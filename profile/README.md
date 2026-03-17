@@ -1,0 +1,19 @@
+# 万德AI平台
+
+南京万德体育产业集团 · AI超级员工矩阵
+
+## 仓库导航
+
+| 仓库 | 用途 |
+|------|------|
+| [wande-ai-platform](https://github.com/WnadeyaowuOraganization/wande-ai-platform) | 核心中枢（Issue/PR/自动化工作流） |
+| [wande-ai-backend](https://github.com/WnadeyaowuOraganization/wande-ai-backend) | Spring Boot 后端 |
+| [wande-ai-front](https://github.com/WnadeyaowuOraganization/wande-ai-front) | Vue3 管理后台 |
+| [wande-ai-web](https://github.com/WnadeyaowuOraganization/wande-ai-web) | Vue3 用户端/员工端 |
+
+## 组织级规范
+
+- [统一标签规范 (WANDE_LABEL.md)](https://github.com/WnadeyaowuOraganization/.github/blob/main/docs/WANDE_LABEL.md)
+- [自动编程看板](https://github.com/orgs/WnadeyaowuOraganization/projects/2)
+- [Sprint看板](https://github.com/orgs/WnadeyaowuOraganization/projects/1)
+

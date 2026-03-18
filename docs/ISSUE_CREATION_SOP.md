@@ -1,7 +1,7 @@
 # Issue创建SOP — 自动编程需求源
 
 > **版本**: v1.0 | **生效日期**: 2026-03-18
-> **适用仓库**: wande-ai-backend / wande-ai-front / wande-ai-web
+> **适用仓库**: 全部
 > **上游**: 吴耀提出需求 → Perplexity分析
 > **下游**: Claude Code从各仓库Issue中接任务 → 自动编程执行
 > **关联文档**: [WANDE_LABEL.md](./WANDE_LABEL.md) · [仓库导航](./README.md)

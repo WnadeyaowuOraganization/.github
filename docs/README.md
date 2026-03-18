@@ -1,4 +1,4 @@
-# 万德AI平台 — 组织级文档中心
+<img width="878" height="571" alt="image" src="https://github.com/user-attachments/assets/0b7643e9-1c1c-456a-847f-0d68000d4e79" /># 万德AI平台 — 组织级文档中心
 
 本目录存放所有跨仓库的统一规范文档。这是 **Single Source of Truth（唯一真相源）**。
 ---
@@ -10,7 +10,7 @@
 | [wande-ai-platform](https://github.com/WnadeyaowuOraganization/wande-ai-platform) | 项目矿场爬虫库 |
 | [wande-ai-backend](https://github.com/WnadeyaowuOraganization/wande-ai-backend) | 万德AI平台-后端 |
 | [wande-ai-front](https://github.com/WnadeyaowuOraganization/wande-ai-front) | 万德AI平台-前端 |
-| [wande-d3-plugin](https://github.com/WnadeyaowuOraganization/wande-d3-plugin) | 万德D3插件 |
+| [wande-gh-plugin](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | 万德 Grasshopper 参数化插件库  |
 
 ## 规范文档
 

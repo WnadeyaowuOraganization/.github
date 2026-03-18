@@ -16,8 +16,8 @@
 
 | 文档 | 说明 | 适用仓库 |
 |------|------|---------| 
-| [WANDE_LABEL.md](./WANDE_LABEL.md) | 统一标签规范（11维度/65标签） | backend / front / web |
-| [ISSUE_CREATION_SOP.md](./ISSUE_CREATION_SOP.md) | Issue创建SOP — 自动编程需求源 | backend / front / web |
+| [WANDE_LABEL.md](./WANDE_LABEL.md) | 统一标签规范（11维度/65标签） | 全部 |
+| [ISSUE_CREATION_SOP.md](./ISSUE_CREATION_SOP.md) | Issue创建SOP — 自动编程需求源 | 全部 |
 
 
 ## 相关资源

@@ -1,7 +1,7 @@
 # 万德AI平台 — 统一标签规范 (WANDE_LABEL.md)
 
 > **版本**: v1.0 | **生效日期**: 2026-03-18
-> **适用仓库**: wande-ai-backend / wande-ai-front / wande-ai-web
+> **适用仓库**: 全部
 > **维护者**: Perplexity（战略大脑）+ 吴耀（super_admin）
 
 本文件定义了万德AI平台三个应用仓库的统一标签体系。所有Issue和PR必须按此规范打标签。

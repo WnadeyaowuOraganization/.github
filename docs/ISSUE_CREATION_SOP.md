@@ -1,6 +1,6 @@
 # Issue创建SOP — 自动编程需求源
 
-> **版本**: v1.0 | **生效日期**: 2026-03-18
+> **版本**: v1.1 | **生效日期**: 2026-03-19
 > **适用仓库**: 全部
 > **上游**: 吴耀提出需求 → Perplexity分析
 > **下游**: Claude Code从各仓库Issue中接任务 → 自动编程执行
@@ -28,7 +28,6 @@
 |---------|---------|------|
 | API接口 / 数据库 / 后端逻辑 / 定时任务 | `wande-ai-backend` | 新增招标查询接口、修改用户权限逻辑 |
 | 管理后台页面 / 运营端功能 / 后台表单 | `wande-ai-front` | 新增供应商管理页面、修改报表筛选 |
-| 用户端页面 / C端交互 / 用户可见界面 | `wande-ai-web` | 新增AI对话界面、修改首页展示 |
 | 前后端都涉及的功能 | **分拆为多个Issue**，分别创建在对应仓库 | 新增CRM模块 → backend一个Issue + front一个Issue |
 | 爬虫 / 数据采集 | `wande-ai-platform` | 招标爬虫规则调整 |
 | D3参数化设计插件 | `wande-d3-plugin` | Grasshopper插件功能开发 |
@@ -169,7 +168,6 @@
 # 引用其他仓库的Issue
 WnadeyaowuOraganization/wande-ai-backend#12
 WnadeyaowuOraganization/wande-ai-front#8
-WnadeyaowuOraganization/wande-ai-web#3
 
 # 在PR描述中自动关闭跨仓库Issue（仅合并到默认分支时生效）
 Fixes WnadeyaowuOraganization/wande-ai-backend#12
@@ -216,8 +214,12 @@ Body：
      --title "[模块] 标题" \
      --body "..." \
      --label "priority/P1,type:feature,status:ready"
-6. 如有跨仓库依赖，在关联Issue的Body中补充引用
-7. 向吴耀确认已创建（附Issue链接）
+6. 将Issue关联到自动编程看板（必须）：
+   gh project item-add 2 \
+     --owner WnadeyaowuOraganization \
+     --url {Issue的URL}
+7. 如有跨仓库依赖，在关联Issue的Body中补充引用
+8. 向吴耀确认已创建（附Issue链接）
 ```
 
 ### 6.2 批量创建（§3.5 一站式交付模式）
@@ -229,13 +231,41 @@ Body：
 2. 等待吴耀"同意"
 3. 按依赖顺序批量创建所有Issue
 4. 被依赖的Issue先创建（获取Issue编号后，在依赖方的Body中引用）
-5. 汇总所有已创建Issue的链接
+5. 将所有Issue关联到自动编程看板（#2）
+6. 汇总所有已创建Issue的链接
 ```
 
-### 6.3 创建后的自动衔接
+### 6.3 Project看板关联（必须步骤）
+
+**所有在应用仓库（backend/front）创建的Issue，必须关联到自动编程看板（Project #2）。**
+
+```bash
+# 创建Issue后立即执行：
+gh project item-add 2 \
+  --owner WnadeyaowuOraganization \
+  --url https://github.com/WnadeyaowuOraganization/{仓库}/issues/{编号}
+```
+
+**看板信息**：
+- 名称：万德应用开发 — 自动编程看板
+- 编号：#2
+- URL：https://github.com/orgs/WnadeyaowuOraganization/projects/2
+- Project Node ID：`PVT_kwDOD3gg584BSCFx`
+
+**关联范围**：
+- `wande-ai-backend` 的所有Issue → 关联到 Project #2
+- `wande-ai-front` 的所有Issue → 关联到 Project #2
+- `wande-ai-platform` 的Issue → 关联到 Project #1（Sprint看板），不关联 #2
+
+**为什么必须关联**：
+- 统一管理所有自动编程任务的进度
+- Claude Code的工作全部可追踪
+- 方便吴耀在一个看板上掌握全部应用开发状态
+
+### 6.4 创建后的自动衔接
 
 ```
-Issue创建（status:ready）
+Issue创建（status:ready）+ 关联到 Project #2
   ↓
 Claude Code每次启动时执行：
   gh issue list --repo WnadeyaowuOraganization/{仓库} --state open --label ready -L 10
@@ -249,7 +279,7 @@ Claude Code每次启动时执行：
 
 Perplexity在创建Issue前，对照以下清单自检：
 
-- [ ] 仓库选择正确？（后端逻辑→backend，管理页面→front，用户页面→web）
+- [ ] 仓库选择正确？（后端逻辑→backend，管理页面→front）
 - [ ] 标签至少3个？（优先级 + 类型 + 状态）
 - [ ] 标签名称拼写正确？（与 WANDE_LABEL.md 一致）
 - [ ] 5个Section都已填写？（需求背景/关联Issue/环境配置/处理步骤/其他要求）
@@ -258,6 +288,7 @@ Perplexity在创建Issue前，对照以下清单自检：
 - [ ] 跨仓库引用格式正确？（`WnadeyaowuOraganization/repo#number`）
 - [ ] 验收标准可执行？（Claude Code能自主验证）
 - [ ] 需要前后端分拆的已分拆？（一个Issue只对应一个仓库）
+- [ ] 已关联到自动编程看板？（`gh project item-add 2 --owner WnadeyaowuOraganization --url {Issue URL}`）
 
 ---
 
@@ -271,3 +302,12 @@ Perplexity在创建Issue前，对照以下清单自检：
 | §9.1 CI/CD流水线 | 下游部署：代码push后自动构建和部署 |
 | WANDE_LABEL.md | 标签字典：所有标签的含义和Claude Code行为指引 |
 | 各仓库CLAUDE.md | 执行手册：Claude Code的项目上下文和开发规范 |
+
+---
+
+## 变更记录
+
+| 版本 | 日期 | 变更内容 |
+|------|------|---------|
+| v1.0 | 2026-03-18 | 初版发布 |
+| v1.1 | 2026-03-19 | 新增§6.3 Project看板关联（必须步骤），所有应用仓库Issue必须关联到自动编程看板(#2)；移除wande-ai-web仓库路由（项目已弃用）；质量检查清单新增看板关联检查项；创建流程6.1/6.2补充关联步骤 |

@@ -1,4 +1,4 @@
-<img width="878" height="571" alt="image" src="https://github.com/user-attachments/assets/0b7643e9-1c1c-456a-847f-0d68000d4e79" /># 万德AI平台 — 组织级文档中心
+万德AI平台 — 组织级文档中心
 
 本目录存放所有跨仓库的统一规范文档。这是 **Single Source of Truth（唯一真相源）**。
 ---

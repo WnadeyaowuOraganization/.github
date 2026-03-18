@@ -1,6 +1,6 @@
 # Issue创建SOP — 自动编程需求源
 
-> **版本**: v1.1 | **生效日期**: 2026-03-19
+> **版本**: v1.2 | **生效日期**: 2026-03-19
 > **适用仓库**: 全部
 > **上游**: 吴耀提出需求 → Perplexity分析
 > **下游**: Claude Code从各仓库Issue中接任务 → 自动编程执行
@@ -29,8 +29,8 @@
 | API接口 / 数据库 / 后端逻辑 / 定时任务 | `wande-ai-backend` | 新增招标查询接口、修改用户权限逻辑 |
 | 管理后台页面 / 运营端功能 / 后台表单 | `wande-ai-front` | 新增供应商管理页面、修改报表筛选 |
 | 前后端都涉及的功能 | **分拆为多个Issue**，分别创建在对应仓库 | 新增CRM模块 → backend一个Issue + front一个Issue |
-| 爬虫 / 数据采集 | `wande-ai-platform` | 招标爬虫规则调整 |
-| D3参数化设计插件 | `wande-d3-plugin` | Grasshopper插件功能开发 |
+| 爬虫 / 数据采集 / 平台基础设施 | `wande-ai-platform` | 招标爬虫规则调整、wande-infra服务 |
+| Grasshopper参数化设计插件 / Rhino插件 | `wande-gh-plugins` | GH插件功能开发、组件新增 |
 
 ### 路由原则
 
@@ -237,7 +237,7 @@ Body：
 
 ### 6.3 Project看板关联（必须步骤）
 
-**所有在应用仓库（backend/front）创建的Issue，必须关联到自动编程看板（Project #2）。**
+**所有仓库创建的Issue，必须关联到自动编程看板（Project #2）。**
 
 ```bash
 # 创建Issue后立即执行：
@@ -255,12 +255,13 @@ gh project item-add 2 \
 **关联范围**：
 - `wande-ai-backend` 的所有Issue → 关联到 Project #2
 - `wande-ai-front` 的所有Issue → 关联到 Project #2
-- `wande-ai-platform` 的Issue → 关联到 Project #1（Sprint看板），不关联 #2
+- `wande-ai-platform` 的所有Issue → 关联到 Project #2
+- `wande-gh-plugins` 的所有Issue → 关联到 Project #2
 
 **为什么必须关联**：
-- 统一管理所有自动编程任务的进度
-- Claude Code的工作全部可追踪
-- 方便吴耀在一个看板上掌握全部应用开发状态
+- 统一管理所有开发任务的进度
+- Claude Code / autonomous_worker 的工作全部可追踪
+- 方便吴耀在一个看板上掌握全部开发状态
 
 ### 6.4 创建后的自动衔接
 
@@ -279,7 +280,7 @@ Claude Code每次启动时执行：
 
 Perplexity在创建Issue前，对照以下清单自检：
 
-- [ ] 仓库选择正确？（后端逻辑→backend，管理页面→front）
+- [ ] 仓库选择正确？（后端逻辑→backend，管理页面→front，爬虫/基础设施→platform，GH插件→wande-gh-plugins）
 - [ ] 标签至少3个？（优先级 + 类型 + 状态）
 - [ ] 标签名称拼写正确？（与 WANDE_LABEL.md 一致）
 - [ ] 5个Section都已填写？（需求背景/关联Issue/环境配置/处理步骤/其他要求）
@@ -311,3 +312,4 @@ Perplexity在创建Issue前，对照以下清单自检：
 |------|------|---------|
 | v1.0 | 2026-03-18 | 初版发布 |
 | v1.1 | 2026-03-19 | 新增§6.3 Project看板关联（必须步骤），所有应用仓库Issue必须关联到自动编程看板(#2)；移除wande-ai-web仓库路由（项目已弃用）；质量检查清单新增看板关联检查项；创建流程6.1/6.2补充关联步骤 |
+| v1.2 | 2026-03-19 | Project #2关联范围从backend/front扩展到全部仓库（新增platform和wande-gh-plugins）；路由表新增wande-gh-plugins仓库（Grasshopper插件）；路由表platform描述补充"平台基础设施"；质量检查清单更新仓库列表 |

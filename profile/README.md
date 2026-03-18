@@ -6,10 +6,10 @@
 
 | 仓库 | 用途 |
 |------|------|
-| [wande-ai-platform](https://github.com/WnadeyaowuOraganization/wande-ai-platform) | 核心中枢（Issue/PR/自动化工作流） |
-| [wande-ai-backend](https://github.com/WnadeyaowuOraganization/wande-ai-backend) | Spring Boot 后端 |
-| [wande-ai-front](https://github.com/WnadeyaowuOraganization/wande-ai-front) | Vue3 管理后台 |
-| [wande-ai-web](https://github.com/WnadeyaowuOraganization/wande-ai-web) | Vue3 用户端/员工端 |
+| [wande-ai-platform](https://github.com/WnadeyaowuOraganization/wande-ai-platform) | 项目矿产爬虫库 |
+| [wande-ai-backend](https://github.com/WnadeyaowuOraganization/wande-ai-backend) | 万德AI平台-后端 |
+| [wande-ai-front](https://github.com/WnadeyaowuOraganization/wande-ai-front) | 万德AI平台-前端 |
+| [wande-ai-web](https://github.com/WnadeyaowuOraganization/wande-d3-plugin) | 万德D3插件 |
 
 ## 组织级规范
 

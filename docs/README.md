@@ -10,12 +10,12 @@
 | [wande-ai-platform](https://github.com/WnadeyaowuOraganization/wande-ai-platform) | 项目矿场爬虫库 |
 | [wande-ai-backend](https://github.com/WnadeyaowuOraganization/wande-ai-backend) | 万德AI平台-后端 |
 | [wande-ai-front](https://github.com/WnadeyaowuOraganization/wande-ai-front) | 万德AI平台-前端 |
-| [wande-gh-plugin](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | 万德 Grasshopper 参数化插件库  |
+| [wande-gh-plugins](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | 万德 Grasshopper 参数化插件库  |
 
 ## 规范文档
 
 | 文档 | 说明 | 适用仓库 |
-|------|------|---------| 
+|------|------|---------|
 | [WANDE_LABEL.md](./WANDE_LABEL.md) | 统一标签规范（11维度/65标签） | 全部 |
 | [ISSUE_CREATION_SOP.md](./ISSUE_CREATION_SOP.md) | Issue创建SOP — 自动编程需求源 | 全部 |
 

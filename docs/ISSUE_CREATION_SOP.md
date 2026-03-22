@@ -29,7 +29,8 @@
 | API接口 / 数据库 / 后端逻辑 / 定时任务 | `wande-ai-backend` | 新增招标查询接口、修改用户权限逻辑 |
 | 管理后台页面 / 运营端功能 / 后台表单 | `wande-ai-front` | 新增供应商管理页面、修改报表筛选 |
 | 前后端都涉及的功能 | **分拆为多个Issue**，分别创建在对应仓库 | 新增CRM模块 → backend一个Issue + front一个Issue |
-| 爬虫 / 数据采集 / 平台基础设施 | `wande-ai-platform` | 招标爬虫规则调整、wande-infra服务 |
+| Python爬虫 / 数据采集脚本 / G7e采集管线 | `wande-data-pipeline` | 招标爬虫规则调整、项目矿场采集、竞品数据采集 |
+| 基础设施 / CI/CD / 自动编程 | `wande-ai-platform` | wande-infra服务、GitHub Actions、Claude Code配置 |
 | Grasshopper参数化设计插件 / Rhino插件 | `wande-gh-plugins` | GH插件功能开发、组件新增 |
 
 ### 路由原则

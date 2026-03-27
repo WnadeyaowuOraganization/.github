@@ -71,13 +71,27 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 - Issue号从 `#N` 格式提取
 - 人工可直接编辑表格调整优先级和状态
 
+## 当前Sprint目标
+
+**Sprint周期**: 2026-03-28 ~ 2026-04-11
+
+**Sprint重点模块**（排程时优先级提升）：
+1. **项目矿场** — 标签含 `module:project` 或标题含 `[项目矿场]` `[项目中心]`
+2. **超管驾驶舱** — 标签含 `module:dashboard` 或标题含 `[超管驾驶舱]` `[Claude Office]`
+
+**排程规则调整**：
+- Sprint重点模块的Issue，在同优先级内排在非Sprint模块前面
+- 例：P0的项目矿场Issue排在P0的色卡材料Issue前面
+- 跨Sprint的P0 Issue仍然保留在队列中，但排在Sprint模块之后
+
 ## Issue优先级排序规则
 
 1. `status:test-failed` 标签的Issue最优先（被测试打回需要修复）
 2. `priority/P0` > `priority/P1` > `priority/P2` > `priority/P3`
-3. 同优先级内按Phase编号升序
-4. 无Phase的按Issue创建时间排序
-5. 有 `blocked-by` 依赖的Issue，依赖未关闭则不分配
+3. **同优先级内，当前Sprint重点模块优先**（项目矿场/超管驾驶舱排在其他模块前面）
+4. 同优先级同模块内按Phase编号升序
+5. 无Phase的按Issue创建时间排序
+6. 有 `blocked-by` 依赖的Issue，依赖未关闭则不分配
 
 ## pre-task 操作（为编程CC准备）
 

@@ -25,6 +25,25 @@
 5. 无Phase按Issue号升序
 6. `blocked-by` 依赖未关闭的排末尾
 
+## SCHEDULE.md格式规范（强制）
+
+每个项目的执行队列表格**必须包含状态列**，格式如下：
+
+```markdown
+| 序号 | Issue | 标题 | 优先级 | 状态 |
+|------|-------|------|--------|------|
+| 1 | #441 | [项目中心-P0] Phase13... | P0 | 待执行 |
+| 2 | #442 | [项目中心-P0] Phase14... | P0 | 执行中 |
+```
+
+**状态值**：`待执行` / `执行中` / `已完成` / `失败` / `需人工` / `暂停`
+
+**状态更新规则**：
+- 触发CC前：将对应Issue状态改为 `执行中`
+- CC完成后（检查PID已结束 + 日志含EXIT_CODE=0）：改为 `已完成`
+- CC失败（EXIT_CODE≠0）：改为 `失败`
+- 每次更新后commit + push SCHEDULE.md
+
 ## 项目与工作目录
 
 | 项目 | 仓库 | 主目录 | 外接目录 |
@@ -42,10 +61,16 @@
 ### pre-task（每个Issue启动前执行）
 
 ```bash
+# 1. 更新SCHEDULE.md中该Issue状态为"执行中"（必须在触发CC前完成）
+# 编辑 docs/SCHEDULE.md → commit + push
+
+# 2. 准备工作目录
 cd /home/ubuntu/projects/<目录>
 git checkout dev && git pull origin dev
 git checkout -b feature-issue-<N>
 mkdir -p ./issues/issue-<N>
+
+# 3. 更新GitHub标签
 gh issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remove-label "status:ready"
 ```
 
@@ -140,3 +165,4 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 2. 不关闭Issue（PR merge自动关）
 3. 不改其他仓库CLAUDE.md
 4. 不合并PR
+

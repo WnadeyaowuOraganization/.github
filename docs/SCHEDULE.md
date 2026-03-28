@@ -13,10 +13,10 @@
 | Backend | #648 | 690817 | wande-ai-backend |
 | Backend | #648 | 716373 | wande-ai-backend-glm2 |
 | Backend | #575 | 1069708 | wande-ai-backend-kimi4 |
-| Backend | #620 | 1154044 | wande-ai-backend-kimi1 |
+| Backend | #620 | 1165137 | wande-ai-backend-kimi1 |
 | Backend | #647 | 1128341 | wande-ai-backend-kimi2 |
 | Frontend | #267 | 972291 | wande-ai-front-kimi1 |
-| Frontend | #264 | 1155591 | wande-ai-front-kimi2 |
+| Frontend | #264 | 1166699 | wande-ai-front-kimi2 |
 | Pipeline | #1 | 973469 | wande-data-pipeline |
 
 ---

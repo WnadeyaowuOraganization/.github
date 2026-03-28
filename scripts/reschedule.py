@@ -2,9 +2,9 @@
 """
 按Sprint规则重新排程所有Issue
 排序规则:
-1. status:test-failed 最优先
-2. priority/P0 > P1 > P2 > P3
-3. 同优先级内，Sprint重点模块优先（超管驾驶舱、Claude Office）
+1. Sprint重点模块排最前面（超管驾驶舱、Claude Office）
+2. status:test-failed 次优先
+3. priority/P0 > P1 > P2 > P3
 4. 同模块内按Phase编号升序
 5. 无Phase按Issue号升序
 """
@@ -85,16 +85,18 @@ def get_status(labels):
     return '待执行'
 
 def sort_issues(issues):
-    """按规则排序Issues"""
+    """按规则排序Issues - Sprint重点模块排最前面"""
     def sort_key(issue):
         title = issue.get('title', '')
         labels = issue.get('labels', [])
         number = issue.get('number', 0)
+        # Sprint重点模块排最前面（0），其他排后面（1）
+        sprint_focus = 0 if is_sprint_focus(title) else 1
+        # test-failed次优先
         test_failed = 0 if is_test_failed(labels) else 1
         priority = get_priority(labels)
-        focus = 0 if is_sprint_focus(title) else 1
         phase = extract_phase_number(title)
-        return (test_failed, priority, focus, phase, number)
+        return (sprint_focus, test_failed, priority, phase, number)
     return sorted(issues, key=sort_key)
 
 def format_priority(labels):

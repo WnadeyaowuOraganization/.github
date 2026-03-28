@@ -114,7 +114,7 @@ echo $! > /home/ubuntu/cc_scheduler/<目录>_cc.pid
 kill -0 $(cat /home/ubuntu/cc_scheduler/<目录>_cc.pid) 2>/dev/null && echo "运行中" || echo "已结束"
 ```
 
-CC完成后自动push feature分支，CI/CD执行post-task.sh。
+CC完成后自动push feature分支并创建feature→dev的PR。
 
 ## 拉取Issue命令
 

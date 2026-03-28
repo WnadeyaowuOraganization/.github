@@ -11,9 +11,7 @@
 | 项目 | Issue | PID | 目录 |
 |------|-------|-----|------|
 | Backend | #648 | 690817 | wande-ai-backend |
-| Backend | #651 | 627531 | wande-ai-backend-kimi1 |
 | Backend | #648 | 716373 | wande-ai-backend-glm2 |
-| Backend | #249 | 1037032 | wande-ai-backend-kimi2 |
 | Backend | #575 | 1069708 | wande-ai-backend-kimi4 |
 | Frontend | #267 | 972291 | wande-ai-front-kimi1 |
 | Frontend | #268 | 972840 | wande-ai-front-kimi2 |
@@ -33,10 +31,11 @@
 | 3 | #620 | [E2E 失败] HR 模块数据库迁移未应用 - BaseEntity 兼容字段缺失 | P0 | 执行中 |
 | 4 | #575 | [超管驾驶舱-P0] API 网关子账户管理 [1/4]: 数据同步 API — G7e 网关数据拉取 + 子账户 CRUD+ 使用记录存储 | P0 | 执行中 |
 | 4 | #46 | [超管驾驶舱-P1] Phase9: 后端 API — 统一审批队列 + 企微通知控制台 (审批 + 规则 + 模板 + 历史) | P1 | 已完成 |
-| 5 | #133 | [超管驾驶舱-P1] 新增用户反馈管理 API — 多渠道汇总 + AI 自动评分 + 需求摘要 | P1 | 待执行 |
+| 5 | #651 | [超管驾驶舱-P1] Phase12: G7e claude_monitor.py 修复 — 429 错误处理 + 重试机制 | P1 | 失败 |
+| 6 | #133 | [超管驾驶舱-P1] 新增用户反馈管理 API — 多渠道汇总 + AI 自动评分 + 需求摘要 | P1 | 待执行 |
 | 6 | #134 | [超管驾驶舱-P1] 新增用户反馈管理 API — 多渠道收集+AI 自动评估 + 超管审阅 | P1 | 待执行 |
 | 7 | #248 | [超管驾驶舱-P1] Phase3: API — 暂停/恢复/手动触发 + G7e Webhook 联动 | P1 | 已完成 |
-| 8 | #249 | [超管驾驶舱-P1] Claude Code 会话监控 API — 状态采集+task.md 解析 + 实时推送 | P1 | 执行中 |
+| 8 | #249 | [超管驾驶舱-P1] Claude Code 会话监控 API — 状态采集+task.md 解析 + 实时推送 | P1 | 已完成 |
 | 9 | #250 | [超管驾驶舱-P1] DB — 验收协同 2 张表 (acceptance_queue + acceptance_results) | P1 | 待执行 |
 | 10 | #251 | [超管驾驶舱-P1] 验收协同 API — 队列管理 + 批量验收触发+G7e 脚本调用 + 结果回写 | P1 | 待执行 |
 | 11 | #252 | [超管驾驶舱-P1] 开发效率统计 API — 产出 + 质量 + 趋势全维度 | P1 | 待执行 |

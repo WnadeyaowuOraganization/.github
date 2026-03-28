@@ -4,10 +4,10 @@
 
 ## 职责
 
-1. **排程** — 从GitHub拉取Issue → 按Sprint+优先级排序 → 更新 `docs/SCHEDULE.md`
-2. **pre-task** — 为编程CC建目录、切分支、改标签
-3. **触发CC** — 按排程启动各项目的编程CC处理Issue
-4. **推送更新** — 每次变更后commit + push SCHEDULE.md
+1. **查询待办** — 从Project #2看板拉取Todo状态的Issue，按优先级排序
+2. **pre-task** — 为编程CC建目录、切分支、改标签、更新看板Status
+3. **触发CC** — 启动各项目的编程CC处理Issue
+4. **检查结果** — CC完成后更新看板Status（Done/Fail）
 
 ## 当前Sprint
 
@@ -16,33 +16,61 @@
 1. **超管驾驶舱** — title含 `[超管驾驶舱]`，或标签含 `module:dashboard`
 2. **Claude Office** — title含 `[Claude Office]`
 
+## Project #2 看板（唯一数据源）
+
+**看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/2
+
+| 常量 | 值 |
+|------|------|
+| Project ID | `PVT_kwDOD3gg584BSCFx` |
+| Status 字段ID | `PVTSSF_lADOD3gg584BSCFxzg_r2go` |
+
+| Status | Option ID | 含义 |
+|--------|-----------|------|
+| Plan | `5ef24ffe` | 需求规划中 |
+| Todo | `f75ad846` | 待执行 |
+| In Progress | `47fc9ee4` | CC正在处理 |
+| Done | `98236657` | 已完成 |
+| pause | `1c220cdf` | 需人工确认 |
+| Fail | `3bdb636e` | 执行失败 |
+
+### 查询待执行Issue（替代SCHEDULE.md）
+
+```bash
+# 拉取看板中Status=Todo的所有Item，返回Issue号、标题、仓库、优先级
+gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500 \
+  | python3 -c "
+import json, sys
+items = json.load(sys.stdin)['items']
+todo = [i for i in items if i.get('status') == 'Todo']
+# 按优先级排序: P0 > P1 > P2 > P3
+priority_order = {'P0-阻塞': 0, 'P1-核心': 1, 'P2-增强': 2, 'P3-规划': 3}
+todo.sort(key=lambda x: priority_order.get(x.get('优先级', ''), 99))
+for i in todo:
+    c = i.get('content', {})
+    print(f'#{c.get(\"number\",\"?\")} [{i.get(\"优先级\",\"?\")}] {c.get(\"repository\",\"?\")} — {i.get(\"title\",\"?\")[:60]}')
+"
+```
+
+### 更新Status的通用命令
+
+```bash
+# 用法: update_status <ISSUE_NUMBER> <OPTION_ID>
+# 先查Item ID，再更新Status
+ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500 \
+  | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<ISSUE_NUMBER>]" | head -1)
+gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID" \
+  --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id <OPTION_ID>
+```
+
 ## 排序规则
 
-1. `status:test-failed` 最优先
+1. `status:test-failed` 标签的Issue最优先
 2. `priority/P0` > `priority/P1` > `priority/P2` > `priority/P3`
 3. 同优先级内，Sprint重点模块优先
 4. 同模块内按Phase编号升序
 5. 无Phase按Issue号升序
 6. `blocked-by` 依赖未关闭的排末尾
-
-## SCHEDULE.md格式规范（强制）
-
-每个项目的执行队列表格**必须包含状态列**，格式如下：
-
-```markdown
-| 序号 | Issue | 标题 | 优先级 | 状态 |
-|------|-------|------|--------|------|
-| 1 | #441 | [项目中心-P0] Phase13... | P0 | 待执行 |
-| 2 | #442 | [项目中心-P0] Phase14... | P0 | 执行中 |
-```
-
-**状态值**：`待执行` / `执行中` / `已完成` / `失败` / `需人工` / `暂停`
-
-**状态更新规则**：
-- 触发CC前：将对应Issue状态改为 `执行中`
-- CC完成后（检查PID已结束 + 日志含EXIT_CODE=0）：改为 `已完成`
-- CC失败（EXIT_CODE≠0）：改为 `失败`
-- 每次更新后commit + push SCHEDULE.md
 
 ## 项目与工作目录
 
@@ -63,7 +91,6 @@
 ### 目录占用检查（强制，触发CC前必须执行）
 
 ```bash
-# 检查目录是否空闲
 PID_FILE="/home/ubuntu/cc_scheduler/<目录>_cc.pid"
 if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
     echo "目录占用，跳过"
@@ -76,7 +103,9 @@ fi
 
 **触发前必须遍历所有可用目录，只在空闲目录中启动CC。绝对不允许在同一个目录启动多个CC。**
 
-### pre-task（每个Issue启动前执行）
+## 调度流程
+
+### Step 1: pre-task（每个Issue启动前执行）
 
 ```bash
 # 1. 检查目录是否空闲（必须通过才能继续）
@@ -85,26 +114,25 @@ if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
     echo "目录占用，跳过"; exit 0
 fi
 
-# 2. 更新SCHEDULE.md中该Issue状态为"执行中"
-# 编辑 docs/SCHEDULE.md → commit + push
-
-# 3. 准备工作目录
+# 2. 准备工作目录
 cd /home/ubuntu/projects/<目录>
 git checkout dev && git pull origin dev
 git checkout -b feature-issue-<N>
 mkdir -p ./issues/issue-<N>
 
-# 4. 更新GitHub标签
+# 3. 更新GitHub标签
 gh issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remove-label "status:ready"
 
-# 5. 更新Project看板Status为In Progress
-ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500   | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<N> and i.get('content',{}).get('repository','')=='<仓库名>']" | head -1)
+# 4. 更新Project看板Status → In Progress
+ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500 \
+  | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<N>]" | head -1)
 if [ -n "$ITEM_ID" ]; then
-  gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID"     --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id 47fc9ee4
+  gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID" \
+    --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id 47fc9ee4
 fi
 ```
 
-### 启动CC（后台运行，不阻塞）
+### Step 2: 启动CC（后台运行，不阻塞）
 
 ```bash
 nohup su - ubuntu -c "export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-token.py 2>/dev/null) && \
@@ -114,76 +142,22 @@ nohup su - ubuntu -c "export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-tok
 echo $! > /home/ubuntu/cc_scheduler/<目录>_cc.pid
 ```
 
-### 检查CC是否完成
+### Step 3: 检查CC结果并更新Status
 
 ```bash
+# 检查是否完成
 kill -0 $(cat /home/ubuntu/cc_scheduler/<目录>_cc.pid) 2>/dev/null && echo "运行中" || echo "已结束"
+
+# CC结束后，根据结果更新Project Status:
+# - 正常完成 → 不改Status（CC已创建PR，等merge后Issue自动关闭，看板自动Done）
+# - 失败(EXIT_CODE≠0) → 改为Fail
+ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500 \
+  | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<N>]" | head -1)
+gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID" \
+  --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id 3bdb636e
 ```
 
 CC完成后自动push feature分支并创建feature→dev的PR。
-
-### CC完成后更新Project Status
-
-CC结束后检查结果，更新Project看板Status：
-- CC正常完成（PID结束 + 日志含正常退出）→ 不改Status（等PR merge后自动Done）
-- CC失败（EXIT_CODE≠0）→ 改为 **Fail**
-- CC评估为需确认/不可执行 → CC内部已改为 **pause**
-
-```bash
-# 更新Project Status的通用命令（替换<ISSUE_NUM>和<OPTION_ID>）
-ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500   | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<ISSUE_NUM>]" | head -1)
-gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID"   --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id <OPTION_ID>
-
-# Option IDs:
-# In Progress: 47fc9ee4
-# Done:        98236657
-# pause:       1c220cdf
-# Fail:        3bdb636e
-```
-
-### CC完成后更新Project Status
-
-CC结束后检查结果，更新Project看板Status：
-- CC正常完成（PID结束 + 日志含正常退出）→ 不改Status（等PR merge后自动Done）
-- CC失败（EXIT_CODE≠0）→ 改为 **Fail**
-- CC评估为需确认/不可执行 → CC内部已改为 **pause**
-
-```bash
-# 更新Project Status的通用命令（替换<ISSUE_NUM>和<OPTION_ID>）
-ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500   | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<ISSUE_NUM>]" | head -1)
-gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID"   --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id <OPTION_ID>
-
-# Option IDs:
-# In Progress: 47fc9ee4
-# Done:        98236657
-# pause:       1c220cdf
-# Fail:        3bdb636e
-```
-
-### CC完成后更新Project Status
-
-CC结束后检查结果，更新Project看板Status：
-- CC正常完成（PID结束 + 日志含正常退出）→ 不改Status（等PR merge后自动Done）
-- CC失败（EXIT_CODE≠0）→ 改为 **Fail**
-- CC评估为需确认/不可执行 → CC内部已改为 **pause**
-
-```bash
-# 更新Project Status的通用命令（替换<ISSUE_NUM>和<OPTION_ID>）
-ITEM_ID=$(gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500   | python3 -c "import json,sys;items=json.load(sys.stdin)['items'];[print(i['id']) for i in items if i.get('content',{}).get('number')==<ISSUE_NUM>]" | head -1)
-gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID"   --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id <OPTION_ID>
-
-# Option IDs:
-# In Progress: 47fc9ee4
-# Done:        98236657
-# pause:       1c220cdf
-# Fail:        3bdb636e
-```
-
-## 拉取Issue命令
-
-```bash
-gh issue list --repo <仓库> --state open --label status:ready --json number,title,labels -L 500
-```
 
 ## GitHub认证
 
@@ -205,9 +179,10 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 
 ## 日志和状态
 
-| 文件 | 位置 |
+| 信息 | 来源 |
 |------|------|
-| 排程清单 | `docs/SCHEDULE.md`（本仓库） |
+| 待办队列 | `gh project item-list 2 --owner WnadeyaowuOraganization --format json` (Status=Todo) |
+| 执行中 | 同上 (Status=In Progress) |
 | CC日志 | `/home/ubuntu/cc_scheduler/logs/<目录>_issue_<N>.log` |
 | PID文件 | `/home/ubuntu/cc_scheduler/<目录>_cc.pid` |
 
@@ -226,4 +201,4 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 2. 不关闭Issue（PR merge自动关）
 3. 不改其他仓库CLAUDE.md
 4. 不合并PR
-
+5. 不编辑SCHEDULE.md（已废弃，使用Project看板）

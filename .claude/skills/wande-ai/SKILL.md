@@ -18,7 +18,7 @@ trigger_keywords:
   - autonomous_worker
 ---
 
-# 万德超级员工操作系统 v5.10
+# 万德超级员工操作系统 v5.12
 
 ## §1 使命与身份
 
@@ -457,6 +457,8 @@ G7e autonomous_worker每日分析自己的成功/失败Pattern，生成优化建
 **版本号规则**：小改(v4.3.1) / 新增条目(v4.3→v4.4) / 架构级重构(v4.x→v5.0)
 
 **变更日志**：
+- `[v5.12] 2026-03-29: Project三层自动化流水线 — 新增auto-add-to-project.yml(三仓库main+dev,Issue创建时CI/CD自动关联Project#2+Status=Plan,test-failed标签→Todo) / .github/CLAUDE.md重写为v2(职责拆分:排程Plan→Todo + 触发Todo→In Progress + 检查结果 / Issue生命周期图 / 任务一排程+任务二触发+任务三检查 三段式) / PROJECT_TOKEN Secret已设置(伟平PAT,三仓库) / 伟平(david-hwp)PAT需Organization Projects权限`
+- `[v5.11] 2026-03-29: Project Status操作统一为辅助脚本 — 所有项目的workflow.md和CLAUDE.md中的内联gh project item-list/item-edit命令替换为`bash /opt/wande-ai/scripts/update-project-status.sh <N> <STATUS>`一行调用 / 脚本位置:/opt/wande-ai/scripts/update-project-status.sh / 脚本内置STATUS_MAP和GraphQL查询，自动处理Item ID查找`
 - `[v5.10] 2026-03-29: 调度器迁移到Project API，废弃SCHEDULE.md — .github/CLAUDE.md全面重写(职责从“更新SCHEDULE.md”改为“查询Project看板” / pre-task用gh project item-list查询Todo状态Issue / Status更新用gh project item-edit / 移除所有SCHEDULE.md读写和commit+push操作 / 清理重复的CC完成后Status更新段落) / SCHEDULE.md文件保留但不再维护`
 - `[v5.9] 2026-03-29: Project#2看板Status字段集成到工作流 — 调度器pre-task时改In Progress / 编程CC评估B/C时改pause / CC失败改Fail / PR merge后自动Done / 四仓库(backend/front/pipeline/.github)的workflow.md和CLAUDE.md已更新 / Project字段ID和Option ID已确认并硬编码到文档`
 - `[v5.8] 2026-03-29: PR创建权回归编程CC — §7.1 v5→v6(编程CC第三阶段创建PR,移除post-task依赖) / §7.9 v4→v5(四层架构简化为三层:调度器+编程CC+测试CC,post-task.sh废弃) / post-task.sh废弃原因:paths-ignore过滤md/docs+commit message格式依赖导致未触发 / 三仓库CLAUDE.md+workflow.md已更新(第三阶段增加gh pr create) / .github调度器CLAUDE.md同步更新 / CI/CD build-deploy-dev.yml feature分支触发改为CI质量门禁`
@@ -957,7 +959,7 @@ G7e仓库路径：`/opt/agent/wande-ai-platform`（autonomous_worker工作目录
     - Project ID: `PVT_kwDOD3gg584BSCFx`
     - Status字段ID: `PVTSSF_lADOD3gg584BSCFxzg_r2go`
     - Status选项: Plan(`5ef24ffe`) / Todo(`f75ad846`) / In Progress(`47fc9ee4`) / Done(`98236657`) / pause(`1c220cdf`) / Fail(`3bdb636e`)
-    - 更新命令: `gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID" --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id <OPTION_ID>`
+    - 更新命令: `bash /opt/wande-ai/scripts/update-project-status.sh <ISSUE_NUMBER> <STATUS>`（自动查找Item ID + 更新Status）
 - CODEOWNERS：@wandeyaowu
 
 **当前状态（2026-03-21 v5.4更新）：Dev环境从Docker切换为G7e本地部署(java -jar + nginx) — 后端jar部署到/apps/wande-ai-backend/ / 前端静态文件部署到/apps/wande-ai-front/ / nginx:8083代理前端+API / PostgreSQL和Redis仍使用Docker / CI/CD dev流水线已更新(直接编译部署，不构建镜像) / 菜单体系为20000+ ID / Corporation标签迁移待执行**

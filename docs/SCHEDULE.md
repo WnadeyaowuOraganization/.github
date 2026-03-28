@@ -78,8 +78,8 @@
 
 | 序号 | Issue | 标题 | 优先级 | 状态 |
 |------|-------|------|--------|------|
-| 1 | #16 | [项目矿场-P0] Phase1: 采集引擎迁移与优化 — smart_project_discovery.py 纳入 data-pipeline 统一管理 | P0 | 待执行 |
-| 2 | #32 | [设计模型训练-P0] Phase1 [2/14]: 竞品 T1 级 6 家高质量效果图采集 — LoRA-B 训练素材 | P0 | 待执行 |
+| 1 | #16 | [项目矿场-P0] Phase1: 采集引擎迁移与优化 — smart_project_discovery.py 纳入 data-pipeline 统一管理 | P0 | 执行中 |
+| 2 | #32 | [设计模型训练-P0] Phase1 [2/14]: 竞品 T1 级 6 家高质量效果图采集 — LoRA-B 训练素材 | P0 | 执行中 |
 | 3 | #1 | [D3 参数化] 欧美竞品产品参数采集 (KOMPAN/HAGS/Playcraft) | P1 | 待执行 |
 | 4 | #2 | [代理商工作台 Phase 2] G7e 采集自动化 — 中标数据→AI 判定→入库 | P1 | 待执行 |
 

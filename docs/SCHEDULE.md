@@ -14,6 +14,7 @@
 | Backend | #651 | 627531 | wande-ai-backend-kimi1 |
 | Backend | #648 | 716373 | wande-ai-backend-glm2 |
 | Backend | #249 | 1037032 | wande-ai-backend-kimi2 |
+| Backend | #575 | 1069708 | wande-ai-backend-kimi4 |
 | Frontend | #267 | 972291 | wande-ai-front-kimi1 |
 | Frontend | #268 | 972840 | wande-ai-front-kimi2 |
 | Pipeline | #1 | 973469 | wande-data-pipeline |
@@ -30,7 +31,7 @@
 | 1 | #332 | [超管驾驶舱-P0] Phase2: G7e cron_reporter.py — 定时任务采集上报脚本 | P0 | 已完成 |
 | 2 | #485 | [超管驾驶舱-P0] 外部工具管理 Phase2 [5/10]: G7e 账号池检测 — model_pool_checker.py | P0 | 已完成 |
 | 3 | #620 | [E2E 失败] HR 模块数据库迁移未应用 - BaseEntity 兼容字段缺失 | P0 | 执行中 |
-| 4 | #575 | [超管驾驶舱-P0] API 网关子账户管理 [1/4]: 数据同步 API — G7e 网关数据拉取 + 子账户 CRUD+ 使用记录存储 | P0 | 待执行 |
+| 4 | #575 | [超管驾驶舱-P0] API 网关子账户管理 [1/4]: 数据同步 API — G7e 网关数据拉取 + 子账户 CRUD+ 使用记录存储 | P0 | 执行中 |
 | 4 | #46 | [超管驾驶舱-P1] Phase9: 后端 API — 统一审批队列 + 企微通知控制台 (审批 + 规则 + 模板 + 历史) | P1 | 已完成 |
 | 5 | #133 | [超管驾驶舱-P1] 新增用户反馈管理 API — 多渠道汇总 + AI 自动评分 + 需求摘要 | P1 | 待执行 |
 | 6 | #134 | [超管驾驶舱-P1] 新增用户反馈管理 API — 多渠道收集+AI 自动评估 + 超管审阅 | P1 | 待执行 |

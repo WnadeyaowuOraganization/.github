@@ -16,7 +16,7 @@
 | Backend | #620 | 1154044 | wande-ai-backend-kimi1 |
 | Backend | #647 | 1128341 | wande-ai-backend-kimi2 |
 | Frontend | #267 | 972291 | wande-ai-front-kimi1 |
-| Frontend | #264 | 1148230 | wande-ai-front-kimi2 |
+| Frontend | #264 | 1155591 | wande-ai-front-kimi2 |
 | Pipeline | #1 | 973469 | wande-data-pipeline |
 
 ---

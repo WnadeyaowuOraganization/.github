@@ -10,14 +10,10 @@
 
 | 项目 | Issue | PID | 目录 |
 |------|-------|-----|------|
-| Backend | #648 | 690817 | wande-ai-backend |
-| Backend | #648 | 716373 | wande-ai-backend-glm2 |
+| Backend | #575 | 690817 | wande-ai-backend |
+| Backend | #133 | 716373 | wande-ai-backend-glm2 |
 | Backend | #575 | 1069708 | wande-ai-backend-kimi4 |
-| Backend | #620 | 1179641 | wande-ai-backend-kimi1 |
 | Backend | #647 | 1128341 | wande-ai-backend-kimi2 |
-| Frontend | #267 | 972291 | wande-ai-front-kimi1 |
-| Frontend | #264 | 1179923 | wande-ai-front-kimi2 |
-| Pipeline | #1 | 973469 | wande-data-pipeline |
 
 ---
 
@@ -30,7 +26,7 @@
 |------|-------|------|--------|------|
 | 1 | #332 | [超管驾驶舱-P0] Phase2: G7e cron_reporter.py — 定时任务采集上报脚本 | P0 | 已完成 |
 | 2 | #485 | [超管驾驶舱-P0] 外部工具管理 Phase2 [5/10]: G7e 账号池检测 — model_pool_checker.py | P0 | 已完成 |
-| 3 | #620 | [E2E 失败] HR 模块数据库迁移未应用 - BaseEntity 兼容字段缺失 | P0 | 执行中 |
+| 3 | #620 | [E2E 失败] HR 模块数据库迁移未应用 - BaseEntity 兼容字段缺失 | P0 | 失败 |
 | 4 | #575 | [超管驾驶舱-P0] API 网关子账户管理 [1/4]: 数据同步 API — G7e 网关数据拉取 + 子账户 CRUD+ 使用记录存储 | P0 | 执行中 |
 | 4 | #46 | [超管驾驶舱-P1] Phase9: 后端 API — 统一审批队列 + 企微通知控制台 (审批 + 规则 + 模板 + 历史) | P1 | 已完成 |
 | 5 | #651 | [超管驾驶舱-P1] Phase12: G7e claude_monitor.py 修复 — 429 错误处理 + 重试机制 | P1 | 失败 |
@@ -88,7 +84,7 @@
 | 22 | #244 | [超管驾驶舱-P1] 确认中心页面 — 业务确认/开发者确认双 Tab + 确认驳回 + 评论回写 | P1 | 待执行 |
 | 23 | #246 | [超管驾驶舱-P1] API 网关子账户管理 [4/4]: 使用记录页面 — 调用明细 + 模型统计 + 趋势图表 | P1 | 待执行 |
 | 24 | #266 | [3/5] 素材库前端 - 素材上传页面（表单 + 文件上传 + 标签选择） | P0 | 待执行 |
-| 25 | #264 | [1/5] 素材库前端 - 素材列表页（瀑布流/网格 + 多维度筛选面板） | P0 | 执行中 |
+| 25 | #264 | [1/5] 素材库前端 - 素材列表页（瀑布流/网格 + 多维度筛选面板） | P0 | 失败 |
 
 </details>
 
@@ -103,7 +99,7 @@
 |------|-------|------|--------|------|
 | 1 | #16 | [项目矿场-P0] Phase1: 采集引擎迁移与优化 — smart_project_discovery.py 纳入 data-pipeline 统一管理 | P0 | 已完成 |
 | 2 | #32 | [设计模型训练-P0] Phase1 [2/14]: 竞品 T1 级 6 家高质量效果图采集 — LoRA-B 训练素材 | P0 | 已完成 |
-| 3 | #1 | [D3 参数化] 欧美竞品产品参数采集 (KOMPAN/HAGS/Playcraft) | P1 | 执行中 |
+| 3 | #1 | [D3 参数化] 欧美竞品产品参数采集 (KOMPAN/HAGS/Playcraft) | P1 | 已完成 |
 | 4 | #2 | [代理商工作台 Phase 2] G7e 采集自动化 — 中标数据→AI 判定→入库 | P1 | 待执行 |
 
 </details>

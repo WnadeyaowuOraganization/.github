@@ -10,11 +10,14 @@
 
 | 项目 | Issue | PID | 目录 |
 |------|-------|-----|------|
-| Backend | #575 | 627531 | wande-ai-backend-kimi1 |
-| Backend | #575 | 690817 | wande-ai-backend |
+| Backend | #332 | 690817 | wande-ai-backend |
+| Backend | #651 | 627531 | wande-ai-backend-kimi1 |
 | Backend | #248 | 693910 | wande-ai-backend-kimi2 |
+| Backend | #46 | 729662 | wande-ai-backend-kimi4 |
 | Backend | #133 | 716373 | wande-ai-backend-glm2 |
-| Backend | #46 | 729742 | wande-ai-backend-kimi4 |
+| Frontend | #29 | 931037 | wande-ai-front-kimi1 |
+| Frontend | #30 | 931444 | wande-ai-front-kimi2 |
+| Pipeline | #32 | 932017 | wande-data-pipeline |
 
 ---
 
@@ -25,7 +28,7 @@
 
 | 序号 | Issue | 标题 | 优先级 | 状态 |
 |------|-------|------|--------|------|
-| 1 | #332 | [超管驾驶舱-P0] Phase2: G7e cron_reporter.py — 定时任务采集上报脚本 | P0 | 执行中 |
+| 1 | #332 | [超管驾驶舱-P0] Phase2: G7e cron_reporter.py — 定时任务采集上报脚本 | P0 | 已完成 |
 | 2 | #485 | [超管驾驶舱-P0] 外部工具管理 Phase2 [5/10]: G7e 账号池检测 — model_pool_checker.py | P0 | 已完成 |
 | 3 | #575 | [超管驾驶舱-P0] API 网关子账户管理 [1/4]: 数据同步 API — G7e 网关数据拉取 + 子账户 CRUD+ 使用记录存储 | P0 | 执行中 |
 | 4 | #46 | [超管驾驶舱-P1] Phase9: 后端 API — 统一审批队列 + 企微通知控制台 (审批 + 规则 + 模板 + 历史) | P1 | 执行中 |

@@ -18,7 +18,7 @@ trigger_keywords:
   - autonomous_worker
 ---
 
-# 万德超级员工操作系统 v5.8
+# 万德超级员工操作系统 v5.10
 
 ## §1 使命与身份
 
@@ -457,6 +457,8 @@ G7e autonomous_worker每日分析自己的成功/失败Pattern，生成优化建
 **版本号规则**：小改(v4.3.1) / 新增条目(v4.3→v4.4) / 架构级重构(v4.x→v5.0)
 
 **变更日志**：
+- `[v5.10] 2026-03-29: 调度器迁移到Project API，废弃SCHEDULE.md — .github/CLAUDE.md全面重写(职责从“更新SCHEDULE.md”改为“查询Project看板” / pre-task用gh project item-list查询Todo状态Issue / Status更新用gh project item-edit / 移除所有SCHEDULE.md读写和commit+push操作 / 清理重复的CC完成后Status更新段落) / SCHEDULE.md文件保留但不再维护`
+- `[v5.9] 2026-03-29: Project#2看板Status字段集成到工作流 — 调度器pre-task时改In Progress / 编程CC评估B/C时改pause / CC失败改Fail / PR merge后自动Done / 四仓库(backend/front/pipeline/.github)的workflow.md和CLAUDE.md已更新 / Project字段ID和Option ID已确认并硬编码到文档`
 - `[v5.8] 2026-03-29: PR创建权回归编程CC — §7.1 v5→v6(编程CC第三阶段创建PR,移除post-task依赖) / §7.9 v4→v5(四层架构简化为三层:调度器+编程CC+测试CC,post-task.sh废弃) / post-task.sh废弃原因:paths-ignore过滤md/docs+commit message格式依赖导致未触发 / 三仓库CLAUDE.md+workflow.md已更新(第三阶段增加gh pr create) / .github调度器CLAUDE.md同步更新 / CI/CD build-deploy-dev.yml feature分支触发改为CI质量门禁`
 - `[v5.7] 2026-03-28: 编程CC工作流v4——调度器+post-task架构 — §7.1 v4→v5(四层架构:调度器pre-task→编程CC三阶段→CI/CD post-task.sh→定时测试CC) / §7.9 v3→v4(编程CC极简化:只做TDD编码+push feature,PR/评论/关Issue全外移) / §7.11 v2→v3(E2E从CI/CD解耦为定时调度:中层30min PR驱动+顶层6h全量回归+全部本地模型) / 新增script/post-task.sh(三仓库统一) / 新增script/deploy-dev.sh(编译+增量SQL+部署) / .github仓库新增CLAUDE.md(调度器)+SCHEDULE.md(排程清单) / pipeline项目创建dev分支+完整工作流 / sql_migrations_history历史数据补录(ruoyi_ai:14条,wande_ai:57条) / §9仓库表.github列新增调度器角色`
 - `[v5.6] 2026-03-27: 编程CC TDD工作模式升级 — §7.1 v3→v4(应用仓库流程新增TDD描述:测试先行+编码+提交门控) / §7.9 v2→v3(第二阶段从纯编码升级为"测试先行+编码":Step1红灯写测试→Step2绿灯写代码→门控检查三项全满足才能提交) / 两仓库CLAUDE.md+docs/workflow.md+docs/testing.md已更新并提交dev(backend:8fb03f3a, front:ca410f6) / wande-org-update Skill同步更新`
@@ -464,6 +466,20 @@ G7e autonomous_worker每日分析自己的成功/失败Pattern，生成优化建
 - `[v5.4] 2026-03-21: Dev环境架构升级Docker→本地部署 — 后端改为java -jar /apps/wande-ai-backend/ruoyi-admin.jar(端口6040) / 前端改为nginx静态文件/apps/wande-ai-front/(端口8083) / nginx安装+配置(/etc/nginx/sites-available/wande-dev) / 启动脚本/apps/wande-ai-backend/start.sh / CI/CD build-deploy-dev.yml重写(后端mvn package+cp+启动,前端pnpm build+rsync+reload) / PostgreSQL和Redis保持Docker不变 / 两个CLAUDE.md新增Dev环境本地部署章节 / §2+§9.1+§9当前状态同步更新 / 菜单ID体系确认为20000+（dev数据库实际使用的体系）`
 - `[v5.3] 2026-03-21: G7e dev环境完全部署 — docker-compose-dev.yaml修复(网络别名wande-ai-backend供front nginx解析+SPRING_DATA_REDIS_*变量名修复+healthcheck用wget替代curl+stringtype=unspecified参数) / 生产数据库schema+基础数据克隆到dev(ruoyi_ai 54表+chat_config/chat_model/sys_*等) / wande-ai-front:dev镜像标签创建 / CI/CD dev流水线修复(前端build-deploy-dev.yml使用build-wande-front-image.sh脚本+git pull替代checkout) / §2新增Dev环境详情 / §9.1 CI/CD增加dev workflow描述 / wande-ai-web确认弃用不再部署`
 - `[v5.2] 2026-03-21: 自动测试SOP上线 — 新增§7.11自动测试SOP(五步决策法+需求追踪矩阵+E2E测试门控) / §7.9 Stage3升级(直接合并→创建PR+E2E测试门控+test-failed修复闭环) / §7.10 v1.2→v1.3(新增测试验收标准Section) / §9仓库表5→6个(新增wande-ai-e2e) / §9.1 CI/CD双流水线(build-deploy-dev.yml+build-deploy.yml PR触发) / §9标签新增status:test-failed+status:test-passed / wande-ai-e2e仓库+CLAUDE.md+Phase1测试+requirement-map.json / G7e dev环境(:6040/:8083/:5433/:6380) / Playwright v1.58.2+Chromium / backend/front CLAUDE.md第三阶段改为PR门控 / WANDE_LABEL.md v1.1 / ISSUE_CREATION_SOP.md v1.3`
+- `[v5.1] 2026-03-19: Project #2关联范围扩展到全部仓库 — §7.10 SOP v1.1→v1.2(关联范围从backend/front扩展到全部仓库:backend/front/platform/wande-gh-plugins) / §9仓库表4→5个(新增wande-gh-plugins) / 路由表新增Grasshopper插件仓库 / 去掉platform→Project#1的区分 / README.md修正wande-gh-plugin链接名`
+- `[v5.0] 2026-03-19: Issue创建SOP+4阶段工作流+GitHub App — 新增§7.10 Issue创建SOP(引用.github/docs/ISSUE_CREATION_SOP.md+WANDE_LABEL.md,适用仓库:全部) / §7.9升级v2(4阶段CLAUDE.md工作流:task.md+完成报告+Issue评论,dev→main流程,commitlint约束) / §2新增GitHub App认证(wande-auto-code-agent,App ID 3124981,8h token自动刷新,G7e全套基础设施) / §9扩展为5仓库(新增.github)+万德统一标签规范+自动编程Project Board#2 / §9.2新增Corporation标签迁移待执行(150 Issue,需满足标签规范+SOP格式) / §9当前状态更新`
+- `[v4.9] 2026-03-18: 代码迁移SOP→自动编程SOP — 新增§7.9自动编程SOP(Issue驱动+Claude Code自主执行+并行调度) / §7.1应用仓库流升级为自动编程模式 / 三个CLAUDE.md已从迁移驱动升级为Issue驱动(backend 615a2e2f/front 4affbcd/web b9a0714) / §12技术栈移除"迁移中"标注 / §9当前状态更新`
+- `[v4.8] 2026-03-17: 三仓库独立CI/CD流水线 + 命名统一 — 新增§9.1 CI/CD流水线详情(三Runner清单+镜像时间戳策略+构建脚本位置+Lightsail部署目录) / §9扩展为4仓库架构(分离平台与应用) / §7.1-7.2升级v3(双模式:平台仓库autonomous_worker+应用仓库Self-hosted Runner) / front和web从Webhook切换为Self-hosted Runner(解决变量转义问题) / Lightsail Docker容器名统一为wande-ai-xxx / §2服务清单新增Runner×3`
+- `[v4.7.3] 2026-03-16: G7e模型 GPTQ-Int4→FP8 — §2服务清单(TP=2+max_model_len=131072) / 降级链备注(FP8原生精度) / §5.2验证链(移除27B) / §8服务健康命令(移除8001) / §12技术栈(Vue+SpringBoot迁移+MinIO+Weaviate) / 备用模型存储信息 / 多模态能力标注`
+- `[v4.7.2] 2026-03-16: §2.1 SOP v4→v5——轮询模式→阻塞模式，单次调用零轮询(credit节约97%) + screen -dmS废弃 + timeout 600s`
+- `[v4.7.1] 2026-03-16: §2.1 SOP v3→v4——强化Perplexity为纯转发者(禁止fetch_url/search_web等预处理) + 轮询间隔5s→10s`
+- `[v4.7] 2026-03-16: "用本地模型"全面切换为Claude Code——§2.1 SOP v3: screen -dmS启动(解决nohup阻塞Webhook问题) + 每5秒轮询带部分输出实时展示 + run_task.sh持久化启动脚本 / Agent Runtime(:9820)已停用 / root Claude Code v2.1.76(symlink+settings.json+CLAUDE.md) / 搜索: WebSearch首选>SearXNG备用`
+- `[v4.5.1] 2026-03-16: G7e模型统一为122B双卡并行 — 停掉27B及其他模型，122B端口映射从8001改为8000 / 新增§2.1 Perplexity调用G7e 122B标准SOP(直接API+Webhook fallback+关闭thinking) / model-catalog新增g7e_qwen35_122b自定义模型提供商 / 降级链更新为122B→glm→kimi→xykjy / CI/CD流水线完成首次成功运行`
+- `[v4.5] 2026-03-08: 知识体系大升级 — NAS→S3→Chroma知识摄入管线 / 明道云全量迁移到PostgreSQL / AWS CLI+S3配置完成 / 14个知识Issue(#381-#394)已创建 / 企微C模式+B模式需求对齐 / Cockpit看板四列视图 / autonomous_worker v4.5(compact scan+4096 tokens+pytest pre-push) / vLLM-27B max_model_len→32768 / watchdog_v2+playbook_engine部署 / 知识库评分45.3→目标80`
+- `[v4.4] 2026-03-08: Worker v4.5修复(prompt瘦身+安全检查) / Opus战略分析落地(9任务) / PR清理(26+merged,14+closed) / watchdog_v2+playbook_engine+pg_backup部署 / Cockpit预算管理Issue(#373-#376)`
+- `[v4.3.2] 2026-03-08: 企微推送从群机器人webhook改为自建应用API（万德助手测试），三层汇报→两层汇报，#342/#343已更新`
+- `[v4.3.1] 2026-03-08: 新增§3.5需求→执行一站式交付（吴耀提需求→直接给最优方案+执行清单→同意后批量创建Issue）`
+- `[v4.3] 2026-03-08: 新增§5.5主动进化协议, §5.6 G7e学习闭环, §5.7模式学习, §5.8反思协议, §5.9版本追踪, §6.5智能分批, §6.6定时引擎, §6.7自主复盘, §6.8能力替代`
 
 ## §6 自愈能力仪表盘
 
@@ -557,9 +573,9 @@ Worker按以下优先级排序处理Issue（不再按创建时间）：
 → Stage 3: main合并触发 → Lightsail部署
 ```
 
-**应用仓库（backend/front/pipeline/plugins）— 调度器驱动的TDD自动编程**：
+**应用仓库（backend/front/pipeline）— 调度器驱动的TDD自动编程**：
 ```
-调度器(.github仓库) → 选Issue + pre-task(建目录/切分支/改标签)
+调度器(.github仓库) → Project看板查询Todo + pre-task(建目录/切分支/改标签/Status→In Progress)
 → 触发编程CC → 3阶段TDD工作流：
   第一阶段：读Issue(含评论) → 需求评估 → 创建task.md
   第二阶段：测试先行(红灯) → 编码通过(绿灯) → deploy-dev.sh部署验证
@@ -585,7 +601,7 @@ Worker按以下优先级排序处理Issue（不再按创建时间）：
 2. 标签至少3个（优先级+类型+状态），跨项目依赖用`WnadeyaowuOraganization/repo#number`格式
 3. 三个项目（backend/front/pipeline）可并行处理
 4. 给Claude Code的Issue描述要精准，让它自主分析和决策
-5. 涉及CLAUDE.md的修改由Perplexity使用ubuntu用户直接完成，不经过Claude Code转一层
+5. 涉及CLAUDE.md的修改由Perplexity直接完成，不经过Claude Code转一层
 
 详见§7.10 Issue创建SOP、§7.9 自动编程SOP 和 §9.1 CI/CD流水线。
 
@@ -666,10 +682,13 @@ push到main → G7e Runner构建镜像 → 推送Registry(时间戳+latest)
 ```
 
 **调度器pre-task（编程CC启动前完成）**：
-1. 从SCHEDULE.md选定Issue → `gh issue edit --add-label status:in-progress`
+1. 从Project#2看板查询Status=Todo的Issue，按优先级排序选定
 2. 工作目录 `mkdir -p ./issues/issue-<N>`
 3. 切分支 `git checkout dev && git pull && git checkout -b feature-issue-<N>`
-4. 触发编程CC：`claude -p '读取Issue #N的完整内容（包括所有评论），按CLAUDE.md工作流执行'`
+4. 标签 `gh issue edit --add-label status:in-progress --remove-label status:ready`
+5. 看板Status→In Progress（`gh project item-edit --single-select-option-id 47fc9ee4`）
+6. 触发编程CC：`claude -p '读取Issue #N的完整内容（包括所有评论），按CLAUDE.md工作流执行'`
+7. CC结果处理：失败→Status改Fail / 评估B/C→CC内部已改pause / 成功→等PR merge后自动Done
 
 **编程CC 3阶段TDD工作流（各仓库CLAUDE.md已配置）**：
 ```
@@ -909,7 +928,7 @@ G7e仓库路径：`/opt/agent/wande-ai-platform`（autonomous_worker工作目录
 
 | 仓库 | 用途 | CI/CD方式 | G7e项目路径 |
 |------|------|----------|------------|
-| `.github` | 组织级规范文档 + 调度器CLAUDE.md + 排程清单 | 调度器 | `/home/ubuntu/projects/.github` |
+| `.github` | 组织级规范文档 + 调度器CLAUDE.md | 调度器 | `/home/ubuntu/projects/.github` |
 | `wande-ai-platform` | 核心中枢（Issue/PR/自动化工作流） | autonomous_worker | `/opt/agent/wande-ai-platform` |
 | `wande-ai-backend` | Spring Boot后端 | Self-hosted Runner | `/home/ubuntu/projects/wande-ai-backend` |
 | `wande-ai-front` | Vue3管理后台前端 | Self-hosted Runner | `/home/ubuntu/projects/wande-ai-front` |
@@ -935,6 +954,10 @@ G7e仓库路径：`/opt/agent/wande-ai-platform`（autonomous_worker工作目录
 - 执行Label：ready（确认可执行，触发Worker）
 - Sprint Board：https://github.com/orgs/WnadeyaowuOraganization/projects/1
 - **自动编程 Project Board**：https://github.com/orgs/WnadeyaowuOraganization/projects/2
+    - Project ID: `PVT_kwDOD3gg584BSCFx`
+    - Status字段ID: `PVTSSF_lADOD3gg584BSCFxzg_r2go`
+    - Status选项: Plan(`5ef24ffe`) / Todo(`f75ad846`) / In Progress(`47fc9ee4`) / Done(`98236657`) / pause(`1c220cdf`) / Fail(`3bdb636e`)
+    - 更新命令: `gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID" --field-id PVTSSF_lADOD3gg584BSCFxzg_r2go --single-select-option-id <OPTION_ID>`
 - CODEOWNERS：@wandeyaowu
 
 **当前状态（2026-03-21 v5.4更新）：Dev环境从Docker切换为G7e本地部署(java -jar + nginx) — 后端jar部署到/apps/wande-ai-backend/ / 前端静态文件部署到/apps/wande-ai-front/ / nginx:8083代理前端+API / PostgreSQL和Redis仍使用Docker / CI/CD dev流水线已更新(直接编译部署，不构建镜像) / 菜单体系为20000+ ID / Corporation标签迁移待执行**

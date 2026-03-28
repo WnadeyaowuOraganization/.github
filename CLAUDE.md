@@ -86,7 +86,7 @@ gh project item-edit --project-id PVT_kwDOD3gg584BSCFx --id "$ITEM_ID" \
 
 **核心原则**: 一个目录同时只能运行一个CC。多Issue并发 = 在多个目录各启动一个CC。
 
-**最大并发数**: G7e本地模型同时最多6个CC（显存限制）。超过6个会导致显存溢出。
+**最大并发数**: 根据Issue相关性和目录个数决定。
 
 ### 目录占用检查（强制，触发CC前必须执行）
 

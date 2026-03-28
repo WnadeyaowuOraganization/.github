@@ -13,8 +13,8 @@
 
 **周期**: 2026-03-28 ~ 2026-04-11
 **重点模块**:
-1. **项目矿场** — title含 `[项目矿场]` `[项目中心]`，或标签含 `module:project`
-2. **超管驾驶舱** — title含 `[超管驾驶舱]` `[Claude Office]`，或标签含 `module:dashboard`
+1. **超管驾驶舱** — title含 `[超管驾驶舱]`，或标签含 `module:dashboard`
+2. **Claude Office** — title含 `[Claude Office]`
 
 ## 排序规则
 
@@ -58,26 +58,49 @@
 
 **核心原则**: 一个目录同时只能运行一个CC。多Issue并发 = 在多个目录各启动一个CC。
 
+**最大并发数**: G7e本地模型同时最多6个CC（显存限制）。超过6个会导致显存溢出。
+
+### 目录占用检查（强制，触发CC前必须执行）
+
+```bash
+# 检查目录是否空闲
+PID_FILE="/home/ubuntu/cc_scheduler/<目录>_cc.pid"
+if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
+    echo "目录占用，跳过"
+    # 不要在这个目录启动CC，换下一个空闲目录
+else
+    rm -f "$PID_FILE"  # 清理过期的PID文件
+    # 可以在这个目录启动CC
+fi
+```
+
+**触发前必须遍历所有可用目录，只在空闲目录中启动CC。绝对不允许在同一个目录启动多个CC。**
+
 ### pre-task（每个Issue启动前执行）
 
 ```bash
-# 1. 更新SCHEDULE.md中该Issue状态为"执行中"（必须在触发CC前完成）
+# 1. 检查目录是否空闲（必须通过才能继续）
+PID_FILE="/home/ubuntu/cc_scheduler/<目录>_cc.pid"
+if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
+    echo "目录占用，跳过"; exit 0
+fi
+
+# 2. 更新SCHEDULE.md中该Issue状态为"执行中"
 # 编辑 docs/SCHEDULE.md → commit + push
 
-# 2. 准备工作目录
+# 3. 准备工作目录
 cd /home/ubuntu/projects/<目录>
 git checkout dev && git pull origin dev
 git checkout -b feature-issue-<N>
 mkdir -p ./issues/issue-<N>
 
-# 3. 更新GitHub标签
+# 4. 更新GitHub标签
 gh issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remove-label "status:ready"
 ```
 
 ### 启动CC（后台运行，不阻塞）
 
 ```bash
-# 本地模型（主目录，环境变量已在/etc/profile.d/claude-local-model.sh中配置）
 nohup su - ubuntu -c "export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-token.py 2>/dev/null) && \
   cd /home/ubuntu/projects/<目录> && \
   claude -p '读取Issue #N的完整内容（包括所有评论），按CLAUDE.md工作流执行' --output-format text" \
@@ -85,38 +108,13 @@ nohup su - ubuntu -c "export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-tok
 echo $! > /home/ubuntu/cc_scheduler/<目录>_cc.pid
 ```
 
-### 并发示例（同时处理3个backend Issue）
-
-```bash
-# Issue #441 → 主目录
-cd /home/ubuntu/projects/wande-ai-backend
-git checkout dev && git pull && git checkout -b feature-issue-441
-mkdir -p ./issues/issue-441
-nohup su - ubuntu -c "export GH_TOKEN=... && cd /home/ubuntu/projects/wande-ai-backend && claude -p '读取Issue #441...' --output-format text" > /home/ubuntu/cc_scheduler/logs/backend_issue_441.log 2>&1 &
-
-# Issue #442 → kimi1目录
-cd /home/ubuntu/projects/wande-ai-backend-kimi1
-git checkout dev && git pull && git checkout -b feature-issue-442
-mkdir -p ./issues/issue-442
-nohup su - ubuntu -c "export GH_TOKEN=... && cd /home/ubuntu/projects/wande-ai-backend-kimi1 && claude -p '读取Issue #442...' --output-format text" > /home/ubuntu/cc_scheduler/logs/backend_kimi1_issue_442.log 2>&1 &
-
-# Issue #443 → kimi2目录
-# ... 同理
-```
-
 ### 检查CC是否完成
 
 ```bash
-# 检查PID是否还在运行
 kill -0 $(cat /home/ubuntu/cc_scheduler/<目录>_cc.pid) 2>/dev/null && echo "运行中" || echo "已结束"
-
-# 查看输出
-tail -20 /home/ubuntu/cc_scheduler/logs/<目录>_issue_<N>.log
 ```
 
-### CC完成后的清理
-
-CC完成后不需要额外操作——CC会push feature分支，CI/CD自动执行post-task.sh（评论Issue+创建PR）。
+CC完成后自动push feature分支，CI/CD执行post-task.sh。
 
 ## 拉取Issue命令
 

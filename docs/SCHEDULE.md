@@ -107,7 +107,7 @@
 
 | 序号 | Issue | 标题 | 优先级 | 状态 |
 |------|-------|------|--------|------|
-| 1 | #16 | [项目矿场-P0] Phase1: 采集引擎迁移与优化 — smart_project_discovery.py 纳入 data-pipeline 统一管理 | P0 | 失败 |
+| 1 | #16 | [项目矿场-P0] Phase1: 采集引擎迁移与优化 — smart_project_discovery.py 纳入 data-pipeline 统一管理 | P0 | 执行中 |
 | 2 | #32 | [设计模型训练-P0] Phase1 [2/14]: 竞品 T1 级 6 家高质量效果图采集 — LoRA-B 训练素材 | P0 | 失败 |
 | 3 | #33 | [设计模型训练-P0] Phase1 [3/14]: 训练数据自动 Caption 标注 — Qwen3.5-VL 批量生成结构化描述 | P0 | 失败 |
 | 4 | #36 | [测试基建-P0] Pipeline 仓库 CI 质量门禁 + 采集脚本测试框架+CLAUDE.md 测试规范 | P0 | 失败 |

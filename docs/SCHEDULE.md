@@ -1,7 +1,7 @@
 # 万德 AI 研发排程表
 
 **当前 Sprint**: 2026-03-28 ~ 2026-04-11
-**更新时间**: 2026-03-28 06:20
+**更新时间**: 2026-03-28 07:45
 **重点模块**: 超管驾驶舱、Claude Office
 
 ---
@@ -12,9 +12,9 @@
 |------|-------|-----|------|
 | Backend | #575 | 690817 | wande-ai-backend |
 | Frontend | #245 | 686527 | wande-ai-front |
-| Backend | #46 | 686776 | wande-ai-backend-kimi1 |
+| Backend | #46 | 715551 | wande-ai-backend-glm1 |
 | Backend | #248 | 693910 | wande-ai-backend-kimi2 |
-| Backend | #133 | 688364 | wande-ai-backend-kimi3 |
+| Backend | #133 | 716369 | wande-ai-backend-glm2 |
 | Pipeline | #16 | 653992 | wande-data-pipeline |
 
 ---

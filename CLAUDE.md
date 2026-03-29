@@ -121,7 +121,8 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Todo"
 
 ### 任务二：触发编程CC（Todo → In Progress）
 
-查询Todo状态的Issue，为每个Issue执行pre-task后启动编程CC：
+1、检查Project#2中In Progress的issue确定是否有编程CC在处理，没有的话恢复对应目录的CC继续完成工作
+2、查询Project#2中Todo状态的Issue，为每个Issue执行pre-task后启动编程CC
 
 ```bash
 # 1. 查询所有Todo状态的Issue

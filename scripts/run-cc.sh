@@ -19,10 +19,6 @@ if [ -z "$REPO" ] || [ -z "$ISSUE" ]; then
     echo "用法: $0 <repo> <issue_number> [dir_suffix]"
     echo "  repo: backend | front | pipeline"
     echo "  dir_suffix: kimi1~kimi6, glm1 等（可选）"
-    echo ""
-    echo "示例:"
-    echo "  $0 backend 272"
-    echo "  $0 backend 332 kimi1"
     exit 1
 fi
 
@@ -54,28 +50,11 @@ fi
 
 # Token
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
+export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
-# 写一个临时启动脚本给tmux执行（避免嵌套引号问题）
-LAUNCHER="/tmp/cc-launch-${REPO}-${ISSUE}.sh"
-cat > "$LAUNCHER" << LAUNCH_EOF
-#!/bin/bash
-export GH_TOKEN="$GH_TOKEN"
-export HOME="/home/ubuntu"
-export PATH="/home/ubuntu/.local/bin:\$PATH"
-cd "$PROJECT_DIR"
-echo "[$(date)] CC started for ${REPO}#${ISSUE} in ${PROJECT_DIR}" | tee "$LOGFILE"
-claude -p "拾取并完成 Issue #${ISSUE}" --output-format text 2>&1 | tee -a "$LOGFILE"
-echo "" | tee -a "$LOGFILE"
-echo "[$(date)] CC COMPLETED for ${REPO}#${ISSUE}" | tee -a "$LOGFILE"
-echo "按Enter关闭会话..."
-read
-LAUNCH_EOF
-chmod +x "$LAUNCHER"
-chown ubuntu:ubuntu "$LAUNCHER"
-
-# 以ubuntu用户启动tmux会话
-tmux new-session -d -s "$SESSION" "su - ubuntu -c 'bash $LAUNCHER'"
+# 直接在tmux中以当前用户(ubuntu)运行claude
+tmux new-session -d -s "$SESSION" \
+  "export GH_TOKEN=$GH_TOKEN; cd $PROJECT_DIR; echo [$(date)] CC started for ${REPO}#${ISSUE} | tee $LOGFILE; claude -p '拾取并完成 Issue #${ISSUE}' --output-format text 2>&1 | tee -a $LOGFILE; echo '' | tee -a $LOGFILE; echo [$(date)] CC COMPLETED | tee -a $LOGFILE; echo '按Enter关闭'; read"
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动"
 echo "  查看: tmux attach -t $SESSION"

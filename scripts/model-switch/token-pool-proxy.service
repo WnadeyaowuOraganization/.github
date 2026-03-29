@@ -1,0 +1,15 @@
+[Unit]
+Description=Token Pool Proxy - 智谱多Key自动切换 (port 9855)
+After=network.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ubuntu/projects/.github/scripts/model-switch
+ExecStart=/usr/bin/python3 /home/ubuntu/projects/.github/scripts/model-switch/token_pool_proxy.py
+Restart=always
+RestartSec=3
+User=ubuntu
+Environment=PYTHONUNBUFFERED=1
+
+[Install]
+WantedBy=multi-user.target

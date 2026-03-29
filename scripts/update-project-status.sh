@@ -2,6 +2,10 @@
 # update-project-status.sh - 更新Project #2看板的Status字段
 # 用法: update-project-status.sh <ISSUE_NUMBER> <STATUS>
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
+#
+# 优化: 单次GraphQL搜索issue获取item ID（vs 逐repo试错最多3次查询）
+#       cost ≈ 2 points (原版 3-7 points)
+
 set -e
 
 ISSUE_NUMBER="$1"
@@ -13,7 +17,6 @@ if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
     exit 1
 fi
 
-# Token
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
@@ -35,68 +38,45 @@ fi
 PROJECT_ID="PVT_kwDOD3gg584BSCFx"
 FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
 
-# 通过issue号直接获取关联的Project Item ID（不拉拉取所有items）
-QUERY='query($num: Int!) {
-  organization(login: "WnadeyaowuOraganization") {
-    repository(name: "wande-ai-backend") {
-      issue(number: $num) {
-        projectItems(first: 10) {
-          nodes {
-            id
-            project { number }
+# 单次查询：直接从Project的items中找对应issue number的item ID
+# 避免逐repo查询（原版最多3次GraphQL调用）
+QUERY='query($projectId: ID!, $after: String) {
+  node(id: $projectId) {
+    ... on ProjectV2 {
+      items(first: 100, after: $after) {
+        pageInfo { hasNextPage endCursor }
+        nodes {
+          id
+          content {
+            ... on Issue {
+              number
+            }
           }
         }
       }
     }
   }
 }'
-ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F num="$ISSUE_NUMBER" 2>/dev/null | python3 -c "
-import json, sys
-data = json.load(sys.stdin)
-items = data['data']['organization']['repository']['issue']['projectItems']['nodes']
-for item in items:
-    if item.get('project', {}).get('number') == 2:
-        print(item['id'])
-        break
-" 2>/dev/null)
 
-if [ -z "$ITEM_ID" ]; then
-    # backend没找到，试试front和pipeline
-    for repo in "wande-ai-front" "wande-data-pipeline"; do
-        QUERY='query($repo: String!, $num: Int!) {
-          organization(login: "WnadeyaowuOraganization") {
-            repository(name: $repo) {
-              issue(number: $num) {
-                projectItems(first: 10) {
-                  nodes {
-                    id
-                    project { number }
-                  }
-                }
-              }
-            }
-          }
-        }'
-        ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F repo="$repo" -F num="$ISSUE_NUMBER" 2>/dev/null | python3 -c "
+ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F projectId="$PROJECT_ID" 2>/dev/null \
+  | python3 -c "
 import json, sys
+target = $ISSUE_NUMBER
 data = json.load(sys.stdin)
-items = data['data']['organization']['repository']['issue']['projectItems']['nodes']
+items = data.get('data', {}).get('node', {}).get('items', {}).get('nodes', [])
 for item in items:
-    if item.get('project', {}).get('number') == 2:
+    content = item.get('content')
+    if content and isinstance(content, dict) and content.get('number') == target:
         print(item['id'])
         break
-" 2>/dev/null)
-        if [ -n "$ITEM_ID" ]; then
-            break
-        fi
-    done
-fi
+")
 
 if [ -z "$ITEM_ID" ]; then
     echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #2 中的 Item"
     exit 1
 fi
 
+# 更新Status (1次mutation)
 MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
   updateProjectV2ItemFieldValue(input: {
     projectId: $projectId
@@ -105,6 +85,8 @@ MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: Stri
     value: { singleSelectOptionId: $optionId }
   }) { projectV2Item { id } }
 }'
-gh api graphql --raw-field query="$MUTATION" -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
+gh api graphql --raw-field query="$MUTATION" \
+  -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" \
+  -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
 
 echo "✓ Issue #$ISSUE_NUMBER Status → $NEW_STATUS"

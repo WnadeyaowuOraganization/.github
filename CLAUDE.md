@@ -161,27 +161,45 @@ gh issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remov
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "In Progress"
 ```
 
-#### 启动CC（后台运行，不阻塞）
+#### 启动CC（tmux会话，可随时查看和恢复）
 
 ```bash
-nohup su - ubuntu -c "export GH_TOKEN=$(bash /home/ubuntu/projects/.github/scripts/get-gh-token.sh 2>/dev/null) && \
-  cd /home/ubuntu/projects/<目录> && \
-  claude -p '读取Issue #N的完整内容（包括所有评论），按CLAUDE.md工作流执行' --output-format text" \
-  > /home/ubuntu/cc_scheduler/logs/<目录>_issue_<N>.log 2>&1 &
-echo $! > /home/ubuntu/cc_scheduler/<目录>_cc.pid
+# 启动（自动创建tmux会话）
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> [dir_suffix]
+
+# 示例:
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 272        # 主目录
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 332 kimi1  # 外接目录
+
+# 查看实时输出:
+tmux attach -t cc-backend-272
+
+# 脱离（CC继续运行）:
+# Ctrl+B D
+
+# 列出所有CC会话:
+tmux list-sessions
 ```
+
 
 ### 任务三：检查结果
 
 ```bash
-# 检查是否完成
-kill -0 $(cat /home/ubuntu/cc_scheduler/<目录>_cc.pid) 2>/dev/null && echo "运行中" || echo "已结束"
+# 列出所有CC会话
+tmux list-sessions
 
-# CC失败(EXIT_CODE≠0) → 改为Fail
+# 查看特定CC
+tmux attach -t cc-backend-272
+
+# CC结束后查看日志
+cat /var/log/coding-cc/backend-272.log
+
+# CC失败 → 改为Fail
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Fail"
 ```
 
 CC正常完成 → 不改Status（CC已创建PR，等merge后Issue自动关闭，看板自动Done）。
+
 
 ## GitHub认证
 
@@ -209,7 +227,7 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 | Todo队列 | 同上 → Status=Todo |
 | 执行中 | 同上 → Status=In Progress |
 | CC日志 | `/home/ubuntu/cc_scheduler/logs/<目录>_issue_<N>.log` |
-| PID文件 | `/home/ubuntu/cc_scheduler/<目录>_cc.pid` |
+| tmux会话 | `tmux list-sessions`（cc-<repo>-<N>格式） |
 
 ## 标签
 

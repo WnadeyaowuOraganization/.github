@@ -182,6 +182,7 @@ tmux list-sessions
 ```
 
 
+
 ### 任务三：检查结果
 
 ```bash
@@ -199,6 +200,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Fail"
 ```
 
 CC正常完成 → 不改Status（CC已创建PR，等merge后Issue自动关闭，看板自动Done）。
+
 
 
 ## GitHub认证

@@ -246,4 +246,24 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 2. 不关闭Issue（PR merge自动关）
 3. 不改其他仓库CLAUDE.md
 4. 不合并PR
-5. 不编辑SCHEDULE.md（已废弃）
+
+### GraphQL 请求参数格式
+
+使用 `gh api graphql` 时，必须使用 `--raw-field` 传递查询/变更语句：
+
+```bash
+# Query
+QUERY='query($num: Int!) { ... }'
+gh api graphql --raw-field query="$QUERY" -F num="$ISSUE_NUMBER"
+
+# Mutation
+MUTATION='mutation($projectId: ID!, $itemId: ID!) { ... }'
+gh api graphql --raw-field query="$MUTATION" -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID"
+```
+
+**注意**：变量用 `-F` 传递（form格式），查询/变更用 `--raw-field query="..."` 传递（raw格式）。
+
+**获取返回值的重要信息**：
+- `status` 是顶层字段，不在 `fields` 数组中
+- `labels` 是顶层字段，不是在 `content.labels` 下
+- `content.repository` 是字符串格式（如 `WnadeyaowuOraganization/wande-ai-backend`）

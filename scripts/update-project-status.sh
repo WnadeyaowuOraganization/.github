@@ -35,38 +35,76 @@ fi
 PROJECT_ID="PVT_kwDOD3gg584BSCFx"
 FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
 
-ITEM_ID=$(gh api graphql -f query='
-query($issueNum: Int!) {
+# 通过issue号直接获取关联的Project Item ID（不拉拉取所有items）
+QUERY='query($num: Int!) {
   organization(login: "WnadeyaowuOraganization") {
-    projectV2(number: 2) {
-      items(first: 100) {
-        nodes {
-          id
-          content { ... on Issue { number } }
+    repository(name: "wande-ai-backend") {
+      issue(number: $num) {
+        projectItems(first: 10) {
+          nodes {
+            id
+            project { number }
+          }
         }
       }
     }
   }
-}' -F issueNum="$ISSUE_NUMBER" 2>/dev/null | python3 -c "
+}'
+ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F num="$ISSUE_NUMBER" 2>/dev/null | python3 -c "
 import json, sys
 data = json.load(sys.stdin)
-for item in data['data']['organization']['projectV2']['items']['nodes']:
-    if item.get('content', {}).get('number') == $ISSUE_NUMBER:
+items = data['data']['organization']['repository']['issue']['projectItems']['nodes']
+for item in items:
+    if item.get('project', {}).get('number') == 2:
         print(item['id'])
         break
 " 2>/dev/null)
 
 if [ -z "$ITEM_ID" ]; then
-    echo "错误: 未找到 Issue #$ISSUE_NUMBER 对应的Project Item"
+    # backend没找到，试试front和pipeline
+    for repo in "wande-ai-front" "wande-data-pipeline"; do
+        QUERY='query($repo: String!, $num: Int!) {
+          organization(login: "WnadeyaowuOraganization") {
+            repository(name: $repo) {
+              issue(number: $num) {
+                projectItems(first: 10) {
+                  nodes {
+                    id
+                    project { number }
+                  }
+                }
+              }
+            }
+          }
+        }'
+        ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F repo="$repo" -F num="$ISSUE_NUMBER" 2>/dev/null | python3 -c "
+import json, sys
+data = json.load(sys.stdin)
+items = data['data']['organization']['repository']['issue']['projectItems']['nodes']
+for item in items:
+    if item.get('project', {}).get('number') == 2:
+        print(item['id'])
+        break
+" 2>/dev/null)
+        if [ -n "$ITEM_ID" ]; then
+            break
+        fi
+    done
+fi
+
+if [ -z "$ITEM_ID" ]; then
+    echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #2 中的 Item"
     exit 1
 fi
 
-gh api graphql -f query='
-mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
   updateProjectV2ItemFieldValue(input: {
-    projectId: $projectId itemId: $itemId fieldId: $fieldId
+    projectId: $projectId
+    itemId: $itemId
+    fieldId: $fieldId
     value: { singleSelectOptionId: $optionId }
   }) { projectV2Item { id } }
-}' -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
+}'
+gh api graphql --raw-field query="$MUTATION" -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
 
 echo "✓ Issue #$ISSUE_NUMBER Status → $NEW_STATUS"

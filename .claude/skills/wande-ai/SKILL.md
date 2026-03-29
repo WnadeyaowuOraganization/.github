@@ -18,7 +18,7 @@ trigger_keywords:
   - autonomous_worker
 ---
 
-# 万德超级员工操作系统 v5.12
+# 万德超级员工操作系统 v5.13
 
 ## §1 使命与身份
 
@@ -218,7 +218,13 @@ G7e 122B 不在 Perplexity 的 `run_subagent` model 参数列表中。
 - **明道云**: 私有化部署（URL待提供）/ 全量数据迁移到PostgreSQL
 - **AWS CLI on G7e**: 已配置（~/.aws/credentials），root账户凭据
 - **IAM用户 nas-cloud-sync**: 仅wande-nas-sync Bucket读写权限，专供NAS Cloud Sync使用
-- **GitHub App（wande-auto-code-agent）**: Claude Code专用认证，替代个人PAT
+- **GitHub Token三层体系**（2026-03-29升级）:
+    - **主力token**: 伟平(david-hwp)PAT — Project操作/Issue/PR/git push，独立5000/h GraphQL配额
+    - **编程CC**: GitHub App(wande-auto-code-agent) token — ubuntu login shell注入，git push用
+    - **测试CC**: wandeyaowu PAT — 审批/合并PR（与App身份分离，解决GitHub禁止自审批）
+    - Token库: `/opt/wande-ai/scripts/github-token-lib.sh`（主=伟平PAT，备=wandeyaowu PAT，自动rate limit切换）
+    - 辅助脚本: `run-cc.sh` / `run-cc-nohup.sh` / `round-executor.sh` / `update-project-status.sh` 均已改为伟平PAT
+- **GitHub App（wande-auto-code-agent）**: Claude Code专用认证（仅用于profile.d login shell）
     - App ID: `3124981` | Installation ID: `117345757` | Client ID: `Iv23ct1pJQ9ipuZVW73f`
     - Bot身份: `wande-auto-code-agent[bot]` | Email: `3124981+wande-auto-code-agent[bot]@users.noreply.github.com`
     - G7e文件:
@@ -457,6 +463,7 @@ G7e autonomous_worker每日分析自己的成功/失败Pattern，生成优化建
 **版本号规则**：小改(v4.3.1) / 新增条目(v4.3→v4.4) / 架构级重构(v4.x→v5.0)
 
 **变更日志**：
+- `[v5.13] 2026-03-29: GitHub Token策略升级——伟平PAT为主token — 为避免App token rate limit(5000/h共享)，所有脚本优先使用伟平(david-hwp)PAT / 新增github-token-lib.sh(主token=伟平PAT+备用=wandeyaowu PAT+自动rate limit切换) / 已改脚本:update-project-status.sh,run-cc.sh,run-cc-nohup.sh,round-executor.sh,git-credential-app-token.sh,gh-with-app-token.sh / gh hosts.yml新增weiping用户 / cc_scheduler和profile.d仍用App token(未来可切换) / 三身份体系:伟平PAT(主力,Project+Issue+PR) + App token(编程CC git push) + wandeyaowu PAT(测试CC审批)`
 - `[v5.12] 2026-03-29: Project三层自动化流水线 — 新增auto-add-to-project.yml(三仓库main+dev,Issue创建时CI/CD自动关联Project#2+Status=Plan,test-failed标签→Todo) / .github/CLAUDE.md重写为v2(职责拆分:排程Plan→Todo + 触发Todo→In Progress + 检查结果 / Issue生命周期图 / 任务一排程+任务二触发+任务三检查 三段式) / PROJECT_TOKEN Secret已设置(伟平PAT,三仓库) / 伟平(david-hwp)PAT需Organization Projects权限`
 - `[v5.11] 2026-03-29: Project Status操作统一为辅助脚本 — 所有项目的workflow.md和CLAUDE.md中的内联gh project item-list/item-edit命令替换为`bash /opt/wande-ai/scripts/update-project-status.sh <N> <STATUS>`一行调用 / 脚本位置:/opt/wande-ai/scripts/update-project-status.sh / 脚本内置STATUS_MAP和GraphQL查询，自动处理Item ID查找`
 - `[v5.10] 2026-03-29: 调度器迁移到Project API，废弃SCHEDULE.md — .github/CLAUDE.md全面重写(职责从“更新SCHEDULE.md”改为“查询Project看板” / pre-task用gh project item-list查询Todo状态Issue / Status更新用gh project item-edit / 移除所有SCHEDULE.md读写和commit+push操作 / 清理重复的CC完成后Status更新段落) / SCHEDULE.md文件保留但不再维护`

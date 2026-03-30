@@ -69,11 +69,12 @@ bash /home/ubuntu/projects/.github/scripts/run-cc-nohup.sh <repo> <issue_number>
 
 ## 项目与工作目录
 
-| 项目 | 仓库 | 主目录 | 外接目录 |
-|------|------|--------|---------|
-| backend | `WnadeyaowuOraganization/wande-ai-backend` | `/home/ubuntu/projects/wande-ai-backend` | `wande-ai-backend-kimi1` ~ `kimi6`, `backend-glm1` |
-| front | `WnadeyaowuOraganization/wande-ai-front` | `/home/ubuntu/projects/wande-ai-front` | `wande-ai-front-kimi1` ~ `kimi4`, `front-glm1` |
-| pipeline | `WnadeyaowuOraganization/wande-data-pipeline` | `/home/ubuntu/projects/wande-data-pipeline` | 无 |
+| 项目       | 仓库                                            | 主目录 | 外接目录                                               |
+|----------|-----------------------------------------------|--------|----------------------------------------------------|
+| backend  | `WnadeyaowuOraganization/wande-ai-backend`    | `/home/ubuntu/projects/wande-ai-backend` | `wande-ai-backend-kimi1` ~ `kimi6`, `backend-glm1` |
+| front    | `WnadeyaowuOraganization/wande-ai-front`      | `/home/ubuntu/projects/wande-ai-front` | `wande-ai-front-kimi1` ~ `kimi4`, `front-glm1`     |
+| pipeline | `WnadeyaowuOraganization/wande-data-pipeline` | `/home/ubuntu/projects/wande-data-pipeline` | `wande-data-pipeline-glm1` ~ `glm4`                |
+| plugins  | `WnadeyaowuOraganization/wande-gh-plugins`    | `/home/ubuntu/projects/wande-gh-plugins` | `wande-gh-plugins-glm1` ~ `glm4`                                                     |
 
 所有目录在 `/home/ubuntu/projects/` 下。每个目录是同一仓库的独立克隆，可以同时运行不同的CC处理不同Issue。
 
@@ -81,7 +82,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc-nohup.sh <repo> <issue_number>
 
 **核心原则**: 一个目录同时只能运行一个CC。多Issue并发 = 在多个目录各启动一个CC。
 
-**最大并发数**: 每个github仓库最多4个并发。
+**最大并发数**: 每个项目最多4个并发。
 
 ### 目录占用检查（强制，触发CC前必须执行）
 

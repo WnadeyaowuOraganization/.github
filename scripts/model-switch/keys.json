@@ -13,7 +13,7 @@
       "name": "zhipu_max_2",
       "type": "zhipu",
       "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "zhipu_max_3",
@@ -23,7 +23,7 @@
     },
     {
       "name": "aiopus_pool",
-      "type": "zhipu",
+      "type": "aiopus",
       "api_url": "https://newapi.aiopus.org",
       "api_key": "sk-24aLsdgHRnydluET4Iy0dfoM9AxO9c7plMKa2H3hYtPzlKt8",
       "model_map": {

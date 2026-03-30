@@ -1,0 +1,3 @@
+# 敏感文件不入git（通过符号链接指向/opt/wande-ai/）
+scripts/github-app/private-key.pem
+scripts/github-app/.token-cache.json

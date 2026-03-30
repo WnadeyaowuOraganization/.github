@@ -3,8 +3,10 @@
 # 用法: update-project-status.sh <ISSUE_NUMBER> <STATUS>
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 #
-# 优化: 单次GraphQL搜索issue获取item ID（vs 逐repo试错最多3次查询）
-#       cost ≈ 2 points (原版 3-7 points)
+# v2 (2026-03-30): 通过Issue.projectItems反查Item ID，彻底消除分页问题
+#   - 1次query(4仓库并行) + N次mutation = 最少2次API调用
+#   - 解决v1的items>100找不到问题
+#   - 同号issue(如#248在backend和front都有)全部更新
 
 set -e
 
@@ -38,45 +40,75 @@ fi
 PROJECT_ID="PVT_kwDOD3gg584BSCFx"
 FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
 
-# 单次查询：直接从Project的items中找对应issue number的item ID
-# 避免逐repo查询（原版最多3次GraphQL调用）
-QUERY='query($projectId: ID!, $after: String) {
-  node(id: $projectId) {
-    ... on ProjectV2 {
-      items(first: 100, after: $after) {
-        pageInfo { hasNextPage endCursor }
-        nodes {
-          id
-          content {
-            ... on Issue {
-              number
-            }
-          }
-        }
+# 1次查询: 4个仓库并行查询，通过Issue.projectItems反查Item ID
+# 不存在的issue number返回null（GraphQL partial error），不影响其他仓库的结果
+QUERY='query($owner: String!, $number: Int!) {
+  backend: repository(owner: $owner, name: "wande-ai-backend") {
+    issue(number: $number) {
+      projectItems(first: 3) {
+        nodes { id project { id } }
+      }
+    }
+  }
+  front: repository(owner: $owner, name: "wande-ai-front") {
+    issue(number: $number) {
+      projectItems(first: 3) {
+        nodes { id project { id } }
+      }
+    }
+  }
+  pipeline: repository(owner: $owner, name: "wande-data-pipeline") {
+    issue(number: $number) {
+      projectItems(first: 3) {
+        nodes { id project { id } }
+      }
+    }
+  }
+  plugins: repository(owner: $owner, name: "wande-gh-plugins") {
+    issue(number: $number) {
+      projectItems(first: 3) {
+        nodes { id project { id } }
       }
     }
   }
 }'
 
-ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F projectId="$PROJECT_ID" 2>/dev/null \
+# 提取所有匹配Project#2的Item ID（同号issue可能在多个仓库）
+ITEM_IDS=$(gh api graphql --raw-field query="$QUERY" \
+  -F owner="WnadeyaowuOraganization" -F number="$ISSUE_NUMBER" 2>/dev/null \
   | python3 -c "
 import json, sys
-target = $ISSUE_NUMBER
-data = json.load(sys.stdin)
-items = data.get('data', {}).get('node', {}).get('items', {}).get('nodes', [])
-for item in items:
-    content = item.get('content')
-    if content and isinstance(content, dict) and content.get('number') == target:
-        print(item['id'])
+
+raw = sys.stdin.read()
+# gh api 可能在JSON后追加error文本，只解析第一个完整JSON对象
+depth = 0
+for i, c in enumerate(raw):
+    if c == '{': depth += 1
+    elif c == '}': depth -= 1
+    if depth == 0 and i > 0:
+        data = json.loads(raw[:i+1]).get('data', {})
         break
+else:
+    data = {}
+
+target_project = '$PROJECT_ID'
+items = []
+for repo, val in data.items():
+    if val and val.get('issue'):
+        for pi in val['issue']['projectItems']['nodes']:
+            if pi['project']['id'] == target_project:
+                items.append(f'{pi[\"id\"]}|{repo}')
+
+for item in items:
+    print(item)
 ")
 
-if [ -z "$ITEM_ID" ]; then
+if [ -z "$ITEM_IDS" ]; then
     echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #2 中的 Item"
     exit 1
 fi
 
-# 更新Status (1次mutation)
+# 更新每个匹配的Item（通常1个，同号issue时可能多个）
 MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
   updateProjectV2ItemFieldValue(input: {
     projectId: $projectId
@@ -85,8 +117,16 @@ MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: Stri
     value: { singleSelectOptionId: $optionId }
   }) { projectV2Item { id } }
 }'
-gh api graphql --raw-field query="$MUTATION" \
-  -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" \
-  -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
 
-echo "✓ Issue #$ISSUE_NUMBER Status → $NEW_STATUS"
+UPDATED=0
+while IFS='|' read -r ITEM_ID REPO_NAME; do
+    gh api graphql --raw-field query="$MUTATION" \
+      -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" \
+      -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
+    UPDATED=$((UPDATED + 1))
+    echo "✓ Issue #$ISSUE_NUMBER ($REPO_NAME) Status → $NEW_STATUS"
+done <<< "$ITEM_IDS"
+
+if [ "$UPDATED" -gt 1 ]; then
+    echo "  (同号issue在${UPDATED}个仓库，全部已更新)"
+fi

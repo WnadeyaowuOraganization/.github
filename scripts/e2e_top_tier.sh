@@ -4,7 +4,7 @@
 
 LOCK_FILE="/home/ubuntu/cc_scheduler/e2e_top.lock"
 LOG_FILE="/home/ubuntu/cc_scheduler/e2e_top.log"
-E2E_DIR="/home/ubuntu/projects/wande-ai-e2e"
+E2E_DIR="/home/ubuntu/projects/wande-ai-e2e-full"
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"; }
 

@@ -36,7 +36,7 @@ export HOME="/home/ubuntu"
 cd "$GITHUB_DIR"
 
 # 触发研发经理CC
-claude -p "检查当前运行中的CC状态（查看/home/ubuntu/cc_scheduler/logs/下的日志和PID文件），更新SCHEDULE.md中已完成Issue的状态，然后为空闲目录触发新的CC处理排程中下一批Issue" --output-format text >> "$LOG_FILE" 2>&1
+claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" --output-format text >> "$LOG_FILE" 2>&1
 
 EXIT_CODE=$?
 log "研发经理CC结束 (exit=$EXIT_CODE)"

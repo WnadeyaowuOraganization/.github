@@ -1,0 +1,61 @@
+{
+  "_doc": "多源Key池配置 — Token Pool Proxy v2",
+  "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=openai_compat: New API兼容中转站(OpenAI格式)",
+
+  "keys": [
+    {
+      "name": "zhipu_max_1",
+      "type": "zhipu",
+      "api_key": "7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C",
+      "enabled": true
+    },
+    {
+      "name": "zhipu_max_2",
+      "type": "zhipu",
+      "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
+      "enabled": false
+    },
+    {
+      "name": "zhipu_max_3",
+      "type": "zhipu",
+      "api_key": "6c587006e0d541e183a1d1e64b984350.rEB8d5uUV4DkZhtA",
+      "enabled": false
+    },
+    {
+      "name": "aiopus_pool",
+      "type": "zhipu",
+      "api_url": "https://newapi.aiopus.org",
+      "api_key": "sk-24aLsdgHRnydluET4Iy0dfoM9AxO9c7plMKa2H3hYtPzlKt8",
+      "model_map": {
+        "glm-5.1": "glm-5",
+        "glm-5-turbo": "glm-5",
+        "glm-4.5-air": "glm-5"
+      },
+      "_note": "aiopus中转站，Anthropic Messages格式直传，模型名重写为glm-5，50刀额度",
+      "enabled": true
+    }
+  ],
+
+  "upstream": {
+    "base_url": "https://open.bigmodel.cn/api/anthropic",
+    "default_models": {
+      "haiku": "glm-4.5-air",
+      "sonnet": "glm-5-turbo",
+      "opus": "glm-5.1"
+    }
+  },
+
+  "fallback": {
+    "enabled": true,
+    "vllm_url": "http://localhost:8000/v1/chat/completions",
+    "vllm_model": "/model",
+    "_note": "本地Qwen3.5-122B-A10B via vLLM, 所有Key耗尽时自动降级"
+  },
+
+  "cooldown": {
+    "rate_limit_hours": 5,
+    "weekly_limit_hours": 168,
+    "balance_exhausted_hours": 720,
+    "_note": "5h限额冷却5h, 周限额168h, 余额不足冷却30天. 连续触发自动升级"
+  }
+}

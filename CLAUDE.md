@@ -120,9 +120,10 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Todo"
 ```
 
 ### 任务二：触发编程CC（Todo → In Progress）
-
-1、检查Project#2中In Progress的issue确定是否有创建对应的PR，没有的话恢复对应目录的CC继续完成工作
-2、查询Project#2中Todo状态的Issue，为每个Issue执行pre-task后启动编程CC
+1. 先检查各仓库的编程CC有没有空闲席位，没有就退出，有则下一步
+2. 检查Project#2中In Progress的issue确定是否有创建对应的PR，没有的话恢复对应目录（原先指派这个issue的编程CC目录）的CC继续完成工作
+3. 查询Project#2中Todo状态的Issue，为每个Issue执行pre-task后启动编程CC
+4. 记录issue被指派到了哪个目录，便于后续恢复（指派记录文件：docs/ISSUE_ASSIGN_HISTORY.md）——这个记录十分重要，能有效避免编程CC重复工作
 
 ```bash
 # 1. 查询所有Todo状态的Issue

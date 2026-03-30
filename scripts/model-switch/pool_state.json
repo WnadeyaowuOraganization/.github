@@ -1,0 +1,8 @@
+{
+  "zhipu_max_3": {
+    "consecutive_hits": 3,
+    "type": "balance",
+    "cooldown_until": "2026-04-29T11:50:54.094989+08:00",
+    "marked_at": "2026-03-30T11:50:54.094998+08:00"
+  }
+}

@@ -49,13 +49,18 @@ Issue创建 → [CI/CD自动] 关联Project + Status=Plan (test-failed→Todo)
 # Token统一入口（e2e→wandeyaowu PAT / 其他→伟平PAT）
 source /home/ubuntu/projects/.github/scripts/get-gh-token.sh
 
+# 按项目和状态搜索Project看板中的issue
+bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh <repo> "<STATUS>"
+# repo: backend | front | pipeline | plugins | all (默认all)
+# STATUS: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
+
 # 更新Project看板Status
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <ISSUE_NUMBER> "<STATUS>"
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <ISSUE_NUMBER> "<STATUS>"
+# repo:   backend | front | pipeline | plugins (可选，不传则查全部4个仓库)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 
 # 触发编程CC
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <issue_number>
-bash /home/ubuntu/projects/.github/scripts/run-cc-nohup.sh <repo> <issue_number>
 ```
 
 ## 排序规则
@@ -104,20 +109,10 @@ fi
 
 ```bash
 # 1. 查询所有Plan状态的Issue
-gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500 \
-  | python3 -c "
-import json, sys
-items = json.load(sys.stdin)['items']
-plan = [i for i in items if i.get('status') == 'Plan']
-priority_order = {'P0-阻塞': 0, 'P1-核心': 1, 'P2-增强': 2, 'P3-规划': 3}
-plan.sort(key=lambda x: priority_order.get(x.get('优先级', ''), 99))
-for i in plan:
-    c = i.get('content', {})
-    print(f'#{c.get(\"number\",\"?\")} [{i.get(\"优先级\",\"?\")}] {c.get(\"repository\",\"?\")} — {i.get(\"title\",\"?\")[:60]}')
-"
+bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh all "Plan"
 
 # 2. 按Sprint重点和优先级，将选定的Issue从Plan改为Todo
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Todo"
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Todo" <repo>
 ```
 
 ### 任务二：触发编程CC（Todo → In Progress）
@@ -127,18 +122,10 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Todo"
 4. 记录issue被指派到了哪个目录，便于后续恢复（指派记录文件：docs/ISSUE_ASSIGN_HISTORY.md）——这个记录十分重要，能有效避免编程CC重复工作
 
 ```bash
-# 1. 查询所有Todo状态的Issue
-gh project item-list 2 --owner WnadeyaowuOraganization --format json -L 500 \
-  | python3 -c "
-import json, sys
-items = json.load(sys.stdin)['items']
-todo = [i for i in items if i.get('status') == 'Todo']
-priority_order = {'P0-阻塞': 0, 'P1-核心': 1, 'P2-增强': 2, 'P3-规划': 3}
-todo.sort(key=lambda x: priority_order.get(x.get('优先级', ''), 99))
-for i in todo:
-    c = i.get('content', {})
-    print(f'#{c.get(\"number\",\"?\")} [{i.get(\"优先级\",\"?\")}] {c.get(\"repository\",\"?\")} — {i.get(\"title\",\"?\")[:60]}')
-"
+# 1. 按项目查询所有In Progress状态的Issue
+bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh <repo> "In Progress"
+# 2. 按项目查询所有Todo状态的Issue
+bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh <repo> "Todo"
 ```
 
 #### pre-task（每个Issue启动前执行）

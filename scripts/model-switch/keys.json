@@ -22,16 +22,16 @@
       "enabled": false
     },
     {
-      "name": "aiopus_pool",
-      "type": "aiopus",
+      "name": "aisonnet_pool",
+      "type": "zhipu",
       "api_url": "https://newapi.aiopus.org",
       "api_key": "sk-24aLsdgHRnydluET4Iy0dfoM9AxO9c7plMKa2H3hYtPzlKt8",
       "model_map": {
-        "glm-5.1": "glm-5",
-        "glm-5-turbo": "glm-5",
-        "glm-4.5-air": "glm-5"
+        "glm-5.1": "claude-opus-4-6",
+        "glm-5-turbo": "claude-sonnet-4-6",
+        "glm-4.5-air": "claude-3-5-haiku-20241022"
       },
-      "_note": "aiopus中转站，Anthropic Messages格式直传，模型名重写为glm-5，50刀额度",
+      "_note": "aisonnet中转站，Anthropic Messages格式，glm模型名映射为claude模型名",
       "enabled": true
     }
   ],
@@ -53,9 +53,9 @@
   },
 
   "cooldown": {
-    "rate_limit_hours": 5,
-    "weekly_limit_hours": 168,
-    "balance_exhausted_hours": 720,
-    "_note": "5h限额冷却5h, 周限额168h, 余额不足冷却30天. 连续触发自动升级"
+    "rate_limit_hours": 1,
+    "weekly_limit_hours": 4,
+    "balance_exhausted_hours": 24,
+    "_note": "速率限制冷却1h, 高频触发(5min内>=5次)冷却4h, 余额/认证问题冷却24h. 基于时间窗口计数，不会因并发429虚假升级"
   }
 }

@@ -57,9 +57,12 @@ logger = logging.getLogger(__name__)
 
 _lock = threading.Lock()
 _config = {}
-_pool_state = {}  # {key_name: {"cooldown_until": iso_str, "type": "rate"|"weekly"|"balance", "consecutive_hits": int}}
+_pool_state = {}  # {key_name: {"cooldown_until": iso_str, "type": "rate"|"weekly"|"balance", "error_timestamps": [iso_str]}}
 _round_robin_index = 0
 _stats = {}  # {key_name: {"requests": int, "errors": int, "last_used": iso_str}}
+
+# 冷却升级的时间窗口(秒): 只统计最近WINDOW秒内的错误次数
+_COOLDOWN_WINDOW_SECS = 300  # 5分钟窗口
 
 
 def _now():
@@ -128,30 +131,53 @@ def _is_key_available(key_name):
 
 
 def _mark_key_cooldown(key_name, cooldown_type="rate"):
-    """标记Key进入冷却"""
+    """标记Key进入冷却，打印详细冷却信息
+
+    升级逻辑基于时间窗口内的错误次数(非简单累计):
+    - 5分钟窗口内错误<=2次: 普通速率冷却(默认1h)
+    - 5分钟窗口内错误>=3次: 升级为较长冷却(默认4h)
+    - 余额/认证类错误: 长期冷却(默认24h)
+    """
     with _lock:
-        state = _pool_state.get(key_name, {"consecutive_hits": 0})
-        state["consecutive_hits"] = state.get("consecutive_hits", 0) + 1
+        state = _pool_state.get(key_name, {})
+        now = _now()
+
+        # 维护时间窗口内的错误时间戳列表
+        error_ts = state.get("error_timestamps", [])
+        error_ts.append(now.isoformat())
+        # 只保留最近窗口内的记录
+        window_start = now - timedelta(seconds=_COOLDOWN_WINDOW_SECS)
+        error_ts = [t for t in error_ts if datetime.fromisoformat(t) >= window_start]
+        state["error_timestamps"] = error_ts
+        recent_count = len(error_ts)
 
         cooldown_cfg = _config.get("cooldown", {})
 
-        if cooldown_type == "balance":
-            # 余额不足 → 长期冷却(30天)
-            hours = cooldown_cfg.get("balance_exhausted_hours", 720)
-            state["type"] = "balance"
-            logger.warning(f"[{key_name}] 余额不足，冷却 {hours}h")
-        elif state["consecutive_hits"] >= 2 or cooldown_type == "weekly":
-            # 连续触发2次以上 → 升级为周冷却
-            hours = cooldown_cfg.get("weekly_limit_hours", 168)
-            state["type"] = "weekly"
-            logger.warning(f"[{key_name}] 周限额冷却 {hours}h (连续触发{state['consecutive_hits']}次)")
-        else:
-            hours = cooldown_cfg.get("rate_limit_hours", 5)
-            state["type"] = "rate"
-            logger.warning(f"[{key_name}] 5小时限额冷却 {hours}h")
+        # 统计池中可用Key数
+        all_keys = _get_enabled_keys()
+        available_count = sum(1 for k in all_keys if _is_key_available(k["name"]) and k["name"] != key_name)
 
-        state["cooldown_until"] = (_now() + timedelta(hours=hours)).isoformat()
-        state["marked_at"] = _now().isoformat()
+        if cooldown_type == "balance":
+            # 余额不足/认证失败 → 长期冷却(默认24h，非30天)
+            hours = cooldown_cfg.get("balance_exhausted_hours", 24)
+            state["type"] = "balance"
+            cooldown_until = now + timedelta(hours=hours)
+            logger.warning(f"[{key_name}] 冷却标记: 余额/认证问题 → {hours}h冷却 (至 {cooldown_until.strftime('%m-%d %H:%M')}) | 窗口内{recent_count}次错误 | 剩余可用Key: {available_count}")
+        elif recent_count >= 5:
+            # 窗口内频繁触发 → 较长冷却(默认4h)
+            hours = cooldown_cfg.get("weekly_limit_hours", 4)
+            state["type"] = "escalated"
+            cooldown_until = now + timedelta(hours=hours)
+            logger.warning(f"[{key_name}] 冷却标记: 高频触发(5min内{recent_count}次) → {hours}h冷却 (至 {cooldown_until.strftime('%m-%d %H:%M')}) | 剩余可用Key: {available_count}")
+        else:
+            # 普通速率限制 → 短冷却(默认1h)
+            hours = cooldown_cfg.get("rate_limit_hours", 1)
+            state["type"] = "rate"
+            cooldown_until = now + timedelta(hours=hours)
+            logger.warning(f"[{key_name}] 冷却标记: 速率限制 → {hours}h冷却 (至 {cooldown_until.strftime('%m-%d %H:%M')}) | 窗口内{recent_count}次错误 | 剩余可用Key: {available_count}")
+
+        state["cooldown_until"] = cooldown_until.isoformat()
+        state["marked_at"] = now.isoformat()
         _pool_state[key_name] = state
         _save_state()
 
@@ -377,84 +403,130 @@ def call_local_vllm(anthropic_body):
         }
 
 
-def is_quota_error(status_code, resp_body):
-    """判断是否为限额错误(兼容智谱和OpenAI格式)"""
-    if status_code == 429:
-        return True
-
+def _parse_error_detail(status_code, resp_body):
+    """从响应体中提取错误详情用于日志"""
     try:
         data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
         if not isinstance(data, dict):
-            return False
-
+            return f"HTTP {status_code}, non-dict body"
         error = data.get("error", {})
         if isinstance(error, dict):
             code = error.get("code", "")
             err_type = error.get("type", "")
-            message = error.get("message", "").lower()
-            # 智谱错误码1302 = 速率限制
-            if str(code) == "1302":
-                return True
-            if any(kw in message for kw in ["rate limit", "quota", "exceeded", "limit reached", "rate_limit"]):
-                return True
-            if err_type == "rate_limit_error":
-                return True
+            message = error.get("message", "")
+            parts = [f"HTTP {status_code}"]
+            if code:
+                parts.append(f"code={code}")
+            if err_type:
+                parts.append(f"type={err_type}")
+            if message:
+                # 截断过长的message
+                display_msg = message[:200] + "..." if len(message) > 200 else message
+                parts.append(f"msg={display_msg}")
+            return ", ".join(parts)
+        # 顶层code
+        top_code = data.get("code", "")
+        top_msg = data.get("message", "")
+        if top_code or top_msg:
+            return f"HTTP {status_code}, top-level code={top_code}, msg={top_msg[:200]}"
+        return f"HTTP {status_code}, body={json.dumps(data, ensure_ascii=False)[:300]}"
+    except Exception as e:
+        return f"HTTP {status_code}, parse error: {e}"
 
-        # 有时错误直接在顶层
-        if str(data.get("code", "")) == "1302":
-            return True
-    except Exception:
-        pass
+
+def is_quota_error(status_code, resp_body):
+    """判断是否为限额错误(兼容智谱和OpenAI格式)，命中时打印详细日志"""
+    matched_reason = None
+
+    if status_code == 429:
+        matched_reason = "HTTP 429"
+
+    if not matched_reason:
+        try:
+            data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
+            if isinstance(data, dict):
+                error = data.get("error", {})
+                if isinstance(error, dict):
+                    code = str(error.get("code", ""))
+                    err_type = error.get("type", "")
+                    message = error.get("message", "").lower()
+                    if code == "1302":
+                        matched_reason = "智谱错误码1302(速率限制)"
+                    elif any(kw in message for kw in ["rate limit", "quota", "exceeded", "limit reached", "rate_limit"]):
+                        matched_reason = f"错误消息含限额关键词"
+                    elif err_type == "rate_limit_error":
+                        matched_reason = "error.type=rate_limit_error"
+
+                if not matched_reason and str(data.get("code", "")) == "1302":
+                    matched_reason = "顶层code=1302"
+        except Exception:
+            pass
+
+    if matched_reason:
+        detail = _parse_error_detail(status_code, resp_body)
+        logger.warning(f"[限额检测] 命中: {matched_reason} | 详情: {detail}")
+        return True
 
     return False
 
 
 def is_balance_error(status_code, resp_body):
-    """判断是否为余额不足错误(主要针对中转站)"""
+    """判断是否为余额不足错误(主要针对中转站)，命中时打印详细日志"""
+    matched_reason = None
+
     if status_code == 402:
+        matched_reason = "HTTP 402"
+
+    if not matched_reason:
+        try:
+            data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
+            if isinstance(data, dict):
+                error = data.get("error", {})
+                if isinstance(error, dict):
+                    message = error.get("message", "").lower()
+                    matched_kw = next((kw for kw in ["insufficient", "balance", "余额", "额度不足", "credit"] if kw in message), None)
+                    if matched_kw:
+                        matched_reason = f"错误消息含余额关键词'{matched_kw}'"
+        except Exception:
+            pass
+
+    if matched_reason:
+        detail = _parse_error_detail(status_code, resp_body)
+        logger.warning(f"[余额检测] 命中: {matched_reason} | 详情: {detail}")
         return True
-
-    try:
-        data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
-        if not isinstance(data, dict):
-            return False
-
-        error = data.get("error", {})
-        if isinstance(error, dict):
-            message = error.get("message", "").lower()
-            if any(kw in message for kw in ["insufficient", "balance", "余额", "额度不足", "credit"]):
-                return True
-    except Exception:
-        pass
 
     return False
 
 
 def is_auth_error(status_code, resp_body):
-    """判断是否为认证错误(Key无效/过期)"""
+    """判断是否为认证错误(Key无效/过期)，命中时打印详细日志"""
+    matched_reason = None
+
     if status_code in (401, 403):
+        matched_reason = f"HTTP {status_code}"
+
+    if not matched_reason:
+        try:
+            data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
+            if isinstance(data, dict):
+                error = data.get("error", {})
+                if isinstance(error, dict):
+                    code = str(error.get("code", "") or error.get("type", ""))
+                    message = error.get("message", "").lower()
+                    if code in ("1000", "1001", "invalid_api_key", "authentication_error"):
+                        matched_reason = f"错误码={code}"
+                    elif any(kw in message for kw in ["身份验证", "认证失败", "invalid", "unauthorized", "authentication"]):
+                        matched_reason = "错误消息含认证关键词"
+
+                if not matched_reason and str(data.get("code", "")) in ("1000", "1001"):
+                    matched_reason = f"顶层code={data.get('code')}"
+        except Exception:
+            pass
+
+    if matched_reason:
+        detail = _parse_error_detail(status_code, resp_body)
+        logger.warning(f"[认证检测] 命中: {matched_reason} | 详情: {detail}")
         return True
-
-    try:
-        data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
-        if not isinstance(data, dict):
-            return False
-
-        error = data.get("error", {})
-        if isinstance(error, dict):
-            code = str(error.get("code", "") or error.get("type", ""))
-            message = error.get("message", "").lower()
-            # 智谱错误码1000 = 身份验证失败
-            if code in ("1000", "1001", "invalid_api_key", "authentication_error"):
-                return True
-            if any(kw in message for kw in ["身份验证", "认证失败", "invalid.*key", "unauthorized", "authentication"]):
-                return True
-
-        # 顶层code
-        if str(data.get("code", "")) in ("1000", "1001"):
-            return True
-    except Exception:
-        pass
 
     return False
 
@@ -491,6 +563,11 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 available = _is_key_available(name)
                 state = _pool_state.get(name, {})
                 stats = _stats.get(name, {"requests": 0, "errors": 0})
+                # 计算当前窗口内的错误数
+                error_ts = state.get("error_timestamps", [])
+                now = _now()
+                window_start = now - timedelta(seconds=_COOLDOWN_WINDOW_SECS)
+                recent_errors = sum(1 for t in error_ts if datetime.fromisoformat(t) >= window_start)
                 key_status.append({
                     "name": name,
                     "type": k.get("type", "zhipu"),
@@ -499,7 +576,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
                     "errors": stats["errors"],
                     "cooldown_type": state.get("type"),
                     "cooldown_until": state.get("cooldown_until"),
-                    "consecutive_hits": state.get("consecutive_hits", 0),
+                    "recent_errors_5min": recent_errors,
                 })
 
             fallback_cfg = _config.get("fallback", {})
@@ -574,9 +651,9 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
                 # 检查错误类型
                 if err_body and is_auth_error(status, err_body):
-                    logger.warning(f"[{key_name}] 中转站认证失败(HTTP {status})，长期冷却")
+                    logger.warning(f"[{key_name}] 中转站认证错误(HTTP {status})，可能是临时问题，短冷却后重试")
                     record_key_error(key_name)
-                    _mark_key_cooldown(key_name, "balance")
+                    _mark_key_cooldown(key_name, "rate")  # 中转站认证错误用短冷却，避免误判
                     continue
 
                 if err_body and is_balance_error(status, err_body):
@@ -586,14 +663,15 @@ class ProxyHandler(BaseHTTPRequestHandler):
                     continue
 
                 if err_body and is_quota_error(status, err_body):
-                    logger.warning(f"[{key_name}] 限额触发(HTTP {status})，切换下一个Key")
+                    logger.warning(f"[{key_name}] 中转站限额触发(HTTP {status})，切换下一个Key | 可用Key剩余: {len(keys) - len(tried_keys)}")
                     record_key_error(key_name)
                     _mark_key_cooldown(key_name)
                     continue
 
                 # 其他错误
                 if err_body:
-                    logger.error(f"[{key_name}] 中转站非限额错误(HTTP {status})")
+                    err_detail = _parse_error_detail(status, err_body)
+                    logger.error(f"[{key_name}] 中转站非限额错误 | {err_detail}")
                     self._send(status, err_body)
                     return
 
@@ -614,26 +692,35 @@ class ProxyHandler(BaseHTTPRequestHandler):
                     return
 
                 if is_auth_error(status, resp_body):
-                    logger.warning(f"[{key_name}] 认证失败(HTTP {status})，Key无效，长期冷却并切换下一个")
-                    record_key_error(key_name)
-                    _mark_key_cooldown(key_name, "balance")
+                    # 区分: 真正的本地直连Key vs 有自定义api_url的中转站
+                    # 中转站的403可能是临时问题(如中转站限流)，不应长期冷却
+                    if key_base_url:
+                        logger.warning(f"[{key_name}] 中转站认证错误(HTTP {status})，可能是临时问题，短冷却后重试")
+                        record_key_error(key_name)
+                        _mark_key_cooldown(key_name, "rate")  # 中转站403用短冷却
+                    else:
+                        logger.warning(f"[{key_name}] 认证失败(HTTP {status})，Key无效，长期冷却并切换下一个")
+                        record_key_error(key_name)
+                        _mark_key_cooldown(key_name, "balance")
                     continue
 
                 if is_quota_error(status, resp_body):
-                    logger.warning(f"[{key_name}] 限额触发(HTTP {status})，切换下一个Key")
+                    logger.warning(f"[{key_name}] {label}限额触发(HTTP {status})，切换下一个Key | 可用Key剩余: {len(keys) - len(tried_keys)}")
                     record_key_error(key_name)
                     _mark_key_cooldown(key_name)
                     continue
 
                 # 其他错误(非限额/非认证) — 直接返回给CC
-                logger.error(f"[{key_name}] 非限额错误(HTTP {status})")
+                err_detail = _parse_error_detail(status, resp_body)
+                logger.error(f"[{key_name}] {label}非限额错误 | {err_detail}")
                 self._send(status, resp_body)
                 return
 
         # === 所有Key都不可用，降级到本地vLLM ===
         fallback_cfg = _config.get("fallback", {})
         if fallback_cfg.get("enabled", True):
-            logger.warning(f"[FALLBACK] 所有Key耗尽，降级到本地Qwen3.5-122B")
+            cooling_keys = [name for name, s in _pool_state.items() if s.get("cooldown_until")]
+            logger.warning(f"[FALLBACK] 所有Key耗尽({len(keys)}个Key, {len(cooling_keys)}个冷却中)，降级到本地Qwen3.5-122B | 冷却Key: {', '.join(cooling_keys) if cooling_keys else '无'}")
             status, resp = call_local_vllm(body)
             self._send(status, resp)
             return

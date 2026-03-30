@@ -60,7 +60,10 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 
 # 触发编程CC
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <issue_number>
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <issue_number> <model> [dir_suffix]
+# repo: backend | front | pipeline
+# model: glm-5.1（默认）、glm-5-turbo、glm-4.5-air
+# dir_suffix: 指定外接目录后缀（如 kimi1, glm1）
 ```
 
 ## 排序规则
@@ -81,7 +84,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <issue_number>
 | pipeline | `WnadeyaowuOraganization/wande-data-pipeline` | `/home/ubuntu/projects/wande-data-pipeline` | `wande-data-pipeline-glm1` ~ `glm4`                |
 | plugins  | `WnadeyaowuOraganization/wande-gh-plugins`    | `/home/ubuntu/projects/wande-gh-plugins` | `wande-gh-plugins-glm1` ~ `glm4`                                                     |
 
-所有目录在 `/home/ubuntu/projects/` 下。每个目录是同一仓库的独立克隆，可以同时运行不同的CC处理不同Issue。
+所有目录在 `/home/ubuntu/projects/` 下。每个目录是同一仓库的独立克隆，可以同时运行不同的CC处理不同Issue，如果并发数超过目录数量，可自行clone对应仓库创建新目录。
 
 ## 并发控制
 
@@ -117,7 +120,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 
 ### 任务二：触发编程CC（Todo → In Progress）
 1. 先检查各仓库的编程CC有没有空闲席位，没有就退出，有则下一步
-2. 检查Project#2中In Progress的issue确定是否有创建对应的PR，没有的话恢复对应目录（原先指派这个issue的编程CC目录）的CC继续完成工作
+2. 检查Project#2中In Progress的issue确定是否有创建对应的PR，没有的话恢复对应目录（原先指派这个issue的编程CC目录）的CC继续完成工作，注意：原指派的目录里有代码改动但没PR的说明其任务被中断，不要标记为Fail，直接在相同目录使用相同方式启动CC即可
 3. 查询Project#2中Todo状态的Issue，为每个Issue执行pre-task后启动编程CC
 4. 记录issue被指派到了哪个目录，便于后续恢复（指派记录文件：docs/ISSUE_ASSIGN_HISTORY.md）——这个记录十分重要，能有效避免编程CC重复工作
 
@@ -154,11 +157,11 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 
 ```bash
 # 启动（自动创建tmux会话）
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> [dir_suffix]
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> [dir_suffix]
 
 # 示例:
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> kimi1  # 外接目录优先
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 272        # 主目录
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> opus kimi1  # 外接目录优先
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> opus       # 主目录
 
 # 查看实时输出:
 tmux attach -t cc-backend-272

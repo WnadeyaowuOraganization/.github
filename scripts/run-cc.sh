@@ -1,7 +1,8 @@
 #!/bin/bash
 # run-cc.sh — 在tmux中启动编程CC
-# 用法: run-cc.sh <repo> <issue_number> [dir_suffix]
+# 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix]
 # repo: backend | front | pipeline
+# model: glm-5.1（默认）、glm-5-turbo、glm-4.5-air
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1, glm1）
 #
 # 操作:
@@ -11,7 +12,8 @@
 
 REPO=$1
 ISSUE=$2
-DIR_SUFFIX=${3:-""}
+MODEL=$3
+DIR_SUFFIX=${4:-""}
 LOGDIR=/var/log/coding-cc
 mkdir -p $LOGDIR
 
@@ -53,9 +55,8 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
 # 直接在tmux中以当前用户(ubuntu)运行claude
-# --model sonnet 避免 opus[1m] 导致 max_tokens 超限
 tmux new-session -d -s "$SESSION" \
-  "export GH_TOKEN=$GH_TOKEN; cd $PROJECT_DIR; echo [$(date)] CC started for ${REPO}#${ISSUE} | tee $LOGFILE; claude -p '拾取并完成 Issue #${ISSUE}' --model sonnet --output-format text 2>&1 | tee -a $LOGFILE; echo '' | tee -a $LOGFILE; echo [$(date)] CC COMPLETED | tee -a $LOGFILE; tmux kill-session -t $SESSION"
+  "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; echo [$(date)] CC started for ${REPO}#${ISSUE} | tee $LOGFILE; claude -p '拾取并完成 Issue #${ISSUE}' --model ${MODEL} --output-format text --max-turns 50 2>&1 | tee -a $LOGFILE; echo '' | tee -a $LOGFILE; echo [$(date)] CC COMPLETED | tee -a $LOGFILE; tmux kill-session -t $SESSION"
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动"
 echo "  查看: tmux attach -t $SESSION"

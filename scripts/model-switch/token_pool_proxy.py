@@ -71,9 +71,10 @@ def _load_config():
     with open(KEYS_FILE, "r") as f:
         _config = json.load(f)
     enabled = [k for k in _config["keys"] if k["enabled"]]
-    zhipu_keys = [k for k in enabled if k.get("type", "zhipu") == "zhipu"]
+    zhipu_direct = [k for k in enabled if k.get("type", "zhipu") == "zhipu" and not k.get("api_url")]
+    zhipu_proxy = [k for k in enabled if k.get("type", "zhipu") == "zhipu" and k.get("api_url")]
     pool_keys = [k for k in enabled if k.get("type") == "openai_compat"]
-    logger.info(f"配置加载: {len(enabled)} 个启用Key (智谱直连:{len(zhipu_keys)}, 中转站:{len(pool_keys)})")
+    logger.info(f"配置加载: {len(enabled)} 个启用Key (智谱直连:{len(zhipu_direct)}, 中转站(Anthropic):{len(zhipu_proxy)}, 中转站(OpenAI):{len(pool_keys)})")
 
 
 def _load_state():
@@ -271,10 +272,22 @@ def _resolve_model_for_pool(key_cfg, requested_model):
 
 # ===================== 上游调用 =====================
 
-def call_zhipu(body_bytes, api_key, path="/v1/messages"):
-    """转发请求到智谱API (Anthropic Messages格式)"""
-    base_url = _config.get("upstream", {}).get("base_url", "https://open.bigmodel.cn/api/anthropic")
+def call_zhipu(body_bytes, api_key, path="/v1/messages", base_url_override=None, model_map=None):
+    """转发请求到Anthropic Messages格式端点(智谱直连或中转站)"""
+    base_url = base_url_override or _config.get("upstream", {}).get("base_url", "https://open.bigmodel.cn/api/anthropic")
     url = f"{base_url}{path}"
+
+    # 模型名重写 (中转站可能不支持某些模型名)
+    if model_map:
+        try:
+            body_obj = json.loads(body_bytes)
+            orig_model = body_obj.get("model", "")
+            if orig_model in model_map:
+                body_obj["model"] = model_map[orig_model]
+                body_bytes = json.dumps(body_obj).encode()
+                logger.info(f"  模型重写: {orig_model} → {model_map[orig_model]}")
+        except Exception:
+            pass
 
     headers = {
         "Content-Type": "application/json",
@@ -585,10 +598,13 @@ class ProxyHandler(BaseHTTPRequestHandler):
                     return
 
             else:
-                # === 智谱直连Key (Anthropic Messages格式) ===
-                logger.info(f"[{key_name}] → 智谱直连转发 {model_requested} (attempt {attempt + 1})")
+                # === Anthropic Messages格式端点 (智谱直连或中转站) ===
+                key_base_url = key.get("api_url")  # 自定义base_url (aiopus等中转站)
+                label = f"中转站" if key_base_url else "智谱直连"
+                logger.info(f"[{key_name}] → {label}转发 {model_requested} (attempt {attempt + 1})")
 
-                status, headers, resp_body = call_zhipu(body_bytes, key["api_key"], self.path)
+                key_model_map = key.get("model_map")  # 模型名映射
+                status, headers, resp_body = call_zhipu(body_bytes, key["api_key"], self.path, base_url_override=key_base_url, model_map=key_model_map)
 
                 if status == 200:
                     with _lock:

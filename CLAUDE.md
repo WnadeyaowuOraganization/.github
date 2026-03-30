@@ -55,7 +55,7 @@ bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh <repo> "<STAT
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
 
 # 更新Project看板Status
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <ISSUE_NUMBER> "<STATUS>"
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "<STATUS>"
 # repo:   backend | front | pipeline | plugins (可选，不传则查全部4个仓库)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 
@@ -112,7 +112,7 @@ fi
 bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh all "Plan"
 
 # 2. 按Sprint重点和优先级，将选定的Issue从Plan改为Todo
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Todo" <repo>
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Todo"
 ```
 
 ### 任务二：触发编程CC（Todo → In Progress）
@@ -147,7 +147,7 @@ mkdir -p ./issues/issue-<N>
 gh issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remove-label "status:ready"
 
 # 4. 更新Project看板Status → In Progress
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "In Progress"
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "In Progress"
 ```
 
 #### 启动CC（tmux会话，可随时查看和恢复）
@@ -157,8 +157,8 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "In Prog
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> [dir_suffix]
 
 # 示例:
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> kimi1  # 外接目录优先
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 272        # 主目录
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 332 kimi1  # 外接目录
 
 # 查看实时输出:
 tmux attach -t cc-backend-272
@@ -185,7 +185,7 @@ tmux attach -t cc-backend-272
 cat /var/log/coding-cc/backend-272.log
 
 # CC失败 → 改为Fail
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "Fail"
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Fail"
 ```
 
 CC正常完成 → 不改Status（CC已创建PR，等merge后Issue自动关闭，看板自动Done）。

@@ -1,13 +1,19 @@
 #!/usr/bin/env python3
 """
-Token Pool Proxy — 智谱Coding Plan多Key自动切换代理
-==================================================
+Token Pool Proxy — 多源Key自动切换代理 v2
+==========================================
 监听 0.0.0.0:9855，提供 Anthropic Messages API 兼容端点
 CC(Claude Code) 通过 ANTHROPIC_BASE_URL=http://localhost:9855 连接
 
+支持两种上游类型:
+  - zhipu: 智谱Coding Plan直连 (Anthropic Messages API格式)
+  - openai_compat: New API兼容中转站如aiopus (OpenAI格式，自动做Anthropic↔OpenAI转换)
+
+优先级链: 智谱直连Key → 中转站Key → 本地vLLM保底
+
 功能:
-  1. 维护多个智谱API Key池，轮询分配
-  2. 检测限额错误(1302)自动切换到下一个Key重试
+  1. 维护多源Key池，按优先级+轮询分配
+  2. 检测限额错误(1302/429/余额不足)自动切换到下一个Key重试
   3. 所有Key耗尽时降级到本地vLLM(Qwen3.5-122B), 做Anthropic↔OpenAI格式转换
   4. Key冷却状态持久化，进程重启不丢失
   5. GET /status 查看所有Key状态
@@ -51,7 +57,7 @@ logger = logging.getLogger(__name__)
 
 _lock = threading.Lock()
 _config = {}
-_pool_state = {}  # {key_name: {"cooldown_until": iso_str, "type": "rate"|"weekly", "consecutive_hits": int}}
+_pool_state = {}  # {key_name: {"cooldown_until": iso_str, "type": "rate"|"weekly"|"balance", "consecutive_hits": int}}
 _round_robin_index = 0
 _stats = {}  # {key_name: {"requests": int, "errors": int, "last_used": iso_str}}
 
@@ -64,7 +70,10 @@ def _load_config():
     global _config
     with open(KEYS_FILE, "r") as f:
         _config = json.load(f)
-    logger.info(f"配置加载: {len([k for k in _config['keys'] if k['enabled']])} 个启用Key")
+    enabled = [k for k in _config["keys"] if k["enabled"]]
+    zhipu_keys = [k for k in enabled if k.get("type", "zhipu") == "zhipu"]
+    pool_keys = [k for k in enabled if k.get("type") == "openai_compat"]
+    logger.info(f"配置加载: {len(enabled)} 个启用Key (智谱直连:{len(zhipu_keys)}, 中转站:{len(pool_keys)})")
 
 
 def _load_state():
@@ -87,6 +96,14 @@ def _save_state():
 
 def _get_enabled_keys():
     return [k for k in _config.get("keys", []) if k.get("enabled")]
+
+
+def _get_keys_by_priority():
+    """按优先级分组返回Key列表: 先智谱直连，再中转站"""
+    enabled = _get_enabled_keys()
+    zhipu_keys = [k for k in enabled if k.get("type", "zhipu") == "zhipu"]
+    pool_keys = [k for k in enabled if k.get("type") == "openai_compat"]
+    return zhipu_keys + pool_keys
 
 
 def _is_key_available(key_name):
@@ -117,8 +134,13 @@ def _mark_key_cooldown(key_name, cooldown_type="rate"):
 
         cooldown_cfg = _config.get("cooldown", {})
 
-        # 连续触发2次以上 → 升级为周冷却
-        if state["consecutive_hits"] >= 2 or cooldown_type == "weekly":
+        if cooldown_type == "balance":
+            # 余额不足 → 长期冷却(30天)
+            hours = cooldown_cfg.get("balance_exhausted_hours", 720)
+            state["type"] = "balance"
+            logger.warning(f"[{key_name}] 余额不足，冷却 {hours}h")
+        elif state["consecutive_hits"] >= 2 or cooldown_type == "weekly":
+            # 连续触发2次以上 → 升级为周冷却
             hours = cooldown_cfg.get("weekly_limit_hours", 168)
             state["type"] = "weekly"
             logger.warning(f"[{key_name}] 周限额冷却 {hours}h (连续触发{state['consecutive_hits']}次)")
@@ -134,20 +156,16 @@ def _mark_key_cooldown(key_name, cooldown_type="rate"):
 
 
 def get_next_key():
-    """获取下一个可用Key (轮询+跳过冷却中的)"""
+    """获取下一个可用Key (按优先级: 智谱直连 → 中转站, 同类内轮询)"""
     global _round_robin_index
-    keys = _get_enabled_keys()
+    keys = _get_keys_by_priority()
     if not keys:
         return None
 
     with _lock:
-        # 尝试所有Key
-        for _ in range(len(keys)):
-            idx = _round_robin_index % len(keys)
-            _round_robin_index += 1
-            key = keys[idx]
+        # 先尝试找任意可用Key (保持优先级)
+        for key in keys:
             if _is_key_available(key["name"]):
-                # 更新统计
                 name = key["name"]
                 if name not in _stats:
                     _stats[name] = {"requests": 0, "errors": 0}
@@ -167,7 +185,7 @@ def record_key_error(key_name):
 
 # ===================== Anthropic ↔ OpenAI 格式转换 =====================
 
-def anthropic_to_openai(anthropic_body):
+def anthropic_to_openai(anthropic_body, model_override=None):
     """将Anthropic Messages API请求转换为OpenAI Chat Completions格式"""
     messages = []
 
@@ -177,7 +195,6 @@ def anthropic_to_openai(anthropic_body):
         if isinstance(system, str):
             messages.append({"role": "system", "content": system})
         elif isinstance(system, list):
-            # Anthropic支持system为content blocks数组
             text = " ".join(b.get("text", "") for b in system if b.get("type") == "text")
             if text:
                 messages.append({"role": "system", "content": text})
@@ -187,9 +204,7 @@ def anthropic_to_openai(anthropic_body):
         role = msg.get("role", "user")
         content = msg.get("content", "")
 
-        # content可能是字符串或content blocks数组
         if isinstance(content, list):
-            # 提取所有text blocks拼接
             text_parts = []
             for block in content:
                 if isinstance(block, dict) and block.get("type") == "text":
@@ -200,8 +215,10 @@ def anthropic_to_openai(anthropic_body):
 
         messages.append({"role": role, "content": content})
 
+    model = model_override or _config.get("fallback", {}).get("vllm_model", "/model")
+
     openai_body = {
-        "model": _config.get("fallback", {}).get("vllm_model", "/model"),
+        "model": model,
         "messages": messages,
         "max_tokens": anthropic_body.get("max_tokens", 4096),
         "temperature": anthropic_body.get("temperature", 0.7),
@@ -241,10 +258,21 @@ def openai_to_anthropic(openai_resp, requested_model="qwen3.5-122b-local"):
     return anthropic_resp
 
 
+# ===================== 模型映射 =====================
+
+def _resolve_model_for_pool(key_cfg, requested_model):
+    """根据CC请求的模型名，映射到中转站实际使用的模型名"""
+    model_map = key_cfg.get("model_map", {})
+    if model_map and requested_model in model_map:
+        return model_map[requested_model]
+    # 默认使用key配置中的model字段
+    return key_cfg.get("model", requested_model)
+
+
 # ===================== 上游调用 =====================
 
 def call_zhipu(body_bytes, api_key, path="/v1/messages"):
-    """转发请求到智谱API"""
+    """转发请求到智谱API (Anthropic Messages格式)"""
     base_url = _config.get("upstream", {}).get("base_url", "https://open.bigmodel.cn/api/anthropic")
     url = f"{base_url}{path}"
 
@@ -268,6 +296,46 @@ def call_zhipu(body_bytes, api_key, path="/v1/messages"):
         return 502, {}, error_resp
 
 
+def call_openai_compat(anthropic_body, key_cfg):
+    """调用OpenAI兼容中转站(如aiopus)，做Anthropic→OpenAI→Anthropic格式转换"""
+    api_url = key_cfg.get("api_url", "")
+    api_key = key_cfg.get("api_key", "")
+    requested_model = anthropic_body.get("model", "unknown")
+    target_model = _resolve_model_for_pool(key_cfg, requested_model)
+
+    # 构建完整URL
+    if not api_url.endswith("/v1/chat/completions"):
+        url = api_url.rstrip("/") + "/v1/chat/completions"
+    else:
+        url = api_url
+
+    openai_body = anthropic_to_openai(anthropic_body, model_override=target_model)
+
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": f"Bearer {api_key}",
+    }
+
+    req = urllib.request.Request(
+        url,
+        data=json.dumps(openai_body).encode(),
+        headers=headers,
+        method="POST",
+    )
+
+    try:
+        with urllib.request.urlopen(req, timeout=300) as resp:
+            openai_resp = json.loads(resp.read())
+            anthropic_resp = openai_to_anthropic(openai_resp, requested_model)
+            return 200, anthropic_resp, None
+    except urllib.error.HTTPError as e:
+        err_body = e.read() if e.fp else b"{}"
+        return e.code, None, err_body
+    except Exception as e:
+        logger.error(f"[openai_compat] 调用失败: {e}")
+        return 502, None, json.dumps({"error": {"message": str(e)}}).encode()
+
+
 def call_local_vllm(anthropic_body):
     """调用本地vLLM作为保底，做格式转换"""
     fallback_cfg = _config.get("fallback", {})
@@ -285,7 +353,6 @@ def call_local_vllm(anthropic_body):
     try:
         with urllib.request.urlopen(req, timeout=300) as resp:
             openai_resp = json.loads(resp.read())
-            # 从请求的model字段获取模型名（CC可能传的是glm-5.1等）
             requested_model = anthropic_body.get("model", "qwen3.5-122b-local")
             anthropic_resp = openai_to_anthropic(openai_resp, requested_model)
             return 200, anthropic_resp
@@ -298,23 +365,80 @@ def call_local_vllm(anthropic_body):
 
 
 def is_quota_error(status_code, resp_body):
-    """判断是否为限额错误"""
+    """判断是否为限额错误(兼容智谱和OpenAI格式)"""
     if status_code == 429:
         return True
 
     try:
         data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
-        # 智谱错误码1302 = 速率限制
+        if not isinstance(data, dict):
+            return False
+
         error = data.get("error", {})
         if isinstance(error, dict):
             code = error.get("code", "")
+            err_type = error.get("type", "")
             message = error.get("message", "").lower()
+            # 智谱错误码1302 = 速率限制
             if str(code) == "1302":
                 return True
-            if any(kw in message for kw in ["rate limit", "quota", "exceeded", "limit reached"]):
+            if any(kw in message for kw in ["rate limit", "quota", "exceeded", "limit reached", "rate_limit"]):
                 return True
+            if err_type == "rate_limit_error":
+                return True
+
         # 有时错误直接在顶层
         if str(data.get("code", "")) == "1302":
+            return True
+    except Exception:
+        pass
+
+    return False
+
+
+def is_balance_error(status_code, resp_body):
+    """判断是否为余额不足错误(主要针对中转站)"""
+    if status_code == 402:
+        return True
+
+    try:
+        data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
+        if not isinstance(data, dict):
+            return False
+
+        error = data.get("error", {})
+        if isinstance(error, dict):
+            message = error.get("message", "").lower()
+            if any(kw in message for kw in ["insufficient", "balance", "余额", "额度不足", "credit"]):
+                return True
+    except Exception:
+        pass
+
+    return False
+
+
+def is_auth_error(status_code, resp_body):
+    """判断是否为认证错误(Key无效/过期)"""
+    if status_code in (401, 403):
+        return True
+
+    try:
+        data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
+        if not isinstance(data, dict):
+            return False
+
+        error = data.get("error", {})
+        if isinstance(error, dict):
+            code = str(error.get("code", "") or error.get("type", ""))
+            message = error.get("message", "").lower()
+            # 智谱错误码1000 = 身份验证失败
+            if code in ("1000", "1001", "invalid_api_key", "authentication_error"):
+                return True
+            if any(kw in message for kw in ["身份验证", "认证失败", "invalid.*key", "unauthorized", "authentication"]):
+                return True
+
+        # 顶层code
+        if str(data.get("code", "")) in ("1000", "1001"):
             return True
     except Exception:
         pass
@@ -343,7 +467,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         if self.path == "/health":
-            self._send(200, {"status": "ok", "service": "TokenPoolProxy", "port": PORT})
+            self._send(200, {"status": "ok", "service": "TokenPoolProxy", "port": PORT, "version": "2.0"})
             return
 
         if self.path == "/status":
@@ -356,6 +480,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 stats = _stats.get(name, {"requests": 0, "errors": 0})
                 key_status.append({
                     "name": name,
+                    "type": k.get("type", "zhipu"),
                     "available": available,
                     "requests": stats["requests"],
                     "errors": stats["errors"],
@@ -366,6 +491,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
             fallback_cfg = _config.get("fallback", {})
             self._send(200, {
+                "version": "2.0",
                 "keys": key_status,
                 "fallback_enabled": fallback_cfg.get("enabled", True),
                 "fallback_url": fallback_cfg.get("vllm_url", ""),
@@ -404,8 +530,8 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
         model_requested = body.get("model", "unknown")
 
-        # === 尝试智谱Key池 ===
-        keys = _get_enabled_keys()
+        # === 尝试Key池 (按优先级: 智谱直连 → 中转站) ===
+        keys = _get_keys_by_priority()
         tried_keys = set()
 
         for attempt in range(len(keys)):
@@ -418,28 +544,75 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 break  # 已经轮了一圈
             tried_keys.add(key_name)
 
-            logger.info(f"[{key_name}] → 转发 {model_requested} (attempt {attempt + 1})")
+            key_type = key.get("type", "zhipu")
 
-            status, headers, resp_body = call_zhipu(body_bytes, key["api_key"], self.path)
+            if key_type == "openai_compat":
+                # === 中转站Key (OpenAI格式) ===
+                logger.info(f"[{key_name}] → 中转站转发 {model_requested} → {_resolve_model_for_pool(key, model_requested)} (attempt {attempt + 1})")
 
-            if status == 200:
-                # 成功 — 如果之前有冷却记录，清除consecutive_hits
-                with _lock:
-                    if key_name in _pool_state:
-                        _pool_state[key_name]["consecutive_hits"] = 0
+                status, anthropic_resp, err_body = call_openai_compat(body, key)
+
+                if status == 200 and anthropic_resp:
+                    with _lock:
+                        if key_name in _pool_state:
+                            _pool_state[key_name]["consecutive_hits"] = 0
+                    self._send(200, anthropic_resp)
+                    return
+
+                # 检查错误类型
+                if err_body and is_auth_error(status, err_body):
+                    logger.warning(f"[{key_name}] 中转站认证失败(HTTP {status})，长期冷却")
+                    record_key_error(key_name)
+                    _mark_key_cooldown(key_name, "balance")
+                    continue
+
+                if err_body and is_balance_error(status, err_body):
+                    logger.warning(f"[{key_name}] 余额不足，长期冷却")
+                    record_key_error(key_name)
+                    _mark_key_cooldown(key_name, "balance")
+                    continue
+
+                if err_body and is_quota_error(status, err_body):
+                    logger.warning(f"[{key_name}] 限额触发(HTTP {status})，切换下一个Key")
+                    record_key_error(key_name)
+                    _mark_key_cooldown(key_name)
+                    continue
+
+                # 其他错误
+                if err_body:
+                    logger.error(f"[{key_name}] 中转站非限额错误(HTTP {status})")
+                    self._send(status, err_body)
+                    return
+
+            else:
+                # === 智谱直连Key (Anthropic Messages格式) ===
+                logger.info(f"[{key_name}] → 智谱直连转发 {model_requested} (attempt {attempt + 1})")
+
+                status, headers, resp_body = call_zhipu(body_bytes, key["api_key"], self.path)
+
+                if status == 200:
+                    with _lock:
+                        if key_name in _pool_state:
+                            _pool_state[key_name]["consecutive_hits"] = 0
+                    self._send(status, resp_body)
+                    return
+
+                if is_auth_error(status, resp_body):
+                    logger.warning(f"[{key_name}] 认证失败(HTTP {status})，Key无效，长期冷却并切换下一个")
+                    record_key_error(key_name)
+                    _mark_key_cooldown(key_name, "balance")
+                    continue
+
+                if is_quota_error(status, resp_body):
+                    logger.warning(f"[{key_name}] 限额触发(HTTP {status})，切换下一个Key")
+                    record_key_error(key_name)
+                    _mark_key_cooldown(key_name)
+                    continue
+
+                # 其他错误(非限额/非认证) — 直接返回给CC
+                logger.error(f"[{key_name}] 非限额错误(HTTP {status})")
                 self._send(status, resp_body)
                 return
-
-            if is_quota_error(status, resp_body):
-                logger.warning(f"[{key_name}] 限额触发(HTTP {status})，切换下一个Key")
-                record_key_error(key_name)
-                _mark_key_cooldown(key_name)
-                continue  # 尝试下一个Key
-
-            # 其他错误(非限额) — 直接返回给CC
-            logger.error(f"[{key_name}] 非限额错误(HTTP {status})")
-            self._send(status, resp_body)
-            return
 
         # === 所有Key都不可用，降级到本地vLLM ===
         fallback_cfg = _config.get("fallback", {})
@@ -454,7 +627,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
             "type": "error",
             "error": {
                 "type": "rate_limit_error",
-                "message": "所有智谱Key已耗尽且本地保底已禁用",
+                "message": "所有Key已耗尽且本地保底已禁用",
             },
         })
 
@@ -474,15 +647,20 @@ def main():
     _load_config()
     _load_state()
 
-    keys = _get_enabled_keys()
-    logger.info(f"启动 Token Pool Proxy on :{PORT}")
-    logger.info(f"  智谱Key: {len(keys)} 个启用")
+    keys = _get_keys_by_priority()
+    zhipu_keys = [k for k in keys if k.get("type", "zhipu") == "zhipu"]
+    pool_keys = [k for k in keys if k.get("type") == "openai_compat"]
+
+    logger.info(f"启动 Token Pool Proxy v2 on :{PORT}")
+    logger.info(f"  智谱直连Key: {len(zhipu_keys)} 个")
+    logger.info(f"  中转站Key: {len(pool_keys)} 个")
     logger.info(f"  上游: {_config.get('upstream', {}).get('base_url', 'N/A')}")
     logger.info(f"  保底: {_config.get('fallback', {}).get('vllm_url', 'N/A')}")
 
     for k in keys:
         avail = "✅" if _is_key_available(k["name"]) else "❄️冷却中"
-        logger.info(f"  [{k['name']}] {avail}")
+        ktype = "智谱" if k.get("type", "zhipu") == "zhipu" else "中转站"
+        logger.info(f"  [{k['name']}] ({ktype}) {avail}")
 
     server = ThreadedHTTPServer(("0.0.0.0", PORT), ProxyHandler)
     try:

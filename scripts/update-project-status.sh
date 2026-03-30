@@ -1,19 +1,23 @@
 #!/bin/bash
 # update-project-status.sh - 更新Project #2看板的Status字段
-# 用法: update-project-status.sh <ISSUE_NUMBER> <STATUS>
+# 用法: update-project-status.sh <ISSUE_NUMBER> <STATUS> [REPO]
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
+# REPO:   backend | front | pipeline | plugins (可选，不传则查全部4个仓库)
 #
-# 优化: 单次GraphQL搜索issue获取item ID（vs 逐repo试错最多3次查询）
-#       cost ≈ 2 points (原版 3-7 points)
+# v3 (2026-03-30): 新增可选repo参数
+#   - 传repo: 只查1个仓库，1次query + 1次mutation = 2次API调用
+#   - 不传:   查全部4仓库，1次query + N次mutation（兼容v2行为）
 
 set -e
 
 ISSUE_NUMBER="$1"
 NEW_STATUS="$2"
+REPO_SHORT="$3"
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
-    echo "用法: $0 <ISSUE_NUMBER> <STATUS>"
+    echo "用法: $0 <ISSUE_NUMBER> <STATUS> [REPO]"
     echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail"
+    echo "REPO:   backend | front | pipeline | plugins (可选)"
     exit 1
 fi
 
@@ -35,48 +39,112 @@ if [ -z "$OPTION_ID" ]; then
     exit 1
 fi
 
+# repo短名 → 仓库全名映射
+declare -A REPO_MAP
+REPO_MAP["backend"]="wande-ai-backend"
+REPO_MAP["front"]="wande-ai-front"
+REPO_MAP["pipeline"]="wande-data-pipeline"
+REPO_MAP["plugins"]="wande-gh-plugins"
+
 PROJECT_ID="PVT_kwDOD3gg584BSCFx"
 FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
 
-# 单次查询：直接从Project的items中找对应issue number的item ID
-# 避免逐repo查询（原版最多3次GraphQL调用）
-QUERY='query($projectId: ID!, $after: String) {
-  node(id: $projectId) {
-    ... on ProjectV2 {
-      items(first: 100, after: $after) {
-        pageInfo { hasNextPage endCursor }
-        nodes {
-          id
-          content {
-            ... on Issue {
-              number
-            }
+# --- 查询Item ID ---
+if [ -n "$REPO_SHORT" ]; then
+    # 指定repo: 只查1个仓库
+    REPO_FULL="${REPO_MAP[$REPO_SHORT]}"
+    if [ -z "$REPO_FULL" ]; then
+        echo "错误: 未知仓库 '$REPO_SHORT' (可选: backend | front | pipeline | plugins)"
+        exit 1
+    fi
+
+    QUERY='query($owner: String!, $repo: String!, $number: Int!) {
+      repository(owner: $owner, name: $repo) {
+        issue(number: $number) {
+          projectItems(first: 3) {
+            nodes { id project { id } }
           }
         }
       }
-    }
-  }
-}'
+    }'
 
-ITEM_ID=$(gh api graphql --raw-field query="$QUERY" -F projectId="$PROJECT_ID" 2>/dev/null \
-  | python3 -c "
+    ITEM_IDS=$(gh api graphql --raw-field query="$QUERY" \
+      -F owner="WnadeyaowuOraganization" -F repo="$REPO_FULL" -F number="$ISSUE_NUMBER" 2>/dev/null \
+      | python3 -c "
 import json, sys
-target = $ISSUE_NUMBER
-data = json.load(sys.stdin)
-items = data.get('data', {}).get('node', {}).get('items', {}).get('nodes', [])
-for item in items:
-    content = item.get('content')
-    if content and isinstance(content, dict) and content.get('number') == target:
-        print(item['id'])
-        break
+data = json.load(sys.stdin).get('data', {})
+repo_data = data.get('repository', {})
+issue = repo_data.get('issue') if repo_data else None
+if issue:
+    for pi in issue['projectItems']['nodes']:
+        if pi['project']['id'] == '$PROJECT_ID':
+            print(f'{pi[\"id\"]}|$REPO_SHORT')
 ")
+else
+    # 不传repo: 并行查4个仓库
+    QUERY='query($owner: String!, $number: Int!) {
+      backend: repository(owner: $owner, name: "wande-ai-backend") {
+        issue(number: $number) {
+          projectItems(first: 3) {
+            nodes { id project { id } }
+          }
+        }
+      }
+      front: repository(owner: $owner, name: "wande-ai-front") {
+        issue(number: $number) {
+          projectItems(first: 3) {
+            nodes { id project { id } }
+          }
+        }
+      }
+      pipeline: repository(owner: $owner, name: "wande-data-pipeline") {
+        issue(number: $number) {
+          projectItems(first: 3) {
+            nodes { id project { id } }
+          }
+        }
+      }
+      plugins: repository(owner: $owner, name: "wande-gh-plugins") {
+        issue(number: $number) {
+          projectItems(first: 3) {
+            nodes { id project { id } }
+          }
+        }
+      }
+    }'
 
-if [ -z "$ITEM_ID" ]; then
+    ITEM_IDS=$(gh api graphql --raw-field query="$QUERY" \
+      -F owner="WnadeyaowuOraganization" -F number="$ISSUE_NUMBER" 2>/dev/null \
+      | python3 -c "
+import json, sys
+
+raw = sys.stdin.read()
+# gh api 可能在JSON后追加error文本，只解析第一个完整JSON对象
+depth = 0
+for i, c in enumerate(raw):
+    if c == '{': depth += 1
+    elif c == '}': depth -= 1
+    if depth == 0 and i > 0:
+        data = json.loads(raw[:i+1]).get('data', {})
+        break
+else:
+    data = {}
+
+target_project = '$PROJECT_ID'
+for repo, val in data.items():
+    if val and val.get('issue'):
+        for pi in val['issue']['projectItems']['nodes']:
+            if pi['project']['id'] == target_project:
+                print(f'{pi[\"id\"]}|{repo}')
+")
+fi
+
+if [ -z "$ITEM_IDS" ]; then
     echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #2 中的 Item"
     exit 1
 fi
 
-# 更新Status (1次mutation)
+# --- 更新Status ---
 MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
   updateProjectV2ItemFieldValue(input: {
     projectId: $projectId
@@ -85,8 +153,16 @@ MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: Stri
     value: { singleSelectOptionId: $optionId }
   }) { projectV2Item { id } }
 }'
-gh api graphql --raw-field query="$MUTATION" \
-  -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" \
-  -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
 
-echo "✓ Issue #$ISSUE_NUMBER Status → $NEW_STATUS"
+UPDATED=0
+while IFS='|' read -r ITEM_ID REPO_NAME; do
+    gh api graphql --raw-field query="$MUTATION" \
+      -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" \
+      -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
+    UPDATED=$((UPDATED + 1))
+    echo "✓ Issue #$ISSUE_NUMBER ($REPO_NAME) Status → $NEW_STATUS"
+done <<< "$ITEM_IDS"
+
+if [ "$UPDATED" -gt 1 ]; then
+    echo "  (同号issue在${UPDATED}个仓库，全部已更新)"
+fi

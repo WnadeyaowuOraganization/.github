@@ -1,14 +1,15 @@
 #!/bin/bash
-# query-project-issues.sh - 查询Project #2中指定仓库和状态的Issue（全量分页版）
+# query-project-issues.sh - 查询Project #2中指定仓库和状态的Issue
 # 用法: query-project-issues.sh [repo] [status]
 # repo: backend | front | pipeline | plugins | all (默认all)
 # status: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
 # 输出: stdout=人类可读表格, stderr=机器可解析 ISSUE_<N>=<STATUS>
 #
-# v2 (2026-03-30): 支持分页遍历全部Project items（解决items>100时漏查问题）
-#   - 首页查询 items(first:100)，后续用 endCursor 翻页直到 hasNextPage=false
-#   - 988个items约需10次API调用，GraphQL cost ≈ 20-30 points
-#   - 比 gh project item-list 的 100+ points 仍然高效
+# v3 (2026-03-30): 使用GraphQL query参数服务端过滤，大幅减少API调用
+#   - 指定status时: 服务端过滤，Todo/In Progress等通常1次API调用即可
+#   - status=all时: 需遍历全部items，自动分页
+#   - Plan状态(790+)仍需翻页，其他状态(<100)单次搞定
+#   - GraphQL cost: 指定status≈2-3 points, all≈20-30 points
 
 set -e
 
@@ -21,11 +22,11 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 PROJECT_ID="PVT_kwDOD3gg584BSCFx"
 
 # --- GraphQL查询模板 ---
-# 首页查询（无cursor）
-QUERY_FIRST='query($projectId: ID!) {
+# 带服务端过滤（指定status时使用）
+QUERY_FILTERED='query($projectId: ID!, $filter: String!, $cursor: String) {
   node(id: $projectId) {
     ... on ProjectV2 {
-      items(first: 100) {
+      items(first: 100, query: $filter, after: $cursor) {
         totalCount
         nodes {
           content {
@@ -53,11 +54,12 @@ QUERY_FIRST='query($projectId: ID!) {
   }
 }'
 
-# 翻页查询（带cursor）
-QUERY_NEXT='query($projectId: ID!, $cursor: String!) {
+# 无过滤（status=all时使用）
+QUERY_ALL='query($projectId: ID!, $cursor: String) {
   node(id: $projectId) {
     ... on ProjectV2 {
       items(first: 100, after: $cursor) {
+        totalCount
         nodes {
           content {
             ... on Issue {
@@ -84,62 +86,73 @@ QUERY_NEXT='query($projectId: ID!, $cursor: String!) {
   }
 }'
 
-# --- 分页获取全部items，写入临时文件 ---
+# --- 分页获取items ---
 TMPFILE=$(mktemp /tmp/project-items-XXXXXX.json)
 trap "rm -f $TMPFILE" EXIT
 
-# 首页
-RESPONSE=$(gh api graphql --raw-field query="$QUERY_FIRST" -F projectId="$PROJECT_ID" 2>/dev/null)
-TOTAL=$(echo "$RESPONSE" | python3 -c "import json,sys; print(json.load(sys.stdin)['data']['node']['items']['totalCount'])" 2>/dev/null || echo "?")
+echo '{"nodes":[]}' > "$TMPFILE"
 
-# 初始化JSON数组
-echo "$RESPONSE" | python3 -c "
-import json, sys
-data = json.load(sys.stdin)
-items = data['data']['node']['items']
-result = {
-    'nodes': items['nodes'],
-    'hasNextPage': items['pageInfo']['hasNextPage'],
-    'endCursor': items['pageInfo'].get('endCursor')
-}
-json.dump(result, sys.stdout)
-" > "$TMPFILE"
+CURSOR=""
+PAGE=0
 
-PAGE=1
-echo "Page $PAGE: fetched 100 / $TOTAL items" >&2
-
-# 翻页循环
 while true; do
-    HAS_NEXT=$(python3 -c "import json; d=json.load(open('$TMPFILE')); print(d['hasNextPage'])")
-    if [ "$HAS_NEXT" != "True" ]; then
-        break
-    fi
-
-    CURSOR=$(python3 -c "import json; d=json.load(open('$TMPFILE')); print(d['endCursor'])")
-    RESPONSE=$(gh api graphql --raw-field query="$QUERY_NEXT" -F projectId="$PROJECT_ID" -F cursor="$CURSOR" 2>/dev/null)
-
     PAGE=$((PAGE + 1))
 
-    # 追加nodes到临时文件，更新翻页信息
-    echo "$RESPONSE" | python3 -c "
+    # 构建gh api命令
+    if [ "$STATUS_NAME" != "all" ]; then
+        FILTER="status:\"$STATUS_NAME\""
+        if [ -z "$CURSOR" ]; then
+            RESPONSE=$(gh api graphql --raw-field query="$QUERY_FILTERED" \
+                -F projectId="$PROJECT_ID" -F "filter=$FILTER" 2>/dev/null)
+        else
+            RESPONSE=$(gh api graphql --raw-field query="$QUERY_FILTERED" \
+                -F projectId="$PROJECT_ID" -F "filter=$FILTER" -F "cursor=$CURSOR" 2>/dev/null)
+        fi
+    else
+        if [ -z "$CURSOR" ]; then
+            RESPONSE=$(gh api graphql --raw-field query="$QUERY_ALL" \
+                -F projectId="$PROJECT_ID" 2>/dev/null)
+        else
+            RESPONSE=$(gh api graphql --raw-field query="$QUERY_ALL" \
+                -F projectId="$PROJECT_ID" -F "cursor=$CURSOR" 2>/dev/null)
+        fi
+    fi
+
+    # 解析并追加
+    PARSE_RESULT=$(echo "$RESPONSE" | python3 -c "
 import json, sys
 
 new_data = json.load(sys.stdin)
-new_items = new_data['data']['node']['items']
+items_data = new_data.get('data', {}).get('node', {}).get('items', {})
+new_nodes = items_data.get('nodes', [])
+total = items_data.get('totalCount', '?')
+pi = items_data.get('pageInfo', {})
 
 old = json.load(open('$TMPFILE'))
-old['nodes'].extend(new_items['nodes'])
-old['hasNextPage'] = new_items['pageInfo']['hasNextPage']
-old['endCursor'] = new_items['pageInfo'].get('endCursor')
+old['nodes'].extend(new_nodes)
+old['totalCount'] = total
 
 with open('$TMPFILE', 'w') as f:
     json.dump(old, f)
 
-print(f'Page $PAGE: fetched {len(old[\"nodes\"])} / $TOTAL items', file=sys.stderr)
-" 2>&2
+has_next = pi.get('hasNextPage', False)
+cursor = pi.get('endCursor', '')
+print(f'{len(old[\"nodes\"])}|{total}|{has_next}|{cursor}')
+" 2>/dev/null)
+
+    FETCHED=$(echo "$PARSE_RESULT" | cut -d'|' -f1)
+    TOTAL=$(echo "$PARSE_RESULT" | cut -d'|' -f2)
+    HAS_NEXT=$(echo "$PARSE_RESULT" | cut -d'|' -f3)
+    CURSOR=$(echo "$PARSE_RESULT" | cut -d'|' -f4)
+
+    echo "Page $PAGE: $FETCHED / $TOTAL items" >&2
+
+    if [ "$HAS_NEXT" != "True" ]; then
+        break
+    fi
 done
 
-# --- 过滤与输出（逻辑与v1一致） ---
+# --- 过滤与输出 ---
 export REPO_NAME STATUS_NAME
 python3 -c "
 import json, sys, os
@@ -156,8 +169,9 @@ repo_map = {
 
 data = json.load(open('$TMPFILE'))
 items = data.get('nodes', [])
+total_items = data.get('totalCount', '?')
 
-print(f'Project #2: {REPO_NAME if REPO_NAME != \"all\" else \"all\"} / {STATUS_NAME if STATUS_NAME != \"all\" else \"all\"}  (total items: {len(items)})')
+print(f'Project #2: {REPO_NAME if REPO_NAME != \"all\" else \"all\"} / {STATUS_NAME if STATUS_NAME != \"all\" else \"all\"}  (server totalCount: {total_items})')
 print('=' * 100)
 
 results = []
@@ -187,8 +201,6 @@ for item in items:
 
     if REPO_NAME != 'all' and repo_short != REPO_NAME:
         continue
-    if STATUS_NAME != 'all' and status != STATUS_NAME:
-        continue
 
     results.append((status, num, repo_short, title))
 
@@ -201,13 +213,13 @@ for status, num, repo, title in results:
 
 print()
 
-# 状态汇总（始终显示，便于总览）
-print('--- 状态汇总 ---')
-for s, c in sorted(status_counts.items(), key=lambda x: status_order.get(x[0], 9)):
-    marker = ' ◀' if STATUS_NAME != 'all' and s == STATUS_NAME else ''
-    print(f'  {s:15} : {c}{marker}')
+# 状态汇总
+if len(status_counts) > 1:
+    print('--- 状态汇总 ---')
+    for s, c in sorted(status_counts.items(), key=lambda x: status_order.get(x[0], 9)):
+        print(f'  {s:15} : {c}')
+    print()
 
-print()
 print(f'匹配条件的Issue: {len(results)}')
 
 # 机器可解析格式(stderr)

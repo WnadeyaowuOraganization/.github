@@ -1,8 +1,8 @@
 #!/bin/bash
 # update-project-status.sh - 更新Project #2看板的Status字段
-# 用法: update-project-status.sh <ISSUE_NUMBER> <STATUS> [REPO]
+# 用法: update-project-status.sh <repo> <ISSUE_NUMBER> <STATUS>
+# repo:   backend | front | pipeline | plugins (可选，不传则查全部4个仓库)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
-# REPO:   backend | front | pipeline | plugins (可选，不传则查全部4个仓库)
 #
 # v3 (2026-03-30): 新增可选repo参数
 #   - 传repo: 只查1个仓库，1次query + 1次mutation = 2次API调用
@@ -10,14 +10,14 @@
 
 set -e
 
-ISSUE_NUMBER="$1"
-NEW_STATUS="$2"
-REPO_SHORT="$3"
+REPO_SHORT="$1"
+ISSUE_NUMBER="$2"
+NEW_STATUS="$3"
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
-    echo "用法: $0 <ISSUE_NUMBER> <STATUS> [REPO]"
-    echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail"
+    echo "用法: $0 <repo> <ISSUE_NUMBER> <STATUS>"
     echo "REPO:   backend | front | pipeline | plugins (可选)"
+    echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail"
     exit 1
 fi
 

@@ -1,0 +1,4 @@
+GET https://open.bigmodel.cn/api/monitor/usage/quota/limit
+Authorization: 7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C
+Accept: application/json
+Content-Type: application/json

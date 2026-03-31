@@ -1,41 +1,71 @@
 {
-  "_doc": "多源Key池配置 — Token Pool Proxy v2",
-  "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=openai_compat: New API兼容中转站(OpenAI格式)",
-
+  "_doc": "多源Key池配置 — Token Pool Proxy v3",
+  "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=anthropic_compat: Anthropic格式中转站; type=openai_compat: OpenAI格式中转站",
   "keys": [
     {
       "name": "zhipu_max_1",
       "type": "zhipu",
+      "priority": 1,
       "api_key": "7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C",
       "enabled": true
     },
     {
       "name": "zhipu_max_2",
       "type": "zhipu",
+      "priority": 1,
       "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
       "enabled": true
     },
     {
       "name": "zhipu_max_3",
       "type": "zhipu",
+      "priority": 1,
       "api_key": "6c587006e0d541e183a1d1e64b984350.rEB8d5uUV4DkZhtA",
       "enabled": false
     },
     {
-      "name": "aisonnet_pool",
-      "type": "zhipu",
-      "api_url": "https://newapi.aiopus.org",
-      "api_key": "sk-24aLsdgHRnydluET4Iy0dfoM9AxO9c7plMKa2H3hYtPzlKt8",
+      "name": "kimi",
+      "type": "anthropic_compat",
+      "priority": 2,
+      "api_url": "https://api.kimi.com/coding/",
+      "api_key": "sk-kimi-ZLtO5HpArs0IH4sCzc8qwtOb8vRvvTKNxDvs5MmxugGQtkCAoReOqPpVuTicPdRf",
       "model_map": {
-        "glm-5.1": "claude-opus-4-6",
-        "glm-5-turbo": "claude-sonnet-4-6",
-        "glm-4.5-air": "claude-3-5-haiku-20241022"
+        "glm-5.1": "kimi-k2.5",
+        "glm-5-turbo": "kimi-k2.5",
+        "glm-4.5-air": "kimi-k2.5"
       },
-      "_note": "aisonnet中转站，Anthropic Messages格式，glm模型名映射为claude模型名",
+      "_note": "kimi官方coding plan",
+      "enabled": true
+    },
+    {
+      "name": "无问星穹",
+      "type": "anthropic_compat",
+      "priority": 3,
+      "api_url": "https://cloud.infini-ai.com/maas/coding",
+      "api_key": "sk-cp-wp25vo2x4xdfdtoz",
+      "model_map": {
+        "glm-5.1": "glm-5",
+        "glm-5-turbo": "glm-5",
+        "glm-4.5-air": "glm-5"
+      },
+      "_note": "无问星穹coding plan",
+      "enabled": true
+    },
+    {
+      "name": "火山方舟",
+      "type": "anthropic_compat",
+      "priority": 4,
+      "api_url": "https://ark.cn-beijing.volces.com/api/coding",
+      "api_key": "eeb31787-c25d-4346-8d87-f1d0b8e7d168",
+      "model_map": {
+        "glm-5.1": "kimi-k2.5",
+        "glm-5-turbo": "kimi-k2.5",
+        "glm-4.5-air": "kimi-k2.5"
+      },
+      "_note": "火山coding plan",
       "enabled": true
     }
   ],
-
   "upstream": {
     "base_url": "https://open.bigmodel.cn/api/anthropic",
     "default_models": {
@@ -44,18 +74,12 @@
       "opus": "glm-5.1"
     }
   },
-
   "fallback": {
     "enabled": true,
     "vllm_url": "http://localhost:8000/v1/chat/completions",
     "vllm_model": "/model",
-    "_note": "本地Qwen3.5-122B-A10B via vLLM, 所有Key耗尽时自动降级"
+    "_note": "本地Qwen3.5-122B-A10B via vLLM, priority=1+2全部不可用时自动降级 (priority=3)"
   },
-
-  "cooldown": {
-    "rate_limit_hours": 1,
-    "weekly_limit_hours": 4,
-    "balance_exhausted_hours": 24,
-    "_note": "速率限制冷却1h, 高频触发(5min内>=5次)冷却4h, 余额/认证问题冷却24h. 基于时间窗口计数，不会因并发429虚假升级"
-  }
+  "concurrency_per_priority": 6,
+  "_concurrency_note": "每个优先级同时向上游发出的最大请求数，超出排队等待。建议根据智谱并发上限调整"
 }

@@ -144,3 +144,37 @@
 - 标记19个无产出In Progress Issue为Fail
 - 恢复2个有代码的Front CC (#212 kimi4, #244 kimi6)
 - 创建7个PR：Backend #599→#823, #691→#824, #601→#825, #477→#826, #576→#827; Front #210→#336, #241→#337
+
+## 2026-03-31 任务二执行记录
+
+### 今日新 PR（18个）
+
+| Issue | PR | 仓库 | 标题 |
+|-------|-----|------|------|
+| #830 | #835 | backend | 修复dashboard-card API 500错误 (E2E修复) |
+| #831 | #834 | backend | CockpitConfig SQL报错修复 (E2E修复) |
+| #829 | #837 | backend | 模块真实可用性审计引擎 |
+| #599 | #833 | backend | GitHub同步修复+增强 |
+| #9 | #832 | backend | 修复任意文件上传漏洞 |
+| #360 | #836 | backend | 项目分配作战信息卡通知 |
+| #338 | #340 | front | 定时任务管理看板页面 |
+| #339 | #341 | front | 模块健康度审计页面 |
+| #62 | #342 | front | 用户反馈管理页面 |
+| #63 | #343 | front | 用户反馈管理页面(超管审阅) |
+| #143 | #344 | front | 矿场运营仪表盘 |
+| #57 | #345 | front | 矿场详情页 |
+| #68 | #346 | front | CRM衔接前端 |
+| #16 | #88 | pipeline | 采集引擎配置分离 |
+| #17 | #90 | pipeline | 关键词自学习引擎优化 |
+| #19 | #89 | pipeline | 信源过滤增强 |
+| #38 | #87 | pipeline | post-task.sh脚本 |
+
+### 未完成（额度耗尽）
+- #828: 定时任务管理API — 额度不足失败
+- #123: 需求闭环看板页面 — 依赖后端
+- 其他未启动的 In Progress 和 Todo Issue
+
+### 修复
+- run-cc.sh: 去掉 `--output-format text`（导致CC工具调用失效）
+- run-cc.sh: `--max-turns` 50 → 200（CC轮次不足无法完成）
+- 标记 22 个已 merged 的 In Progress Issue 为 Done

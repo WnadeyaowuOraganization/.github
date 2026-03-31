@@ -56,7 +56,7 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
 # 直接在tmux中以当前用户(ubuntu)运行claude
 tmux new-session -d -s "$SESSION" \
-  "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; echo [$(date)] CC started for ${REPO}#${ISSUE} | tee $LOGFILE; claude -p '拾取并完成 Issue #${ISSUE}' --model ${MODEL} --max-turns 50 2>&1 | tee -a $LOGFILE; echo '' | tee -a $LOGFILE; echo [$(date)] CC COMPLETED | tee -a $LOGFILE; tmux kill-session -t $SESSION"
+  "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; echo [$(date)] CC started for ${REPO}#${ISSUE} | tee $LOGFILE; claude -p '拾取并完成 Issue #${ISSUE}' --model ${MODEL} --max-turns 200 2>&1 | tee -a $LOGFILE; echo '' | tee -a $LOGFILE; echo [$(date)] CC COMPLETED | tee -a $LOGFILE; tmux kill-session -t $SESSION"
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动"
 echo "  查看: tmux attach -t $SESSION"

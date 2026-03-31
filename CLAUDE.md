@@ -145,6 +145,7 @@ cd /home/ubuntu/projects/<目录>
 git checkout dev && git pull origin dev
 git checkout -b feature-issue-<N>
 mkdir -p ./issues/issue-<N>
+# 针对恢复issue工作目录需要再多执行一步：合并dev分支最新代码到工作目录现有的feature分支中
 
 # 3. 更新GitHub标签
 gh issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remove-label "status:ready"

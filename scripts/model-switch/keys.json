@@ -27,6 +27,12 @@
       "priority": 2,
       "api_url": "https://open.bigmodel.cn/api/anthropic",
       "api_key": "7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C",
+      "model_map": {
+        "claude-opus-4-6": "glm-5.1",
+        "claude-sonnet-4-6": "glm-5.1",
+        "claude-haiku-4-5-20251001": "glm-5.1"
+      },
+      "_note": "智谱清言coding plan",
       "enabled": true
     },
     {
@@ -36,6 +42,12 @@
       "priority": 2,
       "api_url": "https://open.bigmodel.cn/api/anthropic",
       "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
+      "model_map": {
+        "claude-opus-4-6": "glm-5.1",
+        "claude-sonnet-4-6": "glm-5.1",
+        "claude-haiku-4-5-20251001": "glm-5.1"
+      },
+      "_note": "智谱清言coding plan",
       "enabled": false
     },
     {
@@ -45,6 +57,12 @@
       "priority": 2,
       "api_url": "https://open.bigmodel.cn/api/anthropic",
       "api_key": "6c587006e0d541e183a1d1e64b984350.rEB8d5uUV4DkZhtA",
+      "model_map": {
+        "claude-opus-4-6": "glm-5.1",
+        "claude-sonnet-4-6": "glm-5.1",
+        "claude-haiku-4-5-20251001": "glm-5.1"
+      },
+      "_note": "智谱清言coding plan",
       "enabled": false
     },
     {
@@ -85,5 +103,11 @@
     "_note": "本地Qwen3.5-122B-A10B via vLLM, priority=1+2全部不可用时自动降级 (priority=3)"
   },
   "concurrency_per_priority": 6,
-  "_concurrency_note": "每个优先级同时向上游发出的最大请求数，超出排队等待。建议根据智谱并发上限调整"
+  "_concurrency_note": "每个优先级同时向上游发出的最大请求数，超出排队等待。建议根据智谱并发上限调整",
+  "usage_report": {
+    "enabled": true,
+    "url": "http://3.211.167.122:6040/system/dashboard/token-pool/usage-report",
+    "timeout_secs": 5,
+    "_note": "每次调用完成后异步上报用量到万德后端"
+  }
 }

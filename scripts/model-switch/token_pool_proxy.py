@@ -83,6 +83,121 @@ _stats = {}        # {key_name: {"requests": int, "errors": int, "last_used": is
 _semaphores = {}   # {priority: threading.Semaphore} — 每个优先级的并发控制
 _start_time = None
 
+# ===================== 用量上报 =====================
+
+# 上报队列，用于控制并发上报数量
+_usage_report_queue = []
+_usage_report_lock = threading.Lock()
+_MAX_REPORT_QUEUE_SIZE = 100  # 队列满时丢弃最老的
+
+
+def _report_usage_async(key_name, model, prompt_tokens, completion_tokens, latency_ms, status_code, error_msg=None):
+    """异步上报用量数据到万德后端
+
+    Args:
+        key_name: 使用的Key名称
+        model: 请求的模型名
+        prompt_tokens: 输入token数
+        completion_tokens: 输出token数
+        latency_ms: 请求耗时(毫秒)
+        status_code: HTTP状态码
+        error_msg: 错误信息(如果有)
+    """
+    usage_report_cfg = _config.get("usage_report", {})
+    if not usage_report_cfg.get("enabled", False):
+        return
+
+    report_url = usage_report_cfg.get("url", "")
+    if not report_url:
+        return
+
+    timeout_secs = usage_report_cfg.get("timeout_secs", 5)
+
+    report_data = {
+        "key_name": key_name,
+        "model": model,
+        "prompt_tokens": prompt_tokens,
+        "completion_tokens": completion_tokens,
+        "latency_ms": latency_ms,
+        "status_code": status_code,
+        "error_msg": error_msg,
+        "timestamp": _now().isoformat(),
+    }
+
+    def _do_report():
+        try:
+            req = urllib.request.Request(
+                report_url,
+                data=json.dumps(report_data).encode("utf-8"),
+                headers={"Content-Type": "application/json"},
+                method="POST",
+            )
+            with urllib.request.urlopen(req, timeout=timeout_secs) as resp:
+                if resp.status == 200:
+                    logger.debug(f"[usage_report] 上报成功: {key_name} model={model} tokens={prompt_tokens}+{completion_tokens}")
+                else:
+                    logger.warning(f"[usage_report] 上报返回非200: HTTP {resp.status}")
+        except Exception as e:
+            # 上报失败静默处理，不影响主流程
+            logger.debug(f"[usage_report] 上报失败: {e}")
+
+            # 重试一次
+            try:
+                time.sleep(0.5)
+                req = urllib.request.Request(
+                    report_url,
+                    data=json.dumps(report_data).encode("utf-8"),
+                    headers={"Content-Type": "application/json"},
+                    method="POST",
+                )
+                with urllib.request.urlopen(req, timeout=timeout_secs) as resp:
+                    if resp.status == 200:
+                        logger.debug(f"[usage_report] 重试上报成功: {key_name}")
+            except Exception as e2:
+                logger.debug(f"[usage_report] 重试上报失败，放弃: {e2}")
+
+    # 启动独立线程进行异步上报
+    try:
+        with _usage_report_lock:
+            # 队列满时丢弃最老的
+            while len(_usage_report_queue) >= _MAX_REPORT_QUEUE_SIZE:
+                old_thread = _usage_report_queue.pop(0)
+                # 不join，让旧线程自然结束
+
+            t = threading.Thread(target=_do_report, daemon=True)
+            t.start()
+            _usage_report_queue.append(t)
+    except Exception as e:
+        logger.debug(f"[usage_report] 启动上报线程失败: {e}")
+
+
+def _parse_usage_from_response(resp_body, key_type="anthropic_compat"):
+    """从响应体中解析token用量
+
+    Returns: (prompt_tokens, completion_tokens) 或 (0, 0)
+    """
+    try:
+        data = json.loads(resp_body) if isinstance(resp_body, bytes) else resp_body
+        if not isinstance(data, dict):
+            return 0, 0
+
+        usage = data.get("usage", {})
+        if not usage:
+            return 0, 0
+
+        # 智谱格式: input_tokens / output_tokens
+        prompt_tokens = usage.get("input_tokens", 0)
+        completion_tokens = usage.get("output_tokens", 0)
+
+        # OpenAI格式: prompt_tokens / completion_tokens
+        if prompt_tokens == 0 and completion_tokens == 0:
+            prompt_tokens = usage.get("prompt_tokens", 0)
+            completion_tokens = usage.get("completion_tokens", 0)
+
+        return prompt_tokens, completion_tokens
+    except Exception:
+        return 0, 0
+
 
 def _now():
     return datetime.now(CST)
@@ -434,6 +549,48 @@ def classify_openai_compat(status_code, resp_body):
     return ErrorType.UNRECOVERABLE, code or f"HTTP{status_code}", None, message
 
 
+def classify_kimi_provider(status_code, resp_body):
+    """Kimi (Moonshot) 直连错误分类（platform.kimi.com）
+
+    官方文档: https://platform.kimi.com/docs/api/chat
+    Kimi 使用 OpenAI 兼容格式: {"error": {"type": "...", "message": "..."}}
+
+    Returns: (ErrorType, error_code, cooldown_until_iso, raw_message)
+    """
+    fields, message = _extract_error_fields(resp_body)
+    err_type = fields.get("type", "")
+    message_lower = message.lower()
+
+    # 认证/权限错误
+    if status_code in (401, 403) or err_type in ("invalid_authentication_error", "incorrect_api_key_error", "permission_denied_error"):
+        return ErrorType.UNRECOVERABLE, err_type or f"HTTP{status_code}", None, message
+
+    # 余额不足 / 账户暂停
+    if status_code == 402 or err_type == "exceeded_current_quota_error":
+        return ErrorType.BALANCE_EXHAUSTED, err_type or f"HTTP{status_code}", None, message
+    if any(kw in message_lower for kw in ("suspended", "billing", "balance", "quota", "余额不足", "额度不足")):
+        return ErrorType.BALANCE_EXHAUSTED, err_type, None, message
+
+    # 内容过滤 / 请求参数错误 -> 不可恢复（换 key 也一样）
+    if err_type in ("content_filter", "invalid_request_error"):
+        return ErrorType.UNRECOVERABLE, err_type, None, message
+
+    # 资源不存在
+    if status_code == 404 or err_type == "resource_not_found_error":
+        return ErrorType.UNRECOVERABLE, err_type or f"HTTP{status_code}", None, message
+
+    # 服务过载（节点级，backoff 等待）
+    if err_type == "engine_overloaded_error" or status_code in (500, 502, 503):
+        return ErrorType.PLATFORM_OVERLOAD, err_type or f"HTTP{status_code}", None, message
+
+    # 速率限制（并发 / RPM / TPM / TPD，换 key 即可）
+    if err_type == "rate_limit_reached_error" or status_code == 429:
+        return ErrorType.RATE_LIMIT, err_type or f"HTTP{status_code}", None, message
+
+    # 未知错误
+    return ErrorType.UNRECOVERABLE, err_type or f"HTTP{status_code}", None, message
+
+
 def classify_error(key_cfg, status_code, resp_body):
     """根据 provider 分派到对应的错误分类函数
 
@@ -443,6 +600,8 @@ def classify_error(key_cfg, status_code, resp_body):
 
     if provider == "zhipu":
         return classify_zhipu_provider(status_code, resp_body)
+    elif provider == "kimi":
+        return classify_kimi_provider(status_code, resp_body)
     else:
         # 其他供应商统一使用 anthropic_compat 错误分类
         return classify_anthropic_compat(status_code, resp_body)
@@ -614,6 +773,132 @@ def _query_quota_zhipu(api_key, base_url=None):
         return None
 
 
+def _query_quota_kimi(api_key, api_url=None):
+    """Kimi (Moonshot) 用量查询
+
+    注意：Kimi coding plan 目前无公开用量查询 API。
+    用量信息需登录 Kimi 控制台查看：https://platform.moonshot.cn/console/billing
+
+    Returns: None (暂不支持)
+    """
+    # Kimi coding plan 暂不支持用量查询
+    # 用户需登录平台查看用量
+    logger.debug("[quota] Kimi coding plan 暂不支持用量查询 API")
+    return None
+
+# 以下是保留代码，待 Kimi 开放用量 API 后可启用
+def _query_quota_kimi_legacy(api_key, api_url=None):
+    """Kimi (Moonshot) 用量查询 - 保留待启用
+
+    接口：GET https://api.moonshot.cn/v1/billing/quota
+    认证：Authorization: Bearer {api_key}
+
+    Returns: 统一格式 dict 或 None
+    """
+    # Kimi 的 API 基址 - 从 api_url 提取或默认
+    base_url = api_url or "https://api.kimi.com"
+    # 尝试提取基址 (api.kimi.com/coding -> api.kimi.com)
+    parts = base_url.split("/coding")
+    api_host = parts[0].rstrip("/") if parts else base_url
+
+    # 尝试 Kimi/Moonshot 官方用量查询接口
+    # 注意：Kimi 使用的是 moonshot.cn 域名，coding plan 可能没有公开用量 API
+    quota_urls = [
+        f"{api_host}/v1/billing/quota",
+        f"{api_host}/v1/user/quota",
+        f"{api_host}/dashboard/billing/quota",
+        f"{api_host}/v1/billing/credit-balances",
+        "https://api.moonshot.cn/v1/billing/quota",
+        "https://api.moonshot.cn/v1/billing/credit-balances",
+        "https://platform.moonshot.cn/api/billing/quota",
+    ]
+
+    for url in quota_urls:
+        req = urllib.request.Request(url, headers={
+            "Authorization": f"Bearer {api_key}",
+            "Accept": "application/json",
+        })
+
+        try:
+            with urllib.request.urlopen(req, timeout=10) as resp:
+                data = json.loads(resp.read())
+
+            # 解析 Kimi 返回的用量数据
+            quotas = []
+
+            # 处理不同返回格式
+            if "quota" in data:
+                q = data["quota"]
+                total = q.get("total", 0)
+                used = q.get("used", 0)
+                remaining = q.get("remaining", 0)
+                if total > 0:
+                    quotas.append({
+                        "type": "TOKENS_LIMIT",
+                        "window": "monthly",
+                        "used_pct": round(used / total * 100, 2) if total > 0 else 0,
+                        "total": total,
+                        "used": used,
+                        "remaining": remaining,
+                    })
+            elif "data" in data:
+                d = data["data"]
+                total = d.get("hard_limit", d.get("total", 0))
+                used = d.get("hard_limit_used", d.get("used", 0))
+                remaining = d.get("remaining", total - used)
+                if total > 0:
+                    quotas.append({
+                        "type": "TOKENS_LIMIT",
+                        "window": "monthly",
+                        "used_pct": round(used / total * 100, 2) if total > 0 else 0,
+                        "total": total,
+                        "used": used,
+                        "remaining": remaining,
+                    })
+            elif isinstance(data, dict) and "remaining" in data:
+                # 直接返回格式
+                total = data.get("total", 0)
+                used = data.get("used", 0)
+                remaining = data.get("remaining", 0)
+                if total > 0:
+                    quotas.append({
+                        "type": "TOKENS_LIMIT",
+                        "window": "monthly",
+                        "used_pct": round(used / total * 100, 2) if total > 0 else 0,
+                        "total": total,
+                        "used": used,
+                        "remaining": remaining,
+                    })
+
+            if quotas:
+                return {
+                    "provider": "kimi",
+                    "plan": "coding_plan",
+                    "quotas": quotas,
+                }
+
+        except urllib.error.HTTPError as e:
+            # 读取错误响应体
+            try:
+                resp_body = e.read().decode('utf-8')
+            except:
+                resp_body = ""
+            # 404 表示接口不存在，继续尝试下一个
+            if e.code == 404:
+                logger.debug(f"[quota] Kimi 接口未找到 ({url})")
+                continue
+            logger.warning(f"[quota] Kimi 用量查询失败 ({url}): HTTP {e.code} - {resp_body[:200] if resp_body else e}")
+            # 401/403 表示认证问题，直接退出
+            if e.code in (401, 403):
+                break
+            continue
+        except Exception as e:
+            logger.warning(f"[quota] Kimi 用量查询失败 ({url}): {e}")
+            continue
+
+    return None
+
+
 def _query_quota_anthropic_compat(api_key, api_url=None):
     """中转站(anthropic_compat)用量查询 — 预留接口
 
@@ -634,7 +919,7 @@ def _query_quota_openai_compat(api_key, api_url=None):
     return None
 
 
-def query_key_quota(key_cfg):
+def query_provider_quota(key_cfg):
     """查询单个 key 的用量信息，带缓存
 
     Returns: 统一格式 dict 或 None
@@ -669,8 +954,12 @@ def query_key_quota(key_cfg):
         result = _query_quota_zhipu(api_key)
         if result:
             result["provider"] = key_provider
+    elif key_provider == "kimi":
+        result = _query_quota_kimi(api_key, key_cfg.get("api_url"))
+        if result:
+            result["provider"] = key_provider
     else:
-        # 其他供应商暂无量子查询接口
+        # 其他供应商暂无用量查询接口
         result = None
 
     # 更新缓存
@@ -889,7 +1178,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 }
 
                 # 查询上游用量（带缓存，不阻塞主流程）
-                quota = query_key_quota(k)
+                quota = query_provider_quota(k)
                 if quota:
                     entry["quota"] = quota
 
@@ -936,6 +1225,9 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
         model_requested = body_dict.get("model", "unknown")
 
+        # 记录请求开始时间（用于计算latency）
+        request_start_time = time.monotonic()
+
         # === deadline-driven 重试循环 ===
         deadline = time.monotonic() + REQUEST_DEADLINE_SECS
         groups = _get_keys_by_priority()
@@ -943,6 +1235,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
         backoff_count = 0
         last_error_status = 500
         last_error_body = b'{"error": {"message": "No available keys"}}'
+        last_key_used = None  # 记录最后使用的key，用于失败上报
 
         for priority in sorted_priorities:
             if time.monotonic() >= deadline:
@@ -992,6 +1285,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
                 key_name = key["name"]
                 key_type = key.get("type", "zhipu")
+                last_key_used = key  # 记录当前使用的key，用于上报
 
                 # 并发信号量控制
                 acquired = False
@@ -1014,6 +1308,24 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
                     # === 成功 ===
                     if status == 200:
+                        # 计算请求耗时
+                        latency_ms = int((time.monotonic() - request_start_time) * 1000)
+
+                        # 解析token用量
+                        resp_bytes = resp_body if not is_dict_resp else json.dumps(resp_body).encode()
+                        prompt_tokens, completion_tokens = _parse_usage_from_response(resp_bytes, key_type)
+
+                        # 异步上报用量
+                        _report_usage_async(
+                            key_name=key_name,
+                            model=model_requested,
+                            prompt_tokens=prompt_tokens,
+                            completion_tokens=completion_tokens,
+                            latency_ms=latency_ms,
+                            status_code=200,
+                            error_msg=None,
+                        )
+
                         if is_dict_resp:
                             self._send(200, resp_body)  # dict
                         else:
@@ -1088,6 +1400,19 @@ class ProxyHandler(BaseHTTPRequestHandler):
                     elif err_type == ErrorType.UNRECOVERABLE:
                         # 不可恢复，直接透传给CC
                         logger.warning(f"  → 不可恢复错误, 直接透传给CC")
+
+                        # 上报失败用量
+                        latency_ms = int((time.monotonic() - request_start_time) * 1000)
+                        _report_usage_async(
+                            key_name=key_name,
+                            model=model_requested,
+                            prompt_tokens=0,
+                            completion_tokens=0,
+                            latency_ms=latency_ms,
+                            status_code=status,
+                            error_msg=raw_msg[:500],
+                        )
+
                         if is_dict_resp and resp_body:
                             self._send(status, resp_body)
                         else:
@@ -1102,7 +1427,22 @@ class ProxyHandler(BaseHTTPRequestHandler):
         fallback_cfg = _config.get("fallback", {})
         if fallback_cfg.get("enabled", True):
             logger.warning(f"[路由] 所有Key不可用，降级到本地vLLM保底")
+            vllm_start_time = time.monotonic()
             status, resp = call_local_vllm(body_dict)
+
+            # 上报vLLM用量
+            vllm_latency_ms = int((time.monotonic() - vllm_start_time) * 1000)
+            vllm_prompt_tokens, vllm_completion_tokens = _parse_usage_from_response(resp, "openai_compat")
+            _report_usage_async(
+                key_name="local_vllm",
+                model=model_requested,
+                prompt_tokens=vllm_prompt_tokens,
+                completion_tokens=vllm_completion_tokens,
+                latency_ms=vllm_latency_ms,
+                status_code=status,
+                error_msg=None if status == 200 else "vLLM fallback failed",
+            )
+
             self._send(status, resp)
             return
 
@@ -1112,6 +1452,20 @@ class ProxyHandler(BaseHTTPRequestHandler):
             f"[路由] 全部失败 | 耗时={elapsed:.1f}s | "
             f"最后错误=HTTP {last_error_status}"
         )
+
+        # 上报最终失败
+        if last_key_used:
+            latency_ms = int((time.monotonic() - request_start_time) * 1000)
+            _report_usage_async(
+                key_name=last_key_used["name"],
+                model=model_requested,
+                prompt_tokens=0,
+                completion_tokens=0,
+                latency_ms=latency_ms,
+                status_code=last_error_status,
+                error_msg=f"All retries failed, last error: HTTP {last_error_status}",
+            )
+
         self._send(last_error_status, last_error_body)
 
 
@@ -1140,5 +1494,122 @@ def main():
         server.shutdown()
 
 
+# ===================== 命令行用量查询 =====================
+
+def cli_query_quota(key_name=None, provider=None):
+    """命令行查询用量信息
+    
+    用法：
+        python3 token_pool_proxy.py --quota              # 查询所有启用 Key 的用量
+        python3 token_pool_proxy.py --quota kimi         # 查询指定 Key 的用量
+        python3 token_pool_proxy.py --quota-provider kimi # 查询指定 provider 的所有 Key
+    """
+    _load_config()
+    _load_state()
+    
+    keys = _get_enabled_keys()
+    if not keys:
+        print("没有启用的 Key")
+        return
+    
+    if key_name:
+        # 查询指定 Key
+        target_keys = [k for k in keys if k["name"] == key_name]
+        if not target_keys:
+            print(f"未找到 Key: {key_name}")
+            return
+        keys = target_keys
+    
+    if provider:
+        # 查询指定 provider 的所有 Key
+        keys = [k for k in keys if k.get("provider") == provider]
+        if not keys:
+            print(f"未找到 Provider: {provider}")
+            return
+    
+    print(f"\n{'='*60}")
+    print(f"用量查询结果")
+    print(f"{'='*60}\n")
+    
+    for key_cfg in keys:
+        key_name = key_cfg["name"]
+        key_provider = key_cfg.get("provider", "unknown")
+        print(f"Key: {key_name} (provider: {key_provider}, priority: {key_cfg.get('priority', 1)})")
+        
+        result = query_provider_quota(key_cfg)
+        if result:
+            print(f"  套餐：{result.get('plan', 'unknown')}")
+            quotas = result.get("quotas", [])
+            if quotas:
+                for q in quotas:
+                    window = q.get("window", "unknown")
+                    total = q.get("total")
+                    used = q.get("used")
+                    remaining = q.get("remaining")
+                    used_pct = q.get("used_pct", 0)
+                    # 格式化输出
+                    total_str = f"{total:,}" if isinstance(total, int) else str(total)
+                    remaining_str = f"{remaining:,}" if isinstance(remaining, int) else str(remaining)
+                    if total is not None and remaining is not None:
+                        print(f"  [{window}] 总额：{total_str}, 剩余：{remaining_str} ({100-used_pct:.0f}% 可用)")
+                    elif used_pct is not None:
+                        print(f"  [{window}] 已使用：{used_pct:.0f}%")
+                    else:
+                        print(f"  [{window}] 用量数据不可用")
+            else:
+                print("  无用量数据")
+        else:
+            # 根据 provider 给出更明确的提示
+            if key_provider == "kimi":
+                print("  提示：Kimi coding plan 暂无公开用量查询 API")
+                print("        请登录 Kimi 控制台查看：https://platform.moonshot.cn/console/billing")
+            elif key_provider == "infini":
+                print("  提示：无问星穹暂不支持用量查询 API")
+            elif key_provider == "volcengine":
+                print("  提示：火山方舟暂不支持用量查询 API")
+            else:
+                print("  查询失败或未支持")
+        
+        print()
+    
+    print(f"{'='*60}")
+
+
 if __name__ == "__main__":
+    import sys
+    
+    # 检查命令行参数
+    if len(sys.argv) > 1:
+        if sys.argv[1] == "--quota" or sys.argv[1] == "-q":
+            # 查询指定 Key 或所有 Key
+            key_name = sys.argv[2] if len(sys.argv) > 2 else None
+            cli_query_quota(key_name=key_name)
+            exit(0)
+        elif sys.argv[1] == "--quota-provider" or sys.argv[1] == "-qp":
+            # 查询指定 provider
+            provider = sys.argv[2] if len(sys.argv) > 2 else None
+            if not provider:
+                print("用法：python3 token_pool_proxy.py --quota-provider <provider>")
+                exit(1)
+            cli_query_quota(provider=provider)
+            exit(0)
+        elif sys.argv[1] == "--help" or sys.argv[1] == "-h":
+            print("""
+Token Pool Proxy v3 - 用量查询
+
+用法:
+    python3 token_pool_proxy.py                 # 启动代理服务
+    python3 token_pool_proxy.py --quota         # 查询所有启用 Key 的用量
+    python3 token_pool_proxy.py --quota <name>  # 查询指定 Key 的用量
+    python3 token_pool_proxy.py --quota-provider <provider>  # 查询指定 provider 的所有 Key
+
+示例:
+    python3 token_pool_proxy.py --quota kimi            # 查询 kimi Key 用量
+    python3 token_pool_proxy.py --quota-provider kimi   # 查询所有 kimi provider 的 Key
+    python3 token_pool_proxy.py --quota-provider zhipu  # 查询所有 zhipu provider 的 Key
+""")
+            exit(0)
+    
+    # 默认启动服务
     main()
+

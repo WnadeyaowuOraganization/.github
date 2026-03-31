@@ -1,4 +1,4 @@
-# Token Pool Proxy v2 — 多源Key自动切换
+# Token Pool Proxy v3 — 多源Key自动切换
 
 ## 架构
 
@@ -26,7 +26,7 @@ Token Pool Proxy (:9855) — 优先级路由
 
 | 文件 | 用途 |
 |------|------|
-| `token_pool_proxy.py` | 代理主程序 v2 |
+| `token_pool_proxy.py` | 代理主程序 v3 |
 | `keys.json` | Key池配置（**不入git**，含敏感Key） |
 | `keys.json.example` | Key配置模板（入git） |
 | `pool_state.json` | 运行时状态（自动生成，冷却记录） |
@@ -54,20 +54,26 @@ journalctl -u token-pool-proxy -f
 ### 1. zhipu (智谱直连)
 - 使用Anthropic Messages API格式直连 `open.bigmodel.cn`
 - 受Coding Plan限额 (1600次/5h, 8000次/周)
-- 配置: `type: "zhipu"`, `api_key: "xxx"`
+- 配置: `type: "anthropic_compat"`, `provider: "zhipu"`, `api_url: "https://open.bigmodel.cn/api/anthropic"`, `api_key: "xxx"`
 
-### 2. openai_compat (中转站)
+### 2. anthropic_compat (Anthropic格式中转站)
+- 使用Anthropic Messages API格式
+- 支持 model_map 映射CC请求的模型名到中转站模型名
+- model_map key使用Claude Code内置模型名: `claude-opus-4-6`, `claude-sonnet-4-6`, `claude-haiku-4-5-20251001`
+- 配置: `type: "anthropic_compat"`, `api_url: "https://..."`, `api_key: "sk-..."`
+
+### 3. openai_compat (OpenAI格式中转站)
 - 使用OpenAI Chat Completions格式
 - 代理自动做 Anthropic↔OpenAI 双向转换
-- 支持 model_map 映射CC请求的模型名到中转站模型名
-- 配置: `type: "openai_compat"`, `api_url: "https://..."`, `api_key: "sk-..."`, `model: "glm-5.1"`
+- 配置: `type: "openai_compat"`, `api_url: "https://..."`, `api_key: "sk-..."`
 
 ## 添加新Key
 
 1. 编辑 `keys.json`
-2. 智谱直连: 添加 `type: "zhipu"` 的entry
-3. 中转站: 添加 `type: "openai_compat"` 的entry，含 `api_url` 和 `model`
-4. `sudo systemctl restart token-pool-proxy`
+2. 智谱直连: 添加 `type: "anthropic_compat"`, `provider: "zhipu"` 的entry
+3. Anthropic格式中转站: 添加 `type: "anthropic_compat"` 的entry，含 `api_url`
+4. OpenAI格式中转站: 添加 `type: "openai_compat"` 的entry，含 `api_url`
+5. `sudo systemctl restart token-pool-proxy`
 
 ## 限额策略
 

@@ -62,7 +62,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 # 触发编程CC
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <issue_number> <model> [dir_suffix]
 # repo: backend | front | pipeline
-# model: glm-5.1（默认）、glm-5-turbo、glm-4.5-air
+# model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 指定外接目录后缀（如 kimi1, glm1）
 ```
 
@@ -161,8 +161,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> [dir_suffix]
 
 # 示例:
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> opus kimi1  # 外接目录优先
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> opus       # 主目录
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> claude-opus-4-6 kimi1  # 使用外接目录
 
 # 查看实时输出:
 tmux attach -t cc-backend-272

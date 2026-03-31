@@ -51,7 +51,7 @@ export PATH="/home/ubuntu/.local/bin:\$PATH"
 export HOME="/home/ubuntu"
 cd "$E2E_DIR"
 echo [\$(date)] 中层E2E测试启动 >> "$LOGFILE"
-claude -p '执行中层测试' --model glm-5.1 \
+claude -p '执行中层测试' --model claude-opus-4-6 \
   --output-format stream-json --include-partial-messages --verbose \
   2>/dev/null | tee -a "$RAW_LOG" | python3 "$PARSER" >> "$LOGFILE" 2>&1
 EXIT_CODE=\${PIPESTATUS[0]}

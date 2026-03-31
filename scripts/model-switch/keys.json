@@ -10,9 +10,9 @@
       "api_url": "https://api.kimi.com/coding/",
       "api_key": "sk-kimi-ZLtO5HpArs0IH4sCzc8qwtOb8vRvvTKNxDvs5MmxugGQtkCAoReOqPpVuTicPdRf",
       "model_map": {
-        "glm-5.1": "kimi-k2.5",
-        "glm-5-turbo": "kimi-k2.5",
-        "glm-4.5-air": "kimi-k2.5"
+        "claude-opus-4-6": "kimi-k2.5",
+        "claude-sonnet-4-6": "kimi-k2.5",
+        "claude-haiku-4-5-20251001": "kimi-k2.5"
       },
       "env": {
         "ENABLE_TOOL_SEARCH": "false"
@@ -55,9 +55,9 @@
       "api_url": "https://cloud.infini-ai.com/maas/coding",
       "api_key": "sk-cp-wp25vo2x4xdfdtoz",
       "model_map": {
-        "glm-5.1": "glm-5",
-        "glm-5-turbo": "glm-5",
-        "glm-4.5-air": "glm-5"
+        "claude-opus-4-6": "glm-5",
+        "claude-sonnet-4-6": "glm-5",
+        "claude-haiku-4-5-20251001": "glm-5"
       },
       "_note": "无问星穹coding plan",
       "enabled": true
@@ -70,9 +70,9 @@
       "api_url": "https://ark.cn-beijing.volces.com/api/coding",
       "api_key": "eeb31787-c25d-4346-8d87-f1d0b8e7d168",
       "model_map": {
-        "glm-5.1": "kimi-k2.5",
-        "glm-5-turbo": "kimi-k2.5",
-        "glm-4.5-air": "kimi-k2.5"
+        "claude-opus-4-6": "kimi-k2.5",
+        "claude-sonnet-4-6": "kimi-k2.5",
+        "claude-haiku-4-5-20251001": "kimi-k2.5"
       },
       "_note": "火山coding plan",
       "enabled": true

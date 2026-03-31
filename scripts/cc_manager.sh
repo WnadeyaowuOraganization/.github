@@ -42,7 +42,7 @@ cd "$GITHUB_DIR"
 
 # 触发研发经理CC（stream-json实时日志）
 claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" \
-  --output-format stream-json --include-partial-messages --verbose \
+  --model claude-opus-4-6 --output-format stream-json --include-partial-messages --verbose \
   2>/dev/null | tee -a "$RAW_LOG" | python3 "$PARSER" >> "$LOG_FILE" 2>&1
 
 EXIT_CODE=${PIPESTATUS[0]}

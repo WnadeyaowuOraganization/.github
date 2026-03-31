@@ -5,7 +5,7 @@ Token Pool Proxy v3 — 多源Key自动切换代理
 监听 0.0.0.0:9855，提供 Anthropic Messages API 兼容端点
 CC(Claude Code) 通过 ANTHROPIC_BASE_URL=http://localhost:9855 连接
 
-v3 核心改进（相比v2）：
+v4 核心改进（相比v2）：
   1. 三种上游类型: zhipu(直连) / anthropic_compat(中转站) / openai_compat(OpenAI格式)
   2. 按 priority 字段严格分组，同优先级内 round-robin 轮询
   3. 统一错误分类: RATE_LIMIT / PLATFORM_OVERLOAD / QUOTA_EXHAUSTED / BALANCE_EXHAUSTED / UNRECOVERABLE
@@ -95,11 +95,11 @@ def _load_config():
 
     enabled = [k for k in _config["keys"] if k.get("enabled")]
 
-    # 按type分类统计
-    type_counts = {}
+    # 按 provider 分类统计
+    provider_counts = {}
     for k in enabled:
-        t = k.get("type", "zhipu")
-        type_counts[t] = type_counts.get(t, 0) + 1
+        p = k.get("provider", k.get("name", "unknown"))
+        provider_counts[p] = provider_counts.get(p, 0) + 1
 
     # 初始化并发信号量
     concurrency = _config.get("concurrency_per_priority", CONCURRENCY_PER_PRIORITY)
@@ -108,8 +108,8 @@ def _load_config():
         if p not in _semaphores:
             _semaphores[p] = threading.Semaphore(concurrency)
 
-    type_str = ", ".join(f"{t}:{c}" for t, c in sorted(type_counts.items()))
-    logger.info(f"配置加载: {len(enabled)} 个启用Key ({type_str}), 并发信号量: {concurrency}/优先级")
+    provider_str = ", ".join(f"{p}:{c}" for p, c in sorted(provider_counts.items()))
+    logger.info(f"配置加载: {len(enabled)} 个启用Key ({provider_str}), 并发信号量: {concurrency}/优先级")
 
 
 def _load_state():
@@ -302,7 +302,7 @@ def _parse_flush_time(message):
     return None
 
 
-def classify_zhipu_direct(status_code, resp_body):
+def classify_zhipu_provider(status_code, resp_body):
     """智谱直连错误分类（open.bigmodel.cn）
 
     Returns: (ErrorType, error_code, cooldown_until_iso, raw_message)
@@ -435,21 +435,16 @@ def classify_openai_compat(status_code, resp_body):
 
 
 def classify_error(key_cfg, status_code, resp_body):
-    """根据 key type 分派到对应的错误分类函数
+    """根据 provider 分派到对应的错误分类函数
 
     Returns: (ErrorType, error_code, cooldown_until_iso, raw_message)
     """
-    key_type = key_cfg.get("type", "zhipu")
-    has_custom_url = bool(key_cfg.get("api_url"))
+    provider = key_cfg.get("provider", "")
 
-    if key_type == "zhipu" and not has_custom_url:
-        return classify_zhipu_direct(status_code, resp_body)
-    elif key_type == "anthropic_compat":
-        return classify_anthropic_compat(status_code, resp_body)
-    elif key_type == "openai_compat":
-        return classify_openai_compat(status_code, resp_body)
+    if provider == "zhipu":
+        return classify_zhipu_provider(status_code, resp_body)
     else:
-        # 兜底: zhipu with custom url 按 anthropic_compat 处理
+        # 其他供应商统一使用 anthropic_compat 错误分类
         return classify_anthropic_compat(status_code, resp_body)
 
 
@@ -665,51 +660,26 @@ def query_key_quota(key_cfg):
     if cached and (now - cached.get("_mono", 0)) < _QUOTA_CACHE_TTL_SECS:
         return cached.get("data")
 
-    # 按 type 分派查询
-    key_type = key_cfg.get("type", "zhipu")
+    # 按 provider 分派查询
+    key_provider = key_cfg.get("provider", key_name)
     api_key = key_cfg["api_key"]
     result = None
 
-    if key_type == "zhipu":
+    if key_provider == "zhipu":
         result = _query_quota_zhipu(api_key)
-    elif key_type == "anthropic_compat":
-        result = _query_quota_anthropic_compat(api_key, key_cfg.get("api_url"))
-    elif key_type == "openai_compat":
-        result = _query_quota_openai_compat(api_key, key_cfg.get("api_url"))
+        if result:
+            result["provider"] = key_provider
+    else:
+        # 其他供应商暂无量子查询接口
+        result = None
 
     # 更新缓存
     _quota_cache[key_name] = {"data": result, "_mono": now}
     return result
 
 
-# ===================== 上游调用 =====================
-
-def call_zhipu_direct(body_bytes, api_key, path="/v1/messages"):
-    """转发请求到智谱直连（open.bigmodel.cn, Anthropic Messages格式）"""
-    base_url = _config.get("upstream", {}).get("base_url", "https://open.bigmodel.cn/api/anthropic")
-    url = f"{base_url}{path}"
-
-    headers = {
-        "Content-Type": "application/json",
-        "x-api-key": api_key,
-        "anthropic-version": "2023-06-01",
-    }
-
-    req = urllib.request.Request(url, data=body_bytes, headers=headers, method="POST")
-
-    try:
-        with urllib.request.urlopen(req, timeout=300) as resp:
-            return resp.status, resp.read()
-    except urllib.error.HTTPError as e:
-        err_body = e.read() if e.fp else b"{}"
-        return e.code, err_body
-    except Exception as e:
-        error_resp = json.dumps({"type": "error", "error": {"type": "proxy_error", "message": str(e)}}).encode()
-        return 502, error_resp
-
-
 def call_anthropic_compat(body_bytes, api_key, path="/v1/messages", base_url=None, model_map=None):
-    """转发请求到Anthropic格式中转站（如aiopus）"""
+    """调用Anthropic兼容供应商（智谱直连、Kimi、无问星穹、火山等）"""
     url = f"{base_url}{path}"
 
     # 模型名重写
@@ -744,7 +714,7 @@ def call_anthropic_compat(body_bytes, api_key, path="/v1/messages", base_url=Non
 
 
 def call_openai_compat(anthropic_body, key_cfg):
-    """调用OpenAI兼容中转站，做Anthropic→OpenAI→Anthropic格式转换
+    """调用OpenAI兼容供应商，做Anthropic→OpenAI→Anthropic格式转换
 
     Returns: (status_code, anthropic_resp_dict_or_None, err_body_or_None)
     """
@@ -810,32 +780,58 @@ def call_local_vllm(anthropic_body):
         }
 
 
+def _apply_env(env_cfg):
+    """应用 key 配置中的环境变量，返回被覆盖的旧值"""
+    if not env_cfg or not isinstance(env_cfg, dict):
+        return {}
+
+    old_values = {}
+    for key, value in env_cfg.items():
+        old_values[key] = os.environ.get(key)  # 保存旧值（可能为 None）
+        os.environ[key] = str(value)
+        logger.debug(f"  设置环境变量: {key}={value}")
+    return old_values
+
+
+def _restore_env(old_values):
+    """恢复环境变量到调用前的状态"""
+    for key, old_value in old_values.items():
+        if old_value is None:
+            os.environ.pop(key, None)  # 移除新设置的变量
+        else:
+            os.environ[key] = old_value  # 恢复旧值
+
+
 def _call_upstream(key_cfg, body_bytes, body_dict, path):
     """根据 key type 调用对应的上游
 
     Returns: (status_code, resp_body_bytes_or_dict, is_openai_compat)
     """
-    key_type = key_cfg.get("type", "zhipu")
+    key_type = key_cfg.get("type", "anthropic_compat")
     api_key = key_cfg["api_key"]
 
-    if key_type == "zhipu":
-        status, resp_body = call_zhipu_direct(body_bytes, api_key, path)
-        return status, resp_body, False
+    # 应用 key 配置中的环境变量（仅对本次请求有效）
+    env_cfg = key_cfg.get("env", {})
+    old_env = _apply_env(env_cfg)
 
-    elif key_type == "anthropic_compat":
-        base_url = key_cfg.get("api_url", "")
-        model_map = key_cfg.get("model_map")
-        status, resp_body = call_anthropic_compat(body_bytes, api_key, path, base_url, model_map)
-        return status, resp_body, False
+    try:
+        if key_type == "anthropic_compat":
+            base_url = key_cfg.get("api_url", "")
+            model_map = key_cfg.get("model_map")
+            status, resp_body = call_anthropic_compat(body_bytes, api_key, path, base_url, model_map)
+            return status, resp_body, False
 
-    elif key_type == "openai_compat":
-        status, anthropic_resp, err_body = call_openai_compat(body_dict, key_cfg)
-        if status == 200 and anthropic_resp:
-            return 200, anthropic_resp, True
-        return status, err_body, True
+        elif key_type == "openai_compat":
+            status, anthropic_resp, err_body = call_openai_compat(body_dict, key_cfg)
+            if status == 200 and anthropic_resp:
+                return 200, anthropic_resp, True
+            return status, err_body, True
 
-    else:
-        return 400, json.dumps({"error": {"message": f"Unknown key type: {key_type}"}}).encode(), False
+        else:
+            return 400, json.dumps({"error": {"message": f"Unknown key type: {key_type}"}}).encode(), False
+    finally:
+        # 恢复环境变量（确保不影响其他请求）
+        _restore_env(old_env)
 
 
 # ===================== HTTP Handler =====================
@@ -881,6 +877,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 entry = {
                     "name": name,
                     "type": k.get("type", "zhipu"),
+                    "provider": k.get("provider", name),
                     "priority": k.get("priority", 1),
                     "available": available,
                     "requests": stats["requests"],
@@ -1009,7 +1006,7 @@ class ProxyHandler(BaseHTTPRequestHandler):
 
                 try:
                     logger.info(
-                        f"[{key_name}] → {key_type}转发 model={model_requested} "
+                        f"[{key_name}] → {key_type}转发 provider={key.get('provider', '?')} model={model_requested} "
                         f"priority={priority} elapsed={REQUEST_DEADLINE_SECS - (deadline - time.monotonic()):.1f}s"
                     )
 

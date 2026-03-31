@@ -2,7 +2,7 @@
 # run-cc.sh — 在tmux中启动编程CC（stream-json实时日志）
 # 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix]
 # repo: backend | front | pipeline
-# model: glm-5.1（默认）、glm-5-turbo、glm-4.5-air
+# model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1, glm1）
 #
 # 操作:
@@ -12,7 +12,7 @@
 
 REPO=$1
 ISSUE=$2
-MODEL=${3:-glm-5.1}
+MODEL=${3:-claude-opus-4-6}
 DIR_SUFFIX=${4:-""}
 LOGDIR=/var/log/coding-cc
 mkdir -p $LOGDIR
@@ -66,7 +66,7 @@ echo "[$(date)] CC started for ${REPO}#${ISSUE}" >> "$LOGFILE"
 # stream-json模式 → tee保存原始JSON → python解析为可读日志
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; \
-   claude -p '拾取并完成 Issue #${ISSUE}' --model ${MODEL} --max-turns 200 \
+   claude -p '拾取（包含评论）并完成 Issue #${ISSUE}' --model ${MODEL} --max-turns 500 \
      --output-format stream-json --include-partial-messages --verbose \
    2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
    echo '' >> '$LOGFILE'; echo [$(date)] CC COMPLETED >> '$LOGFILE'; \

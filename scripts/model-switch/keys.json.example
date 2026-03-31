@@ -1,56 +1,50 @@
 {
-  "_doc": "多源Key池配置 — Token Pool Proxy v2",
-  "_usage": "复制此文件为 keys.json，填入实际API Key",
+  "_doc": "多源Key池配置 — Token Pool Proxy v3",
+  "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=anthropic_compat: Anthropic格式中转站; type=openai_compat: OpenAI格式中转站; provider=模型提供商标识",
 
   "keys": [
     {
       "name": "zhipu_max_1",
-      "type": "zhipu",
+      "type": "anthropic_compat",
+      "provider": "zhipu",
+      "priority": 1,
+      "api_url": "https://open.bigmodel.cn/api/anthropic",
       "api_key": "YOUR_ZHIPU_API_KEY",
       "enabled": true
     },
     {
       "name": "zhipu_max_2",
-      "type": "zhipu",
+      "type": "anthropic_compat",
+      "provider": "zhipu",
+      "priority": 1,
+      "api_url": "https://open.bigmodel.cn/api/anthropic",
       "api_key": "YOUR_SECOND_ZHIPU_KEY",
       "enabled": false
     },
     {
       "name": "aiopus_pool",
-      "type": "openai_compat",
+      "type": "anthropic_compat",
+      "provider": "aiopus",
+      "priority": 2,
       "api_url": "https://newapi.aiopus.org",
       "api_key": "sk-YOUR_AIOPUS_KEY",
-      "model": "glm-5.1",
       "model_map": {
-        "glm-5.1": "glm-5.1",
-        "glm-5-turbo": "glm-5",
-        "glm-4.5-air": "glm-5"
+        "claude-opus-4-6": "glm-5.1",
+        "claude-sonnet-4-6": "glm-5",
+        "claude-haiku-4-5-20251001": "glm-4.5-air"
       },
       "_note": "中转站Key，按量计费，无5h/周限额",
       "enabled": true
     }
   ],
 
-  "upstream": {
-    "base_url": "https://open.bigmodel.cn/api/anthropic",
-    "default_models": {
-      "haiku": "glm-4.5-air",
-      "sonnet": "glm-5-turbo",
-      "opus": "glm-5.1"
-    }
-  },
-
   "fallback": {
     "enabled": true,
     "vllm_url": "http://localhost:8000/v1/chat/completions",
     "vllm_model": "/model",
-    "_note": "本地Qwen3.5-122B-A10B via vLLM"
+    "_note": "本地Qwen3.5-122B-A10B via vLLM, priority=1+2全部不可用时自动降级 (priority=3)"
   },
 
-  "cooldown": {
-    "rate_limit_hours": 5,
-    "weekly_limit_hours": 168,
-    "balance_exhausted_hours": 720,
-    "_note": "5h限额→5h冷却, 周限额→168h, 余额不足→720h(30天)"
-  }
+  "concurrency_per_priority": 6,
+  "_concurrency_note": "每个优先级同时向上游发出的最大请求数，超出排队等待。建议根据智谱并发上限调整"
 }

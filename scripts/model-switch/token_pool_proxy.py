@@ -434,12 +434,52 @@ def _parse_error_detail(status_code, resp_body):
         return f"HTTP {status_code}, parse error: {e}"
 
 
+def is_rate_limit_error(status_code, resp_body):
+    """判断是否为速率限制(可重试，短暂sleep即可)，命中时打印详细日志"""
+    # 智谱: 429 + code=1302 + message含"速率限制"/"请求频率" → 速率限制
+    try:
+        data = json.loads(resp_body) if isinstance(resp_body, (bytes, str)) else resp_body
+        if isinstance(data, dict):
+            # 检查error.code
+            error = data.get("error", {})
+            if isinstance(error, dict):
+                code = str(error.get("code", ""))
+                message = error.get("message", "").lower()
+                if code == "1302" and ("速率限制" in message or "请求频率" in message or "rate" in message):
+                    detail = _parse_error_detail(status_code, resp_body)
+                    logger.warning(f"[速率限制检测] 命中: 智谱1302(速率限制) | 详情: {detail}")
+                    return True
+            # 检查顶层code
+            top_code = str(data.get("code", ""))
+            top_msg = str(data.get("message", "")).lower()
+            if top_code == "1302" and ("速率限制" in top_msg or "请求频率" in top_msg or "rate" in top_msg):
+                detail = _parse_error_detail(status_code, resp_body)
+                logger.warning(f"[速率限制检测] 命中: 顶层1302(速率限制) | 详情: {detail}")
+                return True
+            # OpenAI格式: error.type=rate_limit_error 且消息不含quota/exceeded
+            if isinstance(error, dict):
+                err_type = error.get("type", "")
+                message = error.get("message", "").lower()
+                if err_type == "rate_limit_error" and "quota" not in message and "exceeded" not in message:
+                    detail = _parse_error_detail(status_code, resp_body)
+                    logger.warning(f"[速率限制检测] 命中: rate_limit_error | 详情: {detail}")
+                    return True
+    except Exception:
+        pass
+
+    return False
+
+
 def is_quota_error(status_code, resp_body):
-    """判断是否为限额错误(兼容智谱和OpenAI格式)，命中时打印详细日志"""
+    """判断是否为真实限额/配额耗尽(需冷却切换Key)，命中时打印详细日志"""
+    # 先排除速率限制
+    if is_rate_limit_error(status_code, resp_body):
+        return False
+
     matched_reason = None
 
     if status_code == 429:
-        matched_reason = "HTTP 429"
+        matched_reason = "HTTP 429(非速率限制)"
 
     if not matched_reason:
         try:
@@ -450,15 +490,17 @@ def is_quota_error(status_code, resp_body):
                     code = str(error.get("code", ""))
                     err_type = error.get("type", "")
                     message = error.get("message", "").lower()
-                    if code == "1302":
-                        matched_reason = "智谱错误码1302(速率限制)"
-                    elif any(kw in message for kw in ["rate limit", "quota", "exceeded", "limit reached", "rate_limit"]):
-                        matched_reason = f"错误消息含限额关键词"
-                    elif err_type == "rate_limit_error":
-                        matched_reason = "error.type=rate_limit_error"
+                    if code == "1302" and ("速率限制" not in message and "请求频率" not in message):
+                        matched_reason = "智谱错误码1302(非速率限制)"
+                    elif any(kw in message for kw in ["quota", "exceeded", "limit reached"]):
+                        matched_reason = "错误消息含限额关键词"
+                    elif err_type == "rate_limit_error" and ("quota" in message or "exceeded" in message):
+                        matched_reason = "error.type=rate_limit_error(含限额关键词)"
 
                 if not matched_reason and str(data.get("code", "")) == "1302":
-                    matched_reason = "顶层code=1302"
+                    top_msg = str(data.get("message", "")).lower()
+                    if "速率限制" not in top_msg and "请求频率" not in top_msg:
+                        matched_reason = "顶层code=1302(非速率限制)"
         except Exception:
             pass
 
@@ -624,7 +666,10 @@ class ProxyHandler(BaseHTTPRequestHandler):
         keys = _get_keys_by_priority()
         tried_keys = set()
 
-        for attempt in range(len(keys)):
+        rate_limit_retries = 0
+        MAX_RATE_LIMIT_RETRIES = 3
+
+        for attempt in range(len(keys) + MAX_RATE_LIMIT_RETRIES):
             key = get_next_key()
             if key is None:
                 break  # 所有Key都在冷却
@@ -661,6 +706,15 @@ class ProxyHandler(BaseHTTPRequestHandler):
                     record_key_error(key_name)
                     _mark_key_cooldown(key_name, "balance")
                     continue
+
+                if err_body and is_rate_limit_error(status, err_body):
+                    rate_limit_retries += 1
+                    if rate_limit_retries <= MAX_RATE_LIMIT_RETRIES:
+                        logger.info(f"[{key_name}] 速率限制，sleep 1s后重试 ({rate_limit_retries}/{MAX_RATE_LIMIT_RETRIES})")
+                        time.sleep(1)
+                        tried_keys.discard(key_name)
+                        continue
+                    logger.warning(f"[{key_name}] 速率限制重试耗尽，切换下一个Key")
 
                 if err_body and is_quota_error(status, err_body):
                     logger.warning(f"[{key_name}] 中转站限额触发(HTTP {status})，切换下一个Key | 可用Key剩余: {len(keys) - len(tried_keys)}")
@@ -703,6 +757,15 @@ class ProxyHandler(BaseHTTPRequestHandler):
                         record_key_error(key_name)
                         _mark_key_cooldown(key_name, "balance")
                     continue
+
+                if is_rate_limit_error(status, resp_body):
+                    rate_limit_retries += 1
+                    if rate_limit_retries <= MAX_RATE_LIMIT_RETRIES:
+                        logger.info(f"[{key_name}] {label}速率限制，sleep 1s后重试 ({rate_limit_retries}/{MAX_RATE_LIMIT_RETRIES})")
+                        time.sleep(1)
+                        tried_keys.discard(key_name)
+                        continue
+                    logger.warning(f"[{key_name}] {label}速率限制重试耗尽，切换下一个Key")
 
                 if is_quota_error(status, resp_body):
                     logger.warning(f"[{key_name}] {label}限额触发(HTTP {status})，切换下一个Key | 可用Key剩余: {len(keys) - len(tried_keys)}")

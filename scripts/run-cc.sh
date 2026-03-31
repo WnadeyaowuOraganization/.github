@@ -30,6 +30,7 @@ case "$REPO" in
   backend)  BASE_DIR="wande-ai-backend" ;;
   front)    BASE_DIR="wande-ai-front" ;;
   pipeline) BASE_DIR="wande-data-pipeline" ;;
+  plugins)  BASE_DIR="wande-gh-plugins" ;;
   *)        echo "Unknown repo: $REPO"; exit 1 ;;
 esac
 

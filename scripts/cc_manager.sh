@@ -4,11 +4,16 @@
 # crontab: */10 * * * *
 # 功能：触发.github项目的研发经理CC，让其检查进行中的CC、
 #       更新已完成Issue的排程状态、触发新的CC处理下一批Issue
+#
+# 查看实时日志: tail -f /home/ubuntu/cc_scheduler/manager.log
 # ==============================================================
 
 LOCK_FILE="/home/ubuntu/cc_scheduler/manager.lock"
 LOG_FILE="/home/ubuntu/cc_scheduler/manager.log"
+RAW_LOG="/home/ubuntu/cc_scheduler/manager-raw.jsonl"
 GITHUB_DIR="/home/ubuntu/projects/.github"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"; }
 
@@ -35,10 +40,12 @@ export HOME="/home/ubuntu"
 
 cd "$GITHUB_DIR"
 
-# 触发研发经理CC
-claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" --output-format text >> "$LOG_FILE" 2>&1
+# 触发研发经理CC（stream-json实时日志）
+claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" \
+  --output-format stream-json --include-partial-messages --verbose \
+  2>/dev/null | tee -a "$RAW_LOG" | python3 "$PARSER" >> "$LOG_FILE" 2>&1
 
-EXIT_CODE=$?
+EXIT_CODE=${PIPESTATUS[0]}
 log "研发经理CC结束 (exit=$EXIT_CODE)"
 
 # 清理锁

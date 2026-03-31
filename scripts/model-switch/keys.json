@@ -1,32 +1,12 @@
 {
   "_doc": "多源Key池配置 — Token Pool Proxy v3",
-  "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=anthropic_compat: Anthropic格式中转站; type=openai_compat: OpenAI格式中转站",
+  "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=anthropic_compat: Anthropic格式中转站; type=openai_compat: OpenAI格式中转站; provider=模型提供商标识",
   "keys": [
-    {
-      "name": "zhipu_max_1",
-      "type": "zhipu",
-      "priority": 1,
-      "api_key": "7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C",
-      "enabled": true
-    },
-    {
-      "name": "zhipu_max_2",
-      "type": "zhipu",
-      "priority": 1,
-      "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
-      "enabled": true
-    },
-    {
-      "name": "zhipu_max_3",
-      "type": "zhipu",
-      "priority": 1,
-      "api_key": "6c587006e0d541e183a1d1e64b984350.rEB8d5uUV4DkZhtA",
-      "enabled": false
-    },
     {
       "name": "kimi",
       "type": "anthropic_compat",
-      "priority": 2,
+      "provider": "kimi",
+      "priority": 1,
       "api_url": "https://api.kimi.com/coding/",
       "api_key": "sk-kimi-ZLtO5HpArs0IH4sCzc8qwtOb8vRvvTKNxDvs5MmxugGQtkCAoReOqPpVuTicPdRf",
       "model_map": {
@@ -34,12 +14,43 @@
         "glm-5-turbo": "kimi-k2.5",
         "glm-4.5-air": "kimi-k2.5"
       },
+      "env": {
+        "ENABLE_TOOL_SEARCH": "false"
+      },
       "_note": "kimi官方coding plan",
       "enabled": true
     },
     {
+      "name": "zhipu_max_1",
+      "type": "anthropic_compat",
+      "provider": "zhipu",
+      "priority": 2,
+      "api_url": "https://open.bigmodel.cn/api/anthropic",
+      "api_key": "7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C",
+      "enabled": true
+    },
+    {
+      "name": "zhipu_max_2",
+      "type": "anthropic_compat",
+      "provider": "zhipu",
+      "priority": 2,
+      "api_url": "https://open.bigmodel.cn/api/anthropic",
+      "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
+      "enabled": false
+    },
+    {
+      "name": "zhipu_max_3",
+      "type": "anthropic_compat",
+      "provider": "zhipu",
+      "priority": 2,
+      "api_url": "https://open.bigmodel.cn/api/anthropic",
+      "api_key": "6c587006e0d541e183a1d1e64b984350.rEB8d5uUV4DkZhtA",
+      "enabled": false
+    },
+    {
       "name": "无问星穹",
       "type": "anthropic_compat",
+      "provider": "infini",
       "priority": 3,
       "api_url": "https://cloud.infini-ai.com/maas/coding",
       "api_key": "sk-cp-wp25vo2x4xdfdtoz",
@@ -54,6 +65,7 @@
     {
       "name": "火山方舟",
       "type": "anthropic_compat",
+      "provider": "volcengine",
       "priority": 4,
       "api_url": "https://ark.cn-beijing.volces.com/api/coding",
       "api_key": "eeb31787-c25d-4346-8d87-f1d0b8e7d168",
@@ -66,14 +78,6 @@
       "enabled": true
     }
   ],
-  "upstream": {
-    "base_url": "https://open.bigmodel.cn/api/anthropic",
-    "default_models": {
-      "haiku": "glm-4.5-air",
-      "sonnet": "glm-5-turbo",
-      "opus": "glm-5.1"
-    }
-  },
   "fallback": {
     "enabled": true,
     "vllm_url": "http://localhost:8000/v1/chat/completions",

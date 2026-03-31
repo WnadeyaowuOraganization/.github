@@ -3,13 +3,19 @@
 # crontab: 0 */6 * * *
 #
 # 操作:
-#   tmux attach -t e2e-top          查看实时输出
-#   tmux list-sessions              列出所有会话
-#   Ctrl+B D                        脱离（测试继续运行）
+#   tail -f /var/log/coding-cc/e2e-top.log    查看实时日志
+#   tmux attach -t e2e-top                     查看tmux会话
+#   Ctrl+B D                                   脱离（测试继续运行）
 
 LOCK_FILE="/home/ubuntu/cc_scheduler/e2e_top.lock"
 E2E_DIR="/home/ubuntu/projects/wande-ai-e2e-full"
 SESSION="e2e-top"
+LOGDIR=/var/log/coding-cc
+mkdir -p $LOGDIR
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PARSER="$SCRIPT_DIR/cc-stream-parser.py"
+LOGFILE="$LOGDIR/e2e-top.log"
+RAW_LOG="$LOGDIR/e2e-top-raw.jsonl"
 
 # 防止并发
 if [ -f "$LOCK_FILE" ]; then
@@ -31,7 +37,11 @@ export HOME="/home/ubuntu"
 
 echo $$ > "$LOCK_FILE"
 
-# 写入临时启动脚本，避免tmux内变量展开问题
+# 清空日志
+> "$LOGFILE"
+> "$RAW_LOG"
+
+# 写入临时启动脚本
 TMP_SCRIPT="/tmp/e2e_top_run_$$.sh"
 cat > "$TMP_SCRIPT" <<INNEREOF
 #!/bin/bash
@@ -40,10 +50,12 @@ export ANTHROPIC_BASE_URL=http://localhost:9855
 export PATH="/home/ubuntu/.local/bin:\$PATH"
 export HOME="/home/ubuntu"
 cd "$E2E_DIR"
-echo [\$(date)] 顶层E2E全量回归启动
-claude -p '执行顶层测试' --model glm-5.1 --output-format text 2>&1
-EXIT_CODE=\$?
-echo [\$(date)] 顶层E2E结束 exit=\$EXIT_CODE
+echo [\$(date)] 顶层E2E全量回归启动 >> "$LOGFILE"
+claude -p '执行顶层测试' --model glm-5.1 \
+  --output-format stream-json --include-partial-messages --verbose \
+  2>/dev/null | tee -a "$RAW_LOG" | python3 "$PARSER" >> "$LOGFILE" 2>&1
+EXIT_CODE=\${PIPESTATUS[0]}
+echo [\$(date)] 顶层E2E结束 exit=\$EXIT_CODE >> "$LOGFILE"
 rm -f "$LOCK_FILE"
 sleep 1
 tmux kill-session -t "$SESSION"
@@ -53,4 +65,5 @@ chmod +x "$TMP_SCRIPT"
 tmux new-session -d -s "$SESSION" "bash $TMP_SCRIPT"
 
 echo "✓ 顶层E2E已在tmux会话 '$SESSION' 中启动"
-echo "  查看: tmux attach -t $SESSION"
+echo "  实时日志: tail -f $LOGFILE"
+echo "  tmux会话: tmux attach -t $SESSION"

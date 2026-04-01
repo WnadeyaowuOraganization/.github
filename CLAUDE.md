@@ -109,12 +109,11 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 ### 目录占用检查（强制，触发CC前必须执行）
 
 ```bash
-PID_FILE="/home/ubuntu/cc_scheduler/<目录>_cc.pid"
-if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
+# 检查tmux会话是否存在（实际占用检查机制）
+SESSION="cc-<repo>-<N>"  # 例如: cc-backend-918
+if tmux has-session -t "$SESSION" 2>/dev/null; then
     echo "目录占用，跳过"
-else
-    rm -f "$PID_FILE"
-    # 可以在这个目录启动CC
+    exit 0
 fi
 ```
 
@@ -166,8 +165,8 @@ bash /home/ubuntu/projects/.github/scripts/query-project-Issues.sh <repo> "Todo"
 
 ```bash
 # 1. 检查目录是否空闲（必须通过才能继续）
-PID_FILE="/home/ubuntu/cc_scheduler/<目录>_cc.pid"
-if [ -f "$PID_FILE" ] && kill -0 $(cat "$PID_FILE") 2>/dev/null; then
+SESSION="cc-<repo>-<N>"  # 例如: cc-backend-918
+if tmux has-session -t "$SESSION" 2>/dev/null; then
     echo "目录占用，跳过"; exit 0
 fi
 
@@ -205,31 +204,69 @@ tail -f /home/ubuntu/cc_scheduler/logs/backend-请你修复一下dev分支的编
 tmux list-sessions
 ```
 
-#### 恢复中断的 CC
+#### E2E测试失败处理流程
+
+当中层E2E测试失败时，采用**单Issue双状态**方案（不新建Issue）：
+
+```bash
+# 1. E2E测试CC执行（由E2E测试CC调用）
+gh pr review <PR_N> --repo <仓库全名> --request-changes \
+  --body "❌ E2E中层测试失败
+
+**失败场景**: <场景名>
+**错误摘要**: <关键日志>
+
+### 修复检查清单
+- [ ] 分析失败原因（代码/测试/环境）
+- [ ] 本地验证通过: \`npx playwright test tests/<path> --reporter=list\`
+- [ ] 提交修复到原PR分支
+- [ ] 等待中层E2E自动重测"
+
+# 2. 添加test-failed标签，改为Todo状态（重新排程最高优先级）
+gh issue edit <N> --repo <仓库全名> \
+  --add-label "status:test-failed" --remove-label "status:in-progress"
+bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Todo"
+```
+
+**研发经理CC排程优先级**: `status:test-failed` 标签的Issue在Todo队列中最优先。
+
+**恢复CC时**（按"恢复中断的CC"流程）：
+- 使用原指派目录（从 `ISSUE_ASSIGN_HISTORY.md` 提取 `dir_suffix`）
+- 自定义Prompt: "修复中层E2E测试失败: <失败场景> - <错误摘要>"
+- 修复完成后，E2E自动重测通过会移除 `test-failed` 标签
 
 当中断发生时，按此流程恢复（不要直接标记为 Fail）：
 
 ```bash
-# 1. 确认原 tmux 会话状态
-tmux list-sessions | grep cc-<repo>-<N>
+# 1. 从历史记录提取原指派目录后缀（从表格格式提取）
+# ISSUE_ASSIGN_HISTORY.md 格式: | #865 | backend-kimi4 | #994 | ✅ ... |
+DIR_SUFFIX=$(grep "| #<N> |" sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md | tail -1 | awk -F'|' '{print $3}' | tr -d ' ' | sed 's/.*-//')
 
-# 2. 若会话存活 → 直接 attach 查看
-#    若会话已中断 → 进入指派目录恢复
-cd /home/ubuntu/projects/<指派目录>
+# 2. 构造tmux会话名称检查状态
+SESSION="cc-<repo>-<N>"  # 例如: cc-backend-918
 
-# 3. 恢复前必须合并 dev 最新代码
+# 3. 若会话存活 → 直接 attach 查看
+if tmux has-session -t "$SESSION" 2>/dev/null; then
+    tmux attach -t "$SESSION"
+    exit 0
+fi
+
+# 4. 若会话已中断 → 进入指派目录恢复
+cd /home/ubuntu/projects/wande-ai-<repo>-${DIR_SUFFIX}
+
+# 5. 恢复前必须合并 dev 最新代码
 git checkout feature-Issue-<N>
 git merge dev --no-edit
 
-# 4. 判断重启方式
+# 6. 判断重启方式
 # 情况A：无 PR 但有代码改动（正常中断）
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> [dir_suffix]
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> $DIR_SUFFIX
 
 # 情况B：有明确失败原因（如编译错误、测试失败）
-bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <repo> "修复<具体问题>" <model> [dir_suffix]
+bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <repo> "修复<具体问题>" <model> $DIR_SUFFIX
 
-# 5. 更新恢复记录
-echo "$(date): Issue-<N> 恢复于 <指派目录>" >> sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md
+# 7. 更新恢复记录
+echo "$(date): Issue-<N> 恢复于 wande-ai-<repo>-${DIR_SUFFIX}" >> sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md
 ```
 
 > **关键原则**：恢复必须在原指派目录进行，避免代码重复工作和合并冲突。
@@ -317,7 +354,7 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 | Plan队列 | `gh project item-list 2` → Status=Plan |
 | Todo队列 | 同上 → Status=Todo |
 | 执行中 | 同上 → Status=In Progress |
-| CC日志 | `/home/ubuntu/cc_scheduler/logs/<目录>_Issue_<N>.log` |
+| CC日志 | `/home/ubuntu/cc_scheduler/logs/<repo>-<N>.log` |
 | tmux会话 | `tmux list-sessions`（cc-<repo>-<N>格式） |
 
 ## 标签

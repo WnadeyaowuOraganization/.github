@@ -123,11 +123,12 @@ fi
 根据Sprint目标将Project看板中领取Plan状态相关的Issue，批量改为Todo
 - 你需要站在架构师的角度完成这些步骤:
 - 了解所有Issue的内容->结合平台已实现的功能(不重复造轮子)->规划出时间最短（多项目同时处理）、问题最少（被关联的优先、合并代码不会冲突）的Issue实现顺序->为编程CC实现Issue做好必要备注（Prompt）->评估出一个大致完成时间
-- 以上步骤的结果作为排程计划记录到`sprints/<sprint>/PLAN.md`中。另外
+- 以上步骤的结果作为排程计划记录到`sprints/<sprint>/<重点模块>/PLAN.md`中。另外
 - 你有权将需求不明确的Issue置为pause状态
 - **Sprint 目录命名规范**: `sprints/YYYY-MM-DD/`（取 Sprint 开始日期）
-  - 例如: `sprints/2026-03-28/PLAN.md`
-  - 指派记录: `sprints/2026-03-28/ISSUE_ASSIGN_HISTORY.md`
+  - 例如: `sprints/2026-03-28/PLAN.md`（索引文件）
+  - 各模块排程: `sprints/2026-03-28/<重点模块>/PLAN.md`
+  - 指派记录: `sprints/2026-03-28/<重点模块>/ISSUE_ASSIGN_HISTORY.md`
 - 需要注意的是从Project看板中获取的Issue顺序通常比较混乱，因此需要你按功能做出规划，一般情况下通过标题找到正确的顺序
 
 ```bash
@@ -150,7 +151,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 1. 先检查各仓库的编程CC有没有空闲席位，没有就退出，有则下一步
 2. 检查In Progress的Issue确定是否有创建对应的PR，没有的话恢复对应目录（原先指派这个Issue的编程CC目录）的CC继续完成工作，注意：原指派的目录里有代码改动但没PR的说明其任务被中断，不要标记为Fail，直接在相同目录使用相同方式启动CC即可
 3. 查询Todo状态的Issue，为每个Issue执行pre-task后启动编程CC，编程CC完成Issue的过程中会输出日志，发现其偏离需求时要及时指正（停止正常运行的CC后使用自定义Prompt在相同目录下启动新的CC）
-4. 记录Issue被指派到了哪个目录，便于后续恢复（指派记录文件：`sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md`）
+4. 记录Issue被指派到了哪个目录，便于后续恢复（指派记录文件：`sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md`）
 5. 持续关注Project#2有没有新增当前Sprint相关的Issue，测试失败的Issue要优先安排修复
 > 这个记录十分重要，In Progress状态的Issue可能会因为各种原因中断，恢复让其在相同指派目录中继续工作，能有效避免编程CC重复工作造成token浪费和代码合并冲突
 
@@ -175,7 +176,6 @@ cd /home/ubuntu/projects/<目录>
 git checkout dev && git pull origin dev
 git checkout -b feature-Issue-<N>
 mkdir -p ./Issues/Issue-<N>
-# 针对恢复Issue工作目录需要再多执行一步：合并dev分支最新代码到工作目录现有的feature分支中
 
 # 3. 更新GitHub标签
 gh Issue edit <N> --repo <仓库全名> --add-label "status:in-progress" --remove-label "status:ready"
@@ -238,9 +238,9 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 当中断发生时，按此流程恢复（不要直接标记为 Fail）：
 
 ```bash
-# 1. 从历史记录提取原指派目录后缀（从表格格式提取）
-# ISSUE_ASSIGN_HISTORY.md 格式: | #865 | backend-kimi4 | #994 | ✅ ... |
-DIR_SUFFIX=$(grep "| #<N> |" sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md | tail -1 | awk -F'|' '{print $3}' | tr -d ' ' | sed 's/.*-//')
+# 1. 从历史记录提取原指派目录后缀（从子目录表格格式提取）
+# sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md 格式: | #865 | backend-kimi4 | #994 | ✅ ... |
+DIR_SUFFIX=$(grep "| #<N> |" sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md | tail -1 | awk -F'|' '{print $3}' | tr -d ' ' | sed 's/.*-//')
 
 # 2. 构造tmux会话名称检查状态
 SESSION="cc-<repo>-<N>"  # 例如: cc-backend-918
@@ -266,7 +266,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> $DIR_SUF
 bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <repo> "修复<具体问题>" <model> $DIR_SUFFIX
 
 # 7. 更新恢复记录
-echo "$(date): Issue-<N> 恢复于 wande-ai-<repo>-${DIR_SUFFIX}" >> sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md
+echo "$(date): Issue-<N> 恢复于 wande-ai-<repo>-${DIR_SUFFIX}" >> sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md
 ```
 
 > **关键原则**：恢复必须在原指派目录进行，避免代码重复工作和合并冲突。

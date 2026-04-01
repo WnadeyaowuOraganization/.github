@@ -228,3 +228,30 @@
 | #385 | front-kimi2 | #413 | ✅ 已合并 |
 | #389 | front-kimi3 | #412 | ✅ 已合并 |
 | #386 | front-kimi4 | #409 | ✅ 已合并 |
+
+## 2026-04-01 13:00 恢复因post-task失败卡住的CC
+
+### 恢复的CC（6个并发）
+
+| Issue | 目录 | 类型 | 说明 |
+|-------|------|------|------|
+| #233 | front-kimi2 | 恢复 | 像素办公室升级 — 合并dev后重启 |
+| #248 | backend-kimi2 | 恢复 | Webhook联动 — 合并dev后重启（释放kimi6） |
+| #249 | backend-kimi3 | 恢复 | Claude Code会话监控API — 解决merge冲突后重启 |
+| #31 | front-kimi4 | 恢复 | Phase7开发者动态 — 合并dev后重启 |
+| #333 | backend-kimi4 | 恢复 | claude_monitor.py — 合并dev后重启 |
+| #339 | front-glm1 | 恢复 | 模块真实可用性审计 — 合并dev后重启 |
+
+### 当前运行中CC (9个)
+
+| Issue | 目录 | 状态 |
+|-------|------|------|
+| #233 | front-kimi2 | 🔄 In Progress |
+| #248 | backend-kimi2 | 🔄 In Progress |
+| #249 | backend-kimi3 | 🔄 In Progress |
+| #31 | front-kimi4 | 🔄 In Progress |
+| #333 | backend-kimi4 | 🔄 In Progress |
+| #339 | front-glm1 | 🔄 In Progress |
+| #338 | front-kimi5 | 🔄 In Progress |
+| #213 | front-kimi6 | 🔄 In Progress |
+| #188 | front-kimi8 | 🔄 In Progress |

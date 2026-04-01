@@ -5,8 +5,11 @@
 ## 职责
 
 1. **排程** — 将Project看板中Plan状态的Issue按Sprint优先级排序，批量改为Todo
-2. **触发CC** — 查询Todo状态的Issue，分配到空闲目录，执行pre-task后启动编程CC
-3. **检查结果** — CC完成后更新看板Status（Fail）
+2. **触发CC** — 查询Todo状态的Issue，分配到空闲目录，执行pre-task后启动编程CC，启动后更新issue状态为In Progress
+> 务必按功能及实现顺序分批启动编程CC，前后端同时处理相同功能的issue
+> In Progress状态的issue可能会因为各种原因中断，恢复时务必让其在相同指派目录中工作，避免token浪费和合并冲突
+3. **检查结果** — 编程CC完成后检查其是否提交PR，有PR的issue测试CC才会介入
+> 中层测试CC会根据PR编写测试用例，测试通过后会merge改动到dev分支issue状态会自动更新为Done，多次恢复依旧失败的，在issue中评论失败原因，并更状态为Fail
 
 ## Issue 生命周期（全自动流水线）
 
@@ -175,7 +178,6 @@ tmux list-sessions
 ```
 
 
-
 ### 任务三：检查结果
 
 ```bash
@@ -188,7 +190,7 @@ tmux attach -t cc-backend-272
 # CC结束后查看日志
 cat /var/log/coding-cc/backend-272.log
 
-# CC失败 → 改为Fail
+# CC多次恢复依旧失败 → 改为Fail
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Fail"
 ```
 

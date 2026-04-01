@@ -145,20 +145,22 @@ if [ -z "$ITEM_IDS" ]; then
 fi
 
 # --- 更新Status ---
-MUTATION='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!, $optionId: String!) {
+# 将optionId直接嵌入mutation，避免-F将纯数字作为数值类型传递导致GraphQL类型错误
+MUTATION_TEMPLATE='mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
   updateProjectV2ItemFieldValue(input: {
     projectId: $projectId
     itemId: $itemId
     fieldId: $fieldId
-    value: { singleSelectOptionId: $optionId }
+    value: { singleSelectOptionId: "OPTION_ID_PLACEHOLDER" }
   }) { projectV2Item { id } }
 }'
 
 UPDATED=0
 while IFS='|' read -r ITEM_ID REPO_NAME; do
+    MUTATION="${MUTATION_TEMPLATE/OPTION_ID_PLACEHOLDER/$OPTION_ID}"
     gh api graphql --raw-field query="$MUTATION" \
       -F projectId="$PROJECT_ID" -F itemId="$ITEM_ID" \
-      -F fieldId="$FIELD_ID" -F optionId="$OPTION_ID" > /dev/null 2>&1
+      -F fieldId="$FIELD_ID" > /dev/null 2>&1
     UPDATED=$((UPDATED + 1))
     echo "✓ Issue #$ISSUE_NUMBER ($REPO_NAME) Status → $NEW_STATUS"
 done <<< "$ITEM_IDS"

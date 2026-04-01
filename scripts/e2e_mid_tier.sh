@@ -50,6 +50,7 @@ export ANTHROPIC_BASE_URL=http://localhost:9855
 export PATH="/home/ubuntu/.local/bin:\$PATH"
 export HOME="/home/ubuntu"
 cd "$E2E_DIR"
+git checkout main && git pull origin main
 echo [\$(date)] 中层E2E测试启动 >> "$LOGFILE"
 claude -p '执行中层测试' --model claude-opus-4-6 \
   --output-format stream-json --include-partial-messages --verbose \

@@ -32,9 +32,12 @@ Issue创建 → [CI/CD自动] 关联Project + Status=Plan (test-failed→Todo)
 **重点模块**:
 1. **超管驾驶舱** — title含 `[超管驾驶舱]`，或标签含 `module:dashboard`
 2. **Claude Office** — title含 `[Claude Office]`
+3. **项目矿场** — title含 `[项目矿场]`，或标签含 `project-mine` / `module:bidding`
+4. **幼儿园客户发现** — title含 `[幼儿园客户发现]`
+5. **国际贸易矿场** — title含 `[国际贸易矿场]`
 
 ## 后续Sprint
-项目矿产->D3相关
+D3相关
 
 ## Project #2 看板（唯一数据源）
 

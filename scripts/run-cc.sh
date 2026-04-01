@@ -6,7 +6,7 @@
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1, glm1）
 #
 # 操作:
-#   tail -f /var/log/coding-cc/<repo>-<issue>.log  查看实时日志
+#   tail -f /home/ubuntu/cc_scheduler/logs/<repo>-<issue>.log  查看实时日志
 #   tmux attach -t cc-<repo>-<issue>                查看tmux会话
 #   Ctrl+B D                                        脱离（CC继续运行）
 
@@ -14,7 +14,7 @@ REPO=$1
 ISSUE=$2
 MODEL=${3:-claude-opus-4-6}
 DIR_SUFFIX=${4:-""}
-LOGDIR=/var/log/coding-cc
+LOGDIR=/home/ubuntu/cc_scheduler/logs
 mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"

@@ -123,7 +123,10 @@ fi
 - 了解所有Issue的内容->结合平台已实现的功能(不重复造轮子)->规划出时间最短（多项目同时处理）、问题最少（被关联的优先、合并代码不会冲突）的Issue实现顺序->为编程CC实现Issue做好必要备注（Prompt）->评估出一个大致完成时间
 - 以上步骤的结果作为排程计划记录到`sprints/<sprint>/PLAN.md`中。另外
 - 你有权将需求不明确的Issue置为pause状态
-需要注意的是从Project看板中获取的Issue顺序通常比较混乱，因此需要你按功能做出规划，一般情况下通过标题找到正确的顺序
+- **Sprint 目录命名规范**: `sprints/YYYY-MM-DD/`（取 Sprint 开始日期）
+  - 例如: `sprints/2026-03-28/PLAN.md`
+  - 指派记录: `sprints/2026-03-28/ISSUE_ASSIGN_HISTORY.md`
+- 需要注意的是从Project看板中获取的Issue顺序通常比较混乱，因此需要你按功能做出规划，一般情况下通过标题找到正确的顺序
 
 ```bash
 # 1. 查询所有Plan状态的Issue
@@ -132,6 +135,13 @@ bash /home/ubuntu/projects/.github/scripts/query-project-Issues.sh all "Plan"
 # 2. 按Sprint重点和优先级，将选定的Issue从Plan改为Todo
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Todo"
 ```
+
+#### 排程快速决策清单
+
+1. **先筛**：只选当前 Sprint 周期内创建的，或明确属于重点模块的
+2. **再分**：按模块/端（backend/front/pipeline）分组
+3. **后串**：同模块内，先接口/模型后页面，先父功能后子功能
+4. **标注**：在 PLAN.md 中每 Issue 加一行 `依赖: Issue-XXX` 或 `可被并行: 是/否`
 
 ### 任务二：触发编程CC（Todo → In Progress）
 务必按排程清单分批启动编程CC，多个项目同时处理相同功能的Issue，新增的e2e测试失败（Sprint相关）的Issue优先
@@ -185,15 +195,45 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 918 claude-opus-4-6
 bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh backend '请你修复一下dev分支的编译错误' claude-opus-4-6 kimi1
 
 # 查看实时输出:
-tail -f /var/log/coding-cc/backend-918.log
-tail -f /var/log/coding-cc/backend-请你修复一下dev分支的编译错误.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-918.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-请你修复一下dev分支的编译错误.log
 
 # 列出所有CC会话:
 tmux list-sessions
 ```
 
+#### 恢复中断的 CC
+
+当中断发生时，按此流程恢复（不要直接标记为 Fail）：
+
+```bash
+# 1. 确认原 tmux 会话状态
+tmux list-sessions | grep cc-<repo>-<N>
+
+# 2. 若会话存活 → 直接 attach 查看
+#    若会话已中断 → 进入指派目录恢复
+cd /home/ubuntu/projects/<指派目录>
+
+# 3. 恢复前必须合并 dev 最新代码
+git checkout feature-Issue-<N>
+git merge dev --no-edit
+
+# 4. 判断重启方式
+# 情况A：无 PR 但有代码改动（正常中断）
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> [dir_suffix]
+
+# 情况B：有明确失败原因（如编译错误、测试失败）
+bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <repo> "修复<具体问题>" <model> [dir_suffix]
+
+# 5. 更新恢复记录
+echo "$(date): Issue-<N> 恢复于 <指派目录>" >> sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md
+```
+
+> **关键原则**：恢复必须在原指派目录进行，避免代码重复工作和合并冲突。
+
 
 ### 任务三：检查结果
+
 编程CC完成工作后正常情况应该提交PR，没有PR的分析原因（通常更post-task.sh脚本执行失败有关），在相同目录下使用自定义Prompt启动新CC继续完成，多次恢复依旧失败的，在issue中评论失败原因，并更新为Fail
 
 ```bash
@@ -204,7 +244,10 @@ tmux list-sessions
 tmux attach -t cc-backend-272
 
 # CC结束后查看日志
-cat /var/log/coding-cc/backend-272.log
+cat /home/ubuntu/cc_scheduler/logs/backend-272.log
+
+# 检查 Issue 是否已有 PR（在任务二中使用）
+gh pr list --repo <仓库全名> --search "Issue-<N>" --state all --json number,state,title -q '.[]'
 
 # CC多次恢复依旧失败 → 改为Fail
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Fail"
@@ -212,6 +255,38 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 
 CC正常完成 → 不改Status（CC已创建PR，等merge后Issue自动关闭，看板自动Done）。
 
+### 任务四：持续优化（触发条件）
+
+每满足以下任一条件时，更新 `sprints/<sprint>/RETROSPECTIVE.md`：
+
+- 单日有 ≥3 个 Issue 进入 Done / Fail
+- 连续出现 2 个相同类型的 CC 中断（如都因 post-task.sh 失败）
+- 有 e2e 测试失败需要优先修复时
+
+**总结模板**：
+
+```markdown
+## Sprint <sprint> 回顾 (<日期>)
+
+### 1. 本周数据
+- 完成数: X | 失败数: Y | 平均修复轮次: Z
+- 较上周变化: +X / -Y
+
+### 2. 高频中断原因 Top 3
+1. `<原因>` — 发生 N 次（如 post-task.sh 竞争条件）
+2. `<原因>` — 发生 N 次（如 dev 分支编译错误）
+3. `<原因>` — 发生 N 次（如依赖服务未就绪）
+
+### 3. 工作流优化项
+- [ ] 脚本调整: `<具体调整>`
+- [ ] CLAUDE.md 更新: `<具体更新>`
+- [ ] 流水线改进: `<具体改进>`
+
+### 4. 已落地优化
+- [commit/PR] `<优化描述>` — 解决 `<问题>`
+```
+
+> **目标**：每个 Sprint 至少落地 1 个优化项，降低同类问题复发率。
 
 
 ## GitHub认证

@@ -2,7 +2,7 @@
 # Round Executor: 按顺序执行6轮项目矿场/项目中心 P0 Issue
 # 每轮backend+front并行，完成后自动下一轮
 
-LOGDIR=/var/log/coding-cc
+LOGDIR=/home/ubuntu/cc_scheduler/logs
 STATUS_FILE=$LOGDIR/round-status.json
 mkdir -p $LOGDIR
 

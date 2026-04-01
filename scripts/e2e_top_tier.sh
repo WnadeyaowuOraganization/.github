@@ -3,14 +3,14 @@
 # crontab: 0 */6 * * *
 #
 # 操作:
-#   tail -f /var/log/coding-cc/e2e-top.log    查看实时日志
+#   tail -f /home/ubuntu/cc_scheduler/logs/e2e-top.log    查看实时日志
 #   tmux attach -t e2e-top                     查看tmux会话
 #   Ctrl+B D                                   脱离（测试继续运行）
 
 LOCK_FILE="/home/ubuntu/cc_scheduler/e2e_top.lock"
 E2E_DIR="/home/ubuntu/projects/wande-ai-e2e-full"
 SESSION="e2e-top"
-LOGDIR=/var/log/coding-cc
+LOGDIR=/home/ubuntu/cc_scheduler/logs
 mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"

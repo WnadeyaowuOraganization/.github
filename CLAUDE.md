@@ -157,17 +157,18 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 #### 启动CC（tmux会话，可随时查看和恢复）
 
 ```bash
-# 启动（自动创建tmux会话）
+# 常规启动方式（完成issue）（自动创建tmux会话）
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> [dir_suffix]
+# 自定义提示词启动（自动创建tmux会话）
+bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <repo> <prompt> <model> [dir_suffix]
 
 # 示例:
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend <N> claude-opus-4-6 kimi1  # 使用外接目录
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 918 claude-opus-4-6 kimi1
+bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh backend '请你修复一下dev分支的编译错误' claude-opus-4-6 kimi1
 
 # 查看实时输出:
-tmux attach -t cc-backend-272
-
-# 脱离（CC继续运行）:
-# Ctrl+B D
+tail -f /var/log/coding-cc/backend-918.log
+tail -f /var/log/coding-cc/backend-请你修复一下dev分支的编译错误.log
 
 # 列出所有CC会话:
 tmux list-sessions

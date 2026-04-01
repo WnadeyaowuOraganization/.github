@@ -687,9 +687,13 @@ def _resolve_model(key_cfg, requested_model):
 
 # ===================== 用量查询适配器 =====================
 
-# 缓存: {key_name: {"data": {...}, "fetched_at": iso_str}}
+# 用量查询缓存: {key_name: {"data": {...}, "fetched_at": iso_str}}
 _quota_cache = {}
 _QUOTA_CACHE_TTL_SECS = 60  # 缓存 60s，避免频繁调用上游
+
+# Anthropic 响应 headers 用量缓存: {key_name: {"headers": {...}, "fetched_at": timestamp}}
+_anthropic_quota_headers = {}
+_ANTHROPIC_HEADERS_TTL_SECS = 30  # headers 缓存 30s
 
 
 def _query_quota_zhipu(api_key, base_url=None):
@@ -774,129 +778,68 @@ def _query_quota_zhipu(api_key, base_url=None):
 
 
 def _query_quota_kimi(api_key, api_url=None):
-    """Kimi (Moonshot) 用量查询
+    """Kimi (Moonshot) 余额查询
 
-    注意：Kimi coding plan 目前无公开用量查询 API。
-    用量信息需登录 Kimi 控制台查看：https://platform.moonshot.cn/console/billing
-
-    Returns: None (暂不支持)
-    """
-    # Kimi coding plan 暂不支持用量查询
-    # 用户需登录平台查看用量
-    logger.debug("[quota] Kimi coding plan 暂不支持用量查询 API")
-    return None
-
-# 以下是保留代码，待 Kimi 开放用量 API 后可启用
-def _query_quota_kimi_legacy(api_key, api_url=None):
-    """Kimi (Moonshot) 用量查询 - 保留待启用
-
-    接口：GET https://api.moonshot.cn/v1/billing/quota
-    认证：Authorization: Bearer {api_key}
+    接口: GET https://api.moonshot.cn/v1/users/me/balance
+    认证: Authorization: Bearer {api_key}
+    文档: https://platform.moonshot.cn/docs/api/balance
 
     Returns: 统一格式 dict 或 None
+    {
+        "provider": "kimi",
+        "plan": "coding_plan",
+        "quotas": [
+            {
+                "type": "BALANCE",
+                "available_balance": float,  # 可用余额
+                "voucher_balance": float,    # 代金券余额
+                "cash_balance": float        # 现金余额
+            }
+        ]
+    }
     """
-    # Kimi 的 API 基址 - 从 api_url 提取或默认
-    base_url = api_url or "https://api.kimi.com"
-    # 尝试提取基址 (api.kimi.com/coding -> api.kimi.com)
-    parts = base_url.split("/coding")
-    api_host = parts[0].rstrip("/") if parts else base_url
+    url = "https://api.moonshot.cn/v1/users/me/balance"
 
-    # 尝试 Kimi/Moonshot 官方用量查询接口
-    # 注意：Kimi 使用的是 moonshot.cn 域名，coding plan 可能没有公开用量 API
-    quota_urls = [
-        f"{api_host}/v1/billing/quota",
-        f"{api_host}/v1/user/quota",
-        f"{api_host}/dashboard/billing/quota",
-        f"{api_host}/v1/billing/credit-balances",
-        "https://api.moonshot.cn/v1/billing/quota",
-        "https://api.moonshot.cn/v1/billing/credit-balances",
-        "https://platform.moonshot.cn/api/billing/quota",
-    ]
+    req = urllib.request.Request(url, headers={
+        "Authorization": f"Bearer {api_key}",
+        "Accept": "application/json",
+    })
 
-    for url in quota_urls:
-        req = urllib.request.Request(url, headers={
-            "Authorization": f"Bearer {api_key}",
-            "Accept": "application/json",
-        })
+    try:
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = json.loads(resp.read())
 
+        # 解析余额数据
+        # 返回格式: {"data": {"available_balance": 100.0, "voucher_balance": 50.0, "cash_balance": 50.0}}
+        balance_data = data.get("data", {})
+
+        available = balance_data.get("available_balance", 0)
+        voucher = balance_data.get("voucher_balance", 0)
+        cash = balance_data.get("cash_balance", 0)
+
+        quotas = [{
+            "type": "BALANCE",
+            "available_balance": available,
+            "voucher_balance": voucher,
+            "cash_balance": cash,
+        }]
+
+        return {
+            "provider": "kimi",
+            "plan": "coding_plan",
+            "quotas": quotas,
+        }
+
+    except urllib.error.HTTPError as e:
         try:
-            with urllib.request.urlopen(req, timeout=10) as resp:
-                data = json.loads(resp.read())
-
-            # 解析 Kimi 返回的用量数据
-            quotas = []
-
-            # 处理不同返回格式
-            if "quota" in data:
-                q = data["quota"]
-                total = q.get("total", 0)
-                used = q.get("used", 0)
-                remaining = q.get("remaining", 0)
-                if total > 0:
-                    quotas.append({
-                        "type": "TOKENS_LIMIT",
-                        "window": "monthly",
-                        "used_pct": round(used / total * 100, 2) if total > 0 else 0,
-                        "total": total,
-                        "used": used,
-                        "remaining": remaining,
-                    })
-            elif "data" in data:
-                d = data["data"]
-                total = d.get("hard_limit", d.get("total", 0))
-                used = d.get("hard_limit_used", d.get("used", 0))
-                remaining = d.get("remaining", total - used)
-                if total > 0:
-                    quotas.append({
-                        "type": "TOKENS_LIMIT",
-                        "window": "monthly",
-                        "used_pct": round(used / total * 100, 2) if total > 0 else 0,
-                        "total": total,
-                        "used": used,
-                        "remaining": remaining,
-                    })
-            elif isinstance(data, dict) and "remaining" in data:
-                # 直接返回格式
-                total = data.get("total", 0)
-                used = data.get("used", 0)
-                remaining = data.get("remaining", 0)
-                if total > 0:
-                    quotas.append({
-                        "type": "TOKENS_LIMIT",
-                        "window": "monthly",
-                        "used_pct": round(used / total * 100, 2) if total > 0 else 0,
-                        "total": total,
-                        "used": used,
-                        "remaining": remaining,
-                    })
-
-            if quotas:
-                return {
-                    "provider": "kimi",
-                    "plan": "coding_plan",
-                    "quotas": quotas,
-                }
-
-        except urllib.error.HTTPError as e:
-            # 读取错误响应体
-            try:
-                resp_body = e.read().decode('utf-8')
-            except:
-                resp_body = ""
-            # 404 表示接口不存在，继续尝试下一个
-            if e.code == 404:
-                logger.debug(f"[quota] Kimi 接口未找到 ({url})")
-                continue
-            logger.warning(f"[quota] Kimi 用量查询失败 ({url}): HTTP {e.code} - {resp_body[:200] if resp_body else e}")
-            # 401/403 表示认证问题，直接退出
-            if e.code in (401, 403):
-                break
-            continue
-        except Exception as e:
-            logger.warning(f"[quota] Kimi 用量查询失败 ({url}): {e}")
-            continue
-
-    return None
+            resp_body = e.read().decode('utf-8')
+        except:
+            resp_body = ""
+        logger.debug(f"[quota] Kimi 余额查询失败: HTTP {e.code} - {resp_body[:200]}")
+        return None
+    except Exception as e:
+        logger.debug(f"[quota] Kimi 余额查询失败: {e}")
+        return None
 
 
 def _query_quota_anthropic_compat(api_key, api_url=None):
@@ -955,9 +898,8 @@ def query_provider_quota(key_cfg):
         if result:
             result["provider"] = key_provider
     elif key_provider == "kimi":
-        result = _query_quota_kimi(api_key, key_cfg.get("api_url"))
-        if result:
-            result["provider"] = key_provider
+        # Kimi coding plan 暂无余额查询 API，依赖 headers 解析
+        result = None
     else:
         # 其他供应商暂无用量查询接口
         result = None
@@ -967,8 +909,130 @@ def query_provider_quota(key_cfg):
     return result
 
 
-def call_anthropic_compat(body_bytes, api_key, path="/v1/messages", base_url=None, model_map=None):
-    """调用Anthropic兼容供应商（智谱直连、Kimi、无问星穹、火山等）"""
+def _parse_anthropic_rate_limit_headers(resp_headers):
+    """解析 Anthropic 响应 headers 中的用量信息
+
+    Anthropic 会在响应 headers 中返回频限信息：
+    - anthropic-ratelimit-requests-limit: 当前周期内最大请求数
+    - anthropic-ratelimit-requests-remaining: 剩余可用请求数
+    - anthropic-ratelimit-requests-reset: 请求限制重置时间
+    - anthropic-ratelimit-input-tokens-limit: 输入 token 上限
+    - anthropic-ratelimit-input-tokens-remaining: 剩余输入 token 数
+    - anthropic-ratelimit-output-tokens-limit: 输出 token 上限
+    - anthropic-ratelimit-output-tokens-remaining: 剩余输出 token 数
+
+    Returns: dict 或 None
+    """
+    quotas = []
+
+    # 请求数限制
+    req_limit = resp_headers.get("anthropic-ratelimit-requests-limit")
+    req_remaining = resp_headers.get("anthropic-ratelimit-requests-remaining")
+    req_reset = resp_headers.get("anthropic-ratelimit-requests-reset")
+
+    if req_limit and req_remaining:
+        try:
+            limit_val = int(req_limit)
+            remaining_val = int(req_remaining)
+            used_pct = round((limit_val - remaining_val) / limit_val * 100, 2) if limit_val > 0 else 0
+
+            quota_entry = {
+                "type": "REQUESTS_LIMIT",
+                "limit": limit_val,
+                "remaining": remaining_val,
+                "used_pct": used_pct,
+            }
+            if req_reset:
+                quota_entry["reset_at"] = req_reset
+            quotas.append(quota_entry)
+        except (ValueError, TypeError):
+            pass
+
+    # 输入 token 限制
+    input_limit = resp_headers.get("anthropic-ratelimit-input-tokens-limit")
+    input_remaining = resp_headers.get("anthropic-ratelimit-input-tokens-remaining")
+    input_reset = resp_headers.get("anthropic-ratelimit-input-tokens-reset")
+
+    if input_limit and input_remaining:
+        try:
+            limit_val = int(input_limit)
+            remaining_val = int(input_remaining)
+            used_pct = round((limit_val - remaining_val) / limit_val * 100, 2) if limit_val > 0 else 0
+
+            quota_entry = {
+                "type": "INPUT_TOKENS_LIMIT",
+                "limit": limit_val,
+                "remaining": remaining_val,
+                "used_pct": used_pct,
+            }
+            if input_reset:
+                quota_entry["reset_at"] = input_reset
+            quotas.append(quota_entry)
+        except (ValueError, TypeError):
+            pass
+
+    # 输出 token 限制
+    output_limit = resp_headers.get("anthropic-ratelimit-output-tokens-limit")
+    output_remaining = resp_headers.get("anthropic-ratelimit-output-tokens-remaining")
+    output_reset = resp_headers.get("anthropic-ratelimit-output-tokens-reset")
+
+    if output_limit and output_remaining:
+        try:
+            limit_val = int(output_limit)
+            remaining_val = int(output_remaining)
+            used_pct = round((limit_val - remaining_val) / limit_val * 100, 2) if limit_val > 0 else 0
+
+            quota_entry = {
+                "type": "OUTPUT_TOKENS_LIMIT",
+                "limit": limit_val,
+                "remaining": remaining_val,
+                "used_pct": used_pct,
+            }
+            if output_reset:
+                quota_entry["reset_at"] = output_reset
+            quotas.append(quota_entry)
+        except (ValueError, TypeError):
+            pass
+
+    if quotas:
+        return {
+            "quotas": quotas,
+            "source": "response_headers",
+        }
+    return None
+
+
+def _save_anthropic_quota_headers(key_name, resp_headers):
+    """保存 Anthropic 响应 headers 中的用量信息"""
+    # 调试：记录收到的 headers
+    ratelimit_headers = {k: v for k, v in resp_headers.items() if "ratelimit" in k.lower() or "limit" in k.lower()}
+    if ratelimit_headers:
+        logger.debug(f"[{key_name}] 收到 ratelimit headers: {ratelimit_headers}")
+
+    quota_info = _parse_anthropic_rate_limit_headers(resp_headers)
+    if quota_info:
+        _anthropic_quota_headers[key_name] = {
+            "data": quota_info,
+            "fetched_at": time.monotonic(),
+        }
+        logger.debug(f"[{key_name}] 保存 headers 用量信息: {len(quota_info.get('quotas', []))} 条配额")
+
+
+def _get_anthropic_quota_headers(key_name):
+    """获取缓存的 Anthropic headers 用量信息"""
+    cached = _anthropic_quota_headers.get(key_name)
+    if cached:
+        age = time.monotonic() - cached.get("fetched_at", 0)
+        if age < _ANTHROPIC_HEADERS_TTL_SECS:
+            return cached.get("data")
+    return None
+
+
+def call_anthropic_compat(body_bytes, api_key, path="/v1/messages", base_url=None, model_map=None, key_name=None):
+    """调用Anthropic兼容供应商（智谱直连、Kimi、无问星穹、火山等）
+
+    Returns: (status_code, resp_body, resp_headers_dict)
+    """
     url = f"{base_url}{path}"
 
     # 模型名重写
@@ -993,13 +1057,20 @@ def call_anthropic_compat(body_bytes, api_key, path="/v1/messages", base_url=Non
 
     try:
         with urllib.request.urlopen(req, timeout=300) as resp:
-            return resp.status, resp.read()
+            resp_headers = dict(resp.headers)
+            # 保存用量信息（如果 key_name 提供）
+            if key_name:
+                _save_anthropic_quota_headers(key_name, resp_headers)
+            return resp.status, resp.read(), resp_headers
     except urllib.error.HTTPError as e:
         err_body = e.read() if e.fp else b"{}"
-        return e.code, err_body
+        # 即使是错误响应，也可能包含用量 headers
+        if key_name and e.headers:
+            _save_anthropic_quota_headers(key_name, dict(e.headers))
+        return e.code, err_body, dict(e.headers) if e.headers else {}
     except Exception as e:
         error_resp = json.dumps({"type": "error", "error": {"type": "proxy_error", "message": str(e)}}).encode()
-        return 502, error_resp
+        return 502, error_resp, {}
 
 
 def call_openai_compat(anthropic_body, key_cfg):
@@ -1098,6 +1169,7 @@ def _call_upstream(key_cfg, body_bytes, body_dict, path):
     """
     key_type = key_cfg.get("type", "anthropic_compat")
     api_key = key_cfg["api_key"]
+    key_name = key_cfg.get("name")
 
     # 应用 key 配置中的环境变量（仅对本次请求有效）
     env_cfg = key_cfg.get("env", {})
@@ -1107,7 +1179,7 @@ def _call_upstream(key_cfg, body_bytes, body_dict, path):
         if key_type == "anthropic_compat":
             base_url = key_cfg.get("api_url", "")
             model_map = key_cfg.get("model_map")
-            status, resp_body = call_anthropic_compat(body_bytes, api_key, path, base_url, model_map)
+            status, resp_body, _ = call_anthropic_compat(body_bytes, api_key, path, base_url, model_map, key_name)
             return status, resp_body, False
 
         elif key_type == "openai_compat":
@@ -1181,6 +1253,17 @@ class ProxyHandler(BaseHTTPRequestHandler):
                 quota = query_provider_quota(k)
                 if quota:
                     entry["quota"] = quota
+
+                # 对于 anthropic_compat 类型的供应商，尝试获取响应 headers 中的用量信息
+                if k.get("type") == "anthropic_compat":
+                    anthropic_quota = _get_anthropic_quota_headers(name)
+                    if anthropic_quota:
+                        # 合并到 quota 中，或单独作为一个字段
+                        if "quota" not in entry:
+                            entry["quota"] = {"provider": k.get("provider", name), "quotas": []}
+                        # 添加 headers 来源的用量信息
+                        entry["quota"]["headers_quotas"] = anthropic_quota.get("quotas", [])
+                        entry["quota"]["headers_source"] = anthropic_quota.get("source", "response_headers")
 
                 key_status.append(entry)
 

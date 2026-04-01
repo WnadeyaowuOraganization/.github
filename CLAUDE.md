@@ -9,7 +9,9 @@
 > 务必按功能及实现顺序分批启动编程CC，前后端同时处理相同功能的issue
 > In Progress状态的issue可能会因为各种原因中断，恢复时务必让其在相同指派目录中工作，避免token浪费和合并冲突
 3. **检查结果** — 编程CC完成后检查其是否提交PR，有PR的issue测试CC才会介入
-> 中层测试CC会根据PR编写测试用例，测试通过后会merge改动到dev分支issue状态会自动更新为Done，多次恢复依旧失败的，在issue中评论失败原因，并更状态为Fail
+> 中层测试CC会根据PR编写测试用例，测试通过后会merge改动到dev分支issue状态会自动更新为Done，非特殊情况不要手工修改issue为Done
+> 没有通过中层测试的issue更新为Fail
+> 多次恢复依旧失败的，在issue中评论失败原因，再更新状态为Fail
 
 ## Issue 生命周期（全自动流水线）
 

@@ -255,3 +255,102 @@
 | #338 | front-kimi5 | 🔄 In Progress |
 | #213 | front-kimi6 | 🔄 In Progress |
 | #188 | front-kimi8 | 🔄 In Progress |
+
+## 2026-04-01 14:30 大规模积压Issue清理与CC恢复
+
+### 清理结果：34个虚假In Progress状态同步为Done
+
+因Post-task失败或PR未用fixes关键字，大量PR已merge的Issue仍卡在In Progress。发现并纠正：
+
+| Issue | Repo | PR | 说明 |
+|-------|------|-----|------|
+| #233 | front | #383 | 像素办公室升级，已merge |
+| #234 | front | #382 | Kanban看板面板，已merge |
+| #123 | front | #372 | 需求闭环看板页面，已merge |
+| #854 | backend | #907 | Token Pool数据模型+G7e同步，已merge |
+| #855 | backend | #910 | Token Pool积分配额引擎，已merge |
+| #856 | backend | #911 | Token Pool用量上报，已merge |
+| #885 | backend | #908 | DORA四指标统计API，已merge |
+| #886 | backend | #909 | 审计日志API，已merge |
+| ...等34个 | - | - | 详见git历史与PR记录 |
+
+清理后In Progress从 **59 → 25**。
+
+### 启动的编程CC（12个并发，最大并发限制）
+
+#### 已恢复/启动的Backend CC（6个）
+
+| Issue | 目录 | 类型 | 说明 |
+|-------|------|------|------|
+| #248 | backend-kimi2 | 恢复 | Webhook联动 — 分支有ahead=17，已恢复 |
+| #249 | backend-kimi3 | 恢复 | Claude Code会话监控API — 分支有ahead=51，已恢复 |
+| #333 | backend-kimi4 | 恢复 | claude_monitor.py — 分支有ahead=31，已恢复 |
+| #917 | backend-kimi1 | 新启动 | E2E失败-P0 dev启动失败（MyBatis别名冲突） |
+| #955 | backend-kimi5 | 新启动 | E2E失败 backend#953 alias冲突 |
+| #691 | backend-kimi6 | 新启动 | E2E失败 Bean名称冲突导致启动失败 |
+| #830 | backend-kimi2 | 新启动 | E2E发现 monitor/ext-tool/dashboard-card API 500 |
+
+#### 已启动的Front CC（6个）
+
+| Issue | 目录 | 类型 | 说明 |
+|-------|------|------|------|
+| #418 | front-kimi1 | 新启动 | E2E失败 PR#409 DORA API返回500 |
+| #371 | front-kimi2 | 新启动 | 铃铛通知中心组件 |
+| #360 | front-kimi3 | 新启动 | Token Pool管理主页面 |
+| #361 | front-kimi4 | 新启动 | Token Pool用量统计页面 |
+| #251 | front-kimi5 | 新启动 | Claude Office排程Tab |
+| #387 | front-kimi6 | 新启动 | 全平台操作审计日志页面 |
+
+### 第三批待启动（backend释放后）
+
+| Issue | Repo | 功能分组 | 计划目录 |
+|-------|------|----------|---------|
+| #840 | backend | E2E修复 | TBD |
+| #868 | backend | 通知中心[1/4] | TBD |
+| #869 | backend | 通知中心[2/4] | TBD |
+| #870 | backend | 通知中心[3/4] | TBD |
+| #871 | backend | 通知中心[4/4] | TBD |
+| #828 | backend | 定时任务管理API | TBD |
+| #332 | backend | G7e cron_reporter.py | TBD |
+| #599 | backend | Claude Office GitHub同步 | TBD |
+| #601 | backend | Claude Office 线路管理API | TBD |
+| #120 | front | Issue看板增强 | TBD |
+| #408 | front | 列表页改造 | TBD |
+| #38 | pipeline | G7e competitors采集 | TBD |
+
+### 第二批CC结果（12个已全部完成）
+
+第一批启动的12个CC在约1小时内全部完成，各issue均成功创建PR：
+- backend #249(PR已创建)、#333(PR#439)、#917(PR#959)、#955(PR#958)、#691(PR#824)、#830(PR#960)
+- front #418(PR#440)、#371(PR#442)、#360、#361、#251(PR#370)、#387(PR#407)
+
+### 第三批启动的CC（backend 6 + front 2 + pipeline 1 = 9个并发）
+
+#### Backend（6个满并发）
+| Issue | 目录 | 类型 | 说明 |
+|-------|------|------|------|
+| #868 | backend-kimi1 | 新启动 | 通知中心-P0 数据模型 |
+| #869 | backend-kimi2 | 新启动 | 通知中心-P0 事件采集Service |
+| #870 | backend-kimi3 | 新启动 | 通知中心-P0 SSE实时推送 |
+| #871 | backend-kimi4 | 新启动 | 通知中心-P0 通知查询API |
+| #828 | backend-kimi5 | 新启动 | 定时任务管理API |
+| #332 | backend-kimi6 | 新启动 | G7e cron_reporter.py |
+
+#### Front（2个）
+| Issue | 目录 | 类型 | 说明 |
+|-------|------|------|------|
+| #120 | front-kimi1 | 新启动 | Issue看板增强 |
+| #408 | front-kimi2 | 新启动 | 列表页按UI-GUIDE改造 |
+
+#### Pipeline（1个）
+| Issue | 目录 | 类型 | 说明 |
+|-------|------|------|------|
+| #38 | pipeline-glm1 | 新启动 | G7e competitors采集+测试+配置 |
+
+### 第四批待启动（仅剩2个backend）
+
+| Issue | Repo | 功能分组 | 计划目录 |
+|-------|------|----------|---------|
+| #599 | backend | Claude Office GitHub同步修复 | TBD |
+| #601 | backend | Claude Office 线路管理REST API | TBD |
+| #248 | backend | Webhook联动 | PR#956 OPEN等待merge，无需再启动CC |

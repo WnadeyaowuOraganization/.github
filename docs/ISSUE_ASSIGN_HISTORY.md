@@ -354,3 +354,32 @@
 | #599 | backend | Claude Office GitHub同步修复 | TBD |
 | #601 | backend | Claude Office 线路管理REST API | TBD |
 | #248 | backend | Webhook联动 | PR#956 OPEN等待merge，无需再启动CC |
+
+### 第四批启动的CC（2026-04-01 晚高峰清理）
+
+#### 恢复/新启动
+| Issue | Repo | 目录 | 类型 | 说明 |
+|-------|------|------|------|------|
+| #601 | backend | wande-ai-backend (主目录) | 恢复 | 线路管理REST API，feature-issue-601-v2 分支 |
+| #443 | front | front-kimi1 | 新启动 | WipPlaceholder全局组件 |
+| #955 | backend | backend-kimi1 | 新启动 | MyBatis alias冲突修复 (#953回退修复) |
+
+#### 仍待处理（In Progress backlog）
+| Issue | Repo | 当前状态 | 说明 |
+|-------|------|----------|------|
+| #868 | backend | In Progress | 通知中心 1/5 数据模型（第三批遗留未完成） |
+| #869 | backend | In Progress | 通知中心 2/5 事件采集Service |
+| #870 | backend | In Progress | 通知中心 3/5 SSE实时推送 |
+| #871 | backend | In Progress | 通知中心 4/5 通知查询API |
+
+
+### 2026-04-01 晚高峰清理 — 状态更新
+- #601 backend — CC完成，直接关闭（修改部署在 /opt/claude-office/api/server.py，无需PR）
+- #840 backend — PR#873已merge，手动关闭
+- #955 backend — PR#959(cae30f18)已修复，手动关闭
+- #443 front — commit cf73ed3 已直接合入dev，手动关闭
+- #868 backend — PR#979 已merge到dev(febd843e)，关闭重复PR#985，手动关闭
+- #869 backend — PR #978 OPEN（被 #988 取代）
+- #870 backend — PR #977 OPEN（被 #988 取代）
+- #871 backend — PR #981 已MERGED
+- #986 backend — CC完成，PR #988 已创建并OPEN

@@ -64,7 +64,7 @@ D3相关
 source /home/ubuntu/projects/.github/scripts/get-gh-token.sh
 
 # 按项目和状态搜索Project看板中的Issue
-bash /home/ubuntu/projects/.github/scripts/query-project-Issues.sh <repo> "<STATUS>"
+bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh <repo> "<STATUS>"
 # repo: backend | front | pipeline | plugins | all (默认all)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
 

@@ -31,6 +31,9 @@ case "$REPO" in
   play-backend) BASE_DIR="wande-play"; SUBDIR="backend" ;;
   play-frontend) BASE_DIR="wande-play"; SUBDIR="frontend" ;;
   play-app) BASE_DIR="wande-play"; SUBDIR="" ;;
+  play-backend) BASE_DIR="wande-play"; SUBDIR="backend" ;;
+  play-frontend) BASE_DIR="wande-play"; SUBDIR="frontend" ;;
+  play-app) BASE_DIR="wande-play"; SUBDIR="" ;;
   backend)  BASE_DIR="wande-ai-backend" ;;
   front)    BASE_DIR="wande-ai-front" ;;
   pipeline) BASE_DIR="wande-data-pipeline" ;;

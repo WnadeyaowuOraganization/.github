@@ -7,7 +7,7 @@
 | #85 | front | front-kimi1 | P1/test-failed | 合同管理跨模块打通前端 | **PR #474** |
 | #623 | backend | backend-kimi2 | P0 | 模具库数据化 | **PR #1071** |
 | #624 | backend | backend-kimi2 | P0 | 模具选型引擎 | **PR #1018** |
-| #626 | backend | backend-kimi3 | P0 | 模具接口标准化 | **In Progress (新启动)** |
+| #626 | backend | backend-kimi3 | P0 | 模具接口标准化 | **Blocked - 依赖#618** |
 | #627 | backend | backend-kimi4 | P0 | 钢架自动选型规则 | **Issue不存在** |
 | #1 | plugins | plugins-glm1 | P0 | G7e D3云端引擎代码迁入 | **PR #28** |
 | #17 | plugins | plugins-glm2 | P0 | 2D板材排料电池包 | **PR #31** |
@@ -30,10 +30,10 @@
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| **PR #30** |
 
-**当前运行中**: 1个CC (backend#626)  
+**当前运行中**: 0个CC  
 **已完成**: 10个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成)  
 **已创建PR**: 12个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16)  
-**待创建PR**: 0个  
+**Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
 **待重启**: 1个 (#5 - 超时待重启)  
 **E2E测试状态**: ✅ 593 passed, 162 skipped, 0 failed
 

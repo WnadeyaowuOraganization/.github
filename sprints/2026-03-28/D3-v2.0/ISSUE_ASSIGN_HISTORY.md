@@ -130,8 +130,9 @@
 **状态更新**: 
 - Issue #625 ✅ **CC完成，已有PR #1075** → 目录释放
 - Issue #171 ✅ **CC完成，已有PR #1072** → 目录释放
-- E2E中层测试: 405 passed, 28 skipped ✅
-- **当前运行中**: 6个CC (#629, #252, #70, #633, #634, #635)
+- Issue #70 ✅ **CC完成，已有PR #1019** → 目录释放
+- E2E中层测试: 407 passed, 28 skipped ✅
+- **当前运行中**: 6个CC (#629, #252, #633, #634, #635, #263)
 
 ## 2026-04-02 第十三批指派（15:25-15:30）
 
@@ -149,9 +150,20 @@
 |---------|------|------|--------|------|------|
 | #263 | backend | backend-kimi4 | **P0** | 阶段流程配置引擎 — 三种业务模式可配置+字段规则+审批规则 | **CC运行中 (15:35启动)** |
 
-**状态更新**: 
+**状态更新**:
 - 利用空闲目录kimi4启动执行管理P0配置引擎Issue
-- **当前运行中**: 7个CC (#629, #252, #70, #633, #634, #635, #263)
+- **当前运行中**: 7个CC (#629, #252, #633, #634, #635, #263)
+
+## 2026-04-02 第十五批指派（15:45-15:50）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #254 | backend | backend-kimi4 | **P0** | 明道云MongoDB数据迁移 — S3 BSON解析+新平台表结构对照 | **CC运行中 (15:45启动)** |
+
+**状态更新**:
+- Issue #70 CC完成，已有PR #1019
+- 利用空闲目录kimi4启动数据迁移P0 Issue
+- **当前运行中**: 7个CC (#629, #252, #633, #634, #635, #263, #254)
 
 ## 会话监控命令
 
@@ -162,14 +174,15 @@ tmux list-sessions | grep "cc-"
 # 查看实时日志（7个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log  # Issue #629, P1, 14:44重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log  # Issue #252, P0/test-failed, 15:05重启
-tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, P1/test-failed, 15:08重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-633.log  # Issue #633, P0, 15:15启动
 tail -f /home/ubuntu/cc_scheduler/logs/backend-634.log  # Issue #634, P0, 15:18启动
 tail -f /home/ubuntu/cc_scheduler/logs/backend-635.log  # Issue #635, P0, 15:25启动
 tail -f /home/ubuntu/cc_scheduler/logs/backend-263.log  # Issue #263, P0, 15:35启动
+tail -f /home/ubuntu/cc_scheduler/logs/backend-254.log  # Issue #254, P0, 15:45启动
 # tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log  # Issue #623, P0, CC已完成, PR#1071
 # tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log  # Issue #625, P1, CC已完成, PR#1075
 # tail -f /home/ubuntu/cc_scheduler/logs/backend-171.log  # Issue #171, P0, CC已完成, PR#1072
+# tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, P1, CC已完成, PR#1019
 # tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, pipeline项目, 非backend
 ```
 

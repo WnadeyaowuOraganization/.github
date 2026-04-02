@@ -39,8 +39,8 @@
 **E2E测试状态**: ✅ 所有中层测试 399 passed, 28 skipped (2026-04-02 14:45)  
 **CC恢复记录**: 2026-04-02 14:22 恢复6个中断的CC会话 (#623, #624, #629, #858, #625, #252)  
 **新增指派**: 2026-04-02 14:36 启动 #70 (backend-kimi4), #85 (backend-kimi2), #252 (backend-kimi6-k2.5)  
-**CC重启记录**: 2026-04-02 14:43-14:44 重启 #85, #629, #70, #252 (token配额/模型问题)  
-**当前状态**: 6个CC运行中，E2E无新失败，等待CC完成
+**CC重启记录**: 2026-04-02 14:43-14:44 重启 #85, #629, #70, #252 (token配额/模型问题) | 14:47 重启 #85 (完成但未创建PR)  
+**当前状态**: 6个CC运行中，E2E 398 passed, 等待CC完成
 
 ## 2026-04-02 第四批指派（11:20-11:21）
 
@@ -108,7 +108,7 @@ tmux list-sessions | grep "cc-"
 
 # 查看实时日志（6个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log  # Issue #623, P0, 运行中
-tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, test-failed, 14:43重启
+tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, test-failed, 14:47重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log  # Issue #625, test-failed, 运行中
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log  # Issue #629, P1, 14:44重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, test-failed, 14:43重启

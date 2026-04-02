@@ -99,6 +99,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 | `module:backend` | 纯后端Issue | `cd wande-play/backend` | 单Agent TDD |
 | `module:frontend` | 纯前端Issue | `cd wande-play/frontend` | 单Agent TDD |
 | `module:pipeline` | 纯爬虫/数据采集Issue | `cd wande-play/pipeline` | 单Agent |
+| `module:pipeline` | 纯爬虫/数据采集Issue | `cd wande-play/pipeline` | 单Agent |
 | `module:fullstack` | 前后端联动Issue | `cd wande-play`（根目录） | Agent Teams（3-Agent并行） |
 
 ### Agent Teams模式（fullstack Issue）
@@ -353,6 +354,7 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 |------|------|
 | `module:backend` | 纯后端Issue |
 | `module:frontend` | 纯前端Issue |
+| `module:pipeline` | 纯爬虫/数据采集Issue |
 | `module:pipeline` | 纯爬虫/数据采集Issue |
 | `module:fullstack` | 前后端联动Issue（Agent Teams模式） |
 | `status:ready` | 可开始（与看板Todo对应） |

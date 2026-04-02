@@ -73,7 +73,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 
 # 触发编程CC
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh <module> <Issue_number> <model> [dir_suffix]
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <model> [dir_suffix]
 # module: backend | frontend | app（fullstack联动）| pipeline
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 指定外接目录后缀（如 kimi1, glm1）
@@ -98,6 +98,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <module> <Issue_number> <mo
 |-----------|------|---------------|-----------|
 | `module:backend` | 纯后端Issue | `cd wande-play/backend` | 单Agent TDD |
 | `module:frontend` | 纯前端Issue | `cd wande-play/frontend` | 单Agent TDD |
+| `module:pipeline` | 纯爬虫/数据采集Issue | `cd wande-play/pipeline` | 单Agent |
 | `module:fullstack` | 前后端联动Issue | `cd wande-play`（根目录） | Agent Teams（3-Agent并行） |
 
 ### Agent Teams模式（fullstack Issue）
@@ -133,7 +134,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <module> <Issue_number> <mo
 | backend | `wande-play/backend` | 编程CC只看到backend/CLAUDE.md |
 | frontend | `wande-play/frontend` | 编程CC只看到frontend/CLAUDE.md |
 | app | `wande-play`（根目录） | fullstack Issue，触发Agent Teams |
-| pipeline | `cd wande-play/pipeline` | 单Agent |
+| pipeline | `cd wande-play/pipeline` | 纯爬虫/数据采集 |
 
 ## 并发控制
 
@@ -161,7 +162,7 @@ fi
 - 你有权将需求不明确的Issue置为pause状态
 - **Sprint 目录命名规范**: `sprints/YYYY-MM-DD/`（取 Sprint 开始日期）
 - 需要注意的是从Project看板中获取的Issue顺序通常比较混乱，因此需要你按功能做出规划，一般情况下通过标题找到正确的顺序
-- **注意**: wande-play仓库中的Issue同时包含backend和frontend的Issue，用module:backend/module:frontend/module:fullstack标签区分
+- **注意**: wande-play仓库中的Issue同时包含backend和frontend的Issue，用module:backend/module:frontend/module:pipeline/module:fullstack标签区分
 
 ```bash
 # 1. 查询所有Plan状态的Issue
@@ -174,7 +175,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "To
 #### 排程快速决策清单
 
 1. **先筛**：只选当前 Sprint 周期内创建的，或明确属于重点模块的
-2. **再分**：按模块和端（module:backend/frontend/fullstack）分组
+2. **再分**：按模块（module:backend/frontend/pipeline/fullstack）分组
 3. **后串**：同模块内，先接口/模型后页面，先父功能后子功能；fullstack Issue优先（可Agent Teams并行）
 4. **标注**：在 PLAN.md 中每 Issue 加一行 `依赖: Issue-XXX` 或 `可被并行: 是/否`
 
@@ -219,13 +220,14 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "In
 
 ```bash
 # 常规启动（按module自动cd到正确子目录）
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh <module> <N> <model> [dir_suffix]
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <N> <model> [dir_suffix]
 # 自定义Prompt启动
-bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <module> <prompt> <model> [dir_suffix]
+bash /home/ubuntu/projects/.github/scripts/run-cc-with-prompt.sh <repo> <prompt> <model> [dir_suffix]
 
 # 示例:
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 918 claude-opus-4-6 kimi1
-bash /home/ubuntu/projects/.github/scripts/run-cc.sh app 950 claude-opus-4-6  # fullstack Issue → Agent Teams
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh app 950 claude-opus-4-6        # fullstack → Agent Teams
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh pipeline 101 claude-opus-4-6 kimi2  # pipeline
 
 # 查看实时输出:
 tail -f /home/ubuntu/cc_scheduler/logs/<module>-<N>.log
@@ -351,6 +353,7 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 |------|------|
 | `module:backend` | 纯后端Issue |
 | `module:frontend` | 纯前端Issue |
+| `module:pipeline` | 纯爬虫/数据采集Issue |
 | `module:fullstack` | 前后端联动Issue（Agent Teams模式） |
 | `status:ready` | 可开始（与看板Todo对应） |
 | `status:in-progress` | CC处理中 |

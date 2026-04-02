@@ -12,20 +12,36 @@
 | #1 | plugins | plugins-glm1 | P0 | G7e D3云端引擎代码迁入 | In Progress |
 | #17 | plugins | plugins-glm2 | P0 | 2D板材排料电池包 | In Progress |
 
+## 2026-04-02 第二批指派（10:36-10:37）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #56 | backend | backend-kimi1 | P1 | 国际贸易矿场-国际客户CRUD API | In Progress |
+| #70 | backend | backend-kimi2 | P1 | 合同管理AI自动填充 | In Progress |
+| #43 | front | front-kimi2 | P1 | 合同管理跨模块打通页面 | In Progress |
+| #2 | plugins | plugins-glm3 | P1 | DfMA制造可行性自动检测引擎 | In Progress |
+| #3 | plugins | plugins-glm4 | P1 | 几何审计脚本 | In Progress |
+
+**总计**: 11个CC并行运行
+
 ## 会话监控命令
 
 ```bash
 # 查看所有CC会话
-tmux list-sessions
+tmux list-sessions | grep "cc-"
 
 # 查看实时日志
 tail -f /home/ubuntu/cc_scheduler/logs/front-85.log
+tail -f /home/ubuntu/cc_scheduler/logs/front-43.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-624.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-626.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-627.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-56.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log
 tail -f /home/ubuntu/cc_scheduler/logs/plugins-1.log
 tail -f /home/ubuntu/cc_scheduler/logs/plugins-17.log
+tail -f /home/ubuntu/cc_scheduler/logs/plugins-2.log
+tail -f /home/ubuntu/cc_scheduler/logs/plugins-3.log
 ```
 
 ## 恢复指令

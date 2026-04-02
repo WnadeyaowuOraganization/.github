@@ -30,7 +30,7 @@
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| **PR #30** |
 
-**当前运行中**: 6个CC (plugins#5, backend#629, backend#623, backend#624, backend#858, backend#625)  
+**当前运行中**: 7个CC (plugins#5, backend#629, backend#623, backend#624, backend#858, backend#625, backend#252)  
 **已完成**: 10个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成)  
 **已创建PR**: 12个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16)  
 **Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
@@ -70,18 +70,25 @@
 | #858 | backend | backend-kimi4 | **P0/E2E阻塞** | wdpp_tender_data.has_embedding类型不匹配 | **CC运行中** |
 | #625 | backend | backend-kimi5 | **P1** | 新模具定义流程 | **CC运行中** |
 
+## 2026-04-02 第八批指派（14:15-14:16）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #252 | backend | backend-kimi6 | **P0/P1/test-failed** | 超管驾驶舱-开发效率统计API | **CC运行中** |
+
 ## 会话监控命令
 
 ```bash
 # 查看所有CC会话
 tmux list-sessions | grep "cc-"
 
-# 查看实时日志（6个运行中）
+# 查看实时日志（7个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-624.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-858.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log
 tail -f /home/ubuntu/cc_scheduler/logs/plugins-5.log
 ```
 

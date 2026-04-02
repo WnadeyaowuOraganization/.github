@@ -122,7 +122,6 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <module> <Issue_number> <mo
 | 项目     | 仓库                                          | 主目录 | 外接目录 |
 |----------|-----------------------------------------------|--------|----------|
 | play     | `WnadeyaowuOraganization/wande-play`          | `/home/ubuntu/projects/wande-play` | `wande-play-kimi1` ~ `kimi6` |
-| pipeline | `WnadeyaowuOraganization/wande-data-pipeline` | `/home/ubuntu/projects/wande-data-pipeline` | `wande-data-pipeline-glm1` ~ `glm4` |
 | plugins  | `WnadeyaowuOraganization/wande-gh-plugins`    | `/home/ubuntu/projects/wande-gh-plugins` | `wande-gh-plugins-glm1` ~ `glm4` |
 
 所有目录在 `/home/ubuntu/projects/` 下。每个目录是同一仓库的独立克隆，可以同时运行不同的CC处理不同Issue。
@@ -134,7 +133,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <module> <Issue_number> <mo
 | backend | `wande-play/backend` | 编程CC只看到backend/CLAUDE.md |
 | frontend | `wande-play/frontend` | 编程CC只看到frontend/CLAUDE.md |
 | app | `wande-play`（根目录） | fullstack Issue，触发Agent Teams |
-| pipeline | `wande-data-pipeline` | 不变 |
+| pipeline | `cd wande-play/pipeline` | 单Agent |
 
 ## 并发控制
 

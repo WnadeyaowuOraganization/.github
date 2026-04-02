@@ -113,18 +113,32 @@
 - E2E中层测试: 392 passed, 28 skipped ✅
 - **当前运行中**: 5个CC (#171, #625, #629, #252, #70)
 
+## 2026-04-02 第十二批指派（15:15-15:20）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #633 | backend | backend-kimi1 | **P0** | clients表增强 — MEDDIC六维度字段+信息质量评分 | **CC运行中 (15:15启动)** |
+| #634 | backend | backend-kimi2 | **P0** | business_opportunities表增强 — 项目级情报字段+红绿灯 | **CC运行中 (15:18启动)** |
+
+**状态更新**: 
+- 利用空闲目录kimi1/kimi2启动2个P0客户情报Issue
+- E2E中层测试: 390 passed, 28 skipped ✅
+- **当前运行中**: 7个CC (#171, #625, #629, #252, #70, #633, #634)
+
 ## 会话监控命令
 
 ```bash
 # 查看所有CC会话
 tmux list-sessions | grep "cc-"
 
-# 查看实时日志（5个运行中）
+# 查看实时日志（7个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-171.log  # Issue #171, P0/test-failed, 14:55启动
 tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log  # Issue #625, test-failed, 14:55重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log  # Issue #629, P1, 14:44重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log  # Issue #252, P0/test-failed, 15:05重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, P1/test-failed, 15:08重启
+tail -f /home/ubuntu/cc_scheduler/logs/backend-633.log  # Issue #633, P0, 15:15启动
+tail -f /home/ubuntu/cc_scheduler/logs/backend-634.log  # Issue #634, P0, 15:18启动
 # tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log  # Issue #623, P0, CC已完成, PR#1071
 # tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, pipeline项目, 非backend
 ```

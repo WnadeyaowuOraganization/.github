@@ -123,7 +123,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 
 | 项目     | 仓库                                          | 主目录 | 外接目录 |
 |----------|-----------------------------------------------|--------|----------|
-| play     | `WnadeyaowuOraganization/wande-play`          | `/home/ubuntu/projects/wande-play` | `wande-play-kimi1` ~ `kimi10` |
+| play     | `WnadeyaowuOraganization/wande-play`          | `/home/ubuntu/projects/wande-play` | `wande-play-kimi1` ~ `kimi20` |
 | plugins  | `WnadeyaowuOraganization/wande-gh-plugins`    | `/home/ubuntu/projects/wande-gh-plugins` | `wande-gh-plugins-glm1` ~ `glm4` |
 
 所有目录在 `/home/ubuntu/projects/` 下。每个目录是同一仓库的独立克隆，可以同时运行不同的CC处理不同Issue。

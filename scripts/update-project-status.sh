@@ -53,12 +53,12 @@ if [ "$REPO_SHORT" = "play" ]; then
     PROJECT_ID="PVT_kwDOD3gg584BTjK2"
     FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"
     declare -A STATUS_MAP_PLAY
-    STATUS_MAP_PLAY["Plan"]="a098a54f"
-    STATUS_MAP_PLAY["Todo"]="7f215ba8"
-    STATUS_MAP_PLAY["In Progress"]="460111e9"
-    STATUS_MAP_PLAY["Done"]="5c3bad25"
-    STATUS_MAP_PLAY["pause"]="8b1834b0"
-    STATUS_MAP_PLAY["Fail"]="1a3fa124"
+    STATUS_MAP_PLAY["Plan"]="7beef254"
+    STATUS_MAP_PLAY["Todo"]="69f47110"
+    STATUS_MAP_PLAY["In Progress"]="c1875ac0"
+    STATUS_MAP_PLAY["Done"]="c8f40892"
+    STATUS_MAP_PLAY["pause"]="434faed7"
+    STATUS_MAP_PLAY["Fail"]="8a0d3051"
     OPTION_ID="${STATUS_MAP_PLAY[$NEW_STATUS]}"
 else
     PROJECT_ID="PVT_kwDOD3gg584BSCFx"

@@ -159,9 +159,10 @@ fi
 根据Sprint目标将Project看板中领取Plan状态相关的Issue，批量改为Todo
 - 你需要站在架构师的角度完成这些步骤:
 - 了解所有Issue的内容->结合平台已实现的功能(不重复造轮子)->规划出时间最短（多项目同时处理）、问题最少（被关联的优先、合并代码不会冲突）的Issue实现顺序->为编程CC实现Issue做好必要备注（Prompt）->评估出一个大致完成时间
-- 以上步骤的结果作为排程计划记录到`sprints/<sprint>/PLAN.md`中。另外
+- 以上步骤的结果作为排程计划记录到`sprints/<sprint>/<重点模块>/PLAN.md`中（每个重点模块一个子目录）。另外
 - 你有权将需求不明确的Issue置为pause状态
 - **Sprint 目录命名规范**: `sprints/YYYY-MM-DD/`（取 Sprint 开始日期）
+- **重点模块子目录**: 按 status.md 中「重点推进」列出的模块创建，如 `超管驾驶舱/`、`销售记录体系/`、`D3参数化/`、`其他/`
 - 需要注意的是从Project看板中获取的Issue顺序通常比较混乱，因此需要你按功能做出规划，一般情况下通过标题找到正确的顺序
 - **注意**: wande-play仓库中的Issue同时包含backend和frontend的Issue，用module:backend/module:frontend/module:pipeline/module:fullstack标签区分
 
@@ -176,16 +177,36 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "To
 #### 排程快速决策清单
 
 1. **先筛**：只选当前 Sprint 周期内创建的，或明确属于重点模块的
-2. **再分**：按模块（module:backend/frontend/pipeline/fullstack）分组
+2. **分模块**：按重点模块分组（如超管驾驶舱、销售记录、D3参数化等），各模块内再按 module:backend/frontend/pipeline/fullstack 区分
 3. **后串**：同模块内，先接口/模型后页面，先父功能后子功能；fullstack Issue优先（可Agent Teams并行）
 4. **标注**：在 PLAN.md 中每 Issue 加一行 `依赖: Issue-XXX` 或 `可被并行: 是/否`
+5. **多模块并行**：排程时同时为多个重点模块分配编程CC，不要串行处理单个模块
+
+#### Sprint 目录结构示例
+
+```
+sprints/2026-03-28/
+├── 超管驾驶舱/
+│   ├── PLAN.md              # 该模块的排程计划
+│   └── ISSUE_ASSIGN_HISTORY.md  # 该模块的指派记录
+├── 销售记录体系/
+│   ├── PLAN.md
+│   └── ISSUE_ASSIGN_HISTORY.md
+├── D3参数化/
+│   ├── PLAN.md
+│   └── ISSUE_ASSIGN_HISTORY.md
+├── 其他/
+│   ├── PLAN.md
+│   └── ISSUE_ASSIGN_HISTORY.md
+└── RETROSPECTIVE.md        # 回顾保持Sprint级别
+```
 
 ### 任务二：触发编程CC（Todo → In Progress）
 务必按排程清单分批启动编程CC，多个项目同时处理相同功能的Issue，新增的e2e测试失败（Sprint相关）的Issue优先
 1. 先检查各仓库的编程CC有没有空闲席位，没有就退出，有则下一步
 2. 检查In Progress的Issue确定是否有创建对应的PR，没有的话恢复对应目录的CC继续完成工作
 3. 查询Todo状态的Issue，为每个Issue执行pre-task后启动编程CC
-4. 记录Issue被指派到了哪个目录（指派记录文件：`sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md`）
+4. 记录Issue被指派到了哪个目录（指派记录文件：`sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md`）
 5. 持续关注Project#4有没有新增当前Sprint相关的Issue，测试失败的Issue要优先安排修复
 
 ```bash
@@ -251,7 +272,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "To
 **研发经理CC排程优先级**: `status:test-failed` 标签的Issue在Todo队列中最优先。
 
 **恢复CC时**：
-- 使用原指派目录（从 `ISSUE_ASSIGN_HISTORY.md` 提取）
+- 使用原指派目录（从对应重点模块的 `ISSUE_ASSIGN_HISTORY.md` 提取）
 - 自定义Prompt: "修复中层E2E测试失败: <失败场景> - <错误摘要>"
 
 ### 任务三：检查结果

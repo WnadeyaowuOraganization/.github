@@ -1,0 +1,1 @@
+/opt/wande-ai/tokens/wandeyaowu.pat

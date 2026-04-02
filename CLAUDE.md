@@ -74,7 +74,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 
 # 触发编程CC
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <model> [dir_suffix]
-# module: backend | frontend | app（fullstack联动）| pipeline
+# repo: backend | frontend | pipeline | app(fullstack) | plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 指定外接目录后缀（如 kimi1, glm1）
 ```
@@ -128,7 +128,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 
 所有目录在 `/home/ubuntu/projects/` 下。每个目录是同一仓库的独立克隆，可以同时运行不同的CC处理不同Issue。
 
-### run-cc.sh 的module参数
+### run-cc.sh 的repo参数
 
 | module参数 | 实际cd目录 | 说明 |
 |-----------|-----------|------|

@@ -1,6 +1,6 @@
 # Issue创建SOP — 自动编程需求源
 
-> **版本**: v1.3 | **生效日期**: 2026-03-21
+> **版本**: v2.0 | **生效日期**: 2026-04-03
 > **适用仓库**: 全部
 > **上游**: 吴耀提出需求 → Perplexity分析
 > **下游**: Claude Code从各仓库Issue中接任务 → 自动编程执行
@@ -20,24 +20,25 @@
 
 ---
 
-## 二、仓库路由决策
+## 二、仓库路由决策（Monorepo版）
 
-创建Issue前，必须先根据需求类型确定目标仓库。参照 `.github/docs/README.md` 仓库导航：
+> **2026-04-03起，backend/frontend/pipeline已合并为 `wande-play` 仓库。**
 
-| 需求特征 | 目标仓库 | 示例 |
-|---------|---------|------|
-| API接口 / 数据库 / 后端逻辑 / 定时任务 | `wande-ai-backend` | 新增招标查询接口、修改用户权限逻辑 |
-| 管理后台页面 / 运营端功能 / 后台表单 | `wande-ai-front` | 新增供应商管理页面、修改报表筛选 |
-| 前后端都涉及的功能 | **分拆为多个Issue**，分别创建在对应仓库 | 新增CRM模块 → backend一个Issue + front一个Issue |
-| Python爬虫 / 数据采集脚本 / G7e采集管线 | `wande-data-pipeline` | 招标爬虫规则调整、项目矿场采集、竞品数据采集 |
-| 基础设施 / CI/CD / 自动编程 | `wande-ai-platform` | wande-infra服务、GitHub Actions、Claude Code配置 |
-| Grasshopper参数化设计插件 / Rhino插件 | `wande-gh-plugins` | GH插件功能开发、组件新增 |
+所有业务Issue统一创建在 `wande-play` 仓库，通过 **module scope 标签** 区分类型：
+
+| 需求特征 | module标签 | 编程CC行为 | 示例 |
+|---------|-----------|-----------|------|
+| API接口/数据库/后端逻辑 | `module:backend` | cd backend/ → 单Agent TDD | 新增招标查询接口 |
+| 管理后台页面/运营端功能 | `module:frontend` | cd frontend/ → 单Agent TDD | 新增供应商管理页面 |
+| Python爬虫/数据采集/数据管线 | `module:pipeline` | cd pipeline/ → 单Agent | 招标爬虫规则调整 |
+| **前后端都涉及的功能** | `module:fullstack` | cd 根目录 → **Agent Teams 3-Agent并行** | 新增CRM模块 |
+| Grasshopper插件 | 创建在 `wande-gh-plugins` | 独立仓库 | GH插件功能 |
 
 ### 路由原则
 
-1. **单一职责**：一个Issue只在一个仓库中创建
-2. **前后端分拆**：涉及前后端的功能，必须拆为独立Issue，通过跨仓库引用建立关联
-3. **纯后端优先**：如果不确定是否需要前端改动，先创建后端Issue，后续按需追加前端Issue
+1. **统一仓库**：除GH插件外，所有业务Issue创建在 `wande-play`
+2. **前后端联动不拆分**：涉及前后端的功能创建单个Issue + `module:fullstack`，编程CC用Agent Teams并行开发
+3. **module标签必选**：每个Issue必须有且仅有一个 module scope 标签
 4. **不在.github仓库创建业务Issue**：.github仓库仅存放规范文档
 
 ---
@@ -52,9 +53,10 @@
 
 | 维度 | 创建时常用 | 说明 |
 |------|----------|------|
+| **模块范围** | `module:backend` `module:frontend` `module:pipeline` `module:fullstack` | **最重要**，决定编程CC启动目录和工作模式 |
 | 优先级 | `priority/P0` `priority/P1` `priority/P2` | P0=阻塞生产，P1=Sprint必做，P2=增强改进 |
-| 类型 | `type:feature` `type:bugfix` `type:enhancement` | 决定Claude Code的开发策略和测试要求 |
-| 状态 | `status:ready` | 创建时如果需求已明确，直接标记ready让Claude Code接任务 |
+| 类型 | `type:feature` `type:bugfix` `type:enhancement` | 决定开发策略和测试要求 |
+| 状态 | `status:ready` | 创建时如果需求已明确，直接标记ready |
 
 ### 可选标签（按需添加）
 

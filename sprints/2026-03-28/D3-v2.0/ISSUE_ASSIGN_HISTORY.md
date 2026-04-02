@@ -30,15 +30,15 @@
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| **PR #30** |
 
-**当前运行中**: 6个CC (backend#623-kimi1, backend#624-kimi2, backend#629-kimi3, backend#70-kimi4, backend#625-kimi5, backend#252-kimi6)  
-**已完成**: 12个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成, plugins#5, #858)  
+**当前运行中**: 6个CC (backend#623-kimi1, backend#85-kimi2, backend#629-kimi3, backend#70-kimi4, backend#625-kimi5, backend#252-kimi6)  
+**已完成**: 13个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成, plugins#5, #858, #624代码完成)  
 **已创建PR**: 13个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16, PR #33 - Issue #5)  
 **Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
 **Issue不存在**: 1个 (#630)  
 **暂停-需求确认**: 1个 (#631)  
-**E2E测试状态**: ✅ 所有中层测试 392 passed, 28 skipped  
+**E2E测试状态**: ✅ 所有中层测试 399 passed, 28 skipped  
 **CC恢复记录**: 2026-04-02 14:22 恢复6个中断的CC会话 (#623, #624, #629, #858, #625, #252)  
-**新增指派**: 2026-04-02 14:36 启动 #70 (backend-kimi4) 替换已完成的 #858
+**新增指派**: 2026-04-02 14:36 启动 #70 (backend-kimi4), #85 (backend-kimi2), #252 (backend-kimi6-k2.5)
 
 ## 2026-04-02 第四批指派（11:20-11:21）
 
@@ -85,6 +85,18 @@
 | #70 | backend | backend-kimi4 | **P1/test-failed** | 合同管理AI自动填充 | **CC运行中** |
 
 **状态更新**: Issue #858 (backend-kimi4) ✅ **PR已合并** → 目录释放用于 #70
+
+## 2026-04-02 第十批指派（14:36-14:38）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #85 | backend | backend-kimi2 | **P3/test-failed** | 知识库修复 | **CC运行中** |
+| #252 | backend | backend-kimi6 | **P0/test-failed** | 开发效率统计API | **CC运行中** |
+| #70 | backend | backend-kimi4 | **P1/test-failed** | 合同管理AI自动填充 | **CC重启** |
+
+**状态更新**: 
+- Issue #624 (backend-kimi2) ✅ **CC完成，已有PR #1018** → 目录释放用于 #85
+- Issue #70 (backend-kimi4) ⚠️ **CC中断，使用kimi-k2.5模型重启**
 
 ## 会话监控命令
 

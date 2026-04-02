@@ -92,13 +92,26 @@
 
 | Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
 |---------|------|------|--------|------|------|
-| #85 | backend | backend-kimi2 | **P3/test-failed** | 知识库修复 | **CC运行中** |
-| #252 | backend | backend-kimi6 | **P0/test-failed** | 开发效率统计API | **CC运行中** |
-| #70 | backend | backend-kimi4 | **P1/test-failed** | 合同管理AI自动填充 | **CC重启** |
+| #85 | backend | backend-kimi2 | **P3/test-failed** | 知识库修复 | **模型问题暂停** |
+| #252 | backend | backend-kimi6 | **P0/test-failed** | 开发效率统计API | **模型问题暂停** |
+| #70 | backend | backend-kimi4 | **P1/test-failed** | 合同管理AI自动填充 | **模型问题暂停** |
 
 **状态更新**: 
 - Issue #624 (backend-kimi2) ✅ **CC完成，已有PR #1018** → 目录释放用于 #85
 - Issue #70 (backend-kimi4) ⚠️ **CC中断，使用kimi-k2.5模型重启**
+
+## 2026-04-02 第十一批指派（15:05-15:10）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #252 | backend | backend-kimi6 | **P0/test-failed** | 开发效率统计API | **CC运行中 (15:05重启)** |
+| #70 | backend | backend-kimi4 | **P1/test-failed** | 合同管理AI自动填充 | **CC运行中 (15:08重启)** |
+
+**状态更新**: 
+- Issue #252, #70 模型服务恢复，使用 claude-opus-4-6 重启CC
+- Issue #85 是 pipeline 项目，非 backend，保持暂停
+- E2E中层测试: 392 passed, 28 skipped ✅
+- **当前运行中**: 5个CC (#171, #625, #629, #252, #70)
 
 ## 会话监控命令
 
@@ -107,13 +120,13 @@
 tmux list-sessions | grep "cc-"
 
 # 查看实时日志（5个运行中）
-tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log  # Issue #623, P0, 运行中
+tail -f /home/ubuntu/cc_scheduler/logs/backend-171.log  # Issue #171, P0/test-failed, 14:55启动
 tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log  # Issue #625, test-failed, 14:55重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log  # Issue #629, P1, 14:44重启
-tail -f /home/ubuntu/cc_scheduler/logs/backend-171.log  # Issue #171, P0/test-failed, 14:55启动
-# tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, test-failed, 模型问题暂停
-# tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, test-failed, 模型问题暂停
-# tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log  # Issue #252, test-failed, 模型问题暂停
+tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log  # Issue #252, P0/test-failed, 15:05重启
+tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, P1/test-failed, 15:08重启
+# tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log  # Issue #623, P0, CC已完成, PR#1071
+# tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, pipeline项目, 非backend
 ```
 
 ## 恢复指令

@@ -237,16 +237,25 @@
 - #637: 解决MoldLibraryMapper冲突，398个测试全部通过，部署验证中
 - #639: 实现DueDiligenceService和Controller
 - **E2E测试**: 361 passed, 161 skipped, 0 failed ✅ (环境已恢复)
-- **test-failed标签**: #393, #169 (2个)
+## 2026-04-03 第八批状态更新（08:00-08:05）
+
+**状态更新**:
+- 所有5个CC仍在运行中
+- #263: 修复Service实现中的TableDataInfo.build()调用
+- #633: 修改Client.java实体类，移除typeHandler
+- #635: 查看CRM相关Controller和Service代码结构
+- #637: 部署验证脚本失败分析中
+- #639: 运行DueDiligenceService单元测试
+- **E2E测试**: 33 passed, 127 skipped, 755 failed ❌ (环境不稳定)
+- **test-failed标签**: #393, #169 (2个，无变化)
 - **当前运行中**: 5个CC (#263, #633, #635, #637, #639)
-- **空闲目录**: kimi3 (Issue #372需要AWS S3访问权限)
+- **空闲目录**: kimi3
+- **新PR**: 无
 
 ---
 
 **状态更新**:
-- 利用kimi2空闲目录启动客户情报Phase3 P1 Issue #639
-- **当前运行中**: 6个CC (#252, #263, #636, #637, #638, #639)
-- **空闲目录**: 无
-- **E2E测试**: 385 passed, 28 skipped ✅
-- **test-failed**: 无
+- **test-failed标签**: #393, #169 (2个)
+- **当前运行中**: 5个CC (#263, #633, #635, #637, #639)
+- **空闲目录**: kimi3 (Issue #372需要AWS S3访问权限)
 

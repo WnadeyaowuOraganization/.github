@@ -141,7 +141,14 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 
 **核心原则**: 一个目录同时只能运行一个CC。多Issue并发 = 在多个目录各启动一个CC。
 
-**最大并发数**: 每个项目最多15个并发。
+**最大并发数**: 每个项目最多20个并发（kimi1~kimi20）。
+
+**主目录保留**: `/home/ubuntu/projects/wande-play` 主目录**不分配给编程CC**，仅用于：
+- CI/CD Self-hosted Runner构建部署（build-deploy-dev.yml / build-deploy.yml）
+- 研发经理CC查看代码和排程
+- Pipeline cron任务直接读取脚本
+
+编程CC一律分配到 kimi1~kimi20 外接目录，避免与CI/CD和cron任务冲突。
 
 ### 目录占用检查（强制，触发CC前必须执行）
 

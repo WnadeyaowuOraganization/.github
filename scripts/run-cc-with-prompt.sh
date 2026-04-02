@@ -1,9 +1,9 @@
 #!/bin/bash
 # run-cc-with-prompt.sh — 在tmux中启动编程CC，自定义prompt（stream-json实时日志）
 # 用法: run-cc-with-prompt.sh <repo> <prompt> <model> [dir_suffix]
-# repo: backend | front | pipeline
+# repo: backend | frontend | pipeline | app(fullstack) | plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
-# dir_suffix: 可选，指定外接目录后缀（如 kimi1, glm1）
+# dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi10）
 #
 # 操作:
 #   tail -f /home/ubuntu/cc_scheduler/logs/<repo>-<issue>.log  查看实时日志
@@ -22,30 +22,38 @@ PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 if [ -z "$REPO" ] || [ -z "$PROMPT" ]; then
     echo "用法: $0 <repo> <prompt> [model] [dir_suffix]"
-    echo "  repo: backend | front | pipeline"
-    echo "  dir_suffix: kimi1~kimi6, glm1 等（可选）"
+    echo "  repo: backend | frontend | pipeline | app | plugins"
+    echo "  dir_suffix: kimi1~kimi10（可选）"
     exit 1
 fi
 
+# wande-play monorepo: backend/frontend/pipeline/app 都在 wande-play 下
 case "$REPO" in
-  play-backend) BASE_DIR="wande-play"; SUBDIR="backend" ;;
-  play-frontend) BASE_DIR="wande-play"; SUBDIR="frontend" ;;
-  play-app) BASE_DIR="wande-play"; SUBDIR="" ;;
-  play-backend) BASE_DIR="wande-play"; SUBDIR="backend" ;;
-  play-frontend) BASE_DIR="wande-play"; SUBDIR="frontend" ;;
-  play-app) BASE_DIR="wande-play"; SUBDIR="" ;;
-  backend)  BASE_DIR="wande-ai-backend" ;;
-  front)    BASE_DIR="wande-ai-front" ;;
-  pipeline) BASE_DIR="wande-data-pipeline" ;;
-  plugins)  BASE_DIR="wande-gh-plugins" ;;
-  *)        echo "Unknown repo: $REPO"; exit 1 ;;
+  backend|frontend|pipeline|app)
+    if [ -n "$DIR_SUFFIX" ]; then
+      BASE_DIR="/home/ubuntu/projects/wande-play-${DIR_SUFFIX}"
+    else
+      BASE_DIR="/home/ubuntu/projects/wande-play"
+    fi
+    ;;
+  plugins)
+    if [ -n "$DIR_SUFFIX" ]; then
+      BASE_DIR="/home/ubuntu/projects/wande-gh-plugins-${DIR_SUFFIX}"
+    else
+      BASE_DIR="/home/ubuntu/projects/wande-gh-plugins"
+    fi
+    ;;
+  *)  echo "Unknown repo: $REPO"; exit 1 ;;
 esac
 
-if [ -n "$DIR_SUFFIX" ]; then
-  PROJECT_DIR="/home/ubuntu/projects/${BASE_DIR}-${DIR_SUFFIX}"
-else
-  PROJECT_DIR="/home/ubuntu/projects/${BASE_DIR}"
-fi
+# 根据 module cd 到对应子目录
+case "$REPO" in
+  backend)  PROJECT_DIR="$BASE_DIR/backend" ;;
+  frontend) PROJECT_DIR="$BASE_DIR/frontend" ;;
+  pipeline) PROJECT_DIR="$BASE_DIR/pipeline" ;;
+  app)      PROJECT_DIR="$BASE_DIR" ;;
+  plugins)  PROJECT_DIR="$BASE_DIR" ;;
+esac
 
 if [ ! -d "$PROJECT_DIR" ]; then
     echo "错误: 目录不存在 $PROJECT_DIR"

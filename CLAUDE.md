@@ -9,6 +9,7 @@
 2. 任务二：**触发CC** — 按照排程指派Issue到空闲目录，执行pre-task后启动编程CC，启动后更新Issue状态为In Progress
 3. 任务三：**检查结果** — 编程CC完成后检查其是否提交PR，有PR的Issue测试CC才会介入
 4. 任务四：**持续优化** — 阶段性完成Issue后都要总结一下经验，主动发现导致自动编程->自动测试中断的原因，以及各编程CC工作中重复出现的问题，不断优化工作流
+5. 任务五：**同步状态** — 完成一个重点功能后，更新 `docs/status.md` 的「工作状态」和「最近完成」章节
 
 ## 如非必要
 1. 不写业务代码
@@ -26,18 +27,16 @@ Issue创建 → [CI/CD自动] 关联Project + Status=Plan (test-failed→Todo)
          → [测试CC] E2E测试 + merge PR → Issue自动关闭 → Status=Done
 ```
 
-## 当前Sprint
+## 当前Sprint（从 status.md 读取）
 
-**周期**: 2026-03-28 ~ 2026-04-11
-**重点模块**:
-1. **超管驾驶舱** — title含 `[超管驾驶舱]`，或标签含 `module:dashboard`
-2. **Claude Office** — title含 `[Claude Office]`
-3. **项目矿场** — title含 `[项目矿场]`，或标签含 `project-mine` / `module:bidding`
-4. **幼儿园客户发现** — title含 `[幼儿园客户发现]`
-5. **国际贸易矿场** — title含 `[国际贸易矿场]`
+> **唯一真相源**: `docs/status.md` 的「当前目标」章节。每次排程前先 `cat docs/status.md` 获取最新的Sprint目标和重点模块。
 
-## 后续Sprint
-D3相关
+```bash
+# 读取Sprint目标
+cat /home/ubuntu/projects/.github/docs/status.md
+```
+
+**如何识别重点模块Issue**：通过Issue标题中的 `[模块名]` 前缀或对应标签匹配 status.md 中列出的重点推进项。
 
 ## Project #4 看板 (wande-play专用)（唯一数据源）
 
@@ -50,12 +49,12 @@ D3相关
 
 | Status | Option ID | 含义 | 谁负责改 |
 |--------|-----------|------|---------| 
-| Plan | `a098a54f` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
-| Todo | `7f215ba8` | 已排程，等待执行 | 研发经理CC（排程时） |
-| In Progress | `460111e9` | CC正在处理 | 研发经理CC（触发CC时） |
-| Done | `5c3bad25` | 已完成 | PR merge自动 |
-| pause | `8b1834b0` | 需人工确认 | 编程CC（评估B/C时） |
-| Fail | `1a3fa124` | 执行失败 | 研发经理CC（CC失败时） |
+| Plan | `7beef254` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
+| Todo | `69f47110` | 已排程，等待执行 | 研发经理CC（排程时） |
+| In Progress | `c1875ac0` | CC正在处理 | 研发经理CC（触发CC时） |
+| Done | `c8f40892` | 已完成 | PR merge自动 |
+| pause | `434faed7` | 需人工确认 | 编程CC（评估B/C时） |
+| Fail | `8a0d3051` | 执行失败 | 研发经理CC（CC失败时） |
 
 ### 辅助脚本（位于 .github/scripts/）
 
@@ -290,6 +289,33 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "Fa
 
 ### 4. 已落地优化
 - [commit/PR] `<优化描述>` — 解决 `<问题>`
+```
+
+### 任务五：同步状态（更新 status.md）
+
+当以下条件满足时，更新 `docs/status.md` 并 push 到 main：
+- 一个重点功能（status.md「重点推进」中列出的）的所有Issue进入Done
+- Sprint目标或重点模块发生变更
+- 看板状态数据有显著变化（单次更新 ≥10 个 Issue 状态）
+
+**更新内容**：
+1. 「重点推进」— 将已完成的功能勾选 `[x]`
+2. 「工作状态」— 更新看板各状态数量
+3. 「最近完成」— 追加新完成的Issue（保留最近10条）
+4. 「最后更新」时间戳
+
+```bash
+# 读取当前status.md
+cat /home/ubuntu/projects/.github/docs/status.md
+
+# 编辑后推送
+cd /home/ubuntu/projects/.github
+git add docs/status.md
+git commit -m "docs(status): 更新工作状态 — <简要说明>"
+FRESH_TOKEN=$(bash /home/ubuntu/projects/.github/scripts/get-gh-token.sh 2>/dev/null)
+git remote set-url origin https://x-access-token:${FRESH_TOKEN}@github.com/WnadeyaowuOraganization/.github.git
+git push origin main
+git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 ```
 
 ## GitHub认证

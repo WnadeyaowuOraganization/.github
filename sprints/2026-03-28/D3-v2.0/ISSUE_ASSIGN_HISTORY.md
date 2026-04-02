@@ -36,9 +36,10 @@
 **Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
 **Issue不存在**: 1个 (#630)  
 **暂停-需求确认**: 1个 (#631)  
-**E2E测试状态**: ✅ 所有中层测试 399 passed, 28 skipped  
+**E2E测试状态**: ✅ 所有中层测试 399 passed, 28 skipped (2026-04-02 14:40)  
 **CC恢复记录**: 2026-04-02 14:22 恢复6个中断的CC会话 (#623, #624, #629, #858, #625, #252)  
-**新增指派**: 2026-04-02 14:36 启动 #70 (backend-kimi4), #85 (backend-kimi2), #252 (backend-kimi6-k2.5)
+**新增指派**: 2026-04-02 14:36 启动 #70 (backend-kimi4), #85 (backend-kimi2), #252 (backend-kimi6-k2.5)  
+**当前状态**: 所有test-failed Issue均有CC运行，E2E无新失败，等待CC完成
 
 ## 2026-04-02 第四批指派（11:20-11:21）
 
@@ -104,14 +105,13 @@
 # 查看所有CC会话
 tmux list-sessions | grep "cc-"
 
-# 查看实时日志（7个运行中）
+# 查看实时日志（6个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-624.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-858.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log
-tail -f /home/ubuntu/cc_scheduler/logs/plugins-5.log
 ```
 
 ## 恢复指令

@@ -23,7 +23,7 @@ Issue创建 → [CI/CD自动] 关联Project + Status=Plan (test-failed→Todo)
          → [研发经理CC排程] Plan → Todo
          → [研发经理CC触发] Todo → 启动编程CC → In Progress
          → [编程CC] TDD开发 + push + 创建PR
-         → [测试CC] E2E测试 + merge PR → Issue自动关闭 → Status=Done
+         → [测试CC] E2E测试 + merge PR → Issue自动关闭 + 显式更新Project看板Status=Done
 ```
 
 ## 当前Sprint
@@ -53,7 +53,7 @@ D3相关
 | Plan | `5ef24ffe` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
 | Todo | `f75ad846` | 已排程，等待执行 | 研发经理CC（排程时） |
 | In Progress | `47fc9ee4` | CC正在处理 | 研发经理CC（触发CC时） |
-| Done | `98236657` | 已完成 | PR merge自动 |
+| Done | `98236657` | 已完成 | E2E测试CC（PR merge后显式更新） |
 | pause | `1c220cdf` | 需人工确认 | 编程CC（评估B/C时） |
 | Fail | `3bdb636e` | 执行失败 | 研发经理CC（CC失败时） |
 
@@ -293,7 +293,7 @@ gh pr list --repo <仓库全名> --search "Issue-<N>" --state all --json number,
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "Fail"
 ```
 
-CC正常完成 → 不改Status（CC已创建PR，等merge后Issue自动关闭，看板自动Done）。
+CC正常完成 → 不改Status（CC已创建PR，等待E2E测试CC合并PR后显式更新Project看板为Done）。
 
 ### 任务四：持续优化（触发条件）
 

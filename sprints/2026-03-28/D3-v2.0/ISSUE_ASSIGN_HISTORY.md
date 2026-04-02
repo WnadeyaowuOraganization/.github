@@ -30,13 +30,14 @@
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| **PR #30** |
 
-**当前运行中**: 7个CC (plugins#5, backend#629, backend#623, backend#624, backend#858, backend#625, backend#252)  
-**已完成**: 10个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成)  
-**已创建PR**: 12个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16)  
+**当前运行中**: 6个CC (backend#623-kimi1, backend#624-kimi2, backend#629-kimi3, backend#858-kimi4, backend#625-kimi5, backend#252-kimi6)  
+**已完成**: 11个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成, plugins#5)  
+**已创建PR**: 13个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16, PR #33 - Issue #5)  
 **Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
 **Issue不存在**: 1个 (#630)  
 **暂停-需求确认**: 1个 (#631)  
-**E2E测试状态**: ✅ 合同管理API 4 passed, 1 skipped
+**E2E测试状态**: ✅ 合同管理API 4 passed, 1 skipped  
+**CC恢复记录**: 2026-04-02 14:22 恢复6个中断的CC会话 (#623, #624, #629, #858, #625, #252)
 
 ## 2026-04-02 第四批指派（11:20-11:21）
 

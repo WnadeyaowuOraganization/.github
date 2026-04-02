@@ -46,6 +46,7 @@ REPO_MAP["front"]="wande-ai-front"
 REPO_MAP["pipeline"]="wande-data-pipeline"
 REPO_MAP["plugins"]="wande-gh-plugins"
 REPO_MAP["play"]="wande-play"
+REPO_MAP["play"]="wande-play"
 
 # Project routing by repo
 if [ "$REPO_SHORT" = "play" ]; then
@@ -61,6 +62,8 @@ if [ "$REPO_SHORT" = "play" ]; then
     OPTION_ID="${STATUS_MAP_PLAY[$NEW_STATUS]}"
 else
     PROJECT_ID="PVT_kwDOD3gg584BSCFx"
+    FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
+fi
     FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
 fi
 

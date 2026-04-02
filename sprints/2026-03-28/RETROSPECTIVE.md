@@ -76,7 +76,8 @@
 3. **CRM直销商机DELETE测试失败** — 修正响应数据提取方式(data.id而非data)
 
 ### 当前测试状态
-- **中层E2E测试**: 377 passed, 25 skipped, 0 failed ✅
+- **中层E2E测试**: 379 passed, 28 skipped, 0 failed ✅
+- **合同编号生成API**: Issue #171 已完成，PR #1072 已创建
 - **测试提交**: commit f14e8dd 已推送到 wande-ai-e2e 仓库
 
 ---

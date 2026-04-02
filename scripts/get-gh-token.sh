@@ -10,7 +10,7 @@ get_gh_token() {
   local cwd="${PWD:-$(pwd)}"
 
   # e2e目录强制使用wandeyaowu PAT
-  if [[ "$cwd" == */wande-ai-e2e* ]]; then
+  if [[ "$cwd" == */e2e* ]]; then
     cat "$TOKEN_DIR/wandeyaowu.pat" 2>/dev/null
     return
   fi

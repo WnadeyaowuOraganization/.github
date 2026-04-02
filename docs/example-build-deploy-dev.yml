@@ -1,0 +1,80 @@
+# 示例：更新后的build-deploy-dev.yml
+# 展示如何调用统一的post-task.sh
+
+name: Build and Deploy Dev
+
+on:
+  push:
+    branches:
+      - dev
+      - 'feature-**'
+  pull_request:
+    branches:
+      - dev
+
+concurrency:
+  group: backend-dev-${{ github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  # Job 1: feature分支push → post-task（评论Issue + 创建PR）
+  post-task:
+    name: Post-task自动化
+    if: startsWith(github.ref, 'refs/heads/feature-')
+    runs-on: [self-hosted, linux, x64, g7e]
+    environment: develop
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: 执行post-task脚本（统一版本）
+        run: |
+          # 检出最新代码
+          cd /home/ubuntu/projects/wande-ai-backend
+          git fetch origin ${{ github.ref_name }}
+          git checkout ${{ github.ref_name }}
+          git pull origin ${{ github.ref_name }}
+
+          # 设置环境变量
+          export REPO_FULL="WnadeyaowuOraganization/wande-ai-backend"
+          export PROJECT_DIR="/home/ubuntu/projects/wande-ai-backend"
+          export BRANCH="${{ github.ref_name }}"
+
+          # 调用统一的post-task.sh（关键修改点）
+          bash /home/ubuntu/projects/.github/scripts/post-task.sh
+
+  # Job 2: dev分支push → 构建 + 部署到dev环境
+  build-deploy-dev:
+    name: 构建并部署到Dev
+    if: github.ref == 'refs/heads/dev'
+    runs-on: [self-hosted, linux, x64, g7e]
+    environment: develop
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 构建项目
+        run: |
+          cd /home/ubuntu/projects/wande-ai-backend
+          mvn clean package -DskipTests
+
+      - name: 部署到Dev环境
+        run: |
+          cd /home/ubuntu/projects/wande-ai-backend
+          bash script/deploy-dev.sh
+
+  # Job 3: PR创建/更新 → 运行单元测试
+  unit-test:
+    name: 单元测试
+    if: github.event_name == 'pull_request'
+    runs-on: [self-hosted, linux, x64, g7e]
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 运行单元测试
+        run: |
+          cd /home/ubuntu/projects/wande-ai-backend
+          mvn test

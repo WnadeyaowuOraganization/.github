@@ -1,0 +1,78 @@
+# D3-v2.0 Issue 指派记录
+
+## 2026-04-02 指派记录
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #85 | front | front-kimi1 | P1/test-failed | 合同管理跨模块打通前端 | **PR #474** |
+| #623 | backend | backend-kimi2 | P0 | 模具库数据化 | **已重启CC** |
+| #624 | backend | backend-kimi2 | P0 | 模具选型引擎 | **PR #1018** |
+| #626 | backend | backend-kimi3 | P0 | 模具接口标准化 | In Progress |
+| #627 | backend | backend-kimi4 | P0 | 钢架自动选型规则 | **Issue不存在** |
+| #1 | plugins | plugins-glm1 | P0 | G7e D3云端引擎代码迁入 | **PR #28** |
+| #17 | plugins | plugins-glm2 | P0 | 2D板材排料电池包 | In Progress |
+
+## 2026-04-02 第二批指派（10:36-10:37）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #56 | backend | backend-kimi1 | P1 | 国际贸易矿场-国际客户CRUD API | **已完成** |
+| #70 | backend | backend-kimi2 | P1 | 合同管理AI自动填充 | **已重启CC** |
+| #43 | front | front-kimi2 | P1 | 合同管理跨模块打通页面 | **已完成** |
+| #2 | plugins | plugins-glm3 | P1 | DfMA制造可行性自动检测引擎 | **PR #29** |
+| #3 | plugins | plugins-glm4 | P1 | 几何审计脚本 | **已完成** |
+
+## 2026-04-02 第三批指派（10:50-10:51）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #858 | backend | backend-kimi3 | **P0/E2E阻塞** | wdpp_tender_data.has_embedding类型不匹配 | **PR #1074** |
+| #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
+| #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| In Progress |
+
+**当前运行中**: 11个CC  
+**已完成**: 6个 (#3, #43, #56, #624, #85, #2代码完成)  
+**已创建PR**: 7个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2)  
+**待创建PR**: 无
+
+## 2026-04-02 第四批指派（11:20-11:21）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #171 | backend | backend-kimi1 | **P1/E2E阻塞** | 合同编号生成API | **PR #1072** |
+
+## 2026-04-02 第五批指派（11:35-11:36）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #625 | backend | backend-kimi2 | **P1** | 新模具定义流程 | In Progress |
+| #628 | backend | backend-kimi3 | **P1** | 历史项目结构化索引 | **已完成** |
+| #5 | plugins | plugins-glm1 | **P1** | CNC/激光切割文件直接输出 | In Progress |
+| #16 | plugins | plugins-glm2 | **P1** | GH材质双向同步 | In Progress |
+
+## 会话监控命令
+
+```bash
+# 查看所有CC会话
+tmux list-sessions | grep "cc-"
+
+# 查看实时日志（10个运行中）
+tail -f /home/ubuntu/cc_scheduler/logs/front-85.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-56.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-624.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-627.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-858.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-632.log
+tail -f /home/ubuntu/cc_scheduler/logs/plugins-2.log
+tail -f /home/ubuntu/cc_scheduler/logs/plugins-4.log
+```
+
+## 恢复指令
+
+如果CC中断，使用以下命令恢复：
+```bash
+# 示例：恢复Issue #623
+bash /home/ubuntu/projects/.github/scripts/run-cc.sh backend 623 claude-opus-4-6 kimi1
+```

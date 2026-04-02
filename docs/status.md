@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-03 by Perplexity Computer
+> ⏰ 最后更新：2026-04-03 02:30 by Perplexity Computer
 
 ---
 
@@ -20,12 +20,11 @@
 
 ## 🏗️ 仓库架构
 
-> **2026-04-02起，backend和front合并为 Monorepo `wande-play`。** 旧仓库 wande-ai-backend / wande-ai-front 保留但不再新增Issue。
+> **2026-04-02起，backend和front合并为 Monorepo `wande-play`。** 2026-04-03起，data-pipeline 也整合进 wande-play/pipeline。旧仓库保留但不再新增Issue。
 
 | 仓库 | 用途 | 看板 |
 |------|------|------|
-| [wande-play](https://github.com/WnadeyaowuOraganization/wande-play) | Monorepo：后端(Spring Boot) + 前端(Vue3) + E2E(Playwright) + 接口契约 | Project#4 |
-| [wande-data-pipeline](https://github.com/WnadeyaowuOraganization/wande-data-pipeline) | 数据采集管线 — 项目矿场/招标采集（Python，运行在G7e） | Project#2 |
+| [wande-play](https://github.com/WnadeyaowuOraganization/wande-play) | Monorepo：后端(Spring Boot) + 前端(Vue3) + E2E(Playwright) + 数据管线(Python) + 接口契约 | Project#4 |
 | [wande-gh-plugins](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | Grasshopper 参数化插件库 | Project#2 |
 | [.github](https://github.com/WnadeyaowuOraganization/.github) | 组织级配置 — 研发经理CC指令/辅助脚本/Sprint记录 | — |
 
@@ -34,6 +33,7 @@
 |------|------|
 | wande-ai-backend | 已合并入 wande-play/backend |
 | wande-ai-front | 已合并入 wande-play/frontend |
+| wande-data-pipeline | 已合并入 wande-play/pipeline |
 
 ### Issue 路由规则
 
@@ -42,7 +42,7 @@
 | Java/Spring Boot 后端 | wande-play（标签 `module:backend`） |
 | Vue3/Vben Admin 前端 | wande-play（标签 `module:frontend`） |
 | 前后端联动 | wande-play（标签 `module:fullstack`） |
-| Python爬虫/采集/G7e采集 | wande-data-pipeline |
+| Python爬虫/采集/G7e采集 | wande-play（标签 `module:pipeline`） |
 | Grasshopper插件 | wande-gh-plugins |
 | 基础设施/CI/CD/自动编程 | .github |
 
@@ -63,6 +63,7 @@
 | D9 | 04-02 | ✅ | Monorepo：backend+front合并为 wande-play | 减少跨仓库协调成本，支持Agent Teams并行开发 | 吴耀 |
 | D10 | 04-02 | ✅ | Project#4 (wande-play研发看板) 替代 Project#2 管理play仓库Issue | Monorepo需要独立看板 | 吴耀 |
 | D11 | 03-28 | ✅ | PR创建职责固化给编程CC（gh pr create --base dev） | post-task.sh触发不稳定，PR创建回归编程CC第三阶段 | 吴耀 |
+| D12 | 04-03 | ✅ | data-pipeline 整合进 wande-play/pipeline | 统一Monorepo管理，减少跨仓库协调 | 吴耀 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权

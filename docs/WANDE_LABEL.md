@@ -170,39 +170,39 @@ Fixes WnadeyaowuOraganization/wande-ai-backend#15
 
 | 标签 | 颜色 | 含义 |
 |------|------|------|
-| `module:crm` | #5319E7 | CRM客户关系管理 |
-| `module:bidding` | #0052CC | 项目矿场/招投标 |
-| `module:execution` | #006B75 | 中标后执行管理 |
-| `module:knowledge` | #C5DEF5 | 知识库 |
-| `module:wecom` | #0E8A16 | 企业微信集成 |
-| `module:rbac` | #D4C5F9 | 权限与角色控制 |
-| `module:cockpit` | #F9D0C4 | 超管驾驶舱 |
-| `module:brand` | #01696F | 品牌中心 |
-| `module:ai-assistant` | #7057FF | AI助手/对话 |
-| `module:analytics` | #5319E7 | 数据分析/报表 |
+| `biz:crm` | #5319E7 | CRM客户关系管理 |
+| `biz:bidding` | #0052CC | 项目矿场/招投标 |
+| `biz:execution` | #006B75 | 中标后执行管理 |
+| `biz:knowledge` | #C5DEF5 | 知识库 |
+| `biz:wecom` | #0E8A16 | 企业微信集成 |
+| `biz:rbac` | #D4C5F9 | 权限与角色控制 |
+| `biz:cockpit` | #F9D0C4 | 超管驾驶舱 |
+| `biz:brand` | #01696F | 品牌中心 |
+| `biz:ai-assistant` | #7057FF | AI助手/对话 |
+| `biz:analytics` | #5319E7 | 数据分析/报表 |
 
 ### 仓库特有模块
 
 **wande-ai-backend**:
 | 标签 | 颜色 | 含义 |
 |------|------|------|
-| `module:api` | #0E8A16 | REST API端点 |
-| `module:migration` | #D93F0B | 数据库迁移 |
-| `module:scheduler` | #0075CA | 定时任务/调度器 |
+| `biz:api` | #0E8A16 | REST API端点 |
+| `biz:migration` | #D93F0B | 数据库迁移 |
+| `biz:scheduler` | #0075CA | 定时任务/调度器 |
 
 **wande-ai-front**:
 | 标签 | 颜色 | 含义 |
 |------|------|------|
-| `module:dashboard` | #0052CC | 仪表盘/看板页面 |
-| `module:form` | #BFD4F2 | 表单/输入组件 |
-| `module:chart` | #5319E7 | 图表/可视化 |
+| `biz:dashboard` | #0052CC | 仪表盘/看板页面 |
+| `biz:form` | #BFD4F2 | 表单/输入组件 |
+| `biz:chart` | #5319E7 | 图表/可视化 |
 
 **wande-ai-web**:
 | 标签 | 颜色 | 含义 |
 |------|------|------|
-| `module:portal` | #006B75 | 员工门户 |
-| `module:mobile` | #0E8A16 | 移动端适配 |
-| `module:supplier` | #FBCA04 | 供应商协作 |
+| `biz:portal` | #006B75 | 员工门户 |
+| `biz:mobile` | #0E8A16 | 移动端适配 |
+| `biz:supplier` | #FBCA04 | 供应商协作 |
 
 ---
 
@@ -225,25 +225,25 @@ Fixes WnadeyaowuOraganization/wande-ai-backend#15
 ### 示例1：新增回款API（纯后端）
 ```
 module:backend  priority/P0  type:feature  status:ready
-approval:required  module:execution  source:perplexity  size/M
+approval:required  biz:execution  source:perplexity  size/M
 ```
 
 ### 示例2：修复登录Bug（纯前端）
 ```
 module:frontend  priority/P1  type:bugfix  status:ready
-approval:auto  module:rbac  source:user  size/S
+approval:auto  biz:rbac  source:user  size/S
 ```
 
 ### 示例3：招标采集规则调整（纯爬虫）
 ```
 module:pipeline  priority/P1  type:enhancement  status:ready
-module:bidding  source:perplexity  size/S
+biz:bidding  source:perplexity  size/S
 ```
 
 ### 示例4：回款监控台（前后端联动 — Agent Teams模式）
 ```
 module:fullstack  priority/P0  type:feature  status:ready
-approval:required  module:execution  source:perplexity  size/L
+approval:required  biz:execution  source:perplexity  size/L
 ```
 Issue body中必须同时包含后端API规格和前端页面要求，编程CC会先更新shared/api-contracts/接口契约再创建3-Agent Team并行开发。
 

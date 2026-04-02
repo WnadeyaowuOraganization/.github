@@ -40,10 +40,10 @@ run_round() {
   echo "{\"current_round\": $round, \"backend_issue\": $backend_issue, \"front_issue\": $front_issue, \"status\": \"running\", \"started_at\": \"$(date -Iseconds)\"}" > $STATUS_FILE
   
   # 并行启动backend和front CC
-  su - ubuntu -c "export GH_TOKEN=\$($GH_TOKEN_CMD) && cd /home/ubuntu/projects/wande-ai-backend && claude -p '拾取并完成 Issue #$backend_issue' --output-format text" > $LOGDIR/backend-$backend_issue.log 2>&1 &
+  su - ubuntu -c "export GH_TOKEN=\$($GH_TOKEN_CMD) && cd /home/ubuntu/projects/wande-play/backend && claude -p '拾取并完成 Issue #$backend_issue' --output-format text" > $LOGDIR/backend-$backend_issue.log 2>&1 &
   local backend_pid=$!
   
-  su - ubuntu -c "export GH_TOKEN=\$($GH_TOKEN_CMD) && cd /home/ubuntu/projects/wande-ai-front && claude -p '拾取并完成 Issue #$front_issue' --output-format text" > $LOGDIR/front-$front_issue.log 2>&1 &
+  su - ubuntu -c "export GH_TOKEN=\$($GH_TOKEN_CMD) && cd /home/ubuntu/projects/wande-play/frontend && claude -p '拾取并完成 Issue #$front_issue' --output-format text" > $LOGDIR/front-$front_issue.log 2>&1 &
   local front_pid=$!
   
   log "Backend PID: $backend_pid | Front PID: $front_pid"
@@ -76,8 +76,8 @@ run_round() {
   sleep 5
   local b_closed=false
   local f_closed=false
-  check_issue_closed wande-ai-backend $backend_issue && b_closed=true
-  check_issue_closed wande-ai-front $front_issue && f_closed=true
+  check_issue_closed wande-play $backend_issue && b_closed=true
+  check_issue_closed wande-play $front_issue && f_closed=true
   
   log "Round $round Result: backend#$backend_issue=$b_closed front#$front_issue=$f_closed"
   
@@ -96,8 +96,8 @@ for round in 1 2 3 4 5 6; do
   # 跳过已完成的
   b_done=false
   f_done=false
-  check_issue_closed wande-ai-backend $backend_issue && b_done=true
-  check_issue_closed wande-ai-front $front_issue && f_done=true
+  check_issue_closed wande-play $backend_issue && b_done=true
+  check_issue_closed wande-play $front_issue && f_done=true
   
   if [ "$b_done" = true ] && [ "$f_done" = true ]; then
     log "Round $round: SKIPPED (both issues already closed)"

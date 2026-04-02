@@ -16,9 +16,9 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 source "${SCRIPT_DIR}/get-gh-token.sh"
 
 case "$REPO" in
-  backend)   BASE_DIR="wande-ai-backend"; REPO_FULL="WnadeyaowuOraganization/wande-ai-backend" ;;
-  front)     BASE_DIR="wande-ai-front";   REPO_FULL="WnadeyaowuOraganization/wande-ai-front" ;;
-  pipeline)  BASE_DIR="wande-data-pipeline"; REPO_FULL="WnadeyaowuOraganization/wande-data-pipeline" ;;
+  backend)   BASE_DIR="wande-play/backend"; REPO_FULL="WnadeyaowuOraganization/wande-play" ;;
+  frontend)  BASE_DIR="wande-play/frontend"; REPO_FULL="WnadeyaowuOraganization/wande-play" ;;
+  pipeline)  BASE_DIR="wande-play/pipeline"; REPO_FULL="WnadeyaowuOraganization/wande-play" ;;
   plugins)   BASE_DIR="wande-gh-plugins"; REPO_FULL="WnadeyaowuOraganization/wande-gh-plugins" ;;
   *)         echo "Unknown repo: $REPO"; exit 1 ;;
 esac

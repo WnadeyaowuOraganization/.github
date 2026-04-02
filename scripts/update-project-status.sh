@@ -1,7 +1,7 @@
 #!/bin/bash
-# update-project-status.sh - 更新Project #2看板的Status字段
+# update-project-status.sh - 更新Project #4看板的Status字段（wande-play专用）
 # 用法: update-project-status.sh <repo> <ISSUE_NUMBER> <STATUS>
-# repo:   backend | front | pipeline | plugins (可选，不传则查全部4个仓库)
+# repo:   play | backend | frontend | pipeline | plugins (可选，不传则查全部4个仓库)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 #
 # v3 (2026-03-30): 新增可选repo参数
@@ -16,7 +16,7 @@ NEW_STATUS="$3"
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
     echo "用法: $0 <repo> <ISSUE_NUMBER> <STATUS>"
-    echo "REPO:   backend | front | pipeline | plugins (可选)"
+    echo "REPO:   play | backend | frontend | pipeline | plugins (可选)"
     echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail"
     exit 1
 fi
@@ -26,12 +26,12 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
 # Status Option ID 映射
 declare -A STATUS_MAP
-STATUS_MAP["Plan"]="5ef24ffe"
-STATUS_MAP["Todo"]="f75ad846"
-STATUS_MAP["In Progress"]="47fc9ee4"
-STATUS_MAP["Done"]="98236657"
-STATUS_MAP["pause"]="1c220cdf"
-STATUS_MAP["Fail"]="3bdb636e"
+STATUS_MAP["Plan"]="7beef254"
+STATUS_MAP["Todo"]="69f47110"
+STATUS_MAP["In Progress"]="c1875ac0"
+STATUS_MAP["Done"]="c8f40892"
+STATUS_MAP["pause"]="434faed7"
+STATUS_MAP["Fail"]="8a0d3051"
 
 OPTION_ID="${STATUS_MAP[$NEW_STATUS]}"
 if [ -z "$OPTION_ID" ]; then
@@ -41,9 +41,9 @@ fi
 
 # repo短名 → 仓库全名映射
 declare -A REPO_MAP
-REPO_MAP["backend"]="wande-ai-backend"
-REPO_MAP["front"]="wande-ai-front"
-REPO_MAP["pipeline"]="wande-data-pipeline"
+REPO_MAP["backend"]="wande-play"
+REPO_MAP["frontend"]="wande-play"
+REPO_MAP["pipeline"]="wande-play"
 REPO_MAP["plugins"]="wande-gh-plugins"
 REPO_MAP["play"]="wande-play"
 REPO_MAP["play"]="wande-play"
@@ -61,10 +61,8 @@ if [ "$REPO_SHORT" = "play" ]; then
     STATUS_MAP_PLAY["Fail"]="8a0d3051"
     OPTION_ID="${STATUS_MAP_PLAY[$NEW_STATUS]}"
 else
-    PROJECT_ID="PVT_kwDOD3gg584BSCFx"
-    FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
-fi
-    FIELD_ID="PVTSSF_lADOD3gg584BSCFxzg_r2go"
+    PROJECT_ID="PVT_kwDOD3gg584BTjK2"
+    FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"
 fi
 
 # --- 查询Item ID ---
@@ -72,7 +70,7 @@ if [ -n "$REPO_SHORT" ]; then
     # 指定repo: 只查1个仓库
     REPO_FULL="${REPO_MAP[$REPO_SHORT]}"
     if [ -z "$REPO_FULL" ]; then
-        echo "错误: 未知仓库 '$REPO_SHORT' (可选: backend | front | pipeline | plugins)"
+        echo "错误: 未知仓库 '$REPO_SHORT' (可选: play | backend | frontend | pipeline | plugins)"
         exit 1
     fi
 
@@ -101,21 +99,21 @@ if issue:
 else
     # 不传repo: 并行查4个仓库
     QUERY='query($owner: String!, $number: Int!) {
-      backend: repository(owner: $owner, name: "wande-ai-backend") {
+      backend: repository(owner: $owner, name: "wande-play") {
         issue(number: $number) {
           projectItems(first: 3) {
             nodes { id project { id } }
           }
         }
       }
-      front: repository(owner: $owner, name: "wande-ai-front") {
+      front: repository(owner: $owner, name: "wande-play") {
         issue(number: $number) {
           projectItems(first: 3) {
             nodes { id project { id } }
           }
         }
       }
-      pipeline: repository(owner: $owner, name: "wande-data-pipeline") {
+      pipeline: repository(owner: $owner, name: "wande-play") {
         issue(number: $number) {
           projectItems(first: 3) {
             nodes { id project { id } }

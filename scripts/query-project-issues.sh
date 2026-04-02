@@ -19,7 +19,7 @@ STATUS_NAME="${2:-all}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
-PROJECT_ID="PVT_kwDOD3gg584BSCFx"
+PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 
 # --- GraphQL查询模板 ---
 # 带服务端过滤（指定status时使用）
@@ -161,9 +161,9 @@ REPO_NAME = os.getenv('REPO_NAME', 'all')
 STATUS_NAME = os.getenv('STATUS_NAME', 'all')
 
 repo_map = {
-    'WnadeyaowuOraganization/wande-ai-backend': 'backend',
-    'WnadeyaowuOraganization/wande-ai-front': 'front',
-    'WnadeyaowuOraganization/wande-data-pipeline': 'pipeline',
+    'WnadeyaowuOraganization/wande-play': 'play',
+    ,
+    ,
     'WnadeyaowuOraganization/wande-gh-plugins': 'plugins',
 }
 

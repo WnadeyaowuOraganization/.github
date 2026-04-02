@@ -3,7 +3,7 @@
 
 Usage:
     export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-token.py)
-    gh issue list --repo WnadeyaowuOraganization/wande-ai-backend
+    gh issue list --repo WnadeyaowuOraganization/wande-play
 
 Config: /home/ubuntu/projects/.github/scripts/github-app/config.env
 Key:    /home/ubuntu/projects/.github/scripts/github-app/private-key.pem

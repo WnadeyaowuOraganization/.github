@@ -30,11 +30,13 @@
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| **PR #30** |
 
-**当前运行中**: 4个CC (plugins#5, backend#629, backend#630, backend#631)  
+**当前运行中**: 6个CC (plugins#5, backend#629, backend#623, backend#624, backend#858, backend#625)  
 **已完成**: 10个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成)  
 **已创建PR**: 12个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16)  
 **Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
-**E2E测试状态**: ✅ 593 passed, 162 skipped, 0 failed
+**Issue不存在**: 1个 (#630)  
+**暂停-需求确认**: 1个 (#631)  
+**E2E测试状态**: ✅ 合同管理API 4 passed, 1 skipped
 
 ## 2026-04-02 第四批指派（11:20-11:21）
 
@@ -56,8 +58,17 @@
 | Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
 |---------|------|------|--------|------|------|
 | #629 | backend | backend-kimi2 | **P1** | 施工安装包自动生成 | **CC运行中** |
-| #630 | backend | backend-kimi3 | **P1** | 采购下料单自动生成 | **CC运行中** |
-| #631 | backend | backend-kimi4 | **P1** | 车间加工图纸自动生成（广美模式） | **CC运行中** |
+| #630 | backend | backend-kimi3 | **P1** | 采购下料单自动生成 | **Issue不存在** |
+| #631 | backend | backend-kimi4 | **P1** | 车间加工图纸自动生成（广美模式） | **暂停-需求确认** |
+
+## 2026-04-02 第七批指派（14:05-14:06）
+
+| Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
+|---------|------|------|--------|------|------|
+| #623 | backend | backend-kimi1 | **P0** | 模具库数据化 | **CC运行中** |
+| #624 | backend | backend-kimi3 | **P0** | 模具选型引擎 | **CC运行中** |
+| #858 | backend | backend-kimi4 | **P0/E2E阻塞** | wdpp_tender_data.has_embedding类型不匹配 | **CC运行中** |
+| #625 | backend | backend-kimi5 | **P1** | 新模具定义流程 | **CC运行中** |
 
 ## 会话监控命令
 
@@ -65,17 +76,13 @@
 # 查看所有CC会话
 tmux list-sessions | grep "cc-"
 
-# 查看实时日志（10个运行中）
-tail -f /home/ubuntu/cc_scheduler/logs/front-85.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-56.log
+# 查看实时日志（6个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-624.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-627.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log
 tail -f /home/ubuntu/cc_scheduler/logs/backend-858.log
-tail -f /home/ubuntu/cc_scheduler/logs/backend-632.log
-tail -f /home/ubuntu/cc_scheduler/logs/plugins-2.log
-tail -f /home/ubuntu/cc_scheduler/logs/plugins-4.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log
+tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log
+tail -f /home/ubuntu/cc_scheduler/logs/plugins-5.log
 ```
 
 ## 恢复指令

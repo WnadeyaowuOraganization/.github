@@ -62,7 +62,7 @@
 | D8 | 04-02 | ✅ | 销售记录三维驱动：流程+项目+时间 | 替代纯手动周报 | 吴耀 |
 | D9 | 04-02 | ✅ | Monorepo：backend+front合并为 wande-play | 减少跨仓库协调成本，支持Agent Teams并行开发 | 吴耀 |
 | D10 | 04-02 | ✅ | Project#4 (wande-play研发看板) 替代 Project#2 管理play仓库Issue | Monorepo需要独立看板 | 吴耀 |
-| D11 | 03-28 | ✅ | PR创建由编程CC负责（gh pr create --base dev），弃用post-task.sh | 简化流水线，减少中间环节 | 吴耀 |
+| D11 | 03-28 | ✅ | PR创建职责固化给编程CC（gh pr create --base dev） | post-task.sh触发不稳定，PR创建回归编程CC第三阶段 | 吴耀 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权

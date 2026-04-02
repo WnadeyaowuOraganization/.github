@@ -141,7 +141,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 
 **核心原则**: 一个目录同时只能运行一个CC。多Issue并发 = 在多个目录各启动一个CC。
 
-**最大并发数**: 每个项目最多6个并发。
+**最大并发数**: 每个项目最多15个并发。
 
 ### 目录占用检查（强制，触发CC前必须执行）
 

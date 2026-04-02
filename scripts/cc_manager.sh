@@ -34,7 +34,9 @@ echo $$ > "$LOCK_FILE"
 log "启动研发经理CC"
 
 # 获取GH_TOKEN
-export GH_TOKEN=$(bash /home/ubuntu/projects/.github/scripts/get-gh-token.sh)
+export GH_TOKEN=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
+export ANTHROPIC_BASE_URL=http://localhost:9855
+export ANTHROPIC_API_KEY=dummy
 export PATH="/home/ubuntu/.local/bin:$PATH"
 export HOME="/home/ubuntu"
 

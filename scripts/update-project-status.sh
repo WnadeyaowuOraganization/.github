@@ -156,7 +156,7 @@ for repo, val in data.items():
 fi
 
 if [ -z "$ITEM_IDS" ]; then
-    echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #2 中的 Item"
+    echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #4 中的 Item"
     exit 1
 fi
 

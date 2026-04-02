@@ -1,5 +1,5 @@
 #!/bin/bash
-# query-project-issues.sh - 查询Project #2中指定仓库和状态的Issue
+# query-project-issues.sh - 查询Project #4中指定仓库和状态的Issue
 # 用法: query-project-issues.sh [repo] [status]
 # repo: backend | front | pipeline | plugins | all (默认all)
 # status: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
@@ -162,8 +162,6 @@ STATUS_NAME = os.getenv('STATUS_NAME', 'all')
 
 repo_map = {
     'WnadeyaowuOraganization/wande-play': 'play',
-    ,
-    ,
     'WnadeyaowuOraganization/wande-gh-plugins': 'plugins',
 }
 
@@ -171,7 +169,7 @@ data = json.load(open('$TMPFILE'))
 items = data.get('nodes', [])
 total_items = data.get('totalCount', '?')
 
-print(f'Project #2: {REPO_NAME if REPO_NAME != \"all\" else \"all\"} / {STATUS_NAME if STATUS_NAME != \"all\" else \"all\"}  (server totalCount: {total_items})')
+print(f'Project #4: {REPO_NAME if REPO_NAME != \"all\" else \"all\"} / {STATUS_NAME if STATUS_NAME != \"all\" else \"all\"}  (server totalCount: {total_items})')
 print('=' * 100)
 
 results = []

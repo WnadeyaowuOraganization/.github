@@ -68,10 +68,10 @@ echo "$(date): Starting CC $SESSION in $WORK_DIR (model=$MODEL)" | tee "$LOGFILE
 # Use stream-parser if available, fallback to tee
 if [ -f "$PARSER" ]; then
   tmux new-session -d -s "$SESSION" -c "$WORK_DIR" \
-    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --output-format stream-json 2>&1 | tee $RAW_LOG | python3 $PARSER 2>&1 | tee -a $LOGFILE"
+    "cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --output-format stream-json 2>&1 | tee $RAW_LOG | python3 $PARSER 2>&1 | tee -a $LOGFILE"
 else
   tmux new-session -d -s "$SESSION" -c "$WORK_DIR" \
-    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --output-format text 2>&1 | tee -a $LOGFILE"
+    "cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --output-format text 2>&1 | tee -a $LOGFILE"
 fi
 
 echo "CC started: tmux attach -t $SESSION"

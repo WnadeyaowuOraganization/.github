@@ -39,23 +39,23 @@ Issue创建 → [CI/CD自动] 关联Project + Status=Plan (test-failed→Todo)
 ## 后续Sprint
 D3相关
 
-## Project #2 看板（唯一数据源）
+## Project #4 看板 (wande-play专用)（唯一数据源）
 
-**看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/2
+**看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/4
 
 | 常量 | 值 |
 |------|------|
-| Project ID | `PVT_kwDOD3gg584BSCFx` |
-| Status 字段ID | `PVTSSF_lADOD3gg584BSCFxzg_r2go` |
+| Project ID | `PVT_kwDOD3gg584BTjK2` |
+| Status 字段ID | `PVTSSF_lADOD3gg584BTjK2zhAxafs` |
 
 | Status | Option ID | 含义 | 谁负责改 |
 |--------|-----------|------|---------| 
-| Plan | `5ef24ffe` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
-| Todo | `f75ad846` | 已排程，等待执行 | 研发经理CC（排程时） |
-| In Progress | `47fc9ee4` | CC正在处理 | 研发经理CC（触发CC时） |
-| Done | `98236657` | 已完成 | PR merge自动 |
-| pause | `1c220cdf` | 需人工确认 | 编程CC（评估B/C时） |
-| Fail | `3bdb636e` | 执行失败 | 研发经理CC（CC失败时） |
+| Plan | `a098a54f` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
+| Todo | `7f215ba8` | 已排程，等待执行 | 研发经理CC（排程时） |
+| In Progress | `460111e9` | CC正在处理 | 研发经理CC（触发CC时） |
+| Done | `5c3bad25` | 已完成 | PR merge自动 |
+| pause | `8b1834b0` | 需人工确认 | 编程CC（评估B/C时） |
+| Fail | `1a3fa124` | 执行失败 | 研发经理CC（CC失败时） |
 
 ### 辅助脚本（位于 .github/scripts/）
 
@@ -186,7 +186,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "To
 2. 检查In Progress的Issue确定是否有创建对应的PR，没有的话恢复对应目录的CC继续完成工作
 3. 查询Todo状态的Issue，为每个Issue执行pre-task后启动编程CC
 4. 记录Issue被指派到了哪个目录（指派记录文件：`sprints/<sprint>/ISSUE_ASSIGN_HISTORY.md`）
-5. 持续关注Project#2有没有新增当前Sprint相关的Issue，测试失败的Issue要优先安排修复
+5. 持续关注Project#4有没有新增当前Sprint相关的Issue，测试失败的Issue要优先安排修复
 
 ```bash
 # 1. 按项目查询所有In Progress状态的Issue
@@ -314,7 +314,7 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 
 | 信息 | 来源 |
 |------|------|
-| Plan队列 | `gh project item-list 2` → Status=Plan |
+| Plan队列 | `gh project item-list 4` → Status=Plan |
 | Todo队列 | 同上 → Status=Todo |
 | 执行中 | 同上 → Status=In Progress |
 | CC日志 | `/home/ubuntu/cc_scheduler/logs/<module>-<N>.log` |

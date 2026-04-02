@@ -33,7 +33,9 @@ QUERY_FILTERED='query($projectId: ID!, $filter: String!, $cursor: String) {
             ... on Issue {
               number
               title
+              state
               repository { nameWithOwner }
+              labels(first: 10) { nodes { name } }
             }
           }
           fieldValues(first: 20) {
@@ -65,7 +67,9 @@ QUERY_ALL='query($projectId: ID!, $cursor: String) {
             ... on Issue {
               number
               title
+              state
               repository { nameWithOwner }
+              labels(first: 10) { nodes { name } }
             }
           }
           fieldValues(first: 20) {
@@ -183,8 +187,14 @@ for item in items:
     title = content.get('title', '')
     repo_full = (content.get('repository') or {}).get('nameWithOwner', '')
     repo_short = repo_map.get(repo_full, repo_full)
+    issue_state = content.get('state', 'OPEN')
+    labels = [l['name'] for l in (content.get('labels') or {}).get('nodes', []) if l]
 
     if not num:
+        continue
+
+    # Skip closed issues
+    if issue_state == 'CLOSED':
         continue
 
     # 提取Status field
@@ -200,14 +210,18 @@ for item in items:
     if REPO_NAME != 'all' and repo_short != REPO_NAME:
         continue
 
-    results.append((status, num, repo_short, title))
+    # Extract key labels for display
+    module = next((l.replace('module:', '') for l in labels if l.startswith('module:')), '-')
+    priority = next((l.replace('priority/', '') for l in labels if l.startswith('priority/')), '-')
+
+    results.append((status, num, repo_short, title, module, priority, labels))
 
 # 按状态排序
 status_order = {'Plan': 0, 'Todo': 1, 'In Progress': 2, 'pause': 3, 'Fail': 4, 'Done': 5, '?': 6}
 results.sort(key=lambda x: (status_order.get(x[0], 9), x[1]))
 
-for status, num, repo, title in results:
-    print(f'{status:12} #{num:4} [{repo:20}] {title[:60]}')
+for status, num, repo, title, module, priority, labels in results:
+    print(f'{status:12} #{num:4} {module:10} {priority:3} {title[:65]}')
 
 print()
 
@@ -221,6 +235,7 @@ if len(status_counts) > 1:
 print(f'匹配条件的Issue: {len(results)}')
 
 # 机器可解析格式(stderr)
-for status, num, repo, title in results:
-    print(f'ISSUE_{num}={status}', file=sys.stderr)
+for status, num, repo, title, module, priority, labels in results:
+    labels_str = ','.join(labels)
+    print(f'ISSUE_{num}={status}|{module}|{priority}|{labels_str}', file=sys.stderr)
 "

@@ -8,7 +8,7 @@
 #   Ctrl+B D                                   脱离（测试继续运行）
 
 LOCK_FILE="/home/ubuntu/cc_scheduler/e2e_top.lock"
-E2E_DIR="/home/ubuntu/projects/wande-ai-e2e-full"
+E2E_DIR="/home/ubuntu/projects/wande-play-e2e-full/e2e"
 SESSION="e2e-top"
 LOGDIR=/home/ubuntu/cc_scheduler/logs
 mkdir -p $LOGDIR

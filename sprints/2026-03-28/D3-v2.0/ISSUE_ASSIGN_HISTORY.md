@@ -19,21 +19,21 @@
 | #56 | backend | backend-kimi1 | P1 | 国际贸易矿场-国际客户CRUD API | **已完成** |
 | #70 | backend | backend-kimi2 | P1 | 合同管理AI自动填充 | **已重启CC** |
 | #43 | front | front-kimi2 | P1 | 合同管理跨模块打通页面 | **已完成** |
-| #2 | plugins | plugins-glm3 | P1 | DfMA制造可行性自动检测引擎 | **代码已推送，待创建PR** |
+| #2 | plugins | plugins-glm3 | P1 | DfMA制造可行性自动检测引擎 | **PR #29** |
 | #3 | plugins | plugins-glm4 | P1 | 几何审计脚本 | **已完成** |
 
 ## 2026-04-02 第三批指派（10:50-10:51）
 
 | Issue # | 仓库 | 目录 | 优先级 | 描述 | 状态 |
 |---------|------|------|--------|------|------|
-| #858 | backend | backend-kimi3 | **P0/E2E阻塞** | wdpp_tender_data.has_embedding类型不匹配 | **代码完成，待创建PR** |
+| #858 | backend | backend-kimi3 | **P0/E2E阻塞** | wdpp_tender_data.has_embedding类型不匹配 | **PR #1074** |
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| In Progress |
 
 **当前运行中**: 11个CC  
 **已完成**: 6个 (#3, #43, #56, #624, #85, #2代码完成)  
-**已创建PR**: 4个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85)  
-**待创建PR**: Issue #858 (feature-issue-858), Issue #2 (feature-issue-2)
+**已创建PR**: 7个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2)  
+**待创建PR**: 无
 
 ## 2026-04-02 第四批指派（11:20-11:21）
 

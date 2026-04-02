@@ -49,12 +49,12 @@ cat /home/ubuntu/projects/.github/docs/status.md
 
 | Status | Option ID | 含义 | 谁负责改 |
 |--------|-----------|------|---------| 
-| Plan | `a098a54f` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
-| Todo | `7f215ba8` | 已排程，等待执行 | 研发经理CC（排程时） |
-| In Progress | `460111e9` | CC正在处理 | 研发经理CC（触发CC时） |
-| Done | `5c3bad25` | 已完成 | PR merge自动 |
-| pause | `8b1834b0` | 需人工确认 | 编程CC（评估B/C时） |
-| Fail | `1a3fa124` | 执行失败 | 研发经理CC（CC失败时） |
+| Plan | `7beef254` | 新Issue，待排程 | CI/CD自动（Issue创建时） |
+| Todo | `69f47110` | 已排程，等待执行 | 研发经理CC（排程时） |
+| In Progress | `c1875ac0` | CC正在处理 | 研发经理CC（触发CC时） |
+| Done | `c8f40892` | 已完成 | PR merge自动 |
+| pause | `434faed7` | 需人工确认 | 编程CC（评估B/C时） |
+| Fail | `8a0d3051` | 执行失败 | 研发经理CC（CC失败时） |
 
 ### 辅助脚本（位于 .github/scripts/）
 

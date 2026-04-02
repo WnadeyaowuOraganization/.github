@@ -30,7 +30,7 @@
 | #632 | backend | backend-kimi4 | **P0** | 发货防错系统 | **代码已推送** |
 | #4 | plugins | plugins-glm1 | P1 | 钢管下料优化（1D Nesting）| **PR #30** |
 
-**当前运行中**: 6个CC (backend#623-kimi1, backend#85-kimi2, backend#629-kimi3, backend#70-kimi4, backend#625-kimi5, backend#252-kimi6)  
+**当前运行中**: 5个CC (backend#623-kimi1, backend#85-kimi2, backend#629-kimi3, backend#70-kimi4, backend#625-kimi5) | #252 模型问题暂停  
 **已完成**: 13个 (#3, #43, #56, #624, #85, #2代码完成, #628, #4, #17, #16代码完成, plugins#5, #858, #624代码完成)  
 **已创建PR**: 13个 (PR #28 - Issue #1, PR #1018 - Issue #624, PR #474 - Issue #85, PR #1072 - Issue #171, PR #1074 - Issue #858, PR #29 - Issue #2, PR #1071 - Issue #623, PR #1075 - Issue #625, PR #30 - Issue #4, PR #31 - Issue #17, PR #32 - Issue #16, PR #33 - Issue #5)  
 **Blocked**: 1个 (#626 - 依赖#618技术标准管理中心)  
@@ -106,13 +106,13 @@
 # 查看所有CC会话
 tmux list-sessions | grep "cc-"
 
-# 查看实时日志（6个运行中）
+# 查看实时日志（5个运行中）
 tail -f /home/ubuntu/cc_scheduler/logs/backend-623.log  # Issue #623, P0, 运行中
-tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, test-failed, 14:47重启
+tail -f /home/ubuntu/cc_scheduler/logs/backend-85.log   # Issue #85, test-failed, 14:51运行中
 tail -f /home/ubuntu/cc_scheduler/logs/backend-625.log  # Issue #625, test-failed, 运行中
 tail -f /home/ubuntu/cc_scheduler/logs/backend-629.log  # Issue #629, P1, 14:44重启
 tail -f /home/ubuntu/cc_scheduler/logs/backend-70.log   # Issue #70, test-failed, 14:43重启
-tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log  # Issue #252, test-failed, kimi-k2.5
+# tail -f /home/ubuntu/cc_scheduler/logs/backend-252.log  # Issue #252, test-failed, 模型问题暂停
 ```
 
 ## 恢复指令

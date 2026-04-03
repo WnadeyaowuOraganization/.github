@@ -144,7 +144,7 @@ CC_ERROR_PATTERNS = [
 ]
 
 
-def parse_coding_cc_logs(since_dt: datetime | None) -> list[dict]:
+def parse_coding_cc_logs(since_dt: datetime | None, session_cache: dict[str, dict] | None = None) -> list[dict]:
     events = []
     if not CODING_CC_LOG_DIR.exists():
         return events
@@ -153,6 +153,12 @@ def parse_coding_cc_logs(since_dt: datetime | None) -> list[dict]:
         repo, issue_num = extract_repo_issue_from_filename(log_path.name)
         # 用文件修改时间作为只有时间的行的默认年份/日期
         mtime = datetime.fromtimestamp(log_path.stat().st_mtime, tz=timezone.utc)
+
+        # 从缓存中获取对应的 session_id 和 model
+        base = log_path.name.replace(".log", "")
+        cached_info = session_cache.get(base, {}) if session_cache else {}
+        session_id = cached_info.get("session_id", "")
+        model = cached_info.get("model", "")
 
         with open(log_path, "rb") as f:
             data = f.read().decode("utf-8", errors="replace")
@@ -189,6 +195,8 @@ def parse_coding_cc_logs(since_dt: datetime | None) -> list[dict]:
                         error_type=err_type,
                         error_message=msg,
                         source_file=str(log_path),
+                        session_id=session_id,
+                        model=model,
                         create_time=create_time,
                     ))
                     break  # 一行只算一种错误
@@ -312,6 +320,57 @@ def parse_raw_jsonl_token_stats(since_dt: datetime | None) -> dict[tuple, dict]:
                     "token_cost": cost,
                 }
     return stats
+
+
+def build_session_cache(since_dt: datetime | None) -> dict[str, dict]:
+    """构建文件名 -> session_id/model 映射，用于给 .log 事件补充信息。
+
+    返回: {base_filename: {"session_id": ..., "model": ...}}
+    例如 {"backend-133": {"session_id": "xxx", "model": "kimi-for-coding"}}
+    """
+    cache = {}
+    if not CODING_CC_LOG_DIR.exists():
+        return cache
+
+    for jsonl_path in sorted(CODING_CC_LOG_DIR.glob("*-raw.jsonl")):
+        mtime = datetime.fromtimestamp(jsonl_path.stat().st_mtime, tz=timezone.utc)
+        if since_dt and mtime < since_dt:
+            continue
+
+        # 从文件名提取 base（去掉 -raw.jsonl 后缀）
+        base = jsonl_path.name.replace("-raw.jsonl", "")
+        repo, issue_num = extract_repo_issue_from_filename(jsonl_path.name)
+
+        with open(jsonl_path, "rb") as f:
+            data = f.read().decode("utf-8", errors="replace")
+
+        session_id = None
+        model = None
+
+        for line in data.split("\n"):
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                obj = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+
+            # 从 system/init 记录提取 session_id 和 model
+            if obj.get("type") == "system" and obj.get("subtype") == "init":
+                session_id = obj.get("session_id") or obj.get("uuid")
+                model = obj.get("model")
+                break  # 只需要第一条
+
+        if session_id or model:
+            cache[base] = {
+                "session_id": session_id or "",
+                "model": model or "",
+                "repo": repo,
+                "issue_number": issue_num,
+            }
+
+    return cache
 
 
 # ---------- proxy.log 解析 ----------
@@ -500,8 +559,11 @@ def main():
     if args.since:
         since_dt = parse_iso_z(args.since)
 
+    # 先构建 session 缓存，用于给 .log 事件补充 session_id/model
+    session_cache = build_session_cache(since_dt)
+
     all_events = []
-    all_events.extend(parse_coding_cc_logs(since_dt))
+    all_events.extend(parse_coding_cc_logs(since_dt, session_cache))
     all_events.extend(parse_raw_jsonl(since_dt))
     all_events.extend(parse_proxy_log(since_dt))
     all_events.extend(parse_infra_log(since_dt))

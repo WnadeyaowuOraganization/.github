@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-04 00:44 by Perplexity Computer
+> ⏰ 最后更新：2026-04-04 02:24 by Perplexity Computer
 
 ---
 
@@ -82,6 +82,8 @@
 | D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 伟平 |
 
 | D22 | 04-03 | ✅ | 测试架构改革：编程CC接管构建部署，CI仅负责PR E2E和pipeline同步 | build-deploy-dev.yml剥离构建部署job，编程CC在feature分支完成TDD→build→deploy→smoke→PR全流程；CI pr-test.yml负责E2E自动merge/fail；cron 2h/6h兜底回归 | 伟平 |
+| D23 | 04-04 | ✅ | 根CLAUDE.md增加Issue拾取指引+清理主目录引用 | 编程CC收到非标准prompt时不知道怎么获取Issue内容（gh issue view失败后无备用方案）。根CLAUDE.md新增「Issue拾取」章节：唯一正确方式(gh issue view)+三级备用方案(token重获→curl REST API→curl评论API)+非标准prompt说明。同时修正Project看板链接(#2→#4)和辅助脚本路径，删除主目录引用 | 吴耀 |
+| D24 | 04-04 | ✅ | Thinking模式改为effort参数动态控制，由研发经理CC按Issue复杂度决策 | 原方案：settings.json全局DISABLE_THINKING=1一刀切关闭。新方案：移除所有settings.json中的DISABLE_THINKING，三个启动脚本(run-cc.sh/run-cc-with-prompt.sh/run-cc-play.sh)新增第5个参数[effort]，不传时默认medium。研发经理CC根据Issue标签决策：docs/config→low，常规CRUD→medium，多文件重构/复杂bug→high，架构级重构/fullstack→high或max | 吴耀 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权

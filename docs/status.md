@@ -1,58 +1,40 @@
 # 万德AI平台 · 项目状态
 
 > ⏰ 最后更新：2026-04-03 21:24 by Perplexity Computer
-
 ---
-
 ## 🎯 Sprint 计划
-
 | Sprint | 状态 | 开始 | 截止 | 重点功能模块 |
 |--------|------|------|------|-------------|
 | Sprint-1 | 🟢 进行中 | 2026-03-28 | 2026-04-11 | 超管驾驶舱、销售记录体系、D3参数化设计 |
 | Sprint-2 | ⏳ 待启动 | 2026-04-12 | — | 执行管理、CRM、数据迁移、品牌中心 |
-
 ### Sprint-1 重点模块
-
 | 模块 | Issue数 | 说明 | sprints子目录 |
 |------|---------|------|--------------|
 | 超管驾驶舱 | 95 | 平台系统+开发者协同+安全审计 | `sprints/sprint-1/超管驾驶舱/` |
 | 销售记录体系 | 16 | 三维驱动+记录中心+周报月报 | `sprints/sprint-1/销售记录体系/` |
 | D3参数化设计 | — | 电池包+AI集成+Web平台 | `sprints/sprint-1/D3参数化设计/` |
-
 ### Sprint-2 预览（76个Issue，已去重清理）
-
-| 模块 | Issue数 | 说明 | sprints子目录 |
-|------|---------|------|--------------|
 | 执行管理 | 57 | 数据库建表→CRUD→图纸/BOM/采购/生产/安装/验收/变更→利润/成本/回款→AI预警→EVM | `sprints/sprint-2/执行管理/` |
 | CRM | 6 | 跟进记录+商机管理+经销体系+报价引擎 | `sprints/sprint-2/CRM/` |
 | 数据迁移 | 5 | 明道云→执行管理迁移 | `sprints/sprint-2/数据迁移/` |
 | 品牌中心 | 3 | 多平台数据采集+竞品监测 | `sprints/sprint-2/品牌中心/` |
 | 其他 | 5 | 质保/协同/代理商/提成 | `sprints/sprint-2/其他/` |
-
 ### 暂不做
 - CRM明道云对接（等API Key）
-
----
-
 ## 🏗️ 仓库架构
-
 > **2026-04-02起，backend和front合并为 Monorepo `wande-play`。** 2026-04-03起，data-pipeline 也整合进 wande-play/pipeline。旧仓库保留但不再新增Issue。
-
 | 仓库 | 用途 | 看板 |
 |------|------|------|
 | [wande-play](https://github.com/WnadeyaowuOraganization/wande-play) | Monorepo：后端(Spring Boot) + 前端(Vue3) + E2E(Playwright) + 数据管线(Python) + 接口契约 | Project#4 |
 | [wande-gh-plugins](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | Grasshopper 参数化插件库 | Project#4 |
 | [.github](https://github.com/WnadeyaowuOraganization/.github) | 组织级配置 — 研发经理CC指令/辅助脚本/Sprint记录 | — |
-
 ### 已归档（仅追溯）
 | 仓库 | 说明 |
 |------|------|
 | wande-ai-backend | 已合并入 wande-play/backend |
 | wande-ai-front | 已合并入 wande-play/frontend |
 | wande-data-pipeline | 已合并入 wande-play/pipeline |
-
 ### Issue 路由规则
-
 | 类型 | 目标仓库 |
 |------|----------|
 | Java/Spring Boot 后端 | wande-play（标签 `module:backend`） |
@@ -61,11 +43,7 @@
 | Python爬虫/采集/G7e采集 | wande-play（标签 `module:pipeline`） |
 | Grasshopper插件 | wande-gh-plugins |
 | 基础设施/CI/CD/自动编程 | .github |
-
----
-
 ## 📋 重大决策
-
 | # | 日期 | 状态 | 决策 | 背景 | 决策人 |
 |---|------|------|------|------|--------|
 | D1 | 03-12 | ✅ | main-only 分支策略 | 团队小，dev分支增加合并成本 | 吴耀 |
@@ -98,46 +76,31 @@
 | D28 | 04-04 | 🟡 | 接口契约目录启用（#2586 P0） | shared/api-contracts/作为前后端唯一真相源，扫描现有API初始化契约文件；契约先行规则写入CLAUDE.md | 伟平 |
 | D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 | D30 | 04-04 | ✅ | 统一run-cc.sh为唯一CC启动脚本+Issue预取机制 | 合并run-cc-play.sh到run-cc.sh，启动前自动预取Issue内容到issue-source.md，编程CC从本地文件读取（解决kimi模型截断gh命令导致10分钟空转的问题，降至6秒）；删除round-executor.sh，修复cc-error-parser.py旧路径 | 伟平 |
-| D30 | 04-04 | ✅ | 统一run-cc.sh为唯一CC启动脚本+Issue预取机制 | 合并run-cc-play.sh到run-cc.sh，启动前自动预取Issue内容到issue-source.md，编程CC从本地文件读取（解决kimi模型截断gh命令导致10分钟空转的问题，降至6秒）；删除round-executor.sh，修复cc-error-parser.py旧路径 | 伟平 |
-
-| D30 | 04-04 | ✅ | CI测试环境隔离+pr-test.yml全面优化 | pr-test与dev环境竞态：1)新增CI专用环境(:6041/:8084)与dev(:6040/:8083)端口隔离，数据库共用 2)全局排队保证CI无并发冲突 3)去重复编译步骤 4)修复Issue号提取bug(PR body特殊字符致shell exit 127) 5)失败评论改为含用例名+错误摘要+日志链接 6)失败信息同时评论到Issue 7)新增ci-env.sh+nginx:8084 8)CLAUDE.md双环境说明 | 伟平 |
 | D30 | 04-04 | ✅ | CI测试环境隔离+pr-test.yml全面优化 | pr-test与dev环境竞态：1)新增CI专用环境(:6041/:8084)与dev(:6040/:8083)端口隔离，数据库共用 2)全局排队保证CI无并发冲突 3)去重复编译步骤 4)修复Issue号提取bug(PR body特殊字符致shell exit 127) 5)失败评论改为含用例名+错误摘要+日志链接 6)失败信息同时评论到Issue 7)新增ci-env.sh+nginx:8084 8)CLAUDE.md双环境说明 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
-
----
-
 ## 📊 工作状态
-
 ### Project#4 — wande-play 研发看板（2026-04-03 19:35）
-
 | 状态 | 数量 |
-|------|------|
 | Plan | 722 |
 | Todo | 288 |
 | In Progress | 27 |
 | 总Items | 1037 |
 | Open Issue | 1070 |
-
 **看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/4
-
 ### Project#2 — 已废弃
-
 > 2026-04-03 起 Project#2 不再使用。所有活跃 Issue 已迁移到 Project#4，wande-gh-plugins 的 22 个 Issue 也已迁移。Project#2 仅保留历史数据供追溯。
-
 ### 最近完成（wande-play 04-03）
 - [后端重构] 合并 wande-ai-api 到 wande-ai，消除42个重复类冲突 #2585 → PR #2593
 - [接口契约] 初始化 shared/api-contracts 目录与规范文档 #2586
 - [项目矿场] 新增运营仪表盘页面 #870
 - [项目矿场] 矿场运营仪表盘核心指标可视化 #869
 - [前端] URL去.html后缀+域名统一 #868
-
 ### Sprint-2 调整记录（04-03）
 - 关闭5个重复Issue：#2184→#2464, #2185→#2465, #2186→#2466, #2187→#2467, #2188→#2468
 - #2085 变更→合同联动优先级 P1→P0
 - 新增 #2506 EVM挣值管理简化版（module:fullstack, Sprint-2）
 - Sprint-2 当前：76个有效Issue（81 - 5重复）
-
 ### 基础设施变更（04-03）
 - E2E测试目录：wande-ai-e2e → wande-play-e2e-mid（中层）/ wande-play-e2e-top（顶层）
 - 316个Issue批量关联到Project#4（之前仅在Project#2）
@@ -148,22 +111,13 @@
 - Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 - 测试架构改革落地：编程CC接管构建部署，build-deploy-dev.yml仅保留pipeline sync，新增pr-test.yml自动E2E+merge/fail
 - D31决策（04-04）：编程CC职责简化 — 去掉deploy-dev.sh和Playwright步骤，只保留编译检查+单元测试；build-deploy-dev.yml补全后端/前端自动构建部署（merge到dev后触发）
-- D31决策（04-04）：编程CC职责简化 — 去掉deploy-dev.sh和Playwright步骤，只保留编译检查+单元测试；build-deploy-dev.yml补全后端/前端自动构建部署（merge到dev后触发）
 - CC prompt全面优化：研发经理(425→160行)、backend(45→28)、frontend(617→119)、E2E(263→80)
-
----
-
 ## 📌 需要对方处理
-
 ### @伟平 待讨论
 - **dev分支后端无法启动（P0）** — 已通过 #2585 / PR #2593 合并 wande-ai-api 到 wande-ai，清理 42 个重复类冲突，编译打包通过。待 pr-test.yml E2E 验证后 merge。
-
-### @伟平 待讨论
-
 ### @吴耀
 - 明道云 API Key — 解锁 CRM 对接
 - ceshi.tiyouoperation.com 决策确认 — 是否继续使用此域名
-
 ### @CC（研发经理）
 - Sprint目标以本文件「当前目标」章节为准
 - 完成一个重点功能后更新本文件的「工作状态」和「最近完成」

@@ -1,60 +1,79 @@
-# 测试架构改革方案（草稿）
+# 测试架构改革方案（已实施）
 
-> 状态：讨论中 | 创建：2026-04-03 | 待确认后实施
+> 状态：已实施 | 创建：2026-04-03 | 实施：2026-04-03
 
 ## 目标
 
-将测试环节从 AI 驱动改为 CI/CD 驱动，减少模型调用，提高效率。
+将测试环节从 AI 驱动改为 CI/CD 驱动，减少模型调用，提高效率和可靠性。
 
-## 新三层架构
-
-| 层级 | 触发方式 | 范围 | AI参与 |
-|------|---------|------|--------|
-| 快速验证 | feature push → CI | smoke + 对应模块测试 | 待讨论 |
-| 中层测试 | PR 创建/更新 → CI | 按变更模块完整E2E | 仅失败分析 |
-| 顶层测试 | cron 6h | 全量回归 | 仅创建Issue |
-
-## feature 分支流水线（整合 post-task.sh）
+## 最终架构
 
 ```
-编程CC push feature → CI 触发
-  Step 1: 构建验证（pnpm build / mvn compile）
-  Step 2: 快速验证（smoke 测试）
-  Step 3: 通过 → 自动创建 feature→dev PR
-  Step 4: 失败 → commit status 标红
+编程CC: TDD → build → deploy-dev → smoke → push feature → create PR → done
+CI (pr-test.yml): PR event → E2E test → auto merge or test-failed
+CI (build-deploy-dev.yml): dev push → pipeline sync only
+Cron: 2h mid-tier E2E (兜底) + 6h top-tier regression
 ```
 
-## PR 流水线
+## 三层测试体系
+
+| 层级 | 触发方式 | 范围 | 频率 | AI参与 |
+|------|---------|------|------|--------|
+| 编程CC内建 | 编程CC开发流程中 | TDD + build + deploy + smoke | 每次开发 | 编程CC自身 |
+| PR E2E | PR 创建/更新 → pr-test.yml | 按变更模块完整E2E | 每次PR | 仅失败分析 |
+| Cron兜底 | crontab 定时 | mid: 按模块 / top: 全量回归 | 2h / 6h | 仅创建Issue |
+
+## 编程CC开发流程
+
+```
+1. TDD: 写测试 → 写代码 → 通过
+2. build: pnpm build / mvn compile
+3. deploy-dev: 构建Docker + 部署到Lightsail测试环境
+4. smoke: 快速验证部署成功
+5. push feature → create PR → done（编程CC工作结束）
+```
+
+关键变更：构建部署由编程CC在feature分支完成，不再由CI负责。
+
+## PR 测试流水线 (pr-test.yml)
 
 ```
 PR 创建/更新 → CI 触发
-  Step 1: 按变更模块跑完整 E2E
-  Step 2: 通过 → 自动 approve + merge + Issue 标 Done
-  Step 3: 失败 → 评论 PR + Issue 标 test-failed + Todo
+  Step 1: checkout dev 分支
+  Step 2: 按变更模块跑 E2E 测试
+  Step 3: 通过 → auto approve + merge + Issue 标 Done
+  Step 4: 失败 → PR评论失败详情 + Issue 标 test-failed
 ```
 
-## 待讨论问题
+## dev push 流水线 (build-deploy-dev.yml)
 
-### 1. 快速验证的测试用例来源
-- 新功能没有对应测试用例，CI 无法独立完成快速验证
-- 方案A: CI触发后由CC补充用例（需自定义prompt，研发经理CC需协调避免目录冲突）
-- 方案B: 编程CC在push前就写好playwright测试用例
-- 方案C: 新功能跳过快速验证，只跑已有smoke
+```
+dev push → CI 触发
+  仅检查 pipeline/ 目录变更 → 同步到G7e基础目录
+```
 
-### 2. 快速验证失败时的修复闭环
-- 编程CC push后已结束工作
-- 方案A: CI失败后触发新CC会话在同目录修复
-- 方案B: 编程CC在push前就确保测试通过（Shift Left彻底化）
-- 方案C: 失败后走test-failed流程，研发经理CC重新排程
+已删除 build-backend-dev 和 build-frontend-dev jobs。
 
-### 3. 单元测试与Playwright测试的边界
-- 编程CC已有TDD（JUnit/Vitest单元测试）
-- 如果编程CC也写Playwright测试，与中层E2E用例可能重复
-- 需要明确：谁写什么层级的测试
+## Cron E2E 测试
 
-## 变更影响
+| 脚本 | 频率 | 工作目录 | 内容 |
+|------|------|---------|------|
+| e2e_mid_tier.sh | 每2小时 | /home/ubuntu/projects/wande-play-e2e-mid | git checkout dev, 按模块E2E |
+| e2e_top_tier.sh | 每6小时 | /home/ubuntu/projects/wande-play-e2e-top | git checkout dev, 全量回归 |
 
-- post-task.sh 退役，PR创建由CI自动完成
-- e2e_mid_tier.sh cron 可能退役（改为PR事件触发）
-- 编程CC CLAUDE.md 第三阶段简化
-- 测试CC角色收缩为：补充用例 + 分析复杂失败
+## 已废弃
+
+- post-task.sh: PR创建已由编程CC直接完成
+- CI快速验证(quick-verify): 编程CC内建smoke替代
+- CI构建部署(build-backend-dev, build-frontend-dev): 编程CC直接完成
+- 旧E2E工作目录: wande-ai-e2e, wande-ai-e2e-full, wande-play-e2e-full（已删除）
+
+## 角色分工
+
+| 角色 | 职责 |
+|------|------|
+| 编程CC | TDD + 构建 + 部署 + smoke + push + PR创建 |
+| pr-test.yml | E2E测试 + auto merge/fail |
+| build-deploy-dev.yml | pipeline代码同步 |
+| E2E CC (cron) | 兜底回归测试 + 失败后创建Issue |
+| 测试CC | 补充测试用例 + 分析复杂失败 |

@@ -80,6 +80,7 @@
 | D19 | 04-03 | ✅ | 首个fullstack Issue #1440（D3技术确认中心）用于测试Agent Teams | 合并#443+#1166，验证研发经理CC对module:fullstack的排程和触发 | 吴耀 |
 | D20 | 04-03 | ✅ | Claude Office新增CC实时日志显示 | 点击agent/研发经理卡片打开终端风格日志面板，3秒自动刷新 | 吴耀 |
 | D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 吴耀 |
+| D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 吴耀 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
@@ -129,6 +130,7 @@
 - query-project-issues.sh输出增加module/priority/labels列
 - Claude Office新增CC实时日志显示（/api/logs端点 + 终端风格面板）
 - 首个fullstack Issue #1440 创建（合并#443+#1166），用于Agent Teams测试
+- Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 - Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 
 ---

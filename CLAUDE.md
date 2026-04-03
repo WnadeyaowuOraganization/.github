@@ -135,31 +135,30 @@ sprints/2026-03-28/
 
 ### 任务二：触发CC（Todo → In Progress）
 
+**数据来源**: 直接读取任务一生成的 `sprints/<sprint>/<重点模块>/PLAN.md`，按排程顺序逐个指派，不需要再查询GitHub看板。
+
 ```bash
 # 1. 查看空闲目录（必须先执行）
 bash scripts/check-cc-status.sh
 
-# 2. 查询Todo和In Progress
-bash scripts/query-project-issues.sh play "Todo"
-bash scripts/query-project-issues.sh play "In Progress"
+# 2. 读取排程计划，按顺序取出待指派的Issue
+cat sprints/<sprint>/<重点模块>/PLAN.md
 
-# 3. pre-task（每个Issue执行）
+# 3. 对每个待指派Issue执行pre-task
 cd /home/ubuntu/projects/wande-play-<suffix>
 git checkout dev && git pull origin dev
 git checkout -b feature-Issue-<N>
 mkdir -p ./issues/issue-<N>
-gh issue edit <N> --repo WnadeyaowuOraganization/wande-play --add-label "status:in-progress" --remove-label "status:ready"
 bash scripts/update-project-status.sh play <N> "In Progress"
 
-# 4. 启动CC
+# 4. 启动CC（exit 2 → 换下一个suffix重试）
 bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix>
-# exit 2 → 换下一个suffix重试
 
-# 5. 记录指派
+# 5. 记录指派到对应模块的历史文件
 # → sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md
 ```
 
-**重点**: test-failed 的 Issue 最优先排程修复。In Progress 没有 PR 的恢复CC继续。
+**重点**: PLAN.md 中标记为 test-failed 的最优先。空闲目录用完则停止，等下一轮。
 
 ### 任务三：检查结果
 

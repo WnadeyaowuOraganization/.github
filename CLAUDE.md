@@ -91,12 +91,6 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 
 判断标准：Issue标题/内容涉及同一数据库表或同一API路径前缀 → 视为同模块，串行排程。
 
-## 防重复规则（同模块串行）
-
-同一业务模块（如d3、crm、contract等）的Issue，如果涉及新建Entity/Mapper/Service，必须串行分配给同一个CC目录，等前一个完成merge后再分配下一个。原因：并行创建同名类会导致Spring Bean冲突，后端无法启动。
-
-判断标准：Issue标题/内容涉及同一数据库表或同一API路径前缀 → 视为同模块，串行排程。
-
 ## 并发控制
 
 - 一个目录同一时间只能运行一个CC

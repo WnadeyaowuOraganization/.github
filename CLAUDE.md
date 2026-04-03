@@ -212,6 +212,20 @@ sprints/2026-03-28/
 ```
 
 ### 任务二：触发编程CC（Todo → In Progress）
+
+**第一步：查看目录状态**（每次触发前必须执行）
+```bash
+bash /home/ubuntu/projects/.github/scripts/check-cc-status.sh
+```
+输出会列出 kimi1~kimi20 每个目录的占用状态（🟢空闲/🔵占用+Issue号+模块）。
+只将 Issue 指派到🟢空闲的目录。如果无空闲目录，等待下一轮。
+
+**第一步：查看目录状态**（每次触发前必须执行）
+```bash
+bash /home/ubuntu/projects/.github/scripts/check-cc-status.sh
+```
+输出会列出 kimi1~kimi20 每个目录的占用状态（🟢空闲/🔵占用+Issue号+模块）。
+只将 Issue 指派到🟢空闲的目录。如果无空闲目录，等待下一轮。
 务必按排程清单分批启动编程CC，多个项目同时处理相同功能的Issue，新增的e2e测试失败（Sprint相关）的Issue优先
 1. 先检查各仓库的编程CC有没有空闲席位，没有就退出，有则下一步
 2. 检查In Progress的Issue确定是否有创建对应的PR，没有的话恢复对应目录的CC继续完成工作

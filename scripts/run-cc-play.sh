@@ -1,20 +1,23 @@
 #!/bin/bash
 # run-cc-play.sh — wande-play monorepo版CC启动脚本（含stream-parser日志）
-# Usage: run-cc-play.sh <module> <issue_number> [model] [dir_suffix]
+# Usage: run-cc-play.sh <module> <issue_number> [model] [dir_suffix] [effort]
 # module: backend | frontend | app (fullstack) | pipeline
+# effort: low | medium（默认）| high | max — 控制thinking深度
 
 MODULE="$1"
 ISSUE="$2"
 MODEL="${3:-claude-opus-4-6}"
 DIR_SUFFIX="$4"
+EFFORT="${5:-medium}"
 LOGDIR=/home/ubuntu/cc_scheduler/logs
 mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 if [ -z "$MODULE" ] || [ -z "$ISSUE" ]; then
-  echo "Usage: $0 <module> <issue_number> [model] [dir_suffix]"
+  echo "Usage: $0 <module> <issue_number> [model] [dir_suffix] [effort]"
   echo "  module: backend | frontend | app | pipeline"
+  echo "  effort: low | medium（默认）| high | max"
   exit 1
 fi
 
@@ -63,15 +66,15 @@ fi
 > "$LOGFILE"
 > "$RAW_LOG"
 
-echo "$(date): Starting CC $SESSION in $WORK_DIR (model=$MODEL)" | tee "$LOGFILE"
+echo "$(date): Starting CC $SESSION in $WORK_DIR (model=$MODEL, effort=$EFFORT)" | tee "$LOGFILE"
 
 # Use stream-parser if available, fallback to tee
 if [ -f "$PARSER" ]; then
   tmux new-session -d -s "$SESSION" -c "$WORK_DIR" \
-    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --output-format stream-json --verbose 2>&1 | tee $RAW_LOG | python3 $PARSER 2>&1 | tee -a $LOGFILE"
+    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --effort $EFFORT --output-format stream-json --verbose 2>&1 | tee $RAW_LOG | python3 $PARSER 2>&1 | tee -a $LOGFILE"
 else
   tmux new-session -d -s "$SESSION" -c "$WORK_DIR" \
-    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --output-format text 2>&1 | tee -a $LOGFILE"
+    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --effort $EFFORT --output-format text 2>&1 | tee -a $LOGFILE"
 fi
 
 echo "CC started: tmux attach -t $SESSION"

@@ -18,9 +18,26 @@ from pathlib import Path
 # ---------- 配置 ----------
 CODING_CC_LOG_DIR = Path("/var/log/coding-cc")
 PROXY_LOG_PATH = Path("/home/ubuntu/projects/.github/scripts/model-switch/proxy.log")
-E2E_LOG_DIR = Path("/home/ubuntu/projects/wande-ai-e2e/logs")
-E2E_TRACE_PATH = Path("/home/ubuntu/projects/wande-ai-e2e/traceability/requirement-map.json")
 INFRA_LOG_PATH = Path("/var/log/wande-infra-monitor.log")
+
+# E2E 路径支持环境变量覆盖 + 多候选回退
+_E2E_CANDIDATES = [
+    Path(os.environ["E2E_LOG_DIR"]) if os.environ.get("E2E_LOG_DIR") else None,
+    Path("/home/ubuntu/projects/wande-ai-e2e/logs"),
+    Path("/home/ubuntu/projects/wande-play-e2e-mid/logs"),
+    Path("/home/ubuntu/projects/wande-play-e2e-top/logs"),
+    Path("/home/ubuntu/projects/wPR-680-ai-e2e/logs"),
+]
+_E2E_TRACE_CANDIDATES = [
+    Path(os.environ["E2E_TRACE_PATH"]) if os.environ.get("E2E_TRACE_PATH") else None,
+    Path("/home/ubuntu/projects/wande-ai-e2e/traceability/requirement-map.json"),
+    Path("/home/ubuntu/projects/wande-play-e2e-mid/traceability/requirement-map.json"),
+    Path("/home/ubuntu/projects/wande-play-e2e-top/traceability/requirement-map.json"),
+    Path("/home/ubuntu/projects/wPR-680-ai-e2e/traceability/requirement-map.json"),
+]
+
+E2E_LOG_DIR = next((p for p in _E2E_CANDIDATES if p and p.exists()), _E2E_CANDIDATES[1])
+E2E_TRACE_PATH = next((p for p in _E2E_TRACE_CANDIDATES if p and p.exists()), _E2E_TRACE_CANDIDATES[1])
 
 
 # ---------- 时间解析工具 ----------
@@ -43,7 +60,7 @@ def ts_to_iso(dt: datetime) -> str:
 
 
 # coding-cc *.log 时间戳解析
-def parse_log_timestamp(line: str, default_year: int = 2026) -> datetime | None:
+def parse_log_timestamp(line: str, default_date: datetime | None = None) -> datetime | None:
     # [Wed Apr  1 06:29:10 UTC 2026] ...
     m = re.match(r"^\[([A-Z][a-z]{2}\s+[A-Z][a-z]{2}\s+\d{1,2}\s+\d{2}:\d{2}:\d{2}\s+UTC\s+\d{4})\]", line)
     if m:
@@ -51,12 +68,13 @@ def parse_log_timestamp(line: str, default_year: int = 2026) -> datetime | None:
             return datetime.strptime(m.group(1), "%a %b %d %H:%M:%S UTC %Y").replace(tzinfo=timezone.utc)
         except ValueError:
             pass
-    # [06:29:10] ...  (只有时间，取文件mtime的日期)
+    # [06:29:10] ...  (只有时间，取文件mtime的完整日期)
     m2 = re.match(r"^\[(\d{2}:\d{2}:\d{2})\]", line)
     if m2:
         try:
             t = datetime.strptime(m2.group(1), "%H:%M:%S").time()
-            return datetime(default_year, 1, 1, t.hour, t.minute, t.second, tzinfo=timezone.utc)
+            base = default_date if default_date else datetime(2026, 1, 1, tzinfo=timezone.utc)
+            return base.replace(hour=t.hour, minute=t.minute, second=t.second, microsecond=0)
         except ValueError:
             pass
     return None
@@ -137,10 +155,12 @@ def make_event(
 CC_ERROR_PATTERNS = [
     (re.compile(r"API Error:\s*(\d+)\s*(.*)"), "api_error"),
     (re.compile(r"Reached max turns\s*\((\d+)\)"), "max_turns"),
-    (re.compile(r"compilation failure|编译失败|BUILD FAILURE"), "compilation_failure"),
-    (re.compile(r"pr create fail|创建PR失败|Failed to create PR"), "pr_create_fail"),
+    (re.compile(r"BUILD FAILURE"), "compilation_failure"),
+    (re.compile(r"compilation failure|编译失败|测试编译失败|部署编译失败"), "compilation_failure"),
+    (re.compile(r"pr create fail|创建PR失败|Failed to create PR|PR 创建失败"), "pr_create_fail"),
     (re.compile(r"❌\s*ERROR:\s*(.*)"), "claude_error"),
     (re.compile(r"Error:\s*Reached max turns"), "max_turns"),
+    (re.compile(r"mvn\s+clean\s+compile.*失败|Compilation failure in .*\.java"), "compilation_failure"),
 ]
 
 
@@ -168,7 +188,7 @@ def parse_coding_cc_logs(since_dt: datetime | None, session_cache: dict[str, dic
             if not line:
                 continue
 
-            ts = parse_log_timestamp(line, default_year=mtime.year)
+            ts = parse_log_timestamp(line, default_date=mtime)
             if ts and since_dt and ts < since_dt:
                 continue
             # 没有时间戳的行，若 since 很新也跳过（保守策略）
@@ -240,7 +260,8 @@ def parse_raw_jsonl(since_dt: datetime | None) -> list[dict]:
                     "issue": issue_num,
                 }
 
-            # 提取 result 错误
+            # 提取 result 类型中的错误（旧格式兼容）
+            result_val = ""
             if obj.get("type") == "result":
                 is_error = obj.get("is_error") is True or obj.get("subtype") == "error"
                 result_val = obj.get("result", "")
@@ -260,30 +281,49 @@ def parse_raw_jsonl(since_dt: datetime | None) -> list[dict]:
                         create_time=ts_to_iso(mtime),
                     ))
 
-            # 提取 tool_result success=false（目前 tool_use_result 结构里没有 success 字段，
-            # 存的是 stdout/stderr，我们检测 stderr 中是否有错误关键词）
-            if obj.get("type") == "user" and obj.get("tool_use_result"):
-                tr = obj.get("tool_use_result")
-                if isinstance(tr, dict) and tr.get("stderr"):
-                    stderr = tr.get("stderr", "")
-                    if stderr.strip():
+            # 提取 message.content[].is_error / tool_result success=false
+            if obj.get("type") == "user" and obj.get("message"):
+                content = obj.get("message", {}).get("content", [])
+                for item in (content if isinstance(content, list) else []):
+                    if isinstance(item, dict) and item.get("type") == "tool_result" and item.get("is_error") is True:
+                        tool_err_msg = item.get("content", "")[:500]
                         cached = session_cache.get(sess_id, {})
+                        err_type = "compilation_failure" if "BUILD FAILURE" in tool_err_msg else "tool_error"
                         events.append(make_event(
                             repo=cached.get("repo", repo),
                             issue_number=cached.get("issue", issue_num),
                             phase="execution",
-                            error_type="tool_error",
-                            error_message=stderr.strip()[:500],
+                            error_type=err_type,
+                            error_message=tool_err_msg,
                             source_file=str(jsonl_path),
                             session_id=sess_id,
                             model=cached.get("model", ""),
                             create_time=ts_to_iso(mtime),
                         ))
 
-            # 统计 token（从 result 记录提取，如果后面 API 支持 cost_usd）
-            if obj.get("type") == "result" and isinstance(result_val, str) and not is_error:
-                # 这里只记录错误事件，不输出成功结果
-                pass
+            # tool_use_result 可能是字符串（Error: Exit code X）或 dict
+            if obj.get("type") == "user" and obj.get("tool_use_result"):
+                tr = obj.get("tool_use_result")
+                tool_err_msg = ""
+                if isinstance(tr, str) and tr.strip().startswith("Error:"):
+                    tool_err_msg = tr.strip()[:500]
+                elif isinstance(tr, dict) and tr.get("stderr"):
+                    tool_err_msg = tr.get("stderr", "").strip()[:500]
+
+                if tool_err_msg:
+                    cached = session_cache.get(sess_id, {})
+                    err_type = "compilation_failure" if "BUILD FAILURE" in tool_err_msg else "tool_error"
+                    events.append(make_event(
+                        repo=cached.get("repo", repo),
+                        issue_number=cached.get("issue", issue_num),
+                        phase="execution",
+                        error_type=err_type,
+                        error_message=tool_err_msg,
+                        source_file=str(jsonl_path),
+                        session_id=sess_id,
+                        model=cached.get("model", ""),
+                        create_time=ts_to_iso(mtime),
+                    ))
 
     return events
 
@@ -308,17 +348,36 @@ def parse_raw_jsonl_token_stats(since_dt: datetime | None) -> dict[tuple, dict]:
                 obj = json.loads(line)
             except json.JSONDecodeError:
                 continue
+            sess = obj.get("session_id") or obj.get("uuid", "")
+            key = (repo, issue_num, sess)
+
+            # duration_ms 只在 result 记录中有
             if obj.get("type") == "result":
-                sess = obj.get("session_id") or obj.get("uuid", "")
-                key = (repo, issue_num, sess)
                 dur = obj.get("duration_ms", 0) or 0
-                # cost_usd 在 cc-stream-parser 的 result 对象里；这里 result 是字符串没有该字段
-                # 原 obj 本身可能有 cost_usd？如果有则记录
-                cost = obj.get("cost_usd", 0.0) or 0.0
-                stats[key] = {
-                    "duration_ms": dur,
-                    "token_cost": cost,
-                }
+                if key not in stats:
+                    stats[key] = {"duration_ms": dur, "token_cost": 0.0, "input_tokens": 0, "output_tokens": 0}
+                else:
+                    stats[key]["duration_ms"] = dur
+
+            # 从 stream_event / assistant 记录聚合 token usage
+            usage = None
+            if obj.get("type") == "stream_event":
+                ev = obj.get("event", {})
+                delta = ev.get("delta", {})
+                msg = ev.get("message", {})
+                usage = delta.get("usage") or msg.get("usage")
+            elif obj.get("type") == "assistant":
+                msg = obj.get("message", {})
+                usage = msg.get("usage")
+
+            if usage and isinstance(usage, dict):
+                if key not in stats:
+                    stats[key] = {"duration_ms": 0, "token_cost": 0.0, "input_tokens": 0, "output_tokens": 0}
+                inp = usage.get("input_tokens", usage.get("prompt_tokens", 0)) or 0
+                out = usage.get("output_tokens", usage.get("completion_tokens", 0)) or 0
+                stats[key]["input_tokens"] += inp
+                stats[key]["output_tokens"] += out
+
     return stats
 
 

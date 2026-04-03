@@ -89,21 +89,13 @@
 | D19 | 04-03 | ✅ | 首个fullstack Issue #1440（D3技术确认中心）用于测试Agent Teams | 合并#443+#1166，验证研发经理CC对module:fullstack的排程和触发 | 伟平 |
 | D20 | 04-03 | ✅ | Claude Office新增CC实时日志显示 | 点击agent/研发经理卡片打开终端风格日志面板，3秒自动刷新 | 伟平 |
 | D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 伟平 |
-
 | D22 | 04-03 | ✅ | 测试架构改革：编程CC接管构建部署，CI仅负责PR E2E和pipeline同步 | build-deploy-dev.yml剥离构建部署job，编程CC在feature分支完成TDD→build→deploy→smoke→PR全流程；CI pr-test.yml负责E2E自动merge/fail；cron 2h/6h兜底回归 | 伟平 |
 | D23 | 04-04 | ✅ | 根CLAUDE.md增加Issue拾取指引+清理主目录引用 | 编程CC收到非标准prompt时不知道怎么获取Issue内容（gh issue view失败后无备用方案）。根CLAUDE.md新增「Issue拾取」章节：唯一正确方式(gh issue view)+三级备用方案(token重获→curl REST API→curl评论API)+非标准prompt说明。同时修正Project看板链接(#2→#4)和辅助脚本路径，删除主目录引用 | 伟平 |
 | D24 | 04-04 | ✅ | Thinking模式改为effort参数动态控制，由研发经理CC按Issue复杂度决策 | 原方案：settings.json全局DISABLE_THINKING=1一刀切关闭。新方案：移除所有settings.json中的DISABLE_THINKING，三个启动脚本(run-cc.sh/run-cc-with-prompt.sh/run-cc-play.sh)新增第5个参数[effort]，不传时默认medium。研发经理CC根据Issue标签决策：docs/config→low，常规CRUD→medium，多文件重构/复杂bug→high，架构级重构/fullstack→high或max | 伟平 |
 | D25 | 04-04 | ✅ | pr-test.yml独立目录+全局排队 | PR E2E使用wande-play-ci专用目录，concurrency全局排队避免并发互踩，与cron e2e-mid/e2e-top目录隔离 | 伟平 |
 | D26 | 04-04 | ✅ | CI编译门禁+编程CC防重复类规范 | pr-test.yml新增mvn compile步骤；编程CC创建新类前必须查重；包路径唯一映射规则；研发经理CC同模块Issue串行排程 | 伟平 |
-| D27 | 04-04 | 🟡 | 合并wande-ai-api到wande-ai（#2584 P0） | 42个重复类名导致Bean/alias冲突，dev分支后端无法启动；两个模块无外部消费者，分离收益为零 | 伟平 |
+| D27 | 04-04 | ✅ | 合并wande-ai-api到wande-ai（#2585 P0） | PR #2593 已创建：删除wande-ai-api模块，迁移1000+类到wande-ai，清理17个内部重复+15个跨模块重复，编译打包通过 | 伟平 |
 | D28 | 04-04 | 🟡 | 接口契约目录启用（#2586 P0） | shared/api-contracts/作为前后端唯一真相源，扫描现有API初始化契约文件；契约先行规则写入CLAUDE.md | 伟平 |
-| D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
-| D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
-| D25 | 04-04 | ✅ | pr-test.yml独立目录+全局排队 | PR E2E使用wande-play-ci专用目录，concurrency全局排队避免并发互踩，与cron e2e-mid/e2e-top目录隔离 | 伟平 |
-| D26 | 04-04 | ✅ | CI编译门禁+编程CC防重复类规范 | pr-test.yml新增mvn compile步骤；编程CC创建新类前必须查重；包路径唯一映射规则；研发经理CC同模块Issue串行排程 | 伟平 |
-| D27 | 04-04 | 🟡 | 合并wande-ai-api到wande-ai（#2584 P0） | 42个重复类名导致Bean/alias冲突，dev分支后端无法启动；两个模块无外部消费者，分离收益为零 | 伟平 |
-| D28 | 04-04 | 🟡 | 接口契约目录启用（#2586 P0） | shared/api-contracts/作为前后端唯一真相源，扫描现有API初始化契约文件；契约先行规则写入CLAUDE.md | 伟平 |
-| D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 | D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
@@ -129,17 +121,12 @@
 
 > 2026-04-03 起 Project#2 不再使用。所有活跃 Issue 已迁移到 Project#4，wande-gh-plugins 的 22 个 Issue 也已迁移。Project#2 仅保留历史数据供追溯。
 
-### 最近完成（wande-play 04-02）
+### 最近完成（wande-play 04-03）
+- [后端重构] 合并 wande-ai-api 到 wande-ai，消除42个重复类冲突 #2585 → PR #2593
+- [接口契约] 初始化 shared/api-contracts 目录与规范文档 #2586
 - [项目矿场] 新增运营仪表盘页面 #870
 - [项目矿场] 矿场运营仪表盘核心指标可视化 #869
 - [前端] URL去.html后缀+域名统一 #868
-- 万德全部列表页按UI-GUIDE.md规范改造 #860
-- [通知中心] 通知中心独立页面+SSE实时推送 #859
-- [通知中心] 铃铛通知中心组件 #858
-- [菜单重组] 创建「商务部」板块菜单结构 #857
-- [Claude Office] Kanban看板面板 #856
-- [超管驾驶舱] 运维监控中心+快捷指令终端 #855
-- [Claude Office 2.0] 排程Tab三列看板 #854
 
 ### Sprint-2 调整记录（04-03）
 - 关闭5个重复Issue：#2184→#2464, #2185→#2465, #2186→#2466, #2187→#2467, #2188→#2468
@@ -163,10 +150,9 @@
 ## 📌 需要对方处理
 
 ### @伟平 待讨论
-- **dev分支后端无法启动（P0）** — 多个编程CC并行开发导致42个重复类名（Bean冲突），Spring Boot 启动失败。影响：pr-test.yml 所有 backend E2E 测试超时。需讨论：1) 是否引入编译检查到CI 2) 如何批量清理现有冲突 3) 编程CC代码规范如何防止重复
+- **dev分支后端无法启动（P0）** — 已通过 #2585 / PR #2593 合并 wande-ai-api 到 wande-ai，清理 42 个重复类冲突，编译打包通过。待 pr-test.yml E2E 验证后 merge。
 
 ### @伟平 待讨论
-- **dev分支后端无法启动（P0）** — 多个编程CC并行开发导致42个重复类名（Bean冲突），Spring Boot 启动失败。影响：pr-test.yml 所有 backend E2E 测试超时。需讨论：1) 是否引入编译检查到CI 2) 如何批量清理现有冲突 3) 编程CC代码规范如何防止重复
 
 ### @吴耀
 - 明道云 API Key — 解锁 CRM 对接

@@ -64,17 +64,17 @@ source /home/ubuntu/projects/.github/scripts/get-gh-token.sh
 
 # 按项目和状态搜索Project看板中的Issue
 bash /home/ubuntu/projects/.github/scripts/query-project-issues.sh <repo> "<STATUS>"
-# repo: play | pipeline | plugins | all (默认all)
+# repo: play | pipeline | plugins | gh-plugins | all (默认all)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
 
 # 更新Project看板Status
 bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "<STATUS>"
-# repo:   play | pipeline | plugins
+# repo:   play | pipeline | plugins | gh-plugins
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 
 # 触发编程CC
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <model> [dir_suffix]
-# repo: backend | frontend | pipeline | app(fullstack) | plugins
+# repo: backend | frontend | pipeline | app(fullstack) | plugins | gh-plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 指定外接目录后缀（如 kimi1, glm1）
 ```
@@ -136,6 +136,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 | frontend | `wande-play/frontend` | 编程CC只看到frontend/CLAUDE.md |
 | app | `wande-play`（根目录） | fullstack Issue，触发Agent Teams |
 | pipeline | `cd wande-play/pipeline` | 纯爬虫/数据采集 |
+| plugins / gh-plugins | `wande-gh-plugins` | GH插件仓库（Python技术栈） |
 
 ## 并发控制
 

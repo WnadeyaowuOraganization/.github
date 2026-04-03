@@ -1,7 +1,7 @@
 #!/bin/bash
 # query-project-issues.sh - 查询Project #4中指定仓库和状态的Issue
 # 用法: query-project-issues.sh [repo] [status]
-# repo: backend | front | pipeline | plugins | all (默认all)
+# repo: backend | front | pipeline | plugins | gh-plugins | all (默认all)
 # status: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
 # 输出: stdout=人类可读表格, stderr=机器可解析 ISSUE_<N>=<STATUS>
 #
@@ -10,6 +10,12 @@
 #   - status=all时: 需遍历全部items，自动分页
 #   - Plan状态(790+)仍需翻页，其他状态(<100)单次搞定
 #   - GraphQL cost: 指定status≈2-3 points, all≈20-30 points
+
+# Auto-detect GH_TOKEN if not set
+if [ -z "$GH_TOKEN" ]; then
+  _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+  export GH_TOKEN=$(bash "$_SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
+fi
 
 set -e
 
@@ -168,6 +174,10 @@ repo_map = {
     'WnadeyaowuOraganization/wande-play': 'play',
     'WnadeyaowuOraganization/wande-gh-plugins': 'plugins',
 }
+
+# Alias: 'gh-plugins' is equivalent to 'plugins'
+if REPO_NAME == 'gh-plugins':
+    REPO_NAME = 'plugins'
 
 data = json.load(open('$TMPFILE'))
 items = data.get('nodes', [])

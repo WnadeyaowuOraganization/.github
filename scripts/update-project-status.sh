@@ -1,7 +1,7 @@
 #!/bin/bash
 # update-project-status.sh - 更新Project #4看板的Status字段（wande-play专用）
 # 用法: update-project-status.sh <repo> <ISSUE_NUMBER> <STATUS>
-# repo:   play | backend | frontend | pipeline | plugins (可选，不传则查全部4个仓库)
+# repo:   play | backend | frontend | pipeline | plugins | gh-plugins (可选，不传则查全部4个仓库)
 # STATUS: Plan | Todo | In Progress | Done | pause | Fail
 #
 # v3 (2026-03-30): 新增可选repo参数
@@ -16,7 +16,7 @@ NEW_STATUS="$3"
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
     echo "用法: $0 <repo> <ISSUE_NUMBER> <STATUS>"
-    echo "REPO:   play | backend | frontend | pipeline | plugins (可选)"
+    echo "REPO:   play | backend | frontend | pipeline | plugins | gh-plugins (可选)"
     echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail"
     exit 1
 fi
@@ -45,6 +45,7 @@ REPO_MAP["backend"]="wande-play"
 REPO_MAP["frontend"]="wande-play"
 REPO_MAP["pipeline"]="wande-play"
 REPO_MAP["plugins"]="wande-gh-plugins"
+REPO_MAP["gh-plugins"]="wande-gh-plugins"
 REPO_MAP["play"]="wande-play"
 REPO_MAP["play"]="wande-play"
 
@@ -70,7 +71,7 @@ if [ -n "$REPO_SHORT" ]; then
     # 指定repo: 只查1个仓库
     REPO_FULL="${REPO_MAP[$REPO_SHORT]}"
     if [ -z "$REPO_FULL" ]; then
-        echo "错误: 未知仓库 '$REPO_SHORT' (可选: play | backend | frontend | pipeline | plugins)"
+        echo "错误: 未知仓库 '$REPO_SHORT' (可选: play | backend | frontend | pipeline | plugins | gh-plugins)"
         exit 1
     fi
 

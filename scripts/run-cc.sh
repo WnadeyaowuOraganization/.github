@@ -1,7 +1,7 @@
 #!/bin/bash
 # run-cc.sh — 在tmux中启动编程CC（stream-json实时日志）
 # 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix]
-# repo: backend | frontend | pipeline | app(fullstack) | plugins
+# repo: backend | frontend | pipeline | app(fullstack) | plugins | gh-plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi10）
 #
@@ -21,7 +21,7 @@ PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 if [ -z "$REPO" ] || [ -z "$ISSUE" ]; then
     echo "用法: $0 <repo> <issue_number> [model] [dir_suffix]"
-    echo "  repo: backend | frontend | pipeline | app | plugins"
+    echo "  repo: backend | frontend | pipeline | app | plugins | gh-plugins"
     echo "  dir_suffix: kimi1~kimi10（可选）"
     exit 1
 fi
@@ -35,7 +35,7 @@ case "$REPO" in
       BASE_DIR="/home/ubuntu/projects/wande-play"
     fi
     ;;
-  plugins)
+  plugins|gh-plugins)
     if [ -n "$DIR_SUFFIX" ]; then
       BASE_DIR="/home/ubuntu/projects/wande-gh-plugins-${DIR_SUFFIX}"
     else
@@ -51,7 +51,7 @@ case "$REPO" in
   frontend) PROJECT_DIR="$BASE_DIR/frontend" ;;
   pipeline) PROJECT_DIR="$BASE_DIR/pipeline" ;;
   app)      PROJECT_DIR="$BASE_DIR" ;;
-  plugins)  PROJECT_DIR="$BASE_DIR" ;;
+  plugins|gh-plugins)  PROJECT_DIR="$BASE_DIR" ;;
 esac
 
 if [ ! -d "$PROJECT_DIR" ]; then

@@ -147,6 +147,7 @@
 - 首个fullstack Issue #1440 创建（合并#443+#1166），用于Agent Teams测试
 - Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 - 测试架构改革落地：编程CC接管构建部署，build-deploy-dev.yml仅保留pipeline sync，新增pr-test.yml自动E2E+merge/fail
+- D31决策（04-04）：编程CC职责简化 — 去掉deploy-dev.sh和Playwright步骤，只保留编译检查+单元测试；build-deploy-dev.yml补全后端/前端自动构建部署（merge到dev后触发）
 - CC prompt全面优化：研发经理(425→160行)、backend(45→28)、frontend(617→119)、E2E(263→80)
 
 ---

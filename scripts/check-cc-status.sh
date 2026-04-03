@@ -1,108 +1,116 @@
 #!/bin/bash
-# check-cc-status.sh — 检查所有CC工作目录的占用状态
-# 输出格式供研发经理CC直接解析，用于指派决策
-#
-# 用法: check-cc-status.sh
-# 输出: 每行一个目录的状态（空闲/占用+Issue号+模块）
+# check-cc-status.sh — 检查CC状态和Issue完成情况
 
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 LOGDIR=/home/ubuntu/cc_scheduler/logs
+SCRIPT_DIR="/home/ubuntu/projects/.github/scripts"
+REPORT_FILE="/home/ubuntu/cc_scheduler/status-report.md"
 
-# ── 收集所有 "claude -p" 主进程的 cwd ──
-declare -A DIR_PID DIR_ISSUE DIR_MODULE
+echo "## CC状态检查报告 — $(date '+%Y-%m-%d %H:%M:%S')" > "$REPORT_FILE"
+echo "" >> "$REPORT_FILE"
 
-while IFS= read -r line; do
-    pid=$(echo "$line" | awk '{print $1}')
-    [ -z "$pid" ] && continue
-    cwd=$(readlink /proc/$pid/cwd 2>/dev/null)
-    [ -z "$cwd" ] && continue
-    
-    # 提取 Issue 号
-    issue=$(ps -o args= -p $pid 2>/dev/null | grep -oP "Issue #\K\d+")
-    
-    # 提取 module（从 cwd 末尾判断）
-    dir_base=$(basename "$cwd")
-    case "$dir_base" in
-        backend)  module="backend" ;;
-        frontend) module="frontend" ;;
-        pipeline) module="pipeline" ;;
-        *)        module="app" ;;
-    esac
-    
-    # 用 BASE_DIR（去掉子目录）作为 key
-    case "$cwd" in
-        */backend|*/frontend|*/pipeline)
-            base_dir=$(dirname "$cwd")
-            ;;
-        *)
-            base_dir="$cwd"
-            ;;
-    esac
-    
-    DIR_PID["$base_dir"]=$pid
-    DIR_ISSUE["$base_dir"]=${issue:-"?"}
-    DIR_MODULE["$base_dir"]=$module
-done < <(ps -u ubuntu -o pid,args 2>/dev/null | grep "claude -p" | grep -v grep | awk '{print $1}')
+# 1. 检查运行中的CC会话
+echo "### 运行中的CC会话" >> "$REPORT_FILE"
+tmux list-sessions 2>/dev/null | grep "^cc-" | while read line; do
+    echo "- $line" >> "$REPORT_FILE"
+done
+echo "" >> "$REPORT_FILE"
 
-# ── 输出表头 ──
-echo "## CC工作目录状态 — $(date '+%Y-%m-%d %H:%M:%S')"
-echo ""
-echo "| 目录 | 状态 | Issue | 模块 | PID |"
-echo "|------|------|-------|------|-----|"
-
-# ── 逐个检查 wande-play kimi1~kimi20 ──
-busy=0
-free=0
-free_list=""
-
-for i in $(seq 1 20); do
-    dir="/home/ubuntu/projects/wande-play-kimi${i}"
-    if [ ! -d "$dir" ]; then
-        echo "| kimi${i} | ❌ 不存在 | - | - | - |"
-        continue
-    fi
-    
-    if [ -n "${DIR_PID[$dir]}" ]; then
-        echo "| kimi${i} | 🔵 占用 | #${DIR_ISSUE[$dir]} | ${DIR_MODULE[$dir]} | ${DIR_PID[$dir]} |"
-        busy=$((busy + 1))
-    else
-        echo "| kimi${i} | 🟢 空闲 | - | - | - |"
-        free=$((free + 1))
-        free_list="${free_list}kimi${i} "
+# 2. 检查最近完成的CC（日志文件最后状态）
+echo "### 最近完成的CC" >> "$REPORT_FILE"
+for log in $LOGDIR/*.log; do
+    if [ -f "$log" ]; then
+        last_line=$(tail -1 "$log" 2>/dev/null)
+        if echo "$last_line" | grep -q "COMPLETED"; then
+            basename "$log" | sed 's/.log//' >> "$REPORT_FILE"
+        fi
     fi
 done
+echo "" >> "$REPORT_FILE"
 
-# ── 检查 gh-plugins 目录 ──
-echo ""
-echo "### 其他目录"
-echo "| 目录 | 状态 | Issue | 模块 | PID |"
-echo "|------|------|-------|------|-----|"
+# 3. 检查In Progress的Issue的真实状态
+# 检测逻辑：
+# - 检查tmux会话是否存在
+# - 检查会话中是否有活跃的claude进程（工作中）
+# - 检查日志最后状态（COMPLETED/ERROR）
+# - 检查PR是否已创建
 
-for dir in /home/ubuntu/projects/wande-gh-plugins /home/ubuntu/projects/wande-gh-plugins-glm1; do
-    name=$(basename "$dir")
-    if [ ! -d "$dir" ]; then
-        continue
-    fi
-    if [ -n "${DIR_PID[$dir]}" ]; then
-        echo "| $name | 🔵 占用 | #${DIR_ISSUE[$dir]} | ${DIR_MODULE[$dir]} | ${DIR_PID[$dir]} |"
+echo "### In Progress Issue状态" >> "$REPORT_FILE"
+for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
+    # 提取repo和issue number
+    repo=$(echo "$session" | cut -d- -f2)
+    issue=$(echo "$session" | cut -d- -f3)
+
+    if [ "$repo" = "backend" ] || [ "$repo" = "frontend" ] || [ "$repo" = "pipeline" ]; then
+        repo_full="WnadeyaowuOraganization/wande-play"
     else
-        echo "| $name | 🟢 空闲 | - | - | - |"
+        repo_full="WnadeyaowuOraganization/wande-gh-plugins"
+    fi
+
+    # 检查该session对应的tmux pane中是否有claude进程在运行
+    pane_pid=$(tmux list-panes -t "$session" -F "#{pane_pid}" 2>/dev/null | head -1)
+    has_claude_running="false"
+    if [ -n "$pane_pid" ]; then
+        # 检查该pane的后代进程中是否有claude
+        if ps -o pid,args --ppid "$pane_pid" 2>/dev/null | grep -q "claude"; then
+            has_claude_running="true"
+        fi
+    fi
+
+    # 检查日志最后状态
+    logfile="$LOGDIR/${repo}-${issue}.log"
+    log_status=""
+    if [ -f "$logfile" ]; then
+        last_line=$(tail -5 "$logfile" 2>/dev/null | grep -E "(COMPLETED|ERROR|Failed)" | tail -1)
+        if echo "$last_line" | grep -q "COMPLETED"; then
+            log_status="completed"
+        elif echo "$last_line" | grep -qE "(ERROR|Failed)"; then
+            log_status="error"
+        fi
+    fi
+
+    # 检查PR状态
+    pr_count=$(gh pr list --repo "$repo_full" --search "Issue-$issue" --state open --json number -q '. | length' 2>/dev/null)
+    pr_status=""
+    if [ "$pr_count" -gt 0 ]; then
+        pr_status="has_pr"
+    fi
+
+    # 综合判断状态
+    if [ "$has_claude_running" = "true" ]; then
+        # claude还在运行，检查最近活跃时间
+        last_active=$(stat -c "%Y" "$logfile" 2>/dev/null)
+        now=$(date +%s)
+        idle_minutes=$(( (now - last_active) / 60 ))
+        if [ "$idle_minutes" -lt 5 ]; then
+            echo "- $session: 🔥 **工作中** (最近活跃)" >> "$REPORT_FILE"
+        else
+            echo "- $session: ⏸️ **可能卡住** (${idle_minutes}分钟无输出)" >> "$REPORT_FILE"
+        fi
+    elif [ "$log_status" = "completed" ]; then
+        if [ "$pr_status" = "has_pr" ]; then
+            echo "- $session: ✅ **已完成，PR已创建**" >> "$REPORT_FILE"
+        else
+            echo "- $session: ⏳ **等待创建PR** (CC已完成)" >> "$REPORT_FILE"
+        fi
+    elif [ "$log_status" = "error" ]; then
+        echo "- $session: ❌ **执行出错**" >> "$REPORT_FILE"
+    else
+        echo "- $session: ⏳ **等待PR** (状态未知)" >> "$REPORT_FILE"
     fi
 done
+echo "" >> "$REPORT_FILE"
 
-# ── E2E 目录 ──
-for dir in /home/ubuntu/projects/wande-play-e2e-mid /home/ubuntu/projects/wande-play-e2e-top; do
-    name=$(basename "$dir")
-    if [ -n "${DIR_PID[$dir]}" ]; then
-        echo "| $name | 🔵 占用 | #${DIR_ISSUE[$dir]} | ${DIR_MODULE[$dir]} | ${DIR_PID[$dir]} |"
-    else
-        echo "| $name | 🟢 空闲 | - | - | - |"
-    fi
-done
+# 4. 统计空闲目录
+echo "### 目录使用情况" >> "$REPORT_FILE"
+active_count=$(tmux list-sessions 2>/dev/null | grep "^cc-" | wc -l)
+available_count=$((20 - active_count))
+echo "- 活跃CC: $active_count" >> "$REPORT_FILE"
+echo "- 空闲目录: $available_count" >> "$REPORT_FILE"
+echo "" >> "$REPORT_FILE"
 
-# ── 汇总 ──
-echo ""
-echo "### 汇总"
-echo "- 占用: ${busy}/20"
-echo "- 空闲: ${free}/20"
-echo "- 可用目录: ${free_list:-无}"
+# 5. 检查Todo队列中的P0 Issue
+echo "### 待处理P0 Issue数量" >> "$REPORT_FILE"
+bash "$SCRIPT_DIR/query-project-issues.sh" play "Todo" 2>/dev/null | grep "P0" | wc -l | xargs -I {} echo "- wande-play Todo P0: {}" >> "$REPORT_FILE"
+echo "" >> "$REPORT_FILE"
+
+cat "$REPORT_FILE"

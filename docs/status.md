@@ -113,6 +113,7 @@
 - D31决策（04-04）：编程CC职责简化 — 去掉deploy-dev.sh和Playwright步骤，只保留编译检查+单元测试；build-deploy-dev.yml补全后端/前端自动构建部署（merge到dev后触发）
 - D32决策（04-04）：E2E测试失败统一使用Project#4的E2E Fail状态（ID:efdab43b），三层测试（CI/中层/顶层）失败均标记E2E Fail而非Todo；中层/顶层复用parse-e2e-failures.py解析Playwright JSON报告
 - D33决策（04-04）：中层E2E从AI驱动改为纯脚本Smoke探活（e2e_smoke.sh，每30分钟，零AI消耗）；e2e-result-handler.py升级支持无Issue时自动创建Issue
+- D33决策（04-04）：中层E2E从AI驱动改为纯脚本Smoke探活（e2e_smoke.sh，每30分钟，零AI消耗）；e2e-result-handler.py升级支持无Issue时自动创建Issue
 - CC prompt全面优化：研发经理(425→160行)、backend(45→28)、frontend(617→119)、E2E(263→80)
 ## 📌 需要对方处理
 ### @伟平 待讨论

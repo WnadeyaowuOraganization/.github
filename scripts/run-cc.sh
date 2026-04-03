@@ -1,6 +1,6 @@
 #!/bin/bash
-# run-cc.sh — 在tmux中启动编程CC（stream-json实时日志）
-# 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix] [effort]
+# run-cc.sh — 在tmux中启动编程CC（Issue预取+stream-json实时日志）
+# 用法: run-cc.sh <repo> <issue_number> [model] [dir_suffix] [effort]
 # repo: backend | frontend | pipeline | app(fullstack) | plugins | gh-plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi20）
@@ -37,6 +37,7 @@ case "$REPO" in
     else
       BASE_DIR="/home/ubuntu/projects/wande-play"
     fi
+    GH_REPO="WnadeyaowuOraganization/wande-play"
     ;;
   plugins|gh-plugins)
     if [ -n "$DIR_SUFFIX" ]; then
@@ -44,6 +45,7 @@ case "$REPO" in
     else
       BASE_DIR="/home/ubuntu/projects/wande-gh-plugins"
     fi
+    GH_REPO="WnadeyaowuOraganization/wande-gh-plugins"
     ;;
   *)  echo "Unknown repo: $REPO"; exit 1 ;;
 esac
@@ -67,9 +69,6 @@ LOGFILE="$LOGDIR/${REPO}-${ISSUE}.log"
 RAW_LOG="$LOGDIR/${REPO}-${ISSUE}-raw.jsonl"
 
 # === 目录占用检测（核心防重复逻辑）===
-# 检查 BASE_DIR 下是否有任何 claude 进程在运行（不管是 backend/frontend/app）
-# 一个目录同一时间只允许一个CC会话
-# 匹配方式：扫描所有 "claude -p" 进程的 cwd
 OCCUPIED_PID=""
 OCCUPIED_INFO=""
 
@@ -81,7 +80,6 @@ while IFS= read -r line; do
     case "$cwd" in
         ${BASE_DIR}|${BASE_DIR}/*)
             OCCUPIED_PID="$pid"
-            # 提取Issue号
             OCCUPIED_INFO=$(ps -o args= -p $pid 2>/dev/null | grep -oP "Issue #\K\d+")
             break
             ;;
@@ -102,6 +100,28 @@ fi
 # Token
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
+# === Issue预取：存到 issue-source.md ===
+ISSUE_DIR="$BASE_DIR/issues/issue-${ISSUE}"
+ISSUE_SOURCE="$ISSUE_DIR/issue-source.md"
+mkdir -p "$ISSUE_DIR"
+
+echo "$(date): Fetching Issue #${ISSUE} from GitHub ($GH_REPO)..."
+
+ISSUE_BODY=$(gh issue view "$ISSUE" --repo "$GH_REPO" --json title,body,labels,state \
+  --jq '"# Issue #'"$ISSUE"': " + .title + "\n\n**Labels**: " + ([.labels[].name] | join(", ")) + "\n**State**: " + .state + "\n\n## 需求内容\n\n" + .body' 2>/dev/null)
+
+ISSUE_COMMENTS=$(gh issue view "$ISSUE" --repo "$GH_REPO" --comments --json comments \
+  --jq 'if (.comments | length) > 0 then "\n\n## 评论\n\n" + ([.comments[] | "### " + .author.login + " (" + (.createdAt | split("T")[0]) + ")\n\n" + .body] | join("\n\n---\n\n")) else "" end' 2>/dev/null)
+
+if [ -z "$ISSUE_BODY" ]; then
+  echo "WARNING: Failed to fetch Issue #${ISSUE}, CC will fetch from GitHub"
+  PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
+else
+  echo "${ISSUE_BODY}${ISSUE_COMMENTS}" > "$ISSUE_SOURCE"
+  echo "$(date): Issue #${ISSUE} saved to $ISSUE_SOURCE ($(wc -l < "$ISSUE_SOURCE") lines)"
+  PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，然后按照开发流程完成任务。Issue 编号: #${ISSUE}"
+fi
+
 # 清空日志
 > "$LOGFILE"
 > "$RAW_LOG"
@@ -111,7 +131,7 @@ echo "[$(date)] CC started for ${REPO}#${ISSUE} in ${BASE_DIR} (effort=$EFFORT)"
 # stream-json模式 → tee保存原始JSON → python解析为可读日志
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; \
-   claude -p '拾取（包含评论）并完成 Issue #${ISSUE}' --model ${MODEL} --effort ${EFFORT} --max-turns 500 \
+   claude -p '$PROMPT' --model ${MODEL} --effort ${EFFORT} --max-turns 500 \
      --output-format stream-json --include-partial-messages --verbose \
    2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
    echo '' >> '$LOGFILE'; echo [$(date)] CC COMPLETED >> '$LOGFILE'; \

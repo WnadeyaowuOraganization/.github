@@ -1,5 +1,5 @@
 #!/bin/bash
-# run-cc-play.sh — wande-play monorepo版CC启动脚本（含stream-parser日志）
+# run-cc-play.sh — wande-play monorepo版CC启动脚本（含Issue预取+stream-parser日志）
 # Usage: run-cc-play.sh <module> <issue_number> [model] [dir_suffix] [effort]
 # module: backend | frontend | app (fullstack) | pipeline
 # effort: low | medium（默认）| high | max — 控制thinking深度
@@ -54,6 +54,31 @@ if [ ! -d "$WORK_DIR" ]; then
   exit 1
 fi
 
+# ============================================================
+# Pre-task: 预取 Issue 内容到本地文件
+# ============================================================
+ISSUE_DIR="$BASE_DIR/issues/issue-${ISSUE}"
+ISSUE_SOURCE="$ISSUE_DIR/issue-source.md"
+mkdir -p "$ISSUE_DIR"
+
+echo "$(date): Fetching Issue #${ISSUE} from GitHub..."
+
+# 获取 Issue 主体
+ISSUE_BODY=$(gh issue view "$ISSUE" --repo WnadeyaowuOraganization/wande-play --json title,body,labels,state --jq '"# Issue #'"$ISSUE"': " + .title + "\n\n**Labels**: " + ([.labels[].name] | join(", ")) + "\n**State**: " + .state + "\n\n## 需求内容\n\n" + .body' 2>/dev/null)
+
+# 获取 Issue 评论
+ISSUE_COMMENTS=$(gh issue view "$ISSUE" --repo WnadeyaowuOraganization/wande-play --comments --json comments --jq 'if (.comments | length) > 0 then "\n\n## 评论\n\n" + ([.comments[] | "### " + .author.login + " (" + (.createdAt | split("T")[0]) + ")\n\n" + .body] | join("\n\n---\n\n")) else "" end' 2>/dev/null)
+
+if [ -z "$ISSUE_BODY" ]; then
+  echo "WARNING: Failed to fetch Issue #${ISSUE}, CC will need to fetch from GitHub"
+  PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
+else
+  # 写入 issue-source.md
+  echo "${ISSUE_BODY}${ISSUE_COMMENTS}" > "$ISSUE_SOURCE"
+  echo "$(date): Issue #${ISSUE} saved to $ISSUE_SOURCE ($(wc -l < "$ISSUE_SOURCE") lines)"
+  PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，然后按照开发流程完成任务。Issue 编号: #${ISSUE}"
+fi
+
 SESSION="cc-${MODULE}-${ISSUE}"
 LOGFILE="$LOGDIR/${MODULE}-${ISSUE}.log"
 RAW_LOG="$LOGDIR/${MODULE}-${ISSUE}-raw.jsonl"
@@ -66,15 +91,26 @@ fi
 > "$LOGFILE"
 > "$RAW_LOG"
 
-echo "$(date): Starting CC $SESSION in $WORK_DIR (model=$MODEL, effort=$EFFORT)" | tee "$LOGFILE"
+echo "[$(date '+%a %b %d %H:%M:%S %Z %Y')] CC started for ${MODULE}#${ISSUE} in $WORK_DIR (effort=$EFFORT)" | tee "$LOGFILE"
 
 # Use stream-parser if available, fallback to tee
 if [ -f "$PARSER" ]; then
   tmux new-session -d -s "$SESSION" -c "$WORK_DIR" \
-    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --effort $EFFORT --output-format stream-json --verbose 2>&1 | tee $RAW_LOG | python3 $PARSER 2>&1 | tee -a $LOGFILE"
+    "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL; \
+    cd $WORK_DIR; \
+   claude -p '$PROMPT' --model $MODEL --effort $EFFORT --max-turns 500 \
+     --output-format stream-json --include-partial-messages --verbose \
+   2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
+   echo '' >> '$LOGFILE'; echo [$(date '+%a %b %d %H:%M:%S %Z %Y')] CC COMPLETED >> '$LOGFILE'; \
+   tmux kill-session -t $SESSION"
 else
   tmux new-session -d -s "$SESSION" -c "$WORK_DIR" \
-    "export GH_TOKEN=$GH_TOKEN && export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL && export ANTHROPIC_API_KEY=$ANTHROPIC_API_KEY && export PATH=/root/.local/bin:\$PATH && cd $WORK_DIR && claude -p '拾取并完成 Issue #${ISSUE}' --model $MODEL --effort $EFFORT --output-format text 2>&1 | tee -a $LOGFILE"
+    "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=$ANTHROPIC_BASE_URL; \
+    cd $WORK_DIR; \
+   claude -p '$PROMPT' --model $MODEL --effort $EFFORT --max-turns 500 \
+     --output-format text \
+   2>&1 | tee -a '$LOGFILE'; \
+   tmux kill-session -t $SESSION"
 fi
 
 echo "CC started: tmux attach -t $SESSION"

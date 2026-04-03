@@ -98,10 +98,12 @@
 | D27 | 04-04 | 🟡 | 合并wande-ai-api到wande-ai（#2584 P0） | 42个重复类名导致Bean/alias冲突，dev分支后端无法启动；两个模块无外部消费者，分离收益为零 | 伟平 |
 | D28 | 04-04 | 🟡 | 接口契约目录启用（#2586 P0） | shared/api-contracts/作为前后端唯一真相源，扫描现有API初始化契约文件；契约先行规则写入CLAUDE.md | 伟平 |
 | D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
+| D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 | D25 | 04-04 | ✅ | pr-test.yml独立目录+全局排队 | PR E2E使用wande-play-ci专用目录，concurrency全局排队避免并发互踩，与cron e2e-mid/e2e-top目录隔离 | 伟平 |
 | D26 | 04-04 | ✅ | CI编译门禁+编程CC防重复类规范 | pr-test.yml新增mvn compile步骤；编程CC创建新类前必须查重；包路径唯一映射规则；研发经理CC同模块Issue串行排程 | 伟平 |
 | D27 | 04-04 | 🟡 | 合并wande-ai-api到wande-ai（#2584 P0） | 42个重复类名导致Bean/alias冲突，dev分支后端无法启动；两个模块无外部消费者，分离收益为零 | 伟平 |
 | D28 | 04-04 | 🟡 | 接口契约目录启用（#2586 P0） | shared/api-contracts/作为前后端唯一真相源，扫描现有API初始化契约文件；契约先行规则写入CLAUDE.md | 伟平 |
+| D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 | D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）

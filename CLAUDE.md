@@ -76,6 +76,7 @@ bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <repo> <N> "
 bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <model> [dir_suffix]
 # repo: backend | frontend | pipeline | app(fullstack) | plugins | gh-plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
+# 退出码: 0=成功启动, 1=参数错误, 2=目录被占用（换一个dir_suffix重试）
 # dir_suffix: 指定外接目录后缀（如 kimi1, glm1）
 ```
 
@@ -150,6 +151,7 @@ bash /home/ubuntu/projects/.github/scripts/run-cc.sh <repo> <Issue_number> <mode
 - Pipeline cron任务直接读取脚本
 
 编程CC一律分配到 kimi1~kimi20 外接目录，避免与CI/CD和cron任务冲突。
+**同一个目录同一时间只能运行一个CC（不管是backend/frontend/fullstack）**。run-cc.sh 如果返回 exit code 2（目录占用），立即换下一个 dir_suffix 重试，不要等待。
 
 ### 目录占用检查（强制，触发CC前必须执行）
 

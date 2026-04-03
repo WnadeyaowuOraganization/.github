@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-04 05:12 by Perplexity Computer
+> ⏰ 最后更新：2026-04-03 21:24 by Perplexity Computer
 
 ---
 
@@ -100,6 +100,8 @@
 | D30 | 04-04 | ✅ | 统一run-cc.sh为唯一CC启动脚本+Issue预取机制 | 合并run-cc-play.sh到run-cc.sh，启动前自动预取Issue内容到issue-source.md，编程CC从本地文件读取（解决kimi模型截断gh命令导致10分钟空转的问题，降至6秒）；删除round-executor.sh，修复cc-error-parser.py旧路径 | 伟平 |
 | D30 | 04-04 | ✅ | 统一run-cc.sh为唯一CC启动脚本+Issue预取机制 | 合并run-cc-play.sh到run-cc.sh，启动前自动预取Issue内容到issue-source.md，编程CC从本地文件读取（解决kimi模型截断gh命令导致10分钟空转的问题，降至6秒）；删除round-executor.sh，修复cc-error-parser.py旧路径 | 伟平 |
 
+| D30 | 04-04 | ✅ | CI测试环境隔离+pr-test.yml全面优化 | pr-test与dev环境竞态：1)新增CI专用环境(:6041/:8084)与dev(:6040/:8083)端口隔离，数据库共用 2)全局排队保证CI无并发冲突 3)去重复编译步骤 4)修复Issue号提取bug(PR body特殊字符致shell exit 127) 5)失败评论改为含用例名+错误摘要+日志链接 6)失败信息同时评论到Issue 7)新增ci-env.sh+nginx:8084 8)CLAUDE.md双环境说明 | 伟平 |
+| D30 | 04-04 | ✅ | CI测试环境隔离+pr-test.yml全面优化 | pr-test与dev环境竞态：1)新增CI专用环境(:6041/:8084)与dev(:6040/:8083)端口隔离，数据库共用 2)全局排队保证CI无并发冲突 3)去重复编译步骤 4)修复Issue号提取bug(PR body特殊字符致shell exit 127) 5)失败评论改为含用例名+错误摘要+日志链接 6)失败信息同时评论到Issue 7)新增ci-env.sh+nginx:8084 8)CLAUDE.md双环境说明 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

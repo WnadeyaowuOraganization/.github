@@ -3,7 +3,8 @@
 # 用法: run-cc-with-prompt.sh <repo> <prompt> <model> [dir_suffix]
 # repo: backend | frontend | pipeline | app(fullstack) | plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
-# dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi10）
+# dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi20）
+# 退出码: 0=成功, 1=参数错误, 2=目录被占用（换dir_suffix重试）
 #
 # 操作:
 #   tail -f /home/ubuntu/cc_scheduler/logs/<repo>-<issue>.log  查看实时日志
@@ -60,6 +61,30 @@ if [ ! -d "$PROJECT_DIR" ]; then
     exit 1
 fi
 
+
+# === 目录占用检测 ===
+# 同一个目录同一时间只能运行一个CC（不管是backend/frontend/fullstack）
+OCCUPIED_PID=""
+OCCUPIED_INFO=""
+
+while IFS= read -r line; do
+    pid=$(echo "$line" | awk '{print $1}')
+    [ -z "$pid" ] && continue
+    cwd=$(readlink /proc/$pid/cwd 2>/dev/null)
+    [ -z "$cwd" ] && continue
+    case "$cwd" in
+        ${BASE_DIR}|${BASE_DIR}/*)
+            OCCUPIED_PID="$pid"
+            OCCUPIED_INFO=$(ps -o args= -p $pid 2>/dev/null | grep -oP "Issue #\K\d+")
+            break
+            ;;
+    esac
+done < <(ps -u ubuntu -o pid,args 2>/dev/null | grep "claude -p" | grep -v grep | awk '{print $1}')
+
+if [ -n "$OCCUPIED_PID" ]; then
+    echo "目录占用: ${BASE_DIR} 已有CC在运行 (PID=$OCCUPIED_PID, Issue#${OCCUPIED_INFO:-?})"
+    exit 2
+fi
 
 SESSION="cc-${REPO}-${SESSION_ID}"
 LOGFILE="$LOGDIR/${REPO}-${SESSION_ID}.log"

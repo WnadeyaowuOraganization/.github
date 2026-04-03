@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-03 18:50 by Perplexity Computer
+> ⏰ 最后更新：2026-04-03 19:35 by Perplexity Computer
 
 ---
 
@@ -74,6 +74,11 @@
 | D13 | 04-03 | ✅ | Sprint-2执行管理变更→合同联动(#2085)提升为P0 | 行业最佳实践：变更金额直接影响合同回款，是核心功能 | 吴耀 |
 | D14 | 04-03 | ✅ | Sprint-2新增EVM挣值管理简化版(#2506, module:fullstack) | 行业标配，SPI/CPI实时计算+项目健康度评分，适合万德长周期项目 | 吴耀 |
 | D15 | 04-03 | ✅ | Sprint-2去重：关闭#2184-#2188，保留#2464-#2468 | 5组完全重复Issue清理 | 吴耀 |
+| D16 | 04-03 | ✅ | E2E测试独立工作目录：wande-play-e2e-mid / wande-play-e2e-top | 中层/顶层E2E各自完整wande-play克隆，互不干扰，也不影响编程CC | 吴耀 |
+| D17 | 04-03 | ✅ | 排程计划按重点模块分子目录 | sprints/日期/超管驾驶舱/PLAN.md，支持多模块并行排程 | 吴耀 |
+| D18 | 04-03 | ✅ | query-project-issues.sh 输出增加 module/priority 列 | 研发经理CC排程时可直接按标签分类，识别fullstack触发Agent Teams | 吴耀 |
+| D19 | 04-03 | ✅ | 首个fullstack Issue #1440（D3技术确认中心）用于测试Agent Teams | 合并#443+#1166，验证研发经理CC对module:fullstack的排程和触发 | 吴耀 |
+| D20 | 04-03 | ✅ | Claude Office新增CC实时日志显示 | 点击agent/研发经理卡片打开终端风格日志面板，3秒自动刷新 | 吴耀 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
@@ -82,14 +87,15 @@
 
 ## 📊 工作状态
 
-### Project#4 — wande-play 研发看板（2026-04-03）
+### Project#4 — wande-play 研发看板（2026-04-03 19:35）
 
 | 状态 | 数量 |
 |------|------|
-| 总Issue数 | 387 |
-| Open Issue | 654 |
-
-> Project#4 刚从 Project#2 迁移，部分 Issue 的 Status 字段待同步。
+| Plan | 722 |
+| Todo | 288 |
+| In Progress | 27 |
+| 总Items | 1037 |
+| Open Issue | 1070 |
 
 **看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/4
 
@@ -121,6 +127,14 @@
 - #2085 变更→合同联动优先级 P1→P0
 - 新增 #2506 EVM挣值管理简化版（module:fullstack, Sprint-2）
 - Sprint-2 当前：76个有效Issue（81 - 5重复）
+
+### 基础设施变更（04-03）
+- E2E测试目录：wande-ai-e2e → wande-play-e2e-mid（中层）/ wande-play-e2e-top（顶层）
+- 316个Issue批量关联到Project#4（之前仅在Project#2）
+- 研发经理CC排程改为按重点模块分子目录（超管驾驶舱/销售记录体系/D3参数化/其他）
+- query-project-issues.sh输出增加module/priority/labels列
+- Claude Office新增CC实时日志显示（/api/logs端点 + 终端风格面板）
+- 首个fullstack Issue #1440 创建（合并#443+#1166），用于Agent Teams测试
 
 ---
 

@@ -1,9 +1,10 @@
 #!/bin/bash
 # run-cc.sh — 在tmux中启动编程CC（stream-json实时日志）
-# 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix]
+# 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix] [effort]
 # repo: backend | frontend | pipeline | app(fullstack) | plugins | gh-plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi20）
+# effort: 可选，low | medium（默认）| high | max — 控制thinking深度
 #
 # 退出码:
 #   0: 成功启动 或 会话已存在
@@ -14,15 +15,17 @@ REPO=$1
 ISSUE=$2
 MODEL=${3:-claude-opus-4-6}
 DIR_SUFFIX=${4:-""}
+EFFORT=${5:-medium}
 LOGDIR=/home/ubuntu/cc_scheduler/logs
 mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 if [ -z "$REPO" ] || [ -z "$ISSUE" ]; then
-    echo "用法: $0 <repo> <issue_number> [model] [dir_suffix]"
+    echo "用法: $0 <repo> <issue_number> [model] [dir_suffix] [effort]"
     echo "  repo: backend | frontend | pipeline | app | plugins | gh-plugins"
     echo "  dir_suffix: kimi1~kimi20（可选）"
+    echo "  effort: low | medium（默认）| high | max"
     exit 1
 fi
 
@@ -103,18 +106,18 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 > "$LOGFILE"
 > "$RAW_LOG"
 
-echo "[$(date)] CC started for ${REPO}#${ISSUE} in ${BASE_DIR}" >> "$LOGFILE"
+echo "[$(date)] CC started for ${REPO}#${ISSUE} in ${BASE_DIR} (effort=$EFFORT)" >> "$LOGFILE"
 
 # stream-json模式 → tee保存原始JSON → python解析为可读日志
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; \
-   claude -p '拾取（包含评论）并完成 Issue #${ISSUE}' --model ${MODEL} --max-turns 500 \
+   claude -p '拾取（包含评论）并完成 Issue #${ISSUE}' --model ${MODEL} --effort ${EFFORT} --max-turns 500 \
      --output-format stream-json --include-partial-messages --verbose \
    2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
    echo '' >> '$LOGFILE'; echo [$(date)] CC COMPLETED >> '$LOGFILE'; \
    tmux kill-session -t $SESSION"
 
-echo "✓ CC已在tmux会话 '$SESSION' 中启动 (目录: $BASE_DIR)"
+echo "✓ CC已在tmux会话 '$SESSION' 中启动 (目录: $BASE_DIR, effort: $EFFORT)"
 echo "  实时日志: tail -f $LOGFILE"
 echo "  原始JSON: tail -f $RAW_LOG"
 echo "  tmux会话: tmux attach -t $SESSION"

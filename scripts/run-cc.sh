@@ -3,7 +3,7 @@
 # 用法: run-cc.sh <repo> <issue_number> <model> [dir_suffix]
 # repo: backend | frontend | pipeline | app(fullstack) | plugins | gh-plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
-# dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi10）
+# dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi20）
 #
 # 操作:
 #   tail -f /home/ubuntu/cc_scheduler/logs/<repo>-<issue>.log  查看实时日志
@@ -22,7 +22,7 @@ PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 if [ -z "$REPO" ] || [ -z "$ISSUE" ]; then
     echo "用法: $0 <repo> <issue_number> [model] [dir_suffix]"
     echo "  repo: backend | frontend | pipeline | app | plugins | gh-plugins"
-    echo "  dir_suffix: kimi1~kimi10（可选）"
+    echo "  dir_suffix: kimi1~kimi20（可选）"
     exit 1
 fi
 

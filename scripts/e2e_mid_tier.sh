@@ -1,6 +1,6 @@
 #!/bin/bash
 # e2e_mid_tier.sh — 中层E2E测试（每15分钟，PR驱动）
-# crontab: */15 * * * *
+# crontab: 0 */2 * * * (每2小时)
 #
 # 操作:
 #   tail -f /home/ubuntu/cc_scheduler/logs/e2e-mid.log    查看实时日志
@@ -50,7 +50,7 @@ export ANTHROPIC_BASE_URL=http://localhost:9855
 export PATH="/home/ubuntu/.local/bin:\$PATH"
 export HOME="/home/ubuntu"
 cd "$E2E_DIR"
-git checkout main && git pull origin main
+git checkout dev && git pull origin dev
 echo [\$(date)] 中层E2E测试启动 >> "$LOGFILE"
 claude -p '执行中层测试' --model claude-opus-4-6 \
   --output-format stream-json --include-partial-messages --verbose \

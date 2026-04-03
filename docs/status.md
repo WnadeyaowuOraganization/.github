@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-03 21:24 by Perplexity Computer
+> ⏰ 最后更新：2026-04-04 07:10 by Perplexity Computer
 ---
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | 重点功能模块 |
@@ -76,9 +76,131 @@
 | D28 | 04-04 | 🟡 | 接口契约目录启用（#2586 P0） | shared/api-contracts/作为前后端唯一真相源，扫描现有API初始化契约文件；契约先行规则写入CLAUDE.md | 伟平 |
 | D29 | 04-04 | ✅ | Sprint管理规范化：表格化+按阶段命名 | status.md Sprint计划改为表格（阶段/状态/时间/重点模块/子目录路径）；sprints目录按阶段命名(sprint-1)而非日期；研发经理CC直接查表获取sprint名和模块子目录 | 伟平 |
 | D30 | 04-04 | ✅ | 统一run-cc.sh为唯一CC启动脚本+Issue预取机制 | 合并run-cc-play.sh到run-cc.sh，启动前自动预取Issue内容到issue-source.md，编程CC从本地文件读取（解决kimi模型截断gh命令导致10分钟空转的问题，降至6秒）；删除round-executor.sh，修复cc-error-parser.py旧路径 | 伟平 |
-| D30 | 04-04 | ✅ | CI测试环境隔离+pr-test.yml全面优化 | pr-test与dev环境竞态：1)新增CI专用环境(:6041/:8084)与dev(:6040/:8083)端口隔离，数据库共用 2)全局排队保证CI无并发冲突 3)去重复编译步骤 4)修复Issue号提取bug(PR body特殊字符致shell exit 127) 5)失败评论改为含用例名+错误摘要+日志链接 6)失败信息同时评论到Issue 7)新增ci-env.sh+nginx:8084 8)CLAUDE.md双环境说明 | 伟平 |
+| D31 | 04-04 | ✅ | 编程CC职责简化：去掉deploy-dev.sh和Playwright，只保留编译检查+单元测试 | build-deploy-dev.yml补全后端/前端自动构建部署（merge到dev后触发），编程CC不再操作Dev环境 | 吴耀 |
+| D32 | 04-04 | ✅ | E2E测试失败统一使用Project#4的E2E Fail状态 | 三层测试失败均标E2E Fail(efdab43b)而非Todo；Label用status:test-failed/test-passed；e2e-result-handler.py统一处理 | 吴耀 |
+| D33 | 04-04 | ✅ | 中层E2E从AI驱动改为纯脚本Smoke探活 | e2e_smoke.sh每30分钟零AI消耗跑smoke测试；原e2e_mid_tier.sh(Claude Code)废弃；e2e-result-handler.py支持无Issue时自动创建 | 吴耀 |
+| D34 | 04-04 | ✅ | pr-test.yml兜底构建失败场景 | 构建失败时Playwright不跑、无测试报告，handler跳过导致Issue未标记。新增兜底：报告不存在时直接评论PR/Issue+标test-failed+设E2E Fail | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
+
+## 🔄 Issue 生命周期 + 测试层级
+
+### 完整流程图
+
+```
+Issue创建
+  │ auto-add-to-project.yml
+  ▼
+[Plan] ──── 研发经理CC排程 ────▶ [Todo]
+                                    │
+                                    ▼ run-cc.sh 触发编程CC
+                                [In Progress]
+                                    │
+                    ┌───────────────┤
+                    ▼               ▼
+              单元测试(TDD)    编译检查
+              mvn test /       mvn package /
+              vitest           pnpm build
+                    │               │
+                    ▼               ▼
+               ❌ 失败?         ❌ 失败?
+               │  是            │  是
+               ▼               ▼
+            编程CC自行修复    编程CC自行修复
+            （不提交PR）      （不提交PR）
+                    │               │
+                    └──── 全通过 ────┘
+                           │
+                           ▼
+                    push feature分支
+                    gh pr create --base dev
+                           │
+    ═══════════════════════╪═══════════════════════
+    CI层 (pr-test.yml)     │  PR创建/更新自动触发
+    ═══════════════════════╪═══════════════════════
+                           ▼
+                CI专用环境构建(:6041/:8084)
+                           │
+                    ┌──────┴──────┐
+                    ▼             ▼
+               构建成功       ❌ 构建失败
+                    │             │
+                    ▼             ▼ 兜底逻辑
+             Playwright E2E      评论PR/Issue
+             tests/backend/      + status:test-failed
+             tests/front/        + [E2E Fail]
+                    │
+              ┌─────┴─────┐
+              ▼           ▼
+           ✅ 通过     ❌ 失败
+              │           │ e2e-result-handler.py
+              ▼           ▼
+         approve PR    评论PR失败详情
+         squash merge  评论Issue失败详情
+         [Done]        + status:test-failed
+              │        + [E2E Fail]
+              ▼
+    ═══════════════════════════════════════════════
+    CD层 (build-deploy-dev.yml)  merge到dev触发
+    ═══════════════════════════════════════════════
+              │
+              ▼
+         后端: mvn package → 部署 → 健康检查
+         前端: pnpm build → rsync → nginx reload
+              │
+              ▼
+         Dev环境更新完成(:6040/:8083)
+              │
+    ═══════════════════════════════════════════════
+    Smoke探活 (e2e_smoke.sh)  cron每30分钟
+    ═══════════════════════════════════════════════
+              │
+              ▼
+         curl健康检查 + Playwright smoke
+              │
+              ├── ✅ 通过 → 静默
+              └── ❌ 失败 → e2e-result-handler.py
+                            自动创建Issue
+                            + status:test-failed
+                            + [E2E Fail]
+              │
+    ═══════════════════════════════════════════════
+    全量回归 (e2e_top_tier.sh)  cron每6小时, AI驱动
+    ═══════════════════════════════════════════════
+              │
+              ▼
+         regression/ + 全部smoke + API
+              │
+              ├── ✅ 通过 → 记录日志
+              └── ❌ 失败 → AI智能创建Issue
+                            (判断模块+写描述)
+                            + e2e-result-handler.py
+                            + [E2E Fail]
+```
+
+### 测试层级总览
+
+| 层级 | 触发 | 范围 | 实现 | AI消耗 | 失败处理 |
+|------|------|------|------|--------|----------|
+| 单元测试 | 编程CC TDD | 当前Issue涉及的Service | mvn test / vitest | 无 | 编程CC自行修复，不提PR |
+| 编译检查 | 编程CC提交前 | 全量编译 | mvn package / pnpm build | 无 | 编程CC自行修复，不提PR |
+| CI E2E | PR创建/更新 | PR影响的模块 | pr-test.yml + e2e-result-handler.py | 无 | 评论PR/Issue + test-failed + E2E Fail |
+| Smoke探活 | cron 30min | health + auth + 页面smoke | e2e_smoke.sh + e2e-result-handler.py | **无** | 自动创建Issue + test-failed + E2E Fail |
+| 全量回归 | cron 6h | regression + 全模块 | Claude Code + e2e-result-handler.py | 有 | AI创建Issue + test-failed + E2E Fail |
+
+### Project#4 状态流转
+
+```
+[Plan] → [Todo] → [In Progress] → [Done]     (正常路径)
+                        │              │
+                        ▼              ▼
+                    [E2E Fail] ◀── CI/Smoke/回归发现失败
+                        │
+                        ▼ 研发经理CC最优先排程
+                    [In Progress] → 修复 → 重新提PR → [Done]
+```
+
+
 ## 📊 工作状态
 ### Project#4 — wande-play 研发看板（2026-04-03 19:35）
 | 状态 | 数量 |
@@ -110,10 +232,6 @@
 - 首个fullstack Issue #1440 创建（合并#443+#1166），用于Agent Teams测试
 - Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 - 测试架构改革落地：编程CC接管构建部署，build-deploy-dev.yml仅保留pipeline sync，新增pr-test.yml自动E2E+merge/fail
-- D31决策（04-04）：编程CC职责简化 — 去掉deploy-dev.sh和Playwright步骤，只保留编译检查+单元测试；build-deploy-dev.yml补全后端/前端自动构建部署（merge到dev后触发）
-- D32决策（04-04）：E2E测试失败统一使用Project#4的E2E Fail状态（ID:efdab43b），三层测试（CI/中层/顶层）失败均标记E2E Fail而非Todo；中层/顶层复用parse-e2e-failures.py解析Playwright JSON报告
-- D33决策（04-04）：中层E2E从AI驱动改为纯脚本Smoke探活（e2e_smoke.sh，每30分钟，零AI消耗）；e2e-result-handler.py升级支持无Issue时自动创建Issue
-- D33决策（04-04）：中层E2E从AI驱动改为纯脚本Smoke探活（e2e_smoke.sh，每30分钟，零AI消耗）；e2e-result-handler.py升级支持无Issue时自动创建Issue
 - CC prompt全面优化：研发经理(425→160行)、backend(45→28)、frontend(617→119)、E2E(263→80)
 ## 📌 需要对方处理
 ### @伟平 待讨论

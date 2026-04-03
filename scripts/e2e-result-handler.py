@@ -131,9 +131,19 @@ def update_issue_labels(issue_num, add_labels, remove_labels):
         run_cmd(f'gh issue edit {issue_num} --repo {REPO} --remove-label "{label}"')
 
 
-def update_project_status(issue_num, status):
+def update_project_status(issue_num, status, retries=3, delay=10):
+    """更新Project#4状态，带重试（新建Issue时auto-add-to-project.yml是异步的）"""
     script = os.path.join(SCRIPTS_DIR, "update-project-status.sh")
-    run_cmd(f'bash "{script}" play "{issue_num}" "{status}"')
+    import time
+    for attempt in range(retries):
+        result = run_cmd(f'bash "{script}" play "{issue_num}" "{status}"')
+        if result.returncode == 0:
+            return True
+        if attempt < retries - 1:
+            print(f"  Project状态更新失败，{delay}s后重试 ({attempt+1}/{retries})")
+            time.sleep(delay)
+    print(f"⚠️ Project状态更新最终失败: Issue #{issue_num}", file=sys.stderr)
+    return False
 
 
 def create_issue(source, module, fail_detail, total, failed_count):

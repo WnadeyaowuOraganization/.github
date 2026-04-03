@@ -16,18 +16,18 @@
 Issue创建 → CI自动关联Project Status=Plan
          → [排程] Plan → Todo
          → [触发CC] Todo → In Progress
-         → [编程CC] TDD → build → deploy-dev → smoke → push feature → create PR
-         → [CI pr-test.yml] E2E测试 → auto merge+Done / test-failed
+         → [编程CC] TDD → 编译检查 → push feature → create PR
+         → [CI pr-test.yml] E2E测试 → 通过auto merge+Done / 失败→E2E Fail
 ```
 
 ## CI/CD 流水线
 
 | 流水线 | 触发 | 职责 |
 |--------|------|------|
-| 编程CC | run-cc.sh | TDD + 构建 + 部署测试环境 + smoke + push feature + 创建PR |
-| pr-test.yml | PR创建/更新 | E2E测试 → 通过auto merge+Issue Done / 失败标test-failed |
-| build-deploy-dev.yml | dev push | 仅pipeline/目录变更时同步代码到G7e |
-| e2e_mid_tier (cron 2h) | crontab | 按模块E2E兜底回归，失败创建Issue |
+| 编程CC | run-cc.sh | TDD + 编译检查 + push feature + 创建PR |
+| pr-test.yml | PR创建/更新 | CI专用环境E2E测试 → 通过auto merge+Done / 失败→E2E Fail |
+| build-deploy-dev.yml | dev push | 后端构建部署+前端构建部署+Pipeline同步 |
+| e2e_smoke (cron 30min) | crontab | Dev环境健康探活，失败自动创建Issue |
 | e2e_top_tier (cron 6h) | crontab | 全量E2E回归，失败创建Issue |
 
 ## Sprint目标
@@ -95,10 +95,11 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 | Done | `c8f40892` |
 | pause | `434faed7` |
 | Fail | `8a0d3051` |
+| E2E Fail | `efdab43b` |
 
 ## 排序规则
 
-1. `status:test-failed` 最优先
+1. `E2E Fail` / `status:test-failed` 最优先
 2. `priority/P0` > P1 > P2 > P3
 3. Sprint重点模块优先
 4. 同模块内Phase编号升序
@@ -147,7 +148,7 @@ bash scripts/update-project-status.sh play <N> "Todo"
 bash scripts/check-cc-status.sh
 
 # 2. 读取排程计划
-cat sprints/<sprint>/<重点模块>/PLAN.md  # sprint名如 sprint-1, sprint-2  # sprint名如 sprint-1, sprint-2
+cat sprints/<sprint>/<重点模块>/PLAN.md  # sprint名如 sprint-1, sprint-2
 
 # 3. pre-task
 cd /home/ubuntu/projects/wande-play-<suffix>

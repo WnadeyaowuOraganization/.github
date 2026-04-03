@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-03 19:35 by Perplexity Computer
+> ⏰ 最后更新：2026-04-03 19:38 by Perplexity Computer
 
 ---
 
@@ -32,7 +32,7 @@
 | 仓库 | 用途 | 看板 |
 |------|------|------|
 | [wande-play](https://github.com/WnadeyaowuOraganization/wande-play) | Monorepo：后端(Spring Boot) + 前端(Vue3) + E2E(Playwright) + 数据管线(Python) + 接口契约 | Project#4 |
-| [wande-gh-plugins](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | Grasshopper 参数化插件库 | Project#2 |
+| [wande-gh-plugins](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | Grasshopper 参数化插件库 | Project#4 |
 | [.github](https://github.com/WnadeyaowuOraganization/.github) | 组织级配置 — 研发经理CC指令/辅助脚本/Sprint记录 | — |
 
 ### 已归档（仅追溯）
@@ -79,6 +79,7 @@
 | D18 | 04-03 | ✅ | query-project-issues.sh 输出增加 module/priority 列 | 研发经理CC排程时可直接按标签分类，识别fullstack触发Agent Teams | 吴耀 |
 | D19 | 04-03 | ✅ | 首个fullstack Issue #1440（D3技术确认中心）用于测试Agent Teams | 合并#443+#1166，验证研发经理CC对module:fullstack的排程和触发 | 吴耀 |
 | D20 | 04-03 | ✅ | Claude Office新增CC实时日志显示 | 点击agent/研发经理卡片打开终端风格日志面板，3秒自动刷新 | 吴耀 |
+| D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 吴耀 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
@@ -99,16 +100,9 @@
 
 **看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/4
 
-### Project#2 — 旧看板（2026-04-03，含全部旧仓库）
+### Project#2 — 已废弃
 
-| 状态 | 数量 |
-|------|------|
-| Plan | 697 |
-| Todo | 128 |
-| In Progress | 202 |
-| Done | 548 |
-| Pause | 1 |
-| 总计 | 1576 |
+> 2026-04-03 起 Project#2 不再使用。所有活跃 Issue 已迁移到 Project#4，wande-gh-plugins 的 22 个 Issue 也已迁移。Project#2 仅保留历史数据供追溯。
 
 ### 最近完成（wande-play 04-02）
 - [项目矿场] 新增运营仪表盘页面 #870
@@ -135,6 +129,7 @@
 - query-project-issues.sh输出增加module/priority/labels列
 - Claude Office新增CC实时日志显示（/api/logs端点 + 终端风格面板）
 - 首个fullstack Issue #1440 创建（合并#443+#1166），用于Agent Teams测试
+- Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 
 ---
 

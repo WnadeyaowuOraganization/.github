@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-03 19:38 by Perplexity Computer
+> ⏰ 最后更新：2026-04-03 23:32 by Perplexity Computer
 
 ---
 
@@ -80,7 +80,8 @@
 | D19 | 04-03 | ✅ | 首个fullstack Issue #1440（D3技术确认中心）用于测试Agent Teams | 合并#443+#1166，验证研发经理CC对module:fullstack的排程和触发 | 伟平 |
 | D20 | 04-03 | ✅ | Claude Office新增CC实时日志显示 | 点击agent/研发经理卡片打开终端风格日志面板，3秒自动刷新 | 伟平 |
 | D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 伟平 |
-| D21 | 04-03 | ✅ | Project#2废弃，wande-gh-plugins迁移到Project#4 | 统一看板管理，Project#2仅保留历史追溯 | 伟平 |
+
+| D22 | 04-03 | ✅ | 测试架构改革：编程CC接管构建部署，CI仅负责PR E2E和pipeline同步 | build-deploy-dev.yml剥离构建部署job，编程CC在feature分支完成TDD→build→deploy→smoke→PR全流程；CI pr-test.yml负责E2E自动merge/fail；cron 2h/6h兜底回归 | 伟平 |
 
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
@@ -131,7 +132,8 @@
 - Claude Office新增CC实时日志显示（/api/logs端点 + 终端风格面板）
 - 首个fullstack Issue #1440 创建（合并#443+#1166），用于Agent Teams测试
 - Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
-- Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
+- 测试架构改革落地：编程CC接管构建部署，build-deploy-dev.yml仅保留pipeline sync，新增pr-test.yml自动E2E+merge/fail
+- CC prompt全面优化：研发经理(425→160行)、backend(45→28)、frontend(617→119)、E2E(263→80)
 
 ---
 

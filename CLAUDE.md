@@ -147,7 +147,7 @@ bash scripts/update-project-status.sh play <N> "Todo"
 bash scripts/check-cc-status.sh
 
 # 2. 读取排程计划
-cat sprints/<sprint>/<重点模块>/PLAN.md  # sprint名如 sprint-1, sprint-2
+cat sprints/<sprint>/<重点模块>/PLAN.md  # sprint名如 sprint-1, sprint-2  # sprint名如 sprint-1, sprint-2
 
 # 3. pre-task
 cd /home/ubuntu/projects/wande-play-<suffix>

@@ -15,9 +15,20 @@
 ```
 Issue创建 → CI自动关联Project Status=Plan
          → [排程] Plan → Todo
-         → [触发CC] Todo → In Progress → 编程CC TDD开发 + push feature
-         → [CI自动] 快速验证 → 创建PR → E2E测试 → merge → Done
+         → [触发CC] Todo → In Progress
+         → [编程CC] TDD → build → deploy-dev → smoke → push feature → create PR
+         → [CI pr-test.yml] E2E测试 → auto merge+Done / test-failed
 ```
+
+## CI/CD 流水线
+
+| 流水线 | 触发 | 职责 |
+|--------|------|------|
+| 编程CC | run-cc.sh | TDD + 构建 + 部署测试环境 + smoke + push feature + 创建PR |
+| pr-test.yml | PR创建/更新 | E2E测试 → 通过auto merge+Issue Done / 失败标test-failed |
+| build-deploy-dev.yml | dev push | 仅pipeline/目录变更时同步代码到G7e |
+| e2e_mid_tier (cron 2h) | crontab | 按模块E2E兜底回归，失败创建Issue |
+| e2e_top_tier (cron 6h) | crontab | 全量E2E回归，失败创建Issue |
 
 ## Sprint目标
 

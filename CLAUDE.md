@@ -138,7 +138,7 @@ bash scripts/update-project-status.sh play <N> "Todo"
 
 **决策清单**: 先筛Sprint重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
 
-**记录**: `sprints/<YYYY-MM-DD>/<重点模块>/PLAN.md`
+**记录**: `sprints/<sprint>/<重点模块>/PLAN.md`（sprint名从status.md Sprint计划表获取，如sprint-1）
 
 ### 任务二：触发CC（Todo → In Progress）
 
@@ -147,7 +147,7 @@ bash scripts/update-project-status.sh play <N> "Todo"
 bash scripts/check-cc-status.sh
 
 # 2. 读取排程计划
-cat sprints/<sprint>/<重点模块>/PLAN.md
+cat sprints/<sprint>/<重点模块>/PLAN.md  # sprint名如 sprint-1, sprint-2
 
 # 3. pre-task
 cd /home/ubuntu/projects/wande-play-<suffix>

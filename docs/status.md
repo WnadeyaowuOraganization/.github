@@ -142,6 +142,9 @@
 ### @伟平 待讨论
 - **dev分支后端无法启动（P0）** — 多个编程CC并行开发导致42个重复类名（Bean冲突），Spring Boot 启动失败。影响：pr-test.yml 所有 backend E2E 测试超时。需讨论：1) 是否引入编译检查到CI 2) 如何批量清理现有冲突 3) 编程CC代码规范如何防止重复
 
+### @伟平 待讨论
+- **dev分支后端无法启动（P0）** — 多个编程CC并行开发导致42个重复类名（Bean冲突），Spring Boot 启动失败。影响：pr-test.yml 所有 backend E2E 测试超时。需讨论：1) 是否引入编译检查到CI 2) 如何批量清理现有冲突 3) 编程CC代码规范如何防止重复
+
 ### @吴耀
 - 明道云 API Key — 解锁 CRM 对接
 - ceshi.tiyouoperation.com 决策确认 — 是否继续使用此域名

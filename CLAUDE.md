@@ -51,15 +51,34 @@ bash scripts/query-project-issues.sh <repo> "<STATUS>"
 bash scripts/update-project-status.sh <repo> <N> "<STATUS>"
 
 # 启动编程CC（exit 0=成功, 1=参数错误, 2=目录占用→换目录重试）
-bash scripts/run-cc.sh <module> <Issue号> <model> [dir_suffix]
+bash scripts/run-cc.sh <module> <Issue号> <model> [dir_suffix] [effort]
 # module: backend | frontend | pipeline | app(fullstack) | plugins
+# effort: low | medium（默认）| high | max — 控制thinking深度
 
 # 自定义Prompt启动CC
-bash scripts/run-cc-with-prompt.sh <module> "<prompt>" <model> [dir_suffix]
+bash scripts/run-cc-with-prompt.sh <module> "<prompt>" <model> [dir_suffix] [effort]
 
 # GitHub Token
 export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 ```
+
+## Effort 参数决策规则
+
+**研发经理根据 Issue 复杂度决定 effort 参数传递给启动脚本。不传时默认 medium。**
+
+| effort | 适用场景 | 示例 |
+|--------|---------|------|
+| `low` | 纯文档/配置/样式变更、单文件小修改 | 修改README、调CSS、改环境变量 |
+| `medium` | **默认值**。常规 CRUD、单模块功能开发、标准 TDD 任务 | Entity+Mapper+Service+Controller、页面组件开发 |
+| `high` | 多文件重构、复杂业务逻辑、涉及多表关联、调试困难的 bug | 模块合并、权限体系重构、复杂查询优化 |
+| `max` | 仅 Opus 4.6 可用。架构级决策、大规模跨模块重构 | 数据库迁移、模块拆分合并、全局架构调整 |
+
+**判断依据（按优先级）：**
+1. `priority/P0` + `type:refactor` 或 `size/L` → 建议 `high` 或 `max`
+2. `type:bugfix` + Issue描述涉及多文件/多表 → 建议 `high`
+3. 标准 `type:feature` + `size/S` 或 `size/M` → `medium`（默认，不传即可）
+4. `type:docs` 或 纯配置变更 → `low`
+5. `module:fullstack`（Agent Teams）→ 至少 `high`（Team Lead 需要深度思考来拆分任务和定义契约）
 
 ## Project #4 看板
 
@@ -137,8 +156,9 @@ git checkout -b feature-Issue-<N>
 mkdir -p ./issues/issue-<N>
 bash scripts/update-project-status.sh play <N> "In Progress"
 
-# 4. 启动CC（exit 2 → 换suffix）
-bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix>
+# 4. 根据Issue复杂度决定effort，启动CC（exit 2 → 换suffix）
+bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix> <effort>
+# effort不传时默认medium，复杂Issue传high或max
 
 # 5. 记录 → sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md
 ```

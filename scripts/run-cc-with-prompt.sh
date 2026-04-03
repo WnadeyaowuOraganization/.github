@@ -1,9 +1,10 @@
 #!/bin/bash
 # run-cc-with-prompt.sh — 在tmux中启动编程CC，自定义prompt（stream-json实时日志）
-# 用法: run-cc-with-prompt.sh <repo> <prompt> <model> [dir_suffix]
+# 用法: run-cc-with-prompt.sh <repo> <prompt> <model> [dir_suffix] [effort]
 # repo: backend | frontend | pipeline | app(fullstack) | plugins
 # model: claude-opus-4-6（默认）、claude-sonnet-4-6、claude-haiku-4-5-20251001
 # dir_suffix: 可选，指定外接目录后缀（如 kimi1~kimi20）
+# effort: 可选，low | medium（默认）| high | max — 控制thinking深度
 # 退出码: 0=成功, 1=参数错误, 2=目录被占用（换dir_suffix重试）
 #
 # 操作:
@@ -16,15 +17,17 @@ PROMPT=$2
 SESSION_ID=$(echo -n "$PROMPT" | md5sum | cut -c1-8)
 MODEL=${3:-claude-opus-4-6}
 DIR_SUFFIX=${4:-""}
+EFFORT=${5:-medium}
 LOGDIR=/home/ubuntu/cc_scheduler/logs
 mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 if [ -z "$REPO" ] || [ -z "$PROMPT" ]; then
-    echo "用法: $0 <repo> <prompt> [model] [dir_suffix]"
+    echo "用法: $0 <repo> <prompt> [model] [dir_suffix] [effort]"
     echo "  repo: backend | frontend | pipeline | app | plugins"
-    echo "  dir_suffix: kimi1~kimi10（可选）"
+    echo "  dir_suffix: kimi1~kimi20（可选）"
+    echo "  effort: low | medium（默认）| high | max"
     exit 1
 fi
 
@@ -102,18 +105,18 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 > "$LOGFILE"
 > "$RAW_LOG"
 
-echo "[$(date)] CC started for PROMPT: (${PROMPT})" >> "$LOGFILE"
+echo "[$(date)] CC started for PROMPT: (${PROMPT}) effort=${EFFORT}" >> "$LOGFILE"
 
 # stream-json模式 → tee保存原始JSON → python解析为可读日志
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; \
-   claude -p '${PROMPT}' --model ${MODEL} --max-turns 500 \
+   claude -p '${PROMPT}' --model ${MODEL} --effort ${EFFORT} --max-turns 500 \
      --output-format stream-json --include-partial-messages --verbose \
    2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
    echo '' >> '$LOGFILE'; echo [$(date)] CC COMPLETED >> '$LOGFILE'; \
-   tmux kill-session -t "$SESSION""
+   tmux kill-session -t \"$SESSION\""
 
-echo "✓ CC已在tmux会话 '$SESSION' 中启动"
+echo "✓ CC已在tmux会话 '$SESSION' 中启动 (effort: $EFFORT)"
 echo "  实时日志: tail -f $LOGFILE"
 echo "  原始JSON: tail -f $RAW_LOG"
 echo "  tmux会话: tmux attach -t $SESSION"

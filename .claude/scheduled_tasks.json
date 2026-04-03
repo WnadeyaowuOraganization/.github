@@ -1,0 +1,12 @@
+{
+  "tasks": [
+    {
+      "id": "c7f4c09f",
+      "cron": "*/5 * * * *",
+      "prompt": "运行CC状态检查脚本：bash /home/ubuntu/cc_scheduler/check-cc-status.sh 2>&1 | tee -a /home/ubuntu/cc_scheduler/cron-check.log | tail -20",
+      "createdAt": 1775209285400,
+      "lastFiredAt": 1775218617946,
+      "recurring": true
+    }
+  ]
+}

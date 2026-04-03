@@ -18,8 +18,8 @@ from pathlib import Path
 # ---------- 配置 ----------
 CODING_CC_LOG_DIR = Path("/var/log/coding-cc")
 PROXY_LOG_PATH = Path("/home/ubuntu/projects/.github/scripts/model-switch/proxy.log")
-E2E_LOG_DIR = Path("/home/ubuntu/projects/wande-ai-e2e/logs")
-E2E_TRACE_PATH = Path("/home/ubuntu/projects/wande-ai-e2e/traceability/requirement-map.json")
+E2E_LOG_DIR = Path("/home/ubuntu/projects/wande-play/e2e/logs")
+E2E_TRACE_PATH = Path("/home/ubuntu/projects/wande-play/e2e/traceability/requirement-map.json")
 INFRA_LOG_PATH = Path("/var/log/wande-infra-monitor.log")
 
 
@@ -478,7 +478,7 @@ def parse_e2e_logs(since_dt: datetime | None) -> list[dict]:
             m = E2E_SYSERROR_PATTERN.search(line)
             if m:
                 events.append(make_event(
-                    repo="wande-ai-e2e",
+                    repo="wande-play",
                     issue_number=None,
                     phase="testing",
                     error_type="e2e_exception",
@@ -499,7 +499,7 @@ def parse_e2e_logs(since_dt: datetime | None) -> list[dict]:
                     content = f.read().decode("utf-8", errors="replace")
                 if "failed" in content.lower() or "failure" in content.lower():
                     events.append(make_event(
-                        repo="wande-ai-e2e",
+                        repo="wande-play",
                         issue_number=None,
                         phase="testing",
                         error_type="e2e_test_failed",
@@ -538,7 +538,7 @@ def parse_e2e_traceability(since_dt: datetime | None) -> list[dict]:
 
     if failed_issues:
         events.append(make_event(
-            repo="wande-ai-e2e",
+            repo="wande-play",
             issue_number=None,
             phase="testing",
             error_type="e2e_traceability_failed",

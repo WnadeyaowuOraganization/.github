@@ -804,3 +804,18 @@
 | 3/5 | #1916 | backend | kimi4 | In Progress |
 | 4/5 | #1913 | backend | kimi5 | In Progress |
 | 5/5 | #1926 | backend | kimi6 | 恢复中 |
+
+### CC轮换 (15:56)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1916 | backend | kimi4 | — | Done | [D3-Web][P1] BOM实时汇总 — CC正常完成，16单元测试通过 |
+| #1928 | backend | kimi4 | high | In Progress | [D3-v2.0][P1][Phase4-4/4] AI设计预览与干涉检测 — 3D预览+碰撞检测+优化建议 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #1915 | backend | kimi1 | In Progress |
+| 2/5 | #1923 | backend | kimi3 | In Progress |
+| 3/5 | #1928 | backend | kimi4 | In Progress |
+| 4/5 | #1913 | backend | kimi5 | In Progress |
+| 5/5 | #1926 | backend | kimi6 | 恢复中 |

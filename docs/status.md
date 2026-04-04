@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-04 07:10 by Perplexity Computer
+> ⏰ 最后更新：2026-04-04 15:18 by Perplexity Computer
 ---
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | 重点功能模块 |
@@ -13,12 +13,13 @@
 | 超管驾驶舱 | 95 | 平台系统+开发者协同+安全审计 | `sprints/sprint-1/超管驾驶舱/` |
 | 销售记录体系 | 16 | 三维驱动+记录中心+周报月报 | `sprints/sprint-1/销售记录体系/` |
 | D3参数化设计 | — | 电池包+AI集成+Web平台 | `sprints/sprint-1/D3参数化设计/` |
-### Sprint-2 预览（76个Issue，已去重清理）
+### Sprint-2 预览（80个Issue，已去重清理）
 | 执行管理 | 57 | 数据库建表→CRUD→图纸/BOM/采购/生产/安装/验收/变更→利润/成本/回款→AI预警→EVM | `sprints/sprint-2/执行管理/` |
 | CRM | 6 | 跟进记录+商机管理+经销体系+报价引擎 | `sprints/sprint-2/CRM/` |
 | 数据迁移 | 5 | 明道云→执行管理迁移 | `sprints/sprint-2/数据迁移/` |
 | 品牌中心 | 3 | 多平台数据采集+竞品监测 | `sprints/sprint-2/品牌中心/` |
 | 其他 | 5 | 质保/协同/代理商/提成 | `sprints/sprint-2/其他/` |
+| PageGuide页面说明 | 4 | 可复用组件+全量数据配置+存量接入+SOP更新(#2614-#2617) | `sprints/sprint-2/其他/` |
 ### 暂不做
 - CRM明道云对接（等API Key）
 ## 🏗️ 仓库架构
@@ -80,6 +81,7 @@
 | D32 | 04-04 | ✅ | E2E测试失败统一使用Project#4的E2E Fail状态 | 三层测试失败均标E2E Fail(efdab43b)而非Todo；Label用status:test-failed/test-passed；e2e-result-handler.py统一处理 | 吴耀 |
 | D33 | 04-04 | ✅ | 中层E2E从AI驱动改为纯脚本Smoke探活 | e2e_smoke.sh每30分钟零AI消耗跑smoke测试；原e2e_mid_tier.sh(Claude Code)废弃；e2e-result-handler.py支持无Issue时自动创建 | 吴耀 |
 | D34 | 04-04 | ✅ | pr-test.yml兜底构建失败场景 | 构建失败时Playwright不跑、无测试报告，handler跳过导致Issue未标记。新增兜底：报告不存在时直接评论PR/Issue+标test-failed+设E2E Fail | 吴耀 |
+| D35 | 04-04 | ✅ | 全平台PageGuide页面说明体系 | 每个前端页面顶部必须包含可折叠Banner（三段式：这是什么/解决什么问题/快速上手），通过可复用Vue3组件+集中数据配置实现。Issue创建SOP新增PageGuide必填Section。#2614-#2617 Sprint-2 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

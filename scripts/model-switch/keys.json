@@ -3,12 +3,30 @@
   "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=anthropic_compat: Anthropic格式中转站; type=openai_compat: OpenAI格式中转站; provider=模型提供商标识",
   "keys": [
     {
-      "name": "kimi",
+      "name": "kimi1",
       "type": "anthropic_compat",
       "provider": "kimi",
       "priority": 1,
       "api_url": "https://api.kimi.com/coding/",
       "api_key": "sk-kimi-ZLtO5HpArs0IH4sCzc8qwtOb8vRvvTKNxDvs5MmxugGQtkCAoReOqPpVuTicPdRf",
+      "model_map": {
+        "claude-opus-4-6": "kimi-k2.5",
+        "claude-sonnet-4-6": "kimi-k2.5",
+        "claude-haiku-4-5-20251001": "kimi-k2.5"
+      },
+      "env": {
+        "ENABLE_TOOL_SEARCH": "false"
+      },
+      "_note": "kimi官方coding plan",
+      "enabled": true
+    },
+    {
+      "name": "kimi2",
+      "type": "anthropic_compat",
+      "provider": "kimi",
+      "priority": 1,
+      "api_url": "https://api.kimi.com/coding/",
+      "api_key": "sk-kimi-xA8Rg5wMzVEcwXQILlJswwQXq5p7r51ZGVya2thvKQmZF0fAxaH2f6jwDOEJwGnY",
       "model_map": {
         "claude-opus-4-6": "kimi-k2.5",
         "claude-sonnet-4-6": "kimi-k2.5",

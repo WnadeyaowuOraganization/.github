@@ -561,12 +561,8 @@ def classify_kimi_provider(status_code, resp_body):
     err_type = fields.get("type", "")
     message_lower = message.lower()
 
-    # 认证/权限错误
-    if status_code in (401, 403) or err_type in ("invalid_authentication_error", "incorrect_api_key_error", "permission_denied_error"):
-        return ErrorType.UNRECOVERABLE, err_type or f"HTTP{status_code}", None, message
-
     # 余额不足 / 账户暂停
-    if status_code == 402 or err_type == "exceeded_current_quota_error":
+    if status_code in (401, 402, 403)  or err_type == "exceeded_current_quota_error":
         return ErrorType.BALANCE_EXHAUSTED, err_type or f"HTTP{status_code}", None, message
     if any(kw in message_lower for kw in ("suspended", "billing", "balance", "quota", "余额不足", "额度不足")):
         return ErrorType.BALANCE_EXHAUSTED, err_type, None, message
@@ -1581,7 +1577,7 @@ def main():
 
 def cli_query_quota(key_name=None, provider=None):
     """命令行查询用量信息
-    
+
     用法：
         python3 token_pool_proxy.py --quota              # 查询所有启用 Key 的用量
         python3 token_pool_proxy.py --quota kimi         # 查询指定 Key 的用量
@@ -1589,12 +1585,12 @@ def cli_query_quota(key_name=None, provider=None):
     """
     _load_config()
     _load_state()
-    
+
     keys = _get_enabled_keys()
     if not keys:
         print("没有启用的 Key")
         return
-    
+
     if key_name:
         # 查询指定 Key
         target_keys = [k for k in keys if k["name"] == key_name]
@@ -1602,23 +1598,23 @@ def cli_query_quota(key_name=None, provider=None):
             print(f"未找到 Key: {key_name}")
             return
         keys = target_keys
-    
+
     if provider:
         # 查询指定 provider 的所有 Key
         keys = [k for k in keys if k.get("provider") == provider]
         if not keys:
             print(f"未找到 Provider: {provider}")
             return
-    
+
     print(f"\n{'='*60}")
     print(f"用量查询结果")
     print(f"{'='*60}\n")
-    
+
     for key_cfg in keys:
         key_name = key_cfg["name"]
         key_provider = key_cfg.get("provider", "unknown")
         print(f"Key: {key_name} (provider: {key_provider}, priority: {key_cfg.get('priority', 1)})")
-        
+
         result = query_provider_quota(key_cfg)
         if result:
             print(f"  套餐：{result.get('plan', 'unknown')}")
@@ -1652,15 +1648,15 @@ def cli_query_quota(key_name=None, provider=None):
                 print("  提示：火山方舟暂不支持用量查询 API")
             else:
                 print("  查询失败或未支持")
-        
+
         print()
-    
+
     print(f"{'='*60}")
 
 
 if __name__ == "__main__":
     import sys
-    
+
     # 检查命令行参数
     if len(sys.argv) > 1:
         if sys.argv[1] == "--quota" or sys.argv[1] == "-q":
@@ -1692,7 +1688,7 @@ Token Pool Proxy v3 - 用量查询
     python3 token_pool_proxy.py --quota-provider zhipu  # 查询所有 zhipu provider 的 Key
 """)
             exit(0)
-    
+
     # 默认启动服务
     main()
 

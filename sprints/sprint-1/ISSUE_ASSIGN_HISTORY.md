@@ -834,3 +834,18 @@
 | 3/5 | #1928 | backend | kimi4 | In Progress |
 | 4/5 | #1913 | backend | kimi5 | In Progress |
 | 5/5 | #1926 | backend | kimi6 | 恢复中 |
+
+### CC轮换 (16:16)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1913 | backend | kimi1 | — | Done | [D3-Web][P1] 电池包版本管理 — CC正常完成（81分钟） |
+| #2476 | backend | kimi1 | high | In Progress | [D3参数化][P1] AI设计规则版本控制 — 版本比对+冲突解决+回滚机制 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2476 | backend | kimi1 | In Progress |
+| 2/5 | #2475 | backend | kimi3 | In Progress |
+| 3/5 | #1928 | backend | kimi4 | In Progress |
+| 4/5 | #1915 | backend | kimi5 | In Progress |
+| 5/5 | #1926 | backend | kimi6 | 恢复中 |

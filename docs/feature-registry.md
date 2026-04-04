@@ -1,7 +1,7 @@
 # 万德AI平台 · 功能注册表
 
-> ⏰ 最后更新：2026-04-05 04:55 by Perplexity Computer
-> 📊 统计：1042 个 open Issue | 36 条业务线 | 6 个 Sprint
+> ⏰ 最后更新：2026-04-05 05:10 by Perplexity Computer
+> 📊 统计：1182 个 open Issue | 35 条业务线 | 6 个 Sprint
 
 ---
 
@@ -371,6 +371,10 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 | 2026-04-04 | 多域 | 认证权限+4、AI对话+2、企微集成+1、AI内容生成+3、方案引擎+1、执行管理+2、商务赋能+1、协同修改+1、数据采集+3 | 各域Issue分配更准确 |
 | 2026-04-05 | 客户生命周期 | 新增6大引擎12个Issue(#2744-#2755)，内部提醒驱动模式 | Sprint-3新增 |
 | 2026-04-05 | 外展获客+营销自动化 | 新增5 Phase·25个Issue(#2793-#2818)，邮件+企微+LinkedIn三通道 | Sprint-3新增 |
+| 2026-04-05 | 全平台 | **Sprint负载均衡调整(D41)**：Sprint-1瘦身27个P2→Sprint-2；方案引擎P0(9个)Sprint-3→Sprint-2；审批引擎P0(3个)Sprint-4→Sprint-2；品牌低优(10个)→Sprint-4；377个无标签→Backlog | 均衡化+场景交付 |
+| 2026-04-05 | 方案引擎 | P0基础（DB+API+PPT插件架构+VI标准+素材库）提前到Sprint-2 | 投标方案是商务刚需 |
+| 2026-04-05 | 审批引擎 | P0基础（数据模型+审批核心+审批中心页面）提前到Sprint-2 | 执行管理的合同/回款需要审批 |
+| 2026-04-05 | 品牌中心 | 视频裂变/员工代言/舆情/SEO/广告(10个)→Sprint-4 | 非业务刚需，延后 |
 | — | — | — | — |
 
 ---

@@ -849,3 +849,18 @@
 | 3/5 | #1928 | backend | kimi4 | In Progress |
 | 4/5 | #1915 | backend | kimi5 | In Progress |
 | 5/5 | #1926 | backend | kimi6 | 恢复中 |
+
+### CC轮换 (16:18)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1915 | backend | kimi5 | — | Fail | [D3-Web][P1] 方案管理 — CC进程中断（无完成标记，tmux会话消失） |
+| #2479 | backend | kimi5 | high | In Progress | [D3参数化][P1] AI多方案并行优化 — 多目标遗传算法+帕累托前沿+灵敏度分析 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2476 | backend | kimi1 | In Progress |
+| 2/5 | #2475 | backend | kimi3 | In Progress |
+| 3/5 | #1928 | backend | kimi4 | In Progress |
+| 4/5 | #2479 | backend | kimi5 | In Progress |
+| 5/5 | #1926 | backend | kimi6 | 恢复中 |

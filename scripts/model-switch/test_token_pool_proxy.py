@@ -562,7 +562,7 @@ def classify_kimi_provider(status_code, resp_body):
     message_lower = message.lower()
 
     # 余额不足 / 账户暂停
-    if status_code in (401,402, 403) or err_type == "exceeded_current_quota_error":
+    if status_code in (401, 402, 403) or err_type == "exceeded_current_quota_error":
         return ErrorType.BALANCE_EXHAUSTED, err_type or f"HTTP{status_code}", None, message
     if any(kw in message_lower for kw in ("suspended", "billing", "balance", "quota", "余额不足", "额度不足")):
         return ErrorType.BALANCE_EXHAUSTED, err_type, None, message

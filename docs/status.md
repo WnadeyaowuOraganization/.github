@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-04 15:18 by Perplexity Computer
+> ⏰ 最后更新：2026-04-04 17:06 by Perplexity Computer
 ---
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | 重点功能模块 |
@@ -47,9 +47,9 @@
 ## 📋 重大决策
 | # | 日期 | 状态 | 决策 | 背景 | 决策人 |
 |---|------|------|------|------|--------|
-| D1 | 03-12 | ✅ | main-only 分支策略 | 团队小，dev分支增加合并成本 | 吴耀 |
-| D2 | 03-12 | ✅ | async SQLAlchemy（后端Java/Spring Boot，数据管道Python） | 技术栈分离 | 吴耀 |
-| D3 | 03-22 | ✅ | 数据管道独立仓库 wande-data-pipeline | 爬虫与业务逻辑分离 | 吴耀 |
+| D1 | 03-12 | ❌ | ~~main-only 分支策略~~ → 被D11取代：feature→dev→main | 团队小，dev分支增加合并成本。**已过时：实际已改为feature→dev→main流程** | 吴耀 |
+| D2 | 03-12 | ✅ | 后端Java/Spring Boot，数据管道Python脚本 | 技术栈分离。~~原描述async SQLAlchemy已过时~~，pipeline用纯Python脚本不用ORM | 吴耀 |
+| D3 | 03-22 | ❌ | ~~数据管道独立仓库 wande-data-pipeline~~ → 被D12取代：整合进wande-play/pipeline | 爬虫与业务逻辑分离。**已过时：D12将pipeline合并入Monorepo** | 吴耀 |
 | D4 | 03-11 | ✅ | 环境隔离：Lightsail=生产 / G7e=测试 | 生产环境功能上线需审批 | 吴耀 |
 | D5 | 03-29 | ✅ | 调度器v2：Plan→Todo→In Progress→Done 全自动 | 替代手动SCHEDULE.md | 吴耀 |
 | D6 | 03-27 | ✅ | TDD模式 + E2E测试解耦 | 编程CC先写单元测试再编码；E2E改为定时调度独立触发，不阻塞编程CC | 吴耀 |
@@ -82,6 +82,7 @@
 | D33 | 04-04 | ✅ | 中层E2E从AI驱动改为纯脚本Smoke探活 | e2e_smoke.sh每30分钟零AI消耗跑smoke测试；原e2e_mid_tier.sh(Claude Code)废弃；e2e-result-handler.py支持无Issue时自动创建 | 吴耀 |
 | D34 | 04-04 | ✅ | pr-test.yml兜底构建失败场景 | 构建失败时Playwright不跑、无测试报告，handler跳过导致Issue未标记。新增兜底：报告不存在时直接评论PR/Issue+标test-failed+设E2E Fail | 吴耀 |
 | D35 | 04-04 | ✅ | 全平台PageGuide页面说明体系 | 每个前端页面顶部必须包含可折叠Banner（三段式：这是什么/解决什么问题/快速上手），通过可复用Vue3组件+集中数据配置实现。Issue创建SOP新增PageGuide必填Section。#2614-#2617 Sprint-2 | 吴耀 |
+| D36 | 04-04 | ✅ | 过时Issue清理：63个重复Issue关闭 + D1/D3标废 + CRM跟进记录统一 | 关闭63个无Sprint标签的重复Issue；D1(main-only)、D3(独立仓库)标❌；D2描述修正；#1705 CRM跟进记录需对接D8的activity_logs三维驱动体系 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

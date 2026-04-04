@@ -864,3 +864,18 @@
 | 3/5 | #1928 | backend | kimi4 | In Progress |
 | 4/5 | #2479 | backend | kimi5 | In Progress |
 | 5/5 | #1926 | backend | kimi6 | 恢复中 |
+
+### CC轮换 (16:22)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2475 | backend | kimi3 | — | Done | [D3参数化][P1] AI电池包成本估算 — CC正常完成 |
+| #2037 | backend | kimi3 | high | In Progress | [D3-优化][10/10] 改造/翻新模式 — 已有结构约束下的设计 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2476 | backend | kimi1 | In Progress |
+| 2/5 | #2037 | backend | kimi3 | In Progress |
+| 3/5 | #1928 | backend | kimi4 | In Progress |
+| 4/5 | #2479 | backend | kimi5 | In Progress |
+| 5/5 | #1926 | backend | kimi6 | 恢复中 |

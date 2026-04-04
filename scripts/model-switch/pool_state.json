@@ -1,1 +1,9 @@
-{}
+{
+  "kimi1": {
+    "cooldown_until": "2026-04-05T11:50:33.530332+08:00",
+    "marked_at": "2026-04-04T11:50:33.530332+08:00",
+    "error_type": "balance_exhausted",
+    "error_code": "permission_error",
+    "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
+  }
+}

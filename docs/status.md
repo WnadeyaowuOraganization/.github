@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-04 18:32 by Perplexity Computer
+> ⏰ 最后更新：2026-04-04 18:45 by Perplexity Computer
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 41个模块·1029个Issue全景索引
 ---
 ## 🎯 Sprint 计划
@@ -98,6 +98,7 @@
 | D36 | 04-04 | ✅ | 过时Issue清理：63个重复Issue关闭 + D1/D3标废 + CRM跟进记录统一 | 关闭63个无Sprint标签的重复Issue；D1(main-only)、D3(独立仓库)标❌；D2描述修正；#1705 CRM跟进记录需对接D8的activity_logs三维驱动体系 | 吴耀 |
 | D37 | 04-04 | ✅ | H5移动端全量适配：双视图架构+完整功能+底部TabBar | 所有页面需手机端可访问（企微内打开），PC端views/wande/+H5端views/h5/双视图，Vant4组件库，新页面强制双端/旧页面逐步补齐，8个P0基座Issue(#2625-#2632) Sprint-2 | 吴耀 |
 | D38 | 04-04 | ✅ | 功能注册表体系：`docs/feature-registry.md` | 1029个Issue戉1个文件管理，41个功能模块×9大业务域，带状态/Sprint/策略备注。与status.md互补：status记架构/技术决策，registry记功能级策略调整 | 吴耀 |
+| D39 | 04-04 | ✅ | Project#4增加「业务域」+「Sprint」自定义字段 | 1043个Item全量填充业务域(32个选项)+Sprint(6个选项)。支持按业务域过滤、按Sprint分组、Board/Table/Roadmap多视图。研发经理CC可用业务域字段进行模块级排程 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 
@@ -220,13 +221,26 @@ Issue创建
 
 
 ## 📊 工作状态
-### Project#4 — wande-play 研发看板（2026-04-03 19:35）
+### Project#4 — wande-play 研发看板（2026-04-04 18:45）
 | 状态 | 数量 |
-| Plan | 722 |
-| Todo | 288 |
-| In Progress | 27 |
-| 总Items | 1037 |
-| Open Issue | 1070 |
+|------|------|
+| Plan | 720 |
+| Todo | 179 |
+| In Progress | 122 |
+| Done | 17 |
+| E2E Fail | 5 |
+| 总Items | 1043 |
+| Open Issue | 1029 |
+
+**自定义字段（D39新增）**：
+- **业务域**（32个选项）— 超管驾驶舱/CRM/执行管理/D3/品牌中心等，已全量填充
+- **Sprint**（6个选项）— Sprint-1到5 + Backlog，已填充749个（294个无Sprint标签）
+
+**建议创建的视图**（需在[GitHub Web](https://github.com/orgs/WnadeyaowuOraganization/projects/4)手动创建）：
+1. Board视图 — 按「业务域」分组，看各域进度
+2. Table视图 — 按「Sprint」过滤，规划下一个Sprint
+3. Roadmap视图 — 按业务域分组，时间线展示
+
 **看板地址**: https://github.com/orgs/WnadeyaowuOraganization/projects/4
 ### Project#2 — 已废弃
 > 2026-04-03 起 Project#2 不再使用。所有活跃 Issue 已迁移到 Project#4，wande-gh-plugins 的 22 个 Issue 也已迁移。Project#2 仅保留历史数据供追溯。

@@ -114,7 +114,7 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 ## 并发控制
 
 - 一个目录同一时间只能运行一个CC
-- kimi1~kimi20 共20个编程CC槽位
+- kimi1~kimi20 共20个编程CC槽位，当前有大量的代码合并冲突问题，最大并发降为10个CC
 - 主目录 `/home/ubuntu/projects/wande-play` 不分配给编程CC
 - `run-cc.sh` 返回 exit 2 时立即换下一个 dir_suffix
 

@@ -76,3 +76,41 @@
 | #1839 | backend | kimi18 | medium | In Progress | 结构风险分级+异步复核流 |
 | #1548 | backend | kimi19 | medium | In Progress | 驾驶舱预算总览接口 |
 | #1872 | frontend | kimi20 | medium | In Progress | 问题+机会双模式扩展 |
+
+## 2026-04-04 (第二轮)
+
+### dev分支修复
+| 操作 | 状态 | 备注 |
+|------|------|------|
+| 修复dev编译 | Done | 迁移wande-ai-api残留代码(PPT模板/预算模板)到wande-ai，push到dev |
+
+### 新Issue分配（20个目录全满）
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1852 | backend | kimi1 | high | In Progress | D3-Agent知识库构建 |
+| #1853 | backend | kimi2 | high | In Progress | Agent三层记忆系统 |
+| #1898 | backend | kimi3 | high | In Progress | 发货防错系统 |
+| #1903 | backend | kimi4 | high | In Progress | 钢架自动选型规则 |
+| #1906 | backend | kimi5 | high | In Progress | 技术标准管理中心 |
+| #1910 | backend | kimi6 | high | In Progress | D3-AI万德知识库构建 |
+| #1911 | backend | kimi7 | high | In Progress | AI电池包开发助手 |
+| #2043 | backend | kimi8 | medium | In Progress | G7e problem_scanner.py |
+| #2136 | backend | kimi9 | medium | In Progress | 统一权限管理API |
+| #2296 | backend | kimi10 | medium | In Progress | Chat后端P1 |
+| #1838 | frontend | kimi11 | medium | In Progress | 批量方案变体生成 |
+| #1872 | frontend | kimi12 | medium | In Progress | 问题+机会双模式扩展 |
+| #1929 | frontend | kimi13 | medium | In Progress | GH插件.gha安装包 |
+| #2051 | frontend | kimi14 | medium | In Progress | L4安装图自动化 |
+| #2053 | frontend | kimi15 | medium | In Progress | GH功能件选择器插件 |
+| #2295 | frontend | kimi16 | medium | In Progress | Chat前端P2 |
+| #2297 | frontend | kimi17 | medium | In Progress | Chat前端P1 |
+| #1861 | backend | kimi18 | high | In Progress | D3 Web技术确认中心 |
+| #1907 | backend | kimi19 | high | In Progress | 滚塑滑桶专项 |
+| #1931 | backend | kimi20 | high | In Progress | D3参数化P0 |
+
+### 待处理（目录释放后）
+| PR/ Issue | 模块 | 状态 | 备注 |
+|-----------|------|------|------|
+| PR #2583 | backend | CONFLICTING | base:main，阶段凭证管理API |
+| PR #2565 | frontend | CONFLICTING | base:main，项目详情页 |
+| PR #2562 | backend | CONFLICTING | base:main，利润计算模型 |

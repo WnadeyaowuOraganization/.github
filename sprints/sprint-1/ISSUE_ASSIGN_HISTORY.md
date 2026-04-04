@@ -790,3 +790,17 @@
 | 3/5 | #1916 | backend | kimi4 | In Progress |
 | 4/5 | #1913 | backend | kimi5 | In Progress |
 | 5/5 | #1926 | backend | kimi6 | In Progress |
+
+### CC轮换 (15:47)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1926 | backend | kimi6 | high | 恢复 | 卡住10分钟后kill，自定义Prompt恢复，从Service实现继续 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #1915 | backend | kimi1 | In Progress |
+| 2/5 | #1923 | backend | kimi3 | In Progress |
+| 3/5 | #1916 | backend | kimi4 | In Progress |
+| 4/5 | #1913 | backend | kimi5 | In Progress |
+| 5/5 | #1926 | backend | kimi6 | 恢复中 |

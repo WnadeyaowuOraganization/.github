@@ -1,6 +1,7 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-04 18:22 by Perplexity Computer
+> ⏰ 最后更新：2026-04-04 18:32 by Perplexity Computer
+> 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 41个模块·1029个Issue全景索引
 ---
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | 重点功能模块 |
@@ -96,6 +97,7 @@
 | D35 | 04-04 | ✅ | 全平台PageGuide页面说明体系 | 每个前端页面顶部必须包含可折叠Banner（三段式：这是什么/解决什么问题/快速上手），通过可复用Vue3组件+集中数据配置实现。Issue创建SOP新增PageGuide必填Section。#2614-#2617 Sprint-2 | 吴耀 |
 | D36 | 04-04 | ✅ | 过时Issue清理：63个重复Issue关闭 + D1/D3标废 + CRM跟进记录统一 | 关闭63个无Sprint标签的重复Issue；D1(main-only)、D3(独立仓库)标❌；D2描述修正；#1705 CRM跟进记录需对接D8的activity_logs三维驱动体系 | 吴耀 |
 | D37 | 04-04 | ✅ | H5移动端全量适配：双视图架构+完整功能+底部TabBar | 所有页面需手机端可访问（企微内打开），PC端views/wande/+H5端views/h5/双视图，Vant4组件库，新页面强制双端/旧页面逐步补齐，8个P0基座Issue(#2625-#2632) Sprint-2 | 吴耀 |
+| D38 | 04-04 | ✅ | 功能注册表体系：`docs/feature-registry.md` | 1029个Issue戉1个文件管理，41个功能模块×9大业务域，带状态/Sprint/策略备注。与status.md互补：status记架构/技术决策，registry记功能级策略调整 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

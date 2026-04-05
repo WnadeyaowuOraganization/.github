@@ -146,6 +146,8 @@
 | D41 | 04-05 | ✅ | Sprint 1-5 负载均衡调整 | Sprint-1瘦身：27个P2 Issue移到Sprint-2（D3 AI/矿场复盘/问题发现/协同修改等非核心）；Sprint-2增强：方案引擎P0(9个)从Sprint-3提前+审批引擎P0(3个)从Sprint-4提前；Sprint-4补充：品牌中心低优(视频裂变/员工代言/舆情/SEO/广告10个)从无标签分配；Sprint-Backlog：377个无标签Issue统一归入。调整后Sprint-1:138/Sprint-2:139/Sprint-3:178/Sprint-4:120/Sprint-5:79/Backlog:459 | 吴耀 | 三合一整合：投标发现(中标概率引擎)+客户发现(ICP评分)+竞品全息情报(知识图谱+战斗卡)+行业信息(7章节模板)。新增biz:intelligence-hub标签，Phase 1 P0可插入Sprint-2，主体Sprint-5。Issue #2674-#2743 | 吴耀 |
 | D41 | 04-05 | ✅ | 外展获客+营销自动化业务线：5 Phase·25个Issue·三通道覆盖 | 营销序列引擎(P0基础设施)+外贸邮件外展(冷外展7步+A/B+追踪)+企微获客(活码+SOP培育+批量加好友)+LinkedIn导入(意图信号+协同序列)+统一获客数据层(线索评分+ROI看板+自动移交)。新增biz:outreach+biz:marketing-automation+biz:crm标签。对标HubSpot Sequences+Lemlist+Apollo.io+WeSCRM。Issue #2793-#2818 | 吴耀 |
 | D42 | 04-05 | ✅ | 行业专家知识体系启动：wande-industry Skill + 知识结晶机制 | 平台从「文档检索」升级为「行业顶级专家」。Nurture-First三层架构+5级能力模型。P0: wande-industry Skill(6知识域+4决策树)+结晶SOP(6标签)+Memory种子+wande-ai v54更新。P1-P4: S3蒸馏→GraphRAG→推理引擎→飞轮 | 吴耀 |
+| D43 | 04-05 | ✅ | Harness优化方案V1落地（28/29完成） | **CLAUDE.md精简**：wande-play主CLAUDE.md从67行精简至40行，接口契约最优先，删除backend/frontend/pipeline子模块CLAUDE.md。**agent-docs子目录**：.github/docs/agent-docs/{backend,frontend,pipeline}/README.md集中管理，wande-play跨仓库引用。**静态分析**：ESLint废弃API规则+嵌套检查+antdv-constraints.md。**工作流精简**：编程CC去需求评估、task.md合并进度字段(Status/Phase)、研发经理CC读task.md替代读日志。**模型分级**：仅max走Claude Max订阅（默认Sonnet），其余走Token Pool Proxy+上下文自动截断(kimi 256K/glm 200K)。**冲突解决**：cycle-merge智能分类+trigger-conflict-resolver+pr-test.yml/post-task.sh集成。**安全边界**：最大重试3次+超时20分钟自动清理。**过时文件清理**：删除15个过时文档/脚本/prompt | 伟平 |
+| D44 | 04-05 | ✅ | wande-ai-api模块废弃确认 | wande-ai-api已合并入wande-ai（D27 PR#2593），万德业务功能全部在wande-ai子模块实现。backend/ruoyi-modules-api/wande-ai-api目录已废弃 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 
@@ -316,9 +318,22 @@ Issue创建
 - Project#2废弃，wande-gh-plugins 22个Issue迁移到Project#4
 - 测试架构改革落地：编程CC接管构建部署，build-deploy-dev.yml仅保留pipeline sync，新增pr-test.yml自动E2E+merge/fail
 - CC prompt全面优化：研发经理(425→160行)、backend(45→28)、frontend(617→119)、E2E(263→80)
+### 基础设施变更（04-05）— Harness优化V1
+- CLAUDE.md精简：wande-play主CLAUDE.md 67→40行，删除3个子模块CLAUDE.md
+- agent-docs子目录化：.github/docs/agent-docs/{backend,frontend,pipeline}/README.md集中管理
+- 新增ESLint自定义规则：废弃API检查(visible→open) + 嵌套Drawer/Modal检查
+- 新增antdv-constraints.md、console-monitor.ts、Issue模板(feature-request.yml)
+- 编程CC工作流精简：去需求评估、task.md合并进度字段(Status/Phase)
+- 模型分级路由：仅effort=max走Claude Max订阅，其余走Token Pool Proxy
+- Token Pool Proxy新增上下文截断：keys.json配context_window(kimi 256K/glm 200K)
+- run-cc.sh/run-cc-with-prompt.sh：按effort自动选择API来源
+- 冲突解决全链路：analyze-conflict-type.sh + cycle-merge智能分类 + post-task.sh/pr-test.yml集成
+- 安全边界：run-cc.sh最大重试3次 + check-cc-status.sh超时20分钟自动清理
+- 过时文件清理：删除15个过时文档/脚本/prompt（旧版guide、迁移文档、废弃脚本等）
+- wande-ai-api确认废弃：万德业务功能全部在wande-ai子模块实现
 ## 📌 需要对方处理
 ### @伟平 待讨论
-- **dev分支后端无法启动（P0）** — 已通过 #2585 / PR #2593 合并 wande-ai-api 到 wande-ai，清理 42 个重复类冲突，编译打包通过。待 pr-test.yml E2E 验证后 merge。
+- ~~**dev分支后端无法启动（P0）**~~ — 已通过 #2585 / PR #2593 解决
 ### @吴耀
 - 明道云 API Key — 解锁 CRM 对接
 - ceshi.tiyouoperation.com 决策确认 — 是否继续使用此域名

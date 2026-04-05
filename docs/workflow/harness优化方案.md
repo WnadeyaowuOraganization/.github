@@ -1111,8 +1111,8 @@ esac
 |---|------|----------|----------|------|
 | 10 | 实现Agent Teams触发规则 | `scripts/run-cc.sh` | 2h | ⏳ 待执行 |
 | 11 | 创建路由完整性检查脚本 | `scripts/check-route-integrity.sh` | 3h | ✅ 已完成 |
-| 12 | 创建控制台警告监控工具 | `e2e/helpers/console-monitor.ts` | 4h | ⏳ 待执行 |
-| 13 | 创建Issue模板（含验收标准） | `.github/ISSUE_TEMPLATE/feature-request.yml` | 2h | ⏳ 待执行 |
+| 12 | 创建控制台警告监控工具 | `e2e/helpers/console-monitor.ts` | 4h | ✅ 已完成 |
+| 13 | 创建Issue模板（含验收标准） | `.github/ISSUE_TEMPLATE/feature-request.yml` | 2h | ✅ 已完成 |
 | 14 | 更新 `run-cc.sh` API选择逻辑 | `scripts/run-cc.sh` | 2h | ✅ 已完成 |
 | 15 | 更新 `run-cc-with-prompt.sh` API选择逻辑 | `scripts/run-cc-with-prompt.sh` | 1h | ✅ 已完成 |
 | 16 | 编程CC工作流精简（去评估+task.md合并进度字段） | `issue-workflow.md` + 各子模块README | 2h | ✅ 已完成 |
@@ -1129,8 +1129,8 @@ esac
 |---|------|----------|----------|------|
 | 23 | keys.json增加`context_window`字段 | `scripts/model-switch/keys.json` | 0.5h | ✅ 已完成 |
 | 24 | proxy增加上下文自动截断功能 | `scripts/model-switch/token_pool_proxy.py` | 4h | ⏳ 待执行 |
-| 25 | 增加最大重试次数限制（run-cc.sh） | `scripts/run-cc.sh` | 1h | ⏳ 待执行 |
-| 26 | 增加超时检测（check-cc-status.sh） | `scripts/check-cc-status.sh` | 2h | ⏳ 待执行 |
+| 25 | 增加最大重试次数限制（run-cc.sh） | `scripts/run-cc.sh` | 1h | ✅ 已完成 |
+| 26 | 增加超时检测（check-cc-status.sh） | `scripts/check-cc-status.sh` | 2h | ✅ 已完成 |
 
 ### 7.4 P3 任务（下月规划）
 

@@ -35,6 +35,64 @@
 | #2591 | frontend | kimi5 | medium | In Progress | D3 15个API接口对齐 |
 | #2592 | frontend | kimi6 | medium | In Progress | Cockpit 120个API接口对齐 |
 
+## 2026-04-04 (第五轮)
+
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2214 | backend | kimi2 | high | In Progress | 销售记录体系-项目周报自动汇总页(P1) |
+| #1869 | backend | kimi3 | high | PR #2760 | 企业决策支持系统-问题机会双模式(P2) |
+| #2483 | backend | kimi4 | high | PR #2761 | D3-AI可制造性评估DFM(P2) |
+| #1772 | backend | kimi3 | high | In Progress | 协同修改-Phase3衔接(P2) |
+| #2030 | backend | kimi4 | high | In Progress | 色卡材料-D3参数化双向同步API(P2) |
+| #1840 | backend | kimi5 | high | PR #2762 | D3-AI设计质量评估体系(P2) |
+| #1963 | backend | kimi6 | high | PR #2763 | 工作流引擎增强(P2) |
+| #2064 | backend | kimi5 | high | In Progress | D3-周期4:集成测试套件+API压测(P2) |
+| #2213 | backend | kimi6 | high | In Progress | 销售记录体系-三维驱动规则配置页(P2) |
+| #2214 | backend | kimi2 | high | PR #2764 | 销售记录体系-项目周报自动汇总页(P1) |
+| #1772 | backend | kimi3 | high | PR #2765 | 协同修改-Phase3衔接(P2) |
+| #2030 | backend | kimi4 | high | PR #2766 | 色卡材料-D3参数化双向同步API(P2) |
+| #2386 | backend | kimi2 | high | In Progress | 问题发现-Perplexity深入分析集成(P2) |
+| #2482 | backend | kimi3 | high | In Progress | D3-AI GH侧AI按钮(P2) |
+| #2484 | backend | kimi4 | high | In Progress | D3-AI AI交付包生成器(P2) |
+| #2482 | backend | kimi3 | high | Fail | GH侧AI按钮-不适合后端仓库(C#插件) |
+| #1848 | backend | kimi3 | high | In Progress | 设计模块-P0图生图后端API(Sprint-3) |
+| #2064 | backend | kimi5 | high | PR #2767 | D3-周期4:集成测试套件+API压测(P2) |
+| #1894 | backend | kimi5 | high | In Progress | 客户情报-P0信息质量API(Sprint-2) |
+| #2386 | backend | kimi2 | high | PR #2768 | 问题发现-Perplexity深入分析集成(P2) |
+| #1990 | backend | kimi2 | high | In Progress | 项目中心-P0双向联动dashboard_problems(Sprint-4) |
+| #2484 | backend | kimi4 | high | PR #2770 | D3-AI AI交付包生成器(P2) |
+| #2008 | backend | kimi4 | high | In Progress | 资金闭环-P0报价成本模型API(Sprint-4) |
+| #2213 | backend | kimi6 | high | PR #2769 | 销售记录体系-三维驱动规则配置页(P2) |
+| #2074 | backend | kimi6 | high | In Progress | 执行管理-P0阶段流程配置引擎(Sprint-2) |
+| #1894 | backend | kimi5 | high | PR #2771 | 客户情报-P0信息质量API(Sprint-2) |
+| #2080 | backend | kimi5 | high | In Progress | 数据迁移-P0明道云MongoDB字段映射表(Sprint-2) |
+| #1848 | backend | kimi3 | high | PR #2772 | 设计模块-P0图生图后端API(Sprint-3) |
+| #2085 | backend | kimi3 | high | In Progress | 执行管理-P0变更→合同联动(Sprint-2) |
+| #1990 | backend | kimi2 | high | PR #2774 | 项目中心-P0双向联动dashboard_problems(Sprint-4) |
+| #2008 | backend | kimi4 | high | PR #2773 | 资金闭环-P0报价成本模型API(Sprint-4) |
+| #2086 | backend | kimi2 | high | In Progress | 执行管理-P0变更影响联动API(Sprint-2) |
+| #2098 | backend | kimi4 | high | In Progress | 执行管理-P0现场验收核心API(Sprint-2) |
+| #2074 | backend | kimi6 | high | PR #2775 | 执行管理-P0阶段流程配置引擎(Sprint-2) |
+| #2099 | backend | kimi6 | high | In Progress | 执行管理-P0现场验收数据库(Sprint-2) |
+| #2080 | backend | kimi5 | high | PR #2776 | 数据迁移-P0明道云MongoDB字段映射表(Sprint-2) |
+| #2123 | backend | kimi5 | high | In Progress | 执行管理-P0成本利润分析API(Sprint-2) |
+| #2085 | backend | kimi3 | high | PR #2777 | 执行管理-P0变更→合同联动(Sprint-2) |
+| #2156 | backend | kimi3 | high | In Progress | 执行管理-P0变更单核心API(Sprint-2) |
+| #2098 | backend | kimi4 | high | PR #2779 | 执行管理-P0现场验收核心API(Sprint-2) |
+| #2099 | backend | kimi6 | high | PR #2778 | 执行管理-P0现场验收数据库(Sprint-2) |
+| #2157 | backend | kimi4 | high | In Progress | 执行管理-P0变更管理数据库(Sprint-2) |
+| #2181 | backend | kimi6 | high | In Progress | 执行管理-P0项目执行管理数据库(Sprint-2) |
+| #2123 | backend | kimi5 | high | PR #2780 | 执行管理-P0成本利润分析API(Sprint-2) |
+| #2207 | backend | kimi5 | high | In Progress | 执行管理-P0投标前利润预估API(Sprint-2) |
+| #2086 | backend | kimi2 | high | PR #2781 | 执行管理-P0变更影响联动API(Sprint-2) |
+| #2467 | backend | kimi2 | high | In Progress | 执行管理-P0 BOM管理API(Sprint-2) |
+| #2181 | backend | kimi6 | high | Done | 执行管理-P0项目执行管理数据库(Sprint-2) |
+| #2468 | backend | kimi6 | high | In Progress | 执行管理-P0图纸管理API(Sprint-2) |
+| #2157 | backend | kimi4 | high | PR #2782 | 执行管理-P0变更管理数据库(Sprint-2) |
+| #2469 | backend | kimi4 | high | In Progress | 执行管理-P0项目执行CRUD API(Sprint-2) |
+| #2207 | backend | kimi5 | high | PR #2784 | 执行管理-P0投标前利润预估API(Sprint-2) |
+| #2453 | backend | kimi5 | high | In Progress | P0历史甲方定向监控清单(Sprint-2) |
+
 ## 2026-04-04
 
 ### PR合并冲突修复
@@ -879,3 +937,343 @@
 | 3/5 | #1928 | backend | kimi4 | In Progress |
 | 4/5 | #2479 | backend | kimi5 | In Progress |
 | 5/5 | #1926 | backend | kimi6 | 恢复中 |
+
+### CC轮换 (16:46)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2037 | backend | kimi3 | — | Done | [D3-优化][10/10] 改造/翻新模式 — CC正常完成 |
+| #2038 | backend | kimi3 | high | In Progress | [D3参数化][P1] AI电池包热管理分析 — 多物理场耦合+稳态/瞬态分析+散热策略优化 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2476 | backend | kimi1 | In Progress |
+| 2/5 | #2038 | backend | kimi3 | In Progress |
+| 3/5 | #1928 | backend | kimi4 | In Progress |
+| 4/5 | #2479 | backend | kimi5 | In Progress |
+| 5/5 | #1926 | backend | kimi6 | 恢复中 |
+
+### CC轮换 (17:02)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1926 | backend | kimi6 | — | Done | [D3成果预览][P1] AI效果度量仪表板 — CC恢复后正常完成 |
+| #2040 | backend | kimi6 | high | In Progress | [D3参数化][P1] AI电池包振动疲劳分析 — 频域/时域分析+随机振动PSD+疲劳寿命预测 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2476 | backend | kimi1 | In Progress |
+| 2/5 | #2038 | backend | kimi3 | In Progress |
+| 3/5 | #1928 | backend | kimi4 | In Progress |
+| 4/5 | #2479 | backend | kimi5 | In Progress |
+| 5/5 | #2040 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:07)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #1928 | backend | kimi4 | — | Done | [D3参数化][P1] AI设计预览与干涉检测 — CC正常完成 |
+| #2041 | backend | kimi4 | high | In Progress | [D3参数化][P1] AI电磁兼容性(EMC)分析 — 辐射发射+传导干扰+屏蔽效能+滤波设计 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2476 | backend | kimi1 | In Progress |
+| 2/5 | #2038 | backend | kimi3 | In Progress |
+| 3/5 | #2041 | backend | kimi4 | In Progress |
+| 4/5 | #2479 | backend | kimi5 | In Progress |
+| 5/5 | #2040 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:16)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2476 | backend | kimi1 | — | Done | [D3参数化][P1] AI设计规则版本控制 — CC正常完成 |
+| #2479 | backend | kimi5 | — | Done | [D3参数化][P1] AI多方案并行优化 — CC正常完成 |
+| #2264 | backend | kimi1 | high | In Progress | [D3参数化][P1] AI电池包轻量化设计 — 拓扑优化+多目标优化+复合材料设计 |
+| #2268 | backend | kimi5 | high | In Progress | [D3参数化][P1] AI电池包安全预警系统 — 故障模式识别+预警策略+风险评估 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2264 | backend | kimi1 | In Progress |
+| 2/5 | #2038 | backend | kimi3 | In Progress |
+| 3/5 | #2041 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2040 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:22)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2040 | backend | kimi6 | — | Done | [D3参数化][P1] AI电池包振动疲劳分析 — CC正常完成 |
+| #2052 | backend | kimi6 | high | In Progress | [D3参数化][P1] AI设计性能基准测试 — 建立标准化测试套件 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2264 | backend | kimi1 | In Progress |
+| 2/5 | #2038 | backend | kimi3 | In Progress |
+| 3/5 | #2041 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2052 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:37)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2038 | backend | kimi3 | — | Done | [D3参数化][P1] AI电池包热管理分析 — CC正常完成 |
+| #2315 | backend | kimi3 | high | In Progress | [design-ai][Sprint-1][P1][D3-parametric] — AI设计知识图谱 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2264 | backend | kimi1 | In Progress |
+| 2/5 | #2315 | backend | kimi3 | In Progress |
+| 3/5 | #2041 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2052 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:41)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2041 | backend | kimi4 | — | Done | [D3参数化][P1] AI电磁兼容性(EMC)分析 — CC正常完成 |
+| #2052 | backend | kimi6 | — | Done | [D3参数化][P1] AI设计性能基准测试 — CC正常完成 |
+| #2078 | backend | kimi4 | high | In Progress | [dashboard][Sprint-1][P1] Dashboard看板定制功能 |
+| #2095 | backend | kimi6 | high | In Progress | [backend][Sprint-1][P1] 权限系统增强 — 数据权限+接口权限+操作日志 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2264 | backend | kimi1 | In Progress |
+| 2/5 | #2315 | backend | kimi3 | In Progress |
+| 3/5 | #2078 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2095 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:47)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2264 | backend | kimi1 | — | Done | [D3参数化][P1] AI电池包轻量化设计 — CC正常完成 |
+| #2096 | backend | kimi1 | high | In Progress | [backend][Sprint-2][P1] 数据备份与恢复机制 — 自动备份+异地容灾+一键恢复 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2096 | backend | kimi1 | In Progress |
+| 2/5 | #2315 | backend | kimi3 | In Progress |
+| 3/5 | #2078 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2095 | backend | kimi6 | In Progress |
+
+### CC轮换 (17:52)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2095 | backend | kimi6 | — | Done | [backend][Sprint-1][P1] 权限系统增强 — CC正常完成 |
+| #2480 | backend | kimi6 | high | In Progress | [D3-parametric][Sprint-1][P2] AI材料智能选材助手 — 材料数据库+性能对比+替代推荐 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2096 | backend | kimi1 | In Progress |
+| 2/5 | #2315 | backend | kimi3 | In Progress |
+| 3/5 | #2078 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2480 | backend | kimi6 | In Progress |
+
+### CC轮换 (18:16)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2096 | backend | kimi1 | — | Done | [backend][Sprint-2][P1] 数据备份与恢复机制 — CC正常完成 |
+| #2078 | backend | kimi4 | — | Done | [dashboard][Sprint-1][P1] Dashboard看板定制功能 — CC正常完成 |
+| #2481 | backend | kimi1 | high | In Progress | [D3-parametric][Sprint-1][P2] AI材料替代方案分析 — 成本对比+性能等效+供应链风险评估 |
+| #2483 | backend | kimi4 | high | In Progress | [D3-parametric][Sprint-1][P2] AI可制造性评估(DFM) — 工艺可行性+成本分析+风险评估 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2481 | backend | kimi1 | In Progress |
+| 2/5 | #2315 | backend | kimi3 | In Progress |
+| 3/5 | #2483 | backend | kimi4 | In Progress |
+| 4/5 | #2268 | backend | kimi5 | In Progress |
+| 5/5 | #2480 | backend | kimi6 | In Progress |
+
+### CC轮换 (18:31)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2268 | backend | kimi5 | — | Done | [D3参数化][P1] AI电池包安全预警系统 — CC正常完成 |
+| #2480 | backend | kimi6 | — | Done | [D3参数化][P2] AI材料智能选材助手 — CC正常完成 |
+| #1840 | backend | kimi5 | high | In Progress | [design-ai][Sprint-1][P2] AI设计质量评估体系 |
+| #1868 | backend | kimi6 | high | In Progress | [dashboard][Sprint-1][P2] 企业运营数据看板 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2481 | backend | kimi1 | In Progress |
+| 2/5 | #2315 | backend | kimi3 | In Progress |
+| 3/5 | #2483 | backend | kimi4 | In Progress |
+| 4/5 | #1840 | backend | kimi5 | In Progress |
+| 5/5 | #1868 | backend | kimi6 | In Progress |
+
+### CC轮换 (18:37)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2315 | backend | kimi3 | — | Done | [design-ai][Sprint-1][P1][D3-parametric] AI设计知识图谱 — CC正常完成 |
+| #1868 | backend | kimi6 | — | Done | [dashboard][Sprint-1][P2] 企业运营数据看板 — CC正常完成 |
+| #1869 | backend | kimi3 | high | In Progress | [dashboard][Sprint-1][P2] 企业决策支持系统 — 数据挖掘+预测模型+决策建议 |
+| #1963 | backend | kimi6 | high | In Progress | [backend][Sprint-1][P2] 工作流引擎增强 — 流程模板+版本管理+审批链 |
+
+### CC并发状态
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2467 | backend | kimi2 | In Progress |
+| 2/5 | #2156 | backend | kimi3 | Done |
+| 3/5 | #2469 | backend | kimi4 | In Progress |
+| 4/5 | #2453 | backend | kimi5 | In Progress |
+| 5/5 | #2468 | backend | kimi6 | In Progress |
+
+### CC轮换 (21:19)
+| Issue | module | dir | effort | 状态 | 备注 |
+|-------|--------|-----|--------|------|------|
+| #2473 | backend | kimi2 | high | PR #2825 | [财务-P1] 律师催收管理 |
+| #2010 | backend | kimi2 | high | In Progress | [项目中心-P1] 项目档案管理(Sprint-4) |
+
+### CC并发状态 (5槽满)
+| 槽位 | Issue | module | dir | 状态 |
+|------|-------|--------|-----|------|
+| 1/5 | #2010 | backend | kimi2 | In Progress |
+| 2/5 | #1847 | backend | kimi4 | In Progress |
+| 3/5 | #1844 | backend | kimi6 | In Progress |
+| 4/5 | #1846 | backend | kimi5 | In Progress |
+| 5/5 | #2466 | backend | kimi7 | In Progress |
+
+### 2026-04-04 21:38 UTC — 批量完成5个Issue
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2010 | 项目中心 | kimi2 | PR #2827 | ✅ Done |
+| #1847 | 设计AI | kimi4 | PR #2828 | ✅ Done |
+| #1846 | 设计AI | kimi5 | PR #2829 | ✅ Done |
+| #1844 | 设计AI | kimi6 | PR #2830 | ✅ Done |
+| #2466 | 执行管理 | kimi7 | PR #2831 | ✅ Done |
+
+**备注**: 所有CC未自动push，手动commit+push+创建PR
+
+
+### 2026-04-04 21:39 UTC — 新批次5个Issue启动
+| Issue | 模块 | 目录 | 类型 | Sprint | effort |
+|-------|------|------|------|--------|--------|
+| #2083 | 执行管理 | kimi1 | fullstack | Sprint-2 | high |
+| #2022 | 审批引擎 | kimi2 | backend | Sprint-4 | high |
+| #1802 | 执行管理 | kimi4 | frontend | Sprint-2 | high |
+| #2205 | AI助手 | kimi5 | fullstack | Sprint-2 | high |
+| #2435 | 数据采集 | kimi6 | pipeline | Sprint-Backlog | medium |
+
+**当前槽位**: 5/5 满载
+
+
+### 2026-04-04 21:53 UTC — #2435完成，#2082启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2435 | 数据采集 | kimi6 | PR #2832 | ✅ Done |
+| #2082 | 执行管理 | kimi6 | — | 🚀 In Progress |
+
+**当前槽位**: 5/5 满载
+- kimi1: #2083 fullstack
+- kimi2: #2022 backend
+- kimi4: #1802 frontend
+- kimi5: #2205 fullstack
+- kimi6: #2082 frontend
+
+
+### 2026-04-04 21:54 UTC — #2205完成，#2311启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2205 | AI助手 | kimi5 | PR #2834 | ✅ Done |
+| #2311 | 设计AI | kimi5 | — | 🚀 In Progress |
+
+**当前槽位**: 5/5 满载
+- kimi1: #2083 fullstack
+- kimi2: #2022 backend
+- kimi4: #1802 frontend
+- kimi5: #2311 fullstack
+- kimi6: #2082 frontend
+
+
+### 2026-04-04 21:58 UTC — #2083完成，#2279启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2083 | 执行管理 | kimi1 | PR #2833 | ✅ Done |
+| #2279 | 制度管理 | kimi1 | — | 🚀 In Progress |
+
+**当前槽位**: 5/5 满载
+- kimi1: #2279 frontend
+- kimi2: #2022 backend
+- kimi4: #1802 frontend
+- kimi5: #2311 fullstack
+- kimi6: #2082 frontend
+
+
+### 2026-04-04 22:03 UTC — #2022/#1802完成，#2312/#2353启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2022 | 审批引擎 | kimi2 | PR #2835 | ✅ Done |
+| #1802 | 执行管理 | kimi4 | PR #2836 | ✅ Done |
+| #2312 | 设计AI | kimi2 | — | 🚀 In Progress |
+| #2353 | 回款管理 | kimi4 | — | 🚀 In Progress |
+
+**当前槽位**: 5/5 满载
+- kimi1: #2279 frontend
+- kimi2: #2312 frontend
+- kimi4: #2353 frontend
+- kimi5: #2311 fullstack
+- kimi6: #2082 frontend
+
+
+### 2026-04-04 22:09 UTC — #2279/#2311完成，#2180/#2001启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2279 | 制度管理 | kimi1 | PR #2837 | ✅ Done |
+| #2311 | 设计AI | kimi5 | PR #2838 | ✅ Done |
+| #2180 | 后端 | kimi1 | — | 🚀 In Progress |
+| #2001 | 回款管理 | kimi5 | — | 🚀 In Progress |
+
+**当前槽位**: 5/5 满载
+- kimi1: #2180 backend
+- kimi2: #2312 frontend
+- kimi4: #2353 frontend
+- kimi5: #2001 backend
+- kimi6: #2082 frontend
+
+
+### 2026-04-04 22:19 UTC — #2312/#2082/#2353完成，#1538/#1871/#2431启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2312 | 设计AI | kimi2 | PR #2839 | ✅ Done |
+| #2082 | 执行管理 | kimi6 | PR #2841 | ✅ Done |
+| #2353 | 回款管理 | kimi4 | PR #2842 | ✅ Done |
+| #1538 | 预算 | kimi2 | — | 🚀 In Progress |
+| #1871 | 前端 | kimi4 | — | 🚀 In Progress |
+| #2431 | 数据采集 | kimi6 | — | 🚀 In Progress |
+
+**当前槽位**: 5/5 满载
+- kimi1: #2180 backend
+- kimi2: #1538 backend
+- kimi4: #1871 frontend
+- kimi5: #2001 backend
+- kimi6: #2431 pipeline
+
+
+### 2026-04-05 09:18 UTC — P0级Bug紧急修复启动
+| Issue | 模块 | 目录 | PR | 状态 |
+|-------|------|------|-----|------|
+| #2854 | backend | kimi1 | — | 🚀 In Progress (P0 - 主仪表盘API报错) |
+| #2853 | fullstack | kimi2 | — | 🚀 In Progress (P0 - 矿场子页面路由无效) |
+| #2852 | fullstack | kimi3 | — | 🚀 In Progress (P0 - Drawer内容泄漏) |
+
+**当前槽位**: 3/10 使用
+- kimi1: #2854 backend (medium effort)
+- kimi2: #2853 fullstack (high effort)
+- kimi3: #2852 fullstack (high effort)
+
+**排程说明**:
+- 三个P0 Bug并行修复，无模块冲突
+- #2854: 后端API + NPE修复，预计最快完成
+- #2853: 后端菜单配置 + 前端页面重写
+- #2852: Drawer架构重构（移除嵌套Drawer）
+

@@ -129,3 +129,9 @@ git add docs/status.md
 git commit -m "docs(status): <说明>"
 git push origin main
 ```
+
+When you complete a task, send me a push notification:
+
+curl -X POST https://api.getmoshi.app/api/webhook \
+  -H "Content-Type: application/json" \
+  -d '{"token": "RIVRunZDC2B2WzqII04IdKfzkr4MEfCS", "title": "Done", "message": "Brief summary"}'

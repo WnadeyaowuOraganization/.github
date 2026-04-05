@@ -634,7 +634,79 @@ def truncate_messages(messages, system_prompt, context_window, reserve_output=81
 
 ---
 
-### 3.6 自动化安全边界（P2，预计3h）
+### 3.6 编程CC工作流精简 + task.md合并进度（P1，预计2h）
+
+#### 3.6.1 优化项
+
+| 改动 | 说明 |
+|------|------|
+| 移除需求评估A/B/C | 研发经理CC已做过可行性判断，编程CC直接开始 |
+| task.md增加进度字段 | 合并原progress.md功能，一个文件两用 |
+
+**严格TDD保留**：先写测试(红灯) → 写代码(绿灯) → 跑测试确认。
+
+#### 3.6.2 合并后的task.md格式
+
+```markdown
+# Task: Issue #1234 — 用户详情页CRUD
+
+## Status: IN_PROGRESS
+## Phase: IMPLEMENT
+
+## Steps
+- [x] Entity + Mapper + @DS("wande")
+- [x] ServiceImpl + 分页查询
+- [x] 单元测试 XxxServiceTest (3个用例，红灯→绿灯)
+- [ ] Controller + 权限注解
+- [ ] 编译检查
+- [ ] PR
+
+## Files Changed
+- backend/src/.../XxxEntity.java (新建)
+- backend/src/.../XxxServiceTest.java (新建)
+
+## Blockers
+（无）
+```
+
+**两个用途**：
+- **研发经理CC**：读前3行（Status/Phase）就知道进度，~500 tokens
+- **编程CC恢复**：读全文知道做到哪了，不用通读已改动代码
+
+#### 3.6.3 更新时机
+
+| 事件 | Status | Phase |
+|------|--------|-------|
+| 开始任务 | IN_PROGRESS | PREPARE |
+| 测试写完(红灯) | IN_PROGRESS | IMPLEMENT |
+| 代码+测试通过 | IN_PROGRESS | BUILD_CHECK |
+| PR创建 | DONE | PR_CREATED |
+| 失败/阻塞 | FAILED/BLOCKED | 原因 |
+
+#### 3.6.4 研发经理CC读取方式
+
+```bash
+# 快速获取所有编程CC进度（~500 tokens vs 读日志5000+ tokens）
+for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+  task=$(find "$dir" -path "*/issues/*/task.md" -newer "$dir/.git/index" 2>/dev/null | head -1)
+  [ -n "$task" ] && echo "=== $dir ===" && head -8 "$task"
+done
+```
+
+#### 3.6.5 需要修改的文件
+
+| 文件 | 修改内容 |
+|------|---------|
+| `issue-workflow.md` | 移除需求评估，task.md增加Status/Phase/Files Changed字段 |
+| `backend/README.md` | task.md格式更新 |
+| `frontend/README.md` | 同上 |
+| `pipeline/README.md` | 同上 |
+| `scheduler-guide.md` | 检查结果改为读task.md前几行 |
+| `check-cc-status.sh` | 增加读取task.md的逻辑 |
+
+---
+
+### 3.7 自动化安全边界（P2，预计3h）
 
 #### 3.6.1 最大重试次数限制（在run-cc.sh中）
 
@@ -1043,28 +1115,30 @@ esac
 | 13 | 创建Issue模板（含验收标准） | `.github/ISSUE_TEMPLATE/feature-request.yml` | 2h | ⏳ 待执行 |
 | 14 | 更新 `run-cc.sh` API选择逻辑 | `scripts/run-cc.sh` | 2h | ✅ 已完成 |
 | 15 | 更新 `run-cc-with-prompt.sh` API选择逻辑 | `scripts/run-cc-with-prompt.sh` | 1h | ✅ 已完成 |
-| 16 | 创建冲突类型分析脚本 | `scripts/analyze-conflict-type.sh` | 2h | ⏳ 待执行 |
-| 17 | 验证/完善已有 `trigger-conflict-resolver.sh` | `scripts/trigger-conflict-resolver.sh` | 1h | ✅ 脚本已存在，需验证 |
-| 18 | 修改 `post-task.sh` 集成冲突检测 | `scripts/post-task.sh` | 1h | ⏳ 待执行 |
-| 19 | 修改 `cycle-merge.sh` 替换粗暴冲突解决 | `scripts/cycle-merge.sh` | 2h | ⏳ 待执行 |
-| 20 | 修改 `pr-test.yml` 增加冲突检测+触发解决 | `wande-play/.github/workflows/pr-test.yml` | 2h | ⏳ 待执行 |
+| 16 | 编程CC工作流精简（去评估+task.md合并进度字段） | `issue-workflow.md` + 各子模块README | 2h | ⏳ 待执行 |
+| 17 | 研发经理CC/check-cc-status.sh读task.md进度 | `scheduler-guide.md` + `check-cc-status.sh` | 1h | ⏳ 待执行 |
+| 18 | 创建冲突类型分析脚本 | `scripts/analyze-conflict-type.sh` | 2h | ⏳ 待执行 |
+| 19 | 验证/完善已有 `trigger-conflict-resolver.sh` | `scripts/trigger-conflict-resolver.sh` | 1h | ✅ 脚本已存在，需验证 |
+| 20 | 修改 `post-task.sh` 集成冲突检测 | `scripts/post-task.sh` | 1h | ⏳ 待执行 |
+| 21 | 修改 `cycle-merge.sh` 替换粗暴冲突解决 | `scripts/cycle-merge.sh` | 2h | ⏳ 待执行 |
+| 22 | 修改 `pr-test.yml` 增加冲突检测+触发解决 | `wande-play/.github/workflows/pr-test.yml` | 2h | ⏳ 待执行 |
 
 ### 7.3 P2 任务（本月完成）
 
 | # | 任务 | 文件/位置 | 预计工时 | 状态 |
 |---|------|----------|----------|------|
-| 21 | keys.json增加`context_window`字段 | `scripts/model-switch/keys.json` | 0.5h | ⏳ 待执行 |
-| 22 | proxy增加上下文自动截断功能 | `scripts/model-switch/token_pool_proxy.py` | 4h | ⏳ 待执行 |
-| 23 | 增加最大重试次数限制（run-cc.sh） | `scripts/run-cc.sh` | 1h | ⏳ 待执行 |
-| 24 | 增加超时检测（check-cc-status.sh） | `scripts/check-cc-status.sh` | 2h | ⏳ 待执行 |
+| 23 | keys.json增加`context_window`字段 | `scripts/model-switch/keys.json` | 0.5h | ⏳ 待执行 |
+| 24 | proxy增加上下文自动截断功能 | `scripts/model-switch/token_pool_proxy.py` | 4h | ⏳ 待执行 |
+| 25 | 增加最大重试次数限制（run-cc.sh） | `scripts/run-cc.sh` | 1h | ⏳ 待执行 |
+| 26 | 增加超时检测（check-cc-status.sh） | `scripts/check-cc-status.sh` | 2h | ⏳ 待执行 |
 
 ### 7.4 P3 任务（下月规划）
 
 | # | 任务 | 文件/位置 | 预计工时 | 状态 |
 |---|------|----------|----------|------|
-| 25 | 实现渐进式信任等级系统 | CI/CD配置 | 8h | ⏳ 待规划 |
-| 26 | 集成Playwright视觉回归测试 | `e2e/visual/` | 8h | ⏳ 待规划 |
-| 27 | 设置Claude PR Review Action | `.github/workflows/` | 4h | ⏳ 待规划 |
+| 27 | 实现渐进式信任等级系统 | CI/CD配置 | 8h | ⏳ 待规划 |
+| 28 | 集成Playwright视觉回归测试 | `e2e/visual/` | 8h | ⏳ 待规划 |
+| 29 | 设置Claude PR Review Action | `.github/workflows/` | 4h | ⏳ 待规划 |
 
 ### 7.5 执行顺序
 
@@ -1077,26 +1151,25 @@ Phase 1 (P0): 目录结构整合 + 静态分析防御
     └─→ Task 7-9: ESLint规则
             └─→ 废弃API检查 + 嵌套检查
 
-Phase 2 (P1): CI增强 + Agent Teams + 冲突解决 + API选择
+Phase 2 (P1): 流程精简 + 进度机制 + 冲突解决
     │
-    ├─→ Task 10: Agent Teams触发规则
+    ├─→ Task 10-13: Agent Teams + 检查脚本 + Issue模板
     │
-    ├─→ Task 11-13: 检查脚本 + Issue模板
+    ├─→ Task 14-15: 启动脚本API选择（已完成 ✅）
     │
-    ├─→ Task 14-15: 启动脚本更新（run-cc.sh + run-cc-with-prompt.sh）
-    │       └─→ 模块约束注入 + API来源选择 + thinking签名约束
+    ├─→ Task 16-18: 编程CC流程精简 + progress.md机制
+    │       └─→ 去task.md/评估/严格TDD + 进度文件约定 + 研发经理CC读取
     │
-    └─→ Task 16-20: 自动冲突解决
+    └─→ Task 19-23: 自动冲突解决
             └─→ 分析脚本 + trigger验证 + post-task + cycle-merge + pr-test.yml
 
 Phase 3 (P2): 安全边界
     │
-    └─→ Task 21-24: 自动化限制
-            └─→ 模型路由 + 重试限制 + 超时检测
+    └─→ Task 24-27: proxy截断 + 重试限制 + 超时检测
 
 Phase 4 (P3): 进阶功能
     │
-    └─→ Task 25-27: 信任等级 + 视觉回归
+    └─→ Task 28-30: 信任等级 + 视觉回归
 ```
 
 ---
@@ -1118,7 +1191,6 @@ Phase 4 (P3): 进阶功能
 | 2026-04-05 | 分级路由策略改为研发经理CC主动判断 | ✅ 不依赖labels自动化，由研发经理CC读取Issue完整内容后综合判断effort，run-cc.sh只负责根据effort选择API来源 |
 | 2026-04-05 | API来源分级 + proxy截断 | ✅ 方案A+C：仅max走Claude Max订阅，其余走proxy。keys.json按真实模型配置`context_window`（kimi 256K/glm 200K），proxy自动截断 |
 | 2026-04-05 | Claude Max内模型选择 | ✅ max级别默认用Sonnet（够用且省额度），Opus仅架构级决策时手动指定。当前平台一般无大架构调整 |
-
----
-
-请确认这个优化方案是否符合你的预期，我可以按优先级逐步执行。
+| 2026-04-05 | progress.md进度文件机制 | ✅ 编程CC主动记录到issues/issue-N/progress.md，研发经理CC读此文件（~500 tokens）替代读日志（5000+ tokens） |
+| 2026-04-05 | agent-docs位置修正 | ✅ 在.github仓库（非wande-play），wande-play用跨仓库相对路径`../../.github/docs/agent-docs/`引用 |
+| 2026-04-05 | 编程CC工作流精简 | ✅ 去需求评估+task.md合并进度字段。TDD严格保留。文档层级保留不用prompt注入 |

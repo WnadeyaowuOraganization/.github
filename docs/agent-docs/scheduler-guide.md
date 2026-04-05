@@ -94,6 +94,46 @@ bash scripts/update-project-status.sh play <N> "Todo"
 
 **记录**: `sprints/<sprint>/<重点模块>/PLAN.md`
 
+### 任务一b：详细设计（high/max Issue触发前）
+
+effort=high或max的复杂Issue，触发编程CC前**必须**先输出详细设计文档：
+
+```bash
+# 文件名规范: <功能名>-详细设计.md
+cat > docs/design/<功能名>-详细设计.md << 'EOF'
+# <功能名> 详细设计
+
+## 背景
+Issue #N — 一句话描述
+
+## 数据模型
+- 涉及表：wdpp_xxx（新建/修改）
+- 关键字段及类型
+
+## API设计
+- GET /wande/xxx/list — 分页查询
+- POST /wande/xxx — 新增
+
+## 关键流程
+1. 步骤1
+2. 步骤2
+
+## 技术选型
+- 选择A而非B的原因
+
+## 依赖关系
+- 前置：Issue #M 需先完成
+- 关联：xxx模块
+EOF
+
+git add docs/design/
+git commit -m "docs(design): <功能名>详细设计"
+git push origin main
+```
+
+**触发条件**：研发经理CC判断effort=high或max时，排程后、触发CC前执行。
+**目的**：编程CC按设计文档实现，降低返工率；后续可追溯原始设计意图。
+
 ### 任务二：触发CC（Todo → In Progress）
 
 ```bash

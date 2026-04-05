@@ -99,6 +99,18 @@ bash scripts/update-project-status.sh play <N> "Todo"
 
 **记录**: `sprints/<sprint>/<重点模块>/PLAN.md`
 
+### 任务一b：详细设计（high/max Issue触发前）
+
+effort=high或max的Issue，触发编程CC前必须先输出详细设计文档：
+
+```bash
+# 创建设计文档
+vim docs/design/<功能名>-详细设计.md
+git add docs/design/ && git commit -m "docs(design): <功能名>详细设计" && git push origin main
+```
+
+设计文档应包含：数据模型、API设计、关键流程、技术选型、依赖关系。
+
 ### 任务二：触发CC（Todo → In Progress）
 
 ```bash

@@ -113,4 +113,18 @@ echo "### 待处理P0 Issue数量" >> "$REPORT_FILE"
 bash "$SCRIPT_DIR/query-project-issues.sh" play "Todo" 2>/dev/null | grep "P0" | wc -l | xargs -I {} echo "- wande-play Todo P0: {}" >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 
+# 6. 读取编程CC进度（task.md）
+echo "### 编程CC进度（task.md）" >> "$REPORT_FILE"
+for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+  if [ ! -d "$dir" ]; then continue; fi
+  task=$(find "$dir" -path "*/issues/*/task.md" -mmin -120 2>/dev/null | head -1)
+  if [ -n "$task" ]; then
+    issue_dir=$(basename $(dirname "$task"))
+    status=$(head -5 "$task" | grep "^## Status:" | sed 's/## Status: //')
+    phase=$(head -5 "$task" | grep "^## Phase:" | sed 's/## Phase: //')
+    echo "- $(basename $dir)/$issue_dir: **${status:-?}** (${phase:-?})" >> "$REPORT_FILE"
+  fi
+done
+echo "" >> "$REPORT_FILE"
+
 cat "$REPORT_FILE"

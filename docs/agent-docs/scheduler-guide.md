@@ -119,6 +119,13 @@ bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix> <effort>
 ### 任务三：检查结果
 
 ```bash
+# 快速获取编程CC进度（读task.md前8行，~500 tokens）
+for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+  task=$(find "$dir" -path "*/issues/*/task.md" -newer "$dir/.git/index" 2>/dev/null | head -1)
+  [ -n "$task" ] && echo "=== $(basename $dir) ===" && head -8 "$task"
+done
+
+# 如需详细日志（仅在task.md信息不足时使用）
 cat /home/ubuntu/cc_scheduler/logs/<module>-<N>.log
 ```
 

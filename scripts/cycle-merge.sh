@@ -61,14 +61,39 @@ while [ $cycle -lt $MAX_CYCLES ]; do
       git push --force origin "$branch" 2>/dev/null || true
       echo "✅ $branch rebase 成功"
     elif git diff --name-only --diff-filter=U 2>/dev/null | grep -q .; then
-      # 有冲突，自动解决
-      for file in $(git diff --name-only --diff-filter=U 2>/dev/null); do
-        git checkout --theirs "$file" 2>/dev/null || git checkout --ours "$file" 2>/dev/null || true
-        git add "$file" 2>/dev/null || true
+      # 有冲突，分类处理
+      CONFLICT_FILES=$(git diff --name-only --diff-filter=U 2>/dev/null)
+      HAS_COMPLEX=false
+
+      for file in $CONFLICT_FILES; do
+        case "$file" in
+          *schema*.sql|*h2*.sql|*pom.xml|*/test/*|*Test.java|*.test.ts|*.spec.ts)
+            # 简单冲突：自动解决（使用dev版本）
+            git checkout --theirs "$file" 2>/dev/null || true
+            git add "$file" 2>/dev/null || true
+            ;;
+          *.java|*.ts|*.vue|*.tsx|*.py)
+            # 复杂冲突：标记，触发CC解决
+            HAS_COMPLEX=true
+            ;;
+          *)
+            git checkout --theirs "$file" 2>/dev/null || true
+            git add "$file" 2>/dev/null || true
+            ;;
+        esac
       done
-      if git rebase --continue 2>&1 | grep -q "Successfully rebased"; then
+
+      if [ "$HAS_COMPLEX" = true ]; then
+        # 有复杂冲突，abort rebase，触发冲突解决CC
+        git rebase --abort 2>/dev/null || true
+        PR_NUM=$(echo "$branch" | grep -oP '\d+' | head -1)
+        echo "⚠️ $branch 有复杂冲突，触发冲突解决CC (PR#${PR_NUM:-?})"
+        if [ -n "$PR_NUM" ]; then
+          bash "$SCRIPT_DIR/trigger-conflict-resolver.sh" "$PR_NUM" 2>/dev/null &
+        fi
+      elif git rebase --continue 2>&1 | grep -q "Successfully rebased"; then
         git push --force origin "$branch" 2>/dev/null || true
-        echo "✅ $branch rebase 成功（已解决冲突）"
+        echo "✅ $branch rebase 成功（简单冲突已自动解决）"
       else
         git rebase --abort 2>/dev/null || true
         echo "❌ $branch rebase 失败"

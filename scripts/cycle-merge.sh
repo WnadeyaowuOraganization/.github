@@ -1,8 +1,10 @@
 #!/bin/bash
-# cycle-merge.sh — 循环处理 PR：rebase → 等待 → 合并 → 重复
+# cycle-merge.sh — 批量rebase feature分支，解决冲突
 # 用法: bash scripts/cycle-merge.sh [max_cycles]
+#
+# 职责：只负责让feature分支与dev保持同步（rebase）
+# PR合并由 pr-test.yml auto-merge job 负责（E2E通过后自动合并）
 
-set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
 
@@ -16,105 +18,84 @@ while [ $cycle -lt $MAX_CYCLES ]; do
   echo "周期 $cycle/$MAX_CYCLES - $(date)"
   echo "=========================================="
 
-  # Step 1: 检查可合并的 PR
-  echo ""
-  echo "=== Step 1: 检查可合并的 PR ==="
-  mergeable=$(gh pr list --repo WnadeyaowuOraganization/wande-play --state open --limit 100 --json number,mergeable,headRefName 2>/dev/null | jq -r '.[] | select(.mergeable == true or .mergeable == "MERGEABLE") | select(.headRefName | startswith("feature")) | .number')
-
-  if [ -n "$mergeable" ]; then
-    echo "找到可合并的 PR: $mergeable"
-    for pr in $mergeable; do
-      echo "合并 PR #$pr..."
-      gh pr merge "$pr" --repo WnadeyaowuOraganization/wande-play --squash --delete-branch 2>&1 || echo "合并失败"
-      sleep 2
-    done
-    echo "等待 dev 分支更新..."
-    sleep 10
-    continue
-  else
-    echo "没有可合并的 PR"
-  fi
-
-  # Step 2: 批量 rebase
-  echo ""
-  echo "=== Step 2: 批量 rebase ==="
+  rebase_count=0
 
   for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
-    if [ ! -d "$dir" ]; then
-      continue
-    fi
+    [ ! -d "$dir" ] && continue
 
     cd "$dir"
     branch=$(git branch --show-current 2>/dev/null)
+    [[ ! "$branch" =~ ^feature ]] && continue
 
-    if [[ ! "$branch" =~ ^feature ]]; then
-      continue
-    fi
-
-    # 清理并获取最新 dev
+    # 清理工作区
     git checkout -- . 2>/dev/null || true
     git clean -fd 2>/dev/null || true
     git fetch origin dev 2>/dev/null
 
-    # Rebase
-    if git rebase origin/dev 2>&1 | grep -q "Successfully rebased"; then
+    # 尝试rebase
+    export GIT_EDITOR=true  # 防止弹出编辑器
+    if git rebase origin/dev 2>/dev/null; then
       git push --force origin "$branch" 2>/dev/null || true
-      echo "✅ $branch rebase 成功"
-    elif git diff --name-only --diff-filter=U 2>/dev/null | grep -q .; then
-      # 有冲突，分类处理
-      CONFLICT_FILES=$(git diff --name-only --diff-filter=U 2>/dev/null)
-      HAS_COMPLEX=false
+      echo "✅ $(basename $dir): $branch rebase成功"
+      rebase_count=$((rebase_count + 1))
+      continue
+    fi
 
-      for file in $CONFLICT_FILES; do
-        case "$file" in
-          *schema*.sql|*h2*.sql|*pom.xml|*/test/*|*Test.java|*.test.ts|*.spec.ts)
-            # 简单冲突：自动解决（使用dev版本）
-            git checkout --theirs "$file" 2>/dev/null || true
-            git add "$file" 2>/dev/null || true
-            ;;
-          *.java|*.ts|*.vue|*.tsx|*.py)
-            # 复杂冲突：标记，触发CC解决
-            HAS_COMPLEX=true
-            ;;
-          *)
-            git checkout --theirs "$file" 2>/dev/null || true
-            git add "$file" 2>/dev/null || true
-            ;;
-        esac
-      done
+    # rebase失败，检查冲突文件
+    CONFLICT_FILES=$(git diff --name-only --diff-filter=U 2>/dev/null)
+    if [ -z "$CONFLICT_FILES" ]; then
+      git rebase --abort 2>/dev/null || true
+      echo "❌ $(basename $dir): $branch rebase失败（非冲突原因）"
+      continue
+    fi
 
-      if [ "$HAS_COMPLEX" = true ]; then
-        # 有复杂冲突，abort rebase，触发冲突解决CC
-        git rebase --abort 2>/dev/null || true
-        PR_NUM=$(echo "$branch" | grep -oP '\d+' | head -1)
-        echo "⚠️ $branch 有复杂冲突，触发冲突解决CC (PR#${PR_NUM:-?})"
-        if [ -n "$PR_NUM" ]; then
-          bash "$SCRIPT_DIR/trigger-conflict-resolver.sh" "$PR_NUM" 2>/dev/null &
-        fi
-      elif git rebase --continue 2>&1 | grep -q "Successfully rebased"; then
+    # 分类冲突
+    HAS_COMPLEX=false
+    for file in $CONFLICT_FILES; do
+      case "$file" in
+        *schema*.sql|*h2*.sql|*pom.xml|*/test/*|*Test.java|*.test.ts|*.spec.ts)
+          git checkout --theirs "$file" 2>/dev/null || true
+          git add "$file" 2>/dev/null || true
+          ;;
+        *.java|*.ts|*.vue|*.tsx|*.py)
+          HAS_COMPLEX=true
+          break
+          ;;
+        *)
+          git checkout --theirs "$file" 2>/dev/null || true
+          git add "$file" 2>/dev/null || true
+          ;;
+      esac
+    done
+
+    if [ "$HAS_COMPLEX" = true ]; then
+      git rebase --abort 2>/dev/null || true
+      # 从分支名提取Issue号
+      PR_NUM=$(gh pr list --repo WnadeyaowuOraganization/wande-play --head "$branch" --json number --jq '.[0].number' 2>/dev/null)
+      if [ -n "$PR_NUM" ]; then
+        echo "⚠️ $(basename $dir): $branch 有复杂冲突，触发CC解决 (PR#$PR_NUM)"
+        bash "$SCRIPT_DIR/trigger-conflict-resolver.sh" "$PR_NUM" 2>/dev/null || true &
+      else
+        echo "⚠️ $(basename $dir): $branch 有复杂冲突，无对应PR"
+      fi
+    else
+      # 只有简单冲突，继续rebase
+      if GIT_EDITOR=true git rebase --continue 2>/dev/null; then
         git push --force origin "$branch" 2>/dev/null || true
-        echo "✅ $branch rebase 成功（简单冲突已自动解决）"
+        echo "✅ $(basename $dir): $branch rebase成功（简单冲突已解决）"
+        rebase_count=$((rebase_count + 1))
       else
         git rebase --abort 2>/dev/null || true
-        echo "❌ $branch rebase 失败"
+        echo "❌ $(basename $dir): $branch rebase失败"
       fi
     fi
   done
 
-  # Step 3: 检查剩余 PR 数量
   echo ""
-  echo "=== Step 3: 检查剩余 PR ==="
-  remaining=$(gh pr list --repo WnadeyaowuOraganization/wande-play --state open --limit 100 --json number 2>/dev/null | jq 'length')
-  echo "剩余打开的 PR: $remaining"
+  echo "本周期rebase成功: $rebase_count 个分支"
 
-  if [ "$remaining" -le 1 ]; then
-    echo "所有 PR 已处理完成！"
-    break
-  fi
-
-  # 等待 GitHub 更新状态
-  echo "等待 GitHub 更新状态..."
-  sleep 15
+  [ $rebase_count -eq 0 ] && break  # 没有可处理的分支，退出
+  sleep 10
 done
 
 echo ""

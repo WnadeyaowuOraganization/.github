@@ -14,9 +14,7 @@ SESSION="e2e-top"
 LOGDIR=${HOME_DIR}/cc_scheduler/logs
 mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 LOGFILE="$LOGDIR/e2e-top.log"
-RAW_LOG="$LOGDIR/e2e-top-raw.jsonl"
 
 # 防止并发
 if [ -f "$LOCK_FILE" ]; then
@@ -40,7 +38,6 @@ echo $$ > "$LOCK_FILE"
 
 # 清空日志
 > "$LOGFILE"
-> "$RAW_LOG"
 
 # 写入临时启动脚本
 TMP_SCRIPT="/tmp/e2e_top_run_$$.sh"
@@ -54,8 +51,8 @@ cd "$E2E_DIR"
 git checkout dev && git pull origin dev
 echo [\$(date)] 顶层E2E全量回归启动 >> "$LOGFILE"
 claude -p '执行顶层测试' --model claude-opus-4-6 \
-  --output-format stream-json --include-partial-messages --verbose \
-  2>/dev/null | tee -a "$RAW_LOG" | python3 "$PARSER" >> "$LOGFILE" 2>&1
+  --effort medium --max-turns 200 --verbose \
+  >> "$LOGFILE" 2>&1
 EXIT_CODE=\${PIPESTATUS[0]}
 echo [\$(date)] 顶层E2E结束 exit=\$EXIT_CODE >> "$LOGFILE"
 rm -f "$LOCK_FILE"

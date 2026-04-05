@@ -78,8 +78,13 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
 
     # 综合判断状态
     if [ "$has_claude_running" = "true" ]; then
-        # claude还在运行，检查最近活跃时间
-        last_active=$(stat -c "%Y" "$logfile" 2>/dev/null)
+        # claude还在运行，检查最近活跃时间（从JSONL文件mtime）
+        # 查找对应的JSONL会话文件
+        jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" -path "*wande-play*${repo}*" -mmin -120 2>/dev/null | sort -t/ -k1 | tail -1)
+        if [ -z "$jsonl_file" ]; then
+            jsonl_file="$logfile"  # fallback到旧日志
+        fi
+        last_active=$(stat -c "%Y" "$jsonl_file" 2>/dev/null || stat -c "%Y" "$logfile" 2>/dev/null)
         now=$(date +%s)
         idle_minutes=$(( (now - last_active) / 60 ))
         if [ "$idle_minutes" -lt 5 ]; then

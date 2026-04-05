@@ -11,10 +11,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 
 LOCK_FILE="${HOME_DIR}/cc_scheduler/manager.lock"
 LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
-RAW_LOG="${HOME_DIR}/cc_scheduler/manager-raw.jsonl"
 GITHUB_DIR="${HOME_DIR}/projects/.github"
-SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"; }
 
@@ -43,12 +40,12 @@ export HOME="${HOME_DIR}"
 
 cd "$GITHUB_DIR"
 
-# 触发研发经理CC（stream-json实时日志）
+# 触发研发经理CC（日志由Claude Code自动写入JSONL）
 claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" \
-  --model claude-opus-4-6 --output-format stream-json --include-partial-messages --verbose \
-  2>/dev/null | tee -a "$RAW_LOG" | python3 "$PARSER" >> "$LOG_FILE" 2>&1
+  --model claude-opus-4-6 --effort medium --max-turns 200 --verbose \
+  >> "$LOG_FILE" 2>&1
 
-EXIT_CODE=${PIPESTATUS[0]}
+EXIT_CODE=$?
 log "研发经理CC结束 (exit=$EXIT_CODE)"
 
 # 清理锁

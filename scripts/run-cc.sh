@@ -21,9 +21,6 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 #   2: 目录被其他CC占用（研发经理CC收到此码后应指派其他目录）
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOGDIR=${HOME_DIR}/cc_scheduler/logs
-PARSER="$SCRIPT_DIR/cc-stream-parser.py"
-mkdir -p $LOGDIR
 
 # === 解析模式 ===
 MODE="issue"
@@ -120,13 +117,9 @@ fi
 # === Session命名 ===
 if [ "$MODE" = "issue" ]; then
   SESSION="cc-${REPO}-${ISSUE}"
-  LOGFILE="$LOGDIR/${REPO}-${ISSUE}.log"
-  RAW_LOG="$LOGDIR/${REPO}-${ISSUE}-raw.jsonl"
 else
   SESSION_ID=$(echo -n "$SECOND" | md5sum | cut -c1-8)
   SESSION="cc-${REPO}-${SESSION_ID}"
-  LOGFILE="$LOGDIR/${REPO}-${SESSION_ID}.log"
-  RAW_LOG="$LOGDIR/${REPO}-${SESSION_ID}-raw.jsonl"
 fi
 
 if tmux has-session -t "$SESSION" 2>/dev/null; then
@@ -176,10 +169,6 @@ else
   PROMPT="$SECOND"
 fi
 
-# === 日志初始化 ===
-> "$LOGFILE"
-> "$RAW_LOG"
-
 # === API来源选择 ===
 if [ "$EFFORT" = "max" ]; then
   API_ENV=""
@@ -189,18 +178,12 @@ else
   API_SOURCE="Token Pool Proxy"
 fi
 
-echo "[$(date)] CC started: mode=$MODE ${REPO}#${SECOND} dir=${BASE_DIR} effort=$EFFORT api=$API_SOURCE" >> "$LOGFILE"
-
-# === 启动tmux ===
+# === 启动tmux（正常CLI界面，日志由Claude Code自动写入JSONL）===
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} cd $PROJECT_DIR; \
-   claude -p '$PROMPT' --model ${MODEL} --effort ${EFFORT} --max-turns 500 \
-     --output-format stream-json --include-partial-messages --verbose \
-   2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
-   echo '' >> '$LOGFILE'; echo [$(date)] CC COMPLETED >> '$LOGFILE'; \
+   claude -p '$PROMPT' --model ${MODEL} --effort ${EFFORT} --max-turns 500 --verbose; \
    tmux kill-session -t $SESSION"
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动 (effort: $EFFORT, api: $API_SOURCE)"
-echo "  实时日志: tail -f $LOGFILE"
-echo "  原始JSON: tail -f $RAW_LOG"
-echo "  tmux会话: tmux attach -t $SESSION"
+echo "  tmux attach -t $SESSION    查看CLI界面"
+echo "  Claude Office 页面查看日志"

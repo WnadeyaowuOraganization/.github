@@ -1109,7 +1109,7 @@ esac
 
 | # | 任务 | 文件/位置 | 预计工时 | 状态 |
 |---|------|----------|----------|------|
-| 10 | 实现Agent Teams触发规则 | `scripts/run-cc.sh` | 2h | ⏳ 待执行 |
+| 10 | 实现Agent Teams触发规则 | `scripts/run-cc.sh` | 2h | ✅ 文档化规则（研发经理CC判断） |
 | 11 | 创建路由完整性检查脚本 | `scripts/check-route-integrity.sh` | 3h | ✅ 已完成 |
 | 12 | 创建控制台警告监控工具 | `e2e/helpers/console-monitor.ts` | 4h | ✅ 已完成 |
 | 13 | 创建Issue模板（含验收标准） | `.github/ISSUE_TEMPLATE/feature-request.yml` | 2h | ✅ 已完成 |
@@ -1119,16 +1119,16 @@ esac
 | 17 | 研发经理CC/check-cc-status.sh读task.md进度 | `scheduler-guide.md` + `check-cc-status.sh` | 1h | ✅ 已完成 |
 | 18 | 创建冲突类型分析脚本 | `scripts/analyze-conflict-type.sh` | 2h | ✅ 已完成 |
 | 19 | 验证/完善已有 `trigger-conflict-resolver.sh` | `scripts/trigger-conflict-resolver.sh` | 1h | ✅ 脚本已存在，需验证 |
-| 20 | 修改 `post-task.sh` 集成冲突检测 | `scripts/post-task.sh` | 1h | ⏳ 待执行 |
+| 20 | 修改 `post-task.sh` 集成冲突检测 | `scripts/post-task.sh` | 1h | ✅ 已完成 |
 | 21 | 修改 `cycle-merge.sh` 替换粗暴冲突解决 | `scripts/cycle-merge.sh` | 2h | ✅ 已完成 |
-| 22 | 修改 `pr-test.yml` 增加冲突检测+触发解决 | `wande-play/.github/workflows/pr-test.yml` | 2h | ⏳ 待执行 |
+| 22 | 修改 `pr-test.yml` 增加冲突检测+触发解决 | `wande-play/.github/workflows/pr-test.yml` | 2h | ✅ 已完成 |
 
 ### 7.3 P2 任务（本月完成）
 
 | # | 任务 | 文件/位置 | 预计工时 | 状态 |
 |---|------|----------|----------|------|
 | 23 | keys.json增加`context_window`字段 | `scripts/model-switch/keys.json` | 0.5h | ✅ 已完成 |
-| 24 | proxy增加上下文自动截断功能 | `scripts/model-switch/token_pool_proxy.py` | 4h | ⏳ 待执行 |
+| 24 | proxy增加上下文自动截断功能 | `scripts/model-switch/token_pool_proxy.py` | 4h | ✅ 已完成 |
 | 25 | 增加最大重试次数限制（run-cc.sh） | `scripts/run-cc.sh` | 1h | ✅ 已完成 |
 | 26 | 增加超时检测（check-cc-status.sh） | `scripts/check-cc-status.sh` | 2h | ✅ 已完成 |
 

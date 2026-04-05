@@ -3,6 +3,17 @@
   "_usage": "type=zhipu: 智谱直连(Anthropic格式); type=anthropic_compat: Anthropic格式中转站; type=openai_compat: OpenAI格式中转站; provider=模型提供商标识",
   "keys": [
     {
+      "name": "claude_max",
+      "type": "anthropic_compat",
+      "provider": "anthropic",
+      "priority": 1,
+      "api_url": "https://api.anthropic.com",
+      "api_key": "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",
+      "_note": "Claude Max",
+      "context_window": 1048576,
+      "enabled": true
+    },
+    {
       "name": "kimi1",
       "type": "anthropic_compat",
       "provider": "kimi",
@@ -18,6 +29,7 @@
         "ENABLE_TOOL_SEARCH": "false"
       },
       "_note": "kimi官方coding plan",
+      "context_window": 262144,
       "enabled": true
     },
     {
@@ -36,6 +48,7 @@
         "ENABLE_TOOL_SEARCH": "false"
       },
       "_note": "kimi官方coding plan",
+      "context_window": 262144,
       "enabled": true
     },
     {
@@ -51,6 +64,7 @@
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
       "_note": "智谱清言coding plan",
+      "context_window": 204800,
       "enabled": true
     },
     {
@@ -66,6 +80,7 @@
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
       "_note": "智谱清言coding plan",
+      "context_window": 204800,
       "enabled": false
     },
     {
@@ -81,6 +96,7 @@
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
       "_note": "智谱清言coding plan",
+      "context_window": 204800,
       "enabled": false
     },
     {
@@ -96,6 +112,7 @@
         "claude-haiku-4-5-20251001": "glm-5"
       },
       "_note": "无问星穹coding plan",
+      "context_window": 204800,
       "enabled": true
     },
     {
@@ -111,6 +128,7 @@
         "claude-haiku-4-5-20251001": "kimi-k2.5"
       },
       "_note": "火山coding plan",
+      "context_window": 262144,
       "enabled": true
     }
   ],

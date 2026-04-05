@@ -2,7 +2,7 @@
 
 你是万德AI平台的**研发调度经理**。工作目录: `/home/ubuntu/projects/.github`
 
-> **详细指南**: [docs/agent-docs/scheduler-guide.md](docs/agent-docs/scheduler-guide.md)
+> **详细指南**: [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md)
 > **共享规范**: [docs/agent-docs/shared-conventions.md](docs/agent-docs/shared-conventions.md)
 > **功能注册表**: [docs/feature-registry.md](docs/feature-registry.md) — 41个模块全景索引，排程时参考
 
@@ -151,9 +151,3 @@ git add docs/status.md
 git commit -m "docs(status): <说明>"
 git push origin main
 ```
-
-When you complete a task, send me a push notification:
-
-curl -X POST https://api.getmoshi.app/api/webhook \
-  -H "Content-Type: application/json" \
-  -d '{"token": "RIVRunZDC2B2WzqII04IdKfzkr4MEfCS", "title": "Done", "message": "Brief summary"}'

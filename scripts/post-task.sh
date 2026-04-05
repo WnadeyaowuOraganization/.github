@@ -63,5 +63,17 @@ else
         2>/dev/null && log "PR创建成功" || warn "PR创建失败"
 fi
 
+# Step 5: 检测PR冲突，触发冲突解决
+log "Step 5: 检测PR冲突..."
+PR_NUM=$(gh pr list --repo "$REPO_FULL" --head "$BRANCH" --base dev --state open --json number --jq '.[0].number' 2>/dev/null || echo "")
+if [ -n "$PR_NUM" ]; then
+    MERGEABLE=$(gh pr view "$PR_NUM" --repo "$REPO_FULL" --json mergeable --jq '.mergeable' 2>/dev/null || echo "")
+    if [ "$MERGEABLE" = "CONFLICTING" ]; then
+        warn "PR #$PR_NUM 有合并冲突，触发冲突解决..."
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+        bash "$SCRIPT_DIR/../scripts/trigger-conflict-resolver.sh" "$PR_NUM" 2>/dev/null &
+    fi
+fi
+
 rm -f "$REPORT_FILE"
 log "post-task 完成 ✅"

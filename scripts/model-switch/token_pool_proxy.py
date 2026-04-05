@@ -603,6 +603,66 @@ def classify_error(key_cfg, status_code, resp_body):
         return classify_anthropic_compat(status_code, resp_body)
 
 
+# ===================== 上下文窗口截断 =====================
+
+def _estimate_tokens(text):
+    """粗略估算token数（中英混合约3字符/token）"""
+    if not text:
+        return 0
+    return len(str(text)) // 3
+
+def _truncate_messages_if_needed(body_dict, context_window):
+    """根据目标模型的context_window截断消息历史
+
+    策略：保留system + 第一条消息(Issue内容) + 尽可能多的最近消息
+    """
+    if not context_window or context_window <= 0:
+        return body_dict
+
+    reserve_output = body_dict.get("max_tokens", 8192)
+    max_input = context_window - reserve_output
+
+    # 估算system prompt token数
+    system = body_dict.get("system", "")
+    system_tokens = _estimate_tokens(str(system))
+    remaining = max_input - system_tokens
+
+    messages = body_dict.get("messages", [])
+    if len(messages) <= 2:
+        return body_dict  # 太少，不截断
+
+    # 估算总token数
+    total_tokens = sum(_estimate_tokens(str(m.get("content", ""))) for m in messages)
+    if total_tokens + system_tokens <= max_input:
+        return body_dict  # 没超限，不截断
+
+    # 保留第一条消息（通常含Issue内容）
+    first_msg = messages[0]
+    first_tokens = _estimate_tokens(str(first_msg.get("content", "")))
+    remaining -= first_tokens
+
+    # 从最新往前保留
+    kept_tail = []
+    for msg in reversed(messages[1:]):
+        msg_tokens = _estimate_tokens(str(msg.get("content", "")))
+        if remaining - msg_tokens < 0:
+            break
+        kept_tail.insert(0, msg)
+        remaining -= msg_tokens
+
+    truncated_count = len(messages) - 1 - len(kept_tail)
+    if truncated_count > 0:
+        logger.warning(
+            f"[context_truncate] 截断{truncated_count}条消息 "
+            f"(原{len(messages)}条, 保留{1 + len(kept_tail)}条, "
+            f"context_window={context_window})"
+        )
+
+    body_dict = dict(body_dict)
+    body_dict["messages"] = [first_msg] + kept_tail
+    return body_dict
+
+
 # ===================== Anthropic ↔ OpenAI 格式转换 =====================
 
 def anthropic_to_openai(anthropic_body, model_override=None):
@@ -1166,6 +1226,12 @@ def _call_upstream(key_cfg, body_bytes, body_dict, path):
     key_type = key_cfg.get("type", "anthropic_compat")
     api_key = key_cfg["api_key"]
     key_name = key_cfg.get("name")
+
+    # === 上下文窗口截断 ===
+    context_window = key_cfg.get("context_window", 0)
+    if context_window > 0 and body_dict:
+        body_dict = _truncate_messages_if_needed(body_dict, context_window)
+        body_bytes = json.dumps(body_dict, ensure_ascii=False).encode("utf-8")
 
     # 应用 key 配置中的环境变量（仅对本次请求有效）
     env_cfg = key_cfg.get("env", {})

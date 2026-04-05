@@ -126,18 +126,29 @@ fi
 > "$LOGFILE"
 > "$RAW_LOG"
 
-echo "[$(date)] CC started for ${REPO}#${ISSUE} in ${BASE_DIR} (effort=$EFFORT)" >> "$LOGFILE"
+# === API来源选择（根据effort决定）===
+if [ "$EFFORT" = "max" ]; then
+  # max级别：使用Claude Max订阅（真实模型，1M上下文）
+  API_ENV=""
+  API_SOURCE="Claude Max订阅"
+else
+  # 其他级别：使用Token Pool Proxy（模型重写+上下文截断）
+  API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
+  API_SOURCE="Token Pool Proxy"
+fi
+
+echo "[$(date)] CC started for ${REPO}#${ISSUE} in ${BASE_DIR} (effort=$EFFORT, api=$API_SOURCE)" >> "$LOGFILE"
 
 # stream-json模式 → tee保存原始JSON → python解析为可读日志
 tmux new-session -d -s "$SESSION" \
-  "export GH_TOKEN=$GH_TOKEN; export ANTHROPIC_BASE_URL=http://localhost:9855; cd $PROJECT_DIR; \
+  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} cd $PROJECT_DIR; \
    claude -p '$PROMPT' --model ${MODEL} --effort ${EFFORT} --max-turns 500 \
      --output-format stream-json --include-partial-messages --verbose \
    2>/dev/null | tee -a '$RAW_LOG' | python3 '$PARSER' >> '$LOGFILE' 2>&1; \
    echo '' >> '$LOGFILE'; echo [$(date)] CC COMPLETED >> '$LOGFILE'; \
    tmux kill-session -t $SESSION"
 
-echo "✓ CC已在tmux会话 '$SESSION' 中启动 (目录: $BASE_DIR, effort: $EFFORT)"
+echo "✓ CC已在tmux会话 '$SESSION' 中启动 (目录: $BASE_DIR, effort: $EFFORT, api: $API_SOURCE)"
 echo "  实时日志: tail -f $LOGFILE"
 echo "  原始JSON: tail -f $RAW_LOG"
 echo "  tmux会话: tmux attach -t $SESSION"

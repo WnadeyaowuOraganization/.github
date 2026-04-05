@@ -3,13 +3,13 @@
 #
 # 解决的问题：
 # 1. Done|OPEN: PR已merge但issue未关闭 → 关闭issue
-# 2. CLOSED但看板非Done: issue已关闭但看板未更新 → 更新看板为Done
+# 2. CLOSED但看板非Done/Reject: issue已关闭但看板未更新 → 根据stateReason更新为Done或Reject
 #
 # 用法:
 #   sync-project-status.sh              # 执行同步（dry-run）
 #   sync-project-status.sh --apply      # 实际执行修改
 #
-# v1 (2026-04-05): 初始版本
+# v2 (2026-04-05): 新增Reject状态，根据stateReason区分Done/Reject
 
 set -e
 
@@ -27,8 +27,23 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"
 DONE_OPTION_ID="c8f40892"
+REJECT_OPTION_ID="19b94094"
 OWNER="WnadeyaowuOraganization"
 REPO="wande-play"
+
+# 获取issue的stateReason
+get_state_reason() {
+    local issue_num=$1
+    local result=$(gh api graphql -f query='
+query {
+  repository(owner: "'"$OWNER"'", name: "'"$REPO"'") {
+    issue(number: '"$issue_num"') {
+      stateReason
+    }
+  }
+}' 2>/dev/null)
+    echo "$result" | jq -r '.data.repository.issue.stateReason // "COMPLETED"'
+}
 
 # 收集所有items（分页）
 collect_all_items() {
@@ -125,10 +140,13 @@ close_issue() {
     fi
 }
 
-# 更新看板状态为Done
+# 更新看板状态
 update_board_status() {
     local item_id=$1
     local issue_num=$2
+    local option_id=$3
+    local status_name=$4
+
     if [ "$APPLY_MODE" = "--apply" ]; then
         gh api graphql -f query='
 mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
@@ -136,12 +154,12 @@ mutation($projectId: ID!, $itemId: ID!, $fieldId: ID!) {
     projectId: $projectId
     itemId: $itemId
     fieldId: $fieldId
-    value: { singleSelectOptionId: "'"$DONE_OPTION_ID"'" }
+    value: { singleSelectOptionId: "'"$option_id"'" }
   }) { projectV2Item { id } }
 }' -F projectId="$PROJECT_ID" -F itemId="$item_id" -F fieldId="$FIELD_ID" > /dev/null 2>&1
-        echo "  ✓ Issue #$issue_num 看板状态 → Done"
+        echo "  ✓ Issue #$issue_num 看板状态 → $status_name"
     else
-        echo "  [DRY-RUN] 将更新 Issue #$issue_num 看板状态 → Done"
+        echo "  [DRY-RUN] 将更新 Issue #$issue_num 看板状态 → $status_name"
     fi
 }
 
@@ -171,18 +189,26 @@ if [ -n "$DONE_OPEN" ]; then
     done
 fi
 
-# 处理 CLOSED 但看板非Done
+# 处理 CLOSED 但看板非Done/Reject
 echo
-echo "=== 处理 CLOSED 但看板非Done ==="
-CLOSED_NOT_DONE=$(echo "$ALL_ITEMS" | grep -v '^$' | awk -F'|' '$3 == "CLOSED" && $2 != "Done" {print}')
+echo "=== 处理 CLOSED 但看板非Done/Reject ==="
+CLOSED_NOT_DONE=$(echo "$ALL_ITEMS" | grep -v '^$' | awk -F'|' '$3 == "CLOSED" && $2 != "Done" && $2 != "Reject" {print}')
 CLOSED_COUNT=$(echo "$CLOSED_NOT_DONE" | grep -c . || true)
-echo "发现 $CLOSED_COUNT 个 CLOSED 但看板非Done 的issue"
+echo "发现 $CLOSED_COUNT 个 CLOSED 但看板非Done/Reject 的issue"
 
 if [ -n "$CLOSED_NOT_DONE" ]; then
     echo "$CLOSED_NOT_DONE" | while IFS='|' read -r item_id status state issue_num; do
         [ -z "$issue_num" ] && continue
-        echo "  Issue #$issue_num (当前: $status)"
-        update_board_status "$item_id" "$issue_num"
+
+        # 获取stateReason决定目标状态
+        state_reason=$(get_state_reason "$issue_num")
+        if [ "$state_reason" = "NOT_PLANNED" ]; then
+            echo "  Issue #$issue_num (当前: $status, reason: NOT_PLANNED)"
+            update_board_status "$item_id" "$issue_num" "$REJECT_OPTION_ID" "Reject"
+        else
+            echo "  Issue #$issue_num (当前: $status, reason: $state_reason)"
+            update_board_status "$item_id" "$issue_num" "$DONE_OPTION_ID" "Done"
+        fi
     done
 fi
 

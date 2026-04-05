@@ -54,15 +54,16 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 
 ## Project #4 看板
 
-| Status | Option ID |
-|--------|-----------|
-| Plan | `7beef254` |
-| Todo | `69f47110` |
-| In Progress | `c1875ac0` |
-| Done | `c8f40892` |
-| pause | `434faed7` |
-| Fail | `8a0d3051` |
-| E2E Fail | `efdab43b` |
+| Status | Option ID | 说明 |
+|--------|-----------|------|
+| Plan | `7beef254` | 新Issue默认状态 |
+| Todo | `69f47110` | 待开发 |
+| In Progress | `c1875ac0` | 开发中 |
+| Done | `c8f40892` | 已完成 (stateReason=COMPLETED) |
+| Reject | `19b94094` | 已拒绝 (stateReason=NOT_PLANNED) |
+| pause | `434faed7` | 暂停 |
+| Fail | `8a0d3051` | 开发失败 |
+| E2E Fail | `efdab43b` | E2E测试失败 |
 
 ## 排序规则
 

@@ -33,6 +33,7 @@ STATUS_MAP["Done"]="c8f40892"
 STATUS_MAP["pause"]="434faed7"
 STATUS_MAP["Fail"]="8a0d3051"
 STATUS_MAP["E2E Fail"]="efdab43b"
+STATUS_MAP["Reject"]="19b94094"
 
 OPTION_ID="${STATUS_MAP[$NEW_STATUS]}"
 if [ -z "$OPTION_ID" ]; then

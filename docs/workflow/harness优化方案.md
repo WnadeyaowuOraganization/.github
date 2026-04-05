@@ -1114,11 +1114,11 @@ esac
 | 12 | 创建控制台警告监控工具 | `e2e/helpers/console-monitor.ts` | 4h | ✅ 已完成 |
 | 13 | 创建Issue模板（含验收标准） | `.github/ISSUE_TEMPLATE/feature-request.yml` | 2h | ✅ 已完成 |
 | 14 | 更新 `run-cc.sh` API选择逻辑 | `scripts/run-cc.sh` | 2h | ✅ 已完成 |
-| 15 | 更新 `run-cc-with-prompt.sh` API选择逻辑 | `scripts/run-cc-with-prompt.sh` | 1h | ✅ 已完成 |
+| 15 | ~~run-cc-with-prompt.sh~~ 已合并入run-cc.sh | `scripts/run-cc.sh --prompt` | 1h | ✅ 已合并删除 |
 | 16 | 编程CC工作流精简（去评估+task.md合并进度字段） | `issue-workflow.md` + 各子模块README | 2h | ✅ 已完成 |
 | 17 | 研发经理CC/check-cc-status.sh读task.md进度 | `scheduler-guide.md` + `check-cc-status.sh` | 1h | ✅ 已完成 |
 | 18 | 创建冲突类型分析脚本 | `scripts/analyze-conflict-type.sh` | 2h | ✅ 已完成 |
-| 19 | 验证/完善已有 `trigger-conflict-resolver.sh` | `scripts/trigger-conflict-resolver.sh` | 1h | ✅ 脚本已存在，需验证 |
+| 19 | 验证/完善已有 `trigger-conflict-resolver.sh` | `scripts/trigger-conflict-resolver.sh` | 1h | ✅ 已验证并更新引用 |
 | 20 | 修改 `post-task.sh` 集成冲突检测 | `scripts/post-task.sh` | 1h | ✅ 已完成 |
 | 21 | 修改 `cycle-merge.sh` 替换粗暴冲突解决 | `scripts/cycle-merge.sh` | 2h | ✅ 已完成 |
 | 22 | 修改 `pr-test.yml` 增加冲突检测+触发解决 | `wande-play/.github/workflows/pr-test.yml` | 2h | ✅ 已完成 |
@@ -1157,8 +1157,8 @@ Phase 2 (P1): 流程精简 + 进度机制 + 冲突解决
     │
     ├─→ Task 14-15: 启动脚本API选择（已完成 ✅）
     │
-    ├─→ Task 16-18: 编程CC流程精简 + progress.md机制
-    │       └─→ 去task.md/评估/严格TDD + 进度文件约定 + 研发经理CC读取
+    ├─→ Task 16-18: 编程CC流程精简 + task.md合并进度
+    │       └─→ 去评估 + task.md合并进度字段 + 研发经理CC读取
     │
     └─→ Task 19-23: 自动冲突解决
             └─→ 分析脚本 + trigger验证 + post-task + cycle-merge + pr-test.yml
@@ -1185,12 +1185,17 @@ Phase 4 (P3): 进阶功能
 | 2026-04-05 | Issue模板是否提及E2E测试 | ✅ **不提及**。职责分离（编程CC做单元测试，E2E由CI/测试CC负责），避免无效推理 |
 | 2026-04-05 | 自动冲突解决工作流 | ✅ 已确认。简单冲突自动解决，复杂冲突触发CC智能解决，复用wande-play-ci目录 |
 | 2026-04-05 | 无人值守超时检测执行时机 | ✅ 由研发经理CC在触发下一个CC前执行（check-cc-status.sh），而非编程CC自检 |
-| 2026-04-05 | 两套API体系切换策略 | ✅ high/max用Claude Max订阅（unset环境变量），low/medium用Token Pool Proxy（设置4个环境变量） |
+| 2026-04-05 | 两套API体系切换策略 | ✅ 仅max用Claude Max订阅，其余走Token Pool Proxy。run-cc.sh统一脚本（--prompt模式替代旧脚本） |
 | 2026-04-05 | thinking签名不兼容 | ✅ 同一CC会话不能混用两套API，启动时确定，整个会话不可切换 |
 | 2026-04-05 | 全面复查发现9个遗漏 | ✅ backend/CLAUDE.md冲突标记、run-cc-with-prompt.sh缺API选择、cycle-merge.sh粗暴解决、pr-test.yml缺冲突检测、trigger脚本已存在、db-prompt未纳入目录等 |
 | 2026-04-05 | 分级路由策略改为研发经理CC主动判断 | ✅ 不依赖labels自动化，由研发经理CC读取Issue完整内容后综合判断effort，run-cc.sh只负责根据effort选择API来源 |
 | 2026-04-05 | API来源分级 + proxy截断 | ✅ 方案A+C：仅max走Claude Max订阅，其余走proxy。keys.json按真实模型配置`context_window`（kimi 256K/glm 200K），proxy自动截断 |
 | 2026-04-05 | Claude Max内模型选择 | ✅ max级别默认用Sonnet（够用且省额度），Opus仅架构级决策时手动指定。当前平台一般无大架构调整 |
-| 2026-04-05 | progress.md进度文件机制 | ✅ 编程CC主动记录到issues/issue-N/progress.md，研发经理CC读此文件（~500 tokens）替代读日志（5000+ tokens） |
+| 2026-04-05 | task.md合并进度字段 | ✅ task.md增加Status/Phase/Files Changed字段，研发经理CC读前8行（~500 tokens）替代读日志 |
 | 2026-04-05 | agent-docs位置修正 | ✅ 在.github仓库（非wande-play），wande-play用跨仓库相对路径`../../.github/docs/agent-docs/`引用 |
 | 2026-04-05 | 编程CC工作流精简 | ✅ 去需求评估+task.md合并进度字段。TDD严格保留。文档层级保留不用prompt注入 |
+| 2026-04-05 | 编程CC本地文档迁移 | ✅ backend/frontend/pipeline的docs/下18个文件迁移到.github/docs/agent-docs/统一管理 |
+| 2026-04-05 | 过时文件清理 | ✅ 删除15个过时文档/脚本/prompt + 7个备份文件 + dev-environment.md + WANDE_LABEL.md副本 |
+| 2026-04-05 | run-cc脚本合并 | ✅ run-cc.sh + run-cc-with-prompt.sh合并为统一脚本（--prompt模式） |
+| 2026-04-05 | 详细设计文档机制 | ✅ high/max Issue触发前输出docs/design/xxx-详细设计.md，run-cc.sh自动注入到编程CC |
+| 2026-04-05 | wande-ai-api废弃确认 | ✅ D44: 万德业务功能全部在wande-ai子模块实现 |

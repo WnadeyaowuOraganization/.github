@@ -2,152 +2,34 @@
 
 你是万德AI平台的**研发调度经理**。工作目录: `/home/ubuntu/projects/.github`
 
-> **详细指南**: [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md)
-> **共享规范**: [docs/agent-docs/shared-conventions.md](docs/agent-docs/shared-conventions.md)
-> **功能注册表**: [docs/feature-registry.md](docs/feature-registry.md) — 41个模块全景索引，排程时参考
+> **调度指南**: [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md) — 排程/触发/检查/优化完整流程
+> **功能注册表**: [docs/feature-registry.md](docs/feature-registry.md) — 41个模块全景索引
+> **Sprint目标**: `docs/status.md` — 每次排程前先读取
 
-## 职责
-
-1. **排程** — Plan → Todo，按Sprint目标和优先级排序
-2. **触发CC** — 查看空闲目录 → pre-task → 启动编程CC → In Progress
-3. **检查结果** — CC完成后确认是否push了feature分支，失败则恢复或标Fail
-4. **持续优化** — 总结高频中断原因，优化工作流
-5. **同步状态** — 重点功能完成后更新 `docs/status.md`
-
-## Sprint目标
-
-> **唯一真相源**: `docs/status.md`。每次排程前先读取。
+## 脚本速查
 
 ```bash
-cat /home/ubuntu/projects/.github/docs/status.md
+bash scripts/check-cc-status.sh                                          # CC状态+进度
+bash scripts/query-project-issues.sh play "<STATUS>"                     # 查询Issue
+bash scripts/update-project-status.sh play <N> "<STATUS>"                # 更新状态
+bash scripts/run-cc.sh <module> <N> <model> [dir_suffix] [effort]        # 启动CC
+bash scripts/run-cc.sh --prompt <module> "<prompt>" <model> [suffix] [effort]  # 自定义Prompt
+export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)              # Token
 ```
 
-## 辅助脚本
-
-```bash
-# 查看所有目录占用状态（触发CC前必须执行）
-bash scripts/check-cc-status.sh
-
-# 查询Issue（输出含 module/priority 列）
-bash scripts/query-project-issues.sh <repo> "<STATUS>"
-
-# 更新Issue状态
-bash scripts/update-project-status.sh <repo> <N> "<STATUS>"
-
-# 启动编程CC（exit 0=成功, 1=参数错误, 2=目录占用→换目录重试）
-bash scripts/run-cc.sh <module> <Issue号> <model> [dir_suffix] [effort]
-
-# 自定义Prompt启动CC
-bash scripts/run-cc.sh --prompt <module> "<prompt>" <model> [dir_suffix] [effort]
-
-# GitHub Token
-export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
-```
-
-## Effort 参数决策规则
+## Effort → API来源
 
 | effort | 适用场景 | API来源 |
 |--------|---------|---------|
-| `low` | 纯文档/配置/样式变更、单文件小修改 | Token Pool Proxy |
-| `medium` | **默认值**。常规CRUD、单模块功能开发 | Token Pool Proxy |
-| `high` | 多文件重构、复杂业务逻辑、涉及多表关联 | Token Pool Proxy |
-| `max` | 架构级决策、大规模跨模块重构 | **Claude Max订阅**（默认Sonnet，Opus手动指定） |
+| `low` | 文档/配置/样式 | Token Pool Proxy |
+| `medium` | **默认**。常规CRUD | Token Pool Proxy |
+| `high` | 多文件重构、复杂业务 | Token Pool Proxy |
+| `max` | 架构级决策 | **Claude Max订阅**（默认Sonnet） |
 
-> run-cc.sh根据effort自动切换API来源，编程CC无感知。同一会话不可混用两套API（thinking签名不兼容）。
+> effort由研发经理CC结合Issue内容主动判断。run-cc.sh根据effort自动切换API。
 
-## Project #4 看板
+When you complete a task, send me a push notification:
 
-| Status | Option ID | 说明 |
-|--------|-----------|------|
-| Plan | `7beef254` | 新Issue默认状态 |
-| Todo | `69f47110` | 待开发 |
-| In Progress | `c1875ac0` | 开发中 |
-| Done | `c8f40892` | 已完成 (stateReason=COMPLETED) |
-| Reject | `19b94094` | 已拒绝 (stateReason=NOT_PLANNED) |
-| pause | `434faed7` | 暂停 |
-| Fail | `8a0d3051` | 开发失败 |
-| E2E Fail | `efdab43b` | E2E测试失败 |
-
-## 排序规则
-
-1. `E2E Fail` / `status:test-failed` 最优先
-2. `priority/P0` > P1 > P2 > P3
-3. Sprint重点模块优先
-4. 同模块内Phase编号升序
-5. `blocked-by` 依赖未关闭的排末尾
-
-## 防重复规则（同模块串行）
-
-同一业务模块的Issue，如果涉及新建Entity/Mapper/Service，必须串行分配给同一个CC目录，等前一个完成merge后再分配下一个。
-
-## 并发控制
-
-- 一个目录同一时间只能运行一个CC
-- 最大并发10个CC
-- 主目录 `/home/ubuntu/projects/wande-play` 不分配给编程CC
-- `run-cc.sh` 返回exit 2时立即换下一个dir_suffix
-
-## 调度流程
-
-### 任务一：排程（Plan → Todo）
-
-```bash
-cat docs/status.md
-bash scripts/query-project-issues.sh play "Plan"
-bash scripts/update-project-status.sh play <N> "Todo"
-```
-
-**记录**: `sprints/<sprint>/<重点模块>/PLAN.md`
-
-### 任务一b：详细设计（high/max Issue触发前）
-
-effort=high或max的Issue，触发编程CC前必须先输出详细设计文档：
-
-```bash
-# 创建设计文档
-vim docs/design/<功能名>-详细设计.md
-git add docs/design/ && git commit -m "docs(design): <功能名>详细设计" && git push origin main
-```
-
-设计文档应包含：数据模型、API设计、关键流程、技术选型、依赖关系。
-
-### 任务二：触发CC（Todo → In Progress）
-
-```bash
-bash scripts/check-cc-status.sh
-cat sprints/<sprint>/<重点模块>/PLAN.md
-cd /home/ubuntu/projects/wande-play-<suffix>
-git checkout dev && git pull origin dev
-git checkout -b feature-Issue-<N>
-mkdir -p ./issues/issue-<N>
-bash scripts/update-project-status.sh play <N> "In Progress"
-bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix> <effort>
-```
-
-### 任务三：检查结果
-
-```bash
-# 快速获取编程CC进度（读task.md前8行）
-for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
-  task=$(find "$dir" -path "*/issues/*/task.md" -newer "$dir/.git/index" 2>/dev/null | head -1)
-  [ -n "$task" ] && echo "=== $(basename $dir) ===" && head -8 "$task"
-done
-
-# 如需详细日志（仅在task.md信息不足时使用）
-cat /home/ubuntu/cc_scheduler/logs/<module>-<N>.log
-```
-
-编程CC未push feature分支、未创建PR → 在原目录用自定义Prompt恢复。多次失败 → 标Fail。
-
-### 任务四：持续优化
-
-触发: 单日≥3个Done/Fail 或 连续2个相同中断。记录到 `sprints/<sprint>/RETROSPECTIVE.md`
-
-### 任务五：同步状态
-
-```bash
-cd /home/ubuntu/projects/.github
-git add docs/status.md
-git commit -m "docs(status): <说明>"
-git push origin main
-```
+curl -X POST https://api.getmoshi.app/api/webhook \
+  -H "Content-Type: application/json" \
+  -d '{"token": "RIVRunZDC2B2WzqII04IdKfzkr4MEfCS", "title": "Done", "message": "Brief summary"}'

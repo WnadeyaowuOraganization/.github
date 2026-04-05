@@ -21,15 +21,16 @@
 | Project ID | `PVT_kwDOD3gg584BTjK2` |
 | Status 字段ID | `PVTSSF_lADOD3gg584BTjK2zhAxafs` |
 
-| Status | Option ID |
-|--------|-----------|
-| Plan | `7beef254` |
-| Todo | `69f47110` |
-| In Progress | `c1875ac0` |
-| Done | `c8f40892` |
-| pause | `434faed7` |
-| Fail | `8a0d3051` |
-| E2E Fail | `efdab43b` |
+| Status | Option ID | 说明 |
+|--------|-----------|------|
+| Plan | `7beef254` | 新Issue默认 |
+| Todo | `69f47110` | 待开发 |
+| In Progress | `c1875ac0` | 开发中 |
+| Done | `c8f40892` | 已完成 |
+| Reject | `19b94094` | 已拒绝 |
+| pause | `434faed7` | 暂停 |
+| Fail | `8a0d3051` | 开发失败 |
+| E2E Fail | `efdab43b` | E2E测试失败 |
 
 ## 排序规则
 
@@ -70,7 +71,10 @@
 | `low` | 纯文档/配置/样式变更、单文件小修改 | 修改README、调CSS、改环境变量 |
 | `medium` | **默认值**。常规CRUD、单模块功能开发、标准TDD任务 | Entity+Mapper+Service+Controller、页面组件开发 |
 | `high` | 多文件重构、复杂业务逻辑、涉及多表关联、调试困难的bug | 模块合并、权限体系重构、复杂查询优化 |
-| `max` | 仅Opus 4.6可用。架构级决策、大规模跨模块重构 | 数据库迁移、模块拆分合并、全局架构调整 |
+| `max` | 架构级决策、大规模跨模块重构（**Claude Max订阅，默认Sonnet**） | 数据库迁移、模块拆分合并、全局架构调整 |
+
+> effort决定API来源：max→Claude Max订阅（真实模型，1M上下文），其余→Token Pool Proxy（模型重写+上下文截断）。
+> 同一CC会话不可混用两套API（thinking签名不兼容）。
 
 ### 判断依据（按优先级）
 

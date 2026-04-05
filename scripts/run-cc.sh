@@ -29,6 +29,17 @@ if [ -z "$REPO" ] || [ -z "$ISSUE" ]; then
     exit 1
 fi
 
+# === 最大重试次数限制 ===
+MAX_RETRIES=3
+RETRY_COUNT_FILE="/tmp/cc-retry-${REPO}-${ISSUE}"
+RETRY_COUNT=$(cat "$RETRY_COUNT_FILE" 2>/dev/null || echo 0)
+if [ "$RETRY_COUNT" -ge "$MAX_RETRIES" ]; then
+    echo "ERROR: Issue#${ISSUE} 已达到最大重试次数($MAX_RETRIES)，需人工介入"
+    bash "$SCRIPT_DIR/update-project-status.sh" play "$ISSUE" "Fail" 2>/dev/null || true
+    exit 1
+fi
+echo $((RETRY_COUNT + 1)) > "$RETRY_COUNT_FILE"
+
 # wande-play monorepo: backend/frontend/pipeline/app 都在 wande-play 下
 case "$REPO" in
   backend|frontend|pipeline|app)

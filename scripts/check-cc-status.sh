@@ -83,6 +83,14 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
         idle_minutes=$(( (now - last_active) / 60 ))
         if [ "$idle_minutes" -lt 5 ]; then
             echo "- $session: 🔥 **工作中** (最近活跃)" >> "$REPORT_FILE"
+        elif [ "$idle_minutes" -ge 20 ]; then
+            echo "- $session: 🚨 **超时${idle_minutes}分钟，自动清理**" >> "$REPORT_FILE"
+            # 超时处理：通知+标Fail+清理
+            curl -s -X POST https://api.getmoshi.app/api/webhook \
+              -H "Content-Type: application/json" \
+              -d "{\"token\": \"RIVRunZDC2B2WzqII04IdKfzkr4MEfCS\", \"title\": \"CC超时\", \"message\": \"${repo}#${issue}已空闲${idle_minutes}分钟，自动清理\"}" 2>/dev/null || true
+            bash "$SCRIPT_DIR/update-project-status.sh" play "$issue" "Fail" 2>/dev/null || true
+            tmux kill-session -t "$session" 2>/dev/null || true
         else
             echo "- $session: ⏸️ **可能卡住** (${idle_minutes}分钟无输出)" >> "$REPORT_FILE"
         fi

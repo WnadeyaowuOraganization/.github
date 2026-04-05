@@ -51,11 +51,15 @@ if [ -n "$EXISTING" ]; then
     log "PR #$EXISTING 已存在"
 else
     PR_TITLE=$(git log -1 --pretty=%s)
+    # 注意：PR merge到dev分支不会自动关闭issue（dev不是默认分支）
+    # sync-issue-closed.yml workflow会在issue手动关闭时同步看板状态
     gh pr create --repo "$REPO_FULL" --base dev --head "$BRANCH" \
         --title "$PR_TITLE" \
-        --body "关联Issue: Fixes #${ISSUE_NUM}
+        --body "关联Issue: Closes #${ISSUE_NUM}
 
-由CI/CD post-task自动创建。测试CC将在下一个周期执行E2E测试。" \
+由CI/CD post-task自动创建。测试CC将在下一个周期执行E2E测试。
+
+**注意**: PR merge到dev后，需要手动关闭issue或等待merge到main。" \
         2>/dev/null && log "PR创建成功" || warn "PR创建失败"
 fi
 

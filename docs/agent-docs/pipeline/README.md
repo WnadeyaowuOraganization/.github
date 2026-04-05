@@ -124,13 +124,14 @@ tests/
 | vLLM | localhost:8000 |
 | 模型ID | `/model` |
 
-## 本地文档（按需阅读）
+## 详细文档（按需阅读）
 
-以下文档在编程CC的工作目录 `pipeline/` 下：
-- `docs/workflow.md` — 开发流程
-- `docs/environment.md` — 环境信息
-- `docs/conventions.md` — Python规范
-- `docs/pipeline-domestic-projects.md` — 国内项目管线
-- `docs/pipeline-domestic-clients.md` — 国内客户管线
-- `docs/pipeline-international-clients.md` — 国际客户管线
-- `docs/pipeline-competitors.md` — 竞争对手管线
+| 文档 | 内容 | 何时读取 |
+|------|------|---------|
+| [workflow.md](workflow.md) | 三阶段开发流程 | 每次开始新Issue时 |
+| [environment.md](environment.md) | G7e服务器、数据库、AI模型 | 需要连接外部服务时 |
+| [conventions.md](conventions.md) | 建表规范、Python规范、代码模板 | 写代码时 |
+| [pipeline-domestic-projects.md](pipeline-domestic-projects.md) | 国内项目采集（7步管线） | 处理国内项目Issue时 |
+| [pipeline-domestic-clients.md](pipeline-domestic-clients.md) | 国内客户采集（4步管线） | 处理国内客户Issue时 |
+| [pipeline-international-clients.md](pipeline-international-clients.md) | 国际客户采集（5步管线） | 处理国际客户Issue时 |
+| [pipeline-competitors.md](pipeline-competitors.md) | 竞争对手采集（5步管线） | 处理竞品Issue时 |

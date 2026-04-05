@@ -259,12 +259,13 @@ ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 - 查看 `/home/ubuntu/projects/wande-ai-e2e/tests/api/` 是否有本模块的测试文件
 - 如果没有，创建 `tests/api/<module-name>.spec.ts` 基本测试
 
-## 本地文档（按需阅读）
+## 详细文档（按需阅读）
 
-以下文档在编程CC的工作目录 `backend/` 下：
-- `docs/architecture.md` — 项目概述、技术栈
-- `docs/conventions.md` — 编码模板
-- `docs/db-schema.md` — 数据库变更管理
-- `docs/testing.md` — TDD规范
-- `docs/workflow.md` — 开发流程
-- `WANDE_MENU.md` — 菜单权限注册
+| 文档 | 内容 | 何时读取 |
+|------|------|---------|
+| [architecture.md](architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
+| [conventions.md](conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
+| [db-schema.md](db-schema.md) | 数据库变更管理、增量SQL流程 | 涉及数据库变更时 |
+| [testing.md](testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
+| [workflow.md](workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
+| [menu-config.md](menu-config.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |

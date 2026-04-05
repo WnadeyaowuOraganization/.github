@@ -176,9 +176,13 @@ export const columns: VxeGridProps['columns'] = [
 | **竞品分析** | `views/wande/competitor/index.vue` | 多Tab + 对比功能 |
 | **CRM客户** | `views/wande/crm/index.vue` | 标准列表页 + AI助手集成 |
 
-## 本地文档（按需阅读）
+## 详细文档（按需阅读）
 
-以下文档在编程CC的工作目录 `frontend/` 下：
-- `docs/UI-GUIDE.md` — 页面开发强制规范（**必读**）
-- `docs/workflow.md` — 开发流程
-- `docs/db-schema.md` — 数据库列名规范
+| 文档 | 内容 | 何时读取 |
+|------|------|---------|
+| [ui-guide.md](ui-guide.md) | 页面开发强制规范 | **写页面时必读** |
+| [conventions.md](conventions.md) | 命名规范、文件组织 | 写代码时 |
+| [testing.md](testing.md) | 组件测试规范（Vitest） | 写测试时 |
+| [workflow.md](workflow.md) | 三阶段开发流程 | 每次开始新Issue时 |
+| [db-schema.md](db-schema.md) | 数据库列名规范 | 涉及数据映射时 |
+| [antdv-constraints.md](antdv-constraints.md) | Ant Design Vue 4.x废弃API | 涉及组件库时 |

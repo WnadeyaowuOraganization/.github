@@ -149,7 +149,7 @@ $CI_DIR
 conflict-resolve-$PR_NUMBER"
 
 # 触发 CC
-bash "$SCRIPT_DIR/run-cc-with-prompt.sh" "conflict-resolver" "$PROMPT" "claude-opus-4-6" "ci" "high"
+bash "$SCRIPT_DIR/run-cc.sh" --prompt "conflict-resolver" "$PROMPT" "claude-opus-4-6" "ci" "high"
 
 echo ""
 echo "CC 已触发，等待处理完成..."

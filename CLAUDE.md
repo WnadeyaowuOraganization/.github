@@ -38,7 +38,7 @@ bash scripts/update-project-status.sh <repo> <N> "<STATUS>"
 bash scripts/run-cc.sh <module> <Issue号> <model> [dir_suffix] [effort]
 
 # 自定义Prompt启动CC
-bash scripts/run-cc-with-prompt.sh <module> "<prompt>" <model> [dir_suffix] [effort]
+bash scripts/run-cc.sh --prompt <module> "<prompt>" <model> [dir_suffix] [effort]
 
 # GitHub Token
 export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)

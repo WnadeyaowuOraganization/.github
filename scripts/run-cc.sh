@@ -133,6 +133,21 @@ else
   PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，然后按照开发流程完成任务。Issue 编号: #${ISSUE}"
 fi
 
+# === 检查是否有详细设计文档 ===
+DESIGN_DOC=$(find "$SCRIPT_DIR/../docs/design/" -name "*详细设计.md" -newer "$ISSUE_DIR" 2>/dev/null | head -1)
+if [ -z "$DESIGN_DOC" ]; then
+  # 按Issue号搜索
+  DESIGN_DOC=$(grep -rl "#${ISSUE}" "$SCRIPT_DIR/../docs/design/"*详细设计.md 2>/dev/null | head -1)
+fi
+if [ -n "$DESIGN_DOC" ]; then
+  # 复制设计文档到Issue目录，让编程CC能直接读取
+  cp "$DESIGN_DOC" "$ISSUE_DIR/design.md"
+  PROMPT="$PROMPT
+
+重要：本Issue有详细设计文档，请先阅读 issues/issue-${ISSUE}/design.md 并严格按设计实现。"
+  echo "$(date): 详细设计文档已注入: $(basename $DESIGN_DOC)"
+fi
+
 # 清空日志
 > "$LOGFILE"
 > "$RAW_LOG"

@@ -22,7 +22,8 @@ Issue创建 → CI自动关联Project Status=Plan
 
 1. 读取Issue内容：优先读 `./issues/issue-<N>/issue-source.md`（调度器预取）
 2. 如不存在：`gh issue view <N> --repo WnadeyaowuOraganization/wande-play --comments`
-3. 恢复工作：如果 `./issues/issue-<N>/task.md` 已存在，读取后继续
+3. **检查详细设计文档**：如果 `../../.github/docs/design/` 下有本Issue相关的 `*-详细设计.md`，必须先阅读并按设计实现
+4. 恢复工作：如果 `./issues/issue-<N>/task.md` 已存在，读取后继续
 
 ### Issue读取备用方案
 

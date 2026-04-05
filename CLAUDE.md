@@ -4,6 +4,7 @@
 
 > **详细指南**: [docs/agent-docs/scheduler-guide.md](docs/agent-docs/scheduler-guide.md)
 > **共享规范**: [docs/agent-docs/shared-conventions.md](docs/agent-docs/shared-conventions.md)
+> **功能注册表**: [docs/feature-registry.md](docs/feature-registry.md) — 41个模块全景索引，排程时参考
 
 ## 职责
 
@@ -45,12 +46,14 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 
 ## Effort 参数决策规则
 
-| effort | 适用场景 |
-|--------|---------|
-| `low` | 纯文档/配置/样式变更、单文件小修改 |
-| `medium` | **默认值**。常规CRUD、单模块功能开发 |
-| `high` | 多文件重构、复杂业务逻辑、涉及多表关联 |
-| `max` | 仅Opus 4.6可用。架构级决策、大规模跨模块重构 |
+| effort | 适用场景 | API来源 |
+|--------|---------|---------|
+| `low` | 纯文档/配置/样式变更、单文件小修改 | Token Pool Proxy |
+| `medium` | **默认值**。常规CRUD、单模块功能开发 | Token Pool Proxy |
+| `high` | 多文件重构、复杂业务逻辑、涉及多表关联 | Token Pool Proxy |
+| `max` | 架构级决策、大规模跨模块重构 | **Claude Max订阅**（默认Sonnet，Opus手动指定） |
+
+> run-cc.sh根据effort自动切换API来源，编程CC无感知。同一会话不可混用两套API（thinking签名不兼容）。
 
 ## Project #4 看板
 
@@ -112,10 +115,17 @@ bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix> <effort>
 ### 任务三：检查结果
 
 ```bash
+# 快速获取编程CC进度（读task.md前8行）
+for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+  task=$(find "$dir" -path "*/issues/*/task.md" -newer "$dir/.git/index" 2>/dev/null | head -1)
+  [ -n "$task" ] && echo "=== $(basename $dir) ===" && head -8 "$task"
+done
+
+# 如需详细日志（仅在task.md信息不足时使用）
 cat /home/ubuntu/cc_scheduler/logs/<module>-<N>.log
 ```
 
-编程CC未push feature分支、未创建PR → 排程问题原因 → 在原目录用自定义Prompt恢复。多次失败 → 标Fail。
+编程CC未push feature分支、未创建PR → 在原目录用自定义Prompt恢复。多次失败 → 标Fail。
 
 ### 任务四：持续优化
 

@@ -33,16 +33,16 @@
 ## Smoke E2E
 
 确认 E2E 项目中有对应的页面加载测试：
-- 查看 `/home/ubuntu/projects/wande-ai-e2e/tests/smoke/` 是否有本页面的测试文件
+- 查看 `$HOME_DIR/projects/wande-ai-e2e/tests/smoke/` 是否有本页面的测试文件
 - 如果没有，创建 `tests/smoke/<page-name>.spec.ts`（导航到页面 + 检查无白屏）
-- 运行：`cd /home/ubuntu/projects/wande-ai-e2e && npx playwright test tests/smoke/<page>.spec.ts`
+- 运行：`cd $HOME_DIR/projects/wande-ai-e2e && npx playwright test tests/smoke/<page>.spec.ts`
 
 ## Shift-left 质量检查
 
 合并到dev前必须全部通过：
 - 构建通过：`pnpm build`
 - 组件测试通过：`pnpm test -- --run`
-- Smoke E2E（如果前端在运行）：`cd /home/ubuntu/projects/wande-ai-e2e && npx playwright test tests/smoke/pages-load.spec.ts --reporter=list`
+- Smoke E2E（如果前端在运行）：`cd $HOME_DIR/projects/wande-ai-e2e && npx playwright test tests/smoke/pages-load.spec.ts --reporter=list`
 
 ## 自检清单
 

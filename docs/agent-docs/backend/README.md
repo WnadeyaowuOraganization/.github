@@ -256,7 +256,7 @@ ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 ## API集成测试
 
 确认E2E项目中有对应的API测试：
-- 查看 `/home/ubuntu/projects/wande-ai-e2e/tests/api/` 是否有本模块的测试文件
+- 查看 `$HOME_DIR/projects/wande-ai-e2e/tests/api/` 是否有本模块的测试文件
 - 如果没有，创建 `tests/api/<module-name>.spec.ts` 基本测试
 
 ## 详细文档（按需阅读）

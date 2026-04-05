@@ -1,9 +1,10 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # 批量关闭已完成的 Issue
 # 这些 Issue 的 PR 已合并，但 Issue 仍标记为 Open
 
 REPO="WnadeyaowuOraganization/wande-play"
-SCRIPT_DIR="/home/ubuntu/projects/.github/scripts"
+SCRIPT_DIR="${HOME_DIR}/projects/.github/scripts"
 
 # 已合并 PR 关联的 Issue 列表
 ISSUES=(1471 1521 1526 1544 1701 171 1721 1782 1899 1934 2216 2355 2411 2474 2586 2591 2592)

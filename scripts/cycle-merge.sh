@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # cycle-merge.sh — rebase feature分支 + 冲突解决
 #
 # 用法:
@@ -14,7 +15,7 @@
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
-CI_DIR="/home/ubuntu/projects/wande-play-ci"
+CI_DIR="${HOME_DIR}/projects/wande-play-ci"
 
 # === 复杂冲突处理：在CI目录触发CC ===
 resolve_complex_conflict() {
@@ -147,7 +148,7 @@ if [ "$1" = "--all" ]; then
     echo "=========================================="
 
     rebase_count=0
-    for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+    for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
       [ ! -d "$dir" ] && continue
       branch=$(cd "$dir" && git branch --show-current 2>/dev/null)
       [[ ! "$branch" =~ ^feature ]] && continue
@@ -182,7 +183,7 @@ else
 
   # 找到该分支所在的外挂目录
   TARGET_DIR=""
-  for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+  for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
     [ ! -d "$dir" ] && continue
     current=$(cd "$dir" && git branch --show-current 2>/dev/null)
     if [ "$current" = "$BRANCH" ]; then

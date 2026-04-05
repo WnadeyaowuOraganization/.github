@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # verify-issue-implementation.sh — Issue需求与代码实现对齐校验脚本
 # 用途：防止Issue被错误关闭或代码未覆盖需求中的关键接口
 #
@@ -23,7 +24,7 @@ case "$REPO" in
   *)         echo "Unknown repo: $REPO"; exit 1 ;;
 esac
 
-PROJECT_DIR="/home/ubuntu/projects/${BASE_DIR}"
+PROJECT_DIR="${HOME_DIR}/projects/${BASE_DIR}"
 ISSUE_INFO_FILE="/tmp/issue_${ISSUE}_info.json"
 REPORT_FILE="/tmp/verify_issue_${ISSUE}_report.md"
 

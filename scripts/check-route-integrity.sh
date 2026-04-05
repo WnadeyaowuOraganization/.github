@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # check-route-integrity.sh — 检查前端路由是否都有后端菜单配置
 # 用法: bash scripts/check-route-integrity.sh [wande-play-dir]
 #
@@ -9,7 +10,7 @@
 
 set -e
 
-PLAY_DIR="${1:-/home/ubuntu/projects/wande-play}"
+PLAY_DIR="${1:-${HOME_DIR}/projects/wande-play}"
 FRONTEND_DIR="$PLAY_DIR/frontend"
 
 # PostgreSQL 连接参数

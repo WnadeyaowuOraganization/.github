@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # run-cc.sh — 统一CC启动脚本（Issue模式 + 自定义Prompt模式）
 #
 # Issue模式（默认）:
@@ -20,7 +21,7 @@
 #   2: 目录被其他CC占用（研发经理CC收到此码后应指派其他目录）
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOGDIR=/home/ubuntu/cc_scheduler/logs
+LOGDIR=${HOME_DIR}/cc_scheduler/logs
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 mkdir -p $LOGDIR
 
@@ -65,17 +66,17 @@ fi
 case "$REPO" in
   backend|frontend|pipeline|app)
     if [ -n "$DIR_SUFFIX" ]; then
-      BASE_DIR="/home/ubuntu/projects/wande-play-${DIR_SUFFIX}"
+      BASE_DIR="${HOME_DIR}/projects/wande-play-${DIR_SUFFIX}"
     else
-      BASE_DIR="/home/ubuntu/projects/wande-play"
+      BASE_DIR="${HOME_DIR}/projects/wande-play"
     fi
     GH_REPO="WnadeyaowuOraganization/wande-play"
     ;;
   plugins|gh-plugins)
     if [ -n "$DIR_SUFFIX" ]; then
-      BASE_DIR="/home/ubuntu/projects/wande-gh-plugins-${DIR_SUFFIX}"
+      BASE_DIR="${HOME_DIR}/projects/wande-gh-plugins-${DIR_SUFFIX}"
     else
-      BASE_DIR="/home/ubuntu/projects/wande-gh-plugins"
+      BASE_DIR="${HOME_DIR}/projects/wande-gh-plugins"
     fi
     GH_REPO="WnadeyaowuOraganization/wande-gh-plugins"
     ;;

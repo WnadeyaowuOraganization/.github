@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # batch-rebase-all.sh — 批量 rebase 所有外挂目录的 feature 分支
 # 用法: bash scripts/batch-rebase-all.sh
 
@@ -10,7 +11,7 @@ echo "=== 开始批量 rebase ==="
 echo "时间: $(date)"
 
 for i in $(seq 1 20); do
-  dir="/home/ubuntu/projects/wande-play-kimi$i"
+  dir="${HOME_DIR}/projects/wande-play-kimi$i"
 
   if [ ! -d "$dir" ]; then
     continue

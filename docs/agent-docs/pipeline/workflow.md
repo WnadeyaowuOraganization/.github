@@ -27,7 +27,7 @@
 
    B/C情况下更新Project看板：
    ```bash
-   bash /home/ubuntu/projects/.github/scripts/update-project-status.sh <N> "pause"
+   bash $HOME_DIR/projects/.github/scripts/update-project-status.sh <N> "pause"
    ```
 
 > 注意：工作目录和feature分支已由调度器pre-task创建。

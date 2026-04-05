@@ -5,8 +5,8 @@ Usage:
     export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-token.py)
     gh issue list --repo WnadeyaowuOraganization/wande-play
 
-Config: /home/ubuntu/projects/.github/scripts/github-app/config.env
-Key:    /home/ubuntu/projects/.github/scripts/github-app/private-key.pem
+Config: $HOME_DIR/projects/.github/scripts/github-app/config.env
+Key:    $HOME_DIR/projects/.github/scripts/github-app/private-key.pem
 """
 
 import json
@@ -16,8 +16,10 @@ import time
 import urllib.request
 import urllib.error
 
+HOME_DIR = os.environ.get('HOME_DIR', '/home/ubuntu')
+
 # --- Config ---
-CONFIG_DIR = "/home/ubuntu/projects/.github/scripts/github-app"
+CONFIG_DIR = f"{HOME_DIR}/projects/.github/scripts/github-app"
 KEY_PATH = os.path.join(CONFIG_DIR, "private-key.pem")
 CONFIG_PATH = os.path.join(CONFIG_DIR, "config.env")
 

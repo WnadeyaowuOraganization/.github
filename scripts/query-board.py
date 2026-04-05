@@ -1,12 +1,14 @@
 #!/usr/bin/env python
+import os
 import json, subprocess, sys, urllib.request
+HOME_DIR = os.environ.get('HOME_DIR', '/home/ubuntu')
 
 PROJECT_ID = "PVT_kwDOD3gg584BTjK2"
 VALID_STATUSES = {"Plan", "Todo", "In Progress", "Done", "pause", "Fail", "all"}
 STATUS_ORDER = {"Fail": 0, "pause": 1, "Plan": 2, "Todo": 3, "In Progress": 4, "Done": 5}
 
 def get_token():
-    r = subprocess.run(["bash", "/home/ubuntu/projects/.github/scripts/get-gh-token.sh"], capture_output=True, text=True)
+    r = subprocess.run(["bash", f"{HOME_DIR}/projects/.github/scripts/get-gh-token.sh"], capture_output=True, text=True)
     t = r.stdout.strip()
     if not t:
         print("ERROR: failed to get token", file=sys.stderr)

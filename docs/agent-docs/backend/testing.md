@@ -50,16 +50,16 @@ mvn test
 ## API 集成测试
 
 确认E2E项目中有对应的API测试：
-- 查看 `/home/ubuntu/projects/wande-ai-e2e/tests/api/` 是否有本模块的测试文件
+- 查看 `$HOME_DIR/projects/wande-ai-e2e/tests/api/` 是否有本模块的测试文件
 - 如果没有，创建 `tests/api/<module-name>.spec.ts` 基本测试（health + list接口）
-- 运行：`cd /home/ubuntu/projects/wande-ai-e2e && npx playwright test tests/api/<module>.spec.ts`
+- 运行：`cd $HOME_DIR/projects/wande-ai-e2e && npx playwright test tests/api/<module>.spec.ts`
 
 ## Shift-left 质量检查
 
 合并到dev前必须全部通过：
 - 编译通过：`mvn clean compile -Pprod -DskipTests`
 - 单元测试通过：`mvn test -pl ruoyi-modules/wande-ai`
-- API Smoke测试（如果后端在运行）：`cd /home/ubuntu/projects/wande-ai-e2e && npx playwright test tests/api/health.spec.ts --reporter=list`
+- API Smoke测试（如果后端在运行）：`cd $HOME_DIR/projects/wande-ai-e2e && npx playwright test tests/api/health.spec.ts --reporter=list`
 - 如果Smoke测试失败，检查是否是本次代码引入的问题，修复后再合并
 - **CI自动执行**：push到dev时ci-test.yml会自动跑编译+Smoke，失败会在GitHub Actions标红
 

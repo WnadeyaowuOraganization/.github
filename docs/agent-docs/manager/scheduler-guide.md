@@ -4,7 +4,7 @@
 
 ## 工作目录
 
-`/home/ubuntu/projects/.github`
+`$HOME_DIR/projects/.github`
 
 ## 职责
 
@@ -50,7 +50,7 @@
 
 - 一个目录同一时间只能运行一个CC
 - kimi1~kimi20 共20个编程CC槽位，当前有大量的代码合并冲突问题，最大并发降为10个CC
-- 主目录 `/home/ubuntu/projects/wande-play` 不分配给编程CC
+- 主目录 `$HOME_DIR/projects/wande-play` 不分配给编程CC
 - `run-cc.sh` 返回exit 2时立即换下一个dir_suffix
 
 ## Issue标签与启动方式
@@ -148,7 +148,7 @@ bash scripts/check-cc-status.sh
 cat sprints/<sprint>/<重点模块>/PLAN.md
 
 # 3. pre-task
-cd /home/ubuntu/projects/wande-play-<suffix>
+cd $HOME_DIR/projects/wande-play-<suffix>
 git checkout dev && git pull origin dev
 git checkout -b feature-Issue-<N>
 mkdir -p ./issues/issue-<N>
@@ -164,13 +164,13 @@ bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix> <effort>
 
 ```bash
 # 快速获取编程CC进度（读task.md前8行，~500 tokens）
-for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+for dir in $HOME_DIR/projects/wande-play-kimi{1..20}; do
   task=$(find "$dir" -path "*/issues/*/task.md" -newer "$dir/.git/index" 2>/dev/null | head -1)
   [ -n "$task" ] && echo "=== $(basename $dir) ===" && head -8 "$task"
 done
 
 # 如需详细日志（仅在task.md信息不足时使用）
-cat /home/ubuntu/cc_scheduler/logs/<module>-<N>.log
+cat $HOME_DIR/cc_scheduler/logs/<module>-<N>.log
 ```
 
 CC未push feature分支 → 在原目录用自定义Prompt恢复。多次失败 → 标Fail。
@@ -184,7 +184,7 @@ CC未push feature分支 → 在原目录用自定义Prompt恢复。多次失败 
 触发: 重点功能完成 / Sprint变更 / 看板大批量变化(≥10个)。
 
 ```bash
-cd /home/ubuntu/projects/.github
+cd $HOME_DIR/projects/.github
 git add docs/status.md
 git commit -m "docs(status): <说明>"
 FRESH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
@@ -220,5 +220,5 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 > **唯一真相源**: `docs/status.md`。每次排程前先读取。
 
 ```bash
-cat /home/ubuntu/projects/.github/docs/status.md
+cat $HOME_DIR/projects/.github/docs/status.md
 ```

@@ -1,7 +1,8 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # 批量恢复In Progress Issue的编程CC
 
-SCRIPT_DIR="/home/ubuntu/projects/.github/scripts"
+SCRIPT_DIR="${HOME_DIR}/projects/.github/scripts"
 
 # 启动CC的函数
 start_cc() {

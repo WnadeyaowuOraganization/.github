@@ -19,7 +19,7 @@
 2. **创建 task.md**：在 `./issues/issue-<N>/` 下拆解为可执行的 task
 3. **需求评估**：
    - A: 可执行 → 继续
-   - B: 需确认 → 评论Issue + `bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "pause"` → 结束
+   - B: 需确认 → 评论Issue + `bash $HOME_DIR/projects/.github/scripts/update-project-status.sh play <N> "pause"` → 结束
    - C: 不可执行 → 评论 + 标 `status:blocked` → 结束
 
 > 工作目录和 feature 分支由调度器 pre-task 创建，无需手动操作。
@@ -59,7 +59,7 @@ e2e/tests/front/smoke/<page-name>.spec.ts
 
 # 内容：导航到页面 + 检查无白屏 + 关键元素存在
 # 运行
-cd /home/ubuntu/projects/wande-play/e2e
+cd $HOME_DIR/projects/wande-play/e2e
 npx playwright test tests/front/smoke/<page-name>.spec.ts --reporter=list
 ```
 

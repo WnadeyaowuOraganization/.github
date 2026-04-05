@@ -1,17 +1,18 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # ==============================================================
 # cc_manager.sh — 研发经理CC定时触发脚本
 # crontab: */10 * * * *
 # 功能：触发.github项目的研发经理CC，让其检查进行中的CC、
 #       更新已完成Issue的排程状态、触发新的CC处理下一批Issue
 #
-# 查看实时日志: tail -f /home/ubuntu/cc_scheduler/manager.log
+# 查看实时日志: tail -f ${HOME_DIR}/cc_scheduler/manager.log
 # ==============================================================
 
-LOCK_FILE="/home/ubuntu/cc_scheduler/manager.lock"
-LOG_FILE="/home/ubuntu/cc_scheduler/manager.log"
-RAW_LOG="/home/ubuntu/cc_scheduler/manager-raw.jsonl"
-GITHUB_DIR="/home/ubuntu/projects/.github"
+LOCK_FILE="${HOME_DIR}/cc_scheduler/manager.lock"
+LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
+RAW_LOG="${HOME_DIR}/cc_scheduler/manager-raw.jsonl"
+GITHUB_DIR="${HOME_DIR}/projects/.github"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PARSER="$SCRIPT_DIR/cc-stream-parser.py"
 
@@ -37,8 +38,8 @@ log "启动研发经理CC"
 export GH_TOKEN=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
 export ANTHROPIC_BASE_URL=http://localhost:9855
 export ANTHROPIC_API_KEY=dummy
-export PATH="/home/ubuntu/.local/bin:$PATH"
-export HOME="/home/ubuntu"
+export PATH="${HOME_DIR}/.local/bin:$PATH"
+export HOME="${HOME_DIR}"
 
 cd "$GITHUB_DIR"
 

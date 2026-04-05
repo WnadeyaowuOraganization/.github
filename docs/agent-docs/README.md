@@ -19,7 +19,7 @@
 
 | CC角色 | 工作目录 | 主要职责 |
 |--------|---------|---------|
-| **调度器CC** | `/home/ubuntu/projects/.github` | 排程、触发编程CC、检查结果、持续优化 |
+| **调度器CC** | `$HOME_DIR/projects/.github` | 排程、触发编程CC、检查结果、持续优化 |
 | **后端CC** | `wande-play-kimi*/backend` | Spring Boot后端TDD开发 |
 | **前端CC** | `wande-play-kimi*/frontend` | Vue3前端页面开发 |
 | **测试CC** | `wande-play-e2e-top/e2e` | 全量E2E回归测试 |

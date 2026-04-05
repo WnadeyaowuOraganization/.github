@@ -60,13 +60,13 @@ mvn clean compile
 
 ```bash
 # 获取Token
-export GH_TOKEN=$(bash /home/ubuntu/projects/.github/scripts/get-gh-token.sh)
+export GH_TOKEN=$(bash $HOME_DIR/projects/.github/scripts/get-gh-token.sh)
 
 # 查看Issue
 gh issue view <N> --repo WnadeyaowuOraganization/wande-play --comments
 
 # 更新Project状态
-bash /home/ubuntu/projects/.github/scripts/update-project-status.sh play <N> "<Status>"
+bash $HOME_DIR/projects/.github/scripts/update-project-status.sh play <N> "<Status>"
 ```
 
 ## 认证机制

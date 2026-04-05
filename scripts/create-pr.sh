@@ -1,9 +1,10 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # create-pr-with-backup-token.sh - 使用备用token创建PR
 # 用法: create-pr-with-backup-token.sh <REPO> <ISSUE_NUM> <TITLE> <HEAD_BRANCH> [BODY]
 
 # 加载token管理库
-source /home/ubuntu/projects/.github/scripts/github-token-lib.sh
+source ${HOME_DIR}/projects/.github/scripts/github-token-lib.sh
 
 REPO="$1"
 ISSUE_NUM="$2"

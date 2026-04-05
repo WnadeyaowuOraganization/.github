@@ -13,13 +13,14 @@ import re
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
+HOME_DIR = os.environ.get('HOME_DIR', '/home/ubuntu')
 
 
 # ---------- 配置 ----------
 CODING_CC_LOG_DIR = Path("/var/log/coding-cc")
-PROXY_LOG_PATH = Path("/home/ubuntu/projects/.github/scripts/model-switch/proxy.log")
-E2E_LOG_DIR = Path("/home/ubuntu/projects/wande-play/e2e/logs")
-E2E_TRACE_PATH = Path("/home/ubuntu/projects/wande-play/e2e/traceability/requirement-map.json")
+PROXY_LOG_PATH = Path(f"{HOME_DIR}/projects/.github/scripts/model-switch/proxy.log")
+E2E_LOG_DIR = Path(f"{HOME_DIR}/projects/wande-play/e2e/logs")
+E2E_TRACE_PATH = Path(f"{HOME_DIR}/projects/wande-play/e2e/traceability/requirement-map.json")
 INFRA_LOG_PATH = Path("/var/log/wande-infra-monitor.log")
 
 

@@ -1,9 +1,10 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # check-cc-status.sh — 检查CC状态和Issue完成情况
 
-LOGDIR=/home/ubuntu/cc_scheduler/logs
-SCRIPT_DIR="/home/ubuntu/projects/.github/scripts"
-REPORT_FILE="/home/ubuntu/cc_scheduler/status-report.md"
+LOGDIR=${HOME_DIR}/cc_scheduler/logs
+SCRIPT_DIR="${HOME_DIR}/projects/.github/scripts"
+REPORT_FILE="${HOME_DIR}/cc_scheduler/status-report.md"
 
 echo "## CC状态检查报告 — $(date '+%Y-%m-%d %H:%M:%S')" > "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
@@ -123,7 +124,7 @@ echo "" >> "$REPORT_FILE"
 
 # 6. 读取编程CC进度（task.md）
 echo "### 编程CC进度（task.md）" >> "$REPORT_FILE"
-for dir in /home/ubuntu/projects/wande-play-kimi{1..20}; do
+for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   if [ ! -d "$dir" ]; then continue; fi
   task=$(find "$dir" -path "*/issues/*/task.md" -mmin -120 2>/dev/null | head -1)
   if [ -n "$task" ]; then

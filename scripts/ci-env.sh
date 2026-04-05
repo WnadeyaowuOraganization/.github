@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # ==============================================================
 # CI专用测试环境 启动/停止/健康检查
 # 用途: pr-test.yml 调用，与dev环境(:6040/:8083)隔离
@@ -8,7 +9,7 @@
 set -e
 
 ACTION=${1:-start}
-CI_DIR="/home/ubuntu/projects/wande-play-ci"
+CI_DIR="${HOME_DIR}/projects/wande-play-ci"
 CI_BACKEND_PORT=6041
 CI_FRONTEND_PORT=8084
 CI_FRONTEND_DIR="/apps/wande-ai-front-ci"

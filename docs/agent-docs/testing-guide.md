@@ -18,7 +18,7 @@
 
 ## 工作目录
 
-`/home/ubuntu/projects/wande-play-e2e-top/e2e`
+`$HOME_DIR/projects/wande-play-e2e-top/e2e`
 
 ## 测试目录结构
 
@@ -38,7 +38,7 @@ e2e/tests/
 测试结果通过 `e2e-result-handler.py` 自动处理评论+Label+Project状态：
 
 ```bash
-HANDLER="/home/ubuntu/projects/.github/scripts/e2e-result-handler.py"
+HANDLER="$HOME_DIR/projects/.github/scripts/e2e-result-handler.py"
 
 # 有关联Issue时:
 python3 $HANDLER --report test-results/reports/results.json --issue <N> --source top
@@ -56,7 +56,7 @@ python3 $HANDLER --report test-results/reports/results.json --source top
 ### 1. 准备
 
 ```bash
-cd /home/ubuntu/projects/wande-play-e2e-top/e2e
+cd $HOME_DIR/projects/wande-play-e2e-top/e2e
 git fetch origin dev && git reset --hard origin/dev && git clean -fd
 ```
 
@@ -76,7 +76,7 @@ npx playwright test tests/backend/ tests/front/ --reporter=json,list --grep-inve
 
 ```bash
 # 调用结果处理器 — 自动完成一切后续动作
-python3 /home/ubuntu/projects/.github/scripts/e2e-result-handler.py \
+python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
   --report test-results/reports/results.json --source top
 ```
 
@@ -118,7 +118,7 @@ python3 /home/ubuntu/projects/.github/scripts/e2e-result-handler.py \
 
 默认 `wandeyaowu` PAT。Rate limit时切换：
 ```bash
-export GH_TOKEN=$(cat /home/ubuntu/projects/.github/scripts/tokens/weiping.pat)
+export GH_TOKEN=$(cat $HOME_DIR/projects/.github/scripts/tokens/weiping.pat)
 ```
 
 ## 测试编写规范

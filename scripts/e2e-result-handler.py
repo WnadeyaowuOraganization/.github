@@ -29,10 +29,11 @@ import subprocess
 import sys
 import tempfile
 from datetime import datetime
+HOME_DIR = os.environ.get('HOME_DIR', '/home/ubuntu')
 
 
 REPO = "WnadeyaowuOraganization/wande-play"
-SCRIPTS_DIR = "/home/ubuntu/projects/.github/scripts"
+SCRIPTS_DIR = f"{HOME_DIR}/projects/.github/scripts"
 
 SOURCE_LABELS = {
     "ci": "CI",

@@ -1,4 +1,5 @@
 #!/bin/bash
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # e2e_smoke.sh — Dev环境Smoke探活（每30分钟，纯脚本，零AI消耗）
 # crontab: */30 * * * *
 #
@@ -6,14 +7,14 @@
 # 不使用AI，不使用Claude Code
 #
 # 操作:
-#   tail -f /home/ubuntu/cc_scheduler/logs/e2e-smoke.log    查看日志
-#   bash /home/ubuntu/projects/.github/scripts/e2e_smoke.sh  手动执行
+#   tail -f ${HOME_DIR}/cc_scheduler/logs/e2e-smoke.log    查看日志
+#   bash ${HOME_DIR}/projects/.github/scripts/e2e_smoke.sh  手动执行
 
-LOCK_FILE="/home/ubuntu/cc_scheduler/e2e_smoke.lock"
-E2E_DIR="/home/ubuntu/projects/wande-play/e2e"
+LOCK_FILE="${HOME_DIR}/cc_scheduler/e2e_smoke.lock"
+E2E_DIR="${HOME_DIR}/projects/wande-play/e2e"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 HANDLER="$SCRIPT_DIR/e2e-result-handler.py"
-LOGDIR="/home/ubuntu/cc_scheduler/logs"
+LOGDIR="${HOME_DIR}/cc_scheduler/logs"
 LOGFILE="$LOGDIR/e2e-smoke.log"
 
 mkdir -p "$LOGDIR"
@@ -34,8 +35,8 @@ log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOGFILE"; }
 
 # --- 环境准备 ---
 export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh")
-export PATH="/home/ubuntu/.local/bin:$PATH"
-export HOME="/home/ubuntu"
+export PATH="${HOME_DIR}/.local/bin:$PATH"
+export HOME="${HOME_DIR}"
 
 cd "$E2E_DIR" || { log "❌ 目录不存在: $E2E_DIR"; exit 1; }
 

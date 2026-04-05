@@ -27,9 +27,3 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)              # Token
 | `max` | 架构级决策 | **Claude Max订阅**（默认Sonnet） |
 
 > effort由研发经理CC结合Issue内容主动判断。run-cc.sh根据effort自动切换API。
-
-When you complete a task, send me a push notification:
-
-curl -X POST https://api.getmoshi.app/api/webhook \
-  -H "Content-Type: application/json" \
-  -d '{"token": "RIVRunZDC2B2WzqII04IdKfzkr4MEfCS", "title": "Done", "message": "Brief summary"}'

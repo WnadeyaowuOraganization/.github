@@ -88,12 +88,19 @@ Issue创建 → CI自动关联Project Status=Plan
 ```bash
 git add -A
 git commit -m "feat(模块): 描述 #<Issue号>"
-git push origin feature-Issue-<N>
+
+# rebase dev（解决冲突，只尝试一次）
+git fetch origin dev
+git rebase origin/dev || git rebase --abort
+
+git push --force-with-lease origin feature-Issue-<N>
 gh pr create --repo WnadeyaowuOraganization/wande-play \
   --base dev --head feature-Issue-<N> \
   --title "feat(模块): 描述 #<Issue号>" \
   --body "Fixes #<Issue号>"
 ```
+
+> rebase冲突能解就解（你有当前Issue的完整上下文），解不了直接abort后push，CI会兜底处理。
 
 更新task.md：Status=DONE，Phase=PR_CREATED
 

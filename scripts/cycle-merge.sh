@@ -67,7 +67,7 @@ EOF
 对每个冲突文件理解双方修改意图，智能合并不丢失功能。
 运行编译测试确保代码正确，完成后提交推送到 $branch 分支。"
 
-  bash "$SCRIPT_DIR/run-cc.sh" --prompt "conflict-resolver" "$prompt" "claude-sonnet-4-6" "ci" "high" || true
+  bash "$SCRIPT_DIR/run-cc.sh" --prompt "app" "$prompt" "claude-sonnet-4-6" "ci" "high" || true
 
   git checkout dev 2>/dev/null
   return 0

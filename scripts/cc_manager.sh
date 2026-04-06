@@ -12,6 +12,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 LOCK_FILE="${HOME_DIR}/cc_scheduler/manager.lock"
 LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
 GITHUB_DIR="${HOME_DIR}/projects/.github"
+SCRIPT_DIR="${GITHUB_DIR}/scripts"
 
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"; }
 
@@ -32,7 +33,7 @@ echo $$ > "$LOCK_FILE"
 log "启动研发经理CC"
 
 # 获取GH_TOKEN
-export GH_TOKEN=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
+export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
 export ANTHROPIC_BASE_URL=http://localhost:9855
 export ANTHROPIC_API_KEY=dummy
 export PATH="${HOME_DIR}/.local/bin:$PATH"
@@ -40,9 +41,9 @@ export HOME="${HOME_DIR}"
 
 cd "$GITHUB_DIR"
 
-# 调度前清理僵尸锁（>1小时 + CC不在运行 + 无PR）
-log "清理僵尸锁..."
-bash "$SCRIPT_DIR/check-cc-status.sh" > /dev/null 2>&1
+# 调度前：恢复异常退出的CC + 清理僵尸锁
+log "执行cron恢复检查..."
+bash "$SCRIPT_DIR/post-cc-check.sh" >> "$LOG_FILE" 2>&1
 
 # 触发研发经理CC（日志由Claude Code自动写入JSONL）
 claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" \

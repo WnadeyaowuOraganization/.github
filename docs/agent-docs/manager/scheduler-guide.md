@@ -54,25 +54,51 @@
 - Issue关闭后 `issue-sync.yml` 自动释放锁
 - `run-cc.sh` 返回exit 2时换下一个kimi目录
 
-### 锁生命周期
+### 锁生命周期与状态机
 
 ```
-run-cc.sh --issue → 写入.cc-lock (issue号+时间)
+run-cc.sh --issue → .cc-lock state=RUNNING
      ↓
-CC完成 → push+PR
+CC正常完成 → push+PR → CI → Issue关闭 → issue-sync.yml删除.cc-lock
      ↓
-CI E2E通过 → auto-merge → Issue关闭
+CC异常退出 → cron post-cc-check.sh(每5分钟)
+     ├── 有未提交改动 → commit+push → state=SAVED
+     ├── 无改动 → 回退Todo → 删除.cc-lock
+     └── push失败 → retry_count+1
      ↓
-issue-sync.yml → release-cc-lock.sh → 删除.cc-lock
+state=SAVED → 研发经理CC看到💾状态 → 重新触发CC继续（同Issue重入）
+     ↓
+retry_count≥10 → 标Fail+评论原因 → 删除.cc-lock
+```
+
+### .cc-lock字段
+
+```
+issue=1234
+module=backend
+dir=kimi1
+model=claude-sonnet-4-6
+effort=high
+state=RUNNING|SAVED|NO_CHANGES
+retry_count=0
+api_source=Token Pool Proxy
 ```
 
 ### 检查锁状态
 
 `check-cc-status.sh` 输出中包含锁状态：
-- 🔧 CC运行中（正常）
-- ⏳ CC已退出，等待CI（正常）
-- ⚠️ 超1小时但CC还在跑（可能卡住）
-- 🚨 **超1小时且CC已退出（需处理）** → 重新触发CC修复
+- 🔧 CC运行中（正常，等待完成）
+- ⏳ state=RUNNING 但CC不在（等待cron恢复，最多5分钟）
+- 💾 **state=SAVED**（代码已保存，需立即重新触发CC继续）
+- 🚨 超1小时（等待cron恢复）
+
+### SAVED状态处理
+
+看到💾状态时，立即重新触发CC（同Issue重入，retry_count保留）：
+```bash
+bash scripts/run-cc.sh --module <原module> --issue <N> --dir <原kimi目录> --effort <原effort>
+```
+run-cc.sh检测到同Issue重入：跳过checkout dev，直接在feature分支上继续。
 
 ## Issue标签与启动方式
 
@@ -81,7 +107,7 @@ issue-sync.yml → release-cc-lock.sh → 删除.cc-lock
 | `module:backend` | backend | `wande-play-<suffix>/backend` | 单Agent TDD |
 | `module:frontend` | frontend | `wande-play-<suffix>/frontend` | 单Agent TDD |
 | `module:pipeline` | pipeline | `wande-play-<suffix>/pipeline` | 单Agent |
-| `module:fullstack` | app | `wande-play-<suffix>/`（根目录） | Agent Teams |
+| `module:fullstack` | fullstack | `wande-play-<suffix>/`（根目录） | Agent Teams |
 
 ## Effort 参数决策规则
 

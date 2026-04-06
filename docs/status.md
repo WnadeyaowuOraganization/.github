@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-05 11:25 by Perplexity Computer
+> ⏰ 最后更新：2026-04-06 by 伟平
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 41个模块·1182个Issue全景索引
 ---
 ## 🎯 Sprint 计划
@@ -154,6 +154,7 @@
 | D48 | 04-06 | ✅ | CC异常退出cron恢复机制 | post-cc-check.sh由cron每5分钟巡检：.cc-lock存在+无claude进程→自动commit/push/PR，10次重试失败标Fail+评论原因。去掉tmux内post-check（快速路径），全部由cron兜底 | 伟平 |
 | D49 | 04-06 | ✅ | 辅助脚本全面审计修复 | cc_manager.sh: SCRIPT_DIR未定义+GH_TOKEN硬编码PAT+集成post-cc-check.sh; run-cc.sh: 重入逻辑修复(统一retry_count/锁检测前置/SAVED状态跳过checkout dev/api_source不重复追加); scheduler-guide: 锁状态机文档化(RUNNING→SAVED→NO_CHANGES)+SAVED处理流程; 删除resume-inprogress-ccs.sh+monitor-issue-2893.sh | 伟平 |
 | D49 | 04-06 | ✅ | 清理孤立脚本+修复check-cc-status.sh会话解析bug | **删除cc-error-parser.py**（596行，无调用者，/var/log/coding-cc已停止写入，CI失败详情走pr-test.yml内联grep，页面已直接读~/.claude/projects/ JSONL）。**修复check-cc-status.sh**：session名从cc-backend-1234改为cc-kimi1-2893后，*kimi1*模糊匹配kimi10-19，误判超时Kill正在运行的CC+标Fail；改为从.cc-lock读issue/module，JSONL搜索改用精确路径。**修复monitor-issue-2893.sh**：新增CC存活检测，threshold从>6h降至>=3h | 伟平 |
+| D50 | 04-06 | ✅ | build-deploy-dev.yml部署失败处理+日志简化 | **新增deploy-failed job**：后端/前端/pipeline任意一个部署失败时，自动创建新P0 bugfix Issue（标priority/P0+type:bugfix+status:test-failed），Project状态设为E2E Fail，由研发经理CC优先安排修复。**简化日志**：去掉Maven/前端构建的tee本地文件逻辑，健康检查失败直接tail打到CI控制台；deploy-failed只附CI日志URL（不再读/tmp/deploy-*.log），减少40行冗余代码 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

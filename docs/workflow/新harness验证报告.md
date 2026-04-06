@@ -689,21 +689,43 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - PR#3022-#3027在UNSTABLE状态卡住30min，通过`gh pr merge --squash --auto`解除阻塞
 - PR#3024/3025/3026含expense文件混入（CC开发环境共用），均通过clean branch v2修复
 
-### 批次13运行中（5个CC）
+---
 
-| 目录 | Issue | 内容 | 模块 |
-|------|-------|------|------|
-| kimi11 | #1798 | 合同详情/创建/编辑页面 — 三种模式 | frontend |
-| kimi15 | #1748 | H5 客户报修页面 — 扫码+工单+进度+评价 | frontend |
-| kimi16 | #1886 | 素材库 Entity+Mapper+Vo+Bo（全部5张表） | backend |
-| kimi17 | #1895 | 客户情报信息质量计算引擎Service | backend/crm |
-| kimi19 | #1885 | 素材库分类管理 Service + Controller | backend |
+## 五I、批次13完成+批次14启动（23:00–23:25 UTC）
+
+> 更新时间：2026-04-06 23:25 UTC（批次13全部完成，累计72 MERGED）
+
+### 批次13完成情况（6/6 MERGED）
+
+| PR | Issue | 标题摘要 | 状态 | 处理 |
+|----|-------|---------|------|------|
+| PR#3029 | #1885 | 素材库分类管理 Service+Controller — CRUD+树形结构+15个测试 | ✅ MERGED | clean v2分支（schema冲突） |
+| PR#3031+#3034 | #1748 | H5客户报修页面 — 评价页+路由+Vue Router迁移+Bug修复 | ✅ MERGED | 2个PR（补充批次） |
+| PR#3033 | #1886 | 素材库 Entity+Mapper+Vo+Bo+schema — 5张表全部Java代码层 | ✅ MERGED | clean v2分支（schema冲突） |
+| PR#3036 | #1895 | 信息质量计算引擎Service — 三模式差异化评分+红绿灯+阶段拦截 | ✅ MERGED | 手动commit（CC未提交） |
+| PR#3037 | #1798 | 合同详情/创建/编辑页面 — 三种模式差异化表单 | ✅ MERGED | clean v2分支（冲突） |
+| PR#3038 | #1888 | 素材库建表SQL — Flyway迁移脚本+PG schema | ✅ MERGED | clean v2分支（schema冲突） |
+
+**批次13关键事件**:
+- **schema累积冲突**：全部6个Issue均遭遇schema.sql/wande-ai-pg.sql冲突，全部采用clean v2分支策略
+- **CC未提交代码（#1895/#1886）**：CC完成工作后回到❯提示，未自动commit；研发经理手动commit+push
+- **H2/PG schema双轨维护**：#1888 CC维护了Flyway迁移脚本+PG schema，#1886/1885 CC维护了H2测试schema
+
+### 批次14已启动（5个CC，23:10 UTC）
+
+| 目录 | Issue | 内容 | 模块 | effort |
+|------|-------|------|------|--------|
+| kimi11 | #1984 | 设计任务看板API — CRUD+状态流转+统计+逾期预警 | backend | high |
+| kimi15 | #2033 | 色卡材料 Entity+Mapper+Service — 材料库CRUD | backend | high |
+| kimi16 | #1995 | 项目风险事件Service — CRUD+多源自动汇聚引擎 | backend | high |
+| kimi17 | #2049 | 备件管理API — spare_parts CRUD+出入库+安全库存预警 | backend | high |
+| kimi19 | #2048 | 备件消耗关联工单 — 维修时自动扣减库存+成本记录 | backend | high |
 
 ---
 
 ## 七、最终结论
 
-> 更新时间：2026-04-06 22:50 UTC（批次13运行中，累计66 MERGED）
+> 更新时间：2026-04-06 23:25 UTC（批次14运行中，累计72 MERGED）
 
 - **总验收项**: **63项**（A~H阶段：原53项 + H阶段新增10项）
 - **已观测**: 43项（+5项H阶段部分观测）
@@ -712,12 +734,13 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - **警告**: 8项（⚠️：A8过度max/P18/P19/H3/H10等）
 - **不适用/待观测**: 18项（—）
 - **整体评分**: 21/43 = 49%（含H阶段修正）
-- **累计完成**: 批次1-4共27个 + 批次5-13已39个 = **66个 MERGED**
+- **累计完成**: 批次1-4共27个 + 批次5-14已45个 = **72个 MERGED**
   - 批次10全部：#1699/#1632/#1633/#1694/#1688（5个）
   - 批次11全部：#1631/#1703/#1630/#1681/#1620/#1716路由（6个）
   - 批次12完成：#1716完整/#1621/#1725/#1731/#1800（5个）
-- **当前运行(5个)**: kimi11(#1798) / kimi15(#1748) / kimi16(#1886) / kimi17(#1895) / kimi19(#1885)
+  - 批次13全部：#1885/#1748/#1886/#1895/#1798/#1888（6个）
+- **当前运行(5个)**: kimi11(#1984) / kimi15(#2033) / kimi16(#1995) / kimi17(#2049) / kimi19(#2048)
 - **关键问题（按优先级）**:
-  1. 🟡 **CC交互模式阻塞**: CC完成后在❯提示等待(计划确认/完成汇报)，需研发经理定时发送继续指令
-  2. 🟡 **CI auto-merge阻塞**: 部分PR在UNSTABLE状态卡住，需手动`gh pr merge --squash`触发
+  1. 🟡 **CC未提交代码**: CC完成工作后在❯提示等待，不自动commit；需研发经理定时检查并手动提交
+  2. 🟡 **schema累积冲突**: 每批PR都有schema.sql/wande-ai-pg.sql冲突，统一用clean v2分支策略处理
   3. 🟡 **expense文件污染**: CC工作目录共用导致expense文件混入其他PR，需clean branch v2处理

@@ -1318,3 +1318,28 @@
 | #2846 | frontend | kimi4 | 🔄 重启中 |
 
 **附带修复**: `.cc-lock` 加入 `.gitignore`，各kimi目录取消git追踪；PR #2908/#2907 冲突已通过rebase解决。
+
+## 2026-04-06 10:50 UTC 第3轮指派（并发扩容至10个，矿场Phase P0）
+
+**指派者**: 研发调度经理（本会话）
+**并发数**: 10（含kimi6运行中的#2850）
+**Effort**: max（Claude Max Sonnet）
+
+| kimi目录 | Issue | 模块 | 标题 |
+|---------|-------|------|------|
+| kimi1 | #1483 | backend | [矿场-验证][3/5] 商务标记存疑触发深度验证 |
+| kimi2 | #1493 | backend | [矿场-Phase4][11/17] 企微跟进记录Webhook |
+| kimi3 | #1512 | backend | [矿场-Phase1][12/13] 每日简报企微/邮件定时推送 |
+| kimi4 | #1513 | backend | [矿场-Phase1][11/13] 每日简报数据聚合接口 |
+| kimi5 | #1514 | backend | [矿场-Phase1][9/13] 客户ICP批量评分任务 |
+| kimi7 | #1515 | backend | [矿场-Phase1][8/13] ICP评分维度表与配置接口 |
+| kimi8 | #1516 | backend | [矿场-Phase1][7/13] 个人赢率统计视图 |
+| kimi9 | #2244 | backend | [矿场-Phase1][10/13] 客户列表ICP评分列与分层徽标 |
+| kimi10 | #2229 | frontend | [矿场-Phase4][12/17] 项目详情页跟进时间线 |
+
+**同期完成（第1/2轮）**:
+- #2845(kimi1) PR#2913 MERGED | #2846(kimi2) PR#2911 MERGED
+- #2847(kimi2) PR#2906 MERGED | #2848(kimi3) PR#2912 MERGED
+- #2849 PR#2908 MERGED | #2850(kimi6) 运行中
+- #2851 PR#2907 MERGED | #1534 PR#2910 MERGED
+- #1494(kimi8) PR#2915 MERGED | #2455(kimi9) PR#2914 MERGED

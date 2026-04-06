@@ -148,6 +148,7 @@
 | D42 | 04-05 | ✅ | 行业专家知识体系启动：wande-industry Skill + 知识结晶机制 | 平台从「文档检索」升级为「行业顶级专家」。Nurture-First三层架构+5级能力模型。P0: wande-industry Skill(6知识域+4决策树)+结晶SOP(6标签)+Memory种子+wande-ai v54更新。P1-P4: S3蒸馏→GraphRAG→推理引擎→飞轮 | 吴耀 |
 | D43 | 04-05 | ✅ | Harness优化方案V1落地（28/29完成） | **CLAUDE.md精简**：wande-play主CLAUDE.md从67行精简至40行，接口契约最优先，删除backend/frontend/pipeline子模块CLAUDE.md。**agent-docs子目录**：.github/docs/agent-docs/{backend,frontend,pipeline}/README.md集中管理，wande-play跨仓库引用。**静态分析**：ESLint废弃API规则+嵌套检查+antdv-constraints.md。**工作流精简**：编程CC去需求评估、task.md合并进度字段(Status/Phase)、研发经理CC读task.md替代读日志。**模型分级**：仅max走Claude Max订阅（默认Sonnet），其余走Token Pool Proxy+上下文自动截断(kimi 256K/glm 200K)。**冲突解决**：cycle-merge智能分类+trigger-conflict-resolver+pr-test.yml/post-task.sh集成。**安全边界**：最大重试3次+超时20分钟自动清理。**过时文件清理**：删除15个过时文档/脚本/prompt | 伟平 |
 | D44 | 04-05 | ✅ | wande-ai-api模块废弃确认 | wande-ai-api已合并入wande-ai（D27 PR#2593），万德业务功能全部在wande-ai子模块实现。backend/ruoyi-modules-api/wande-ai-api目录已废弃 | 伟平 |
+| D45 | 04-06 | ✅ | Harness优化V2 + Claude Office重构 | run-cc.sh命名参数+内置pre-task；Claude Office server.py重写(2424→479行)；进程检测统一扫描；日志JSONL直读；PR CI全链路优化（冲突检测→构建部署→smoke→E2E→失败自动修复） | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 
@@ -331,6 +332,34 @@ Issue创建
 - 安全边界：run-cc.sh最大重试3次 + check-cc-status.sh超时20分钟自动清理
 - 过时文件清理：删除15个过时文档/脚本/prompt（旧版guide、迁移文档、废弃脚本等）
 - wande-ai-api确认废弃：万德业务功能全部在wande-ai子模块实现
+### 基础设施变更（04-06）— Harness优化V2 + Claude Office重构
+- run-cc.sh改为--命名参数（--module/--issue/--dir/--effort/--prompt），消除下标解析bug
+- run-cc.sh内置pre-task（自动checkout dev→pull→创建feature分支→校验分支名）
+- run-cc.sh --module支持fullstack作为app别名
+- run-cc.sh session名用真实目录名（cc-kimi1-backend-2854），server.py不再推断
+- run-cc.sh Issue模式必须传--dir（主目录仅--prompt可用）
+- query-project-issues.sh/update-project-status.sh改为--命名参数（兼容已删除）
+- cycle-merge.sh支持指定PR号（--all批量模式保留）
+- cycle-merge.sh合并trigger-conflict-resolver.sh功能
+- 删除cc-stream-parser.py：tmux显示正常CLI界面，日志由JSONL直读
+- 删除所有/home/ubuntu硬编码：统一HOME_DIR变量（30个文件）
+- Claude Office server.py重写（2424→479行）：仅保留status/manager/logs/sprint/project 5个API
+- Claude Office进程检测改为统一扫描claude进程按cwd分类（替代tmux+ps双重检测）
+- Claude Office日志统一JSONL直读（编程CC/研发经理CC/E2E全部统一）
+- Claude Office研发经理CC支持tab页切换会话日志
+- Claude Office编程CC日志tab统一（所有活跃CC共享tab列表）
+- Claude Office看板计数从GitHub Project#4 GraphQL API实时获取（后台30秒刷新）
+- Claude Office日志滚动优化（翻看历史不跳转，滚到底部恢复跟随）
+- pr-test.yml增加conflict-check job（E2E前解决冲突）
+- pr-test.yml轻量smoke改用CI专用环境(:6041/:8084)
+- pr-test.yml构建部署步骤按BACKEND_CHANGED/FRONTEND_CHANGED增量部署
+- pr-test.yml E2E失败评论含错误详情（body-file方式避免YAML注入）
+- pr-test.yml Issue号提取改用env传递PR body（修复shell注入漏洞）
+- pr-test.yml E2E失败后自动触发CC修复（run-cc.sh --prompt）
+- ci-env.sh启动失败自动重新构建重试
+- 批量清理重复Bean定义（45个文件，-4187行）
+- 编程CC文档统一迁移到.github/docs/agent-docs/（18个文件）
+- 删除server_old.py等废弃文件
 ## 📌 需要对方处理
 ### @伟平 待讨论
 - ~~**dev分支后端无法启动（P0）**~~ — 已通过 #2585 / PR #2593 解决

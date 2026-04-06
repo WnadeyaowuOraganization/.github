@@ -144,12 +144,14 @@ if [ -f "$LOCK_FILE" ]; then
   fi
 fi
 
-# 写入锁（Issue模式）
+# 写入锁（Issue模式，API/模型信息在启动tmux前追加）
 if [ "$MODE" = "issue" ]; then
   cat > "$LOCK_FILE" << EOF
 issue=${ISSUE}
 module=${MODULE}
 dir=${DIR}
+model=${MODEL}
+effort=${EFFORT}
 time=$(date '+%Y-%m-%d %H:%M:%S')
 timestamp=$(date +%s)
 EOF
@@ -222,6 +224,11 @@ if [ "$EFFORT" = "max" ]; then
 else
   API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
   API_SOURCE="Token Pool Proxy"
+fi
+
+# 追加API信息到锁文件
+if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
+  echo "api_source=${API_SOURCE}" >> "$LOCK_FILE"
 fi
 
 # === 启动tmux ===

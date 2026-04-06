@@ -1343,3 +1343,29 @@
 - #2849 PR#2908 MERGED | #2850(kimi6) 运行中
 - #2851 PR#2907 MERGED | #1534 PR#2910 MERGED
 - #1494(kimi8) PR#2915 MERGED | #2455(kimi9) PR#2914 MERGED
+
+## 2026-04-06 12:05 UTC 第4轮指派（企微打通P0 + 商务赋能P0，10并发）
+
+**指派者**: 研发调度经理（本会话）
+**并发数**: 10
+**Effort**: max（Claude Max Sonnet）
+
+| kimi目录 | Issue | 模块 | 标题 |
+|---------|-------|------|------|
+| kimi1 | #1564 | backend | [企微打通-P0][1/17] WecomAppService — access_token管理+消息发送SDK |
+| kimi2 | #1563 | backend | [企微打通-P0][2/17] 通知双通道Service — 站内通知+企微消息统一发送 |
+| kimi3 | #1562 | backend | [企微打通-P0][3/17] 企微消息模板管理 — 6种业务场景模板+Markdown格式化 |
+| kimi4 | #1561 | backend | [企微打通-P0][4/17] 企微消息回调接收API — 模板卡片按钮点击事件处理 |
+| kimi5 | #1559 | backend | [企微打通-P0][5/17] 通讯录同步数据模型 — 映射表+同步日志表 |
+| kimi6 | #1476 | backend | [商务赋能][12/28] 标准变更追踪+到期提醒 |
+| kimi7 | #1478 | backend | [商务赋能][8/28] 材质检测报告管理 |
+| kimi8 | #1480 | backend | [商务赋能][3/28] 案例照片S3存储+缩略图生成 |
+| kimi9 | #1481 | backend | [商务赋能][2/28] 案例照片管理+季节自动标签 |
+| kimi10 | #1484 | frontend | [矿场-验证][2/5] L4复检异常检测与项目状态联动 |
+
+**同期完成（第3轮）**:
+- #1483(kimi1) PR#2924 MERGED | #1512(kimi3) PR#2923 MERGED
+- #1513(kimi4) PR#2922 MERGED | #1514(kimi5) PR#2921 MERGED
+- #1515(kimi7) PR#2918 MERGED | #1516(kimi8) PR#2920 MERGED
+- #2244(kimi9) PR#2919 MERGED | #2229(kimi10) PR#2917 MERGED
+- #1493(kimi2) PR#2866 MERGED（第1轮遗留）

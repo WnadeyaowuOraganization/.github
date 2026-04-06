@@ -37,7 +37,7 @@ if [ -z "$MODULE" ]; then
   echo "  $0 --module <module> --issue <N> --dir <kimi目录> --effort <effort> [--model <model>]"
   echo "  $0 --module <module> --prompt \"<prompt>\" [--dir <kimi目录>] [--effort <effort>]"
   echo ""
-  echo "  module: backend | frontend | pipeline | app | plugins | gh-plugins"
+  echo "  module: backend | frontend | pipeline | fullstack | plugins | gh-plugins"
   echo "  effort: low | medium | high | max"
   exit 1
 fi
@@ -74,12 +74,18 @@ if [ "$MODE" = "issue" ]; then
 fi
 
 # === 目录解析 ===
+# fullstack是app的别名
+[ "$MODULE" = "fullstack" ] && MODULE="app"
+
 case "$MODULE" in
   backend|frontend|pipeline|app)
     if [ -n "$DIR" ]; then
       BASE_DIR="${HOME_DIR}/projects/wande-play-${DIR}"
-    else
+    elif [ "$MODE" = "prompt" ]; then
       BASE_DIR="${HOME_DIR}/projects/wande-play"
+    else
+      echo "ERROR: Issue模式必须指定 --dir（如 kimi1~kimi20），主目录仅--prompt模式可用"
+      exit 1
     fi
     GH_REPO="WnadeyaowuOraganization/wande-play"
     ;;
@@ -144,12 +150,18 @@ if [ -n "$OCCUPIED_PID" ]; then
   exit 2
 fi
 
-# === Session命名 ===
+# === Session命名（使用真实目录名，与.claude/projects/一致）===
+# PROJECT_DIR: /home/ubuntu/projects/wande-play-kimi1/backend → DIR_NAME: kimi1-backend
+# PROJECT_DIR: /home/ubuntu/projects/wande-play-kimi1 → DIR_NAME: kimi1
+REL_PATH=$(echo "$PROJECT_DIR" | sed "s|${HOME_DIR}/projects/wande-play-||; s|${HOME_DIR}/projects/wande-gh-plugins-||; s|${HOME_DIR}/projects/wande-play||; s|${HOME_DIR}/projects/wande-gh-plugins||")
+REL_PATH=$(echo "$REL_PATH" | sed 's|^/||; s|/|-|g')  # kimi1/backend → kimi1-backend
+[ -z "$REL_PATH" ] && REL_PATH="main"  # 主目录
+
 if [ "$MODE" = "issue" ]; then
-  SESSION="cc-${MODULE}-${ISSUE}"
+  SESSION="cc-${REL_PATH}-${ISSUE}"
 else
   SESSION_ID=$(echo -n "$PROMPT" | md5sum | cut -c1-8)
-  SESSION="cc-${MODULE}-${SESSION_ID}"
+  SESSION="cc-${REL_PATH}-${SESSION_ID}"
 fi
 
 if tmux has-session -t "$SESSION" 2>/dev/null; then

@@ -1,10 +1,10 @@
 # 新 Harness 工作流验证报告
 
 > **生成时间**: 2026-04-06  
-> **架构基准**: status.md 重大决策 D1–D44（截至 2026-04-05）  
+> **架构基准**: status.md 重大决策 D1–D49（截至 2026-04-06）  
 > **验证范围**: 完整自动化研发流水线（排程→编程CC→CI→合并→发布→E2E）  
-> **验证 Issue**: #2893 Claude Office全量迁移-P0（已加入 Project#4 Todo 列最前方）  
-> **状态**: ⏳ 预期验收项已生成，等待用户确认后开始执行验证  
+> **验证批次**: 驾驶舱7+矿场3（#2845-#2851 + #1494/#2455/#1534）Max Sonnet  
+> **状态**: 🔄 验证进行中（批次完成率 30%，7个CC重启中）  
 >
 > **⚠️ 架构注意**:  
 > - `wande-ai-api` 子模块**已废弃**（D44，PR#2593），所有业务代码在 `wande-ai`  
@@ -17,7 +17,7 @@
 ## 一、流水线架构总览（基于 status.md 实际流程图）
 
 ```
-研发经理CC（每10分钟，cc_manager.sh）
+研发经理CC（每10分钟，cc_manager.sh）[含 post-cc-check.sh 集成，D49]
     │
     ├─ 任务一: 排程  Plan → Todo（按优先级/Sprint）
     └─ 任务二: 触发  Todo → In Progress
@@ -25,6 +25,7 @@
                         ▼
           run-cc.sh --module <m> --issue N --dir kimiX --effort <e>
           工作目录: wande-play-kimiX/（带后缀，主目录禁止）
+          .cc-lock 写入 state=RUNNING（D46）
                         │
               ┌─────────┴──────────┐
               ▼                    ▼
@@ -40,6 +41,16 @@
                     push feature-Issue-N
                     gh pr create --base dev
                     （由编程CC自身完成，D11）
+    ═══════════════════════════════════════════
+    CC异常恢复  post-cc-check.sh  cron每5分钟（D48）
+    ═══════════════════════════════════════════
+         扫描 .cc-lock 存在 + 无 claude 进程
+         → git add -A + commit（保存进度）
+         → git push origin feature-Issue-N
+         → state=SAVED，retry_count++
+         下次 cc_manager.sh 见 SAVED 状态 → 重入继续
+         超过 MAX_RETRY=10 次 → 标 Fail
+         ⚠️ 注意：post-cc-check.sh 不创建 PR，PR 由重入的编程CC创建
                            │
     ═══════════════════════╪═══════════════════════
     CI层  pr-test.yml      │  PR 创建/更新自动触发
@@ -97,7 +108,7 @@
 |---|--------|---------|---------|
 | A1 | 定时任务已恢复 | `crontab -l` 显示 `*/10 * * * *` cc_manager.sh（无 `# PAUSED` 前缀） | 仍有 PAUSED 注释 |
 | A2 | 研发经理CC每10分钟触发 | `~/cc_scheduler/manager.log` 有 ≤10分钟内的新日志 | 无新日志 / lock 残留 |
-| A3 | 防重复锁生效 | 上轮未完成时日志显示"跳过"，不并发启动 | 并发运行多个 manager |
+| A3 | 防重复锁生效（cc_manager.sh内置锁） | 上轮未完成时日志显示"跳过"，不并发启动 | 并发运行多个 manager |
 | A4 | 读取 status.md + Sprint 目标 | CC 响应包含 Sprint-1 重点模块信息 | 未读 status.md |
 | A5 | 任务一排程：Plan → Todo | 按优先级（P0>P1>P2）将 Plan Issue 移入 Todo | 看板无变化 |
 | A6 | 任务二触发：Todo → In Progress | 对 Todo 顶部 Issue 调用 run-cc.sh | 未触发编程CC |
@@ -122,8 +133,8 @@
 | B9 | CC 自身创建 PR（D11） | 编程CC第三阶段执行 `gh pr create --base dev`（不依赖 post-task.sh） | PR 未创建 |
 | B10 | task.md 完成报告 | `issues/issue-N/task.md` 存在，含 Status/Phase 进度字段 | 文件缺失 |
 | B11 | Issue 评论完成摘要 | PR创建后 Issue 有 CC 完成的评论 | Issue 无评论 |
-| B12 | 最大重试3次（D43） | 超过3次失败后标 Fail，不再重试 | 无限重试 |
-| B13 | 超时20分钟自动清理（D43） | 无响应超20分钟时 tmux session 被强制关闭 | 僵尸session残留 |
+| B12 | 最大重试10次（D48/D49实际值） | run-cc.sh `MAX_RETRIES=10`；post-cc-check.sh `MAX_RETRY=10`；超过后标 Fail | 无限重试 |
+| B13 | 超时1小时检测（D46实际值） | `check-cc-status.sh` `TIMEOUT_SECS=3600`（≠D43所述20分钟）；超时会话需人工处理 | 僵尸session残留 |
 | B14 | 编程CC不操作 Dev 环境（D31） | CC 不执行 deploy-dev.sh 或 Playwright，Dev 部署由 build-deploy-dev.yml 负责 | CC 直接 deploy 到 Dev |
 
 ---
@@ -215,16 +226,16 @@
 | Smoke 日志 | `tail -f ~/cc_scheduler/logs/e2e-smoke.log` |
 | 项目看板状态 | `bash scripts/query-project-issues.sh play "In Progress"` |
 
-### 触发链路（#2893 为主验证 Issue）
+### 触发链路（以驾驶舱+矿场批次为实际验证样本）
 
 ```
-Issue #2893 (Todo, 看板最前方)
-    → 研发经理CC 下一个10分钟周期
-    → run-cc.sh --module app --issue 2893 --dir kimiX --effort high
-    → 编程CC: TDD → compile → gh pr create --base dev
+本批次10个 Issue（#2845-#2851 + #1494/#2455/#1534，Max Sonnet，effort=max）
+    → 用户手动触发 run-cc.sh × 10（cc_manager.sh 当前 PAUSED）
+    → 编程CC: SAVED状态重入 → TDD → compile → gh pr create --base dev
     → pr-test.yml: build CI环境 → Playwright E2E → squash merge
     → build-deploy-dev.yml: mvn package + pnpm build → 部署 :6040/:8083
     → e2e_smoke.sh: 下一个30分钟周期 smoke 验证
+⚠️ #2893（Claude Office）的 monitor-issue-2893.sh 已删除（D49），不再单独跟踪
 ```
 
 ---

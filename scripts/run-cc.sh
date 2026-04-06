@@ -107,6 +107,22 @@ if [ ! -d "$PROJECT_DIR" ]; then
   exit 1
 fi
 
+# === Issue模式自动pre-task ===
+if [ "$MODE" = "issue" ]; then
+  cd "$BASE_DIR"
+  echo "$(date): pre-task: checkout dev → pull → feature-Issue-${ISSUE}"
+  git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
+  git checkout -b "feature-Issue-${ISSUE}" 2>/dev/null || git checkout "feature-Issue-${ISSUE}" 2>/dev/null
+  mkdir -p "./issues/issue-${ISSUE}"
+
+  # 校验分支名
+  CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
+  if [ "$CURRENT_BRANCH" != "feature-Issue-${ISSUE}" ]; then
+    echo "ERROR: 分支切换失败，当前分支=$CURRENT_BRANCH，期望=feature-Issue-${ISSUE}"
+    exit 1
+  fi
+fi
+
 # === 目录占用检测 ===
 OCCUPIED_PID=""
 while IFS= read -r line; do

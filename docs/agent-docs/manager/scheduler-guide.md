@@ -9,7 +9,7 @@
 ## 职责
 
 1. **排程** — Plan → Todo，按Sprint目标和优先级排序
-2. **触发CC** — 查看空闲目录 → pre-task → 启动编程CC → In Progress
+2. **触发CC** — 查看空闲目录 → 启动编程CC（自动pre-task）→ In Progress
 3. **检查结果** — CC完成后确认是否push了feature分支，失败则恢复或标Fail
 4. **持续优化** — 总结高频中断原因，优化工作流
 5. **同步状态** — 重点功能完成后更新 `docs/status.md`
@@ -147,14 +147,10 @@ bash scripts/check-cc-status.sh
 # 2. 读取排程计划
 cat sprints/<sprint>/<重点模块>/PLAN.md
 
-# 3. pre-task
-cd $HOME_DIR/projects/wande-play-<suffix>
-git checkout dev && git pull origin dev
-git checkout -b feature-Issue-<N>
-mkdir -p ./issues/issue-<N>
+# 3. 更新状态
 bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
 
-# 4. 根据Issue复杂度决定effort，启动CC
+# 4. 启动CC（自动执行pre-task: checkout dev → pull → 创建feature分支）
 bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
 # 示例: bash scripts/run-cc.sh --module backend --issue 2854 --dir kimi2 --effort high
 

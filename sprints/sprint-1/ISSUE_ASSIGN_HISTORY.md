@@ -1386,3 +1386,13 @@
 - #1559(kimi5) PR#2931 MERGED | #1476(kimi6) PR#2930 MERGED
 - #1480(kimi8) PR#2933 MERGED
 - 仍在运行：#1564(kimi1), #1478(kimi7), #1481(kimi9)
+
+## 2026-04-06 ~13:30 UTC 第5轮指派（预算P0+矿场P1，5并发，kimi16-20）
+
+| kimi目录 | Issue | 模块 | 标题 |
+|---------|-------|------|------|
+| kimi16 | #1607 | backend | [预算管控][3/32] 项目预算CRUD API |
+| kimi17 | #1606 | backend | [预算管控][4/32] 预算科目明细CRUD API |
+| kimi18 | #1605 | backend | [预算管控][5/32] 保证金台账CRUD API |
+| kimi19 | #1604 | backend | [预算管控][8/32] WBS预算模板引擎 — 3套业务模式模板 |
+| kimi20 | #1491 | backend | [矿场-Phase4][15/17] 销售KPI自动统计视图 |

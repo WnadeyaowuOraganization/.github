@@ -1277,3 +1277,18 @@
 - #2853: 后端菜单配置 + 前端页面重写
 - #2852: Drawer架构重构（移除嵌套Drawer）
 
+| 2026-04-06 | #1512 | backend | kimi3 | Claude Max Sonnet (矿场-每日简报推送 P0) |
+| 2026-04-06 | #1513 | backend | kimi5 | Claude Max Sonnet (矿场-简报数据聚合 P0) |
+| 2026-04-06 | #1514 | backend | kimi6 | Claude Max Sonnet (矿场-ICP批量评分 P0) |
+| 2026-04-06 | #1515 | backend | kimi7 | Claude Max Sonnet (矿场-ICP评分配置 P0) |
+| 2026-04-06 | #1516 | backend | kimi8 | Claude Max Sonnet (矿场-个人赢率统计 P0) |
+| 2026-04-06 | #1483 | backend | kimi9 | Claude Max Sonnet (矿场-深度验证 P0) |
+| 2026-04-06 | #2392 | backend | kimi11 | Claude Max Sonnet (矿场-L4复检引擎 P0) |
+| 2026-04-06 | #1503 | backend | kimi12 | Claude Max Sonnet (矿场-赢率打分 P1) |
+| 2026-04-06 | #1504 | backend | kimi13 | Claude Max Sonnet (矿场-特征工程 P1) |
+| 2026-04-06 | #1490 | backend | kimi14 | Claude Max Sonnet (矿场-周报月报 P2) |
+| 2026-04-06 | #2234 | backend | kimi15 | Claude Max Sonnet (矿场-竞品份额预警 P2) |
+| 2026-04-06 | #1773 | frontend | kimi16 | Claude Max Sonnet (协同修改-Cockpit概览) |
+| 2026-04-06 | #2138 | frontend | kimi18 | Claude Max Sonnet (协同修改-AI PPT Cockpit P2) |
+| 2026-04-06 | #2164 | backend | kimi19 | Claude Max Sonnet (驾驶舱-ComfyUI迁移 P3) |
+| 2026-04-06 | #2393 | backend | kimi20 | Claude Max Sonnet (矿场-买家意图信号 P3) |

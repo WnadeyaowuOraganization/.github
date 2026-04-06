@@ -85,14 +85,21 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
     # 综合判断状态
     if [ "$has_claude_running" = "true" ]; then
         # claude还在运行，检查最近活跃时间（从 .claude/projects/ JSONL文件mtime）
-        # 精确匹配：用kimi_dir构建精确路径前缀，避免 kimi1 匹配 kimi10/kimi11 等
-        if [ -n "$kimi_dir" ]; then
-            # 精确匹配目录：wande-play-{kimiN} 或 wande-play-{kimiN}-{module}
-            jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" \
-                \( -path "*wande-play-${kimi_dir}/*" -o -path "*wande-play-${kimi_dir}-*/*" \) \
-                -mmin -120 2>/dev/null | sort | tail -1)
+        # 精确匹配：用Claude项目路径格式精确定位，避免 kimi1 匹配 kimi10/kimi11 等
+        # Claude存储路径格式：-home-ubuntu-projects-wande-play-{kimiN}-{module}/
+        if [ -n "$kimi_dir" ] && [ -n "$module" ]; then
+            proj_dir_name="-home-ubuntu-projects-wande-play-${kimi_dir}-${module}"
+            jsonl_file=$(find "${HOME_DIR}/.claude/projects/${proj_dir_name}/" -name "*.jsonl" \
+                -not -path "*/subagents/*" -mmin -120 2>/dev/null \
+                | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
+        elif [ -n "$kimi_dir" ]; then
+            proj_dir_name="-home-ubuntu-projects-wande-play-${kimi_dir}"
+            jsonl_file=$(find "${HOME_DIR}/.claude/projects/${proj_dir_name}/" -name "*.jsonl" \
+                -not -path "*/subagents/*" -mmin -120 2>/dev/null \
+                | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         else
-            jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" -path "*wande-play*${module}*" -mmin -120 2>/dev/null | sort | tail -1)
+            jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" -path "*wande-play*${module}*" -mmin -120 2>/dev/null \
+                | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         fi
         if [ -z "$jsonl_file" ]; then
             jsonl_file="$logfile"  # fallback到旧日志

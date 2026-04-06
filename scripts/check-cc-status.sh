@@ -141,4 +141,53 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
 done
 echo "" >> "$REPORT_FILE"
 
+# 7. 外接目录指派锁状态
+echo "### 外接目录锁状态" >> "$REPORT_FILE"
+NOW=$(date +%s)
+TIMEOUT_SECS=3600
+FREE_COUNT=0
+LOCKED_COUNT=0
+TIMEOUT_COUNT=0
+
+for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
+  [ ! -d "$dir" ] && continue
+  DIRNAME=$(basename "$dir")
+
+  if [ ! -f "$dir/.cc-lock" ]; then
+    FREE_COUNT=$((FREE_COUNT + 1))
+    continue
+  fi
+
+  LOCK_ISSUE=$(grep "^issue=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  LOCK_MODULE=$(grep "^module=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  LOCK_TS=$(grep "^timestamp=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  AGE_SECS=$((NOW - ${LOCK_TS:-0}))
+  AGE_MINS=$((AGE_SECS / 60))
+
+  CC_RUNNING=false
+  for session in $(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^cc-"); do
+    echo "$session" | grep -q "$DIRNAME" && CC_RUNNING=true && break
+  done
+
+  if [ $AGE_SECS -gt $TIMEOUT_SECS ]; then
+    if [ "$CC_RUNNING" = "true" ]; then
+      echo "- ⚠️ $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, CC仍在运行)" >> "$REPORT_FILE"
+    else
+      echo "- 🚨 $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (**${AGE_MINS}分钟超时, 需处理**)" >> "$REPORT_FILE"
+      TIMEOUT_COUNT=$((TIMEOUT_COUNT + 1))
+    fi
+    LOCKED_COUNT=$((LOCKED_COUNT + 1))
+  else
+    if [ "$CC_RUNNING" = "true" ]; then
+      echo "- 🔧 $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, CC运行中)" >> "$REPORT_FILE"
+    else
+      echo "- ⏳ $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, 等待CI)" >> "$REPORT_FILE"
+    fi
+    LOCKED_COUNT=$((LOCKED_COUNT + 1))
+  fi
+done
+
+echo "- 空闲: ${FREE_COUNT}  锁定: ${LOCKED_COUNT}  超时需处理: ${TIMEOUT_COUNT}" >> "$REPORT_FILE"
+echo "" >> "$REPORT_FILE"
+
 cat "$REPORT_FILE"

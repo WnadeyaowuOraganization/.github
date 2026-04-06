@@ -129,25 +129,31 @@ if [ "$MODE" = "issue" ]; then
   fi
 fi
 
-# === 目录占用检测 ===
-OCCUPIED_PID=""
-while IFS= read -r line; do
-  pid=$(echo "$line" | awk '{print $1}')
-  [ -z "$pid" ] && continue
-  cwd=$(readlink /proc/$pid/cwd 2>/dev/null)
-  [ -z "$cwd" ] && continue
-  case "$cwd" in
-    ${BASE_DIR}|${BASE_DIR}/*)
-      OCCUPIED_PID="$pid"
-      OCCUPIED_INFO=$(ps -o args= -p $pid 2>/dev/null | grep -oP "Issue #\K\d+")
-      break
-      ;;
-  esac
-done < <(ps -u ubuntu -o pid,args 2>/dev/null | grep "claude -p" | grep -v grep | awk '{print $1}')
+# === 目录指派锁检测 ===
+LOCK_FILE="${BASE_DIR}/.cc-lock"
 
-if [ -n "$OCCUPIED_PID" ]; then
-  echo "目录占用: ${BASE_DIR} 已有CC在运行 (PID=$OCCUPIED_PID, Issue#${OCCUPIED_INFO:-?})"
-  exit 2
+if [ -f "$LOCK_FILE" ]; then
+  LOCK_ISSUE=$(grep "^issue=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  LOCK_TIME=$(grep "^time=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  # 同一个Issue可以重入（重试场景）
+  if [ "$MODE" = "issue" ] && [ "$LOCK_ISSUE" = "$ISSUE" ]; then
+    echo "同Issue重入: #${ISSUE}，继续"
+  else
+    echo "目录被锁: ${BASE_DIR} → Issue#${LOCK_ISSUE} (锁定于 ${LOCK_TIME})"
+    exit 2
+  fi
+fi
+
+# 写入锁（Issue模式）
+if [ "$MODE" = "issue" ]; then
+  cat > "$LOCK_FILE" << EOF
+issue=${ISSUE}
+module=${MODULE}
+dir=${DIR}
+time=$(date '+%Y-%m-%d %H:%M:%S')
+timestamp=$(date +%s)
+EOF
+  echo "$(date): 目录锁已写入 ${LOCK_FILE} → Issue#${ISSUE}"
 fi
 
 # === Session命名（使用真实目录名，与.claude/projects/一致）===

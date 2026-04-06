@@ -46,12 +46,33 @@
 
 判断标准：Issue标题/内容涉及同一数据库表或同一API路径前缀 → 视为同模块，串行排程。
 
-## 并发控制
+## 并发控制与目录锁
 
-- 一个目录同一时间只能运行一个CC
-- kimi1~kimi20 共20个编程CC槽位，当前有大量的代码合并冲突问题，最大并发降为10个CC
-- 主目录 `$HOME_DIR/projects/wande-play` 不分配给编程CC
-- `run-cc.sh` 返回exit 2时立即换下一个dir_suffix
+- kimi1~kimi20 共20个外接目录
+- 主目录不分配给编程CC（仅--prompt模式可用）
+- `run-cc.sh` 指派Issue时自动写入 `.cc-lock` 文件
+- Issue关闭后 `issue-sync.yml` 自动释放锁
+- `run-cc.sh` 返回exit 2时换下一个kimi目录
+
+### 锁生命周期
+
+```
+run-cc.sh --issue → 写入.cc-lock (issue号+时间)
+     ↓
+CC完成 → push+PR
+     ↓
+CI E2E通过 → auto-merge → Issue关闭
+     ↓
+issue-sync.yml → release-cc-lock.sh → 删除.cc-lock
+```
+
+### 检查锁状态
+
+`check-cc-status.sh` 输出中包含锁状态：
+- 🔧 CC运行中（正常）
+- ⏳ CC已退出，等待CI（正常）
+- ⚠️ 超1小时但CC还在跑（可能卡住）
+- 🚨 **超1小时且CC已退出（需处理）** → 重新触发CC修复
 
 ## Issue标签与启动方式
 

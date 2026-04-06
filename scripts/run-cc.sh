@@ -65,7 +65,8 @@ case "$REPO" in
     if [ -n "$DIR_SUFFIX" ]; then
       BASE_DIR="${HOME_DIR}/projects/wande-play-${DIR_SUFFIX}"
     else
-      BASE_DIR="${HOME_DIR}/projects/wande-play"
+      echo "ERROR: 主目录禁止分配给编程CC，必须指定dir_suffix（如 kimi1~kimi20）"
+      exit 1
     fi
     GH_REPO="WnadeyaowuOraganization/wande-play"
     ;;

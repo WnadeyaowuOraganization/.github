@@ -13,8 +13,10 @@
 
 | 目录 | 内容 |
 |------|------|
-| `ruoyi-modules-api/wande-ai-api` | API定义层：Entity/Bo/Vo/Mapper接口/Service接口 |
-| `ruoyi-modules/wande-ai` | 实现层：Service实现/Controller/Scheduler/Config |
+| `ruoyi-modules/wande-ai` | **唯一业务模块**：Entity/Mapper/Service/Controller 全部在此 |
+| `ruoyi-modules-api/wande-ai-api` | ⚠️ **已废弃（D44）**，禁止新增业务代码，仅保留历史引用 |
+
+> **重要**：新功能代码必须全部写在 `ruoyi-modules/wande-ai/` 下，不要碰 `wande-ai-api`。
 
 ## 核心规则
 
@@ -60,23 +62,24 @@ mvn clean package -Pprod -Dmaven.test.skip=true
 
 ## 包路径规范
 
-```
-# API定义层 (wande-ai-api)
-org.ruoyi.wande.domain.{模块名}/          <- Entity
-org.ruoyi.wande.domain.{模块名}/vo/       <- Vo
-org.ruoyi.wande.domain.{模块名}/bo/       <- Bo
-org.ruoyi.wande.mapper.{模块名}/          <- Mapper接口
-org.ruoyi.wande.service.{模块名}/         <- Service接口
+所有新功能统一放在 `ruoyi-modules/wande-ai/`，包路径模板：
 
-# 实现层 (wande-ai)
-org.ruoyi.wande.controller.{模块名}/      <- Controller
-org.ruoyi.wande.service.{模块名}/impl/    <- Service实现
+```
+org.ruoyi.wande.{feature}.domain.entity.XxxEntity   <- 实体
+org.ruoyi.wande.{feature}.domain.vo.XxxVo           <- VO
+org.ruoyi.wande.{feature}.domain.bo.XxxBo           <- BO
+org.ruoyi.wande.mapper.{feature}.XxxMapper           <- Mapper
+org.ruoyi.wande.service.{feature}.IXxxService        <- Service接口
+org.ruoyi.wande.service.{feature}.impl.XxxServiceImpl <- Service实现
+org.ruoyi.wande.controller.{feature}.XxxController   <- Controller
 ```
 
 **禁止**：
-- 在 `org.ruoyi.wande` 下直接创建业务顶级包
-- 在两个模块中创建同名类
+- 使用旧路径 `org.ruoyi.wande.domain.{feature}.*`（会与新结构冲突导致 MyBatis alias 重复）
+- 在 `wande-ai-api` 下新建业务代码
 - 跳过查重直接创建新类
+
+> 新增 domain 包后，必须在 `ruoyi-admin/src/main/resources/application.yml` 的 `typeAliasesPackage` 列表中追加，否则 XML 别名会报 ClassNotFoundException。
 
 ## 代码模板
 
@@ -263,6 +266,7 @@ ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
+| [**common-pitfalls.md**](common-pitfalls.md) | **⚠️ 必读：高频错误与规范，CI 曾踩过的坑** | **开始每个 Issue 前** |
 | [architecture.md](architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
 | [conventions.md](conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
 | [db-schema.md](db-schema.md) | 数据库变更管理、增量SQL流程 | 涉及数据库变更时 |

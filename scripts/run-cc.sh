@@ -231,10 +231,11 @@ if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
   echo "api_source=${API_SOURCE}" >> "$LOCK_FILE"
 fi
 
-# === 启动tmux ===
+# === 启动tmux（CC退出后自动检查产出+恢复）===
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} cd $PROJECT_DIR; \
    claude -p '$CC_PROMPT' --model ${MODEL} --effort ${EFFORT} --max-turns 500 --verbose; \
+   bash ${SCRIPT_DIR}/post-cc-check.sh --base-dir ${BASE_DIR} --issue ${ISSUE:-0} --repo ${GH_REPO:-none} --mode ${MODE} --script-dir ${SCRIPT_DIR} --dir ${DIR:-main} --model ${MODEL} --effort ${EFFORT}; \
    tmux kill-session -t $SESSION"
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动 (effort: $EFFORT, api: $API_SOURCE)"

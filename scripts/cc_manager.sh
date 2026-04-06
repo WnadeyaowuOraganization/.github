@@ -40,6 +40,10 @@ export HOME="${HOME_DIR}"
 
 cd "$GITHUB_DIR"
 
+# 调度前清理僵尸锁（>1小时 + CC不在运行 + 无PR）
+log "清理僵尸锁..."
+bash "$SCRIPT_DIR/check-cc-status.sh" > /dev/null 2>&1
+
 # 触发研发经理CC（日志由Claude Code自动写入JSONL）
 claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" \
   --model claude-opus-4-6 --effort medium --max-turns 200 --verbose \

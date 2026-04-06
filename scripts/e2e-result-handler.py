@@ -137,7 +137,7 @@ def update_project_status(issue_num, status, retries=3, delay=10):
     script = os.path.join(SCRIPTS_DIR, "update-project-status.sh")
     import time
     for attempt in range(retries):
-        result = run_cmd(f'bash "{script}" play "{issue_num}" "{status}"')
+        result = run_cmd(f'bash "{script}" --repo play --issue "{issue_num}" --status "{status}"')
         if result.returncode == 0:
             return True
         if attempt < retries - 1:

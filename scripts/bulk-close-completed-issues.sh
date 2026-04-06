@@ -25,7 +25,7 @@ for ISSUE in "${ISSUES[@]}"; do
     fi
     
     # 2. 更新 Project 状态为 Done
-    bash $SCRIPT_DIR/update-project-status.sh play $ISSUE "Done" 2>/dev/null
+    bash $SCRIPT_DIR/update-project-status.sh --repo play --issue $ISSUE --status "Done" 2>/dev/null
     if [ $? -eq 0 ]; then
         echo "  ✓ Issue #$ISSUE Project 状态已更新为 Done"
     else

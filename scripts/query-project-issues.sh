@@ -13,24 +13,17 @@ fi
 
 set -e
 
-# 参数解析（兼容旧的下标方式）
+# 参数解析
 REPO_NAME="all"
 STATUS_NAME="all"
 
-if [ "$1" = "--repo" ] || [ "$1" = "--status" ]; then
-  # 新的命名参数模式
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      --repo)   REPO_NAME="$2"; shift 2 ;;
-      --status) STATUS_NAME="$2"; shift 2 ;;
-      *) shift ;;
-    esac
-  done
-else
-  # 兼容旧的下标模式
-  REPO_NAME="${1:-all}"
-  STATUS_NAME="${2:-all}"
-fi
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --repo)   REPO_NAME="$2"; shift 2 ;;
+    --status) STATUS_NAME="$2"; shift 2 ;;
+    *) echo "未知参数: $1"; exit 1 ;;
+  esac
+done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")

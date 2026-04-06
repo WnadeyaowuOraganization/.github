@@ -6,26 +6,19 @@
 
 set -e
 
-# 参数解析（兼容旧的下标方式）
+# 参数解析
 REPO_SHORT=""
 ISSUE_NUMBER=""
 NEW_STATUS=""
 
-if [ "$1" = "--repo" ] || [ "$1" = "--issue" ] || [ "$1" = "--status" ]; then
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      --repo)   REPO_SHORT="$2"; shift 2 ;;
-      --issue)  ISSUE_NUMBER="$2"; shift 2 ;;
-      --status) NEW_STATUS="$2"; shift 2 ;;
-      *) shift ;;
-    esac
-  done
-else
-  # 兼容旧的下标模式
-  REPO_SHORT="$1"
-  ISSUE_NUMBER="$2"
-  NEW_STATUS="$3"
-fi
+while [ $# -gt 0 ]; do
+  case "$1" in
+    --repo)   REPO_SHORT="$2"; shift 2 ;;
+    --issue)  ISSUE_NUMBER="$2"; shift 2 ;;
+    --status) NEW_STATUS="$2"; shift 2 ;;
+    *) echo "未知参数: $1"; exit 1 ;;
+  esac
+done
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
     echo "用法: $0 --repo play --issue <N> --status \"<STATUS>\""

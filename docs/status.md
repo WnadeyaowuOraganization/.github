@@ -149,6 +149,7 @@
 | D43 | 04-05 | ✅ | Harness优化方案V1落地（28/29完成） | **CLAUDE.md精简**：wande-play主CLAUDE.md从67行精简至40行，接口契约最优先，删除backend/frontend/pipeline子模块CLAUDE.md。**agent-docs子目录**：.github/docs/agent-docs/{backend,frontend,pipeline}/README.md集中管理，wande-play跨仓库引用。**静态分析**：ESLint废弃API规则+嵌套检查+antdv-constraints.md。**工作流精简**：编程CC去需求评估、task.md合并进度字段(Status/Phase)、研发经理CC读task.md替代读日志。**模型分级**：仅max走Claude Max订阅（默认Sonnet），其余走Token Pool Proxy+上下文自动截断(kimi 256K/glm 200K)。**冲突解决**：cycle-merge智能分类+trigger-conflict-resolver+pr-test.yml/post-task.sh集成。**安全边界**：最大重试3次+超时20分钟自动清理。**过时文件清理**：删除15个过时文档/脚本/prompt | 伟平 |
 | D44 | 04-05 | ✅ | wande-ai-api模块废弃确认 | wande-ai-api已合并入wande-ai（D27 PR#2593），万德业务功能全部在wande-ai子模块实现。backend/ruoyi-modules-api/wande-ai-api目录已废弃 | 伟平 |
 | D45 | 04-06 | ✅ | Harness优化V2 + Claude Office重构 | run-cc.sh命名参数+内置pre-task；Claude Office server.py重写(2424→479行)；进程检测统一扫描；日志JSONL直读；PR CI全链路优化（冲突检测→构建部署→smoke→E2E→失败自动修复） | 伟平 |
+| D46 | 04-06 | ✅ | 外接目录指派锁机制 | run-cc.sh写入.cc-lock(issue号+时间)，issue-sync.yml关闭时release-cc-lock.sh释放，check-cc-status.sh整合锁状态检查(超1小时需处理) | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

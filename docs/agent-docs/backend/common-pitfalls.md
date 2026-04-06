@@ -133,6 +133,84 @@ private ComplexDataType complexData;  // 自动处理，但泛型集合类型慎
 
 ---
 
+## 7. wande-ai-api 中的 XML 与 wande-ai 模块中的 XML 不能重名
+
+**错误现象：** `mapperLocations: classpath*:mapper/**/*Mapper.xml` 会扫描所有 JAR 包，若 `wande-ai-api` 和 `wande-ai` 中存在相同 namespace 的 XML，启动时报：
+
+```
+Result Maps collection already contains value for org.ruoyi.wande.domain.dispatch.mapper.DispatchLogMapper.DispatchLogResult
+```
+
+**规范：**
+- 在 `wande-ai` 中为某接口创建了 XML，需同时**删除** `wande-ai-api` 中同名旧 XML
+- `wande-ai-api` 模块已废弃，其 `resources/mapper/` 下的文件应逐步清空
+
+---
+
+## 8. Spring Bean 名称冲突：同名 ServiceImpl/Mapper 必须指定唯一 Bean 名
+
+**错误现象：** 两个不同包下存在同名 `XxxServiceImpl` 或 `XxxMapper`，Spring 启动时报：
+
+```
+ConflictingBeanDefinitionException: Annotation-specified bean name 'changeOrderServiceImpl' 
+for bean class [org.ruoyi.wande.service.change.impl.ChangeOrderServiceImpl] conflicts with 
+existing, non-compatible bean definition of same name and class 
+[org.ruoyi.wande.change.service.impl.ChangeOrderServiceImpl]
+```
+
+**根因：** Spring 默认 Bean 名是类名首字母小写，不含包路径。同名类产生冲突。
+
+**规范：**
+```java
+// ❌ 错误：两个包下都有 ChangeOrderServiceImpl
+package org.ruoyi.wande.service.change.impl;
+@Service  // bean名 = changeOrderServiceImpl → 冲突！
+
+// ✅ 正确：遗留/兼容类显式指定不同 Bean 名
+@Service("legacyChangeOrderServiceImpl")
+public class ChangeOrderServiceImpl ...
+
+// ✅ 或者：将旧类文件重命名（推荐）
+public class LegacyChangeOrderMapper ...  // 不再叫 ChangeOrderMapper
+```
+
+**规则：**
+- 新功能优先使用新包路径（`wande.{feature}.service.impl`）
+- 遗留类若不能删除，**必须**通过 `@Service("uniqueBeanName")` 或重命名类避免冲突
+- Mapper 接口名冲突时，重命名旧 Mapper 类（`@Mapper` 注解不支持 value 参数）
+
+---
+
+## 9. IService 子接口不能用简单的 implements 存根，必须用 ServiceImpl 继承
+
+**错误现象：** 某 Service 接口继承了 `IService<T>`，为其创建存根 impl 时只写了 `implements IXxxService`，编译报错：
+
+```
+NudgeRecordServiceImpl is not abstract and does not override abstract method 
+getEntityClass() in com.baomidou.mybatisplus.extension.repository.IRepository
+```
+
+**根因：** MybatisPlus `IService` 继承 `IRepository`，后者有 `getBaseMapper()`、`getEntityClass()`、`getObj()` 等抽象方法。简单 impl 必须全部实现，但数量多且易遗漏。
+
+**规范：**
+```java
+// ❌ 错误：直接 implements，缺少 IRepository 抽象方法实现
+@Service
+public class XxxServiceImpl implements IXxxService { ... }
+
+// ✅ 正确：extends ServiceImpl（需要对应 Mapper）
+@Service
+public class XxxServiceImpl extends ServiceImpl<XxxMapper, XxxEntity>
+        implements IXxxService { ... }
+```
+
+**处理步骤：**
+1. 若存在 `XxxMapper`（或可创建），让 impl 继承 `ServiceImpl<XxxMapper, XxxEntity>`
+2. 若 Entity 在 `wande-ai-api` 中，需先在 `wande-ai` 中创建对应 Mapper
+3. 若同名 Mapper 冲突，重命名新 Mapper（如 `XxxDomainMapper`）
+
+---
+
 ## 快速检查清单（PR 前自查）
 
 | 检查项 | 说明 |
@@ -143,3 +221,6 @@ private ComplexDataType complexData;  // 自动处理，但泛型集合类型慎
 | ✅ XML resultMap 无复杂类型字段 | 或已配置 `typeHandler` |
 | ✅ 删除 Mapper 接口时同步删除 XML | `resources/mapper/` 下同名文件 |
 | ✅ Entity 的 JSON 列用 `String` 存储 | Service 层负责序列化/反序列化 |
+| ✅ wande-ai-api 同名 XML 已删除 | 避免 ResultMap duplicate 冲突 |
+| ✅ 新建 ServiceImpl 无同名 Bean 冲突 | 检查跨包同名类，必要时指定 `@Service("uniqueName")` |
+| ✅ IService 子接口存根用 ServiceImpl 继承 | 不能仅 `implements`，需配套 Mapper |

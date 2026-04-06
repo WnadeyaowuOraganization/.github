@@ -1302,3 +1302,19 @@
 | 2026-04-06 | #1494 | backend | kimi8 | Claude Max Sonnet (矿场-销售活动数据模型 P0) |
 | 2026-04-06 | #2455 | backend | kimi9 | Claude Max Sonnet (矿场-中标数据入库 P0) |
 | 2026-04-06 | #1534 | backend | kimi10 | Claude Max Sonnet (矿场-矿场状态枚举 P0) |
+
+### 2026-04-06 ~09:40 UTC — 批量重启（驾驶舱7+矿场3 中7个CC崩溃）
+
+**背景**: Max Sonnet 10并发CC中，#2847(MERGED)/#2849/#2851 已产出PR，但kimi1/3/4/6/8/9/10共7个CC崩溃退出（`retry=1`自动commit但无PR）。
+
+| Issue | 模块 | 目录 | 重启状态 |
+|-------|------|------|---------|
+| #2845 | backend | kimi1 | 🔄 重启中 |
+| #2848 | backend | kimi3 | 🔄 重启中 |
+| #1494 | backend | kimi8 | 🔄 重启中 |
+| #2455 | backend | kimi9 | 🔄 重启中 |
+| #1534 | backend | kimi10 | 🔄 重启中 |
+| #2850 | backend | kimi6 | 🔄 重启中 |
+| #2846 | frontend | kimi4 | 🔄 重启中 |
+
+**附带修复**: `.cc-lock` 加入 `.gitignore`，各kimi目录取消git追踪；PR #2908/#2907 冲突已通过rebase解决。

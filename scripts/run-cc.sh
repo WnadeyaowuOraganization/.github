@@ -64,8 +64,10 @@ case "$REPO" in
   backend|frontend|pipeline|app)
     if [ -n "$DIR_SUFFIX" ]; then
       BASE_DIR="${HOME_DIR}/projects/wande-play-${DIR_SUFFIX}"
+    elif [ "$MODE" = "prompt" ]; then
+      BASE_DIR="${HOME_DIR}/projects/wande-play"
     else
-      echo "ERROR: 主目录禁止分配给编程CC，必须指定dir_suffix（如 kimi1~kimi20）"
+      echo "ERROR: Issue模式必须指定kimi目录（如 kimi1~kimi20），主目录仅--prompt模式可用"
       exit 1
     fi
     GH_REPO="WnadeyaowuOraganization/wande-play"

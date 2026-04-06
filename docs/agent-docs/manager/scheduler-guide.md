@@ -48,7 +48,7 @@
 
 ## 并发控制与目录锁
 
-- kimi1~kimi20 共20个外接目录
+- kimi1~kimi20 共20个外接目录，目前harness还不稳定，并发暂时控制到5个
 - 主目录不分配给编程CC（仅--prompt模式可用）
 - `run-cc.sh` 指派Issue时自动写入 `.cc-lock` 文件
 - Issue关闭后 `issue-sync.yml` 自动释放锁

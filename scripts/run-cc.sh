@@ -249,7 +249,7 @@ fi
 # === 启动tmux（交互模式，支持attach和注入）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} \
-   claude --model ${MODEL} --dangerously-skip-permissions --max-turns 500 --verbose; \
+   claude --model ${MODEL} --dangerously-skip-permissions --max-turns 500; \
    ${CLEANUP_CMD} exec bash"
 
 # 等待 Claude Code CLI 初始化完成（出现输入提示符）

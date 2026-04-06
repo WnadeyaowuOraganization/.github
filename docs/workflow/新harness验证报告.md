@@ -564,9 +564,75 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 
 ---
 
+## 五E、批次9 — dev编译链修复+新批次指派（18:00–18:42 UTC）
+
+> 更新时间：2026-04-06 18:42 UTC  
+> 本节记录第9轮编程CC指派和dev编译链的多级修复
+
+### dev编译链修复（研发经理直接介入）
+
+| PR | 修复内容 | 根因 | 状态 |
+|----|---------|------|------|
+| PR#2975 | ChangeOrderEntityMapper.java merge冲突标记 | PR#2968合并时携带<<<HEAD标记 | ✅ MERGED（17:46 dev CI仍失败）|
+| PR#2978 | ProjectMineStatus.java重复方法（canTransitionTo/getAllowedTransitions/allValues） | 两套方法定义导致Lombok AP中断，连锁造成WeeklySummaryVo等所有@Data类setter缺失 | ✅ MERGED（dev编译通过，Spring启动失败）|
+| PR#2982 | CasePhotoMapper.java同时有@Component+@Repository导致Bean名称冲突 | biz/mapper/CasePhotoMapper.java有两个不同Bean名 | ✅ MERGED（dev CI ✅ success, 18:26 UTC）|
+
+**dev编译恢复时间**: 18:26 UTC（累计失败约1.5小时）
+
+### 批次8已完成 & 批次9新完成
+
+| PR | Issue | 标题摘要 | 状态 |
+|----|-------|---------|------|
+| PR#2977 | #1557 | 企微通讯录同步回调+增量+全量 | 关闭（CONFLICTING，改cherry-pick）|
+| PR#2985 | #1557 | 企微通讯录同步（cherry-pick clean版） | ✅ MERGED（18:53 UTC）|
+| PR#2983 | #1629 | 整改工单照片S3+GPS+反作弊 | ✅ MERGED（手动cherry-pick clean分支，18:33 UTC，dev CI ✅）|
+| PR#2984 | #1600 | 采购申请接入预算关卡（Mapper映射补全） | ✅ MERGED（手动cherry-pick clean分支，18:41 UTC）|
+
+### 批次9问题汇总
+
+| 问题ID | 严重程度 | 描述 | 状态 |
+|--------|---------|------|------|
+| P23 | 🔴 高 | Token Pool Proxy不稳定：批次8中kimi1/kimi15/kimi16/kimi17/kimi18/kimi19全部retry≥9次崩溃，#1698/#1702最终标Fail（无功能代码产出）| 已标Fail，重新指派 |
+| P24 | 🟡 中 | stale .cc-lock问题加剧：kimi1 lock指向dir=kimi16（旧会话遗留），kimi15 lock指向dir=kimi10，导致状态误判 | 手动清理后修复lock文件 |
+| P25 | 🟡 中 | feature分支起点过旧：kimi18/#1629分支包含已合并PR的代码（#1601/#2968等），导致rebase冲突；最终手动cherry-pick实际功能commit创建clean PR | cherry-pick解决，PR#2983 MERGED |
+
+### 当前状态（18:42 UTC）
+
+**5个CC运行中**：
+- kimi11 (#1633) 整改工单Phase24 Entity+Mapper
+- kimi15 (#1557) 企微通讯录同步
+- kimi16 (#1513) 矿场每日简报聚合接口（重试）
+- kimi17 (#1699) 提成规则配置API
+- kimi19 (#1694) 报销发票OCR识别（Fail重试）
+
+---
+
+## 五F、批次10 — #1557完成+Token Pool不稳（18:45–19:00 UTC）
+
+> 更新时间：2026-04-06 18:58 UTC
+
+### 批次9完成情况
+
+| PR | Issue | 标题摘要 | 状态 |
+|----|-------|---------|------|
+| PR#2985 | #1557 | 企微通讯录同步（cherry-pick clean重建） | ✅ MERGED（18:53 UTC）|
+
+**问题P26**：Token Pool Proxy连续崩溃（kimi11/16/17/19均在retry=1时SAVED，auth error 401），研发经理CC批量重启。根因与P23相同：高频并发Token Pool不稳定。
+
+### 批次10当前状态（18:58 UTC）
+
+**5个CC运行中**：
+- kimi11 (#1633) 整改工单Phase24 Entity+Mapper（retry=2重启）
+- kimi15 (#1632) 工艺标准Service — CRUD+按产品线/工艺类型查询（新指派）
+- kimi16 (#1513) 矿场每日简报聚合接口（retry=2重启）
+- kimi17 (#1699) 提成规则配置API（retry=2重启）
+- kimi19 (#1694) 报销发票OCR识别（retry=2重启）
+
+---
+
 ## 七、最终结论
 
-> 更新时间：2026-04-06 17:40 UTC（全量脚本审查完成，kimi17 fix #2966运行中，累计44 MERGED）
+> 更新时间：2026-04-06 18:58 UTC（批次9完成#1557，批次10已启动，累计48 MERGED）
 
 - **总验收项**: **63项**（A~H阶段：原53项 + H阶段新增10项）
 - **已观测**: 43项（+5项H阶段部分观测）
@@ -575,8 +641,11 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - **警告**: 8项（⚠️：A8过度max/P18/P19/H3/H10等）
 - **不适用/待观测**: 18项（—）
 - **整体评分**: 21/43 = 49%（含H阶段修正）
-- **累计完成**: 批次1-4共27个 + 批次5+已17个（#1624 PR#2972新增MERGED）= **44个 MERGED**
-- **当前运行(4个)**: kimi15(#1557) / kimi17(fix #2966 🔴) / kimi18(#1629) / kimi19(#1600)
+- **累计完成**: 批次1-4共27个 + 批次5-10已21个 = **48个 MERGED**
+  - 新增：#1629(PR#2983) / #1600(PR#2984) / #1557(PR#2985)
+  - dev编译链修复：PR#2975/2978/2982三级修复
+- **当前运行(5个)**: kimi11(#1633) / kimi15(#1632) / kimi16(#1513) / kimi17(#1699) / kimi19(#1694)
+- **Fail重新指派**: #1698/#1702（无功能代码，retry=10标Fail后重排为#1633/#1699）
 - **空闲**: kimi1/kimi16（各已释放）
 - **关键问题（按优先级）**:
   1. 🔴 **P21/P22**: dev编译失败持续 → kimi17 fix CC运行中，若再崩溃考虑升级max

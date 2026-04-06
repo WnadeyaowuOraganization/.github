@@ -155,7 +155,9 @@ mkdir -p ./issues/issue-<N>
 bash scripts/update-project-status.sh play <N> "In Progress"
 
 # 4. 根据Issue复杂度决定effort，启动CC
-bash scripts/run-cc.sh <module> <N> claude-opus-4-6 <suffix> <effort>
+bash scripts/run-cc.sh <module> <N> claude-sonnet-4-6 <kimi目录> <effort>
+# 示例: bash scripts/run-cc.sh backend 2854 claude-sonnet-4-6 kimi2 high
+# kimi目录必填（kimi1~kimi20），主目录禁止使用
 
 # 5. 记录 → sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md
 ```
@@ -206,10 +208,10 @@ bash scripts/query-project-issues.sh <repo> "<STATUS>"
 bash scripts/update-project-status.sh <repo> <N> "<STATUS>"
 
 # 启动编程CC
-bash scripts/run-cc.sh <module> <Issue号> <model> [dir_suffix] [effort]
+bash scripts/run-cc.sh <module> <Issue号> <model> <kimi目录> <effort>
 
 # 自定义Prompt启动CC
-bash scripts/run-cc.sh --prompt <module> "<prompt>" <model> [dir_suffix] [effort]
+bash scripts/run-cc.sh --prompt <module> "<prompt>" <model> <kimi目录> <effort>
 
 # GitHub Token
 export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)

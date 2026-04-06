@@ -4,7 +4,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 #
 # 用法:
 #   run-cc.sh --module backend --issue 1234 --dir kimi1 --effort high [--model claude-sonnet-4-6]
-#   run-cc.sh --module app --prompt "自定义任务" --dir kimi1 --effort medium
+#   run-cc.sh --module fullstack --issue 1234 --dir kimi1 --effort high
 #   run-cc.sh --module backend --prompt "修复编译" (--prompt模式不传--dir则用主目录)
 #
 # 退出码: 0=成功, 1=参数错误, 2=目录占用
@@ -47,34 +47,14 @@ if [ -z "$ISSUE" ] && [ -z "$PROMPT" ]; then
   exit 1
 fi
 
-# 判断模式
-if [ -n "$ISSUE" ]; then
-  MODE="issue"
-else
-  MODE="prompt"
-fi
+if [ -n "$ISSUE" ]; then MODE="issue"; else MODE="prompt"; fi
 
-# Issue模式必须传--dir
 if [ "$MODE" = "issue" ] && [ -z "$DIR" ]; then
-  echo "ERROR: Issue模式必须指定 --dir（如 kimi1~kimi20），主目录仅--prompt模式可用"
+  echo "ERROR: Issue模式必须指定 --dir（如 kimi1~kimi20）"
   exit 1
 fi
 
-# === 最大重试次数限制（仅Issue模式）===
-if [ "$MODE" = "issue" ]; then
-  MAX_RETRIES=3
-  RETRY_COUNT_FILE="/tmp/cc-retry-${MODULE}-${ISSUE}"
-  RETRY_COUNT=$(cat "$RETRY_COUNT_FILE" 2>/dev/null || echo 0)
-  if [ "$RETRY_COUNT" -ge "$MAX_RETRIES" ]; then
-    echo "ERROR: Issue#${ISSUE} 已达到最大重试次数($MAX_RETRIES)，需人工介入"
-    bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$ISSUE" --status "Fail" 2>/dev/null || true
-    exit 1
-  fi
-  echo $((RETRY_COUNT + 1)) > "$RETRY_COUNT_FILE"
-fi
-
 # === 目录解析 ===
-# fullstack是app的别名
 [ "$MODULE" = "fullstack" ] && MODULE="app"
 
 case "$MODULE" in
@@ -84,17 +64,12 @@ case "$MODULE" in
     elif [ "$MODE" = "prompt" ]; then
       BASE_DIR="${HOME_DIR}/projects/wande-play"
     else
-      echo "ERROR: Issue模式必须指定 --dir（如 kimi1~kimi20），主目录仅--prompt模式可用"
       exit 1
     fi
     GH_REPO="WnadeyaowuOraganization/wande-play"
     ;;
   plugins|gh-plugins)
-    if [ -n "$DIR" ]; then
-      BASE_DIR="${HOME_DIR}/projects/wande-gh-plugins-${DIR}"
-    else
-      BASE_DIR="${HOME_DIR}/projects/wande-gh-plugins"
-    fi
+    BASE_DIR="${HOME_DIR}/projects/wande-gh-plugins${DIR:+-$DIR}"
     GH_REPO="WnadeyaowuOraganization/wande-gh-plugins"
     ;;
   *)  echo "Unknown module: $MODULE"; exit 1 ;;
@@ -113,41 +88,63 @@ if [ ! -d "$PROJECT_DIR" ]; then
   exit 1
 fi
 
-# === Issue模式自动pre-task ===
-if [ "$MODE" = "issue" ]; then
-  cd "$BASE_DIR"
-  echo "$(date): pre-task: checkout dev → pull → feature-Issue-${ISSUE}"
-  git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
-  git checkout -b "feature-Issue-${ISSUE}" 2>/dev/null || git checkout "feature-Issue-${ISSUE}" 2>/dev/null
-  mkdir -p "./issues/issue-${ISSUE}"
-
-  # 校验分支名
-  CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
-  if [ "$CURRENT_BRANCH" != "feature-Issue-${ISSUE}" ]; then
-    echo "ERROR: 分支切换失败，当前分支=$CURRENT_BRANCH，期望=feature-Issue-${ISSUE}"
-    exit 1
-  fi
-fi
-
-# === 目录指派锁检测 ===
+# === 锁检测（在pre-task之前，避免checkout dev丢弃SAVED状态的改动）===
 LOCK_FILE="${BASE_DIR}/.cc-lock"
 
 if [ -f "$LOCK_FILE" ]; then
   LOCK_ISSUE=$(grep "^issue=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
-  LOCK_TIME=$(grep "^time=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
-  # 同一个Issue可以重入（重试场景）
+  LOCK_STATE=$(grep "^state=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  LOCK_RETRY=$(grep "^retry_count=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+
   if [ "$MODE" = "issue" ] && [ "$LOCK_ISSUE" = "$ISSUE" ]; then
-    echo "同Issue重入: #${ISSUE}，继续"
+    echo "同Issue重入: #${ISSUE} (state=${LOCK_STATE}, retry=${LOCK_RETRY:-0})"
   else
-    echo "目录被锁: ${BASE_DIR} → Issue#${LOCK_ISSUE} (锁定于 ${LOCK_TIME})"
+    echo "目录被锁: ${BASE_DIR} → Issue#${LOCK_ISSUE} (state=${LOCK_STATE})"
     exit 2
   fi
 fi
 
-# 写入锁（Issue模式，API/模型信息在启动tmux前追加）
+# === 重试次数检查（统一用.cc-lock中的retry_count）===
 if [ "$MODE" = "issue" ]; then
-  # 保留已有的retry_count（重入场景）
-  OLD_RETRY=$(grep "^retry_count=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  RETRY=${LOCK_RETRY:-0}
+  MAX_RETRIES=10
+  if [ "$RETRY" -ge "$MAX_RETRIES" ]; then
+    echo "ERROR: Issue#${ISSUE} 已重试${MAX_RETRIES}次，标记Fail"
+    bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$ISSUE" --status "Fail" 2>/dev/null || true
+    gh issue comment "$ISSUE" --repo "$GH_REPO" \
+      --body "❌ CC重试${MAX_RETRIES}次仍失败，标记Fail。目录: $(basename $BASE_DIR)" 2>/dev/null || true
+    rm -f "$LOCK_FILE"
+    cd "$BASE_DIR" && git checkout dev 2>/dev/null && git branch -D "feature-Issue-${ISSUE}" 2>/dev/null
+    exit 1
+  fi
+fi
+
+# === Issue模式pre-task ===
+if [ "$MODE" = "issue" ]; then
+  cd "$BASE_DIR"
+
+  if [ "$LOCK_STATE" = "SAVED" ]; then
+    # SAVED状态重入：cron已commit+push，直接checkout feature分支继续
+    echo "$(date): SAVED状态重入，checkout feature-Issue-${ISSUE}"
+    git checkout "feature-Issue-${ISSUE}" 2>/dev/null
+  else
+    # 首次或RUNNING状态：正常pre-task
+    echo "$(date): pre-task: checkout dev → pull → feature-Issue-${ISSUE}"
+    git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
+    git checkout -b "feature-Issue-${ISSUE}" 2>/dev/null || git checkout "feature-Issue-${ISSUE}" 2>/dev/null
+  fi
+
+  mkdir -p "./issues/issue-${ISSUE}"
+
+  CURRENT_BRANCH=$(git branch --show-current 2>/dev/null)
+  if [ "$CURRENT_BRANCH" != "feature-Issue-${ISSUE}" ]; then
+    echo "ERROR: 分支切换失败，当前=$CURRENT_BRANCH，期望=feature-Issue-${ISSUE}"
+    exit 1
+  fi
+fi
+
+# === 写入/更新锁 ===
+if [ "$MODE" = "issue" ]; then
   cat > "$LOCK_FILE" << EOF
 issue=${ISSUE}
 module=${MODULE}
@@ -157,17 +154,15 @@ effort=${EFFORT}
 state=RUNNING
 time=$(date '+%Y-%m-%d %H:%M:%S')
 timestamp=$(date +%s)
-retry_count=${OLD_RETRY:-0}
+retry_count=${RETRY:-0}
+api_source=
 EOF
-  echo "$(date): 目录锁已写入 ${LOCK_FILE} → Issue#${ISSUE}"
 fi
 
-# === Session命名（使用真实目录名，与.claude/projects/一致）===
-# PROJECT_DIR: /home/ubuntu/projects/wande-play-kimi1/backend → DIR_NAME: kimi1-backend
-# PROJECT_DIR: /home/ubuntu/projects/wande-play-kimi1 → DIR_NAME: kimi1
+# === Session命名 ===
 REL_PATH=$(echo "$PROJECT_DIR" | sed "s|${HOME_DIR}/projects/wande-play-||; s|${HOME_DIR}/projects/wande-gh-plugins-||; s|${HOME_DIR}/projects/wande-play||; s|${HOME_DIR}/projects/wande-gh-plugins||")
-REL_PATH=$(echo "$REL_PATH" | sed 's|^/||; s|/|-|g')  # kimi1/backend → kimi1-backend
-[ -z "$REL_PATH" ] && REL_PATH="main"  # 主目录
+REL_PATH=$(echo "$REL_PATH" | sed 's|^/||; s|/|-|g')
+[ -z "$REL_PATH" ] && REL_PATH="main"
 
 if [ "$MODE" = "issue" ]; then
   SESSION="cc-${REL_PATH}-${ISSUE}"
@@ -230,12 +225,12 @@ else
   API_SOURCE="Token Pool Proxy"
 fi
 
-# 追加API信息到锁文件
+# 更新锁中的api_source
 if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
-  echo "api_source=${API_SOURCE}" >> "$LOCK_FILE"
+  sed -i "s/^api_source=.*/api_source=${API_SOURCE}/" "$LOCK_FILE"
 fi
 
-# === 启动tmux（恢复由cron兜底，不在tmux内检查）===
+# === 启动tmux ===
 tmux new-session -d -s "$SESSION" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} cd $PROJECT_DIR; \
    claude -p '$CC_PROMPT' --model ${MODEL} --effort ${EFFORT} --max-turns 500 --verbose; \

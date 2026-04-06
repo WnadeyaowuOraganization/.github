@@ -28,18 +28,13 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   [ -z "$ISSUE" ] && continue
 
   # 检查是否有claude进程在该目录运行
-  # Session命名格式: cc-{DIR_SUFFIX}-{MODULE}-{ISSUE}，用DIR_SUFFIX匹配
+  # Session命名格式: cc-{DIRNAME}-{ISSUE}（DIRNAME=basename目录名，如wande-play-kimi11）
   HAS_PROCESS=false
-  EXPECTED_SESSION="cc-${DIR_SUFFIX}-${MODULE}-${ISSUE}"
-  for session in $(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^cc-"); do
-    if [ "$session" = "$EXPECTED_SESSION" ]; then
-      pane_pid=$(tmux list-panes -t "$session" -F "#{pane_pid}" 2>/dev/null | head -1)
-      if [ -n "$pane_pid" ] && ps --ppid "$pane_pid" -o comm= 2>/dev/null | grep -q "claude"; then
-        HAS_PROCESS=true
-        break
-      fi
-    fi
-  done
+  EXPECTED_SESSION="cc-${DIRNAME}-${ISSUE}"
+  pane_pid=$(tmux list-panes -t "$EXPECTED_SESSION" -F "#{pane_pid}" 2>/dev/null | head -1)
+  if [ -n "$pane_pid" ] && ps --ppid "$pane_pid" -o comm= 2>/dev/null | grep -q "claude"; then
+    HAS_PROCESS=true
+  fi
 
   [ "$HAS_PROCESS" = "true" ] && continue
 

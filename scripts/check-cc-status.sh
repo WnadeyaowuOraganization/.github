@@ -37,17 +37,18 @@ echo "" >> "$REPORT_FILE"
 
 echo "### In Progress Issue状态" >> "$REPORT_FILE"
 for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
-    # 解析新格式 cc-{kimiN}-{module}-{issue} 或 cc-{kimiN}-{issue}（app模块）
-    # 从 .cc-lock 文件读取准确信息
-    kimi_dir=$(echo "$session" | sed 's/^cc-//' | grep -oP '^kimi\d+')
+    # 解析格式 cc-{wande-play-kimiN}-{issue}
+    # DIRNAME = wande-play-kimiN，从lock文件读取module等其他信息
+    dirname_part=$(echo "$session" | sed 's/^cc-//' | rev | cut -d- -f2- | rev)
+    kimi_dir=$(echo "$dirname_part" | grep -oP 'kimi\d+$')
     lock_file="${HOME_DIR}/projects/wande-play-${kimi_dir}/.cc-lock"
     if [ -n "$kimi_dir" ] && [ -f "$lock_file" ]; then
         issue=$(grep "^issue=" "$lock_file" | cut -d= -f2)
         module=$(grep "^module=" "$lock_file" | cut -d= -f2)
     else
-        # 兼容旧格式 cc-backend-1234
+        # 兼容/降级：直接从session名取最后一段作issue
         issue=$(echo "$session" | rev | cut -d- -f1 | rev)
-        module=$(echo "$session" | cut -d- -f2)
+        module="unknown"
         kimi_dir=""
     fi
 
@@ -85,9 +86,9 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
     # 综合判断状态
     if [ "$has_claude_running" = "true" ]; then
         # claude还在运行，检查最近活跃时间（从 .claude/projects/ JSONL文件mtime）
-        # 精确匹配：用Claude项目路径格式精确定位，避免 kimi1 匹配 kimi10/kimi11 等
+        # 精确匹配：用Claude项目路径格式精确定位
         # Claude存储路径格式：-home-ubuntu-projects-wande-play-{kimiN}-{module}/
-        if [ -n "$kimi_dir" ] && [ -n "$module" ]; then
+        if [ -n "$kimi_dir" ] && [ -n "$module" ] && [ "$module" != "unknown" ]; then
             proj_dir_name="-home-ubuntu-projects-wande-play-${kimi_dir}-${module}"
             jsonl_file=$(find "${HOME_DIR}/.claude/projects/${proj_dir_name}/" -name "*.jsonl" \
                 -not -path "*/subagents/*" -mmin -120 2>/dev/null \
@@ -98,7 +99,7 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
                 -not -path "*/subagents/*" -mmin -120 2>/dev/null \
                 | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         else
-            jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" -path "*wande-play*${module}*" -mmin -120 2>/dev/null \
+            jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" -path "*wande-play*" -mmin -120 2>/dev/null \
                 | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         fi
         if [ -z "$jsonl_file" ]; then

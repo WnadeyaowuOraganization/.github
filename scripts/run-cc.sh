@@ -159,16 +159,16 @@ api_source=
 EOF
 fi
 
-# === Session命名 ===
-REL_PATH=$(echo "$PROJECT_DIR" | sed "s|${HOME_DIR}/projects/wande-play-||; s|${HOME_DIR}/projects/wande-gh-plugins-||; s|${HOME_DIR}/projects/wande-play||; s|${HOME_DIR}/projects/wande-gh-plugins||")
-REL_PATH=$(echo "$REL_PATH" | sed 's|^/||; s|/|-|g')
-[ -z "$REL_PATH" ] && REL_PATH="main"
+# === Session命名：cc-{BASE_DIR_NAME}-{issue/hash} ===
+# 一个kimi目录只处理一个issue，session用dirname+issue唯一标识
+BASE_DIRNAME=$(basename "$BASE_DIR")
+[ -z "$BASE_DIRNAME" ] || [ "$BASE_DIRNAME" = "." ] && BASE_DIRNAME="main"
 
 if [ "$MODE" = "issue" ]; then
-  SESSION="cc-${REL_PATH}-${ISSUE}"
+  SESSION="cc-${BASE_DIRNAME}-${ISSUE}"
 else
   SESSION_ID=$(echo -n "$PROMPT" | md5sum | cut -c1-8)
-  SESSION="cc-${REL_PATH}-${SESSION_ID}"
+  SESSION="cc-${BASE_DIRNAME}-${SESSION_ID}"
 fi
 
 if tmux has-session -t "$SESSION" 2>/dev/null; then

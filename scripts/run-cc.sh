@@ -218,7 +218,7 @@ fi
 
 # === API来源选择 ===
 if [ "$EFFORT" = "max" ]; then
-  API_ENV=""
+  API_ENV="unset ANTHROPIC_BASE_URL; unset ANTHROPIC_API_KEY; unset API_TIMEOUT_MS; unset CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC;"
   API_SOURCE="Claude Max订阅"
 else
   API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"

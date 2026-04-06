@@ -78,36 +78,16 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
     continue
   fi
 
-  # Step 3: push
+  # Step 3: push（保证代码不丢失）
   git push origin "feature-Issue-${ISSUE}" 2>/dev/null
   if [ $? -ne 0 ]; then
-    git fetch origin dev 2>/dev/null
-    export GIT_EDITOR=true
-    if git rebase origin/dev 2>/dev/null; then
-      git push --force-with-lease origin "feature-Issue-${ISSUE}" 2>/dev/null
-    else
-      git rebase --abort 2>/dev/null
-      log "$DIRNAME Issue#$ISSUE: push/rebase失败，重新触发CC"
-      sed -i "s/^retry_count=.*/retry_count=$((RETRY+1))/" "$dir/.cc-lock"
-      bash "$SCRIPT_DIR/run-cc.sh" --module "${MODULE:-backend}" --issue "$ISSUE" --dir "$DIR_SUFFIX" --effort "${EFFORT:-medium}" 2>/dev/null &
-      continue
-    fi
+    git push --force-with-lease origin "feature-Issue-${ISSUE}" 2>/dev/null
   fi
 
-  # Step 4: 创建PR
-  EXISTING_PR=$(gh pr list --repo WnadeyaowuOraganization/wande-play --head "feature-Issue-${ISSUE}" --json number --jq '.[0].number' 2>/dev/null)
-  if [ -z "$EXISTING_PR" ] || [ "$EXISTING_PR" = "null" ]; then
-    TITLE=$(git log -1 --pretty=%s)
-    gh pr create --repo WnadeyaowuOraganization/wande-play --base dev --head "feature-Issue-${ISSUE}" \
-      --title "$TITLE" --body "Fixes #${ISSUE}" 2>/dev/null
-    if [ $? -eq 0 ]; then
-      log "$DIRNAME Issue#$ISSUE: ✅ PR创建成功"
-    else
-      log "$DIRNAME Issue#$ISSUE: PR创建失败，重新触发CC"
-      sed -i "s/^retry_count=.*/retry_count=$((RETRY+1))/" "$dir/.cc-lock"
-      bash "$SCRIPT_DIR/run-cc.sh" --module "${MODULE:-backend}" --issue "$ISSUE" --dir "$DIR_SUFFIX" --effort "${EFFORT:-medium}" 2>/dev/null &
-    fi
+  if [ $? -eq 0 ]; then
+    log "$DIRNAME Issue#$ISSUE: ✅ 已push到远程"
   else
-    log "$DIRNAME Issue#$ISSUE: ✅ PR#${EXISTING_PR}已存在"
+    log "$DIRNAME Issue#$ISSUE: push失败，保留本地改动待下次重试"
+    sed -i "s/^retry_count=.*/retry_count=$((RETRY+1))/" "$dir/.cc-lock"
   fi
 done

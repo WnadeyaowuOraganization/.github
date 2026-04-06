@@ -630,18 +630,19 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 
 ---
 
-## 五G、批次10完成+批次11启动（20:00–20:30 UTC）
+## 五G、批次10完成+批次11（20:00–21:25 UTC）
 
-> 更新时间：2026-04-06 20:30 UTC
+> 更新时间：2026-04-06 21:25 UTC
 
-### 批次10完成情况
+### 批次10完成情况（全部5/5 MERGED）
 
 | PR | Issue | 标题摘要 | 状态 |
 |----|-------|---------|------|
 | PR#2993 | #1699 | 提成规则配置API — 阶梯/经销/国际提成规则CRUD | ✅ MERGED |
 | PR#2996 | #1632 | 工艺标准Service CRUD — Controller+Mapper+Service+测试 | ✅ MERGED |
-| PR#2999 | #1633 | Phase24 整改工单 Entity+Mapper（cherry-pick v3） | ✅ MERGED（20:20 UTC）|
-| PR#3000 | #1694 | 发票OCR识别+验真+查重+规则引擎服务（cherry-pick v3） | ⏳ MERGEABLE（等待CI）|
+| PR#2999 | #1633 | Phase24 整改工单 Entity+Mapper（cherry-pick v3） | ✅ MERGED |
+| PR#3000 | #1694 | 发票OCR识别+验真+查重+规则引擎服务（cherry-pick v3） | ✅ MERGED |
+| PR#3004 | #1688 | ComfyUI 模型下载与配置完成 | ✅ MERGED |
 
 **问题D53修复影响**：批次10所有PR均遭遇schema.sql累积冲突（多PR同时追加表定义）。研发经理CC采用cherry-pick策略逐一修复，合计创建3个clean分支（v3）。
 
@@ -650,20 +651,26 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - **D53**: session命名统一`cc-{dirname}-{issue}`格式
 - schema.sql冲突解决策略：用origin/dev最新版本+追加新表
 
-### 批次11启动（20:22 UTC）
+### 批次11部分完成（21:25 UTC）
 
-**5个CC运行中（全部effort=high，Token Pool Proxy）**：
-- kimi11 (#1681) 新增投标方案历史数据入库（pipeline P0）
-- kimi15 (#1631) 整改工单Service — 创建+状态流转+超时预警（Phase26 P0）
-- kimi16 (#1630) 整改工单API — /project-center/{projectId}/（Phase27 P0）
-- kimi17 (#1703) 新增设计资产 CRUD API — 资产库+版本管理+RAG向量化（knowledge P0）
-- kimi19 (#1688) 新增 ComfyUI 模型下载与配置（backend P0）
+| PR | Issue | 标题摘要 | 状态 |
+|----|-------|---------|------|
+| PR#3010 | #1631 | 整改工单Service CRUD+状态机+超时预警+38测试（v2） | ✅ MERGED |
+
+**4个CC仍运行中**：
+- kimi11 (#1681) 投标方案历史数据入库（53%）
+- kimi16 (#1630) 整改工单API Phase27（Max重启）
+- kimi17 (#1703) 设计资产CRUD API（Max，活跃）
+- kimi15 (#1621) 企微会话存档SDK集成（新指派）
+- kimi19 (#1716) 产品参数查询中心页面（新指派，fullstack）
+
+**反复卡住问题**：kimi16(#1630)和kimi17(#1703)因Token Pool plan dialog阻塞反复超时，均已切换至Claude Max重启。
 
 ---
 
 ## 七、最终结论
 
-> 更新时间：2026-04-06 20:30 UTC（批次10完成4/5 MERGED，批次11已启动，累计52 MERGED）
+> 更新时间：2026-04-06 21:25 UTC（批次11进行中，累计55 MERGED）
 
 - **总验收项**: **63项**（A~H阶段：原53项 + H阶段新增10项）
 - **已观测**: 43项（+5项H阶段部分观测）
@@ -672,12 +679,11 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - **警告**: 8项（⚠️：A8过度max/P18/P19/H3/H10等）
 - **不适用/待观测**: 18项（—）
 - **整体评分**: 21/43 = 49%（含H阶段修正）
-- **累计完成**: 批次1-4共27个 + 批次5-10共25个 = **52个 MERGED**
-  - 批次10新增：#1699(PR#2993) / #1632(PR#2996) / #1633(PR#2999) / #1694(PR#3000 pending)
-  - D53修复：post-cc-check.sh进程检测Bug + session命名统一
-- **当前运行(5个)**: kimi11(#1681) / kimi15(#1631) / kimi16(#1630) / kimi17(#1703) / kimi19(#1688)
+- **累计完成**: 批次1-4共27个 + 批次5-11已28个 = **55个 MERGED**
+  - 批次10全部：#1699/#1632/#1633/#1694/#1688（5个）
+  - 批次11已完成：#1631(PR#3010)
+- **当前运行(5个)**: kimi11(#1681) / kimi15(#1621) / kimi16(#1630) / kimi17(#1703) / kimi19(#1716)
 - **关键问题（按优先级）**:
-  1. 🔴 **schema.sql累积冲突**: 每批PR均追加新表，导致持续CONFLICTING，需定期cherry-pick修复
-  2. 🔴 **P16/C10**: pr-test.yml E2E失败后设"Todo"而非"E2E Fail"，研发经理CC的E2E Fail优先队列实际上只能捕捉部署失败
+  1. 🔴 **schema.sql累积冲突**: 每批PR均追加新表，导致持续CONFLICTING，已改为python脚本替换策略
+  2. 🟡 **Token Pool plan dialog**: 反复导致CC卡住超时，批次11起高风险Issue改用effort=max
   3. 🟡 **P20/H2**: wande-ai/pom.xml仍依赖已废弃的wande-ai-api，D44未完全落地
-  4. 🟡 **P17/P18/P19**: CI/脚本多处与文档不符或有bug，需逐一修复

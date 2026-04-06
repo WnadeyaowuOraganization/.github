@@ -12,7 +12,7 @@ start_cc() {
     local suffix=$4
 
     echo "Starting CC for Issue #$issue on $suffix..."
-    bash "$SCRIPT_DIR/run-cc.sh" "$repo" "$issue" "$model" "$suffix"
+    bash "$SCRIPT_DIR/run-cc.sh" --module "$repo" --issue "$issue" --model "$model" --dir "$suffix" --effort medium
 }
 
 # Backend模块 Issues

@@ -1292,3 +1292,13 @@
 | 2026-04-06 | #2138 | frontend | kimi18 | Claude Max Sonnet (协同修改-AI PPT Cockpit P2) |
 | 2026-04-06 | #2164 | backend | kimi19 | Claude Max Sonnet (驾驶舱-ComfyUI迁移 P3) |
 | 2026-04-06 | #2393 | backend | kimi20 | Claude Max Sonnet (矿场-买家意图信号 P3) |
+| 2026-04-06 | #2845 | backend | kimi1 | Claude Max Sonnet (驾驶舱-CFD数据API P0) |
+| 2026-04-06 | #2847 | pipeline | kimi2 | Claude Max Sonnet (驾驶舱-Fail根因回写 P0) |
+| 2026-04-06 | #2848 | backend | kimi3 | Claude Max Sonnet (驾驶舱-Agent效率API P0) |
+| 2026-04-06 | #2846 | frontend | kimi4 | Claude Max Sonnet (驾驶舱-CFD前端 P1) |
+| 2026-04-06 | #2849 | frontend | kimi5 | Claude Max Sonnet (驾驶舱-Agent看板前端 P1) |
+| 2026-04-06 | #2850 | backend | kimi6 | Claude Max Sonnet (驾驶舱-验收队列API P1) |
+| 2026-04-06 | #2851 | frontend | kimi7 | Claude Max Sonnet (驾驶舱-验收队列前端 P1) |
+| 2026-04-06 | #1494 | backend | kimi8 | Claude Max Sonnet (矿场-销售活动数据模型 P0) |
+| 2026-04-06 | #2455 | backend | kimi9 | Claude Max Sonnet (矿场-中标数据入库 P0) |
+| 2026-04-06 | #1534 | backend | kimi10 | Claude Max Sonnet (矿场-矿场状态枚举 P0) |

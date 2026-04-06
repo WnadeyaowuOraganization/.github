@@ -150,10 +150,10 @@ wait_healthy() {
 
     err "CI环境未在${HEALTH_TIMEOUT}s内就绪"
     if [ -f "$CI_BACKEND_DIR/logs/backend.log" ]; then
-        echo "--- CI后端最后50行日志 ---"
-        tail -50 "$CI_BACKEND_DIR/logs/backend.log"
+        echo "--- CI后端最后10行日志 ---"
+        tail -10 "$CI_BACKEND_DIR/logs/backend.log"
     fi
-    exit 1
+    return 1
 }
 
 case $ACTION in
@@ -161,7 +161,14 @@ case $ACTION in
         log "=== 启动CI专用测试环境 ==="
         start_ci_backend
         start_ci_frontend
-        wait_healthy
+        if ! wait_healthy; then
+            # 启动失败，强制重新构建
+            warn "CI环境启动失败，强制重新构建..."
+            BACKEND_CHANGED=true
+            start_ci_backend
+            start_ci_frontend
+            wait_healthy
+        fi
         ;;
     stop)
         log "=== 停止CI专用测试环境 ==="

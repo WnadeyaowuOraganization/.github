@@ -67,22 +67,45 @@ case "$PROJECT_STATUS" in
         if python3 -c "exit(0 if float('${HOURS_SINCE}') > 3 else 1)" 2>/dev/null; then
             ALERT_LEVEL="🔴 严重"
             ALERT_REASON="Issue #$ISSUE 已在 Todo 状态超过 ${HOURS_SINCE} 小时，研发经理CC尚未触发"
-            SUGGEST="检查研发经理CC是否正常运行：\`tail -f ~/cc_scheduler/manager.log\`\n手动触发命令：\`bash scripts/run-cc.sh --module app --issue 2893 --dir kimi1 --effort high\`"
+            SUGGEST="检查研发经理CC是否正常运行：\`tail -f ~/cc_scheduler/manager.log\`\n手动触发命令：\`bash scripts/run-cc.sh --module fullstack --issue 2893 --dir kimi1 --effort high\`"
         fi
         ;;
     "In Progress")
         # 检查是否有PR
         PR_COUNT=$(gh pr list --repo "$REPO" --search "$ISSUE" --state all --json number 2>/dev/null | python3 -c "import sys,json; print(len(json.load(sys.stdin)))" 2>/dev/null || echo "0")
-        if [ "$PR_COUNT" = "0" ] && python3 -c "exit(0 if float('${HOURS_SINCE}') > 6 else 1)" 2>/dev/null; then
-            ALERT_LEVEL="🟡 警告"
-            ALERT_REASON="Issue #$ISSUE 已在 In Progress 超过 ${HOURS_SINCE} 小时，但尚未产生 PR"
-            SUGGEST="检查编程CC是否仍在运行：\`tmux list-sessions | grep 2893\`\n查看日志：\`tmux attach -t cc-app-2893\`"
+        # 检查CC是否在运行（tmux会话）
+        CC_RUNNING=$(tmux list-sessions 2>/dev/null | grep -c "2893" || echo "0")
+        # 检查CC日志是否存在且近1小时有更新
+        CC_LOG=$(ls -t "${HOME_DIR}/cc_scheduler/logs/"*2893* 2>/dev/null | head -1)
+        CC_LOG_FRESH="0"
+        if [ -n "$CC_LOG" ]; then
+            CC_LOG_AGE=$(python3 -c "
+import os,time
+mtime=os.path.getmtime('${CC_LOG}')
+age=(time.time()-mtime)/3600
+print(f'{age:.1f}')
+" 2>/dev/null || echo "99")
+            python3 -c "exit(0 if float('${CC_LOG_AGE}') < 1 else 1)" 2>/dev/null && CC_LOG_FRESH="1"
+        fi
+
+        if [ "$PR_COUNT" = "0" ]; then
+            if [ "$CC_RUNNING" = "0" ] && [ "$CC_LOG_FRESH" = "0" ]; then
+                # CC未运行且无日志活动 → 严重告警
+                ALERT_LEVEL="🔴 严重"
+                ALERT_REASON="Issue #$ISSUE 已在 In Progress 超过 ${HOURS_SINCE} 小时，编程CC**未在运行**，且无 PR"
+                SUGGEST="研发经理CC未重新触发！请立即执行：\n\`\`\`\nbash scripts/run-cc.sh --module fullstack --issue 2893 --dir kimi1 --effort high\n\`\`\`\n或将状态重置回 Todo：\`bash scripts/update-project-status.sh --repo play --issue 2893 --status \"Todo\"\`"
+            elif python3 -c "exit(0 if float('${HOURS_SINCE}') >= 3 else 1)" 2>/dev/null; then
+                # CC在运行但超过3小时无PR → 普通警告
+                ALERT_LEVEL="🟡 警告"
+                ALERT_REASON="Issue #$ISSUE 已在 In Progress 超过 ${HOURS_SINCE} 小时，但尚未产生 PR"
+                SUGGEST="检查编程CC是否仍在运行：\`tmux list-sessions | grep 2893\`\n查看日志：\`tmux attach -t cc-app-2893\`"
+            fi
         fi
         ;;
     "Fail"|"E2E Fail")
         ALERT_LEVEL="🔴 严重"
         ALERT_REASON="Issue #$ISSUE 状态为 **$PROJECT_STATUS**"
-        SUGGEST="清除重试计数：\`rm -f /tmp/cc-retry-app-2893\`\n重新触发：\`bash scripts/run-cc.sh --module app --issue 2893 --dir kimi1 --effort high\`\n更新状态回 Todo：\`bash scripts/update-project-status.sh play 2893 \"Todo\"\`"
+        SUGGEST="清除重试计数：\`rm -f /tmp/cc-retry-app-2893\`\n重新触发：\`bash scripts/run-cc.sh --module fullstack --issue 2893 --dir kimi1 --effort high\`\n更新状态回 Todo：\`bash scripts/update-project-status.sh --repo play --issue 2893 --status \"Todo\"\`"
         ;;
     *)
         log "⚠️ 未知状态：$PROJECT_STATUS，跳过"

@@ -24,7 +24,7 @@
 
 ## Issue路由规则（Monorepo版）
 
-所有业务Issue统一创建在  仓库，通过 module scope 标签区分：
+所有业务Issue统一创建在 wande-play 仓库，通过 module scope 标签区分：
 
 | module标签 | 含义 | 编程CC行为 |
 |-----------|------|-----------|

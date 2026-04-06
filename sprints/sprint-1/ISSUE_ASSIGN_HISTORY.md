@@ -1369,3 +1369,20 @@
 - #1515(kimi7) PR#2918 MERGED | #1516(kimi8) PR#2920 MERGED
 - #2244(kimi9) PR#2919 MERGED | #2229(kimi10) PR#2917 MERGED
 - #1493(kimi2) PR#2866 MERGED（第1轮遗留）
+
+## 2026-04-06 ~13:00 UTC 第4.5轮补充指派（预算P0+材料P0+CRM，5并发）
+
+| kimi目录 | Issue | 模块 | 标题 |
+|---------|-------|------|------|
+| kimi11 | #1609 | backend | [预算管控][1/32] 预算管控数据模型 — 7张核心表创建 |
+| kimi12 | #1608 | backend | [预算管控][2/32] 保证金台账数据模型 — 2张表创建 |
+| kimi13 | #1543 | backend | [预算模板增强][3/12] 模板自动匹配引擎 |
+| kimi14 | #1549 | backend | [材料熟悉度-P0] 材料知识卡+小测验API [4/4] |
+| kimi15 | #1537 | backend | [CRM-P1] 商机/项目下设计单入口 |
+
+**同期完成（第4轮7/10）**:
+- #1562(kimi3) PR#2927 MERGED | #1563(kimi2) PR#2928 MERGED
+- #1484(kimi10) PR#2929 MERGED | #1561(kimi4) PR#2932 MERGED
+- #1559(kimi5) PR#2931 MERGED | #1476(kimi6) PR#2930 MERGED
+- #1480(kimi8) PR#2933 MERGED
+- 仍在运行：#1564(kimi1), #1478(kimi7), #1481(kimi9)

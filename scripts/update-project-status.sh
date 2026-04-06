@@ -1,23 +1,35 @@
 #!/bin/bash
-# update-project-status.sh - 更新Project #4看板的Status字段（wande-play专用）
-# 用法: update-project-status.sh <repo> <ISSUE_NUMBER> <STATUS>
-# repo:   play | backend | frontend | pipeline | plugins | gh-plugins (可选，不传则查全部4个仓库)
-# STATUS: Plan | Todo | In Progress | Done | pause | Fail | E2E Fail
-#
-# v3 (2026-03-30): 新增可选repo参数
-#   - 传repo: 只查1个仓库，1次query + 1次mutation = 2次API调用
-#   - 不传:   查全部4仓库，1次query + N次mutation（兼容v2行为）
+# update-project-status.sh - 更新Project #4看板的Status字段
+# 用法: update-project-status.sh --repo play --issue 1234 --status "In Progress"
+# repo:   play | backend | frontend | pipeline | plugins | gh-plugins
+# status: Plan | Todo | In Progress | Done | pause | Fail | E2E Fail | Reject
 
 set -e
 
-REPO_SHORT="$1"
-ISSUE_NUMBER="$2"
-NEW_STATUS="$3"
+# 参数解析（兼容旧的下标方式）
+REPO_SHORT=""
+ISSUE_NUMBER=""
+NEW_STATUS=""
+
+if [ "$1" = "--repo" ] || [ "$1" = "--issue" ] || [ "$1" = "--status" ]; then
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --repo)   REPO_SHORT="$2"; shift 2 ;;
+      --issue)  ISSUE_NUMBER="$2"; shift 2 ;;
+      --status) NEW_STATUS="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+else
+  # 兼容旧的下标模式
+  REPO_SHORT="$1"
+  ISSUE_NUMBER="$2"
+  NEW_STATUS="$3"
+fi
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
-    echo "用法: $0 <repo> <ISSUE_NUMBER> <STATUS>"
-    echo "REPO:   play | backend | frontend | pipeline | plugins | gh-plugins (可选)"
-    echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail | E2E Fail"
+    echo "用法: $0 --repo play --issue <N> --status \"<STATUS>\""
+    echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail | E2E Fail | Reject"
     exit 1
 fi
 

@@ -90,8 +90,8 @@
 
 ```bash
 cat docs/status.md
-bash scripts/query-project-issues.sh play "Plan"
-bash scripts/update-project-status.sh play <N> "Todo"
+bash scripts/query-project-issues.sh --repo play --status "Plan"
+bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 ```
 
 **决策清单**: 先筛Sprint重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
@@ -152,7 +152,7 @@ cd $HOME_DIR/projects/wande-play-<suffix>
 git checkout dev && git pull origin dev
 git checkout -b feature-Issue-<N>
 mkdir -p ./issues/issue-<N>
-bash scripts/update-project-status.sh play <N> "In Progress"
+bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
 
 # 4. 根据Issue复杂度决定effort，启动CC
 bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
@@ -201,10 +201,10 @@ git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
 bash scripts/check-cc-status.sh
 
 # 查询Issue（输出含 module/priority 列）
-bash scripts/query-project-issues.sh <repo> "<STATUS>"
+bash scripts/query-project-issues.sh --repo <repo> --status "<STATUS>"
 
 # 更新Issue状态
-bash scripts/update-project-status.sh <repo> <N> "<STATUS>"
+bash scripts/update-project-status.sh --repo <repo> --issue <N> --status "<STATUS>"
 
 # 启动编程CC
 bash scripts/run-cc.sh --module <module> --issue <Issue号> --dir <kimi目录> --effort <effort>

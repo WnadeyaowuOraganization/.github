@@ -1,15 +1,9 @@
 #!/bin/bash
 # query-project-issues.sh - 查询Project #4中指定仓库和状态的Issue
-# 用法: query-project-issues.sh [repo] [status]
-# repo: backend | front | pipeline | plugins | gh-plugins | all (默认all)
+# 用法: query-project-issues.sh --repo play --status "Todo"
+#       query-project-issues.sh --status "In Progress"
+# repo: play | backend | frontend | pipeline | plugins | gh-plugins | all (默认all)
 # status: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
-# 输出: stdout=人类可读表格, stderr=机器可解析 ISSUE_<N>=<STATUS>
-#
-# v3 (2026-03-30): 使用GraphQL query参数服务端过滤，大幅减少API调用
-#   - 指定status时: 服务端过滤，Todo/In Progress等通常1次API调用即可
-#   - status=all时: 需遍历全部items，自动分页
-#   - Plan状态(790+)仍需翻页，其他状态(<100)单次搞定
-#   - GraphQL cost: 指定status≈2-3 points, all≈20-30 points
 
 # Auto-detect GH_TOKEN if not set
 if [ -z "$GH_TOKEN" ]; then
@@ -19,8 +13,24 @@ fi
 
 set -e
 
-REPO_NAME="${1:-all}"
-STATUS_NAME="${2:-all}"
+# 参数解析（兼容旧的下标方式）
+REPO_NAME="all"
+STATUS_NAME="all"
+
+if [ "$1" = "--repo" ] || [ "$1" = "--status" ]; then
+  # 新的命名参数模式
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      --repo)   REPO_NAME="$2"; shift 2 ;;
+      --status) STATUS_NAME="$2"; shift 2 ;;
+      *) shift ;;
+    esac
+  done
+else
+  # 兼容旧的下标模式
+  REPO_NAME="${1:-all}"
+  STATUS_NAME="${2:-all}"
+fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")

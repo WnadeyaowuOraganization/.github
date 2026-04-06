@@ -9,12 +9,11 @@
 ## 脚本速查
 
 ```bash
-bash scripts/check-cc-status.sh                                             # CC状态+进度
-bash scripts/query-project-issues.sh play "<STATUS>"                        # 查询Issue
-bash scripts/update-project-status.sh play <N> "<STATUS>"                   # 更新状态
-bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort high   # 启动编程CC
-bash scripts/run-cc.sh --module app --prompt "修复编译" --effort medium          # 自定义Prompt
-export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)                 # Token
+bash scripts/check-cc-status.sh                                                          # CC状态
+bash scripts/query-project-issues.sh --repo play --status "Todo"                         # 查询Issue
+bash scripts/update-project-status.sh --repo play --issue 1234 --status "In Progress"    # 更新状态
+bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort high           # 启动编程CC
+bash scripts/run-cc.sh --module app --prompt "修复编译" --effort medium                    # 自定义Prompt
 ```
 
 > Issue模式 `--dir` 必填（kimi1~kimi20）。Prompt模式不传`--dir`则用主目录。

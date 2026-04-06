@@ -154,6 +154,7 @@ module=${MODULE}
 dir=${DIR}
 model=${MODEL}
 effort=${EFFORT}
+state=RUNNING
 time=$(date '+%Y-%m-%d %H:%M:%S')
 timestamp=$(date +%s)
 retry_count=${OLD_RETRY:-0}

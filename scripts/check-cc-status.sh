@@ -173,6 +173,8 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
 
   LOCK_ISSUE=$(grep "^issue=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
   LOCK_MODULE=$(grep "^module=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  LOCK_STATE=$(grep "^state=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  LOCK_RETRY=$(grep "^retry_count=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
   LOCK_TS=$(grep "^timestamp=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
   AGE_SECS=$((NOW - ${LOCK_TS:-0}))
   AGE_MINS=$((AGE_SECS / 60))
@@ -182,29 +184,19 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
     echo "$session" | grep -q "$DIRNAME" && CC_RUNNING=true && break
   done
 
-  if [ $AGE_SECS -gt $TIMEOUT_SECS ]; then
-    if [ "$CC_RUNNING" = "true" ]; then
-      echo "- ⚠️ $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, CC仍在运行)" >> "$REPORT_FILE"
-    else
-      # CC已退出+超时：检查是否有PR，无则自动释放
-      HAS_PR=$(gh pr list --repo WnadeyaowuOraganization/wande-play --head "feature-Issue-${LOCK_ISSUE}" --json number --jq '.[0].number' 2>/dev/null)
-      if [ -n "$HAS_PR" ]; then
-        echo "- ⏳ $DIRNAME: Issue#${LOCK_ISSUE} (${AGE_MINS}分钟, PR#${HAS_PR}等待CI)" >> "$REPORT_FILE"
-      else
-        echo "- 🚨 $DIRNAME: Issue#${LOCK_ISSUE} (**${AGE_MINS}分钟超时, 无PR, 自动释放**)" >> "$REPORT_FILE"
-        rm -f "$dir/.cc-lock"
-        cd "$dir" && git checkout dev 2>/dev/null && git branch -D "feature-Issue-${LOCK_ISSUE}" 2>/dev/null
-        bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$LOCK_ISSUE" --status "Todo" 2>/dev/null
-        TIMEOUT_COUNT=$((TIMEOUT_COUNT + 1))
-      fi
-    fi
+  if [ "$LOCK_STATE" = "SAVED" ]; then
+    # 代码已保存，需要研发经理CC重新触发继续
+    echo "- 💾 $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (**SAVED, retry=${LOCK_RETRY:-0}, 需重新触发CC继续**)" >> "$REPORT_FILE"
+    LOCKED_COUNT=$((LOCKED_COUNT + 1))
+  elif [ "$CC_RUNNING" = "true" ]; then
+    echo "- 🔧 $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, CC运行中)" >> "$REPORT_FILE"
+    LOCKED_COUNT=$((LOCKED_COUNT + 1))
+  elif [ $AGE_SECS -gt $TIMEOUT_SECS ]; then
+    echo "- 🚨 $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (**${AGE_MINS}分钟超时, 等待cron恢复**)" >> "$REPORT_FILE"
+    TIMEOUT_COUNT=$((TIMEOUT_COUNT + 1))
     LOCKED_COUNT=$((LOCKED_COUNT + 1))
   else
-    if [ "$CC_RUNNING" = "true" ]; then
-      echo "- 🔧 $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, CC运行中)" >> "$REPORT_FILE"
-    else
-      echo "- ⏳ $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, 等待CI)" >> "$REPORT_FILE"
-    fi
+    echo "- ⏳ $DIRNAME: Issue#${LOCK_ISSUE} ${LOCK_MODULE} (${AGE_MINS}分钟, state=${LOCK_STATE:-RUNNING})" >> "$REPORT_FILE"
     LOCKED_COUNT=$((LOCKED_COUNT + 1))
   fi
 done

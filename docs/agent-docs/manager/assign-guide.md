@@ -34,7 +34,7 @@
 
 ```bash
 # 1. 检查当前槽位（最多5个并发CC）
-bash scripts/check-cc-status.sh
+bash scripts/cc-check.sh
 
 # 2. 读取排程计划（排程经理已维护好的优先列表）
 cat sprints/sprint-1/PLAN.md | grep -A 20 "下次指派时优先选择"
@@ -71,7 +71,7 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 
 ```bash
 # 全面锁状态总览
-bash scripts/check-cc-status.sh
+bash scripts/cc-check.sh
 
 # 读取指定会话实时输出（最近200行），判断是否卡住/报错/等待输入
 tmux capture-pane -t cc-wande-play-kimi1-1234 -p -S -200
@@ -99,7 +99,7 @@ tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Ente
 
 ```bash
 # 处理 SAVED 状态（cc-keepalive.sh 已自动处理，手动确认）
-bash scripts/check-cc-status.sh | grep "SAVED\|超时"
+bash scripts/cc-check.sh | grep "SAVED\|超时"
 
 # 重新触发（同 Issue 重入）
 bash scripts/run-cc.sh --module <原module> --issue <N> --dir <原kimi目录> --effort <原effort>
@@ -126,7 +126,7 @@ bash scripts/query-project-issues.sh --repo play --status "Fail" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "E2E Fail" 2>/dev/null
 
 # 3. 各 kimi 目录当前状态
-bash scripts/check-cc-status.sh
+bash scripts/cc-check.sh
 
 # 4. 读取 PLAN.md 下批建议
 grep -A 20 "下次指派时优先选择" sprints/sprint-1/PLAN.md
@@ -169,7 +169,7 @@ grep -A 20 "下次指派时优先选择" sprints/sprint-1/PLAN.md
 ## 辅助脚本
 
 ```bash
-bash scripts/check-cc-status.sh                                                    # 全面状态
+bash scripts/cc-check.sh                                                    # 全面状态
 bash scripts/query-project-issues.sh --repo play --status "Todo"                   # 待指派
 bash scripts/prefetch-issues.sh N1 N2 N3                                           # 预下载 Issue
 bash scripts/run-cc.sh --module backend --issue N --dir kimi1 --effort medium      # 启动 CC

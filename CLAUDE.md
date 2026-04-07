@@ -36,7 +36,7 @@
 
 ```bash
 export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
-bash scripts/check-cc-status.sh                                                    # CC状态总览
+bash scripts/cc-check.sh                                                    # CC状态总览
 bash scripts/query-project-issues.sh --repo play --status "Todo"                   # 查询Issue
 bash scripts/update-project-status.sh --repo play --issue 1234 --status "Todo"    # 更新状态
 bash scripts/prefetch-issues.sh 1533 2256 2304                                     # 预下载Issue

@@ -19,6 +19,23 @@ bash scripts/run-cc.sh --module backend --prompt "修复编译" --effort medium 
 
 > Issue模式 `--dir` 必填（kimi1~kimi20）。Prompt模式不传`--dir`则用主目录。
 
+## 向编程CC注入提示词
+
+当需要干预某个正在运行的编程CC时，用 `tmux send-keys` 直接注入（CC处于等待输入状态时生效）：
+
+```bash
+# 查看当前所有CC会话
+tmux ls | grep "^cc-"
+
+# 向指定会话注入提示词（session格式：cc-{目录}-{issue号}）
+tmux send-keys -t cc-wande-play-kimi1-1234 "你的提示词内容" Enter
+
+# 示例：让某个CC重新阅读设计文档
+tmux send-keys -t cc-wande-play-kimi3-1567 "请重新阅读 issues/issue-1567/design.md 并按设计文档继续实现" Enter
+```
+
+> Claude Office 页面（http://localhost:9872）的日志面板底部也有注入输入框，可视化操作。
+
 ## Effort → API来源
 
 | effort | 适用场景 | API来源 |

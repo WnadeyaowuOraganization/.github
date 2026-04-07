@@ -1,7 +1,8 @@
-# 排程经理 指南（研发经理A）
+# 排程经理 指南
 
-> 当前会话角色：**排程经理**，只负责排程分析与看板维护，不负责指派和验收。
-> 指派验收由另一个研发经理CC（cc_manager.sh 触发）负责，见 `assign-guide.md`。
+> 当前角色：**排程经理**，只负责排程分析与看板维护，不负责指派和验收。
+> 由 `run-manager.sh` 启动 tmux 会话，`\loop 10m` 自驱动，每10分钟执行一轮。
+> 指派验收由研发经理负责（同由 run-manager.sh 启动），见 `assign-guide.md`。
 
 ## 工作目录
 
@@ -9,8 +10,8 @@
 
 ## 职责边界
 
-| 职责 | 排程经理（本会话） | 指派验收经理（cc_manager.sh） |
-|------|-----------------|---------------------------|
+| 职责 | 排程经理 | 研发经理 |
+|------|---------|---------|
 | 监控 Jump/Fail/E2E Fail | ✅ | ❌ |
 | 依赖分析、维护 PLAN.md | ✅ | ❌ |
 | Plan → Todo 状态流转 | ✅ | ❌ |
@@ -119,7 +120,7 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 ```bash
 curl -s -X POST http://localhost:9872/api/notify \
   -H "Content-Type: application/json" \
-  -d "{\"session\":\"manager-scheduler\",\"message\":\"排程完成：新增X个Todo，Jump队列Y个\",\"type\":\"success\"}"
+  -d "{\"session\":\"manager-排程经理\",\"message\":\"排程完成：新增X个Todo，Jump队列Y个\",\"type\":\"success\"}"
 ```
 
 ## Sprint 目标

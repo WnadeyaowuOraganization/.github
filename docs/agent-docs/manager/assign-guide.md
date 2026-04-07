@@ -1,7 +1,7 @@
-# 指派验收经理 指南（研发经理B）
+# 研发经理 指南
 
-> 本会话角色：**指派验收经理**，由 `cc_manager.sh` 定时触发。
-> 排程分析由排程经理（当前另一会话）负责，本经理只读 PLAN.md 执行指派和验收。
+> 当前角色：**研发经理**，由 `run-manager.sh` 启动 tmux 会话，`\loop 10m` 自驱动。
+> 排程分析由排程经理负责（见 scheduler-guide.md），本经理只读 PLAN.md 执行指派和验收。
 
 ## 工作目录
 
@@ -157,5 +157,5 @@ export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 ```bash
 curl -s -X POST http://localhost:9872/api/notify \
   -H "Content-Type: application/json" \
-  -d "{\"session\":\"manager-assign\",\"message\":\"指派X个Issue：#N1(kimi1) #N2(kimi2)；巡检Y个运行中\",\"type\":\"success\"}"
+  -d "{\"session\":\"manager-研发经理\",\"message\":\"指派X个Issue：#N1(kimi1) #N2(kimi2)；巡检Y个运行中\",\"type\":\"success\"}"
 ```

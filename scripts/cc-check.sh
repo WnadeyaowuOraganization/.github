@@ -134,7 +134,7 @@ echo "" >> "$REPORT_FILE"
 
 # 4. 统计空闲目录
 echo "### 目录使用情况" >> "$REPORT_FILE"
-MAX_CONCURRENT=5
+MAX_CONCURRENT=15
 active_count=$(tmux list-sessions 2>/dev/null | grep "^cc-" | wc -l)
 available_count=$((MAX_CONCURRENT - active_count))
 echo "- 活跃CC: $active_count / $MAX_CONCURRENT（并发上限）" >> "$REPORT_FILE"

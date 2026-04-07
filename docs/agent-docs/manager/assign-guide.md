@@ -16,7 +16,7 @@
 ## 任务一：指派（Todo → In Progress）
 
 ```bash
-# 1. 检查当前槽位（最多5个并发CC）
+# 1. 检查当前槽位（最多15个并发CC）
 bash scripts/cc-check.sh
 
 # 2. 读取排程计划（排程经理已维护好的优先列表）

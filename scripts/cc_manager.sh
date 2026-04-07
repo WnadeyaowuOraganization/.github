@@ -1,11 +1,12 @@
 #!/bin/bash
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # ==============================================================
-# cc_manager.sh — 研发经理CC定时触发脚本
+# cc_manager.sh — 指派验收经理CC定时触发脚本（研发经理B）
 # crontab: */10 * * * *
-# 功能：触发.github项目的研发经理CC，让其检查进行中的CC、
-#       更新已完成Issue的排程状态、触发新的CC处理下一批Issue
+# 功能：读取 PLAN.md 执行指派、巡检各CC进度、发现问题注入提示词、
+#       处理 SAVED 状态恢复、阶段性生成验收报告
 #
+# 注意：排程分析（Plan→Todo）由排程经理A（当前会话）负责，本脚本不做排程
 # 查看实时日志: tail -f ${HOME_DIR}/cc_scheduler/manager.log
 # ==============================================================
 
@@ -46,7 +47,7 @@ log "执行cron恢复检查..."
 bash "$SCRIPT_DIR/post-cc-check.sh" >> "$LOG_FILE" 2>&1
 
 # 触发研发经理CC（日志由Claude Code自动写入JSONL）
-claude -p "继续完成任务二，如果任务二没有issue了，执行一次任务一后继续" \
+claude -p "你是指派验收经理（研发经理B），先阅读 docs/agent-docs/manager/assign-guide.md 了解职责。按以下顺序执行：1) 巡检各kimi目录task.md进度，发现卡住/异常立即注入提示词处理；2) 处理💾SAVED状态的CC（重新触发继续）；3) 检查空闲槽位，读取 sprints/sprint-1/PLAN.md「下次指派时优先选择」列表，prefetch后指派新Issue；4) 若本轮完成≥3个Done，生成阶段性验收报告写入 sprints/sprint-1/VERIFICATION_REPORT.md；5) 发送通知到Claude Office。" \
   --model claude-opus-4-6 --effort medium --max-turns 200 --verbose \
   >> "$LOG_FILE" 2>&1
 

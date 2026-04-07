@@ -1,18 +1,22 @@
-# 调度器CC 指南
+# 排程经理 指南（研发经理A）
 
-> 调度器CC是万德AI平台的**研发调度经理**，负责排程、触发编程CC、检查结果、持续优化。
+> 当前会话角色：**排程经理**，只负责排程分析与看板维护，不负责指派和验收。
+> 指派验收由另一个研发经理CC（cc_manager.sh 触发）负责，见 `assign-guide.md`。
 
 ## 工作目录
 
 `$HOME_DIR/projects/.github`
 
-## 职责
+## 职责边界
 
-1. **排程** — Plan → Todo，按Sprint目标和优先级排序
-2. **触发CC** — 查看空闲目录 → 启动编程CC（自动pre-task）→ In Progress
-3. **检查结果** — CC完成后确认是否push了feature分支，失败则恢复或标Fail
-4. **持续优化** — 总结高频中断原因，优化工作流
-5. **同步状态** — 重点功能完成后更新 `docs/status.md`
+| 职责 | 排程经理（本会话） | 指派验收经理（cc_manager.sh） |
+|------|-----------------|---------------------------|
+| 监控 Jump/Fail/E2E Fail | ✅ | ❌ |
+| 依赖分析、维护 PLAN.md | ✅ | ❌ |
+| Plan → Todo 状态流转 | ✅ | ❌ |
+| 读 PLAN.md 指派 CC | ❌ | ✅ |
+| 巡检 CC 进度、注入提示词 | ❌ | ✅ |
+| 阶段性验证报告 | ❌ | ✅ |
 
 ## Project #4 看板
 
@@ -23,246 +27,106 @@
 
 | Status | Option ID | 说明 |
 |--------|-----------|------|
-| Plan | `7beef254` | 新Issue默认 |
-| Todo | `69f47110` | 待开发 |
-| In Progress | `c1875ac0` | 开发中 |
-| Done | `c8f40892` | 已完成 |
-| Reject | `19b94094` | 已拒绝 |
-| pause | `434faed7` | 暂停 |
-| Fail | `8a0d3051` | 开发失败 |
-| E2E Fail | `efdab43b` | E2E测试失败 |
+| **Jump** | `03012e67` | **插队：最高优先，立即排程** |
+| Plan | `a07b604b` | 新Issue默认 |
+| Todo | `d14d5f74` | 待开发 |
+| In Progress | `4a591864` | 开发中 |
+| Done | `ba15b774` | 已完成 |
+| Reject | `5aef36fa` | 已拒绝 |
+| pause | `895c6027` | 暂停 |
+| Fail | `787b6892` | 开发失败 |
+| E2E Fail | `8d2164a2` | E2E测试失败 |
 
 ## 排序规则
 
-1. `E2E Fail` / `status:test-failed` 最优先
-2. `priority/P0` > P1 > P2 > P3
-3. Sprint重点模块优先
-4. 同模块内Phase编号升序
-5. `blocked-by` 依赖未关闭的排末尾
+1. **`Jump`** 插队状态最优先 — 立即分析并标 Todo + 写入 PLAN.md 队首
+2. `E2E Fail` / `Fail` — 检查是否需要重新排程（依赖未解决则移回 Todo）
+3. `priority/P0` > P1 > P2 > P3
+4. Sprint重点模块优先
+5. 同模块内Phase编号升序
+6. `blocked-by` 依赖未关闭的排末尾
 
-## 防重复规则（同模块串行）
-
-同一业务模块（如d3、crm、contract等）的Issue，如果涉及新建Entity/Mapper/Service，必须串行分配给同一个CC目录，等前一个完成merge后再分配下一个。原因：并行创建同名类会导致Spring Bean冲突，后端无法启动。
-
-判断标准：Issue标题/内容涉及同一数据库表或同一API路径前缀 → 视为同模块，串行排程。
-
-## 并发控制与目录锁
-
-- kimi1~kimi20 共20个外接目录，目前harness还不稳定，并发暂时控制到5个
-- 主目录不分配给编程CC（仅--prompt模式可用）
-- `run-cc.sh` 指派Issue时自动写入 `.cc-lock` 文件
-- Issue关闭后 `issue-sync.yml` 自动释放锁
-- `run-cc.sh` 返回exit 2时换下一个kimi目录
-
-### 锁生命周期与状态机
-
-```
-run-cc.sh --issue → .cc-lock state=RUNNING
-     ↓
-CC正常完成 → push+PR → CI → Issue关闭 → issue-sync.yml删除.cc-lock
-     ↓
-CC异常退出 → cron post-cc-check.sh(每5分钟)
-     ├── 有未提交改动 → commit+push → state=SAVED
-     ├── 无改动 → 回退Todo → 删除.cc-lock
-     └── push失败 → retry_count+1
-     ↓
-state=SAVED → 研发经理CC看到💾状态 → 重新触发CC继续（同Issue重入）
-     ↓
-retry_count≥10 → 标Fail+评论原因 → 删除.cc-lock
-```
-
-### .cc-lock字段
-
-```
-issue=1234
-module=backend
-dir=kimi1
-model=claude-sonnet-4-6
-effort=high
-state=RUNNING|SAVED|NO_CHANGES
-retry_count=0
-api_source=Token Pool Proxy
-```
-
-### 检查锁状态
-
-`check-cc-status.sh` 输出中包含锁状态：
-- 🔧 CC运行中（正常，等待完成）
-- ⏳ state=RUNNING 但CC不在（等待cron恢复，最多5分钟）
-- 💾 **state=SAVED**（代码已保存，需立即重新触发CC继续）
-- 🚨 超1小时（等待cron恢复）
-
-### SAVED状态处理
-
-看到💾状态时，立即重新触发CC（同Issue重入，retry_count保留）：
-```bash
-bash scripts/run-cc.sh --module <原module> --issue <N> --dir <原kimi目录> --effort <原effort>
-```
-run-cc.sh检测到同Issue重入：跳过checkout dev，直接在feature分支上继续。
-
-## Issue标签与启动方式
-
-| 标签 | module参数 | 实际cd目录 | Agent模式 |
-|------|-----------|-----------|----------|
-| `module:backend` | backend | `wande-play-<suffix>/backend` | 单Agent TDD |
-| `module:frontend` | frontend | `wande-play-<suffix>/frontend` | 单Agent TDD |
-| `module:pipeline` | pipeline | `wande-play-<suffix>/pipeline` | 单Agent |
-| `module:fullstack` | fullstack | `wande-play-<suffix>/`（根目录） | Agent Teams |
-
-## Effort 参数决策规则
-
-**研发经理根据Issue复杂度决定effort参数传递给启动脚本。不传时默认medium。**
-
-| effort | 适用场景 | 示例 |
-|--------|---------|------|
-| `low` | 纯文档/配置/样式变更、单文件小修改 | 修改README、调CSS、改环境变量 |
-| `medium` | **默认值**。常规CRUD、单模块功能开发、标准TDD任务 | Entity+Mapper+Service+Controller、页面组件开发 |
-| `high` | 多文件重构、复杂业务逻辑、涉及多表关联、调试困难的bug | 模块合并、权限体系重构、复杂查询优化 |
-| `max` | 架构级决策、大规模跨模块重构（**Claude Max订阅，默认Sonnet**） | 数据库迁移、模块拆分合并、全局架构调整 |
-
-> effort决定API来源：max→Claude Max订阅（真实模型，1M上下文），其余→Token Pool Proxy（模型重写+上下文截断）。
-> 同一CC会话不可混用两套API（thinking签名不兼容）。
-
-### 判断依据（按优先级）
-
-1. `priority/P0` + `type:refactor` 或 `size/L` → 建议 `high` 或 `max`
-2. `type:bugfix` + Issue描述涉及多文件/多表 → 建议 `high`
-3. 标准 `type:feature` + `size/S` 或 `size/M` → `medium`（默认，不传即可）
-4. `type:docs` 或 纯配置变更 → `low`
-5. `module:fullstack`（Agent Teams）→ 至少 `high`
-
-## 调度流程
-
-### 任务一：排程（Plan → Todo）
+## 任务一：监控优先队列（Jump / Fail / E2E Fail）
 
 ```bash
-cat docs/status.md
-bash scripts/query-project-issues.sh --repo play --status "Plan"
+export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
+
+# 检查 Jump 队列
+bash scripts/query-project-issues.sh --repo play --status "Jump" 2>/dev/null
+
+# 检查 Fail / E2E Fail
+bash scripts/query-project-issues.sh --repo play --status "Fail" 2>/dev/null
+bash scripts/query-project-issues.sh --repo play --status "E2E Fail" 2>/dev/null
+```
+
+**Jump 处理流程**：
+1. 下载 Issue 详情到 `/tmp/issue-cache/$N.json`
+2. 分析依赖，若无 blocker → 直接标 `Todo`，写入 PLAN.md 队首「下次指派时优先选择」第1位
+3. 发送通知：`curl POST http://localhost:9872/api/notify`
+
+**Fail / E2E Fail 处理流程**：
+1. 检查 Issue 是否 OPEN（CLOSED 的跳过）
+2. OPEN → 分析失败原因（看标签/评论）→ 若依赖已就绪重新标 Todo，写入 PLAN.md
+
+## 任务二：排程分析（Plan → Todo）
+
+```bash
+# 批量下载待分析 Issue
+mkdir -p /tmp/issue-cache
+for i in 1234 5678; do
+  gh issue view $i --repo WnadeyaowuOraganization/wande-play \
+    --json number,title,body,labels,state > /tmp/issue-cache/${i}.json
+done
+
+# 确认依赖已关闭
+gh issue view <dep_issue> --repo WnadeyaowuOraganization/wande-play --json state -q '.state'
+
+# 标 Todo
 bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 ```
 
-**决策清单**: 先筛Sprint重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
+**决策清单**：先筛 Sprint 重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
 
-**记录**: `sprints/<sprint>/<重点模块>/PLAN.md`
+**记录**：维护 `sprints/sprint-1/PLAN.md`，每次排程后更新「下次指派时优先选择」列表
 
-### 任务一b：详细设计（high/max Issue触发前）
+## 任务三：详细设计（effort=high/max 的复杂 Issue）
 
-effort=high或max的复杂Issue，触发编程CC前**必须**先输出详细设计文档：
+触发条件：Issue 含 `type:refactor`、`size/L`，或判断需要 effort=high/max 时。
 
 ```bash
-# 文件名规范: <功能名>-详细设计.md
 cat > docs/design/<功能名>-详细设计.md << 'EOF'
 # <功能名> 详细设计
-
-## 背景
-Issue #N — 一句话描述
-
-## 数据模型
-- 涉及表：wdpp_xxx（新建/修改）
-- 关键字段及类型
-
-## API设计
-- GET /wande/xxx/list — 分页查询
-- POST /wande/xxx — 新增
-
-## 关键流程
-1. 步骤1
-2. 步骤2
-
-## 技术选型
-- 选择A而非B的原因
-
-## 依赖关系
-- 前置：Issue #M 需先完成
-- 关联：xxx模块
+## 背景 / 数据模型 / API设计 / 关键流程 / 依赖关系
 EOF
-
-git add docs/design/
-git commit -m "docs(design): <功能名>详细设计"
-git push origin main
+git add docs/design/ && git commit -m "docs(design): <功能名>详细设计" && git push origin main
 ```
 
-**触发条件**：研发经理CC判断effort=high或max时，排程后、触发CC前执行。
-**目的**：编程CC按设计文档实现，降低返工率；后续可追溯原始设计意图。
+## 防重复规则（同模块串行）
 
-### 任务二：触发CC（Todo → In Progress）
-
-```bash
-# 1. 查看空闲目录
-bash scripts/check-cc-status.sh
-
-# 2. 读取排程计划
-cat sprints/<sprint>/<重点模块>/PLAN.md
-
-# 3. 更新状态
-bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
-
-# 4. 启动CC（自动执行pre-task: checkout dev → pull → 创建feature分支）
-bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
-# 示例: bash scripts/run-cc.sh --module backend --issue 2854 --dir kimi2 --effort high
-
-# 5. 记录 → sprints/<sprint>/<重点模块>/ISSUE_ASSIGN_HISTORY.md
-```
-
-### 任务三：检查结果
-
-```bash
-# 快速获取编程CC进度（读task.md前8行，~500 tokens）
-for dir in $HOME_DIR/projects/wande-play-kimi{1..20}; do
-  task=$(find "$dir" -path "*/issues/*/task.md" -newer "$dir/.git/index" 2>/dev/null | head -1)
-  [ -n "$task" ] && echo "=== $(basename $dir) ===" && head -8 "$task"
-done
-
-# 如需详细日志（仅在task.md信息不足时使用）
-cat $HOME_DIR/cc_scheduler/logs/<module>-<N>.log
-```
-
-CC未push feature分支 → 在原目录用自定义Prompt恢复。多次失败 → 标Fail。
-
-### 任务四：持续优化
-
-触发: 单日≥3个Done/Fail 或 连续2个相同中断。记录到 `sprints/<sprint>/RETROSPECTIVE.md`
-
-### 任务五：同步状态
-
-触发: 重点功能完成 / Sprint变更 / 看板大批量变化(≥10个)。
-
-```bash
-cd $HOME_DIR/projects/.github
-git add docs/status.md
-git commit -m "docs(status): <说明>"
-FRESH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
-git remote set-url origin https://x-access-token:${FRESH_TOKEN}@github.com/WnadeyaowuOraganization/.github.git
-git push origin main
-git remote set-url origin https://github.com/WnadeyaowuOraganization/.github.git
-```
+同一业务模块涉及新建 Entity/Mapper/Service 的 Issue，在 PLAN.md 中必须串行标注（前一个 CLOSED 后才标下一个 Todo）。
 
 ## 辅助脚本
 
 ```bash
-# 查看所有目录占用状态（触发CC前必须执行）
-bash scripts/check-cc-status.sh
-
-# 查询Issue（输出含 module/priority 列）
-bash scripts/query-project-issues.sh --repo <repo> --status "<STATUS>"
-
-# 更新Issue状态
-bash scripts/update-project-status.sh --repo <repo> --issue <N> --status "<STATUS>"
-
-# 启动编程CC
-bash scripts/run-cc.sh --module <module> --issue <Issue号> --dir <kimi目录> --effort <effort>
-
-# 自定义Prompt启动CC
-bash scripts/run-cc.sh --module <module> --prompt "<prompt>" [--dir <kimi目录>] [--effort <effort>]
-
-# GitHub Token
+bash scripts/query-project-issues.sh --repo play --status "Jump"     # 查 Jump 队列
+bash scripts/query-project-issues.sh --repo play --status "Plan"     # 查待排程
+bash scripts/update-project-status.sh --repo play --issue N --status "Todo"  # 标 Todo
 export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 ```
 
-## Sprint目标
-
-> **唯一真相源**: `docs/status.md`。每次排程前先读取。
+## 每轮结束后发送通知
 
 ```bash
-cat $HOME_DIR/projects/.github/docs/status.md
+curl -s -X POST http://localhost:9872/api/notify \
+  -H "Content-Type: application/json" \
+  -d "{\"session\":\"manager-scheduler\",\"message\":\"排程完成：新增X个Todo，Jump队列Y个\",\"type\":\"success\"}"
+```
+
+## Sprint 目标
+
+> 唯一真相源：`docs/status.md` + `sprints/sprint-1/PLAN.md`
+
+```bash
+cat $HOME_DIR/projects/.github/docs/status.md | head -30
+cat $HOME_DIR/projects/.github/sprints/sprint-1/PLAN.md | head -50
 ```

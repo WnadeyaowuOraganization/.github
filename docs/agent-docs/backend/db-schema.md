@@ -32,9 +32,7 @@ CREATE TABLE IF NOT EXISTS supplier_ratings (
 - SQL 文件中**不需要**指定 schema 前缀（如 `wande_ai.`），子目录名即目标数据库，CI/CD 会自动连接对应数据库执行
 - **CI/CD 自动执行机制**：push 到 main 后，GitHub Actions 会将 `script/sql/update/` 下各子目录的 SQL 文件同步到 Lightsail，由 `run-sql-updates.sh` 脚本按文件名日期顺序执行。已执行过的文件会记录在各数据库的 `sql_migrations_history` 表中自动跳过，保证幂等
 
-### 第 2 步：同步到初始化脚本
-
-将新增的表 DDL 同步追加到 `script/sql/wande-ai-pg.sql`（万德业务表）末尾，保持初始化脚本与增量脚本一致。
+### 第 2 步：单元测试自动加载（无需手动同步）
 
 > ⚠️ **2026-04-07 起单元测试改用 Docker PostgreSQL，不再需要维护 H2 schema**
 >
@@ -47,7 +45,7 @@ CREATE TABLE IF NOT EXISTS supplier_ratings (
 > 2. 加载 `test-base-schema.pg.sql`（dev PG snapshot 冻结快照，含 368 张表）
 > 3. 加载 `update/wande_ai/` 下不在 `test-base-applied.txt` 里的脚本（即你新加的）
 >
-> **禁止编辑**：`test/resources/test-base-schema.pg.sql`、`test/resources/test-base-applied.txt`、`script/sql/wande-ai-pg.sql` 中的旧表定义。
+> **禁止编辑**：`test/resources/test-base-schema.pg.sql`、`test/resources/test-base-applied.txt`、`script/sql/wande-ai-pg.sql`（pg_dump 全量初始化脚本，由 DBA 集中维护，编程 CC 不得动）。
 >
 > 验证：`cd backend && mvn -pl ruoyi-modules-api/wande-ai-api -am install -DskipTests && mvn -pl ruoyi-modules/wande-ai test`
 

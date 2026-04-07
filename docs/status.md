@@ -192,93 +192,94 @@
 
 ```
 Issue创建
-  │ auto-add-to-project.yml
+  │ issue-sync.yml (opened) → 加入Project#4 → [Plan]
   ▼
 [Plan] ──── 排程经理CC ────▶ [Todo]
-                                    │
-                                    ▼ run-cc.sh 触发编程CC
-                                [In Progress]
-                                    │
-                    ┌───────────────┤
-                    ▼               ▼
-              单元测试(TDD)    编译检查
-              mvn test /       mvn package /
-              vitest           pnpm build
-                    │               │
-                    ▼               ▼
-               ❌ 失败?         ❌ 失败?
-               │  是            │  是
-               ▼               ▼
-            编程CC自行修复    编程CC自行修复
-            （不提交PR）      （不提交PR）
-                    │               │
-                    └──── 全通过 ────┘
-                           │
-                           ▼
-                    push feature分支
-                    gh pr create --base dev
-                           │
-    ═══════════════════════╪═══════════════════════
-    CI层 (pr-test.yml)     │  PR创建/更新自动触发
-    ═══════════════════════╪═══════════════════════
-                           ▼
-                CI专用环境构建(:6041/:8084)
-                           │
-                    ┌──────┴──────┐
-                    ▼             ▼
-               构建成功       ❌ 构建失败
-                    │             │
-                    ▼             ▼ 兜底逻辑
-             Playwright E2E      评论PR/Issue
-             tests/backend/      + status:test-failed
-             tests/front/        + [E2E Fail]
-                    │
-              ┌─────┴─────┐
-              ▼           ▼
-           ✅ 通过     ❌ 失败
-              │           │ e2e-result-handler.py
-              ▼           ▼
-         approve PR    评论PR失败详情
-         squash merge  评论Issue失败详情
-         [Done]        + status:test-failed
-              │        + [E2E Fail]
-              ▼
-    ═══════════════════════════════════════════════
+            依赖分析           │
+            维护PLAN.md        │ 研发经理CC
+                               │ run-cc.sh --module --issue --dir --effort
+                               ▼
+                           [In Progress]
+                               │
+                               ▼ 编程CC（tmux会话 cc-wande-play-kimiN-ISSUE）
+                    ┌──────────┴──────────┐
+                    ▼                     ▼
+              单元测试(TDD)          编译检查
+              mvn test / vitest      mvn package / pnpm build
+                    │                     │
+                    ▼                     ▼
+               ❌ 失败 → 自行修复    ❌ 失败 → 自行修复
+                    │                     │
+                    └──────── 全通过 ──────┘
+                                  │
+                                  ▼
+                           push feature分支
+                           gh pr create --base dev
+                           CC轮询等待merge（不主动退出）
+                                  │
+    ══════════════════════════════╪══════════════════════════════
+    CI层 (pr-test.yml)            │  PR创建/更新自动触发
+    ══════════════════════════════╪══════════════════════════════
+                                  ▼
+                      CI专用环境构建(:6041/:8084)
+                                  │
+                         ┌────────┴────────┐
+                         ▼                 ▼
+                    构建成功          ❌ 构建失败
+                         │                 │ inject-cc-prompt.sh
+                         ▼                 ▼ 注入修复提示词到活跃CC
+                   Playwright E2E     + [E2E Fail]
+                   tests/backend/
+                   tests/front/
+                         │
+                   ┌─────┴─────┐
+                   ▼           ▼
+                ✅ 通过     ❌ 失败
+                   │           │ inject-cc-prompt.sh
+                   ▼           ▼ 注入修复提示词到活跃CC
+              approve PR    + status:test-failed
+              squash merge  + [E2E Fail]
+                   │
+    ══════════════════════════════════════════════════════════════
     CD层 (build-deploy-dev.yml)  merge到dev触发
-    ═══════════════════════════════════════════════
-              │
-              ▼
-         后端: mvn package → 部署 → 健康检查
-         前端: pnpm build → rsync → nginx reload
-              │
-              ▼
-         Dev环境更新完成(:6040/:8083)
-              │
-    ═══════════════════════════════════════════════
-    Smoke探活 (e2e_smoke.sh)  cron每30分钟
-    ═══════════════════════════════════════════════
-              │
-              ▼
-         curl健康检查 + Playwright smoke
-              │
-              ├── ✅ 通过 → 静默
-              └── ❌ 失败 → e2e-result-handler.py
-                            自动创建Issue
-                            + status:test-failed
-                            + [E2E Fail]
-              │
-    ═══════════════════════════════════════════════
-    全量回归 (e2e_top_tier.sh)  cron每6小时, AI驱动
-    ═══════════════════════════════════════════════
-              │
-              ▼
-         regression/ + 全部smoke + API
-              │
-              ├── ✅ 通过 → 记录日志
-              └── ❌ 失败 → AI智能创建Issue
-                            (判断模块+写描述)
-                            + e2e-result-handler.py
-                            + [E2E Fail]
+    ══════════════════════════════════════════════════════════════
+                   │
+                   ▼
+              后端: mvn package → 部署 → 健康检查
+              前端: pnpm build → rsync → nginx reload
+                   │
+                   ├── ❌ 部署失败 → inject-cc-prompt.sh 注入修复提示词
+                   ▼
+              Dev环境更新完成(:6040/:8083)
+                   │
+                   ├─► cc-lock-manager.yml → release-cc-lock.sh
+                   │                         (kill tmux session + rm .cc-lock)
+                   │
+                   └─► issue-sync.yml (PR merged → close Issue)
+                                  ▼
+                               [Done]
+                   │
+    ══════════════════════════════════════════════════════════════
+    Smoke探活 (e2e_smoke.sh)  cron每30分钟，零AI消耗
+    ══════════════════════════════════════════════════════════════
+                   │
+                   ▼
+              curl健康检查 + Playwright smoke
+                   │
+                   ├── ✅ 通过 → 静默
+                   └── ❌ 失败 → e2e-result-handler.py
+                                 自动创建Issue + [E2E Fail]
+                   │
+    ══════════════════════════════════════════════════════════════
+    全量回归 (e2e_top_tier.sh)  cron每6小时，AI驱动
+    ══════════════════════════════════════════════════════════════
+                   │
+                   ▼
+              regression/ + 全部smoke + API
+                   │
+                   ├── ✅ 通过 → 记录日志
+                   └── ❌ 失败 → AI智能创建Issue（判断模块+写描述）
+                                 + e2e-result-handler.py + [E2E Fail]
 ```
 
 ### 测试层级总览

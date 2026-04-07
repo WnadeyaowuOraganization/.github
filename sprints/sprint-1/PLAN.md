@@ -470,7 +470,6 @@
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
 | kimi10 | #2109 | T1 | backend | 质保售后 售后工单API |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
-| kimi16 | #2461 | T1 | backend | 合同管理建表 |
 | kimi17 | #2107 | T1 | backend | 质保售后 备件管理API |
 
 ---
@@ -481,7 +480,7 @@
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |
 |---------|-------|------|------|------|---------|
-| — | #1533 | — | backend | 矿场反馈统计API | Todo |
+| — | ~~#1533~~ | — | backend | ~~矿场反馈统计API~~ | ~~Done~~ |
 | — | #2405 | — | backend | 关系加分逻辑 | Todo |
 | — | #2406 | — | pipeline | 信号衰减定时任务 | Todo |
 | — | ~~#2046~~ | — | pipeline | ~~AI生成Phase4 投标知识库增强~~ | ~~Done~~ |
@@ -492,7 +491,7 @@
 | kimi16 | ~~#1532~~ | — | backend | ~~矿场增强[7/23] 转化漏斗统计API~~ | ~~Done~~ |
 | kimi19 | ~~#2362~~ | — | frontend | ~~项目中心Phase9 详情全景页~~ | ~~Done~~ |
 | kimi11 | ~~#1994~~ | — | backend | ~~项目中心Phase15 风险事件API~~ | ~~Done~~ |
-| kimi16 | #2461 | T1 | backend | 合同管理建表 | In Progress |
+| kimi16 | ~~#2461~~ | T1 | backend | ~~合同管理建表~~ | ~~Done~~ |
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | In Progress |
 | kimi2 | ~~#1903~~ | T1 | backend | ~~D3钢架自动选型规则~~ PR#3245 | ~~Done~~ |
 | kimi3 | ~~#1531~~ | T1 | backend | ~~可赢性评分模型(WinProb)~~ PR#3240 | ~~Done~~ |

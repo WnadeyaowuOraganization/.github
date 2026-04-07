@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 14:20 | CC **16/15在跑**（研发经理多开1个），全部活跃
-> 补标Done：#2384（执行管理流程配置页面，Issue CLOSED）
-> 🎉 E2E Fail清零！#2086已被kimi3接手运行 | 企微#1557已启动(kimi14)
+> 更新时间：2026-04-07 14:30 | CC **16/15在跑**，三队列持续清零
+> kimi13切换→#1724（设备台账页面，#1724解锁因#2110已Done）
+> ⚠️ kimi10(#2452)可能卡住5分钟，研发经理关注
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -457,7 +457,7 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 14:14 UTC | **15/15** | kimi13/#2384重启(清旧锁)、kimi14→#1557(企微通讯录同步)
+> 更新：2026-04-07 14:24 UTC | **15/15** | kimi13→#1724(设备台账，#2384已CLOSED取消)、kimi14→#1557(企微通讯录同步)
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -473,7 +473,7 @@
 | kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38] |
 | kimi11 | #1560 | T1 | backend | D3材质标注[1/4] 构件-材料绑定规则Service |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
-| kimi13 | #2384 | T1 | frontend | 执行管理 流程配置可视化页面 |
+| kimi13 | #1724 | T1 | frontend | 质保售后 设备台账页面 |
 | kimi14 | #1557 | T1 | backend | 企微打通[6/17] 通讯录同步 |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 |
 | kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API |
@@ -540,7 +540,7 @@
 | kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API | In Progress |
 | kimi4 | #2055 | T1 | backend | D3参数化 扣件管理Web后台 | In Progress |
 | kimi8 | #2042 | T1 | backend | D3优化[3/10] 局部替换+增量重算 | In Progress |
-| kimi13 | #2384 | T1 | frontend | 执行管理 流程配置可视化页面 | In Progress |
+| kimi13 | #1724 | T1 | frontend | 质保售后 设备台账页面 | In Progress |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API | In Progress |
 | kimi6 | #2065 | T1 | backend | D3市场配置预设（5个市场） | In Progress |
 | kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API（重启） | In Progress |

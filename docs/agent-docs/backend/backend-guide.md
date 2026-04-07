@@ -28,7 +28,7 @@
 6. **编译检查必须通过** — 提交前 `mvn clean package -Pprod -Dmaven.test.skip=true` 必须成功
 7. **只push feature分支** — 创建feature->dev的PR
 8. **创建新类前必须查重** — 已有同名类则复用扩展
-9. **禁止直接编辑 `schema.sql`** — 所有新表必须放入 `schemas/issue_XXXX.sql`
+9. **禁止直接编辑 `wande-ai-pg.sql` 和 `test-base-schema.pg.sql`** — 所有新表必须放入 `backend/script/sql/update/wande_ai/`
 
 ## TDD开发流程
 
@@ -142,7 +142,7 @@ public class XxxController {
 
 - 文件位置：`src/test/java/` 对应包下
 - 命名：`XxxServiceTest.java`
-- 继承：`BaseServiceTest`（自动配置H2内存数据库 + @Transactional回滚）
+- 继承：`BaseServiceTest`（自动配置 PostgreSQL 测试容器 + @Transactional 回滚）
 - 最少覆盖：创建、查询、更新、删除（针对Service层核心方法）
 
 ### 测试策略
@@ -179,34 +179,16 @@ mvn test
 
 ## 数据库变更管理规范
 
+> **2026-04-07 起单元测试由 H2 改为 Docker PostgreSQL**，CC 只需维护一套 PG 增量脚本。
+
 ### 新增数据库表
 
-#### 步骤 1：创建 H2 测试脚本（必须先做）
-
-**位置**: `backend/ruoyi-modules/wande-ai/src/test/resources/schemas/`
-**文件名**: `issue_XXXX.sql`（XXXX 是 Issue 号）
-
-```sql
--- H2 测试 Schema - Issue #XXXX
-CREATE TABLE IF NOT EXISTS wdpp_xxx (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(200) NOT NULL,
-    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    create_by BIGINT,
-    update_by BIGINT,
-    create_dept BIGINT
-);
-```
-
-#### 步骤 2：创建 PostgreSQL 增量脚本
-
 **位置**: `backend/script/sql/update/wande_ai/`
-**文件名**: `create-<表名>-issue-XXXX.sql`
+**文件名**: `create-<表名>-issue-XXXX.sql` 或 `V<日期>__<描述>.sql`
 
 ```sql
 -- 变更说明：创建 XXX 表 - Issue #XXXX
--- 变更日期：2026-04-05
+-- 变更日期：2026-04-08
 
 CREATE TABLE IF NOT EXISTS wdpp_xxx (
     id BIGSERIAL PRIMARY KEY,
@@ -215,38 +197,36 @@ CREATE TABLE IF NOT EXISTS wdpp_xxx (
     update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     create_by BIGINT,
     update_by BIGINT,
-    create_dept BIGINT
+    create_dept BIGINT,
+    deleted INTEGER DEFAULT 0
 );
+
+CREATE INDEX IF NOT EXISTS idx_wdpp_xxx_name ON wdpp_xxx(name);
 ```
-
-#### 步骤 4：验证
-
-```bash
-cd backend && mvn test -pl ruoyi-modules/wande-ai
-```
-
-### PostgreSQL -> H2 语法转换
-
-| PostgreSQL | H2 |
-|------------|-----|
-| `BIGSERIAL` | `BIGINT AUTO_INCREMENT` |
-| `SERIAL` | `INT AUTO_INCREMENT` |
-| `TEXT` | `CLOB` |
-| `JSONB` | `VARCHAR(4000)` |
 
 ### 修改现有表
-
-H2脚本文件名: `_alter_issue_XXXX.sql`（alter 前缀）
 
 ```sql
 ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 ```
 
+### 验证
+
+```bash
+cd backend && mvn test -pl ruoyi-modules/wande-ai
+```
+
+测试启动时会自动：
+1. DROP/CREATE PG schema
+2. 加载 `test-base-schema.pg.sql`（dev PG snapshot 冻结快照）
+3. 加载所有不在 `test-base-applied.txt` 中的 update 脚本（你刚加的）
+
 ### 数据库变更检查清单
 
-- [ ] 创建了 `schemas/issue_XXXX.sql`（无需修改任何配置，测试启动时自动加载）
-- [ ] 创建了增量脚本
-- [ ] 没有直接编辑 `schema.sql`
+- [ ] 在 `backend/script/sql/update/wande_ai/` 添加了 PG 增量脚本
+- [ ] 用了 `IF NOT EXISTS` 保证幂等
+- [ ] 没有直接编辑 `wande-ai-pg.sql` 或 `test-base-schema.pg.sql`
+- [ ] `mvn test -pl ruoyi-modules/wande-ai` 通过
 
 ## API集成测试
 
@@ -256,12 +236,23 @@ ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 
 ## 详细文档（按需阅读）
 
+### 共享文档（前后端通用）
+
+| 文档 | 内容 | 何时读取 |
+|------|------|---------|
+| [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范、环境信息、通用开发规则 | 首次接触项目时 |
+| [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
+| [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据库字段映射时 |
+
+### 后端专属文档
+
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
 | [**common-pitfalls.md**](/home/ubuntu/projects/.github/docs/agent-docs/backend/common-pitfalls.md) | **⚠️ 必读：高频错误与规范，CI 曾踩过的坑** | **开始每个 Issue 前** |
 | [architecture.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
 | [conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
-| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/db-schema.md) | 数据库变更管理、增量SQL流程 | 涉及数据库变更时 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/db-schema.md) | 数据库变更管理、增量SQL、H2测试Schema | 涉及数据库变更时 |
 | [testing.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
 | [workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
 | [menu-config.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/menu-config.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |

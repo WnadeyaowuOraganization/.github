@@ -19,7 +19,7 @@
 
 - 文件位置：`src/test/java/` 对应包下
 - 命名：`XxxServiceTest.java`
-- 继承：`BaseServiceTest`（自动配置 H2 内存数据库 + @Transactional 回滚）
+- 继承：`BaseServiceTest`（自动配置 PostgreSQL 测试容器 + @Transactional 回滚）
 - 最少覆盖：创建、查询、更新、删除（针对 Service 层核心方法）
 - 参考模板：`src/test/java/org/ruoyi/wande/controller/TenderDataControllerTest.java`
 - 工具类：`TestDatabaseHelper` 可用于手动数据清理

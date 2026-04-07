@@ -1,17 +1,20 @@
 #!/bin/bash
-HOME_DIR="${HOME_DIR:-/home/ubuntu}"
-# post-cc-check.sh — cron定时巡检：检测CC异常退出并恢复
-# 用法: cron每5分钟执行
-# 逻辑: 扫描所有.cc-lock，无claude进程则恢复（commit→push→PR），10次重试后标Fail
+# post-cc-check.sh — CC保活巡检：检测CC进程异常退出并恢复
+# cron每5分钟执行
+# 策略：
+#   session存在+claude运行 → 健康，跳过
+#   session存在+claude不在 → 注入恢复提示词（CC自行继续）
+#   session不存在（真崩溃）→ run-cc.sh重启（SAVED状态重入，feature分支继续）
+# 注意：任何路径都不kill session，只有release-cc-lock.sh在部署成功后kill
 
+HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-MAX_RETRY=10
 
 if [ -z "$GH_TOKEN" ]; then
   export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
 fi
 
-log() { echo "[recovery] $1"; }
+log() { echo "[cc-check] $1"; }
 
 for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   [ ! -f "$dir/.cc-lock" ] && continue
@@ -19,7 +22,6 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   ISSUE=$(grep "^issue=" "$dir/.cc-lock" | cut -d= -f2)
   MODULE=$(grep "^module=" "$dir/.cc-lock" | cut -d= -f2)
   DIR_SUFFIX=$(grep "^dir=" "$dir/.cc-lock" | cut -d= -f2)
-  MODEL=$(grep "^model=" "$dir/.cc-lock" | cut -d= -f2)
   EFFORT=$(grep "^effort=" "$dir/.cc-lock" | cut -d= -f2)
   RETRY=$(grep "^retry_count=" "$dir/.cc-lock" | cut -d= -f2)
   RETRY=${RETRY:-0}
@@ -27,31 +29,27 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
 
   [ -z "$ISSUE" ] && continue
 
-  # 检查是否有claude进程在该目录运行
-  # Session命名格式: cc-{DIRNAME}-{ISSUE}（DIRNAME=basename目录名，如wande-play-kimi11）
-  HAS_PROCESS=false
-  EXPECTED_SESSION="cc-${DIRNAME}-${ISSUE}"
-  pane_pid=$(tmux list-panes -t "$EXPECTED_SESSION" -F "#{pane_pid}" 2>/dev/null | head -1)
-  if [ -n "$pane_pid" ] && ps --ppid "$pane_pid" -o comm= 2>/dev/null | grep -q "claude"; then
-    HAS_PROCESS=true
-  fi
+  SESSION="cc-${DIRNAME}-${ISSUE}"
 
-  [ "$HAS_PROCESS" = "true" ] && continue
+  # === 场景1：session存在，检查claude进程 ===
+  if tmux has-session -t "$SESSION" 2>/dev/null; then
+    pane_pid=$(tmux list-panes -t "$SESSION" -F "#{pane_pid}" 2>/dev/null | head -1)
+    if [ -n "$pane_pid" ] && ps --ppid "$pane_pid" -o comm= 2>/dev/null | grep -q "claude"; then
+      # 健康运行中
+      continue
+    fi
 
-  # === 无进程，检查是否已有 open PR（PR合并前CC应持续等待，由CI释放锁）===
-  FEATURE_BRANCH="feature-Issue-${ISSUE}"
-  OPEN_PR=$(gh pr list --repo WnadeyaowuOraganization/wande-play \
-    --head "$FEATURE_BRANCH" --base dev --state open \
-    --json number --jq '.[0].number' 2>/dev/null || echo "")
-  if [ -n "$OPEN_PR" ]; then
-    log "$DIRNAME Issue#$ISSUE: PR #$OPEN_PR 已开启，等待CI合并后释放锁，跳过恢复"
+    # claude进程没了，session还在 → 注入恢复提示词
+    log "$DIRNAME Issue#$ISSUE: claude进程不在，注入恢复提示词"
+    RECOVERY_PROMPT="检测到你的进程意外退出后恢复。请读取 ./issues/issue-${ISSUE}/task.md 确认当前进度，然后继续完成剩余工作。如果PR已创建，执行轮询等待合并的步骤。"
+    tmux send-keys -t "$SESSION" "$RECOVERY_PROMPT" Enter
     continue
   fi
 
-  # === 无进程 + 无open PR，需要恢复 ===
-  log "$DIRNAME Issue#$ISSUE: CC不在运行，检查产出 (retry=$RETRY)"
+  # === 场景2：session不存在（真正崩溃）→ 重启 ===
+  log "$DIRNAME Issue#$ISSUE: session不存在，准备重启 (retry=$RETRY)"
 
-  # 重试次数检查
+  MAX_RETRY=10
   if [ "$RETRY" -ge "$MAX_RETRY" ]; then
     log "$DIRNAME Issue#$ISSUE: 已重试${MAX_RETRY}次，标记Fail"
     bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$ISSUE" --status "Fail" 2>/dev/null
@@ -62,42 +60,16 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
     continue
   fi
 
-  cd "$dir"
+  # 更新重试次数
   NEW_RETRY=$((RETRY + 1))
-
-  # Step 1: 有未commit改动？自动commit
-  UNSTAGED=$(git diff --name-only 2>/dev/null | wc -l)
-  UNTRACKED=$(git ls-files --others --exclude-standard 2>/dev/null | grep -cv "^issues/" 2>/dev/null)
-
-  if [ "$((UNSTAGED + UNTRACKED))" -gt 0 ]; then
-    log "$DIRNAME Issue#$ISSUE: ${UNSTAGED}个未暂存+${UNTRACKED}个未跟踪，自动commit"
-    git add -A 2>/dev/null
-    git commit -m "feat: Issue #${ISSUE} 自动提交（CC退出恢复 retry=${NEW_RETRY}）" 2>/dev/null
-  fi
-
-  # Step 2: 检查vs dev有没有diff
-  DIFF_COUNT=$(git diff --stat dev..HEAD 2>/dev/null | grep "files\? changed" | grep -oP "\d+" | head -1)
-
-  if [ "${DIFF_COUNT:-0}" -eq 0 ]; then
-    log "$DIRNAME Issue#$ISSUE: 无代码变更，state=NO_CHANGES"
-    sed -i "s/^state=.*/state=NO_CHANGES/" "$dir/.cc-lock"
-    bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$ISSUE" --status "Todo" 2>/dev/null
-    rm -f "$dir/.cc-lock"
-    git checkout dev 2>/dev/null && git branch -D "feature-Issue-${ISSUE}" 2>/dev/null
-    continue
-  fi
-
-  # Step 3: push（保证代码不丢失）
-  git push origin "feature-Issue-${ISSUE}" 2>/dev/null || \
-    git push --force-with-lease origin "feature-Issue-${ISSUE}" 2>/dev/null
-
-  # Step 4: 更新锁状态+重试次数
-  sed -i "s/^state=.*/state=SAVED/" "$dir/.cc-lock"
   sed -i "s/^retry_count=.*/retry_count=${NEW_RETRY}/" "$dir/.cc-lock"
 
-  if [ $? -eq 0 ]; then
-    log "$DIRNAME Issue#$ISSUE: ✅ state=SAVED, retry=${NEW_RETRY}"
-  else
-    log "$DIRNAME Issue#$ISSUE: push失败, retry=${NEW_RETRY}"
-  fi
+  # run-cc.sh检测到锁存在且同Issue → SAVED状态重入，在feature分支继续
+  bash "$SCRIPT_DIR/run-cc.sh" \
+    --module "$MODULE" \
+    --issue "$ISSUE" \
+    --dir "$DIR_SUFFIX" \
+    --effort "${EFFORT:-medium}" 2>/dev/null &
+
+  log "$DIRNAME Issue#$ISSUE: 已触发重启 (retry=${NEW_RETRY})"
 done

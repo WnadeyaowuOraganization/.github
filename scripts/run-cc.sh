@@ -124,7 +124,7 @@ if [ "$MODE" = "issue" ]; then
   cd "$BASE_DIR"
 
   if [ "$LOCK_STATE" = "SAVED" ]; then
-    # SAVED状态重入：cron已commit+push，直接checkout feature分支继续
+    # SAVED状态重入：session崩溃后post-cc-check触发重启，直接checkout feature分支继续
     echo "$(date): SAVED状态重入，checkout feature-Issue-${ISSUE}"
     git checkout "feature-Issue-${ISSUE}" 2>/dev/null
   else

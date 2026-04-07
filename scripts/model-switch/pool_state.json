@@ -6,13 +6,6 @@
     "error_code": "permission_error",
     "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
   },
-  "kimi1": {
-    "cooldown_until": "2026-04-08T11:52:18.821147+08:00",
-    "marked_at": "2026-04-07T11:52:18.821147+08:00",
-    "error_type": "balance_exhausted",
-    "error_code": "permission_error",
-    "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
-  },
   "zhipu_max_1": {
     "cooldown_until": "2026-04-13T10:00:03+08:00",
     "marked_at": "2026-04-07T17:41:28.072788+08:00",

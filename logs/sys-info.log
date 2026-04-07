@@ -431,3 +431,73 @@
 2026-04-07 09:52:26 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
 2026-04-07 09:52:26 [main] INFO  org.jboss.threads - JBoss Threads version 3.5.0.Final
 2026-04-07 09:53:01 [XNIO-1 task-2] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 10:01:58 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-07 10:02:06 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2026-04-07 10:02:06 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2026-04-07 10:02:06 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2026-04-07 10:02:07 [main] INFO  com.zaxxer.hikari.pool.HikariPool - master - Added connection org.postgresql.jdbc.PgConnection@3dbf2603
+2026-04-07 10:02:07 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2026-04-07 10:02:07 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Starting...
+2026-04-07 10:02:07 [main] INFO  com.zaxxer.hikari.pool.HikariPool - wande - Added connection org.postgresql.jdbc.PgConnection@4775d6d0
+2026-04-07 10:02:07 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Start completed.
+2026-04-07 10:02:07 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2026-04-07 10:02:07 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [wande] success
+2026-04-07 10:02:07 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2026-04-07 10:02:12 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2026-04-07 10:02:12 [redisson-netty-2-6] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:02:12 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:02:31 [main] INFO  o.n.driver.internal.DriverFactory - Direct driver instance 421325835 created for server address localhost:7687
+2026-04-07 10:02:32 [main] INFO  io.undertow - starting server: Undertow - 2.3.18.Final
+2026-04-07 10:02:32 [main] INFO  org.xnio - XNIO version 3.8.16.Final
+2026-04-07 10:02:32 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
+2026-04-07 10:02:32 [main] INFO  org.jboss.threads - JBoss Threads version 3.5.0.Final
+2026-04-07 10:03:08 [XNIO-1 task-2] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 10:10:18 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-07 10:10:26 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2026-04-07 10:10:27 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2026-04-07 10:10:27 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2026-04-07 10:10:27 [main] INFO  com.zaxxer.hikari.pool.HikariPool - master - Added connection org.postgresql.jdbc.PgConnection@2f024025
+2026-04-07 10:10:27 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2026-04-07 10:10:27 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Starting...
+2026-04-07 10:10:27 [main] INFO  com.zaxxer.hikari.pool.HikariPool - wande - Added connection org.postgresql.jdbc.PgConnection@7acf609d
+2026-04-07 10:10:27 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Start completed.
+2026-04-07 10:10:27 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2026-04-07 10:10:27 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [wande] success
+2026-04-07 10:10:27 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2026-04-07 10:10:32 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2026-04-07 10:10:32 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:10:32 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:10:50 [main] INFO  o.n.driver.internal.DriverFactory - Direct driver instance 1310435226 created for server address localhost:7687
+2026-04-07 10:10:50 [main] INFO  io.undertow - starting server: Undertow - 2.3.18.Final
+2026-04-07 10:10:50 [main] INFO  org.xnio - XNIO version 3.8.16.Final
+2026-04-07 10:10:50 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
+2026-04-07 10:10:50 [main] INFO  org.jboss.threads - JBoss Threads version 3.5.0.Final
+2026-04-07 10:10:54 [XNIO-1 task-2] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 10:30:17 [SpringApplicationShutdownHook] INFO  io.undertow - stopping server: Undertow - 2.3.18.Final
+2026-04-07 10:30:17 [SpringApplicationShutdownHook] INFO  io.undertow.servlet - Destroying Spring FrameworkServlet 'dispatcherServlet'
+2026-04-07 10:30:17 [SpringApplicationShutdownHook] INFO  o.n.driver.internal.InternalDriver - Closing driver instance 1310435226
+2026-04-07 10:30:17 [SpringApplicationShutdownHook] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource start closing ....
+2026-04-07 10:38:06 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-07 10:38:15 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2026-04-07 10:38:15 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2026-04-07 10:38:15 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2026-04-07 10:38:16 [main] INFO  com.zaxxer.hikari.pool.HikariPool - master - Added connection org.postgresql.jdbc.PgConnection@eae8dd
+2026-04-07 10:38:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2026-04-07 10:38:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Starting...
+2026-04-07 10:38:16 [main] INFO  com.zaxxer.hikari.pool.HikariPool - wande - Added connection org.postgresql.jdbc.PgConnection@508835bc
+2026-04-07 10:38:16 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Start completed.
+2026-04-07 10:38:16 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2026-04-07 10:38:16 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [wande] success
+2026-04-07 10:38:16 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2026-04-07 10:38:22 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2026-04-07 10:38:22 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:38:22 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:38:42 [main] INFO  o.n.driver.internal.DriverFactory - Direct driver instance 1753841560 created for server address localhost:7687
+2026-04-07 10:38:43 [main] INFO  io.undertow - starting server: Undertow - 2.3.18.Final
+2026-04-07 10:38:43 [main] INFO  org.xnio - XNIO version 3.8.16.Final
+2026-04-07 10:38:43 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
+2026-04-07 10:38:43 [main] INFO  org.jboss.threads - JBoss Threads version 3.5.0.Final
+2026-04-07 10:38:55 [XNIO-1 task-2] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 10:43:11 [SpringApplicationShutdownHook] INFO  io.undertow - stopping server: Undertow - 2.3.18.Final
+2026-04-07 10:43:11 [SpringApplicationShutdownHook] INFO  o.n.driver.internal.InternalDriver - Closing driver instance 1753841560
+2026-04-07 10:43:11 [SpringApplicationShutdownHook] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource start closing ....

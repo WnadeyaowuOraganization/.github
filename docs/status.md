@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-06 by 研发经理CC
+> ⏰ 最后更新：2026-04-07 by 研发经理CC
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 41个模块·1182个Issue全景索引
 ---
 ## 🎯 Sprint 计划
@@ -161,6 +161,14 @@
 | D53 | 04-06 | ✅ | post-cc-check.sh进程检测Bug修复 + session命名统一 | **Bug根因**：`HAS_PROCESS`检测用`DIRNAME=wande-play-kimi11`匹配session名`cc-kimi11-backend-1633`，grep永远不匹配→所有CC误判无进程→每5分钟retry+1→触发retry=10标Fail，CC实际正在运行。**修复**：session命名统一为`cc-{basename(BASE_DIR)}-{issue}`（如`cc-wande-play-kimi11-1633`），post-cc-check.sh改为精确匹配`cc-{DIRNAME}-{ISSUE}`，无需读DIR_SUFFIX字段。**check-cc-status.sh**：session解析从`cc-wande-play-kimiN-1234`提取kimiN和issue。**Claude Office兼容**：`/log`接口`rsplit("-",1)`提取dir_name=`wande-play-kimi11`→`_find_jsonl`按最近修改匹配JSONL，功能不受影响 | 伟平 |
 | D55 | 04-07 | ✅ | CC目录锁完整生命周期重构 | **CC不退出**：issue-workflow.md改为PR创建后轮询等待合并，不主动退出。**锁释放**：新增release-cc-lock.sh（kill session+rm .cc-lock+checkout dev），唯一出口。**cc-lock-manager.yml**：双触发路径——①workflow_run(build-deploy-dev完成后，不受cancel-in-progress影响)→部署成功释放锁/失败注入提示；②pull_request merged兜底（仅改issues/docs等被paths-ignore过滤时dev CI不触发，靠PR事件直接释放）。**CI注入**：pr-test.yml/build-deploy-dev.yml失败时改为inject-cc-prompt.sh直接注入活跃CC会话，不再创建新Issue。**post-cc-check.sh简化**：去掉commit/push/SAVED状态机，只做保活——进程消失注入恢复提示词，session消失重启run-cc.sh。**全量同步**：所有kimi1-20目录+main分支同步 | 伟平 |
 | D54 | 04-07 | ✅ | Sprint-1矿场优先级提升：矿场P0(5个)+投标引擎(1个)+矿场增量同步(1个)→Todo | Sprint-1矿场完成率0%(19个Issue全部未启动)，算力被D3吸收。矿场P0的5个Issue(#1534/#1535/#2256/#2257/#2407)+投标引擎#2206(P0)+#2028(P1)看板状态从Plan→Todo，确保研发经理CC能排程。矿场P0优先于D3剩余Todo | 吴耀 |
+| D56 | 04-06 | ✅ | Claude Office Safari/iPhone兼容性修复 | **Safari相对URL**：fetch从`window.location.origin+'/api/inject'`改为`'api/inject'`（Safari不接受origin拼接）。**iPhone注入栏不可见**：`height:100vh`→`100dvh`（动态视口高度，排除浏览器地址栏）+`padding-bottom:max(10px,env(safe-area-inset-bottom,10px))`（Home Indicator遮挡）。**viewport**：`<meta>`加`viewport-fit=cover`（iOS safe-area-inset生效前提） | 伟平 |
+| D57 | 04-06 | ✅ | Claude Office研发经理CC日志Tab重构 | **问题**：manager session无法通过JSONL uuid直接找到tmux会话，注入失效+tab名错误。**方案**：新增`tmux_session`字段（真实tmux会话名）与`log_session`（JSONL uuid）分离。`_scan_manager_tmux_sessions()`扫描非cc-前缀tmux会话→找claude进程→按进程启动时间vs JSONL mtime分配最近修改文件。Tab名特殊处理：cc-前缀截去`cc-{org}-{repo}-`前缀保留`kimiN-issue`，manager按uuid前8位显示。前端inject用`cur.tmux_session||cur.log_session` | 伟平 |
+| D58 | 04-06 | ✅ | Claude Office实时Webhook通知系统 | **问题**：通知轮询8s延迟，刷新页面才显示。**方案**：SSE长连接（`GET /api/events`，EventSource），`ThreadingHTTPServer`避免阻塞。`POST /api/notify`存储通知+推送所有SSE队列。Toast UI：右上角固定，12s自动消失，按type着色左边框。`connectNotificationSSE()`自动5s重连。CLAUDE.md新增每轮结束后`curl /api/notify`的指令让研发经理CC主动推送 | 伟平 |
+| D59 | 04-06 | ✅ | Canvas工作区取消拖拽、自适应铺满 | 去掉鼠标drag handler（mousedown/mouseup），保留hover tooltip。新增`autoZoomFit()`：`zoom=min(containerW/(OFFICE_W*T), containerH/(OFFICE_H*T))`，panX/panY归零，实现fit-contain铺满。初始化和`window.resize`时通过`requestAnimationFrame`触发，跟随浏览器窗口大小 | 伟平 |
+| D60 | 04-06 | ✅ | 前端UI图形E2E测试体系建立 | 使用Playwright对Claude Office、wande-play前端进行一次完整图形测试。发现P0 bug：①Claude Office /api/events Content-Type缺失SSE标准头；②多个路由404（/service-records、/pit-analysis等）；③Modal点击无响应；④看板数据加载异常。创建[bug]标题P0 Issue至E2E Fail状态。新增`docs/workflow/ui-test-coverage-plan.md`三级测试改进方案 | 伟平 |
+| D61 | 04-06 | ✅ | update-project-status.sh自动关联看板 | `gh issue create`不自动添加到GitHub Project看板，导致update-project-status.sh找不到Item ID。**修复**：ITEM_IDS为空时，①`addProjectV2ItemById` GraphQL mutation获取issue node ID②添加到Project→获取item ID③继续更新Status。对所有已创建未关联的bug Issue批量补关联。脚本现在幂等，issue未在看板中会自动加入 | 伟平 |
+| D62 | 04-07 | ✅ | 编程CC文档误读三大问题修复 | **①.github项目入口缺失**：CLAUDE.md顶部新增强制阅读块，明确文档库在`/home/ubuntu/projects/.github/docs/agent-docs/`（独立项目，非当前.github/workflows目录），run-cc.sh初始prompt前置"先读issue-workflow.md"。**②schema.sql/wande-ai-api禁令未在CLAUDE.md体现**：新增两条YOU MUST NOT——禁止直接编辑schema.sql/禁止在wande-ai-api下新增代码。**③RuoYi原版文档冲突**：`database-specification.md`顶部加覆盖声明（禁止按原版改schema.sql/使用MySQL语法/日期命名）；`backend/CLAUDE.md`去掉6个不存在的本地docs引用；`backend/README.md`wande-ai-api标为已废弃；`frontend/CLAUDE.md`3个不存在的本地docs引用替换为`.github`绝对路径；`shared-conventions.md`/`backend/conventions.md`sudo误用修正。全部同步kimi1-20 | 伟平 |
+| D63 | 04-07 | ✅ | 第2轮排程：超管驾驶舱+Claude Office迁移+矿场增强 | 12个Issue并行启动：超管驾驶舱P0(#2409/#1572/#2076/#2043/#2081/#2276)、Claude Office全量迁移(#2893)、矿场增强P0(#2257/#2407/#2256)、投标方案引擎(#2206)、矿场增量同步(#2028)。当前16空闲→12锁定 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 
@@ -372,6 +380,14 @@ Issue创建
 - 批量清理重复Bean定义（45个文件，-4187行）
 - 编程CC文档统一迁移到.github/docs/agent-docs/（18个文件）
 - 删除server_old.py等废弃文件
+### 基础设施变更（04-06）— Claude Office平台增强
+- Claude Office Safari/iPhone兼容：fetch改相对URL、100dvh、safe-area-inset、viewport-fit=cover
+- Claude Office研发经理CC日志Tab重构：tmux_session/log_session分离，_scan_manager_tmux_sessions()按进程启动时间分配JSONL，Tab名cc-前缀截去org/repo前缀
+- Claude Office SSE实时通知：ThreadingHTTPServer+/api/events SSE端点+Toast UI，替代8s轮询
+- Claude Office Canvas取消拖拽：autoZoomFit()自适应铺满，跟随window.resize
+- update-project-status.sh自动关联看板：ITEM_IDS为空时addProjectV2ItemById自动加入
+- CLAUDE.md新增注入提示词和发送通知webhook两节指令
+- 前端UI图形E2E测试：Playwright全面测试，发现P0 bug并创建Issue至E2E Fail状态
 ## 📌 需要对方处理
 ### @伟平 待讨论
 - ~~**dev分支后端无法启动（P0）**~~ — 已通过 #2585 / PR #2593 解决

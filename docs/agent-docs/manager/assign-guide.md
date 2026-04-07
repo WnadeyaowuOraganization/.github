@@ -130,7 +130,7 @@ gh issue comment <N> --repo WnadeyaowuOraganization/wande-play --body "❌ 多�
 
 ```bash
 # 写入验收报告
-cat >> sprints/sprint-1/VERIFICATION_REPORT.md << 'EOF'
+cat >> docs/workflow/新harness验证报告.md << 'EOF'
 ## $(date '+%Y-%m-%d %H:%M') 验收报告
 ### 完成
 - #N: 标题 — PR #M

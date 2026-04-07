@@ -11,7 +11,7 @@
 | [scheduler-guide.md](scheduler-guide.md) | 调度器CC - 排程、触发、检查、优化 | 调度器CC |
 | [backend-guide.md](backend-guide.md) | 后端CC - Spring Boot TDD开发 | 后端开发 |
 | [frontend-guide.md](frontend-guide.md) | 前端CC - Vue3 Vben Admin开发 | 前端开发 |
-| [testing-guide.md](testing-guide.md) | 测试CC - E2E回归测试 | 测试CC |
+| [testing-guide.md](e2e/testing-guide.md) | 测试CC - E2E回归测试 | 测试CC |
 | [pipeline-guide.md](pipeline-guide.md) | 管线CC - Python数据采集 | 数据采集 |
 | [api-contracts.md](api-contracts.md) | API契约规范 - 前后端接口定义 | fullstack Issue |
 

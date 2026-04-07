@@ -56,8 +56,8 @@ start_ci_backend() {
         # 如果有PR分支，切换到PR分支构建
         if [ -n "$PR_BRANCH" ]; then
             log "使用PR分支: $PR_BRANCH"
-            git fetch origin "$PR_BRANCH"
-            git checkout -B "$PR_BRANCH" "origin/$PR_BRANCH"
+            git fetch origin "${PR_BRANCH}:${PR_BRANCH}" --update-head-ok || git fetch origin "$PR_BRANCH"
+            git checkout -B "$PR_BRANCH" || git checkout "$PR_BRANCH"
         fi
         cd "$CI_DIR/backend"
         mvn clean package -Pprod -Dmaven.test.skip=true -q 2>&1 | tail -5

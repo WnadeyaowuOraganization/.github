@@ -98,7 +98,7 @@ docs/agent-docs/
 ├── issue-workflow.md（三阶段流程）            ← 保留
 ├── backend-guide.md（后端技术细节）           ← 仅后端CC读取
 ├── frontend-guide.md（前端技术细节）          ← 仅前端CC读取
-├── testing-guide.md（E2E测试）               ← 仅测试CC读取
+├── e2e/testing-guide.md（E2E测试）               ← 仅测试CC读取
 ├── pipeline-guide.md（管线规范）             ← 仅管线CC读取
 └── api-contracts.md（接口契约）              ← fullstack时读取
 ```

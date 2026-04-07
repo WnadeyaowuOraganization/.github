@@ -430,7 +430,7 @@
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
 | #1855 | P0 | design-ai | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境 | ✅ |
-| #1863 | P0 | frontend | [产品平台][P0] D3 Web产品目录浏览器 — 42品类浏览+3D预览 | ✅ |
+| #1863 | P0 | frontend | [产品平台][P0] D3 Web产品目录浏览器 — 42品类浏览+3D预览 | 运行中(kimi8) |
 | #1864 | P0 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 | ✅ |
 | #1529 | P1 | backend | 矿场增强[17/23] 企微H5轻量接口 | ✅ |
 | #2255 | P1 | frontend | 矿场增强[8/23] 转化漏斗看板页面（#1532已CLOSED解锁） | ✅ |
@@ -456,7 +456,7 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 18:35 UTC | **15/15** | 重启6个超时CC：kimi2/#2276(90min)、kimi3/#2086(73min)、kimi7/#1678(39min)、kimi12/#2423(88min)、kimi13/#2477(81min)、kimi16/#2026(81min) | 清理孤立会话kimi5-2845/kimi14-1555 | CI sessions注入trust确认
+> 更新：2026-04-07 19:23 UTC | **15/15** | kimi8/#1863活跃 | 13个CC推进中，2个注入提示(kimi1/9) | kimi3遇Spring Transaction超时，已注入修复建议 | Done 9个✅、Fail 0个✅ | 并发满，预期kimi3完成后可释放 | 下批候选：#1855/#1864/#1529/#2255
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -467,6 +467,7 @@
 | kimi5 | #1510 | T1 | backend | 矿场Phase2[4/16] 客户角色关联表 |
 | kimi6 | #2848 | T2 | backend | 开发模式监控[4/7] Agent效率看板API |
 | kimi7 | #1678 | T1 | backend | AI投标配图自动生成（#2047解锁） |
+| kimi8 | #1863 | T2 | frontend | D3产品平台 Web产品目录浏览器 — 42品类浏览+3D预览 |
 | kimi9 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理（重派） |
 | kimi10 | #2589 | T1 | fullstack | 执行管理45个API前端对接 |
 | kimi11 | #2893 | T3 | fullstack | Claude Office全量迁移至wande-play |
@@ -598,3 +599,4 @@
 | kimi14 | ~~#1555~~ | T1 | backend | ~~企微打通[10/17] 审批引擎模板卡片集成~~ PR#3313 | ~~Done~~ |
 | kimi5 | #1510 | T1 | backend | 矿场Phase2[4/16] 客户角色关联表 | In Progress |
 | kimi14 | #1511 | T1 | backend | 矿场Phase2[1/16] 客户画像扩展字段 | In Progress |
+| kimi8 | #1863 | T2 | frontend | D3产品平台 Web产品目录浏览器 | In Progress |

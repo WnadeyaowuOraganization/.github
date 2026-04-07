@@ -65,7 +65,10 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 
 **决策清单**：先筛 Sprint 重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
 
-**记录**：维护 `sprints/sprint-<N>/PLAN.md`，每次排程后更新「下次指派时优先选择」列表
+**记录**：维护 `sprints/sprint-<N>/PLAN.md`，每次排程后：
+- 更新「下次指派时优先选择」列表
+- 新 Issue 加入系列明细表时，`kimi` 列填 `—`（待研发经理指派时填入）
+- Issue 状态变更（Done/Fail）时同步更新明细表对应行的`状态`列
 
 ## 任务三：详细设计（effort=high/max 的复杂 Issue）
 

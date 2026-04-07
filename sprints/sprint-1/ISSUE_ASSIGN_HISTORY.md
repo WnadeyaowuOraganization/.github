@@ -1447,3 +1447,63 @@
 - 第6轮(kimi1-6): #1556/#1557/#1601/#1600/#1624/#1629
 - 第5/5.5轮(kimi11/13-20): #1596/#1602/#1597/#1537/#1607/#1606/#1605/#1604/#1503
 - 第7轮(kimi7-10): #1564/#1609/#1634/#1693
+
+## 2026-04-06 ~17:28-17:41 UTC 第8轮指派（大崩溃后重建，5并发控制）
+
+**背景**: 批次5+大规模崩溃（P8）后重建，5并发控制。kimi17(#1624)已MERGED，释放槽位。主要变化：
+- kimi17 #2966 fix CC（第5次尝试，换目录，修复ChangeOrderEntityMapper冲突标记）
+- kimi1 #1694 新功能（报销费控OCR）
+- post-cc-check.sh 补入crontab（每5分钟），修复G3/B13长期问题
+
+| kimi目录 | Issue | 模块 | 标题 | effort |
+|---------|-------|------|------|--------|
+| kimi1 | #1694 | backend | [报销费控] 发票OCR识别+验真+查重服务 | high |
+| kimi15 | #1557 | backend | [企微打通-P0] 企微通讯录同步 | high |
+| kimi17 | #2966 | backend | fix: ChangeOrderEntityMapper冲突标记（dev编译失败修复） | high |
+| kimi18 | #1629 | backend | [整改工单-P0] 照片Service（CC崩溃，ahead=3，等post-cc-check.sh恢复） | max |
+| kimi19 | #1600 | backend | [预算管控] 采购申请接入预算关卡 | max |
+
+**当前总体运行情况**: 5个并发（4活跃+1待cron恢复）
+
+## 2026-04-07 第9轮排程（矿场优先+驾驶舱+Claude Office，并发5上限）
+
+### 看板清理
+- 关闭10个Done但GitHub仍OPEN的Issue：#1493 #1513 #2207 #1548 #1565 #1568 #2075 #2079 #2136 #2410
+- 停止kimi11(跑已关闭的#1474)
+
+### 当前运行（5/5）
+| kimi | Issue | 模块 | 内容 |
+|------|-------|------|------|
+| kimi1 | #2409 | backend | 超管驾驶舱·采集管控 Phase0-1/4 建表 |
+| kimi15 | #1886 | backend | 素材库 Entity+Mapper |
+| kimi16 | #1609 | backend | 预算管控数据模型 7张表 |
+| kimi17 | #1475 | backend | 商务赋能知识中台·标准产品合规矩阵 |
+| kimi19 | #1567 | dashboard | 错误分析中心·错误采集Service+查询API |
+
+### 优先队列（按槽位空出顺序）
+
+**Tier-1 矿场/投标 P0（最高优先）**
+| 优先级 | Issue | 模块 | 标题 | effort |
+|--------|-------|------|------|--------|
+| 1 | #2257 | backend | 矿场增强·反馈按钮结构化表单 | medium |
+| 2 | #2407 | backend | 矿场增强·反馈驱动评分模型校准 | medium |
+| 3 | #2256 | frontend | 矿场增强·矿场列表状态筛选+流转 | medium |
+| 4 | #2206 | backend | 投标方案生成引擎 API+RAG | high |
+| 5 | #2046 | pipeline | 投标方案知识库增强 | medium |
+| 6 | #2028 | backend | 项目矿场·增量同步推送 | medium |
+
+**Tier-2 超管驾驶舱 P0**
+| 优先级 | Issue | 模块 | 标题 | effort |
+|--------|-------|------|------|--------|
+| 7 | #1572 | backend | 采集管控·管线数据漏斗API | medium |
+| 8 | #2076 | backend | 问题发现·问题采集API | medium |
+| 9 | #2043 | pipeline | 问题发现·problem_scanner.py | medium |
+| 10 | #2081 | backend | 超管驾驶舱·开发效率统计API | medium |
+| 11 | #2261 | frontend | 预算模板增强·模板库管理页面(超管) | medium |
+| 12 | #2262 | frontend | 预算模板增强·科目编码树管理页面(超管) | medium |
+| 13 | #2276 | frontend | 采集管控·采集管线管控面板 | medium |
+
+**Tier-3 Claude Office迁移 P0**
+| 优先级 | Issue | 模块 | 标题 | effort |
+|--------|-------|------|------|--------|
+| 14 | #2893 | fullstack | Claude Office全量迁移至wande-play | high |

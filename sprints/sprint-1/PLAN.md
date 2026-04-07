@@ -424,17 +424,18 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 15:55 | CC **15/15满载**，14个活跃，kimi5槽位已恢复
-> 补标Done：#2373(H5客户报修页面,kimi13→已重指派#2453) | 本轮累计Done：#2107/#2452/#1458/#2373
-> ⚠️ kimi6(#1630)卡住17min | kimi16(#2026) 5% until auto-compact（即将compact）| kimi17(#1705) ~10% compact
+> 更新时间：2026-04-07 16:05 | CC **15/15满载**，13个活跃
+> 补标Done：#3234(BUG Dashboard数据全0，kimi2运行3小时完成) | 今日累计Done：#2950/#2107/#2452/#1458/#2373/#3234
+> 🚨 kimi16(#2026) **2% until auto-compact**（已接近自动compact） | kimi17(#1705) 6% compact
+> ⚠️ kimi6(#1630)卡住26min | kimi4(#2372)卡住6min
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失 | ✅ |
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
+| #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失 | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
 | #2423 | P0 | pipeline | Agent基类（#2424 OPEN in kimi10，可并行） | ✅ |
-| #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16 compact倒计时） | ⏳ |
+| #2366 | P0 | frontend | 审批中心页面（kimi16 #2026即将compact→完成后解锁） | ⏳ |
 | #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成，kimi11运行中） | ⏳ |
 | #2276 | P0 | frontend | 采集管控[4/4] 管控面板（等#1572完成） | ⏳ |
 | #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
@@ -446,10 +447,10 @@
 | #2845 | P0 | backend | 开发模式监控[1/7] CFD数据API | ✅ |
 | #2848 | P0 | backend | 开发模式监控[4/7] Agent效率看板API | ✅ |
 | #2847 | P0 | pipeline | 开发模式监控[3/7] Fail根因强制回写 | ✅ |
-| #1852 | P0 | pipeline | D3-Agent知识库构建（kimi12释放后优先恢复） | ✅ |
-| #2372 | P0 | frontend | 质保售后 售后工单主页面（kimi4运行中） | ⏳ |
-| #2408 | P0 | pipeline | 采集管控[2/4] 13脚本接run_reporter（kimi9前身，OPEN） | ✅ |
+| #1852 | P0 | pipeline | D3-Agent知识库构建（kimi12→#1740运行中，释放后恢复） | ✅ |
+| #2408 | P0 | pipeline | 采集管控[2/4] 13脚本接run_reporter（kimi9接力，OPEN） | ✅ |
 | #2250 | P1 | frontend | 矿场增强[23/23] 历史联系人高亮 | ✅ |
+| #1558 | P0 | backend | D3材质标注[2/4]（等kimi11完成#1560，预计近期解锁） | ⏳ |
 
 ---
 
@@ -457,11 +458,11 @@
 
 ## 当前运行（16/15）
 
-> 更新：2026-04-07 15:35 UTC | **16/15** | kimi9→#2450(竞品甲方P0)、kimi10→#2424(browser_client P0)；kimi9/#2408 PR#3276 Done，kimi10/#2452 PR#3275 已MERGED
+> 更新：2026-04-07 15:50 UTC | **16/15** | kimi1→#1554(企微H5)、kimi12→#1740(备件库存)；#2950 PR#3215 MERGED/Done，#1852 PR#3249 Done；全目录.cc-lock已同步
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
-| kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
+| kimi1 | #1554 | T1 | backend | 企微打通[9/17] H5 JS-SDK签名 |
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi4 | #2372 | T1 | frontend | 质保售后 售后工单管理主页面 P0 |
@@ -469,14 +470,14 @@
 | kimi6 | #1630 | T1 | backend | 整改工单Phase27 API P0 |
 | kimi7 | #2041 | T1 | backend | D3优化[5/10] 场地地形集成 |
 | kimi8 | #2040 | T1 | backend | D3优化[6/10] 无障碍合规自动检测 |
-| kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0（#2452 MERGED解锁） |
+| kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0 |
 | kimi10 | #2424 | T1 | pipeline | browser_client.py Agent基建[3/7] P0 |
 | kimi11 | #2095 | T1 | backend | 执行管理 验收附件管理API |
-| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
+| kimi12 | #1740 | T1 | frontend | 质保 备件库存管理页面 P1 |
 | kimi13 | #2453 | T1 | pipeline | 历史甲方定向监控清单[3/38] P0 |
 | kimi14 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理+版本回溯 |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 |
-| kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API（2h+，context 10%）|
+| kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API（PR创建中）|
 
 ---
 
@@ -566,3 +567,7 @@
 | kimi10 | ~~#2452~~ | T1 | pipeline | ~~竞品中标公告定向采集管线[4/38]~~ PR#3275✅merged | ~~Done~~ |
 | kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0 | In Progress |
 | kimi10 | #2424 | T1 | pipeline | browser_client.py Agent基建[3/7] P0 | In Progress |
+| kimi1 | ~~#2950~~ | T2 | fullstack | ~~侧边栏分组重构+RBAC~~ PR#3215✅merged | ~~Done~~ |
+| kimi12 | ~~#1852~~ | T1 | pipeline | ~~D3-Agent知识库构建~~ PR#3249 | ~~Done~~ |
+| kimi1 | #1554 | T1 | backend | 企微打通[9/17] H5 JS-SDK签名 | In Progress |
+| kimi12 | #1740 | T1 | frontend | 质保 备件库存管理页面 P1 | In Progress |

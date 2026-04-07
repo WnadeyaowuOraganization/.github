@@ -424,20 +424,17 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 13:10 | CC **15/15全满**（kimi1-17全部在跑）
-> 补标Done：#2108(质保外包维修商API)/#3229(Fat JAR BUG)/#2109(售后工单API)/#2368(菜单重组5/8)
-> ✅ #2156已启动(kimi9)，#2086 E2E Fail依赖即将解除 | 槽位满，以下为槽位释放后建议
+> 更新时间：2026-04-07 13:20 | CC **15/15全满**（kimi1/2/3/4/5/6/7/8/9/10/11/12/13/16/17）
+> 补标Done：#3232（前端路由BUG 6/7，Issue CLOSED）
+> 本轮新增运行：kimi3→#2098/kimi7→#2467/kimi10→#2468/kimi16→#2026/kimi17→#1705
+> ⏳ #2156运行中(kimi9)，完成后#2086 E2E Fail→Todo
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
 | #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失致500 | ✅ |
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
-| #2098 | P0 | backend | 执行管理 验收核心API | ✅ |
-| #2467 | P0 | backend | 执行管理 BOM管理API（多级树形+审核定价） | ✅ |
-| #2468 | P0 | backend | 执行管理 图纸管理API（上传/版本/审批） | ✅ |
-| #2026 | P0 | backend | 审批引擎核心[3/10] 发起/审批/驳回/撤回+4种规则 | ✅ |
-| #1705 | P1 | backend | CRM跟进记录CRUD API（OPEN） | ✅ |
+| #2086 | P0 | backend | 🟠 [E2E Fail] 变更影响联动API（等#2156完成后立即指派） | ⏳ |
 | #1564 | P0 | backend | 企微打通[1/17] WecomAppService根节点 | ✅ |
 | #1560 | P0 | backend | D3材质标注[1/4] 构件-材料绑定规则Service | ✅ |
 | #2452 | P0 | pipeline | 采集/竞品[4/38] 竞品中标公告定向采集管线 | ✅ |
@@ -448,8 +445,12 @@
 | #2446 | P0 | pipeline | 政策信号采集管线[11/38] 六层信号源第一层 | ✅ |
 | #1630 | P0 | backend | 整改工单Phase27 API（OPEN） | ✅ |
 | #2051 | P1 | frontend | D3-周期5-G L4安装图自动化 | ✅ |
-| #2086 | P0 | backend | 🟠 [E2E Fail] 变更影响联动API（等#2156完成后立即指派） | ⏳ |
-| #1705 | P1 | backend | CRM跟进记录CRUD API（OPEN，kimi9用完释放后） | ✅ |
+| #2384 | P0 | frontend | 执行管理 流程配置可视化页面 | ✅ |
+| #1876 | P0 | backend | 商务48小时反馈机制+分级升级（确认是否已Done） | ✅ |
+| #2363 | P0 | frontend | 项目中心Phase8 菜单+列表（确认kimi7完成状态） | ✅ |
+| #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
+| #2095 | P1 | backend | 验收附件管理API（等#2098完成） | ⏳ |
+| #1724 | P0 | frontend | 设备台账页面（等#2110 Done） | ✅ |
 
 ---
 
@@ -457,26 +458,25 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 13:08 UTC | **15/15** | kimi9/#3228 MERGED→释放；新指派kimi9→#2156/kimi13→#2124
+> 更新：2026-04-07 13:18 UTC | **15/15** | kimi3/#2108/kimi7/#3229/kimi10/#2109/kimi17/#2368 MERGED→清退；新指派#2098/#2467/#2468/#2026/#1705
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 |
-| kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API |
+| kimi3 | #2098 | T1 | backend | 执行管理 验收核心API |
 | kimi4 | #3226 | BUG | fullstack | 🔴 P0 Claude Office今日工作状态面板 |
 | kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 |
 | kimi6 | #3230 | BUG | backend | 🟠 P1 后端API路由缺失 |
-| kimi7 | #3229 | BUG | backend | 🔴 P0 Fat JAR依赖冲突 |
+| kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
-| kimi9 | #3228 | BUG | backend | 🔴 P0 DB Schema缺失字段 |
-| kimi10 | #2109 | T1 | backend | 质保售后 售后工单API |
-| kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE |
-| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建（重启） |
-| kimi16 | #3232 | BUG | frontend | 🟡 P2 前端路由404+UI渲染异常 |
-| kimi17 | #2368 | T1 | frontend | 菜单重组[5/8] 综合管理中心板块 |
 | kimi9 | #2156 | T1 | backend | 执行管理 变更单核心API |
+| kimi10 | #2468 | T1 | backend | 执行管理 图纸管理API |
+| kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE |
+| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #2124 | T1 | backend | 执行管理 回款计划与管理API |
+| kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 |
+| kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API |
 
 ---
 
@@ -515,18 +515,24 @@
 | kimi7 | ~~#2363~~ | T1 | frontend | ~~项目中心Phase8 菜单+列表~~ PR#3135✅merged | ~~Done~~ |
 | kimi9 | ~~#1705~~ | T1 | backend | ~~CRM跟进记录CRUD API~~ PR#2563✅merged | ~~Done~~ |
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | In Progress |
-| kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API | In Progress |
-| kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 | In Progress |
-| kimi10 | #2109 | T1 | backend | 质保售后 售后工单API | In Progress |
-| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
-| kimi7 | #3229 | BUG | backend | 🔴 P0 Fat JAR依赖冲突 | In Progress |
+| kimi3 | ~~#2108~~ | T1 | backend | ~~质保售后 外包维修商管理API~~ PR#3247✅merged | ~~Done~~ |
+| kimi7 | ~~#3229~~ | BUG | backend | ~~🔴 P0 Fat JAR依赖冲突~~ PR#3250✅merged | ~~Done~~ |
 | kimi9 | ~~#3228~~ | BUG | backend | ~~🔴 P0 DB Schema缺失字段~~ PR#3248✅merged | ~~Done~~ |
+| kimi10 | ~~#2109~~ | T1 | backend | ~~质保售后 售后工单API~~ PR#3204✅merged | ~~Done~~ |
+| kimi17 | ~~#2368~~ | T1 | frontend | ~~菜单重组[5/8] 综合管理中心板块~~ PR#3251✅merged | ~~Done~~ |
+| kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 | In Progress |
+| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
 | kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 | In Progress |
 | kimi6 | #3230 | BUG | backend | 🟠 P1 后端API路由缺失 | In Progress |
 | kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE | In Progress |
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 | In Progress |
 | kimi4 | #3226 | BUG | fullstack | 🔴 P0 Claude Office今日工作状态面板 | In Progress |
 | kimi16 | #3232 | BUG | frontend | 🟡 P2 前端路由404+UI渲染异常 | In Progress |
-| kimi17 | #2368 | T1 | frontend | 菜单重组[5/8] 综合管理中心板块 | In Progress |
 | kimi9 | #2156 | T1 | backend | 执行管理 变更单核心API | In Progress |
 | kimi13 | #2124 | T1 | backend | 执行管理 回款计划与管理API | In Progress |
+| kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | In Progress |
+| kimi3 | #2098 | T1 | backend | 执行管理 验收核心API | In Progress |
+| kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API | In Progress |
+| kimi10 | #2468 | T1 | backend | 执行管理 图纸管理API | In Progress |
+| kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 | In Progress |
+| kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API | In Progress |

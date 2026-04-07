@@ -34,7 +34,7 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 # 6. 更新 PLAN.md：
 #    - 「当前运行」表格新增一行：| kimiX | #N | Tier | module | 标题 | 刚启动 |
 #    - 「下次指派时优先选择」列表对应行追加：→ kimiX 运行中
-#    - 对应系列明细表的 kimi 列填入 kimiX（原为 — ）
+#    - 对应系列明细表的 指派目录 列填入 kimiX（原为 — ）
 ```
 
 ### module 对应目录

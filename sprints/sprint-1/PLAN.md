@@ -455,28 +455,32 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（22/25）
+## 当前运行（20/20 PG修复）
 
-> 更新：2026-04-07 23:22 UTC | **40 CC 运行中** | 16个指派目录(kimi1-17全OPEN) + 其他批次并行 | 看板：Plan 691/Todo 125/IP 34/Done 382 | 无新完成本轮 | Jump/Fail/E2E Fail=0 | 系统稳定高并发
+> 更新：2026-04-07 23:32 UTC | **6 CC 运行中** | pg-test 修复推进中（20个 issues 已指派） | 进度：40%-81%，平均60% | 无新完成本轮 | Maven 依赖问题普遍 | Jump/Fail/E2E Fail=0
 
-| 指派目录 | Issue | Tier | 模块 | 内容 |
-|------|-------|------|------|------|
-| kimi1 | #2405 | T1 | backend | [矿场增强][22/23] 关系加分逻辑 |
-| kimi2 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 |
-| kimi4 | #2254 | T1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go |
-| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） |
-| kimi6 | #2255 | T1 | frontend | [矿场增强][8/23] 转化漏斗看板页面 |
-| kimi7 | #2252 | T1 | frontend | [矿场增强][20/23] 来源ROI看板 |
-| kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 |
-| kimi9 | #1695 | T1 | backend | [提成绩效] 新增绩效考核API |
-| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） |
-| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） |
-| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） |
-| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） |
-| kimi14 | #1696 | T1 | backend | [提成绩效] 新增管理费分摊API |
-| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） |
-| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） |
-| kimi17 | #3354 | tech | backend | [mvn test欠债] 验收与交付（31 errors） |
+| 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
+|------|-------|------|------|------|------|
+| kimi1 | #3335 | tech | backend | [mvn test欠债] D3设计与参数化（410 errors） | 44% |
+| kimi2 | #3345 | tech | backend | [mvn test欠债] 问题反馈与通知（64 errors） | 66% |
+| kimi3 | #3336 | tech | backend | [mvn test欠债] 项目执行与看板（235 errors） | 71% |
+| kimi4 | #3337 | tech | backend | [mvn test欠债] 预算资金与佣金（222 errors） | 48% |
+| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） | 62% |
+| kimi6 | #3348 | tech | backend | [mvn test欠债] 文案与审批（52 errors） | 46% |
+| kimi7 | #3338 | tech | backend | [mvn test欠债] Token池与运营（210 errors） | 66% |
+| kimi8 | #3344 | tech | backend | [mvn test欠债] 方案与报价（68 errors） | 45% |
+| kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保（116 errors） | 56% |
+| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） | 53% |
+| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） | 49% |
+| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） | 77% |
+| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） | 46% |
+| kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维（110 errors） | 59% |
+| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） | 58% |
+| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） | 81% |
+| kimi17 | #3354 | tech | backend | [mvn test欠债] 验收与交付（31 errors） | 62% |
+| kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆（105 errors） | 40% |
+| kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限（104 errors） | 40% |
+| kimi20 | #3343 | tech | backend | [mvn test欠债] 标准库与材质（83 errors） | 49% |
 
 ---
 
@@ -609,3 +613,23 @@
 | kimi7 | ~~#1678~~ | T1 | backend | ~~AI投标配图自动生成~~ | ~~Done~~ |
 | kimi1 | ~~#1855~~ | T2 | fullstack | ~~[D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境~~ PR#3331✅merged | ~~Done~~ |
 | kimi3 | ~~#2086~~ | T1 | backend | ~~变更影响联动API - BOM差异+成本利润联动~~ PR#3356✅merged | ~~Done~~ |
+| kimi1 | #3335 | tech | backend | [mvn test欠债] D3设计与参数化 | In Progress |
+| kimi2 | #3345 | tech | backend | [mvn test欠债] 问题反馈与通知 | In Progress |
+| kimi3 | #3336 | tech | backend | [mvn test欠债] 项目执行与看板 | In Progress |
+| kimi4 | #3337 | tech | backend | [mvn test欠债] 预算资金与佣金 | In Progress |
+| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM | In Progress |
+| kimi6 | #3348 | tech | backend | [mvn test欠债] 文案与审批 | In Progress |
+| kimi7 | #3338 | tech | backend | [mvn test欠债] Token池与运营 | In Progress |
+| kimi8 | #3344 | tech | backend | [mvn test欠债] 方案与报价 | In Progress |
+| kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保 | In Progress |
+| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期 | In Progress |
+| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3 | In Progress |
+| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购 | In Progress |
+| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同 | In Progress |
+| kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维 | In Progress |
+| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单 | In Progress |
+| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别 | In Progress |
+| kimi17 | #3354 | tech | backend | [mvn test欠债] 验收与交付 | In Progress |
+| kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆 | In Progress |
+| kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限 | In Progress |
+| kimi20 | #3343 | tech | backend | [mvn test欠债] 标准库与材质 | In Progress |

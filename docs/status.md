@@ -451,6 +451,13 @@ Issue创建
 - assign-guide.md修正：Step顺序改为run-cc.sh成功后再标In Progress（原反序），删除死代码ISSUE_ASSIGN_HISTORY.md步骤
 - check-cc-status.sh：去除超时自动kill+标Fail逻辑，改为30min发warning通知人工重启（防误杀正常CC）
 - Reject Issue批量清理：121个Reject状态Issue全部标Done（均已CLOSED，为迁移/替代/过时旧需求）
+### 基础设施变更（04-07）— Claude Office重构+文档体系整理
+- Claude Office server.py四区域独立扫描：_scan_play_sessions/_scan_e2e_sessions/_scan_gh_plugins_sessions/_scan_manager_tmux_sessions，日志改tmux capture-pane直读（替代JSONL解析+SESSION_MAP），chrome行过滤（保留状态栏）
+- get-gh-token.sh删除：逻辑合并到gh-app-token.py（e2e路径→wandeyaowu PAT，默认→GitHub App Token，兜底→weiping PAT），更新17处引用
+- e2e_top_tier.sh：去除exec bash，CC退出后tmux会话自动关闭；testing-guide.md改为CC自行创建Issue+标签+通知，移至docs/agent-docs/e2e/
+- 文档重命名：agent-docs/backend/README.md→backend-guide.md，frontend/README.md→frontend-guide.md，全路径索引，同步kimi1-20/ci/pr/main/e2e-top等24个仓库CLAUDE.md；第二轮补漏database-specification.md/frontend/CLAUDE.md共42个文件
+- 单元测试H2→PostgreSQL迁移：新增scripts/ensure-test-pg.sh（wande-test-pg容器端口5434），backend-guide.md删H2章节，testing.md改为PG描述，.test-baseline=338
+- 文档分层体系：新增docs/agent-docs/share/（shared-conventions/api-contracts/issue-workflow/db-schema），backend-guide/frontend-guide新增"共享文档"节全路径引用，agent-docs/README.md添加目录树+六层分层说明
 ## 📌 需要对方处理
 ### @伟平 待讨论
 - ~~**dev分支后端无法启动（P0）**~~ — 已通过 #2585 / PR #2593 解决

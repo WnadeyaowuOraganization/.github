@@ -457,3 +457,35 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 | 日期 | 变更 | 原因 |
 |------|------|------|
 | 2026-04-05 | 新建行业专家知识体系(#54-#60)，7个模块(3个P0已上线+4个待实施) | D42决策：平台需要专家级消化能力，不只是文档检索。S3资料已足够丰富，差距在推理和经验积累 |
+
+---
+
+## 业务域：S3数据管线
+
+> 2026-04-08 新增（D47）。S3数据湖4.5TB/38万文件自动处理管线。G7e自托管方案：EventBridge+SQS事件路由→G7e轮询消费→本地处理(OCR/CLIP/pythonocc)→pgvector入库→驾驶舱监控+企微告警。月成本~$10。对标：AWS Data Lake最佳实践+Bronze-Silver-Gold架构。
+
+| # | 功能模块 | Issue范围 | 状态 | Sprint | 策略备注 |
+|---|---------|-----------|------|--------|---------|
+| 61 | Phase0: SQS+EventBridge基础设施 | #3290 (1个) | 📋 Plan | Sprint-3 | 5条SQS队列+DLQ+EventBridge按后缀路由+排除_silver/_gold前缀 |
+| 62 | Phase0: G7e SQS轮询调度器 | #3291 (1个) | 📋 Plan | Sprint-3 | cron每5分钟+PostgreSQL状态表+并发处理+systemd服务 |
+| 63 | Phase0: 加密文件检测+隔离 | #3292 (1个) | 📋 Plan | Sprint-3 | 文件头magic bytes(17da5fa0)+S3标签+隔离队列+解密后自动重入管线 |
+| 64 | Phase1: PDF文本提取+OCR | #3293 (1个) | 📋 Plan | Sprint-3 | PyMuPDF+PaddleOCR中文+扫描件自动检测+_silver/documents/ |
+| 65 | Phase1: Office文档提取 | #3294 (1个) | 📋 Plan | Sprint-3 | python-docx/openpyxl/python-pptx+统一JSON输出 |
+| 66 | Phase1: 文档向量化+pgvector入库 | #3295 (1个) | 📋 Plan | Sprint-3 | BGE-large-zh-v1.5(1024维)+800字符分块+兼容kb_pipeline.py |
+| 67 | Phase1: 历史文件批量回填 | #3296 (1个) | 📋 Plan | Sprint-3 | 优先99历史存档(3.6TB)+01胡时辉(64GB)+断点续传+速率控制 |
+| 68 | Phase2: 图片AI标签(CLIP) | #3297 (1个) | 📋 Plan | Sprint-3 | G7e本地CLIP+中文产品分类标签+以文搜图+_silver/image-labels/ |
+| 69 | Phase2: STEP模型元数据 | #3298 (1个) | 📋 Plan | Sprint-3 | pythonocc几何提取(体积/质心/装配树)+_silver/cad-metadata/ |
+| 70 | Phase2: SLDPRT基础元数据 | #3299 (1个) | 📋 Plan | Sprint-3 | olefile读OLE(无需License)+缩略图+基础属性 |
+| 71 | Phase3: 管线监控Dashboard | #3300 (1个) | 📋 Plan | Sprint-3 | 驾驶舱实时队列深度+DLQ+处理速率+错误列表+健康状态 |
+| 72 | Phase3: 加密文件管理页面 | #3301 (1个) | 📋 Plan | Sprint-3 | 列表+状态筛选+批量触发解密+统计卡片 |
+| 73 | Phase3: 管线错误告警+企微 | #3302 (1个) | 📋 Plan | Sprint-3 | DLQ>0/积压/失败率→企微机器人推送+驾驶舱错误中心+规则可配 |
+| 74 | Phase3: 管线状态API | #3303 (1个) | 📋 Plan | Sprint-3 | REST API: 队列状态+处理统计+错误列表+加密文件+SQS查询 |
+| 75 | Phase3: 驾驶舱Tab集成 | #3304 (1个) | 📋 Plan | Sprint-3 | 超管驾驶舱新增"数据管线"Tab(Dashboard+加密+告警) |
+| 76 | Phase4: 通用解密管线 | #3306 (1个) | 📋 Plan | Sprint-3 | 插件式解密器架构+多种加密软件CLI+解密后自动重入管线+密钥安全存储 |
+| 77 | Phase4: AI文档蒸馏 | #3307 (1个) | 📋 Plan | Sprint-3 | Qwen蒸馏→产品知识图谱+投标策略库+项目经验库+标准规范库→_gold/ |
+| 78 | Phase4: 成本监控+限流 | #3308 (1个) | 📋 Plan | Sprint-3 | 日处理上限+月预算上限+超限自动暂停+月度报告 |
+
+### 策略变更日志
+| 日期 | 变更 | 原因 |
+|------|------|------|
+| 2026-04-08 | 新建S3数据管线业务域(#61-#78)，18个Issue | D47决策：S3 4.5TB数据资产挖掘管线，G7e自托管方案(月$10)替代全AWS托管($310/月) |

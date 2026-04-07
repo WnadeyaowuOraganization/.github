@@ -7,7 +7,7 @@
 | Sprint | 状态 | 开始 | 截止 | Issue数 | 重点功能模块 | 交付物（用户能做什么） |
 |--------|------|------|------|---------|-------------|---------------------|
 | Sprint-1 | 🟢 进行中 | 2026-03-28 | 2026-04-11 | 156 | D3参数化P0/P1、矿场增强P0/P1、销售记录体系、驾驶舱P0 | 商务打开矿场看到项目→标记→写销售记录→你在驾驶舱看到；D3 Web端可配置电池包；国贸/经销询盘看板→报价→PI→订单跟踪 |
-| Sprint-2 | ⏳ 待启动 | 2026-04-12 | — | 173 | 执行管理、CRM、审批引擎P0、方案引擎P0、H5基座、**企微审批贯通**、**流程补齐·通用表单** | 签约后能建项目→图纸/BOM管理→回款跟踪；合同/报价能走审批；商务能用PPT插件做方案；**企微内可发起/审批；47个OA遗留流程全覆盖** |
+| Sprint-2 | ⏳ 待启动 | 2026-04-12 | — | 171 | 执行管理、CRM、审批引擎P0、方案引擎P0、H5基座、**企微审批贯通**、**流程补齐·通用表单** | 签约后能建项目→图纸/BOM管理→回款跟踪；合同/报价能走审批；商务能用PPT插件做方案；**企微内可发起/审批；47个OA遗留流程全覆盖** |
 | Sprint-3 | ⏳ 待启动 | — | — | 178 | 品牌中心·内容自动化+AI数字人、协同修改、素材库、客户生命周期、外展获客 | 海报/文章自动生成→审批→发布；多语言方案翻译；客户交付提醒+赢丢单复盘 |
 | Sprint-4 | ⏳ 待启动 | — | — | 120 | 品牌中心·视频裂变/舆情/SEO、色卡配色器、库存联通、项目中心、资金闭环 | 视频裂变分发；色卡在线配色→审批；仓库库存可视化；项目全景+风险台账；财务对账 |
 | Sprint-5 | ⏳ 待启动 | — | — | 79 | 商战情报中台（7 Phase）、人事管理、认证完善 | 行业情报+中标概率预测+竞品知识图谱→企微推送；员工档案+培训管理 |
@@ -20,11 +20,13 @@
 | D3参数化设计 | — | 电池包+AI集成+Web平台 | `sprints/sprint-1/D3参数化设计/` |
 | 统一询盘管理 | 13 | 三线统一(直销/经销/国贸)：询盘+报价+PI+订单跟踪+发货+单据 | — |
 | 项目矿场/投标 | 19 | **D54新增优先**：矿场增强P0(5)+投标引擎P0(1)+增量同步P1(1)，矿场P0优先于D3 Todo | — |
-### Sprint-2 预览（93个Issue，已去重清理）
+### Sprint-2 预览（91个Issue，已去重清理）
+| 模块 | Issue数 | 说明 | sprints子目录 |
+|------|---------|------|--------------|
 | 执行管理 | 57 | 数据库建表→CRUD→图纸/BOM/采购/生产/安装/验收/变更→利润/成本/回款→AI预警→EVM | `sprints/sprint-2/执行管理/` |
 | CRM | 6 | 跟进记录+商机管理+经销体系+报价引擎 | `sprints/sprint-2/CRM/` |
 | 数据迁移 | 5 | 明道云→执行管理迁移 | `sprints/sprint-2/数据迁移/` |
-| 项目计划管理 | 13 | 主计划数据模型→供应商排程→模板引擎→关键路径→API→前端甘特图→预警→变更管理→供应商日历→仪表盘→BOM联动 | `sprints/sprint-2/项目计划管理/` |
+| 项目计划管理 | 11 | 主计划数据模型→供应商排程→模板引擎→关键路径→API→前端甘特图→预警→变更管理→供应商日历→仪表盘→BOM联动 | `sprints/sprint-2/项目计划管理/` |
 | 品牌中心 | 3 | 多平台数据采集+竞品监测 | `sprints/sprint-2/品牌中心/` |
 | 其他 | 5 | 质保/协同/代理商/提成 | `sprints/sprint-2/其他/` |
 | PageGuide页面说明 | 4 | 可复用组件+全量数据配置+存量接入+SOP更新(#2614-#2617) | `sprints/sprint-2/其他/` |
@@ -89,7 +91,7 @@
 |------|------|------|
 | [wande-play](https://github.com/WnadeyaowuOraganization/wande-play) | Monorepo：后端(Spring Boot) + 前端(Vue3) + E2E(Playwright) + 数据管线(Python) + 接口契约 | Project#4 |
 | [wande-gh-plugins](https://github.com/WnadeyaowuOraganization/wande-gh-plugins) | Grasshopper 参数化插件库 | Project#4 |
-| [.github](https://github.com/WnadeyaowuOraganization/.github) | 组织级配置 — 研发经理CC指令/辅助脚本/Sprint记录 | — |
+| [.github](https://github.com/WnadeyaowuOraganization/.github) | 组织级配置 — 排程经理/研发经理CC指令、辅助脚本、Sprint记录 | — |
 ### 已归档（仅追溯）
 | 仓库 | 说明 |
 |------|------|
@@ -152,13 +154,13 @@
 | D41 | 04-05 | ✅ | Sprint 1-5 负载均衡调整 | Sprint-1瘦身：27个P2 Issue移到Sprint-2（D3 AI/矿场复盘/问题发现/协同修改等非核心）；Sprint-2增强：方案引擎P0(9个)从Sprint-3提前+审批引擎P0(3个)从Sprint-4提前；Sprint-4补充：品牌中心低优(视频裂变/员工代言/舆情/SEO/广告10个)从无标签分配；Sprint-Backlog：377个无标签Issue统一归入。调整后Sprint-1:138/Sprint-2:139/Sprint-3:178/Sprint-4:120/Sprint-5:79/Backlog:459 | 吴耀 | 三合一整合：投标发现(中标概率引擎)+客户发现(ICP评分)+竞品全息情报(知识图谱+战斗卡)+行业信息(7章节模板)。新增biz:intelligence-hub标签，Phase 1 P0可插入Sprint-2，主体Sprint-5。Issue #2674-#2743 | 吴耀 |
 | D41 | 04-05 | ✅ | 外展获客+营销自动化业务线：5 Phase·25个Issue·三通道覆盖 | 营销序列引擎(P0基础设施)+外贸邮件外展(冷外展7步+A/B+追踪)+企微获客(活码+SOP培育+批量加好友)+LinkedIn导入(意图信号+协同序列)+统一获客数据层(线索评分+ROI看板+自动移交)。新增biz:outreach+biz:marketing-automation+biz:crm标签。对标HubSpot Sequences+Lemlist+Apollo.io+WeSCRM。Issue #2793-#2818 | 吴耀 |
 | D42 | 04-05 | ✅ | 行业专家知识体系启动：wande-industry Skill + 知识结晶机制 | 平台从「文档检索」升级为「行业顶级专家」。Nurture-First三层架构+5级能力模型。P0: wande-industry Skill(6知识域+4决策树)+结晶SOP(6标签)+Memory种子+wande-ai v54更新。P1-P4: S3蒸馏→GraphRAG→推理引擎→飞轮 | 吴耀 |
-| D43 | 04-05 | ✅ | Harness优化方案V1落地（28/29完成） | **CLAUDE.md精简**：wande-play主CLAUDE.md从67行精简至40行，接口契约最优先，删除backend/frontend/pipeline子模块CLAUDE.md。**agent-docs子目录**：.github/docs/agent-docs/{backend,frontend,pipeline}/README.md集中管理，wande-play跨仓库引用。**静态分析**：ESLint废弃API规则+嵌套检查+antdv-constraints.md。**工作流精简**：编程CC去需求评估、task.md合并进度字段(Status/Phase)、研发经理CC读task.md替代读日志。**模型分级**：仅max走Claude Max订阅（默认Sonnet），其余走Token Pool Proxy+上下文自动截断(kimi 256K/glm 200K)。**冲突解决**：cycle-merge智能分类+trigger-conflict-resolver+pr-test.yml/post-task.sh集成。**安全边界**：最大重试3次+超时20分钟自动清理。**过时文件清理**：删除15个过时文档/脚本/prompt | 伟平 |
+| D43 | 04-05 | ✅ | Harness优化方案V1落地（28/29完成） | **CLAUDE.md精简**：wande-play主CLAUDE.md从67行精简至40行，接口契约最优先，删除backend/frontend/pipeline子模块CLAUDE.md。**agent-docs子目录**：.github/docs/agent-docs/{backend,frontend,pipeline}/README.md集中管理，wande-play跨仓库引用。**静态分析**：ESLint废弃API规则+嵌套检查+antdv-constraints.md。**工作流精简**：编程CC去需求评估、task.md合并进度字段(Status/Phase)、研发经理CC读tmux capture-pane实时输出（D65已改）。**模型分级**：仅max走Claude Max订阅（默认Sonnet），其余走Token Pool Proxy+上下文自动截断(kimi 256K/glm 200K)。**冲突解决**：cycle-merge智能分类+trigger-conflict-resolver+pr-test.yml/post-task.sh集成。**安全边界**：最大重试3次+超时20分钟自动清理。**过时文件清理**：删除15个过时文档/脚本/prompt | 伟平 |
 | D44 | 04-05 | ✅ | wande-ai-api模块废弃确认 | wande-ai-api已合并入wande-ai（D27 PR#2593），万德业务功能全部在wande-ai子模块实现。backend/ruoyi-modules-api/wande-ai-api目录已废弃 | 伟平 |
 | D45 | 04-06 | ✅ | Harness优化V2 + Claude Office重构 | run-cc.sh命名参数+内置pre-task；Claude Office server.py重写(2424→479行)；进程检测统一扫描；日志JSONL直读；PR CI全链路优化（冲突检测→构建部署→smoke→E2E→失败自动修复） | 伟平 |
-| D46 | 04-06 | ✅ | 外接目录指派锁机制 | run-cc.sh写入.cc-lock(issue号+时间)，issue-sync.yml关闭时release-cc-lock.sh释放，check-cc-status.sh整合锁状态检查(超1小时需处理) | 伟平 |
+| D46 | 04-06 | ✅ | 外接目录指派锁机制 | run-cc.sh写入.cc-lock(issue号+时间)，issue-sync.yml关闭时release-cc-lock.sh释放，cc-check.sh（原check-cc-status.sh）整合锁状态检查(超1小时需处理) | 伟平 |
 | D47 | 04-06 | ✅ | Issue关闭自动清理全链路 | issue-sync.yml: 删除.cc-lock + 本地git branch -D + 远程git push --delete。不依赖外部脚本，直接在workflow中遍历kimi1~20 | 伟平 |
-| D48 | 04-06 | ✅ | CC异常退出cron恢复机制 | post-cc-check.sh由cron每5分钟巡检：.cc-lock存在+无claude进程→自动commit/push/PR，10次重试失败标Fail+评论原因。去掉tmux内post-check（快速路径），全部由cron兜底 | 伟平 |
-| D49 | 04-06 | ✅ | 辅助脚本全面审计修复 | cc_manager.sh: SCRIPT_DIR未定义+GH_TOKEN硬编码PAT+集成post-cc-check.sh; run-cc.sh: 重入逻辑修复(统一retry_count/锁检测前置/SAVED状态跳过checkout dev/api_source不重复追加); scheduler-guide: 锁状态机文档化(RUNNING→SAVED→NO_CHANGES)+SAVED处理流程; 删除resume-inprogress-ccs.sh+monitor-issue-2893.sh | 伟平 |
+| D48 | 04-06 | ✅ | CC异常退出cron恢复机制 | cc-keepalive.sh（原post-cc-check.sh）由cron每5分钟巡检：.cc-lock存在+无claude进程→自动commit/push/PR，10次重试失败标Fail+评论原因。去掉tmux内post-check（快速路径），全部由cron兜底 | 伟平 |
+| D49 | 04-06 | ✅ | 辅助脚本全面审计修复 | cc_manager.sh已废弃→run-manager.sh替代（D65）; run-cc.sh: 重入逻辑修复(统一retry_count/锁检测前置/SAVED状态跳过checkout dev/api_source不重复追加); scheduler-guide: 锁状态机文档化(RUNNING→SAVED→NO_CHANGES)+SAVED处理流程; 删除resume-inprogress-ccs.sh+monitor-issue-2893.sh | 伟平 |
 | D49 | 04-06 | ✅ | 清理孤立脚本+修复check-cc-status.sh会话解析bug | **删除cc-error-parser.py**（596行，无调用者，/var/log/coding-cc已停止写入，CI失败详情走pr-test.yml内联grep，页面已直接读~/.claude/projects/ JSONL）。**修复check-cc-status.sh**：session名从cc-backend-1234改为cc-kimi1-2893后，*kimi1*模糊匹配kimi10-19，误判超时Kill正在运行的CC+标Fail；改为从.cc-lock读issue/module，JSONL搜索改用精确路径。**修复monitor-issue-2893.sh**：新增CC存活检测，threshold从>6h降至>=3h | 伟平 |
 | D50 | 04-06 | ✅ | build-deploy-dev.yml部署失败处理+日志简化 | **新增deploy-failed job**：后端/前端/pipeline任意一个部署失败时，自动创建新P0 bugfix Issue（标priority/P0+type:bugfix+status:test-failed），Project状态设为E2E Fail，由研发经理CC优先安排修复。**简化日志**：去掉Maven/前端构建的tee本地文件逻辑，健康检查失败直接tail打到CI控制台；deploy-failed只附CI日志URL（不再读/tmp/deploy-*.log），减少40行冗余代码 | 伟平 |
 | D51 | 04-06 | ✅ | run-cc.sh重构：交互模式+CLAUDE_CONFIG_DIR隔离+会话稳定性 | **交互模式**：去掉`-p`改用`tmux send-keys`注入，支持`tmux attach`直接对话编程CC。**目录修复**：`-c $PROJECT_DIR`确保启动目录正确，加`--dangerously-skip-permissions`。**Auth隔离**：proxy模式用`CLAUDE_CONFIG_DIR`隔离claude.ai凭证（rsync复制除credentials外全部文件+stub `.credentials.json`+复制`~/.claude.json`），避免auth conflict同时跳过onboarding。**会话稳定性**：去掉`tmux kill-session`（防止claude异常退出时会话立即消失，影响cron检测），加`exec bash`保持会话存活，sleep改为5s。**keys.json**：删除失效的`claude_max` API key配置 | 伟平 |
@@ -179,7 +181,8 @@
 | D66 | 04-07 | ✅ | 企微审批贯通：万德平台主控+企微端审批双引擎 | 使用企微「审批流程引擎」API（非审批应用API），自建应用集成，控制权在万德平台侧。4核心API(submit/detail/list/status)+回调实时同步+H5发起+消息卡片一键审批+双端状态监控。6个Issue(#3161-#3166) Sprint-2，blocked-by #1564(企微SDK)+#2026(审批状态机) | 吴耀 |
 | D67 | 04-07 | ✅ | OA遗留47流程全覆盖：JSON Schema动态表单+条件路由 | 170+旧流程→33简化流程，47个OA未覆盖流程采用「通用表单引擎+审批引擎条件路由」方案，不逐个定制开发。JSON Schema驱动表单配置化，7模块28个模板(人事6+行政5+质量5+印章3+运营2+国贸1+管理6)。8个Issue(#3167-#3174) Sprint-2 | 吴耀 |
 | D68 | 04-07 | ✅ | 回款资料管理体系：Checklist+催收+企业信息库+甲方表单辅助 | 解决甲方回款资料丢失和收集难题。三层方案：①流程节点强制附件+自动归集；②回款节点资料Checklist+完整度门控+自定义甲方要求；③企业信息库自动填充+甲方表单模板生成导出。资料催收企微+站内双通道。7个Issue(#3185-#3191) Sprint-2。复用现有#1999凭证数据库+#2124回款计划+#3179项目360看板+企微通知能力 | 吴耀 |
-| D69 | 04-07 | ✅ | 体游甲方视角的项目计划管理体系 | 中标后项目计划从万德供应商视角转为体游甲方视角。五条业务线(设计/合约/工程/报建/商务)+三级管控(一级节点=项目生死线/二级=管理层关注/三级=日常跟踪)+多供应商三段式排程(设计→生产→现场)+关键路径自动识别+计划模板一键生成+BOM变更→计划联动引擎。BOM独立模块(execution包)通过Spring Event与计划模块联动。13个Issue(#3193-#3203,#3211-#3212) Sprint-2。参考：琴澳公园全景计划表+天力合项目安排计划表+加工深化清单 | 吴耀 |
+| D69 | 04-07 | ✅ | 体游甲方视角的项目计划管理体系 | 中标后项目计划从万德供应商视角转为体游甲方视角。五条业务线(设计/合约/工程/报建/商务)+三级管控(一级节点=项目生死线/二级=管理层关注/三级=日常跟踪)+多供应商三段式排程(设计→生产→现场)+关键路径自动识别+计划模板一键生成+BOM变更→计划联动引擎。BOM独立模块(execution包)通过Spring Event与计划模块联动。11个Issue(#3193-#3203) Sprint-2。参考：琴澳公园全景计划表+天力合项目安排计划表+加工深化清单 | 吴耀 |
+| D70 | 04-07 | ✅ | 研发经理架构拆分：排程经理+研发经理双角色CC | **角色分离**：单一研发经理CC拆为两个独立角色——排程经理（监控Jump/Fail/排程分析/维护PLAN.md）、研发经理（指派CC/巡检进度/注入提示词/验收报告）。**run-manager.sh**：统一启动脚本，幂等启动`manager-排程经理`+`manager-研发经理`两个tmux会话，`\loop 10m`自驱动，cron每30分钟保活。**CLAUDE.md重构**：统一角色路由入口，公共信息（看板ID/脚本/Effort/通知）集中管理，各角色读对应guide文件。**guide文件**：scheduler-guide.md（排程经理专属）/ assign-guide.md（研发经理专属），去除与CLAUDE.md重复内容。**脚本重命名**：check-cc-status.sh→cc-check.sh，post-cc-check.sh→cc-keepalive.sh，cc_manager.sh删除。**巡检改进**：研发经理巡检改为tmux capture-pane实时输出，不再读滞后的task.md。**Sprint多版本支持**：guide中路径统一用sprints/sprint-N，由CC从status.md「🟢进行中」行自行识别当前Sprint。**PLAN.md整合**：增加指派目录列，删除独立ISSUE_ASSIGN_HISTORY.md；sprint-1目录清理19个过时文件 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 
@@ -191,7 +194,7 @@
 Issue创建
   │ auto-add-to-project.yml
   ▼
-[Plan] ──── 研发经理CC排程 ────▶ [Todo]
+[Plan] ──── 排程经理CC ────▶ [Todo]
                                     │
                                     ▼ run-cc.sh 触发编程CC
                                 [In Progress]
@@ -296,7 +299,7 @@ Issue创建
                         ▼              ▼
                     [E2E Fail] ◀── CI/Smoke/回归发现失败
                         │
-                        ▼ 研发经理CC最优先排程
+                        ▼ 排程经理优先排程
                     [In Progress] → 修复 → 重新提PR → [Done]
 ```
 
@@ -360,7 +363,7 @@ Issue创建
 - Token Pool Proxy新增上下文截断：keys.json配context_window(kimi 256K/glm 200K)
 - run-cc.sh/run-cc-with-prompt.sh：按effort自动选择API来源
 - 冲突解决全链路：analyze-conflict-type.sh + cycle-merge智能分类 + post-task.sh/pr-test.yml集成
-- 安全边界：run-cc.sh最大重试3次 + check-cc-status.sh超时20分钟自动清理
+- 安全边界：run-cc.sh最大重试3次 + cc-check.sh（原check-cc-status.sh）超时30分钟自动清理
 - 过时文件清理：删除15个过时文档/脚本/prompt（旧版guide、迁移文档、废弃脚本等）
 - wande-ai-api确认废弃：万德业务功能全部在wande-ai子模块实现
 ### 基础设施变更（04-06）— Harness优化V2 + Claude Office重构

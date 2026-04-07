@@ -35,7 +35,7 @@
 ## 脚本速查（公共）
 
 ```bash
-export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
+export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
 bash scripts/cc-check.sh                                                    # CC状态总览
 bash scripts/query-project-issues.sh --repo play --status "Todo"                   # 查询Issue
 bash scripts/update-project-status.sh --repo play --issue 1234 --status "Todo"    # 更新状态

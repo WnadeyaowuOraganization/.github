@@ -34,7 +34,7 @@ trap 'rm -f "$LOCK_FILE"' EXIT
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOGFILE"; }
 
 # --- 环境准备 ---
-export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh")
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 export PATH="${HOME_DIR}/.local/bin:$PATH"
 export HOME="${HOME_DIR}"
 

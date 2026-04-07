@@ -62,7 +62,7 @@ mvn clean compile
 
 ```bash
 # 获取Token
-export GH_TOKEN=$(bash $HOME_DIR/projects/.github/scripts/get-gh-token.sh)
+export GH_TOKEN=$(python3 $HOME_DIR/projects/.github/scripts/gh-app-token.py)
 
 # 查看Issue
 gh issue view <N> --repo WnadeyaowuOraganization/wande-play --comments

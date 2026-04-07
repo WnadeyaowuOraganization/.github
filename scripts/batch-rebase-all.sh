@@ -5,7 +5,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 
 echo "=== 开始批量 rebase ==="
 echo "时间: $(date)"

@@ -152,28 +152,59 @@ def save_cache(token, expires_at):
 
 
 def main():
-    # Try cache first
-    cached = read_cached_token()
-    if cached:
-        print(cached)
+    SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+    TOKEN_DIR = os.path.join(SCRIPT_DIR, "tokens")
+
+    def _read_pat(filename):
+        path = os.path.join(TOKEN_DIR, filename)
+        try:
+            return open(path).read().strip()
+        except Exception:
+            return None
+
+    # e2e目录强制使用wandeyaowu PAT（独立rate limit，防止merge限流）
+    cwd = os.getcwd()
+    if "e2e" in cwd:
+        token = _read_pat("wandeyaowu.pat")
+        if token:
+            print(token)
+            return
+
+    # Try GitHub App token（独立rate limit 5000）
+    try:
+        # Try cache first
+        cached = read_cached_token()
+        if cached:
+            print(cached)
+            return
+
+        # Load config
+        config = load_config()
+        app_id = config["APP_ID"]
+        installation_id = config["INSTALLATION_ID"]
+
+        # Generate JWT
+        jwt_token = generate_jwt(app_id, KEY_PATH)
+
+        # Exchange for installation token
+        token, expires_at = get_installation_token(jwt_token, installation_id)
+
+        # Cache it
+        save_cache(token, expires_at)
+
+        print(token)
+        return
+    except Exception:
+        pass
+
+    # Fallback: weiping PAT
+    token = _read_pat("weiping.pat")
+    if token:
+        print(token)
         return
 
-    # Load config
-    config = load_config()
-    app_id = config["APP_ID"]
-    installation_id = config["INSTALLATION_ID"]
-
-    # Generate JWT
-    jwt_token = generate_jwt(app_id, KEY_PATH)
-
-    # Exchange for installation token
-    token, expires_at = get_installation_token(jwt_token, installation_id)
-
-    # Cache it
-    save_cache(token, expires_at)
-
-    # Output token (for use in $(...) substitution)
-    print(token)
+    print("ERROR: No valid token available", file=sys.stderr)
+    sys.exit(1)
 
 
 if __name__ == "__main__":

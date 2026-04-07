@@ -31,7 +31,7 @@ Issue创建 → CI自动关联Project Status=Plan
 
 1. 重新获取token：
    ```bash
-   export GH_TOKEN=$(bash $HOME_DIR/projects/.github/scripts/get-gh-token.sh)
+   export GH_TOKEN=$(python3 $HOME_DIR/projects/.github/scripts/gh-app-token.py)
    ```
 2. 用curl直接调GitHub API：
    ```bash

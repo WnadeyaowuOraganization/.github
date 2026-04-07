@@ -177,7 +177,7 @@ if tmux has-session -t "$SESSION" 2>/dev/null; then
 fi
 
 # === Token ===
-export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 # === Prompt构建 ===
 if [ "$MODE" = "issue" ]; then

@@ -30,7 +30,7 @@
 ## 任务一：监控优先队列（Jump / Fail / E2E Fail）
 
 ```bash
-export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
+export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
 
 bash scripts/query-project-issues.sh --repo play --status "Jump" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "Fail" 2>/dev/null

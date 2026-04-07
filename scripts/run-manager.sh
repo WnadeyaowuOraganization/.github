@@ -17,7 +17,7 @@ JSONL_DIR="${HOME_DIR}/.claude/projects/-home-ubuntu-projects--github"
 mkdir -p "$(dirname "$LOG_FILE")"
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
 
-GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
+GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 
 # 写入 tmux会话→JSONL 映射（供 Claude Office 精确关联日志）
 _write_session_map() {

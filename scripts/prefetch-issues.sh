@@ -17,7 +17,7 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null || echo "$GH_TOKEN")
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null || echo "$GH_TOKEN")
 
 # 确保在 dev 分支且已 pull
 cd "$BASE_DIR"

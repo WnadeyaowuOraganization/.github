@@ -14,7 +14,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # PR合并由 pr-test.yml auto-merge job 负责
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 CI_DIR="${HOME_DIR}/projects/wande-play-ci"
 
 # === 复杂冲突处理：在CI目录触发CC ===

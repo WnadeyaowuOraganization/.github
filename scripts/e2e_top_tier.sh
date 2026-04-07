@@ -74,7 +74,7 @@ cd "$E2E_DIR"
 git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
 
 # Token
-export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh")
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 # API来源：Token Pool Proxy（同 run-cc.sh effort!=max）
 API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"

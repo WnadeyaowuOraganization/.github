@@ -14,7 +14,7 @@ REPO=$1
 ISSUE=$2
 MODE=${3:-code-exists}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-source "${SCRIPT_DIR}/get-gh-token.sh"
+export GH_TOKEN=$(python3 "${SCRIPT_DIR}/gh-app-token.py")
 
 case "$REPO" in
   backend)   BASE_DIR="wande-play/backend"; REPO_FULL="WnadeyaowuOraganization/wande-play" ;;
@@ -37,7 +37,7 @@ echo "" >> "$REPORT_FILE"
 
 # ===================== Step 1: 拉取Issue信息 =====================
 echo "拉取 Issue #${ISSUE} 信息..."
-GH_TOKEN=$(bash "${SCRIPT_DIR}/get-gh-token.sh")
+GH_TOKEN=$(python3 "${SCRIPT_DIR}/gh-app-token.py")
 GH_TOKEN="$GH_TOKEN" gh issue view "${ISSUE}" \
     --repo "${REPO_FULL}" \
     --json title,body,state > "$ISSUE_INFO_FILE" 2>/dev/null || {

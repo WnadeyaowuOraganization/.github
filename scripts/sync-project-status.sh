@@ -22,7 +22,7 @@ if [ "$APPLY_MODE" != "--apply" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"

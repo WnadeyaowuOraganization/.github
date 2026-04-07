@@ -8,7 +8,7 @@
 # Auto-detect GH_TOKEN if not set
 if [ -z "$GH_TOKEN" ]; then
   _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-  export GH_TOKEN=$(bash "$_SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
+  export GH_TOKEN=$(python3 "$_SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 fi
 
 set -e
@@ -26,7 +26,7 @@ while [ $# -gt 0 ]; do
 done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 

@@ -2,7 +2,7 @@
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # check-cc-status.sh — 检查CC状态和Issue完成情况
 
-LOGDIR=${HOME_DIR}/cc_scheduler/logs
+LOGDIR=/var/log/coding-cc
 SCRIPT_DIR="${HOME_DIR}/projects/.github/scripts"
 REPORT_FILE="${HOME_DIR}/cc_scheduler/status-report.md"
 
@@ -103,7 +103,7 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
                 | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         fi
         if [ -z "$jsonl_file" ]; then
-            jsonl_file="$logfile"  # fallback到旧日志
+            jsonl_file="$logfile"  # fallback到/var/log/coding-cc/日志
         fi
         last_active=$(stat -c "%Y" "$jsonl_file" 2>/dev/null || stat -c "%Y" "$logfile" 2>/dev/null)
         now=$(date +%s)
@@ -146,19 +146,13 @@ echo "### 待处理P0 Issue数量" >> "$REPORT_FILE"
 bash "$SCRIPT_DIR/query-project-issues.sh" --repo play --status "Todo" 2>/dev/null | grep "P0" | wc -l | xargs -I {} echo "- wande-play Todo P0: {}" >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 
-# 6. 读取编程CC进度（task.md）
-echo "### 编程CC进度（task.md）" >> "$REPORT_FILE"
-for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
-  if [ ! -d "$dir" ]; then continue; fi
-  task=$(find "$dir" -path "*/issues/*/task.md" -mmin -120 2>/dev/null | head -1)
-  if [ -n "$task" ]; then
-    issue_dir=$(basename $(dirname "$task"))
-    status=$(head -5 "$task" | grep "^## Status:" | sed 's/## Status: //')
-    phase=$(head -5 "$task" | grep "^## Phase:" | sed 's/## Phase: //')
-    echo "- $(basename $dir)/$issue_dir: **${status:-?}** (${phase:-?})" >> "$REPORT_FILE"
-  fi
+# 6. 编程CC实时输出摘要（tmux capture-pane）
+echo "### 编程CC实时输出（最近5行）" >> "$REPORT_FILE"
+for session in $(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^cc-"); do
+  echo "#### $session" >> "$REPORT_FILE"
+  tmux capture-pane -t "$session" -p -S -20 2>/dev/null | tail -5 | sed 's/^/  /' >> "$REPORT_FILE"
+  echo "" >> "$REPORT_FILE"
 done
-echo "" >> "$REPORT_FILE"
 
 # 7. 外接目录指派锁状态
 echo "### 外接目录锁状态" >> "$REPORT_FILE"

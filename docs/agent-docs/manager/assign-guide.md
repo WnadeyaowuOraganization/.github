@@ -42,14 +42,11 @@ cat sprints/sprint-1/PLAN.md | grep -A 20 "下次指派时优先选择"
 # 3. prefetch Issue 到 dev 分支（减少 CC 启动时 gh fetch）
 bash scripts/prefetch-issues.sh <issue1> <issue2> ...
 
-# 4. 标 In Progress
-bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
-
-# 5. 启动 CC
+# 4. 启动 CC（成功后再标 In Progress）
 bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
 
-# 6. 记录指派历史
-echo "$(date) #N → kimiX (module, effort)" >> sprints/sprint-1/ISSUE_ASSIGN_HISTORY.md
+# 5. 启动成功后标 In Progress
+bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
 ```
 
 ### Effort 决策
@@ -96,7 +93,7 @@ tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Ente
 | tmux 输出停滞，最后一条是编译错误 | 注入提示词：「检查编译错误并修复」 |
 | tmux 输出显示完成但无 PR 创建动作 | 注入提示词：「执行 gh pr create」 |
 | tmux 会话已不存在，锁状态为 SAVED | 重新触发同 Issue 重入（run-cc.sh 同参数） |
-| 🚨 tmux 输出超30分钟无新内容 | 先注入提示词，无响应则标 Fail |
+| 🚨 tmux 输出超30分钟无新内容 | CC 可能已停止：先 `tmux kill-session` 再 `run-cc.sh` 同参数重启（SAVED 重入）；重启失败再标 Fail |
 
 ## 任务三：恢复异常 CC
 
@@ -174,9 +171,9 @@ grep -A 20 "下次指派时优先选择" sprints/sprint-1/PLAN.md
 ```bash
 bash scripts/check-cc-status.sh                                                    # 全面状态
 bash scripts/query-project-issues.sh --repo play --status "Todo"                   # 待指派
-bash scripts/update-project-status.sh --repo play --issue N --status "In Progress" # 标进行中
-bash scripts/run-cc.sh --module backend --issue N --dir kimi1 --effort medium      # 启动 CC
 bash scripts/prefetch-issues.sh N1 N2 N3                                           # 预下载 Issue
+bash scripts/run-cc.sh --module backend --issue N --dir kimi1 --effort medium      # 启动 CC
+bash scripts/update-project-status.sh --repo play --issue N --status "In Progress" # 启动成功后标进行中
 export GH_TOKEN=$(bash scripts/get-gh-token.sh 2>/dev/null)
 ```
 

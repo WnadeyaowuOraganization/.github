@@ -47,6 +47,10 @@ bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort
 
 # 5. 启动成功后标 In Progress
 bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
+
+# 6. 更新 PLAN.md：
+#    - 「当前运行」表格新增一行：| kimiX | #N | Tier | module | 标题 | 刚启动 |
+#    - 「下次指派时优先选择」列表对应行追加：→ kimiX 运行中
 ```
 
 ### Effort 决策

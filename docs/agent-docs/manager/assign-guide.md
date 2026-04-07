@@ -46,6 +46,34 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 | `module:pipeline` | pipeline | `wande-play-<suffix>/pipeline` |
 | `module:fullstack` | fullstack | `wande-play-<suffix>/`（根目录） |
 
+## PLAN.md 维护规范（研发经理负责）
+
+> ⚠️ PLAN.md 是唯一的指派记录源，每次操作后必须立即更新，不得积压。
+
+### 三个必须维护的区域
+
+#### 1. 「下次指派时优先选择」列表
+- 每次指派后：在对应行追加 `→ kimiX 运行中`
+- Issue Done/Fail 后：更新状态标注（`→ kimiX ✅ Done` 或 `→ kimiX ❌ Fail`）
+
+#### 2. 「当前运行」表格
+格式：`| kimiX | #N | Tier | module | 标题 | 启动时间 |`
+- 指派时：新增一行
+- CC 结束（Done/Fail/超时）后：删除对应行
+
+#### 3. 系列明细表的 `指派目录` 列
+- 默认值为 `—`（排程经理建表时填入）
+- 指派时：填入 `kimiX`（外接目录的最后一段，如 `kimi1`、`kimi3`）
+- **不要填完整路径，只填最后一段**
+
+### 何时更新
+| 事件 | 必须更新的位置 |
+|------|--------------|
+| 指派新 Issue | 三处全部更新 |
+| CC 完成（Done） | 当前运行删行 + 优先列表标 ✅ + 明细表状态列改 Done |
+| CC 失败（Fail） | 当前运行删行 + 优先列表标 ❌ + 明细表状态列改 Fail |
+| 发现 PLAN.md 过时 | 对照 cc-check.sh 输出 + project 看板补齐所有缺失行 |
+
 ## 任务二：巡检 CC 进度
 
 ```bash

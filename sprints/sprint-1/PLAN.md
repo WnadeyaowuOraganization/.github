@@ -425,8 +425,8 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🚨 **插队优先排程** 2026-04-07 21:55 UTC | 20 个 mvn test 欠债修复 (tech-debt:pg-test) 插到表头 | 按 error 数从大到小排序 | 优先级：超高（修复类） | 20 个 kimi 目录可并行，各自独立 PG DB (TEST_PG_DB=wande_test_kimi<N>)
-> ⏳ **待清理**：旧建议表（矿场 Series、CRM、开发监控）暂存后继，等 pg-test 修复推进后恢复
+> 🚨 **插队优先排程** 2026-04-07 22:12 UTC | pg-test 修复 (tech-debt:pg-test) 全 OPEN 继续推进中 | 20 个 issue 按 error 数排序(410→31) | 优先级：超高（修复类）| 各自独立 PG DB (TEST_PG_DB=wande_test_kimi<N>)
+> ⏳ **并发策略**：Sprint-1(kimi1-9) + pg-test(kimi10-17) + 待分配(kimi18-20) | 旧建议表（矿场Series、CRM）已暂存 PLAN 中 Tier1-3，恢复需等 pg-test 推进
 
 | Issue | 优先 | 模块 | 内容 |
 |-------|------|------|------|
@@ -457,7 +457,7 @@
 
 ## 当前运行（22/25）
 
-> 更新：2026-04-07 21:30 UTC | **16/15（超1，临时）** | pg-test批次与Sprint-1指派并发，kimi1-9由Sprint-1占用，kimi10-17由pg-test占用，kimi18-20待分配 | Done 15+个✅ | kimi3#2086刚完成释放
+> 更新：2026-04-07 22:12 UTC | **16/15（超1，临时）** | pg-test批次与Sprint-1指派并发运行中 | kimi1-9：Sprint-1(#2405/#1504/#2254等) | kimi10-17：pg-test(#3349-#3354等) | Done 15+个✅、Fail 0✅ | 全部OPEN继续推进
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|

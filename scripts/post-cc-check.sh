@@ -38,7 +38,17 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
 
   [ "$HAS_PROCESS" = "true" ] && continue
 
-  # === 无进程，需要恢复 ===
+  # === 无进程，检查是否已有 open PR（PR合并前CC应持续等待，由CI释放锁）===
+  FEATURE_BRANCH="feature-Issue-${ISSUE}"
+  OPEN_PR=$(gh pr list --repo WnadeyaowuOraganization/wande-play \
+    --head "$FEATURE_BRANCH" --base dev --state open \
+    --json number --jq '.[0].number' 2>/dev/null || echo "")
+  if [ -n "$OPEN_PR" ]; then
+    log "$DIRNAME Issue#$ISSUE: PR #$OPEN_PR 已开启，等待CI合并后释放锁，跳过恢复"
+    continue
+  fi
+
+  # === 无进程 + 无open PR，需要恢复 ===
   log "$DIRNAME Issue#$ISSUE: CC不在运行，检查产出 (retry=$RETRY)"
 
   # 重试次数检查

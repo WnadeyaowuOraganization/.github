@@ -104,7 +104,26 @@ gh pr create --repo WnadeyaowuOraganization/wande-play \
 
 更新task.md：Status=DONE，Phase=PR_CREATED
 
-**完成。** PR提交后，CI会自动在专用环境运行E2E测试并处理合并。
+**等待合并（不要主动退出）。** PR提交后，轮询PR状态直到合并，然后保持空闲等待CI停止本会话：
+
+```bash
+# 轮询PR合并状态（每60秒一次）
+while true; do
+  STATE=$(gh pr view --head "feature-Issue-<N>" \
+    --repo WnadeyaowuOraganization/wande-play \
+    --json state --jq '.state' 2>/dev/null)
+  if [ "$STATE" = "MERGED" ]; then
+    echo "✅ PR已合并，等待CI释放目录锁并停止本会话..."
+    break
+  fi
+  echo "PR状态: ${STATE:-unknown}，60s后再次检查..."
+  sleep 60
+done
+
+# PR合并后：保持空闲，不要退出。CI脚本会自动停止本会话并释放目录锁。
+# 如长时间未收到停止信号，可执行：sleep infinity
+sleep infinity
+```
 
 ## 跨项目依赖
 

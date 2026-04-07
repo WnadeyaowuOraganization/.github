@@ -424,16 +424,14 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 12:35 | CC状态：10/15在跑（kimi1/2/3/4/7/8/9/10/12/16），**5个空闲槽位（kimi5/6/11/13/17）**
-> 已去除：运行中的 kimi3/#2108、kimi10/#2109、kimi4/#2256 等
-> ⚠️ E2E Fail #2086（变更影响联动API）依赖#2156未完成，暂留E2E Fail
-> ⚠️ CC异常：kimi7(#2363超时46分)/kimi9(#1705超时38分)/kimi12(#1852超时33分) — 研发经理处理
+> 更新时间：2026-04-07 12:50 | CC实际在跑9个（kimi1/2/3/4/5/8/10/16/17），**6个空闲槽位**
+> 补标Done：#2461（Issue CLOSED，PR#3145已合并）| #3227运行中(kimi5)
+> ⚠️ kimi16(#2461 Done) session残留可清理 | #2086 E2E Fail依赖#2156未完成
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
 | #3229 | P0 | backend | 🔴 [BUG 3/7] Fat JAR依赖冲突 — MyBatis/OGNL/Netty/Redis类加载失败 | ✅ |
 | #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失致500 | ✅ |
-| #3227 | P0 | backend | 🔴 [BUG 1/7] 后端进程守护 — Netty类加载崩溃后无自动恢复 | ✅ |
 | #3230 | P1 | backend | 🟠 [BUG 4/7] 后端API路由缺失 — 9个前端页面返回404 | ✅ |
 | #3231 | P1 | backend | 🟠 [BUG 5/7] CompetitorBidBo.getId() NPE — 进入首页即崩溃 | ✅ |
 | #3234 | P1 | fullstack | 🟠 [BUG 7/7] 矿场/运营仪表盘数据全0 — Dashboard统计接口返回空 | ✅ |
@@ -456,20 +454,24 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（10/15）
+## 当前运行（13/15）
 
-> 更新：2026-04-07 12:30 UTC | **10/15** | 撤销错误指派kimi5/#2110/kimi6/#2106/kimi11/#2471/kimi13/#2047（Issue已CLOSED+MERGED PR）
+> 更新：2026-04-07 12:47 UTC | **13/15** | kimi7/kimi9超时释放→重指派BUG P0；kimi12重启；新增kimi5/kimi6/kimi11→BUG P0/P1
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API |
 | kimi4 | #2256 | T1 | frontend | 矿场增强[6/23] 列表状态筛选+流转 |
-| kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 |
+| kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 |
+| kimi6 | #3230 | BUG | backend | 🟠 P1 后端API路由缺失 |
+| kimi7 | #3229 | BUG | backend | 🔴 P0 Fat JAR依赖冲突 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
-| kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
+| kimi9 | #3228 | BUG | backend | 🔴 P0 DB Schema缺失字段 |
 | kimi10 | #2109 | T1 | backend | 质保售后 售后工单API |
-| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
+| kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE |
+| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建（重启） |
+| kimi16 | #2461 | T1 | backend | 合同管理建表 |
 | kimi17 | #2107 | T1 | backend | 质保售后 备件管理API |
 
 ---
@@ -515,3 +517,10 @@
 | kimi6 | ~~#2106~~ | T1 | backend | ~~质保售后 备件消耗关联工单~~ PR#3206✅merged | ~~Done~~ |
 | kimi11 | ~~#2471~~ | T1 | backend | ~~项目中心Phase13 6张表~~ PR#3141✅merged | ~~Done~~ |
 | kimi13 | ~~#2047~~ | T1 | backend | ~~AI投标Phase1 ComfyUI基础设施~~ PR#3143✅merged | ~~Done~~ |
+| kimi7 | ~~#2363~~ | T1 | frontend | ~~项目中心Phase8 菜单+列表~~ PR#3135✅merged | ~~Done~~ |
+| kimi9 | ~~#1705~~ | T1 | backend | ~~CRM跟进记录CRUD API~~ PR#2563✅merged | ~~Done~~ |
+| kimi7 | #3229 | BUG | backend | 🔴 P0 Fat JAR依赖冲突 | In Progress |
+| kimi9 | #3228 | BUG | backend | 🔴 P0 DB Schema缺失字段 | In Progress |
+| kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 | In Progress |
+| kimi6 | #3230 | BUG | backend | 🟠 P1 后端API路由缺失 | In Progress |
+| kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE | In Progress |

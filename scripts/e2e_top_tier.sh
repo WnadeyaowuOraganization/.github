@@ -100,7 +100,7 @@ tmux new-session -d -s "$SESSION" -c "$E2E_DIR" \
    ${API_ENV} \
    export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
    claude --model claude-opus-4-6 --dangerously-skip-permissions; \
-   rm -rf ${CONFIG_DIR}; exec bash"
+   rm -rf ${CONFIG_DIR}"
 
 # 后台：注入prompt + 关联JSONL
 ( sleep 6

@@ -33,25 +33,19 @@ e2e/tests/
 └── fixtures/             # 共享测试数据
 ```
 
-## 结果处理器
+## 辅助脚本
 
-测试结果通过 `e2e-result-handler.py` 自动处理评论+Label+Project状态：
+`e2e-result-handler.py` 只负责打标签和更新 Project#4 状态，**不负责创建 Issue**：
 
 ```bash
-HANDLER="$HOME_DIR/projects/.github/scripts/e2e-result-handler.py"
-
-# 有关联Issue时:
-python3 $HANDLER --report test-results/reports/results.json --issue <N> --source top
-
-# 无关联Issue时（自动创建）:
-python3 $HANDLER --report test-results/reports/results.json --source top
-# → 失败时自动创建Issue（判断module、打标签、设Project状态为E2E Fail）
-# → 通过时静默退出
+# 给已存在的Issue打标签 + 设Project状态为 E2E Fail
+python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
+  --report test-results/reports/results.json --issue <N> --source top
 ```
 
 ## 全量回归工作流
 
-**prompt**: `执行顶层测试`
+**prompt**: `执行顶层E2E全量回归测试`
 
 ### 1. 准备
 
@@ -65,24 +59,42 @@ git fetch origin dev && git reset --hard origin/dev && git clean -fd
 **必须使用 `--reporter=json,list` 输出JSON报告**：
 
 ```bash
-# 全量回归
 npx playwright test tests/regression/ --reporter=json,list
-
-# 各模块smoke + API测试
 npx playwright test tests/backend/ tests/front/ --reporter=json,list --grep-invert "@external"
 ```
 
-### 3. 结果处理
+### 3. 结果处理（你来完成）
+
+**全通过** → 无需创建Issue，直接跳到步骤5。
+
+**有失败** → 你自己分析失败原因，创建一个 Issue：
 
 ```bash
-# 调用结果处理器 — 自动完成一切后续动作
-python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
-  --report test-results/reports/results.json --source top
+export GH_TOKEN=$(python3 $HOME_DIR/projects/.github/scripts/gh-app-token.py)
+
+gh issue create \
+  --repo WnadeyaowuOraganization/wande-play \
+  --title "[E2E回归] <你总结的问题标题>" \
+  --label "type:bug,status:test-failed,priority:P0" \
+  --body "<你写的详细分析>"
 ```
 
-处理器会：
-- **全通过** → 静默退出（退出码0）
-- **有失败** → 自动创建Issue + 评论失败详情 + 标 `status:test-failed` + Project状态设为 `E2E Fail`
+Issue body 应包含：
+- 通过率（X/Y）和测试时间
+- 按模块分类的失败列表，附失败原因分析（是代码bug、环境问题还是测试本身的问题）
+- 重现步骤
+- 修复建议和优先级
+
+拿到新建 Issue 号后，调用辅助脚本设 Project 状态，并发送通知：
+
+```bash
+python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
+  --report test-results/reports/results.json --issue <新Issue号> --source top
+
+curl -s -X POST http://localhost:9872/api/notify \
+  -H "Content-Type: application/json" \
+  -d "{\"session\":\"e2e-top\",\"message\":\"E2E全量回归完成，发现问题已创建Issue #<新Issue号>\",\"type\":\"warning\"}"
+```
 
 ### 4. 补充测试（你的核心价值）
 
@@ -90,6 +102,19 @@ python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
 1. 根据最近merge的PR变更，分析哪些功能缺少测试
 2. 补充测试用例到对应目录
 3. 提交到仓库: `git add . && git commit -m "test: <描述>" && git push origin dev`
+
+### 5. 完成退出
+
+所有工作完成后，发送通知并退出（tmux会话会自动关闭）：
+
+```bash
+# 全通过时：
+curl -s -X POST http://localhost:9872/api/notify \
+  -H "Content-Type: application/json" \
+  -d "{\"session\":\"e2e-top\",\"message\":\"E2E全量回归完成，全部通过\",\"type\":\"success\"}"
+
+exit
+```
 
 ## 环境信息
 

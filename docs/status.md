@@ -18,6 +18,7 @@
 | 超管驾驶舱 | 95 | 平台系统+开发者协同+安全审计 | `sprints/sprint-1/超管驾驶舱/` |
 | 销售记录体系 | 16 | 三维驱动+记录中心+周报月报 | `sprints/sprint-1/销售记录体系/` |
 | D3参数化设计 | — | 电池包+AI集成+Web平台 | `sprints/sprint-1/D3参数化设计/` |
+| 项目矿场/投标 | 19 | **D54新增优先**：矿场增强P0(5)+投标引擎P0(1)+增量同步P1(1)，矿场P0优先于D3 Todo | — |
 ### Sprint-2 预览（80个Issue，已去重清理）
 | 执行管理 | 57 | 数据库建表→CRUD→图纸/BOM/采购/生产/安装/验收/变更→利润/成本/回款→AI预警→EVM | `sprints/sprint-2/执行管理/` |
 | CRM | 6 | 跟进记录+商机管理+经销体系+报价引擎 | `sprints/sprint-2/CRM/` |
@@ -158,6 +159,7 @@
 | D51 | 04-06 | ✅ | run-cc.sh重构：交互模式+CLAUDE_CONFIG_DIR隔离+会话稳定性 | **交互模式**：去掉`-p`改用`tmux send-keys`注入，支持`tmux attach`直接对话编程CC。**目录修复**：`-c $PROJECT_DIR`确保启动目录正确，加`--dangerously-skip-permissions`。**Auth隔离**：proxy模式用`CLAUDE_CONFIG_DIR`隔离claude.ai凭证（rsync复制除credentials外全部文件+stub `.credentials.json`+复制`~/.claude.json`），避免auth conflict同时跳过onboarding。**会话稳定性**：去掉`tmux kill-session`（防止claude异常退出时会话立即消失，影响cron检测），加`exec bash`保持会话存活，sleep改为5s。**keys.json**：删除失效的`claude_max` API key配置 | 伟平 |
 | D52 | 04-06 | ✅ | CLAUDE.md文档路径改为绝对路径 | wande-play所有kimi目录CLAUDE.md中子模块指南由相对路径`../../.github/docs/...`改为绝对路径`/home/ubuntu/projects/.github/docs/...`，避免编程CC在子目录操作时路径解析错误，也避免与项目自身`.github/workflows/`混淆 | 伟平 |
 | D53 | 04-06 | ✅ | post-cc-check.sh进程检测Bug修复 + session命名统一 | **Bug根因**：`HAS_PROCESS`检测用`DIRNAME=wande-play-kimi11`匹配session名`cc-kimi11-backend-1633`，grep永远不匹配→所有CC误判无进程→每5分钟retry+1→触发retry=10标Fail，CC实际正在运行。**修复**：session命名统一为`cc-{basename(BASE_DIR)}-{issue}`（如`cc-wande-play-kimi11-1633`），post-cc-check.sh改为精确匹配`cc-{DIRNAME}-{ISSUE}`，无需读DIR_SUFFIX字段。**check-cc-status.sh**：session解析从`cc-wande-play-kimiN-1234`提取kimiN和issue。**Claude Office兼容**：`/log`接口`rsplit("-",1)`提取dir_name=`wande-play-kimi11`→`_find_jsonl`按最近修改匹配JSONL，功能不受影响 | 伟平 |
+| D54 | 04-07 | ✅ | Sprint-1矿场优先级提升：矿场P0(5个)+投标引擎(1个)+矿场增量同步(1个)→Todo | Sprint-1矿场完成率0%(19个Issue全部未启动)，算力被D3吸收。矿场P0的5个Issue(#1534/#1535/#2256/#2257/#2407)+投标引擎#2206(P0)+#2028(P1)看板状态从Plan→Todo，确保研发经理CC能排程。矿场P0优先于D3剩余Todo | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

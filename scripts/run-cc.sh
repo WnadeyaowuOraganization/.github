@@ -252,9 +252,16 @@ if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
   sed -i "s/^api_source=.*/api_source=${API_SOURCE}/" "$LOCK_FILE"
 fi
 
+# === 准备测试 PG 独立 DB（per-kimi 隔离）===
+# DIRNAME 形如 wande-play-kimi3，提取 kimi3 作为 DB suffix
+KIMI_TAG=$(basename "$PROJECT_DIR" | sed 's/wande-play-//')
+TEST_PG_DB="wande_test_${KIMI_TAG}"
+bash "$SCRIPT_DIR/ensure-test-pg.sh" "$KIMI_TAG" 2>&1 | tail -3 || true
+TEST_PG_ENV="export TEST_PG_HOST=localhost; export TEST_PG_PORT=5434; export TEST_PG_DB=${TEST_PG_DB}; export TEST_PG_USER=wande; export TEST_PG_PASSWORD=wande_test;"
+
 # === 启动tmux（交互模式，支持attach和注入）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
-  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} \
+  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${TEST_PG_ENV} \
    claude --model ${MODEL} --dangerously-skip-permissions; \
    ${CLEANUP_CMD} exec bash"
 

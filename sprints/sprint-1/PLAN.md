@@ -425,8 +425,8 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🚨 **插队优先排程** 2026-04-07 22:12 UTC | pg-test 修复 (tech-debt:pg-test) 全 OPEN 继续推进中 | 20 个 issue 按 error 数排序(410→31) | 优先级：超高（修复类）| 各自独立 PG DB (TEST_PG_DB=wande_test_kimi<N>)
-> ⏳ **并发策略**：Sprint-1(kimi1-9) + pg-test(kimi10-17) + 待分配(kimi18-20) | 旧建议表（矿场Series、CRM）已暂存 PLAN 中 Tier1-3，恢复需等 pg-test 推进
+> 🚨 **插队优先排程** 2026-04-07 22:32 UTC | pg-test 修复 (tech-debt:pg-test) 全 OPEN 稳定推进 | 20 个 issue 按 error 数排序(410→31) | 优先级：超高 | 独立 PG DB (TEST_PG_DB=wande_test_kimi<N>)
+> ⏳ **并发策略稳定**：Sprint-1(kimi1-9) + pg-test(kimi10-17) + 其他批次并行 | 旧建议表暂存 PLAN Tier1-3 | 恢复待 pg-test 推进
 
 | Issue | 优先 | 模块 | 内容 |
 |-------|------|------|------|
@@ -457,7 +457,7 @@
 
 ## 当前运行（22/25）
 
-> 更新：2026-04-07 22:22 UTC | **41 CC 运行中**（超预期，多批次并发）| 16个指派目录(kimi1-17) + 其他批次并行 | 指派表全OPEN继续推进 | Plan 691/Todo 125/Done 382 | 无新 Done 本轮检出
+> 更新：2026-04-07 22:32 UTC | **40 CC 运行中** | 16个指派目录(kimi1-17全OPEN) + 其他批次并行 | 看板：Plan 691/Todo 125/In Progress 34/Done 382 | 无新完成本轮 | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|

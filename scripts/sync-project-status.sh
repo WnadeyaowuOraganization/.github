@@ -26,8 +26,8 @@ export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
 PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"
-DONE_OPTION_ID="c8f40892"
-REJECT_OPTION_ID="19b94094"
+DONE_OPTION_ID="ba15b774"
+REJECT_OPTION_ID="5aef36fa"
 OWNER="WnadeyaowuOraganization"
 REPO="wande-play"
 

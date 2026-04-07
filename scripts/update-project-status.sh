@@ -2,7 +2,7 @@
 # update-project-status.sh - 更新Project #4看板的Status字段
 # 用法: update-project-status.sh --repo play --issue 1234 --status "In Progress"
 # repo:   play | backend | frontend | pipeline | plugins | gh-plugins
-# status: Plan | Todo | In Progress | Done | pause | Fail | E2E Fail | Reject
+# status: Jump | Plan | Todo | In Progress | Done | pause | Fail | E2E Fail | Reject
 
 set -e
 
@@ -22,23 +22,24 @@ done
 
 if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
     echo "用法: $0 --repo play --issue <N> --status \"<STATUS>\""
-    echo "STATUS: Plan | Todo | In Progress | Done | pause | Fail | E2E Fail | Reject"
+    echo "STATUS: Jump | Plan | Todo | In Progress | Done | pause | Fail | E2E Fail | Reject"
     exit 1
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 export GH_TOKEN=$("$SCRIPT_DIR/get-gh-token.sh")
 
-# Status Option ID 映射
+# Status Option ID 映射（2026-04-07更新，新增Jump状态）
 declare -A STATUS_MAP
-STATUS_MAP["Plan"]="7beef254"
-STATUS_MAP["Todo"]="69f47110"
-STATUS_MAP["In Progress"]="c1875ac0"
-STATUS_MAP["Done"]="c8f40892"
-STATUS_MAP["pause"]="434faed7"
-STATUS_MAP["Fail"]="8a0d3051"
-STATUS_MAP["E2E Fail"]="efdab43b"
-STATUS_MAP["Reject"]="19b94094"
+STATUS_MAP["Jump"]="03012e67"
+STATUS_MAP["Plan"]="a07b604b"
+STATUS_MAP["pause"]="895c6027"
+STATUS_MAP["Todo"]="d14d5f74"
+STATUS_MAP["In Progress"]="4a591864"
+STATUS_MAP["E2E Fail"]="8d2164a2"
+STATUS_MAP["Done"]="ba15b774"
+STATUS_MAP["Fail"]="787b6892"
+STATUS_MAP["Reject"]="5aef36fa"
 
 OPTION_ID="${STATUS_MAP[$NEW_STATUS]}"
 if [ -z "$OPTION_ID" ]; then
@@ -61,13 +62,15 @@ if [ "$REPO_SHORT" = "play" ]; then
     PROJECT_ID="PVT_kwDOD3gg584BTjK2"
     FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"
     declare -A STATUS_MAP_PLAY
-    STATUS_MAP_PLAY["Plan"]="7beef254"
-    STATUS_MAP_PLAY["Todo"]="69f47110"
-    STATUS_MAP_PLAY["In Progress"]="c1875ac0"
-    STATUS_MAP_PLAY["Done"]="c8f40892"
-    STATUS_MAP_PLAY["pause"]="434faed7"
-    STATUS_MAP_PLAY["Fail"]="8a0d3051"
-    STATUS_MAP_PLAY["E2E Fail"]="efdab43b"
+    STATUS_MAP_PLAY["Jump"]="03012e67"
+    STATUS_MAP_PLAY["Plan"]="a07b604b"
+    STATUS_MAP_PLAY["pause"]="895c6027"
+    STATUS_MAP_PLAY["Todo"]="d14d5f74"
+    STATUS_MAP_PLAY["In Progress"]="4a591864"
+    STATUS_MAP_PLAY["E2E Fail"]="8d2164a2"
+    STATUS_MAP_PLAY["Done"]="ba15b774"
+    STATUS_MAP_PLAY["Fail"]="787b6892"
+    STATUS_MAP_PLAY["Reject"]="5aef36fa"
     OPTION_ID="${STATUS_MAP_PLAY[$NEW_STATUS]}"
 else
     PROJECT_ID="PVT_kwDOD3gg584BTjK2"

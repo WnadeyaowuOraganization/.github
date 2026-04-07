@@ -172,6 +172,7 @@
 | D63 | 04-07 | ✅ | 第2轮排程：超管驾驶舱+Claude Office迁移+矿场增强 | 12个Issue并行启动：超管驾驶舱P0(#2409/#1572/#2076/#2043/#2081/#2276)、Claude Office全量迁移(#2893)、矿场增强P0(#2257/#2407/#2256)、投标方案引擎(#2206)、矿场增量同步(#2028)。当前16空闲→12锁定 | 伟平 |
 | D64 | 04-07 | ✅ | 统一询盘管理体系：客户为中心+三线统一数据模型 | 客户(Account)→询盘(Inquiry)→报价(Quotation)→订单(Order)层级，直销/经销/国贸共用trade_inquiries+trade_quotations表(business_type区分)。直销主流程仍走矿场→商机模式(项目驱动)，询盘模式服务经销+国贸+少量直销非招标场景。13个Issue(#3099-#3111) Sprint-1：P0询盘模型+报价模型+客户Tab+看板+报价PDF+PI生成，P1订单跟踪+发货+单据+合同扩展，P2信用额度+转化率+汇率。对标SAP SD文档流+Salesforce Account-Opportunity | 吴耀 |
 | D65 | 04-07 | ✅ | 直销vs询盘双入口架构确认 | 直销(国内+澳门)=项目驱动→矿场系统(68个Issue)；经销+国贸=客户驱动→询盘工作台(13个Issue)。两套入口共享客户/合同/回款/销售记录层，互不混用。少量直销非招标场景可走询盘模式(business_type=direct) | 吴耀 |
+| D66 | 04-07 | ✅ | Project#4新增Jump插队状态+自动检查机制 | **Jump状态**：在Project#4看板Status字段新增「Jump」选项（红色，优先级高于Todo），用于标记需要插队优先处理的Issue。#2950已设为Jump。**ID更新**：updateProjectV2Field重置了所有选项ID，同步更新update-project-status.sh/sync-project-status.sh/issue-sync.yml中的硬编码ID映射（Jump=03012e67, Plan=a07b604b, Todo=d14d5f74, In Progress=4a591864, Done=ba15b774, Fail=787b6892, E2E Fail=8d2164a2, Reject=5aef36fa）。**check-jump-fail.sh**：每10分钟巡检Jump/Fail/E2E Fail中的新Issue，有新增时通过Claude Office SSE推送优先排程提醒，状态持久化到~/.cc_scheduler/jump-fail-state.json | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

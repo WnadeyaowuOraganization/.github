@@ -429,6 +429,11 @@ Issue创建
 - update-project-status.sh自动关联看板：ITEM_IDS为空时addProjectV2ItemById自动加入
 - CLAUDE.md新增注入提示词和发送通知webhook两节指令
 - 前端UI图形E2E测试：Playwright全面测试，发现P0 bug并创建Issue至E2E Fail状态
+### 基础设施变更（04-07）— E2E与CC管理优化
+- e2e_top_tier.sh重构：从claude -p headless+临时脚本改为交互式tmux+send-keys注入，对齐run-manager.sh保活模式（session存在跳过，cron每6h重启），新增_associate_jsonl JSONL关联供Claude Office日志展示，配置隔离同run-cc.sh Token Pool Proxy stub credentials
+- assign-guide.md修正：Step顺序改为run-cc.sh成功后再标In Progress（原反序），删除死代码ISSUE_ASSIGN_HISTORY.md步骤
+- check-cc-status.sh：去除超时自动kill+标Fail逻辑，改为30min发warning通知人工重启（防误杀正常CC）
+- Reject Issue批量清理：121个Reject状态Issue全部标Done（均已CLOSED，为迁移/替代/过时旧需求）
 ## 📌 需要对方处理
 ### @伟平 待讨论
 - ~~**dev分支后端无法启动（P0）**~~ — 已通过 #2585 / PR #2593 解决

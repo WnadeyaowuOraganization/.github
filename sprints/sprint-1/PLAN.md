@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 15:20 | CC **16/15在跑**，**全部活跃** 🎉
-> 补标Done：#1557（企微通讋录同步，Issue CLOSED）→ 解锁#1554(H5 JS-SDK签名)
-> 研发经理已处理卡住CC：kimi4→#2372/kimi6→#1630/kimi7→#2041/kimi8→#2040/kimi13→#2453/kimi14→#2039
+> 更新时间：2026-04-07 15:30 | CC **16/15在跑**，14个活跃
+> 补标Done：#2950（侧边栏分组重构+RBAC，T2，今日最大单Issue，kimi1运行约5小时）
+> ⚠️ kimi1(#2950 Done) session仍存在可清理 | kimi10(#2452)卡住10分/kimi6(#1630)卡住6分
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -434,22 +434,22 @@
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
 | #1554 | P1 | backend | 企微打通[9/17] H5 JS-SDK签名（#1557已Done，解锁） | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
-| #2122 | P0 | backend | AI回款风险预警（#2124运行中kimi16，完成后解锁） | ⏳ |
 | #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16运行中） | ⏳ |
 | #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成，kimi11运行中） | ⏳ |
 | #2276 | P0 | frontend | 采集管控[4/4] 管控面板（等#1572完成） | ⏳ |
-| #2372 | P0 | frontend | 售后工单管理主页面（运行中kimi4） | 运行中 |
-| #2373 | P0 | frontend | H5客户报修页面（运行中kimi13前轮，本轮已换） | ✅ |
-| #1740 | P1 | frontend | 备件库存管理页面（#2107已Done，解锁） | ✅ |
 | #2450 | P0 | pipeline | 竞品甲方提取（等#2452完成，kimi10运行中） | ⏳ |
-| #2423 | P0 | pipeline | Agent基类（等#2424完成） | ✅ |
+| #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
+| #1740 | P1 | frontend | 备件库存管理页面（#2107已Done，解锁） | ✅ |
+| #2373 | P0 | frontend | H5客户报修页面 | ✅ |
+| #2423 | P0 | pipeline | Agent基类（#2424已完成，解锁） | ✅ |
 | #2038 | P1 | backend | D3优化[8/10] 配色方案系统 | ✅ |
 | #2477 | P1 | pipeline | D3-AI ComfyUI渲染Pipeline | ✅ |
-| #2026 | P0 | backend | 审批引擎核心（运行中kimi16，完成解锁#2366） | 运行中 |
-| #2065 | P0 | backend | D3参数化市场配置预设（kimi6已切离，OPEN） | ✅ |
-| #2055 | P0 | backend | D3参数化扣件管理（kimi4已切离，OPEN） | ✅ |
-| #1876 | P0 | backend | 商务48小时反馈（确认是否已Done） | ✅ |
-| #2363 | P0 | frontend | 项目中心Phase8 菜单+列表（确认状态） | ✅ |
+| #2065 | P0 | backend | D3参数化 市场配置预设（kimi6已切离，OPEN） | ✅ |
+| #2055 | P0 | backend | D3参数化 扣件管理Web后台（kimi4已切离，OPEN） | ✅ |
+| #2893 | P0 | fullstack | Claude Office全量迁移至wande-play（T3，无代码依赖） | ✅ |
+| #2845 | P0 | backend | 开发模式监控[1/7] CFD数据API | ✅ |
+| #2848 | P0 | backend | 开发模式监控[4/7] Agent效率看板API | ✅ |
+| #2847 | P0 | pipeline | 开发模式监控[3/7] Fail根因强制回写 | ✅ |
 
 ---
 

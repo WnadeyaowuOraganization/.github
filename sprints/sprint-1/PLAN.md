@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 15:30 | CC **16/15在跑**，14个活跃
-> 补标Done：#2950（侧边栏分组重构+RBAC，T2，今日最大单Issue，kimi1运行约5小时）
-> ⚠️ kimi1(#2950 Done) session仍存在可清理 | kimi10(#2452)卡住10分/kimi6(#1630)卡住6分
+> 更新时间：2026-04-07 15:45 | CC **15/15满载**，14个活跃，kimi5锁超时（自动恢复中）
+> 补标Done：#2107(备件管理API,kimi5-445min超时), #2452(竞品中标管线[4/38],kimi10→已重指派#2424), #1458(商务周报API,kimi5已关闭)
+> ⚠️ kimi1(#2950 Done) session仍存在可清理 | kimi16(6% until auto-compact) | kimi17(10% until auto-compact)
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -434,10 +434,10 @@
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
 | #1554 | P1 | backend | 企微打通[9/17] H5 JS-SDK签名（#1557已Done，解锁） | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
-| #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16运行中） | ⏳ |
+| #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16运行中~6% compact） | ⏳ |
 | #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成，kimi11运行中） | ⏳ |
 | #2276 | P0 | frontend | 采集管控[4/4] 管控面板（等#1572完成） | ⏳ |
-| #2450 | P0 | pipeline | 竞品甲方提取（等#2452完成，kimi10运行中） | ⏳ |
+| #2450 | P0 | pipeline | 竞品甲方提取（kimi9在跑中） | ✅ |
 | #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
 | #1740 | P1 | frontend | 备件库存管理页面（#2107已Done，解锁） | ✅ |
 | #2373 | P0 | frontend | H5客户报修页面 | ✅ |
@@ -457,7 +457,7 @@
 
 ## 当前运行（16/15）
 
-> 更新：2026-04-07 15:20 UTC | **16/15** | kimi4→#2372(售后工单P0)、kimi13→#2453(历史甲方pipeline P0)、kimi14→#2039(D3方案变体)；kimi10/#2452 PR创建中
+> 更新：2026-04-07 15:35 UTC | **16/15** | kimi9→#2450(竞品甲方P0)、kimi10→#2424(browser_client P0)；kimi9/#2408 PR#3276 Done，kimi10/#2452 PR#3275 已MERGED
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -469,14 +469,14 @@
 | kimi6 | #1630 | T1 | backend | 整改工单Phase27 API P0 |
 | kimi7 | #2041 | T1 | backend | D3优化[5/10] 场地地形集成 |
 | kimi8 | #2040 | T1 | backend | D3优化[6/10] 无障碍合规自动检测 |
-| kimi9 | #2408 | T1 | pipeline | 采集管控[2/4] 13脚本接run_reporter |
-| kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38]（PR创建中） |
+| kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0（#2452 MERGED解锁） |
+| kimi10 | #2424 | T1 | pipeline | browser_client.py Agent基建[3/7] P0 |
 | kimi11 | #2095 | T1 | backend | 执行管理 验收附件管理API |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #2453 | T1 | pipeline | 历史甲方定向监控清单[3/38] P0 |
 | kimi14 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理+版本回溯 |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 |
-| kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API |
+| kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API（2h+，context 10%）|
 
 ---
 
@@ -562,3 +562,7 @@
 | kimi4 | #2372 | T1 | frontend | 质保售后 售后工单管理主页面 P0 | In Progress |
 | kimi13 | #2453 | T1 | pipeline | 历史甲方定向监控清单[3/38] P0 | In Progress |
 | kimi14 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理+版本回溯 | In Progress |
+| kimi9 | ~~#2408~~ | T1 | pipeline | ~~采集管控[2/4] 13脚本接run_reporter~~ PR#3276 | ~~Done~~ |
+| kimi10 | ~~#2452~~ | T1 | pipeline | ~~竞品中标公告定向采集管线[4/38]~~ PR#3275✅merged | ~~Done~~ |
+| kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0 | In Progress |
+| kimi10 | #2424 | T1 | pipeline | browser_client.py Agent基建[3/7] P0 | In Progress |

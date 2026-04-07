@@ -62,7 +62,8 @@ public class XxxController {
 
 ## 必须使用 ubuntu 用户执行构建
 
-`sudo -u ubuntu mvn clean compile`（如果当前是 root）。禁止用 root 执行 mvn，否则 target 目录权限会变成 root 所有，导致后续 CI/CD Runner（ubuntu 用户）无法清理 target 目录而构建失败。
+**CC本身已在ubuntu用户下运行**，直接执行 `mvn clean compile` 即可，无需 `sudo -u ubuntu`。
+`sudo -u ubuntu` 仅在当前是 root 用户时才需要。禁止用 root 执行 mvn，否则 target 目录权限会变成 root 所有，导致后续 CI/CD Runner（ubuntu 用户）无法清理 target 目录而构建失败。
 
 ## 包路径规范（防止同名类冲突）
 

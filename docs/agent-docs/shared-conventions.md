@@ -48,13 +48,15 @@
 
 ### 必须用ubuntu用户执行构建
 
-```bash
-# 正确
-sudo -u ubuntu mvn clean compile
+**CC本身已在ubuntu用户下运行**，直接执行即可：
 
-# 错误（root会导致CI/CD Runner权限失败）
+```bash
+# CC环境下直接运行（CC已是ubuntu用户）
 mvn clean compile
 ```
+
+> `sudo -u ubuntu` 仅在当前是 root 用户时才需要（例如手动SSH进服务器以root身份操作）。
+> 禁止用 root 执行 mvn，否则 target 目录权限变成 root 所有，导致后续 CI/CD Runner（ubuntu 用户）无法清理 target 目录而构建失败。
 
 ## GitHub CLI
 

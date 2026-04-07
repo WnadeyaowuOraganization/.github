@@ -197,7 +197,7 @@ if [ "$MODE" = "issue" ]; then
   else
     echo "${ISSUE_BODY}${ISSUE_COMMENTS}" > "$ISSUE_SOURCE"
     echo "$(date): Issue #${ISSUE} saved to $ISSUE_SOURCE ($(wc -l < "$ISSUE_SOURCE") lines)"
-    CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，然后按照开发流程完成任务。Issue 编号: #${ISSUE}"
+    CC_PROMPT="请先阅读 /home/ubuntu/projects/.github/docs/agent-docs/issue-workflow.md 了解完整开发流程，然后阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
   fi
 
   # 检查详细设计文档

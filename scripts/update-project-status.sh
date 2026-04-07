@@ -165,8 +165,25 @@ for repo, val in data.items():
 fi
 
 if [ -z "$ITEM_IDS" ]; then
-    echo "错误: 未找到 Issue #$ISSUE_NUMBER 在Project #4 中的 Item"
-    exit 1
+    # Issue 不在看板中，先添加再获取 Item ID
+    echo "Issue #$ISSUE_NUMBER 不在看板中，自动添加..."
+    REPO_FULL_ADD="${REPO_MAP[$REPO_SHORT]:-wande-play}"
+    ISSUE_NODE_ID=$(gh api graphql --raw-field query='query($owner:String!,$repo:String!,$n:Int!){repository(owner:$owner,name:$repo){issue(number:$n){id}}}' \
+      -F owner="WnadeyaowuOraganization" -F repo="$REPO_FULL_ADD" -F n="$ISSUE_NUMBER" \
+      --jq '.data.repository.issue.id' 2>/dev/null)
+    if [ -z "$ISSUE_NODE_ID" ]; then
+        echo "错误: 无法获取 Issue #$ISSUE_NUMBER 的 Node ID"
+        exit 1
+    fi
+    NEW_ITEM_ID=$(gh api graphql --raw-field query='mutation($p:ID!,$c:ID!){addProjectV2ItemById(input:{projectId:$p,contentId:$c}){item{id}}}' \
+      -F p="$PROJECT_ID" -F c="$ISSUE_NODE_ID" \
+      --jq '.data.addProjectV2ItemById.item.id' 2>/dev/null)
+    if [ -z "$NEW_ITEM_ID" ]; then
+        echo "错误: 添加 Issue #$ISSUE_NUMBER 到看板失败"
+        exit 1
+    fi
+    ITEM_IDS="${NEW_ITEM_ID}|${REPO_SHORT:-play}"
+    echo "✓ Issue #$ISSUE_NUMBER 已添加到看板 (Item: $NEW_ITEM_ID)"
 fi
 
 # --- 更新Status ---

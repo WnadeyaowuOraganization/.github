@@ -1,7 +1,23 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-08 00:45 by Perplexity
+> ⏰ 最后更新：2026-04-08 by Wande AI Bot
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
+
+## 🚨 2026-04-07 重大基础设施变更
+
+**单元测试基础设施由 H2 切换到 Docker PostgreSQL，CI 加 mvn test 关卡**
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 调研 SCHEMA_ORDER.txt 并行冲突 → 发现 H2/PG 双套维护浪费 → 发现 dev 长期 `-Dmaven.test.skip=true` 导致 2117 个测试错误无人发现 |
+| 改动 | wande-play `3fee4e88` (dev) + .github `321366e` (main) |
+| 测试 PG 容器 | `wande-test-pg` (postgres:16-alpine, 端口 5434/wande_ai/wande/wande_test) |
+| 启动脚本 | `scripts/ensure-test-pg.sh` |
+| 当前基线 | **338 通过** / 2462 总测试（写入 `.test-baseline`，CI 不允许下降） |
+| 历史欠债 | 2117 errors 拆成 20 个 issue（#3335-#3354），按功能分组，由 CC 逐批清理 |
+| 完整记录 | [docs/workflow/2026-04-07-mvn-test-baseline.md](workflow/2026-04-07-mvn-test-baseline.md) |
+| CC 流程变化 | 写 PG 增量脚本只放 `backend/script/sql/update/wande_ai/`，**不再维护 H2 schema、不再追加 `wande-ai-pg.sql`**。详见 [db-schema.md](agent-docs/backend/db-schema.md) |
+
 ---
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | Issue数 | 重点功能模块 | 交付物（用户能做什么） |

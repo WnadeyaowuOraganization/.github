@@ -1,14 +1,14 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-07 18:10 by Perplexity
-> 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 41个模块·1182个Issue全景索引
+> ⏰ 最后更新：2026-04-08 00:45 by Perplexity
+> 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 ---
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | Issue数 | 重点功能模块 | 交付物（用户能做什么） |
 |--------|------|------|------|---------|-------------|---------------------|
 | Sprint-1 | 🟢 进行中 | 2026-03-28 | 2026-04-11 | 156 | D3参数化P0/P1、矿场增强P0/P1、销售记录体系、驾驶舱P0 | 商务打开矿场看到项目→标记→写销售记录→你在驾驶舱看到；D3 Web端可配置电池包；国贸/经销询盘看板→报价→PI→订单跟踪 |
 | Sprint-2 | ⏳ 待启动 | 2026-04-12 | — | 171 | 执行管理、CRM、审批引擎P0、方案引擎P0、H5基座、**企微审批贯通**、**流程补齐·通用表单** | 签约后能建项目→图纸/BOM管理→回款跟踪；合同/报价能走审批；商务能用PPT插件做方案；**企微内可发起/审批；47个OA遗留流程全覆盖** |
-| Sprint-3 | ⏳ 待启动 | — | — | 190 | 品牌中心·内容自动化+AI数字人、协同修改、素材库、客户生命周期、外展获客、**总控预算二维矩阵+BOM联动**、**项目全景控制表** | 海报/文章自动生成→审批→发布；多语言方案翻译；客户交付提醒+赢丢单复盘；**一张表看进度×预算×BOM全局** |
+| Sprint-3 | ⏳ 待启动 | — | — | 208 | 品牌中心·内容自动化+AI数字人、协同修改、素材库、客户生命周期、外展获客、**总控预算二维矩阵+BOM联动**、**项目全景控制表** | 海报/文章自动生成→审批→发布；多语言方案翻译；客户交付提醒+赢丢单复盘；**一张表看进度×预算×BOM全局** |
 | Sprint-4 | ⏳ 待启动 | — | — | 120 | 品牌中心·视频裂变/舆情/SEO、色卡配色器、库存联通、项目中心、资金闭环 | 视频裂变分发；色卡在线配色→审批；仓库库存可视化；项目全景+风险台账；财务对账 |
 | Sprint-5 | ⏳ 待启动 | — | — | 79 | 商战情报中台（7 Phase）、人事管理、认证完善 | 行业情报+中标概率预测+竞品知识图谱→企微推送；员工档案+培训管理 |
 | Backlog | 待排期 | — | — | 459 | 企微集成、知识库RAG、预算管控、制度管理、报销费控等 | 按需插入各Sprint |
@@ -68,6 +68,15 @@
 |------|---------|------|-----------|
 | 聚合API+前端页面(P1) | 2 | 进度×预算×BOM三维聚合+EVM(SPI/CPI)指标+区域健康度+气泡图+一键钻取 | #3222-#3223 |
 
+
+### Sprint-3 新增：S3数据管线（18个Issue）
+| 模块 | Issue数 | 说明 | Issue范围 |
+|------|---------|------|-----------|
+| Phase0: 基础设施(P0) | 3 | SQS队列+EventBridge+G7e轮询调度器+加密检测 | #3290-#3292 |
+| Phase1: 文档处理(P0) | 4 | PDF OCR+Office提取+向量化pgvector+历史回填 | #3293-#3296 |
+| Phase2: 图片+3D(P1) | 3 | CLIP标签+STEP元数据+SLDPRT基础元数据 | #3297-#3299 |
+| Phase3: 驾驶舱监控(P0) | 5 | Dashboard+加密管理+企微告警+状态API+Tab集成 | #3300-#3304 |
+| Phase4: 解密+高级(P1) | 3 | 通用解密模块+AI蒸馏(知识图谱)+成本限流 | #3306-#3308 |
 ### Sprint-3 新增：外展获客+营销自动化（25个Issue）
 | 模块 | Issue数 | 说明 | Issue范围 |
 |------|---------|------|-----------|
@@ -171,6 +180,7 @@
 | D44 | 04-05 | ✅ | wande-ai-api模块废弃确认 | wande-ai-api已合并入wande-ai（D27 PR#2593），万德业务功能全部在wande-ai子模块实现。backend/ruoyi-modules-api/wande-ai-api目录已废弃 | 伟平 |
 | D45 | 04-06 | ✅ | Harness优化V2 + Claude Office重构 | run-cc.sh命名参数+内置pre-task；Claude Office server.py重写(2424→479行)；进程检测统一扫描；日志JSONL直读；PR CI全链路优化（冲突检测→构建部署→smoke→E2E→失败自动修复） | 伟平 |
 | D46 | 04-06 | ✅ | 外接目录指派锁机制 | run-cc.sh写入.cc-lock(issue号+时间)，issue-sync.yml关闭时release-cc-lock.sh释放，cc-check.sh（原check-cc-status.sh）整合锁状态检查(超1小时需处理) | 伟平 |
+| D47 | 04-08 | ✅ | S3数据管线业务线：5 Phase·18个Issue·G7e自托管方案 | S3 4.5TB数据资产全景扫描完成(38万文件)→发现加密文件签名(17da5fa0)→EventBridge+SQS+G7e轮询架构→pgvector入库→驾驶舱监控+企微告警→解密管线+AI蒸馏。月成本~$10(仅SQS+EventBridge)，处理全在G7e。新增biz:data-pipeline标签。S3 Metadata已开启。Issue #3290-#3308 | 吴耀 |
 | D47 | 04-06 | ✅ | Issue关闭自动清理全链路 | issue-sync.yml: 删除.cc-lock + 本地git branch -D + 远程git push --delete。不依赖外部脚本，直接在workflow中遍历kimi1~20 | 伟平 |
 | D48 | 04-06 | ✅ | CC异常退出cron恢复机制 | cc-keepalive.sh（原post-cc-check.sh）由cron每5分钟巡检：.cc-lock存在+无claude进程→自动commit/push/PR，10次重试失败标Fail+评论原因。去掉tmux内post-check（快速路径），全部由cron兜底 | 伟平 |
 | D49 | 04-06 | ✅ | 辅助脚本全面审计修复 | cc_manager.sh已废弃→run-manager.sh替代（D65）; run-cc.sh: 重入逻辑修复(统一retry_count/锁检测前置/SAVED状态跳过checkout dev/api_source不重复追加); scheduler-guide: 锁状态机文档化(RUNNING→SAVED→NO_CHANGES)+SAVED处理流程; 删除resume-inprogress-ccs.sh+monitor-issue-2893.sh | 伟平 |

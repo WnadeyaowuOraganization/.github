@@ -3,7 +3,7 @@
 > 最后更新：2026-04-07（全量 Issue 依赖分析，覆盖23个系列+Tier2+Tier3）
 > 并发上限：**15个CC** | 数据来源：`/tmp/issue-cache/` 批量离线分析
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
-> **Jump队列**：已处理 → #2950 已标 Todo（侧边栏分组重构，fullstack P0，effort=high）| #3226 已标 Todo（Claude Office工作状态面板，fullstack P0）| #3237 已标 Todo（auto-add-to-project工作流修复，⚠️Step2需人工更新PROJECT_TOKEN Secret）
+> **Jump队列**：已处理 → #2950/#3226/#3237 已标 Todo | **2026-04-07 12:35 批量处理7个BUG Jump**：#3227(P0后端进程守护)/#3228(P0 DB Schema缺失字段)/#3229(P0 Fat JAR冲突)/#3230(P1 API路由缺失)/#3231(P1 NPE)/#3232(P2前端路由)/#3234(P1 Dashboard数据全0) — 全部标Todo，5个空闲槽位优先消化P0
 
 ## Tier-1：矿场 / 投标 / 项目中心
 
@@ -424,14 +424,22 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 12:25 | CC状态：13个在跑（kimi1/2/3/4/5/6/7/8/9/10/11/12/13/16），**kimi17空闲（#2107已Done PR#3246）**
-> 已去除：#2107(Done)、#2110(运行中)、#2106(运行中)、#2471(运行中)、#2047(运行中)、#2108(运行中)、#2109(运行中)、#2256(运行中)
+> 更新时间：2026-04-07 12:35 | CC状态：10/15在跑（kimi1/2/3/4/7/8/9/10/12/16），**5个空闲槽位（kimi5/6/11/13/17）**
+> 已去除：运行中的 kimi3/#2108、kimi10/#2109、kimi4/#2256 等
 > ⚠️ E2E Fail #2086（变更影响联动API）依赖#2156未完成，暂留E2E Fail
+> ⚠️ CC异常：kimi7(#2363超时46分)/kimi9(#1705超时38分)/kimi12(#1852超时33分) — 研发经理处理
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #3237 | P0 | fullstack | 🔴 [Jump→Todo] auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
-| #3226 | P0 | fullstack | 🔴 [Jump→Todo] Claude Office右上角今日工作状态面板 | ✅ |
+| #3229 | P0 | backend | 🔴 [BUG 3/7] Fat JAR依赖冲突 — MyBatis/OGNL/Netty/Redis类加载失败 | ✅ |
+| #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失致500 | ✅ |
+| #3227 | P0 | backend | 🔴 [BUG 1/7] 后端进程守护 — Netty类加载崩溃后无自动恢复 | ✅ |
+| #3230 | P1 | backend | 🟠 [BUG 4/7] 后端API路由缺失 — 9个前端页面返回404 | ✅ |
+| #3231 | P1 | backend | 🟠 [BUG 5/7] CompetitorBidBo.getId() NPE — 进入首页即崩溃 | ✅ |
+| #3234 | P1 | fullstack | 🟠 [BUG 7/7] 矿场/运营仪表盘数据全0 — Dashboard统计接口返回空 | ✅ |
+| #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
+| #3226 | P0 | fullstack | Claude Office右上角今日工作状态面板 | ✅ |
+| #3232 | P2 | frontend | [BUG 6/7] 前端路由404 + UI渲染异常 — 13个路由缺失 | ✅ |
 | #2368 | P0 | frontend | 菜单重组[5/8] 综合管理中心板块 | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
 | #2156 | P0 | backend | 执行管理 变更单核心API | ✅ |
@@ -439,36 +447,29 @@
 | #2098 | P0 | backend | 执行管理 验收核心API | ✅ |
 | #2467 | P0 | backend | 执行管理 BOM管理API（多级树形+审核定价） | ✅ |
 | #2468 | P0 | backend | 执行管理 图纸管理API（上传/版本/审批） | ✅ |
-| #2384 | P0 | frontend | 执行管理 流程配置可视化页面 | ✅ |
 | #2026 | P0 | backend | 审批引擎核心[3/10] 发起/审批/驳回/撤回+4种规则 | ✅ |
 | #1564 | P0 | backend | 企微打通[1/17] WecomAppService根节点 | ✅ |
 | #1560 | P0 | backend | D3材质标注[1/4] 构件-材料绑定规则Service | ✅ |
 | #2452 | P0 | pipeline | 采集/竞品[4/38] 竞品中标公告定向采集管线 | ✅ |
-| #2055 | P0 | backend | D3参数化 扣件管理Web后台 | ✅ |
-| #2065 | P0 | backend | D3参数化 市场配置预设（中/国际/北美/东南亚/欧盟） | ✅ |
 
 ---
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（14/15）
+## 当前运行（10/15）
 
-> 更新：2026-04-07 12:19 UTC | **14/15** | 新指派kimi5→#2110/kimi6→#2106/kimi11→#2471/kimi13→#2047；kimi2/#1903 PR#3245✅/kimi3/#1531 PR#3240✅/kimi11/#1527 PR#3238✅/kimi13/#1853 PR#3241✅/kimi14/#1854 PR#3243✅
+> 更新：2026-04-07 12:30 UTC | **10/15** | 撤销错误指派kimi5/#2110/kimi6/#2106/kimi11/#2471/kimi13/#2047（Issue已CLOSED+MERGED PR）
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API |
 | kimi4 | #2256 | T1 | frontend | 矿场增强[6/23] 列表状态筛选+流转 |
-| kimi5 | #2110 | T1 | backend | 质保售后 质保台账API |
-| kimi6 | #2106 | T1 | backend | 质保售后 备件消耗关联工单 |
 | kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
 | kimi10 | #2109 | T1 | backend | 质保售后 售后工单API |
-| kimi11 | #2471 | T1 | backend | 项目中心Phase13 6张表 |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
-| kimi13 | #2047 | T1 | backend | AI投标Phase1 ComfyUI基础设施 |
 | kimi16 | #2461 | T1 | backend | 合同管理建表 |
 | kimi17 | #2107 | T1 | backend | 质保售后 备件管理API |
 
@@ -511,7 +512,7 @@
 | kimi17 | #2107 | T1 | backend | 质保售后 备件管理API | In Progress |
 | kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API | In Progress |
 | kimi10 | #2109 | T1 | backend | 质保售后 售后工单API | In Progress |
-| kimi5 | #2110 | T1 | backend | 质保售后 质保台账API | In Progress |
-| kimi6 | #2106 | T1 | backend | 质保售后 备件消耗关联工单 | In Progress |
-| kimi11 | #2471 | T1 | backend | 项目中心Phase13 6张表 | In Progress |
-| kimi13 | #2047 | T1 | backend | AI投标Phase1 ComfyUI基础设施 | In Progress |
+| kimi5 | ~~#2110~~ | T1 | backend | ~~质保售后 质保台账API~~ PR#3207✅merged | ~~Done~~ |
+| kimi6 | ~~#2106~~ | T1 | backend | ~~质保售后 备件消耗关联工单~~ PR#3206✅merged | ~~Done~~ |
+| kimi11 | ~~#2471~~ | T1 | backend | ~~项目中心Phase13 6张表~~ PR#3141✅merged | ~~Done~~ |
+| kimi13 | ~~#2047~~ | T1 | backend | ~~AI投标Phase1 ComfyUI基础设施~~ PR#3143✅merged | ~~Done~~ |

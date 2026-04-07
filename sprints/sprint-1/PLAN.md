@@ -429,7 +429,7 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #1855 | P0 | design-ai | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境 | ✅ |
+| #1855 | P0 | design-ai | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境 | 运行中(kimi1) |
 | #1863 | P0 | frontend | [产品平台][P0] D3 Web产品目录浏览器 — 42品类浏览+3D预览 | 运行中(kimi8) |
 | #1864 | P0 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 | ✅ |
 | #1529 | P1 | backend | 矿场增强[17/23] 企微H5轻量接口 | ✅ |
@@ -456,11 +456,11 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 19:23 UTC | **15/15** | kimi8/#1863活跃 | 13个CC推进中，2个注入提示(kimi1/9) | kimi3遇Spring Transaction超时，已注入修复建议 | Done 9个✅、Fail 0个✅ | 并发满，预期kimi3完成后可释放 | 下批候选：#1855/#1864/#1529/#2255
+> 更新：2026-04-07 19:43 UTC | **15/15** | kimi1/#1855已活跃(15%,1m) | 全部15个CC工作中 | PR #3316(#2076)已合并✅ | 向3个会话注入推进提示(kimi14加速、kimi4/6继续) | Done 8个✅、Fail 0个✅ | 监测kimi14(67%)接近完成释放
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
-| kimi1 | #2076 | T2 | backend | 🔴 问题发现采集API（多下游依赖） |
+| kimi1 | #1855 | T2 | fullstack | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模 |
 | kimi2 | #2276 | T2 | frontend | 采集管控[4/4] 管控面板 |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi4 | #2372 | T1 | frontend | 质保售后 售后工单管理主页面 P0 |
@@ -600,3 +600,4 @@
 | kimi5 | #1510 | T1 | backend | 矿场Phase2[4/16] 客户角色关联表 | In Progress |
 | kimi14 | #1511 | T1 | backend | 矿场Phase2[1/16] 客户画像扩展字段 | In Progress |
 | kimi8 | #1863 | T2 | frontend | D3产品平台 Web产品目录浏览器 | In Progress |
+| kimi1 | #1855 | T2 | fullstack | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模 | In Progress |

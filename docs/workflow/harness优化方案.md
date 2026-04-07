@@ -698,8 +698,8 @@ done
 | 文件 | 修改内容 |
 |------|---------|
 | `issue-workflow.md` | 移除需求评估，task.md增加Status/Phase/Files Changed字段 |
-| `backend/README.md` | task.md格式更新 |
-| `frontend/README.md` | 同上 |
+| `backend/backend-guide.md` | task.md格式更新 |
+| `frontend/frontend-guide.md` | 同上 |
 | `pipeline/README.md` | 同上 |
 | `scheduler-guide.md` | 检查结果改为读task.md前几行 |
 | `check-cc-status.sh` | 增加读取task.md的逻辑 |
@@ -1051,8 +1051,8 @@ Monorepo: backend/ + frontend/ + e2e/ + pipeline/
 
 ## 子模块约束（按需阅读）
 - **接口契约**: @shared/api-contracts/README.md
-- **backend**: @.github/agent-docs/backend/README.md
-- **frontend**: @.github/agent-docs/frontend/README.md
+- **backend**: @.github/agent-docs/backend/backend-guide.md
+- **frontend**: @.github/agent-docs/frontend/frontend-guide.md
 - **pipeline**: @.github/agent-docs/pipeline/README.md
 - **公共规范**: @.github/agent-docs/shared-conventions.md
 - **Issue流程**: @.github/agent-docs/issue-workflow.md
@@ -1072,14 +1072,14 @@ case "$REPO" in
     PROMPT="$PROMPT
 
 参考约束文件:
-- @.github/agent-docs/backend/README.md
+- @.github/agent-docs/backend/backend-guide.md
 - @.github/agent-docs/shared-conventions.md"
     ;;
   frontend)
     PROMPT="$PROMPT
 
 参考约束文件:
-- @.github/agent-docs/frontend/README.md
+- @.github/agent-docs/frontend/frontend-guide.md
 - @.github/agent-docs/frontend/antdv-constraints.md
 - @.github/agent-docs/shared-conventions.md"
     ;;

@@ -180,9 +180,9 @@ export const columns: VxeGridProps['columns'] = [
 
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
-| [ui-guide.md](ui-guide.md) | 页面开发强制规范 | **写页面时必读** |
-| [conventions.md](conventions.md) | 命名规范、文件组织 | 写代码时 |
-| [testing.md](testing.md) | 组件测试规范（Vitest） | 写测试时 |
-| [workflow.md](workflow.md) | 三阶段开发流程 | 每次开始新Issue时 |
-| [db-schema.md](db-schema.md) | 数据库列名规范 | 涉及数据映射时 |
-| [antdv-constraints.md](antdv-constraints.md) | Ant Design Vue 4.x废弃API | 涉及组件库时 |
+| [ui-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/ui-guide.md) | 页面开发强制规范 | **写页面时必读** |
+| [conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/conventions.md) | 命名规范、文件组织 | 写代码时 |
+| [testing.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/testing.md) | 组件测试规范（Vitest） | 写测试时 |
+| [workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/workflow.md) | 三阶段开发流程 | 每次开始新Issue时 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/db-schema.md) | 数据库列名规范 | 涉及数据映射时 |
+| [antdv-constraints.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/antdv-constraints.md) | Ant Design Vue 4.x废弃API | 涉及组件库时 |

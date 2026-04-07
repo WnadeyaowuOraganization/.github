@@ -258,10 +258,11 @@ ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
-| [**common-pitfalls.md**](common-pitfalls.md) | **⚠️ 必读：高频错误与规范，CI 曾踩过的坑** | **开始每个 Issue 前** |
-| [architecture.md](architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
-| [conventions.md](conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
-| [db-schema.md](db-schema.md) | 数据库变更管理、增量SQL流程 | 涉及数据库变更时 |
-| [testing.md](testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
-| [workflow.md](workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
-| [menu-config.md](menu-config.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |
+| [**common-pitfalls.md**](/home/ubuntu/projects/.github/docs/agent-docs/backend/common-pitfalls.md) | **⚠️ 必读：高频错误与规范，CI 曾踩过的坑** | **开始每个 Issue 前** |
+| [architecture.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
+| [conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/db-schema.md) | 数据库变更管理、增量SQL流程 | 涉及数据库变更时 |
+| [testing.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
+| [workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
+| [menu-config.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/menu-config.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |
+| [wechat-integration.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/wechat-integration.md) | 企微/微信集成规范 | 涉及企微功能时 |

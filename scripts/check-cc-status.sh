@@ -141,10 +141,7 @@ echo "- 活跃CC: $active_count / $MAX_CONCURRENT（并发上限）" >> "$REPORT
 echo "- 可新增: $available_count" >> "$REPORT_FILE"
 echo "" >> "$REPORT_FILE"
 
-# 5. 检查Todo队列中的P0 Issue
-echo "### 待处理P0 Issue数量" >> "$REPORT_FILE"
-bash "$SCRIPT_DIR/query-project-issues.sh" --repo play --status "Todo" 2>/dev/null | grep "P0" | wc -l | xargs -I {} echo "- wande-play Todo P0: {}" >> "$REPORT_FILE"
-echo "" >> "$REPORT_FILE"
+# 5 (已移除：P0 Todo统计)
 
 # 6. 编程CC实时输出摘要（tmux capture-pane）
 echo "### 编程CC实时输出（最近5行）" >> "$REPORT_FILE"

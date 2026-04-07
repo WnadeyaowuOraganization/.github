@@ -424,18 +424,14 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 12:15 | CC状态：11个在跑（kimi1/2/3/4/7/8/9/10/12/16/17），4个空闲槽位
-> 已去除：#2256(运行中)、#2107(运行中)、#2108(运行中)、#2109(运行中)
+> 更新时间：2026-04-07 12:25 | CC状态：13个在跑（kimi1/2/3/4/5/6/7/8/9/10/11/12/13/16），**kimi17空闲（#2107已Done PR#3246）**
+> 已去除：#2107(Done)、#2110(运行中)、#2106(运行中)、#2471(运行中)、#2047(运行中)、#2108(运行中)、#2109(运行中)、#2256(运行中)
 > ⚠️ E2E Fail #2086（变更影响联动API）依赖#2156未完成，暂留E2E Fail
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
 | #3237 | P0 | fullstack | 🔴 [Jump→Todo] auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
 | #3226 | P0 | fullstack | 🔴 [Jump→Todo] Claude Office右上角今日工作状态面板 | ✅ |
-| #2110 | P0 | backend | 质保售后 质保台账API | ✅ |
-| #2106 | P0 | backend | 质保售后 备件消耗关联工单 | ✅ |
-| #2471 | P0 | backend | 项目中心Phase13 project_risk_events等6张表 | ✅ |
-| #2047 | P0 | backend | AI投标Phase1 ComfyUI基础设施 | ✅ |
 | #2368 | P0 | frontend | 菜单重组[5/8] 综合管理中心板块 | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
 | #2156 | P0 | backend | 执行管理 变更单核心API | ✅ |
@@ -455,25 +451,24 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（15/15）
+## 当前运行（14/15）
 
-> 更新：2026-04-07 12:01 UTC | **15/15** | kimi4→#2256 frontend，kimi17→#2107 backend；kimi10/kimi15 PR已建等释放
+> 更新：2026-04-07 12:19 UTC | **14/15** | 新指派kimi5→#2110/kimi6→#2106/kimi11→#2471/kimi13→#2047；kimi2/#1903 PR#3245✅/kimi3/#1531 PR#3240✅/kimi11/#1527 PR#3238✅/kimi13/#1853 PR#3241✅/kimi14/#1854 PR#3243✅
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
-| kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 |
-| kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) |
+| kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API |
 | kimi4 | #2256 | T1 | frontend | 矿场增强[6/23] 列表状态筛选+流转 |
+| kimi5 | #2110 | T1 | backend | 质保售后 质保台账API |
+| kimi6 | #2106 | T1 | backend | 质保售后 备件消耗关联工单 |
 | kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
-| ~~kimi10~~ | ~~#1898~~ | T1 | backend | ~~D3发货防错系统~~ PR#3239 ✅ |
-| kimi11 | #1527 | T1 | backend | 甲方历史合作查询接口 |
+| kimi10 | #2109 | T1 | backend | 质保售后 售后工单API |
+| kimi11 | #2471 | T1 | backend | 项目中心Phase13 6张表 |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
-| kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 |
-| kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 |
-| ~~kimi15~~ | ~~#1528~~ | T1 | backend | ~~线索来源转化率统计API~~ PR#3236 ✅ |
+| kimi13 | #2047 | T1 | backend | AI投标Phase1 ComfyUI基础设施 |
 | kimi16 | #2461 | T1 | backend | 合同管理建表 |
 | kimi17 | #2107 | T1 | backend | 质保售后 备件管理API |
 
@@ -498,19 +493,25 @@
 | kimi11 | ~~#1994~~ | — | backend | ~~项目中心Phase15 风险事件API~~ | ~~Done~~ |
 | kimi16 | #2461 | T1 | backend | 合同管理建表 | In Progress |
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | In Progress |
-| kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 | In Progress |
-| kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) | In Progress |
+| kimi2 | ~~#1903~~ | T1 | backend | ~~D3钢架自动选型规则~~ PR#3245 | ~~Done~~ |
+| kimi3 | ~~#1531~~ | T1 | backend | ~~可赢性评分模型(WinProb)~~ PR#3240 | ~~Done~~ |
 | kimi4 | ~~#1532~~ | T1 | backend | ~~矿场转化漏斗统计API~~ PR#3233 | ~~Done~~ |
 | kimi7 | ~~#1459~~ | T1 | backend | ~~记录中心统一数据模型~~ PR#3235 | ~~Done~~ |
 | kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 | In Progress |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 | In Progress |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API | In Progress |
 | kimi10 | ~~#1898~~ | T1 | backend | ~~D3发货防错系统~~ PR#3239 | ~~Done~~ |
-| kimi11 | #1527 | T1 | backend | 甲方历史合作查询接口 | In Progress |
+| kimi11 | ~~#1527~~ | T1 | backend | ~~甲方历史合作查询接口~~ PR#3238 | ~~Done~~ |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
-| kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 | In Progress |
-| kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 | In Progress |
+| kimi13 | ~~#1853~~ | T1 | pipeline | ~~D3-Agent三层记忆系统~~ PR#3241 | ~~Done~~ |
+| kimi14 | ~~#1854~~ | T1 | pipeline | ~~D3-Agent LangGraph框架~~ PR#3243✅merged | ~~Done~~ |
 | kimi15 | ~~#1528~~ | T1 | backend | ~~线索来源转化率统计API~~ PR#3236 | ~~Done~~ |
 | kimi17 | ~~#1630~~ | T1 | backend | ~~整改工单Phase27 API~~ 已合并dev | ~~Done~~ |
 | kimi4 | #2256 | T1 | frontend | 矿场增强[6/23] 列表状态筛选+流转 | In Progress |
 | kimi17 | #2107 | T1 | backend | 质保售后 备件管理API | In Progress |
+| kimi3 | #2108 | T1 | backend | 质保售后 外包维修商管理API | In Progress |
+| kimi10 | #2109 | T1 | backend | 质保售后 售后工单API | In Progress |
+| kimi5 | #2110 | T1 | backend | 质保售后 质保台账API | In Progress |
+| kimi6 | #2106 | T1 | backend | 质保售后 备件消耗关联工单 | In Progress |
+| kimi11 | #2471 | T1 | backend | 项目中心Phase13 6张表 | In Progress |
+| kimi13 | #2047 | T1 | backend | AI投标Phase1 ComfyUI基础设施 | In Progress |

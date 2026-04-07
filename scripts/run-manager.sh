@@ -32,18 +32,32 @@ json.dump(m, open(f,'w'))
 " 2>/dev/null
 }
 
-# 启动后等待新 JSONL 出现并写入映射
+# 启动后等待新 JSONL 出现并写入映射（跳过已被其他会话占用的 JSONL）
 _associate_jsonl() {
   local session="$1"
   local before_list="$2"   # 启动前的 JSONL 列表（换行分隔）
-  local max_wait=30
+  local max_wait=40
   local elapsed=0
   while [ $elapsed -lt $max_wait ]; do
     sleep 2; elapsed=$((elapsed+2))
+    # 读取已占用的 JSONL（其他会话已写入映射的）
+    local claimed
+    claimed=$(python3 -c "
+import json,os
+f='${SESSION_MAP}'
+if os.path.exists(f):
+    m=json.load(open(f))
+    for k,v in m.items():
+        if k != '${session}': print(v)
+" 2>/dev/null)
+    # 找新出现且未被占用的 JSONL
     local new_jsonl
     new_jsonl=$(ls -1t "${JSONL_DIR}"/*.jsonl 2>/dev/null \
-      | while read -r f; do echo "$before_list" | grep -qxF "$f" || echo "$f"; done \
-      | head -1)
+      | while read -r f; do
+          echo "$before_list" | grep -qxF "$f" && continue   # 启动前已存在
+          echo "$claimed"    | grep -qxF "$f" && continue   # 已被其他会话占用
+          echo "$f"; break
+        done)
     if [ -n "$new_jsonl" ]; then
       _write_session_map "$session" "$new_jsonl"
       log "✓ ${session} → $(basename $new_jsonl)"
@@ -89,8 +103,13 @@ start_manager() {
      rm -rf ${CONFIG_DIR}; exec bash"
 
   # 等待 Claude Code CLI 初始化并关联 JSONL（后台执行，不阻塞下一个经理启动）
+  # ASSOC_DELAY：第几个经理*5秒，错开竞争窗口
+  local ASSOC_DELAY=$(( $(grep -c 'start_manager' "$0" 2>/dev/null || echo 2) * 0 ))
+  _MANAGER_START_SEQ=$(( ${_MANAGER_START_SEQ:-0} + 1 ))
+  local MY_DELAY=$(( (_MANAGER_START_SEQ - 1) * 8 ))
   ( sleep 6
     tmux send-keys -t "$SESSION" "$LOOP_PROMPT" Enter
+    sleep "$MY_DELAY"   # 错开：第1个0秒延迟，第2个8秒延迟
     _associate_jsonl "$SESSION" "$BEFORE_LIST"
   ) &
 

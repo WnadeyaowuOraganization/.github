@@ -64,5 +64,5 @@ CREDS
   log "✓ ${ROLE} 已启动，loop已注入"
 }
 
-start_manager "排程经理" "\\loop 10m 你是排程经理，请你按照指南继续工作"
-start_manager "研发经理" "\\loop 10m 你是研发经理，请你按照指南继续工作"
+start_manager "排程经理" "\\loop 10m 你是排程经理，按 docs/agent-docs/manager/scheduler-guide.md 执行本轮巡检"
+start_manager "研发经理" "\\loop 10m 你是研发经理，按 docs/agent-docs/manager/assign-guide.md 执行本轮任务"

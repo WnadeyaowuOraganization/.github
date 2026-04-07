@@ -1,5 +1,5 @@
 #!/bin/bash
-# post-cc-check.sh — CC保活巡检：检测CC进程异常退出并恢复
+# cc-keepalive.sh — CC保活巡检：检测CC进程异常退出并恢复
 # cron每5分钟执行
 # 策略：
 #   session存在+claude运行 → 健康，跳过

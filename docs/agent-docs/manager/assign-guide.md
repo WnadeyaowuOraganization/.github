@@ -98,7 +98,7 @@ tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Ente
 ## 任务三：恢复异常 CC
 
 ```bash
-# 处理 SAVED 状态（post-cc-check.sh 已自动处理，手动确认）
+# 处理 SAVED 状态（cc-keepalive.sh 已自动处理，手动确认）
 bash scripts/check-cc-status.sh | grep "SAVED\|超时"
 
 # 重新触发（同 Issue 重入）

@@ -5,37 +5,41 @@
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
 > **Jump队列**：已处理 → #2950 已标 Todo（侧边栏分组重构，fullstack P0，effort=high）
 
-### 🔴 下次指派时优先选择（4个空闲槽位）
+### 🔴 下次指派时优先选择（满载，槽位释放后按此顺序）
 
-> 更新：2026-04-07 11:00 UTC | E2E Fail×7已回 Todo | Plan→Todo×12晋级完成
+> 更新：2026-04-07 11:03 UTC | 15/15满载 | E2E Fail仅剩#2086（等#2156 CLOSED）
 
-**立即可启动（无依赖）**：
-1. **#2461** P0 backend — 合同管理建表（新晋级）
-2. **#2363** P0 frontend — 项目中心Phase8 菜单+列表（backend#380 CLOSED）
-3. **#1531** P1 backend — 可赢性评分模型(Win Probability)
-4. **#1533** P1 backend — 反馈统计API
+**槽位释放后立即启动**：
+1. **#2363** P0 frontend — 项目中心Phase8 菜单+列表（backend#380 CLOSED ✅）
+2. **#1533** P1 backend — 矿场反馈统计API
+3. **#2405** P1 backend — 关系加分逻辑
+4. **#2406** P1 pipeline — 信号衰减定时任务
 
-> 注：4槽位空闲，研发经理可按此顺序指派
+> 注：CC满载，E2E Fail #2086待#2156完成后回Todo
 
 ---
 
-## 当前运行（11/15）
+## 当前运行（15/15）
 
-> 更新：2026-04-07 11:00 UTC | 4槽位空闲 | E2E Fail×7→Todo | Plan→Todo×12
+> 更新：2026-04-07 11:03 UTC | **满载** | 等待槽位释放后按优先列表指派
 
 | kimi | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 |
-| kimi5 | #1458 | T1 | backend | 商务周报提交API |
-| kimi6 | #1560 | T1 | backend | 构件-材料绑定规则Service |
+| kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) |
+| kimi4 | #1532 | T1 | backend | 矿场转化漏斗统计API |
 | kimi7 | #1459 | T1 | backend | 记录中心统一数据模型 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
 | kimi10 | #1898 | T1 | backend | D3发货防错系统 |
+| kimi11 | #1527 | T1 | backend | 甲方历史合作查询接口 |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 |
 | kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 |
+| kimi15 | #1528 | T1 | backend | 线索来源转化率统计API |
+| kimi16 | #2461 | T1 | backend | 合同管理建表 |
+| kimi17 | #1630 | T1 | backend | 整改工单Phase27 API |
 
 ---
 

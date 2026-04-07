@@ -5,25 +5,37 @@
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
 > **Jump队列**：已处理 → #2950 已标 Todo（侧边栏分组重构，fullstack P0，effort=high）
 
-### 🔴 下次指派时优先选择
+### 🔴 下次指派时优先选择（4个空闲槽位）
 
-1. 按 Tier-1 剩余 Todo 队列（#2105成本核算、#2026审批引擎、#1531可赢性评分等）
-2. （#2950 已指派 kimi1）
+> 更新：2026-04-07 11:00 UTC | E2E Fail×7已回 Todo | Plan→Todo×12晋级完成
+
+**立即可启动（无依赖）**：
+1. **#2461** P0 backend — 合同管理建表（新晋级）
+2. **#2363** P0 frontend — 项目中心Phase8 菜单+列表（backend#380 CLOSED）
+3. **#1531** P1 backend — 可赢性评分模型(Win Probability)
+4. **#1533** P1 backend — 反馈统计API
+
+> 注：4槽位空闲，研发经理可按此顺序指派
 
 ---
 
-## 当前运行（6/5）
+## 当前运行（11/15）
 
-> 更新：2026-04-07 08:52 UTC | #2107✅PR#3192 MERGED → kimi1 → #2950
+> 更新：2026-04-07 11:00 UTC | 4槽位空闲 | E2E Fail×7→Todo | Plan→Todo×12
 
-| kimi | Issue | Tier | 模块 | 内容 | 进度 |
-|------|-------|------|------|------|------|
-| kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | 刚启动 |
-| kimi11 | #2110 | T1 | backend | 质保台账API（#2159解锁） | ~29min |
-| kimi15 | #2108 | T1 | backend | 外包维修商管理API | ~48min |
-| kimi16 | #2106 | T1 | backend | 备件消耗关联工单 | ~29min |
-| kimi17 | #2104 | T1 | backend | 客户满意度评价API | ~29min |
-| kimi19 | #2109 | T1 | backend | 售后工单API | ~35min |
+| kimi | Issue | Tier | 模块 | 内容 |
+|------|-------|------|------|------|
+| kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
+| kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 |
+| kimi5 | #1458 | T1 | backend | 商务周报提交API |
+| kimi6 | #1560 | T1 | backend | 构件-材料绑定规则Service |
+| kimi7 | #1459 | T1 | backend | 记录中心统一数据模型 |
+| kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
+| kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
+| kimi10 | #1898 | T1 | backend | D3发货防错系统 |
+| kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
+| kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 |
+| kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 |
 
 ---
 
@@ -140,13 +152,13 @@
 
 | Issue | 状态 | 指派目录 | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------||------|------|------|------|------|
-| #2461 | Plan | — | P0 | backend | 创建合同管理数据表 | ✅ | 无依赖 |
-| #2112 | Plan | — | P1 | backend | AI合同风险分析引擎 | ✅ | 无明确依赖 |
-| #2111 | Plan | — | P1 | backend | AI条款对比引擎 | ✅ | 无明确依赖 |
+| #2461 | Todo | — | P0 | backend | 创建合同管理数据表 | ✅ | 无依赖 |
+| #2112 | Todo | — | P1 | backend | AI合同风险分析引擎 | ✅ | 无明确依赖 |
+| #2111 | Todo | — | P1 | backend | AI条款对比引擎 | ✅ | 无明确依赖 |
 | #2113 | Plan | — | P1 | backend | 合同审批流程 | ✅ | platform#1098 CLOSED |
-| #2458 | Plan | — | P1 | backend | AI条款对比引擎(Python) | ✅ | 无明确依赖 |
-| #2459 | Plan | — | P1 | backend | 合同审批API(Python) | ✅ | 无明确依赖 |
-| #1796 | Plan | — | P1 | frontend | 合同审批流程页面 | ✅ | 无明确依赖 |
+| #2458 | Todo | — | P1 | backend | AI条款对比引擎(Python) | ✅ | 无明确依赖 |
+| #2459 | Todo | — | P1 | backend | 合同审批API(Python) | ✅ | 无明确依赖 |
+| #1796 | Todo | — | P1 | frontend | 合同审批流程页面 | ✅ | 无明确依赖 |
 | #1750 | Plan | — | P1 | frontend | AI条款对比前端 | ⏳ | 等#2111 |
 | #1752 | Plan | — | P1 | frontend | 合同审批前端 | ⏳ | 等#2113 |
 
@@ -181,11 +193,11 @@
 | Issue | 状态 | 指派目录 | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------||------|------|------|------|------|
 | #2471 | Todo | — | P0 | backend | Phase13: project_risk_events等6张表 | ✅ | 无blocker |
-| #2363 | Plan | — | P0 | frontend | Phase8: 项目中心菜单+列表页 | ✅ | backend#380 CLOSED |
-| #2009 | Plan | — | P1 | backend | Phase7: 项目全景API | ✅ | 无依赖 |
-| #2012 | Plan | — | P1 | backend | Phase4: 跨部门任务Service | ✅ | 无依赖 |
+| #2363 | Todo | — | P0 | frontend | Phase8: 项目中心菜单+列表页 | ✅ | backend#380 CLOSED |
+| #2009 | Todo | — | P1 | backend | Phase7: 项目全景API | ✅ | 无依赖 |
+| #2012 | Todo | — | P1 | backend | Phase4: 跨部门任务Service | ✅ | 无依赖 |
 | #2011 | Plan | — | P1 | backend | Phase5: 设计变更联动 | ✅ | platform#1030 CLOSED |
-| #2359 | Plan | — | P1 | backend | Phase12: 菜单权限SQL | ✅ | 无依赖 |
+| #2359 | Todo | — | P1 | backend | Phase12: 菜单权限SQL | ✅ | 无依赖 |
 | #240 | Plan | — | P1 | backend | Phase6: 项目费用归集 | 🚫 | 需确认依赖状态 |
 | #2362 | Plan | — | P0 | frontend | Phase9: 项目详情全景页 | ⏳ | 等#2363 Phase8 |
 | #2361 | Plan | — | P1 | frontend | Phase10: 项目任务面板 | ⏳ | 等#2012 Phase4 |
@@ -206,11 +218,11 @@
 |-------|------|------||------|------|------|------|------|
 | #1634 | RUN | — | P0 | backend | Phase23: DB 4张表+种子数据 | 运行中 | — |
 | #1630 | Todo | — | P0 | backend | Phase27: 整改工单API | ⏳ | 等#1634完成 |
-| #2304 | Plan | — | P0 | frontend | 工艺标准卡管理页面 | ✅ | #1632(Phase25 Service) CLOSED |
+| #2304 | Todo | — | P0 | frontend | 工艺标准卡管理页面 | ✅ | #1632(Phase25 Service) CLOSED |
 | #2301 | Plan | — | P0 | frontend | 工人端H5页面(企微内嵌) | ⏳ | 等#1630 Phase27 |
 | #2303 | Plan | — | P0 | frontend | 整改工单列表+看板页面 | ⏳ | 等#1630 Phase27 |
 | #2302 | Plan | — | P0 | frontend | 整改工单详情页 | ⏳ | 等#1630 Phase27 |
-| #1626 | Plan | — | P1 | backend | 工艺标准卡导入API | ✅ | #1632 CLOSED |
+| #1626 | Todo | — | P1 | backend | 工艺标准卡导入API | ✅ | #1632 CLOSED |
 | #1628 | Plan | — | P1 | backend | Phase29: AI视觉审查Service | ⏳ | 等#1630 API完成 |
 | #1627 | Plan | — | P1 | backend | Phase30: 风险台账联动 | ⏳ | 等#1628 |
 | #2299 | Plan | — | P1 | frontend | 整改统计仪表盘 | ⏳ | 等#2303 |

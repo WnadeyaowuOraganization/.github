@@ -424,32 +424,32 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 15:45 | CC **15/15满载**，14个活跃，kimi5锁超时（自动恢复中）
-> 补标Done：#2107(备件管理API,kimi5-445min超时), #2452(竞品中标管线[4/38],kimi10→已重指派#2424), #1458(商务周报API,kimi5已关闭)
-> ⚠️ kimi1(#2950 Done) session仍存在可清理 | kimi16(6% until auto-compact) | kimi17(10% until auto-compact)
+> 更新时间：2026-04-07 15:55 | CC **15/15满载**，14个活跃，kimi5槽位已恢复
+> 补标Done：#2373(H5客户报修页面,kimi13→已重指派#2453) | 本轮累计Done：#2107/#2452/#1458/#2373
+> ⚠️ kimi6(#1630)卡住17min | kimi16(#2026) 5% until auto-compact（即将compact）| kimi17(#1705) ~10% compact
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
 | #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失 | ✅ |
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
-| #1554 | P1 | backend | 企微打通[9/17] H5 JS-SDK签名（#1557已Done，解锁） | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
-| #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16运行中~6% compact） | ⏳ |
+| #2423 | P0 | pipeline | Agent基类（#2424 OPEN in kimi10，可并行） | ✅ |
+| #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16 compact倒计时） | ⏳ |
 | #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成，kimi11运行中） | ⏳ |
 | #2276 | P0 | frontend | 采集管控[4/4] 管控面板（等#1572完成） | ⏳ |
-| #2450 | P0 | pipeline | 竞品甲方提取（kimi9在跑中） | ✅ |
 | #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
-| #1740 | P1 | frontend | 备件库存管理页面（#2107已Done，解锁） | ✅ |
-| #2373 | P0 | frontend | H5客户报修页面 | ✅ |
-| #2423 | P0 | pipeline | Agent基类（#2424已完成，解锁） | ✅ |
 | #2038 | P1 | backend | D3优化[8/10] 配色方案系统 | ✅ |
 | #2477 | P1 | pipeline | D3-AI ComfyUI渲染Pipeline | ✅ |
-| #2065 | P0 | backend | D3参数化 市场配置预设（kimi6已切离，OPEN） | ✅ |
-| #2055 | P0 | backend | D3参数化 扣件管理Web后台（kimi4已切离，OPEN） | ✅ |
+| #2065 | P0 | backend | D3参数化 市场配置预设 | ✅ |
+| #2055 | P0 | backend | D3参数化 扣件管理Web后台 | ✅ |
 | #2893 | P0 | fullstack | Claude Office全量迁移至wande-play（T3，无代码依赖） | ✅ |
 | #2845 | P0 | backend | 开发模式监控[1/7] CFD数据API | ✅ |
 | #2848 | P0 | backend | 开发模式监控[4/7] Agent效率看板API | ✅ |
 | #2847 | P0 | pipeline | 开发模式监控[3/7] Fail根因强制回写 | ✅ |
+| #1852 | P0 | pipeline | D3-Agent知识库构建（kimi12释放后优先恢复） | ✅ |
+| #2372 | P0 | frontend | 质保售后 售后工单主页面（kimi4运行中） | ⏳ |
+| #2408 | P0 | pipeline | 采集管控[2/4] 13脚本接run_reporter（kimi9前身，OPEN） | ✅ |
+| #2250 | P1 | frontend | 矿场增强[23/23] 历史联系人高亮 | ✅ |
 
 ---
 

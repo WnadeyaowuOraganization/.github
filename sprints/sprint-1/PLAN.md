@@ -420,19 +420,20 @@
 | #2893 | P0 | fullstack | Claude Office全量迁移至wande-play | ✅（无代码依赖） |
 
 ---
+
 # 以下内容由排程经理每次排程后维护
----
+
 ## 指派建议（最近20个）
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
 
+---
 
 # 以下内容由研发经理每次指派前维护
----
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 11:03 UTC | **满载** | 等待槽位释放后按优先列表指派
+> 更新：2026-04-07 11:34 UTC | **满载** | kimi7换#2363，#1459 PR#3235已创建
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -440,7 +441,7 @@
 | kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 |
 | kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) |
 | kimi4 | #1532 | T1 | backend | 矿场转化漏斗统计API |
-| kimi7 | #1459 | T1 | backend | 记录中心统一数据模型 |
+| kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
 | kimi10 | #1898 | T1 | backend | D3发货防错系统 |
@@ -460,7 +461,6 @@
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |
 |---------|-------|------|------|------|---------|
-| — | #2363 | — | frontend | 项目中心Phase8 菜单+列表 | Todo |
 | — | #1533 | — | backend | 矿场反馈统计API | Todo |
 | — | #2405 | — | backend | 关系加分逻辑 | Todo |
 | — | #2406 | — | pipeline | 信号衰减定时任务 | Todo |
@@ -478,7 +478,8 @@
 | kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 | In Progress |
 | kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) | In Progress |
 | kimi4 | #1532 | T1 | backend | 矿场转化漏斗统计API | In Progress |
-| kimi7 | #1459 | T1 | backend | 记录中心统一数据模型 | In Progress |
+| kimi7 | ~~#1459~~ | T1 | backend | ~~记录中心统一数据模型~~ PR#3235 | ~~Done~~ |
+| kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 | In Progress |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 | In Progress |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API | In Progress |
 | kimi10 | #1898 | T1 | backend | D3发货防错系统 | In Progress |
@@ -486,4 +487,4 @@
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
 | kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 | In Progress |
 | kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 | In Progress |
-| kimi15 | #1528 | T1 | backend | 线索来源转化率统计API | In Progress |
+| kimi15 | ~~#1528~~ | T1 | backend | ~~线索来源转化率统计API~~ PR#3236 | ~~Done~~ |

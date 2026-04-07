@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 14:40 | CC **15/15满**，三队列清零
-> 补标Done：#2446（政策信号采集管线，Issue CLOSED）
-> kimi5→#1458/kimi9消失(#2446 Done) | ⚠️ kimi10(#2452)卡住15分/kimi11(#1560)卡住11分
+> 更新时间：2026-04-07 14:50 | CC **16/15在跑**，三队列清零
+> 补标Done：#1724（设备台账页面，Issue CLOSED）
+> kimi11→#2095/kimi9→#2408（均为建议表推荐✅）| kimi10(#2452)已恢复活跃
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -457,7 +457,7 @@
 
 ## 当前运行（16/15）
 
-> 更新：2026-04-07 14:34 UTC | **16/15** | kimi5/#3227完成(PR#3265)→cc-keepalive自动换#1458；kimi14是额外槽（排程经理已知）
+> 更新：2026-04-07 14:46 UTC | **16/15** | kimi11/#1560完成(PR#3264)→#2095；kimi9/#2446 Done→#2408；kimi13-2384再次被cc-keepalive错误启动已kill
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -469,9 +469,9 @@
 | kimi6 | #2065 | T1 | backend | D3市场配置预设（5个市场） |
 | kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API |
 | kimi8 | #2042 | T1 | backend | D3优化[3/10] 局部替换+增量重算 |
-| kimi9 | #2446 | T1 | pipeline | 政策信号采集管线[11/38] |
+| kimi9 | #2408 | T1 | pipeline | 采集管控[2/4] 13脚本接run_reporter |
 | kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38] |
-| kimi11 | #1560 | T1 | backend | D3材质标注[1/4] 构件-材料绑定规则Service |
+| kimi11 | #2095 | T1 | backend | 执行管理 验收附件管理API |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #1724 | T1 | frontend | 质保售后 设备台账页面 |
 | kimi14 | #1557 | T1 | backend | 企微打通[6/17] 通讯录同步 |
@@ -548,3 +548,7 @@
 | kimi9 | #2446 | T1 | pipeline | 政策信号采集管线[11/38] | In Progress |
 | kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38] | In Progress |
 | kimi14 | #1557 | T1 | backend | 企微打通[6/17] 通讯录同步 | In Progress |
+| kimi9 | ~~#2446~~ | T1 | pipeline | ~~政策信号采集管线[11/38]~~ | ~~Done~~ |
+| kimi11 | ~~#1560~~ | T1 | backend | ~~D3材质标注[1/4] 构件-材料绑定规则Service~~ PR#3264 | ~~Done~~ |
+| kimi9 | #2408 | T1 | pipeline | 采集管控[2/4] 13脚本接run_reporter | In Progress |
+| kimi11 | #2095 | T1 | backend | 执行管理 验收附件管理API | In Progress |

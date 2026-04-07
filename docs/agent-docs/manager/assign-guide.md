@@ -72,24 +72,36 @@ echo "$(date) #N → kimiX (module, effort)" >> sprints/sprint-1/ISSUE_ASSIGN_HI
 
 ## 任务二：巡检 CC 进度
 
-```bash
-# 读 task.md（最轻量，~500 tokens）
-for dir in $HOME_DIR/projects/wande-play-kimi{1..20}; do
-  task=$(find "$dir" -path "*/issues/*/task.md" -mmin -120 2>/dev/null | head -1)
-  [ -n "$task" ] && echo "=== $(basename $dir) ===" && head -8 "$task"
-done
+### 第一步：列出运行中的 CC 会话
 
-# 查看锁状态
+```bash
+# 查看所有 CC 会话
+tmux ls | grep "^cc-"
+
+# 配合锁状态确认各 kimi 目录情况
 bash scripts/check-cc-status.sh
 ```
+
+### 第二步：读取 tmux 会话输出（实时进度）
+
+```bash
+# 查看指定会话最近200行输出（最准确的实时状态）
+tmux capture-pane -t cc-wande-play-kimi1-1234 -p -S -200
+
+# 批量查看所有运行中的 CC 最新输出
+for session in $(tmux ls 2>/dev/null | grep "^cc-" | cut -d: -f1); do
+  echo "=== $session ==="
+  tmux capture-pane -t "$session" -p -S -30 | tail -10
+  echo ""
+done
+```
+
+根据输出内容判断进度：是否在等待输入、是否卡在某个阶段、是否报错。
 
 ### 发现问题时注入提示词
 
 ```bash
-# 查看运行中的 CC 会话
-tmux ls | grep "^cc-"
-
-# 注入提示词（CC 等待输入时生效）
+# 注入提示词（CC 处于等待输入时生效）
 tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Enter
 
 # 或通过 Claude Office 页面注入（http://localhost:9872）
@@ -99,10 +111,10 @@ tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Ente
 
 | 现象 | 处理 |
 |------|------|
-| task.md Phase=BUILD_CHECK 超30分钟 | 注入提示词：「检查编译错误」 |
-| task.md Status=DONE 但 PR 未创建 | 注入提示词：「执行 gh pr create」 |
-| 💾 SAVED 状态 | 重新触发同 Issue 重入（run-cc.sh 同参数） |
-| 🚨 超1小时无进展 | 先注入提示词，无响应则标 Fail |
+| tmux 输出停滞，最后一条是编译错误 | 注入提示词：「检查编译错误并修复」 |
+| tmux 输出显示完成但无 PR 创建动作 | 注入提示词：「执行 gh pr create」 |
+| tmux 会话已不存在，锁状态为 SAVED | 重新触发同 Issue 重入（run-cc.sh 同参数） |
+| 🚨 tmux 输出超30分钟无新内容 | 先注入提示词，无响应则标 Fail |
 
 ## 任务三：恢复异常 CC
 

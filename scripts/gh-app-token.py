@@ -2,7 +2,7 @@
 """Generate GitHub App Installation Token for gh CLI.
 
 Usage:
-    export GH_TOKEN=$(python3 /opt/wande-ai/scripts/gh-app-token.py)
+    export GH_TOKEN=$(python3 /home/ubuntu/projects/.github/scripts/gh-app-token.py)
     gh issue list --repo WnadeyaowuOraganization/wande-play
 
 Config: $HOME_DIR/projects/.github/scripts/github-app/config.env

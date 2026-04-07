@@ -425,44 +425,43 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新：2026-04-07 21:50 UTC | 系统12/15，3个空闲 | ✅清除Done：#2372(kimi4)、#1678(kimi7) | 新增候选：#2255解锁、矿场Phase2批、销售记录体系、提成绩效批 | 下次分配优先级：矿场Series > CRM > 开发监控
+> 🚨 **插队优先排程** 2026-04-07 21:55 UTC | 20 个 mvn test 欠债修复 (tech-debt:pg-test) 插到表头 | 按 error 数从大到小排序 | 优先级：超高（修复类） | 20 个 kimi 目录可并行，各自独立 PG DB (TEST_PG_DB=wande_test_kimi<N>)
+> ⏳ **待清理**：旧建议表（矿场 Series、CRM、开发监控）暂存后继，等 pg-test 修复推进后恢复
 
-| Issue | 优先 | 模块 | 内容 | 启动 |
-|-------|------|------|------|------|
-| #1855 | P0 | design-ai | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境 | 运行中(kimi1/75%) |
-| #1863 | P0 | frontend | [产品平台][P0] D3 Web产品目录浏览器 — 42品类浏览+3D预览 | 运行中(kimi8) |
-| #1864 | P0 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 | 运行中(kimi5/API错) |
-| #1529 | P1 | backend | 矿场增强[17/23] 企微H5轻量接口 | 运行中(kimi15/72%) |
-| #2255 | P1 | frontend | 矿场增强[8/23] 转化漏斗看板页面（#1532 CLOSED 解锁） | ✅ |
-| #1504 | P1 | backend | 矿场Phase3[1/12] 赢率预测特征工程 | ✅ |
-| #2403 | P1 | pipeline | 矿场Phase2[2/16] 企业工商数据采集 | ✅ |
-| #2402 | P1 | pipeline | 矿场Phase2[5/16] 项目角色自动识别NLP | ✅ |
-| #2401 | P1 | pipeline | 矿场Phase2[10/16] 政策信号采集器 | ✅ |
-| #2400 | P1 | pipeline | 矿场Phase2[14/16] G7e联系人自动提取 | ✅ |
-| #1505 | P1 | backend | 矿场Phase2[16/16] 阶段话术模板库 | ✅ |
-| #1695 | P1 | backend | 提成绩效 绩效考核API | ✅ |
-| #1696 | P1 | backend | 提成绩效 管理费分摊API | ✅ |
-| #1463 | P1 | crm | 销售记录体系[3/9] 智能提醒频率引擎 | ✅ |
-| #1464 | P1 | crm | 销售记录体系[2/9] 里程碑门控配置 | ✅ |
-| #2851 | P1 | frontend | 开发监控[7/7] 验收队列前端 | ✅ |
-| #2228 | P1 | frontend | 矿场Phase4[13/17] 管理看板-团队活动量 | ✅ |
-| #2116 | P1 | backend | 代理商工作台数据模型+API | ✅ |
-| #2849 | P0 | frontend | 开发监控[5/7] Agent效率看板前端（等#2848 kimi6/71%） | ⏳ |
-| #2366 | P0 | frontend | 审批中心页面（等#2026 kimi16/30%） | ⏳ |
+| Issue | 优先 | 模块 | 内容 |
+|-------|------|------|------|
+| #3335 | medium | tech-debt:pg-test | [mvn test 欠债清理] D3 设计与参数化（410 errors） |
+| #3336 | medium | tech-debt:pg-test | [mvn test 欠债清理] 项目执行与看板（235 errors） |
+| #3337 | medium | tech-debt:pg-test | [mvn test 欠债清理] 预算资金与佣金（222 errors） |
+| #3338 | medium | tech-debt:pg-test | [mvn test 欠债清理] Token 池与运营（210 errors） |
+| #3339 | medium | tech-debt:pg-test | [mvn test 欠债清理] 整改与质保（116 errors） |
+| #3340 | medium | tech-debt:pg-test | [mvn test 欠债清理] 驾驶舱与运维（110 errors） |
+| #3341 | medium | tech-debt:pg-test | [mvn test 欠债清理] 聊天会话与记忆（105 errors） |
+| #3342 | medium | tech-debt:pg-test | [mvn test 欠债清理] 企微集成与权限（104 errors） |
+| #3343 | medium | tech-debt:pg-test | [mvn test 欠债清理] 标准库与材质（83 errors） |
+| #3344 | medium | tech-debt:pg-test | [mvn test 欠债清理] 方案与报价（68 errors） |
+| #3345 | medium | tech-debt:pg-test | [mvn test 欠债清理] 问题反馈与通知（64 errors） |
+| #3346 | medium | tech-debt:pg-test | [mvn test 欠债清理] 销售跟踪与 CRM（54 errors） |
+| #3347 | medium | tech-debt:pg-test | [mvn test 欠债清理] 数字资产与 S3（54 errors） |
+| #3348 | medium | tech-debt:pg-test | [mvn test 欠债清理] 文案与审批（52 errors） |
+| #3349 | medium | tech-debt:pg-test | [mvn test 欠债清理] 设备生命周期（49 errors） |
+| #3350 | medium | tech-debt:pg-test | [mvn test 欠债清理] 备件与采购（46 errors） |
+| #3351 | medium | tech-debt:pg-test | [mvn test 欠债清理] 财务收款与合同（45 errors） |
+| #3352 | medium | tech-debt:pg-test | [mvn test 欠债清理] 工单与派单（39 errors） |
+| #3353 | medium | tech-debt:pg-test | [mvn test 欠债清理] 照片 AI 识别（38 errors） |
+| #3354 | medium | tech-debt:pg-test | [mvn test 欠债清理] 验收与交付（31 errors） |
 
 ---
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（12/15）
+## 当前运行（11/15）
 
-> 更新：2026-04-07 21:42 UTC | **12/15** | ✅**kimi4#2372已Done、kimi7#1678已Done** | 🔴**kimi1(75%)即将完成** | 🟡**kimi16(30%→持续推进)** | 🟢**kimi15(72%)高进度** | 🔵**kimi3(57%)编译修复、kimi6(71%)merge冲突** | 🟠**kimi5 API错误需恢复** | Done 11个✅、Fail 0个✅ | 3个空闲，按优先级新指派
+> 更新：2026-04-07 21:52 UTC | **11/15** | ✅**kimi1#1855 PR#3331 MERGED**、**kimi3#2086 PR#3356 MERGED**、**kimi4#2372 Done**、**kimi7#1678 Done** | 🔴**kimi1/4/7已释放** | 🟡**kimi15(74%)E2E重试中** | 🟢**kimi16(35%)继续推进** | 🔵**kimi6(71%)merge冲突、kimi5 API错误** | Done 12个✅、Fail 0个✅ | 4个空闲槽位
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
-| kimi1 | #1855 | T2 | fullstack | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模 |
 | kimi2 | #2276 | T2 | frontend | 采集管控[4/4] 管控面板 |
-| kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi5 | #1864 | T2 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 |
 | kimi6 | #2848 | T2 | backend | 开发模式监控[4/7] Agent效率看板API |
 | kimi8 | #1863 | T2 | frontend | D3产品平台 Web产品目录浏览器 — 42品类浏览+3D预览 |
@@ -604,3 +603,5 @@
 | kimi5 | #1864 | T2 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 | In Progress |
 | kimi4 | ~~#2372~~ | T1 | frontend | ~~质保售后 售后工单管理主页面 P0~~ PR#3325✅merged | ~~Done~~ |
 | kimi7 | ~~#1678~~ | T1 | backend | ~~AI投标配图自动生成~~ | ~~Done~~ |
+| kimi1 | ~~#1855~~ | T2 | fullstack | ~~[D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境~~ PR#3331✅merged | ~~Done~~ |
+| kimi3 | ~~#2086~~ | T1 | backend | ~~变更影响联动API - BOM差异+成本利润联动~~ PR#3356✅merged | ~~Done~~ |

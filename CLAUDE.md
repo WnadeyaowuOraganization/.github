@@ -5,7 +5,7 @@
 > | 角色 | 触发方式 | 指南 |
 > |------|---------|------|
 > | **排程经理** | 当前会话（用户直接对话） | 阅读 [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md) |
-> | **研发经理** | cc_manager.sh 定时触发 | 阅读 [docs/agent-docs/manager/assign-guide.md](docs/agent-docs/manager/assign-guide.md) |
+> | **研发经理** | run-manager.sh 启动 tmux 会话 | 阅读 [docs/agent-docs/manager/assign-guide.md](docs/agent-docs/manager/assign-guide.md) |
 >
 > 阅读完对应指南后，按指南中的职责顺序执行本轮任务。
 

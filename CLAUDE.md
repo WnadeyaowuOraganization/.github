@@ -6,6 +6,10 @@
 > **功能注册表**: [docs/feature-registry.md](docs/feature-registry.md) — 41个模块全景索引
 > **Sprint目标**: `docs/status.md` — 每次排程前先读取
 
+## 并发上限
+
+**最多同时运行 5 个编程CC**。排程前先用 `bash scripts/check-cc-status.sh` 确认当前活跃数，剩余槽位才是本次可指派数量。
+
 ## 脚本速查
 
 ```bash
@@ -38,7 +42,7 @@ tmux send-keys -t cc-wande-play-kimi3-1567 "请重新阅读 issues/issue-1567/de
 
 ## 每轮结束后发送通知
 
-**每次完成一轮任务后，必须调用以下命令向 Claude Office 发送通知**，让监控页面实时显示进度：
+**每次完成一轮与用户的对话或检测到issue有新的关键进展或者编程CC需要人工确认、长时间（超过20分钟）无新进展，必须调用以下命令向 Claude Office 发送通知**，让监控页面实时显示进度：
 
 ```bash
 curl -s -X POST http://localhost:9872/api/notify \

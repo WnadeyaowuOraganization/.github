@@ -112,6 +112,25 @@ private Long equipmentId;
 
 如果 Java 字段名与 DB 列名不一致，用 `@TableId(value = "db_column_name")` 显式指定，不要依赖 MyBatis-Plus 的驼峰转换（驼峰转换对非标准命名可能出错）。
 
+## 测试环境进程静默退出处理
+
+后端进程可能在**无报错日志**的情况下静默退出（OOM、OOM Killer、系统资源不足），表现为：
+- `pgrep -f ruoyi-admin` 返回空
+- 端口 6040 关闭
+- `logs/backend.log` 最后一行停在启动成功后的某个时间点
+
+**排查步骤**：
+```bash
+# 1. 查看系统 OOM 记录
+dmesg | grep -i "killed process\|out of memory" | tail -5
+# 2. 查看进程退出码（需在进程存活时）
+cat /proc/<PID>/status | grep State
+# 3. 直接重启（无需重新构建）
+bash /apps/wande-ai-backend/start.sh
+```
+
+**处置原则**：静默退出不代表代码有问题，**无需重新构建 JAR**，直接重启即可。只有在健康检查失败且日志中有 `BeanCreationException` / `Ambiguous mapping` / 编译错误时，才需要重新构建。
+
 ## CI/CD 部署必须有回滚机制
 
 后端 JAR 部署步骤：

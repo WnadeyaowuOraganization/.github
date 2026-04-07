@@ -424,33 +424,32 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 14:00 | CC **15/15全满**，全部活跃
-> 补标Done：#2098（执行管理验收核心API，Issue CLOSED）
-> kimi4→#2055/kimi8→#2042/kimi13→#2384（研发经理主动切换）
-> ⏳ #2156运行中(kimi9)，完成后#2086 E2E Fail→Todo
+> 更新时间：2026-04-07 14:10 | CC **10/15在跑**（kimi1/2/4/5/8/11/12/13/16/17），**5个空闲槽位**
+> 补标Done：#2156/#1564/#2467/#2468（均有早期merged PR）
+> 🟢 #2086 E2E Fail → **Todo**（#2156 PR#2783已合并，platform#1096 CLOSED）
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失致500 | ✅ |
+| #2086 | P0 | backend | 🟠 [E2E Fail→Todo] 变更影响联动API — BOM差异+成本+工期 | ✅ |
+| #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失 | ✅ |
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
-| #2086 | P0 | backend | 🟠 [E2E Fail] 变更影响联动API（等#2156完成后立即指派） | ⏳ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
-| #1560 | P0 | backend | D3材质标注[1/4] 构件-材料绑定规则Service | ✅ |
+| #2095 | P1 | backend | 验收附件管理API（等#2098 Done ✅ 已解锁） | ✅ |
+| #1557 | P0 | backend | 企微打通[6/17] 通讯录同步（#1564已Done，解锁） | ✅ |
+| #2122 | P0 | backend | AI回款风险预警（#2124运行中，完成后解锁） | ⏳ |
 | #2452 | P0 | pipeline | 采集/竞品[4/38] 竞品中标公告定向采集管线 | ✅ |
-| #2055 | P0 | backend | D3参数化 扣件管理Web后台 | ✅ |
 | #2065 | P0 | backend | D3参数化 市场配置预设（中/国际/北美/东南亚/欧盟） | ✅ |
-| #2384 | P0 | frontend | 执行管理 流程配置可视化页面 | ✅ |
-| #2042 | P0 | backend | D3优化[3/10] 局部替换+增量重算 | ✅ |
-| #2446 | P0 | pipeline | 政策信号采集管线[11/38] 六层信号源第一层 | ✅ |
-| #1630 | P0 | backend | 整改工单Phase27 API（OPEN） | ✅ |
-| #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
-| #2095 | P1 | backend | 验收附件管理API（等#2098完成） | ⏳ |
-| #1724 | P0 | frontend | 设备台账页面（等#2110 Done） | ✅ |
+| #1724 | P0 | frontend | 设备台账页面（#2110已Done，解锁） | ✅ |
+| #2372 | P0 | frontend | 售后工单管理主页面（等#2109已Done ✅ 解锁） | ✅ |
+| #2373 | P0 | frontend | H5客户报修页面（等#2109已Done ✅ 解锁） | ✅ |
+| #1740 | P1 | frontend | 备件库存管理页面（等#2107已Done ✅ 解锁） | ✅ |
+| #2366 | P0 | frontend | 审批中心页面（等#2026完成） | ⏳ |
+| #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成） | ⏳ |
+| #2408 | P0 | pipeline | 采集管控[2/4] 13脚本接run_reporter（等#2409已Done ✅ 解锁） | ✅ |
+| #2276 | P0 | frontend | 采集管控[4/4] 管控面板（等#1572完成） | ⏳ |
+| #1532 | P1 | backend | 矿场转化漏斗统计API（已Done，确认） | — |
 | #2051 | P1 | frontend | D3-周期5-G L4安装图自动化 | ✅ |
-| #1557 | P0 | backend | 企微打通[6/17] 通讯录同步（等#1564完成） | ⏳ |
-| #2363 | P0 | frontend | 项目中心Phase8 菜单+列表 | ✅ |
-| #2471 | P0 | backend | 项目中心Phase13 6张表（确认是否Done） | ✅ |
-| #1876 | P0 | backend | 商务48小时反馈机制（确认是否Done） | ✅ |
+| #2446 | P0 | pipeline | 政策信号采集管线[11/38] | ✅ |
 
 ---
 
@@ -458,20 +457,20 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 13:50 UTC | **15/15** | 新指派kimi4→#2055(D3扣件管理)、kimi8→#2042(D3优化)、kimi13→#2384(流程配置页面)
+> 更新：2026-04-07 14:06 UTC | **15/15** | kimi3→#2086(E2E Fail)、kimi6→#2065(D3市场配置)、kimi7→#2467(重启)、kimi9→#2446(政策信号)、kimi10→#2452(竞品采集)
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 |
-| kimi3 | #2098 | T1 | backend | 执行管理 验收核心API |
+| kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi4 | #2055 | T1 | backend | D3参数化 扣件管理Web后台 |
 | kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 |
-| kimi6 | #1564 | T1 | backend | 企微打通[1/17] WecomAppService根节点 |
-| kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API |
+| kimi6 | #2065 | T1 | backend | D3市场配置预设（5个市场） |
+| kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API（重启） |
 | kimi8 | #2042 | T1 | backend | D3优化[3/10] 局部替换+增量重算 |
-| kimi9 | #2156 | T1 | backend | 执行管理 变更单核心API |
-| kimi10 | #2468 | T1 | backend | 执行管理 图纸管理API |
+| kimi9 | #2446 | T1 | pipeline | 政策信号采集管线[11/38] |
+| kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38] |
 | kimi11 | #1560 | T1 | backend | D3材质标注[1/4] 构件-材料绑定规则Service |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #2384 | T1 | frontend | 执行管理 流程配置可视化页面 |
@@ -524,20 +523,25 @@
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
 | kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 | In Progress |
 | kimi6 | ~~#3230~~ | BUG | backend | ~~🟠 P1 后端API路由缺失~~ PR#3255✅merged | ~~Done~~ |
-| kimi6 | #1564 | T1 | backend | 企微打通[1/17] WecomAppService根节点 | In Progress |
+| kimi6 | ~~#1564~~ | T1 | backend | ~~企微打通[1/17] WecomAppService根节点~~ PR#3260 | ~~Done~~ |
 | kimi11 | ~~#3231~~ | BUG | backend | ~~🟠 P1 CompetitorBidBo NPE~~ PR#3252 | ~~Done~~ |
 | kimi11 | #1560 | T1 | backend | D3材质标注[1/4] 构件-材料绑定规则Service | In Progress |
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 | In Progress |
 | kimi4 | ~~#3226~~ | BUG | fullstack | ~~🔴 P0 Claude Office今日工作状态面板~~ PR#3257 | ~~Done~~ |
 | kimi16 | ~~#3232~~ | BUG | frontend | ~~🟡 P2 前端路由404+UI渲染异常~~ | ~~Done~~ |
-| kimi9 | #2156 | T1 | backend | 执行管理 变更单核心API | In Progress |
+| kimi9 | ~~#2156~~ | T1 | backend | ~~执行管理 变更单核心API~~ PR#3262 | ~~Done~~ |
 | kimi13 | ~~#2124~~ | T1 | backend | ~~执行管理 回款计划与管理API~~ PR#3256 | ~~Done~~ |
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | In Progress |
-| kimi3 | #2098 | T1 | backend | 执行管理 验收核心API | In Progress |
+| kimi3 | ~~#2098~~ | T1 | backend | ~~执行管理 验收核心API~~ | ~~Done~~ |
 | kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API | In Progress |
-| kimi10 | #2468 | T1 | backend | 执行管理 图纸管理API | In Progress |
+| kimi10 | ~~#2468~~ | T1 | backend | ~~执行管理 图纸管理API~~ PR#3261 | ~~Done~~ |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 | In Progress |
 | kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API | In Progress |
 | kimi4 | #2055 | T1 | backend | D3参数化 扣件管理Web后台 | In Progress |
 | kimi8 | #2042 | T1 | backend | D3优化[3/10] 局部替换+增量重算 | In Progress |
 | kimi13 | #2384 | T1 | frontend | 执行管理 流程配置可视化页面 | In Progress |
+| kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API | In Progress |
+| kimi6 | #2065 | T1 | backend | D3市场配置预设（5个市场） | In Progress |
+| kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API（重启） | In Progress |
+| kimi9 | #2446 | T1 | pipeline | 政策信号采集管线[11/38] | In Progress |
+| kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38] | In Progress |

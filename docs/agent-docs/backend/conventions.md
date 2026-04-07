@@ -67,52 +67,23 @@ public class XxxController {
 
 ## 包路径规范（防止同名类冲突）
 
-两个 Maven 模块的职责分工：
-- `ruoyi-modules-api/wande-ai-api`：Entity/Bo/Vo/Mapper接口/Service接口（API定义层）
-- `ruoyi-modules/wande-ai`：Service实现/Controller/Scheduler/Config（实现层）
+> **`wande-ai-api` 已废弃（D44），禁止在该模块下新增任何业务代码。**
+> 所有新功能代码统一写在 `ruoyi-modules/wande-ai/`。
 
-**包路径唯一映射规则**（按业务模块分子包）：
+包路径模板：
 
 ```
-# API定义层 (wande-ai-api)
-org.ruoyi.wande.domain.{模块名}/          ← Entity
-org.ruoyi.wande.domain.{模块名}/vo/       ← Vo
-org.ruoyi.wande.domain.{模块名}/bo/       ← Bo
-org.ruoyi.wande.mapper.{模块名}/          ← Mapper接口
-org.ruoyi.wande.service.{模块名}/         ← Service接口
-
-# 实现层 (wande-ai)
-org.ruoyi.wande.controller.{模块名}/      ← Controller
-org.ruoyi.wande.service.{模块名}/impl/    ← Service实现
+org.ruoyi.wande.{feature}.domain.entity.XxxEntity   ← 实体
+org.ruoyi.wande.{feature}.domain.vo.XxxVo           ← VO
+org.ruoyi.wande.{feature}.domain.bo.XxxBo           ← BO
+org.ruoyi.wande.mapper.{feature}.XxxMapper           ← Mapper接口
+org.ruoyi.wande.service.{feature}.IXxxService        ← Service接口
+org.ruoyi.wande.service.{feature}.impl.XxxServiceImpl ← Service实现
+org.ruoyi.wande.controller.{feature}.XxxController   ← Controller
 ```
 
 **禁止**：
-- 在 `org.ruoyi.wande` 下直接创建业务顶级包（如 `org.ruoyi.wande.d3/`、`org.ruoyi.wande.activity/`）
-- 在两个模块中创建同名类（MyBatis alias 和 Spring Bean 会冲突）
-- 跳过查重直接创建新类
-
-## 包路径规范（防止同名类冲突）
-
-两个 Maven 模块的职责分工：
-- `ruoyi-modules-api/wande-ai-api`：Entity/Bo/Vo/Mapper接口/Service接口（API定义层）
-- `ruoyi-modules/wande-ai`：Service实现/Controller/Scheduler/Config（实现层）
-
-**包路径唯一映射规则**（按业务模块分子包）：
-
-```
-# API定义层 (wande-ai-api)
-org.ruoyi.wande.domain.{模块名}/          ← Entity
-org.ruoyi.wande.domain.{模块名}/vo/       ← Vo
-org.ruoyi.wande.domain.{模块名}/bo/       ← Bo
-org.ruoyi.wande.mapper.{模块名}/          ← Mapper接口
-org.ruoyi.wande.service.{模块名}/         ← Service接口
-
-# 实现层 (wande-ai)
-org.ruoyi.wande.controller.{模块名}/      ← Controller
-org.ruoyi.wande.service.{模块名}/impl/    ← Service实现
-```
-
-**禁止**：
-- 在 `org.ruoyi.wande` 下直接创建业务顶级包（如 `org.ruoyi.wande.d3/`、`org.ruoyi.wande.activity/`）
-- 在两个模块中创建同名类（MyBatis alias 和 Spring Bean 会冲突）
+- 在 `wande-ai-api` 下新建业务代码
+- 使用旧路径 `org.ruoyi.wande.domain.{feature}.*`（会与新结构冲突导致 MyBatis alias 重复）
+- 在 `org.ruoyi.wande` 下直接创建业务顶级包（如 `org.ruoyi.wande.d3/`）
 - 跳过查重直接创建新类

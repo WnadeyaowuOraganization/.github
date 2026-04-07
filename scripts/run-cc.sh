@@ -253,8 +253,9 @@ if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
 fi
 
 # === 准备测试 PG 独立 DB（per-kimi 隔离）===
-# DIRNAME 形如 wande-play-kimi3，提取 kimi3 作为 DB suffix
-KIMI_TAG=$(basename "$PROJECT_DIR" | sed 's/wande-play-//')
+# BASE_DIR 形如 .../wande-play-kimi3，提取 kimi3 作为 DB suffix
+KIMI_TAG=$(basename "$BASE_DIR" | sed 's/wande-play-//;s/wande-play//')
+[ -z "$KIMI_TAG" ] && KIMI_TAG="main"
 TEST_PG_DB="wande_test_${KIMI_TAG}"
 bash "$SCRIPT_DIR/ensure-test-pg.sh" "$KIMI_TAG" 2>&1 | tail -3 || true
 TEST_PG_ENV="export TEST_PG_HOST=localhost; export TEST_PG_PORT=5434; export TEST_PG_DB=${TEST_PG_DB}; export TEST_PG_USER=wande; export TEST_PG_PASSWORD=wande_test;"

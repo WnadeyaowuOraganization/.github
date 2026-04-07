@@ -185,19 +185,25 @@ if [ "$MODE" = "issue" ]; then
   ISSUE_SOURCE="$ISSUE_DIR/issue-source.md"
   mkdir -p "$ISSUE_DIR"
 
-  echo "$(date): Fetching Issue #${ISSUE} from GitHub ($GH_REPO)..."
-  ISSUE_BODY=$(gh issue view "$ISSUE" --repo "$GH_REPO" --json title,body,labels,state \
-    --jq '"# Issue #'"$ISSUE"': " + .title + "\n\n**Labels**: " + ([.labels[].name] | join(", ")) + "\n**State**: " + .state + "\n\n## 需求内容\n\n" + .body' 2>/dev/null)
-  ISSUE_COMMENTS=$(gh issue view "$ISSUE" --repo "$GH_REPO" --comments --json comments \
-    --jq 'if (.comments | length) > 0 then "\n\n## 评论\n\n" + ([.comments[] | "### " + .author.login + " (" + (.createdAt | split("T")[0]) + ")\n\n" + .body] | join("\n\n---\n\n")) else "" end' 2>/dev/null)
-
-  if [ -z "$ISSUE_BODY" ]; then
-    echo "WARNING: Failed to fetch Issue #${ISSUE}, CC will fetch from GitHub"
-    CC_PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
+  # 优先使用 dev 分支预下载的 issue-source.md（由 prefetch-issues.sh 提前写入并推送）
+  if [ -f "$ISSUE_SOURCE" ]; then
+    echo "$(date): Issue #${ISSUE} 已预下载 ($(wc -l < "$ISSUE_SOURCE") 行)，跳过 gh fetch"
+    CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
   else
-    echo "${ISSUE_BODY}${ISSUE_COMMENTS}" > "$ISSUE_SOURCE"
-    echo "$(date): Issue #${ISSUE} saved to $ISSUE_SOURCE ($(wc -l < "$ISSUE_SOURCE") lines)"
-    CC_PROMPT="请先阅读 /home/ubuntu/projects/.github/docs/agent-docs/issue-workflow.md 了解完整开发流程，然后阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
+    echo "$(date): Fetching Issue #${ISSUE} from GitHub ($GH_REPO)..."
+    ISSUE_BODY=$(gh issue view "$ISSUE" --repo "$GH_REPO" --json number,title,body,labels,state \
+      --jq '"# Issue #\(.number): \(.title)\n\n**Labels**: \([.labels[].name] | join(", "))\n**State**: \(.state)\n\n## 需求内容\n\n\(.body)"' 2>/dev/null)
+    ISSUE_COMMENTS=$(gh issue view "$ISSUE" --repo "$GH_REPO" --comments --json comments \
+      --jq 'if (.comments | length) > 0 then "\n\n---\n\n## 评论\n\n" + ([.comments[] | "### \(.author.login) (\(.createdAt | split("T")[0]))\n\n\(.body)"] | join("\n\n---\n\n")) else "" end' 2>/dev/null)
+
+    if [ -z "$ISSUE_BODY" ]; then
+      echo "WARNING: Failed to fetch Issue #${ISSUE}, CC will fetch from GitHub"
+      CC_PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
+    else
+      echo "${ISSUE_BODY}${ISSUE_COMMENTS}" > "$ISSUE_SOURCE"
+      echo "$(date): Issue #${ISSUE} saved to $ISSUE_SOURCE ($(wc -l < "$ISSUE_SOURCE") lines)"
+      CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
+    fi
   fi
 
   # 检查详细设计文档

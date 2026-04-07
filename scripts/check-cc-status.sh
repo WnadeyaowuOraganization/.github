@@ -110,14 +110,11 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
         idle_minutes=$(( (now - ${last_active:-now}) / 60 ))
         if [ "$idle_minutes" -lt 5 ]; then
             echo "- $session: 🔥 **工作中** (最近活跃)" >> "$REPORT_FILE"
-        elif [ "$idle_minutes" -ge 20 ]; then
-            echo "- $session: 🚨 **超时${idle_minutes}分钟，自动清理**" >> "$REPORT_FILE"
-            # 超时处理：通知Claude Office + 标Fail + 清理
+        elif [ "$idle_minutes" -ge 30 ]; then
+            echo "- $session: 🚨 **超时${idle_minutes}分钟，请重启CC**（kill-session → run-cc.sh 同参数）" >> "$REPORT_FILE"
             curl -s -X POST http://localhost:9872/api/notify \
               -H "Content-Type: application/json" \
-              -d "{\"session\":\"manager\",\"message\":\"${session} Issue#${issue}已空闲${idle_minutes}分钟，自动清理标Fail\",\"type\":\"error\"}" 2>/dev/null || true
-            bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$issue" --status "Fail" 2>/dev/null || true
-            tmux kill-session -t "$session" 2>/dev/null || true
+              -d "{\"session\":\"manager\",\"message\":\"${session} Issue#${issue}空闲${idle_minutes}分钟，请kill后run-cc.sh重启\",\"type\":\"warning\"}" 2>/dev/null || true
         else
             echo "- $session: ⏸️ **可能卡住** (${idle_minutes}分钟无输出)" >> "$REPORT_FILE"
         fi

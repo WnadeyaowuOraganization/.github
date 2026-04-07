@@ -3,21 +3,27 @@
 > 最后更新：2026-04-07（全量 Issue 依赖分析，覆盖23个系列+Tier2+Tier3）
 > 并发上限：**5个CC** | 数据来源：`/tmp/issue-cache/` 批量离线分析
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
-> **Jump队列**：#2950（侧边栏分组重构，fullstack P0，需立即指派）
+> **Jump队列**：已处理 → #2950 已标 Todo（侧边栏分组重构，fullstack P0，effort=high）
+
+### 🔴 下次指派时优先选择
+
+1. 按 Tier-1 剩余 Todo 队列（#2105成本核算、#2026审批引擎、#1531可赢性评分等）
+2. （#2950 已指派 kimi1）
 
 ---
 
-## 当前运行（5/5，满载）
+## 当前运行（6/5）
 
-> 更新：2026-04-07 06:58 UTC
+> 更新：2026-04-07 08:52 UTC | #2107✅PR#3192 MERGED → kimi1 → #2950
 
 | kimi | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #1533 | T1 | backend | 矿场增强[4/23] 反馈统计API | ~65% |
-| kimi11 | #2471 | T1 | backend | 项目中心Phase13 DB 6张表 | ~53% |
-| kimi15 | #2046 | T1 | pipeline | AI生成Phase4 投标知识库增强 | 刚启动 |
-| kimi16 | #1876 | T1 | backend | 商务48小时反馈机制+分级升级 | 刚启动 |
-| kimi19 | #2047 | T1 | backend | AI生成Phase1 ComfyUI基础设施 | ~35% |
+| kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | 刚启动 |
+| kimi11 | #2110 | T1 | backend | 质保台账API（#2159解锁） | ~29min |
+| kimi15 | #2108 | T1 | backend | 外包维修商管理API | ~48min |
+| kimi16 | #2106 | T1 | backend | 备件消耗关联工单 | ~29min |
+| kimi17 | #2104 | T1 | backend | 客户满意度评价API | ~29min |
+| kimi19 | #2109 | T1 | backend | 售后工单API | ~35min |
 
 ---
 
@@ -442,13 +448,13 @@
 > 更新：2026-04-07 06:35 UTC | 条件：✅可立即启动 + P0优先 + 不同模块并行
 > 注：#1533/#2257/#2304/#2471/#2363/#2047 已运行，从第7位接续
 
-1. ~~**#2046** pipeline — AI生成Phase4 投标知识库增强（P0，独立，与#2047并行）~~ → kimi15 **运行中**
-2. ~~**#1876** backend — 商务48小时反馈机制+分级升级（P0，独立）~~ → kimi16 **运行中**
-3. **#2461** backend — 合同管理建表（P0，无依赖）
-4. **#1700** backend — 提成绩效5张表（P0，platform依赖CLOSED）
-5. **#2159** backend — 质保售后12张表建表（P0，platform全CLOSED）
-6. **#2409** pipeline — 采集管控[1/4] wdpp_pipeline_runs表（P0，独立→解锁#2408）
-7. **#1532** backend — 矿场增强[7/23] 转化漏斗统计API（P1，独立）
-8. **#1630** backend — 整改工单Phase27 API（P0，#1634已CLOSED✅）
-9. **#2362** frontend — 项目中心Phase9 详情全景页（P0，等#2363运行中→完成后立即指派）
-10. **#1994** backend — 项目中心Phase15 风险事件API（P0，等#2471运行中→完成后立即指派）
+1. ~~**#2046** pipeline — AI生成Phase4 投标知识库增强（P0）~~ → ✅PR#3140 MERGED
+2. ~~**#1876** backend — 商务48小时反馈机制+分级升级（P0）~~ → kimi16 **运行中**
+3. ~~**#2461** backend — 合同管理建表（P0）~~ → kimi17 **运行中**
+4. ~~**#1700** backend — 提成绩效5张表（P0）~~ → kimi1 **运行中**
+5. ~~**#2159** backend — 质保售后12张表建表（P0）~~ → kimi15 **运行中**
+6. ~~**#2409** pipeline — 采集管控[1/4] wdpp_pipeline_runs表（P0）~~ → kimi11 **运行中**
+7. ~~**#1532** backend — 矿场增强[7/23] 转化漏斗统计API（P1）~~ → kimi16 **运行中**
+8. ~~**#1630** backend — 整改工单Phase27 API（P0）~~ → kimi17 **运行中**
+9. ~~**#2362** frontend — 项目中心Phase9 详情全景页（P0）~~ → kimi19 **运行中**
+10. ~~**#1994** backend — 项目中心Phase15 风险事件API（P0）~~ → kimi11 **运行中**

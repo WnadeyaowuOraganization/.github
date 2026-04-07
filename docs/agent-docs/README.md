@@ -2,32 +2,84 @@
 
 本目录整理了万德AI平台各编程CC的prompt文档，供开发者参考和复用。
 
-## 文档结构
+## 目录结构
 
-| 文件 | 描述 | 适用场景 |
-|------|------|---------|
-| [shared-conventions.md](shared-conventions.md) | 共享规范 - Git分支、环境、数据库、通用规则 | 所有CC |
-| [issue-workflow.md](issue-workflow.md) | Issue生命周期与三阶段开发流程 | 所有编程CC |
-| [scheduler-guide.md](scheduler-guide.md) | 调度器CC - 排程、触发、检查、优化 | 调度器CC |
-| [backend-guide.md](backend-guide.md) | 后端CC - Spring Boot TDD开发 | 后端开发 |
-| [frontend-guide.md](frontend-guide.md) | 前端CC - Vue3 Vben Admin开发 | 前端开发 |
-| [testing-guide.md](e2e/testing-guide.md) | 测试CC - E2E回归测试 | 测试CC |
-| [pipeline-guide.md](pipeline-guide.md) | 管线CC - Python数据采集 | 数据采集 |
-| [api-contracts.md](api-contracts.md) | API契约规范 - 前后端接口定义 | fullstack Issue |
+```
+docs/agent-docs/
+├── README.md                      ← 本导航文档
+├── share/                         ← 前后端共享文档
+│   ├── shared-conventions.md      ← Git分支、环境、通用规则
+│   ├── issue-workflow.md          ← Issue生命周期与三阶段开发流程
+│   ├── api-contracts.md           ← 前后端接口契约规范
+│   └── db-schema.md               ← 数据库列名规范（新旧表差异）
+├── backend/                       ← 后端CC专属文档
+│   ├── backend-guide.md           ← 主指引（必读）
+│   ├── common-pitfalls.md         ← ⚠️ 高频错误与规范
+│   ├── architecture.md            ← 项目概述与技术栈
+│   ├── conventions.md             ← Entity/Mapper/Service/Controller模板
+│   ├── db-schema.md               ← 数据库变更管理与增量SQL流程
+│   ├── testing.md                 ← TDD流程与单元测试规范
+│   ├── workflow.md                ← TDD三阶段开发流程
+│   ├── menu-config.md             ← 菜单与权限注册
+│   └── wechat-integration.md      ← 企微/微信集成规范
+├── frontend/                      ← 前端CC专属文档
+│   ├── frontend-guide.md          ← 主指引（必读）
+│   ├── ui-guide.md                ← ⚠️ 页面开发强制规范
+│   ├── conventions.md             ← 命名规范与文件组织
+│   ├── testing.md                 ← 组件测试规范（Vitest）
+│   ├── workflow.md                ← 三阶段开发流程
+│   └── antdv-constraints.md       ← Ant Design Vue 4.x废弃API
+├── manager/                       ← 经理CC文档
+│   ├── scheduler-guide.md         ← 排程经理指南
+│   ├── assign-guide.md            ← 研发经理指南
+│   ├── issue-creation-sop.md      ← Issue创建SOP
+│   └── wande-label.md             ← 标签规范
+├── pipeline/                      ← 管线CC文档
+│   ├── README.md                  ← 管线CC主指引
+│   ├── conventions.md             ← 管线编码规范
+│   ├── environment.md             ← 运行环境说明
+│   ├── workflow.md                ← 管线开发流程
+│   └── pipeline-*.md              ← 各类管线专项文档
+└── e2e/                           ← E2E测试CC文档
+    └── testing-guide.md           ← 顶层E2E回归测试指南
+```
 
-## CC角色总览
+## 文档分层说明
 
-| CC角色 | 工作目录 | 主要职责 |
-|--------|---------|---------|
-| **调度器CC** | `$HOME_DIR/projects/.github` | 排程、触发编程CC、检查结果、持续优化 |
-| **后端CC** | `wande-play-kimi*/backend` | Spring Boot后端TDD开发 |
-| **前端CC** | `wande-play-kimi*/frontend` | Vue3前端页面开发 |
-| **测试CC** | `wande-play-e2e-top/e2e` | 全量E2E回归测试 |
-| **管线CC** | `wande-play-kimi*/pipeline` | Python数据采集管线 |
+| 层级 | 目录 | 说明 |
+|------|------|------|
+| **共享层** | `share/` | 前后端CC必须了解的通用规范，两份主指引均有引用 |
+| **后端层** | `backend/` | 仅后端CC需要的Spring Boot / MyBatis-Plus开发规范 |
+| **前端层** | `frontend/` | 仅前端CC需要的Vue3 / Vben Admin开发规范 |
+| **经理层** | `manager/` | 排程经理与研发经理CC的决策指南 |
+| **管线层** | `pipeline/` | Python数据采集管线专项文档 |
+| **测试层** | `e2e/` | 顶层E2E全量回归测试指南 |
+
+## CC主指引快速导航
+
+| CC角色 | 主指引 | 启动入口 |
+|--------|--------|---------|
+| **后端CC** | [backend-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/backend-guide.md) | CLAUDE.md → 后端CC指南 |
+| **前端CC** | [frontend-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/frontend-guide.md) | CLAUDE.md → 前端CC指南 |
+| **排程经理** | [scheduler-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/manager/scheduler-guide.md) | CLAUDE.md → 排程经理指南 |
+| **研发经理** | [assign-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/manager/assign-guide.md) | CLAUDE.md → 研发经理指南 |
+| **管线CC** | [pipeline/README.md](/home/ubuntu/projects/.github/docs/agent-docs/pipeline/README.md) | CLAUDE.md → 管线CC指南 |
+| **E2E测试CC** | [e2e/testing-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/e2e/testing-guide.md) | e2e_top_tier.sh prompt |
+
+## 共享文档说明
+
+以下文档前后端CC均须知晓，在各自主指引的"共享文档"节中引用：
+
+| 文档 | 内容摘要 |
+|------|---------|
+| [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范（main/dev/feature）、开发环境端口、数据库连接信息、通用禁止事项 |
+| [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue从Plan到Done的完整生命周期、三阶段开发流程（准备→执行→提交） |
+| [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约文件路径规范、YAML契约格式、修改流程 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（create_time/created_at差异）、新表wdpp_前缀、BaseEntity字段映射 |
 
 ## 仓库信息
 
 - **组织**: WnadeyaowuOraganization
 - **主仓库**: wande-play
 - **Project看板**: https://github.com/orgs/WnadeyaowuOraganization/projects/4
-- **CI/CD**: GitHub Actions
+- **CI/CD**: GitHub Actions（pr-test.yml + build-deploy-dev.yml）

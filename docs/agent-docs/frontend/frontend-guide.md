@@ -178,11 +178,21 @@ export const columns: VxeGridProps['columns'] = [
 
 ## 详细文档（按需阅读）
 
+### 共享文档（前后端通用）
+
+| 文档 | 内容 | 何时读取 |
+|------|------|---------|
+| [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范、环境信息、通用开发规则 | 首次接触项目时 |
+| [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
+| [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据字段映射时 |
+
+### 前端专属文档
+
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
 | [ui-guide.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/ui-guide.md) | 页面开发强制规范 | **写页面时必读** |
 | [conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/conventions.md) | 命名规范、文件组织 | 写代码时 |
 | [testing.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/testing.md) | 组件测试规范（Vitest） | 写测试时 |
 | [workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/workflow.md) | 三阶段开发流程 | 每次开始新Issue时 |
-| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/db-schema.md) | 数据库列名规范 | 涉及数据映射时 |
 | [antdv-constraints.md](/home/ubuntu/projects/.github/docs/agent-docs/frontend/antdv-constraints.md) | Ant Design Vue 4.x废弃API | 涉及组件库时 |

@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 14:50 | CC **16/15在跑**，三队列清零
-> 补标Done：#1724（设备台账页面，Issue CLOSED）
-> kimi11→#2095/kimi9→#2408（均为建议表推荐✅）| kimi10(#2452)已恢复活跃
+> 更新时间：2026-04-07 15:00 | CC **16/15在跑**，三队列清零
+> 无新Done | kimi13→#2373（H5客户报修页面✅）
+> ⚠️ kimi4(#2055)卡住15分/kimi10(#2452)卡住11分/kimi14(#1557)卡住11分 — 研发经理处理
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -457,7 +457,7 @@
 
 ## 当前运行（16/15）
 
-> 更新：2026-04-07 14:46 UTC | **16/15** | kimi11/#1560完成(PR#3264)→#2095；kimi9/#2446 Done→#2408；kimi13-2384再次被cc-keepalive错误启动已kill
+> 更新：2026-04-07 14:55 UTC | **16/15** | kimi13/#1724(CLOSED)→#2373(H5报修P0)；PR#3268为重复待关闭
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -473,7 +473,7 @@
 | kimi10 | #2452 | T1 | pipeline | 竞品中标公告定向采集管线[4/38] |
 | kimi11 | #2095 | T1 | backend | 执行管理 验收附件管理API |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
-| kimi13 | #1724 | T1 | frontend | 质保售后 设备台账页面 |
+| kimi13 | #2373 | T1 | frontend | 质保售后 H5客户报修页面 P0 |
 | kimi14 | #1557 | T1 | backend | 企微打通[6/17] 通讯录同步 |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 |
 | kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API |
@@ -541,7 +541,8 @@
 | kimi17 | #1705 | T1 | backend | CRM跟进记录CRUD API | In Progress |
 | kimi4 | #2055 | T1 | backend | D3参数化 扣件管理Web后台 | In Progress |
 | kimi8 | #2042 | T1 | backend | D3优化[3/10] 局部替换+增量重算 | In Progress |
-| kimi13 | #1724 | T1 | frontend | 质保售后 设备台账页面 | In Progress |
+| kimi13 | ~~#1724~~ | T1 | frontend | ~~质保售后 设备台账页面~~（Issue已CLOSED，PR#3268为重复，待关闭） | ~~取消~~ |
+| kimi13 | #2373 | T1 | frontend | 质保售后 H5客户报修页面 P0 | In Progress |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API | In Progress |
 | kimi6 | #2065 | T1 | backend | D3市场配置预设（5个市场） | In Progress |
 | kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API（重启） | In Progress |

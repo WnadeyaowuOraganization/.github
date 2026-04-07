@@ -47,7 +47,7 @@ log "执行cron恢复检查..."
 bash "$SCRIPT_DIR/post-cc-check.sh" >> "$LOG_FILE" 2>&1
 
 # 触发研发经理CC（日志由Claude Code自动写入JSONL）
-claude -p "你是指派验收经理（研发经理B），先阅读 docs/agent-docs/manager/assign-guide.md 了解职责。按以下顺序执行：1) 巡检各kimi目录task.md进度，发现卡住/异常立即注入提示词处理；2) 处理💾SAVED状态的CC（重新触发继续）；3) 检查空闲槽位，读取 sprints/sprint-1/PLAN.md「下次指派时优先选择」列表，prefetch后指派新Issue；4) 若本轮完成≥3个Done，生成阶段性验收报告写入 sprints/sprint-1/VERIFICATION_REPORT.md；5) 发送通知到Claude Office。" \
+claude -p "你是研发经理，阅读 CLAUDE.md 确认职责后按指南执行本轮任务。" \
   --model claude-opus-4-6 --effort medium --max-turns 200 --verbose \
   >> "$LOG_FILE" 2>&1
 

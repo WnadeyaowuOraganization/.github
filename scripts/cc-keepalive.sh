@@ -49,6 +49,16 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   # === 场景2：session不存在（真正崩溃）→ 重启 ===
   log "$DIRNAME Issue#$ISSUE: session不存在，准备重启 (retry=$RETRY)"
 
+  # CLOSED 检查：issue已关闭则清锁退出，不重启（防止lock release链断裂时无限重试）
+  ISSUE_STATE=$(gh issue view "$ISSUE" --repo WnadeyaowuOraganization/wande-play \
+    --json state --jq '.state' 2>/dev/null)
+  if [ "$ISSUE_STATE" = "CLOSED" ]; then
+    log "$DIRNAME Issue#$ISSUE: 已CLOSED，清理锁文件，不重启"
+    rm -f "$dir/.cc-lock"
+    cd "$dir" && git checkout dev 2>/dev/null && git branch -D "feature-Issue-${ISSUE}" 2>/dev/null
+    continue
+  fi
+
   MAX_RETRY=10
   if [ "$RETRY" -ge "$MAX_RETRY" ]; then
     log "$DIRNAME Issue#$ISSUE: 已重试${MAX_RETRY}次，标记Fail"

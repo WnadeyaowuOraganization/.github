@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 13:30 | CC **15/15全满**（kimi1/2/3/4/5/6/7/8/9/10/11/12/13/16/17）
-> 补标Done：#3230（BUG 4/7 后端API路由缺失，Issue CLOSED）
-> kimi6已切换→#1564（企微打通根节点） | ⏳ #2156运行中(kimi9)完成后解锁#2086
+> 更新时间：2026-04-07 13:40 | CC **15/15全满**（kimi1/2/3/4/5/6/7/8/9/10/11/12/13/16/17）
+> 无新完成Issue | kimi11切换→#1560(D3材质标注)，#3231仍OPEN由研发经理跟进
+> ⏳ #2156运行中(kimi9)，完成后#2086 E2E Fail→Todo
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -457,7 +457,7 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 13:22 UTC | **15/15** | kimi6/#3230 MERGED→释放；新指派kimi6→#1564(P0 企微打通)
+> 更新：2026-04-07 13:32 UTC | **15/15** | kimi11/#3231 PR#3252已建→释放；新指派kimi11→#1560(D3材质标注P0)
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -471,7 +471,7 @@
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #2156 | T1 | backend | 执行管理 变更单核心API |
 | kimi10 | #2468 | T1 | backend | 执行管理 图纸管理API |
-| kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE |
+| kimi11 | #1560 | T1 | backend | D3材质标注[1/4] 构件-材料绑定规则Service |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #2124 | T1 | backend | 执行管理 回款计划与管理API |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回 |
@@ -524,7 +524,8 @@
 | kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 | In Progress |
 | kimi6 | ~~#3230~~ | BUG | backend | ~~🟠 P1 后端API路由缺失~~ PR#3255✅merged | ~~Done~~ |
 | kimi6 | #1564 | T1 | backend | 企微打通[1/17] WecomAppService根节点 | In Progress |
-| kimi11 | #3231 | BUG | backend | 🟠 P1 CompetitorBidBo NPE | In Progress |
+| kimi11 | ~~#3231~~ | BUG | backend | ~~🟠 P1 CompetitorBidBo NPE~~ PR#3252 | ~~Done~~ |
+| kimi11 | #1560 | T1 | backend | D3材质标注[1/4] 构件-材料绑定规则Service | In Progress |
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 | In Progress |
 | kimi4 | #3226 | BUG | fullstack | 🔴 P0 Claude Office今日工作状态面板 | In Progress |
 | kimi16 | #3232 | BUG | frontend | 🟡 P2 前端路由404+UI渲染异常 | In Progress |

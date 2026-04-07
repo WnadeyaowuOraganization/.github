@@ -22,8 +22,8 @@
 | #2255 | P1 | frontend | [8/23] 转化漏斗看板页面 | ⏳ | 等#1532[7/23] |
 | #1531 | P1 | backend | [9/23] 可赢性评分模型(WinProb) | ✅ | 无明确依赖 |
 | #2254 | P1 | frontend | [10/23] 可赢性评分展示+Go/No-Go | ⏳ | 等#1531[9/23] |
-| #2406 | P1 | pipeline | [11/23] 信号衰减定时任务 | ✅ | 无明确依赖 |
-| #1529 | P1 | backend | [17/23] 企微H5轻量接口 | ✅ | 无明确依赖 |
+| #2406 | P1 | pipeline | [11/23] 信号衰减定时任务 | 运行中(kimi12) | 无明确依赖 |
+| #1529 | P1 | backend | [17/23] 企微H5轻量接口 | 运行中(kimi15) | 无明确依赖 |
 | #2253 | P1 | frontend | [18/23] 企微H5矿场页面 | ⏳ | 等#1529[17/23] |
 | #1528 | P1 | backend | [19/23] 线索来源转化率统计API | ✅ | 无明确依赖 |
 | #2252 | P1 | frontend | [20/23] 来源ROI看板 | ⏳ | 等#1528[19/23] |
@@ -431,8 +431,8 @@
 |-------|------|------|------|------|
 | #1855 | P0 | design-ai | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境 | 运行中(kimi1) |
 | #1863 | P0 | frontend | [产品平台][P0] D3 Web产品目录浏览器 — 42品类浏览+3D预览 | 运行中(kimi8) |
-| #1864 | P0 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 | ✅ |
-| #1529 | P1 | backend | 矿场增强[17/23] 企微H5轻量接口 | ✅ |
+| #1864 | P0 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 | 运行中(kimi5) |
+| #1529 | P1 | backend | 矿场增强[17/23] 企微H5轻量接口 | 运行中(kimi15) |
 | #2255 | P1 | frontend | 矿场增强[8/23] 转化漏斗看板页面（#1532已CLOSED解锁） | ✅ |
 | #1504 | P1 | backend | 矿场Phase3[1/12] 赢率预测特征工程 | ✅ |
 | #2403 | P1 | pipeline | 矿场Phase2[2/16] 企业工商数据采集 | ✅ |
@@ -456,7 +456,7 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 19:43 UTC | **15/15** | kimi1/#1855已活跃(15%,1m) | 全部15个CC工作中 | PR #3316(#2076)已合并✅ | 向3个会话注入推进提示(kimi14加速、kimi4/6继续) | Done 8个✅、Fail 0个✅ | 监测kimi14(67%)接近完成释放
+> 更新：2026-04-07 21:14 UTC | **15/15** | 🔴**kimi16(77%)、kimi7(25%)持续推进** | 🟢kimi3(55%)、kimi6(68%)继续推进 | 🟡kimi12(0%)、kimi2(14%)、kimi13(27%)/clear后恢复中，全部推进提示已注入 | 🟢kimi9已完成等待 | Done 8个✅、Fail 0个✅ | 向5个卡住会话注入推进提示词，/clear恢复策略代价评估中
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -464,16 +464,16 @@
 | kimi2 | #2276 | T2 | frontend | 采集管控[4/4] 管控面板 |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi4 | #2372 | T1 | frontend | 质保售后 售后工单管理主页面 P0 |
-| kimi5 | #1510 | T1 | backend | 矿场Phase2[4/16] 客户角色关联表 |
+| kimi5 | #1864 | T2 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 — 42品类×300+产品 |
 | kimi6 | #2848 | T2 | backend | 开发模式监控[4/7] Agent效率看板API |
 | kimi7 | #1678 | T1 | backend | AI投标配图自动生成（#2047解锁） |
 | kimi8 | #1863 | T2 | frontend | D3产品平台 Web产品目录浏览器 — 42品类浏览+3D预览 |
-| kimi9 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理（重派） |
 | kimi10 | #2589 | T1 | fullstack | 执行管理45个API前端对接 |
 | kimi11 | #2893 | T3 | fullstack | Claude Office全量迁移至wande-play |
-| kimi12 | #2423 | T1 | pipeline | Agent基类[4/7] |
+| kimi12 | #2406 | T1 | pipeline | 矿场增强[11/23] 信号衰减定时任务 |
 | kimi13 | #2477 | T1 | pipeline | D3-AI ComfyUI渲染Pipeline[1/3] |
 | kimi14 | #1511 | T1 | backend | 矿场Phase2[1/16] 客户画像扩展字段 |
+| kimi15 | #1529 | T1 | backend | 矿场增强[17/23] 企微H5轻量接口 |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回（重启 high） |
 | kimi17 | #1806 | T1 | frontend | 🔴 执行项目总看板（重启，PR#3289续做） |
 
@@ -587,7 +587,7 @@
 | kimi13 | #2477 | T1 | pipeline | D3-AI ComfyUI渲染Pipeline[1/3] | In Progress |
 | kimi17 | ~~#1806~~ | T1 | frontend | ~~🔴 执行项目总看板（用户优先）~~ PR#3289 | ~~Done~~ |
 | kimi9 | ~~#2851~~ | T2 | backend | ~~开发监控[7/7] 告警规则配置API~~ PR#3288 | ~~Done~~ |
-| kimi9 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理（重派） | In Progress |
+| kimi9 | ~~#2039~~ | T1 | backend | ~~D3优化[7/10] 方案变体管理（重派）~~ MERGED 2026-04-07 19:05 | ~~Done~~ |
 | kimi7 | ~~#2038~~ | T1 | backend | ~~D3优化[8/10] 配色方案系统~~ PR#3310 | ~~Done~~ |
 | kimi10 | ~~#2445~~ | T1 | pipeline | ~~锁定100儿童友好城市监控~~ PR#3305 | ~~Done~~ |
 | kimi12 | ~~#1740~~ | T1 | frontend | ~~质保 备件库存管理页面~~ PR#3311 | ~~Done~~ |
@@ -601,3 +601,6 @@
 | kimi14 | #1511 | T1 | backend | 矿场Phase2[1/16] 客户画像扩展字段 | In Progress |
 | kimi8 | #1863 | T2 | frontend | D3产品平台 Web产品目录浏览器 | In Progress |
 | kimi1 | #1855 | T2 | fullstack | [D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模 | In Progress |
+| kimi12 | #2406 | T1 | pipeline | 矿场增强[11/23] 信号衰减定时任务 | In Progress |
+| kimi15 | #1529 | T1 | backend | 矿场增强[17/23] 企微H5轻量接口 | In Progress |
+| kimi5 | #1864 | T2 | pipeline | [产品平台][P0] 2026产品目录数据结构化入库 | In Progress |

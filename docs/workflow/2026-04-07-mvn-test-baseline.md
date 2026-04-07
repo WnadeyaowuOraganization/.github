@@ -1,4 +1,4 @@
-# 单元测试基础设施切换：H2 → Docker PostgreSQL
+。# 单元测试基础设施切换：H2 → Docker PostgreSQL
 
 **日期**：2026-04-07
 **触发**：调研 SCHEMA_ORDER.txt 并行冲突，进而发现单元测试 H2/PG 双套维护问题
@@ -171,7 +171,7 @@ dev PG 装了 pgvector 扩展但 server 端 lib 文件路径有问题（`could n
 | ...（共 19 组） | ~800 | 各种 |
 
 修复策略由 CC 在各 issue 内独立处理，PR 合并时 `unit-test` 关卡自动校验通过数不退化。
-
+相关issue： #3335 - #3354
 ---
 
 ## 八、未来改进

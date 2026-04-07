@@ -33,15 +33,6 @@ e2e/tests/
 └── fixtures/             # 共享测试数据
 ```
 
-## 辅助脚本
-
-`e2e-result-handler.py` 只负责打标签和更新 Project#4 状态，**不负责创建 Issue**：
-
-```bash
-# 给已存在的Issue打标签 + 设Project状态为 E2E Fail
-python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
-  --report test-results/reports/results.json --issue <N> --source top
-```
 
 ## 全量回归工作流
 
@@ -85,15 +76,24 @@ Issue body 应包含：
 - 重现步骤
 - 修复建议和优先级
 
-拿到新建 Issue 号后，调用辅助脚本设 Project 状态，并发送通知：
+拿到新建 Issue 号后，打标签、更新 Project#4 状态并发送通知：
 
 ```bash
-python3 $HOME_DIR/projects/.github/scripts/e2e-result-handler.py \
-  --report test-results/reports/results.json --issue <新Issue号> --source top
+export GH_TOKEN=$(python3 $HOME_DIR/projects/.github/scripts/gh-app-token.py)
+ISSUE=<新Issue号>
 
+# 打标签
+gh issue edit $ISSUE --repo WnadeyaowuOraganization/wande-play \
+  --add-label "priority/P0,type:bugfix,status:test-failed"
+
+# 设 Project#4 状态为 E2E Fail
+bash $HOME_DIR/projects/.github/scripts/update-project-status.sh \
+  --repo play --issue $ISSUE --status "E2E Fail"
+
+# 发送通知
 curl -s -X POST http://localhost:9872/api/notify \
   -H "Content-Type: application/json" \
-  -d "{\"session\":\"e2e-top\",\"message\":\"E2E全量回归完成，发现问题已创建Issue #<新Issue号>\",\"type\":\"warning\"}"
+  -d "{\"session\":\"e2e-top\",\"message\":\"E2E全量回归完成，发现问题已创建 Issue #${ISSUE}\",\"type\":\"warning\"}"
 ```
 
 ### 4. 补充测试（你的核心价值）

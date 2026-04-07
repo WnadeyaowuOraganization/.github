@@ -70,7 +70,38 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 - 新 Issue 加入系列明细表时，`指派目录` 列填 `—`（待研发经理指派时填入）
 - Issue 状态变更（Done/Fail）时同步更新明细表对应行的`状态`列
 
-## 任务三：详细设计（effort=high/max 的复杂 Issue）
+## 任务三：维护指派建议表
+
+> 位置：`sprints/sprint-<N>/PLAN.md` → `# 以下内容由排程经理每次排程后维护` → `## 指派建议（最近20个）`
+
+### 触发时机
+- 每轮巡检后，若建议表中**所有 Issue 均已 Done 或 Fail**，必须重新生成建议（旧数据清空，重写20条）
+- 发现 Jump / Fail / E2E Fail Issue 时，立即插入建议表**队首**
+
+### 优先级规则（从高到低）
+
+| 优先级 | 条件 |
+|--------|------|
+| 🔴 最高 | 看板状态为 **Jump** 的 Issue（无论模块） |
+| 🟠 高 | 看板状态为 **E2E Fail** 或 **Fail** 且仍 OPEN、依赖已就绪 |
+| 🟡 中 | `priority/P0` Todo，依赖已 CLOSED |
+| 🟢 普通 | `priority/P1` Todo，依赖已 CLOSED，按模块并行原则补足20条 |
+
+### 建议表格式
+
+```markdown
+## 指派建议（最近20个）
+| Issue | 优先 | 模块 | 内容 | 启动 |
+|-------|------|------|------|------|
+| #2363 | P0 | frontend | 项目中心Phase8 菜单+列表 | ✅ |
+```
+
+### 写入规则
+- 每次重新建议时**清空旧内容，整体替换**，不追加
+- Jump/Fail 插队时在现有表格**首行插入**，不清空其余行
+- `启动` 列：无 blocker 填 ✅，有依赖填 ⏳ 并在内容列注明前置
+
+## 任务四：详细设计（effort=high/max 的复杂 Issue）
 
 触发条件：Issue 含 `type:refactor`、`size/L`，或判断需要 effort=high/max 时。
 

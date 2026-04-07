@@ -31,10 +31,9 @@ bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort
 # 5. 启动成功后标 In Progress
 bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
 
-# 6. 更新 PLAN.md：
-#    - 「当前运行」表格新增一行：| kimiX | #N | Tier | module | 标题 | 刚启动 |
-#    - 「下次指派时优先选择」列表对应行追加：→ kimiX 运行中
-#    - 对应系列明细表的 指派目录 列填入 kimiX（原为 — ）
+# 6. 更新 PLAN.md 两处：
+#    - 「当前运行」表格新增一行：| kimiX | #N | Tier | module | 内容 |
+#    - 「指派历史」表格新增一行：| kimiX | #N | Tier | module | 内容 | In Progress |
 ```
 
 ### module 对应目录
@@ -52,26 +51,26 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 
 ### 三个必须维护的区域
 
-#### 1. 「下次指派时优先选择」列表
-- 每次指派后：在对应行追加 `→ kimiX 运行中`
-- Issue Done/Fail 后：更新状态标注（`→ kimiX ✅ Done` 或 `→ kimiX ❌ Fail`）
+#### 1. 「指派历史（完成后划线）」表格
+格式：`| 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |`
+- 指派时：新增一行，看板状态填 `In Progress`
+- CC 完成后：内容列加删除线，看板状态改 `~~Done~~`
+- CC 失败后：内容列加删除线，看板状态改 `~~Fail~~`
 
 #### 2. 「当前运行」表格
-格式：`| kimiX | #N | Tier | module | 标题 | 启动时间 |`
+格式：`| 指派目录 | Issue | Tier | 模块 | 内容 |`
 - 指派时：新增一行
 - CC 结束（Done/Fail/超时）后：删除对应行
 
-#### 3. 系列明细表的 `指派目录` 列
-- 默认值为 `—`（排程经理建表时填入）
-- 指派时：填入 `kimiX`（外接目录的最后一段，如 `kimi1`、`kimi3`）
-- **不要填完整路径，只填最后一段**
+#### 3. 「指派建议」表格（只读，排程经理维护）
+- 指派时优先参考此表，**不要修改此表**
 
 ### 何时更新
 | 事件 | 必须更新的位置 |
 |------|--------------|
-| 指派新 Issue | 三处全部更新 |
-| CC 完成（Done） | 当前运行删行 + 优先列表标 ✅ + 明细表状态列改 Done |
-| CC 失败（Fail） | 当前运行删行 + 优先列表标 ❌ + 明细表状态列改 Fail |
+| 指派新 Issue | 当前运行新增行 + 指派历史新增行 |
+| CC 完成（Done） | 当前运行删行 + 指派历史状态改 ~~Done~~ |
+| CC 失败（Fail） | 当前运行删行 + 指派历史状态改 ~~Fail~~ |
 | 发现 PLAN.md 过时 | 对照 cc-check.sh 输出 + project 看板补齐所有缺失行 |
 
 ## 任务二：巡检 CC 进度

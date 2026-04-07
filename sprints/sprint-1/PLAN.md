@@ -425,19 +425,19 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 17:05 | CC **18/15**（含2 CI，kimi实际16个），7个槽位空闲
+> 更新时间：2026-04-07 17:15 | CC **17/15**（含2 CI，kimi实际15个），8个槽位空闲
 > 本轮无新增Done | 今日累计Done：15个
-> 建议表消化：kimi1→#2076✅ kimi2→#2276✅ kimi14→#1555✅（均来自上轮建议）
-> ⚠️ kimi10(#2445)卡住13min | kimi14从#2039切离(仍OPEN,需重派)
+> ⚠️ kimi17(#1806)session退出但Issue仍OPEN — 需研发经理重新启动
+> ⚠️ kimi9已切→#2039 | kimi5(#2845)卡住5min（观察中）
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
+| #1806 | P0 | frontend | 🔴 执行项目总看板（kimi17 session退出，Issue OPEN，需重新启动） | ✅ |
 | #1678 | P1 | backend | AI投标配图自动生成（#2047已CLOSED，已解锁） | ✅ |
 | #2589 | P1 | fullstack | 执行管理45个API前端对接（#2586已CLOSED，已解锁） | ✅ |
 | #3237 | P0 | fullstack | auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN） | ✅ |
 | #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失 | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
-| #2039 | P1 | backend | D3优化[7/10] 方案变体管理（kimi14切离，OPEN待重派） | ✅ |
 | #2423 | P0 | pipeline | Agent基类（kimi10跑#2445可并行） | ✅ |
 | #1510 | P1 | backend | 矿场Phase2[4/16] 客户角色关联表 | ✅ |
 | #1511 | P1 | backend | 矿场Phase2[1/16] 客户画像扩展字段 | ✅ |
@@ -448,10 +448,10 @@
 | #1504 | P1 | backend | 矿场Phase3[1/12] 赢率预测特征工程 | ✅ |
 | #2065 | P0 | backend | D3参数化 市场配置预设 | ✅ |
 | #2055 | P0 | backend | D3参数化 扣件管理Web后台 | ✅ |
+| #2851 | P1 | frontend | 开发监控[7/7] 验收队列前端（kimi9切→#2039，需重派） | ✅ |
 | #2849 | P0 | frontend | 开发监控[5/7] Agent效率看板前端（等#2848完成,kimi6运行中） | ⏳ |
 | #1558 | P0 | backend | D3材质标注[2/4]（等#1560 In Progress完成） | ⏳ |
 | #2366 | P0 | frontend | 审批中心页面（等#2026完成，kimi16运行中） | ⏳ |
-| #2122 | P0 | backend | AI回款风险预警（等#2124 In Progress完成） | ⏳ |
 
 ---
 
@@ -459,7 +459,7 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 16:55 UTC | **15/15** | kimi1/#1554 PR#3286✅、kimi2/#2846 PR#3285✅、kimi14/#2039 PR#3287✅；新指派 kimi1→#2076、kimi2→#2276、kimi14→#1555
+> 更新：2026-04-07 17:10 UTC | **15/15** | kimi9/#2851 PR#3288✅、kimi17/#1806 PR#3289✅；kimi10注入继续；新指派 kimi9→#2039(重派)
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -471,14 +471,13 @@
 | kimi6 | #2848 | T2 | backend | 开发模式监控[4/7] Agent效率看板API |
 | kimi7 | #2038 | T1 | backend | D3优化[8/10] 配色方案系统 |
 | kimi8 | #2040 | T1 | backend | D3优化[6/10] 无障碍合规自动检测 |
-| kimi9 | #2851 | T2 | backend | 开发模式监控[7/7] 告警规则配置API |
+| kimi9 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理（重派，PR#3287 OPEN） |
 | kimi10 | #2445 | T1 | pipeline | 锁定100儿童友好+50体育公园城市监控 P0 |
 | kimi11 | #2893 | T3 | fullstack | Claude Office全量迁移至wande-play |
 | kimi12 | #1740 | T1 | frontend | 质保 备件库存管理页面 P1 |
 | kimi13 | #2477 | T1 | pipeline | D3-AI ComfyUI渲染Pipeline[1/3] |
 | kimi14 | #1555 | T1 | backend | 企微打通[10/17]（#1554完成解锁） |
 | kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回（重启 high） |
-| kimi17 | #1806 | T1 | frontend | 🔴 执行项目总看板（吴耀全局视图，用户优先） |
 | kimi17 | #1806 | T1 | frontend | 🔴 执行项目总看板（吴耀全局视图，用户优先） |
 
 ---
@@ -589,4 +588,6 @@
 | kimi9 | #2851 | T2 | backend | 开发模式监控[7/7] 告警规则配置API | In Progress |
 | kimi11 | #2893 | T3 | fullstack | Claude Office全量迁移至wande-play | In Progress |
 | kimi13 | #2477 | T1 | pipeline | D3-AI ComfyUI渲染Pipeline[1/3] | In Progress |
-| kimi17 | #1806 | T1 | frontend | 🔴 执行项目总看板（吴耀全局视图，用户优先） | In Progress |
+| kimi17 | ~~#1806~~ | T1 | frontend | ~~🔴 执行项目总看板（用户优先）~~ PR#3289 | ~~Done~~ |
+| kimi9 | ~~#2851~~ | T2 | backend | ~~开发监控[7/7] 告警规则配置API~~ PR#3288 | ~~Done~~ |
+| kimi9 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理（重派） | In Progress |

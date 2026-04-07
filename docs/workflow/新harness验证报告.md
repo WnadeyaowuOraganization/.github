@@ -207,7 +207,7 @@
 | G2 | cycle-merge.sh 冲突解决 | CONFLICTING时自动rebase+push | 冲突残留 | **6** | 批次3需多轮rebase：#1513（2轮）/#1483（3轮）；批次4-5：#1596/#1596/#1629等（各1轮），cycle-merge.sh触发但仍需多次重试 |
 | G3 | check-cc-status.sh 准确性 | 正确显示🔧运行中/💾SAVED/🚨超时；无僵尸会话误判 | 僵尸session/状态误报 | **18+** | 批次5大崩溃时：18个CC state=RUNNING但tmux=0，check-cc-status.sh显示⏳而非🚨（因非tmux超时而是进程消失）；另有`${repo}`未定义变量bug导致超时通知信息不完整（check-cc-status.sh:117） |
 | G4 | update-project-status.sh（GraphQL） | 成功更新Project#4状态 | API失败 | **0** | 全程GraphQL更新正常 |
-| G5 | get-gh-token.sh（有效token） | 返回可读写private repo的token | 401 | **0** | 全程token有效 |
+| G5 | gh-app-token.py（有效token） | 返回可读写private repo的token | 401 | **0** | 全程token有效 |
 | G6 | e2e-result-handler.py | 正确解析测试报告→评论+状态更新 | 解析失败/静默 | — | 未直接观测E2E失败处理 |
 | G7 | wande-ai-api 路径清除（D44） | 无脚本/CI引用废弃路径 | 有废弃路径引用 | **0** | 全部脚本和CI均无 wande-ai-api 引用 |
 
@@ -356,7 +356,7 @@
 | G2 | — | 本批次未观测到冲突自动解决 | — |
 | G3 | ⚠️ 部分通过 | `check-cc-status.sh` 正确显示锁状态；但 state=RUNNING 与实际无进程不一致（post-cc-check.sh 未在 cron 中运行） | post-cc-check.sh 未加入 crontab |
 | G4 | ✅ 通过 | 状态更新脚本正常工作（Issue → In Progress 切换无报错） | — |
-| G5 | ✅ 通过 | `get-gh-token.sh` 正常返回有效 token | — |
+| G5 | ✅ 通过 | `gh-app-token.py` 正常返回有效 token | — |
 | G6 | — | 未观测到 E2E 失败处理 | — |
 | G7 | ✅ 通过 | 本批次新增代码均在 `wande-ai`，无 `wande-ai-api` 引用 | — |
 

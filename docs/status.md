@@ -6,7 +6,7 @@
 ## 🎯 Sprint 计划
 | Sprint | 状态 | 开始 | 截止 | Issue数 | 重点功能模块 | 交付物（用户能做什么） |
 |--------|------|------|------|---------|-------------|---------------------|
-| Sprint-1 | 🟢 进行中 | 2026-03-28 | 2026-04-11 | 138 | D3参数化P0/P1、矿场增强P0/P1、销售记录体系、驾驶舱P0 | 商务打开矿场看到项目→标记→写销售记录→你在驾驶舱看到；D3 Web端可配置电池包 |
+| Sprint-1 | 🟢 进行中 | 2026-03-28 | 2026-04-11 | 156 | D3参数化P0/P1、矿场增强P0/P1、销售记录体系、驾驶舱P0 | 商务打开矿场看到项目→标记→写销售记录→你在驾驶舱看到；D3 Web端可配置电池包；国贸/经销询盘看板→报价→PI→订单跟踪 |
 | Sprint-2 | ⏳ 待启动 | 2026-04-12 | — | 139 | 执行管理、CRM、审批引擎P0、方案引擎P0、H5基座 | 签约后能建项目→图纸/BOM管理→回款跟踪；合同/报价能走审批；商务能用PPT插件做方案 |
 | Sprint-3 | ⏳ 待启动 | — | — | 178 | 品牌中心·内容自动化+AI数字人、协同修改、素材库、客户生命周期、外展获客 | 海报/文章自动生成→审批→发布；多语言方案翻译；客户交付提醒+赢丢单复盘 |
 | Sprint-4 | ⏳ 待启动 | — | — | 120 | 品牌中心·视频裂变/舆情/SEO、色卡配色器、库存联通、项目中心、资金闭环 | 视频裂变分发；色卡在线配色→审批；仓库库存可视化；项目全景+风险台账；财务对账 |
@@ -18,6 +18,7 @@
 | 超管驾驶舱 | 95 | 平台系统+开发者协同+安全审计 | `sprints/sprint-1/超管驾驶舱/` |
 | 销售记录体系 | 16 | 三维驱动+记录中心+周报月报 | `sprints/sprint-1/销售记录体系/` |
 | D3参数化设计 | — | 电池包+AI集成+Web平台 | `sprints/sprint-1/D3参数化设计/` |
+| 统一询盘管理 | 13 | 三线统一(直销/经销/国贸)：询盘+报价+PI+订单跟踪+发货+单据 | — |
 | 项目矿场/投标 | 19 | **D54新增优先**：矿场增强P0(5)+投标引擎P0(1)+增量同步P1(1)，矿场P0优先于D3 Todo | — |
 ### Sprint-2 预览（80个Issue，已去重清理）
 | 执行管理 | 57 | 数据库建表→CRUD→图纸/BOM/采购/生产/安装/验收/变更→利润/成本/回款→AI预警→EVM | `sprints/sprint-2/执行管理/` |
@@ -161,6 +162,8 @@
 | D53 | 04-06 | ✅ | post-cc-check.sh进程检测Bug修复 + session命名统一 | **Bug根因**：`HAS_PROCESS`检测用`DIRNAME=wande-play-kimi11`匹配session名`cc-kimi11-backend-1633`，grep永远不匹配→所有CC误判无进程→每5分钟retry+1→触发retry=10标Fail，CC实际正在运行。**修复**：session命名统一为`cc-{basename(BASE_DIR)}-{issue}`（如`cc-wande-play-kimi11-1633`），post-cc-check.sh改为精确匹配`cc-{DIRNAME}-{ISSUE}`，无需读DIR_SUFFIX字段。**check-cc-status.sh**：session解析从`cc-wande-play-kimiN-1234`提取kimiN和issue。**Claude Office兼容**：`/log`接口`rsplit("-",1)`提取dir_name=`wande-play-kimi11`→`_find_jsonl`按最近修改匹配JSONL，功能不受影响 | 伟平 |
 | D55 | 04-07 | ✅ | CC目录锁完整生命周期重构 | **CC不退出**：issue-workflow.md改为PR创建后轮询等待合并，不主动退出。**锁释放**：新增release-cc-lock.sh（kill session+rm .cc-lock+checkout dev），唯一出口。**cc-lock-manager.yml**：双触发路径——①workflow_run(build-deploy-dev完成后，不受cancel-in-progress影响)→部署成功释放锁/失败注入提示；②pull_request merged兜底（仅改issues/docs等被paths-ignore过滤时dev CI不触发，靠PR事件直接释放）。**CI注入**：pr-test.yml/build-deploy-dev.yml失败时改为inject-cc-prompt.sh直接注入活跃CC会话，不再创建新Issue。**post-cc-check.sh简化**：去掉commit/push/SAVED状态机，只做保活——进程消失注入恢复提示词，session消失重启run-cc.sh。**全量同步**：所有kimi1-20目录+main分支同步 | 伟平 |
 | D54 | 04-07 | ✅ | Sprint-1矿场优先级提升：矿场P0(5个)+投标引擎(1个)+矿场增量同步(1个)→Todo | Sprint-1矿场完成率0%(19个Issue全部未启动)，算力被D3吸收。矿场P0的5个Issue(#1534/#1535/#2256/#2257/#2407)+投标引擎#2206(P0)+#2028(P1)看板状态从Plan→Todo，确保研发经理CC能排程。矿场P0优先于D3剩余Todo | 吴耀 |
+| D56 | 04-07 | ✅ | 统一询盘管理体系：客户为中心+三线统一数据模型 | 客户(Account)→询盘(Inquiry)→报价(Quotation)→订单(Order)层级，直销/经销/国贸共用trade_inquiries+trade_quotations表(business_type区分)。直销主流程仍走矿场→商机模式(项目驱动)，询盘模式服务经销+国贸+少量直销非招标场景。13个Issue(#3099-#3111) Sprint-1：P0询盘模型+报价模型+客户Tab+看板+报价PDF+PI生成，P1订单跟踪+发货+单据+合同扩展，P2信用额度+转化率+汇率。对标SAP SD文档流+Salesforce Account-Opportunity | 吴耀 |
+| D57 | 04-07 | ✅ | 直销vs询盘双入口架构确认 | 直销(国内+澳门)=项目驱动→矿场系统(68个Issue)；经销+国贸=客户驱动→询盘工作台(13个Issue)。两套入口共享客户/合同/回款/销售记录层，互不混用。少量直销非招标场景可走询盘模式(business_type=direct) | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

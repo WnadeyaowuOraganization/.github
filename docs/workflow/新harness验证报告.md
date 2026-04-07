@@ -711,21 +711,37 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - **CC未提交代码（#1895/#1886）**：CC完成工作后回到❯提示，未自动commit；研发经理手动commit+push
 - **H2/PG schema双轨维护**：#1888 CC维护了Flyway迁移脚本+PG schema，#1886/1885 CC维护了H2测试schema
 
-### 批次14已启动（5个CC，23:10 UTC）
+### 批次14完成情况（5+1=6 MERGED，含hotfix）
+
+| PR | Issue | 标题摘要 | 状态 | 处理 |
+|----|-------|---------|------|------|
+| PR#3040 | hotfix | 修复ConflictingBeanDefinitionException assetCategoryMapper — dev启动失败 | ✅ MERGED | 紧急hotfix（#1886引入冲突） |
+| PR#3041 | #1995 | 项目风险事件Service — RiskEventAutoCollector+ApplicationEvent+阶段停滞检测 | ✅ MERGED | 手动commit+clean branch（CC在错误分支上工作） |
+| PR#3042 | #1984 | 设计任务看板API — TDD测试+API契约+Stats空值修复 | ✅ MERGED | CC自动创建PR |
+| PR#3043 | #2033 | 色卡材料库CRUD — Entity+Mapper+Service+DTO/VO+单元测试 | ✅ MERGED | CC自动创建PR |
+| PR#3047 | #2048 | 备件消耗关联工单 — 自动扣减库存+成本记录+SQL迁移 | ✅ MERGED (auto) | 手动commit（schema冲突） |
+| PR#3049 | #2049 | 备件管理API — spare_parts CRUD+出入库+安全库存预警 | ✅ MERGED | 手动commit（CC在错误分支） |
+
+**批次14关键事件**:
+- **dev启动失败hotfix**：PR#3033(#1886)引入重复assetCategoryMapper Bean冲突，导致Spring启动失败；kimi16 CC自动修复，研发经理提取修复提交为独立hotfix PR#3040（紧急合并）
+- **CC在错误分支工作（#1995）**：kimi16 CC在feature-Issue-1886-v2（已合并分支）上工作，研发经理提取代码创建feature-Issue-1995-v2
+- **CC未提交代码（#2049/#2048）**：CC完成后在❯提示等待，未自动commit；均需手动commit+push
+
+### 批次15已启动（4个CC，00:35 UTC 04-07）
 
 | 目录 | Issue | 内容 | 模块 | effort |
 |------|-------|------|------|--------|
-| kimi11 | #1984 | 设计任务看板API — CRUD+状态流转+统计+逾期预警 | backend | high |
-| kimi15 | #2033 | 色卡材料 Entity+Mapper+Service — 材料库CRUD | backend | high |
-| kimi16 | #1995 | 项目风险事件Service — CRUD+多源自动汇聚引擎 | backend | high |
-| kimi17 | #2049 | 备件管理API — spare_parts CRUD+出入库+安全库存预警 | backend | high |
-| kimi19 | #2048 | 备件消耗关联工单 — 维修时自动扣减库存+成本记录 | backend | high |
+| kimi11 | #1945 | 工具中心使用统计Service+API — 下载记录+使用追踪 | backend | high |
+| kimi15 | #1735 | 验收执行页（移动端） — 逐项检查+拍照+签字 | frontend | high |
+| kimi16 | #1962 | 万德VI标准管理 — 字体/配色/间距/图片规范配置中心 | backend | high |
+| kimi17 | #1956 | PPT插件AI文案对话面板 — 选项目→看上下文→对话写文案→一键插入 | backend | high |
+| kimi19 | #1977 | 方案模板CRUD API + 行业×阶段智能匹配 | backend | high |
 
 ---
 
 ## 七、最终结论
 
-> 更新时间：2026-04-06 23:25 UTC（批次14运行中，累计72 MERGED）
+> 更新时间：2026-04-07 00:35 UTC（批次15运行中，累计79 MERGED）
 
 - **总验收项**: **63项**（A~H阶段：原53项 + H阶段新增10项）
 - **已观测**: 43项（+5项H阶段部分观测）
@@ -734,13 +750,14 @@ kimi1(#1556) / kimi2(#1557) / kimi3(#1601) / kimi4(#1600) / kimi5(#1624) / kimi6
 - **警告**: 8项（⚠️：A8过度max/P18/P19/H3/H10等）
 - **不适用/待观测**: 18项（—）
 - **整体评分**: 21/43 = 49%（含H阶段修正）
-- **累计完成**: 批次1-4共27个 + 批次5-14已45个 = **72个 MERGED**
+- **累计完成**: 批次1-4共27个 + 批次5-15已52个 = **79个 MERGED**
   - 批次10全部：#1699/#1632/#1633/#1694/#1688（5个）
   - 批次11全部：#1631/#1703/#1630/#1681/#1620/#1716路由（6个）
   - 批次12完成：#1716完整/#1621/#1725/#1731/#1800（5个）
   - 批次13全部：#1885/#1748/#1886/#1895/#1798/#1888（6个）
-- **当前运行(5个)**: kimi11(#1984) / kimi15(#2033) / kimi16(#1995) / kimi17(#2049) / kimi19(#2048)
+  - 批次14全部：#1995/#1984/#2033/#2048/#2049+hotfix（5+1）
+- **当前运行(5个)**: kimi11(#1945) / kimi15(#1735) / kimi16(#1962) / kimi17(#1956) / kimi19(#1977)
 - **关键问题（按优先级）**:
-  1. 🟡 **CC未提交代码**: CC完成工作后在❯提示等待，不自动commit；需研发经理定时检查并手动提交
-  2. 🟡 **schema累积冲突**: 每批PR都有schema.sql/wande-ai-pg.sql冲突，统一用clean v2分支策略处理
-  3. 🟡 **expense文件污染**: CC工作目录共用导致expense文件混入其他PR，需clean branch v2处理
+  1. 🔴 **dev Bean冲突风险**: 多包下同名Mapper/Entity会引发Spring启动失败；需CC提交前grep验证Bean唯一性
+  2. 🟡 **CC未提交代码**: CC完成工作后在❯提示等待，不自动commit；需研发经理定时检查并手动提交
+  3. 🟡 **CC在错误分支工作**: run-cc.sh偶尔分支切换失败，CC在旧分支上写代码；需监控git branch显示

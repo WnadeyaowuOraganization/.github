@@ -456,14 +456,14 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 11:50 UTC | **15/15满载** | #1898 PR#3239已创建；kimi4/kimi17session仍占用锁但工作已完成
+> 更新：2026-04-07 12:01 UTC | **15/15** | kimi4→#2256 frontend，kimi17→#2107 backend；kimi10/kimi15 PR已建等释放
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 |
 | kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) |
-| ~~kimi4~~ | ~~#1532~~ | T1 | backend | ~~矿场转化漏斗统计API~~ PR#3233 ✅ |
+| kimi4 | #2256 | T1 | frontend | 矿场增强[6/23] 列表状态筛选+流转 |
 | kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
@@ -472,9 +472,9 @@
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 |
 | kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 |
-| kimi15 | #1528 | T1 | backend | 线索来源转化率统计API（PR#3236等待合并） |
+| ~~kimi15~~ | ~~#1528~~ | T1 | backend | ~~线索来源转化率统计API~~ PR#3236 ✅ |
 | kimi16 | #2461 | T1 | backend | 合同管理建表 |
-| ~~kimi17~~ | ~~#1630~~ | T1 | backend | ~~整改工单Phase27 API~~ 已合并dev ✅ |
+| kimi17 | #2107 | T1 | backend | 质保售后 备件管理API |
 
 ---
 
@@ -511,3 +511,5 @@
 | kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 | In Progress |
 | kimi15 | ~~#1528~~ | T1 | backend | ~~线索来源转化率统计API~~ PR#3236 | ~~Done~~ |
 | kimi17 | ~~#1630~~ | T1 | backend | ~~整改工单Phase27 API~~ 已合并dev | ~~Done~~ |
+| kimi4 | #2256 | T1 | frontend | 矿场增强[6/23] 列表状态筛选+流转 | In Progress |
+| kimi17 | #2107 | T1 | backend | 质保售后 备件管理API | In Progress |

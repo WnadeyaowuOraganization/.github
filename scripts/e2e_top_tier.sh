@@ -2,67 +2,111 @@
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # e2e_top_tier.sh — 顶层E2E测试（每6小时，全量回归）
 # crontab: 0 */6 * * *
+# 保活：cron每6小时检查，会话存在则跳过，崩溃则重启
 #
 # 操作:
-#   tail -f ${HOME_DIR}/cc_scheduler/logs/e2e-top.log    查看实时日志
-#   tmux attach -t e2e-top                     查看tmux会话
-#   Ctrl+B D                                   脱离（测试继续运行）
+#   tmux attach -t e2e-top    查看/注入消息
+#   Ctrl+B D                  脱离（测试继续运行）
 
-LOCK_FILE="${HOME_DIR}/cc_scheduler/e2e_top.lock"
 E2E_DIR="${HOME_DIR}/projects/wande-play-e2e-top/e2e"
 SESSION="e2e-top"
-LOGDIR=${HOME_DIR}/cc_scheduler/logs
-mkdir -p $LOGDIR
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-LOGFILE="$LOGDIR/e2e-top.log"
+SESSION_MAP="/tmp/manager-session-map.json"
+JSONL_DIR="${HOME_DIR}/.claude/projects/-home-ubuntu-projects-wande-play-e2e-top-e2e"
 
-# 防止并发
-if [ -f "$LOCK_FILE" ]; then
-    PID=$(cat "$LOCK_FILE" 2>/dev/null)
-    if kill -0 "$PID" 2>/dev/null; then
-        exit 0
+LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
+mkdir -p "$(dirname "$LOG_FILE")"
+log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
+
+# 写入 tmux会话→JSONL 映射（供 Claude Office 精确关联日志）
+_write_session_map() {
+  local session="$1" jsonl="$2"
+  python3 -c "
+import json, os
+f='${SESSION_MAP}'
+m = json.load(open(f)) if os.path.exists(f) else {}
+m['${session}'] = '${jsonl}'
+json.dump(m, open(f,'w'))
+" 2>/dev/null
+}
+
+# 启动后等待新 JSONL 出现并写入映射
+_associate_jsonl() {
+  local session="$1" before_list="$2"
+  local max_wait=40 elapsed=0
+  while [ $elapsed -lt $max_wait ]; do
+    sleep 2; elapsed=$((elapsed+2))
+    local claimed
+    claimed=$(python3 -c "
+import json,os
+f='${SESSION_MAP}'
+if os.path.exists(f):
+    m=json.load(open(f))
+    for k,v in m.items():
+        if k != '${session}': print(v)
+" 2>/dev/null)
+    local new_jsonl
+    new_jsonl=$(ls -1t "${JSONL_DIR}"/*.jsonl 2>/dev/null \
+      | while read -r f; do
+          echo "$before_list" | grep -qxF "$f" && continue
+          echo "$claimed"     | grep -qxF "$f" && continue
+          echo "$f"; break
+        done)
+    if [ -n "$new_jsonl" ]; then
+      _write_session_map "$session" "$new_jsonl"
+      log "✓ ${session} → $(basename $new_jsonl)"
+      return
     fi
-    rm -f "$LOCK_FILE"
-fi
+  done
+  log "⚠ ${session} JSONL关联超时，将由server.py时序匹配"
+}
 
-# 如果tmux会话已存在，跳过
+# 幂等：会话已存在则跳过
 if tmux has-session -t "$SESSION" 2>/dev/null; then
+    log "✓ e2e-top 运行中，跳过"
     exit 0
 fi
 
-export GH_TOKEN=$(bash ${HOME_DIR}/projects/.github/scripts/get-gh-token.sh)
-export PATH="${HOME_DIR}/.local/bin:$PATH"
-export HOME="${HOME_DIR}"
+log "启动 e2e-top → ${SESSION}"
 
-echo $$ > "$LOCK_FILE"
-
-# 清空日志
-> "$LOGFILE"
-
-# 写入临时启动脚本
-TMP_SCRIPT="/tmp/e2e_top_run_$$.sh"
-cat > "$TMP_SCRIPT" <<INNEREOF
-#!/bin/bash
-export GH_TOKEN="$GH_TOKEN"
-export ANTHROPIC_BASE_URL=http://localhost:9855
-export PATH="${HOME_DIR}/.local/bin:\$PATH"
-export HOME="${HOME_DIR}"
+# pre-task：切换 dev 分支并 pull
 cd "$E2E_DIR"
-git checkout dev && git pull origin dev
-echo [\$(date)] 顶层E2E全量回归启动 >> "$LOGFILE"
-claude -p '执行顶层测试' --model claude-opus-4-6 \
-  --effort medium --max-turns 200 --verbose \
-  >> "$LOGFILE" 2>&1
-EXIT_CODE=\${PIPESTATUS[0]}
-echo [\$(date)] 顶层E2E结束 exit=\$EXIT_CODE >> "$LOGFILE"
-rm -f "$LOCK_FILE"
-sleep 1
-tmux kill-session -t "$SESSION"
-INNEREOF
-chmod +x "$TMP_SCRIPT"
+git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
 
-tmux new-session -d -s "$SESSION" "bash $TMP_SCRIPT"
+# Token
+export GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh")
 
-echo "✓ 顶层E2E已在tmux会话 '$SESSION' 中启动"
-echo "  实时日志: tail -f $LOGFILE"
-echo "  tmux会话: tmux attach -t $SESSION"
+# API来源：Token Pool Proxy（同 run-cc.sh effort!=max）
+API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
+
+CONFIG_DIR="/tmp/cc-config-${SESSION}"
+mkdir -p "$CONFIG_DIR"
+rsync -a --exclude='.credentials.json' --exclude='projects' \
+  "${HOME_DIR}/.claude/" "$CONFIG_DIR/" 2>/dev/null
+ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
+cat > "$CONFIG_DIR/.credentials.json" << 'CREDS_EOF'
+{"claudeAiOauth":{"accessToken":"stub-proxy-mode","refreshToken":"stub-proxy-mode","expiresAt":1,"scopes":["user:inference"],"subscriptionType":"free","rateLimitTier":"free"}}
+CREDS_EOF
+[ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
+
+# 记录启动前已有的 JSONL 列表
+mkdir -p "$JSONL_DIR"
+BEFORE_LIST=$(ls -1 "${JSONL_DIR}"/*.jsonl 2>/dev/null | sort)
+
+tmux new-session -d -s "$SESSION" -c "$E2E_DIR" \
+  "export GH_TOKEN=${GH_TOKEN}; \
+   export HOME=${HOME_DIR}; \
+   export PATH=${HOME_DIR}/.local/bin:\$PATH; \
+   ${API_ENV} \
+   export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
+   claude --model claude-opus-4-6 --dangerously-skip-permissions; \
+   rm -rf ${CONFIG_DIR}; exec bash"
+
+# 后台：注入prompt + 关联JSONL
+( sleep 6
+  tmux send-keys -t "$SESSION" "执行顶层E2E全量回归测试" Enter
+  _associate_jsonl "$SESSION" "$BEFORE_LIST"
+) &
+
+log "✓ e2e-top 已启动，JSONL关联中..."
+echo "  tmux attach -t $SESSION    查看/注入消息"

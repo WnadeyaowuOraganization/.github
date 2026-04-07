@@ -424,10 +424,10 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 16:15 | CC **16/15超载**（kimi2/#3234 Done session待清理）
-> 补标Done：#2041(D3场地地形kimi7→#2038), #2453(历史甲方监控kimi13→释放), #1484(kimi18超时32h), #1886(kimi19超时17h)
-> 今日累计Done：#2950/#2107/#2452/#1458/#2373/#3234/#2041/#2453/#1484/#1886（10个）
-> ⚠️ kimi16(#2026)已compact重启 | kimi9(#2450)卡住12min | kimi2(#3234 Done)session待清理
+> 更新时间：2026-04-07 16:25 | CC **17/15超载**（含2个CI session，kimi实际15个）
+> 补标Done：#2095(验收附件管理API，kimi11→已释放) | 今日累计Done：11个
+> kimi2→#2846(开发监控[2/7]已清理#3234) | kimi13槽位空闲
+> ⚠️ kimi7(#2038)卡住12min | kimi18/kimi19超时锁已恢复（空闲8）
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -435,22 +435,22 @@
 | #3228 | P0 | backend | 🔴 [BUG 2/7] DB Schema不匹配 — related_win_/create_dept字段缺失 | ✅ |
 | #2304 | P0 | frontend | 工艺标准卡管理页面（整改工单系列） | ✅ |
 | #2423 | P0 | pipeline | Agent基类（#2424 OPEN in kimi10，可并行） | ✅ |
+| #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成，#1560仍OPEN待重指派） | ⏳ |
 | #2366 | P0 | frontend | 审批中心页面（等kimi16/#2026完成，已compact重启进行中） | ⏳ |
-| #1558 | P0 | backend | D3材质标注[2/4] 材质标注API（等#1560完成，kimi11运行中） | ⏳ |
 | #2276 | P0 | frontend | 采集管控[4/4] 管控面板（等#1572完成） | ⏳ |
 | #2122 | P0 | backend | AI回款风险预警（等#2124完成） | ⏳ |
 | #2065 | P0 | backend | D3参数化 市场配置预设 | ✅ |
 | #2055 | P0 | backend | D3参数化 扣件管理Web后台 | ✅ |
 | #2477 | P1 | pipeline | D3-AI ComfyUI渲染Pipeline | ✅ |
 | #2893 | P0 | fullstack | Claude Office全量迁移至wande-play（T3，无代码依赖） | ✅ |
-| #2042 | P1 | backend | D3优化[6/10] 无障碍合规（kimi8运行中） | ⏳ |
 | #1852 | P0 | pipeline | D3-Agent知识库构建（kimi12→#1740运行中，释放后恢复） | ✅ |
-| #2408 | P0 | pipeline | 采集管控[2/4] 13脚本接run_reporter（OPEN，kimi9→#2450接力） | ✅ |
 | #1630 | P0 | backend | 整改工单Phase27 API（kimi6→#2848重指派，OPEN待补派） | ✅ |
 | #1705 | P1 | backend | CRM跟进记录CRUD API（kimi17→#2847重指派，OPEN待补派） | ✅ |
+| #2408 | P0 | pipeline | 采集管控[2/4] 13脚本接run_reporter（OPEN） | ✅ |
 | #2250 | P1 | frontend | 矿场增强[23/23] 历史联系人高亮 | ✅ |
-| #2039 | P1 | backend | D3优化[7/10] 方案变体管理（kimi14运行中） | ⏳ |
-| #2846 | P0 | backend | 开发模式监控[2/7] 甘特图数据API | ✅ |
+| #2849 | P0 | frontend | 开发模式监控[5/7] 实时看板前端页面 | ✅ |
+| #2850 | P0 | frontend | 开发模式监控[6/7] 历史报表页面 | ✅ |
+| #2851 | P0 | backend | 开发模式监控[7/7] 告警规则配置API | ✅ |
 
 ---
 
@@ -458,25 +458,24 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 15:53 UTC | **15/15** | kimi6→#1630 Done(已合并)、kimi17→#1705 PR#3280 Done；新指派 kimi5→#2845、kimi6→#2848、kimi17→#2847；⚠️kimi16/#2026 1% context
+> 更新：2026-04-07 15:58 UTC | **15/15** | kimi2/#3234 PR#3254✅Done、kimi13/#2453 PR#3281✅Done、kimi15/#1528 cc-keepalive误启已kill；新指派 kimi2→#2846；kimi9/#2450 注入PR指令
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #1554 | T1 | backend | 企微打通[9/17] H5 JS-SDK签名 |
-| kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0（3h运行中） |
+| kimi2 | #2846 | T2 | backend | 开发模式监控[2/7] CFD甘特图数据API |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi4 | #2372 | T1 | frontend | 质保售后 售后工单管理主页面 P0 |
 | kimi5 | #2845 | T2 | backend | 开发模式监控[1/7] CFD数据API |
 | kimi6 | #2848 | T2 | backend | 开发模式监控[4/7] Agent效率看板API |
 | kimi7 | #2038 | T1 | backend | D3优化[8/10] 配色方案系统 |
 | kimi8 | #2040 | T1 | backend | D3优化[6/10] 无障碍合规自动检测 |
-| kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0 |
+| kimi9 | #2450 | T1 | pipeline | 竞品甲方提取[6/38] P0（注入PR指令） |
 | kimi10 | #2445 | T1 | pipeline | 锁定100儿童友好+50体育公园城市监控 P0 |
 | kimi11 | #2095 | T1 | backend | 执行管理 验收附件管理API |
 | kimi12 | #1740 | T1 | frontend | 质保 备件库存管理页面 P1 |
-| kimi13 | #2453 | T1 | pipeline | 历史甲方定向监控清单[3/38] P0 |
 | kimi14 | #2039 | T1 | backend | D3优化[7/10] 方案变体管理+版本回溯 |
-| kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回（⚠️1% compact）|
+| kimi16 | #2026 | T1 | backend | 审批引擎核心[3/10] 发起/审批/驳回（重启 high） |
 | kimi17 | #2847 | T2 | pipeline | 开发模式监控[3/7] Fail根因强制回写 |
 
 ---
@@ -574,3 +573,6 @@
 | kimi5 | #2845 | T2 | backend | 开发模式监控[1/7] CFD数据API | In Progress |
 | kimi6 | #2848 | T2 | backend | 开发模式监控[4/7] Agent效率看板API | In Progress |
 | kimi17 | #2847 | T2 | pipeline | 开发模式监控[3/7] Fail根因强制回写 | In Progress |
+| kimi2 | ~~#3234~~ | BUG | fullstack | ~~Dashboard数据全0~~ PR#3254✅merged | ~~Done~~ |
+| kimi13 | ~~#2453~~ | T1 | pipeline | ~~历史甲方定向监控清单[3/38]~~ PR#3281✅merged | ~~Done~~ |
+| kimi2 | #2846 | T2 | backend | 开发模式监控[2/7] CFD甘特图数据API | In Progress |

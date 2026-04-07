@@ -72,31 +72,13 @@ echo "$(date) #N → kimiX (module, effort)" >> sprints/sprint-1/ISSUE_ASSIGN_HI
 
 ## 任务二：巡检 CC 进度
 
-### 第一步：列出运行中的 CC 会话
-
 ```bash
-# 查看所有 CC 会话
-tmux ls | grep "^cc-"
-
-# 配合锁状态确认各 kimi 目录情况
+# 全面锁状态总览
 bash scripts/check-cc-status.sh
-```
 
-### 第二步：读取 tmux 会话输出（实时进度）
-
-```bash
-# 查看指定会话最近200行输出（最准确的实时状态）
+# 读取指定会话实时输出（最近200行），判断是否卡住/报错/等待输入
 tmux capture-pane -t cc-wande-play-kimi1-1234 -p -S -200
-
-# 批量查看所有运行中的 CC 最新输出
-for session in $(tmux ls 2>/dev/null | grep "^cc-" | cut -d: -f1); do
-  echo "=== $session ==="
-  tmux capture-pane -t "$session" -p -S -30 | tail -10
-  echo ""
-done
 ```
-
-根据输出内容判断进度：是否在等待输入、是否卡在某个阶段、是否报错。
 
 ### 发现问题时注入提示词
 

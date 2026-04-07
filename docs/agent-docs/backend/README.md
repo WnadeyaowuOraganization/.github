@@ -199,14 +199,7 @@ CREATE TABLE IF NOT EXISTS wdpp_xxx (
 );
 ```
 
-#### 步骤 2：更新合并顺序
-
-在 `schemas/SCHEMA_ORDER.txt` 末尾添加：
-```
-issue_XXXX.sql  # Issue #XXXX: 功能描述
-```
-
-#### 步骤 3：创建 PostgreSQL 增量脚本
+#### 步骤 2：创建 PostgreSQL 增量脚本
 
 **位置**: `backend/script/sql/update/wande_ai/`
 **文件名**: `create-<表名>-issue-XXXX.sql`
@@ -251,8 +244,7 @@ ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
 
 ### 数据库变更检查清单
 
-- [ ] 创建了 `schemas/issue_XXXX.sql`
-- [ ] 更新了 `SCHEMA_ORDER.txt`
+- [ ] 创建了 `schemas/issue_XXXX.sql`（无需修改任何配置，测试启动时自动加载）
 - [ ] 创建了增量脚本
 - [ ] 没有直接编辑 `schema.sql`
 

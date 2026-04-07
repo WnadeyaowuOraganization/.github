@@ -424,9 +424,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 14:30 | CC **16/15在跑**，三队列持续清零
-> kimi13切换→#1724（设备台账页面，#1724解锁因#2110已Done）
-> ⚠️ kimi10(#2452)可能卡住5分钟，研发经理关注
+> 更新时间：2026-04-07 14:40 | CC **15/15满**，三队列清零
+> 补标Done：#2446（政策信号采集管线，Issue CLOSED）
+> kimi5→#1458/kimi9消失(#2446 Done) | ⚠️ kimi10(#2452)卡住15分/kimi11(#1560)卡住11分
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -455,9 +455,9 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（15/15）
+## 当前运行（16/15）
 
-> 更新：2026-04-07 14:24 UTC | **15/15** | kimi13→#1724(设备台账，#2384已CLOSED取消)、kimi14→#1557(企微通讯录同步)
+> 更新：2026-04-07 14:34 UTC | **16/15** | kimi5/#3227完成(PR#3265)→cc-keepalive自动换#1458；kimi14是额外槽（排程经理已知）
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
@@ -465,7 +465,7 @@
 | kimi2 | #3234 | BUG | fullstack | 🟠 P1 Dashboard数据全0 |
 | kimi3 | #2086 | T1 | backend | 🟠 E2E Fail 变更影响联动API |
 | kimi4 | #2055 | T1 | backend | D3参数化 扣件管理Web后台 |
-| kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 |
+| kimi5 | #1458 | T1 | backend | 销售记录体系 商务周报提交API（cc-keepalive自动分配） |
 | kimi6 | #2065 | T1 | backend | D3市场配置预设（5个市场） |
 | kimi7 | #2467 | T1 | backend | 执行管理 BOM管理API |
 | kimi8 | #2042 | T1 | backend | D3优化[3/10] 局部替换+增量重算 |
@@ -522,7 +522,8 @@
 | kimi17 | ~~#2368~~ | T1 | frontend | ~~菜单重组[5/8] 综合管理中心板块~~ PR#3251✅merged | ~~Done~~ |
 | kimi8 | ~~#1465~~ | T1 | backend | ~~销售记录聚合引擎~~ PR#3258 | ~~Done~~ |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
-| kimi5 | #3227 | BUG | backend | 🔴 P0 后端进程守护 | In Progress |
+| kimi5 | ~~#3227~~ | BUG | backend | ~~🔴 P0 后端进程守护~~ PR#3265 | ~~Done~~ |
+| kimi5 | #1458 | T1 | backend | 销售记录体系 商务周报提交API（cc-keepalive自动） | In Progress |
 | kimi6 | ~~#3230~~ | BUG | backend | ~~🟠 P1 后端API路由缺失~~ PR#3255✅merged | ~~Done~~ |
 | kimi6 | ~~#1564~~ | T1 | backend | ~~企微打通[1/17] WecomAppService根节点~~ PR#3260 | ~~Done~~ |
 | kimi11 | ~~#3231~~ | BUG | backend | ~~🟠 P1 CompetitorBidBo NPE~~ PR#3252 | ~~Done~~ |

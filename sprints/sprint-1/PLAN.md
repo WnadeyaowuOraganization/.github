@@ -3,7 +3,7 @@
 > 最后更新：2026-04-07（全量 Issue 依赖分析，覆盖23个系列+Tier2+Tier3）
 > 并发上限：**15个CC** | 数据来源：`/tmp/issue-cache/` 批量离线分析
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
-> **Jump队列**：已处理 → #2950 已标 Todo（侧边栏分组重构，fullstack P0，effort=high）
+> **Jump队列**：已处理 → #2950 已标 Todo（侧边栏分组重构，fullstack P0，effort=high）| #3226 已标 Todo（Claude Office工作状态面板，fullstack P0）| #3237 已标 Todo（auto-add-to-project工作流修复，⚠️Step2需人工更新PROJECT_TOKEN Secret）
 
 ## Tier-1：矿场 / 投标 / 项目中心
 
@@ -424,15 +424,14 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 更新时间：2026-04-07 11:58 | CC状态：4槽位工作已完成等释放（kimi4/10/15/17），GH rate limit恢复后验证看板
-> 已去除：#2159(Done)、#1700(Done)、#2046(Done)、#1876(Done)、#1459(Done)、#2461(运行中)
+> 更新时间：2026-04-07 12:15 | CC状态：11个在跑（kimi1/2/3/4/7/8/9/10/12/16/17），4个空闲槽位
+> 已去除：#2256(运行中)、#2107(运行中)、#2108(运行中)、#2109(运行中)
+> ⚠️ E2E Fail #2086（变更影响联动API）依赖#2156未完成，暂留E2E Fail
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #2256 | P0 | frontend | 矿场增强[6/23] 列表状态筛选+流转 | ✅ |
-| #2107 | P0 | backend | 质保售后 备件管理API（前置#2159已Done） | ✅ |
-| #2108 | P0 | backend | 质保售后 外包维修商管理API | ✅ |
-| #2109 | P0 | backend | 质保售后 售后工单API | ✅ |
+| #3237 | P0 | fullstack | 🔴 [Jump→Todo] auto-add-to-project工作流修复（⚠️Step2需人工更新PROJECT_TOKEN Secret） | ✅ |
+| #3226 | P0 | fullstack | 🔴 [Jump→Todo] Claude Office右上角今日工作状态面板 | ✅ |
 | #2110 | P0 | backend | 质保售后 质保台账API | ✅ |
 | #2106 | P0 | backend | 质保售后 备件消耗关联工单 | ✅ |
 | #2471 | P0 | backend | 项目中心Phase13 project_risk_events等6张表 | ✅ |
@@ -449,6 +448,8 @@
 | #1564 | P0 | backend | 企微打通[1/17] WecomAppService根节点 | ✅ |
 | #1560 | P0 | backend | D3材质标注[1/4] 构件-材料绑定规则Service | ✅ |
 | #2452 | P0 | pipeline | 采集/竞品[4/38] 竞品中标公告定向采集管线 | ✅ |
+| #2055 | P0 | backend | D3参数化 扣件管理Web后台 | ✅ |
+| #2065 | P0 | backend | D3参数化 市场配置预设（中/国际/北美/东南亚/欧盟） | ✅ |
 
 ---
 

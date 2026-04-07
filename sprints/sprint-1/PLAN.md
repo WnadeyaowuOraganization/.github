@@ -457,30 +457,26 @@
 
 ## 当前运行（22/25）
 
-> 更新：2026-04-07 22:02 UTC | **22/25** | 🚨**pg-test插队已分配：kimi1-20全部运行#3335-#3354**（按error数410→31排序，独立PG DB隔离）| ✅**kimi6还在#2848、kimi10还在#2589** | Done 12+个✅、Fail 0个✅ | 3个空闲待补
+> 更新：2026-04-07 21:30 UTC | **16/15（超1，临时）** | pg-test批次与Sprint-1指派并发，kimi1-9由Sprint-1占用，kimi10-17由pg-test占用，kimi18-20待分配 | Done 15+个✅ | kimi3#2086刚完成释放
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
-| kimi1 | #3335 | medium | tech-debt:pg-test | [mvn test 欠债清理] D3 设计与参数化（410 errors） |
-| kimi2 | #3345 | medium | tech-debt:pg-test | [mvn test 欠债清理] 问题反馈与通知（64 errors） |
-| kimi3 | #3336 | medium | tech-debt:pg-test | [mvn test 欠债清理] 项目执行与看板（235 errors） |
-| kimi4 | #3337 | medium | tech-debt:pg-test | [mvn test 欠债清理] 预算资金与佣金（222 errors） |
-| kimi5 | #3346 | medium | tech-debt:pg-test | [mvn test 欠债清理] 销售跟踪与 CRM（54 errors） |
-| kimi6 | #3348 | medium | tech-debt:pg-test | [mvn test 欠债清理] 文案与审批（52 errors） |
-| kimi7 | #3338 | medium | tech-debt:pg-test | [mvn test 欠债清理] Token 池与运营（210 errors） |
-| kimi8 | #3344 | medium | tech-debt:pg-test | [mvn test 欠债清理] 方案与报价（68 errors） |
-| kimi9 | #3339 | medium | tech-debt:pg-test | [mvn test 欠债清理] 整改与质保（116 errors） |
-| kimi10 | #3349 | medium | tech-debt:pg-test | [mvn test 欠债清理] 设备生命周期（49 errors） |
-| kimi11 | #3347 | medium | tech-debt:pg-test | [mvn test 欠债清理] 数字资产与 S3（54 errors） |
-| kimi12 | #3350 | medium | tech-debt:pg-test | [mvn test 欠债清理] 备件与采购（46 errors） |
-| kimi13 | #3351 | medium | tech-debt:pg-test | [mvn test 欠债清理] 财务收款与合同（45 errors） |
-| kimi14 | #3340 | medium | tech-debt:pg-test | [mvn test 欠债清理] 驾驶舱与运维（110 errors） |
-| kimi15 | #3352 | medium | tech-debt:pg-test | [mvn test 欠债清理] 工单与派单（39 errors） |
-| kimi16 | #3353 | medium | tech-debt:pg-test | [mvn test 欠债清理] 照片 AI 识别（38 errors） |
-| kimi17 | #3354 | medium | tech-debt:pg-test | [mvn test 欠债清理] 验收与交付（31 errors） |
-| kimi18 | #3341 | medium | tech-debt:pg-test | [mvn test 欠债清理] 聊天会话与记忆（105 errors） |
-| kimi19 | #3342 | medium | tech-debt:pg-test | [mvn test 欠债清理] 企微集成与权限（104 errors） |
-| kimi20 | #3343 | medium | tech-debt:pg-test | [mvn test 欠债清理] 标准库与材质（83 errors） |
+| kimi1 | #2405 | T1 | backend | [矿场增强][22/23] 关系加分逻辑 |
+| kimi2 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 |
+| kimi4 | #2254 | T1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go |
+| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） |
+| kimi6 | #2255 | T1 | frontend | [矿场增强][8/23] 转化漏斗看板页面 |
+| kimi7 | #2252 | T1 | frontend | [矿场增强][20/23] 来源ROI看板 |
+| kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 |
+| kimi9 | #1695 | T1 | backend | [提成绩效] 新增绩效考核API |
+| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） |
+| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） |
+| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） |
+| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） |
+| kimi14 | #1696 | T1 | backend | [提成绩效] 新增管理费分摊API |
+| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） |
+| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） |
+| kimi17 | #3354 | tech | backend | [mvn test欠债] 验收与交付（31 errors） |
 
 ---
 

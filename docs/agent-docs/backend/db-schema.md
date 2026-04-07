@@ -36,6 +36,21 @@ CREATE TABLE IF NOT EXISTS supplier_ratings (
 
 将新增的表 DDL 同步追加到 `script/sql/wande-ai-pg.sql`（万德业务表）末尾，保持初始化脚本与增量脚本一致。
 
+> ⚠️ **2026-04-07 起单元测试改用 Docker PostgreSQL，不再需要维护 H2 schema**
+>
+> 旧流程要求 CC 同时维护 `test/resources/schemas/issue_XXXX.sql`（H2 方言）+ PG 增量脚本，两套同步极易出错且并行写入冲突频繁。
+>
+> **新流程**：CC 只写一处——`backend/script/sql/update/wande_ai/` 下的 PG 脚本。
+>
+> 测试启动时 `TestApplication.schemaAutoLoader` 会自动：
+> 1. `DROP SCHEMA public CASCADE; CREATE SCHEMA public`
+> 2. 加载 `test-base-schema.pg.sql`（dev PG snapshot 冻结快照，含 368 张表）
+> 3. 加载 `update/wande_ai/` 下不在 `test-base-applied.txt` 里的脚本（即你新加的）
+>
+> **禁止编辑**：`test/resources/test-base-schema.pg.sql`、`test/resources/test-base-applied.txt`、`script/sql/wande-ai-pg.sql` 中的旧表定义。
+>
+> 验证：`cd backend && mvn -pl ruoyi-modules-api/wande-ai-api -am install -DskipTests && mvn -pl ruoyi-modules/wande-ai test`
+
 ### 第 3 步：同步 Java 代码
 
 为新表创建对应的 Entity / Mapper / Vo / Bo / Service / Controller，遵循开发规范（详见 [conventions.md](conventions.md)）。

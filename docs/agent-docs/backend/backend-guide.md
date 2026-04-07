@@ -179,54 +179,9 @@ mvn test
 
 ## 数据库变更管理规范
 
-> **2026-04-07 起单元测试由 H2 改为 Docker PostgreSQL**，CC 只需维护一套 PG 增量脚本。
+详见 [db-schema.md](db-schema.md)。
 
-### 新增数据库表
-
-**位置**: `backend/script/sql/update/wande_ai/`
-**文件名**: `create-<表名>-issue-XXXX.sql` 或 `V<日期>__<描述>.sql`
-
-```sql
--- 变更说明：创建 XXX 表 - Issue #XXXX
--- 变更日期：2026-04-08
-
-CREATE TABLE IF NOT EXISTS wdpp_xxx (
-    id BIGSERIAL PRIMARY KEY,
-    name VARCHAR(200) NOT NULL,
-    create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    create_by BIGINT,
-    update_by BIGINT,
-    create_dept BIGINT,
-    deleted INTEGER DEFAULT 0
-);
-
-CREATE INDEX IF NOT EXISTS idx_wdpp_xxx_name ON wdpp_xxx(name);
-```
-
-### 修改现有表
-
-```sql
-ALTER TABLE wdpp_xxx ADD COLUMN IF NOT EXISTS new_field VARCHAR(100);
-```
-
-### 验证
-
-```bash
-cd backend && mvn test -pl ruoyi-modules/wande-ai
-```
-
-测试启动时会自动：
-1. DROP/CREATE PG schema
-2. 加载 `test-base-schema.pg.sql`（dev PG snapshot 冻结快照）
-3. 加载所有不在 `test-base-applied.txt` 中的 update 脚本（你刚加的）
-
-### 数据库变更检查清单
-
-- [ ] 在 `backend/script/sql/update/wande_ai/` 添加了 PG 增量脚本
-- [ ] 用了 `IF NOT EXISTS` 保证幂等
-- [ ] 没有直接编辑 `wande-ai-pg.sql` 或 `test-base-schema.pg.sql`
-- [ ] `mvn test -pl ruoyi-modules/wande-ai` 通过
+> **2026-04-07 起单元测试由 H2 改为 Docker PostgreSQL**，CC 只需维护一套 PG 增量脚本到 `backend/script/sql/update/wande_ai/`，不再需要 H2 测试 schema。
 
 ## API集成测试
 

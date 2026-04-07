@@ -36,6 +36,28 @@ tmux send-keys -t cc-wande-play-kimi3-1567 "请重新阅读 issues/issue-1567/de
 
 > Claude Office 页面（http://localhost:9872）的日志面板底部也有注入输入框，可视化操作。
 
+## 每轮结束后发送通知
+
+**每次完成一轮任务后，必须调用以下命令向 Claude Office 发送通知**，让监控页面实时显示进度：
+
+```bash
+curl -s -X POST http://localhost:9872/api/notify \
+  -H "Content-Type: application/json" \
+  -d "{\"session\":\"$(tmux display-message -p '#S' 2>/dev/null || echo 'manager')\",\"message\":\"你的完成摘要（1-2句话）\",\"type\":\"success\"}"
+```
+
+**type 取值规则：**
+- `success` — 正常完成（指派Issue、PR合并、巡检通过）
+- `info` — 一般进度播报（开始新批次、状态更新）
+- `warning` — 发现异常但不影响继续（CC卡住、重试）
+- `error` — 严重问题需要人工介入
+
+**message 内容规范（简洁，控制在50字内）：**
+- 指派批次：`批次N 已指派M个Issue：#xxx(kimi1) #xxx(kimi2)...`
+- 巡检完成：`巡检完成：X个运行中，Y个已完成，Z个失败`
+- 触发恢复：`kimi3 Issue#xxx 已恢复重试（第N次）`
+- 发现问题：`kimi5 Issue#xxx 卡住超过30分钟，等待人工确认`
+
 ## Effort → API来源
 
 | effort | 适用场景 | API来源 |

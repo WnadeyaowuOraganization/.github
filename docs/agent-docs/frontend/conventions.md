@@ -74,6 +74,25 @@ export function getTenderList(params: Record<string, any>) {
 3. **通知后端**创建 `sys_menu` 增量 SQL — 这一步决定菜单是否显示
 4. 确保 `component` 字段值与 `views/` 下的实际路径匹配
 
+## 移动端 Tab 切换 / 动态 DOM 索引（高危）
+
+使用 `querySelectorAll` 等方式批量选取 DOM 元素时，**索引必须与实际渲染的元素数量一致**，不能靠"猜"。
+
+常见错误场景：
+```javascript
+// ❌ 以为只有3个 section，实际渲染了4个（包含 footer）
+const sections = document.querySelectorAll('.sidebar-section');
+sections.forEach((sec, i) => {
+  sec.style.display = (i === 0 || i === 1) ? 'block' : 'none';
+  // 结果：footer section 永远不显示，布局错乱
+});
+```
+
+**规则**：
+- 写 Tab 切换逻辑前，先在浏览器 DevTools 确认 `.sidebar-section` 实际有几个元素
+- 为每个 index 添加注释说明对应的 section 名称，便于后续维护
+- 优先用 `data-section="xxx"` 属性代替数字索引，避免顺序变化导致 bug
+
 ## 后端接口前缀
 
 | 模块 | 接口前缀 |

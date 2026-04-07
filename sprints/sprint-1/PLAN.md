@@ -433,14 +433,14 @@
 
 ## 当前运行（15/15）
 
-> 更新：2026-04-07 11:34 UTC | **满载** | kimi7换#2363，#1459 PR#3235已创建
+> 更新：2026-04-07 11:38 UTC | **13/15** | #1532 PR#3233已创建，#1630已合并dev；kimi4/kimi17即将释放
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |------|-------|------|------|------|
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC |
 | kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 |
 | kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) |
-| kimi4 | #1532 | T1 | backend | 矿场转化漏斗统计API |
+| ~~kimi4~~ | ~~#1532~~ | T1 | backend | ~~矿场转化漏斗统计API~~ PR#3233 ✅ |
 | kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 |
 | kimi9 | #1705 | T1 | backend | CRM跟进记录CRUD API |
@@ -449,9 +449,9 @@
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 |
 | kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 |
 | kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 |
-| kimi15 | #1528 | T1 | backend | 线索来源转化率统计API |
+| kimi15 | #1528 | T1 | backend | 线索来源转化率统计API（PR#3236等待合并） |
 | kimi16 | #2461 | T1 | backend | 合同管理建表 |
-| kimi17 | #1630 | T1 | backend | 整改工单Phase27 API |
+| ~~kimi17~~ | ~~#1630~~ | T1 | backend | ~~整改工单Phase27 API~~ 已合并dev ✅ |
 
 ---
 
@@ -473,11 +473,10 @@
 | kimi19 | ~~#2362~~ | — | frontend | ~~项目中心Phase9 详情全景页~~ | ~~Done~~ |
 | kimi11 | ~~#1994~~ | — | backend | ~~项目中心Phase15 风险事件API~~ | ~~Done~~ |
 | kimi16 | #2461 | T1 | backend | 合同管理建表 | In Progress |
-| kimi17 | #1630 | T1 | backend | 整改工单Phase27 API | In Progress |
 | kimi1 | #2950 | T2 | fullstack | 侧边栏分组重构+RBAC | In Progress |
 | kimi2 | #1903 | T1 | backend | D3钢架自动选型规则 | In Progress |
 | kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) | In Progress |
-| kimi4 | #1532 | T1 | backend | 矿场转化漏斗统计API | In Progress |
+| kimi4 | ~~#1532~~ | T1 | backend | ~~矿场转化漏斗统计API~~ PR#3233 | ~~Done~~ |
 | kimi7 | ~~#1459~~ | T1 | backend | ~~记录中心统一数据模型~~ PR#3235 | ~~Done~~ |
 | kimi7 | #2363 | T1 | frontend | 项目中心Phase8 菜单+列表 | In Progress |
 | kimi8 | #1465 | T1 | backend | 销售记录聚合引擎 | In Progress |
@@ -488,3 +487,4 @@
 | kimi13 | #1853 | T1 | pipeline | D3-Agent三层记忆系统 | In Progress |
 | kimi14 | #1854 | T1 | pipeline | D3-Agent LangGraph框架 | In Progress |
 | kimi15 | ~~#1528~~ | T1 | backend | ~~线索来源转化率统计API~~ PR#3236 | ~~Done~~ |
+| kimi17 | ~~#1630~~ | T1 | backend | ~~整改工单Phase27 API~~ 已合并dev | ~~Done~~ |

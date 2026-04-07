@@ -11,11 +11,47 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 GITHUB_DIR="${HOME_DIR}/projects/.github"
 SCRIPT_DIR="${GITHUB_DIR}/scripts"
 LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
+SESSION_MAP="/tmp/manager-session-map.json"
+JSONL_DIR="${HOME_DIR}/.claude/projects/-home-ubuntu-projects--github"
 
 mkdir -p "$(dirname "$LOG_FILE")"
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
 
 GH_TOKEN=$(bash "$SCRIPT_DIR/get-gh-token.sh" 2>/dev/null)
+
+# 写入 tmux会话→JSONL 映射（供 Claude Office 精确关联日志）
+_write_session_map() {
+  local session="$1"
+  local jsonl="$2"
+  python3 -c "
+import json, os
+f='${SESSION_MAP}'
+m = json.load(open(f)) if os.path.exists(f) else {}
+m['${session}'] = '${jsonl}'
+json.dump(m, open(f,'w'))
+" 2>/dev/null
+}
+
+# 启动后等待新 JSONL 出现并写入映射
+_associate_jsonl() {
+  local session="$1"
+  local before_list="$2"   # 启动前的 JSONL 列表（换行分隔）
+  local max_wait=30
+  local elapsed=0
+  while [ $elapsed -lt $max_wait ]; do
+    sleep 2; elapsed=$((elapsed+2))
+    local new_jsonl
+    new_jsonl=$(ls -1t "${JSONL_DIR}"/*.jsonl 2>/dev/null \
+      | while read -r f; do echo "$before_list" | grep -qxF "$f" || echo "$f"; done \
+      | head -1)
+    if [ -n "$new_jsonl" ]; then
+      _write_session_map "$session" "$new_jsonl"
+      log "✓ ${session} → $(basename $new_jsonl)"
+      return
+    fi
+  done
+  log "⚠ ${session} JSONL关联超时，将由server.py时序匹配"
+}
 
 # 启动单个经理CC（幂等，会话存在则跳过）
 start_manager() {
@@ -29,6 +65,10 @@ start_manager() {
   fi
 
   log "启动 ${ROLE} → ${SESSION}"
+
+  # 记录启动前已有的 JSONL 列表
+  local BEFORE_LIST
+  BEFORE_LIST=$(ls -1 "${JSONL_DIR}"/*.jsonl 2>/dev/null | sort)
 
   # 隔离 claude config（使用真实订阅凭证）
   local CONFIG_DIR="/tmp/cc-config-${SESSION}"
@@ -48,13 +88,13 @@ start_manager() {
      claude --model claude-sonnet-4-6 --dangerously-skip-permissions; \
      rm -rf ${CONFIG_DIR}; exec bash"
 
-  # 等待 Claude Code CLI 初始化
-  sleep 6
+  # 等待 Claude Code CLI 初始化并关联 JSONL（后台执行，不阻塞下一个经理启动）
+  ( sleep 6
+    tmux send-keys -t "$SESSION" "$LOOP_PROMPT" Enter
+    _associate_jsonl "$SESSION" "$BEFORE_LIST"
+  ) &
 
-  # 注入 loop 提示词（自驱动，每10分钟执行一轮）
-  tmux send-keys -t "$SESSION" "$LOOP_PROMPT" Enter
-
-  log "✓ ${ROLE} 已启动，loop已注入"
+  log "✓ ${ROLE} 已启动，JSONL关联中..."
 }
 
 start_manager "排程经理" "\\loop 10m 你是排程经理，按 docs/agent-docs/manager/scheduler-guide.md 执行本轮巡检"

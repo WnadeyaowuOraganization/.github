@@ -64,7 +64,7 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 
 **决策清单**：先筛 Sprint 重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
 
-**记录**：维护 `sprints/sprint-1/PLAN.md`，每次排程后更新「下次指派时优先选择」列表
+**记录**：维护 `sprints/current/PLAN.md`，每次排程后更新「下次指派时优先选择」列表
 
 ## 任务三：详细设计（effort=high/max 的复杂 Issue）
 
@@ -84,9 +84,9 @@ git add docs/design/ && git commit -m "docs(design): <功能名>详细设计" &&
 
 ## Sprint 目标
 
-> 唯一真相源：`docs/status.md` + `sprints/sprint-1/PLAN.md`
+> 唯一真相源：`docs/status.md` + `sprints/current/PLAN.md`
 
 ```bash
 cat docs/status.md | head -30
-cat sprints/sprint-1/PLAN.md | head -50
+cat sprints/current/PLAN.md | head -50
 ```

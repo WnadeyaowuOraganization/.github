@@ -19,7 +19,7 @@
 bash scripts/cc-check.sh
 
 # 2. 读取排程计划（排程经理已维护好的优先列表）
-cat sprints/sprint-1/PLAN.md | grep -A 20 "下次指派时优先选择"
+cat sprints/current/PLAN.md | grep -A 20 "下次指派时优先选择"
 
 # 3. prefetch Issue 到 dev 分支（减少 CC 启动时 gh fetch）
 bash scripts/prefetch-issues.sh <issue1> <issue2> ...
@@ -97,7 +97,7 @@ bash scripts/query-project-issues.sh --repo play --status "Done" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "Fail" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "E2E Fail" 2>/dev/null
 bash scripts/cc-check.sh
-grep -A 20 "下次指派时优先选择" sprints/sprint-1/PLAN.md
+grep -A 20 "下次指派时优先选择" sprints/current/PLAN.md
 ```
 
 ### 第二步：分析归纳

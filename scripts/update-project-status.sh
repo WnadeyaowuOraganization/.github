@@ -27,7 +27,8 @@ if [ -z "$ISSUE_NUMBER" ] || [ -z "$NEW_STATUS" ]; then
 fi
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
+# GH_TOKEN已由caller设置（CC tmux会话），或自动获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 # Status Option ID 映射（2026-04-07更新，新增Jump状态）
 declare -A STATUS_MAP

@@ -6,6 +6,7 @@
 # status: Plan | Todo | In Progress | Done | pause | Fail | all (默认all)
 
 # Auto-detect GH_TOKEN if not set
+# 如果在CC tmux会话中调用，GH_TOKEN已由run-cc.sh设置
 if [ -z "$GH_TOKEN" ]; then
   _SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
   export GH_TOKEN=$(python3 "$_SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
@@ -26,7 +27,8 @@ while [ $# -gt 0 ]; do
 done
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
+# GH_TOKEN已在环境中，无需重新获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 

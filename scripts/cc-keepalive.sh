@@ -10,9 +10,8 @@
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-if [ -z "$GH_TOKEN" ]; then
-  export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
-fi
+# GH_TOKEN已由caller设置（cron环境或手动调用），或自动获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 
 log() { echo "[cc-check] $1"; }
 

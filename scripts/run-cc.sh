@@ -177,6 +177,7 @@ if tmux has-session -t "$SESSION" 2>/dev/null; then
 fi
 
 # === Token ===
+# 确保获取新鲜 token（run-cc.sh 需要为新 tmux 会话设置独立的 token）
 export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
 
 # === Prompt构建 ===
@@ -260,9 +261,17 @@ TEST_PG_DB="wande_test_${KIMI_TAG}"
 bash "$SCRIPT_DIR/ensure-test-pg.sh" "$KIMI_TAG" 2>&1 | tail -3 || true
 TEST_PG_ENV="export TEST_PG_HOST=localhost; export TEST_PG_PORT=5434; export TEST_PG_DB=${TEST_PG_DB}; export TEST_PG_USER=wande; export TEST_PG_PASSWORD=wande_test;"
 
+# === 每个 kimi 用独立 maven repo（避免并发 mvn install race condition）===
+M2_REPO="${HOME_DIR}/.m2-${KIMI_TAG}/repository"
+if [ ! -d "$M2_REPO" ]; then
+  mkdir -p "$M2_REPO"
+  cp -al "${HOME_DIR}/.m2/repository/." "$M2_REPO/" 2>/dev/null || true
+fi
+MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO}';"
+
 # === 启动tmux（交互模式，支持attach和注入）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
-  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${TEST_PG_ENV} \
+  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${TEST_PG_ENV} ${MAVEN_ENV} \
    claude --model ${MODEL} --dangerously-skip-permissions; \
    ${CLEANUP_CMD} exec bash"
 

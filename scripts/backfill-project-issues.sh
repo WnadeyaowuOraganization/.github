@@ -2,7 +2,8 @@
 # 回补未关联 Project#4 的 Issue
 # 用法：bash scripts/backfill-project-issues.sh [起始Issue号，默认2830]
 
-export GH_TOKEN=$(python3 "$(dirname "$0")/gh-app-token.py" 2>/dev/null)
+# GH_TOKEN已由caller设置（CC tmux会话），或自动获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "$(dirname "$0")/gh-app-token.py" 2>/dev/null)
 PROJECT_ID="PVT_kwDOD3gg584BTjK2"
 FIELD_ID="PVTSSF_lADOD3gg584BTjK2zhAxafs"
 PLAN_OPTION="a07b604b"

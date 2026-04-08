@@ -17,7 +17,8 @@ if [ $# -eq 0 ]; then
   exit 1
 fi
 
-export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null || echo "$GH_TOKEN")
+# GH_TOKEN已由caller设置（CC tmux会话），或自动获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 
 # 确保在 dev 分支且已 pull
 cd "$BASE_DIR"

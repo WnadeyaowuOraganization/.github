@@ -5,7 +5,8 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 
 set -e
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
+# GH_TOKEN已由caller设置（CC tmux会话），或自动获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" 2>/dev/null)
 
 echo "=== 开始批量 rebase ==="
 echo "时间: $(date)"

@@ -14,7 +14,8 @@ REPO=$1
 ISSUE=$2
 MODE=${3:-code-exists}
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-export GH_TOKEN=$(python3 "${SCRIPT_DIR}/gh-app-token.py")
+# GH_TOKEN已由caller设置（CC tmux会话），或自动获取
+[ -n "$GH_TOKEN" ] || export GH_TOKEN=$(python3 "${SCRIPT_DIR}/gh-app-token.py")
 
 case "$REPO" in
   backend)   BASE_DIR="wande-play/backend"; REPO_FULL="WnadeyaowuOraganization/wande-play" ;;

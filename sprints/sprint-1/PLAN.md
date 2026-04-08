@@ -456,24 +456,24 @@
 
 ## 当前运行（15 CC 活跃）
 
-> 更新：2026-04-08 07:55 UTC | 满槽15/15 | 5新CC确认启动(kimi1/3/10/11/12) | 修复：旧.cc-lock阻塞问题已解决 | kimi6/7/8 PR等E2E
+> 更新：2026-04-08 08:03 UTC | 满槽15/15 | kimi5(#2077 PR#3407✅merged)→重派#2385 | kimi4/kimi9已注入继续
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | 启动中 |
-| kimi10 | #2242 | T1 | frontend | [矿场-Phase2][3/16] 客户360画像详情页 | 启动中 |
-| kimi3 | #1509 | T1 | backend | [矿场-Phase2][6/16] 关系快照API | 启动中 |
-| kimi11 | #2112 | T1 | backend | [合同管理] AI合同风险分析引擎 | 启动中 |
-| kimi12 | #2111 | T1 | backend | [合同管理] AI条款对比引擎 | 启动中 |
+| kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | 7% |
+| kimi10 | #2242 | T1 | frontend | [矿场-Phase2][3/16] 客户360画像详情页 | 7% |
+| kimi3 | #1509 | T1 | backend | [矿场-Phase2][6/16] 关系快照API | 7% |
+| kimi11 | #2112 | T1 | backend | [合同管理] AI合同风险分析引擎 | 6% |
+| kimi12 | #2111 | T1 | backend | [合同管理] AI条款对比引擎 | 6% |
+| kimi5 | #2385 | T2 | frontend | [问题发现-P1] 解决方案展示+待办管理页面 | 启动中 |
 | kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | PR#3399 等E2E |
 | kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | PR#3329 等E2E |
 | kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | PR#3376 等E2E |
 | kimi2 | #1492 | T1 | backend | [矿场-Phase4][14/17] 跟进超时提醒 | 进行中 |
-| kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | 进行中 |
-| kimi5 | #2077 | T2 | backend | [问题发现-P1] 方案搜索API | 进行中 |
-| kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | 进行中 |
-| kimi13 | #2116 | T1 | backend | [代理商工作台] 数据模型+API+统计 | 进行中 |
-| kimi14 | #1695 | T1 | backend | [提成绩效] 绩效考核API | 进行中 |
+| kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | 注入继续 |
+| kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | 注入继续 |
+| kimi13 | #2116 | T1 | backend | [代理商工作台] 数据模型+API+统计 | 63% |
+| kimi14 | #1695 | T1 | backend | [提成绩效] 绩效考核API | 71% |
 | kimi15 | #1696 | T1 | backend | [提成绩效] 管理费分摊API | 进行中 |
 
 ---
@@ -646,7 +646,8 @@
 | kimi2 | ~~#2321~~ | T1 | frontend | ~~[P0] 全局防泄密水印~~ PR#3402 | ~~Done~~ |
 | kimi5 | ~~#2405~~ | T1 | backend | ~~[矿场增强][22/23] 关系加分逻辑~~ PR#3401 | ~~Done~~ |
 | kimi2 | #1492 | T1 | backend | [矿场-Phase4][14/17] 跟进超时提醒 | In Progress |
-| kimi5 | #2077 | T2 | backend | [问题发现-P1] 方案搜索API | In Progress |
+| kimi5 | ~~#2077~~ | T2 | backend | ~~[问题发现-P1] 方案搜索API~~ PR#3407✅merged | ~~Done~~ |
+| kimi5 | #2385 | T2 | frontend | [问题发现-P1] 解决方案展示+待办管理页面 | In Progress |
 | kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | In Progress |
 | kimi10 | #2242 | T1 | frontend | [矿场-Phase2][3/16] 客户360画像详情页 | In Progress |
 | kimi3 | #1509 | T1 | backend | [矿场-Phase2][6/16] 关系快照API | In Progress |

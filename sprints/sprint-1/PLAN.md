@@ -425,9 +425,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **巡检 2026-04-08 19:22 UTC | 15/15满槽 | 新增kimi6-#2893/kimi15-#1862；kimi2-#2445/kimi4-#2051已完成；kimi8-#2893超时(cron恢复中)**
+> 🔄 **巡检 2026-04-08 19:24 UTC | 14/15（1槽空闲）| kimi6-#2893/kimi15-#1862完成释放；kimi1-#1628新启动；kimi8-#2893超时(cron恢复中)**
 
-> **当前运行中（占槽）**：kimi3-#3458 | kimi5-#2008 | kimi6-#2893 | kimi7-#2122 | kimi9-#1919 | kimi11-#1918 | kimi12-#1519 | kimi13-#3450 | kimi14-#2589 | kimi15-#1862 | kimi16-#3452 | kimi17-#2301 | kimi18-#2302 | kimi19-#2303 | 🚨kimi8-#2893超时
+> **当前运行中（占槽）**：kimi1-#1628 | kimi3-#3458 | kimi5-#2008 | kimi7-#2122 | kimi9-#1919 | kimi11-#1918 | kimi12-#1519 | kimi13-#3450 | kimi14-#2589 | kimi16-#3452 | kimi17-#2301 | kimi18-#2302 | kimi19-#2303 | 🚨kimi8-#2893超时(不占有效槽)
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -458,21 +458,21 @@
 
 ## 当前运行（15/15满槽）
 
-> 更新：2026-04-08 19:21 UTC | Done：#1531(PR#3240) | 新指派：#3458(Jump)/#2008/#2122/#1919/#1918/#1519；锁文件改DONE清除8个keepalive僵尸会话
+> 更新：2026-04-08 19:30 UTC | Done：#3288(PR#3480) | 新指派：#1628(整改工单AI视觉审查)；注入kimi14解决Lombok阻塞；根治keepalive：删锁文件法
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #3288 | P0 | frontend | 验收队列前端 | 42% |
+| kimi1 | #1628 | P1 | backend | [整改工单] AI视觉审查Service | 新启动 |
 | kimi2 | #2445 | P0 | pipeline | [**冲突修复**] 定向监控[12/38] PR#3305 rebase | 运行中 |
-| kimi3 | #3458 | Jump | fullstack | [全球项目矿场v3.0] 9项功能统一改版 | 新启动 |
+| kimi3 | #3458 | Jump | fullstack | [全球项目矿场v3.0] 9项功能统一改版 | 15% |
 | kimi4 | #2051 | P1 | frontend | D3-L4安装图自动化 | 运行中 |
-| kimi5 | #2008 | P0 | backend | [资金闭环][1/17] 报价成本模型API | 新启动 |
-| kimi7 | #2122 | P0 | backend | [执行管理] AI回款风险预警 | 新启动 |
-| kimi9 | #1919 | P0 | frontend | [D3-Web] 电池包目录 | 新启动 |
-| kimi11 | #1918 | P0 | frontend | [D3-Web] 参数配置器 | 新启动 |
-| kimi12 | #1519 | P1 | backend | [业务运营中心][5/8] 业务看板 | 新启动 |
-| kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式 | 63% |
-| kimi14 | #2589 | P0 | backend | [**冲突修复**] execution PR#3317 rebase | 50% |
+| kimi5 | #2008 | P0 | backend | [资金闭环][1/17] 报价成本模型API | 35% |
+| kimi7 | #2122 | P0 | backend | [执行管理] AI回款风险预警 | 30% |
+| kimi9 | #1919 | P0 | frontend | [D3-Web] 电池包目录 | 29% |
+| kimi11 | #1918 | P0 | frontend | [D3-Web] 参数配置器 | 24% |
+| kimi12 | #1519 | P1 | backend | [业务运营中心][5/8] 业务看板 | 19% |
+| kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式 | 70% |
+| kimi14 | #2589 | P0 | backend | [**冲突修复**] execution rebase（注入解锁Lombok） | 57% |
 | kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 运行中 |
 | kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传+企微内嵌 | 运行中 |
 | kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴 | 运行中 |
@@ -529,6 +529,8 @@
 | kimi9 | #1919 | P0 | frontend | [D3-Web] 电池包目录 | In Progress |
 | kimi11 | #1918 | P0 | frontend | [D3-Web] 参数配置器 | In Progress |
 | kimi12 | #1519 | P1 | backend | [业务运营中心][5/8] 业务看板 | In Progress |
+| kimi1 | #1628 | P1 | backend | [整改工单][Phase29] AI视觉审查Service | In Progress |
+| kimi1 | ~~#3288~~ | P0 | frontend | ~~验收队列前端组件+API契约~~ PR#3480 | ~~Done~~ |
 | kimi6 | ~~#1531~~ | P0 | backend | ~~[冲突修复] 可赢性评分模型~~ PR#3240 | ~~Done~~ |
 | kimi7 | ~~#1505~~ | P1 | backend | ~~[矿场-Phase2][16/16] 阶段话术模板库~~ PR#3460 | ~~Done~~ |
 | kimi9 | ~~#2055~~ | P0 | backend | ~~[D3参数化冲突修复] PR#3274~~ | ~~Done~~ |

@@ -1,6 +1,6 @@
 # Sprint-1 完整排程计划
 
-> 最后更新：2026-04-08 18:20 UTC（巡检：项目挖掘改版#3449-3456全CLOSED；企微#1564 CLOSED→#1557#1554已CLOSED；矿场#1529#2406 CLOSED；5个CC占用CLOSED Issue将释放）
+> 最后更新：2026-04-08 18:30 UTC（巡检：kimi12完成#1858→PR#3462；kimi13新开#3450(CLOSED)；6个CC占CLOSED Issue将释放；kimi2 pool耗尽至4/10→kimi2-2445可能停滞）
 > 并发上限：**15个CC** | 数据来源：`/tmp/issue-cache/` 批量离线分析
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
 > **Jump队列**：已处理 → #2950/#3226/#3237 已标 Todo | **2026-04-07 12:35 批量处理7个BUG Jump**：#3227/#3228/#3229/#3230/#3231/#3232/#3234 — 全部标Todo

@@ -457,7 +457,7 @@
 
 ## 当前运行（20/20 PG修复）
 
-> 更新：2026-04-08 00:55 UTC | **20 PG-CC 进度加速** | 🎉 4/20 完成(#3338/#3343/#3348/#3354) | 进度：36%-83% | ⚠️ kimi5 超时30分钟需重启 | 🔶 kimi1/2/4 可能卡住 | Jump/Fail/E2E Fail=0
+> 更新：2026-04-08 01:05 UTC | **20 PG-CC 加速推进** | 🎉 5/20 完成(#3338/#3343/#3344/#3348/#3354) | 16/20 继续运行 | 34 CC活跃 | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
@@ -468,7 +468,7 @@
 | kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） | 76% |
 | kimi6 | #3348 | tech | backend | [mvn test欠债] 文案与审批（52 errors） | ✅ DONE |
 | kimi7 | #3338 | tech | backend | [mvn test欠债] Token池与运营（210 errors） | ✅ DONE |
-| kimi8 | #3344 | tech | backend | [mvn test欠债] 方案与报价（68 errors） | 71% |
+| kimi8 | #3344 | tech | backend | [mvn test欠债] 方案与报价（68 errors） | ✅ DONE |
 | kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保（116 errors） | 24% |
 | kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） | 64% |
 | kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） | 58% |

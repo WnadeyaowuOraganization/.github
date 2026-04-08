@@ -58,17 +58,7 @@ npx playwright test tests/backend/ tests/front/ --reporter=json,list --grep-inve
 
 **全通过** → 无需创建Issue，直接跳到步骤5。
 
-**有失败** → 你自己分析失败原因，创建一个 Issue：
-
-```bash
-export GH_TOKEN=$(python3 $HOME_DIR/projects/.github/scripts/gh-app-token.py)
-
-gh issue create \
-  --repo WnadeyaowuOraganization/wande-play \
-  --title "[E2E回归] <你总结的问题标题>" \
-  --label "type:bug,status:test-failed,priority:P0" \
-  --body "<你写的详细分析>"
-```
+**有失败** → 分析失败原因，用以下**完整命令序列**创建 Issue 并关联看板（必须一次性执行完，不能只跑一半）：
 
 Issue body 应包含：
 - 通过率（X/Y）和测试时间
@@ -76,24 +66,26 @@ Issue body 应包含：
 - 重现步骤
 - 修复建议和优先级
 
-拿到新建 Issue 号后，打标签、更新 Project#4 状态并发送通知：
-
 ```bash
 export GH_TOKEN=$(python3 $HOME_DIR/projects/.github/scripts/gh-app-token.py)
-ISSUE=<新Issue号>
 
-# 打标签
-gh issue edit $ISSUE --repo WnadeyaowuOraganization/wande-play \
-  --add-label "priority/P0,type:bugfix,status:test-failed"
+# 1. 创建 Issue 并捕获 Issue 号
+ISSUE_URL=$(gh issue create \
+  --repo WnadeyaowuOraganization/wande-play \
+  --title "[E2E回归] <你总结的问题标题>" \
+  --label "type:bug,status:test-failed,priority/P0" \
+  --body "<你写的详细分析>")
+ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
+echo "Created Issue #$ISSUE"
 
-# 设 Project#4 状态为 E2E Fail
+# 2. 关联 Project#4 并设状态为 Jump（E2E失败 = 最高优先级，插队处理）
 bash $HOME_DIR/projects/.github/scripts/update-project-status.sh \
-  --repo play --issue $ISSUE --status "E2E Fail"
+  --repo play --issue $ISSUE --status "Jump"
 
-# 发送通知
+# 3. 发送通知
 curl -s -X POST http://localhost:9872/api/notify \
   -H "Content-Type: application/json" \
-  -d "{\"session\":\"e2e-top\",\"message\":\"E2E全量回归完成，发现问题已创建 Issue #${ISSUE}\",\"type\":\"warning\"}"
+  -d "{\"session\":\"e2e-top\",\"message\":\"E2E回归发现失败，Issue #${ISSUE} 已创建并加入看板(Jump)\",\"type\":\"warning\"}"
 ```
 
 ### 4. 补充测试（你的核心价值）

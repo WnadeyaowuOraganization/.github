@@ -554,20 +554,29 @@ Issue创建
 > 
 > **误操作说明**: Perplexity在对账过程中误删了5个分支（feature-Issue-1626/1508/1696/1695/1756），这5个分支对应的Issue均已CLOSED且PR已merged（1756为closed未merge），无实际影响但操作不应在未经确认前执行。auto-delete设置已回滚为false。
 
-🟡 **D78: 是否开启仓库auto-delete head branches**
+✅ **D78: 开启仓库auto-delete head branches** — 已生效（2026-04-09，伟平确认）
 - 现状：PR merge后feature分支不会自动删除，导致残留
 - 对账发现：87个feature分支中78个对应Issue已CLOSED，占90%
 - 建议：开启`delete_branch_on_merge=true`，从根源解决分支堆积
 - 影响：未来所有PR merge后自动删除head branch
 - 操作：GitHub仓库Settings → General → 勾选"Automatically delete head branches"
 
-🟡 **D79: 是否批量清理82个残留过期分支**
+✅ **D79: 批量清理过期分支** — 已执行（2026-04-09）。共删除81个过期分支（76个feature-Issue-* + 5个旧格式feature/*）。保留11个Issue仍OPEN的分支
 - 现状：87个feature分支中78个Issue已CLOSED + 4个旧格式feature/分支已过期（已误删5个，剩82个）
 - 需保留的9个分支（Issue仍OPEN）：feature-Issue-1490/1505/1531/1597/1601/1630/1698/1702 + feature/issue-1946
 - 建议：一次性脚本删除82个过期分支
 - 风险：极低（对应Issue均已CLOSED，代码已在dev/main中）
 
-🟡 **D80: PR#3435 是否需要重新处理**
+✅ **D80: PR#3435** — 已关闭，Issue#2261已CLOSED，无需操作
 - 现状：PR#3435（模板库管理页面）对应Issue#2261已CLOSED，PR在对账前就已是CLOSED状态
 - 无需操作，仅记录
 
+
+
+### 已完成（2026-04-09 代码↔Issue对账清理）
+- ✅ 81个过期feature分支已删除（Issue均已CLOSED）
+- ✅ auto-delete head branches 已开启（PR merge后自动清理分支）
+- ✅ 238个空状态Issue已全部补设Plan状态（Project#4看板准确性恢复）
+- ✅ #2028矿场Issue的错误biz:cockpit标签已移除
+- ✅ 对账报告已存档：`.github/docs/code-issue-audit.md`
+- ✅ 4个新biz:标签已创建：biz:acceptance / biz:change / biz:rectification / biz:collab

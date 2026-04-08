@@ -1,37 +1,83 @@
 #!/bin/bash
 # inject-cc-prompt.sh — 向指定Issue的CC会话注入提示词
-# 用法: bash inject-cc-prompt.sh <issue_number> <prompt>
+# 用法: bash inject-cc-prompt.sh <issue_number> <prompt> [--prompt-file FILE]
 # 由CI失败时调用，让CC直接在现有会话中修复问题
+#
+# 会话查找顺序（2026-04-08 修复："会话找得不对"漏洞）:
+#   1. .cc-lock 中 issue=<N> 的 kimi 目录 → cc-wande-play-<dir>-<issue>
+#   2. tmux 直接 grep "cc-wande-play-kimi*-<issue>"（lock 已被清理但 session 还在）
+#   3. tmux 列出全部 session 名以 -<issue> 结尾的（兜底）
+#   找到多个 → 都注入，避免漏；找不到 → 退出码 1（让调用方知道）
 
 ISSUE=$1
 PROMPT=$2
+PROMPT_FILE=""
+if [ "$3" = "--prompt-file" ] && [ -n "$4" ]; then
+  PROMPT_FILE=$4
+fi
+
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 
-if [ -z "$ISSUE" ] || [ -z "$PROMPT" ]; then
-  echo "用法: $0 <issue_number> <prompt>"
+if [ -z "$ISSUE" ]; then
+  echo "用法: $0 <issue_number> <prompt> [--prompt-file FILE]"
   exit 1
 fi
 
-SESSION=""
+# 如果通过文件传 prompt，读出来
+if [ -n "$PROMPT_FILE" ] && [ -f "$PROMPT_FILE" ]; then
+  PROMPT=$(cat "$PROMPT_FILE")
+fi
+
+if [ -z "$PROMPT" ]; then
+  echo "[inject] ❌ prompt 为空，拒绝注入空通知"
+  exit 2
+fi
+
+SESSIONS=()
+
+# 1) lock 文件查找
 for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   [ ! -f "$dir/.cc-lock" ] && continue
   LOCK_ISSUE=$(grep "^issue=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
   [ "$LOCK_ISSUE" != "$ISSUE" ] && continue
   DIRNAME=$(basename "$dir")
-  SESSION="cc-${DIRNAME}-${ISSUE}"
-  break
+  CAND="cc-${DIRNAME}-${ISSUE}"
+  if tmux has-session -t "$CAND" 2>/dev/null; then
+    SESSIONS+=("$CAND")
+  fi
 done
 
-if [ -z "$SESSION" ]; then
-  echo "[inject] 未找到 Issue #$ISSUE 对应的CC会话，跳过注入"
-  exit 0
+# 2) tmux 直接精确匹配 -<issue> 后缀（lock 已被清但 session 还在）
+if [ ${#SESSIONS[@]} -eq 0 ]; then
+  while IFS= read -r s; do
+    [ -n "$s" ] && SESSIONS+=("$s")
+  done < <(tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -E "^cc-wande-play-kimi[0-9]+-${ISSUE}$" || true)
 fi
 
-if ! tmux has-session -t "$SESSION" 2>/dev/null; then
-  echo "[inject] 会话 $SESSION 不存在，跳过注入"
-  exit 0
+# 3) 兜底：包含 -<issue> 的 session（防 typo）
+if [ ${#SESSIONS[@]} -eq 0 ]; then
+  while IFS= read -r s; do
+    [ -n "$s" ] && SESSIONS+=("$s")
+  done < <(tmux list-sessions -F '#{session_name}' 2>/dev/null | grep -E "-${ISSUE}\$" || true)
 fi
 
-echo "[inject] → $SESSION"
-tmux send-keys -t "$SESSION" "$PROMPT" Enter
-echo "[inject] ✅ 已注入提示词"
+if [ ${#SESSIONS[@]} -eq 0 ]; then
+  echo "[inject] ❌ 未找到 Issue #$ISSUE 对应的CC会话（lock+tmux双查）"
+  echo "[inject]    现存 cc 会话："
+  tmux list-sessions -F '  #{session_name}' 2>/dev/null | grep "^  cc-" || echo "    (无)"
+  exit 3
+fi
+
+# 注入到所有匹配的 session
+for SESSION in "${SESSIONS[@]}"; do
+  echo "[inject] → $SESSION"
+  # 用 tmux load-buffer 注入而非 send-keys，避免长 prompt 中的特殊字符（反引号、$ 等）被 shell 二次解析
+  TMP_BUF=$(mktemp)
+  printf '%s\n' "$PROMPT" > "$TMP_BUF"
+  tmux load-buffer -b "inject-$$" "$TMP_BUF"
+  tmux paste-buffer -b "inject-$$" -t "$SESSION"
+  tmux send-keys -t "$SESSION" Enter
+  tmux delete-buffer -b "inject-$$" 2>/dev/null || true
+  rm -f "$TMP_BUF"
+  echo "[inject] ✅ 已注入到 $SESSION ($(echo "$PROMPT" | wc -c) 字节)"
+done

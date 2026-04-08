@@ -139,22 +139,24 @@ def main():
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
     TOKEN_DIR = os.path.join(SCRIPT_DIR, "tokens")
 
-    def _read_pat(filename):
-        path = os.path.join(TOKEN_DIR, filename)
+    def _read_pat(name):
+        """读取 tokens/<name>.pat 文件内容。"""
+        path = os.path.join(TOKEN_DIR, f"{name}.pat")
         try:
-            return open(path).read().strip()
+            token = open(path).read().strip()
+            if token:
+                return token
         except Exception:
-            return None
+            pass
+        print(f"ERROR: token file not found: {path}", file=sys.stderr)
+        sys.exit(1)
 
-    # e2e目录强制使用wandeyaowu PAT（独立rate limit，防止merge限流）
-    cwd = os.getcwd()
-    if "e2e" in cwd:
-        token = _read_pat("wandeyaowu.pat")
-        if token:
-            print(token)
-            return
+    # 传参模式：python3 gh-app-token.py <name>  → 直接返回 tokens/<name>.pat
+    if len(sys.argv) == 2:
+        print(_read_pat(sys.argv[1]))
+        return
 
-    # GitHub App token（独立rate limit 5000，每次重新生成）
+    # 无参数模式：编程CC使用 App Installation Token
     try:
         config = load_config()
         app_id = config["APP_ID"]
@@ -168,19 +170,12 @@ def main():
         if graphql_remaining > 0:
             print(app_token)
             return
-        # App token GraphQL 额度耗尽，fallback
-        print(f"App token GraphQL exhausted, falling back to weiping.pat", file=sys.stderr)
+        print("App token GraphQL exhausted, falling back to weiping.pat", file=sys.stderr)
     except Exception:
         pass
 
-    # Fallback: weiping PAT（个人账号独立额度）
-    token = _read_pat("weiping.pat")
-    if token:
-        print(token)
-        return
-
-    print("ERROR: No valid token available", file=sys.stderr)
-    sys.exit(1)
+    # Fallback: weiping PAT
+    print(_read_pat("weiping"))
 
 
 if __name__ == "__main__":

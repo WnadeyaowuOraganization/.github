@@ -73,10 +73,8 @@ log "启动 e2e-top → ${SESSION}"
 cd "$E2E_DIR"
 git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
 
-# Token：使用个人账号PAT（weiping.pat），原因：
-#   App token无法审核自己创建的PR（GitHub不允许自提自审核）。
-WEIPING_PAT=$(cat "$SCRIPT_DIR/tokens/weiping.pat" 2>/dev/null)
-export GH_TOKEN="${WEIPING_PAT:-$(python3 "$SCRIPT_DIR/gh-app-token.py")}"
+# Token：使用个人账号PAT（App token无法自审核自己创建的PR）
+export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" weiping)
 
 # API来源：Token Pool Proxy（同 run-cc.sh effort!=max）
 API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"

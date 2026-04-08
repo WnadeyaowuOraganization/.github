@@ -15,56 +15,48 @@
 
 ---
 
-## ⚠️ Done 的硬定义（不允许主观判断）
+## ⚠️ Done 的硬定义
 
-> **2026-04-08 强化**：之前因为措辞含糊，研发经理把「PR 已创建」当作「任务完成」，
-> 导致 #3458 系列 issue 在没有任何代码 merge 进 dev 的情况下被错误关闭。
-> 本节为硬约束，不接受任何例外。
+Issue → Done 必须同时满足，缺一不可：
 
-**Issue 状态变更为 Done 必须同时满足两个条件，缺一不可**：
+1. `gh pr view <PR> --json mergedAt --jq '.mergedAt'` 返回非空时间
+2. `gh issue view <N> --json state,stateReason` 返回 `closed/completed`
 
-1. PR squash-merged into `dev` 分支
-   - 验证：`gh pr view <PR_NUM> --json mergedAt --jq '.mergedAt'` 返回非空 ISO 时间
-2. Issue 在 GitHub 上 closed 且 `state_reason=completed`
-   - 验证：`gh issue view <N> --json state,stateReason` 返回 `closed/completed`
-   - 这一步通常由 GitHub 在 PR squash-merge 时根据 PR body 中的 `Closes #N` 自动完成
+Done 由 `pr-test.yml` 的 auto-merge job 自动触发。研发经理 ⛔ 永远不要主动执行：
+- `update-project-status.sh --status "Done"`
+- `gh issue close`
+- 任何手动改 Project#4 看板为 Done 的操作
 
-**研发经理 永远不要 主动调用以下命令把 Issue 标 Done**：
-- ❌ `update-project-status.sh --status "Done"`
-- ❌ `gh issue close`
-- ❌ 任何手动改 Project#4 看板 Status 字段为 Done 的操作
+### 状态对照表
 
-**Done 状态由 `pr-test.yml` 的 `auto-merge` job 在 PR 真正 squash-merge 后自动触发**。
-研发经理的职责是：让 CC 把代码写到能让 CI 通过的程度，剩下交给 CI。
+| 阶段 | 看板状态 | 研发经理动作 |
+|------|---------|-------------|
+| 指派启动 CC | Todo → In Progress | 手动改（唯一允许的主动状态变更） |
+| CC 写代码中 | In Progress | 仅巡检注入，不改状态 |
+| CC 退出但无 PR | In Progress | 注入「执行 gh pr create」 |
+| PR open + CI 跑中 | In Progress | 等 CI，不改状态 |
+| PR + CI failure | In Progress | 看 PR 评论失败详情，注入 CC 修复 |
+| PR + mergeable=CONFLICTING | In Progress | 注入「git fetch && git rebase origin/dev && git push --force-with-lease」 |
+| PR squash-merged | **看板自动 → Done** | 仅 PLAN.md 划删除线（Markdown 视觉同步） |
+| CC 异常 + 无法恢复 + 无 PR | Fail | 唯一允许的非-In-Progress 主动变更 |
 
-### 中间状态映射表
+### ⛔ 禁止
 
-| CC / PR 阶段 | Issue 看板 Status | 研发经理动作 |
-|--------------|------------------|-------------|
-| CC 启动跑 | In Progress | 指派时手动改（这是唯一允许的状态变更） |
-| CC 写代码中（tmux 输出活跃） | In Progress | 仅巡检注入，不改状态 |
-| CC 进程退出 但 PR 未创建 | In Progress | 注入「执行 gh pr create」，不改状态 |
-| PR open，CI 跑中 | In Progress | 等 CI 结果，不改状态 |
-| PR open，CI failure | In Progress | 看 PR 评论中失败详情，注入修复 prompt，不改状态 |
-| PR open，mergeable=CONFLICTING | In Progress | 注入「git fetch + rebase + force-push」，不改状态 |
-| PR squash-merged | **看板自动 → Done** | 仅画删除线（Markdown 视觉同步），不改实际看板 |
-| CC 进程异常退出 + 无法恢复 + 无 PR | Fail | 唯一允许研发经理主动改的非 In Progress 状态 |
+- CC 进程退出就改 Done
+- PR 已创建就改 Done
+- tmux 输出 "完成/done/✅" 就改 Done
+- 手动 `gh issue close`
+- In Progress 直接跳 Done 不经过 PR squash-merge
+- 批量把多个 issue 改 Done
 
-### ⛔ 禁止行为清单
+### 拿不准时
 
-- ❌ 禁止：CC 进程退出就把 Issue 看板状态改 Done
-- ❌ 禁止：PR 已创建就把 Issue 看板状态改 Done
-- ❌ 禁止：tmux 输出"完成/done/✅"字样就把状态改 Done
-- ❌ 禁止：手动 `gh issue close <N>`
-- ❌ 禁止：把状态从 In Progress 直接跳到 Done 而不经过 PR squash-merge
-- ❌ 禁止：批量把多个 issue 改 Done（这是 #3458 系列误关的根本动作）
-
-**如果你不确定 issue 是否真的已完成，运行**：
 ```bash
 gh pr list --repo WnadeyaowuOraganization/wande-play --search "Issue-<N> in:branch" --state all --json number,state,mergedAt
 gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json state,stateReason,closedAt
 ```
-如果 PR 不存在或 mergedAt 为空，issue 一定不能改 Done。
+PR 不存在或 mergedAt 为空 → issue 一定不能改 Done。
+反向：发现 issue 已 closed 但 PR 不存在或 mergedAt 为空 → 立即 reopen。
 
 ---
 

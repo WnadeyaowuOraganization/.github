@@ -425,9 +425,9 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **巡检 2026-04-08 20:44 UTC | 15/15满槽 | 🚨双异常持续第6轮：kimi19超时80min未处理 + kimi9幽灵锁3642min**
+> 🔄 **巡检 2026-04-08 20:54 UTC | 15/15满槽 | kimi4-#1742完成→#1506新启✅ | 🚨双异常第7轮：kimi19超时90min + kimi9幽灵锁3652min**
 
-> **当前运行中（占槽）**：kimi1-#1628 | kimi2-#1746 | kimi3-#2459 | kimi4-#1742 | kimi5-#2008 | kimi7-#2122 | kimi9-⚠️#2893(3632min幽灵锁) | kimi11-#2458 | kimi12-#1519 | kimi13-#1518 | kimi14-#2589 | kimi16-#3452 | kimi17-#2301(重启2min) | kimi18-#2302 | kimi19-#2303(超时70min)
+> **当前运行中（占槽）**：kimi1-#1628 | kimi2-#1746 | kimi3-#2459 | kimi4-#1506(1min) | kimi5-#2008 | kimi7-#2122 | kimi9-⚠️#2893(3652min幽灵锁) | kimi11-#2458 | kimi12-#1519 | kimi13-#1518 | kimi14-#2589 | kimi16-#3452 | kimi17-#2301 | kimi18-#2302 | kimi19-#2303(超时90min)
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -436,7 +436,7 @@
 | #1917 | P0 | frontend | [D3-Web] 设计师自助上传 — .gh文件上传+参数识别+发布审核 | ✅ 独立 |
 | #1947 | P0 | design-ai | [D3最小单元] 邵鹏电池包连接公式提取 — 9个Cluster规则入库 | ✅ 独立 |
 | #1946 | P0 | design-ai | [D3最小单元] 合并功能件参数化名单 — 16件统一 | ✅ 独立 |
-| #1506 | P1 | backend | [矿场-Phase2][13/16] 作战资料包聚合API — 多前序完成 | ✅ 前序全CLOSED |
+| ~~#1506~~ | ~~P1~~ | ~~backend~~ | ~~[矿场-Phase2][13/16] 作战资料包聚合API~~ | ~~已指派kimi4~~ |
 | #1507 | P1 | backend | [矿场-Phase2][11/16] 政策信号关联推送 — 地名NER+区域推送 | ✅ #2401 CLOSED解锁 |
 | #1627 | P1 | backend | [整改工单][Phase30] 风险台账联动 — 严重整改升级risk | ⏳ 等#1628完成 |
 | #1625 | P1 | backend | [企微] 整改通知消息模板 — 整改/超时/验收结果 | ✅ #1630完成解锁 |
@@ -455,25 +455,25 @@
 
 ## 当前运行（15/15满槽）
 
-> 更新：2026-04-08 20:25 UTC | ⚠️审计修正：15个误标Done改回In Progress(PR未merge) | kimi18-2302重启(API error) | kimi9创建PR#3492 | kimi5创建PR#3491
+> 更新：2026-04-08 20:53 UTC | ✅ #1742 PR#3499 MERGED | kimi16创建PR#3500 | kimi4新指派#1506
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #1628 | P1 | backend | [整改工单] AI视觉审查Service | 运行中 |
-| kimi2 | #1746 | P1 | frontend | [质保售后] 售后工单管理主页面 | 运行中 |
-| kimi3 | #2459 | P1 | backend | [合同管理] 合同审批API | 新启动 |
-| kimi4 | #1742 | P1 | frontend | [质保] 质保台账管理页面 | 运行中 |
-| kimi5 | #2008 | P0 | backend | [资金闭环][1/17] 报价成本模型API | 运行中 |
-| kimi7 | #2122 | P0 | backend | [执行管理] AI回款风险预警 | 运行中 |
-| kimi9 | #1919 | P0 | frontend | [D3-Web] 电池包目录 | 运行中 |
-| kimi11 | #2458 | P1 | backend | [合同管理] AI条款对比引擎 | 新启动 |
-| kimi12 | #1519 | P1 | backend | [业务运营中心][5/8] 业务看板 | 运行中 |
-| kimi13 | #1518 | P1 | backend | [业务运营中心][7/8] 业务数据仪表盘 | 运行中 |
-| kimi14 | #2589 | P0 | backend | [**冲突修复**] execution rebase（重启，接续工作） | 新启动 |
-| kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 运行中 |
-| kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传+企微内嵌 | 运行中 |
-| kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴 | 运行中 |
-| kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板页面 | 运行中 |
+| kimi1 | #1628 | P1 | backend | [整改工单] AI视觉审查Service | PR#3495等CI |
+| kimi2 | #1746 | P1 | frontend | [质保售后] 售后工单管理主页面 | PR#3493等CI |
+| kimi3 | #2459 | P1 | backend | [合同管理] 合同审批API | 编码中 |
+| kimi5 | #2008 | P0 | backend | [资金闭环][1/17] 报价成本模型API | PR#3491等CI |
+| kimi7 | #2122 | P0 | backend | [执行管理] AI回款风险预警 | PR#3494等CI |
+| kimi9 | #1919 | P0 | frontend | [D3-Web] 电池包目录 | PR#3492等CI |
+| kimi11 | #2458 | P1 | backend | [合同管理] AI条款对比引擎 | PR#3496等CI |
+| kimi12 | #1519 | P1 | backend | [业务运营中心][5/8] 业务看板 | PR#3497等CI |
+| kimi4 | #1506 | P1 | backend | [矿场-Phase2][13/16] 作战资料包聚合API | 新启动 |
+| kimi13 | #1518 | P1 | backend | [业务运营中心][7/8] 业务数据仪表盘 | 编码中(上下文紧张) |
+| kimi14 | #2589 | P0 | backend | [冲突修复] execution rebase | 编码中 |
+| kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | PR#3500等CI |
+| kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传 | PR#3489等CI |
+| kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页 | 编码中 |
+| kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板 | 编码中(新启15min) |
 
 ---
 
@@ -532,7 +532,7 @@
 | kimi1 | #1628 | P1 | backend | [整改工单][Phase29] AI视觉审查Service | In Progress |
 | kimi13 | #1518 | P1 | backend | [业务运营中心][7/8] 业务数据仪表盘 | In Progress |
 | kimi2 | #1746 | P1 | frontend | [质保售后] 售后工单管理主页面 | In Progress |
-| kimi4 | #1742 | P1 | frontend | [质保] 质保台账管理页面 | In Progress |
+| kimi4 | ~~#1742~~ | P1 | frontend | ~~[质保] 质保台账管理页面~~ PR#3499✅merged 2026-04-08 | ~~Done~~ |
 | kimi4 | #2051 | P1 | frontend | D3-L4安装图自动化 PR#3488(OPEN，等CI merge) | In Progress |
 | kimi2 | ~~#2445~~ | P0 | pipeline | ~~[冲突修复] 定向监控 PR#3305已关闭未合并，rebase后无新提交~~ | ~~Fail~~ |
 | kimi13 | ~~#3450~~ | P0 | fullstack | ~~[挖掘改版][2/8] 配合单位联系方式~~ commit:01ea434de(直接入dev) | ~~Done~~ |

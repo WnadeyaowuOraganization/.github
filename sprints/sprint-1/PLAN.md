@@ -455,7 +455,7 @@
 
 ## 当前运行（15/15满槽）
 
-> 更新：2026-04-08 21:32 UTC | 注入rebase×9(kimi1/7/11/13/17/3/12/6/9) | kimi3-PR#3504已创建但CONFLICTING | kimi2-PR#3493 MERGEABLE但CI git fetch exit128→注入空提交重触发 | kimi5正在自行解决冲突 | 超时55-60min：kimi1/7/11/13/17
+> 更新：2026-04-08 21:42 UTC | 🔧 修复wande-play-ci origin缺失(所有CI git-fetch exit128根因) | PR#3493 CI重触发 | 注入kimi18 rebase | kimi5→v2分支/kimi11→clean分支(自行处理冲突) | 多会话detached-HEAD中(rebase进行中)
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|

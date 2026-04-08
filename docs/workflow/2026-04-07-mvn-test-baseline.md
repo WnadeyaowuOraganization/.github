@@ -156,22 +156,73 @@ dev PG 装了 pgvector 扩展但 server 端 lib 文件路径有问题（`could n
 
 ---
 
-## 七、待解决：2117 个历史 errors
+## 七、清理进度（持续更新）
 
-按业务功能拆成 ≤20 个 GitHub issue（dev 上提交 `2026-04-07-mvn-test-fix-{N}` 系列）：
+按业务功能拆成 20 个 GitHub issue (#3335-#3354)，由 20 个 kimi 目录的编程 CC 并行修复。
 
+### 已完成 Issue
+| 完成时间 | Issue | 模块 | PR | Errors | 主要修复内容 |
+|---------|------|-----|-----|-------:|------------|
+| 2026-04-08 00:32 | #3343 | 标准库与材质 | #3358 | 83 | 创建 wdpp_knowledge_base / wdpp_material / wdpp_site_inspection_standards / wdpp_standard_tables 表 |
+
+### 进行中（有 PR open）
+| Issue | 模块 | PR | Errors |
+|-------|-----|----|-------:|
+| #3338 | Token 池与运营 | #3357 | 210 |
+| #3347 | 数字资产与 S3 | #3360 | 54 |
+| #3354 | 验收与交付 | #3361 | 31 |
+| #3348 | 文案与审批 | #3362 | 52 |
+| #3350 | 备件与采购 | #3363 | 46 |
+
+### 待处理（有 commit 但未 PR）
+kimi4 #3337 (预算资金), kimi5 #3346 (销售/CRM), kimi9 #3339 (整改/质保), kimi15 #3352 (工单/派单), kimi18 #3341 (聊天/记忆)
+
+### 19 模块全表
 | 功能 | Errors | 主要 root cause |
 |------|-------:|----------------|
-| D3 设计与参数化 | 410 | excludeFilters 排除导致 NoBean / SQL 不兼容 |
-| 项目执行与看板 | 235 | 同上 |
-| 预算资金与佣金 | 222 | mapper 重复定义 |
-| Token 池与运营 | 210 | NoBean |
-| 整改与质保 | 116 | `deleted` 列 boolean vs integer |
-| 驾驶舱与运维 | 110 | NoBean |
-| ...（共 19 组） | ~800 | 各种 |
+| D3 设计与参数化 #3335 | 410 | excludeFilters 排除导致 NoBean / SQL 不兼容 |
+| 项目执行与看板 #3336 | 235 | 同上 |
+| 预算资金与佣金 #3337 | 222 | mapper 重复定义 |
+| Token 池与运营 #3338 | 210 | NoBean |
+| 整改与质保 #3339 | 116 | `deleted` 列 boolean vs integer |
+| 驾驶舱与运维 #3340 | 110 | NoBean |
+| 聊天会话与记忆 #3341 | 105 | 缺表（archive_consent 等） |
+| 企微集成与权限 #3342 | 104 | mapper 包路径错 |
+| ✅ 标准库与材质 #3343 | 83 | 已修复 |
+| 方案与报价 #3344 | 68 | 各种 |
+| 问题反馈与通知 #3345 | 64 | 各种 |
+| 销售跟踪与 CRM #3346 | 54 | 各种 |
+| 数字资产与 S3 #3347 | 54 | 缺表 |
+| 文案与审批 #3348 | 52 | 各种 |
+| 设备生命周期 #3349 | 49 | 各种 |
+| 备件与采购 #3350 | 46 | 各种 |
+| 财务收款与合同 #3351 | 45 | 各种 |
+| 工单与派单 #3352 | 39 | 缺表 |
+| 照片 AI 识别 #3353 | 38 | 各种 |
+| 验收与交付 #3354 | 31 | 各种 |
+
+### 修复过程中发现的 dev 累积 bug（已顺手修复）
+| 时间 | bug | 修复 commit |
+|------|-----|------------|
+| 22:00 | #2055 PR 漏掉 fastener entity/bo/vo 文件 | `1952a463` |
+| 22:00 | R.okOrFail 方法不存在 | 同上 |
+| 22:00 | mapper selectVoList 与 BaseMapperPlus 重定义冲突 | 同上 |
+| 00:25 | GatewaySubAccountController 与 DashboardGatewayController 重复映射 `/system/dashboard/gateway/accounts` | `1b01ac60` |
+
+### 修复过程中暴露的工具脚本问题（已修）
+| 问题 | 修复 commit |
+|------|------------|
+| `run-cc.sh` KIMI_TAG 用 PROJECT_DIR（含 backend 后缀）算错 | `3f3309e` |
+| 20 个 CC 共享 ~/.m2 race condition jar 损坏 | `337eee2` per-kimi PG DB 隔离 + 之后改用 hardlink 独立 maven repo |
+| `cc-keepalive` 在 PG fix 期间反复重启卡住的 CC | 暂停 cron */5 30min |
+
+### 修复进度图
+- 总错误：2117
+- 已修复 errors（issue close）：83 (#3343)
+- 进行中（PR open）：210+54+31+52+46 = 393
+- 等待 PR：xxx
 
 修复策略由 CC 在各 issue 内独立处理，PR 合并时 `unit-test` 关卡自动校验通过数不退化。
-相关issue： #3335 - #3354
 ---
 
 ## 八、未来改进

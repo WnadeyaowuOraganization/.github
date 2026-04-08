@@ -457,29 +457,29 @@
 
 ## 当前运行（20/20 PG修复）
 
-> 更新：2026-04-08 00:05 UTC | **20 PG-CC 稳定运行** | 20个 pg-test issues 全部 OPEN（kimi1-20） | 28 CC活跃 | 无新完成本轮 | 无超时会话 | Jump/Fail/E2E Fail=0
+> 更新：2026-04-08 00:15 UTC | **20 PG-CC 稳定推进** | 20个 pg-test issues 全部 OPEN（kimi1-20） | 进度：37%-62% | 40 CC活跃 | kimi7 已重启（39分钟超时） | 🔓 #2408 CLOSED解锁 #2276 Todo | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #3335 | tech | backend | [mvn test欠债] D3设计与参数化（410 errors） | 19% |
-| kimi2 | #3345 | tech | backend | [mvn test欠债] 问题反馈与通知（64 errors） | ~20% |
-| kimi3 | #3336 | tech | backend | [mvn test欠债] 项目执行与看板（235 errors） | 19% |
-| kimi4 | #3337 | tech | backend | [mvn test欠债] 预算资金与佣金（222 errors） | ~18% |
-| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） | ~17% |
-| kimi6 | #3348 | tech | backend | [mvn test欠债] 文案与审批（52 errors） | ~18% |
-| kimi7 | #3338 | tech | backend | [mvn test欠债] Token池与运营（210 errors） | 45% |
-| kimi8 | #3344 | tech | backend | [mvn test欠债] 方案与报价（68 errors） | ~18% |
-| kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保（116 errors） | ~19% |
-| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） | 16% |
-| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） | ~17% |
-| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） | 16% |
-| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） | ~18% |
-| kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维（110 errors） | ~19% |
-| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） | ~18% |
-| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） | 20% |
-| kimi17 | #3354 | tech | backend | [mvn test欠债] 验收与交付（31 errors） | ~19% |
-| kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆（105 errors） | ~17% |
-| kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限（104 errors） | ~18% |
+| kimi1 | #3335 | tech | backend | [mvn test欠债] D3设计与参数化（410 errors） | 57% |
+| kimi2 | #3345 | tech | backend | [mvn test欠债] 问题反馈与通知（64 errors） | 57% |
+| kimi3 | #3336 | tech | backend | [mvn test欠债] 项目执行与看板（235 errors） | 62% |
+| kimi4 | #3337 | tech | backend | [mvn test欠债] 预算资金与佣金（222 errors） | 63% |
+| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） | 56% |
+| kimi6 | #3348 | tech | backend | [mvn test欠债] 文案与审批（52 errors） | 66% |
+| kimi7 | #3338 | tech | backend | [mvn test欠债] Token池与运营（210 errors） | 57% 🔄重启 |
+| kimi8 | #3344 | tech | backend | [mvn test欠债] 方案与报价（68 errors） | 38% |
+| kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保（116 errors） | 45% |
+| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） | 40% |
+| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） | 40% |
+| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） | 45% |
+| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） | 37% |
+| kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维（110 errors） | 55% |
+| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） | 39% |
+| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） | 38% |
+| kimi17 | #3354 | tech | backend | [mvn test欠债] 验收与交付（31 errors） | 43% |
+| kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆（105 errors） | 53% |
+| kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限（104 errors） | 56% |
 | kimi20 | #3343 | tech | backend | [mvn test欠债] 标准库与材质（83 errors） | 57% |
 
 ---

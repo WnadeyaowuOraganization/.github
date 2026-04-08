@@ -425,7 +425,7 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **更新：2026-04-08 14:44 UTC | 新完成：#2254✅ | 当前运行：15/15 满槽 | 优先队列清空 | 候选：#2459/#2458/#2154 Todo
+> 🔄 **更新：2026-04-08 14:46 UTC | 运行中：15/15 满槽 | 优先队列清空 | Plan检查：668个Plan Issues超出Sprint范围**
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -454,27 +454,27 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（6 常规 + 9 P0冲突修复 = 15/15）
+## 当前运行（4 常规 + 9 P0冲突修复 + 2新指派 = 15/15，kimi6重复）
 
-> 更新：2026-04-08 14:44 UTC | 常规Issue 6个运行中；新完成：#2254✅；P0冲突9个rebase(14-46%)；满槽15/15
+> 更新：2026-04-08 14:46 UTC | 优先队列（Jump/Fail/E2E Fail）：全清空 | CC容量：15/15 满槽 | P0冲突rebase继续进行中
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #1920 | P0 | pipeline | [D3-v2.0][P0] wande-gh-plugins仓库重构 | 运行中 (18%) |
-| kimi2 | #2424 | **P0插** | frontend | [**冲突修复**] Agent基建 PR#3279 rebase | 运行中 (16%) |
-| kimi3 | #1766 | **P0插** | frontend | [**冲突修复**] 代理商工作台 PR#3423 rebase | 运行中 (0%) |
-| kimi4 | #1527 | **P0插** | backend | [**冲突修复**] 矿场Phase2 PR#3238 rebase | 运行中 (20%) |
-| kimi5 | #1756 | **P0插** | frontend | [**冲突修复**] 代理商工作台 PR#3424 rebase | 运行中 (14%) |
-| kimi6 | #1531 | **P0插** | backend | [**冲突修复**] 矿场评分模型 PR#3240 rebase | 运行中 (26%) |
-| kimi7 | #2096 | T1 | backend | [执行管理] 整改工单管理API | 运行中 (73%) |
-| kimi8 | #1564 | **P0插** | backend | [**冲突修复**] 企微打通 PR#3260 rebase | 运行中 (27%) |
-| kimi9 | #2055 | **P0插** | backend | [**冲突修复**] D3参数化 PR#3274 rebase | 运行中 (19%) |
-| kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | 运行中 (53%) |
-| kimi11 | #2095 | **P0插** | backend | [**冲突修复**] Equipment模块 PR#3284 rebase | 运行中 (15%) |
-| kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | 运行中 (31%) |
-| kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | 运行中 (46%) |
-| kimi14 | #2589 | **P0插** | backend | [**冲突修复**] execution执行管理 PR#3317 rebase | 运行中 (24%) |
-| kimi15 | #2893 | **P0插** | fullstack | [**冲突修复**] Claude Office PR#3315 rebase | 运行中 (20%) |
+| kimi1 | #3288 | P0 | frontend | [**冲突修复**] 验收队列前端 PR#3288 rebase | 运行中 |
+| kimi2 | #2445 | P0 | pipeline | [**冲突修复**] 定向监控[12/38] PR#3305 rebase | 运行中 |
+| kimi3 | #2851 | P0 | frontend | [**冲突修复**] 开发监控[7/7] PR#3288 rebase | 运行中 |
+| kimi4 | #2051 | P1 | frontend | D3-L4安装图自动化 | 运行中 (13%) |
+| kimi5 | #1756 | P0 | frontend | [**冲突修复**] 代理商工作台 PR#3424 rebase | 运行中 |
+| kimi6 | #1531 | P0 | backend | [**冲突修复**] 可赢性评分模型 PR#3240 rebase | 运行中 |
+| kimi6 | #2893 | P0 | fullstack | [**冲突修复**] Claude Office PR#3315 rebase | 运行中 |
+| kimi7 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 | 运行中 (0%) |
+| kimi8 | #1564 | P0 | backend | [**冲突修复**] 企微打通 PR#3260 rebase | 运行中 |
+| kimi9 | #2055 | P0 | backend | [**冲突修复**] D3参数化 PR#3274 rebase | 运行中 |
+| kimi11 | #1520 | P1 | backend | [业务运营中心][3/8] CRM操作面板 | 运行中 (0%) |
+| kimi12 | #1858 | P1 | backend | [产品平台][P1] 方案版本对比 | 运行中 (0%) |
+| kimi13 | #1796 | P1 | frontend | [合同管理] 合同审批流程页面 | 运行中 |
+| kimi14 | #2589 | P0 | backend | [**冲突修复**] execution执行管理 PR#3317 rebase | 运行中 |
+| kimi15 | #1862 | P1 | backend | [产品平台][P1] 标准品报价引擎 | 运行中 (0%) |
 
 ---
 
@@ -543,6 +543,11 @@
 | kimi10 | ~~#2109~~ | T1 | backend | ~~质保售后 售后工单API~~ PR#3204✅merged | ~~Done~~ |
 | kimi17 | ~~#2368~~ | T1 | frontend | ~~菜单重组[5/8] 综合管理中心板块~~ PR#3251✅merged | ~~Done~~ |
 | kimi8 | ~~#1465~~ | T1 | backend | ~~销售记录聚合引擎~~ PR#3258 | ~~Done~~ |
+| kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | Done |
+| kimi7 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 | In Progress |
+| kimi11 | #1520 | P1 | backend | [业务运营中心][3/8] CRM操作面板 | In Progress |
+| kimi12 | #1858 | P1 | backend | [产品平台][P1] 方案版本对比 | In Progress |
+| kimi15 | #1862 | P1 | backend | [产品平台][P1] 标准品报价引擎 | In Progress |
 | kimi12 | #1852 | T1 | pipeline | D3-Agent知识库构建 | In Progress |
 | kimi5 | ~~#3227~~ | BUG | backend | ~~🔴 P0 后端进程守护~~ PR#3265 | ~~Done~~ |
 | kimi5 | ~~#1458~~ | T1 | backend | ~~销售记录体系 商务周报提交API（Issue CLOSED）~~ | ~~Done~~ |

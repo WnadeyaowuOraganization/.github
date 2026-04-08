@@ -455,7 +455,7 @@
 
 ## 当前运行（15/15满槽）
 
-> 更新：2026-04-08 21:42 UTC | 🔧 修复wande-play-ci origin缺失(所有CI git-fetch exit128根因) | PR#3493 CI重触发 | 注入kimi18 rebase | kimi5→v2分支/kimi11→clean分支(自行处理冲突) | 多会话detached-HEAD中(rebase进行中)
+> 更新：2026-04-08 21:52 UTC | 🔧 修复ci-env.sh缺失(E2E exit127根因已恢复) | PR#3505/3493重触发CI | kimi4-PR#3506已创建 | kimi2单元测试下降338个→注入调查 | kimi7注入创新PR+关旧PR#3494 | kimi5注入重触发CI
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|

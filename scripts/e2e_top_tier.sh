@@ -84,10 +84,14 @@ mkdir -p "$CONFIG_DIR"
 rsync -a --exclude='.credentials.json' --exclude='projects' \
   "${HOME_DIR}/.claude/" "$CONFIG_DIR/" 2>/dev/null
 ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
-cat > "$CONFIG_DIR/.credentials.json" << 'CREDS_EOF'
-{"claudeAiOauth":{"accessToken":"stub-proxy-mode","refreshToken":"stub-proxy-mode","expiresAt":1,"scopes":["user:inference"],"subscriptionType":"free","rateLimitTier":"free"}}
-CREDS_EOF
+# 使用真实 credentials（避免 stub 触发 OAuth 刷新失败后写回 ~/.claude/.credentials.json 污染经理CC）
+# API 调用走 proxy（ANTHROPIC_BASE_URL），credentials 仅用于 claude.ai 会话认证，不影响计费
+cp "${HOME_DIR}/.claude/.credentials.json" "$CONFIG_DIR/.credentials.json" 2>/dev/null
 [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
+
+# 备份真实 credentials（防御性措施：确保运行后恢复）
+CREDS_BACKUP="/tmp/creds-backup-${SESSION}.json"
+cp "${HOME_DIR}/.claude/.credentials.json" "$CREDS_BACKUP" 2>/dev/null
 
 # 记录启动前已有的 JSONL 列表
 mkdir -p "$JSONL_DIR"
@@ -100,7 +104,10 @@ tmux new-session -d -s "$SESSION" -c "$E2E_DIR" \
    ${API_ENV} \
    export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
    claude --model claude-opus-4-6 --dangerously-skip-permissions; \
-   rm -rf ${CONFIG_DIR}"
+   rm -rf ${CONFIG_DIR}; \
+   cp ${CREDS_BACKUP} ${HOME_DIR}/.claude/.credentials.json 2>/dev/null; \
+   rm -f ${CREDS_BACKUP}; \
+   tmux kill-session -t ${SESSION}"
 
 # 后台：注入prompt + 关联JSONL
 ( sleep 6

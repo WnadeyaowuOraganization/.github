@@ -1,7 +1,7 @@
 # 万德AI平台 · 功能注册表
 
-> ⏰ 最后更新：2026-04-05 11:25 by Perplexity Computer
-> 📊 统计：1182 个 open Issue | 36 条业务线 | 6 个 Sprint
+> ⏰ 最后更新：2026-04-08 by Perplexity Computer
+> 📊 统计：1182 个 open Issue | 36 条业务线 | 8 个 Sprint
 
 ---
 
@@ -56,36 +56,36 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 3. 审批流引擎
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 审批模板 + 4种审批人规则 + SLA | 10 | Sprint-4 | 📋 计划中 | `module:approval` | 基于明道云 280万实例经验 |
-| AI预检服务 | 2 | Sprint-4 | 📋 计划中 | `module:approval` | 提交前自动质量/价格检查 |
-| 前端审批中心 | 4 | Sprint-4 | 📋 计划中 | `module:approval` | 公共板块，非驾驶舱 |
+| 审批模板 + 4种审批人规则 + SLA | 10 | Sprint-5 | 📋 计划中 | `module:approval` | 基于明道云 280万实例经验 |
+| AI预检服务 | 2 | Sprint-5 | 📋 计划中 | `module:approval` | 提交前自动质量/价格检查 |
+| 前端审批中心 | 4 | Sprint-5 | 📋 计划中 | `module:approval` | 公共板块，非驾驶舱 |
 
 ### 4. 企微集成
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 企微消息SDK + 通知双通道 + 通讯录同步 | 17 | — | ⏸️ 暂缓 | `module:wecom` | 无Sprint标签，待排期 |
+| 企微消息SDK + 通知双通道 + 通讯录同步 | 17 | Sprint-8 | ⏸️ 暂缓 | `module:wecom` | 无Sprint标签，待排期 |
 
 ### 5. AI对话中枢
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 统一对话状态/日志 + 渠道适配器 | 13 | Sprint-Backlog | ⏸️ 暂缓 | `module:chat` | 跨渠道上下文共享 |
+| 统一对话状态/日志 + 渠道适配器 | 13 | Sprint-7 | ⏸️ 暂缓 | `module:chat` | 跨渠道上下文共享 |
 | Cockpit AI对话监控面板 | 4 | Sprint-1 | 🔨 开发中 | `module:chat` | — |
-| 企微会话存档SDK | 2 | Sprint-5 | 📋 计划中 | `module:chat` | — |
+| 企微会话存档SDK | 2 | Sprint-7 | 📋 计划中 | `module:chat` | — |
 
 ### 6. 知识库 RAG
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| Embedding模型修复 + 文档扩展 + 分类优化 | 12 | Sprint-Backlog | ⏸️ 暂缓 | `module:knowledge` | 214个国标文件待入库 |
+| Embedding模型修复 + 文档扩展 + 分类优化 | 12 | Sprint-7 | ⏸️ 暂缓 | `module:knowledge` | 214个国标文件待入库 |
 
 ### 7. H5 移动端基座
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| Vant4 + MobileLayout + TabBar + 路由 + 企微SDK | 8 | Sprint-2 | 📋 计划中 | `biz:h5-mobile` | D37决策：所有页面需H5可访问 |
+| Vant4 + MobileLayout + TabBar + 路由 + 企微SDK | 8 | Sprint-7 | 📋 计划中 | `biz:h5-mobile` | D37决策：所有页面需H5可访问 |
 
 ### 8. 菜单重组
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 支持中心/综合管理/资源中心板块菜单 | 3 | Sprint-3/5 | 📋 计划中 | `module:layout` | — |
+| 支持中心/综合管理/资源中心板块菜单 | 3 | Sprint-5 | 📋 计划中 | `module:layout` | — |
 
 ---
 
@@ -96,7 +96,7 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 9. 项目矿场（招投标）
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 矿场核心（ICP评分/赢率统计/每日简报） | ~35 | — | 📋 计划中 | `module:mine` | 无Sprint标签，67个Issue |
+| 矿场核心（ICP评分/赢率统计/每日简报） | ~35 | Sprint-2 | 📋 计划中 | `module:mine` | 无Sprint标签，67个Issue |
 | 矿场增强（反馈结构化/评分校准/状态机） | 23 | Sprint-1 | 🔨 开发中 | `module:bidding` | — |
 | 投标方案生成引擎 + RAG | 1 | Sprint-1 | 🔨 开发中 | `module:bidding` | — |
 
@@ -113,7 +113,7 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 12. 客户情报（MEDDIC）
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| MEDDIC六维度 + 三模式差异化评分 + 阶段拦截 | 11 | Sprint-2 | 📋 计划中 | `module:customer-intelligence` | 直销/经销/国贸三模式 |
+| MEDDIC六维度 + 三模式差异化评分 + 阶段拦截 | 11 | Sprint-4 | 📋 计划中 | `module:customer-intelligence` | 直销/经销/国贸三模式 |
 
 ---
 
@@ -124,10 +124,10 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 13. CRM 三体系
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 商机管理 + 状态机 + 健康度AI评分 | ~10 | Sprint-1/2 | 🔨 开发中 | `module:crm` | — |
-| 渐进式字段收集 | ~5 | Sprint-2 | 📋 计划中 | `module:crm` | — |
-| 标准产品快速报价引擎 | ~5 | Sprint-2 | 📋 计划中 | `module:crm` | — |
-| 经销体系 + 国际贸易适配 | ~11 | Sprint-2 | 📋 计划中 | `module:crm` | 客户维度为核心 |
+| 商机管理 + 状态机 + 健康度AI评分 | ~10 | Sprint-1 | 🔨 开发中 | `module:crm` | — |
+| 渐进式字段收集 | ~5 | Sprint-6 | 📋 计划中 | `module:crm` | — |
+| 标准产品快速报价引擎 | ~5 | Sprint-6 | 📋 计划中 | `module:crm` | — |
+| 经销体系 + 国际贸易适配 | ~11 | Sprint-6 | 📋 计划中 | `module:crm` | 客户维度为核心 |
 
 ### 14. 销售记录体系
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
@@ -142,15 +142,15 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 15. 商务赋能
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 产品参数查询中心 | ~8 | Sprint-4 | 📋 计划中 | `module:biz-enablement` | — |
-| 直销投标文档生成 | ~8 | Sprint-4 | 📋 计划中 | `module:biz-enablement` | 技术参数响应表自动组装 |
-| 经销报价单生成 | ~8 | Sprint-4 | 📋 计划中 | `module:biz-enablement` | 批量选品+PDF |
+| 产品参数查询中心 | ~8 | Sprint-6 | 📋 计划中 | `module:biz-enablement` | — |
+| 直销投标文档生成 | ~8 | Sprint-6 | 📋 计划中 | `module:biz-enablement` | 技术参数响应表自动组装 |
+| 经销报价单生成 | ~8 | Sprint-6 | 📋 计划中 | `module:biz-enablement` | 批量选品+PDF |
 | 其他（竞品对比/知识库/客户洞察） | ~14 | — | 📋 计划中 | `module:biz-enablement` | — |
 
 ### 16. 业务运营中心
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 项目分配工作台 + CRM操作面板 + 业务看板 | 16 | — | ⏸️ 暂缓 | `module:ops-hub` | 含8个无Sprint |
+| 项目分配工作台 + CRM操作面板 + 业务看板 | 16 | Sprint-8 | ⏸️ 暂缓 | `module:ops-hub` | 含8个无Sprint |
 
 ---
 
@@ -172,27 +172,27 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 18. 项目中心
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 项目全景API + 费用归集 + 设计变更联动 | 12 | Sprint-4 | 📋 计划中 | `module:project` | Phase4-12 |
-| 风险台账（5维健康度） | 10 | Sprint-4 | 📋 计划中 | `module:project` | Phase13-22 |
+| 项目全景API + 费用归集 + 设计变更联动 | 12 | Sprint-6 | 📋 计划中 | `module:project` | Phase4-12 |
+| 风险台账（5维健康度） | 10 | Sprint-6 | 📋 计划中 | `module:project` | Phase13-22 |
 
 ### 19. 项目组织管理
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 文档中心（版本控制+分类+当前生效版） | 6 | — | 📋 计划中 | `biz:project` | 独立子模块，不复用DAM |
-| 公告板（注意事项+讨论→行动项） | 4 | — | 📋 计划中 | `biz:project` | — |
-| 阶段门禁增强（必交文档清单） | 2 | — | 📋 计划中 | `biz:project` | — |
-| 经验教训 + 通讯录增强 | 2 | — | 📋 计划中 | `biz:project` | — |
+| 文档中心（版本控制+分类+当前生效版） | 6 | Sprint-6 | 📋 计划中 | `biz:project` | 独立子模块，不复用DAM |
+| 公告板（注意事项+讨论→行动项） | 4 | Sprint-6 | 📋 计划中 | `biz:project` | — |
+| 阶段门禁增强（必交文档清单） | 2 | Sprint-6 | 📋 计划中 | `biz:project` | — |
+| 经验教训 + 通讯录增强 | 2 | Sprint-6 | 📋 计划中 | `biz:project` | — |
 
 ### 20. 合同管理
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 合同CRUD + 审批 + 回款联动 | ~32 | 散布 | 📋 计划中 | — | — |
+| 合同CRUD + 审批 + 回款联动 | ~32 | Sprint-6 | 📋 计划中 | — | — |
 
 ### 21. 质保/售后
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 质保登记 + 工单 + 备件 + 复购联动CRM | ~30 | 散布 | 📋 计划中 | — | 全链路18个Issue |
-| 整改工单（工艺标准+状态流转+超时预警） | 16 | Sprint-4 | 📋 计划中 | `module:rectification` | — |
+| 质保登记 + 工单 + 备件 + 复购联动CRM | ~30 | Sprint-8 | 📋 计划中 | — | 全链路18个Issue |
+| 整改工单（工艺标准+状态流转+超时预警） | 16 | Sprint-6 | 📋 计划中 | `module:rectification` | — |
 
 ---
 
@@ -209,25 +209,25 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 23. AI 内容生成 & 设计模型训练
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| ComfyUI FLUX + LoRA训练（万德风格/国际美学） | 14 | Sprint-3 | 📋 计划中 | `module:design-ai` | D3出图→AI渲染 |
+| ComfyUI FLUX + LoRA训练（万德风格/国际美学） | 14 | Sprint-7 | 📋 计划中 | `module:design-ai` | D3出图→AI渲染 |
 | 文生图子模块 | 14 | Sprint-1 | 🔨 开发中 | `module:design-ai` | — |
-| 批量渲染引擎 + 风格迁移 | ~21 | Sprint-3 | 📋 计划中 | `module:design-ai` | — |
+| 批量渲染引擎 + 风格迁移 | ~21 | Sprint-7 | 📋 计划中 | `module:design-ai` | — |
 
 ### 24. 协同修改
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| Phase2: 多语言翻译引擎 + 模板多语言化 + 文件管理 | 16 | Sprint-3 | 📋 计划中 | `collab-editing` | OnlyOffice + G7e翻译 |
+| Phase2: 多语言翻译引擎 + 模板多语言化 + 文件管理 | 16 | Sprint-4 | 📋 计划中 | `collab-editing` | OnlyOffice + G7e翻译 |
 
 ### 25. 方案引擎 + PPT插件
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| PPT模板中心 + 素材批量迁移 | ~4 | Sprint-3 | 📋 计划中 | `module:ai-assistant` | — |
+| PPT模板中心 + 素材批量迁移 | ~4 | Sprint-4 | 📋 计划中 | `module:ai-assistant` | — |
 | 方案引擎整体（含D3联动） | ~55 | 散布 | 📋 计划中 | — | 35个Issue全面重构 |
 
 ### 26. 素材库/DAM
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 分类树 + 标签 + 项目关联 + AI自动标签 | 17 | Sprint-3 | 📋 计划中 | `module:asset-library` | P0 CRUD + P1 AI标签 |
+| 分类树 + 标签 + 项目关联 + AI自动标签 | 17 | Sprint-4 | 📋 计划中 | `module:asset-library` | P0 CRUD + P1 AI标签 |
 
 ---
 
@@ -238,40 +238,40 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 27. 品牌中心（基础）
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 内容管理 + 多平台发布 + 数据采集 | ~26 | Sprint-2/3 | 📋 计划中 | `brand-center`, `module:brand` | Phase1-4，Sprint-2有3个基础Issue |
+| 内容管理 + 多平台发布 + 数据采集 | ~26 | Sprint-4 | 📋 计划中 | `brand-center`, `module:brand` | Phase1-4，Sprint-2有3个基础Issue |
 
 ### 28. 品牌中心 · AI数字人 + 声音克隆
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 数字分身 + 声音克隆 + 视频生成 | 4 | Sprint-3 | 📋 计划中 | `biz:brand-center` | 平台待选(HeyGen/DeepBrain/自建) |
-| 自动管线（AI脚本→定时生产） | 1 | Sprint-3 | 📋 计划中 | `biz:brand-center` | — |
-| 平台选型对比文档 | 1 | Sprint-3 | 📋 计划中 | `biz:brand-center` | #2639 |
-| 视频生成工作台 + 审批队列 | 1 | Sprint-3 | 📋 计划中 | `biz:brand-center` | — |
+| 数字分身 + 声音克隆 + 视频生成 | 4 | Sprint-4 | 📋 计划中 | `biz:brand-center` | 平台待选(HeyGen/DeepBrain/自建) |
+| 自动管线（AI脚本→定时生产） | 1 | Sprint-4 | 📋 计划中 | `biz:brand-center` | — |
+| 平台选型对比文档 | 1 | Sprint-4 | 📋 计划中 | `biz:brand-center` | #2639 |
+| 视频生成工作台 + 审批队列 | 1 | Sprint-4 | 📋 计划中 | `biz:brand-center` | — |
 
 ### 29. 品牌中心 · 视频裂变
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 裂变服务 + 素材包管理 + ffmpeg + AI文案 | 3 | Sprint-3 | 📋 计划中 | `biz:brand-center` | #2640-#2642 |
+| 裂变服务 + 素材包管理 + ffmpeg + AI文案 | 3 | Sprint-4 | 📋 计划中 | `biz:brand-center` | #2640-#2642 |
 
 ### 30. 品牌中心 · 员工代言
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 内容池 + 分享追踪 + H5分享页 | 2 | Sprint-3 | 📋 计划中 | `biz:brand-center` | #2643-#2644 |
+| 内容池 + 分享追踪 + H5分享页 | 2 | Sprint-4 | 📋 计划中 | `biz:brand-center` | #2643-#2644 |
 
 ### 31. 品牌中心 · 舆情监测
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 采集 + 情感分析 + 告警 + 仪表盘 + 周报 | 2 | Sprint-3 | 📋 计划中 | `biz:brand-center` | #2645-#2646 |
+| 采集 + 情感分析 + 告警 + 仪表盘 + 周报 | 2 | Sprint-4 | 📋 计划中 | `biz:brand-center` | #2645-#2646 |
 
 ### 32. 品牌中心 · SEO管线
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 关键词→文章→发布 + 排名追踪 | 2 | Sprint-3 | 📋 计划中 | `biz:brand-center` | #2647-#2648 |
+| 关键词→文章→发布 + 排名追踪 | 2 | Sprint-4 | 📋 计划中 | `biz:brand-center` | #2647-#2648 |
 
 ### 33. 品牌中心 · Thought Leader Ads
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| LinkedIn自动投放服务 | 1 | Sprint-3 | 📋 计划中 | `biz:brand-center` | #2649 |
+| LinkedIn自动投放服务 | 1 | Sprint-4 | 📋 计划中 | `biz:brand-center` | #2649 |
 
 ---
 
@@ -282,22 +282,22 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 34. 资金闭环
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 报价成本模型 + 应收/应付 + 对账 | 20 | Sprint-4 | 📋 计划中 | `module:finance` | 17个Issue |
+| 报价成本模型 + 应收/应付 + 对账 | 20 | Sprint-6 | 📋 计划中 | `module:finance` | 17个Issue |
 
 ### 35. 预算管控 + 保证金
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 7张核心表 + CRUD + 保证金台账 | 46 | — | ⏸️ 暂缓 | `module:budget` | D7：业务预算归这里 |
+| 7张核心表 + CRUD + 保证金台账 | 46 | Sprint-6 | ⏸️ 暂缓 | `module:budget` | D7：业务预算归这里 |
 
 ### 36. 提成绩效
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 提成规则配置 + 明细 + 考核 | ~14 | Sprint-4 | 📋 计划中 | — | Phase1-10 |
+| 提成规则配置 + 明细 + 考核 | ~14 | Sprint-6 | 📋 计划中 | — | Phase1-10 |
 
 ### 37. 报销费控
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 报销申请 + 审批 + 费控规则 | ~14 | — | ⏸️ 暂缓 | — | Phase1-6 |
+| 报销申请 + 审批 + 费控规则 | ~14 | Sprint-6 | ⏸️ 暂缓 | — | Phase1-6 |
 
 ### 38. 人事管理
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
@@ -312,17 +312,17 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ### 39. 制度管理
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 制度文档 + 版本控制 + 审批 + 知识竞赛 | 22 | — | ⏸️ 暂缓 | `module:policy` | — |
+| 制度文档 + 版本控制 + 审批 + 知识竞赛 | 22 | Sprint-5 | ⏸️ 暂缓 | `module:policy` | — |
 
 ### 40. 样品管理
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 申请单 + D3联动 + CRM联动 + 借还 | 9 | Sprint-1/5 | 📋 计划中 | `module:sample` | — |
+| 申请单 + D3联动 + CRM联动 + 借还 | 9 | Sprint-6 | 📋 计划中 | `module:sample` | — |
 
 ### 41. 工具中心
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
-| 工具下载 + 使用统计 + 分类页面 | 6 | 散布 | 📋 计划中 | `module:tool-center` | — |
+| 工具下载 + 使用统计 + 分类页面 | 6 | Sprint-8 | 📋 计划中 | `module:tool-center` | — |
 
 ---
 
@@ -341,15 +341,16 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 
 ## 十、Sprint 总览
 
-| Sprint | 状态 | 预估Issue数 | 核心模块 |
-|--------|------|------------|---------|
-| Sprint-1 | 🟢 进行中 | 171 | 超管驾驶舱、销售记录、D3参数化、矿场增强、数据采集 |
-| Sprint-2 | ⏳ 待启动 | 101 | 执行管理(57)、CRM(6)、数据迁移(5)、品牌基础(3)、客户情报(11)、H5基座(8) |
-| Sprint-3 | ⏳ 待启动 | 205 | 品牌中心全模块(17)、协同修改(16)、素材库(17)、设计模型训练(34)、客户生命周期(12)、外展获客(25)、方案引擎 |
-| Sprint-4 | ⏳ 待启动 | 114 | 项目中心(32)、资金闭环(20)、审批引擎(16)、整改工单(16)、商务赋能(10) |
-| Sprint-5 | ⏳ 待启动 | 89 | 人事管理(11)、认证登录(5)、样品管理(7)、企微会话存档 |
-| Sprint-Backlog | 待排期 | 93 | AI对话中枢、知识库、BUG修复 |
-| 无Sprint | 待排期 | ~313 | 矿场核心(67)、预算(46)、企微(17)、制度(22)、运营中心(8) |
+| Sprint | 定位 | 状态 | 预估Issue数 | 核心模块 |
+|--------|------|------|------------|----------|
+| Sprint-1 | 基座搭建 | 🟢 进行中 | ~156 | 超管驾驶舱、销售记录、D3参数化、矿场增强、数据采集 |
+| Sprint-2 | 商务全闭环 | ⏳ 待启动 | ~188 | 执行管理、CRM、矿场核心、客户情报、数据迁移、H5基座 |
+| Sprint-3 | 商战情报 | ⏳ 待启动 | ~81 | 商战情报中台7个Phase(70个Issue)、S3数据管线 |
+| Sprint-4 | 内容获客+数据 | ⏳ 待启动 | ~117 | 品牌中心、协同修改、素材库、客户生命周期、外展获客、客户情报 |
+| Sprint-5 | 组织管理 | ⏳ 待启动 | ~78 | 人事管理、审批引擎、制度管理、认证权限 |
+| Sprint-6 | 财务+运营 | ⏳ 待启动 | ~121 | 资金闭环、预算管控、项目中心、商务赋能、CRM、样品管理 |
+| Sprint-7 | AI增强+知识 | ⏳ 待启动 | ~95 | AI内容生成、设计模型训练、AI对话中枢、知识库、H5移动端 |
+| Sprint-8 | 生态+售后 | ⏳ 待启动 | ~113 | 企微集成、质保售后、业务运营中心、工具中心 |
 
 ---
 
@@ -375,6 +376,7 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 | 2026-04-05 | 方案引擎 | P0基础（DB+API+PPT插件架构+VI标准+素材库）提前到Sprint-2 | 投标方案是商务刚需 |
 | 2026-04-05 | 审批引擎 | P0基础（数据模型+审批核心+审批中心页面）提前到Sprint-2 | 执行管理的合同/回款需要审批 |
 | 2026-04-05 | 品牌中心 | 视频裂变/员工代言/舆情/SEO/广告(10个)→Sprint-4 | 非业务刚需，延后 |
+| 2026-04-08 | 全平台 | **D77 Sprint重组为8阶段**：S1基座搭建→S2商务全闭环→S3商战情报→S4内容获客+数据→S5组织管理→S6财务+运营→S7 AI增强+知识→S8生态+售后。原Sprint-3→Sprint-4，原Sprint-4→Sprint-6，原Sprint-5情报→Sprint-3 | Sprint从5+Backlog扩展为8个，每个Sprint有清晰定位 |
 | — | — | — | — |
 
 ---
@@ -385,13 +387,13 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 
 | # | 功能模块 | Issue范围 | 状态 | Sprint | 策略备注 |
 |---|---------|-----------|------|--------|---------|
-| 34 | Phase1: 共享基础设施+数据模型 | #2674-#2685 (12个) | 📋 Plan | Sprint-5 (P0可插入Sprint-2) | 地基：统一实体模型+知识图谱+采集引擎+通知+权限+全文检索 |
-| 35 | Phase2: 行业信息中心MVP | #2686-#2695 (10个) | 📋 Plan | Sprint-5 | 对标Vertical IQ：7章节行业档案+政策采集+产品PIM+案例库 |
-| 36 | Phase3: 项目矿场→中标概率引擎 | #2696-#2705 (10个) | 📋 Plan | Sprint-5 | 对标TenderStrike：中标概率前置+能力匹配+AI标书解析+Go/No-Go |
-| 37 | Phase4: 客户雷达ICP评分系统 | #2706-#2715 (10个) | 📋 Plan | Sprint-5 | 对标6sense：ICP评分+意图信号+购买阶段+暗漏斗+自动推送 |
-| 38 | Phase5: 竞品全息情报升级 | #2716-#2725 (10个) | 📋 Plan | Sprint-5 | 对标Contify+Crayon：知识图谱+事实卡片+动态战斗卡+大规模源 |
-| 39 | Phase6: 智能联动层+AI引擎 | #2726-#2735 (10个) | 📋 Plan | Sprint-5 | 跨模块事件总线+三角关联+AI洞察+商机评分+Copilot |
-| 40 | Phase7: 统一分发+移动端+企微 | #2736-#2743 (8个) | 📋 Plan | Sprint-5 | 企微Bot+邮件订阅+H5+小程序+CRM双向同步 |
+| 34 | Phase1: 共享基础设施+数据模型 | #2674-#2685 (12个) | 📋 Plan | Sprint-3 (P0可插入Sprint-2) | 地基：统一实体模型+知识图谱+采集引擎+通知+权限+全文检索 |
+| 35 | Phase2: 行业信息中心MVP | #2686-#2695 (10个) | 📋 Plan | Sprint-3 | 对标Vertical IQ：7章节行业档案+政策采集+产品PIM+案例库 |
+| 36 | Phase3: 项目矿场→中标概率引擎 | #2696-#2705 (10个) | 📋 Plan | Sprint-3 | 对标TenderStrike：中标概率前置+能力匹配+AI标书解析+Go/No-Go |
+| 37 | Phase4: 客户雷达ICP评分系统 | #2706-#2715 (10个) | 📋 Plan | Sprint-3 | 对标6sense：ICP评分+意图信号+购买阶段+暗漏斗+自动推送 |
+| 38 | Phase5: 竞品全息情报升级 | #2716-#2725 (10个) | 📋 Plan | Sprint-3 | 对标Contify+Crayon：知识图谱+事实卡片+动态战斗卡+大规模源 |
+| 39 | Phase6: 智能联动层+AI引擎 | #2726-#2735 (10个) | 📋 Plan | Sprint-3 | 跨模块事件总线+三角关联+AI洞察+商机评分+Copilot |
+| 40 | Phase7: 统一分发+移动端+企微 | #2736-#2743 (8个) | 📋 Plan | Sprint-3 | 企微Bot+邮件订阅+H5+小程序+CRM双向同步 |
 
 ### 策略变更日志
 | 日期 | 变更 | 原因 |
@@ -406,12 +408,12 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 
 | # | 功能模块 | Issue范围 | 状态 | Sprint | 策略备注 |
 |---|---------|-----------|------|--------|---------|
-| 43 | 提醒框架引擎(P0) | #2744-#2746 (3个) | 📋 Plan | Sprint-3 | 统一提醒SPI+日历+通知渠道 |
-| 44 | 交付里程碑引擎(P0) | #2747-#2748 (2个) | 📋 Plan | Sprint-3 | 阶段变更→提醒项目组→联系客户 |
-| 45 | 赢丢单复盘引擎(P0) | #2749-#2750 (2个) | 📋 Plan | Sprint-3 | 商机关闭→结构化复盘+知识沉淀 |
-| 46 | 满意度回访引擎(P1) | #2751-#2752 (2个) | 📋 Plan | Sprint-3 | 验收→满意度问卷→提醒回访 |
-| 47 | 复购信号引擎(P1) | #2753-#2754 (2个) | 📋 Plan | Sprint-3 | 矿场新项目匹配历史客户→通知商务 |
-| 48 | 设备生命周期+客户分层(P2) | #2755 (1个) | 📋 Plan | Sprint-3 | 设备档案+巡检/质保/换代提醒+分层差异化回访 |
+| 43 | 提醒框架引擎(P0) | #2744-#2746 (3个) | 📋 Plan | Sprint-4 | 统一提醒SPI+日历+通知渠道 |
+| 44 | 交付里程碑引擎(P0) | #2747-#2748 (2个) | 📋 Plan | Sprint-4 | 阶段变更→提醒项目组→联系客户 |
+| 45 | 赢丢单复盘引擎(P0) | #2749-#2750 (2个) | 📋 Plan | Sprint-4 | 商机关闭→结构化复盘+知识沉淀 |
+| 46 | 满意度回访引擎(P1) | #2751-#2752 (2个) | 📋 Plan | Sprint-4 | 验收→满意度问卷→提醒回访 |
+| 47 | 复购信号引擎(P1) | #2753-#2754 (2个) | 📋 Plan | Sprint-4 | 矿场新项目匹配历史客户→通知商务 |
+| 48 | 设备生命周期+客户分层(P2) | #2755 (1个) | 📋 Plan | Sprint-4 | 设备档案+巡检/质保/换代提醒+分层差异化回访 |
 
 ### 策略变更日志
 | 日期 | 变更 | 原因 |
@@ -426,11 +428,11 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 
 | # | 功能模块 | Issue范围 | 状态 | Sprint | 策略备注 |
 |---|---------|-----------|------|--------|---------|
-| 49 | Phase1: 营销序列引擎(P0基础设施) | #2793-#2799 (7个) | 📋 Plan | Sprint-3 | 数据模型+执行调度器+触发器+邮件基础设施(多域名SMTP+预热+送达率)+模板引擎+管理前端 |
-| 50 | Phase2: 外贸邮件外展 | #2800-#2806 (6个) | 📋 Plan | Sprint-3 | 7步冷外展序列+追踪(打开/点击/回复)+A/B测试+收件箱轮转+分析看板+回复智能分类→CRM商机 |
-| 51 | Phase3: 企微获客自动化 | #2807-#2812 (6个) | 📋 Plan | Sprint-3 | 企微API对接+渠道活码+自动标签+SOP培育序列+效果分析+批量加好友+频率控制 |
-| 52 | Phase4: LinkedIn数据导入 | #2813-#2815 (3个) | 📋 Plan | Sprint-3 | CSV/API导入+意图信号富化+LinkedIn+邮件协同序列 |
-| 53 | Phase5: 统一获客数据层 | #2816-#2818 (3个) | 📋 Plan | Sprint-3 | 线索评分增强+渠道ROI统一看板+营销→销售自动移交 |
+| 49 | Phase1: 营销序列引擎(P0基础设施) | #2793-#2799 (7个) | 📋 Plan | Sprint-4 | 数据模型+执行调度器+触发器+邮件基础设施(多域名SMTP+预热+送达率)+模板引擎+管理前端 |
+| 50 | Phase2: 外贸邮件外展 | #2800-#2806 (6个) | 📋 Plan | Sprint-4 | 7步冷外展序列+追踪(打开/点击/回复)+A/B测试+收件箱轮转+分析看板+回复智能分类→CRM商机 |
+| 51 | Phase3: 企微获客自动化 | #2807-#2812 (6个) | 📋 Plan | Sprint-4 | 企微API对接+渠道活码+自动标签+SOP培育序列+效果分析+批量加好友+频率控制 |
+| 52 | Phase4: LinkedIn数据导入 | #2813-#2815 (3个) | 📋 Plan | Sprint-4 | CSV/API导入+意图信号富化+LinkedIn+邮件协同序列 |
+| 53 | Phase5: 统一获客数据层 | #2816-#2818 (3个) | 📋 Plan | Sprint-4 | 线索评分增强+渠道ROI统一看板+营销→销售自动移交 |
 
 ### 策略变更日志
 | 日期 | 变更 | 原因 |

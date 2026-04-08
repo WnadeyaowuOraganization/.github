@@ -457,7 +457,7 @@
 
 ## 当前运行（15/20 PG修复）
 
-> 更新：2026-04-08 01:45 UTC | **🎉 11/20 完成**（新增#3335大型D3设计410errors）| **9/20 继续运行** | 进度：54%-83% | 15 CC活跃 | Jump/Fail/E2E Fail=0
+> 更新：2026-04-08 01:55 UTC | **PG 修复加速** 12/20 完成(60%) + **业务指派启动** (#1504/#1529/#2401) | 15 PG CC + 3 业务 CC(30 CC总计) | 无超时 | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
@@ -469,13 +469,16 @@
 | kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保（116 errors） | ✅ DONE |
 | kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） | ✅ DONE |
 | kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） | ✅ DONE |
-| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） | 78% |
+| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） | ✅ DONE |
 | kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） | 54% |
 | kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维（110 errors） | 83% ⭐次高 |
 | kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） | ✅ DONE |
 | kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） | 50% |
 | kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆（105 errors） | 0% 💫重启 |
 | kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限（104 errors） | 0% 💫重启 |
+| kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | 启动中 |
+| kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | 启动中 |
+| kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | 启动中 |
 
 ---
 
@@ -628,3 +631,6 @@
 | kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆 | In Progress |
 | kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限 | In Progress |
 | kimi20 | ~~#3343~~ | tech | backend | ~~[mvn test欠债] 标准库与材质~~ | ~~Done~~ |
+| kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | In Progress |
+| kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | In Progress |
+| kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | In Progress |

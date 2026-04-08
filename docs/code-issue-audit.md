@@ -333,3 +333,94 @@
 - **先稳定再扩展**: 3个Bug优先修，让已有80个Vue先跑通
 - **度量驱动**: DORA指标(#2275)纳入Sprint-2，建立成功度量基线
 - **增量交付**: 4个新Tab聚焦Sprint-1，不铺更多功能
+
+---
+
+## 十、7个「有基础需改造」Tab — Issue映射+代码复用指引汇总（2026-04-09）
+
+### 背景
+
+18个Tab中7个有代码基础但需改造，共涉及14个Issue。每个Issue均已添加「⚠️ 代码复用指引」评论，列明已有Controller和Vue文件路径，防止CC重复开发。
+
+### 全量映射表
+
+#### Tab 4: 采集管控（8个Issue）
+
+| Issue | 类型 | 改造内容 | 已有代码复用 |
+|-------|------|---------|------------|
+| #2925 | pipeline | 字段完整度引擎 | pipeline/各管线运行日志 |
+| #2926 | 后端 | 数据质量KPI API(6维度) | `PipelineFunnelController`漏斗API |
+| #2944 | pipeline | 7天滚动基线异常检测 | pipeline/数据量记录 |
+| #3303 | 后端 | 管线状态聚合API | `PipelineFunnelController` + 17个管线目录 |
+| #3300 | 全栈 | 管线监控Dashboard | **`pipeline-control/`(4个Vue)必须复用** |
+| #3301 | 全栈 | 加密文件管理 | `S3AssetController`(16个Java) |
+| #3302 | 全栈 | 管线错误告警+企微 | `DashboardAlertRulesController` + `WecomNotificationController` |
+| #3304 | 前端 | 驾驶舱Tab集成 | `pipeline-control/index.vue` + 驾驶舱主框架 |
+
+共享已有代码：`PipelineFunnelController`(`/wande/pipeline/funnel`) + `views/dashboard/cockpit/pipeline-control/`(index.vue + 3个组件)
+
+#### Tab 7: FinOps（1个Issue）
+
+| Issue | 改造内容 | 已有代码复用 |
+|-------|---------|------------|
+| #3482 | 扩展为完整FinOps看板 | `CreditUsageController`(`/wande/credit-usage`) + `credit-usage/index.vue` + Token Pool成本数据(`DashboardTokenPoolController` + `TokenPoolUsageController`) |
+
+#### Tab 12: Agent效率（1个Issue）
+
+| Issue | 改造内容 | 已有代码复用 |
+|-------|---------|------------|
+| #2849 | 增加线路矩阵+趋势+Merge Rate | `AgentEfficiencyController`(`/wande/cockpit/agent`) + `agent-efficiency/`(index.vue + data.ts) |
+
+#### Tab 13: 验收队列（1个Issue）
+
+| Issue | 改造内容 | 已有代码复用 |
+|-------|---------|------------|
+| #2851 | 增加待办卡片+优先级+响应趋势 | 3个Controller(`AcceptanceQueue/Results/Monitor`) + `acceptance-queue/`(index.vue + utils.ts) + `acceptance-center/index.vue` |
+
+#### Tab 14: DORA（1个Issue）
+
+| Issue | 改造内容 | 已有代码复用 |
+|-------|---------|------------|
+| #2275 | 整合到首页+错误滚动条 | `DoraMetricsController`(`/api/dora`) + `DoraMetricsCard.vue` + `dora/index.vue` + `error-analysis/`(5个Vue) + `CcErrorAnalysisController` + `DashboardCcErrorController` |
+
+#### Tab 15: 安全审计（2个Issue）
+
+| Issue | 改造内容 | 已有代码复用 |
+|-------|---------|------------|
+| #3483 | 审计查询API+异常检测+合规 | `audit-log/index.vue`(基础页) + 各Service中的审计写入逻辑 |
+| #2296 | Cockpit安全审计页面 | 与#3483合并为同一Tab |
+
+#### Tab 18: AI对话监控（1个Issue）
+
+| Issue | 改造内容 | 已有代码复用 |
+|-------|---------|------------|
+| #2298 | 整合11个Vue为统一面板 | **`ai-chat-monitor/`(5个Vue) + `chat-analysis/`(6个Vue) 必须复用**，不新建。+ `ConversationLogController`(`/wande/chat/log`) |
+
+### 复用指引评论清单
+
+所有14个Issue均已在GitHub评论中标注代码复用指引：
+
+| Issue | 评论链接 |
+|-------|---------|
+| #2925 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2925#issuecomment-4209088734) |
+| #2926 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2926#issuecomment-4209088895) |
+| #2944 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2944#issuecomment-4209089060) |
+| #3303 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3303#issuecomment-4209089189) |
+| #3300 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3300#issuecomment-4209089313) |
+| #3301 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3301#issuecomment-4209089424) |
+| #3302 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3302#issuecomment-4209089550) |
+| #3304 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3304#issuecomment-4209089682) |
+| #3482 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3482#issuecomment-4209066903) |
+| #2849 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2849#issuecomment-4209066440) |
+| #2851 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2851#issuecomment-4209066575) |
+| #2275 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2275#issuecomment-4209066686) |
+| #3483 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/3483#issuecomment-4209066799) |
+| #2298 | [复用指引](https://github.com/WnadeyaowuOraganization/wande-play/issues/2298#issuecomment-4209066314) |
+
+### 复用指引格式标准
+
+每条评论统一包含：
+1. **本Issue定位** — 在采集管控/驾驶舱整体中的角色
+2. **已有代码** — Controller文件名+API路径 / Vue文件目录+数量
+3. **改造方向** — 明确"在xxx基础上扩展"或"复用xxx的数据"，禁止"新建"
+4. **原型引用** — `.github/docs/design/超管驾驶舱/prototype.html` 对应Tab位置

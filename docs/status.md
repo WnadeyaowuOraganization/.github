@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-08 by Wande AI Bot
+> ⏰ 最后更新：2026-04-08 12:39 by Perplexity
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
 ## 🚨 2026-04-07 重大基础设施变更
@@ -225,6 +225,7 @@
 | D72 | 04-07 | ✅ | 项目全景控制表：一张表看进度×预算×BOM | 用区域(zone)作为计划管理(plan_milestone.zone)+预算矩阵(budget_zone)+BOM(bom_items.budget_zone_id)三模块的公共轴，聚合查询生成项目全景视图。核心指标：EVM挣值管理(PV/EV/AC/SPI/CPI)+区域级健康度(🟢🟡🔴)+进度-成本气泡图。纯查询聚合不新建数据模型。2个Issue(#3222-#3223) Sprint-3。参考：5D BIM(空间+时间+成本)+AACE统一WBS+EPC挣值管理 | 吴耀 |
 | D73 | 04-07 | ✅ | 经理CC全面优化：PLAN.md重构+指派建议表+Project#4回补 | **PLAN.md结构重构**：当前运行+指派历史+指派建议三表置于底部研发经理/排程经理专区，Tier系列表删除状态/指派目录列（排程经理只看依赖），修复全文||双竖线格式错误。**指派建议表**：排程经理新增任务三，维护`## 指派建议（最近20个）`，Jump/Fail/E2E Fail插队首，建议全Done时重建；研发经理指派步骤改为优先读建议表。**经理CC升级**：run-manager.sh从Proxy模式切换为Claude Max订阅Sonnet 4.6，unset ANTHROPIC_API_KEY；cron保活从30分钟缩短为10分钟。**ISSUE_ASSIGN_HISTORY.md防复建**：assign-guide修正旧引用（下次指派时优先选择→指派历史），加入.gitignore。**Project#4 TOKEN失效修复**：issue-sync.yml已整合自动关联Project#4逻辑，仅PROJECT_TOKEN secret失效需人工更新；新增backfill-project-issues.sh回补4月3日后约400个未关联Issue | 伟平 |
 | D74 | 04-07 | ✅ | 基础设施：Claude Office四区域独立发现+tmux日志+gh-app-token合并 | **Claude Office重构**：`_scan_coding_cc_sessions()`拆为三个独立方法——`_scan_play_sessions()`(cc-wande-play-*)、`_scan_e2e_sessions()`(e2e-*)、`_scan_gh_plugins_sessions()`(cc-wande-gh-plugins-*)，各区域发现逻辑独立互不干扰。日志端点`/api/logs/{name}`全面改为`tmux capture-pane`直读终端内容，删除JSONL映射/`_parse_jsonl_log`/`_manager_session_jsonl`/`SESSION_MAP_FILE`等复杂日志链路。末尾UI chrome过滤：两轮剥离去掉横线/bash提示/权限提示，保留`[Model]`状态栏行。`e2e_top_tier.sh`改为interactive tmux会话（与run-manager.sh同模式）。**gh-app-token合并**：`get-gh-token.sh`逻辑（e2e目录→wandeyaowu PAT、GitHub App token、fallback weiping PAT）全部整合进`gh-app-token.py`，删除`get-gh-token.sh`，全仓库17处引用统一更新为`python3 gh-app-token.py` | 伟平 |
+| D75 | 04-08 | ✅ | S3三级检索架构确立：Perplexity直连S3知识库 | **管道已验证**：Perplexity AWS连接器(aws__pipedream) presigned URL→curl下载→本地解析，端到端可用。**三级优先级**：L0 Skill内嵌 references/（零成本）→ L1 S3直接读取 JSON/TXT/CSV/MD/DOCX/XLSX（低credit）→ L2 G7e RAG pgvector PDF/扫描件（零credit）。**Skill更新**：wande-industry v3.0（§3.2新增S3实时检索执行协议）+ wande-ai v55.0（§3新增S3检索场景+§7新增Perplexity独有能力）。**已知限制**：无List Objects（依赖directory_mapping.json索引）、presigned URL 1h有效期、本地无OCR。下一步：#37数据管线P0上线打通L2通路 | 吴耀 |
 | D70 | 04-07 | ✅ | 研发经理架构拆分：排程经理+研发经理双角色CC | **角色分离**：单一研发经理CC拆为两个独立角色——排程经理（监控Jump/Fail/排程分析/维护PLAN.md）、研发经理（指派CC/巡检进度/注入提示词/验收报告）。**run-manager.sh**：统一启动脚本，幂等启动`manager-排程经理`+`manager-研发经理`两个tmux会话，`\loop 10m`自驱动，cron每30分钟保活。**CLAUDE.md重构**：统一角色路由入口，公共信息（看板ID/脚本/Effort/通知）集中管理，各角色读对应guide文件。**guide文件**：scheduler-guide.md（排程经理专属）/ assign-guide.md（研发经理专属），去除与CLAUDE.md重复内容。**脚本重命名**：check-cc-status.sh→cc-check.sh，post-cc-check.sh→cc-keepalive.sh，cc_manager.sh删除。**巡检改进**：研发经理巡检改为tmux capture-pane实时输出，不再读滞后的task.md。**Sprint多版本支持**：guide中路径统一用sprints/sprint-N，由CC从status.md「🟢进行中」行自行识别当前Sprint。**PLAN.md整合**：增加指派目录列，删除独立ISSUE_ASSIGN_HISTORY.md；sprint-1目录清理19个过时文件 | 伟平 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权

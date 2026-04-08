@@ -164,6 +164,9 @@ dev PG 装了 pgvector 扩展但 server 端 lib 文件路径有问题（`could n
 | 完成时间 | Issue | 模块 | PR | Errors | 主要修复内容 |
 |---------|------|-----|-----|-------:|------------|
 | 2026-04-08 00:32 | #3343 | 标准库与材质 | #3358 | 83 | 创建 wdpp_knowledge_base / wdpp_material / wdpp_site_inspection_standards / wdpp_standard_tables 表 |
+| 2026-04-08 00:42 | #3338 | Token 池与运营 | #3357 | 210 | TokenPool Entity 主键自增配置 |
+| 2026-04-08 00:42 | #3354 | 验收与交付 | #3361 | 31 | AcceptanceAttachmentService 等修复 |
+| 2026-04-08 00:42 | #3348 | 文案与审批 | #3362 | 52 | CopywriterEnhanceServiceTest 等修复 |
 
 ### 进行中（有 PR open）
 | Issue | 模块 | PR | Errors |

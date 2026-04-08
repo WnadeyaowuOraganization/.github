@@ -425,7 +425,7 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **巡检 2026-04-08 22:01 UTC | 15/15满槽 | Jump/Fail=0 | E2E Fail=2(API查询异常) | Todo=120 | Tier-1/2推进**
+> 🔄 **巡检 2026-04-08 22:11 UTC | 15/15满槽 | Jump/Fail=0 | E2E Fail=2(API查询异常) | Todo=120 | Tier-1/2推进**
 
 > **当前运行中（占槽）**：kimi1-#1628(超时46min) | kimi2-#1746 | kimi3-#2459 | kimi4-#1506✅ | kimi5-#2008✅ | kimi6-#3452✅ | kimi7-#2122(超时49min) | kimi9-🔴幽灵锁/实跑#1919✅ | kimi11-#2458(超时44min) | kimi12-#1519 | kimi13-#1518 | kimi14-#2589✅ | kimi17-#2301 | kimi18-#2302 | kimi19-#2303(超时133min)
 
@@ -455,7 +455,7 @@
 
 ## 当前运行（15/15满槽）
 
-> 更新：2026-04-08 21:52 UTC | 🔧 修复ci-env.sh缺失(E2E exit127根因已恢复) | PR#3505/3493重触发CI | kimi4-PR#3506已创建 | kimi2单元测试下降338个→注入调查 | kimi7注入创新PR+关旧PR#3494 | kimi5注入重触发CI
+> 更新：2026-04-08 22:11 UTC | 同步#2589已Done(PR#3317 14:01 merged) | 14/15运行中 | e2e-top已重启
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
@@ -469,7 +469,6 @@
 | kimi12 | #1519 | P1 | backend | [业务运营中心][5/8] 业务看板 | PR#3497等CI |
 | kimi4 | #1506 | P1 | backend | [矿场-Phase2][13/16] 作战资料包聚合API | 新启动 |
 | kimi13 | #1518 | P1 | backend | [业务运营中心][7/8] 业务数据仪表盘 | PR#3498等CI(上下文2%) |
-| kimi14 | #2589 | P0 | backend | [冲突修复] execution rebase | 编码中 |
 | kimi6 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 重启kimi6(kimi16退出/294min) |
 | kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传 | PR#3489等CI |
 | kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页 | 编码中 |
@@ -654,7 +653,7 @@
 | kimi10 | ~~#2445~~ | T1 | pipeline | ~~锁定100儿童友好城市监控~~ PR#3305 | ~~Done~~ |
 | kimi12 | ~~#1740~~ | T1 | frontend | ~~质保 备件库存管理页面~~ PR#3311 | ~~Done~~ |
 | kimi7 | #1678 | T1 | backend | AI投标配图自动生成 | In Progress |
-| kimi10 | #2589 | T1 | fullstack | 执行管理45个API前端对接 | In Progress |
+| kimi14 | ~~#2589~~ | P0 | backend | ~~[冲突修复] execution rebase~~ PR#3317✅merged 2026-04-08 | ~~Done~~ |
 | kimi12 | #2423 | T1 | pipeline | Agent基类[4/7] | In Progress |
 | kimi17 | #1806 | T1 | frontend | 🔴 执行项目总看板（重启） | In Progress |
 | kimi5 | ~~#2845~~ | T2 | backend | ~~开发模式监控[1/7] CFD数据API~~ PR#3314 | ~~Done~~ |

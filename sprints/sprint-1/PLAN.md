@@ -1,6 +1,6 @@
 # Sprint-1 完整排程计划
 
-> 最后更新：2026-04-07（全量 Issue 依赖分析，覆盖23个系列+Tier2+Tier3）
+> 最后更新：2026-04-08 06:10 UTC（pg-test 20/20 全部DONE，恢复业务指派；看板状态批量修正）
 > 并发上限：**15个CC** | 数据来源：`/tmp/issue-cache/` 批量离线分析
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
 > **Jump队列**：已处理 → #2950/#3226/#3237 已标 Todo | **2026-04-07 12:35 批量处理7个BUG Jump**：#3227/#3228/#3229/#3230/#3231/#3232/#3234 — 全部标Todo
@@ -425,60 +425,44 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🚨 **插队优先排程** 2026-04-07 22:32 UTC | pg-test 修复 (tech-debt:pg-test) 全 OPEN 稳定推进 | 20 个 issue 按 error 数排序(410→31) | 优先级：超高 | 独立 PG DB (TEST_PG_DB=wande_test_kimi<N>)
-> ⏳ **并发策略稳定**：Sprint-1(kimi1-9) + pg-test(kimi10-17) + 其他批次并行 | 旧建议表暂存 PLAN Tier1-3 | 恢复待 pg-test 推进
+> ✅ **pg-test 20/20 全部 DONE** (2026-04-08 06:10 UTC) | 恢复 Sprint-1 业务指派 | 当前活跃CC：kimi6(#1504)+kimi7(#1529)+kimi8(#2401) | 空闲目录充足
 
-| Issue | 优先 | 模块 | 内容 |
-|-------|------|------|------|
-| #3335 | medium | tech-debt:pg-test | [mvn test 欠债清理] D3 设计与参数化（410 errors） |
-| #3336 | medium | tech-debt:pg-test | [mvn test 欠债清理] 项目执行与看板（235 errors） |
-| #3337 | medium | tech-debt:pg-test | [mvn test 欠债清理] 预算资金与佣金（222 errors） |
-| #3338 | medium | tech-debt:pg-test | [mvn test 欠债清理] Token 池与运营（210 errors） |
-| #3339 | medium | tech-debt:pg-test | [mvn test 欠债清理] 整改与质保（116 errors） |
-| #3340 | medium | tech-debt:pg-test | [mvn test 欠债清理] 驾驶舱与运维（110 errors） |
-| #3341 | medium | tech-debt:pg-test | [mvn test 欠债清理] 聊天会话与记忆（105 errors） |
-| #3342 | medium | tech-debt:pg-test | [mvn test 欠债清理] 企微集成与权限（104 errors） |
-| #3343 | medium | tech-debt:pg-test | [mvn test 欠债清理] 标准库与材质（83 errors） |
-| #3344 | medium | tech-debt:pg-test | [mvn test 欠债清理] 方案与报价（68 errors） |
-| #3345 | medium | tech-debt:pg-test | [mvn test 欠债清理] 问题反馈与通知（64 errors） |
-| #3346 | medium | tech-debt:pg-test | [mvn test 欠债清理] 销售跟踪与 CRM（54 errors） |
-| #3347 | medium | tech-debt:pg-test | [mvn test 欠债清理] 数字资产与 S3（54 errors） |
-| #3348 | medium | tech-debt:pg-test | [mvn test 欠债清理] 文案与审批（52 errors） |
-| #3349 | medium | tech-debt:pg-test | [mvn test 欠债清理] 设备生命周期（49 errors） |
-| #3350 | medium | tech-debt:pg-test | [mvn test 欠债清理] 备件与采购（46 errors） |
-| #3351 | medium | tech-debt:pg-test | [mvn test 欠债清理] 财务收款与合同（45 errors） |
-| #3352 | medium | tech-debt:pg-test | [mvn test 欠债清理] 工单与派单（39 errors） |
-| #3353 | medium | tech-debt:pg-test | [mvn test 欠债清理] 照片 AI 识别（38 errors） |
-| #3354 | medium | tech-debt:pg-test | [mvn test 欠债清理] 验收与交付（31 errors） |
+| Issue | 优先 | 模块 | 内容 | 启动 |
+|-------|------|------|------|------|
+| #2043 | P0 | dashboard | [问题发现] problem_scanner.py 多源采集脚本+Cron（#2076已Done解锁） | ✅ |
+| #2081 | P0 | dashboard | [超管驾驶舱] 开发效率统计API — 产出+质量+趋势全维度 | ✅ |
+| #2321 | P0 | frontend | 全局防泄密水印 — 独立模块 | ✅ |
+| #2262 | P0 | frontend | [预算模板][9/12] 科目编码树管理（backend#1545已CLOSED） | ✅ |
+| #2261 | P0 | frontend | [预算模板][10/12] 模板库管理（backend#1544已CLOSED） | ✅ |
+| #2116 | P1 | backend | [代理商工作台] 数据模型+API+统计 — 独立 | ✅ |
+| #2131 | P1 | backend | [代理商工作台] 数据模型+API+评分引擎 — 独立 | ✅ |
+| #1695 | P1 | backend | [提成绩效] 绩效考核API — platform#1286/#1288已CLOSED | ✅ |
+| #1696 | P1 | backend | [提成绩效] 管理费分摊API — 独立 | ✅ |
+| #2112 | P1 | backend | [合同管理] AI合同风险分析引擎 — 独立 | ✅ |
+| #2111 | P1 | backend | [合同管理] AI条款对比引擎 — 独立 | ✅ |
+| #2009 | P1 | backend | [项目中心Phase7] 项目全景API — 独立 | ✅ |
+| #2012 | P1 | backend | [项目中心Phase4] 跨部门任务Service — 独立 | ✅ |
+| #2403 | P1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 — 独立 | ✅ |
+| #2402 | P1 | pipeline | [矿场-Phase2][5/16] 项目角色自动识别NLP — 独立 | ✅ |
+| #2465 | P1 | backend | [执行管理] 生产进度/质检/发货/安装API — 独立 | ✅ |
+| #2183 | P1 | backend | [执行管理] 扩展角色权限 tech_coordinator+install_manager — 独立 | ✅ |
+| #1626 | P1 | backend | [整改工单-P1] 工艺标准卡导入API（#1632已CLOSED） | ✅ |
+| #1492 | P1 | backend | [矿场-Phase4][14/17] 跟进超时提醒 — 独立 | ✅ |
+| #1464 | P1 | backend | [销售记录体系][2/9] 里程碑门控配置 — 独立建表 | ✅ |
 
 ---
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（15/20 PG修复）
+## 当前运行（3 CC 活跃）
 
-> 更新：2026-04-08 02:05 UTC | **PG 修复进度 14/20(70%)** + **业务指派启动** (#1504/#1529/#2401) | 24 CC活跃 | 无超时 | Jump/Fail/E2E Fail=0
+> 更新：2026-04-08 06:10 UTC | **pg-test 20/20 全部DONE** 🎉 | 仅3 CC活跃 | 大量空闲目录 | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #3335 | tech | backend | [mvn test欠债] D3设计与参数化（410 errors） | ✅ DONE |
-| kimi2 | #3345 | tech | backend | [mvn test欠债] 问题反馈与通知（64 errors） | 71% |
-| kimi3 | #3336 | tech | backend | [mvn test欠债] 项目执行与看板（235 errors） | 36% |
-| kimi4 | #3337 | tech | backend | [mvn test欠债] 预算资金与佣金（222 errors） | ✅ DONE |
-| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM（54 errors） | ✅ DONE |
-| kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保（116 errors） | ✅ DONE |
-| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期（49 errors） | ✅ DONE |
-| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3（54 errors） | ✅ DONE |
-| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购（46 errors） | ✅ DONE |
-| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同（45 errors） | 54% |
-| kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维（110 errors） | ✅ DONE |
-| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单（39 errors） | ✅ DONE |
-| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别（38 errors） | 50% |
-| kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆（105 errors） | 0% 💫重启 |
-| kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限（104 errors） | 0% 💫重启 |
-| kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | 启动中 |
-| kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | 启动中 |
-| kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | 启动中 |
+| kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | 进行中 |
+| kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | 进行中 |
+| kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | 进行中 |
 
 ---
 

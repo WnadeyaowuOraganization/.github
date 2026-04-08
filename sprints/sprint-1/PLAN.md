@@ -456,25 +456,25 @@
 
 ## 当前运行（6 常规 + 9 P0冲突修复 = 15/15）
 
-> 更新：2026-04-08 13:40 UTC | 排程巡检：Jump=0✓, E2E Fail=1(#1839), Fail=0✓ | 新完成PR：#3444(#2255)、#3442(#2011)、#3437(#1626) | P0冲突修复9个全部活跃 | 指派完成度+变化统计见下
+> 更新：2026-04-08 14:05 UTC | 常规Issue 6个：#1920(18%)/#2096(79%)/#1993(68%)/#1856(50%)/#1796(47%)/#2095(27%)；P0冲突9个rebase(14-46%)；满槽15/15
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #1920 | P0 | pipeline | [D3-v2.0][P0] wande-gh-plugins仓库重构 | 运行中 |
-| kimi2 | ~~#1626~~ | — | — | — | ✅ PR#3437 DONE |
-| kimi3 | #2254 | T1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go | 运行中 |
-| kimi4 | #1527 | **P0插** | backend | [**冲突修复**] 矿场Phase2 PR#3238 rebase | 运行中 (0%) |
-| kimi5 | #1756 | **P0插** | frontend | [**冲突修复**] 代理商工作台 PR#3424 rebase | 运行中 |
-| kimi6 | #1531 | **P0插** | backend | [**冲突修复**] 矿场评分模型 PR#3240 rebase | 运行中 (0%) |
-| kimi7 | #2096 | T1 | backend | [执行管理] 整改工单管理API | 运行中 |
-| kimi8 | #1564 | **P0插** | backend | [**冲突修复**] 企微打通 PR#3260 rebase | 运行中 |
-| kimi9 | #2055 | **P0插** | backend | [**冲突修复**] D3参数化 PR#3274 rebase | 运行中 |
-| kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | 运行中 |
-| kimi11 | #2095 | **P0插** | backend | [**冲突修复**] Equipment模块 PR#3284 rebase | 运行中 |
-| kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | 运行中 |
-| kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | 运行中 |
-| kimi14 | #2589 | **P0插** | backend | [**冲突修复**] execution执行管理 PR#3317 rebase | 运行中 |
-| kimi15 | #2893 | **P0插** | fullstack | [**冲突修复**] Claude Office PR#3315 rebase | 运行中 |
+| kimi1 | #1920 | P0 | pipeline | [D3-v2.0][P0] wande-gh-plugins仓库重构 | 运行中 (18%) |
+| kimi2 | #2424 | **P0插** | frontend | [**冲突修复**] Agent基建 PR#3279 rebase | 运行中 (16%) |
+| kimi3 | #1766 | **P0插** | frontend | [**冲突修复**] 代理商工作台 PR#3423 rebase | 运行中 (0%) |
+| kimi4 | #1527 | **P0插** | backend | [**冲突修复**] 矿场Phase2 PR#3238 rebase | 运行中 (20%) |
+| kimi5 | #1756 | **P0插** | frontend | [**冲突修复**] 代理商工作台 PR#3424 rebase | 运行中 (14%) |
+| kimi6 | #1531 | **P0插** | backend | [**冲突修复**] 矿场评分模型 PR#3240 rebase | 运行中 (26%) |
+| kimi7 | #2096 | T1 | backend | [执行管理] 整改工单管理API | 运行中 (73%) |
+| kimi8 | #1564 | **P0插** | backend | [**冲突修复**] 企微打通 PR#3260 rebase | 运行中 (27%) |
+| kimi9 | #2055 | **P0插** | backend | [**冲突修复**] D3参数化 PR#3274 rebase | 运行中 (19%) |
+| kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | 运行中 (53%) |
+| kimi11 | #2095 | **P0插** | backend | [**冲突修复**] Equipment模块 PR#3284 rebase | 运行中 (15%) |
+| kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | 运行中 (31%) |
+| kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | 运行中 (46%) |
+| kimi14 | #2589 | **P0插** | backend | [**冲突修复**] execution执行管理 PR#3317 rebase | 运行中 (24%) |
+| kimi15 | #2893 | **P0插** | fullstack | [**冲突修复**] Claude Office PR#3315 rebase | 运行中 (20%) |
 
 ---
 
@@ -491,7 +491,7 @@
 | #3274 | feature-Issue-2055 | D3 fastener/6文件 | #2055 | ✅ 启动中 (kimi9 rebase, 13%) |
 | #3238 | feature-Issue-1527 | ProjectMineController/5文件 | #1527 | ✅ 启动中 (kimi4 rebase, 0%) |
 | #3240 | feature-Issue-1531 | ProjectMineMapper/3文件 | #1531 | ✅ 启动中 (kimi6 rebase, 0%) |
-| #3423 | feature-Issue-1766 | dealer/4文件 | #1766 | ⏳ 等#1756完成后启动 |
+| #3423 | feature-Issue-1766 | dealer/4文件 | #1766 | ✅ 启动中 (kimi3 rebase, 0%) |
 | #3270 | feature-Issue-2065 | **62文件** | #2065 | ❌ 建议关闭重做 |
 | #3279 | feature-Issue-2424 | D3SyncServiceImpl/2文件 | #2424 | ✅ 启动中 (kimi2 rebase, 0%) |
 | #3284 | feature-Issue-2095 | Equipment/12文件 | #2095 | ✅ 启动中 (kimi11 rebase, 0%) |
@@ -741,3 +741,27 @@
 | kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | In Progress |
 | kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | In Progress |
 | kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | In Progress |
+
+---
+
+## 🔧 系统维护记录
+
+### 2026-04-08 14:30 UTC — vLLM L2 122B 服务修复
+
+**问题**：Issue #107 "vLLM L2 122B service" 被标记为 Not Planned，实际诊断发现模型目录为空
+
+**修复进度**：
+1. ✅ 诊断：确认 `/model` 目录为空，122B 模型文件存在于 `/opt/models/Qwen3.5-122B-A10B-FP8`
+2. ✅ 符号链接修复：`sudo ln -s /opt/models/Qwen3.5-122B-A10B-FP8 /model`  
+3. ✅ 服务重启：以双卡并行模式启动 vLLM
+4. ⏳ 模型加载中：进度 26% (10/39 分片)，预计 10-12 分钟完成
+
+**预期结果**：
+- vLLM API 正常响应
+- ModelRouter 能连接 122B 模型（无 Connection refused）
+- 准确度恢复至 122B 级别（相比 27B 降级方案）
+
+**监控**：修复后 24 小时内持续监控 GPU 内存、API 响应、推理延迟
+
+详见：`docs/workflow/2026-04-08-vllm-l2-122b-diagnosis.md`
+

@@ -2,12 +2,21 @@
 
 > **第一步：确认你的角色，立即阅读对应指南**
 >
-> | 角色 | 触发方式 | 指南 |
-> |------|---------|------|
-> | **排程经理** | 当前会话（用户直接对话） | 阅读 [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md) |
-> | **研发经理** | run-manager.sh 启动 tmux 会话 | 阅读 [docs/agent-docs/manager/assign-guide.md](docs/agent-docs/manager/assign-guide.md) |
+> | 角色       | 指南 |
+> |----------|------|
+> | **排程经理** | 阅读 [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md) |
+> | **研发经理** | 阅读 [docs/agent-docs/manager/assign-guide.md](docs/agent-docs/manager/assign-guide.md) |
 >
-> 阅读完对应指南后，按指南中的职责顺序执行本轮任务。
+> 阅读完对应指南后，阅读唯一真相源的Issue生命周期部分，最后按指南中的职责顺序执行本轮任务。无法决策时参考唯一真相源后继续
+
+## Sprint 目标（公共）
+
+> 唯一真相源：`docs/status.md` + `sprints/sprint-<N>/PLAN.md`
+
+```bash
+cat docs/status.md | head -150
+cat sprints/sprint-<N>/PLAN.md | head -50
+```
 
 ## 工作目录
 
@@ -63,3 +72,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 ```
 
 **type 取值**：`success`（正常完成）/ `info`（进度播报）/ `warning`（发现异常）/ `error`（需人工介入）
+
+**何时用哪个**：
+- 研发经理：每轮巡检 + 指派完成 → `success`；CC 卡住已注入修复 → `warning`；超管必须介入（如 cc-keepalive 失效、PR 误关）→ `error`
+- 排程经理：每轮分析完成 → `success`；新 Jump/Fail 已重排 → `info`；依赖死锁无法排程 → `warning`

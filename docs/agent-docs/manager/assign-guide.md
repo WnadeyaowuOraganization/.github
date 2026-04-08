@@ -8,7 +8,7 @@
 
 ## 职责
 
-1. **指派** — 读 PLAN.md「下次指派时优先选择」→ prefetch → run-cc.sh → 标 In Progress
+1. **指派** — 读 PLAN.md「指派建议」→ prefetch → run-cc.sh → 标 In Progress
 2. **巡检** — 读 tmux 会话实时输出，发现问题直接注入提示词
 3. **恢复** — 处理 SAVED 状态、超时 CC，重启或标 Fail
 4. **验证报告** — 阶段性汇总已完成 Issue、PR 合并率、Fail 原因，更新验收报告
@@ -31,14 +31,14 @@ Done 由 `pr-test.yml` 的 auto-merge job 自动触发。研发经理 ⛔ 永远
 
 | 阶段 | 看板状态 | 研发经理动作 |
 |------|---------|-------------|
-| 指派启动 CC | Todo → In Progress | 手动改（唯一允许的主动状态变更） |
+| 指派启动 CC | Todo → In Progress | 手动改（**唯一从 Todo 出发的主动变更**） |
 | CC 写代码中 | In Progress | 仅巡检注入，不改状态 |
-| CC 退出但无 PR | In Progress | 注入「执行 gh pr create」 |
+| **异常**：CC 进程意外退出且无 PR | In Progress | 注入「执行 gh pr create」 |
 | PR open + CI 跑中 | In Progress | 等 CI，不改状态 |
 | PR + CI failure | In Progress | 看 PR 评论失败详情，注入 CC 修复 |
 | PR + mergeable=CONFLICTING | In Progress | 注入「git fetch && git rebase origin/dev && git push --force-with-lease」 |
 | PR squash-merged | **看板自动 → Done** | 仅 PLAN.md 划删除线（Markdown 视觉同步） |
-| CC 异常 + 无法恢复 + 无 PR | Fail | 唯一允许的非-In-Progress 主动变更 |
+| CC 异常 + 无法恢复 + 无 PR | Fail | **唯一允许的失败终态变更**（cc-keepalive 重试 ≥10 后自动触发） |
 
 ### ⛔ 禁止
 
@@ -75,7 +75,7 @@ bash scripts/prefetch-issues.sh <issue1> <issue2> ...
 # 4. 启动 CC
 bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
 
-# 5. 启动成功后标 In Progress
+# 5. 启动成功后标 In Progress（run-cc.sh 不会自动改看板状态，必须手动这一步）
 bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
 
 # 6. 更新 PLAN.md 两处：
@@ -95,6 +95,17 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 ## PLAN.md 维护规范（研发经理负责）
 
 > ⚠️ PLAN.md 是唯一的指派记录源，每次操作后必须立即更新，不得积压。
+> ⚠️ **并发协作约束**：排程经理也会写 PLAN.md（「指派建议」表 + 「明细表状态列」）。
+> 改 PLAN.md 前必须 `git pull`，改完立即 `git add + commit + push`，避免相互覆盖。
+
+### 写权限分工
+
+| 区域 | 维护方 |
+|------|-------|
+| 「指派建议」表（最近20个）| **排程经理** 写，研发经理只读 |
+| Sprint 系列明细表的 `状态` 列 | **排程经理** 写（Done/Fail 同步） |
+| 「当前运行」表 | **研发经理** 写 |
+| 「指派历史」表 | **研发经理** 写（含 ~~Done~~ ~~Fail~~ 划线）|
 
 ### 三个必须维护的区域
 
@@ -130,18 +141,22 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 ## 任务二：巡检 CC 进度
 
 ```bash
-# 全面锁状态总览
+# 全面锁状态总览（含 RUNNING/SAVED/超时）
 bash scripts/cc-check.sh
 
 # 读取指定会话实时输出（最近200行），判断是否卡住/报错/等待输入
 tmux capture-pane -t cc-wande-play-kimi1-1234 -p -S -200
+
+# 检查最近 15 分钟内 squash-merged 的 PR（找出需要 PLAN.md 划删除线的 issue）
+gh pr list --repo WnadeyaowuOraganization/wande-play --state merged \
+  --search "merged:>$(date -u -d '15 minutes ago' +%Y-%m-%dT%H:%M:%S)" \
+  --json number,title,mergedAt,headRefName --jq '.[] | "\(.number)\t\(.headRefName)\t\(.mergedAt)"'
 ```
 
 ### 发现问题时注入提示词
 
 ```bash
 tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Enter
-# 或通过 Claude Office 页面注入（http://localhost:9872）
 ```
 
 ### 判断标准（覆盖 CC 退出 → PR 创建 → CI → merged 全链路）
@@ -168,14 +183,24 @@ bash scripts/cc-check.sh | grep "SAVED\|超时"
 # 重新触发（同 Issue 重入）
 bash scripts/run-cc.sh --module <原module> --issue <N> --dir <原kimi目录> --effort <原effort>
 
-# 标 Fail（retry≥10 或确认无法修复）
+# cc-keepalive.sh 自动重试 ≤10 次后会自动标 Fail，研发经理通常不主动操作。
+# 仅在用户明确要求或巡检发现 keepalive 失效时手动：
 bash scripts/update-project-status.sh --repo play --issue <N> --status "Fail"
-gh issue comment <N> --repo WnadeyaowuOraganization/wande-play --body "❌ 多次失败，标记 Fail。原因：..."
+gh issue comment <N> --repo WnadeyaowuOraganization/wande-play --body "❌ 标记 Fail。原因：..."
 ```
+
+## 故障兜底（gh / cc-check 报错时）
+
+| 现象 | 处理 |
+|------|------|
+| `gh ...` 401 Bad credentials | `export GH_TOKEN=$(python3 scripts/gh-app-token.py wandeyaowu)` 直取已验证有效的 PAT |
+| `cc-check.sh` 报 `integer expression expected` | 已修复（使用 `${pr_count:-0}`），如再出现先 `git pull` 同步最新版本 |
+| `tmux send-keys` 注入特殊字符被 shell 解析 | 改用 `bash scripts/inject-cc-prompt.sh <issue> <prompt>` 或 `--prompt-file FILE` |
+| `inject-cc-prompt.sh` exit 3 找不到 session | 三层 fallback 已查 lock+tmux 都没找到，确认 issue 号正确再排查 |
 
 ## 任务四：阶段性验证报告
 
-触发条件：单轮 ≥3 个 Done，或连续2个相同 Fail 原因，或用户要求。
+触发条件：**自上次写报告起累计 ≥3 个新 Done**（查询 `grep '## 批次验收' docs/workflow/新harness验证报告.md | tail -1` 找最后时间戳），或连续 2 个相同 Fail 原因，或用户要求。
 
 **流程：先收集数据 → 分析归纳 → 写入报告，不能直接拼接原始数据**
 

@@ -27,7 +27,7 @@
 5. 同模块内 Phase 编号升序
 6. `blocked-by` 依赖未关闭的排末尾
 
-## 任务一：监控优先队列（Jump / Fail / E2E Fail）
+## 任务一：监控优先队列（Jump / Fail / E2E Fail / 新 Done）
 
 ```bash
 export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
@@ -35,11 +35,13 @@ export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
 bash scripts/query-project-issues.sh --repo play --status "Jump" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "Fail" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "E2E Fail" 2>/dev/null
+# 也查 Done 状态：被动发现 CI 自动改的 Done，同步 Sprint 明细表「状态」列
+bash scripts/query-project-issues.sh --repo play --status "Done" 2>/dev/null
 ```
 
 **Jump 处理流程**：
 1. 下载 Issue 详情到 `/tmp/issue-cache/$N.json`
-2. 分析依赖，若无 blocker → 标 `Todo`，写入 PLAN.md 队首「下次指派时优先选择」第1位
+2. 分析依赖，若无 blocker → 标 `Todo`，写入 PLAN.md 队首「指派建议」第1位
 3. 发送通知
 
 **Fail / E2E Fail 处理流程**：
@@ -66,7 +68,7 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 **决策清单**：先筛 Sprint 重点 → 分模块 → 排序（接口先于页面）→ 标注依赖 → 多模块并行
 
 **记录**：维护 `sprints/sprint-<N>/PLAN.md`，每次排程后：
-- 更新「下次指派时优先选择」列表
+- 更新「指派建议」列表
 - 新 Issue 加入系列明细表时，`指派目录` 列填 `—`（待研发经理指派时填入）
 - Issue 状态变更（Done/Fail）时同步更新明细表对应行的`状态`列
 
@@ -75,8 +77,12 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 > 位置：`sprints/sprint-<N>/PLAN.md` → `# 以下内容由排程经理每次排程后维护` → `## 指派建议（最近20个）`
 
 ### 触发时机
-- 每轮巡检后，若建议表中**所有 Issue 均已 Done 或 Fail**，必须重新生成建议（旧数据清空，重写20条）
+- 每轮巡检后，若建议表**无任何 Todo / In Progress 行**（全部 Done/Fail/Reject），必须重新生成建议（旧数据清空，重写20条）
 - 发现 Jump / Fail / E2E Fail Issue 时，立即插入建议表**队首**
+
+### 写 PLAN.md 的并发约束
+> ⚠️ 研发经理也会写 PLAN.md（「当前运行」+「指派历史」表）。
+> 改 PLAN.md 前必须 `git pull`，改完立即 `git add + commit + push`，避免相互覆盖。
 
 ### 优先级规则（从高到低）
 
@@ -117,11 +123,3 @@ git add docs/design/ && git commit -m "docs(design): <功能名>详细设计" &&
 
 同一业务模块涉及新建 Entity/Mapper/Service 的 Issue，在 PLAN.md 中必须串行标注（前一个 CLOSED 后才标下一个 Todo）。
 
-## Sprint 目标
-
-> 唯一真相源：`docs/status.md` + `sprints/sprint-<N>/PLAN.md`
-
-```bash
-cat docs/status.md | head -30
-cat sprints/sprint-<N>/PLAN.md | head -50
-```

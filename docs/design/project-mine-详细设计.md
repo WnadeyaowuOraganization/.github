@@ -2,8 +2,9 @@
 
 > 原型预览: https://www.perplexity.ai/computer/a/mo-de-aiping-tai-xiang-mu-wa-j-ql_RHIoATe.JVSYXtK4mKw
 > 创建日期: 2026-04-09
-> 状态: 已实现（归档版）
-> 关联Bug: [#2852 Drawer内容泄漏导致表格完全不可用](https://github.com/WnadeyaowuOraganization/wande-play/issues/2852)（Open/P0）
+> 状态: 改版中（v2.0）
+> 改版Issue: [#3449](https://github.com/WnadeyaowuOraganization/wande-play/issues/3449)~[#3456](https://github.com/WnadeyaowuOraganization/wande-play/issues/3456)（8个P0，Sprint-1）
+> 关联Bug: [#2852 Drawer内容泄漏导致表格完全不可用](https://github.com/WnadeyaowuOraganization/wande-play/issues/2852)（由#3449修复）
 
 ---
 
@@ -22,7 +23,7 @@
 
 ## 2. 页面布局
 
-页面采用「顶部KPI + Tab切换 + 筛选栏 + 工具栏 + 表格/卡片」复合布局。主体分为两种视图：表格视图（全部Tab默认）和卡片视图（待我确认Tab专用）。
+页面采用「顶部KPI + Tab切换 + 筛选栏 + 工具栏 + 表格」统一布局。所有Tab均使用VxeGrid表格视图（v2.0改版：移除卡片视图）。
 
 ```
 ┌──────────────────────────────────────────────┐
@@ -36,9 +37,9 @@
 ├──────────────────────────────────────────────┤
 │  [筛选栏] 项目名称 | 省份 | 阶段 | 验证状态 | 匹配等级 | 最低评分 │
 ├──────────────────────────────────────────────┤
-│  [工具栏] 新增 | 导出 | 重新评估 | 批量操作▼  ←→ 表格视图/卡片视图 │
+│  [工具栏] 新增 | 导出 | 分配 | 重新评估 | 批量操作▼              │
 ├──────────────────────────────────────────────┤
-│  [数据表格 / 卡片视图]                         │
+│  [数据表格]                                    │
 │    └── 点击行 → 右侧抽屉（900px）              │
 ├──────────────────────────────────────────────┤
 │  [分页器]                                      │
@@ -71,8 +72,8 @@
 | `all` | 全部 | — | 表格 | 排除 `invalid` + `dormant` |
 | `early_gold` | 前期金矿 | — | 表格 | `mineCategory = early_gold` |
 | `investable` | 当前可投 | — | 表格 | `status IN (assigned, contacted, tracking, bid_preparing)` |
-| `needs_confirm` | 待我确认 | — | **卡片** | `verificationStatus = needs_confirm` |
-| `competitor` | 竞对动态 | — | 表格 | 竞品相关项目（后端逻辑） |
+| `needs_confirm` | 待我确认 | — | 表格 | `verificationStatus = needs_confirm`（v2.0改为表格） |
+| `competitor` | 竞对动态 | — | 表格（独立列定义） | 竞品中标项目列表，含万德参与情况（v2.0增强 #3454） |
 | `dormant_invalid` | 休眠/无效 | WarningOutlined | 表格 | `status IN (dormant, invalid)` |
 | `trash` | 垃圾桶 | DeleteOutlined | 表格 | `deleted = 1`（软删除） |
 
@@ -104,13 +105,13 @@
 | 搜索 | SearchOutlined | 触发表格查询 | — |
 | 重新评估 | BarChartOutlined | 批量调用 `POST /wande/project/mine/matchGrade` | `mine:edit` |
 | 批量操作▼ | DownOutlined | 展开下拉菜单（见下） | — |
-| 表格视图 | — | 切换为 VxeGrid 表格 | — |
-| 卡片视图 | — | 切换为卡片网格 | — |
+| 分配 | TeamOutlined | 批量分配项目给商务（v2.0新增 #3452） | `mine:edit` |
 
 - **批量操作下拉菜单**:
   - 批量标记有效线索（`feedbackType = good_lead`）
   - 批量标记无效线索（弹窗填原因 → `feedbackType = bad_lead`）
   - 批量催更新（弹窗填附言 → `nudgeBatchSend`）
+  - 批量分配（v2.0新增，弹窗选择商务人员 → `PUT /wande/project/mine/batchAssign`）
 
 ### 3.5 数据表格
 
@@ -135,7 +136,10 @@
 | 状态 | `status` | 100 | Tag | 11种状态+颜色 |
 | 发现时间 | `discoveredAt` | 160 | 日期时间 | — |
 | 反馈 | `feedbackType` | 100 | Tag | 有效线索绿/无效线索红/- |
-| 操作 | — | 280 | 按钮组 | 固定右侧，见操作说明 |
+| 研判等级 | `qualificationLevel` | 80 | 圆点 | Green/Yellow/Red + 分数（v2.0新增 #3455） |
+| 投标倒计时 | `tenderDeadline` | 120 | 倒计时Tag | 仅bidding类显示，红≤3天/橙≤7天/蓝≤14天（v2.0新增 #3453） |
+| 信源数 | `sourceCount` | 80 | 徽标 | 显示信源数量，hover查看全部（v2.0新增 #3451） |
+| 操作 | — | 320 | 按钮组 | 固定右侧，见操作说明 |
 
 **行操作按钮**:
 - `详情` → 打开详情抽屉 (mode='view')
@@ -144,6 +148,7 @@
 - `有效线索` → FeedbackButtons 组件 (feedbackType=good_lead)
 - `无效线索` → FeedbackButtons 组件 (feedbackType=bad_lead)
 - `流转▼` → 下拉菜单，显示当前状态的合法流转目标（STATUS_TRANSITIONS规则）→ `PUT /wande/project/mine/{id}/status`
+- `分配` → 弹窗选择商务人员 → `PUT /wande/project/mine/{id}/assign`（v2.0新增 #3452，仅unassigned/verified状态显示）
 - `催更新` → NudgeButton 组件 → `POST /wande/nudge/send`
 - `删除` → Popconfirm确认 → `DELETE /wande/project/mine/{ids}`
 - `恢复`（垃圾桶Tab专用）→ 恢复软删除
@@ -156,17 +161,17 @@
 - **标题**: 动态，view=「项目详情」/ add=「新增项目」/ edit=「编辑项目」
 - **数据加载**: view模式下并行调用 `projectMineInfo(id)` + `projectMineEnriched(id)` (含关联招标数据)
 
-**内部7个Tab**:
+**内部7个Tab**（v2.0改版：移除样品管理Tab，新增研判分析Tab）:
 
 | Tab | 内容 | 组件/数据 |
 |-----|------|---------|
-| 基本信息 | 两列表单（15个字段） | VbenForm + formSchema |
+| 基本信息 | 两列表单 + 多信源链接列表（v2.0 #3451） | VbenForm + formSchema + sourceList |
 | 招标数据 | 招标信息表格 | `EnrichedProjectItem.tenderData[]` |
-| 样品管理 | 样品统计卡片+申请表格 | SampleManagementTab |
-| 配合单位 | 角色列表（甲方/代建方/设计院/施工总包/监理/劳务） | CounterpartManagementTab |
+| 配合单位 | 角色列表 + 联系方式（v2.0增加姓名/电话/职位 #3450） | CounterpartManagementTab |
 | 任务看板 | 三列看板（待接收/进行中/已完成） | TaskManagementTab |
-| 操作记录 | 时间线 | ActivityTimeline |
-| AI分析 | AI评分+匹配建议 | 展示 `matchReason` + `aiRecommendation` |
+| 操作记录 | 时间线（含分配记录 #3452） | ActivityTimeline |
+| 研判分析 | 5维度研判卡 + AI建议（v2.0新增 #3455，替代原AI分析Tab） | QualificationCard |
+| 信源链接 | 多信源列表（v2.0新增 #3451） | SourceListTab |
 
 **基本信息表单字段**:
 
@@ -190,18 +195,26 @@
 | AI建议 | `aiRecommendation` | TextArea rows=3 | — |
 | 发现时间 | `discoveredAt` | Input | — |
 
-### 3.7 待我确认 — 卡片视图
+### 3.7 项目分配功能（v2.0新增 #3452）
 
-- **触发条件**: Tab切换到 `needs_confirm`
-- **组件**: `ProjectCard.vue`（自定义卡片）
-- **布局**: `a-row` gutter=[16,16]，xs=24 / sm=12 / md=8 / lg=6（4列）
-- **单卡片内容**: 项目名、省份+分类Tag、投资金额、评分Badge、AI建议摘要、三个操作按钮
-- **卡片操作**:
-  - `确认通过` → 更新 verificationStatus=verified
-  - `留待观察` → 更新 verificationStatus=pending（观察）
-  - `垃圾桶` → 软删除（弹窗填原因）
-- **批量操作**: 多选后顶部浮动操作栏（批量确认通过/留待观察/垃圾桶）
-- **分页**: `a-pagination`，独立的 cardPage 状态（pageSize=12）
+- **触发**: 操作列"分配"按钮 或 工具栏"批量分配"
+- **弹窗内容**: 商务人员Select下拉（系统用户中商务角色）+ 分配备注TextArea
+- **逻辑**: 分配后状态自动 `unassigned` → `assigned`，记录分配日志
+- **分配记录表**: `wdpp_project_mine_assign_log`（project_mine_id, assigned_by, assigned_to, remark, assigned_at）
+
+### 3.8 项目研判卡（v2.0新增 #3455）
+
+5维度研判评分（满分100），对标Building Radar Deal Qualification + McKinsey NBO：
+
+| 维度 | 满分 | 评估内容 |
+|------|------|----------|
+| 历史关系度 | 40 | 万德历史中标过同甲方/同区域/同类型项目 |
+| 人脉可达性 | 20 | 认识甲方联系人/设计院/当地经销商 |
+| 竞品威胁度 | 15 | 竞品在该区域中标频次/甲方历史用竞品 |
+| 项目匹配度 | 15 | 项目类型匹配万德产品线/金额在能力范围 |
+| 时间窗口 | 10 | 介入时机合理性/准备时间充足度 |
+
+研判等级: Green(≥75) / Yellow(55-74) / Red(<55)
 
 ### 3.8 弹窗组件
 
@@ -210,6 +223,8 @@
 | 垃圾桶原因弹窗 | 单项删除 | Select选择原因（6个预设 + 其他） |
 | 批量标记无效线索 | 批量操作 | Select + 快速Tag选择 + TextArea（选其他时） |
 | 批量催更新 | 批量操作 | TextArea附言 + 24h限制提示 |
+| 分配弹窗（v2.0新增） | 分配按钮/批量分配 | 商务人员Select + 分配备注TextArea |
+| 竞对项目跟进弹窗（v2.0新增） | 竞对动态Tab操作 | 确认跟进 / 标记为机会 |
 
 ---
 
@@ -336,6 +351,23 @@ dormant     → unassigned / invalid
 - **权限**: `wande:project:mine:export`
 - **返回**: Excel文件流
 
+### PUT /wande/project/mine/{id}/assign（v2.0新增 #3452）
+- **权限**: `wande:project:mine:edit`
+- **Body**: `{ assignedTo: String, assignedUserId: Long, remark: String }`
+- **逻辑**: 更新assignedTo + 状态→assigned + 记录分配日志
+
+### PUT /wande/project/mine/batchAssign（v2.0新增 #3452）
+- **Body**: `{ ids: Long[], assignedTo: String, assignedUserId: Long, remark: String }`
+
+### GET /wande/project/mine/{id}/sources（v2.0新增 #3451）
+- **返回**: `List<ProjectMineSourceVo>`（信源类型+名称+URL+发现时间）
+
+### GET /wande/project/mine/{id}/qualification（v2.0新增 #3455）
+- **返回**: `QualificationVo`（总分+5维度分数+等级+AI文字建议）
+
+### GET /wande/project/mine/competitor-activity（v2.0新增 #3454）
+- **返回**: 竞品中标项目列表（项目名/省份/竞品企业/中标金额/万德参与情况）
+
 ---
 
 ## 6. 数据库设计
@@ -375,8 +407,10 @@ dormant     → unassigned / invalid
 | 表名 | 说明 |
 |------|------|
 | `wdpp_project_counterpart` | 配合单位信息（甲方/设计院等） |
-| `wdpp_project_sample` | 样品管理记录 |
+| `wdpp_project_sample` | 样品管理记录（不在项目挖掘页面展示） |
 | `wdpp_project_task` | 任务看板记录 |
+| `wdpp_project_mine_source`（v2.0新增） | 多信源链接（project_mine_id, source_type, source_name, source_url, discovered_at） |
+| `wdpp_project_mine_assign_log`（v2.0新增） | 项目分配记录（project_mine_id, assigned_by, assigned_to, remark, assigned_at） |
 | `wdpp_project_feedback` | 反馈历史记录 |
 | `wdpp_project_review` | 项目审核记录 |
 | 招标数据表（pipeline侧） | tenderData通过 enriched 接口关联 |
@@ -459,8 +493,14 @@ dormant     → unassigned / invalid
 - [ ] Tab切换正常，各Tab筛选条件正确生效
 - [ ] 表格显示9000+条数据，列齐全，操作按钮可用
 - [ ] 点击表格行可正常打开右侧900px详情抽屉（#2852修复后）
-- [ ] 详情抽屉内7个Tab正常切换，内容不互相污染
-- [ ] 切换至「待我确认」Tab展示卡片视图，三个操作按钮功能正常
+- [ ] 详情抽屉内7个Tab正常切换，无样品管理Tab，有研判分析Tab
+- [ ] 「待我确认」Tab使用表格视图（无卡片）
+- [ ] 配合单位Tab显示联系人姓名/电话/职位
+- [ ] 多信源链接列表正常显示
+- [ ] 项目分配弹窗正常，分配后状态自动变为"已分配"
+- [ ] 设备招标类项目显示投标截止倒计时（红/橙/蓝/灰）
+- [ ] 竞对动态Tab展示竞品中标项目+万德参与情况
+- [ ] 研判分析Tab显示5维度评分+Green/Yellow/Red等级
 - [ ] 批量操作：多选→批量标记无效/催更新弹窗正常
 - [ ] 「流转」下拉只显示当前状态合法的流转目标
 - [ ] 导出功能正常下载Excel

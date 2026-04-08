@@ -510,7 +510,7 @@ Issue创建
 - pr-test.yml E2E失败评论含错误详情（body-file方式避免YAML注入）
 - pr-test.yml Issue号提取改用env传递PR body（修复shell注入漏洞）
 - pr-test.yml E2E失败后自动触发CC修复（run-cc.sh --prompt）
-- ci-env.sh启动失败自动重新构建重试
+- ~~ci-env.sh启动失败自动重新构建重试~~ (2026-04-08 删除：ci-env.sh 已废弃，逻辑内联到 pr-test.yml；fallback 旧版本是漏洞)
 - 批量清理重复Bean定义（45个文件，-4187行）
 - 编程CC文档统一迁移到.github/docs/agent-docs/（18个文件）
 - 删除server_old.py等废弃文件

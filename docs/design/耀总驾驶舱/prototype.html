@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>万德AI平台 — 耀总驾驶舱 低保真原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;margin:0}
+.sidebar{width:56px;background:#001529;min-height:100vh;position:fixed;left:0;top:0;z-index:50}
+.sidebar-icon{width:56px;height:48px;display:flex;align-items:center;justify-content:center;color:#ffffffa0;font-size:18px;cursor:pointer}
+.sidebar-icon:hover,.sidebar-icon.active{background:#1890ff33;color:#fff}
+.main{margin-left:56px;padding:16px 20px}
+.card{background:#fff;border-radius:8px;padding:16px;border:1px solid #e8e8e8}
+.card-title{font-size:14px;font-weight:600;color:#333;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.card-title a{font-size:12px;color:#1890ff;text-decoration:none;font-weight:400}
+.kpi{text-align:center}
+.kpi-num{font-size:26px;font-weight:700;color:#333;line-height:1.2}
+.kpi-label{font-size:11px;color:#999;margin-top:2px}
+.kpi-change{font-size:11px;margin-top:2px}
+.up{color:#52c41a}
+.down{color:#f5222d}
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500}
+.tag-red{background:#fff1f0;color:#f5222d}
+.tag-green{background:#f6ffed;color:#52c41a}
+.tag-orange{background:#fff7e6;color:#fa8c16}
+.tag-blue{background:#e6f7ff;color:#1890ff}
+.tag-gray{background:#fafafa;color:#8c8c8c}
+.tag-purple{background:#f9f0ff;color:#722ed1}
+.funnel-step{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
+.funnel-bar{height:24px;border-radius:4px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:600}
+.mini-table{width:100%;font-size:12px;border-collapse:collapse}
+.mini-table th{text-align:left;padding:6px 8px;color:#999;font-weight:500;border-bottom:1px solid #f0f0f0}
+.mini-table td{padding:6px 8px;border-bottom:1px solid #f5f5f5;color:#333}
+.progress-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;border-radius:3px}
+.todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
+.todo-badge{min-width:20px;height:20px;border-radius:10px;background:#f5222d;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 6px}
+.btn-sm{padding:3px 10px;border-radius:4px;font-size:11px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333}
+.btn-sm:hover{border-color:#1890ff;color:#1890ff}
+.btn-primary-sm{background:#1890ff;color:#fff;border-color:#1890ff}
+.signal-item{padding:10px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
+.signal-item:last-child{border:none}
+.signal-tag{font-size:10px;padding:1px 6px;border-radius:2px;margin-right:4px}
+.heatmap-row{display:flex;gap:2px;margin-bottom:2px}
+.heatmap-cell{width:32px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;cursor:pointer}
+.review-bar{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px}
+.review-bar-label{width:60px;text-align:right;color:#666}
+.review-bar-track{flex:1;height:16px;background:#f0f0f0;border-radius:3px;overflow:hidden;display:flex}
+.review-bar-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500}
+.greeting{font-size:20px;font-weight:700;color:#333;margin-bottom:4px}
+.greeting-sub{font-size:13px;color:#999;margin-bottom:16px}
+</style>
+</head>
+<body>
+
+<!-- [侧边栏] -->
+<div class="sidebar">
+  <div class="sidebar-icon" style="background:#1890ff33;height:56px;font-size:14px;font-weight:700;color:#fff">万德</div>
+  <div class="sidebar-icon active" title="耀总驾驶舱">📊</div>
+  <div class="sidebar-icon" title="项目矿场">⛏️</div>
+  <div class="sidebar-icon" title="销售记录">📋</div>
+  <div class="sidebar-icon" title="项目中心">🏗️</div>
+  <div class="sidebar-icon" title="设计中心">🎨</div>
+  <div class="sidebar-icon" title="超管驾驶舱">⚙️</div>
+</div>
+
+<div class="main">
+  <!-- [问候+日期] -->
+  <div class="greeting">早上好，耀总 👋</div>
+  <div class="greeting-sub">2026年4月9日 星期三 | 上次登录: 昨天 22:15 | 数据更新: 3分钟前</div>
+
+  <!-- ========== 第一行: 待办中心(核心) + 矿场运营 ========== -->
+  <div style="display:grid;grid-template-columns:340px 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- [区块5: 待办中心] -->
+    <div class="card" style="border-left:3px solid #f5222d">
+      <div class="card-title">🔴 需要你处理 <span class="todo-badge">7</span></div>
+      <div class="todo-item">
+        <div>⛏️ 待分配项目</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge">12</span><button class="btn-sm btn-primary-sm" onclick="location.href='#'">去分配</button></div>
+      </div>
+      <div class="todo-item">
+        <div>✅ 待确认验证（有效/无效）</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge">8</span><button class="btn-sm">去确认</button></div>
+      </div>
+      <div class="todo-item">
+        <div>📝 待审批（报价/合同）</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge" style="background:#fa8c16">3</span><button class="btn-sm">去审批</button></div>
+      </div>
+      <div class="todo-item">
+        <div>⚠️ 商务超时预警</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge" style="background:#fa8c16">2</span><button class="btn-sm">查看</button></div>
+      </div>
+      <div class="todo-item" style="border:none">
+        <div>💡 AI推荐今日行动</div>
+        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge" style="background:#1890ff">3</span><button class="btn-sm">查看</button></div>
+      </div>
+      <div style="margin-top:8px;padding:10px;background:#fff7e6;border-radius:6px;font-size:12px;border:1px solid #ffe58f">
+        <b>AI建议:</b> 成都天府项目投标仅剩3天，建议今天联系程传春确认标书准备进度
+      </div>
+    </div>
+
+    <!-- [区块1: 矿场运营] -->
+    <div class="card">
+      <div class="card-title">⛏️ 矿场运营 <a href="#">查看全部项目 →</a></div>
+      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px">
+        <div class="kpi"><div class="kpi-num">9,015</div><div class="kpi-label">总项目</div><div class="kpi-change up">↑ 23 今日</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#f5222d">1,247</div><div class="kpi-label">A级</div><div class="kpi-change up">↑ 5</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#fa8c16">3,582</div><div class="kpi-label">B级</div><div class="kpi-change up">↑ 11</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#1890ff">12</div><div class="kpi-label">待分配</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#52c41a">87%</div><div class="kpi-label">验证通过率</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#52c41a">●</div><div class="kpi-label">采集运行中</div><div class="kpi-change" style="color:#999">每2h</div></div>
+      </div>
+      <!-- 转化漏斗(横向) -->
+      <div style="font-size:12px;color:#999;margin-bottom:6px">转化漏斗（本月）</div>
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px">
+        <div class="funnel-bar" style="width:100%;background:#1890ff">发现 523</div>
+        <div style="color:#999">→</div>
+        <div class="funnel-bar" style="width:75%;background:#13c2c2">分配 398</div>
+        <div style="color:#999">→</div>
+        <div class="funnel-bar" style="width:50%;background:#52c41a">联系 245</div>
+        <div style="color:#999">→</div>
+        <div class="funnel-bar" style="width:30%;background:#722ed1">跟进 156</div>
+        <div style="color:#999">→</div>
+        <div class="funnel-bar" style="width:12%;background:#eb2f96">中标 18</div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;color:#999">
+        <span>转化率: 发现→分配 76% | 分配→联系 62% | 联系→跟进 64% | 跟进→中标 12%</span>
+        <span>信源ROI最高: <b style="color:#333">政府采购网</b> (转化率18%)</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 第二行: 团队效能 + 项目全景 ========== -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- [区块2: 团队效能] -->
+    <div class="card">
+      <div class="card-title">👥 团队效能 <a href="#">详细看板 →</a></div>
+      <table class="mini-table">
+        <thead><tr><th>商务</th><th>分配</th><th>跟进中</th><th>本周拜访</th><th>平均响应</th><th>赢率</th><th>状态</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><b>邓文涛</b></td><td>12</td><td>8</td><td>5</td>
+            <td style="color:#52c41a">6h</td>
+            <td><b>32%</b></td>
+            <td><span class="tag tag-green">正常</span></td>
+          </tr>
+          <tr>
+            <td><b>程传春</b></td><td>8</td><td>5</td><td>3</td>
+            <td style="color:#52c41a">12h</td>
+            <td><b>28%</b></td>
+            <td><span class="tag tag-green">正常</span></td>
+          </tr>
+          <tr>
+            <td><b>孙小坤</b></td><td>15</td><td>6</td><td>1</td>
+            <td style="color:#f5222d">72h</td>
+            <td><b>15%</b></td>
+            <td><span class="tag tag-red">超时</span></td>
+          </tr>
+          <tr>
+            <td><b>何言峰</b></td><td>6</td><td>4</td><td>4</td>
+            <td style="color:#52c41a">8h</td>
+            <td><b>25%</b></td>
+            <td><span class="tag tag-green">正常</span></td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:8px;font-size:11px;color:#999">
+        ⚠️ 孙小坤: 3个项目超48h未反馈 | 本周拜访量最低
+      </div>
+    </div>
+
+    <!-- [区块3: 项目全景] -->
+    <div class="card">
+      <div class="card-title">🏗️ 项目全景（在执行） <a href="#">项目中心 →</a></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+        <div class="kpi"><div class="kpi-num">23</div><div class="kpi-label">活跃项目</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#1890ff">¥4,520万</div><div class="kpi-label">总合同额</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#52c41a">78%</div><div class="kpi-label">平均健康度</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#f5222d">3</div><div class="kpi-label">延期预警</div></div>
+      </div>
+      <div style="font-size:12px;color:#999;margin-bottom:6px">项目阶段分布</div>
+      <div style="display:flex;gap:4px;margin-bottom:8px">
+        <div style="flex:3;background:#1890ff;height:20px;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">设计 3</div>
+        <div style="flex:5;background:#13c2c2;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">生产 5</div>
+        <div style="flex:8;background:#52c41a;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">安装 8</div>
+        <div style="flex:4;background:#722ed1;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">验收 4</div>
+        <div style="flex:3;background:#eb2f96;height:20px;border-radius:0 3px 3px 0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">质保 3</div>
+      </div>
+      <div style="font-size:12px;color:#999;margin-bottom:4px">延期预警项目</div>
+      <div style="font-size:12px">
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f5f5f5">
+          <span>🔴 琴澳公园项目 — 安装阶段延期7天</span><span class="tag tag-red">紧急</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f5f5f5">
+          <span>🟡 龙华儿童公园 — 供应商交期延迟3天</span><span class="tag tag-orange">关注</span>
+        </div>
+        <div style="display:flex;justify-content:space-between;padding:4px 0">
+          <span>🟡 成都天府设备 — 图纸审批待确认</span><span class="tag tag-orange">关注</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 第三行: 财务概览 + 复盘洞察 ========== -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- [区块4: 财务概览] -->
+    <div class="card">
+      <div class="card-title">💰 财务概览 <a href="#">详细报表 →</a></div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+        <div class="kpi"><div class="kpi-num" style="color:#f5222d">¥680万</div><div class="kpi-label">待回款</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#52c41a">¥320万</div><div class="kpi-label">本月已回</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#fa8c16">¥150万</div><div class="kpi-label">逾期金额</div></div>
+        <div class="kpi"><div class="kpi-num">18%</div><div class="kpi-label">平均利润率</div></div>
+      </div>
+      <div style="font-size:12px;color:#999;margin-bottom:6px">回款进度（按项目）</div>
+      <div style="font-size:12px">
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+          <span style="width:140px">琴澳公园</span>
+          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:70%;background:#52c41a"></div></div>
+          <span style="width:60px;text-align:right">70%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+          <span style="width:140px">龙华儿童公园</span>
+          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:45%;background:#fa8c16"></div></div>
+          <span style="width:60px;text-align:right">45%</span>
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
+          <span style="width:140px">武汉江夏幼儿园</span>
+          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:20%;background:#f5222d"></div></div>
+          <span style="width:60px;text-align:right;color:#f5222d">20% 逾期</span>
+        </div>
+      </div>
+      <div style="margin-top:8px;padding:8px;background:#e6f7ff;border-radius:4px;font-size:11px;border:1px solid #91d5ff">
+        合同看板: 进行中 <b>15</b> 份 | 总额 ¥3,200万 | 即将到期 <b style="color:#f5222d">2</b> 份
+      </div>
+    </div>
+
+    <!-- [区块6: 复盘洞察] -->
+    <div class="card">
+      <div class="card-title">📊 复盘洞察（本季度） <a href="#">详细分析 →</a></div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
+        <div class="kpi"><div class="kpi-num" style="color:#52c41a">18</div><div class="kpi-label">中标</div></div>
+        <div class="kpi"><div class="kpi-num" style="color:#f5222d">24</div><div class="kpi-label">流失</div></div>
+        <div class="kpi"><div class="kpi-num">43%</div><div class="kpi-label">总赢率</div><div class="kpi-change up">↑ 5% vs上季</div></div>
+      </div>
+      <div style="font-size:12px;color:#999;margin-bottom:6px">流失原因分布</div>
+      <div>
+        <div class="review-bar">
+          <div class="review-bar-label">价格</div>
+          <div class="review-bar-track"><div class="review-bar-seg" style="width:42%;background:#f5222d">42%</div></div>
+        </div>
+        <div class="review-bar">
+          <div class="review-bar-label">关系</div>
+          <div class="review-bar-track"><div class="review-bar-seg" style="width:25%;background:#fa8c16">25%</div></div>
+        </div>
+        <div class="review-bar">
+          <div class="review-bar-label">产品</div>
+          <div class="review-bar-track"><div class="review-bar-seg" style="width:17%;background:#1890ff">17%</div></div>
+        </div>
+        <div class="review-bar">
+          <div class="review-bar-label">跟进慢</div>
+          <div class="review-bar-track"><div class="review-bar-seg" style="width:16%;background:#722ed1">16%</div></div>
+        </div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#666">
+        <b>AI洞察:</b> 价格仍是主要流失原因。凯奇在广东赢率上升至38%，建议关注其定价策略。跟进速度改善明显（↓12%流失占比）。
+      </div>
+    </div>
+  </div>
+
+  <!-- ========== 第四行: 市场地图 + 趋势雷达 ========== -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+
+    <!-- [区块7: 市场地图] -->
+    <div class="card">
+      <div class="card-title">🗺️ 市场地图 <a href="#">完整地图 →</a></div>
+      <div style="font-size:12px;color:#999;margin-bottom:8px">项目热度 TOP10 省份（颜色越深=项目越多）</div>
+      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px">
+        <div style="background:#ff4d4f;color:#fff;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>广东</b><div style="font-size:18px;font-weight:700">847</div></div>
+        <div style="background:#ff7a45;color:#fff;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>四川</b><div style="font-size:18px;font-weight:700">623</div></div>
+        <div style="background:#ffa940;color:#fff;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>浙江</b><div style="font-size:18px;font-weight:700">589</div></div>
+        <div style="background:#ffc53d;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>江苏</b><div style="font-size:18px;font-weight:700">512</div></div>
+        <div style="background:#ffd666;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>湖北</b><div style="font-size:18px;font-weight:700">445</div></div>
+        <div style="background:#fff1b8;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>云南</b><div style="font-size:16px;font-weight:700">398</div></div>
+        <div style="background:#fff1b8;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>贵州</b><div style="font-size:16px;font-weight:700">367</div></div>
+        <div style="background:#fffbe6;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>湖南</b><div style="font-size:16px;font-weight:700">334</div></div>
+        <div style="background:#fffbe6;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>福建</b><div style="font-size:16px;font-weight:700">301</div></div>
+        <div style="background:#fffbe6;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>山东</b><div style="font-size:16px;font-weight:700">278</div></div>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:11px">
+        <span>🔵 蓝海区域（竞争少+项目多）: <b style="color:#1890ff">云南、贵州、广西</b></span>
+        <span>🔴 红海区域: <b style="color:#f5222d">广东、浙江</b></span>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#666">
+        国际: 🇦🇪 迪拜 23个 | 🇸🇬 新加坡 12个 | 🇸🇦 沙特 8个 | 🇲🇾 马来 6个
+      </div>
+    </div>
+
+    <!-- [区块8: 趋势雷达] -->
+    <div class="card">
+      <div class="card-title">📡 趋势雷达（政策信号） <a href="#">全部信号 →</a></div>
+      <div class="signal-item">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <span class="signal-tag" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f">高关联</span>
+            <span class="signal-tag" style="background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff">广东</span>
+            <b>广东省发改委：2026年全省新建30个社区体育公园</b>
+          </div>
+          <span style="font-size:11px;color:#999;white-space:nowrap">2天前</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 未来12个月广东将新增30+个游乐设备采购项目 | 矿场已关联: 5个项目</div>
+      </div>
+      <div class="signal-item">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <span class="signal-tag" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f">高关联</span>
+            <span class="signal-tag" style="background:#fff7e6;color:#fa8c16;border:1px solid #ffd591">四川</span>
+            <b>成都市：十四五期间投资50亿元建设200个口袋公园</b>
+          </div>
+          <span style="font-size:11px;color:#999;white-space:nowrap">5天前</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 口袋公园含儿童游乐区，预计每个50-200万设备需求 | 矿场已关联: 2个项目</div>
+      </div>
+      <div class="signal-item">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <span class="signal-tag" style="background:#fff7e6;color:#fa8c16;border:1px solid #ffd591">中关联</span>
+            <span class="signal-tag" style="background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7">国际</span>
+            <b>迪拜政府发布2026-2030城市休闲设施五年计划</b>
+          </div>
+          <span style="font-size:11px;color:#999;white-space:nowrap">1周前</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 计划投入$2B建设50+公共游乐空间 | 矿场已关联: 1个项目</div>
+      </div>
+      <div class="signal-item" style="border:none">
+        <div style="display:flex;justify-content:space-between;align-items:start">
+          <div>
+            <span class="signal-tag" style="background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9">低关联</span>
+            <span class="signal-tag" style="background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff">全国</span>
+            <b>教育部：全国中小学体育设施达标率提升至85%目标</b>
+          </div>
+          <span style="font-size:11px;color:#999;white-space:nowrap">2周前</span>
+        </div>
+        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 学校体育设施升级可能带动幼儿园/小学游乐设备采购 | 矿场已关联: 0个项目</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="card" style="margin-top:8px">
+    <div class="card-title">📋 原型说明 — 耀总驾驶舱 v1.0</div>
+    <table class="mini-table" style="font-size:12px">
+      <thead><tr><th>区块</th><th>回答的问题</th><th>数据来源</th><th>关联Issue</th></tr></thead>
+      <tbody>
+        <tr><td>1. 矿场运营</td><td>今天有多少新项目值得看？</td><td>项目矿场KPI+漏斗+ROI+验证</td><td>#2255 #2252 #2225 #2318</td></tr>
+        <tr><td>2. 团队效能</td><td>商务团队表现怎样？</td><td>销售记录+CRM+分配日志</td><td>#2320 + 销售记录体系</td></tr>
+        <tr><td>3. 项目全景</td><td>在执行项目进展如何？</td><td>执行管理+项目中心+EVM</td><td>#3193-3202 + 项目中心</td></tr>
+        <tr><td>4. 财务概览</td><td>钱收回来了吗？</td><td>回款+合同+金蝶联动</td><td>回款增强+合同管理</td></tr>
+        <tr><td>5. 待办中心</td><td>有什么需要我处理？</td><td>分配+确认+审批+预警+NBO</td><td>#1496 + 审批流引擎</td></tr>
+        <tr><td>6. 复盘洞察</td><td>我们为什么赢/输？</td><td>赢/输/流标记录+竞品数据</td><td>#2251 #2404</td></tr>
+        <tr><td>7. 市场地图</td><td>全国哪里有机会？</td><td>矿场区域统计+竞品分布</td><td>#2250 #2235 #1523</td></tr>
+        <tr><td>8. 趋势雷达</td><td>未来会发生什么？</td><td>政策信号采集+AI关联分析</td><td>#2239 #1507 #2434</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

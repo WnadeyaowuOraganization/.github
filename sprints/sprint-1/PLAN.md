@@ -425,7 +425,7 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **巡检 2026-04-08 20:14 UTC | 15/15满槽 | 无新变化 | 🚨kimi19-#2303 tmux超时升至50min(连续3轮)，研发经理需重启**
+> 🔄 **巡检 2026-04-08 20:24 UTC | 15/15满槽 | kimi18-#2302已重启(3min)✅ | 🚨kimi19-#2303 tmux超时60min(连续4轮未处理)**
 
 > **当前运行中（占槽）**：kimi1-#1628 | kimi2-#1746 | kimi3-#2459 | kimi4-#1742 | kimi5-#2008 | kimi7-#2122 | kimi9-#1919 | kimi11-#2458 | kimi12-#1519 | kimi13-#1518 | kimi14-#2589 | kimi16-#3452 | kimi17-#2301 | kimi18-#2302 | kimi19-#2303
 
@@ -455,7 +455,7 @@
 
 ## 当前运行（15/15满槽）
 
-> 更新：2026-04-08 19:58 UTC | Done：#3458(PR#3487,ClaudeMax)/#1918(PR#3490) | kimi14重启(Lombok卡6h) | 新指派：#2459/#2458
+> 更新：2026-04-08 20:25 UTC | ⚠️审计修正：15个误标Done改回In Progress(PR未merge) | kimi18-2302重启(API error) | kimi9创建PR#3492 | kimi5创建PR#3491
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
@@ -507,21 +507,21 @@
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |
 |---------|-------|------|------|------|---------|
-| kimi8 | ~~#1564~~ | P0 | backend | ~~[企微打通][1/17] WecomAppService access_token+消息SDK~~ PR#3465 | ~~Done~~ |
-| kimi3 | ~~#2851~~ | P0 | frontend | ~~[冲突修复] 开发监控[7/7] PR#3459~~ | ~~Done~~ |
-| kimi12 | ~~#1858~~ | P1 | backend | ~~[产品平台] 方案版本对比~~ PR#3462 | ~~Done~~ |
-| kimi15 | ~~#1862~~ | P1 | backend | ~~[产品平台] 标准品报价引擎~~ PR#3467 | ~~Done~~ |
-| kimi11 | ~~#1520~~ | P1 | backend | ~~[业务运营中心][3/8] CRM操作面板~~ PR#3463 | ~~Done~~ |
-| kimi5 | ~~#1756~~ | P0 | frontend | ~~[代理商工作台] 前端看板+列表视图~~ PR#3478 | ~~Done~~ |
-| kimi9 | ~~#2055~~ | P0 | backend | ~~[D3参数化冲突修复] PR#3274~~ | ~~Done~~ |
-| kimi6 | ~~#2893~~ | P0 | fullstack | ~~[Claude Office前端重构+编译修复] PR#3479~~ | ~~Done~~ |
-| kimi10 | ~~#3449~~ | P0 | frontend | ~~[项目挖掘改版][1/8] 详情抽屉清理+Drawer泄漏~~ PR#3485 | ~~Done~~ |
+| kimi8 | #1564 | P0 | backend | [企微打通][1/17] WecomAppService access_token+消息SDK PR#3465(CLOSED未merge，待重建PR) | In Progress |
+| kimi3 | #2851 | P0 | frontend | [冲突修复] 开发监控[7/7] PR#3459(OPEN，等CI merge) | In Progress |
+| kimi12 | #1858 | P1 | backend | [产品平台] 方案版本对比 PR#3462(OPEN，等CI merge) | In Progress |
+| kimi15 | #1862 | P1 | backend | [产品平台] 标准品报价引擎 PR#3467(OPEN，等CI merge) | In Progress |
+| kimi11 | #1520 | P1 | backend | [业务运营中心][3/8] CRM操作面板 PR#3463(OPEN，等CI merge) | In Progress |
+| kimi5 | #1756 | P0 | frontend | [代理商工作台] 前端看板+列表视图 PR#3478(OPEN，等CI merge) | In Progress |
+| kimi9 | #2055 | P0 | backend | [D3参数化冲突修复] PR#3274(OPEN，等CI merge) | In Progress |
+| kimi6 | #2893 | P0 | fullstack | [Claude Office前端重构+编译修复] PR#3479(OPEN，等CI merge) | In Progress |
+| kimi10 | ~~#3449~~ | P0 | frontend | ~~[项目挖掘改版][1/8] 详情抽屉清理+Drawer泄漏~~ PR#3485✅merged 2026-04-08 | ~~Done~~ |
 | kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式显示 | In Progress |
 | kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传+企微内嵌 | In Progress |
 | kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴+意见流 | In Progress |
 | kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板+筛选+统计 | In Progress |
-| kimi3 | ~~#3458~~ | Jump | fullstack | ~~[全球项目矿场v3.0] 9项功能统一改版~~ PR#3487 (Claude Max Sonnet) | ~~Done~~ |
-| kimi11 | ~~#1918~~ | P0 | frontend | ~~[D3-Web] 参数配置器~~ PR#3490 | ~~Done~~ |
+| kimi3 | #3458 | Jump | fullstack | [全球项目矿场v3.0] 9项功能统一改版 PR#3487(OPEN，等CI merge，Claude Max Sonnet) | In Progress |
+| kimi11 | #1918 | P0 | frontend | [D3-Web] 参数配置器 PR#3490(OPEN，等CI merge) | In Progress |
 | kimi3 | #2459 | P1 | backend | [合同管理] 合同审批API | In Progress |
 | kimi11 | #2458 | P1 | backend | [合同管理] AI条款对比引擎 | In Progress |
 | kimi5 | #2008 | P0 | backend | [资金闭环][1/17] 报价成本模型API | In Progress |
@@ -533,15 +533,15 @@
 | kimi13 | #1518 | P1 | backend | [业务运营中心][7/8] 业务数据仪表盘 | In Progress |
 | kimi2 | #1746 | P1 | frontend | [质保售后] 售后工单管理主页面 | In Progress |
 | kimi4 | #1742 | P1 | frontend | [质保] 质保台账管理页面 | In Progress |
-| kimi4 | ~~#2051~~ | P1 | frontend | ~~D3-L4安装图自动化~~ PR#3488 | ~~Done~~ |
+| kimi4 | #2051 | P1 | frontend | D3-L4安装图自动化 PR#3488(OPEN，等CI merge) | In Progress |
 | kimi2 | ~~#2445~~ | P0 | pipeline | ~~[冲突修复] 定向监控 PR#3305已关闭未合并，rebase后无新提交~~ | ~~Fail~~ |
 | kimi13 | ~~#3450~~ | P0 | fullstack | ~~[挖掘改版][2/8] 配合单位联系方式~~ commit:01ea434de(直接入dev) | ~~Done~~ |
-| kimi1 | ~~#3288~~ | P0 | frontend | ~~验收队列前端组件+API契约~~ PR#3480 | ~~Done~~ |
-| kimi6 | ~~#1531~~ | P0 | backend | ~~[冲突修复] 可赢性评分模型~~ PR#3240 | ~~Done~~ |
-| kimi7 | ~~#1505~~ | P1 | backend | ~~[矿场-Phase2][16/16] 阶段话术模板库~~ PR#3460 | ~~Done~~ |
-| kimi9 | ~~#2055~~ | P0 | backend | ~~[D3参数化冲突修复] PR#3274~~ | ~~Done~~ |
-| kimi15 | ~~#1862~~ | P1 | backend | ~~[产品平台] 标准品报价引擎~~ PR#3467 | ~~Done~~ |
-| kimi3 | ~~#2851~~ | P0 | frontend | ~~[冲突修复] 开发监控驾驶舱~~ PR#3459 | ~~Done~~ |
+| kimi1 | #3288 | P0 | frontend | 验收队列前端组件+API契约 PR#3480(OPEN，等CI merge) | In Progress |
+| kimi6 | #1531 | P0 | backend | [冲突修复] 可赢性评分模型 PR#3240(OPEN，等CI merge) | In Progress |
+| kimi7 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 PR#3460(OPEN，等CI merge) | In Progress |
+| kimi9 | #2055 | P0 | backend | [D3参数化冲突修复] PR#3274(OPEN，等CI merge) | In Progress |
+| kimi15 | #1862 | P1 | backend | [产品平台] 标准品报价引擎 PR#3467(OPEN，等CI merge) | In Progress |
+| kimi3 | #2851 | P0 | frontend | [冲突修复] 开发监控驾驶舱 PR#3459(OPEN，等CI merge) | In Progress |
 | — | ~~#1533~~ | — | backend | ~~矿场反馈统计API~~ | ~~Done~~ |
 | — | ~~#2046~~ | — | pipeline | ~~AI生成Phase4 投标知识库增强~~ | ~~Done~~ |
 | kimi16 | ~~#1876~~ | — | backend | ~~商务48小时反馈机制+分级升级~~ | ~~Done~~ |
@@ -553,10 +553,10 @@
 | kimi11 | ~~#1994~~ | — | backend | ~~项目中心Phase15 风险事件API~~ | ~~Done~~ |
 | kimi16 | ~~#2461~~ | T1 | backend | ~~合同管理建表~~ | ~~Done~~ |
 | kimi2 | ~~#1903~~ | T1 | backend | ~~D3钢架自动选型规则~~ PR#3245 | ~~Done~~ |
-| kimi3 | ~~#1531~~ | T1 | backend | ~~可赢性评分模型(WinProb)~~ PR#3240 | ~~Done~~ |
+| kimi3 | #1531 | T1 | backend | 可赢性评分模型(WinProb) PR#3240(OPEN，等CI merge) | In Progress |
 | kimi4 | ~~#1532~~ | T1 | backend | ~~矿场转化漏斗统计API~~ PR#3233 | ~~Done~~ |
 | kimi7 | ~~#1459~~ | T1 | backend | ~~记录中心统一数据模型~~ PR#3235 | ~~Done~~ |
-| kimi10 | ~~#1898~~ | T1 | backend | ~~D3发货防错系统~~ PR#3239 | ~~Done~~ |
+| kimi10 | #1898 | T1 | backend | D3发货防错系统 PR#3239(CLOSED未merge，PR需重建) | In Progress |
 | kimi11 | ~~#1527~~ | T1 | backend | ~~甲方历史合作查询接口~~ PR#3238 | ~~Done~~ |
 | kimi13 | ~~#1853~~ | T1 | pipeline | ~~D3-Agent三层记忆系统~~ PR#3241 | ~~Done~~ |
 | kimi14 | ~~#1854~~ | T1 | pipeline | ~~D3-Agent LangGraph框架~~ PR#3243✅merged | ~~Done~~ |

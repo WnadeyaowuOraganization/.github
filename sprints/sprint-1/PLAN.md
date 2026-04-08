@@ -425,13 +425,12 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **更新** 2026-04-08 09:50 UTC | #1756/#1766/#1508/#2253/#2465 Done(5个)；#2237/#1828/#2359 已IP移除；#2240 新解锁Todo；2槽空闲
+> 🔄 **更新** 2026-04-08 10:00 UTC | #1867/#2012 Done；#2120/#2011 已IP移除；#1920(P0)入列首位
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
+| #1920 | P0 | pipeline | [D3-v2.0][P0] wande-gh-plugins仓库重构 — COMPAS+CI/CD | ✅ |
 | #2240 | P1 | frontend | [矿场-Phase2][9/16] 决策链可视化组件（#1508 Done解锁） | ✅ |
-| #2120 | P1 | backend | [执行管理] AI项目进度智能跟踪 — 独立 | ✅ |
-| #2011 | P1 | backend | [项目中心Phase5] 设计变更联动 — 独立 | ✅ |
 | #2255 | P1 | frontend | [矿场增强][8/23] 转化漏斗看板页面（#1532 Done解锁） | ✅ |
 | #2254 | P1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go（#1531 Done解锁） | ✅ |
 | #1463 | P1 | backend | [销售记录体系][3/9] 智能提醒频率引擎（#1465 Done解锁） | ✅ |
@@ -449,6 +448,7 @@
 | #1836 | P1 | design-ai | [D3-P1][30/30] 受力计算+基础设计引擎 — 多国标准载荷组合 | ✅ |
 | #2252 | P1 | frontend | [矿场增强][20/23] 来源ROI看板 — 各信号源转化率柱状图+质量排名 | ✅ |
 | #1525 | P1 | backend | [D3-缺陷修复][P1][3/7] D3 API Gateway统一入口层 — 独立 | ✅ |
+| #1928 | P1 | pipeline | [D3-v2.0][Phase3-1/3] v2.0电池包→图纸输出桥接（#1867 Done解锁） | ✅ |
 
 ---
 
@@ -456,25 +456,25 @@
 
 ## 当前运行（15 CC 活跃）
 
-> 更新：2026-04-08 09:42 UTC | 满槽15/15 | kimi12(#1756✅PR#3424)+kimi13(#1766✅PR#3423)+kimi8(#1508✅PR#3426)→Done→重派；kimi3注入PR；kimi11编译检查中
+> 更新：2026-04-08 09:52 UTC | 满槽15/15 | kimi6(#1867✅PR#3428)+kimi14(#2012✅PR#3429)→Done→#2120/#2011；kimi3/kimi7崩溃→重启；kimi1/kimi11注入PR
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | 28% 重启 |
-| kimi2 | #1626 | T1 | backend | [整改工单-P1] 工艺标准卡导入API | 28% |
-| kimi3 | #2253 | T1 | frontend | [矿场增强][18/23] 企微H5矿场页面 | 注入PR创建 |
+| kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | 注入PR(测试✅) |
+| kimi2 | #1626 | T1 | backend | [整改工单-P1] 工艺标准卡导入API | 39% |
+| kimi3 | #2253 | T1 | frontend | [矿场增强][18/23] 企微H5矿场页面 | 重启(有提交) |
 | kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | 36% |
 | kimi5 | #2241 | T1 | frontend | [矿场-Phase2][7/16] 项目详情关系地图 | 35% |
-| kimi6 | #1867 | P0 | pipeline | [D3-v2.0][P0] D3 AI知识体系构建 | 36% |
-| kimi7 | #2465 | T1 | backend | [执行管理] 生产进度/质检/发货/安装API | 68% |
-| kimi8 | #2237 | T1 | backend | [矿场-Phase3][4/12] 项目列表赢率列排序 | 启动中 |
-| kimi9 | #1464 | T1 | backend | [销售记录体系][2/9] 里程碑门控配置 | 30% |
+| kimi6 | #2120 | T1 | backend | [执行管理] AI项目进度智能跟踪 | 启动中 |
+| kimi7 | #2465 | T1 | backend | [执行管理] 生产进度/质检/发货/安装API | 重启(有提交) |
+| kimi8 | #2237 | T1 | backend | [矿场-Phase3][4/12] 项目列表赢率列排序 | 38% |
+| kimi9 | #1464 | T1 | backend | [销售记录体系][2/9] 里程碑门控配置 | 38% |
 | kimi10 | #2228 | T1 | frontend | [矿场-Phase4][13/17] 管理看板-团队活动量 | 36% |
-| kimi11 | #2009 | T1 | backend | [项目中心Phase7] 项目全景API | 71% 编译检查中 |
-| kimi12 | #1828 | T1 | frontend | [提成绩效] 提成规则配置页面 | 启动中 |
-| kimi13 | #2359 | T1 | backend | [项目中心Phase12] 菜单权限SQL | 启动中 |
-| kimi14 | #2012 | T1 | backend | [项目中心Phase4] 跨部门任务Service | 55% |
-| kimi15 | #2183 | T1 | backend | [执行管理] 扩展角色权限 | 47% |
+| kimi11 | #2009 | T1 | backend | [项目中心Phase7] 项目全景API | 注入PR(编译✅) |
+| kimi12 | #1828 | T1 | frontend | [提成绩效] 提成规则配置页面 | 29% |
+| kimi13 | #2359 | T1 | backend | [项目中心Phase12] 菜单权限SQL | 26% |
+| kimi14 | #2011 | T1 | backend | [项目中心Phase5] 设计变更联动 | 启动中 |
+| kimi15 | #2183 | T1 | backend | [执行管理] 扩展角色权限 | 54% |
 
 ---
 
@@ -692,3 +692,9 @@
 | kimi8 | #2237 | T1 | backend | [矿场-Phase3][4/12] 项目列表赢率列排序 | In Progress |
 | kimi12 | #1828 | T1 | frontend | [提成绩效] 提成规则配置页面 | In Progress |
 | kimi13 | #2359 | T1 | backend | [项目中心Phase12] 菜单权限SQL | In Progress |
+| kimi6 | ~~#1867~~ | P0 | pipeline | ~~[D3-v2.0][P0] D3 AI知识体系构建~~ PR#3428 | ~~Done~~ |
+| kimi14 | ~~#2012~~ | T1 | backend | ~~[项目中心Phase4] 跨部门任务Service~~ PR#3429 | ~~Done~~ |
+| kimi3 | #2253 | T1 | frontend | [矿场增强][18/23] 企微H5矿场页面（重启） | In Progress |
+| kimi7 | #2465 | T1 | backend | [执行管理] 生产进度/质检/发货/安装API（重启） | In Progress |
+| kimi6 | #2120 | T1 | backend | [执行管理] AI项目进度智能跟踪 | In Progress |
+| kimi14 | #2011 | T1 | backend | [项目中心Phase5] 设计变更联动 | In Progress |

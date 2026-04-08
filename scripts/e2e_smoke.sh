@@ -34,7 +34,11 @@ trap 'rm -f "$LOCK_FILE"' EXIT
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" >> "$LOGFILE"; }
 
 # --- 环境准备 ---
-export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py")
+# e2e-smoke使用个人账号PAT（weiping.pat），原因：
+#   App token创建PR后无法自审核（GitHub不允许自提自审核），
+#   需要独立账号身份执行review/approve/merge操作。
+WEIPING_PAT=$(cat "$SCRIPT_DIR/tokens/weiping.pat" 2>/dev/null)
+export GH_TOKEN="${WEIPING_PAT:-$(python3 "$SCRIPT_DIR/gh-app-token.py")}"
 export PATH="${HOME_DIR}/.local/bin:$PATH"
 export HOME="${HOME_DIR}"
 

@@ -470,7 +470,7 @@
 | kimi4 | #1506 | P1 | backend | [矿场-Phase2][13/16] 作战资料包聚合API | 新启动 |
 | kimi13 | #1518 | P1 | backend | [业务运营中心][7/8] 业务数据仪表盘 | PR#3498等CI(上下文2%) |
 | kimi14 | #2589 | P0 | backend | [冲突修复] execution rebase | 编码中 |
-| kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | PR#3500等CI |
+| kimi6 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 重启kimi6(kimi16退出/294min) |
 | kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传 | PR#3489等CI |
 | kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页 | 编码中 |
 | kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板 | 编码中(新启15min) |

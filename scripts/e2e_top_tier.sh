@@ -89,10 +89,6 @@ ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
 cp "${HOME_DIR}/.claude/.credentials.json" "$CONFIG_DIR/.credentials.json" 2>/dev/null
 [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
 
-# 备份真实 credentials（防御性措施：确保运行后恢复）
-CREDS_BACKUP="/tmp/creds-backup-${SESSION}.json"
-cp "${HOME_DIR}/.claude/.credentials.json" "$CREDS_BACKUP" 2>/dev/null
-
 # 记录启动前已有的 JSONL 列表
 mkdir -p "$JSONL_DIR"
 BEFORE_LIST=$(ls -1 "${JSONL_DIR}"/*.jsonl 2>/dev/null | sort)
@@ -104,9 +100,8 @@ tmux new-session -d -s "$SESSION" -c "$E2E_DIR" \
    ${API_ENV} \
    export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
    claude --model claude-opus-4-6 --dangerously-skip-permissions; \
+   cp ${CONFIG_DIR}/.credentials.json ${HOME_DIR}/.claude/.credentials.json 2>/dev/null; \
    rm -rf ${CONFIG_DIR}; \
-   cp ${CREDS_BACKUP} ${HOME_DIR}/.claude/.credentials.json 2>/dev/null; \
-   rm -f ${CREDS_BACKUP}; \
    tmux kill-session -t ${SESSION}"
 
 # 后台：注入prompt + 关联JSONL

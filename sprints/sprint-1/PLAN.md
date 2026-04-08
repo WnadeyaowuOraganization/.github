@@ -1,6 +1,6 @@
 # Sprint-1 完整排程计划
 
-> 最后更新：2026-04-08 18:40 UTC（巡检：#1862/#2851 Done；执行管理#2094/#2122解锁；质保售后#1742/#1744/#1746解锁；8CC占CLOSED/Done释放中→净9/15，6槽空）
+> 最后更新：2026-04-08 18:50 UTC（巡检：#2055/#2893 Done；#1756回退Todo；10CC占CLOSED/Done释放中→净7/15，8槽空；指派建议20条就绪）
 > 并发上限：**15个CC** | 数据来源：`/tmp/issue-cache/` 批量离线分析
 > 排程前：`bash scripts/prefetch-issues.sh <issues>` 预写 dev | Jump状态Issue最优先
 > **Jump队列**：已处理 → #2950/#3226/#3237 已标 Todo | **2026-04-07 12:35 批量处理7个BUG Jump**：#3227/#3228/#3229/#3230/#3231/#3232/#3234 — 全部标Todo
@@ -454,28 +454,29 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（2 常规 + 9 P0冲突修复 + 2挖掘 + 3keepalive重启 = 16/15超限1）
+## 当前运行（3 常规 + 7 P0冲突修复 + 2挖掘 + 5待释放 = 17/15超限2）
 
-> 更新：2026-04-08 18:22 UTC | #1858→Done PR#3462；#1862→Done PR#3467；kimi3/kimi8/kimi15 keepalive重启；超限1等自然释放
+> 更新：2026-04-08 18:42 UTC | #2055→Done PR#3274；#2893→Done PR#3479(注入push)；17/15超限待释放
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #3288 | P0 | frontend | [**冲突修复**] 验收队列前端 PR#3288 rebase | 运行中 |
+| kimi1 | #3288 | P0 | frontend | 验收队列前端（/clear恢复，26%） | 运行中 |
 | kimi2 | #2445 | P0 | pipeline | [**冲突修复**] 定向监控[12/38] PR#3305 rebase | 运行中 |
-| kimi3 | #2851 | P0 | frontend | [**冲突修复**] 开发监控驾驶舱 keepalive重启 | 运行中 |
+| kimi3 | #2851 | P0 | frontend | [**冲突修复**] 开发监控驾驶舱 PR#3459 keepalive | 31% |
 | kimi4 | #2051 | P1 | frontend | D3-L4安装图自动化 | 运行中 |
-| kimi5 | #1756 | P0 | frontend | [**冲突修复**] 代理商工作台 PR#3424 rebase | 运行中 |
+| kimi5 | #1756 | P0 | frontend | ~~代理商工作台~~ PR#3478→Done | 待释放 |
 | kimi6 | #1531 | P0 | backend | [**冲突修复**] 可赢性评分模型 PR#3240 rebase | 运行中 |
-| kimi6 | #2893 | P0 | fullstack | [**冲突修复**] Claude Office PR#3315 rebase | 运行中 |
-| kimi7 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 | 运行中 |
-| kimi8 | #1564 | P0 | backend | [**冲突修复**] 企微打通 keepalive重启(PR#3465已存在) | 验证中 |
-| kimi9 | #2055 | P0 | backend | [**冲突修复**] D3参数化 PR#3274 rebase | 运行中 |
-| kimi10 | #3449 | P0 | frontend | [项目挖掘改版][1/8] 详情抽屉清理+修复Drawer泄漏 | 运行中 |
-| kimi11 | #1520 | P1 | backend | [业务运营中心][3/8] CRM操作面板 | 运行中 |
-| kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式显示 | 运行中18% |
-| kimi14 | #2589 | P0 | backend | [**冲突修复**] execution执行管理 PR#3317 rebase | 运行中 |
-| kimi15 | #1862 | P1 | backend | [产品平台][P1] 标准品报价引擎 PR#3467→Done | 完成待释放 |
-| kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 运行中 |
+| kimi6 | #2893 | P0 | fullstack | ~~Claude Office~~ PR#3479→Done | 待释放 |
+| kimi7 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 | 45% |
+| kimi8 | #1564 | P0 | backend | 企微打通 keepalive(PR#3465已存在) | 待释放 |
+| kimi9 | #2055 | P0 | backend | ~~D3参数化~~ PR#3274→Done | 待释放 |
+| kimi10 | #3449 | P0 | frontend | [项目挖掘改版][1/8] 详情抽屉清理 | 38% |
+| kimi11 | #1520 | P1 | backend | ~~CRM操作面板~~ PR#3463→Done | 待释放 |
+| kimi12 | #1858 | P1 | backend | 方案版本对比 keepalive(PR#3462已存在) | 待释放 |
+| kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式 | 62% |
+| kimi14 | #2589 | P0 | backend | [**冲突修复**] execution PR#3317 rebase | 运行中 |
+| kimi15 | #1862 | P1 | backend | ~~标准品报价引擎~~ PR#3467→Done | 待释放 |
+| kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 18% |
 
 ---
 
@@ -513,6 +514,10 @@
 | kimi3 | ~~#2851~~ | P0 | frontend | ~~[冲突修复] 开发监控[7/7] PR#3459~~ | ~~Done~~ |
 | kimi12 | ~~#1858~~ | P1 | backend | ~~[产品平台] 方案版本对比~~ PR#3462 | ~~Done~~ |
 | kimi15 | ~~#1862~~ | P1 | backend | ~~[产品平台] 标准品报价引擎~~ PR#3467 | ~~Done~~ |
+| kimi11 | ~~#1520~~ | P1 | backend | ~~[业务运营中心][3/8] CRM操作面板~~ PR#3463 | ~~Done~~ |
+| kimi5 | ~~#1756~~ | P0 | frontend | ~~[代理商工作台] 前端看板+列表视图~~ PR#3478 | ~~Done~~ |
+| kimi9 | ~~#2055~~ | P0 | backend | ~~[D3参数化冲突修复] PR#3274~~ | ~~Done~~ |
+| kimi6 | ~~#2893~~ | P0 | fullstack | ~~[Claude Office前端重构+编译修复] PR#3479~~ | ~~Done~~ |
 | kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式显示 | In Progress |
 | — | ~~#1533~~ | — | backend | ~~矿场反馈统计API~~ | ~~Done~~ |
 | — | ~~#2046~~ | — | pipeline | ~~AI生成Phase4 投标知识库增强~~ | ~~Done~~ |

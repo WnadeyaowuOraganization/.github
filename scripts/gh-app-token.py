@@ -95,6 +95,23 @@ def base64url_encode(data):
     return base64.urlsafe_b64encode(data).rstrip(b"=")
 
 
+def check_graphql_remaining(token):
+    """Check GraphQL rate limit remaining via REST (doesn't consume GraphQL quota)."""
+    req = urllib.request.Request(
+        "https://api.github.com/rate_limit",
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/vnd.github+json",
+        },
+    )
+    try:
+        with urllib.request.urlopen(req) as resp:
+            data = json.loads(resp.read())
+            return data.get("resources", {}).get("graphql", {}).get("remaining", 0)
+    except Exception:
+        return 0
+
+
 def get_installation_token(jwt_token, installation_id):
     """Exchange JWT for an installation access token."""
     url = f"https://api.github.com/app/installations/{installation_id}/access_tokens"
@@ -144,14 +161,19 @@ def main():
         installation_id = config["INSTALLATION_ID"]
 
         jwt_token = generate_jwt(app_id, KEY_PATH)
-        token, _ = get_installation_token(jwt_token, installation_id)
+        app_token, _ = get_installation_token(jwt_token, installation_id)
 
-        print(token)
-        return
+        # 检查 GraphQL 额度，耗尽则 fallback 到 weiping PAT
+        graphql_remaining = check_graphql_remaining(app_token)
+        if graphql_remaining > 0:
+            print(app_token)
+            return
+        # App token GraphQL 额度耗尽，fallback
+        print(f"App token GraphQL exhausted, falling back to weiping.pat", file=sys.stderr)
     except Exception:
         pass
 
-    # Fallback: weiping PAT
+    # Fallback: weiping PAT（个人账号独立额度）
     token = _read_pat("weiping.pat")
     if token:
         print(token)

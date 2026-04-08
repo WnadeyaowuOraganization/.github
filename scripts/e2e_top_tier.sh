@@ -79,15 +79,13 @@ export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" weiping)
 # API来源：Token Pool Proxy（同 run-cc.sh effort!=max）
 API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
 
-CONFIG_DIR="/tmp/cc-config-${SESSION}"
-mkdir -p "$CONFIG_DIR"
-rsync -a --exclude='.credentials.json' --exclude='projects' \
-  "${HOME_DIR}/.claude/" "$CONFIG_DIR/" 2>/dev/null
-ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
-# 使用真实 credentials（避免 stub 触发 OAuth 刷新失败后写回 ~/.claude/.credentials.json 污染经理CC）
-# API 调用走 proxy（ANTHROPIC_BASE_URL），credentials 仅用于 claude.ai 会话认证，不影响计费
-cp "${HOME_DIR}/.claude/.credentials.json" "$CONFIG_DIR/.credentials.json" 2>/dev/null
-[ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
+# 完全隔离 HOME：防止 Claude Code 无视 CLAUDE_CONFIG_DIR 直接读写 $HOME/.claude/.credentials.json
+# token rotation 发生时新 token 写入隔离目录，结束后回写到真实位置
+E2E_HOME="/tmp/e2e-home-${SESSION}"
+mkdir -p "${E2E_HOME}/.claude"
+rsync -a --exclude='projects' "${HOME_DIR}/.claude/" "${E2E_HOME}/.claude/" 2>/dev/null
+ln -sfn "${HOME_DIR}/.claude/projects" "${E2E_HOME}/.claude/projects"
+[ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "${E2E_HOME}/.claude.json"
 
 # 记录启动前已有的 JSONL 列表
 mkdir -p "$JSONL_DIR"
@@ -95,13 +93,12 @@ BEFORE_LIST=$(ls -1 "${JSONL_DIR}"/*.jsonl 2>/dev/null | sort)
 
 tmux new-session -d -s "$SESSION" -c "$E2E_DIR" \
   "export GH_TOKEN=${GH_TOKEN}; \
-   export HOME=${HOME_DIR}; \
+   export HOME=${E2E_HOME}; \
    export PATH=${HOME_DIR}/.local/bin:\$PATH; \
    ${API_ENV} \
-   export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
    claude --model claude-opus-4-6 --dangerously-skip-permissions; \
-   cp ${CONFIG_DIR}/.credentials.json ${HOME_DIR}/.claude/.credentials.json 2>/dev/null; \
-   rm -rf ${CONFIG_DIR}; \
+   cp ${E2E_HOME}/.claude/.credentials.json ${HOME_DIR}/.claude/.credentials.json 2>/dev/null; \
+   rm -rf ${E2E_HOME}; \
    tmux kill-session -t ${SESSION}"
 
 # 后台：注入prompt + 关联JSONL

@@ -96,7 +96,11 @@ def base64url_encode(data):
 
 
 def check_graphql_remaining(token):
-    """Check GraphQL rate limit remaining via REST (doesn't consume GraphQL quota)."""
+    """Check GraphQL rate limit remaining via REST (doesn't consume GraphQL quota).
+
+    瞬时网络错误时返回 -1（而不是 0），让上层判断为"未知"而保留 App token，
+    避免因一次 urllib 抖动就 fallback 到 PAT。
+    """
     req = urllib.request.Request(
         "https://api.github.com/rate_limit",
         headers={
@@ -104,12 +108,16 @@ def check_graphql_remaining(token):
             "Accept": "application/vnd.github+json",
         },
     )
-    try:
-        with urllib.request.urlopen(req) as resp:
-            data = json.loads(resp.read())
-            return data.get("resources", {}).get("graphql", {}).get("remaining", 0)
-    except Exception:
-        return 0
+    for attempt in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=5) as resp:
+                data = json.loads(resp.read())
+                return data.get("resources", {}).get("graphql", {}).get("remaining", -1)
+        except Exception:
+            if attempt < 2:
+                time.sleep(0.5)
+                continue
+            return -1
 
 
 def get_installation_token(jwt_token, installation_id):
@@ -157,6 +165,8 @@ def main():
         return
 
     # 无参数模式：编程CC使用 App Installation Token
+    # TEMP FIX (2026-04-08): 15个CC并发竞争App token配额→竞态条件
+    # 临时改为强制使用weiping.pat直到API池方案就绪
     try:
         config = load_config()
         app_id = config["APP_ID"]
@@ -165,17 +175,18 @@ def main():
         jwt_token = generate_jwt(app_id, KEY_PATH)
         app_token, _ = get_installation_token(jwt_token, installation_id)
 
-        # 检查 GraphQL 额度，耗尽则 fallback 到 weiping PAT
+        # 检查 GraphQL 额度，耗尽才 fallback 到 PAT
+        # remaining=-1 表示检查失败（urllib 瞬时错误），保守认为可用
         graphql_remaining = check_graphql_remaining(app_token)
-        if graphql_remaining > 0:
+        if graphql_remaining > 100 or graphql_remaining == -1:
             print(app_token)
             return
-        print("App token GraphQL exhausted, falling back to weiping.pat", file=sys.stderr)
-    except Exception:
-        pass
+        print(f"App token GraphQL low ({graphql_remaining}/5000), falling back to wandeyaowu.pat", file=sys.stderr)
+    except Exception as e:
+        print(f"App token generation failed: {e}", file=sys.stderr)
 
-    # Fallback: weiping PAT
-    print(_read_pat("weiping"))
+    # Fallback: wandeyaowu PAT (weiping.pat 已失效 2026-04-08)
+    print(_read_pat("wandeyaowu"))
 
 
 if __name__ == "__main__":

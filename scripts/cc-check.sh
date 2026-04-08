@@ -79,7 +79,7 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
     # 检查PR状态
     pr_count=$(gh pr list --repo "$repo_full" --search "Issue-$issue" --state open --json number -q '. | length' 2>/dev/null)
     pr_status=""
-    if [ "$pr_count" -gt 0 ]; then
+    if [ "${pr_count:-0}" -gt 0 ]; then
         pr_status="has_pr"
     fi
 

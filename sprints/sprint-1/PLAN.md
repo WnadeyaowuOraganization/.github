@@ -425,10 +425,11 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **更新：2026-04-08 19:00 UTC | 净容量 6/15，9槽空 | ⚡整改工单#2301/#2302/#2303(P0)新解锁 | 业务运营#1519/#1518解锁**
+> 🔄 **更新：2026-04-08 19:12 UTC | 净容量 4/15，11槽空 | 🔴 Jump #3458 全球项目矿场v3.0 插队队首 | 用户指令最高优先**
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
+| **#3458** | **🔴 Jump** | **fullstack** | **[全球项目矿场v3.0] 9项功能统一改版（前端+后端）— 吴耀确认原型** | **✅ 插队队首，立即指派** |
 | #2301 | P0 | frontend | [整改工单] 工人端H5页面 — 企微内嵌拍照上传+查看意见 | ✅ #1630 Done解锁 |
 | #2302 | P0 | frontend | [整改工单] 整改工单详情页 — 照片时间轴+意见流+状态操作 | ✅ #1630 Done解锁 |
 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板页面 — 按状态分组+筛选+统计 | ✅ #1630 Done解锁 |
@@ -454,29 +455,27 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（3 常规 + 6 P0冲突修复 + 3挖掘 + 6待释放 = 17/15超限2）
+## 当前运行（5 常规 + 2 P0冲突修复 + 4 挖掘/整改 + 4 keepalive占位 = 15/15满槽）
 
-> 更新：2026-04-08 18:52 UTC | #3449→Done PR#3485(kimi10注入)；/clear阻断kimi9/kimi15/kimi6-2893 compact
+> 更新：2026-04-08 19:11 UTC | Done：#1505(PR#3460)/#1520(PR#3463)/#1858(PR#3462)/#1862(PR#3467)/#2055(PR#3274)/#2851(PR#3459) | 新指派：#2301/#2302/#2303(整改工单P0)
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
-| kimi1 | #3288 | P0 | frontend | 验收队列前端（42%） | 运行中 |
+| kimi1 | #3288 | P0 | frontend | 验收队列前端 | 42% |
 | kimi2 | #2445 | P0 | pipeline | [**冲突修复**] 定向监控[12/38] PR#3305 rebase | 运行中 |
-| kimi3 | #2851 | P0 | frontend | [**冲突修复**] 开发监控驾驶舱 PR#3459 keepalive | 31% |
 | kimi4 | #2051 | P1 | frontend | D3-L4安装图自动化 | 运行中 |
-| kimi5 | #1756 | P0 | frontend | ~~代理商工作台~~ PR#3478→Done | 待释放 |
+| kimi5 | #1756 | P0 | frontend | ~~代理商工作台~~ PR#3478→Done | keepalive占位 |
 | kimi6 | #1531 | P0 | backend | [**冲突修复**] 可赢性评分模型 PR#3240 rebase | 运行中 |
-| kimi6 | #2893 | P0 | fullstack | ~~Claude Office~~ PR#3479→Done | 待释放(/clear) |
-| kimi7 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 | 54% |
-| kimi8 | #1564 | P0 | backend | 企微打通 keepalive(PR#3465已存在) | 待释放 |
-| kimi9 | #2055 | P0 | backend | ~~D3参数化~~ PR#3274→Done | 待释放(/clear) |
-| kimi10 | #3449 | P0 | frontend | ~~[挖掘改版][1/8] 详情抽屉~~ PR#3485→Done | 完成 |
-| kimi11 | #1520 | P1 | backend | ~~CRM操作面板~~ PR#3463→Done | 待释放 |
-| kimi12 | #1858 | P1 | backend | 方案版本对比 keepalive(PR#3462已存在) | 待释放 |
+| kimi6 | #2893 | P0 | fullstack | ~~Claude Office~~ PR#3479→Done | keepalive占位 |
+| kimi10 | #3449 | P0 | frontend | ~~[挖掘改版][1/8] 详情抽屉~~ PR#3485→Done | keepalive占位 |
+| kimi11 | #1520 | P1 | backend | ~~CRM操作面板~~ PR#3463→Done | keepalive占位 |
+| kimi12 | #1858 | P1 | backend | ~~方案版本对比~~ PR#3462→Done | keepalive重启 |
 | kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式 | 63% |
 | kimi14 | #2589 | P0 | backend | [**冲突修复**] execution PR#3317 rebase | 50% |
-| kimi15 | #1862 | P1 | backend | ~~标准品报价引擎~~ PR#3467→Done | 待释放(/clear) |
 | kimi16 | #3452 | P0 | fullstack | [项目挖掘改版][4/8] 项目分配功能 | 18% |
+| kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传+查看意见 | 新启动 |
+| kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴 | 新启动 |
+| kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板页面 | 新启动 |
 
 ---
 
@@ -520,6 +519,13 @@
 | kimi6 | ~~#2893~~ | P0 | fullstack | ~~[Claude Office前端重构+编译修复] PR#3479~~ | ~~Done~~ |
 | kimi10 | ~~#3449~~ | P0 | frontend | ~~[项目挖掘改版][1/8] 详情抽屉清理+Drawer泄漏~~ PR#3485 | ~~Done~~ |
 | kimi13 | #3450 | P0 | fullstack | [项目挖掘改版][2/8] 配合单位联系方式显示 | In Progress |
+| kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传+企微内嵌 | In Progress |
+| kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴+意见流 | In Progress |
+| kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板+筛选+统计 | In Progress |
+| kimi7 | ~~#1505~~ | P1 | backend | ~~[矿场-Phase2][16/16] 阶段话术模板库~~ PR#3460 | ~~Done~~ |
+| kimi9 | ~~#2055~~ | P0 | backend | ~~[D3参数化冲突修复] PR#3274~~ | ~~Done~~ |
+| kimi15 | ~~#1862~~ | P1 | backend | ~~[产品平台] 标准品报价引擎~~ PR#3467 | ~~Done~~ |
+| kimi3 | ~~#2851~~ | P0 | frontend | ~~[冲突修复] 开发监控驾驶舱~~ PR#3459 | ~~Done~~ |
 | — | ~~#1533~~ | — | backend | ~~矿场反馈统计API~~ | ~~Done~~ |
 | — | ~~#2046~~ | — | pipeline | ~~AI生成Phase4 投标知识库增强~~ | ~~Done~~ |
 | kimi16 | ~~#1876~~ | — | backend | ~~商务48小时反馈机制+分级升级~~ | ~~Done~~ |

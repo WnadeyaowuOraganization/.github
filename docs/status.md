@@ -1,9 +1,96 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-08 18:55 by Perplexity
+> ⏰ 最后更新：2026-04-08 20:30 by Claude
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
 ## 🚨 2026-04-07 / 2026-04-08 重大基础设施变更
+
+### 阶段四（2026-04-08 晚）：CI 流程修复 + 菜单/前端路由对账
+
+#### 4.1 CI 流程漏洞修复
+
+| 项 | 详情 |
+|---|---|
+| 触发 | PR #3487 (#3458) 第一次 CI 构建失败但通知不全，inject 给 CC 的 prompt 中"失败详情："后面是空的 |
+| 漏洞 1 | `ci-env.sh` mvn 用 `2>&1 \| tail -5` 屏蔽退出码 + `mvn clean` 不一定清空 target → 残留旧 jar 被 find 找到 → 用旧 jar 部署掩盖编译失败 |
+| 漏洞 2 | `BACKEND_CHANGED=false` 时使用 CI 残留 jar（可能是上一个 PR 的产物），不是当前 dev 真实部署 |
+| 漏洞 3 | `wait_healthy` 失败时强制重新构建掩盖问题 |
+| 漏洞 4 | inject-cc-prompt.sh 只查 .cc-lock，lock 已删但 session 还在时找不到，找不到 exit 0 静默 |
+| 漏洞 5 | test-failed 的失败详情只读 `summary.md`（playwright 报告），构建失败发生在 playwright 之前 → 详情为空 |
+| **核心决策** | 删除 `scripts/ci-env.sh` (197 行)，逻辑全部内联到 `.github/workflows/pr-test.yml` 的 build job 中 9 个独立 step |
+| 内联收益 | mvn/pnpm 输出实时进 Actions 日志流（`::group::` 分组），CC 可通过 `gh run view --log-failed` 实时拉取，不再有黑盒包装 |
+| build job 拆分 | 检测变更 → 拉取代码 → 构建后端 jar (backend 变更时) → 复用 dev jar (无变更时) → 构建前端 dist → 复用 dev dist → 停旧 → 启动 → 健康检查 |
+| inject-cc-prompt 增强 | 三层 fallback (.cc-lock → tmux 精确匹配 → 包含 -N 后缀)、找不到 exit 3、改用 `tmux load-buffer + paste-buffer` 注入避免 shell 解析特殊字符、新增 `--prompt-file` 支持长 prompt |
+| test-failed 增强 | 通过 `gh api repos/.../actions/jobs/$ID/logs` 实时拉取失败 step 完整日志（grep ERROR 行 + tail 100 行）、附 Actions 完整日志 URL、覆盖 unit-test/build/e2e 任一 job 失败 |
+| commits | `.github` 16cac17 + `wande-play` ff0fa3d13 |
+
+#### 4.2 gh-app-token.py fallback PAT 失效
+
+| 项 | 详情 |
+|---|---|
+| 触发 | kimi10 编程 CC 报 `HTTP 401: Bad credentials` 调 gh API |
+| 根因 | `weiping.pat` 已失效（401），但 `gh-app-token.py` 在 `check_graphql_remaining()` urllib 瞬时失败时返回 0 → 触发 fallback 到死 PAT |
+| 修复 | (1) `check_graphql_remaining` 加 timeout=5 + 3 次重试，失败返回 -1 而非 0；(2) main() 改为 `> 100 or == -1` 才用 App token 保守保留；(3) fallback 改用已验证有效的 `wandeyaowu.pat` |
+| commit | `.github` 待提交（同次菜单工作链中） |
+
+#### 4.3 cc-check.sh 整数比较错
+
+| 项 | 详情 |
+|---|---|
+| 触发 | `cc-check.sh:82 [: : integer expression expected` |
+| 根因 | `pr_count=$(gh pr list...)` 在 gh 失败时返回空字符串，`[ "" -gt 0 ]` 报错 |
+| 修复 | `[ "${pr_count:-0}" -gt 0 ]` |
+| commit | `.github` 待提交 |
+
+#### 4.4 菜单表 vs 前端路由对账与修复
+
+| 项 | 详情 |
+|---|---|
+| 数据源 | dev `ruoyi_ai.sys_menu` (86 个 C 型菜单) + `frontend/apps/web-antd/src/views/**` + `routes/modules/*.ts` 静态路由 |
+| 问题 1 | menu 100「用户管理」component 错指 `system/user/index`（vue 不存在），实际页面在 `operator/user/index` → 点击 404 |
+| 问题 2 | 42 个 wande/* 业务页面已合并 PR 但未注册菜单（D3/安全/工作流/财务/CRM/dealer/budget...）|
+| 问题 3 | 4 组真重复菜单（同 vue 引用 2 次）：30002↔20600 Issue看板, 30003↔20603 验收中心, 30005↔20104 我的项目, 20505↔20503 G7e监控/系统监控 |
+| 问题 4 | 5 组前端静态路由 name 与后端动态菜单 name 冲突 → vue-router 重名导致后注册的动态路由被静默忽略 → 用户访问 404 |
+| 问题 5 | 82 个菜单从未授权给任何角色（包括 superadmin role_id=1）；不过 admin 用户 (user_id=1) 走 `LoginHelper.isSuperAdmin(userId)` bypass 自动看到全部，所以这条对 admin 用户无影响，但对其他角色有影响 |
+| 问题 6 | `types.ts` 因之前 `git merge-file --union` 自动合并 PR 冲突时拼接两个 interface，导致 `ProjectMineFunnelTrend` 缺少闭合 `}`，前端构建失败 |
+| 修复 SQL | `V20260408_2__menu_route_recon.sql` UPDATE 1 + INSERT 39 (3 父目录 + 36 叶子) ；`V20260408_3__menu_dedup.sql` DELETE 4 menu + 3 role_menu；`V20260408_4__menu_role_grant.sql` INSERT 100 (role 1) + 124 (role admin) |
+| 修复前端 | `routes/modules/dashboard.ts` Dashboard → DashboardRoot；`wande.ts` Wande → WandeRoot, Execution → ExecutionRoot；`monitor.ts` Monitor → MonitorRoot；`workflow.ts` Workflow → WorkflowList；`views/workflow/edit.vue` 同步改 router.push name；`views/wande/dashboard/cron-alert-rule/` 重复目录已删 |
+| 修复 types.ts | 补 `ProjectMineFunnelTrend` 闭合 `}` |
+| 对账后效果 | menu→vue 缺失 1→0；wande/* 孤儿 42→5（剩 5 个全是已有菜单的代码 dedup 重复，非菜单问题）；前端路由 name 冲突 5→0 |
+| 已合并 commits | 941136f42 (recon) + cc8bfb853 (dedup) + 35703383e (grant) + 632d975fb (route name) + 342f55e6b (types.ts fix) |
+
+#### 4.5 [P0][项目挖掘改版] 系列 Issue 误关审计
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 用户问 #3449~#3456 代码写到哪了，为什么页面看不到 |
+| 真实情况 | 8 个 issue 全部 `closed/completed`，但只有 3 个真完成：#3449/#3450 PR open 未合并，#3456 文档已更新，**5 个 (#3451-3455) 完全没写代码**就被关了（#3452 kimi16 启动 CC 但 0 commit）|
+| 根因 | post-task / 状态机 bug：CC 退出时把 issue 标 completed 而不验证 PR 是否真的 merged。需要后续修 `scripts/post-task.sh` 加 PR merge gate |
+| 处理 | (1) 解决 #3485 的 types.ts 冲突 → squash merge 进 dev；(2) #3486 直接 squash merge；(3) #3451-3455 全部 reopen 并加注释；(4) 通知研发经理插队补做 |
+
+#### 4.6 PR #3270 损坏关闭
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 自动冲突解析时发现 #3270 异常 |
+| 异常 | 212 commits, +698042/-5458 lines, 4445 files —— 不是 feature PR，是 merge 灾难 |
+| 处理 | 评论说明 + 关闭 PR；建议从干净 dev 重做 #2065 |
+
+---
+
+### 阶段三（2026-04-08 下午）：批量解决 PR 冲突 + 菜单基础设施
+
+| 项 | 详情 |
+|---|---|
+| 触发 | Flyway/test 基础设施落地后，49 个 open PR 中 44 个 CONFLICTING |
+| 自动解析器 | 用 4 类规则批量解决：(A) dev 已删文件 git rm；(B) test 基础设施 (TestApplication.java/application.yml/pom.xml) sed 移除 ours hunk；(C) types.ts/requirements.txt/task.md union merge；(D) modify/delete 与 add/add 按 stage 解析 |
+| base ref 修正 | 9 个 PR 错把 base 设为 `main`，用 PATCH 改为 `dev` |
+| 自动解决 | 22 个 PR 冲突自动消除 |
+| 批量 merge | iterative loop：resolve → merge mergeable → 等 GitHub recompute → 重复，最终 squash merge **34 个 PR** |
+| 关闭 | #3270（212 commits / 4445 files 的 merge 灾难）|
+| 剩余 | 12-14 个真实 feature-vs-feature 代码冲突，已注入研发经理 tmux 会话由 CC 自行 rebase |
+
+---
 
 ### 阶段一（2026-04-07）：单元测试 H2 → Docker PostgreSQL + CI 加 mvn test 关卡
 

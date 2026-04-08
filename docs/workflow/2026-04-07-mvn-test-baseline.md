@@ -156,7 +156,13 @@ dev PG 装了 pgvector 扩展但 server 端 lib 文件路径有问题（`could n
 
 ---
 
-## 七、清理进度（持续更新）
+## 七、清理进度 — ✅ 全部完成
+
+**2026-04-08 02:33 — 20/20 issue 全部 closed (100%)**
+
+总耗时：约 3 小时 10 分钟（从 22:23 第一批分配 → 02:33 最后一个合并）
+
+### 已完成 Issue 全表（按合并顺序）
 
 按业务功能拆成 20 个 GitHub issue (#3335-#3354)，由 20 个 kimi 目录的编程 CC 并行修复。
 
@@ -226,6 +232,34 @@ kimi4 #3337 (预算资金), kimi5 #3346 (销售/CRM), kimi9 #3339 (整改/质保
 - 等待 PR：xxx
 
 修复策略由 CC 在各 issue 内独立处理，PR 合并时 `unit-test` 关卡自动校验通过数不退化。
+
+### 最终成果
+
+| 项 | 数 |
+|---|---|
+| **Issue closed** | **20/20 (100%)** |
+| **PR merged** | ~25 个（含若干 rebase 重新触发） |
+| **总修复 errors** | 2117（基线从 338 → 应大幅提升） |
+| **修复的 dev main src bug** | 5+ 个（fastener / R.okOrFail / listAccounts 等） |
+| **新建工具脚本** | per-kimi maven repo + per-kimi PG DB 隔离机制 |
+| **CC 干预次数** | ~30 次（push 催促、PR 创建、rebase、kill 重启）|
+
+### 关键发现 + 修复
+
+**dev main src 累积 bug（CI 没把关导致）**：
+1. `#2055 PR 漏 fastener entity/bo/vo` → fix `1952a463`
+2. `R.okOrFail()` 不存在被调用 → fix `1952a463`
+3. `mapper selectVoList` 与 `BaseMapperPlus` 重定义冲突 → fix `1952a463`
+4. `GatewaySubAccountController` vs `DashboardGatewayController` 重复 `/system/dashboard/gateway/accounts` mapping → fix `1b01ac60`
+
+**工具脚本 bug**：
+1. `run-cc.sh KIMI_TAG` 用 PROJECT_DIR 算成 "backend" → fix `3f3309e`
+2. 20 个 CC 共享 ~/.m2 race condition jar 损坏 → 给每个 kimi 独立 maven repo (hardlink)
+3. cc-keepalive 在 PG fix 期间反复重启卡住 CC → 暂停 3 小时，完成后恢复
+
+**研发经理 bug**：
+- 在 PG fix 已指派 7 个 kimi 后又分配业务 issue 到这些目录，导致 .cc-lock 被覆盖、git 分支错乱
+- 修复：超管手动 kill 业务会话 + 修复 .cc-lock + 注入禁令
 ---
 
 ## 八、未来改进

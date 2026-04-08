@@ -425,14 +425,12 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **更新** 2026-04-08 07:45 UTC | 13 CC有效运行 | #2399/#2242 已IP，#2116 IP；移除并补充新解锁 | Plan→Todo新增：#1508
+> 🔄 **更新** 2026-04-08 08:00 UTC | 15 CC满槽 | #2262/#2131/#2043 新完成；#1766 解锁；#2112/#2111/#1509 已IP
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #1509 | P1 | backend | [矿场-Phase2][6/16] 关系快照API（#1510 Done解锁） | ✅ |
+| #1766 | P1 | frontend | [代理商工作台] 前端管线+五阶段看板（#2131 Done解锁） | ✅ |
 | #1508 | P1 | backend | [矿场-Phase2][8/16] 决策链联系人角色标签（#1510 Done解锁） | ✅ |
-| #2112 | P1 | backend | [合同管理] AI合同风险分析引擎 — 独立 | ✅ |
-| #2111 | P1 | backend | [合同管理] AI条款对比引擎 — 独立 | ✅ |
 | #2009 | P1 | backend | [项目中心Phase7] 项目全景API — 独立 | ✅ |
 | #2012 | P1 | backend | [项目中心Phase4] 跨部门任务Service — 独立 | ✅ |
 | #2465 | P1 | backend | [执行管理] 生产进度/质检/发货/安装API — 独立 | ✅ |
@@ -441,6 +439,7 @@
 | #1464 | P1 | backend | [销售记录体系][2/9] 里程碑门控配置 — 独立建表 | ✅ |
 | #1828 | P1 | frontend | [提成绩效] 提成规则配置页面 — 独立 | ✅ |
 | #2078 | P1 | backend | [问题发现-P1] 原因诊断API（#2076已Done解锁） | ✅ |
+| #1872 | P1 | backend | [问题发现-P1] 扩展双模式（#2076已Done解锁） | ✅ |
 | #2359 | P1 | backend | [项目中心Phase12] 菜单权限SQL — 独立 | ✅ |
 | #2120 | P1 | backend | [执行管理] AI项目进度智能跟踪 — 独立 | ✅ |
 | #2011 | P1 | backend | [项目中心Phase5] 设计变更联动 — 独立 | ✅ |
@@ -449,6 +448,7 @@
 | #1463 | P1 | backend | [销售记录体系][3/9] 智能提醒频率引擎（#1465 Done解锁） | ✅ |
 | #2479 | P1 | backend | [D3-AI][3/3] 账号池AI渲染集成（#2477+#2478 Done解锁） | ✅ |
 | #1505 | P1 | backend | [矿场-Phase2][16/16] 阶段话术模板库 — 独立 | ✅ |
+| #2119 | P2 | backend | [执行管理] 经销模式支持 — 独立 | ✅ |
 
 ---
 
@@ -456,25 +456,25 @@
 
 ## 当前运行（15 CC 活跃）
 
-> 更新：2026-04-08 07:35 UTC | 满槽15/15 | kimi1→#2399(pipeline)、kimi10→#2242(frontend)新指派 | kimi6/7/8 PR等E2E
+> 更新：2026-04-08 07:44 UTC | 满槽15/15 | kimi3→#1509/kimi11→#2112/kimi12→#2111 新指派 | kimi6/7/8 PR等E2E
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
 | kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | 启动中 |
 | kimi10 | #2242 | T1 | frontend | [矿场-Phase2][3/16] 客户360画像详情页 | 启动中 |
+| kimi3 | #1509 | T1 | backend | [矿场-Phase2][6/16] 关系快照API | 启动中 |
+| kimi11 | #2112 | T1 | backend | [合同管理] AI合同风险分析引擎 | 启动中 |
+| kimi12 | #2111 | T1 | backend | [合同管理] AI条款对比引擎 | 启动中 |
 | kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | PR#3399 等E2E |
 | kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | PR#3329 等E2E |
 | kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | PR#3376 等E2E |
-| kimi2 | #1492 | T1 | backend | [矿场-Phase4][14/17] 跟进超时提醒 | 启动中 |
-| kimi3 | #2262 | T2 | frontend | [预算模板P0] 科目编码树管理页面 | 18% |
-| kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | 42% |
-| kimi5 | #2077 | T2 | backend | [问题发现-P1] 方案搜索API | 启动中 |
-| kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | 42% |
-| kimi11 | #2131 | T1 | backend | [代理商工作台] 数据模型+API+评分引擎 | 28% |
-| kimi12 | #2043 | T2 | pipeline | [问题发现P0] problem_scanner.py | 16% |
-| kimi13 | #2116 | T1 | backend | [代理商工作台] 数据模型+API+统计 | Plan模式 |
-| kimi14 | #1695 | T1 | backend | [提成绩效] 绩效考核API | 27% |
-| kimi15 | #1696 | T1 | backend | [提成绩效] 管理费分摊API | 39% |
+| kimi2 | #1492 | T1 | backend | [矿场-Phase4][14/17] 跟进超时提醒 | 进行中 |
+| kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | 进行中 |
+| kimi5 | #2077 | T2 | backend | [问题发现-P1] 方案搜索API | 进行中 |
+| kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | 进行中 |
+| kimi13 | #2116 | T1 | backend | [代理商工作台] 数据模型+API+统计 | 进行中 |
+| kimi14 | #1695 | T1 | backend | [提成绩效] 绩效考核API | 进行中 |
+| kimi15 | #1696 | T1 | backend | [提成绩效] 管理费分摊API | 进行中 |
 
 ---
 
@@ -632,14 +632,14 @@
 | kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | In Progress |
 | kimi1 | ~~#2081~~ | T2 | backend | ~~[超管驾驶舱P0] 开发效率统计API~~ PR#3403 | ~~Done~~ |
 | kimi2 | #2321 | T1 | frontend | [P0] 全局防泄密水印 | In Progress |
-| kimi3 | #2262 | T2 | frontend | [预算模板P0] 科目编码树管理页面 | In Progress |
+| kimi3 | ~~#2262~~ | T2 | frontend | ~~[预算模板P0] 科目编码树管理页面~~ PR#2575✅merged | ~~Done~~ |
 | kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | In Progress |
 | kimi5 | #2405 | T1 | backend | [矿场增强][22/23] 关系加分逻辑 | In Progress |
 | kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | In Progress |
 | kimi10 | ~~#2402~~ | T1 | pipeline | ~~[矿场-Phase2][5/16] 项目角色自动识别NLP~~ PR#3404 | ~~Done~~ |
 | kimi11 | ~~#2400~~ | T1 | pipeline | ~~[矿场-Phase2][14/16] G7e联系人自动提取~~ | ~~Done~~ |
-| kimi11 | #2131 | T1 | backend | [代理商工作台] 数据模型+API+评分引擎 | In Progress |
-| kimi12 | #2043 | T2 | pipeline | [问题发现P0] problem_scanner.py多源采集 | In Progress |
+| kimi11 | ~~#2131~~ | T1 | backend | ~~[代理商工作台] 数据模型+API+评分引擎~~ PR#3405 | ~~Done~~ |
+| kimi12 | ~~#2043~~ | T2 | pipeline | ~~[问题发现P0] problem_scanner.py多源采集~~ PR#3406 | ~~Done~~ |
 | kimi13 | #2116 | T1 | backend | [代理商工作台] 数据模型+API+统计 | In Progress |
 | kimi14 | #1695 | T1 | backend | [提成绩效] 绩效考核API | In Progress |
 | kimi15 | #1696 | T1 | backend | [提成绩效] 管理费分摊API | In Progress |
@@ -649,3 +649,6 @@
 | kimi5 | #2077 | T2 | backend | [问题发现-P1] 方案搜索API | In Progress |
 | kimi1 | #2399 | T1 | pipeline | [矿场-Phase3][2/12] 赢率预测模型训练Pipeline | In Progress |
 | kimi10 | #2242 | T1 | frontend | [矿场-Phase2][3/16] 客户360画像详情页 | In Progress |
+| kimi3 | #1509 | T1 | backend | [矿场-Phase2][6/16] 关系快照API | In Progress |
+| kimi11 | #2112 | T1 | backend | [合同管理] AI合同风险分析引擎 | In Progress |
+| kimi12 | #2111 | T1 | backend | [合同管理] AI条款对比引擎 | In Progress |

@@ -425,15 +425,11 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> ✅ **pg-test 20/20 全部 DONE** (2026-04-08 06:10 UTC) | 恢复 Sprint-1 业务指派 | 当前活跃CC：kimi6(#1504)+kimi7(#1529)+kimi8(#2401) | 空闲目录充足
+> 🔄 **更新** 2026-04-08 06:20 UTC | 11 CC活跃（kimi1-11）| #2081/#2321/#2262/#2261/#2403/#2402已IP，已从建议移除 | Plan→Todo新增6个
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
-| #2043 | P0 | dashboard | [问题发现] problem_scanner.py 多源采集脚本+Cron（#2076已Done解锁） | ✅ |
-| #2081 | P0 | dashboard | [超管驾驶舱] 开发效率统计API — 产出+质量+趋势全维度 | ✅ |
-| #2321 | P0 | frontend | 全局防泄密水印 — 独立模块 | ✅ |
-| #2262 | P0 | frontend | [预算模板][9/12] 科目编码树管理（backend#1545已CLOSED） | ✅ |
-| #2261 | P0 | frontend | [预算模板][10/12] 模板库管理（backend#1544已CLOSED） | ✅ |
+| #2043 | P0 | dashboard | [问题发现] problem_scanner.py 多源采集脚本+Cron（#2076已Done） | ✅ |
 | #2116 | P1 | backend | [代理商工作台] 数据模型+API+统计 — 独立 | ✅ |
 | #2131 | P1 | backend | [代理商工作台] 数据模型+API+评分引擎 — 独立 | ✅ |
 | #1695 | P1 | backend | [提成绩效] 绩效考核API — platform#1286/#1288已CLOSED | ✅ |
@@ -442,27 +438,39 @@
 | #2111 | P1 | backend | [合同管理] AI条款对比引擎 — 独立 | ✅ |
 | #2009 | P1 | backend | [项目中心Phase7] 项目全景API — 独立 | ✅ |
 | #2012 | P1 | backend | [项目中心Phase4] 跨部门任务Service — 独立 | ✅ |
-| #2403 | P1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 — 独立 | ✅ |
-| #2402 | P1 | pipeline | [矿场-Phase2][5/16] 项目角色自动识别NLP — 独立 | ✅ |
 | #2465 | P1 | backend | [执行管理] 生产进度/质检/发货/安装API — 独立 | ✅ |
 | #2183 | P1 | backend | [执行管理] 扩展角色权限 tech_coordinator+install_manager — 独立 | ✅ |
 | #1626 | P1 | backend | [整改工单-P1] 工艺标准卡导入API（#1632已CLOSED） | ✅ |
 | #1492 | P1 | backend | [矿场-Phase4][14/17] 跟进超时提醒 — 独立 | ✅ |
 | #1464 | P1 | backend | [销售记录体系][2/9] 里程碑门控配置 — 独立建表 | ✅ |
+| #1828 | P1 | frontend | [提成绩效] 提成规则配置页面 — 独立 | ✅ |
+| #2077 | P1 | backend | [问题发现-P1] 方案搜索API（#2076已Done解锁） | ✅ |
+| #2078 | P1 | backend | [问题发现-P1] 原因诊断API（#2076已Done解锁） | ✅ |
+| #2359 | P1 | backend | [项目中心Phase12] 菜单权限SQL — 独立 | ✅ |
+| #2120 | P1 | backend | [执行管理] AI项目进度智能跟踪 — 独立 | ✅ |
+| #2011 | P1 | backend | [项目中心Phase5] 设计变更联动（platform#1030已CLOSED确认） | ✅ |
 
 ---
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（3 CC 活跃）
+## 当前运行（11 CC 活跃）
 
-> 更新：2026-04-08 06:10 UTC | **pg-test 20/20 全部DONE** 🎉 | 仅3 CC活跃 | 大量空闲目录 | Jump/Fail/E2E Fail=0
+> 更新：2026-04-08 06:15 UTC | **pg-test 20/20全部DONE 🎉** | 新指派8个业务Issue | 合计11 CC活跃 | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
 | kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | 进行中 |
 | kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | 进行中 |
 | kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | 进行中 |
+| kimi1 | #2081 | T2 | backend | [超管驾驶舱P0] 开发效率统计API | 启动中 |
+| kimi2 | #2321 | T1 | frontend | [P0] 全局防泄密水印 | 启动中 |
+| kimi3 | #2262 | T2 | frontend | [预算模板P0] 科目编码树管理页面 | 启动中 |
+| kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | 启动中 |
+| kimi5 | #2405 | T1 | backend | [矿场增强][22/23] 关系加分逻辑 | 启动中 |
+| kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | 启动中 |
+| kimi10 | #2402 | T1 | pipeline | [矿场-Phase2][5/16] 项目角色自动识别NLP | 启动中 |
+| kimi11 | #2400 | T1 | pipeline | [矿场-Phase2][14/16] G7e联系人自动提取 | 启动中 |
 
 ---
 
@@ -595,26 +603,34 @@
 | kimi7 | ~~#1678~~ | T1 | backend | ~~AI投标配图自动生成~~ | ~~Done~~ |
 | kimi1 | ~~#1855~~ | T2 | fullstack | ~~[D3-Agent][1/7] G7e安装CadQuery+rhino3dm参数化建模环境~~ PR#3331✅merged | ~~Done~~ |
 | kimi3 | ~~#2086~~ | T1 | backend | ~~变更影响联动API - BOM差异+成本利润联动~~ PR#3356✅merged | ~~Done~~ |
-| kimi1 | #3335 | tech | backend | [mvn test欠债] D3设计与参数化 | In Progress |
-| kimi2 | #3345 | tech | backend | [mvn test欠债] 问题反馈与通知 | In Progress |
-| kimi3 | #3336 | tech | backend | [mvn test欠债] 项目执行与看板 | In Progress |
-| kimi4 | #3337 | tech | backend | [mvn test欠债] 预算资金与佣金 | In Progress |
-| kimi5 | #3346 | tech | backend | [mvn test欠债] 销售跟踪与CRM | In Progress |
+| kimi1 | ~~#3335~~ | tech | backend | ~~[mvn test欠债] D3设计与参数化~~ | ~~Done~~ |
+| kimi2 | ~~#3345~~ | tech | backend | ~~[mvn test欠债] 问题反馈与通知~~ | ~~Done~~ |
+| kimi3 | ~~#3336~~ | tech | backend | ~~[mvn test欠债] 项目执行与看板~~ | ~~Done~~ |
+| kimi4 | ~~#3337~~ | tech | backend | ~~[mvn test欠债] 预算资金与佣金~~ | ~~Done~~ |
+| kimi5 | ~~#3346~~ | tech | backend | ~~[mvn test欠债] 销售跟踪与CRM~~ | ~~Done~~ |
 | kimi6 | ~~#3348~~ | tech | backend | ~~[mvn test欠债] 文案与审批~~ | ~~Done~~ |
 | kimi7 | ~~#3338~~ | tech | backend | ~~[mvn test欠债] Token池与运营~~ PR#3357✅merged | ~~Done~~ |
 | kimi8 | ~~#3344~~ | tech | backend | ~~[mvn test欠债] 方案与报价~~ | ~~Done~~ |
-| kimi9 | #3339 | tech | backend | [mvn test欠债] 整改与质保 | In Progress |
-| kimi10 | #3349 | tech | backend | [mvn test欠债] 设备生命周期 | In Progress |
-| kimi11 | #3347 | tech | backend | [mvn test欠债] 数字资产与S3 | In Progress |
-| kimi12 | #3350 | tech | backend | [mvn test欠债] 备件与采购 | In Progress |
-| kimi13 | #3351 | tech | backend | [mvn test欠债] 财务收款与合同 | In Progress |
-| kimi14 | #3340 | tech | backend | [mvn test欠债] 驾驶舱与运维 | In Progress |
-| kimi15 | #3352 | tech | backend | [mvn test欠债] 工单与派单 | In Progress |
-| kimi16 | #3353 | tech | backend | [mvn test欠债] 照片AI识别 | In Progress |
+| kimi9 | ~~#3339~~ | tech | backend | ~~[mvn test欠债] 整改与质保~~ | ~~Done~~ |
+| kimi10 | ~~#3349~~ | tech | backend | ~~[mvn test欠债] 设备生命周期~~ | ~~Done~~ |
+| kimi11 | ~~#3347~~ | tech | backend | ~~[mvn test欠债] 数字资产与S3~~ | ~~Done~~ |
+| kimi12 | ~~#3350~~ | tech | backend | ~~[mvn test欠债] 备件与采购~~ | ~~Done~~ |
+| kimi13 | ~~#3351~~ | tech | backend | ~~[mvn test欠债] 财务收款与合同~~ | ~~Done~~ |
+| kimi14 | ~~#3340~~ | tech | backend | ~~[mvn test欠债] 驾驶舱与运维~~ | ~~Done~~ |
+| kimi15 | ~~#3352~~ | tech | backend | ~~[mvn test欠债] 工单与派单~~ | ~~Done~~ |
+| kimi16 | ~~#3353~~ | tech | backend | ~~[mvn test欠债] 照片AI识别~~ | ~~Done~~ |
 | kimi17 | ~~#3354~~ | tech | backend | ~~[mvn test欠债] 验收与交付~~ | ~~Done~~ |
-| kimi18 | #3341 | tech | backend | [mvn test欠债] 聊天会话与记忆 | In Progress |
-| kimi19 | #3342 | tech | backend | [mvn test欠债] 企微集成与权限 | In Progress |
+| kimi18 | ~~#3341~~ | tech | backend | ~~[mvn test欠债] 聊天会话与记忆~~ | ~~Done~~ |
+| kimi19 | ~~#3342~~ | tech | backend | ~~[mvn test欠债] 企微集成与权限~~ | ~~Done~~ |
 | kimi20 | ~~#3343~~ | tech | backend | ~~[mvn test欠债] 标准库与材质~~ | ~~Done~~ |
 | kimi6 | #1504 | T1 | backend | [矿场-Phase3][1/12] 赢率预测特征工程 | In Progress |
 | kimi7 | #1529 | T1 | backend | [矿场增强][17/23] 企微H5轻量接口 | In Progress |
 | kimi8 | #2401 | T1 | pipeline | [矿场-Phase2][10/16] 政策信号采集器 | In Progress |
+| kimi1 | #2081 | T2 | backend | [超管驾驶舱P0] 开发效率统计API | In Progress |
+| kimi2 | #2321 | T1 | frontend | [P0] 全局防泄密水印 | In Progress |
+| kimi3 | #2262 | T2 | frontend | [预算模板P0] 科目编码树管理页面 | In Progress |
+| kimi4 | #2261 | T2 | frontend | [预算模板P0] 模板库管理页面 | In Progress |
+| kimi5 | #2405 | T1 | backend | [矿场增强][22/23] 关系加分逻辑 | In Progress |
+| kimi9 | #2403 | T1 | pipeline | [矿场-Phase2][2/16] 企业工商数据采集 | In Progress |
+| kimi10 | #2402 | T1 | pipeline | [矿场-Phase2][5/16] 项目角色自动识别NLP | In Progress |
+| kimi11 | #2400 | T1 | pipeline | [矿场-Phase2][14/16] G7e联系人自动提取 | In Progress |

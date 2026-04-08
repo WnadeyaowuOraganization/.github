@@ -3,20 +3,32 @@
 > ⏰ 最后更新：2026-04-08 12:43 by Perplexity
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
-## 🚨 2026-04-07 重大基础设施变更
+## 🚨 2026-04-07 / 2026-04-08 重大基础设施变更
 
-**单元测试基础设施由 H2 切换到 Docker PostgreSQL，CI 加 mvn test 关卡**
+### 阶段一（2026-04-07）：单元测试 H2 → Docker PostgreSQL + CI 加 mvn test 关卡
 
 | 项 | 详情 |
 |---|---|
 | 触发 | 调研 SCHEMA_ORDER.txt 并行冲突 → 发现 H2/PG 双套维护浪费 → 发现 dev 长期 `-Dmaven.test.skip=true` 导致 2117 个测试错误无人发现 |
-| 改动 | wande-play `3fee4e88` (dev) + .github `321366e` (main) |
 | 测试 PG 容器 | `wande-test-pg` (postgres:16-alpine, 端口 5434/wande_ai/wande/wande_test) |
-| 启动脚本 | `scripts/ensure-test-pg.sh` |
+| 启动脚本 | `scripts/ensure-test-pg.sh`（per-kimi 独立 DB 隔离）|
 | 当前基线 | **338 通过** / 2462 总测试（写入 `.test-baseline`，CI 不允许下降） |
-| 历史欠债 | 2117 errors 拆成 20 个 issue（#3335-#3354），按功能分组，由 CC 逐批清理 |
+| 历史欠债清理 | 2117 errors 拆成 20 个 issue（#3335-#3354），4 小时内 20/20 全部 closed |
 | 完整记录 | [docs/workflow/2026-04-07-mvn-test-baseline.md](workflow/2026-04-07-mvn-test-baseline.md) |
-| CC 流程变化 | 写 PG 增量脚本只放 `backend/script/sql/update/wande_ai/`，**不再维护 H2 schema、不再追加 `wande-ai-pg.sql`**。详见 [db-schema.md](agent-docs/backend/db-schema.md) |
+
+### 阶段二（2026-04-08）：数据库迁移改用 Flyway 自动执行
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 重新冻结后发现 `wande-ai-pg.sql` 与 `test-base-schema.pg.sql` 冗余 + bash 维护的 `sql_migrations_history` 不符合 Spring 生态 |
+| 引入 | `flyway-core` + `flyway-database-postgresql` 依赖 |
+| 自定义配置 | `backend/ruoyi-admin/src/main/java/org/ruoyi/config/WandeFlywayConfig.java` 同时迁移 `ruoyi_ai` + `wande_ai` 两个库 |
+| 迁移脚本位置 | `backend/ruoyi-modules/wande-ai/src/main/resources/db/migration_{ruoyi_ai,wande_ai}/V*.sql` |
+| Baseline | `V1__baseline_2026_04_08.sql` 包含 dev PG snapshot 全量 (ruoyi_ai 62 + wande_ai 408 张表) |
+| 历史 bash 脚本 | `script/sql/update/{ruoyi_ai,wande_ai}/_archive_2026-04-08/` 归档保留 |
+| 删除 | `build-deploy-dev.yml` 的 `run_migrations` 函数 + `run-sql-updates.sh` 替换为 stub |
+| **CC 新流程** | 写 `db/migration_wande_ai/V<日期>_<序号>__<描述>.sql`，Spring 启动时 Flyway 自动跑，**不需要任何手工同步**。详见 [db-schema.md](agent-docs/backend/db-schema.md) |
+| **新环境部署** | Docker / dev / prod 启动应用即自动建表 + 跑增量，**无需任何 setup 步骤** |
 
 ---
 ## 🎯 Sprint 计划

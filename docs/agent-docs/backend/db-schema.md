@@ -1,67 +1,103 @@
 # 数据库设计与变更管理
 
-## 数据库变更管理
+> **2026-04-08 起改用 Flyway 自动迁移**：Spring Boot 启动时会自动跑 `db/migration_wande_ai/V*.sql` 和 `db/migration_ruoyi_ai/V*.sql`，CC 只需按命名规范创建新文件即可，不再需要手写 bash 脚本或 PR review SQL 执行顺序。
 
-开发过程中如果需要新建表或修改表结构，按以下流程操作：
+## 新增表/改表（标准流程）
 
-### 第 1 步：创建增量 SQL
+### 第 1 步：在 `db/migration_wande_ai/` 创建 Flyway 增量脚本
 
-在 `script/sql/update/` 下按**目标数据库子目录**创建 SQL 文件：
-- 目标数据库为 `wande_ai` → 放入 `script/sql/update/wande_ai/`
-- 目标数据库为 `ruoyi_ai` → 放入 `script/sql/update/ruoyi_ai/`
-- 命名格式：`YYYY-MM-DD-功能描述.sql`
-- 示例：`script/sql/update/wande_ai/2026-03-18-add-supplier-ratings.sql`
+**位置**：`backend/ruoyi-modules/wande-ai/src/main/resources/db/migration_wande_ai/`
+（如果是 ruoyi 框架表如菜单、字典等，写到 `db/migration_ruoyi_ai/` 下）
+
+**Flyway 命名规范（强制）**：`V<日期>_<序号>__<描述>.sql`
+- `V20260408_1__add_supplier_ratings_table.sql` ✅
+- `V20260408_2__add_invoice_index.sql` ✅
+- `V2026-04-08-add-supplier.sql` ❌ 不符合 Flyway 命名
+
+**为什么强制 V 开头**：Flyway 要求前缀 V（versioned migration），版本号要单调递增。两个 CC 同一天写就用 `_1`、`_2` 序号区分。
 
 文件模板：
 ```sql
 -- 变更说明：添加供应商评级表
--- 变更日期：2026-03-18
--- 关联 Issue：#3
+-- 变更日期：2026-04-08
+-- 关联 Issue：#1234
 
-CREATE TABLE IF NOT EXISTS supplier_ratings (
+CREATE TABLE IF NOT EXISTS wdpp_supplier_ratings (
     id BIGSERIAL PRIMARY KEY,
-    -- 字段定义...
+    supplier_id BIGINT NOT NULL,
+    score NUMERIC(3,1) NOT NULL,
     create_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    update_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    create_by BIGINT,
+    update_by BIGINT,
+    create_dept BIGINT,
+    deleted INTEGER DEFAULT 0
 );
+
+CREATE INDEX IF NOT EXISTS idx_wdpp_supplier_ratings_supplier ON wdpp_supplier_ratings(supplier_id);
 ```
 
-**要求**：
-- PostgreSQL 语法，使用 `IF NOT EXISTS` / `IF EXISTS` 保证幂等
-- 每个文件的头部注释必须包含：变更说明、日期、关联 Issue
-- SQL 文件中**不需要**指定 schema 前缀（如 `wande_ai.`），子目录名即目标数据库，CI/CD 会自动连接对应数据库执行
-- **CI/CD 自动执行机制**：push 到 main 后，GitHub Actions 会将 `script/sql/update/` 下各子目录的 SQL 文件同步到 Lightsail，由 `run-sql-updates.sh` 脚本按文件名日期顺序执行。已执行过的文件会记录在各数据库的 `sql_migrations_history` 表中自动跳过，保证幂等
+**强制要求**：
+- PostgreSQL 语法（`BIGSERIAL`/`TEXT`/`JSONB`/`TIMESTAMP`）
+- 必须用 `IF NOT EXISTS` / `IF EXISTS` 保证幂等（Flyway 失败重试时不会报错）
+- 头部注释包含变更说明、日期、关联 Issue
 
-### 第 2 步：单元测试自动加载（无需手动同步）
+### 第 2 步：自动应用，无需任何手动操作
 
-> ⚠️ **2026-04-07 起单元测试改用 Docker PostgreSQL，不再需要维护 H2 schema**
->
-> 旧流程要求 CC 同时维护 `test/resources/schemas/issue_XXXX.sql`（H2 方言）+ PG 增量脚本，两套同步极易出错且并行写入冲突频繁。
->
-> **新流程**：CC 只写一处——`backend/script/sql/update/wande_ai/` 下的 PG 脚本。
->
-> 测试启动时 `TestApplication.schemaAutoLoader` 会自动：
-> 1. `DROP SCHEMA public CASCADE; CREATE SCHEMA public`
-> 2. 加载 `test-base-schema.pg.sql`（dev PG snapshot 冻结快照，含 368 张表）
-> 3. 加载 `update/wande_ai/` 下不在 `test-base-applied.txt` 里的脚本（即你新加的）
->
-> **禁止编辑**：`test/resources/test-base-schema.pg.sql`、`test/resources/test-base-applied.txt`、`script/sql/wande-ai-pg.sql`（pg_dump 全量初始化脚本，由 DBA 集中维护，编程 CC 不得动）。
->
-> 验证：`cd backend && mvn -pl ruoyi-modules-api/wande-ai-api -am install -DskipTests && mvn -pl ruoyi-modules/wande-ai test`
+| 环境 | 何时跑 | 谁触发 |
+|------|--------|--------|
+| **本地 mvn test** | Spring Context 启动时 | `WandeFlywayConfig.@PostConstruct` |
+| **dev 部署** | 应用启动时 | 同上 |
+| **生产部署** | 应用启动时 | 同上 |
+| **新 Docker 部署** | 应用启动时 | 同上 |
+
+**已应用的迁移记录**：每个库的 `flyway_schema_history` 表
+- ruoyi_ai 库的 history 表 → `ruoyi_ai.public.flyway_schema_history`
+- wande_ai 库的 history 表 → `wande_ai.public.flyway_schema_history`
 
 ### 第 3 步：同步 Java 代码
 
 为新表创建对应的 Entity / Mapper / Vo / Bo / Service / Controller，遵循开发规范（详见 [conventions.md](conventions.md)）。
 
+### 第 4 步：本地验证
+
+```bash
+# 编译 + 跑相关测试
+cd backend
+mvn -pl ruoyi-modules-api/wande-ai-api -am install -DskipTests -q
+mvn -pl ruoyi-modules/wande-ai test -Dtest='YourServiceTest'
+```
+
+测试启动时 Flyway 会自动跑你的 V*.sql 到测试 PG 容器（`wande_test_kimi<N>`）。
+
+---
+
+## ⛔ 禁止行为
+
+1. **禁止编辑 `backend/script/sql/wande-ai-pg.sql`**（baseline 快照，由超管定期重新冻结）
+2. **禁止编辑 `backend/script/sql/ruoyi-ai-pg.sql`**（同上）
+3. **禁止编辑 `db/migration_*/V1__baseline_2026_04_08.sql`**（baseline V1）
+4. **禁止把 SQL 写到 `backend/script/sql/update/wande_ai/`**（已废弃，归档目录）
+5. **禁止用旧的 `YYYY-MM-DD-xxx.sql` 命名**（不符合 Flyway，不会被加载）
+6. **禁止已合并的迁移脚本被修改**（Flyway checksum 验证会失败）—— 如果发现 V*.sql 写错了，写一个新的 V*.sql 修复，不要直接改老文件
+
+---
+
 ## SQL 脚本说明
 
 | 脚本文件 | 位置 | 用途 |
 |---------|------|------|
-| `ruoyi-ai.sql` | `script/sql/` | ruoyi-ai 框架 MySQL 版（原始） |
-| `ruoyi-ai-pg.sql` | `script/sql/` | ruoyi-ai 框架表 PostgreSQL 版 |
-| `wande-ai-pg.sql` | `script/sql/` | 万德业务表 PostgreSQL DDL |
+| `ruoyi-ai-pg.sql` | `backend/script/sql/` | ruoyi 框架库 baseline (62 张表) |
+| `wande-ai-pg.sql` | `backend/script/sql/` | 万德业务库 baseline (408 张表) |
+| `db/migration_ruoyi_ai/V*.sql` | `backend/ruoyi-modules/wande-ai/src/main/resources/` | ruoyi_ai 库的 Flyway 迁移脚本 |
+| `db/migration_wande_ai/V*.sql` | 同上 | wande_ai 库的 Flyway 迁移脚本 |
+| `_archive_2026-04-08/` | `backend/script/sql/update/{ruoyi_ai,wande_ai}/` | 历史 bash 脚本归档（不再执行）|
 
-初始化执行顺序：先 `ruoyi-ai-pg.sql`（在 `ruoyi_ai` 库），再执行`script/sql/update/ruoyi`下的菜单更新脚本"*-menu.sql"（在 `ruoyi_ai` 库），最后 `wande-ai-pg.sql`（在 `wande_ai` 库）。
+### 初始化机制
+
+- **新部署**：Flyway 启动时跑 V1（含 baseline 408+62 张表）+ V2、V3...
+- **已有库**（dev/prod 当前状态）：Flyway 启动时自动 baseline 到 V1（不执行 V1），跳过后跑 V2+
+- **测试库**：每次 Spring Context 启动 → `schemaAutoLoader` Bean drop schema → Flyway 跑全部 V*.sql
 
 ## 菜单与权限注册
 

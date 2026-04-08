@@ -425,7 +425,7 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **更新** 2026-04-08 13:30 UTC | PR#3445(#2120)✅新完成；优先队列清空；CC监控：kimi14/15超时需重启、kimi3卡住；Plan=59→4 Todo；下一批指派候选：#2459/#2458/#2154(Todo)
+> 🔄 **更新** 2026-04-08 13:40 UTC | 新完成：PR#3444(#2255)、PR#3442(#2011)、PR#3437(#1626)、PR#3445(#2120) | 优先队列清空 | 研发经理已启动P0冲突修复第二批(#2424/#2095/#2589/#2893)；常规任务继续 | 下一批候选：#2459/#2458/#2154(4 Todo)
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -454,27 +454,51 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（13-14 CC 活跃）
+## 当前运行（6 常规 + 9 P0冲突修复 = 15/15）
 
-> 更新：2026-04-08 13:30 UTC | 排程巡检：Jump=0✓, E2E Fail=1(#1839), Fail=0✓ | PR#3445(#2120)✅新Done | 🚨预警：kimi14/kimi15超时33分钟需重启，kimi3可能卡住(18分钟无输出) | 11/15 CC工作中
+> 更新：2026-04-08 13:40 UTC | 排程巡检：Jump=0✓, E2E Fail=1(#1839), Fail=0✓ | 新完成PR：#3444(#2255)、#3442(#2011)、#3437(#1626) | P0冲突修复9个全部活跃 | 指派完成度+变化统计见下
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
 | kimi1 | #1920 | P0 | pipeline | [D3-v2.0][P0] wande-gh-plugins仓库重构 | 运行中 |
-| kimi2 | #1626 | T1 | backend | [整改工单-P1] 工艺标准卡导入API | 运行中 |
-| kimi3 | #2254 | T1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go | 注入创PR中 |
-| kimi4 | ~~#2261~~ | — | — | — | ✅ CLOSED PR#2575 |
-| kimi5 | #2260 | T1 | frontend | [预算模板11/12] 项目预算编制增强 | 运行中 |
-| kimi6 | ~~#2120~~ | — | — | — | ✅ PR#3445 DONE |
+| kimi2 | ~~#1626~~ | — | — | — | ✅ PR#3437 DONE |
+| kimi3 | #2254 | T1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go | 运行中 |
+| kimi4 | #1527 | **P0插** | backend | [**冲突修复**] 矿场Phase2 PR#3238 rebase | 运行中 (0%) |
+| kimi5 | #1756 | **P0插** | frontend | [**冲突修复**] 代理商工作台 PR#3424 rebase | 运行中 |
+| kimi6 | #1531 | **P0插** | backend | [**冲突修复**] 矿场评分模型 PR#3240 rebase | 运行中 (0%) |
 | kimi7 | #2096 | T1 | backend | [执行管理] 整改工单管理API | 运行中 |
-| kimi8 | #2237 | T1 | backend | [矿场-Phase3][4/12] 项目列表赢率列排序 | 运行中 |
-| kimi9 | #1464 | T1 | backend | [销售记录体系][2/9] 里程碑门控配置 | 运行中 |
+| kimi8 | #1564 | **P0插** | backend | [**冲突修复**] 企微打通 PR#3260 rebase | 运行中 |
+| kimi9 | #2055 | **P0插** | backend | [**冲突修复**] D3参数化 PR#3274 rebase | 运行中 |
 | kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | 运行中 |
-| kimi11 | #2240 | T1 | frontend | [矿场-Phase2][9/16] 决策链可视化组件 | 运行中 |
+| kimi11 | #2095 | **P0插** | backend | [**冲突修复**] Equipment模块 PR#3284 rebase | 运行中 |
 | kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | 运行中 |
 | kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | 运行中 |
-| kimi14 | #2011 | T1 | backend | [项目中心Phase5] 设计变更联动 | 🚨超时33分钟，待重启 |
-| kimi15 | #2255 | T1 | frontend | [矿场增强][8/23] 转化漏斗看板页面 | 🚨超时32分钟，待重启 |
+| kimi14 | #2589 | **P0插** | backend | [**冲突修复**] execution执行管理 PR#3317 rebase | 运行中 |
+| kimi15 | #2893 | **P0插** | fullstack | [**冲突修复**] Claude Office PR#3315 rebase | 运行中 |
+
+---
+
+---
+
+## 🚨 P0冲突修复（超管插队，13个PR）
+
+> 状态：2026-04-08 13:55 UTC | 已启动9个rebase（第一批5个13-15%，第二批4个0%）；待处理4个（#1766等）；满槽15/15
+
+| PR | 分支 | 冲突文件 | Issue | 状态 |
+|----|------|---------|-------|------|
+| #3424 | feature-Issue-1756 | dealer/2文件 | #1756 | ✅ 启动中 (kimi5 rebase) |
+| #3260 | feature-Issue-1564 | WecomAppService/2文件 | #1564 | ✅ 启动中 (kimi8 rebase) |
+| #3274 | feature-Issue-2055 | D3 fastener/6文件 | #2055 | ✅ 启动中 (kimi9 rebase, 13%) |
+| #3238 | feature-Issue-1527 | ProjectMineController/5文件 | #1527 | ✅ 启动中 (kimi4 rebase, 0%) |
+| #3240 | feature-Issue-1531 | ProjectMineMapper/3文件 | #1531 | ✅ 启动中 (kimi6 rebase, 0%) |
+| #3423 | feature-Issue-1766 | dealer/4文件 | #1766 | ⏳ 等#1756完成后启动 |
+| #3270 | feature-Issue-2065 | **62文件** | #2065 | ❌ 建议关闭重做 |
+| #3279 | feature-Issue-2424 | D3SyncServiceImpl/2文件 | #2424 | ✅ 启动中 (kimi2 rebase, 0%) |
+| #3284 | feature-Issue-2095 | Equipment/12文件 | #2095 | ✅ 启动中 (kimi11 rebase, 0%) |
+| #3288 | feature-Issue-2851 | cockpit.yaml | #2851 | ✅ DONE（看板已标） |
+| #3305 | feature-Issue-2445 | smart_project_discovery.py | #2445 | ✅ DONE（看板已标） |
+| #3315 | feature-Issue-2893 | claude-office/index.vue | #2893 | ✅ 启动中 (kimi15 rebase, 0%) |
+| #3317 | feature-Issue-2589 | WeeklyReportController.java | #2589 | ✅ 启动中 (kimi14 rebase, 0%) |
 
 ---
 
@@ -684,7 +708,7 @@
 | kimi15 | #2183 | T1 | backend | [执行管理] 扩展角色权限 tech_coordinator+install_manager | In Progress |
 | kimi9 | ~~#2403~~ | T1 | pipeline | ~~[矿场-Phase2][2/16] 企业工商数据采集~~ PR#3421 | ~~Done~~ |
 | kimi2 | ~~#1863~~ | P0 | frontend | ~~[产品平台][P0] D3 Web产品目录浏览器~~ PR#3326✅merged | ~~Done~~ |
-| kimi2 | #1626 | T1 | backend | [整改工单-P1] 工艺标准卡导入API | In Progress |
+| kimi2 | ~~#1626~~ | T1 | backend | ~~[整改工单-P1] 工艺标准卡导入API~~ PR#3437✅merged | ~~Done~~ |
 | kimi9 | #1464 | T1 | backend | [销售记录体系][2/9] 里程碑门控配置 | In Progress |
 | kimi12 | ~~#1756~~ | T1 | frontend | ~~[代理商工作台] 前端看板+列表视图~~ PR#3424 | ~~Done~~ |
 | kimi13 | ~~#1766~~ | T1 | frontend | ~~[代理商工作台] 前端管线+五阶段看板~~ PR#3423 | ~~Done~~ |

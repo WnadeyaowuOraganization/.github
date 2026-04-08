@@ -78,14 +78,14 @@ ISSUE_URL=$(gh issue create \
 ISSUE=$(echo "$ISSUE_URL" | grep -oE '[0-9]+$')
 echo "Created Issue #$ISSUE"
 
-# 2. 关联 Project#4 并设状态为 Jump（E2E失败 = 最高优先级，插队处理）
+# 2. 关联 Project#4 并设状态为 E2E Fail
 bash $HOME_DIR/projects/.github/scripts/update-project-status.sh \
-  --repo play --issue $ISSUE --status "Jump"
+  --repo play --issue $ISSUE --status "E2E Fail"
 
 # 3. 发送通知
 curl -s -X POST http://localhost:9872/api/notify \
   -H "Content-Type: application/json" \
-  -d "{\"session\":\"e2e-top\",\"message\":\"E2E回归发现失败，Issue #${ISSUE} 已创建并加入看板(Jump)\",\"type\":\"warning\"}"
+  -d "{\"session\":\"e2e-top\",\"message\":\"E2E回归发现失败，Issue #${ISSUE} 已创建并加入看板(E2E Fail)\",\"type\":\"warning\"}"
 ```
 
 ### 4. 补充测试（你的核心价值）

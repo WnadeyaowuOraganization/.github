@@ -262,7 +262,28 @@ kimi4 #3337 (预算资金), kimi5 #3346 (销售/CRM), kimi9 #3339 (整改/质保
 - 修复：超管手动 kill 业务会话 + 修复 .cc-lock + 注入禁令
 ---
 
-## 八、未来改进
+## 八、2026-04-08 02:40 重新冻结操作
+
+完成 20/20 PG fix 清理后，超管执行了一次重新冻结，把所有 update 脚本整合到 wande-ai-pg.sql：
+
+| 项 | 之前 | 之后 |
+|----|------|------|
+| `wande-ai-pg.sql` | pg_dump 5500 行（vector 索引导致部分缺失）| 322KB / 408 张表（dev PG snapshot）|
+| `test-base-schema.pg.sql` | 368 张表（含 slide-bucket）| 408 张表（与 pg.sql 同源）|
+| `update/wande_ai/*.sql` | 299 个 | 全部归档到 `_archive_2026-04-08/` |
+| `test-base-applied.txt` | 261 行 | 空（CC 写的新脚本都视为"新增"自动加载）|
+
+**commit**: `51cf9a189`
+
+**新环境部署**：直接 `psql -f wande-ai-pg.sql` 一次建好所有 408 张表，无需再叠加 update 脚本。
+
+**dev 部署**：`build-deploy-dev.yml` 的 `ls -1 *.sql` 不扫子目录，归档不影响；`sql_migrations_history` 已记录所有归档文件名，即使被恢复也不会重跑。
+
+**重新冻结流程文档**：参见 `backend/script/sql/update/wande_ai/_archive_2026-04-08/README.md`
+
+---
+
+## 九、未来改进
 
 1. **schema 重新冻结脚本**：把 dump python 脚本固化到 `scripts/regen-test-base-schema.py`，定期（每月或大版本前）重跑刷新 base
 2. **每个 PR 显示 delta**：`unit-test` job 把 `passed - baseline` 写到 PR comment

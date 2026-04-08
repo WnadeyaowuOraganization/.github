@@ -478,6 +478,11 @@ Issue创建
 ### @吴耀
 - ~~明道云 API Key — 解锁 CRM 对接~~ — 已确认：明道云仅做一次性数据迁移，平台上线后团队不再使用明道云。不需要CRM对接API Key，迁移数据已有(#2017/#2019/#2154)
 - ~~ceshi.tiyouoperation.com 决策确认~~ — 已确认(D76)：测试环境 ceshi.tiyouoperation.com / 正式环境 www.tiyouoperation.com
+- **【Sprint-3前必须完成】品牌中心多平台发布 — 外部平台授权** (2026-04-08)
+  - 微信公众号：确认公众号已认证 → 提供 AppID + AppSecret → 配置IP白名单
+  - 抖音/B站/小红书/YouTube：各平台注册开发者账号 → 创建应用 → 获取 OAuth 凭证
+  - LinkedIn：注册 LinkedIn Developer App → 申请 Marketing API 权限 → 获取 Client ID/Secret
+  - 说明：品牌中心 Phase2（#2058/#2059/#2195/#2199/#2200/#2202 等20个Issue）依赖这些凭证方可让 CC 开发发布集成
 ### @CC（研发经理）
 - Sprint目标以本文件「当前目标」章节为准
 - 完成一个重点功能后更新本文件的「工作状态」和「最近完成」

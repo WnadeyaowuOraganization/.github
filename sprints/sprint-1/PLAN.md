@@ -457,7 +457,7 @@
 
 ## 当前运行（20/20 PG修复）
 
-> 更新：2026-04-08 00:15 UTC | **20 PG-CC 稳定推进** | 20个 pg-test issues 全部 OPEN（kimi1-20） | 进度：37%-62% | 40 CC活跃 | kimi7 已重启（39分钟超时） | 🔓 #2408 CLOSED解锁 #2276 Todo | Jump/Fail/E2E Fail=0
+> 更新：2026-04-08 00:25 UTC | **20 PG-CC 推进 + Tier-1 新解锁** | pg-test 全 OPEN（kimi1-20） | 34 CC活跃 | 🔓 #2257/#2256/#1532 CLOSED → #2255/#2252 可转 Todo | 🔓 #2407/#2406 CLOSED | Jump/Fail/E2E Fail=0
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|

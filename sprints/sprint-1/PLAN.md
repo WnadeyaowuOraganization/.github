@@ -425,7 +425,7 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-> 🔄 **更新** 2026-04-08 13:00 UTC | PR#3443(#1828)✅；PR#3441(#1463)✅；PR#3440(#2361)✅；PR#3439(#2465)✅；kimi13已释放空闲
+> 🔄 **更新** 2026-04-08 13:20 UTC | 优先队列清空；15/15 CC满槽；kimi12→#1856(新指派)；下一批候选：#2459/#2458/#2154(Todo)，#2388(BUG)/自动化优化
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
 |-------|------|------|------|------|
@@ -454,9 +454,9 @@
 
 # 以下内容由研发经理每次指派前维护
 
-## 当前运行（12-13 CC 活跃）
+## 当前运行（15 CC 活跃）
 
-> 更新：2026-04-08 13:05 UTC | 新完成：PR#3443(#1828)✅、PR#3441(#1463)✅、PR#3440(#2361)✅、PR#3439(#2465)✅；释放槽位4个（kimi4/kimi12/kimi13/kimi14可空闲）
+> 更新：2026-04-08 13:20 UTC | 排程经理巡检完毕：Jump=0, E2E Fail=1(#1839已CLOSED,无法更新), Fail=0 | kimi12→#1856刚启动(13:05) | 监控指标：Plan=59,Todo=4,In Progress=2,Done=34
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 进度 |
 |------|-------|------|------|------|------|
@@ -471,9 +471,9 @@
 | kimi9 | #1464 | T1 | backend | [销售记录体系][2/9] 里程碑门控配置 | 运行中 |
 | kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | 运行中 |
 | kimi11 | #2240 | T1 | frontend | [矿场-Phase2][9/16] 决策链可视化组件 | 运行中 |
-| kimi12 | ~~#1828~~ | — | — | — | ✅ PR#3443 |
-| kimi13 | ~~#2361~~ | — | — | — | ✅ PR#3440 |
-| kimi14 | ~~#2011~~ | — | — | — | ✅ PR#3442 |
+| kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | 运行中 |
+| kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | 运行中 |
+| kimi14 | #2011 | T1 | backend | [项目中心Phase5] 设计变更联动（测试中） | 运行中 |
 | kimi15 | #2255 | T1 | frontend | [矿场增强][8/23] 转化漏斗看板页面 | 运行中 |
 
 ---
@@ -690,7 +690,7 @@
 | kimi13 | ~~#1766~~ | T1 | frontend | ~~[代理商工作台] 前端管线+五阶段看板~~ PR#3423 | ~~Done~~ |
 | kimi8 | ~~#1508~~ | T1 | backend | ~~[矿场-Phase2][8/16] 决策链联系人角色标签~~ PR#3426 | ~~Done~~ |
 | kimi8 | #2237 | T1 | backend | [矿场-Phase3][4/12] 项目列表赢率列排序 | In Progress |
-| kimi12 | #1828 | T1 | frontend | [提成绩效] 提成规则配置页面 | In Progress |
+| kimi12 | ~~#1828~~ | T1 | frontend | ~~[提成绩效] 提成规则配置页面~~ PR#3443✅merged | ~~Done~~ |
 | kimi13 | #2359 | T1 | backend | [项目中心Phase12] 菜单权限SQL | In Progress |
 | kimi6 | ~~#1867~~ | P0 | pipeline | ~~[D3-v2.0][P0] D3 AI知识体系构建~~ PR#3428 | ~~Done~~ |
 | kimi14 | ~~#2012~~ | T1 | backend | ~~[项目中心Phase4] 跨部门任务Service~~ PR#3429 | ~~Done~~ |
@@ -707,12 +707,13 @@
 | kimi15 | #2255 | T1 | frontend | [矿场增强][8/23] 转化漏斗看板页面 | In Progress |
 | kimi5 | ~~#2241~~ | T1 | frontend | ~~[矿场-Phase2][7/16] 项目详情关系地图~~ PR#3434 | ~~Done~~ |
 | kimi3 | #2254 | T1 | frontend | [矿场增强][10/23] 可赢性评分展示+Go/No-Go | In Progress |
-| kimi10 | #1463 | T1 | backend | [销售记录体系][3/9] 智能提醒频率引擎 | In Progress |
+| kimi10 | ~~#1463~~ | T1 | backend | ~~[销售记录体系][3/9] 智能提醒频率引擎~~ PR#3441✅merged | ~~Done~~ |
 | kimi13 | ~~#2359~~ | T1 | backend | ~~[项目中心Phase12] 菜单权限SQL~~ PR#3430✅merged | ~~Done~~ |
 | kimi5 | #2260 | T1 | frontend | [预算模板11/12] 项目预算编制增强 | In Progress |
-| kimi13 | #2361 | T1 | frontend | [项目中心Phase10] 项目任务面板 | In Progress |
+| kimi13 | ~~#2361~~ | T1 | frontend | ~~[项目中心Phase10] 项目任务面板~~ PR#3440✅merged | ~~Done~~ |
 | kimi7 | ~~#2465~~ | T1 | backend | ~~[执行管理] 生产进度/质检/发货/安装API~~ | ~~Done~~ |
 | kimi7 | #2096 | T1 | backend | [执行管理] 整改工单管理API | In Progress |
 | kimi14 | ~~#2011~~ | T1 | backend | ~~[项目中心Phase5] 设计变更联动~~ PR#3442 | ~~Done~~ |
 | kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | In Progress |
 | kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | In Progress |
+| kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | In Progress |

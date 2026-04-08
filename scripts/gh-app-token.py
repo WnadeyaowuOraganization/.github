@@ -23,10 +23,6 @@ CONFIG_DIR = f"{HOME_DIR}/projects/.github/scripts/github-app"
 KEY_PATH = os.path.join(CONFIG_DIR, "private-key.pem")
 CONFIG_PATH = os.path.join(CONFIG_DIR, "config.env")
 
-# Token cache file (avoid regenerating if still valid)
-CACHE_PATH = os.path.join(CONFIG_DIR, ".token-cache.json")
-CACHE_MARGIN_SECONDS = 600  # refresh 10 min before expiry
-
 
 def load_config():
     """Load APP_ID and INSTALLATION_ID from config.env."""
@@ -39,26 +35,6 @@ def load_config():
                 config[k.strip()] = v.strip()
     return config
 
-
-def read_cached_token():
-    """Return cached token if still valid."""
-    if not os.path.exists(CACHE_PATH):
-        return None
-    try:
-        with open(CACHE_PATH) as f:
-            cache = json.load(f)
-        # Check expiry (ISO 8601 → unix timestamp approximation)
-        expires_at = cache.get("expires_at", "")
-        if expires_at:
-            from datetime import datetime, timezone
-            exp = datetime.fromisoformat(expires_at.replace("Z", "+00:00"))
-            now = datetime.now(timezone.utc)
-            remaining = (exp - now).total_seconds()
-            if remaining > CACHE_MARGIN_SECONDS:
-                return cache["token"]
-    except Exception:
-        pass
-    return None
 
 
 def generate_jwt(app_id, key_path):
@@ -141,15 +117,6 @@ def get_installation_token(jwt_token, installation_id):
         sys.exit(1)
 
 
-def save_cache(token, expires_at):
-    """Cache the token."""
-    try:
-        with open(CACHE_PATH, "w") as f:
-            json.dump({"token": token, "expires_at": expires_at}, f)
-        os.chmod(CACHE_PATH, 0o600)
-    except Exception:
-        pass
-
 
 def main():
     SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -170,27 +137,14 @@ def main():
             print(token)
             return
 
-    # Try GitHub App token（独立rate limit 5000）
+    # GitHub App token（独立rate limit 5000，每次重新生成）
     try:
-        # Try cache first
-        cached = read_cached_token()
-        if cached:
-            print(cached)
-            return
-
-        # Load config
         config = load_config()
         app_id = config["APP_ID"]
         installation_id = config["INSTALLATION_ID"]
 
-        # Generate JWT
         jwt_token = generate_jwt(app_id, KEY_PATH)
-
-        # Exchange for installation token
-        token, expires_at = get_installation_token(jwt_token, installation_id)
-
-        # Cache it
-        save_cache(token, expires_at)
+        token, _ = get_installation_token(jwt_token, installation_id)
 
         print(token)
         return

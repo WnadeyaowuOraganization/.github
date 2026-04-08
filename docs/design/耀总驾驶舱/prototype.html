@@ -3,370 +3,621 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>万德AI平台 — 耀总驾驶舱 低保真原型</title>
+<title>万德AI平台 — 超管驾驶舱 低保真原型</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <style>
-body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;margin:0}
-.sidebar{width:56px;background:#001529;min-height:100vh;position:fixed;left:0;top:0;z-index:50}
-.sidebar-icon{width:56px;height:48px;display:flex;align-items:center;justify-content:center;color:#ffffffa0;font-size:18px;cursor:pointer}
-.sidebar-icon:hover,.sidebar-icon.active{background:#1890ff33;color:#fff}
-.main{margin-left:56px;padding:16px 20px}
-.card{background:#fff;border-radius:8px;padding:16px;border:1px solid #e8e8e8}
-.card-title{font-size:14px;font-weight:600;color:#333;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-.card-title a{font-size:12px;color:#1890ff;text-decoration:none;font-weight:400}
-.kpi{text-align:center}
-.kpi-num{font-size:26px;font-weight:700;color:#333;line-height:1.2}
-.kpi-label{font-size:11px;color:#999;margin-top:2px}
-.kpi-change{font-size:11px;margin-top:2px}
-.up{color:#52c41a}
-.down{color:#f5222d}
-.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500}
-.tag-red{background:#fff1f0;color:#f5222d}
-.tag-green{background:#f6ffed;color:#52c41a}
-.tag-orange{background:#fff7e6;color:#fa8c16}
-.tag-blue{background:#e6f7ff;color:#1890ff}
-.tag-gray{background:#fafafa;color:#8c8c8c}
-.tag-purple{background:#f9f0ff;color:#722ed1}
-.funnel-step{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
-.funnel-bar{height:24px;border-radius:4px;display:flex;align-items:center;padding:0 8px;color:#fff;font-size:11px;font-weight:600}
+body{font-family:'JetBrains Mono',monospace;background:#0d1117;color:#c9d1d9;margin:0;font-size:13px}
+a{color:#58a6ff;text-decoration:none}
+.sidebar{width:48px;background:#161b22;min-height:100vh;position:fixed;left:0;top:0;z-index:50;border-right:1px solid #30363d}
+.sidebar-icon{width:48px;height:44px;display:flex;align-items:center;justify-content:center;color:#8b949e;font-size:16px;cursor:pointer}
+.sidebar-icon:hover,.sidebar-icon.active{background:#1f6feb22;color:#58a6ff}
+.main{margin-left:48px}
+.topbar{background:#161b22;border-bottom:1px solid #30363d;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40}
+.topbar-title{font-size:16px;font-weight:700;color:#f0f6fc}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.dot-green{background:#3fb950}
+.dot-red{background:#f85149}
+.dot-yellow{background:#d29922}
+.content{padding:12px 16px}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #30363d;background:#161b22;padding:0 16px;position:sticky;top:41px;z-index:39}
+.tab{padding:10px 16px;cursor:pointer;color:#8b949e;border-bottom:2px solid transparent;font-size:13px}
+.tab:hover{color:#c9d1d9}
+.tab.active{color:#f0f6fc;border-bottom-color:#58a6ff}
+.tab .badge{background:#f85149;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:600;color:#f0f6fc;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.card-title .link{font-size:11px;color:#58a6ff;font-weight:400}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+.stat{text-align:center;padding:8px}
+.stat-num{font-size:22px;font-weight:700;color:#f0f6fc}
+.stat-label{font-size:11px;color:#8b949e;margin-top:2px}
+.stat-green .stat-num{color:#3fb950}
+.stat-red .stat-num{color:#f85149}
+.stat-yellow .stat-num{color:#d29922}
+.stat-blue .stat-num{color:#58a6ff}
 .mini-table{width:100%;font-size:12px;border-collapse:collapse}
-.mini-table th{text-align:left;padding:6px 8px;color:#999;font-weight:500;border-bottom:1px solid #f0f0f0}
-.mini-table td{padding:6px 8px;border-bottom:1px solid #f5f5f5;color:#333}
-.progress-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden}
-.progress-fill{height:100%;border-radius:3px}
-.todo-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
-.todo-badge{min-width:20px;height:20px;border-radius:10px;background:#f5222d;color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 6px}
-.btn-sm{padding:3px 10px;border-radius:4px;font-size:11px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333}
-.btn-sm:hover{border-color:#1890ff;color:#1890ff}
-.btn-primary-sm{background:#1890ff;color:#fff;border-color:#1890ff}
-.signal-item{padding:10px 0;border-bottom:1px solid #f5f5f5;font-size:13px}
-.signal-item:last-child{border:none}
-.signal-tag{font-size:10px;padding:1px 6px;border-radius:2px;margin-right:4px}
-.heatmap-row{display:flex;gap:2px;margin-bottom:2px}
-.heatmap-cell{width:32px;height:24px;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:9px;color:#fff;cursor:pointer}
-.review-bar{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px}
-.review-bar-label{width:60px;text-align:right;color:#666}
-.review-bar-track{flex:1;height:16px;background:#f0f0f0;border-radius:3px;overflow:hidden;display:flex}
-.review-bar-seg{height:100%;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff;font-weight:500}
-.greeting{font-size:20px;font-weight:700;color:#333;margin-bottom:4px}
-.greeting-sub{font-size:13px;color:#999;margin-bottom:16px}
+.mini-table th{text-align:left;padding:6px 8px;color:#8b949e;border-bottom:1px solid #30363d;font-weight:500}
+.mini-table td{padding:6px 8px;border-bottom:1px solid #21262d;color:#c9d1d9}
+.mini-table tr:hover{background:#1f6feb11}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.tag-green{background:#3fb95020;color:#3fb950;border:1px solid #3fb95040}
+.tag-red{background:#f8514920;color:#f85149;border:1px solid #f8514940}
+.tag-yellow{background:#d2992220;color:#d29922;border:1px solid #d2992240}
+.tag-blue{background:#58a6ff20;color:#58a6ff;border:1px solid #58a6ff40}
+.tag-purple{background:#bc8cff20;color:#bc8cff;border:1px solid #bc8cff40}
+.tag-gray{background:#8b949e20;color:#8b949e;border:1px solid #8b949e40}
+.progress{height:4px;background:#21262d;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px}
+.cc-slot{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;margin:2px;border:1px solid #30363d}
+.cc-slot.running{background:#3fb95015;border-color:#3fb95040;color:#3fb950}
+.cc-slot.idle{background:#21262d;color:#8b949e}
+.cc-slot.error{background:#f8514915;border-color:#f8514940;color:#f85149}
+.log-line{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 0;color:#8b949e;border-bottom:1px solid #21262d}
+.log-line .time{color:#6e7681}
+.log-line .level-info{color:#58a6ff}
+.log-line .level-warn{color:#d29922}
+.log-line .level-error{color:#f85149}
+.alert-item{padding:8px 10px;border-left:3px solid;margin-bottom:6px;background:#161b22;border-radius:0 4px 4px 0;font-size:12px}
+.alert-critical{border-color:#f85149;background:#f8514908}
+.alert-warning{border-color:#d29922;background:#d2992208}
+.alert-info{border-color:#58a6ff;background:#58a6ff08}
+.dora-metric{text-align:center;padding:10px}
+.dora-value{font-size:20px;font-weight:700}
+.dora-label{font-size:10px;color:#8b949e;margin-top:2px}
+.dora-target{font-size:10px;color:#6e7681;margin-top:2px}
+.section-hidden{display:none}
+.section-visible{display:block}
 </style>
 </head>
 <body>
 
 <!-- [侧边栏] -->
 <div class="sidebar">
-  <div class="sidebar-icon" style="background:#1890ff33;height:56px;font-size:14px;font-weight:700;color:#fff">万德</div>
-  <div class="sidebar-icon active" title="耀总驾驶舱">📊</div>
-  <div class="sidebar-icon" title="项目矿场">⛏️</div>
-  <div class="sidebar-icon" title="销售记录">📋</div>
-  <div class="sidebar-icon" title="项目中心">🏗️</div>
-  <div class="sidebar-icon" title="设计中心">🎨</div>
-  <div class="sidebar-icon" title="超管驾驶舱">⚙️</div>
+  <div class="sidebar-icon" style="font-size:12px;font-weight:700;color:#58a6ff;height:48px">万德</div>
+  <div class="sidebar-icon" title="耀总驾驶舱" onclick="location.href='/wande-cockpit/boss'">📊</div>
+  <div class="sidebar-icon" title="项目矿场" onclick="location.href='/wande-project/project'">⛏️</div>
+  <div class="sidebar-icon active" title="超管驾驶舱">⚙️</div>
+  <div class="sidebar-icon" title="Claude Office" onclick="location.href='/cla/'">🖥️</div>
 </div>
 
-<div class="main">
-  <!-- [问候+日期] -->
-  <div class="greeting">早上好，耀总 👋</div>
-  <div class="greeting-sub">2026年4月9日 星期三 | 上次登录: 昨天 22:15 | 数据更新: 3分钟前</div>
+<!-- [顶部导航] -->
+<div class="topbar" style="margin-left:48px">
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="topbar-title">⚙️ 超管驾驶舱</div>
+    <span style="font-size:12px;color:#8b949e">|</span>
+    <span style="font-size:12px"><span class="status-dot dot-green"></span>16 个CC活跃</span>
+    <span style="font-size:12px"><span class="status-dot dot-yellow"></span>10 个PR待处理</span>
+    <span style="font-size:12px"><span class="status-dot dot-green"></span>后端 :6040 ✓</span>
+    <span style="font-size:12px"><span class="status-dot dot-green"></span>前端 :8083 ✓</span>
+    <span style="font-size:12px"><span class="status-dot dot-green"></span>Pipeline ✓</span>
+  </div>
+  <div style="display:flex;align-items:center;gap:12px;font-size:12px">
+    <span style="color:#8b949e">更新: 30秒前</span>
+    <a href="/cla/" target="_blank">打开Claude Office →</a>
+    <span>吴耀 + 开发者</span>
+  </div>
+</div>
 
-  <!-- ========== 第一行: 待办中心(核心) + 矿场运营 ========== -->
-  <div style="display:grid;grid-template-columns:340px 1fr;gap:16px;margin-bottom:16px">
+<!-- [Tab栏] -->
+<div class="tab-bar" style="margin-left:48px">
+  <div class="tab active" onclick="switchTab('overview')">总览</div>
+  <div class="tab" onclick="switchTab('studio')">CC工作室</div>
+  <div class="tab" onclick="switchTab('kanban')">看板</div>
+  <div class="tab" onclick="switchTab('cc')">CC监控 <span class="badge">16</span></div>
+  <div class="tab" onclick="switchTab('cicd')">CI/CD</div>
+  <div class="tab" onclick="switchTab('token')">Token Pool</div>
+  <div class="tab" onclick="switchTab('errors')">错误分析 <span class="badge">3</span></div>
+  <div class="tab" onclick="switchTab('issue')">Issue看板</div>
+  <div class="tab" onclick="switchTab('logs')">日志流</div>
+  <div class="tab" onclick="switchTab('finops')">FinOps</div>
+  <div class="tab" onclick="switchTab('security')">安全审计</div>
+  <div class="tab" onclick="switchTab('prompt')">Prompt管理</div>
+</div>
 
-    <!-- [区块5: 待办中心] -->
-    <div class="card" style="border-left:3px solid #f5222d">
-      <div class="card-title">🔴 需要你处理 <span class="todo-badge">7</span></div>
-      <div class="todo-item">
-        <div>⛏️ 待分配项目</div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge">12</span><button class="btn-sm btn-primary-sm" onclick="location.href='#'">去分配</button></div>
-      </div>
-      <div class="todo-item">
-        <div>✅ 待确认验证（有效/无效）</div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge">8</span><button class="btn-sm">去确认</button></div>
-      </div>
-      <div class="todo-item">
-        <div>📝 待审批（报价/合同）</div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge" style="background:#fa8c16">3</span><button class="btn-sm">去审批</button></div>
-      </div>
-      <div class="todo-item">
-        <div>⚠️ 商务超时预警</div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge" style="background:#fa8c16">2</span><button class="btn-sm">查看</button></div>
-      </div>
-      <div class="todo-item" style="border:none">
-        <div>💡 AI推荐今日行动</div>
-        <div style="display:flex;align-items:center;gap:8px"><span class="todo-badge" style="background:#1890ff">3</span><button class="btn-sm">查看</button></div>
-      </div>
-      <div style="margin-top:8px;padding:10px;background:#fff7e6;border-radius:6px;font-size:12px;border:1px solid #ffe58f">
-        <b>AI建议:</b> 成都天府项目投标仅剩3天，建议今天联系程传春确认标书准备进度
+<div class="content" style="margin-left:48px">
+
+<!-- ============ Tab: 总览 ============ -->
+<div id="tab-overview" class="section-visible">
+
+  <!-- 服务健康一览 -->
+  <div class="card">
+    <div class="card-title">🟢 服务健康一览 <span class="link">详细监控 →</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="cc-slot running">后端API :6040 <span style="color:#3fb950">● 正常</span> 响应12ms</div>
+      <div class="cc-slot running">前端 :8083 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">CI前端 :8084 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">CI后端 :6041 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">PostgreSQL :5433 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">Redis :6380 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">vLLM :8000 <span style="color:#3fb950">● 正常</span> Qwen3.5-122B</div>
+      <div class="cc-slot running">Token Proxy :9855 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">Webhook :9800 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">SearXNG :8888 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">Status Page :9850 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot idle">Lightsail 生产 <span style="color:#d29922">● 待部署</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- DORA指标 -->
+    <div class="card">
+      <div class="card-title">📈 DORA四指标（本周） <span class="link">#2275</span></div>
+      <div class="grid-4">
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#3fb950">4.2/天</div>
+          <div class="dora-label">部署频率</div>
+          <div class="dora-target">目标: ≥3/天 ✓</div>
+        </div>
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#3fb950">38分</div>
+          <div class="dora-label">交付时长</div>
+          <div class="dora-target">目标: <1h ✓</div>
+        </div>
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#d29922">18%</div>
+          <div class="dora-label">变更失败率</div>
+          <div class="dora-target">目标: <15% ✗</div>
+        </div>
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#3fb950">52分</div>
+          <div class="dora-label">MTTR</div>
+          <div class="dora-target">目标: <1h ✓</div>
+        </div>
       </div>
     </div>
 
-    <!-- [区块1: 矿场运营] -->
+    <!-- CC集群状态 -->
     <div class="card">
-      <div class="card-title">⛏️ 矿场运营 <a href="#">查看全部项目 →</a></div>
-      <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:16px">
-        <div class="kpi"><div class="kpi-num">9,015</div><div class="kpi-label">总项目</div><div class="kpi-change up">↑ 23 今日</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#f5222d">1,247</div><div class="kpi-label">A级</div><div class="kpi-change up">↑ 5</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#fa8c16">3,582</div><div class="kpi-label">B级</div><div class="kpi-change up">↑ 11</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#1890ff">12</div><div class="kpi-label">待分配</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#52c41a">87%</div><div class="kpi-label">验证通过率</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#52c41a">●</div><div class="kpi-label">采集运行中</div><div class="kpi-change" style="color:#999">每2h</div></div>
+      <div class="card-title">🤖 CC集群状态 <span class="link"><a href="/cla/">Claude Office →</a></span></div>
+      <div class="grid-4">
+        <div class="stat stat-green"><div class="stat-num">16</div><div class="stat-label">活跃CC</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">空闲槽位</div></div>
+        <div class="stat stat-yellow"><div class="stat-num">10</div><div class="stat-label">PR待处理</div></div>
+        <div class="stat stat-red"><div class="stat-num">2</div><div class="stat-label">E2E失败</div></div>
       </div>
-      <!-- 转化漏斗(横向) -->
-      <div style="font-size:12px;color:#999;margin-bottom:6px">转化漏斗（本月）</div>
-      <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px">
-        <div class="funnel-bar" style="width:100%;background:#1890ff">发现 523</div>
-        <div style="color:#999">→</div>
-        <div class="funnel-bar" style="width:75%;background:#13c2c2">分配 398</div>
-        <div style="color:#999">→</div>
-        <div class="funnel-bar" style="width:50%;background:#52c41a">联系 245</div>
-        <div style="color:#999">→</div>
-        <div class="funnel-bar" style="width:30%;background:#722ed1">跟进 156</div>
-        <div style="color:#999">→</div>
-        <div class="funnel-bar" style="width:12%;background:#eb2f96">中标 18</div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px;color:#999">
-        <span>转化率: 发现→分配 76% | 分配→联系 62% | 联系→跟进 64% | 跟进→中标 12%</span>
-        <span>信源ROI最高: <b style="color:#333">政府采购网</b> (转化率18%)</span>
+      <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
+        <span class="cc-slot running">kimi1 #3288</span>
+        <span class="cc-slot running">kimi10 #3449</span>
+        <span class="cc-slot running">kimi11 #1520</span>
+        <span class="cc-slot running">kimi12 #1858</span>
+        <span class="cc-slot running">kimi13 #1796</span>
+        <span class="cc-slot running">kimi14 #2589</span>
+        <span class="cc-slot running">kimi15 #1862</span>
+        <span class="cc-slot running">kimi16 #3452</span>
+        <span class="cc-slot idle">kimi17 空闲</span>
+        <span class="cc-slot idle">kimi18 空闲</span>
+        <span class="cc-slot idle">kimi19 空闲</span>
+        <span class="cc-slot idle">kimi20 空闲</span>
       </div>
     </div>
   </div>
 
-  <!-- ========== 第二行: 团队效能 + 项目全景 ========== -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-
-    <!-- [区块2: 团队效能] -->
+  <div class="grid-2">
+    <!-- 告警面板 -->
     <div class="card">
-      <div class="card-title">👥 团队效能 <a href="#">详细看板 →</a></div>
-      <table class="mini-table">
-        <thead><tr><th>商务</th><th>分配</th><th>跟进中</th><th>本周拜访</th><th>平均响应</th><th>赢率</th><th>状态</th></tr></thead>
-        <tbody>
-          <tr>
-            <td><b>邓文涛</b></td><td>12</td><td>8</td><td>5</td>
-            <td style="color:#52c41a">6h</td>
-            <td><b>32%</b></td>
-            <td><span class="tag tag-green">正常</span></td>
-          </tr>
-          <tr>
-            <td><b>程传春</b></td><td>8</td><td>5</td><td>3</td>
-            <td style="color:#52c41a">12h</td>
-            <td><b>28%</b></td>
-            <td><span class="tag tag-green">正常</span></td>
-          </tr>
-          <tr>
-            <td><b>孙小坤</b></td><td>15</td><td>6</td><td>1</td>
-            <td style="color:#f5222d">72h</td>
-            <td><b>15%</b></td>
-            <td><span class="tag tag-red">超时</span></td>
-          </tr>
-          <tr>
-            <td><b>何言峰</b></td><td>6</td><td>4</td><td>4</td>
-            <td style="color:#52c41a">8h</td>
-            <td><b>25%</b></td>
-            <td><span class="tag tag-green">正常</span></td>
-          </tr>
-        </tbody>
-      </table>
-      <div style="margin-top:8px;font-size:11px;color:#999">
-        ⚠️ 孙小坤: 3个项目超48h未反馈 | 本周拜访量最低
+      <div class="card-title">🔔 活跃告警 <span class="link">告警规则管理 →</span></div>
+      <div class="alert-item alert-critical">
+        <b>E2E失败</b> — #3288 验收队列前端组件 pr-test.yml编译失败
+        <div style="font-size:11px;color:#6e7681;margin-top:2px">10分钟前 | kimi1 正在修复</div>
+      </div>
+      <div class="alert-item alert-warning">
+        <b>变更失败率偏高</b> — 本周18%（目标<15%），主要来自frontend模块
+        <div style="font-size:11px;color:#6e7681;margin-top:2px">持续中 | 建议review近期PR质量</div>
+      </div>
+      <div class="alert-item alert-info">
+        <b>Token Pool</b> — 智谱Key#3 冷却中（限额触发），已自动切换到Key#4
+        <div style="font-size:11px;color:#6e7681;margin-top:2px">2小时前 | 自动恢复</div>
       </div>
     </div>
 
-    <!-- [区块3: 项目全景] -->
+    <!-- 今日产出 -->
     <div class="card">
-      <div class="card-title">🏗️ 项目全景（在执行） <a href="#">项目中心 →</a></div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
-        <div class="kpi"><div class="kpi-num">23</div><div class="kpi-label">活跃项目</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#1890ff">¥4,520万</div><div class="kpi-label">总合同额</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#52c41a">78%</div><div class="kpi-label">平均健康度</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#f5222d">3</div><div class="kpi-label">延期预警</div></div>
+      <div class="card-title">📦 今日产出</div>
+      <div class="grid-4">
+        <div class="stat stat-green"><div class="stat-num">8</div><div class="stat-label">PR合并</div></div>
+        <div class="stat stat-blue"><div class="stat-num">12</div><div class="stat-label">Issue推进</div></div>
+        <div class="stat"><div class="stat-num">3,420</div><div class="stat-label">代码行变更</div></div>
+        <div class="stat stat-yellow"><div class="stat-num">2</div><div class="stat-label">E2E失败</div></div>
       </div>
-      <div style="font-size:12px;color:#999;margin-bottom:6px">项目阶段分布</div>
-      <div style="display:flex;gap:4px;margin-bottom:8px">
-        <div style="flex:3;background:#1890ff;height:20px;border-radius:3px 0 0 3px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">设计 3</div>
-        <div style="flex:5;background:#13c2c2;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">生产 5</div>
-        <div style="flex:8;background:#52c41a;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">安装 8</div>
-        <div style="flex:4;background:#722ed1;height:20px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">验收 4</div>
-        <div style="flex:3;background:#eb2f96;height:20px;border-radius:0 3px 3px 0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:10px">质保 3</div>
-      </div>
-      <div style="font-size:12px;color:#999;margin-bottom:4px">延期预警项目</div>
-      <div style="font-size:12px">
-        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f5f5f5">
-          <span>🔴 琴澳公园项目 — 安装阶段延期7天</span><span class="tag tag-red">紧急</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #f5f5f5">
-          <span>🟡 龙华儿童公园 — 供应商交期延迟3天</span><span class="tag tag-orange">关注</span>
-        </div>
-        <div style="display:flex;justify-content:space-between;padding:4px 0">
-          <span>🟡 成都天府设备 — 图纸审批待确认</span><span class="tag tag-orange">关注</span>
-        </div>
+      <div style="margin-top:8px;font-size:11px;color:#8b949e">
+        Sprint-1进度: <b style="color:#f0f6fc">458/524</b> Done (87%)
+        <div class="progress" style="margin-top:4px"><div class="progress-fill" style="width:87%;background:#3fb950"></div></div>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- ========== 第三行: 财务概览 + 复盘洞察 ========== -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+<!-- ============ Tab: CC工作室 (Claude Office iframe) ============ -->
+<div id="tab-studio" class="section-hidden">
+  <div class="card" style="padding:8px">
+    <div class="card-title" style="margin-bottom:6px">
+      🖥️ CC工作室 — Claude Office 像素办公室
+      <span class="link"><a href="/cla/" target="_blank">新窗口打开 →</a></span>
+    </div>
+    <iframe src="http://3.211.167.122:8083/cla/" style="width:100%;height:calc(100vh - 140px);border:1px solid #30363d;border-radius:4px;background:#0d1117"></iframe>
+  </div>
+</div>
 
-    <!-- [区块4: 财务概览] -->
-    <div class="card">
-      <div class="card-title">💰 财务概览 <a href="#">详细报表 →</a></div>
-      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
-        <div class="kpi"><div class="kpi-num" style="color:#f5222d">¥680万</div><div class="kpi-label">待回款</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#52c41a">¥320万</div><div class="kpi-label">本月已回</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#fa8c16">¥150万</div><div class="kpi-label">逾期金额</div></div>
-        <div class="kpi"><div class="kpi-num">18%</div><div class="kpi-label">平均利润率</div></div>
+<!-- ============ Tab: 看板 (GitHub Project#4 views) ============ -->
+<div id="tab-kanban" class="section-hidden">
+  <div class="card" style="padding:8px">
+    <div class="card-title" style="margin-bottom:6px">
+      📋 研发看板 — Project#4 (5个View)
+      <span class="link"><a href="https://github.com/orgs/WnadeyaowuOraganization/projects/4/views" target="_blank">新窗口打开 →</a></span>
+    </div>
+    <div style="display:flex;gap:6px;margin-bottom:8px">
+      <button class="tag tag-blue" style="cursor:pointer;padding:4px 10px;font-size:12px" onclick="switchKanbanView(1)">View 1: 主看板</button>
+      <button class="tag tag-gray" style="cursor:pointer;padding:4px 10px;font-size:12px" onclick="switchKanbanView(2)">View 2: 按Sprint</button>
+      <button class="tag tag-gray" style="cursor:pointer;padding:4px 10px;font-size:12px" onclick="switchKanbanView(3)">View 3: 按模块</button>
+      <button class="tag tag-gray" style="cursor:pointer;padding:4px 10px;font-size:12px" onclick="switchKanbanView(4)">View 4: 按优先级</button>
+      <button class="tag tag-gray" style="cursor:pointer;padding:4px 10px;font-size:12px" onclick="switchKanbanView(5)">View 5: 我的待办</button>
+    </div>
+    <div style="padding:12px;background:#21262d;border:1px solid #30363d;border-radius:4px;font-size:12px;color:#8b949e;margin-bottom:12px">
+      ⚠️ GitHub禁止iframe嵌入（X-Frame-Options: deny）。替代方案：通过GitHub API拉取数据自己渲染看板。
+    </div>
+    <!-- 自建看板：通过GitHub API拉取Project#4数据渲染 -->
+    <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:12px">
+      <div style="background:#21262d;border:1px solid #30363d;border-radius:6px;padding:10px">
+        <div style="font-weight:600;color:#8b949e;margin-bottom:8px">Plan <span style="color:#6e7681">(671)</span></div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px">
+          <span class="tag tag-purple">backend</span> #1531 可赢性评分模型
+        </div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px">
+          <span class="tag tag-blue">frontend</span> #2849 Agent效率看板
+        </div>
+        <div style="color:#6e7681;font-size:11px;text-align:center;padding:4px">… 共671条</div>
       </div>
-      <div style="font-size:12px;color:#999;margin-bottom:6px">回款进度（按项目）</div>
-      <div style="font-size:12px">
-        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
-          <span style="width:140px">琴澳公园</span>
-          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:70%;background:#52c41a"></div></div>
-          <span style="width:60px;text-align:right">70%</span>
+      <div style="background:#21262d;border:1px solid #30363d;border-radius:6px;padding:10px">
+        <div style="font-weight:600;color:#d29922;margin-bottom:8px">Todo <span style="color:#6e7681">(120)</span></div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px">
+          <span class="tag tag-red">fullstack</span> <b>#3458</b> 全球矿场v3.0
         </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
-          <span style="width:140px">龙华儿童公园</span>
-          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:45%;background:#fa8c16"></div></div>
-          <span style="width:60px;text-align:right">45%</span>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px">
+          <span class="tag tag-red">fullstack</span> <b>#3461</b> 耀总驾驶舱
         </div>
-        <div style="display:flex;align-items:center;gap:8px;padding:4px 0">
-          <span style="width:140px">武汉江夏幼儿园</span>
-          <div class="progress-bar" style="flex:1"><div class="progress-fill" style="width:20%;background:#f5222d"></div></div>
-          <span style="width:60px;text-align:right;color:#f5222d">20% 逾期</span>
-        </div>
+        <div style="color:#6e7681;font-size:11px;text-align:center;padding:4px">… 共120条</div>
       </div>
-      <div style="margin-top:8px;padding:8px;background:#e6f7ff;border-radius:4px;font-size:11px;border:1px solid #91d5ff">
-        合同看板: 进行中 <b>15</b> 份 | 总额 ¥3,200万 | 即将到期 <b style="color:#f5222d">2</b> 份
+      <div style="background:#21262d;border:1px solid #30363d;border-radius:6px;padding:10px">
+        <div style="font-weight:600;color:#58a6ff;margin-bottom:8px">In Progress <span style="color:#6e7681">(24)</span></div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px">
+          <span class="tag tag-blue">frontend</span> #3288 验收队列前端
+        </div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px">
+          <span class="tag tag-blue">frontend</span> #3449 矿场Drawer修复
+        </div>
+        <div style="color:#6e7681;font-size:11px;text-align:center;padding:4px">… 共24条</div>
+      </div>
+      <div style="background:#21262d;border:1px solid #30363d;border-radius:6px;padding:10px">
+        <div style="font-weight:600;color:#f85149;margin-bottom:8px">E2E Fail <span style="color:#6e7681">(2)</span></div>
+        <div style="background:#f8514908;border:1px solid #f8514940;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px;color:#f85149">
+          #2852 矿场页面Drawer泄漏
+        </div>
+        <div style="color:#6e7681;font-size:11px;text-align:center;padding:4px">… 共2条</div>
+      </div>
+      <div style="background:#21262d;border:1px solid #30363d;border-radius:6px;padding:10px">
+        <div style="font-weight:600;color:#3fb950;margin-bottom:8px">Done <span style="color:#6e7681">(458)</span></div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:6px 8px;margin-bottom:4px;font-size:11px;color:#3fb950">
+          ✓ #3234 矿场仪表盘数据全0修复
+        </div>
+        <div style="color:#6e7681;font-size:11px;text-align:center;padding:4px">… 共458条</div>
       </div>
     </div>
-
-    <!-- [区块6: 复盘洞察] -->
-    <div class="card">
-      <div class="card-title">📊 复盘洞察（本季度） <a href="#">详细分析 →</a></div>
-      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px">
-        <div class="kpi"><div class="kpi-num" style="color:#52c41a">18</div><div class="kpi-label">中标</div></div>
-        <div class="kpi"><div class="kpi-num" style="color:#f5222d">24</div><div class="kpi-label">流失</div></div>
-        <div class="kpi"><div class="kpi-num">43%</div><div class="kpi-label">总赢率</div><div class="kpi-change up">↑ 5% vs上季</div></div>
-      </div>
-      <div style="font-size:12px;color:#999;margin-bottom:6px">流失原因分布</div>
-      <div>
-        <div class="review-bar">
-          <div class="review-bar-label">价格</div>
-          <div class="review-bar-track"><div class="review-bar-seg" style="width:42%;background:#f5222d">42%</div></div>
-        </div>
-        <div class="review-bar">
-          <div class="review-bar-label">关系</div>
-          <div class="review-bar-track"><div class="review-bar-seg" style="width:25%;background:#fa8c16">25%</div></div>
-        </div>
-        <div class="review-bar">
-          <div class="review-bar-label">产品</div>
-          <div class="review-bar-track"><div class="review-bar-seg" style="width:17%;background:#1890ff">17%</div></div>
-        </div>
-        <div class="review-bar">
-          <div class="review-bar-label">跟进慢</div>
-          <div class="review-bar-track"><div class="review-bar-seg" style="width:16%;background:#722ed1">16%</div></div>
-        </div>
-      </div>
-      <div style="margin-top:8px;font-size:11px;color:#666">
-        <b>AI洞察:</b> 价格仍是主要流失原因。凯奇在广东赢率上升至38%，建议关注其定价策略。跟进速度改善明显（↓12%流失占比）。
-      </div>
+    <div style="text-align:center">
+      <a href="https://github.com/orgs/WnadeyaowuOraganization/projects/4/views/1" target="_blank" style="color:#58a6ff;font-size:12px">在GitHub中打开完整看板 →</a>
     </div>
   </div>
+</div>
 
-  <!-- ========== 第四行: 市场地图 + 趋势雷达 ========== -->
-  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
-
-    <!-- [区块7: 市场地图] -->
-    <div class="card">
-      <div class="card-title">🗺️ 市场地图 <a href="#">完整地图 →</a></div>
-      <div style="font-size:12px;color:#999;margin-bottom:8px">项目热度 TOP10 省份（颜色越深=项目越多）</div>
-      <div style="display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:12px">
-        <div style="background:#ff4d4f;color:#fff;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>广东</b><div style="font-size:18px;font-weight:700">847</div></div>
-        <div style="background:#ff7a45;color:#fff;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>四川</b><div style="font-size:18px;font-weight:700">623</div></div>
-        <div style="background:#ffa940;color:#fff;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>浙江</b><div style="font-size:18px;font-weight:700">589</div></div>
-        <div style="background:#ffc53d;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>江苏</b><div style="font-size:18px;font-weight:700">512</div></div>
-        <div style="background:#ffd666;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>湖北</b><div style="font-size:18px;font-weight:700">445</div></div>
-        <div style="background:#fff1b8;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>云南</b><div style="font-size:16px;font-weight:700">398</div></div>
-        <div style="background:#fff1b8;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>贵州</b><div style="font-size:16px;font-weight:700">367</div></div>
-        <div style="background:#fffbe6;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>湖南</b><div style="font-size:16px;font-weight:700">334</div></div>
-        <div style="background:#fffbe6;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>福建</b><div style="font-size:16px;font-weight:700">301</div></div>
-        <div style="background:#fffbe6;color:#333;padding:8px;border-radius:4px;text-align:center;font-size:12px"><b>山东</b><div style="font-size:16px;font-weight:700">278</div></div>
-      </div>
-      <div style="display:flex;justify-content:space-between;font-size:11px">
-        <span>🔵 蓝海区域（竞争少+项目多）: <b style="color:#1890ff">云南、贵州、广西</b></span>
-        <span>🔴 红海区域: <b style="color:#f5222d">广东、浙江</b></span>
-      </div>
-      <div style="margin-top:8px;font-size:11px;color:#666">
-        国际: 🇦🇪 迪拜 23个 | 🇸🇬 新加坡 12个 | 🇸🇦 沙特 8个 | 🇲🇾 马来 6个
-      </div>
-    </div>
-
-    <!-- [区块8: 趋势雷达] -->
-    <div class="card">
-      <div class="card-title">📡 趋势雷达（政策信号） <a href="#">全部信号 →</a></div>
-      <div class="signal-item">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <span class="signal-tag" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f">高关联</span>
-            <span class="signal-tag" style="background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff">广东</span>
-            <b>广东省发改委：2026年全省新建30个社区体育公园</b>
-          </div>
-          <span style="font-size:11px;color:#999;white-space:nowrap">2天前</span>
-        </div>
-        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 未来12个月广东将新增30+个游乐设备采购项目 | 矿场已关联: 5个项目</div>
-      </div>
-      <div class="signal-item">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <span class="signal-tag" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f">高关联</span>
-            <span class="signal-tag" style="background:#fff7e6;color:#fa8c16;border:1px solid #ffd591">四川</span>
-            <b>成都市：十四五期间投资50亿元建设200个口袋公园</b>
-          </div>
-          <span style="font-size:11px;color:#999;white-space:nowrap">5天前</span>
-        </div>
-        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 口袋公园含儿童游乐区，预计每个50-200万设备需求 | 矿场已关联: 2个项目</div>
-      </div>
-      <div class="signal-item">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <span class="signal-tag" style="background:#fff7e6;color:#fa8c16;border:1px solid #ffd591">中关联</span>
-            <span class="signal-tag" style="background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7">国际</span>
-            <b>迪拜政府发布2026-2030城市休闲设施五年计划</b>
-          </div>
-          <span style="font-size:11px;color:#999;white-space:nowrap">1周前</span>
-        </div>
-        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 计划投入$2B建设50+公共游乐空间 | 矿场已关联: 1个项目</div>
-      </div>
-      <div class="signal-item" style="border:none">
-        <div style="display:flex;justify-content:space-between;align-items:start">
-          <div>
-            <span class="signal-tag" style="background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9">低关联</span>
-            <span class="signal-tag" style="background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff">全国</span>
-            <b>教育部：全国中小学体育设施达标率提升至85%目标</b>
-          </div>
-          <span style="font-size:11px;color:#999;white-space:nowrap">2周前</span>
-        </div>
-        <div style="font-size:11px;color:#666;margin-top:4px">预计影响: 学校体育设施升级可能带动幼儿园/小学游乐设备采购 | 矿场已关联: 0个项目</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- [原型说明] -->
-  <div class="card" style="margin-top:8px">
-    <div class="card-title">📋 原型说明 — 耀总驾驶舱 v1.0</div>
-    <table class="mini-table" style="font-size:12px">
-      <thead><tr><th>区块</th><th>回答的问题</th><th>数据来源</th><th>关联Issue</th></tr></thead>
+<!-- ============ Tab: CC监控 ============ -->
+<div id="tab-cc" class="section-hidden">
+  <div class="card">
+    <div class="card-title">🤖 CC实时监控（20个槽位） <span class="link"><a href="/cla/">Claude Office全屏 →</a></span></div>
+    <div style="font-size:12px;color:#8b949e;margin-bottom:8px">点击Claude Office查看像素办公室实时可视化。以下为文字版概要。</div>
+    <table class="mini-table">
+      <thead><tr><th>槽位</th><th>Issue</th><th>模块</th><th>模型</th><th>Effort</th><th>工具</th><th>进度</th><th>耗时</th><th>状态</th></tr></thead>
       <tbody>
-        <tr><td>1. 矿场运营</td><td>今天有多少新项目值得看？</td><td>项目矿场KPI+漏斗+ROI+验证</td><td>#2255 #2252 #2225 #2318</td></tr>
-        <tr><td>2. 团队效能</td><td>商务团队表现怎样？</td><td>销售记录+CRM+分配日志</td><td>#2320 + 销售记录体系</td></tr>
-        <tr><td>3. 项目全景</td><td>在执行项目进展如何？</td><td>执行管理+项目中心+EVM</td><td>#3193-3202 + 项目中心</td></tr>
-        <tr><td>4. 财务概览</td><td>钱收回来了吗？</td><td>回款+合同+金蝶联动</td><td>回款增强+合同管理</td></tr>
-        <tr><td>5. 待办中心</td><td>有什么需要我处理？</td><td>分配+确认+审批+预警+NBO</td><td>#1496 + 审批流引擎</td></tr>
-        <tr><td>6. 复盘洞察</td><td>我们为什么赢/输？</td><td>赢/输/流标记录+竞品数据</td><td>#2251 #2404</td></tr>
-        <tr><td>7. 市场地图</td><td>全国哪里有机会？</td><td>矿场区域统计+竞品分布</td><td>#2250 #2235 #1523</td></tr>
-        <tr><td>8. 趋势雷达</td><td>未来会发生什么？</td><td>政策信号采集+AI关联分析</td><td>#2239 #1507 #2434</td></tr>
+        <tr><td>kimi1</td><td><a href="#">#3288</a> 验收队列前端</td><td><span class="tag tag-blue">frontend</span></td><td>sonnet-4-6</td><td>high</td><td>Bash</td><td>60%</td><td>3h21m</td><td><span class="tag tag-green">运行中</span></td></tr>
+        <tr><td>kimi10</td><td><a href="#">#3449</a> 项目挖掘改版Drawer修复</td><td><span class="tag tag-blue">frontend</span></td><td>sonnet-4-6</td><td>high</td><td>Bash</td><td>60%</td><td>1h27m</td><td><span class="tag tag-green">运行中</span></td></tr>
+        <tr><td>kimi11</td><td><a href="#">#1520</a> CRM操作面板</td><td><span class="tag tag-purple">backend</span></td><td>sonnet-4-6</td><td>medium</td><td>Edit</td><td>60%</td><td>2h49m</td><td><span class="tag tag-green">运行中</span></td></tr>
+        <tr><td>kimi12</td><td><a href="#">#1858</a> 方案版本对比</td><td><span class="tag tag-purple">backend</span></td><td>sonnet-4-6</td><td>medium</td><td>TaskUpdate</td><td>95%</td><td>2h49m</td><td><span class="tag tag-yellow">PR open</span></td></tr>
+        <tr><td>kimi16</td><td><a href="#">#3452</a> 项目分配功能</td><td><span class="tag tag-red">fullstack</span></td><td>sonnet-4-6</td><td>high</td><td>Bash</td><td>40%</td><td>0h45m</td><td><span class="tag tag-green">运行中</span></td></tr>
+        <tr style="color:#6e7681"><td>kimi17</td><td colspan="7">— 空闲 —</td><td><span class="tag tag-gray">空闲</span></td></tr>
+        <tr style="color:#6e7681"><td>kimi18</td><td colspan="7">— 空闲 —</td><td><span class="tag tag-gray">空闲</span></td></tr>
       </tbody>
     </table>
   </div>
 </div>
+
+<!-- ============ Tab: CI/CD ============ -->
+<div id="tab-cicd" class="section-hidden">
+  <div class="card">
+    <div class="card-title">🔄 CI/CD流水线 <span class="link">GitHub Actions →</span></div>
+    <table class="mini-table">
+      <thead><tr><th>流水线</th><th>触发</th><th>最近状态</th><th>耗时</th><th>最近执行</th></tr></thead>
+      <tbody>
+        <tr><td>pr-test.yml</td><td>PR创建/更新</td><td><span class="tag tag-green">✓ Pass</span></td><td>8m32s</td><td>15分钟前</td></tr>
+        <tr><td>build-deploy-dev.yml</td><td>merge到dev</td><td><span class="tag tag-green">✓ Pass</span></td><td>4m15s</td><td>30分钟前</td></tr>
+        <tr><td>e2e_smoke.sh</td><td>cron 30min</td><td><span class="tag tag-green">✓ Pass</span></td><td>45s</td><td>12分钟前</td></tr>
+        <tr><td>e2e_top_tier.sh</td><td>cron 6h</td><td><span class="tag tag-red">✗ Fail</span></td><td>18m</td><td>2小时前</td></tr>
+        <tr><td>build-deploy.yml</td><td>push到main</td><td><span class="tag tag-green">✓ Pass</span></td><td>12m</td><td>昨天</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ Tab: Token Pool ============ -->
+<div id="tab-token" class="section-hidden">
+  <div class="card">
+    <div class="card-title">🪙 Token Pool Proxy (:9855) <span class="link">管理告警规则 →</span></div>
+    <table class="mini-table">
+      <thead><tr><th>优先级</th><th>供应商</th><th>Key</th><th>状态</th><th>今日调用</th><th>冷却</th></tr></thead>
+      <tbody>
+        <tr><td>1</td><td>智谱直连</td><td>Key#1</td><td><span class="tag tag-green">活跃</span></td><td>1,234</td><td>—</td></tr>
+        <tr><td>1</td><td>智谱直连</td><td>Key#2</td><td><span class="tag tag-green">活跃</span></td><td>987</td><td>—</td></tr>
+        <tr><td>1</td><td>智谱直连</td><td>Key#3</td><td><span class="tag tag-yellow">冷却中</span></td><td>0</td><td>还剩3h</td></tr>
+        <tr><td>2</td><td>中转站</td><td>Key#4</td><td><span class="tag tag-green">活跃</span></td><td>456</td><td>—</td></tr>
+        <tr><td>3</td><td>本地Qwen3.5-122B</td><td>localhost:8000</td><td><span class="tag tag-green">保底</span></td><td>89</td><td>—</td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:8px;font-size:11px;color:#8b949e">今日总调用: <b>2,766</b> | 成功率: <b style="color:#3fb950">99.2%</b> | 平均延迟: <b>1.8s</b></div>
+  </div>
+</div>
+
+<!-- ============ Tab: 错误分析 ============ -->
+<div id="tab-errors" class="section-hidden">
+  <div class="card">
+    <div class="card-title">🔴 错误分析中心 <span class="link">#2078 原因诊断</span></div>
+    <table class="mini-table">
+      <thead><tr><th>时间</th><th>来源</th><th>错误</th><th>Issue</th><th>状态</th></tr></thead>
+      <tbody>
+        <tr><td>10:20</td><td>pr-test.yml</td><td>编译失败: mine-detail-drawer.vue TypeScript error</td><td><a href="#">#3449</a></td><td><span class="tag tag-yellow">修复中</span></td></tr>
+        <tr><td>08:33</td><td>e2e_top_tier</td><td>Playwright timeout: /wande-project/project 页面未加载</td><td><a href="#">#2852</a></td><td><span class="tag tag-red">E2E Fail</span></td></tr>
+        <tr><td>昨天</td><td>kimi6</td><td>Bean冲突: ProjectMineService 重复注册</td><td><a href="#">#2893</a></td><td><span class="tag tag-green">已修复</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ Tab: Issue看板 ============ -->
+<div id="tab-issue" class="section-hidden">
+  <div class="card">
+    <div class="card-title">📋 Issue看板 (Project#4) <span class="link">GitHub看板 →</span></div>
+    <div class="grid-4" style="margin-bottom:12px">
+      <div class="stat"><div class="stat-num">671</div><div class="stat-label">Plan</div></div>
+      <div class="stat stat-yellow"><div class="stat-num">120</div><div class="stat-label">Todo</div></div>
+      <div class="stat stat-blue"><div class="stat-num">24</div><div class="stat-label">In Progress</div></div>
+      <div class="stat stat-green"><div class="stat-num">458</div><div class="stat-label">Done</div></div>
+    </div>
+    <div style="font-size:11px;color:#8b949e">
+      Sprint-1: 524 issues | Sprint-2: 200 | Sprint-3: 70 | 全部8个Sprint共1505 issues
+    </div>
+  </div>
+</div>
+
+<!-- ============ Tab: 日志流 (NEW) ============ -->
+<div id="tab-logs" class="section-hidden">
+  <div class="card">
+    <div class="card-title">📜 实时日志流</div>
+    <div style="font-size:11px;color:#8b949e;margin-bottom:8px">
+      筛选: <span class="tag tag-blue" style="cursor:pointer">CC日志</span> <span class="tag tag-gray" style="cursor:pointer">API日志</span> <span class="tag tag-gray" style="cursor:pointer">CI日志</span> <span class="tag tag-gray" style="cursor:pointer">部署日志</span>
+      | 搜索: <input type="text" placeholder="关键词..." style="background:#21262d;border:1px solid #30363d;border-radius:3px;padding:2px 6px;color:#c9d1d9;font-size:11px;width:200px">
+    </div>
+    <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:8px;font-family:'JetBrains Mono',monospace;max-height:240px;overflow-y:auto">
+      <div class="log-line"><span class="time">10:33:12</span> <span class="level-info">[INFO]</span> kimi1 #3288 — 使用Bash: pnpm typecheck</div>
+      <div class="log-line"><span class="time">10:33:08</span> <span class="level-info">[INFO]</span> kimi10 #3449 — 使用Bash: pnpm lint</div>
+      <div class="log-line"><span class="time">10:32:55</span> <span class="level-warn">[WARN]</span> Token Proxy — Key#3 触发限额(429)，切换到Key#4</div>
+      <div class="log-line"><span class="time">10:32:41</span> <span class="level-info">[INFO]</span> pr-test.yml — PR #3462 编译通过，开始E2E测试</div>
+      <div class="log-line"><span class="time">10:32:20</span> <span class="level-info">[INFO]</span> kimi12 #1858 — PR #3462 created (feature → dev)</div>
+      <div class="log-line"><span class="time">10:31:55</span> <span class="level-error">[ERROR]</span> e2e_top_tier — Playwright timeout at /wande-project/project (30s)</div>
+      <div class="log-line"><span class="time">10:31:30</span> <span class="level-info">[INFO]</span> build-deploy-dev — 前端构建完成，rsync到nginx :8083</div>
+      <div class="log-line"><span class="time">10:30:45</span> <span class="level-info">[INFO]</span> e2e_smoke — 健康检查通过 (后端:6040 OK, 前端:8083 OK)</div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ Tab: FinOps (NEW) ============ -->
+<div id="tab-finops" class="section-hidden">
+  <div class="card">
+    <div class="card-title">💵 FinOps 开发运维成本</div>
+    <div class="grid-4" style="margin-bottom:12px">
+      <div class="stat"><div class="stat-num">¥2,340</div><div class="stat-label">本月AI模型成本</div><div style="font-size:10px;color:#d29922">预算¥3,000 (78%)</div></div>
+      <div class="stat"><div class="stat-num">$85</div><div class="stat-label">G7e服务器(AWS)</div><div style="font-size:10px;color:#3fb950">预算$100 (85%)</div></div>
+      <div class="stat"><div class="stat-num">$12</div><div class="stat-label">Lightsail生产</div><div style="font-size:10px;color:#3fb950">固定月费</div></div>
+      <div class="stat"><div class="stat-num">¥0</div><div class="stat-label">本地模型(122B)</div><div style="font-size:10px;color:#3fb950">零成本</div></div>
+    </div>
+    <div style="font-size:12px;color:#8b949e;margin-bottom:6px">AI模型成本明细</div>
+    <table class="mini-table">
+      <thead><tr><th>模型/供应商</th><th>调用次数</th><th>Token数</th><th>成本</th><th>占比</th></tr></thead>
+      <tbody>
+        <tr><td>智谱直连</td><td>45,230</td><td>128M</td><td>¥1,560</td><td>67%</td></tr>
+        <tr><td>中转站</td><td>12,100</td><td>34M</td><td>¥620</td><td>26%</td></tr>
+        <tr><td>本地Qwen3.5-122B</td><td>3,400</td><td>9M</td><td>¥0</td><td>0%</td></tr>
+        <tr><td>Perplexity Credit</td><td>—</td><td>—</td><td>¥160</td><td>7%</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ Tab: 安全审计 (NEW) ============ -->
+<div id="tab-security" class="section-hidden">
+  <div class="card">
+    <div class="card-title">🔒 安全审计日志</div>
+    <table class="mini-table">
+      <thead><tr><th>时间</th><th>操作人</th><th>操作</th><th>对象</th><th>IP</th><th>风险</th></tr></thead>
+      <tbody>
+        <tr><td>10:30</td><td>wande-auto-code-agent[bot]</td><td>git push</td><td>feature/issue-3449 → dev</td><td>3.211.167.122</td><td><span class="tag tag-green">正常</span></td></tr>
+        <tr><td>10:15</td><td>吴耀</td><td>Issue创建</td><td>#3461 耀总驾驶舱</td><td>Perplexity</td><td><span class="tag tag-green">正常</span></td></tr>
+        <tr><td>09:45</td><td>wandeyaowu</td><td>PR merge</td><td>#3460 squash merge → dev</td><td>3.211.167.122</td><td><span class="tag tag-green">正常</span></td></tr>
+        <tr><td>08:20</td><td>unknown</td><td>SSH login attempt</td><td>G7e :22</td><td>45.33.xx.xx</td><td><span class="tag tag-red">异常</span></td></tr>
+      </tbody>
+    </table>
+    <div style="margin-top:8px;font-size:11px;color:#8b949e">
+      今日操作: <b>156</b> 次 | 异常: <b style="color:#f85149">1</b> 次（SSH暴力尝试，已被fail2ban拦截）
+    </div>
+  </div>
+</div>
+
+</div>
+
+<!-- [原型说明] -->
+<div style="margin-left:48px;padding:12px 16px">
+  <div class="card">
+    <div class="card-title">📋 原型说明 — 超管驾驶舱</div>
+    <table class="mini-table" style="font-size:11px">
+      <thead><tr><th>Tab</th><th>状态</th><th>说明</th><th>关联</th></tr></thead>
+      <tbody>
+        <tr><td>总览</td><td><span class="tag tag-green">已开发</span></td><td>服务健康+DORA+CC集群+告警+今日产出</td><td>dashboard/cockpit/index.vue</td></tr>
+        <tr><td>CC监控</td><td><span class="tag tag-green">已开发</span></td><td>20个槽位实时状态，Claude Office像素办公室</td><td>/cla/ + agent-efficiency/</td></tr>
+        <tr><td>CI/CD</td><td><span class="tag tag-green">已开发</span></td><td>5条流水线状态</td><td>DeploymentManagementPage.vue</td></tr>
+        <tr><td>Token Pool</td><td><span class="tag tag-green">已开发</span></td><td>三级路由Key池+冷却状态+告警规则</td><td>token-pool/</td></tr>
+        <tr><td>错误分析</td><td><span class="tag tag-green">已开发</span></td><td>CC错误+CI失败+Bean冲突追踪</td><td>error-analysis/</td></tr>
+        <tr><td>Issue看板</td><td><span class="tag tag-green">已开发</span></td><td>Project#4状态分布+CFD累积流量图</td><td>issue-board/ + cfd/</td></tr>
+        <tr><td>日志流</td><td><span class="tag tag-yellow">建议新增</span></td><td>CC/CI/API/部署日志集中查看，类似Datadog Log Explorer</td><td>无现有Issue</td></tr>
+        <tr><td>FinOps</td><td><span class="tag tag-yellow">建议新增</span></td><td>AI模型/云资源成本趋势+预算对比</td><td>无现有Issue</td></tr>
+        <tr><td>安全审计</td><td><span class="tag tag-yellow">建议新增</span></td><td>操作日志+异常登录+SSH暴力检测</td><td>audit-log模块已有，待接入</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ Tab: Prompt管理 (NEW) ============ -->
+<div id="tab-prompt" class="section-hidden" style="margin-left:48px;padding:12px 16px">
+  <div class="card">
+    <div class="card-title">📝 CC Prompt统一管理</div>
+
+    <!-- 依赖图可视化 -->
+    <div class="grid-2" style="margin-bottom:16px">
+      <div>
+        <div style="font-size:12px;color:#8b949e;margin-bottom:6px">Prompt依赖图</div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#c9d1d9">
+wande-play/CLAUDE.md  ← <span style="color:#58a6ff">公共层</span>
+  ├─ backend/CLAUDE.md    <span style="color:#bc8cff">v8</span>  <span style="color:#3fb950">✅ 已同步</span>
+  ├─ frontend/CLAUDE.md   <span style="color:#bc8cff">v6</span>  <span style="color:#d29922">⚠️ 待同步</span>
+  ├─ pipeline/CLAUDE.md   <span style="color:#bc8cff">v4</span>  <span style="color:#3fb950">✅ 已同步</span>
+  └─ e2e/CLAUDE.md        <span style="color:#bc8cff">v5</span>  <span style="color:#3fb950">✅ 已同步</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#8b949e;margin-bottom:6px">一致性检查报告 <span style="color:#3fb950">今日 06:00 自动扫描</span></div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:12px;font-size:12px">
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #21262d">
+            <span><span style="color:#f85149">❌</span> frontend/CLAUDE.md — 缺少effort参数说明</span>
+            <span style="color:#58a6ff;cursor:pointer">修复</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #21262d">
+            <span><span style="color:#d29922">⚠️</span> frontend/CLAUDE.md — 公共层新增“run-cc.sh --module”未同步</span>
+            <span style="color:#58a6ff;cursor:pointer">同步</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0">
+            <span><span style="color:#3fb950">✅</span> 其他3个Prompt无矛盾</span>
+            <span style="color:#6e7681">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 变更影响分析结果（当前有待同步） -->
+    <div style="background:#d2992210;border:1px solid #d2992230;border-radius:6px;padding:12px;margin-bottom:16px">
+      <div style="font-weight:600;color:#d29922;margin-bottom:8px">⚠️ 待同步: 公共层昨天更新了 §4 Issue拾取规则，frontend/CLAUDE.md 未同步</div>
+      <div style="font-size:12px;color:#c9d1d9;margin-bottom:8px">
+        变更内容: 新增 "run-cc.sh --module frontend --issue N" 启动方式说明（D30决策）
+      </div>
+      <div style="display:flex;gap:8px">
+        <button style="background:#d2992230;border:1px solid #d2992250;color:#d29922;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">查看变更diff</button>
+        <button style="background:#3fb95020;border:1px solid #3fb95040;color:#3fb950;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">一键同步到frontend</button>
+        <button style="background:#21262d;border:1px solid #30363d;color:#8b949e;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">忽略本次</button>
+      </div>
+    </div>
+    <table class="mini-table">
+      <thead><tr><th>Prompt文件</th><th>作用域</th><th>最后修改</th><th>版本</th><th>状态</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>wande-play/CLAUDE.md</code></td>
+          <td><span class="tag tag-blue">公共层</span> Issue拾取+架构+Git规范+Agent Teams</td>
+          <td>2026-04-08</td><td>v12</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>backend/CLAUDE.md</code></td>
+          <td><span class="tag tag-purple">后端CC</span> Spring Boot + TDD + 编译检查</td>
+          <td>2026-04-06</td><td>v8</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>frontend/CLAUDE.md</code></td>
+          <td><span class="tag tag-blue">前端CC</span> Vue3 + Vben + Ant Design Vue</td>
+          <td>2026-04-05</td><td>v6</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>pipeline/CLAUDE.md</code></td>
+          <td><span class="tag tag-yellow">Pipeline CC</span> Python数据采集+清洗</td>
+          <td>2026-04-02</td><td>v4</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>e2e/CLAUDE.md</code></td>
+          <td><span class="tag tag-red">测试CC</span> Playwright E2E + 结果处理</td>
+          <td>2026-04-04</td><td>v5</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 变更日志时间线 -->
+    <div style="font-size:12px;color:#8b949e;margin-bottom:6px">最近变更日志</div>
+    <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:12px;font-size:12px;border-left:2px solid #30363d;margin-bottom:16px">
+      <div style="margin-bottom:12px;padding-left:12px;border-left:2px solid #d29922">
+        <div style="color:#f0f6fc"><b>昨天 22:15</b> 吴耀 修改了 <code>wande-play/CLAUDE.md</code> v11→v12</div>
+        <div style="color:#8b949e;margin-top:2px">变更: §4 Issue拾取规则新增 run-cc.sh --module 启动方式说明</div>
+        <div style="color:#d29922;margin-top:2px">影响: backend ✅ frontend <b>⚠️待同步</b> pipeline ✅ e2e ✅</div>
+      </div>
+      <div style="margin-bottom:12px;padding-left:12px;border-left:2px solid #3fb950">
+        <div style="color:#f0f6fc"><b>4月8日 14:12</b> 吴耀 修改了 <code>backend/CLAUDE.md</code> v7→v8</div>
+        <div style="color:#8b949e;margin-top:2px">变更: 新增 Flyway迁移脚本命名规范</div>
+        <div style="color:#3fb950;margin-top:2px">影响: 仅backend，无需同步其他</div>
+      </div>
+      <div style="padding-left:12px;border-left:2px solid #3fb950">
+        <div style="color:#f0f6fc"><b>4月5日 09:30</b> 吴耀 修改了 <code>e2e/CLAUDE.md</code> v4→v5</div>
+        <div style="color:#8b949e;margin-top:2px">变更: e2e-result-handler.py统一处理逻辑(D32)</div>
+        <div style="color:#3fb950;margin-top:2px">影响: 仅e2e，无需同步其他</div>
+      </div>
+    </div>
+
+    <!-- Prompt性能对比 -->
+    <div style="font-size:12px;color:#8b949e;margin-bottom:6px">Prompt版本性能对比</div>
+    <table class="mini-table">
+      <thead><tr><th>Prompt</th><th>版本</th><th>CC成功率</th><th>平均耗时</th><th>Token消耗</th><th>E2E通过</th><th>趋势</th></tr></thead>
+      <tbody>
+        <tr><td>wande-play/CLAUDE.md</td><td>v12</td><td><span style="color:#3fb950">94%</span></td><td>42m</td><td>35K</td><td><span style="color:#3fb950">89%</span></td><td><span style="color:#3fb950">↑ vs v11</span></td></tr>
+        <tr><td>backend/CLAUDE.md</td><td>v8</td><td><span style="color:#3fb950">91%</span></td><td>38m</td><td>28K</td><td><span style="color:#3fb950">92%</span></td><td><span style="color:#3fb950">↑ vs v7</span></td></tr>
+        <tr><td>frontend/CLAUDE.md</td><td>v6</td><td><span style="color:#d29922">82%</span></td><td>55m</td><td>42K</td><td><span style="color:#d29922">75%</span></td><td><span style="color:#f85149">↓ vs v5</span></td></tr>
+        <tr><td>pipeline/CLAUDE.md</td><td>v4</td><td><span style="color:#3fb950">96%</span></td><td>25m</td><td>18K</td><td><span style="color:#3fb950">95%</span></td><td><span style="color:#8b949e">→ 稳定</span></td></tr>
+        <tr><td>e2e/CLAUDE.md</td><td>v5</td><td><span style="color:#3fb950">88%</span></td><td>18m</td><td>15K</td><td><span style="color:#3fb950">90%</span></td><td><span style="color:#3fb950">↑ vs v4</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+function switchKanbanView(n){
+  document.getElementById('kanban-iframe').src='https://github.com/orgs/WnadeyaowuOraganization/projects/4/views/'+n;
+}
+function switchTab(key){
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('[id^="tab-"]').forEach(s=>{s.classList.remove('section-visible');s.classList.add('section-hidden')});
+  event.target.classList.add('active');
+  document.getElementById('tab-'+key).classList.remove('section-hidden');
+  document.getElementById('tab-'+key).classList.add('section-visible');
+}
+</script>
 </body>
 </html>

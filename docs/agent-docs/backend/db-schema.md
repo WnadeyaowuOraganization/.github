@@ -7,7 +7,24 @@
 ### 第 1 步：在 `db/migration_wande_ai/` 创建 Flyway 增量脚本
 
 **位置**：`backend/ruoyi-modules/wande-ai/src/main/resources/db/migration_wande_ai/`
-（如果是 ruoyi 框架表如菜单、字典等，写到 `db/migration_ruoyi_ai/` 下）
+
+> ⚠️ **目录归属是死规则，写错位置会导致表建到错误的库里，且很难被发现**：
+>
+> | 目录 | 仅允许 | 严禁 |
+> |------|--------|------|
+> | `db/migration_wande_ai/` | **所有业务表**（`wdpp_*`、`competitor_*`、`expense_*` 等所有非框架表）| ❌ 菜单表、字典表、用户角色等框架表 |
+> | `db/migration_ruoyi_ai/` | **仅限菜单表更新**（`sys_menu`、`sys_role_menu` 等 ruoyi 框架自带表）| ❌ 任何业务表（`wdpp_*` 严禁出现在此目录） |
+>
+> **判断规则**：
+> - 你的 SQL 在操作 `sys_menu` / `sys_role` / `sys_dict_*` / `sys_user_*` 这种 `sys_` 开头的 ruoyi 框架表 → `migration_ruoyi_ai/`
+> - 你的 SQL 在创建/修改任何 `wdpp_*` 或其他业务表 → `migration_wande_ai/`
+> - **拿不准就是 `migration_wande_ai/`**（业务表是绝大多数情况）
+>
+> 写错位置的后果：
+> - 业务表写到 `migration_ruoyi_ai/` → 表建到 ruoyi_ai 库，wande_ai 库找不到，dynamic-datasource `@DS("wande")` 注解的所有 Mapper 全部 SQLException
+> - 菜单更新写到 `migration_wande_ai/` → 菜单建到 wande_ai 库，前端权限读取 ruoyi_ai 库读不到，菜单消失
+>
+> **不允许跨库 JOIN**：每个 V*.sql 只能操作一个库的对象，不要在一个 SQL 里同时碰两个库的表。
 
 **Flyway 命名规范（强制）**：`V<日期>_<序号>__<描述>.sql`
 - `V20260408_1__add_supplier_ratings_table.sql` ✅

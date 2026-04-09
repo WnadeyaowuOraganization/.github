@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商机详情 — OPP-2026-0028 — CRM商务中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #fff; color: #333; margin:0; }
+  .nav-bar { height: 48px; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-left { font-size: 14px; color: #666; }
+  .nav-left strong { color: #333; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666; }
+  /* 主布局 */
+  .main-layout { display: flex; min-height: calc(100vh - 48px - 52px); }
+  /* 左侧摘要栏 */
+  .sidebar { width: 280px; min-width: 280px; background: #fafafa; border-right: 1px solid #f0f0f0; padding: 20px 16px; display: flex; flex-direction: column; gap: 0; }
+  .opp-code { font-size: 12px; color: #999; margin-bottom: 6px; }
+  .opp-title { font-size: 18px; font-weight: 700; color: #333; line-height: 1.4; margin-bottom: 16px; }
+  /* 阶段进度条 */
+  .stage-bar { display: flex; align-items: center; gap: 0; margin-bottom: 16px; }
+  .stage-step { display: flex; flex-direction: column; align-items: center; flex: 1; }
+  .stage-dot { width: 20px; height: 20px; border-radius: 50%; font-size: 10px; display: flex; align-items: center; justify-content: center; font-weight: 700; }
+  .stage-dot.done { background: #1890ff; color: #fff; }
+  .stage-dot.current { background: #fff; border: 2px solid #1890ff; color: #1890ff; font-weight: 700; }
+  .stage-dot.pending { background: #f0f0f0; color: #bbb; }
+  .stage-label { font-size: 10px; color: #888; margin-top: 2px; white-space: nowrap; }
+  .stage-line { flex: 1; height: 2px; background: #e8e8e8; margin: 0; }
+  .stage-line.done { background: #1890ff; }
+  .divider { border: none; border-top: 1px solid #f0f0f0; margin: 12px 0; }
+  /* 关键指标 */
+  .kv-row { display: flex; align-items: flex-start; padding: 5px 0; }
+  .kv-label { width: 72px; min-width: 72px; font-size: 12px; color: #888; }
+  .kv-value { font-size: 13px; color: #333; font-weight: 500; flex: 1; }
+  /* 快捷按钮 */
+  .sidebar-btn { display: block; width: 100%; height: 32px; margin-bottom: 8px; border-radius: 3px; font-size: 13px; cursor: pointer; text-align: center; line-height: 30px; }
+  .sidebar-btn-primary { background: #1890ff; color: #fff; border: 1px solid #1890ff; }
+  .sidebar-btn-default { background: #fff; color: #555; border: 1px solid #d9d9d9; }
+  /* 右侧内容区 */
+  .content-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  .tab-nav { display: flex; border-bottom: 1px solid #f0f0f0; padding: 0 20px; background: #fff; overflow-x: auto; }
+  .tab-item { padding: 12px 14px; font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; color: #666; white-space: nowrap; }
+  .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+  .tab-content { display: none; padding: 20px; flex: 1; overflow-y: auto; }
+  .tab-content.active { display: block; }
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 12px; font-weight: 600; color: #555; padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; vertical-align: middle; height: 40px; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; }
+  .tag-gray { background: #f0f0f0; color: #8c8c8c; }
+  .btn-link { color: #1890ff; background: none; border: none; cursor: pointer; font-size: 13px; }
+  .btn { height: 28px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 12px; cursor: pointer; background: #fff; color: #555; }
+  .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+  /* 表单区域 */
+  .form-section { background: #fafafa; border: 1px solid #f0f0f0; border-radius: 4px; padding: 16px; margin-top: 12px; }
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .form-row { display: flex; align-items: center; gap: 8px; }
+  .form-label { width: 80px; min-width: 80px; font-size: 12px; color: #666; }
+  .form-input { flex: 1; height: 30px; border: 1px solid #d9d9d9; border-radius: 3px; padding: 0 8px; font-size: 13px; }
+  .form-input[readonly] { background: #f5f5f5; color: #888; }
+  .lock-hint { font-size: 11px; color: #bbb; margin-left: 4px; }
+  /* 基本信息双列 */
+  .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0; }
+  .info-cell { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; display: flex; align-items: flex-start; }
+  .info-label { width: 90px; min-width: 90px; font-size: 12px; color: #888; }
+  .info-value { font-size: 13px; color: #333; flex: 1; }
+  /* 流程说明 */
+  .flow-text { font-size: 13px; color: #666; padding: 10px 0; }
+  footer { text-align: center; padding: 14px; font-size: 12px; color: #bbb; border-top: 1px solid #f0f0f0; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="nav-bar">
+  <div class="nav-left">CRM商务中心 &gt; 商机管道 &gt; <strong>商机详情</strong></div>
+  <div class="nav-right">
+    <span>📥 <span style="color:#1890ff;font-weight:700;">4</span></span>
+    <span>📢 <span style="color:#1890ff;font-weight:700;">3</span></span>
+    <span>🔔 <span style="color:#1890ff;font-weight:700;">2</span></span>
+    <span style="color:#333;font-weight:500;">张三 | 拓展一部</span>
+  </div>
+</div>
+
+<div class="main-layout">
+
+  <!-- 左侧摘要栏 -->
+  <div class="sidebar">
+    <div class="opp-code">商机代码：OPP-2026-0028</div>
+    <div class="opp-title">Playpoint新加坡<br>学校游乐场</div>
+
+    <!-- 阶段进度条 -->
+    <div style="margin-bottom:16px;">
+      <div style="display:flex; align-items:center; margin-bottom:4px;">
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#1890ff; color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+          <div style="font-size:10px; color:#1890ff; margin-top:2px;">新</div>
+        </div>
+        <div style="flex:1; height:2px; background:#1890ff;"></div>
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#1890ff; color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+          <div style="font-size:10px; color:#1890ff; margin-top:2px;">商</div>
+        </div>
+        <div style="flex:1; height:2px; background:#1890ff;"></div>
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#1890ff; color:#fff; font-size:10px; display:flex; align-items:center; justify-content:center; margin:0 auto;">✓</div>
+          <div style="font-size:10px; color:#1890ff; margin-top:2px;">招</div>
+        </div>
+        <div style="flex:1; height:2px; background:#1890ff;"></div>
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#fff; border:2px solid #1890ff; color:#1890ff; font-size:10px; font-weight:700; display:flex; align-items:center; justify-content:center; margin:0 auto;">签</div>
+          <div style="font-size:10px; color:#1890ff; margin-top:2px; font-weight:700;">签</div>
+        </div>
+        <div style="flex:1; height:2px; background:#e8e8e8;"></div>
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#f0f0f0; color:#bbb; font-size:10px; display:flex; align-items:center; justify-content:center; margin:0 auto;">回</div>
+          <div style="font-size:10px; color:#bbb; margin-top:2px;">回</div>
+        </div>
+        <div style="flex:1; height:2px; background:#e8e8e8;"></div>
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#f0f0f0; color:#bbb; font-size:10px; display:flex; align-items:center; justify-content:center; margin:0 auto;">验</div>
+          <div style="font-size:10px; color:#bbb; margin-top:2px;">验</div>
+        </div>
+        <div style="flex:1; height:2px; background:#e8e8e8;"></div>
+        <div style="text-align:center; flex:1;">
+          <div style="width:20px; height:20px; border-radius:50%; background:#f0f0f0; color:#bbb; font-size:10px; display:flex; align-items:center; justify-content:center; margin:0 auto;">结</div>
+          <div style="font-size:10px; color:#bbb; margin-top:2px;">结</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <!-- 关键指标 -->
+    <div class="kv-row"><span class="kv-label">客户</span><span class="kv-value">Playpoint Pte Ltd</span></div>
+    <div class="kv-row"><span class="kv-label">业务线</span><span class="kv-value">🌏 国贸</span></div>
+    <div class="kv-row"><span class="kv-label">负责人</span><span class="kv-value">张三 · 拓展一部</span></div>
+    <div class="kv-row"><span class="kv-label">等级</span><span class="kv-value"><span style="display:inline-block;width:20px;height:20px;border-radius:50%;background:#e6f7ff;color:#1890ff;font-size:11px;font-weight:700;text-align:center;line-height:20px;">A</span></span></div>
+    <div class="kv-row"><span class="kv-label">预算</span><span class="kv-value" style="color:#1890ff; font-weight:600;">$120,000</span></div>
+    <div class="kv-row"><span class="kv-label">成单概率</span><span class="kv-value"><span style="color:#52c41a; font-weight:600;">85%</span></span></div>
+    <div class="kv-row"><span class="kv-label">创建日期</span><span class="kv-value">2026-02-28</span></div>
+    <div class="kv-row"><span class="kv-label">来源</span><span class="kv-value">客户询盘</span></div>
+
+    <hr class="divider">
+
+    <!-- 快捷操作 -->
+    <button class="sidebar-btn sidebar-btn-primary">写跟进记录</button>
+    <button class="sidebar-btn sidebar-btn-default">下设计单</button>
+    <button class="sidebar-btn sidebar-btn-default">提交报价</button>
+    <button class="sidebar-btn sidebar-btn-default">发起投标HZ</button>
+    <button class="sidebar-btn sidebar-btn-default">新建合同</button>
+  </div>
+
+  <!-- 右侧内容区 -->
+  <div class="content-area">
+    <div class="tab-nav">
+      <div class="tab-item active" onclick="showTab('tab1',this)">基本信息</div>
+      <div class="tab-item" onclick="showTab('tab2',this)">跟进时间线</div>
+      <div class="tab-item" onclick="showTab('tab3',this)">设计单</div>
+      <div class="tab-item" onclick="showTab('tab4',this)">报价单</div>
+      <div class="tab-item" onclick="showTab('tab5',this)">合同</div>
+      <div class="tab-item" onclick="showTab('tab6',this)">回款</div>
+      <div class="tab-item" onclick="showTab('tab7',this)">投标HZ</div>
+      <div class="tab-item" onclick="showTab('tab8',this)">作战资料</div>
+      <div class="tab-item" onclick="showTab('tab9',this)">🔄 流程监控</div>
+      <div class="tab-item" onclick="showTab('tab10',this)">📋 变更日志</div>
+    </div>
+
+    <!-- Tab1: 基本信息 -->
+    <div class="tab-content active" id="tab1">
+      <div style="font-size:13px; color:#888; margin-bottom:12px;">基本信息 — 只读展示（带🔒的字段自动继承）</div>
+      <div class="info-grid">
+        <div class="info-cell"><span class="info-label">🔒 商机代码</span><span class="info-value" style="color:#888;">OPP-2026-0028 <span class="lock-hint">自动生成</span></span></div>
+        <div class="info-cell"><span class="info-label">预算金额</span><span class="info-value">$120,000</span></div>
+        <div class="info-cell"><span class="info-label">项目名称</span><span class="info-value">Playpoint新加坡学校游乐场</span></div>
+        <div class="info-cell"><span class="info-label">商机来源</span><span class="info-value">客户询盘</span></div>
+        <div class="info-cell"><span class="info-label">🔒 客户名称</span><span class="info-value">Playpoint Pte Ltd <span class="lock-hint">选商机后自动带出</span></span></div>
+        <div class="info-cell"><span class="info-label">竞争对手</span><span class="info-value">凯奇乐, 永浪</span></div>
+        <div class="info-cell"><span class="info-label">🔒 负责人</span><span class="info-value">张三 <span class="lock-hint">选商机后自动带出</span></span></div>
+        <div class="info-cell"><span class="info-label">预计签约日</span><span class="info-value">2026-04-30</span></div>
+        <div class="info-cell"><span class="info-label">🔒 部门</span><span class="info-value">拓展一部 <span class="lock-hint">选商机后自动带出</span></span></div>
+        <div class="info-cell"><span class="info-label">成单概率</span><span class="info-value" style="color:#52c41a; font-weight:600;">85%</span></div>
+        <div class="info-cell"><span class="info-label">🔒 等级</span><span class="info-value">A级 <span class="lock-hint">选商机后自动带出</span></span></div>
+        <div class="info-cell"><span class="info-label">备注</span><span class="info-value">客户已初步确认方案，等待校方审批</span></div>
+
+        <!-- 来源信息（矿场同步） -->
+        <div style="margin-top:20px; padding:16px; background:#fafafa; border:1px solid #f0f0f0; border-radius:4px;">
+          <div style="font-size:13px; font-weight:600; color:#333; margin-bottom:10px;">📦 来源信息（矿场同步）</div>
+          <table style="width:100%;">
+            <tbody>
+              <tr><td style="color:#888; width:120px; padding:4px 0;">来源系统</td><td style="padding:4px 0;"><span style="display:inline-block; padding:2px 8px; border-radius:3px; font-size:12px; background:#e6f7ff; color:#1890ff;">客户询盘</span> INQ-2026-0028</td></tr>
+              <tr><td style="color:#888; padding:4px 0;">发现渠道</td><td style="padding:4px 0;">Playpoint官网表单提交</td></tr>
+              <tr><td style="color:#888; padding:4px 0;">发现日期</td><td style="padding:4px 0;">2026-02-25</td></tr>
+              <tr><td style="color:#888; padding:4px 0;">ICP评分</td><td style="padding:4px 0;"><span style="color:#52c41a; font-weight:700;">88/100</span> S级客户</td></tr>
+              <tr><td style="color:#888; padding:4px 0;">客户历史</td><td style="padding:4px 0;">Playpoint与万德合作3年，历史成交5笔 共$380,000</td></tr>
+              <tr><td style="color:#888; padding:4px 0;">竞品情况</td><td style="padding:4px 0;">无竞品介入（独家供应商）</td></tr>
+              <tr><td style="color:#888; padding:4px 0;">分配评估</td><td style="padding:4px 0;">张三 2026-02-28 评估：完全匹配+有优势 → 接受</td></tr>
+            </tbody>
+          </table>
+        </div></div>
+      </div>
+    </div>
+
+    <!-- Tab2: 跟进时间线 -->
+    <div class="tab-content" id="tab2">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:13px; font-weight:600;">跟进记录 — 共5条</span>
+        <button class="btn btn-primary">+ 写跟进记录</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>时间</th><th>操作人</th><th>内容</th><th>来源标签</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="white-space:nowrap; color:#888; font-size:12px;">2026-04-09 13:42</td>
+            <td>张三</td>
+            <td>与David确认了方案V2，等待校方内部审批，预计下周五有结果</td>
+            <td><span class="tag tag-blue">手动记录</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888; font-size:12px;">2026-04-07 10:00</td>
+            <td>系统</td>
+            <td>阶段自动推进：招投标 → 签约（合同审批通过）</td>
+            <td><span class="tag tag-yellow">流程触发</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888; font-size:12px;">2026-04-03 16:20</td>
+            <td>张三</td>
+            <td>提交合同至法务审查，合同金额$120,000，交货期8个月</td>
+            <td><span class="tag tag-blue">手动记录</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888; font-size:12px;">2026-03-28 09:15</td>
+            <td>系统</td>
+            <td>报价单QT-2026-0028-V2 已发送至客户邮箱</td>
+            <td><span class="tag tag-green">自动记录</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888; font-size:12px;">2026-03-15 14:30</td>
+            <td>张三</td>
+            <td>首次拜访Playpoint Singapore办公室，了解学校项目需求</td>
+            <td><span class="tag tag-blue">手动记录</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab3: 设计单 -->
+    <div class="tab-content" id="tab3">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <div style="background:#f6ffed; border:1px solid #b7eb8f; border-radius:3px; padding:6px 12px; font-size:13px; color:#389e0d;">
+          ✅ 关联设计单：WD-GM-202604-003（V2已交付）
+        </div>
+        <button class="btn btn-primary" onclick="toggleForm('designForm')">+ 创建设计单</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>设计单号</th><th>类型</th><th>设计师</th><th>状态</th><th>创建日期</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>WD-GM-202604-003</td>
+            <td>游乐场设计</td>
+            <td>王设计</td>
+            <td><span class="tag tag-green">V2已交付</span></td>
+            <td>2026-03-10</td>
+            <td><button class="btn-link">查看</button></td>
+          </tr>
+          <tr>
+            <td>WD-GM-202603-001</td>
+            <td>初步方案</td>
+            <td>王设计</td>
+            <td><span class="tag tag-gray">已作废</span></td>
+            <td>2026-03-01</td>
+            <td><button class="btn-link">查看</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="designForm" class="form-section" style="display:none;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:12px; color:#333;">创建设计单</div>
+        <div class="form-grid">
+          <div class="form-row"><span class="form-label">🔒 商机代码</span><input class="form-input" readonly value="OPP-2026-0028"></div>
+          <div class="form-row"><span class="form-label">🔒 客户</span><input class="form-input" readonly value="Playpoint Pte Ltd"></div>
+          <div class="form-row"><span class="form-label">客户性质</span><select class="form-input"><option>国际客户</option><option>直销甲方</option><option>国内经销商</option></select></div>
+          <div class="form-row"><span class="form-label">项目类型</span><select class="form-input"><option>学校游乐场</option><option>社区公园</option><option>商业综合体</option></select></div>
+          <div class="form-row"><span class="form-label">🔒 等级</span><input class="form-input" readonly value="A级"></div>
+          <div class="form-row"><span class="form-label">🔒 预算</span><input class="form-input" readonly value="$120,000"></div>
+        </div>
+        <div class="form-row" style="margin-top:10px;"><span class="form-label">设计需求</span><textarea class="form-input" style="height:60px; padding:6px;">3-12岁儿童，户外游乐场，面积约600㎡，需含攀爬区和滑梯区</textarea></div>
+        <div class="form-row" style="margin-top:10px;"><span class="form-label">附件</span><input type="file" style="font-size:12px;"></div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary">提交</button>
+          <button class="btn" onclick="toggleForm('designForm')">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab4: 报价单 -->
+    <div class="tab-content" id="tab4">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:13px; color:#888;">关联设计单：WD-GM-202604-003（V2已交付）</span>
+        <button class="btn btn-primary" onclick="toggleForm('quoteForm')">+ 创建报价</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>报价单号</th><th>版本</th><th>金额</th><th>币种</th><th>状态</th><th>日期</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>QT-2026-0028-V2</td>
+            <td>V2</td>
+            <td>$120,000</td>
+            <td>USD</td>
+            <td><span class="tag tag-blue">已发送</span></td>
+            <td>2026-03-28</td>
+            <td><button class="btn-link">查看</button> <button class="btn-link">下载</button></td>
+          </tr>
+          <tr>
+            <td>QT-2026-0028-V1</td>
+            <td>V1</td>
+            <td>$135,000</td>
+            <td>USD</td>
+            <td><span class="tag tag-gray">已作废</span></td>
+            <td>2026-03-15</td>
+            <td><button class="btn-link">查看</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="quoteForm" class="form-section" style="display:none;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:12px;">创建报价单（国贸）</div>
+        <div class="form-grid">
+          <div class="form-row"><span class="form-label">🔒 商机</span><input class="form-input" readonly value="OPP-2026-0028"></div>
+          <div class="form-row"><span class="form-label">🔒 客户</span><input class="form-input" readonly value="Playpoint Pte Ltd"></div>
+          <div class="form-row"><span class="form-label">报价金额</span><input class="form-input" placeholder="如 120000"></div>
+          <div class="form-row"><span class="form-label">成本价</span><input class="form-input" placeholder="如 85000"></div>
+          <div class="form-row"><span class="form-label">毛利率</span><input class="form-input" readonly value="自动计算" style="color:#888;"></div>
+          <div class="form-row"><span class="form-label">付款条件</span><input class="form-input" placeholder="如 30/70"></div>
+          <div class="form-row"><span class="form-label">有效期</span><input type="date" class="form-input" value="2026-04-30"></div>
+          <div class="form-row"><span class="form-label">贸易术语</span><select class="form-input"><option>FOB</option><option>CIF</option><option>CNF</option></select></div>
+          <div class="form-row"><span class="form-label">币种</span><select class="form-input"><option>USD</option><option>EUR</option><option>SGD</option></select></div>
+          <div class="form-row"><span class="form-label">汇率</span><input class="form-input" placeholder="如 7.24"></div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary">提交</button>
+          <button class="btn" onclick="toggleForm('quoteForm')">取消</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab5: 合同 -->
+    <div class="tab-content" id="tab5">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:13px; font-weight:600;">合同列表</span>
+        <button class="btn btn-primary" onclick="toggleForm('contractForm')">+ 创建合同</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>合同编号</th><th>类型</th><th>金额</th><th>状态</th><th>签约日期</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>CT-2026-0028-01</td>
+            <td>销售合同</td>
+            <td>$120,000</td>
+            <td><span class="tag tag-yellow">法务审查中</span></td>
+            <td>—</td>
+            <td><button class="btn-link">查看</button> <button class="btn-link">催办</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="contractForm" class="form-section" style="display:none;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:12px;">创建合同</div>
+        <div class="form-grid">
+          <div class="form-row"><span class="form-label">🔒 商机</span><input class="form-input" readonly value="OPP-2026-0028"></div>
+          <div class="form-row"><span class="form-label">🔒 客户</span><input class="form-input" readonly value="Playpoint Pte Ltd"></div>
+          <div class="form-row"><span class="form-label">合同类型</span><select class="form-input"><option>销售合同</option><option>框架协议</option><option>补充协议</option></select></div>
+          <div class="form-row"><span class="form-label">合同金额</span><input class="form-input" placeholder="$120,000"></div>
+          <div class="form-row"><span class="form-label">交货期</span><input class="form-input" placeholder="8个月"></div>
+          <div class="form-row"><span class="form-label">质保期</span><input class="form-input" placeholder="12个月"></div>
+        </div>
+        <div class="form-row" style="margin-top:10px;"><span class="form-label">附件</span><input type="file" style="font-size:12px;"></div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary">提交</button>
+          <button class="btn" onclick="toggleForm('contractForm')">取消</button>
+        </div>
+      </div>
+      <div class="flow-text" style="margin-top:16px; padding-top:12px; border-top:1px solid #f0f0f0; color:#888;">
+        合同流程：提交 → 法务审查 → 吴耀审批 → 盖章申请 → 行政用印 → 合同生效
+      </div>
+    </div>
+
+    <!-- Tab6: 回款 -->
+    <div class="tab-content" id="tab6">
+      <div style="margin-bottom:12px; font-size:13px; font-weight:600;">回款计划</div>
+      <table>
+        <thead>
+          <tr><th>回款阶段</th><th>应收金额</th><th>实收金额</th><th>状态</th><th>逾期天数</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>预付款 30%</td>
+            <td>$36,000</td>
+            <td>$36,000</td>
+            <td><span class="tag tag-green">已收</span></td>
+            <td>—</td>
+            <td><button class="btn-link">详情</button></td>
+          </tr>
+          <tr>
+            <td>发货款 30%</td>
+            <td>$36,000</td>
+            <td>$0</td>
+            <td><span class="tag tag-blue">待收</span></td>
+            <td>—</td>
+            <td><button class="btn-link">催收</button></td>
+          </tr>
+          <tr style="background:#fff1f0;">
+            <td>验收款 20%</td>
+            <td>$24,000</td>
+            <td>$0</td>
+            <td><span class="tag tag-red">逾期</span></td>
+            <td style="color:#ff4d4f; font-weight:600;">15天</td>
+            <td><button class="btn-link" style="color:#ff4d4f;">催收</button></td>
+          </tr>
+          <tr>
+            <td>审计款 10%</td>
+            <td>$12,000</td>
+            <td>$0</td>
+            <td><span class="tag tag-gray">未到期</span></td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+          <tr>
+            <td>质保款 10%</td>
+            <td>$12,000</td>
+            <td>$0</td>
+            <td><span class="tag tag-gray">未到期</span></td>
+            <td>—</td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab7: 投标HZ -->
+    <div class="tab-content" id="tab7">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:13px; font-weight:600;">投标申请列表</span>
+        <button class="btn btn-primary" onclick="toggleForm('biddingForm')">+ 发起投标申请</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>HZ编号</th><th>招投标编号</th><th>开标日</th><th>保证金</th><th>保证金状态</th><th>投标结果</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>HZ-2026-0028-01</td>
+            <td>SG-SCH-2026-001</td>
+            <td>2026-03-20</td>
+            <td>$6,000</td>
+            <td><span class="tag tag-green">已缴</span></td>
+            <td><span class="tag tag-green">中标</span></td>
+            <td><button class="btn-link">详情</button></td>
+          </tr>
+        </tbody>
+      </table>
+      <div id="biddingForm" class="form-section" style="display:none;">
+        <div style="font-size:13px; font-weight:600; margin-bottom:12px;">发起投标申请</div>
+        <div class="form-grid">
+          <div class="form-row"><span class="form-label">商机</span><input class="form-input" readonly value="OPP-2026-0028"></div>
+          <div class="form-row"><span class="form-label">招投标编号</span><input class="form-input" placeholder="如 SG-SCH-2026-002"></div>
+          <div class="form-row"><span class="form-label">开标日期</span><input type="date" class="form-input"></div>
+          <div class="form-row"><span class="form-label">保证金金额</span><input class="form-input" placeholder="$"></div>
+        </div>
+        <div style="margin-top:12px; display:flex; gap:8px;">
+          <button class="btn btn-primary">提交</button>
+          <button class="btn" onclick="toggleForm('biddingForm')">取消</button>
+        </div>
+        <div style="margin-top:10px; font-size:12px; color:#888;">审批通过后自动：①创建标书任务 ②记录保证金 ③推进阶段</div>
+      </div>
+    </div>
+
+    <!-- Tab8: 作战资料 -->
+    <div class="tab-content" id="tab8">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px;">
+        <span style="font-size:13px; font-weight:600;">文件资料</span>
+        <button class="btn btn-primary">+ 上传文件</button>
+      </div>
+      <table>
+        <thead>
+          <tr><th>文件名</th><th>类型</th><th>上传人</th><th>日期</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Playpoint_方案V2_20260328.pdf</td>
+            <td>设计方案</td>
+            <td>王设计</td>
+            <td>2026-03-28</td>
+            <td><button class="btn-link">下载</button></td>
+          </tr>
+          <tr>
+            <td>报价单QT-2026-0028-V2.xlsx</td>
+            <td>报价文件</td>
+            <td>张三</td>
+            <td>2026-03-28</td>
+            <td><button class="btn-link">下载</button></td>
+          </tr>
+          <tr>
+            <td>合同草稿CT-2026-0028.docx</td>
+            <td>合同文件</td>
+            <td>张三</td>
+            <td>2026-04-03</td>
+            <td><button class="btn-link">下载</button></td>
+          </tr>
+          <tr>
+            <td>客户需求确认邮件.eml</td>
+            <td>邮件记录</td>
+            <td>张三</td>
+            <td>2026-03-10</td>
+            <td><button class="btn-link">下载</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab9: 流程监控 -->
+    <div class="tab-content" id="tab9">
+      <div style="margin-bottom:12px; font-size:13px; font-weight:600;">进行中的流程</div>
+      <table>
+        <thead>
+          <tr><th>流程类型</th><th>标题</th><th>当前节点</th><th>处理人</th><th>等待天数</th><th>状态</th><th>操作</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>设计单审批</td>
+            <td>WD-GM-202604-003</td>
+            <td>设计总监审核</td>
+            <td>李总监</td>
+            <td style="color:#faad14;">2天</td>
+            <td><span class="tag tag-blue">进行中</span></td>
+            <td><button class="btn-link">催办</button></td>
+          </tr>
+          <tr>
+            <td>报价审批</td>
+            <td>QT-2026-0028-V2</td>
+            <td>商务总监审批</td>
+            <td>吴总</td>
+            <td style="color:#ff4d4f; font-weight:600;">4天</td>
+            <td><span class="tag tag-yellow">待审批</span></td>
+            <td><button class="btn-link" style="color:#ff4d4f;">催办</button></td>
+          </tr>
+          <tr>
+            <td>合同审批</td>
+            <td>CT-2026-0028-01</td>
+            <td>法务审查</td>
+            <td>陈法务</td>
+            <td>1天</td>
+            <td><span class="tag tag-blue">进行中</span></td>
+            <td><button class="btn-link">催办</button></td>
+          </tr>
+          <tr>
+            <td>投标申请</td>
+            <td>HZ-2026-0028-01</td>
+            <td>—</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="tag tag-green">已完成</span></td>
+            <td>—</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab10: 变更日志 -->
+    <div class="tab-content" id="tab10">
+      <div style="margin-bottom:12px; font-size:13px; font-weight:600;">变更记录</div>
+      <table>
+        <thead>
+          <tr><th>时间</th><th>变更类型</th><th>变更前</th><th>变更后</th><th>操作人</th><th>原因</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#888; font-size:12px; white-space:nowrap;">2026-04-07 10:00</td>
+            <td>阶段变更</td>
+            <td>招投标</td>
+            <td>签约</td>
+            <td>系统</td>
+            <td>合同审批通过自动推进</td>
+          </tr>
+          <tr>
+            <td style="color:#888; font-size:12px; white-space:nowrap;">2026-03-28 14:00</td>
+            <td>金额变更</td>
+            <td>$135,000</td>
+            <td>$120,000</td>
+            <td>张三</td>
+            <td>客户议价，降低报价</td>
+          </tr>
+          <tr>
+            <td style="color:#888; font-size:12px; white-space:nowrap;">2026-03-10 09:00</td>
+            <td>负责人变更</td>
+            <td>赵六</td>
+            <td>张三</td>
+            <td>吴总</td>
+            <td>销售资源重新分配</td>
+          </tr>
+          <tr>
+            <td style="color:#888; font-size:12px; white-space:nowrap;">2026-02-28 16:00</td>
+            <td>商机创建</td>
+            <td>—</td>
+            <td>OPP-2026-0028</td>
+            <td>张三</td>
+            <td>由询盘INQ-2026-0052转化</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+</div>
+
+<!-- ========== 放弃跟进评估面板 ========== -->
+<div id="abandon-panel" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); z-index:200;">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; width:560px; border-radius:6px; box-shadow:0 4px 24px rgba(0,0,0,0.15);">
+    <div style="padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:16px; font-weight:600; color:#ff4d4f;">⛔ 放弃跟进 — OPP-2026-0028</div>
+      <span style="cursor:pointer; font-size:18px; color:#999;" onclick="document.getElementById('abandon-panel').style.display='none'">✕</span>
+    </div>
+    <div style="padding:24px;">
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px; color:#666; margin-bottom:4px;">放弃原因（必选）</div>
+        <select style="width:100%; padding:8px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px;">
+          <option value="">— 请选择放弃原因 —</option>
+          <option>客户无预算 — 预算被砍或项目搁置</option>
+          <option>竞品已锁定 — 对手已深度介入无法翻盘</option>
+          <option>项目取消/延期 — 甲方取消或无限期推迟</option>
+          <option>联系不上关键人 — 多次尝试无法建立联系</option>
+          <option>非万德产品线 — 需求不在万德能力范围</option>
+          <option>价格差距过大 — 客户预期远低于万德报价</option>
+          <option>内部资源不足 — 当前无法匹配客户要求的交期/规格</option>
+          <option>客户选择其他供应商 — 明确告知已选他方</option>
+          <option>其他原因</option>
+        </select>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px; color:#666; margin-bottom:4px;">详细说明（必填）</div>
+        <textarea style="width:100%; height:80px; padding:8px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px; resize:vertical;" placeholder="请说明具体情况，这些信息将用于赢/输分析和评分模型优化..."></textarea>
+      </div>
+      <div style="margin-bottom:14px;">
+        <div style="font-size:12px; color:#666; margin-bottom:4px;">竞品信息（选填）</div>
+        <input type="text" style="width:100%; padding:8px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px;" placeholder="如已知中标方/竞品名称和价格，请填写">
+      </div>
+      <div style="background:#fff7e6; border:1px solid #ffe58f; border-radius:3px; padding:10px; margin-bottom:16px; font-size:12px; color:#d48806;">
+        ⚠️ 放弃后：商机将标记为 Closed-Lost · 原因将记录到赢/输分析系统 · 反馈将回流矿场优化评分模型 · 如后续需恢复跟进可重新激活
+      </div>
+      <div style="display:flex; gap:8px;">
+        <button style="flex:1; padding:8px; border:1px solid #d9d9d9; border-radius:3px; background:#fff; color:#666; font-size:14px; cursor:pointer;" onclick="document.getElementById('abandon-panel').style.display='none'">取消</button>
+        <button style="flex:1; padding:8px; border:1px solid #ff4d4f; border-radius:3px; background:#ff4d4f; color:#fff; font-size:14px; cursor:pointer;" onclick="document.getElementById('abandon-panel').style.display='none'">确认放弃</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>万德AI平台 — CRM商务中心原型 v3.0 | 2026年4月</footer>
+
+<script>
+function showTab(tabId, el) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  document.getElementById(tabId).classList.add('active');
+  el.classList.add('active');
+}
+function toggleForm(id) {
+  const f = document.getElementById(id);
+  f.style.display = f.style.display === 'none' ? 'block' : 'none';
+}
+</script>
+</body>
+</html>

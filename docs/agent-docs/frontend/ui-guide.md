@@ -432,6 +432,183 @@ import PriorityModal from './priority-modal.vue';
 const [PriorityDialog, dialogApi] = useVbenDrawer({ connectedComponent: PriorityModal });
 ```
 
+### 3.5 多分区页面布局规范（参考 ruoyi 官方 `graphRAG/index.vue`）
+
+原型图包含多个分区时，**必须**按下列栅格 + Card 模板实现。禁止用自定义 `<div>` + 内联 style 拼布局。
+
+**官方模板**：`frontend/apps/web-antd/src/views/operator/graphRAG/index.vue`（图谱检索测试，三分区左右+全宽嵌套）
+
+#### 核心规则
+
+| 元素 | 规则 |
+|------|------|
+| 最外层（主页面） | `<Page :auto-content-height="true">` — 仅**主页面**用，drawer/modal 内容禁用（见 §3.6） |
+| 行容器 | `<Row :gutter="16">` — 24 栅格，gutter 固定 16 |
+| 列容器 | `<Col :span="N">` — 左右 1:1 用 `12/12`，左右 1:2 用 `8/16`，全宽用 `24` |
+| 分区容器 | 每个分区**必须**用 `<Card title="分区标题" size="small">` 包裹，不得裸 `<div>` + `<h3>` |
+| 分区内垂直排列 | `<Space direction="vertical" style="width:100%" :size="16">` |
+| 行之间间距 | 第二行起加 `style="margin-top: 16px"`（与 gutter 保持一致） |
+| 分区内分段 | 用 `<Divider />`（不加文字）分隔多段内容 |
+| 结果展示 | `<Alert type="success" />` + `<Descriptions bordered size="small">` + `<Tag>` + `<Space wrap>` |
+
+#### 模板（三分区：左右 1:1 + 全宽嵌套 1:2）
+
+```vue
+<template>
+  <Page :auto-content-height="true">
+    <div class="xxx-page">
+      <!-- 第一行: 左右 1:1 两个分区 -->
+      <Row :gutter="16">
+        <Col :span="12">
+          <Card title="分区 A" size="small">
+            <Space direction="vertical" style="width:100%" :size="16">
+              <!-- 表单字段 -->
+              <div>
+                <div style="margin-bottom:8px">字段标签</div>
+                <Input v-model:value="xxx" />
+              </div>
+              <Button type="primary" block @click="handleA">操作 A</Button>
+              <Divider />
+              <div v-if="resultA"><!-- 结果展示 --></div>
+            </Space>
+          </Card>
+        </Col>
+        <Col :span="12">
+          <Card title="分区 B" size="small">
+            <!-- 同上结构 -->
+          </Card>
+        </Col>
+      </Row>
+
+      <!-- 第二行: 全宽 + 内部嵌套 1:2 -->
+      <Row :gutter="16" style="margin-top:16px">
+        <Col :span="24">
+          <Card title="分区 C" size="small">
+            <Row :gutter="16">
+              <Col :span="8"><!-- 左列: 输入 --></Col>
+              <Col :span="16"><!-- 右列: 结果 --></Col>
+            </Row>
+          </Card>
+        </Col>
+      </Row>
+    </div>
+  </Page>
+</template>
+
+<style scoped>
+.xxx-page { padding: 16px; }
+</style>
+```
+
+#### ❌ 禁止的模式
+
+| 反例 | 问题 | 正确替代 |
+|------|------|---------|
+| 裸 `<div class="section">` 堆叠 | 缺 Card 边框/标题 | `<Card title="..." size="small">` |
+| 内联 `style="display:flex;gap:16px"` | 不响应式，栅格混乱 | `<Row :gutter="16"><Col :span="N">` |
+| 自定义 `<h3>分区标题</h3>` | 样式不统一 | `<Card title="分区标题">` |
+| 用 `<hr />` 或 `<div class="divider">` | 非 antd 组件 | `<Divider />` |
+| `Row` 之间用 `<br>` 或 `margin-bottom` | 不一致 | `style="margin-top: 16px"` |
+| 混用 `el-row` / `el-col`（element-plus）| 组件库错位 | 只用 `ant-design-vue` 的 `Row`/`Col` |
+
+#### 原型图多分区对照
+
+当设计文档/原型图显示**多个独立内容区块**时（如 #3458 矿场 v3.0 详情的「甲方联系卡 + 真实性论证 Tab + 研判分析 Tab + 信源链接 Tab + 配合单位 Tab + 任务看板 Tab + 操作记录 Tab」），**必须**：
+
+1. 先判断属于哪种结构：
+   - **平级多分区** → `Row` + 多个 `Col` + 每个 `Card`
+   - **分 Tab 切换** → `<a-tabs>` + `<a-tab-pane>`，每个 tab-pane 内部仍按本规范
+   - **主+辅分区** → `Row :gutter="16"` + `Col :span="16"` 主 + `Col :span="8"` 辅
+2. 每个分区**必须用 `<Card>` 包裹**，不得直接写内容到 template
+3. 间距全部用 `gutter="16"` + `margin-top: 16px`，禁止自定义数值
+
+### 3.6 `useVbenDrawer` / `useVbenModal` connectedComponent 规则（防 #3544 事故）
+
+**`<Page>` 组件**源码只是 `<div class="relative">` wrapper（含可选 header/footer slot），不能用于 drawer/modal 内容，因它是**主页面布局语义**组件。
+
+**drawer 组件必须自带 overlay 容器**。`useVbenDrawer` 的 `h(connectedComponent, ...)` 会**直接渲染** `connectedComponent`，如果该组件 template 最外层不是 `<BasicDrawer>` / `<VbenDrawer>` / `<a-drawer>`，就会被当作 inline 组件渲染到主页面（#3544 事故根因）。
+
+#### ❌ 错误写法（#3544 PR #3553 修复仍错）
+
+```vue
+<!-- xxx-detail-drawer.vue -->
+<script setup>
+// ❌ 没有 useVbenDrawer 无参调用接收 inject
+import CounterpartManagementTab from './counterpart-management-tab.vue';
+</script>
+
+<template>
+  <div>  <!-- ❌ 或 <Page> -- 没有 overlay 容器,会被 inline 渲染 -->
+    <a-tabs>...</a-tabs>
+  </div>
+</template>
+```
+
+#### ✅ 正确写法（对比 `brand-content-detail-drawer.vue`）
+
+```vue
+<!-- xxx-detail-drawer.vue -->
+<script setup>
+import { useVbenDrawer } from '@vben/common-ui';
+
+// ✅ 无参/无 connectedComponent 调用,接收父组件 inject 的 api
+const [BasicDrawer, drawerApi] = useVbenDrawer({
+  onCancel: () => drawerApi.close(),
+  onConfirm: handleConfirm,
+});
+
+// 通过 drawerApi.getData() 拿外部传入的数据
+const data = ref(null);
+drawerApi.onOpenChange((isOpen) => {
+  if (isOpen) data.value = drawerApi.getData();
+});
+</script>
+
+<template>
+  <BasicDrawer  <!-- ✅ 必须是 BasicDrawer/VbenDrawer/a-drawer overlay 容器 -->
+    title="项目详情"
+    class="w-[900px]"
+    :close-on-click-modal="false"
+  >
+    <a-tabs>...</a-tabs>
+  </BasicDrawer>
+</template>
+```
+
+#### 外部调用方（index.vue）
+
+```vue
+<script setup>
+import { useVbenDrawer } from '@vben/common-ui';
+import MineDetailDrawer from './mine-detail-drawer.vue';
+
+// 父级传 connectedComponent,拿到 <DetailDrawer> 渲染组件 + api
+const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  connectedComponent: MineDetailDrawer,
+});
+
+async function onRowClick(row) {
+  await detailDrawerApi.open({ data: row });
+}
+</script>
+
+<template>
+  <BasicTable @row-click="onRowClick" />
+  <!-- 必须在 template 末尾挂 DetailDrawer (overlay 挂载点) -->
+  <DetailDrawer @refresh="refresh" />
+</template>
+```
+
+#### Modal 同规则
+
+`useVbenModal` 的 `connectedComponent` 同样需要 `<BasicModal>` overlay 容器。
+
+#### 检测规则
+
+本规则已纳入 `pr-reviewer.md` P0 审查清单：
+- 发现 `connectedComponent: XxxDrawer` 时 → 检查 `XxxDrawer.vue` template 最外层是否为 `<BasicDrawer>` / `<VbenDrawer>` / `<a-drawer>`
+- 不是 → block merge + 评论「drawer 组件缺 overlay 容器 (#3544 同款反模式)」
+
 ---
 
 ## §4 三层页面布局

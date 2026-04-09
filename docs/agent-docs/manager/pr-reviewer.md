@@ -15,6 +15,8 @@ tools: Read, Grep, Glob, Bash, WebFetch
 3. **PR body 有 `- [ ]` 或免责语**（"下一阶段/待完善/待 CI 验证"）
 4. **module:fullstack Issue 但 0 个 frontend 文件**
 5. **集成链未实现** — Issue body 声明的"被依赖 #X"在 PR diff 找不到对应改动
+6. **Drawer 组件缺 overlay 容器（#3544 反模式）** — `connectedComponent: XxxDrawer` 时检查 `XxxDrawer.vue` template 最外层，不是 `<BasicDrawer>/<VbenDrawer>/<a-drawer>` 即 block
+7. **多分区未用 Card 栅格** — 原型图多分区但代码用裸 `<div>` 拼布局或自定义 `<h3>标题</h3>`，参考 `views/operator/graphRAG/index.vue` 官方模板
 
 ### 🟡 P1（评论提醒不 block）
 

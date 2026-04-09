@@ -34,6 +34,7 @@
 
 - **YOU MUST NOT** 使用 `visible` 属性 — 用 `open`（Ant Design Vue 4.x）
 - **YOU MUST NOT** 嵌套 Drawer/Modal — 独立组件 + 事件通信
+- **YOU MUST NOT** 在 `useVbenDrawer/Modal` 的 `connectedComponent` 里用 `<Page>`/`<div>` 作 template 最外层 — 必须是 `<BasicDrawer>`/`<VbenDrawer>`/`<a-drawer>` overlay 容器（#3544 事故，详见 `frontend/ui-guide.md` §3.5）
 - **YOU MUST NOT** 加前端路由而不配置后端 `sys_menu` 表
 - **YOU MUST NOT** 使用 `any` 类型
 - **YOU MUST NOT** 直接编辑 `schema.sql` — 新表用 `schemas/issue_XXXX.sql` + `script/sql/update/` 增量脚本

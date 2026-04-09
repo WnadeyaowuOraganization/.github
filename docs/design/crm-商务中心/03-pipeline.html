@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商机管道 — CRM商务中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #f5f5f5; color: #333; margin:0; }
+  .nav-bar { height: 48px; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-left { font-size: 14px; color: #666; }
+  .nav-left strong { color: #333; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666; }
+  .tab-bar { display: flex; align-items: center; border-bottom: 1px solid #f0f0f0; padding: 0 24px; background: #fff; justify-content: space-between; }
+  .tab-item { padding: 12px 16px; font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; color: #666; }
+  .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+  .view-btn { height: 28px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 13px; cursor: pointer; background: #fff; color: #555; }
+  .view-btn.active { background: #e6f7ff; color: #1890ff; border-color: #91d5ff; }
+  /* 看板视图 */
+  .kanban-wrap { display: flex; gap: 12px; padding: 16px 24px; overflow-x: auto; min-height: calc(100vh - 150px); }
+  .kanban-col { min-width: 220px; width: 220px; flex-shrink: 0; background: #fff; border: 1px solid #f0f0f0; border-radius: 4px; display: flex; flex-direction: column; }
+  .kanban-col-header { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; background: #fafafa; border-radius: 4px 4px 0 0; }
+  .col-title { font-size: 13px; font-weight: 600; color: #333; }
+  .col-meta { font-size: 12px; color: #888; margin-top:2px; }
+  /* 紧凑行条目 */
+  .opp-item { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; position: relative; }
+  .opp-item:last-child { border-bottom: none; }
+  .opp-item.overdue { border-left: 3px solid #ff4d4f; }
+  .opp-name { font-size: 13px; font-weight: 600; color: #333; display: flex; align-items: center; justify-content: space-between; }
+  .opp-code { font-size: 11px; color: #999; margin-top: 2px; }
+  .opp-amount { font-size: 12px; color: #555; }
+  .opp-footer { font-size: 11px; color: #999; margin-top: 4px; display: flex; align-items: center; justify-content: space-between; }
+  .biz-tag { font-size: 11px; padding: 1px 5px; border-radius: 2px; }
+  .biz-direct { background: #e6f7ff; color: #1890ff; }
+  .biz-dealer { background: #fff7e6; color: #fa8c16; }
+  .biz-intl { background: #f6ffed; color: #52c41a; }
+  .detail-link { color: #1890ff; font-size: 11px; cursor: pointer; }
+  /* 列表视图 */
+  #listView { display: none; padding: 0 24px 20px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 13px; font-weight: 600; color: #555; padding: 11px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; height: 44px; vertical-align: middle; }
+  tr:hover td { background: #fafafa; }
+  .stage-tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .btn-link { color: #1890ff; background: none; border: none; cursor: pointer; font-size: 13px; padding: 2px 4px; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: #bbb; border-top: 1px solid #f0f0f0; background: #fff; margin-top: 0; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="nav-bar">
+  <div class="nav-left">CRM商务中心 &gt; <strong>商机管道</strong></div>
+  <div class="nav-right">
+    <span>📥 <span style="color:#1890ff;font-weight:700;">4</span></span>
+    <span>📢 <span style="color:#1890ff;font-weight:700;">3</span></span>
+    <span>🔔 <span style="color:#1890ff;font-weight:700;">2</span></span>
+    <span style="color:#333;font-weight:500;">张三 | 拓展一部</span>
+  </div>
+</div>
+
+<!-- Tab 栏 + 视图切换 -->
+<div class="tab-bar">
+  <div style="display:flex;">
+    <div class="tab-item active" onclick="switchTab(this)">全部</div>
+    <div class="tab-item" onclick="switchTab(this)">📍 直销</div>
+    <div class="tab-item" onclick="switchTab(this)">🏠 经销</div>
+    <div class="tab-item" onclick="switchTab(this)">🌏 国贸</div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <button class="view-btn active" id="btnKanban" onclick="showView('kanban')">看板</button>
+    <button class="view-btn" id="btnList" onclick="showView('list')">列表</button>
+    <button style="height:28px; padding:0 12px; border:1px solid #1890ff; border-radius:3px; font-size:13px; cursor:pointer; background:#1890ff; color:#fff;">+ 新建商机</button>
+  </div>
+</div>
+
+<!-- 看板视图 -->
+<div id="kanbanView" class="kanban-wrap">
+
+  <!-- 新商机 (3) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">新商机 <span style="color:#1890ff;">(3)</span></div>
+      <div class="col-meta">￥3.2M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">合肥万达广场游乐场 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0044 · 合肥市体育局</div>
+      <div class="opp-amount">￥1,200,000</div>
+      <div class="opp-footer"><span>张三 · 今天</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">成都天府新区社区项目 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0043 · 成都天府住建局</div>
+      <div class="opp-amount">￥980,000</div>
+      <div class="opp-footer"><span>李四 · 1天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">PT Fun新加坡方案 <span class="biz-tag biz-intl">🌏国贸</span></div>
+      <div class="opp-code">OPP-2026-0042 · PT Funworld</div>
+      <div class="opp-amount">$158,000</div>
+      <div class="opp-footer"><span>王五 · 2天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+  <!-- 商务推进 (4) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">商务推进 <span style="color:#1890ff;">(4)</span></div>
+      <div class="col-meta">￥8.5M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">深圳龙华区体育公园 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0039 · 深圳市体育局</div>
+      <div class="opp-amount">￥2,450,000</div>
+      <div class="opp-footer"><span>张三 · 3天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">安徽乐翔华东区域补货 <span class="biz-tag biz-dealer">🏠经销</span></div>
+      <div class="opp-code">OPP-2026-0038 · 安徽乐翔体育</div>
+      <div class="opp-amount">￥1,880,000</div>
+      <div class="opp-footer"><span>赵六 · 2天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">Al Hokair利雅得乐园 <span class="biz-tag biz-intl">🌏国贸</span></div>
+      <div class="opp-code">OPP-2026-0035 · Al Hokair Group</div>
+      <div class="opp-amount">$320,000</div>
+      <div class="opp-footer"><span>王五 · 5天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item overdue">
+      <div class="opp-name">成都锦江住建局社区 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0031 · 成都锦江住建局</div>
+      <div class="opp-amount">￥620,000</div>
+      <div class="opp-footer"><span style="color:#ff4d4f;">李四 · 16天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+  <!-- 招投标 (2) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">招投标 <span style="color:#1890ff;">(2)</span></div>
+      <div class="col-meta">￥4.2M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">武汉光谷体育中心 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0029 · 武汉东湖高新区</div>
+      <div class="opp-amount">￥2,800,000</div>
+      <div class="opp-footer"><span>张三 · 4天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">杭州钱塘区体育公园 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0026 · 杭州钱塘区住建局</div>
+      <div class="opp-amount">￥1,400,000</div>
+      <div class="opp-footer"><span>李四 · 7天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+  <!-- 签约 (2) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">签约 <span style="color:#1890ff;">(2)</span></div>
+      <div class="col-meta">￥3.8M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">Playpoint新加坡学校 <span class="biz-tag biz-intl">🌏国贸</span></div>
+      <div class="opp-code">OPP-2026-0028 · Playpoint Pte Ltd</div>
+      <div class="opp-amount">$120,000</div>
+      <div class="opp-footer"><span>张三 · 1天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">杭州乐动年度框架 <span class="biz-tag biz-dealer">🏠经销</span></div>
+      <div class="opp-code">OPP-2026-0024 · 杭州乐动体育</div>
+      <div class="opp-amount">￥1,600,000</div>
+      <div class="opp-footer"><span>赵六 · 3天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+  <!-- 回款 (3) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">回款 <span style="color:#1890ff;">(3)</span></div>
+      <div class="col-meta">￥5.1M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">安徽合肥蜀山区学校 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0021 · 合肥蜀山区教育局</div>
+      <div class="opp-amount">￥2,100,000</div>
+      <div class="opp-footer"><span>张三 · 8天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item overdue">
+      <div class="opp-name">PT Funworld雅加达 <span class="biz-tag biz-intl">🌏国贸</span></div>
+      <div class="opp-code">OPP-2026-0019 · PT Funworld Indonesia</div>
+      <div class="opp-amount">$95,000</div>
+      <div class="opp-footer"><span style="color:#ff4d4f;">王五 · 18天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">安徽乐翔Q1补货 <span class="biz-tag biz-dealer">🏠经销</span></div>
+      <div class="opp-code">OPP-2026-0017 · 安徽乐翔体育</div>
+      <div class="opp-amount">￥860,000</div>
+      <div class="opp-footer"><span>赵六 · 6天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+  <!-- 验收 (1) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">验收 <span style="color:#1890ff;">(1)</span></div>
+      <div class="col-meta">￥1.2M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">郑州高新区体育公园 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0012 · 郑州高新区管委会</div>
+      <div class="opp-amount">￥1,200,000</div>
+      <div class="opp-footer"><span>李四 · 5天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+  <!-- 完结 (2) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">完结 <span style="color:#52c41a;">(2)</span></div>
+      <div class="col-meta">￥4.6M</div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">北京海淀社区公园 <span class="biz-tag biz-direct">📍直销</span></div>
+      <div class="opp-code">OPP-2026-0008 · 北京海淀区住建委</div>
+      <div class="opp-amount">￥3,200,000</div>
+      <div class="opp-footer"><span>张三 · 22天前</span><span class="detail-link">详情</span></div>
+    </div>
+    <div class="opp-item">
+      <div class="opp-name">杭州乐动2025年框架 <span class="biz-tag biz-dealer">🏠经销</span></div>
+      <div class="opp-code">OPP-2025-0098 · 杭州乐动体育</div>
+      <div class="opp-amount">￥1,400,000</div>
+      <div class="opp-footer"><span>赵六 · 30天前</span><span class="detail-link">详情</span></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 列表视图 -->
+<div id="listView">
+  <table>
+    <thead>
+      <tr>
+        <th>商机编号</th>
+        <th>项目名称</th>
+        <th>客户</th>
+        <th>阶段</th>
+        <th>业务线</th>
+        <th>预算金额</th>
+        <th>负责人</th>
+        <th>最近更新</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:#999; font-size:12px;">OPP-2026-0044</td>
+        <td style="font-weight:500;">合肥万达广场游乐场</td>
+        <td>合肥市体育局</td>
+        <td><span style="background:#e6f7ff; color:#1890ff; padding:2px 8px; border-radius:3px; font-size:12px;">新商机</span></td>
+        <td>📍直销</td>
+        <td>￥1,200,000</td>
+        <td>张三</td>
+        <td>今天</td>
+        <td><button class="btn-link">详情</button> <button class="btn-link">编辑</button></td>
+      </tr>
+      <tr>
+        <td style="color:#999; font-size:12px;">OPP-2026-0028</td>
+        <td style="font-weight:500;">Playpoint新加坡学校游乐场</td>
+        <td>Playpoint Pte Ltd</td>
+        <td><span style="background:#f6ffed; color:#52c41a; padding:2px 8px; border-radius:3px; font-size:12px;">签约</span></td>
+        <td>🌏国贸</td>
+        <td>$120,000</td>
+        <td>张三</td>
+        <td>1天前</td>
+        <td><button class="btn-link">详情</button> <button class="btn-link">编辑</button></td>
+      </tr>
+      <tr>
+        <td style="color:#999; font-size:12px;">OPP-2026-0039</td>
+        <td style="font-weight:500;">深圳龙华区体育公园</td>
+        <td>深圳市体育局</td>
+        <td><span style="background:#fff7e6; color:#fa8c16; padding:2px 8px; border-radius:3px; font-size:12px;">商务推进</span></td>
+        <td>📍直销</td>
+        <td>￥2,450,000</td>
+        <td>张三</td>
+        <td>3天前</td>
+        <td><button class="btn-link">详情</button> <button class="btn-link">编辑</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>万德AI平台 — CRM商务中心原型 v3.0 | 2026年4月</footer>
+
+<script>
+function switchTab(el) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function showView(view) {
+  if (view === 'kanban') {
+    document.getElementById('kanbanView').style.display = 'flex';
+    document.getElementById('listView').style.display = 'none';
+    document.getElementById('btnKanban').classList.add('active');
+    document.getElementById('btnList').classList.remove('active');
+  } else {
+    document.getElementById('kanbanView').style.display = 'none';
+    document.getElementById('listView').style.display = 'block';
+    document.getElementById('btnKanban').classList.remove('active');
+    document.getElementById('btnList').classList.add('active');
+  }
+}
+</script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 阅读 `issues/issue-${ISSUE}/issue-source.md` 完成 Issue #${ISSUE}。
 
-## 9 条硬约束（违反任一项被 quality-gate 拦截）
+## 10 条硬约束（违反任一项被 quality-gate 拦截）
 
 1. **task.md 全勾** — `issues/issue-${ISSUE}/task.md` 任何 `- [ ]` 都禁止；做不完拆追补 Issue 后勾选原步骤
 2. **PR body 全勾 + 禁止假勾选** — body 不得有 `- [ ]`；勾了「截图/视觉/screenshot」类文字必须 body 同时有 `![](.*\.png)`
@@ -11,6 +11,16 @@
 7. **🚨 前端必补 smoke 用例** — 改动 `views/**/index.vue` 必须 `cp e2e/tests/front/smoke/_template.spec.ts e2e/tests/front/smoke/<module>-page.spec.ts` 并保留 3 条反事故断言
 8. **PR create 前必 rebase** — `git fetch origin dev && git rebase origin/dev && git push --force-with-lease`
 9. **PR create 后必轮询** — `while [ "$(gh pr view $PR --json state -q .state)" != "MERGED" ]; do sleep 120; done`；超 30min 未 merged 在 Issue 评论说明后退出
+10. **阶段性主动汇报** — 在以下 4 个节点调用通知 API 向研发经理汇报，禁止静默工作：
+    - 开工：读完 Issue + task.md 后
+    - 阶段完成：编译通过 / 单测绿 / 提 PR / PR merged 等里程碑
+    - 卡住：连续 10 分钟同一问题无进展时
+    - 结论前：下「问题不存在 / 无需修改 / 已修复」结论前**必须**先汇报等确认
+    ```bash
+    curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
+      -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"[#${ISSUE}] <一句话现状>\",\"type\":\"info\"}"
+    # type: info=进度 / warning=卡住需关注 / success=阶段完成 / error=必须介入
+    ```
 
 ## slot VNode 正确写法（约束 4）
 

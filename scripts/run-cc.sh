@@ -133,9 +133,29 @@ if [ "$MODE" = "issue" ]; then
     git checkout "feature-Issue-${ISSUE}" 2>/dev/null
   else
     # 首次或RUNNING状态：正常pre-task
-    echo "$(date): pre-task: checkout dev → pull → feature-Issue-${ISSUE}"
-    git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
-    git checkout -b "feature-Issue-${ISSUE}" 2>/dev/null || git checkout "feature-Issue-${ISSUE}" 2>/dev/null
+    # 2026-04-09 #3554 事故修复：不再用 2>/dev/null 屏蔽 git 错误，pre-task 失败必须立即 exit
+    echo "$(date): pre-task: 清理 dev 状态 → fetch → 重建 feature-Issue-${ISSUE}"
+
+    # 1. 强制清理 dev 可能的本地改动（防止 pull 失败）
+    git checkout -f dev 2>&1 | tail -3 || { echo "ERROR: checkout dev 失败"; exit 1; }
+    git reset --hard HEAD 2>&1 | tail -3  # 清理任何未提交改动
+
+    # 2. fetch 远端最新（不用 pull，避免 merge 冲突）
+    git fetch origin dev 2>&1 | tail -3 || { echo "ERROR: fetch origin dev 失败"; exit 1; }
+
+    # 3. 强制本地 dev 对齐远端（彻底消除分叉）
+    git reset --hard origin/dev 2>&1 | tail -3 || { echo "ERROR: reset --hard origin/dev 失败"; exit 1; }
+
+    # 4. 如果 feature 分支已存在，删除重建（防止基于老 dev 的陈旧分支复用 → #3554 同款事故）
+    if git show-ref --verify --quiet "refs/heads/feature-Issue-${ISSUE}"; then
+      echo "$(date): feature-Issue-${ISSUE} 已存在，删除重建（防 #3554 陈旧分支事故）"
+      git branch -D "feature-Issue-${ISSUE}" 2>&1 | tail -1 || true
+    fi
+
+    # 5. 基于最新 dev 创建干净 feature 分支
+    git checkout -b "feature-Issue-${ISSUE}" 2>&1 | tail -3 || { echo "ERROR: 创建 feature-Issue-${ISSUE} 失败"; exit 1; }
+
+    echo "$(date): pre-task 完成，feature-Issue-${ISSUE} 基于 $(git rev-parse --short HEAD) = $(git rev-parse --short origin/dev)"
   fi
 
   mkdir -p "./issues/issue-${ISSUE}"

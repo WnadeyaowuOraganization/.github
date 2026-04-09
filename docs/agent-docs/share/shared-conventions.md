@@ -14,7 +14,11 @@
 5. **集成链显式声明** — Issue body 声明的「依赖/被依赖」必须在 PR body 说明每项 `已接入 / 延后到 #X / N/A`
 6. **单测本地跑通** — 禁写「测试配置待解决」「待 CI 验证」类免责语
 7. **🚨 前端必补 smoke 用例** — 改动 `views/**/index.vue` 必须 `cp e2e/tests/front/smoke/_template.spec.ts e2e/tests/front/smoke/<module>-page.spec.ts` 并保留 3 条反事故断言
-8. **PR create 前必 rebase** — `git fetch origin dev && git rebase origin/dev && git push --force-with-lease`
+8. **PR create 前必 rebase + 必须 `--base dev`** — 禁止默认 base（repo default 是 main，默认会合到 main 导致反向污染 #3554 事故）
+   ```bash
+   git fetch origin dev && git rebase origin/dev && git push --force-with-lease
+   gh pr create --base dev --title "..." --body "..."   # --base dev 必填,不能省
+   ```
 9. **PR create 后必轮询** — `while [ "$(gh pr view $PR --json state -q .state)" != "MERGED" ]; do sleep 120; done`；超 30min 未 merged 在 Issue 评论说明后退出
 10. **阶段性主动汇报** — 4 个节点直接向研发经理汇报（tmux 即时 + claude-office 通知），禁止静默工作：
     - 开工（读完 Issue + task.md 后）

@@ -1736,3 +1736,241 @@ Technical Stack: Vue3 + Ant Design Vue + ECharts (前端部分待完善)
 
 在用户确认前，**暂不恢复常规指派**，循环继续空转 warning 状态
 
+---
+
+# 🛠️ #3458 事故最终优化方案（2026-04-09 10:50）
+
+> **触发事件**：#3458 生态 3 个 PR 综合评分仅 5.43/10（4.2 + 5.40 + 6.70），全部 CI 全绿但实际业务价值未交付。
+> **方案目标**：让"CI 绿"真正对应"业务可用"，消灭「信号绿 + 产品坏」的 gap。
+> **方案分层**：P0 立即修复（24h 内）→ P1 harness 补丁（3 天内）→ P2 质量门（1 周内）→ P3 流程文化（持续）
+> **不做的事**：不推倒 auto-merge 重来（它的 ROI 高）、不加无限 review 步骤（会卡住流水线）
+
+## 事故复盘一句话总结
+
+> **auto-merge 只看 CI 信号的数字指示灯，但从没人（或 AI）真的打开过页面 / 读过 task.md / 勾过 PR body 的 checkbox，导致 3 个"自述未完成/渲染坏/未集成"的 PR 一路绿灯合并。**
+
+---
+
+## 📌 P0 立即修复（24 小时内，优先级最高）
+
+### P0.1 三 Issue 追补指派（今日）
+
+| 追补 Issue | 内容 | Effort | 分派 |
+|---|---|---|---|
+| **#3458-fix1** 新建 | `data.ts` 所有 `slots.default` 返回字符串改为模板插槽或 `h()` VNode；清理未定义"赢率"列；清理未移除的旧筛选器 | high | fullstack 空闲 kimi |
+| **#3458-fix2** 新建 | 修复主页面底部配合单位/任务看板/选择商务被误植问题 — 这些应在 drawer 而非主页 | high | 同上 kimi（合并一个 PR） |
+| **#3118-fix** 新建 | 前端 ECharts 关系图谱可视化 + 「关系网络」Tab 集成到矿场详情抽屉 | high | fullstack 空闲 kimi |
+| **#2391-fix** 新建 | #3458 `data.ts` / `mine-detail-drawer` 接入 `/wande/mine/source-credibility/project/{id}` 填充真实 trustLevel；补充超管可信度看板页面 | medium | fullstack 空闲 kimi |
+
+**禁止**：不许直接在原 Issue 上让 CC 继续跑 — 原 Issue 已 CLOSED，GitHub 语义混乱；必须新建追补 Issue 保留审计链。
+
+### P0.2 本次事故硬隔离
+
+- **暂停 auto-merge 24 小时**（到 P1.1 上线）：临时在 `pr-test.yml` 的 auto-merge job 前增加一条 `if: github.event.pull_request.user.login != 'WandeAIBot' || contains(github.event.pull_request.body, '[ ]') == false` 守卫，防止未勾 PR body checkbox 的 PR 合并
+- **或者更简单**：在 `scripts/run-cc.sh` 第 196 行 default prompt 追加一句硬约束：「**禁止在 PR body 存在未勾 `- [ ]` checkbox 时提 PR；禁止在 task.md 存在未勾步骤时提 PR**」
+
+---
+
+## 📌 P1 harness 补丁（3 天内，结构性修复）
+
+### P1.1 auto-merge 三道预检门（核心修复）
+
+在 `.github/workflows/pr-test.yml` 的 `auto-merge` job 之前新增一个 `quality-gate` job：
+
+```yaml
+quality-gate:
+  runs-on: self-hosted
+  outputs:
+    passed: ${{ steps.check.outputs.passed }}
+  steps:
+    - name: 门 1 — PR body checkbox 预检
+      run: |
+        UNCHECKED=$(echo "$PR_BODY" | grep -c '^- \[ \]' || true)
+        if [ "$UNCHECKED" -gt 0 ]; then
+          echo "❌ PR body 存在 $UNCHECKED 项未勾 checkbox"
+          exit 1
+        fi
+      env:
+        PR_BODY: ${{ github.event.pull_request.body }}
+
+    - name: 门 2 — task.md 完成度校验
+      run: |
+        TASK_FILE="issues/issue-${{ env.ISSUE_NUM }}/task.md"
+        if [ -f "$TASK_FILE" ]; then
+          UNCHECKED=$(grep -c '^- \[ \]' "$TASK_FILE" || true)
+          if [ "$UNCHECKED" -gt 0 ]; then
+            echo "❌ task.md 存在 $UNCHECKED 项未勾步骤"
+            exit 1
+          fi
+        fi
+
+    - name: 门 3 — 前端 PR 必须有截图
+      run: |
+        if echo "$CHANGED_FILES" | grep -q 'frontend/apps/web-antd/src/views'; then
+          if ! echo "$PR_BODY" | grep -qE '!\[.*\]\(.*\.(png|jpg|jpeg|gif)\)'; then
+            echo "❌ 前端 PR 必须在 body 贴截图"
+            exit 1
+          fi
+        fi
+
+auto-merge:
+  needs: [quality-gate, e2e-test, build]
+  if: needs.quality-gate.outputs.passed == 'true'
+```
+
+**预期效果**：上面 3 个事故 PR 全部会被门 1 或门 2 拦截（#3487 门 1 拦截 6 项未勾 E2E，#3541 门 1+门 2 双拦截，#3542 门 3 拦截无截图）。
+
+### P1.2 `run-cc.sh` default prompt 模板升级
+
+**现状**（第 196 行）：
+```bash
+CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
+```
+
+**升级为**（新 prompt 模板文件 `docs/agent-docs/cc-prompts/default-issue.md`）：
+```
+阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。
+
+## 硬约束（违反任一项禁止提 PR，违反将被 quality-gate 拦截）
+
+1. **task.md 全勾**：提 PR 前 task.md 的所有 steps 必须勾选；如果某步真的无法完成，拆分为追补 Issue 不要在原 task.md 留空勾
+2. **PR body checkbox 全勾**：PR 描述中的 `- [ ]` 必须全部勾选，不允许「下一阶段」「待完善」类文字免责
+3. **前端视觉验证**：前端 Issue 必须在 Dev 环境手动打开页面并用 Playwright/浏览器截图，截图粘贴到 PR body（Markdown 图片语法）
+4. **vxe-table slot 约束**：slots.default 函数必须返回 VNode（用 `h()` 或模板插槽），禁止返回 HTML 字符串
+5. **集成链声明**：Issue body 中声明的「被依赖/依赖」关系，必须在 PR body 显式说明接入情况（已接入/延后/N/A）
+6. **单元测试必须本地跑通**：不得在 task.md 或 PR body 写「测试配置问题待解决/待 CI 验证」这类免责语
+
+## 流程
+
+按 docs/agent-docs/cc-prompts/standard-workflow.md 执行（读 Issue → 设计 → TDD 红灯 → 实现 → 单测绿灯 → 本地构建 → 前端视觉验证 → task.md 全勾 → gh pr create → 巡检 PR CI → auto-merge）
+
+Issue 编号: #${ISSUE}
+```
+
+### P1.3 新增 `scripts/pr-body-lint.sh`（可以本地运行）
+
+CC 在 `gh pr create` 之前，必须先运行一次：
+```bash
+bash scripts/pr-body-lint.sh --pr-body pr-body.md --task-md issues/issue-${ISSUE}/task.md --frontend-changes $(git diff --name-only origin/dev...HEAD | grep 'frontend/' | wc -l)
+```
+脚本校验：
+- PR body 无 `- [ ]`
+- task.md 无 `- [ ]`
+- 如果前端有改动，body 必须有 `![](.*\.(png|jpg))` 图片
+
+---
+
+## 📌 P2 质量门（1 周内，防再发）
+
+### P2.1 Playwright 视觉回归机器人（auto-visual-review）
+
+新 workflow `.github/workflows/visual-review.yml`：
+- **触发**：任何改动 `frontend/apps/web-antd/src/views/**` 的 PR
+- **动作**：
+  1. 起 Dev-PR 环境
+  2. 用 admin/admin123 登录
+  3. 打开变更涉及的页面路由，截图
+  4. 用 LLM（Claude/本地 vision 模型）对比：截图 vs 对应 `docs/design/*/prototype.html` 截图
+  5. 差异 > 30% → 评论 PR 「⚠️ 视觉差异 %，需人工审核」+ block auto-merge
+- **成本**：每个前端 PR 增加 ~2 分钟 + 1 次 Claude 视觉 API 调用（~¥0.3）
+
+**预期**：#3487 会被视觉 bot 直接拦截（HTML 源码暴露与原型差异 > 80%）
+
+### P2.2 E2E smoke 用例补课 — 新页面必须有 smoke
+
+新增 CI 预检 `e2e-coverage-gate`：
+- 从 PR 改动识别新增或修改的前端路由
+- 检查 `e2e/tests/front/smoke/*.spec.ts` 是否存在该路由对应的 smoke 用例
+- 不存在 → 拒绝合并，要求补用例
+
+**CC 补用例模板**（`tests/front/smoke/_template.spec.ts`）：
+```ts
+test('<page> smoke — 关键组件渲染', async ({ page }) => {
+  await login(page);
+  await page.goto('<route>');
+  // 至少 1 个断言：特定 CSS selector 存在（如 .ant-tag）
+  await expect(page.locator('.ant-tag').first()).toBeVisible();
+  // 至少 1 个断言：主表格首行单元格不是 HTML 源码
+  const firstCellText = await page.locator('.vxe-body--row:first-child .vxe-cell').first().textContent();
+  expect(firstCellText).not.toMatch(/^<[a-z-]+[\s>]/);
+});
+```
+
+### P2.3 AI code-reviewer agent（新 subagent）
+
+新增 `.claude/agents/pr-reviewer.md` — 在 PR 创建后自动运行的审稿 agent：
+- 读 PR diff
+- 读设计文档（从 Issue body 链接）
+- 交叉验证代码实现 vs 设计要求
+- 发现 `slots.default: () => \`<...>\``（返回字符串）类模式直接评论 block merge
+- 成本：每 PR ~¥1，节省的返工成本远大于
+
+触发：`.github/workflows/pr-test.yml` 的 `conflict-check` 之后并行运行
+
+---
+
+## 📌 P3 流程文化（持续）
+
+### P3.1 质量评分反馈循环
+
+每周用 `scripts/weekly-quality-report.sh` 生成：
+- 本周 merge 的 PR 平均评分（研发经理批次评估汇总）
+- 低于 7.0 的 PR 列表 + 根因分类
+- 指派给 kimi 的长期质量画像（哪些 kimi 常犯哪类错）
+
+质量画像反哺 `run-cc.sh` 的 `--effort` 自动路由：
+- 历史质量 < 6 的 kimi 目录，默认 effort 提一档
+- 连续 3 个 PR < 5 分的 kimi，标 review-required，下次必须 max effort + 人工审阅
+
+### P3.2 prompt template 版本化
+
+- `docs/agent-docs/cc-prompts/` 目录版本化
+- 每次调整 prompt 模板都有 commit + 评分追踪
+- 比如："v2 加入 slot 约束后，4 周内前端 PR 质量从 5.2 → 7.1"
+
+### P3.3 验收报告章节化
+
+- 本报告 `docs/workflow/新harness验证报告.md` 已经事实上成为"质量事故档案"
+- 每次重大事故（评分 < 6）必须新增独立章节
+- 研发经理循环任务中增加一步："读最近 5 个事故章节，避免重复犯错"
+
+---
+
+## 最终方案优先级排序
+
+| 优先级 | 工作项 | 负责角色 | 预计耗时 | 预期收益 |
+|-------|-------|---------|---------|---------|
+| **P0.1** | 3 Issue 追补指派 | 研发经理 | 立即（10 分钟） | 修复已知 bug |
+| **P0.2** | run-cc.sh prompt 追加硬约束 | 超管（改脚本） | 30 分钟 | 立即止血 |
+| **P1.1** | quality-gate 三道预检门 | 超管 | 2 小时 | **最高 ROI** — 拦截 80% 事故 |
+| **P1.2** | prompt 模板完整升级 | 超管 + 研发经理 | 4 小时 | 长期收益 |
+| **P1.3** | pr-body-lint.sh | 超管 | 1 小时 | 本地预检 |
+| **P2.1** | 视觉回归 bot | 超管 + pipeline | 1 天 | 根治视觉事故 |
+| **P2.2** | E2E smoke coverage gate | 超管 | 半天 | 前端质量 |
+| **P2.3** | AI code-reviewer agent | 超管 | 1 天 | 深度 review |
+| **P3.x** | 流程文化 | 持续 | — | 长期质量 |
+
+## 一句话行动建议
+
+> **今天立刻做 P0.1 + P0.2（追补 + 止血），明天做 P1.1（三道预检门），本周内补 P1.2/P1.3/P2.1，其余作为 Sprint-2 任务排程**。只要 P1.1 上线，80% 的类似事故会被自动拦截，就能放心恢复常规 auto-merge 指派。
+
+## 本方案的落地追踪
+
+在本章节持续追加「方案执行进度」小节，每次有 P0/P1/P2 项目落地时更新一次，形成"事故 → 修复 → 防复发"的完整闭环。
+
+### 执行进度（初版：2026-04-09 10:50）
+
+- [ ] P0.1 三 Issue 追补指派
+- [ ] P0.2 run-cc.sh prompt 追加硬约束
+- [ ] P1.1 quality-gate 三道预检门
+- [ ] P1.2 prompt 模板完整升级
+- [ ] P1.3 pr-body-lint.sh
+- [ ] P2.1 视觉回归 bot
+- [ ] P2.2 E2E smoke coverage gate
+- [ ] P2.3 AI code-reviewer agent
+- [ ] P3 流程文化建设
+
+---
+
+**本报告章节是 #3458 生态事故从发现到系统性修复的完整档案，吴总审阅后可据此拍板排程 Sprint-2 质量补课。**
+

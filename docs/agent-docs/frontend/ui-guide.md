@@ -528,27 +528,30 @@ const [PriorityDialog, dialogApi] = useVbenDrawer({ connectedComponent: Priority
 
 **drawer 组件必须自带 overlay 容器**。`useVbenDrawer` 的 `h(connectedComponent, ...)` 会**直接渲染** `connectedComponent`，如果该组件 template 最外层不是 `<BasicDrawer>`，就会被当作 inline 组件渲染到主页面（#3544 事故根因）。
 
-#### ✅ 权威参考（已实测验证）
+#### ✅ 权威参考（已实测验证 + 动态菜单可访问）
 
-**子组件（drawer 本体）**：`frontend/apps/web-antd/src/views/brand-center/content/brand-content-detail-drawer.vue`
+**首选参考 — `international-trade`**（代码正确 + Dev 动态菜单真实可访问）：
 
-- 第 80 行：`const [BasicDrawer, drawerApi] = useVbenDrawer({ onCancel, onConfirm, onOpenChange });` — **无 `connectedComponent` 参数**
-- 第 158 行：`<BasicDrawer :close-on-click-modal="false" :title="title" class="w-[800px]" width="800">` — **template 最外层**
+| 项 | 值 |
+|---|---|
+| Dev URL | `http://3.211.167.122:8083/wande/international-trade` |
+| 菜单路径 | **万德业务 → 国际贸易** |
+| 主页面文件 | `frontend/apps/web-antd/src/views/business/international-trade/index.vue` |
+| Drawer 子组件 | `frontend/apps/web-antd/src/views/business/international-trade/prospect-detail-drawer.vue` |
+| `useVbenDrawer` 调用位置（子组件） | L45 — 无 `connectedComponent` 参数 |
+| `<BasicDrawer>` template 位置（子组件） | L118 — template 最外层 |
 
-**外部调用方（主页面）**：`frontend/apps/web-antd/src/views/brand-center/content/index.vue`
+**验证方法**：用 admin/admin123 登录 Dev → 万德业务 → 国际贸易 → 点击列表某行 → 看到右侧 900px overlay drawer 弹出即正确。
 
-- 第 31 行：`import BrandContentDetailDrawer from './brand-content-detail-drawer.vue';`
-- 第 100 行：`connectedComponent: BrandContentDetailDrawer,` — **传给父级 useVbenDrawer**
+#### 交叉验证（代码模式一致，3 文件相同）
 
-#### 交叉验证（同模式一致）
+| 文件 | `useVbenDrawer` 行 | `<BasicDrawer>` 行 | 动态菜单可访问 |
+|------|-------------------|-------------------|---------------|
+| `views/business/international-trade/prospect-detail-drawer.vue` | **45** | **118** | ✅ 万德业务 → 国际贸易 |
+| `views/brand-center/content/brand-content-detail-drawer.vue` | 80 | 158 | ❌ 不在动态菜单（仅代码参考）|
+| `views/hr/employee/employee-drawer.vue` | 37 | 105 | ❌ 不在动态菜单（仅代码参考）|
 
-| 文件 | useVbenDrawer 行 | `<BasicDrawer>` 行 |
-|------|-----------------|-------------------|
-| `views/brand-center/content/brand-content-detail-drawer.vue` | 80 | 158 |
-| `views/hr/employee/employee-drawer.vue` | 37 | 105 |
-| `views/business/international-trade/prospect-detail-drawer.vue` | 45 | 118 |
-
-三个文件模式完全一致 — 这是 wande-play 的**标准 drawer 模板**。
+**3 个文件代码模式完全一致** — 这是 wande-play 的**标准 drawer 模板**。首选 `prospect-detail-drawer.vue` 因为它同时在 Dev 动态菜单里可以实测验证。
 
 #### 模板骨架（照抄即可）
 

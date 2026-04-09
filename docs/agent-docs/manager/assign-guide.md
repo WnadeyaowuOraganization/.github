@@ -301,3 +301,9 @@ grep -A 25 "指派建议" sprints/sprint-<N>/PLAN.md
 ### 下批建议
 - #N backend kimi3（理由）
 ```
+
+---
+
+## 辅助 Agent
+
+- [pr-reviewer.md](./pr-reviewer.md) — AI PR 审查员 subagent，`.claude/agents/pr-reviewer.md` symlink 到此文件，Claude Code 加载后可用 `PR_NUM=X claude -p "用 pr-reviewer agent 审查"` 调用

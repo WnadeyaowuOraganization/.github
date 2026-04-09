@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>询盘工作台 — CRM商务中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #f5f5f5; color: #333; margin:0; }
+  .nav-bar { height: 48px; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-left { font-size: 14px; color: #666; }
+  .nav-left strong { color: #333; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666; }
+  .tab-bar { display: flex; align-items: center; border-bottom: 1px solid #f0f0f0; padding: 0 24px; background: #fff; justify-content: space-between; }
+  .tab-item { padding: 12px 16px; font-size: 14px; cursor: pointer; border-bottom: 2px solid transparent; color: #666; }
+  .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+  .view-btn { height: 28px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 13px; cursor: pointer; background: #fff; color: #555; }
+  .view-btn.active { background: #e6f7ff; color: #1890ff; border-color: #91d5ff; }
+  /* 看板 */
+  .kanban-wrap { display: flex; gap: 12px; padding: 16px 24px; overflow-x: auto; min-height: calc(100vh - 200px); }
+  .kanban-col { min-width: 220px; width: 220px; flex-shrink: 0; background: #fff; border: 1px solid #f0f0f0; border-radius: 4px; display: flex; flex-direction: column; }
+  .kanban-col-header { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; background: #fafafa; border-radius: 4px 4px 0 0; }
+  .col-title { font-size: 13px; font-weight: 600; color: #333; }
+  .inq-item { padding: 8px 12px; border-bottom: 1px solid #f0f0f0; }
+  .inq-item:last-child { border-bottom: none; }
+  .inq-name { font-size: 13px; font-weight: 600; color: #333; }
+  .biz-tag { font-size: 11px; padding: 1px 5px; border-radius: 2px; }
+  .biz-intl { background: #f6ffed; color: #52c41a; }
+  .biz-direct { background: #e6f7ff; color: #1890ff; }
+  .biz-dealer { background: #fff7e6; color: #fa8c16; }
+  .inq-code { font-size: 11px; color: #999; margin-top:2px; }
+  .inq-footer { font-size: 11px; color: #999; margin-top: 4px; display: flex; flex-wrap: wrap; gap: 4px; }
+  .inq-action { font-size: 11px; color: #1890ff; cursor: pointer; border: 1px solid #91d5ff; border-radius: 2px; padding: 1px 5px; background: #e6f7ff; }
+  /* 列表视图 */
+  #listView { display: none; padding: 0 24px 20px; background: #fff; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 13px; font-weight: 600; color: #555; padding: 11px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; height: 44px; vertical-align: middle; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; }
+  .btn-link { color: #1890ff; background: none; border: none; cursor: pointer; font-size: 13px; }
+  /* 国贸工具栏 */
+  .intl-panel { background: #fff; border-top: 1px solid #f0f0f0; margin: 0 24px 12px; border-radius: 0 0 4px 4px; }
+  .intl-toggle { padding: 8px 12px; cursor: pointer; font-size: 13px; color: #666; user-select: none; display: flex; align-items: center; gap: 6px; }
+  .intl-content { display: none; padding: 10px 16px; border-top: 1px solid #f0f0f0; font-size: 13px; color: #555; display: flex; align-items: center; gap: 20px; flex-wrap: wrap; }
+  .doc-link { color: #1890ff; cursor: pointer; text-decoration: none; }
+  .rate-item { color: #333; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: #bbb; border-top: 1px solid #f0f0f0; background: #fff; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="nav-bar">
+  <div class="nav-left">CRM商务中心 &gt; <strong>询盘工作台</strong></div>
+  <div class="nav-right">
+    <span>📥 <span style="color:#1890ff;font-weight:700;">4</span></span>
+    <span>📢 <span style="color:#1890ff;font-weight:700;">3</span></span>
+    <span>🔔 <span style="color:#1890ff;font-weight:700;">2</span></span>
+    <span style="color:#333;font-weight:500;">张三 | 拓展一部</span>
+  </div>
+</div>
+
+<!-- Tab 栏 -->
+<div class="tab-bar">
+  <div style="display:flex;">
+    <div class="tab-item active" onclick="switchTab(this)">全部</div>
+    <div class="tab-item" onclick="switchTab(this)">🌏 国贸</div>
+    <div class="tab-item" onclick="switchTab(this)">🏠 国内经销</div>
+    <div class="tab-item" onclick="switchTab(this)">📍 直销</div>
+  </div>
+  <div style="display:flex; align-items:center; gap:8px;">
+    <button class="view-btn active" id="btnKanban" onclick="showView('kanban')">看板</button>
+    <button class="view-btn" id="btnList" onclick="showView('list')">列表</button>
+    <button style="height:28px; padding:0 12px; border:1px solid #1890ff; border-radius:3px; font-size:13px; cursor:pointer; background:#1890ff; color:#fff; margin-left:4px;">+ 新建询盘</button>
+  </div>
+</div>
+
+<!-- 看板视图 -->
+<div id="kanbanView" class="kanban-wrap">
+
+  <!-- 新询盘 (3) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">新询盘 <span style="color:#1890ff;">(3)</span></div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">Al Hokair Group</span>
+        <span class="biz-tag biz-intl">🌏国贸</span>
+      </div>
+      <div class="inq-code">INQ-2026-0103 · 大型室外游乐设备 · $85,000</div>
+      <div class="inq-footer">
+        <span>2天前</span>
+        <span class="inq-action">报价</span>
+        <span class="inq-action">跟进</span>
+        <span class="inq-action">转商机</span>
+      </div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">杭州乐动体育</span>
+        <span class="biz-tag biz-dealer">🏠经销</span>
+      </div>
+      <div class="inq-code">INQ-2026-0102 · 儿童滑梯套装 · ￥68,000</div>
+      <div class="inq-footer">
+        <span>今天</span>
+        <span class="inq-action">报价</span>
+        <span class="inq-action">跟进</span>
+        <span class="inq-action">转商机</span>
+      </div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">合肥长丰县体育局</span>
+        <span class="biz-tag biz-direct">📍直销</span>
+      </div>
+      <div class="inq-code">INQ-2026-0101 · 社区公园游乐场 · ￥320,000</div>
+      <div class="inq-footer">
+        <span>今天</span>
+        <span class="inq-action">报价</span>
+        <span class="inq-action">跟进</span>
+        <span class="inq-action">转商机</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 待报价 (2) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">待报价 <span style="color:#fa8c16;">(2)</span></div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">PT Funworld Indonesia</span>
+        <span class="biz-tag biz-intl">🌏国贸</span>
+      </div>
+      <div class="inq-code">INQ-2026-0098 · 水上乐园设备 · $45,000</div>
+      <div class="inq-footer">
+        <span>3天前</span>
+        <span class="inq-action">报价</span>
+        <span class="inq-action">跟进</span>
+      </div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">安徽乐翔体育</span>
+        <span class="biz-tag biz-dealer">🏠经销</span>
+      </div>
+      <div class="inq-code">INQ-2026-0096 · 攀爬架系列 · ￥95,000</div>
+      <div class="inq-footer">
+        <span>4天前</span>
+        <span class="inq-action">报价</span>
+        <span class="inq-action">跟进</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 已报价 (2) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">已报价 <span style="color:#1890ff;">(2)</span></div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">Playpoint Pte Ltd</span>
+        <span class="biz-tag biz-intl">🌏国贸</span>
+      </div>
+      <div class="inq-code">INQ-2026-0089 · 儿童天幕游乐场 · $32,000</div>
+      <div class="inq-footer">
+        <span>6天前</span>
+        <span class="inq-action">跟进</span>
+        <span class="inq-action">转商机</span>
+      </div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">深圳市体育局</span>
+        <span class="biz-tag biz-direct">📍直销</span>
+      </div>
+      <div class="inq-code">INQ-2026-0087 · 社区健身设施 · ￥180,000</div>
+      <div class="inq-footer">
+        <span>5天前</span>
+        <span class="inq-action">跟进</span>
+        <span class="inq-action">转商机</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PI/合同 (1) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">PI/合同 <span style="color:#1890ff;">(1)</span></div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">Al Hokair Group</span>
+        <span class="biz-tag biz-intl">🌏国贸</span>
+      </div>
+      <div class="inq-code">INQ-2026-0082 · 蹦床公园设备 · $68,000</div>
+      <div class="inq-footer">
+        <span>8天前</span>
+        <span class="inq-action">查看PI</span>
+        <span class="inq-action">跟进</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 生产发货 (1) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">生产发货 <span style="color:#1890ff;">(1)</span></div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">杭州乐动体育</span>
+        <span class="biz-tag biz-dealer">🏠经销</span>
+      </div>
+      <div class="inq-code">INQ-2026-0075 · 秋千系列 · ￥42,000</div>
+      <div class="inq-footer">
+        <span>12天前</span>
+        <span class="inq-action">跟踪物流</span>
+        <span class="inq-action">跟进</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 完成 (1) -->
+  <div class="kanban-col">
+    <div class="kanban-col-header">
+      <div class="col-title">完成 <span style="color:#52c41a;">(1)</span></div>
+    </div>
+    <div class="inq-item">
+      <div style="display:flex; align-items:center; justify-content:space-between;">
+        <span class="inq-name">安徽乐翔体育</span>
+        <span class="biz-tag biz-dealer">🏠经销</span>
+      </div>
+      <div class="inq-code">INQ-2026-0068 · 跷跷板系列 · ￥28,000</div>
+      <div class="inq-footer">
+        <span>20天前</span>
+        <span class="inq-action">查看详情</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- 列表视图 -->
+<div id="listView">
+  <table>
+    <thead>
+      <tr>
+        <th>询盘编号</th>
+        <th>客户名称</th>
+        <th>产品摘要</th>
+        <th>业务线</th>
+        <th>金额</th>
+        <th>状态</th>
+        <th>最近活动</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="color:#999; font-size:12px;">INQ-2026-0103</td>
+        <td>Al Hokair Group</td>
+        <td>大型室外游乐设备</td>
+        <td>🌏国贸</td>
+        <td>$85,000</td>
+        <td><span class="tag tag-blue">新询盘</span></td>
+        <td>2天前</td>
+        <td><button class="btn-link">报价</button> <button class="btn-link">跟进</button> <button class="btn-link">转商机</button></td>
+      </tr>
+      <tr>
+        <td style="color:#999; font-size:12px;">INQ-2026-0098</td>
+        <td>PT Funworld Indonesia</td>
+        <td>水上乐园设备</td>
+        <td>🌏国贸</td>
+        <td>$45,000</td>
+        <td><span class="tag tag-yellow">待报价</span></td>
+        <td>3天前</td>
+        <td><button class="btn-link">报价</button> <button class="btn-link">跟进</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 国贸专属工具（折叠） -->
+<div style="padding: 0 24px 0;">
+  <div style="background:#fff; border:1px solid #f0f0f0; border-radius:4px; margin-bottom:16px;">
+    <div onclick="toggleIntl()" style="padding:10px 14px; cursor:pointer; font-size:13px; color:#555; user-select:none; display:flex; align-items:center; gap:6px; border-bottom:1px solid transparent;">
+      <span id="intlArrow" style="font-size:10px; transition:transform 0.2s;">▶</span>
+      🌏 国贸专属工具
+    </div>
+    <div id="intlContent" style="display:none; padding:12px 16px; border-top:1px solid #f0f0f0; display:flex; align-items:center; gap:20px; flex-wrap:wrap; font-size:13px;">
+      <span style="color:#888; font-weight:500;">出口单据：</span>
+      <a class="doc-link" href="#">CI 商业发票</a>
+      <a class="doc-link" href="#">PL 装箱单</a>
+      <a class="doc-link" href="#">BL 提单</a>
+      <a class="doc-link" href="#">CO 产地证</a>
+      <a class="doc-link" href="#">Form E</a>
+      <span style="color:#d9d9d9;">|</span>
+      <span style="color:#888; font-weight:500;">汇率参考：</span>
+      <span class="rate-item">USD <strong style="color:#1890ff;">7.24</strong></span>
+      <span class="rate-item">EUR <strong style="color:#1890ff;">7.86</strong></span>
+      <span class="rate-item">SGD <strong style="color:#1890ff;">5.38</strong></span>
+      <span style="font-size:11px; color:#bbb;">更新于 2026-04-09 09:00</span>
+    </div>
+  </div>
+</div>
+
+<footer>万德AI平台 — CRM商务中心原型 v3.0 | 2026年4月</footer>
+
+<script>
+function switchTab(el) {
+  document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+  el.classList.add('active');
+}
+function showView(view) {
+  if (view === 'kanban') {
+    document.getElementById('kanbanView').style.display = 'flex';
+    document.getElementById('listView').style.display = 'none';
+    document.getElementById('btnKanban').classList.add('active');
+    document.getElementById('btnList').classList.remove('active');
+  } else {
+    document.getElementById('kanbanView').style.display = 'none';
+    document.getElementById('listView').style.display = 'block';
+    document.getElementById('btnKanban').classList.remove('active');
+    document.getElementById('btnList').classList.add('active');
+  }
+}
+var intlOpen = false;
+function toggleIntl() {
+  intlOpen = !intlOpen;
+  document.getElementById('intlContent').style.display = intlOpen ? 'flex' : 'none';
+  document.getElementById('intlArrow').style.transform = intlOpen ? 'rotate(90deg)' : '';
+}
+</script>
+</body>
+</html>

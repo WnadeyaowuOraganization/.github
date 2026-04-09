@@ -547,7 +547,7 @@
 | kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴+意见流 | In Progress |
 | kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板+筛选+统计 | In Progress |
 | kimi3 | ~~#3458~~ | ~~Jump~~ | ~~fullstack~~ | ~~[全球项目矿场v3.0] 9项功能统一改版 PR#3487✅merged 2026-04-09 10:05~~ | ~~Done（实测4.2/10 不合格）~~ |
-| kimi2 | #2391 | P1 | backend | [#3458关联] L1源头可信度评分 — 数据依赖，trustLevel算法 PR#3542(OPEN等CI) | In Progress |
+| kimi2 | ~~#2391~~ | ~~P1~~ | ~~backend~~ | ~~[#3458关联] L1源头可信度评分 — 数据依赖,trustLevel算法 PR#3542✅merged 2026-04-09 10:41 (6.70/10 勉强合格,与#3458集成缺失)~~ | ~~Done（勉强合格,需追补#3458集成）~~ |
 | kimi3 | ~~#3118~~ | ~~P1~~ | ~~fullstack~~ | ~~[#3458关联] 项目配合单位关系图谱 PR#3541✅merged 2026-04-09 10:36 (⚠️半成品,仅后端,前端ECharts未做,5.40/10)~~ | ~~Done（实测不合格,需追补前端）~~ |
 | kimi11 | #1918 | P0 | frontend | [D3-Web] 参数配置器 PR#3490(OPEN，等CI merge) | In Progress |
 | kimi3 | #2459 | P1 | backend | [合同管理] 合同审批API | In Progress |

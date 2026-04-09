@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>万德AI平台 — 商务工作台 低保真原型 v2.0</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  /* ===== Lo-fi Wireframe Base ===== */
+  * { box-sizing: border-box; }
+  body {
+    font-family: -apple-system, "PingFang SC", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+    background: #f5f5f5;
+    color: #333;
+    min-width: 1200px;
+    margin: 0;
+    font-size: 13px;
+    line-height: 1.6;
+  }
+
+  /* Annotation labels for wireframe */
+  .wireframe-label {
+    position: absolute;
+    top: -10px;
+    left: 8px;
+    background: #f5f5f5;
+    color: #999;
+    font-size: 10px;
+    padding: 0 4px;
+    z-index: 2;
+    letter-spacing: 0.5px;
+  }
+  .wireframe-block {
+    position: relative;
+    border: 1px dashed #ccc;
+    border-radius: 6px;
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+
+  /* Card base */
+  .card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+  }
+
+  /* Status colors */
+  .c-red    { color: #ff4d4f; }
+  .c-yellow { color: #faad14; }
+  .c-green  { color: #52c41a; }
+  .c-blue   { color: #1890ff; }
+  .c-gray   { color: #999; }
+
+  .bg-red    { background: #fff1f0; border-color: #ff4d4f; }
+  .bg-yellow { background: #fffbe6; border-color: #faad14; }
+  .bg-green  { background: #f6ffed; border-color: #52c41a; }
+  .bg-gray   { background: #fafafa; border-color: #d9d9d9; }
+  .bg-blue   { background: #e6f7ff; border-color: #1890ff; }
+
+  .btn-primary {
+    background: #1890ff;
+    color: #fff;
+    border: none;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .btn-primary:hover { background: #40a9ff; }
+
+  .btn-ghost {
+    background: transparent;
+    color: #1890ff;
+    border: 1px solid #1890ff;
+    padding: 3px 10px;
+    border-radius: 4px;
+    font-size: 12px;
+    cursor: pointer;
+  }
+  .btn-ghost:hover { background: #e6f7ff; }
+
+  .badge {
+    display: inline-block;
+    padding: 1px 8px;
+    border-radius: 10px;
+    font-size: 11px;
+    font-weight: 500;
+  }
+
+  /* Kanban column */
+  .kanban-col {
+    flex: 1;
+    min-width: 0;
+    background: #fafafa;
+    border-radius: 6px;
+    padding: 8px;
+    border: 1px solid #e8e8e8;
+  }
+  .kanban-col-header {
+    font-size: 12px;
+    font-weight: 600;
+    color: #333;
+    padding: 4px 6px 8px;
+    border-bottom: 1px solid #e0e0e0;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .kanban-card {
+    background: #fff;
+    border: 1px solid #e0e0e0;
+    border-radius: 4px;
+    padding: 8px 10px;
+    margin-bottom: 6px;
+    font-size: 12px;
+  }
+  .kanban-card:hover {
+    box-shadow: 0 1px 4px rgba(0,0,0,0.08);
+  }
+
+  /* Sidebar */
+  .sidebar {
+    width: 56px;
+    background: #1f1f1f;
+    color: #aaa;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding-top: 12px;
+    transition: width 0.2s;
+    position: fixed;
+    top: 44px;
+    left: 0;
+    bottom: 0;
+    z-index: 50;
+  }
+  .sidebar:hover {
+    width: 160px;
+  }
+  .sidebar-item {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+    cursor: pointer;
+    font-size: 13px;
+    color: #aaa;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+  .sidebar-item:hover { background: #333; color: #fff; }
+  .sidebar-item.active { color: #1890ff; background: #111; }
+  .sidebar-item svg { flex-shrink: 0; margin-right: 10px; }
+  .sidebar-item span { opacity: 0; transition: opacity 0.2s; }
+  .sidebar:hover .sidebar-item span { opacity: 1; }
+
+  /* Top nav */
+  .topnav {
+    height: 44px;
+    background: #262626;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    padding: 0 20px;
+    font-size: 13px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+  }
+  .topnav a {
+    color: #bbb;
+    text-decoration: none;
+    margin-right: 24px;
+    font-size: 13px;
+  }
+  .topnav a:hover, .topnav a.active { color: #fff; }
+
+  /* Banner */
+  .alert-banner {
+    background: #fffbe6;
+    border: 1px solid #ffe58f;
+    color: #333;
+    padding: 8px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 13px;
+  }
+  .alert-banner .close-btn {
+    cursor: pointer;
+    color: #999;
+    font-size: 16px;
+    padding: 0 4px;
+  }
+
+  /* Table */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .data-table th {
+    background: #fafafa;
+    border-bottom: 1px solid #e0e0e0;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    color: #666;
+  }
+  .data-table td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #f0f0f0;
+    color: #333;
+  }
+  .data-table tr:hover td { background: #fafafa; }
+
+  /* Main content area */
+  .main-content {
+    margin-left: 56px;
+    margin-top: 44px;
+    padding: 0;
+  }
+
+  /* View toggle */
+  .view-toggle {
+    display: inline-flex;
+    border: 1px solid #d9d9d9;
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .view-toggle button {
+    padding: 3px 12px;
+    font-size: 12px;
+    border: none;
+    background: #fff;
+    color: #666;
+    cursor: pointer;
+  }
+  .view-toggle button.active {
+    background: #1890ff;
+    color: #fff;
+  }
+  .view-toggle button:not(:last-child) {
+    border-right: 1px solid #d9d9d9;
+  }
+
+  /* Breadcrumb */
+  .breadcrumb {
+    font-size: 12px;
+    color: #999;
+    padding: 10px 24px;
+  }
+  .breadcrumb a { color: #1890ff; text-decoration: none; }
+  .breadcrumb a:hover { text-decoration: underline; }
+
+  /* Design notes table */
+  .notes-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+  .notes-table th {
+    background: #e8e8e8;
+    padding: 8px 12px;
+    text-align: left;
+    font-weight: 600;
+    border: 1px solid #d9d9d9;
+  }
+  .notes-table td {
+    padding: 8px 12px;
+    border: 1px solid #d9d9d9;
+    vertical-align: top;
+  }
+
+  /* List view table */
+  .list-view-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+  .list-view-table th {
+    background: #fafafa;
+    border-bottom: 2px solid #e0e0e0;
+    padding: 8px 10px;
+    text-align: left;
+    font-weight: 600;
+    color: #666;
+    white-space: nowrap;
+  }
+  .list-view-table td {
+    padding: 8px 10px;
+    border-bottom: 1px solid #f0f0f0;
+  }
+  .list-view-table tr:hover td { background: #fafafa; }
+</style>
+</head>
+<body>
+
+<!-- [顶部导航栏：万德平台全局导航] -->
+<header class="topnav">
+  <div style="font-weight:700; font-size:15px; margin-right:40px; letter-spacing:1px;">
+    <!-- Logo placeholder -->
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" style="display:inline-block;vertical-align:middle;margin-right:6px;">
+      <rect x="1" y="1" width="18" height="18" rx="4" stroke="#1890ff" stroke-width="2"/>
+      <path d="M5 14L10 6L15 14" stroke="#1890ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+    <span style="color:#fff;">万德AI</span>
+  </div>
+  <nav style="display:flex;gap:0;">
+    <a href="#" class="active" style="border-bottom:2px solid #1890ff;padding-bottom:2px;">CRM</a>
+    <a href="#">项目矿场</a>
+    <a href="#">执行管理</a>
+    <a href="#">数据中心</a>
+  </nav>
+  <div style="margin-left:auto;display:flex;align-items:center;gap:16px;">
+    <span style="color:#bbb;font-size:12px;">🔔</span>
+    <span style="color:#bbb;font-size:12px;">孙晓坤</span>
+    <span style="width:28px;height:28px;background:#444;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;color:#fff;">孙</span>
+  </div>
+</header>
+
+<!-- [左侧边栏：折叠式导航，当前高亮CRM] -->
+<aside class="sidebar">
+  <div class="sidebar-item active">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"/><polyline points="9,22 9,12 15,12 15,22"/></svg>
+    <span>工作台</span>
+  </div>
+  <div class="sidebar-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4-4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+    <span>客户管理</span>
+  </div>
+  <div class="sidebar-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+    <span>商机列表</span>
+  </div>
+  <div class="sidebar-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+    <span>合同管理</span>
+  </div>
+  <div class="sidebar-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+    <span>数据报表</span>
+  </div>
+  <div class="sidebar-item">
+    <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+    <span>设置</span>
+  </div>
+</aside>
+
+<!-- [主内容区域] -->
+<div class="main-content">
+
+  <!-- [警告横幅：异常商机提醒，首次打开可关闭] -->
+  <div class="alert-banner" id="alertBanner">
+    <span>⚠️ 你有 <strong class="c-red">3个商机</strong> 超过14天未更新，<a href="#" class="c-blue" style="text-decoration:underline;">查看详情</a></span>
+    <span class="close-btn" onclick="document.getElementById('alertBanner').style.display='none'">✕</span>
+  </div>
+
+  <!-- Breadcrumb -->
+  <div class="breadcrumb">
+    <a href="#">首页</a> &gt; <a href="#">CRM</a> &gt; <span style="color:#333;">商务工作台</span>
+  </div>
+
+  <div style="padding: 0 24px 40px 24px;">
+
+    <!-- Page title -->
+    <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:16px;">
+      <div>
+        <h1 style="font-size:20px;font-weight:700;color:#333;margin:0;">商务工作台</h1>
+        <span style="font-size:11px;color:#999;">低保真原型 v1.0 · 商务人员日常首页 · 数据为模拟假数据</span>
+      </div>
+      <div style="font-size:12px;color:#999;">
+        今日：2025-07-17 周四 · 登录人：孙晓坤 · 商务一部
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- [第一行：状态卡片栏 — 关键指标一眼可见] -->
+    <!-- ============================================================ -->
+    <div class="wireframe-block" style="padding-top:20px;">
+      <span class="wireframe-label">状态卡片栏：关键指标概览</span>
+      <div style="display:grid; grid-template-columns: repeat(5, 1fr); gap: 12px;">
+
+        <!-- 需要关注 -->
+        <div class="card bg-red" style="padding:14px 16px; border-left:3px solid #ff4d4f; cursor:pointer;">
+          <div style="font-size:11px;color:#999;">需要关注的商机（异常）</div>
+          <div style="font-size:28px;font-weight:700;color:#ff4d4f;margin:4px 0;">3</div>
+          <div style="font-size:11px;color:#ff4d4f;">🔴 超14天未更新，点击查看 →</div>
+        </div>
+
+        <!-- 本周待更新 -->
+        <div class="card bg-yellow" style="padding:14px 16px; border-left:3px solid #faad14; cursor:pointer;">
+          <div style="font-size:11px;color:#999;">本周待更新</div>
+          <div style="font-size:28px;font-weight:700;color:#faad14;margin:4px 0;">12</div>
+          <div style="font-size:11px;color:#faad14;">🟡 需要补充进展，点击查看 →</div>
+        </div>
+
+        <!-- 本月新商机 -->
+        <div class="card bg-green" style="padding:14px 16px; border-left:3px solid #52c41a;">
+          <div style="font-size:11px;color:#999;">本月新商机</div>
+          <div style="font-size:28px;font-weight:700;color:#52c41a;margin:4px 0;">8</div>
+          <div style="font-size:11px;color:#52c41a;">🟢 7月新增</div>
+        </div>
+
+        <!-- 有效商机总数 -->
+        <div class="card bg-gray" style="padding:14px 16px; border-left:3px solid #999;">
+          <div style="font-size:11px;color:#999;">有效商机总数</div>
+          <div style="font-size:28px;font-weight:700;color:#333;margin:4px 0;">40</div>
+          <div style="font-size:11px;color:#999;">⚫ 进行中（不含完结7个）</div>
+        </div>
+
+        <!-- 今日自动汇总 -->
+        <div class="card bg-blue" style="padding:14px 16px; border-left:3px solid #1890ff;">
+          <div style="font-size:11px;color:#999;">今日自动汇总</div>
+          <div style="font-size:28px;font-weight:700;color:#1890ff;margin:4px 0;">✓</div>
+          <div style="font-size:11px;color:#1890ff;">🔵 5项活动已自动记录</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- [第二行：左右两栏 — 商机管道 + 今日汇总/待办] -->
+    <!-- ============================================================ -->
+    <div style="display:grid; grid-template-columns: 7fr 3fr; gap: 16px;">
+
+      <!-- ===== 左侧：商机管道（看板/列表切换） ===== -->
+      <!-- [商机管道区：看板视图，按阶段分列展示] -->
+      <div class="wireframe-block" style="padding-top:20px;">
+        <span class="wireframe-label">商机管道：看板/列表视图切换</span>
+
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;">
+          <h2 style="font-size:15px;font-weight:600;margin:0;">我的商机</h2>
+          <div class="view-toggle">
+            <button class="active" id="btnKanban" onclick="switchView('kanban')">看板</button>
+            <button id="btnList" onclick="switchView('list')">列表</button>
+          </div>
+        </div>
+
+        <!-- Kanban View -->
+        <div id="viewKanban" style="display:flex;gap:8px;overflow-x:auto;">
+
+          <!-- 新建商机 -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              新建商机
+              <span class="badge" style="background:#e6f7ff;color:#1890ff;">5</span>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【百香果】智慧园区项目</div>
+              <div style="color:#999;margin:3px 0;">客户：百香果科技<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥320,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#e6f7ff;color:#1890ff;">新建</span>
+                <span style="font-size:11px;color:#999;">3天前</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【鑫源达】办公系统升级</div>
+              <div style="color:#999;margin:3px 0;">客户：鑫源达集团<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥180,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#e6f7ff;color:#1890ff;">新建</span>
+                <span style="font-size:11px;color:#999;">1天前</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div style="text-align:center;padding:4px;font-size:11px;"><a href="#" class="c-blue">展开查看 (+3)</a></div>
+          </div>
+
+          <!-- 商务推进 -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              商务推进
+              <span class="badge" style="background:#fffbe6;color:#faad14;">12</span>
+            </div>
+            <div class="kanban-card" style="border-left:3px solid #ff4d4f;">
+              <div style="font-weight:600;color:#333;">【元小二】门店管理系统 <span class="badge c-red" style="background:#fff1f0;font-size:10px;">异常</span></div>
+              <div style="color:#999;margin:3px 0;">客户：元小二餐饮<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥650,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#fffbe6;color:#faad14;">推进中</span>
+                <span style="font-size:11px;color:#ff4d4f;font-weight:600;">45天前 ⚠️</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【时利和】×× 项目</div>
+              <div style="color:#999;margin:3px 0;">客户：时利和集团<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥500,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#fffbe6;color:#faad14;">推进中</span>
+                <span style="font-size:11px;color:#ff4d4f;font-weight:600;">2天前</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div class="kanban-card" style="border-left:3px solid #ff4d4f;">
+              <div style="font-weight:600;color:#333;">【华盛通】仓储WMS <span class="badge c-red" style="background:#fff1f0;font-size:10px;">异常</span></div>
+              <div style="color:#999;margin:3px 0;">客户：华盛通物流<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥280,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#fffbe6;color:#faad14;">推进中</span>
+                <span style="font-size:11px;color:#ff4d4f;font-weight:600;">21天前 ⚠️</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div style="text-align:center;padding:4px;font-size:11px;"><a href="#" class="c-blue">展开查看 (+9)</a></div>
+          </div>
+
+          <!-- 招投标 -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              招投标
+              <span class="badge" style="background:#f6ffed;color:#52c41a;">8</span>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【中海机车】动力监测平台</div>
+              <div style="color:#999;margin:3px 0;">客户：中海机车集团<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥1,200,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#f6ffed;color:#52c41a;">招投标</span>
+                <span style="font-size:11px;color:#999;">今天</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【云台】智能安防系统</div>
+              <div style="color:#999;margin:3px 0;">客户：云台科技<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥880,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#f6ffed;color:#52c41a;">招投标</span>
+                <span style="font-size:11px;color:#999;">5天前</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">下设计单</button>
+              </div>
+            </div>
+            <div style="text-align:center;padding:4px;font-size:11px;"><a href="#" class="c-blue">展开查看 (+6)</a></div>
+          </div>
+
+          <!-- 签约 -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              签约
+              <span class="badge" style="background:#e6f7ff;color:#1890ff;">6</span>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【恒信达】ERP二期</div>
+              <div style="color:#999;margin:3px 0;">客户：恒信达制造<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥750,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#e6f7ff;color:#1890ff;">签约中</span>
+                <span style="font-size:11px;color:#999;">1天前</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+              </div>
+            </div>
+            <div style="text-align:center;padding:4px;font-size:11px;"><a href="#" class="c-blue">展开查看 (+5)</a></div>
+          </div>
+
+          <!-- 回款 -->
+          <div class="kanban-col">
+            <div class="kanban-col-header">
+              回款
+              <span class="badge" style="background:#f9f0ff;color:#722ed1;">9</span>
+            </div>
+            <div class="kanban-card">
+              <div style="font-weight:600;color:#333;">【绿城地产】数字化营销</div>
+              <div style="color:#999;margin:3px 0;">客户：绿城地产<span style="color:#ccc;margin:0 4px;">·</span>自动继承</div>
+              <div>预算：<span style="font-weight:600;">¥420,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#f9f0ff;color:#722ed1;">回款中</span>
+                <span style="font-size:11px;color:#999;">3天前</span>
+              </div>
+              <div style="margin-top:6px;display:flex;gap:6px;">
+                <button class="btn-ghost" style="font-size:11px;padding:2px 8px;">跟进记录</button>
+              </div>
+            </div>
+            <div style="text-align:center;padding:4px;font-size:11px;"><a href="#" class="c-blue">展开查看 (+8)</a></div>
+          </div>
+
+          <!-- 完结 -->
+          <div class="kanban-col" style="opacity:0.7;">
+            <div class="kanban-col-header">
+              完结
+              <span class="badge" style="background:#f0f0f0;color:#999;">7</span>
+            </div>
+            <div class="kanban-card" style="opacity:0.6;">
+              <div style="font-weight:600;color:#666;">【明珠港】办公OA</div>
+              <div style="color:#999;margin:3px 0;">客户：明珠港集团</div>
+              <div>金额：<span style="font-weight:600;">¥360,000</span></div>
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-top:6px;">
+                <span class="badge" style="background:#f0f0f0;color:#999;">已完结</span>
+                <span style="font-size:11px;color:#999;">30天前</span>
+              </div>
+            </div>
+            <div style="text-align:center;padding:4px;font-size:11px;"><a href="#" class="c-blue">展开查看 (+6)</a></div>
+          </div>
+
+        </div><!-- end kanban -->
+
+        <!-- List View (hidden by default) -->
+        <div id="viewList" style="display:none;">
+          <table class="list-view-table">
+            <thead>
+              <tr>
+                <th>商机名称</th>
+                <th>客户（自动继承）</th>
+                <th>预算</th>
+                <th>阶段</th>
+                <th>最后活动</th>
+                <th>状态</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="font-weight:600;">【百香果】智慧园区项目</td>
+                <td>百香果科技</td>
+                <td>¥320,000</td>
+                <td><span class="badge" style="background:#e6f7ff;color:#1890ff;">新建</span></td>
+                <td>3天前</td>
+                <td>—</td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr style="background:#fff1f0;">
+                <td style="font-weight:600;">【元小二】门店管理系统 <span class="c-red">⚠️</span></td>
+                <td>元小二餐饮</td>
+                <td>¥650,000</td>
+                <td><span class="badge" style="background:#fffbe6;color:#faad14;">推进中</span></td>
+                <td class="c-red" style="font-weight:600;">45天前</td>
+                <td><span class="badge" style="background:#fff1f0;color:#ff4d4f;">异常</span></td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">【时利和】×× 项目</td>
+                <td>时利和集团</td>
+                <td>¥500,000</td>
+                <td><span class="badge" style="background:#fffbe6;color:#faad14;">推进中</span></td>
+                <td>2天前</td>
+                <td>—</td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">【中海机车】动力监测平台</td>
+                <td>中海机车集团</td>
+                <td>¥1,200,000</td>
+                <td><span class="badge" style="background:#f6ffed;color:#52c41a;">招投标</span></td>
+                <td>今天</td>
+                <td>—</td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr style="background:#fff1f0;">
+                <td style="font-weight:600;">【华盛通】仓储WMS <span class="c-red">⚠️</span></td>
+                <td>华盛通物流</td>
+                <td>¥280,000</td>
+                <td><span class="badge" style="background:#fffbe6;color:#faad14;">推进中</span></td>
+                <td class="c-red" style="font-weight:600;">21天前</td>
+                <td><span class="badge" style="background:#fff1f0;color:#ff4d4f;">异常</span></td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">【云台】智能安防系统</td>
+                <td>云台科技</td>
+                <td>¥880,000</td>
+                <td><span class="badge" style="background:#f6ffed;color:#52c41a;">招投标</span></td>
+                <td>5天前</td>
+                <td>—</td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">【恒信达】ERP二期</td>
+                <td>恒信达制造</td>
+                <td>¥750,000</td>
+                <td><span class="badge" style="background:#e6f7ff;color:#1890ff;">签约中</span></td>
+                <td>1天前</td>
+                <td>—</td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+              <tr>
+                <td style="font-weight:600;">【绿城地产】数字化营销</td>
+                <td>绿城地产</td>
+                <td>¥420,000</td>
+                <td><span class="badge" style="background:#f9f0ff;color:#722ed1;">回款中</span></td>
+                <td>3天前</td>
+                <td>—</td>
+                <td><a href="#" class="c-blue">跟进</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div><!-- end 商机管道 wireframe block -->
+
+      <!-- ===== 右侧：分配给我 + 协同追踪 + 今日汇总 + 过会 + 待办 + 业绩 ===== -->
+      <div style="display:flex;flex-direction:column;gap:0;">
+
+        <!-- [v2.0新增] 分配给我（等我处理）：矿场分配/管理层Nudge/审批/客户回复 -->
+        <div class="wireframe-block" style="padding-top:20px;border-color:#ff4d4f;">
+          <span class="wireframe-label" style="color:#ff4d4f;">v2.0新增：分配给我（等我处理）</span>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
+            <h3 style="font-size:14px;font-weight:600;margin:0;">待处理 — 分配给我的 <span style="background:#ff4d4f;color:#fff;font-size:10px;padding:1px 6px;border-radius:8px;margin-left:4px;">4</span></h3>
+          </div>
+          <div style="font-size:12px;">
+            <div style="padding:8px;background:#fff1f0;border-radius:4px;margin-bottom:6px;border-left:3px solid #ff4d4f;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#ff4d4f;color:#fff;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">矿场分配</span>
+                <div>
+                  <div style="font-weight:600;">合肥市长丰县2026年快乐健身体育设施采购</div>
+                  <div style="color:#999;font-size:11px;">分配人：胡玲玲 · 今天 09:30</div>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="btn-primary" style="font-size:10px;padding:2px 10px;">接受</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">查看</button>
+              </div>
+            </div>
+            <div style="padding:8px;background:#fffbe6;border-radius:4px;margin-bottom:6px;border-left:3px solid #faad14;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#faad14;color:#fff;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">催更新</span>
+                <div>
+                  <div style="font-weight:600;">【元小二】门店管理系统</div>
+                  <div style="color:#999;font-size:11px;">吴耀："这个客户下周要来参观，更新一下" · 昨天 18:00</div>
+                </div>
+              </div>
+              <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">去更新</button>
+            </div>
+            <div style="padding:8px;background:#f6ffed;border-radius:4px;margin-bottom:6px;border-left:3px solid #52c41a;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#52c41a;color:#fff;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">审批待办</span>
+                <div>
+                  <div style="font-weight:600;">【百香果】报价单审批 — 待你填写评审结果</div>
+                  <div style="color:#999;font-size:11px;">发起人：黎培燕 · 今天 11:00</div>
+                </div>
+              </div>
+              <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">去处理</button>
+            </div>
+            <div style="padding:8px;background:#e6f7ff;border-radius:4px;border-left:3px solid #1890ff;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#1890ff;color:#fff;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">客户回复</span>
+                <div>
+                  <div style="font-weight:600;">【恒信达】合同条款已盖章回传</div>
+                  <div style="color:#999;font-size:11px;">系统检测到邮件附件 · 今天 14:20</div>
+                </div>
+              </div>
+              <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">查看</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- [v2.0新增] 我的协同（等别人）：设计/审批/合同在别人手里的进展 -->
+        <div class="wireframe-block" style="padding-top:20px;border-color:#1890ff;">
+          <span class="wireframe-label" style="color:#1890ff;">v2.0新增：我的协同（等别人）</span>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
+            <h3 style="font-size:14px;font-weight:600;margin:0;">等待中 — 我发起的事项进展</h3>
+            <span style="font-size:10px;color:#999;">共5项在别人那里</span>
+          </div>
+          <div style="font-size:12px;">
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#e6f7ff;color:#1890ff;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">设计单</span>
+                <div>
+                  <span style="font-weight:600;">【时利和】项目场地设计</span>
+                  <span style="color:#999;margin-left:6px;">→ 设计师 张华</span>
+                  <span style="color:#ff4d4f;font-size:11px;margin-left:6px;font-weight:600;">等待5天</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;color:#1890ff;" title="Web平台提醒">📢 提醒</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;" title="企微提醒">💬 企微</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;" title="拨打电话">📞</button>
+              </div>
+            </div>
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#fffbe6;color:#faad14;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">报价审批</span>
+                <div>
+                  <span style="font-weight:600;">【百香果】智慧园区报价</span>
+                  <span style="color:#999;margin-left:6px;">→ 董事长 吴耀</span>
+                  <span style="color:#faad14;font-size:11px;margin-left:6px;">等待2天</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;color:#1890ff;">📢 提醒</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">💬 企微</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">📞</button>
+              </div>
+            </div>
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#f9f0ff;color:#722ed1;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">合同审批</span>
+                <div>
+                  <span style="font-weight:600;">【恒信达】ERP二期合同</span>
+                  <span style="color:#999;margin-left:6px;">→ 法务 成静</span>
+                  <span style="color:#999;font-size:11px;margin-left:6px;">等待1天</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;color:#1890ff;">📢 提醒</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">💬 企微</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">📞</button>
+              </div>
+            </div>
+            <div style="padding:6px 0;display:flex;align-items:center;justify-content:space-between;">
+              <div style="display:flex;align-items:center;gap:8px;">
+                <span style="background:#e6f7ff;color:#1890ff;font-size:9px;padding:1px 6px;border-radius:3px;white-space:nowrap;">设计单</span>
+                <div>
+                  <span style="font-weight:600;">【中海机车】监测平台方案</span>
+                  <span style="color:#999;margin-left:6px;">→ 设计师 陈家琪</span>
+                  <span style="color:#999;font-size:11px;margin-left:6px;">等待1天</span>
+                </div>
+              </div>
+              <div style="display:flex;gap:4px;">
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;color:#1890ff;">📢 提醒</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">💬 企微</button>
+                <button class="btn-ghost" style="font-size:10px;padding:2px 8px;">📞</button>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:6px;padding-top:6px;border-top:1px solid #f0f0f0;text-align:right;">
+            <a href="#" class="c-blue" style="font-size:11px;">📒 公司通讯录 →</a>
+          </div>
+        </div>
+
+        <!-- [今日活动自动汇总：系统自动记录，取代手写日报] -->
+        <div class="wireframe-block" style="padding-top:20px;">
+          <span class="wireframe-label">今日活动自动汇总：取代手写日报</span>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
+            <h3 style="font-size:14px;font-weight:600;margin:0;">今日活动（系统自动）</h3>
+            <span style="font-size:10px;color:#52c41a;background:#f6ffed;padding:1px 6px;border-radius:3px;">无需手写日报</span>
+          </div>
+          <div style="font-size:12px;">
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:flex-start;gap:6px;">
+              <span style="color:#52c41a;">✅</span>
+              <div>
+                <span style="color:#999;">10:30</span> 下设计单：<strong>【时利和】项目</strong>
+                <span style="font-size:10px;color:#999;background:#f5f5f5;padding:0 4px;border-radius:2px;margin-left:4px;">已自动记录</span>
+              </div>
+            </div>
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:flex-start;gap:6px;">
+              <span style="color:#52c41a;">✅</span>
+              <div>
+                <span style="color:#999;">14:00</span> 更新商机阶段：<strong>【中海机车】</strong>→ 招投标
+                <span style="font-size:10px;color:#999;background:#f5f5f5;padding:0 4px;border-radius:2px;margin-left:4px;">已自动记录</span>
+              </div>
+            </div>
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:flex-start;gap:6px;">
+              <span style="color:#52c41a;">✅</span>
+              <div>
+                <span style="color:#999;">15:20</span> 新增商机：<strong>【鑫源达】办公系统升级</strong>
+                <span style="font-size:10px;color:#999;background:#f5f5f5;padding:0 4px;border-radius:2px;margin-left:4px;">已自动记录</span>
+              </div>
+            </div>
+            <div style="padding:6px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:flex-start;gap:6px;">
+              <span style="color:#d9d9d9;">○</span>
+              <div>
+                <span style="color:#999;">16:00</span> 上传报价单：<strong>【百香果】</strong>
+                <span style="font-size:10px;color:#faad14;background:#fffbe6;padding:0 4px;border-radius:2px;margin-left:4px;">待确认</span>
+              </div>
+            </div>
+            <div style="padding:6px 0;display:flex;align-items:flex-start;gap:6px;">
+              <span style="color:#d9d9d9;">○</span>
+              <div>
+                <span style="color:#999;">17:10</span> 客户拜访记录：<strong>【恒信达】</strong>
+                <span style="font-size:10px;color:#faad14;background:#fffbe6;padding:0 4px;border-radius:2px;margin-left:4px;">待确认</span>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;padding-top:10px;border-top:1px solid #f0f0f0;">
+            <span style="font-size:11px;color:#999;">进度：3/5 项已记录</span>
+            <button class="btn-primary">确认今日汇总</button>
+          </div>
+        </div>
+
+        <!-- [智能过会提醒：异常驱动，取代2606个商机全过会] -->
+        <div class="wireframe-block" style="padding-top:20px;">
+          <span class="wireframe-label">智能过会提醒：异常驱动取代全量过会</span>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:8px;">
+            <h3 style="font-size:14px;font-weight:600;margin:0;">本周过会议程（智能筛选）</h3>
+            <span style="font-size:10px;color:#1890ff;background:#e6f7ff;padding:1px 6px;border-radius:3px;">仅显示异常/需决策项</span>
+          </div>
+          <div style="font-size:12px;">
+            <div style="padding:8px;background:#fff1f0;border-radius:4px;margin-bottom:6px;border-left:3px solid #ff4d4f;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span>🔴</span>
+                <div>
+                  <div style="font-weight:600;">【元小二】门店管理系统</div>
+                  <div style="color:#999;font-size:11px;">45天无活动 · 预算¥65万 · 建议：重新评估或关闭</div>
+                </div>
+              </div>
+            </div>
+            <div style="padding:8px;background:#fffbe6;border-radius:4px;margin-bottom:6px;border-left:3px solid #faad14;">
+              <div style="display:flex;align-items:center;gap:6px;">
+                <span>🟡</span>
+                <div>
+                  <div style="font-weight:600;">【云台】智能安防系统</div>
+                  <div style="color:#999;font-size:11px;">成单预测80% · 预算¥88万 · 待决策：是否提前备货</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div style="text-align:right;margin-top:4px;">
+            <a href="#" class="c-blue" style="font-size:12px;">查看全部过会商机 (3) →</a>
+          </div>
+        </div>
+
+        <!-- [v2.0新增] 我的业绩：商务最关心自己赚了多少 -->
+        <div class="wireframe-block" style="padding-top:20px;border-color:#52c41a;">
+          <span class="wireframe-label" style="color:#52c41a;">v2.0新增：我的业绩</span>
+          <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;">我的业绩</h3>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:12px;">
+            <div style="background:#f6ffed;padding:10px;border-radius:4px;text-align:center;">
+              <div style="color:#999;font-size:10px;">本月完成</div>
+              <div style="font-size:20px;font-weight:700;color:#52c41a;">62.81万</div>
+              <div style="color:#999;font-size:10px;">目标 100万</div>
+              <div style="background:#e0e0e0;border-radius:10px;height:6px;margin-top:4px;"><div style="background:#52c41a;width:63%;height:100%;border-radius:10px;"></div></div>
+              <div style="color:#52c41a;font-size:10px;margin-top:2px;">完成率 62.8%</div>
+            </div>
+            <div style="background:#e6f7ff;padding:10px;border-radius:4px;text-align:center;">
+              <div style="color:#999;font-size:10px;">年度累计</div>
+              <div style="font-size:20px;font-weight:700;color:#1890ff;">62.81万</div>
+              <div style="color:#999;font-size:10px;">年目标 800万</div>
+              <div style="background:#e0e0e0;border-radius:10px;height:6px;margin-top:4px;"><div style="background:#1890ff;width:8%;height:100%;border-radius:10px;"></div></div>
+              <div style="color:#1890ff;font-size:10px;margin-top:2px;">完成率 7.9%（4月）</div>
+            </div>
+          </div>
+          <div style="margin-top:8px;padding:6px 8px;background:#fffbe6;border-radius:4px;font-size:11px;color:#666;">
+            💰 预计提成：¥18,843（按当前完成率估算）· <a href="#" class="c-blue">查看提成明细 →</a>
+          </div>
+        </div>
+
+        <!-- [待办清单：今日待办事项] -->
+        <div class="wireframe-block" style="padding-top:20px;">
+          <span class="wireframe-label">待办清单：今日任务</span>
+          <h3 style="font-size:14px;font-weight:600;margin:0 0 8px 0;">今日待办</h3>
+          <div style="font-size:12px;">
+            <div style="padding:8px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" style="accent-color:#1890ff;">
+              <div style="flex:1;">
+                <span>提交报价单 —【百香果】智慧园区</span>
+                <span class="badge c-red" style="background:#fff1f0;font-size:10px;margin-left:6px;">截止今天</span>
+              </div>
+            </div>
+            <div style="padding:8px 0;border-bottom:1px solid #f5f5f5;display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" style="accent-color:#1890ff;">
+              <div style="flex:1;">
+                <span>回复【百香果】设计需求确认</span>
+              </div>
+            </div>
+            <div style="padding:8px 0;display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" style="accent-color:#1890ff;">
+              <div style="flex:1;">
+                <span>确认【时利和】合同条款</span>
+              </div>
+            </div>
+          </div>
+          <div style="margin-top:8px;text-align:right;">
+            <button class="btn-ghost" style="font-size:11px;">+ 添加待办</button>
+          </div>
+        </div>
+
+      </div><!-- end right column -->
+
+    </div><!-- end 第二行 grid -->
+
+    <!-- ============================================================ -->
+    <!-- [第三行：最近跟进记录 — 自动记录表格] -->
+    <!-- ============================================================ -->
+    <div class="wireframe-block" style="padding-top:20px;">
+      <span class="wireframe-label">最近跟进记录：流程操作自动产生</span>
+      <div style="display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px;">
+        <div>
+          <h2 style="font-size:15px;font-weight:600;margin:0;display:inline;">最近跟进记录（自动记录）</h2>
+          <span style="font-size:10px;color:#52c41a;background:#f6ffed;padding:1px 6px;border-radius:3px;margin-left:8px;">流程操作自动产生，无需手写</span>
+        </div>
+        <a href="#" class="c-blue" style="font-size:12px;">查看全部 →</a>
+      </div>
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:140px;">时间</th>
+            <th style="width:200px;">商机</th>
+            <th style="width:120px;">记录类型</th>
+            <th>内容摘要</th>
+            <th style="width:100px;">来源</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="color:#999;">2025-07-17 15:20</td>
+            <td style="font-weight:600;">【鑫源达】办公系统升级</td>
+            <td>新增商机</td>
+            <td>从项目矿场分配，自动创建商机记录，客户信息已继承</td>
+            <td><span class="badge" style="background:#f6ffed;color:#52c41a;">自动</span></td>
+          </tr>
+          <tr>
+            <td style="color:#999;">2025-07-17 14:00</td>
+            <td style="font-weight:600;">【中海机车】动力监测平台</td>
+            <td>阶段变更</td>
+            <td>商机阶段：商务推进 → 招投标（触发：上传招标文件）</td>
+            <td><span class="badge" style="background:#f6ffed;color:#52c41a;">自动</span></td>
+          </tr>
+          <tr>
+            <td style="color:#999;">2025-07-17 10:30</td>
+            <td style="font-weight:600;">【时利和】×× 项目</td>
+            <td>下设计单</td>
+            <td>提交设计单 #DS-2025-0472，需求：品牌VI设计+展厅方案</td>
+            <td><span class="badge" style="background:#f6ffed;color:#52c41a;">自动</span></td>
+          </tr>
+          <tr>
+            <td style="color:#999;">2025-07-16 16:45</td>
+            <td style="font-weight:600;">【百香果】智慧园区项目</td>
+            <td>跟进备注</td>
+            <td>与客户张总电话沟通，确认预算范围30-35万，下周安排现场勘察</td>
+            <td><span class="badge" style="background:#e6f7ff;color:#1890ff;">手动补充</span></td>
+          </tr>
+          <tr>
+            <td style="color:#999;">2025-07-16 11:20</td>
+            <td style="font-weight:600;">【恒信达】ERP二期</td>
+            <td>跟进备注</td>
+            <td>合同条款第三轮修改，法务已确认，等待客户盖章回传</td>
+            <td><span class="badge" style="background:#e6f7ff;color:#1890ff;">手动补充</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- [原型说明表格：设计意图与痛点对照] -->
+    <!-- ============================================================ -->
+    <div class="wireframe-block" style="padding-top:20px;margin-top:24px;background:#fafafa;">
+      <span class="wireframe-label">原型设计说明</span>
+      <h2 style="font-size:15px;font-weight:600;margin:0 0 12px 0;">📋 原型说明 — 商务工作台设计意图</h2>
+      <table class="notes-table">
+        <thead>
+          <tr>
+            <th style="width:160px;">区域</th>
+            <th style="width:300px;">设计意图</th>
+            <th>解决的明道云痛点</th>
+            <th style="width:100px;">对应Issue</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="font-weight:600;">状态卡片栏</td>
+            <td>关键指标一眼可见，用颜色区分优先级。异常商机红色高亮，引导商务优先处理异常，而非翻看全部列表。</td>
+            <td>原来商务不知道哪些商机超期，需要管理层逐个检查后反馈。现在商务自己先看到异常，提升透明度。</td>
+            <td>#CRM-001</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">商机管道（看板）</td>
+            <td>按销售阶段分列展示，商务一眼掌握管道全貌。异常商机红色左边框+异常标签，看板/列表双视图切换。</td>
+            <td>原来2606个商机全部列表展示，无法区分阶段和优先级。现在按管道阶段组织，聚焦当前需推进的商机。</td>
+            <td>#CRM-002</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">字段智能继承</td>
+            <td>商机卡片中"客户"字段标注"自动继承"，选商机后客户名称/负责人/部门自动带出，商务不重复填写。</td>
+            <td>原来每次新建商机需手填客户名、负责人、部门等重复字段，效率低且易出错。</td>
+            <td>#CRM-003</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">今日活动自动汇总</td>
+            <td>系统自动抓取当天流程操作（下设计单、阶段变更、新增商机等），生成日报。商务只需"确认"，无需手写。</td>
+            <td>取代明道云手写日报。原来商务每天花20-30分钟写日报，内容与系统操作重复。现在自动生成，一键确认。</td>
+            <td>#CRM-004</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">智能过会提醒</td>
+            <td>仅筛选异常/需决策商机进入过会议程，而非所有商机。异常驱动，减少无效会议时间。</td>
+            <td>取代2606个商机全部过会。原来每周过会需逐个review商机，90%无变化。现在只看异常+需决策项。</td>
+            <td>#CRM-005</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">待办清单</td>
+            <td>聚合今日待办，含截止提醒。与商机关联，点击直达。</td>
+            <td>原来待办散落在微信/钉钉/明道云各处，没有统一视图。</td>
+            <td>#CRM-006</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">最近跟进记录</td>
+            <td>自动记录（绿色标签）vs 手动补充（蓝色标签）并存。大部分记录由系统流程自动产生。</td>
+            <td>原来所有跟进记录靠手写，工作量大且遗漏多。现在80%自动产生，商务只补充系统无法感知的信息（如电话沟通）。</td>
+            <td>#CRM-007</td>
+          </tr>
+          <tr>
+            <td style="font-weight:600;">异常横幅</td>
+            <td>当天首次打开时显示，醒目提醒超期商机。可关闭。商务比管理层先看到异常（透明度驱动考核）。</td>
+            <td>原来异常发现依赖管理层手动检查，发现滞后。现在系统主动推送，商务自驱处理。</td>
+            <td>#CRM-008</td>
+          </tr>
+          <tr style="background:#fff7e6;">
+            <td style="font-weight:600;">v2.0 分配给我（等我处理）</td>
+            <td>聚合所有需要商务处理的事项：矿场新分配的项目、管理层Nudge催更新、审批待办、客户回复。接受后自动进入商机管道。</td>
+            <td>明道云无统一的“分配给我”视图，矿场分配/审批/催更新分散在不同页面，商务容易遗漏。</td>
+            <td>#CRM-009</td>
+          </tr>
+          <tr style="background:#fff7e6;">
+            <td style="font-weight:600;">v2.0 我的协同（等别人）</td>
+            <td>追踪商务发起的事项在别人那里的进展：设计单/报价审批/合同审批。三种提醒方式：Web平台提醒、企微提醒、拨打电话。底部链接公司通讯录。</td>
+            <td>明道云没有跨部门协同追踪视图，商务不知道自己的设计单在谁那里、进展如何，无法主动催办。</td>
+            <td>#CRM-010</td>
+          </tr>
+          <tr style="background:#fff7e6;">
+            <td style="font-weight:600;">v2.0 快捷操作 FAB</td>
+            <td>右下角“+”浮动按钮，点击展开6个快捷入口：新建商机/下设计单/提交报价/申请投标/新建合同/写跟进记录。点击后弹出简化表单，3-5个字段即可提交。</td>
+            <td>明道云每个表单都需要进入独立页面，字段多达10+个，填写慢。新平台两步完成，其余字段自动继承。</td>
+            <td>#CRM-011</td>
+          </tr>
+          <tr style="background:#fff7e6;">
+            <td style="font-weight:600;">v2.0 我的业绩</td>
+            <td>本月/年度业绩完成率进度条、目标对比、预计提成金额。商务实时看到自己的成绩单，正向激励而非惩罚驱动。</td>
+            <td>明道云业绩评分页全是空的，商务看不到自己的实时业绩和提成估算。</td>
+            <td>#CRM-012</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Footer -->
+    <div style="text-align:center;padding:24px;color:#ccc;font-size:11px;border-top:1px solid #f0f0f0;margin-top:24px;">
+      万德AI平台 — 商务工作台 低保真原型 v2.0 · 仅供内部评审 · 数据均为模拟
+    </div>
+
+    <!-- [v2.0新增] 快捷操作浮动按钮（Quick Action） -->
+    <div id="quickActionFab" onclick="toggleQuickActions()" style="position:fixed;bottom:32px;right:32px;width:56px;height:56px;background:#1890ff;color:#fff;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;cursor:pointer;box-shadow:0 4px 12px rgba(24,144,255,0.4);z-index:100;transition:transform 0.2s;" title="快捷操作">
+      +
+    </div>
+    <div id="quickActionPanel" style="position:fixed;bottom:100px;right:32px;background:#fff;border:1px solid #e0e0e0;border-radius:12px;padding:16px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:99;display:none;width:220px;">
+      <div style="font-size:12px;font-weight:600;color:#333;margin-bottom:10px;border-bottom:1px solid #f0f0f0;padding-bottom:6px;">⚡ 快捷操作 <span style="color:#999;font-weight:400;font-size:10px;">（两步完成）</span></div>
+      <div style="display:flex;flex-direction:column;gap:6px;font-size:12px;">
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;text-decoration:none;color:#333;border:1px solid #f0f0f0;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background='#fff'">
+          <span style="width:24px;height:24px;background:#e6f7ff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;">📋</span>
+          新建商机
+        </a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;text-decoration:none;color:#333;border:1px solid #f0f0f0;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background='#fff'">
+          <span style="width:24px;height:24px;background:#f6ffed;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;">🎨</span>
+          下设计单
+        </a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;text-decoration:none;color:#333;border:1px solid #f0f0f0;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background='#fff'">
+          <span style="width:24px;height:24px;background:#fffbe6;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;">💰</span>
+          提交报价
+        </a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;text-decoration:none;color:#333;border:1px solid #f0f0f0;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background='#fff'">
+          <span style="width:24px;height:24px;background:#fff1f0;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;">📑</span>
+          申请投标(HZ)
+        </a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;text-decoration:none;color:#333;border:1px solid #f0f0f0;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background='#fff'">
+          <span style="width:24px;height:24px;background:#f9f0ff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;">📝</span>
+          新建合同
+        </a>
+        <a href="#" style="display:flex;align-items:center;gap:8px;padding:8px;border-radius:6px;text-decoration:none;color:#333;border:1px solid #f0f0f0;" onmouseover="this.style.background='#e6f7ff'" onmouseout="this.style.background='#fff'">
+          <span style="width:24px;height:24px;background:#e6f7ff;border-radius:4px;display:flex;align-items:center;justify-content:center;font-size:14px;">✍️</span>
+          写跟进记录
+        </a>
+      </div>
+    </div>
+
+  </div><!-- end main padding container -->
+</div><!-- end main-content -->
+
+<!-- ===== JavaScript ===== -->
+<script>
+  // Quick Action FAB toggle
+  function toggleQuickActions() {
+    const panel = document.getElementById('quickActionPanel');
+    const fab = document.getElementById('quickActionFab');
+    if (panel.style.display === 'none') {
+      panel.style.display = 'block';
+      fab.style.transform = 'rotate(45deg)';
+    } else {
+      panel.style.display = 'none';
+      fab.style.transform = 'rotate(0deg)';
+    }
+  }
+
+  // View toggle: kanban / list
+  function switchView(view) {
+    const kanban = document.getElementById('viewKanban');
+    const list = document.getElementById('viewList');
+    const btnK = document.getElementById('btnKanban');
+    const btnL = document.getElementById('btnList');
+
+    if (view === 'kanban') {
+      kanban.style.display = 'flex';
+      list.style.display = 'none';
+      btnK.classList.add('active');
+      btnL.classList.remove('active');
+    } else {
+      kanban.style.display = 'none';
+      list.style.display = 'block';
+      btnK.classList.remove('active');
+      btnL.classList.add('active');
+    }
+  }
+</script>
+
+</body>
+</html>

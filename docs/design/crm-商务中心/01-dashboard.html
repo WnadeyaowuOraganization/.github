@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商务Dashboard — CRM商务中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #fff; color: #333; }
+  .nav-bar { height: 48px; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-left { font-size: 14px; color: #666; }
+  .nav-left strong { color: #333; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666; }
+  .badge-icon { cursor: pointer; }
+  .kpi-bar { background: #fff; border-bottom: 1px solid #f0f0f0; padding: 12px 24px; display: flex; align-items: center; gap: 0; font-size: 13px; }
+  .kpi-item { display: flex; align-items: center; gap: 6px; padding: 0 20px; }
+  .kpi-item:first-child { padding-left: 0; }
+  .kpi-item + .kpi-item { border-left: 1px solid #f0f0f0; }
+  .kpi-label { color: #666; }
+  .kpi-val { font-weight: 700; font-size: 16px; }
+  .section-title { font-size: 14px; font-weight: 600; color: #333; margin-bottom: 12px; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 13px; font-weight: 600; color: #555; padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 14px; color: #333; vertical-align: middle; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; }
+  .btn { display: inline-block; padding: 3px 10px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 12px; cursor: pointer; background: #fff; color: #555; }
+  .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+  .funnel-bar { height: 32px; border-radius: 2px; display: flex; align-items: center; padding-left: 10px; color: #fff; font-size: 12px; font-weight: 600; margin-bottom: 2px; }
+  .todo-row { display: flex; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; gap: 8px; }
+  .todo-index { width: 22px; height: 22px; border-radius: 50%; background: #1890ff; color: #fff; font-size: 12px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .todo-name { flex: 1; font-size: 14px; color: #333; }
+  .todo-desc { font-size: 12px; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: #bbb; border-top: 1px solid #f0f0f0; margin-top: 24px; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="nav-bar">
+  <div class="nav-left">CRM商务中心 &gt; <strong>商务Dashboard</strong></div>
+  <div class="nav-right">
+    <span class="badge-icon">📥 <span style="color:#1890ff;font-weight:700;">4</span></span>
+    <span class="badge-icon">📢 <span style="color:#1890ff;font-weight:700;">3</span></span>
+    <span class="badge-icon">🔔 <span style="color:#1890ff;font-weight:700;">2</span></span>
+    <span style="color:#333;font-weight:500;">张三 | 拓展一部</span>
+  </div>
+</div>
+
+<!-- KPI统计条 -->
+<div class="kpi-bar">
+  <div class="kpi-item">
+    <span class="kpi-label">异常商机</span>
+    <span class="kpi-val" style="color:#ff4d4f;">3</span>
+  </div>
+  <div class="kpi-item">
+    <span class="kpi-label">待更新</span>
+    <span class="kpi-val" style="color:#fa8c16;">12</span>
+  </div>
+  <div class="kpi-item">
+    <span class="kpi-label">本月新商机</span>
+    <span class="kpi-val" style="color:#52c41a;">8</span>
+  </div>
+  <div class="kpi-item">
+    <span class="kpi-label">有效商机</span>
+    <span class="kpi-val" style="color:#595959;">40</span>
+  </div>
+  <div class="kpi-item">
+    <span class="kpi-label">今日活动</span>
+    <span class="kpi-val" style="color:#1890ff;">5</span>
+  </div>
+</div>
+
+<!-- 主内容 -->
+<div style="display:flex; gap:24px; padding:20px 24px; align-items: flex-start;">
+
+  <!-- 左列 6/10 — 商机漏斗 -->
+  <div style="flex:6;">
+    <div class="section-title">商机漏斗（本月）</div>
+    <div style="font-size:12px; color:#999; margin-bottom:10px;">各阶段数量 · 金额</div>
+
+    <!-- 漏斗各阶段 -->
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>新商机</span><span style="color:#595959; font-weight:600;">14条 · ￥18.6M</span>
+      </div>
+      <div class="funnel-bar" style="background:#1890ff; width:100%;">14</div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>商务推进</span><span style="color:#595959; font-weight:600;">11条 · ￥24.3M</span>
+      </div>
+      <div class="funnel-bar" style="background:#40a9ff; width:85%;">11</div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>招投标</span><span style="color:#595959; font-weight:600;">8条 · ￥19.8M</span>
+      </div>
+      <div class="funnel-bar" style="background:#69c0ff; width:68%;">8</div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>签约</span><span style="color:#595959; font-weight:600;">5条 · ￥12.5M</span>
+      </div>
+      <div class="funnel-bar" style="background:#52c41a; width:50%;">5</div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>回款</span><span style="color:#595959; font-weight:600;">6条 · ￥9.2M</span>
+      </div>
+      <div class="funnel-bar" style="background:#73d13d; width:40%;">6</div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>验收</span><span style="color:#595959; font-weight:600;">4条 · ￥6.1M</span>
+      </div>
+      <div class="funnel-bar" style="background:#faad14; width:30%;">4</div>
+    </div>
+    <div style="margin-bottom:6px;">
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:2px;">
+        <span>完结</span><span style="color:#595959; font-weight:600;">8条 · ￥22.4M</span>
+      </div>
+      <div class="funnel-bar" style="background:#d9d9d9; color:#666; width:55%;">8</div>
+    </div>
+
+    <!-- 最近跟进记录 -->
+    <div style="margin-top:28px;">
+      <div class="section-title">最近跟进记录</div>
+      <table>
+        <thead>
+          <tr>
+            <th>时间</th>
+            <th>操作人</th>
+            <th>客户/商机</th>
+            <th>内容</th>
+            <th>来源标签</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">13:42</td>
+            <td>张三</td>
+            <td>Playpoint / OPP-2026-0028</td>
+            <td>与David确认了方案版本，等待客户内部审批</td>
+            <td><span class="tag tag-blue">手动记录</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">11:20</td>
+            <td>李四</td>
+            <td>深圳市体育局 / OPP-2026-0019</td>
+            <td>跟进报价审批，预计下周回复</td>
+            <td><span class="tag tag-blue">手动记录</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">10:05</td>
+            <td>系统</td>
+            <td>安徽乐翔体育 / OPP-2026-0031</td>
+            <td>阶段自动推进：商务推进 → 招投标</td>
+            <td><span class="tag tag-yellow">流程触发</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">09:33</td>
+            <td>系统</td>
+            <td>杭州乐动体育 / INQ-2026-0087</td>
+            <td>询盘自动录入：官网表单提交</td>
+            <td><span class="tag tag-green">自动记录</span></td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">昨天 17:15</td>
+            <td>王五</td>
+            <td>Al Hokair Group / OPP-2026-0041</td>
+            <td>发送了PI确认函，等待Ahmed签字回传</td>
+            <td><span class="tag tag-blue">手动记录</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 右列 4/10 — 今日待办 -->
+  <div style="flex:4;">
+    <div class="section-title">今日待办</div>
+
+    <div class="todo-row">
+      <div class="todo-index">①</div>
+      <div style="flex:1;">
+        <div class="todo-name">合肥万达广场项目</div>
+        <div class="todo-desc" style="color:#1890ff;">待评估 · 来源：项目矿场分配 · 48h内</div>
+      </div>
+      <button class="btn btn-primary" onclick="document.getElementById('assess-panel').style.display='block'">评估</button>
+    </div>
+
+    <div class="todo-row">
+      <div class="todo-index" style="background:#ff4d4f;">②</div>
+      <div style="flex:1;">
+        <div class="todo-name">成都锦江住建局</div>
+        <div class="todo-desc" style="color:#ff4d4f;">超期15天未更新</div>
+      </div>
+      <button class="btn" style="color:#ff4d4f; border-color:#ff4d4f;">更新</button>
+    </div>
+
+    <div class="todo-row">
+      <div class="todo-index" style="background:#faad14;">③</div>
+      <div style="flex:1;">
+        <div class="todo-name">本周周报</div>
+        <div class="todo-desc" style="color:#666;">截止 2026-04-10 18:00</div>
+      </div>
+      <button class="btn">填写</button>
+    </div>
+
+    <!-- 今日日程概览 -->
+    <div style="margin-top:24px;">
+      <div class="section-title">今日日程</div>
+      <table>
+        <thead>
+          <tr><th>时间</th><th>事项</th><th>地点/方式</th></tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">14:00</td>
+            <td>Playpoint方案汇报</td>
+            <td>Zoom在线</td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">16:30</td>
+            <td>部门周会</td>
+            <td>会议室A</td>
+          </tr>
+          <tr>
+            <td style="white-space:nowrap; color:#888;">17:00</td>
+            <td>合肥项目签约前确认</td>
+            <td>电话</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 本月业绩进度 -->
+    <div style="margin-top:24px;">
+      <div class="section-title">本月业绩进度</div>
+      <div style="display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:4px;">
+        <span>已签约 ￥628,100</span>
+        <span>目标 ￥1,000,000 (62.8%)</span>
+      </div>
+      <div style="height:8px; background:#f0f0f0; border-radius:4px; overflow:hidden;">
+        <div style="width:62.8%; height:100%; background:#52c41a; border-radius:4px;"></div>
+      </div>
+      <div style="margin-top:12px; display:flex; justify-content:space-between; font-size:12px; color:#666; margin-bottom:4px;">
+        <span>年度累计 ￥628,100</span>
+        <span>年目标 ￥8,000,000 (7.9%)</span>
+      </div>
+      <div style="height:8px; background:#f0f0f0; border-radius:4px; overflow:hidden;">
+        <div style="width:7.9%; height:100%; background:#1890ff; border-radius:4px;"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 评估面板（点击评估按钮后显示） ========== -->
+<div id="assess-panel" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; background:rgba(0,0,0,0.3); z-index:200; display:none;">
+  <div style="position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); background:#fff; width:900px; max-height:85vh; overflow-y:auto; border-radius:6px; box-shadow:0 4px 24px rgba(0,0,0,0.15);">
+    <!-- 面板头部 -->
+    <div style="padding:16px 24px; border-bottom:1px solid #f0f0f0; display:flex; justify-content:space-between; align-items:center;">
+      <div style="font-size:16px; font-weight:600;">📋 项目可行性评估 — 合肥万达广场项目</div>
+      <span style="cursor:pointer; font-size:18px; color:#999;" onclick="document.getElementById('assess-panel').style.display='none'">✕</span>
+    </div>
+
+    <div style="padding:24px; display:flex; gap:24px;">
+      <!-- 左侧：矿场同步信息包 -->
+      <div style="flex:1; border-right:1px solid #f0f0f0; padding-right:24px;">
+        <div style="font-size:13px; font-weight:600; color:#333; margin-bottom:12px;">📦 矿场同步信息</div>
+        <table style="width:100%;">
+          <tbody>
+            <tr><td style="color:#888; width:100px; padding:6px 0;">项目名称</td><td style="padding:6px 0; font-weight:500;">合肥市长丰县2026年全民健身体育设施采购</td></tr>
+            <tr><td style="color:#888; padding:6px 0;">招标编号</td><td style="padding:6px 0;">AHCF-2026-GK-0042</td></tr>
+            <tr><td style="color:#888; padding:6px 0;">甲方</td><td style="padding:6px 0;">合肥市长丰县体育局</td></tr>
+            <tr><td style="color:#888; padding:6px 0;">预算金额</td><td style="padding:6px 0; font-weight:600;">￥3,200,000</td></tr>
+            <tr><td style="color:#888; padding:6px 0;">开标时间</td><td style="padding:6px 0;">2026-05-15</td></tr>
+            <tr><td style="color:#888; padding:6px 0;">发现渠道</td><td style="padding:6px 0;"><span class="tag tag-green">政府采购网</span></td></tr>
+            <tr><td style="color:#888; padding:6px 0;">发现日期</td><td style="padding:6px 0;">2026-04-08</td></tr>
+          </tbody>
+        </table>
+
+        <div style="font-size:13px; font-weight:600; color:#333; margin:16px 0 8px;">📊 矿场评分</div>
+        <table style="width:100%;">
+          <tbody>
+            <tr><td style="color:#888; width:100px; padding:4px 0;">ICP评分</td><td style="padding:4px 0;"><span style="color:#52c41a; font-weight:700;">82/100</span> A级</td></tr>
+            <tr><td style="color:#888; padding:4px 0;">可信度</td><td style="padding:4px 0;"><span class="tag tag-green">高</span> 政府采购网直接来源</td></tr>
+            <tr><td style="color:#888; padding:4px 0;">产品匹配</td><td style="padding:4px 0;">无动力游乐设施 + 健身路径</td></tr>
+            <tr><td style="color:#888; padding:4px 0;">区域覆盖</td><td style="padding:4px 0;">华东-安徽 · 万德有安徽经销商(乐翔体育)</td></tr>
+          </tbody>
+        </table>
+
+        <div style="font-size:13px; font-weight:600; color:#333; margin:16px 0 8px;">⚔️ 竞争信息</div>
+        <table style="width:100%;">
+          <tbody>
+            <tr><td style="color:#888; width:100px; padding:4px 0;">竞品参与</td><td style="padding:4px 0;"><span class="tag" style="background:#fff1f0; color:#ff4d4f;">凯奇乐</span> <span class="tag" style="background:#fff7e6; color:#fa8c16;">永浪</span></td></tr>
+            <tr><td style="color:#888; padding:4px 0;">历史中标</td><td style="padding:4px 0;">该甲方2024年采购由永浪中标(￥1.8M)</td></tr>
+            <tr><td style="color:#888; padding:4px 0;">万德记录</td><td style="padding:4px 0;">万德2023年在长丰县中标1次(￥2.1M)</td></tr>
+          </tbody>
+        </table>
+
+        <div style="font-size:13px; font-weight:600; color:#333; margin:16px 0 8px;">📎 附件</div>
+        <div style="font-size:13px;"><a href="#" style="color:#1890ff;">招标公告原文.pdf</a> · <a href="#" style="color:#1890ff;">采购需求清单.xlsx</a></div>
+      </div>
+
+      <!-- 右侧：评估表单 -->
+      <div style="flex:1;">
+        <div style="font-size:13px; font-weight:600; color:#333; margin-bottom:12px;">✍️ 我的评估</div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px; color:#666; margin-bottom:4px;">项目真实性</div>
+          <select style="width:100%; padding:6px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px;">
+            <option>确认真实 — 已核实招标信息</option>
+            <option>基本真实 — 信息来源可靠</option>
+            <option>存疑 — 需进一步核实</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px; color:#666; margin-bottom:4px;">能力匹配度</div>
+          <select style="width:100%; padding:6px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px;">
+            <option>完全匹配 — 有同类中标业绩</option>
+            <option>基本匹配 — 产品线覆盖但无同类业绩</option>
+            <option>部分匹配 — 需要外协或新品开发</option>
+            <option>不匹配 — 非万德产品线</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px; color:#666; margin-bottom:4px;">竞争态势判断</div>
+          <select style="width:100%; padding:6px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px;">
+            <option>有优势 — 有客户关系或价格优势</option>
+            <option>均势 — 与竞品实力相当</option>
+            <option>劣势 — 竞品已深度介入</option>
+          </select>
+        </div>
+
+        <div style="margin-bottom:12px;">
+          <div style="font-size:12px; color:#666; margin-bottom:4px;">补充说明</div>
+          <textarea style="width:100%; height:60px; padding:6px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px; resize:vertical;" placeholder="一句话说明你的判断依据..."></textarea>
+        </div>
+
+        <div style="border-top:1px solid #f0f0f0; padding-top:16px; margin-top:16px;">
+          <div style="font-size:12px; color:#666; margin-bottom:8px;">评估结论</div>
+          <div style="display:flex; gap:8px;">
+            <button class="btn btn-primary" style="flex:1; padding:8px; font-size:14px;" onclick="document.getElementById('assess-panel').style.display='none'">✅ 接受跟进 → 创建商机</button>
+            <button class="btn" style="flex:1; padding:8px; font-size:14px; color:#fa8c16; border-color:#fa8c16;">⏸ 观望暂缓</button>
+            <button class="btn" style="flex:1; padding:8px; font-size:14px; color:#ff4d4f; border-color:#ff4d4f;">❌ 退回矿场</button>
+          </div>
+          <div style="font-size:11px; color:#999; margin-top:6px;">退回时必须选择原因，反馈将回流矿场优化评分模型</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// 让评估面板可以通过按钮显示
+document.querySelector('.btn-primary[onclick]') && true;
+</script>
+
+<footer>万德AI平台 — CRM商务中心原型 v3.0 | 2026年4月</footer>
+</body>
+</html>

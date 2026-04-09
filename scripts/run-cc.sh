@@ -271,6 +271,7 @@ TEST_PG_ENV="export TEST_PG_HOST=localhost; export TEST_PG_PORT=5434; export TES
 #   - 每次调用 cp -a base → /dev/shm/m2-cc-${KIMI_TAG}/（独立写入区）
 #   - CC 退出时由 release-cc-lock.sh 调 m2-cc-cleanup.sh 释放
 # 完全 tmpfs，无 hardlink 元信息污染。base 共享只占 1 份内存。
+# 注：所有 module 都准备 maven repo（CC 是全栈开发，前端任务可能需要跑后端测试或反向）
 # 兜底：如果 m2-cc-prepare.sh 不存在（升级中）或失败，回退到旧的 .m2-${KIMI_TAG} 模式
 M2_OPTS=$(bash "$SCRIPT_DIR/m2-cc-prepare.sh" "$KIMI_TAG" 2>&1 | tail -1)
 if [ -n "$M2_OPTS" ] && echo "$M2_OPTS" | grep -q "^-Dmaven.repo.local="; then

@@ -526,88 +526,133 @@ const [PriorityDialog, dialogApi] = useVbenDrawer({ connectedComponent: Priority
 
 **`<Page>` 组件**源码只是 `<div class="relative">` wrapper（含可选 header/footer slot），不能用于 drawer/modal 内容，因它是**主页面布局语义**组件。
 
-**drawer 组件必须自带 overlay 容器**。`useVbenDrawer` 的 `h(connectedComponent, ...)` 会**直接渲染** `connectedComponent`，如果该组件 template 最外层不是 `<BasicDrawer>` / `<VbenDrawer>` / `<a-drawer>`，就会被当作 inline 组件渲染到主页面（#3544 事故根因）。
+**drawer 组件必须自带 overlay 容器**。`useVbenDrawer` 的 `h(connectedComponent, ...)` 会**直接渲染** `connectedComponent`，如果该组件 template 最外层不是 `<BasicDrawer>`，就会被当作 inline 组件渲染到主页面（#3544 事故根因）。
+
+#### ✅ 权威参考（已实测验证）
+
+**子组件（drawer 本体）**：`frontend/apps/web-antd/src/views/brand-center/content/brand-content-detail-drawer.vue`
+
+- 第 80 行：`const [BasicDrawer, drawerApi] = useVbenDrawer({ onCancel, onConfirm, onOpenChange });` — **无 `connectedComponent` 参数**
+- 第 158 行：`<BasicDrawer :close-on-click-modal="false" :title="title" class="w-[800px]" width="800">` — **template 最外层**
+
+**外部调用方（主页面）**：`frontend/apps/web-antd/src/views/brand-center/content/index.vue`
+
+- 第 31 行：`import BrandContentDetailDrawer from './brand-content-detail-drawer.vue';`
+- 第 100 行：`connectedComponent: BrandContentDetailDrawer,` — **传给父级 useVbenDrawer**
+
+#### 交叉验证（同模式一致）
+
+| 文件 | useVbenDrawer 行 | `<BasicDrawer>` 行 |
+|------|-----------------|-------------------|
+| `views/brand-center/content/brand-content-detail-drawer.vue` | 80 | 158 |
+| `views/hr/employee/employee-drawer.vue` | 37 | 105 |
+| `views/business/international-trade/prospect-detail-drawer.vue` | 45 | 118 |
+
+三个文件模式完全一致 — 这是 wande-play 的**标准 drawer 模板**。
+
+#### 模板骨架（照抄即可）
+
+**子组件 `xxx-detail-drawer.vue`**（drawer 本体）：
+
+```vue
+<script setup lang="ts">
+import { ref } from 'vue';
+import { useVbenDrawer } from '@vben/common-ui';
+
+const title = ref('');
+const loading = ref(false);
+const data = ref<any>({});
+
+async function handleCancel() {
+  drawerApi.close();
+}
+
+async function handleConfirm() {
+  // 处理确认逻辑
+  drawerApi.close();
+}
+
+// ✅ 无 connectedComponent 调用,接收父级 inject 的 api
+const [BasicDrawer, drawerApi] = useVbenDrawer({
+  onCancel: handleCancel,
+  onConfirm: handleConfirm,
+  async onOpenChange(isOpen) {
+    if (!isOpen) return;
+    drawerApi.drawerLoading(true);
+    const payload = drawerApi.getData() as { id?: number };
+    // 加载 payload.id 对应的数据
+    data.value = /* 调用 API */;
+    title.value = `项目详情 #${payload.id}`;
+    drawerApi.drawerLoading(false);
+  },
+});
+</script>
+
+<template>
+  <!-- ✅ 必须是 BasicDrawer 作 template 最外层 -->
+  <BasicDrawer
+    :close-on-click-modal="false"
+    :title="title"
+    class="w-[900px]"
+    :width="900"
+  >
+    <!-- drawer 内容:Tab / 表单 / 表格等 -->
+    <a-tabs>...</a-tabs>
+  </BasicDrawer>
+</template>
+```
+
+**外部调用方 `index.vue`**（主页面）：
+
+```vue
+<script setup lang="ts">
+import { useVbenDrawer } from '@vben/common-ui';
+import XxxDetailDrawer from './xxx-detail-drawer.vue';
+
+// ✅ 父级传 connectedComponent,拿到 DetailDrawer 渲染组件 + api
+const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
+  connectedComponent: XxxDetailDrawer,
+});
+
+async function handleDetail(row: any) {
+  detailDrawerApi.setData({ id: row.id }).open();
+}
+</script>
+
+<template>
+  <Page>
+    <BasicTable @row-click="handleDetail" />
+    <!-- ✅ template 末尾必须挂 DetailDrawer (overlay 挂载点) -->
+    <DetailDrawer @refresh="refreshTable" />
+  </Page>
+</template>
+```
 
 #### ❌ 错误写法（#3544 PR #3553 修复仍错）
 
 ```vue
 <!-- xxx-detail-drawer.vue -->
 <script setup>
-// ❌ 没有 useVbenDrawer 无参调用接收 inject
-import CounterpartManagementTab from './counterpart-management-tab.vue';
+// ❌ 缺少 useVbenDrawer 调用,没有 drawerApi 接收 inject
+import CounterpartTab from './counterpart-tab.vue';
 </script>
 
 <template>
-  <div>  <!-- ❌ 或 <Page> -- 没有 overlay 容器,会被 inline 渲染 -->
+  <div>  <!-- ❌ 或 <Page> -- 没有 BasicDrawer 容器,会被 inline 渲染到主页面 -->
     <a-tabs>...</a-tabs>
   </div>
 </template>
 ```
 
-#### ✅ 正确写法（对比 `brand-content-detail-drawer.vue`）
-
-```vue
-<!-- xxx-detail-drawer.vue -->
-<script setup>
-import { useVbenDrawer } from '@vben/common-ui';
-
-// ✅ 无参/无 connectedComponent 调用,接收父组件 inject 的 api
-const [BasicDrawer, drawerApi] = useVbenDrawer({
-  onCancel: () => drawerApi.close(),
-  onConfirm: handleConfirm,
-});
-
-// 通过 drawerApi.getData() 拿外部传入的数据
-const data = ref(null);
-drawerApi.onOpenChange((isOpen) => {
-  if (isOpen) data.value = drawerApi.getData();
-});
-</script>
-
-<template>
-  <BasicDrawer  <!-- ✅ 必须是 BasicDrawer/VbenDrawer/a-drawer overlay 容器 -->
-    title="项目详情"
-    class="w-[900px]"
-    :close-on-click-modal="false"
-  >
-    <a-tabs>...</a-tabs>
-  </BasicDrawer>
-</template>
-```
-
-#### 外部调用方（index.vue）
-
-```vue
-<script setup>
-import { useVbenDrawer } from '@vben/common-ui';
-import MineDetailDrawer from './mine-detail-drawer.vue';
-
-// 父级传 connectedComponent,拿到 <DetailDrawer> 渲染组件 + api
-const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
-  connectedComponent: MineDetailDrawer,
-});
-
-async function onRowClick(row) {
-  await detailDrawerApi.open({ data: row });
-}
-</script>
-
-<template>
-  <BasicTable @row-click="onRowClick" />
-  <!-- 必须在 template 末尾挂 DetailDrawer (overlay 挂载点) -->
-  <DetailDrawer @refresh="refresh" />
-</template>
-```
-
 #### Modal 同规则
 
-`useVbenModal` 的 `connectedComponent` 同样需要 `<BasicModal>` overlay 容器。
+`useVbenModal` 的 `connectedComponent` 同样需要 `<BasicModal>` 作 template 最外层。
 
 #### 检测规则
 
-本规则已纳入 `pr-reviewer.md` P0 审查清单：
-- 发现 `connectedComponent: XxxDrawer` 时 → 检查 `XxxDrawer.vue` template 最外层是否为 `<BasicDrawer>` / `<VbenDrawer>` / `<a-drawer>`
-- 不是 → block merge + 评论「drawer 组件缺 overlay 容器 (#3544 同款反模式)」
+本规则已纳入 `pr-reviewer.md` P0.6 审查清单：
+- 发现 `connectedComponent: XxxDrawer` → 检查 `XxxDrawer.vue` template 最外层
+- 不是 `<BasicDrawer>` / `<BasicModal>` → block merge + 评论「drawer 组件缺 overlay 容器 (#3544 同款反模式)，参考 `brand-content-detail-drawer.vue` 正确写法」
 
 ---
 

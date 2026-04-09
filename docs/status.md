@@ -1,9 +1,183 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-08 20:30 by Claude
+> ⏰ 最后更新：2026-04-09 06:55 by Claude
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
+---
+## 🔄 Issue 生命周期 + 测试层级
 
-## 🚨 2026-04-07 / 2026-04-08 重大基础设施变更
+### 完整流程图
+
+```
+Issue创建
+  │ issue-sync.yml (opened) → 加入Project#4 → [Plan]
+  ▼
+[Plan] ──── 排程经理CC ────▶ [Todo]
+            依赖分析           │
+            维护PLAN.md        │ 研发经理CC
+                               │ run-cc.sh --module --issue --dir --effort
+                               ▼
+                           [In Progress]
+                               │
+                               ▼ 编程CC（tmux会话 cc-wande-play-kimiN-ISSUE）
+                    ┌──────────┴──────────┐
+                    ▼                     ▼
+              单元测试(TDD)          编译检查
+              mvn test / vitest      mvn package / pnpm build
+                    │                     │
+                    ▼                     ▼
+               ❌ 失败 → 自行修复    ❌ 失败 → 自行修复
+                    │                     │
+                    └──────── 全通过 ──────┘
+                                  │
+                                  ▼
+                           push feature分支
+                           gh pr create --base dev
+                           CC轮询等待merge或新指令（不主动退出）
+                                  │
+    ══════════════════════════════╪══════════════════════════════
+    CI层 (pr-test.yml)            │  PR创建/更新自动触发
+    ══════════════════════════════╪══════════════════════════════
+                                  ▼
+                      CI专用环境构建(:6041/:8084)
+                                  │
+                         ┌────────┴────────┐
+                         ▼                 ▼
+                    构建成功          ❌ 构建失败
+                         │                 │ inject-cc-prompt.sh
+                         ▼                 ▼ 注入修复提示词到活跃CC
+                   Playwright E2E     + [E2E Fail]
+                   tests/backend/
+                   tests/front/
+                         │
+                   ┌─────┴─────┐
+                   ▼           ▼
+                ✅ 通过     ❌ 失败
+                   │           │ inject-cc-prompt.sh
+                   ▼           ▼ 注入修复提示词到活跃CC
+              approve PR    + status:test-failed
+              squash merge  + [E2E Fail]
+                   │
+    ══════════════════════════════════════════════════════════════
+    CD层 (build-deploy-dev.yml)  merge到dev触发
+    ══════════════════════════════════════════════════════════════
+                   │
+                   ▼
+              后端: mvn package → 部署 → 健康检查
+              前端: pnpm build → rsync → nginx reload
+                   │
+                   ├── ❌ 部署失败 → inject-cc-prompt.sh 注入修复提示词
+                   ▼
+              Dev环境更新完成(:6040/:8083)
+                   │
+                   ├─► cc-lock-manager.yml → release-cc-lock.sh
+                   │                         (kill tmux session + rm .cc-lock)
+                   │
+                   └─► issue-sync.yml (PR merged → close Issue)
+                                  ▼
+                               [Done]
+                   │
+    ══════════════════════════════════════════════════════════════
+    Smoke探活 (e2e_smoke.sh)  cron每30分钟，零AI消耗
+    ══════════════════════════════════════════════════════════════
+                   │
+                   ▼
+              curl健康检查 + Playwright smoke
+                   │
+                   ├── ✅ 通过 → 静默
+                   └── ❌ 失败 → e2e-result-handler.py
+                                 自动创建Issue + [E2E Fail]
+                   │
+    ══════════════════════════════════════════════════════════════
+    全量回归 (e2e_top_tier.sh)  cron每6小时，AI驱动
+    ══════════════════════════════════════════════════════════════
+                   │
+                   ▼
+              regression/ + 全部smoke + API
+                   │
+                   ├── ✅ 通过 → 记录日志
+                   └── ❌ 失败 → AI智能创建Issue（判断模块+写描述）
+                                 + e2e-result-handler.py + [E2E Fail]
+```
+
+### 测试层级总览
+
+| 层级 | 触发 | 范围 | 实现 | AI消耗 | 失败处理 |
+|------|------|------|------|--------|----------|
+| 单元测试 | 编程CC TDD | 当前Issue涉及的Service | mvn test / vitest | 无 | 编程CC自行修复，不提PR |
+| 编译检查 | 编程CC提交前 | 全量编译 | mvn package / pnpm build | 无 | 编程CC自行修复，不提PR |
+| CI E2E | PR创建/更新 | PR影响的模块 | pr-test.yml + e2e-result-handler.py | 无 | 评论PR/Issue + test-failed + E2E Fail |
+| Smoke探活 | cron 30min | health + auth + 页面smoke | e2e_smoke.sh + e2e-result-handler.py | **无** | 自动创建Issue + test-failed + E2E Fail |
+| 全量回归 | cron 6h | regression + 全模块 | Claude Code + e2e-result-handler.py | 有 | AI创建Issue + test-failed + E2E Fail |
+
+### Project#4 状态流转
+
+```
+[Plan] → [Todo] → [In Progress] → [Done]     (正常路径)
+                        │              │
+                        ▼              ▼
+                    [E2E Fail] ◀── CI/Smoke/回归发现失败
+                        │
+                        ▼ 排程经理优先排程
+                    [In Progress] → 修复 → 重新提PR → [Done]
+```
+
+以上内容除非得到用户批准不可擅自修改
+---
+
+
+## 🚨 2026-04-07 / 2026-04-08 / 2026-04-09 重大基础设施变更
+
+### 阶段七（2026-04-09 上午）：Maven 缓存 tmpfs 隔离 + 共享 base + 全脚本接入
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 排查 PR pre-test 全失败时发现 dev 后端 bean/编译错累积。深挖发现根因之一是 maven cache 跨 kimi 污染：20 个 `.m2-kimi*/repository` 之前用 `cp -al ~/.m2 .m2-kimiN` hardlink 共享，实测 `_remote.repositories` 等元信息文件 21 个 hardlink 同 inode → 一个 kimi 改影响所有兄弟 |
+| 实证 | append `POLLUTED-FROM-KIMI1` 到 `.m2-kimi1/.../_remote.repositories` → kimi5 + 主 ~/.m2 立刻看到该字符串。jar 文件因 mvn 是 unlink+create 模式 OK，但元信息文件是 truncate-and-write → 跨 kimi 同步污染 |
+| 4 类风险 | A. 元信息互污染（必发生）；B. `*.lastUpdated` 误标记导致跨 kimi 误判依赖不可用；C. 两 kimi 同时 mvn install 同一 SNAPSHOT 造成 jar partial write；D. 一个 CC 跑 `mvn dependency:purge` 让所有 kimi hardlink 兄弟丢数据 |
+| 方案演化 | 先尝试系统级 fstab + systemd tmpfs mount（fstab 23 条 + m2-prewarm@.service 模板 + /usr/local/bin/m2-prewarm.sh）→ 用户判断"改动太大、未来迁移到小 RAM 服务器不一定有这么大 RAM" → 全部撤销 |
+| **7.1 最终方案：脚本级 + /dev/shm tmpfs + 共享 base** | (a) 持久化 base 在磁盘 `~/.m2-base/repository` (586MB，预先 mvn clean install dev 后删除自产 jar `wande-ai/wande-ai-api/ruoyi-admin/ruoyi-mcp-server/copilot` 共 -437MB)；(b) `/dev/shm/m2-base/repository` 共享只读，第一个 CC 启动时 cp 进去；(c) `/dev/shm/m2-cc-<KIMI>/repository` 每 CC 独立写入区，cp -a base 进去；(d) refcount 文件管理 base 的引用计数，最后一个 CC 退出时自动释放 base |
+| **7.2 新增脚本** | `scripts/m2-cc-prepare.sh` (62 行)：KIMI_TAG → 准备 tmpfs repo，stdout 输出 MAVEN_OPTS 给 caller export；`scripts/m2-cc-cleanup.sh` (50 行)：rm cc 区 + refcount-1 + 全退后释放 base。两个脚本用 `flock` 互斥避免 race |
+| **7.3 .cc-lock 新增 m2_repo 字段** | run-cc.sh 把 maven repo 路径写入 lock 文件 (`m2_repo=/dev/shm/m2-cc-kimiN/repository`)；release-cc-lock.sh 优先从 lock 读路径 rm tmpfs，按 KIMI_TAG 兜底 |
+| **7.4 全脚本/CI 接入** | (a) `scripts/run-cc.sh` 调 prepare 注入 tmux MAVEN_OPTS；(b) `scripts/release-cc-lock.sh` 调 cleanup；(c) `scripts/ci-env.sh` mvn clean package 前 prepare(`tag=ci-pr-${PR_NUM}`) + 后 cleanup；(d) `wande-play/.github/workflows/pr-test.yml` unit-test job(`tag=ci-unit-pr-${PR_NUM}`) + build job(`tag=ci-build-pr-${PR_NUM}`)；(e) `build-deploy-dev.yml` Maven编译打包(`tag=dev-deploy`) |
+| 隔离验证 | (1) 改 cc1 的 jar 内容，cc2/base 完全不受影响 ✅ (2) 真实 mvn install wande-ai-api 18s SUCCESS，jar 写到 cc 区，base 不被污染 ✅ (3) prepare 2 个 CC → refcount=2 → cleanup 第一个 → refcount=1 → cleanup 最后一个 → base 自动释放 ✅ (4) lock m2_repo 字段写入 + cleanup 读取 ✅ |
+| 资源对比 | 之前：1.1GB 假隔离（hardlink，元信息全共享，污染）；现在：586MB base + N × 586MB cc 区，15 并发 ≈ 9.4GB，/dev/shm 总 250GB 无压力 |
+| 未来迁移到小 RAM 服务器 | 改 m2-cc-prepare.sh 第 23/24 行 `/dev/shm/m2-base` → `/tmp/m2-base`、`/dev/shm/m2-cc-${KIMI_TAG}` → `/tmp/m2-cc-${KIMI_TAG}` 即可，从 tmpfs 切到磁盘，**一处 2 行修改**，其他逻辑完全不动 |
+| commits | `.github` `125e0a3` (m2-cc-prepare/cleanup + run-cc.sh + release-cc-lock.sh + lock m2_repo) + `c3634b2` (ci-env.sh)；`wande-play` `b3f638f07` (pr-test.yml × 2 + build-deploy-dev.yml × 1) |
+
+### 阶段六（2026-04-09 凌晨）：.cc-lock 物理迁移 + GH token 自动刷新 + inject race 修复
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 14 个 CC 全部"假卡死"。根因调查发现三层叠加问题:(1) GH App installation token TTL 1h 过期、各 CC tmux env 内的 GH_TOKEN 是 fork 时快照无法热更;(2) inject-cc-prompt.sh 的 paste-buffer 与 send-keys Enter 之间没 sleep,导致 prompt 被粘贴但没提交;(3) 13 个 kimi 目录的 .cc-lock 内容完全相同(都是 issue=2893 dir=kimi1) — 因为历史 commit `66a3067c1` 把 .cc-lock 误带进 git,fc57f49c7 cleanup 不彻底,后续 PR merge 反复把 .cc-lock 加回 dev,各 kimi git pull 时同步污染 |
+| **6.1 GH token 自动刷新** | 新建 `scripts/refresh-gh-token.sh`(写 hosts.yml + /tmp/.gh-token.env + 给所有 cc-/manager-/e2e- tmux 会话 set-environment GH_TOKEN);加 cron `*/45 * * * *`,留 15 分钟余量;立即跑了一次解了当前 401 |
+| **6.2 inject 修复** | `scripts/inject-cc-prompt.sh` 在 paste-buffer 和 send-keys Enter 之间加 `sleep 0.5`;给 8 个之前卡着 [Pasted text] 的 CC 补 Enter 全部恢复 |
+| **6.3 .cc-lock 物理迁移** | 所有 lock 从 kimi 目录的 working tree 迁出到 `/home/ubuntu/cc_scheduler/lock/<dirname>.lock`,9 个文件从原位置 mv,5 个被 cc-keepalive 误删的从 tmux session 重建。改动 9 个代码文件:`scripts/run-cc.sh` `cc-keepalive.sh` `cc-check.sh` `release-cc-lock.sh` `inject-cc-prompt.sh` `post-task.sh`、`/opt/claude-office/api/server.py`(4 处 lock 路径)、`wande-play/.github/workflows/issue-sync.yml`(PR merged 释放 lock 的 fs 路径) |
+| **6.4 dev 污染清理** | `wande-play` 主仓 commit `3aaa8667b` `git rm .cc-lock + push origin dev`(从 dev HEAD 移除污染源)+ commit `f2abaefbc` 修 issue-sync.yml workflow 路径 |
+| **6.5 lock module 推断 + 命名重写** | 14 个 lock 用 tmux session 名作权威源重写(`cc-wande-play-kimiN-ISSUE` → dir=kimiN issue=ISSUE),module 用 `git diff origin/dev..HEAD --name-only` 推断 |
+| **6.6 6 个 kimi 目录 git rm --cached .cc-lock** | 把 .cc-lock 从 git index 移除,staged for deletion 状态等 CC 自然 commit 一起进 PR |
+| **6.7 保留 history** | 用户决定不做 history rewrite(避免破坏 14 个 active CC 的 feature 分支 + 所有 open PR);历史中的 .cc-lock 作为档案保留无害 |
+| **附带修复:孤儿 server.py** | 发现 server.py 端口 9872 被一个跑了 4h56m 的孤儿 python 进程占着导致 systemctl restart 一直 fail。kill 后 service 恢复 |
+| **未做的事(等用户处理)** | (a) wande-play-kimi1 仍处于 merge in progress(另一个会话在解决 pr-test.yml conflict,与本次无关);(b) kimi9 死锁(API message 损坏 + git remote 配置丢失,需 kill + run-cc.sh 重启);(c) kimi5 branch 名异常 `feature-Issue-2008-v2` |
+| commits | wande-play `3aaa8667b` (cc-lock cleanup) + `f2abaefbc` (issue-sync.yml workflow 修复) + .github 待提交 |
+| 实测 | `/api/status` 返回 18 agents 全部从新 lock 路径正确读取 module/effort/state;cron `*/45` token 刷新 + cron `*/5` cc-keepalive 已分别用新路径运行 |
+
+### 阶段五（2026-04-08 夜）：研发经理 token 优化 + Done 硬隔离 + 进度估算
+
+| 项 | 详情 |
+|---|---|
+| 触发 | 研发经理每轮巡检 tmux capture-pane × N 个 CC ≈ 70k tokens/轮 ≈ 10M/天，原始日志噪声大、LLM 重复劳动 |
+| 改造目标 | token 降 ~89%，质量不降反升，让 CC 自监控、研发经理只处理 attention case |
+| **5.1 进度估算** | server.py `_estimate_progress` 多源回退：PR > lock state > TodoWrite > Phase 标题 > effort 兜底；前端卡片显示 `via X` 标明可信度 |
+| **5.2 标签统一** | 像素小人/卡片主标签按 repo 名 `-` 切片最后一节(`wande-play-kimi4 → kimi4`)；REPO_COLORS 简化只保留 fill/light；Proxy 自动 fallback；server.py 修正 `_scan_play_sessions` 返回真实 dirname |
+| **5.3 PR 计数展示** | active-count 徽章追加 `N 个PR待处理`；后端共享 30s 缓存的 pr_index，0 额外 GitHub 调用 |
+| **5.4 Done 硬隔离** | `update-project-status.sh` 内置 Done Guard：`--status Done` 时强制 `gh pr list` 校验 issue 关联 PR 的 mergedAt 非空，否则 exit 2；`FORCE_DONE=1` 仅限超管绕过；assign-guide.md 同步更新 |
+| **5.5 排程经理切 Haiku 4.5** | run-manager.sh 加 MODEL 参数；排程经理用 `claude-haiku-4-5-20251001`(任务结构化强、清单驱动)；研发经理本阶段保持 sonnet，5.7 后切 Haiku |
+| **5.6 W1: post-task summary 纯规则版** | post-task.sh Step 5 追加：push 后用 git stat + .cc-lock + gh pr 抽硬数据写 `post-task-summary.json`(schema_version=1, fallback=true)；**主路径与 task.md 同级**(`issues/issue-N/`),自动 `git add+commit+push [skip ci]` 进 feature 分支跟随 task.md 生命周期；TASK_FILE 缺失时 fallback 到 `.github/post-task-summaries/`;不阻塞主流程 |
+| **5.7 W2: needs_attention 规则引擎** | server.py `/api/status` 新增字段 `silent_minutes` / `pr_summary` / `lock_state` / `needs_attention` / `attention_reason`；规则：silent>120 兜底升级、PR+silent<30 自监控不打扰、无PR+silent>30 卡住；不调 LLM |
+| **5.8 W3: 任务二改 attention-only** | assign-guide.md 任务二完全重写：先 `curl /api/status \| jq 'select(.needs_attention)'`，只对返回的 0~3 个 CC 做精细 capture/inject；旧的全场扫保留为兜底 |
+| 后续 W4-W7 | 见 [docs/workflow/2026-04-08-manager-token-optimization.md](workflow/2026-04-08-manager-token-optimization.md):lock 状态机扩展 / Haiku summary 升级 / 任务四验收报告改造 / cc-self-check cron 兜底 |
+| 实测效果 | 16 个活跃 CC,W3 后规则引擎只标 1 个 needs_attention(e2e-top 静默 208m);单轮 token 预期从 ~70k 降到 ~5k(降 93%) |
+| commits | (本阶段) `.github/scripts/post-task.sh`、`.github/scripts/update-project-status.sh`、`.github/scripts/run-manager.sh`、`.github/docs/agent-docs/manager/assign-guide.md`、`/opt/claude-office/api/server.py`、`/opt/claude-office/static/office.js`、`/opt/claude-office/static/style.css` |
 
 ### 阶段四（2026-04-08 晚）：CI 流程修复 + 菜单/前端路由对账
 
@@ -391,125 +565,6 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D77 | 04-08 | ✅ | Sprint体系重构：5+Backlog→8个Sprint，每个Sprint有清晰主题 | 矿场核心45个Issue从Backlog移入Sprint-2形成商务全闭环；商战情报前移Sprint-3；原Backlog拆分为Sprint 5(组织管理)/6(财务运营)/7(AI增强)/8(生态售后)。8个Sprint主线：能用→能赚钱→能决策→能获客→能管人→能管钱→更智能→生态闭环 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
-
-## 🔄 Issue 生命周期 + 测试层级
-
-### 完整流程图
-
-```
-Issue创建
-  │ issue-sync.yml (opened) → 加入Project#4 → [Plan]
-  ▼
-[Plan] ──── 排程经理CC ────▶ [Todo]
-            依赖分析           │
-            维护PLAN.md        │ 研发经理CC
-                               │ run-cc.sh --module --issue --dir --effort
-                               ▼
-                           [In Progress]
-                               │
-                               ▼ 编程CC（tmux会话 cc-wande-play-kimiN-ISSUE）
-                    ┌──────────┴──────────┐
-                    ▼                     ▼
-              单元测试(TDD)          编译检查
-              mvn test / vitest      mvn package / pnpm build
-                    │                     │
-                    ▼                     ▼
-               ❌ 失败 → 自行修复    ❌ 失败 → 自行修复
-                    │                     │
-                    └──────── 全通过 ──────┘
-                                  │
-                                  ▼
-                           push feature分支
-                           gh pr create --base dev
-                           CC轮询等待merge（不主动退出）
-                                  │
-    ══════════════════════════════╪══════════════════════════════
-    CI层 (pr-test.yml)            │  PR创建/更新自动触发
-    ══════════════════════════════╪══════════════════════════════
-                                  ▼
-                      CI专用环境构建(:6041/:8084)
-                                  │
-                         ┌────────┴────────┐
-                         ▼                 ▼
-                    构建成功          ❌ 构建失败
-                         │                 │ inject-cc-prompt.sh
-                         ▼                 ▼ 注入修复提示词到活跃CC
-                   Playwright E2E     + [E2E Fail]
-                   tests/backend/
-                   tests/front/
-                         │
-                   ┌─────┴─────┐
-                   ▼           ▼
-                ✅ 通过     ❌ 失败
-                   │           │ inject-cc-prompt.sh
-                   ▼           ▼ 注入修复提示词到活跃CC
-              approve PR    + status:test-failed
-              squash merge  + [E2E Fail]
-                   │
-    ══════════════════════════════════════════════════════════════
-    CD层 (build-deploy-dev.yml)  merge到dev触发
-    ══════════════════════════════════════════════════════════════
-                   │
-                   ▼
-              后端: mvn package → 部署 → 健康检查
-              前端: pnpm build → rsync → nginx reload
-                   │
-                   ├── ❌ 部署失败 → inject-cc-prompt.sh 注入修复提示词
-                   ▼
-              Dev环境更新完成(:6040/:8083)
-                   │
-                   ├─► cc-lock-manager.yml → release-cc-lock.sh
-                   │                         (kill tmux session + rm .cc-lock)
-                   │
-                   └─► issue-sync.yml (PR merged → close Issue)
-                                  ▼
-                               [Done]
-                   │
-    ══════════════════════════════════════════════════════════════
-    Smoke探活 (e2e_smoke.sh)  cron每30分钟，零AI消耗
-    ══════════════════════════════════════════════════════════════
-                   │
-                   ▼
-              curl健康检查 + Playwright smoke
-                   │
-                   ├── ✅ 通过 → 静默
-                   └── ❌ 失败 → e2e-result-handler.py
-                                 自动创建Issue + [E2E Fail]
-                   │
-    ══════════════════════════════════════════════════════════════
-    全量回归 (e2e_top_tier.sh)  cron每6小时，AI驱动
-    ══════════════════════════════════════════════════════════════
-                   │
-                   ▼
-              regression/ + 全部smoke + API
-                   │
-                   ├── ✅ 通过 → 记录日志
-                   └── ❌ 失败 → AI智能创建Issue（判断模块+写描述）
-                                 + e2e-result-handler.py + [E2E Fail]
-```
-
-### 测试层级总览
-
-| 层级 | 触发 | 范围 | 实现 | AI消耗 | 失败处理 |
-|------|------|------|------|--------|----------|
-| 单元测试 | 编程CC TDD | 当前Issue涉及的Service | mvn test / vitest | 无 | 编程CC自行修复，不提PR |
-| 编译检查 | 编程CC提交前 | 全量编译 | mvn package / pnpm build | 无 | 编程CC自行修复，不提PR |
-| CI E2E | PR创建/更新 | PR影响的模块 | pr-test.yml + e2e-result-handler.py | 无 | 评论PR/Issue + test-failed + E2E Fail |
-| Smoke探活 | cron 30min | health + auth + 页面smoke | e2e_smoke.sh + e2e-result-handler.py | **无** | 自动创建Issue + test-failed + E2E Fail |
-| 全量回归 | cron 6h | regression + 全模块 | Claude Code + e2e-result-handler.py | 有 | AI创建Issue + test-failed + E2E Fail |
-
-### Project#4 状态流转
-
-```
-[Plan] → [Todo] → [In Progress] → [Done]     (正常路径)
-                        │              │
-                        ▼              ▼
-                    [E2E Fail] ◀── CI/Smoke/回归发现失败
-                        │
-                        ▼ 排程经理优先排程
-                    [In Progress] → 修复 → 重新提PR → [Done]
-```
-
 
 ## 📊 工作状态
 ### Project#4 — wande-play 研发看板（2026-04-04 18:45）

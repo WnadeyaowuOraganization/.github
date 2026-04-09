@@ -94,7 +94,7 @@ gh pr diff $PR_NUM --repo $REPO > /tmp/pr-$PR_NUM.diff
    ```
    **问题**：Vue 3 slot 函数返回字符串会被当作文本节点，页面显示 HTML 源码。
    **修复**：改为模板插槽 `default: 'trustLevel'` + `<template #trustLevel>` 或 `h(ATag, ...)`。
-   **参考**：docs/agent-docs/cc-prompts/default-issue.md 约束 4
+   **参考**：~/projects/.github/docs/agent-docs/share/cc-default-prompt.md 约束 4
 
 ### 🟡 P1 提醒（$M 项）
 

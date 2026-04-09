@@ -206,12 +206,12 @@ if [ "$MODE" = "issue" ]; then
     fi
   fi
 
-  # === 构建 prompt（v2 - 2026-04-09 起引用 default-issue.md 模板，含 6 条硬约束） ===
-  PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/cc-prompts/default-issue.md"
+  # === 构建 prompt（v2.2 - 2026-04-09 起引用 share/cc-default-prompt.md 模板，含 9 条硬约束） ===
+  PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/share/cc-default-prompt.md"
   if [ -f "$PROMPT_TEMPLATE" ]; then
     # 用 envsubst 或 bash 字符串替换 ${ISSUE}
     CC_PROMPT=$(ISSUE="$ISSUE" envsubst '${ISSUE}' < "$PROMPT_TEMPLATE" 2>/dev/null || sed "s/\${ISSUE}/${ISSUE}/g" "$PROMPT_TEMPLATE")
-    echo "$(date): 使用 prompt 模板 v2 (default-issue.md, $(wc -l < "$PROMPT_TEMPLATE") 行)"
+    echo "$(date): 使用 prompt 模板 v2.2 (share/cc-default-prompt.md, $(wc -l < "$PROMPT_TEMPLATE") 行)"
   elif [ -f "$ISSUE_SOURCE" ]; then
     # fallback v1 纯字符串（兼容性）
     CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
@@ -315,7 +315,11 @@ tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
 sleep 5
 
 # 注入初始 prompt
+# v2 prompt (126 行) 会被 Claude Code CLI 识别为 paste mode，需补一个额外 Enter 触发提交
+# v1 单行 prompt 也能兼容额外 Enter（只是多一次空回车）
 tmux send-keys -t "$SESSION" "$CC_PROMPT" Enter
+sleep 3
+tmux send-keys -t "$SESSION" "" Enter
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动 (effort: $EFFORT, api: $API_SOURCE)"
 echo "  tmux attach -t $SESSION    查看/注入消息"

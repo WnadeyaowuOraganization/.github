@@ -35,11 +35,16 @@
 
 ## 规范文档
 
-| 文档 | 说明 |
+> ⚠️ **2026-04-09 重组**：所有 prompt / CC 相关文档已统一迁移到 `agent-docs/`，按角色分门别类。
+> 业务仓库引用时**必须使用绝对路径** `~/projects/.github/docs/agent-docs/...` 或 `/home/ubuntu/projects/.github/docs/agent-docs/...`，禁止 `./` 相对路径。
+
+| 文档 | 新位置 |
 |------|------|
-| [WANDE_LABEL.md](./WANDE_LABEL.md) | 统一标签规范 v2.0（module scope + 业务模块 + 优先级等） |
-| [ISSUE_CREATION_SOP.md](./ISSUE_CREATION_SOP.md) | Issue创建SOP v2.0 — Monorepo版 |
-| [MONOREPO_MIGRATION.md](./MONOREPO_MIGRATION.md) | wande-play Monorepo迁移方案 |
+| 标签规范（原 WANDE_LABEL.md） | `~/projects/.github/docs/agent-docs/manager/wande-label.md` |
+| Issue 创建 SOP（原 ISSUE_CREATION_SOP.md） | `~/projects/.github/docs/agent-docs/manager/issue-creation-sop.md` |
+| CC 启动 prompt v2.2（9 条硬约束） | `~/projects/.github/docs/agent-docs/share/cc-default-prompt.md` |
+| **agent-docs 完整导航** | `~/projects/.github/docs/agent-docs/README.md` |
+| MONOREPO_MIGRATION.md | （历史文档，未迁移） |
 
 ## 相关资源
 

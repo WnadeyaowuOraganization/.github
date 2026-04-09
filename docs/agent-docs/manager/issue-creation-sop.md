@@ -1,333 +1,349 @@
 # Issue创建SOP — 自动编程需求源
 
-> **版本**: v2.0 | **生效日期**: 2026-04-03
-> **适用仓库**: 全部
+> **版本**: v3.0 | **生效日期**: 2026-04-08
+> **适用仓库**: wande-play（Monorepo）
 > **上游**: 吴耀提出需求 → Perplexity分析
-> **下游**: Claude Code从各仓库Issue中接任务 → 自动编程执行
-> **关联文档**: [WANDE_LABEL.md](./WANDE_LABEL.md) · [仓库导航](./README.md)
+> **下游**: Claude Code从 wande-play Issue 接任务 → 自动编程执行 → Perplexity产品验收
+> **关联文档**: [wande-label.md](./wande-label.md) · [status.md](~/projects/.github/docs/status.md)
 
 ---
 
 ## 一、SOP定位
 
 ```
-吴耀提需求 → Perplexity按本SOP创建Issue → Claude Code自动接任务执行
-                    ↑                              ↓
-              §3.5一站式交付                  §7.9自动编程SOP
+吴耀提需求 → Perplexity按本SOP创建Issue → CC自动接任务执行 → Perplexity产品验收
+                    ↑                              ↓                    ↓
+              Skill §3场景路由表            §4自动编程SOP           本SOP §六
 ```
 
-本SOP是自动编程体系的**需求入口**，规范Issue从需求到创建的全过程。核心目标：让每个Issue都**精准到Claude Code可以直接自主执行**，无需人工二次解释。
+**核心目标**：让每个Issue都精准到CC可以直接自主执行，不产生歧义、不遗漏环境，且Perplexity验收时有明确Checklist可勾。
 
 ---
 
-## 二、仓库路由决策（Monorepo版）
+## 二、仓库路由（Monorepo版）
 
-> **2026-04-03起，backend/frontend/pipeline已合并为 `wande-play` 仓库。**
+> **2026-04-02起，所有业务Issue统一创建在 `wande-play` 仓库。**
+> Grasshopper插件例外，创建在 `wande-gh-plugins`。
 
-所有业务Issue统一创建在 `wande-play` 仓库，通过 **module scope 标签** 区分类型：
+通过 **module scope 标签** 决定CC行为：
 
-| 需求特征 | module标签 | 编程CC行为 | 示例 |
-|---------|-----------|-----------|------|
-| API接口/数据库/后端逻辑 | `module:backend` | cd backend/ → 单Agent TDD | 新增招标查询接口 |
-| 管理后台页面/运营端功能 | `module:frontend` | cd frontend/ → 单Agent TDD | 新增供应商管理页面 |
-| Python爬虫/数据采集/数据管线 | `module:pipeline` | cd pipeline/ → 单Agent | 招标爬虫规则调整 |
-| **前后端都涉及的功能** | `module:fullstack` | cd 根目录 → **Agent Teams 3-Agent并行** | 新增CRM模块 |
-| Grasshopper插件 | 创建在 `wande-gh-plugins` | 独立仓库 | GH插件功能 |
+| module标签 | 需求特征 | CC工作目录 | CC模式 |
+|-----------|---------|-----------|-------|
+| `module:backend` | 纯后端：Spring Boot API/Service/数据库 | `backend/` | 单Agent TDD |
+| `module:frontend` | 纯前端：Vue3页面/组件/路由 | `frontend/` | 单Agent TDD |
+| `module:pipeline` | 纯采集：Python爬虫/数据管线 | `pipeline/` | 单Agent |
+| `module:fullstack` | **前后端联动**（涉及API+页面） | 根目录 | **Agent Teams 3-Agent并行** |
 
-### 路由原则
-
-1. **统一仓库**：除GH插件外，所有业务Issue创建在 `wande-play`
-2. **前后端联动不拆分**：涉及前后端的功能创建单个Issue + `module:fullstack`，编程CC用Agent Teams并行开发
-3. **module标签必选**：每个Issue必须有且仅有一个 module scope 标签
-4. **不在.github仓库创建业务Issue**：.github仓库仅存放规范文档
+**路由原则**：
+1. 前后端联动功能 → **一个Issue + `module:fullstack`**，不拆分为两个
+2. 每个Issue有且仅有一个module scope标签
+3. 跨越多个环境/仓库的需求 → **按环境拆分为独立Issue**（见 §三 Scope边界规则）
 
 ---
 
-## 三、标签规范
+## 三、Scope边界规则（新增 — 解决多环境漏改问题）
 
-每个Issue**至少需要3个标签**：1个优先级 + 1个类型 + 1个状态标签。
+> **背景**：Issue #3226 教训 — 旧版 `/cla/` 改动在评论中追加，CC未执行。
+> **根因**：评论里的追加需求CC不一定读到，且 `/opt/claude-office/` 属于另一个仓库。
 
-完整标签体系参照 [WANDE_LABEL.md](./WANDE_LABEL.md)，以下为创建时的最常用组合：
+### 3.1 一个Issue只对应一个仓库
 
-### 必选标签
+| 场景 | 错误做法 | 正确做法 |
+|------|---------|---------|
+| wande-play + /opt/claude-office/ 都要改 | 评论追加"旧版也要改" | **拆成2个独立Issue**，分别指向各自仓库 |
+| 新版前端 + 旧版Vanilla JS都要改 | 在同一Issue body中描述两套 | 拆成 `module:frontend`（wande-play）+ `/opt/claude-office/` 专项Issue |
+| 后端 + 前端都要改 | 拆成backend/frontend两个Issue | **一个Issue + `module:fullstack`**（同仓库联动不拆） |
 
-| 维度 | 创建时常用 | 说明 |
-|------|----------|------|
-| **模块范围** | `module:backend` `module:frontend` `module:pipeline` `module:fullstack` | **最重要**，决定编程CC启动目录和工作模式 |
-| 优先级 | `priority/P0` `priority/P1` `priority/P2` | P0=阻塞生产，P1=Sprint必做，P2=增强改进 |
-| 类型 | `type:feature` `type:bugfix` `type:enhancement` | 决定开发策略和测试要求 |
-| 状态 | `status:ready` | 创建时如果需求已明确，直接标记ready |
+**简单判断**：改动是否在同一个Git仓库？
+- 同仓库 → 一个Issue可以覆盖（fullstack模式）
+- 跨仓库 → 必须拆分
 
-### 可选标签（按需添加）
+### 3.2 Issue body中明确列出环境清单
 
-| 维度 | 常用标签 | 场景 |
-|------|---------|------|
-| 来源 | `source:perplexity` `source:human` | 追踪Issue来源 |
-| 审批 | `approval:auto` `approval:required` | 控制PR合并策略 |
-| 模块 | `module:bid` `module:crm` `module:chat` 等 | 标识业务模块 |
-| 规模 | `size/S` `size/M` `size/L` | 预估工作量 |
-| 跨仓库 | `cross-repo` | 存在跨仓库依赖时添加 |
+每个涉及前端可见功能的Issue，**必须在「产品验收清单」Section中列出所有需要检查的访问地址**：
 
-### 标签决策速查
+```markdown
+## 产品验收清单（Perplexity Review）
 
-```
-是Bug修复？ → type:bugfix + priority/P0或P1
-是新功能？ → type:feature + priority/P1或P2
-是现有功能改进？ → type:enhancement + priority/P2
-涉及安全？ → type:security + priority/P0 + approval:required
-只改文档？ → type:docs + priority/P2 + approval:auto
+### 环境覆盖（必须全部验证）
+- [ ] Dev新版：http://3.211.167.122:8083/wande/xxx
+- [ ] Dev旧版（如有）：http://3.211.167.122:8083/cla/
+
+### 功能Checklist
+- [ ] [具体可见行为描述]
+- [ ] [交互效果描述]
+- [ ] [数据展示描述]
 ```
 
 ---
 
 ## 四、Issue模板（标准格式）
 
-每个Issue的Body必须包含以下5个section。Claude Code依赖这些结构化信息来自主理解和执行任务。
+每个Issue的Body必须包含以下 **7个Section**：
 
 ```markdown
-## 需求背景 / 问题描述
+## 需求背景
 
-<!-- 
-用1-3段话说明：
-- 为什么需要这个功能/修复？业务场景是什么？
+<!--
+1-3段话说明：
+- 为什么需要这个功能？业务场景是什么？
 - 当前存在什么问题？用户痛点是什么？
 - 期望达到什么效果？
 -->
 
-## 关联的Issue（可跨仓库引用）
+## 关联Issue
 
-<!-- 
-- 本仓库关联：#12, #15
-- 跨仓库关联：WnadeyaowuOraganization/wande-ai-front#8
-- 依赖关系：blocked-by WnadeyaowuOraganization/wande-ai-backend#5（需要后端API先完成）
+<!--
+- 本仓库依赖：#12, #15
+- 跨仓库依赖：WnadeyaowuOraganization/repo#N
+- 阻塞关系：blocked-by #N（需要先完成）
 - 无关联时写"无"
 -->
 
-## 环境 / 配置 / 关联文件 / 参考资料
+## 环境 / 配置 / 关联文件
 
 <!--
-- 涉及的配置文件路径（如 application-dev.yml）
-- 需要的环境变量或Secret
-- 数据库表名或SQL文件路径
-- 参考的API文档URL或设计稿链接
-- 相关的第三方库或依赖
+- 访问地址（Dev：http://3.211.167.122:6040 / http://3.211.167.122:8083）
+- 涉及的配置文件路径
+- 数据库Flyway迁移脚本路径规则：backend/ruoyi-modules/wande-ai/src/main/resources/db/migration_wande_ai/V<日期>_<序号>__<描述>.sql
+- 参考API文档或设计稿链接
+- 相关第三方库或依赖
 -->
 
 ## 处理步骤
 
 <!--
-以表格形式列出具体执行步骤，让Claude Code明确知道做什么。
-如果步骤较复杂，可使用子任务列表 [ ] 替代表格。
+以表格形式列出具体执行步骤。
+涉及数据库变更时，必须写Flyway迁移脚本（不要直接改schema.sql）。
 -->
 
 | 步骤 | 操作内容 | 涉及文件/路径 | 验收标准 |
 |------|---------|-------------|---------|
 | 1 | ... | ... | ... |
 | 2 | ... | ... | ... |
-| 3 | ... | ... | ... |
 
 ## 其他要求
 
 <!--
-- 编码规范要求（如需特别注意的注解、命名约定）
-- 测试要求（单元测试、集成测试、手动验证点）
-- 兼容性要求（不破坏现有API、数据库向后兼容）
-- 部署注意事项（需要新的环境变量、数据库迁移等）
+- 接口契约：涉及前后端联动时，先在 shared/api-contracts/ 更新契约文件
+- 编码规范：如需特别注意的注解、命名约定
+- 兼容性：不破坏现有API、数据库向后兼容
 - 无特殊要求时写"按项目现有规范开发即可"
 -->
 
-## 测试验收标准
+## 技术验收标准（CC自验）
 
 <!--
-定义此Issue完成后，自动测试（wande-ai-e2e）应验证的内容。
-测试CC会根据此section决定是否需要编写新的测试用例。
-
-格式建议：
-- 用户场景描述（如"用户可以在招标列表页看到新增的筛选条件"）
-- 关键数据验证（如"API返回的分页数据total字段不为0"）
-- 页面元素验证（如"页面包含id为supplier-rating的评分组件"）
-- 无特殊测试需求时写"由自动测试CC根据变更范围自动判断"
+CC执行完成后自行验证的技术指标：
+- 编译/构建通过
+- 单元测试通过（mvn test / vitest / pytest）
+- curl验证命令（如：curl http://localhost:6040/wande/xxx → {code:200}）
+- 无特殊要求时写"由CI pr-test.yml自动验证"
 -->
+
+## 产品验收清单（Perplexity Review）
+
+<!--
+⚠️ 此Section专供Perplexity做产品级验收用，CC不需要执行。
+凡是涉及前端可见功能的Issue（module:frontend / module:fullstack），必须填写。
+纯后端API、type:docs、type:bugfix可写"无需产品验收"。
+
+格式：
+-->
+
+### 是否需要产品验收
+<!-- 是 / 否（纯后端/文档/bugfix可填否） -->
+
+### 环境覆盖（必须全部验证）
+- [ ] Dev新版前端：http://3.211.167.122:8083/wande/[路径]
+- [ ] （如有旧版）：http://3.211.167.122:8083/cla/
+
+### 功能Checklist
+- [ ] [Given-When-Then格式：进入XX页面，执行XX操作，应看到XX结果]
+- [ ] [交互效果：点击/悬停/展开等]
+- [ ] [数据展示：字段/格式/颜色状态]
+- [ ] [响应式：窄屏/手机端是否正常]
 ```
 
 ---
 
-## 五、Issue编写指南
+## 五、标签规范
 
-### 5.1 标题规范
+每个Issue **至少4个标签**：1个module scope + 1个优先级 + 1个类型 + 1个状态。
 
-```
-[模块] 动词 + 对象 + 限定条件
-```
+完整标签体系参照 [wande-label.md](./wande-label.md)。
 
-**好的标题**：
-- `[招投标] 新增招标项目列表分页查询接口`
-- `[CRM] 修复供应商详情页手机号显示异常`
-- `[用户端] 添加AI对话历史记录侧边栏`
+### 必选标签
 
-**差的标题**：
-- `修改一个bug`（没有模块、没有具体描述）
-- `前端优化`（过于宽泛）
+| 维度 | 常用标签 | 说明 |
+|------|---------|------|
+| **模块范围** | `module:backend` `module:frontend` `module:pipeline` `module:fullstack` | **最高优先级**，决定CC启动目录和工作模式 |
+| 优先级 | `priority/P0` `priority/P1` `priority/P2` | P0=阻塞，P1=Sprint必做，P2=增强 |
+| 类型 | `type:feature` `type:bugfix` `type:enhancement` | 决定开发策略和测试要求 |
+| 状态 | `status:ready` | 创建时需求已明确则直接标ready |
 
-### 5.2 处理步骤编写要点
+### 产品验收相关标签（新增）
 
-处理步骤是Claude Code的核心执行依据，要做到：
+| 标签 | 颜色 | 含义 | 触发条件 |
+|------|------|------|---------|
+| `review:needed` | #7057FF | 需要Perplexity产品验收 | 含前端可见功能的Issue merge后，由CI自动或手动添加 |
+| `review:passed` | #0E8A16 | 产品验收通过 | Perplexity在Issue评论写验收通过后添加 |
+| `review:rework` | #D73A4A | 产品验收未通过，需返工 | Perplexity验收发现问题时添加，Issue重回In Progress |
 
-1. **路径明确**：涉及的文件给出完整路径（如 `ruoyi-modules/wande-ai/src/main/java/...`）
-2. **输入输出明确**：API接口需说明请求参数和响应结构
-3. **依赖明确**：需要import的类、需要注入的Service给出全限定名
-4. **验收标准可执行**：用"编译通过"、"接口返回200"、"页面可正常渲染"等可验证的描述
-
-### 5.3 跨仓库引用格式
+### 标签决策速查
 
 ```
-# 引用其他仓库的Issue
-WnadeyaowuOraganization/wande-ai-backend#12
-WnadeyaowuOraganization/wande-ai-front#8
-
-# 在PR描述中自动关闭跨仓库Issue（仅合并到默认分支时生效）
-Fixes WnadeyaowuOraganization/wande-ai-backend#12
-```
-
-### 5.4 前后端分拆示例
-
-需求："新增供应商评分功能"
-
-**后端Issue**（创建在 `wande-ai-backend`）：
-```
-标题：[CRM] 新增供应商评分CRUD接口
-标签：priority/P1, type:feature, status:ready, module:crm
-Body：
-  - 需求背景：需要对供应商进行评分管理...
-  - 关联Issue：WnadeyaowuOraganization/wande-ai-front#N（前端评分页面）
-  - 处理步骤：建表 → Entity → Mapper → Service → Controller → SQL迁移
-```
-
-**前端Issue**（创建在 `wande-ai-front`）：
-```
-标题：[CRM] 新增供应商评分管理页面
-标签：priority/P1, type:feature, status:ready, module:crm, cross-repo
-Body：
-  - 需求背景：配合后端评分接口，提供管理界面...
-  - 关联Issue：blocked-by WnadeyaowuOraganization/wande-ai-backend#N（等待后端接口）
-  - 处理步骤：路由注册 → 页面组件 → API调用层 → 表格+表单实现
+type:feature + module:frontend/fullstack → 创建时加 review:needed
+type:feature + module:backend            → 无需产品验收
+type:bugfix                              → 无需产品验收（除非P0且影响UI）
+type:docs                                → 无需产品验收
 ```
 
 ---
 
-## 六、创建流程
+## 六、产品验收流程（Perplexity执行）
 
-### 6.1 Perplexity创建Issue的标准流程
+### 6.1 什么时候触发验收
 
-```
-1. 接收吴耀需求
-2. 分析需求 → 确定目标仓库（按第二章路由决策）
-3. 确定标签组合（按第三章标签规范）
-4. 按第四章模板填写Issue Body
-5. 调用 GitHub API 创建Issue：
-   gh issue create \
-     --repo WnadeyaowuOraganization/{目标仓库} \
-     --title "[模块] 标题" \
-     --body "..." \
-     --label "priority/P1,type:feature,status:ready"
-6. 将Issue关联到自动编程看板（必须）：
-   gh project item-add 2 \
-     --owner WnadeyaowuOraganization \
-     --url {Issue的URL}
-7. 如有跨仓库依赖，在关联Issue的Body中补充引用
-8. 向吴耀确认已创建（附Issue链接）
-```
+以下情况触发Perplexity产品验收（优先级由高到低）：
+1. 吴耀明确要求"验收一下"
+2. Issue带有 `review:needed` 标签且状态已 Done
+3. 新模块/新页面首次上线前
 
-### 6.2 批量创建（§3.5 一站式交付模式）
+以下情况**跳过**产品验收，由CI自动完成即可：
+- 纯后端API Issue（`module:backend`）
+- 文档变更（`type:docs`）
+- Bug修复（`type:bugfix`），除非P0且影响UI
 
-当需求较大需要拆分为多个Issue时：
+### 6.2 验收步骤
 
 ```
-1. 分析需求 → 输出执行清单（含所有Issue的标题/仓库/标签/依赖）
-2. 等待吴耀"同意"
-3. 按依赖顺序批量创建所有Issue
-4. 被依赖的Issue先创建（获取Issue编号后，在依赖方的Body中引用）
-5. 将所有Issue关联到自动编程看板（#2）
-6. 汇总所有已创建Issue的链接
+1. 打开Issue，读「产品验收清单」Section
+2. 逐条勾选 Checklist（用 browser_task 访问环境）
+3. 在Issue评论中写验收结果：
+   - 通过：添加 review:passed 标签，评论"✅ 产品验收通过"
+   - 未通过：添加 review:rework 标签，评论具体问题 + 修复建议
+4. 未通过时，创建新Issue（type:bugfix + blocked-by 原Issue）
 ```
 
-### 6.3 Project看板关联（必须步骤）
+### 6.3 验收评论模板
 
-**所有仓库创建的Issue，必须关联到自动编程看板（Project #2）。**
+```markdown
+## 产品验收结果 — Perplexity Review
+
+**验收时间**: 2026-XX-XX
+**验收环境**: Dev（http://3.211.167.122:8083）
+
+### Checklist结果
+- [x] ✅ 进入/wande/claude-office，右上角可见紧凑指标条（✅🔀🤖🩺）
+- [x] ✅ 点击指标条，展开详情面板，6项数据完整
+- [ ] ❌ /cla/ 旧版页面未见DailyStatusBar — **阻塞**
+
+### 结论
+**未通过** — 旧版 /cla/ 页面缺少同步改动。
+已创建修复Issue：#XXXX（[claude-office旧版] DailyStatusBar同步）
+
+🤖 Perplexity Computer | 2026-04-08
+```
+
+---
+
+## 七、预检清单（创建前必须自检）
+
+> CC的harness会在执行前验证Issue可执行性，但发现问题=浪费G7e算力。
+> Perplexity在创建阶段就要确保质量。
+
+### 7.1 Scope预检
+
+- [ ] 改动是否跨仓库？跨仓库 → 已拆分为独立Issue
+- [ ] 是否涉及 `/opt/claude-office/` 旧版？→ 已创建独立Issue（不在wande-play）
+- [ ] 评论里有追加需求？→ 已更新到Issue body（不只在评论）
+- [ ] 有blocked-by依赖？→ 已标注且依赖Issue状态确认
+
+### 7.2 技术预检
+
+- [ ] **路径验证**：引用的每个文件路径已用 `gh api` 确认存在（或注明"待创建"）
+  ```bash
+  gh api repos/WnadeyaowuOraganization/wande-play/contents/<路径>?ref=dev --jq '.name'
+  ```
+- [ ] **技术栈一致性**：
+  - `module:backend` → 只引用 `backend/` 下Java/Spring路径
+  - `module:frontend` → 只引用 `frontend/` 下Vue3/TypeScript路径
+  - `module:pipeline` → 只引用 `pipeline/` 下Python路径
+  - `module:fullstack` → 可同时引用 `backend/` + `frontend/` + `shared/api-contracts/`
+- [ ] **数据库变更**：需新建表/字段 → 使用Flyway迁移脚本，不直接改schema.sql
+  - 路径：`backend/ruoyi-modules/wande-ai/src/main/resources/db/migration_wande_ai/V<YYYYMMDD>_<序号>__<描述>.sql`
+- [ ] **接口契约**：module:fullstack的Issue → 已要求先更新 `shared/api-contracts/`
+
+### 7.3 模板预检
+
+- [ ] 7个Section都已填写（需求背景/关联Issue/环境配置/处理步骤/其他要求/技术验收/产品验收）
+- [ ] 处理步骤有表格或清单（不是纯文字描述）
+- [ ] 「产品验收清单」已填写环境URL和功能Checklist（`module:frontend/fullstack` 必填）
+- [ ] 标签至少4个（module + 优先级 + 类型 + 状态）
+- [ ] 标签名称拼写正确（与 wande-label.md 一致）
+- [ ] Sprint标签已添加（Sprint-1 / Sprint-2 等）
+
+---
+
+## 八、Issue批量创建（一站式交付）
+
+当需求较大需拆分多个Issue时：
+
+```
+1. 分析需求 → 识别Scope边界（§三）→ 输出执行清单
+   清单包含：标题 / 仓库 / module标签 / 依赖关系 / 是否需要产品验收
+2. 向吴耀确认Sprint编号（硬性门控，不可跳过）
+3. 按依赖顺序批量创建（被依赖的Issue先创建）
+4. 创建后：
+   - CI/CD的 auto-add-to-project.yml 自动关联Project#4
+   - 无需手动关联看板
+5. 汇总所有已创建Issue链接向吴耀确认
+```
+
+**关于 Project 看板**：
+- 2026-04-02起，Project#4（wande-play研发看板）由 `auto-add-to-project.yml` 自动关联
+- **不需要手动执行** `gh project item-add`（旧SOP已废弃）
+
+---
+
+## 九、创建命令参考
 
 ```bash
-# 创建Issue后立即执行：
-gh project item-add 2 \
-  --owner WnadeyaowuOraganization \
-  --url https://github.com/WnadeyaowuOraganization/{仓库}/issues/{编号}
-```
+# 标准创建命令
+gh issue create \
+  --repo WnadeyaowuOraganization/wande-play \
+  --title "[模块名] 动词+对象" \
+  --body "$(cat issue_body.md)" \
+  --label "module:fullstack,priority/P1,type:feature,status:ready,biz:cockpit,Sprint-1,review:needed,source:perplexity"
 
-**看板信息**：
-- 名称：万德应用开发 — 自动编程看板
-- 编号：#2
-- URL：https://github.com/orgs/WnadeyaowuOraganization/projects/2
-- Project Node ID：`PVT_kwDOD3gg584BSCFx`
+# 创建后确认Issue编号
+gh issue list --repo WnadeyaowuOraganization/wande-play --state open -L 3
 
-**关联范围**：
-- `wande-ai-backend` 的所有Issue → 关联到 Project #2
-- `wande-ai-front` 的所有Issue → 关联到 Project #2
-- `wande-ai-platform` 的所有Issue → 关联到 Project #2
-- `wande-gh-plugins` 的所有Issue → 关联到 Project #2
-
-**为什么必须关联**：
-- 统一管理所有开发任务的进度
-- Claude Code / autonomous_worker 的工作全部可追踪
-- 方便吴耀在一个看板上掌握全部开发状态
-
-### 6.4 创建后的自动衔接
-
-```
-Issue创建（status:ready）+ 关联到 Project #2
-  ↓
-Claude Code每次启动时执行：
-  gh issue list --repo WnadeyaowuOraganization/{仓库} --state open --label ready -L 10
-  ↓
-按 priority 排序拾取 → 开发 → push到main → CI/CD自动部署 → 关闭Issue
+# 路径验证（创建前预检）
+gh api repos/WnadeyaowuOraganization/wande-play/contents/frontend/apps/web-antd/src/views/wande/claude-office/index.vue?ref=dev --jq '.name' 2>/dev/null || echo "路径不存在"
 ```
 
 ---
 
-## 七、质量检查清单
+## 十、与其他文档的关系
 
-Perplexity在创建Issue前，对照以下清单自检：
-
-- [ ] 仓库选择正确？（后端逻辑→backend，管理页面→front，爬虫/基础设施→platform，GH插件→wande-gh-plugins）
-- [ ] 标签至少3个？（优先级 + 类型 + 状态）
-- [ ] 标签名称拼写正确？（与 WANDE_LABEL.md 一致）
-- [ ] 5个Section都已填写？（需求背景/关联Issue/环境配置/处理步骤/其他要求）
-- [ ] 处理步骤有表格或清单？（不是纯文字描述）
-- [ ] 文件路径准确？（参照各仓库CLAUDE.md中的项目目录结构）
-- [ ] 跨仓库引用格式正确？（`WnadeyaowuOraganization/repo#number`）
-- [ ] 验收标准可执行？（Claude Code能自主验证）
-- [ ] 需要前后端分拆的已分拆？（一个Issue只对应一个仓库）
-- [ ] 已关联到自动编程看板？（`gh project item-add 2 --owner WnadeyaowuOraganization --url {Issue URL}`）
-- [ ] 测试验收标准Section已填写？（至少写"由自动测试CC根据变更范围自动判断"）
-
----
-
-## 八、与Skill其他章节的关系
-
-| Skill章节 | 与本SOP的关系 |
-|-----------|-------------|
-| §3.5 需求→执行一站式交付 | 上层框架：大需求拆分为多个Issue的流程 |
-| §7.1 代码开发流 | 下游执行：Issue创建后Claude Code如何接任务 |
-| §7.9 自动编程SOP | 平行文档：自动编程的执行侧，本SOP是需求侧 |
-| §9.1 CI/CD流水线 | 下游部署：代码push后自动构建和部署 |
-| WANDE_LABEL.md | 标签字典：所有标签的含义和Claude Code行为指引 |
-| 各仓库CLAUDE.md | 执行手册：Claude Code的项目上下文和开发规范 |
+| 文档 | 关系 |
+|------|------|
+| `wande-label.md` | 标签字典，本SOP的标签Section的上游权威 |
+| `~/projects/.github/docs/status.md` | Sprint计划，Issue创建时确认Sprint编号的依据 |
+| `agent-docs/backend/db-schema.md` | 数据库Flyway规范，涉及DB变更时参考 |
+| `shared/api-contracts/` | 接口契约目录，fullstack Issue必须先更新 |
+| Skill wande-ai §4 | 产品验收SOP的调用方，与本文档保持同步 |
 
 ---
 
 ## 变更记录
 
 | 版本 | 日期 | 变更内容 |
-|------|------|---------|
+|------|------|---------| 
 | v1.0 | 2026-03-18 | 初版发布 |
-| v1.1 | 2026-03-19 | 新增§6.3 Project看板关联（必须步骤），所有应用仓库Issue必须关联到自动编程看板(#2)；移除wande-ai-web仓库路由（项目已弃用）；质量检查清单新增看板关联检查项；创建流程6.1/6.2补充关联步骤 |
-| v1.3 | 2026-03-21 | 新增"测试验收标准"Section（第6个Section）；质量检查清单新增测试验收标准检查项；配合自动测试SOP(wande-ai-e2e) |
-| v1.2 | 2026-03-19 | Project #2关联范围从backend/front扩展到全部仓库（新增platform和wande-gh-plugins）；路由表新增wande-gh-plugins仓库（Grasshopper插件）；路由表platform描述补充"平台基础设施"；质量检查清单更新仓库列表 |
+| v1.1 | 2026-03-19 | 新增Project看板关联步骤 |
+| v1.3 | 2026-03-21 | 新增测试验收标准Section |
+| v2.0 | 2026-04-03 | Monorepo重构，仓库路由更新 |
+| **v3.0** | **2026-04-08** | **全面重写**：①对齐Monorepo+Project#4+Flyway现状；②新增§三「Scope边界规则」（Issue #3226 教训：跨仓库需求必须拆分，不能在评论追加）；③Issue模板新增「产品验收清单」Section（第7个Section）；④新增§六「产品验收流程」（Given-When-Then Checklist + 验收评论模板）；⑤新增 review:needed / review:passed / review:rework 标签；⑥预检清单新增Scope预检组；⑦废弃手动Project看板关联步骤（已由auto-add-to-project.yml自动化）|

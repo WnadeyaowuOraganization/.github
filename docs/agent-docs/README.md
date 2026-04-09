@@ -1,17 +1,33 @@
 # CC Agent Docs 导航
 
-本目录整理了万德AI平台各编程CC的prompt文档，供开发者参考和复用。
+本目录是 **万德AI平台所有 prompt / CC 相关文档的唯一权威源**。除 `CLAUDE.md` 外，任何 prompt 文档都应放在这里，按角色分门别类。
+
+## 🚨 业务仓库引用规范（2026-04-09 立规）
+
+**业务仓库（wande-play / wande-gh-plugins / 等）引用本目录文档时**：
+
+| 引用方式 | 状态 | 示例 |
+|---------|------|------|
+| ✅ **首选** | 绝对路径 `~/` 开头 | `~/projects/.github/docs/agent-docs/share/cc-default-prompt.md` |
+| ✅ **备选** | 完整绝对路径 | `/home/ubuntu/projects/.github/docs/agent-docs/share/cc-default-prompt.md` |
+| ❌ **禁止** | 相对路径 `./` `../` | `../../.github/docs/agent-docs/...`（脆弱，目录层级一变就断） |
+| ❌ **禁止** | 仅文件名 | `default-issue.md`（找不到所属目录） |
+
+**理由**：业务仓库的工作目录可能在 `wande-play-kimiN/frontend` 等多层嵌套位置，相对路径容易解析错误；统一绝对路径让 CC 在任何 `cwd` 下都能正确引用文档。
+
+`.github` 仓库**内部**文档相互引用时（如 `agent-docs/manager/issue-creation-sop.md` 引用 `agent-docs/manager/wande-label.md`）可以用相对路径 `./wande-label.md`，因为它们在同一仓库稳定位置。
 
 ## 目录结构
 
 ```
 docs/agent-docs/
-├── README.md                      ← 本导航文档
+├── README.md                      ← 本导航文档（含业务仓库引用规范）
 ├── share/                         ← 前后端共享文档
 │   ├── shared-conventions.md      ← Git分支、环境、通用规则
 │   ├── issue-workflow.md          ← Issue生命周期与三阶段开发流程
 │   ├── api-contracts.md           ← 前后端接口契约规范
-│   └── db-schema.md               ← 数据库列名规范（新旧表差异）
+│   ├── db-schema.md               ← 数据库列名规范（新旧表差异）
+│   └── cc-default-prompt.md       ← 🚦 CC 启动 prompt 模板 v2.2（9 条硬约束 + quality-gate 4 道门，run-cc.sh 引用）
 ├── backend/                       ← 后端CC专属文档
 │   ├── backend-guide.md           ← 主指引（必读）
 │   ├── common-pitfalls.md         ← ⚠️ 高频错误与规范
@@ -32,8 +48,8 @@ docs/agent-docs/
 ├── manager/                       ← 经理CC文档
 │   ├── scheduler-guide.md         ← 排程经理指南
 │   ├── assign-guide.md            ← 研发经理指南
-│   ├── issue-creation-sop.md      ← Issue创建SOP
-│   └── wande-label.md             ← 标签规范
+│   ├── issue-creation-sop.md      ← Issue创建SOP v3.0
+│   └── wande-label.md             ← 统一标签规范 v2.1
 ├── pipeline/                      ← 管线CC文档
 │   ├── README.md                  ← 管线CC主指引
 │   ├── conventions.md             ← 管线编码规范
@@ -76,6 +92,20 @@ docs/agent-docs/
 | [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue从Plan到Done的完整生命周期、三阶段开发流程（准备→执行→提交） |
 | [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约文件路径规范、YAML契约格式、修改流程 |
 | [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（create_time/created_at差异）、新表wdpp_前缀、BaseEntity字段映射 |
+| [cc-default-prompt.md](/home/ubuntu/projects/.github/docs/agent-docs/share/cc-default-prompt.md) | 🚦 **CC 启动 prompt 模板 v2.2** — 9 条硬约束（task.md 全勾 / PR body 全勾 / 前端截图 / slot VNode / 集成链 / 单测 / smoke 用例 / rebase / 轮询 PR）+ quality-gate 4 道门规则。`scripts/run-cc.sh` 第 196 行引用，`pr-test.yml` 评论里也会指向此文档 |
+
+## CC Prompt 版本化
+
+| 版本 | 日期 | 触发事件 | 主要变更 |
+|-----|------|---------|---------|
+| v1 | ~2026-03 | 初版 | 仅一句话「阅读 issue-source.md 按流程完成任务」 |
+| **v2** | 2026-04-09 | #3458 事故（评分 4.2/10） | 追加 6 条硬约束（约束 1-6） |
+| **v2.1** | 2026-04-09 | 用户问"图形测试在哪个环节" | 追加约束 7（必补 smoke 用例）+ quality-gate 门 4 |
+| **v2.2** | 2026-04-09 | #3543 首次压测发现漏洞 B/E/F | 追加约束 8（必 rebase）+ 约束 9（PR 创建后轮询）+ 约束 2 假勾选警告 + 约束 7 加粗 🚨 |
+
+**度量方法**：用 `scripts/weekly-quality-report.sh` 对比版本前后的批次评估平均分和反模式出现次数。目标：每次 prompt 升级带来 ≥ +0.5 平均分提升。
+
+**事故档案**：`docs/workflow/新harness验证报告.md` 是所有事故 → 修复 → 防复发的完整档案，每次事故评分 < 6 必须新增独立章节。
 
 ## 仓库信息
 

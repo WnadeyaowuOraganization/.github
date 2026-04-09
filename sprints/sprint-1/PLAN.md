@@ -427,6 +427,7 @@
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
+> 🔄 **巡检 2026-04-09 10:25 UTC | 🟢 平稳 — Jump=0/Fail=0/E2E Fail=0匹配 | Todo=68(play)/In Progress=10(play)/Done=488持平 | 距10:15轮无新Done,无需调整建议表**
 > 🔄 **巡检 2026-04-09 10:15 UTC | 🎉 研发经理活跃中 — PR#3540抢救成功(#2094 Done) + PR#3490 merged(#1918 Done) | Todo=115↓2/Done=488↑2**
 > **关键发现**：研发经理09:38创建PR#3540"从灾难PR#3511抢救"处理#2094,09:38 merged ✅
 > **最新Merged**：PR#3540 #2094 (09:38抢救) | PR#3490 #1918 (09:44 kimi11)
@@ -545,7 +546,7 @@
 | kimi17 | #2301 | P0 | frontend | [整改工单] 工人端H5拍照上传+企微内嵌 | In Progress |
 | kimi18 | #2302 | P0 | frontend | [整改工单] 整改工单详情页照片时间轴+意见流 | In Progress |
 | kimi19 | #2303 | P0 | frontend | [整改工单] 整改工单列表+看板+筛选+统计 | In Progress |
-| kimi3 | #3458 | Jump | fullstack | [全球项目矿场v3.0] 9项功能统一改版 PR#3487(OPEN，等CI merge，Claude Max Sonnet) | In Progress |
+| kimi3 | ~~#3458~~ | ~~Jump~~ | ~~fullstack~~ | ~~[全球项目矿场v3.0] 9项功能统一改版 PR#3487✅merged 2026-04-09 10:05~~ | ~~Done~~ |
 | kimi11 | #1918 | P0 | frontend | [D3-Web] 参数配置器 PR#3490(OPEN，等CI merge) | In Progress |
 | kimi3 | #2459 | P1 | backend | [合同管理] 合同审批API | In Progress |
 | kimi11 | #2458 | P1 | backend | [合同管理] AI条款对比引擎 | In Progress |

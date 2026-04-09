@@ -206,12 +206,12 @@ if [ "$MODE" = "issue" ]; then
     fi
   fi
 
-  # === 构建 prompt（v2.2 - 2026-04-09 起引用 share/cc-default-prompt.md 模板，含 9 条硬约束） ===
-  PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/share/cc-default-prompt.md"
+  # === 构建 prompt（v2.2 - 2026-04-09 起引用 share/shared-conventions.md 模板，含 9 条硬约束） ===
+  PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/share/shared-conventions.md"
   if [ -f "$PROMPT_TEMPLATE" ]; then
     # 用 envsubst 或 bash 字符串替换 ${ISSUE}
     CC_PROMPT=$(ISSUE="$ISSUE" envsubst '${ISSUE}' < "$PROMPT_TEMPLATE" 2>/dev/null || sed "s/\${ISSUE}/${ISSUE}/g" "$PROMPT_TEMPLATE")
-    echo "$(date): 使用 prompt 模板 v2.2 (share/cc-default-prompt.md, $(wc -l < "$PROMPT_TEMPLATE") 行)"
+    echo "$(date): 使用 prompt 模板 v2.2 (share/shared-conventions.md, $(wc -l < "$PROMPT_TEMPLATE") 行)"
   elif [ -f "$ISSUE_SOURCE" ]; then
     # fallback v1 纯字符串（兼容性）
     CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"

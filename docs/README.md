@@ -42,7 +42,7 @@
 |------|------|
 | 标签规范（原 WANDE_LABEL.md） | `~/projects/.github/docs/agent-docs/manager/wande-label.md` |
 | Issue 创建 SOP（原 ISSUE_CREATION_SOP.md） | `~/projects/.github/docs/agent-docs/manager/issue-creation-sop.md` |
-| CC 启动 prompt v2.2（9 条硬约束） | `~/projects/.github/docs/agent-docs/share/cc-default-prompt.md` |
+| CC 启动 prompt v2.3（10 条硬约束 + 所有共享规范） | `~/projects/.github/docs/agent-docs/share/shared-conventions.md` |
 | **agent-docs 完整导航** | `~/projects/.github/docs/agent-docs/README.md` |
 | MONOREPO_MIGRATION.md | （历史文档，未迁移） |
 

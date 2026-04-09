@@ -2294,3 +2294,134 @@ ci(quality): P1.1 quality-gate 三道预检门 + P2.1 visual-review + P2.2 smoke
 
 **本章节完整记录了 P0-P3 方案的落地细节，每一步都可按文件路径 review 和 git diff 审查。下一步等用户/超管 review 后，拍板 commit + push 时序。**
 
+---
+
+# 🩹 图形测试覆盖补丁（2026-04-09 12:20，补丁 A+B）
+
+> **触发**：用户质疑「编程 CC 自己写测试用例时会覆盖图形测试吗？」
+> **自查结论**：**不会**。#3487 声称的 16 个单元测试全是纯函数（倒计时公式/等级映射），0 个 DOM 断言，slot 字符串 bug 一个也测不到。当前 P0-P3 方案有严重缺口：
+> 1. prompt v2 约束 6 只说「单测本地跑通」，没说必须是**组件渲染测试**
+> 2. `e2e-smoke-coverage-gate.sh` 脚本就绪但**未挂到 CI**
+> 3. quality-gate 只有 3 道门，没有 smoke 用例存在性检查
+
+## 补丁 A — prompt v2.1 追加约束 7
+
+**改动**：`docs/agent-docs/cc-prompts/default-issue.md`
+
+### 新增约束 7
+
+```markdown
+### 7️⃣ 前端改动必须补对应 smoke 用例（图形测试覆盖）
+前端 PR 改动 `frontend/apps/web-antd/src/views/**/index.vue` 时，必须在
+`wande-play/e2e/tests/front/smoke/` 下新增或更新对应的 `<module>-page.spec.ts`。
+
+**核心动机**：纯函数单测永远发现不了 vxe-table slot 返回 HTML 字符串这类渲染 bug。
+CC 必须写运行时 DOM 断言才能真正覆盖图形层。
+
+**必须保留的 3 条反事故断言**（从 _template.spec.ts 模板复制过来）：
+  - 断言 1：标题正确（toHaveTitle）
+  - 断言 2：关键组件可见（.ant-tag / .vxe-body--row）
+  - 断言 3：核心反事故 — 表格首 20 个单元格文本不得以 < 开头
+
+反例（#3487）：16 个单元测试全是纯函数，0 个 DOM 断言
+正确：cp _template.spec.ts → <module>-page.spec.ts，修改 ROUTE 和 PAGE_NAME
+```
+
+### quality-gate 拦截规则表更新
+
+```markdown
+| 门 | 检查 | 失败后果 |
+|---|------|---------|
+| 1 | PR body 无 `- [ ]` | ❌ block auto-merge |
+| 2 | task.md 无 `- [ ]` | ❌ block auto-merge |
+| 3 | 前端 PR body 含 Markdown 图片 | ❌ block auto-merge |
+| 4 | 前端 index.vue 改动必须有对应 smoke/<module>-page.spec.ts | ❌ block auto-merge |  ← 新增
+```
+
+## 补丁 B — pr-test.yml quality-gate 增加门 4
+
+**改动**：`wande-play/.github/workflows/pr-test.yml` 的 `quality-gate` job，在门 3 之后新增门 4
+
+### 门 4 逻辑
+
+```bash
+# 筛出 PR 中所有 views/**/index.vue 改动
+INDEX_VUE_CHANGES=$(gh pr view $PR_NUM --json files --jq '[.files[] | select(.path | test("frontend/apps/web-antd/src/views/.*index\\.vue$"))] | .[].path')
+
+# 对每个改动的 index.vue，检查是否存在对应的 smoke 用例
+for vue_file in $INDEX_VUE_CHANGES; do
+  module_path=$(echo "$vue_file" | sed -E 's|.*views/||;s|/index\.vue$||')  # wande/project
+  dashed="${module_path//\//-}"                                               # wande-project
+  # 允许的命名：<dashed>-page.spec.ts / <dashed>.spec.ts / <basename>-page.spec.ts / project-mine-page.spec.ts
+  # 通过 gh api contents 检查 smoke 目录是否有对应文件（从 PR 分支读取）
+  if 任一命名存在 → 通过；否则 → 加入 MISSING_SMOKE 列表
+done
+
+if MISSING_SMOKE 非空:
+  gh pr comment 打印缺失清单 + cp 模板命令
+  exit 4  # quality-gate.outputs.passed=false，block auto-merge
+```
+
+### 允许的命名清单（4 选 1）
+
+| 源文件 | 期望 smoke 文件名 |
+|-------|------------------|
+| `views/wande/project/index.vue` | `wande-project-page.spec.ts`（推荐） |
+| | `wande-project.spec.ts` |
+| | `project-page.spec.ts` |
+| | `project-mine-page.spec.ts`（现有历史命名兼容） |
+
+兼容历史命名（第四项）让现有 `project-mine-page.spec.ts` 被识别为 `views/wande/project/index.vue` 的 smoke，避免误报。
+
+### 失败示例评论（CC 看到后知道怎么补）
+
+```
+❌ **quality-gate 门 4 拦截**：前端 `index.vue` 改动必须有对应 smoke 用例（防 #3487 slot 字符串事故）。
+缺失清单：
+  - frontend/apps/web-antd/src/views/wande/project/index.vue → 期望 e2e/tests/front/smoke/wande-project-page.spec.ts
+
+请复制模板：
+  cp e2e/tests/front/smoke/_template.spec.ts e2e/tests/front/smoke/<module>-page.spec.ts
+
+保留 3 条反事故断言（标题/组件可见/单元格非 HTML 源码）。详见 default-issue.md 约束 7。
+```
+
+## 修复后的纵深防御图（7 条约束 + 4 道门）
+
+```
+CC 编码     本地预检      PR 创建      CI 流水          auto-merge      合并后
+  │           │            │            │                  │              │
+  ▼           ▼            ▼            ▼                  ▼              ▼
+[约束1-7]   [lint门1-3]   [quality-gate 门1-4]   [smoke运行 DOM 断言]    [AI reviewer]
+ CC自律     本地exit      CI级硬block              运行时事故检测         深度审查
+                          ↑ 新增门 4
+```
+
+### 门 4 对 #3487 的假设回归
+
+- **假设当时门 4 已上线**：PR #3487 改了 `views/wande/project/index.vue`，但没有 smoke 用例（当时 smoke 目录只有 `project-mine-page.spec.ts` 不匹配命名）→ 门 4 拦截
+- 即使 CC 绕过门 4（改名对齐到 `project-mine-page.spec.ts`），smoke 用例的**断言 3**（表格首 20 单元格非 HTML 源码）会在 e2e-test job 运行时失败 → e2e-test job 红 → auto-merge 不触发
+- **双层防护**：门 4 在 PR 静态层挡住「用例缺失」，smoke 用例的断言在运行时层挡住「实现错误」
+
+## 文件清单（补丁 A+B）
+
+### `.github` 仓库（main 分支）
+
+| 路径 | 改动 |
+|------|------|
+| `docs/agent-docs/cc-prompts/default-issue.md` | 新增约束 7（~40 行）+ 拦截规则表加门 4 一行 |
+| `docs/workflow/新harness验证报告.md` | 追加「图形测试覆盖补丁」章节（本节） |
+
+### `wande-play` 仓库（dev 分支）
+
+| 路径 | 改动 |
+|------|------|
+| `.github/workflows/pr-test.yml` | `quality-gate` job 新增门 4（~40 行） |
+
+## 成功判据（补丁 A+B 落地后）
+
+- 下一个前端 PR 必须包含 smoke 用例，否则被门 4 拦截
+- `#3543-#3546` 追补 Issue 的 CC 会在 prompt v2.1 约束 7 中看到硬性要求
+- `slot 返回 HTML 字符串` 反模式出现次数 → 0（被运行时断言 3 保底）
+- 前端 PR 平均评分从 4.2 → 7.5+（#3458 失分项的 6 个致命 bug 全部被某一道门拦截）
+

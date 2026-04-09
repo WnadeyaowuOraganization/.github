@@ -522,140 +522,104 @@ const [PriorityDialog, dialogApi] = useVbenDrawer({ connectedComponent: Priority
 2. 每个分区**必须用 `<Card>` 包裹**，不得直接写内容到 template
 3. 间距全部用 `gutter="16"` + `margin-top: 16px`，禁止自定义数值
 
-### 3.6 `useVbenDrawer` / `useVbenModal` connectedComponent 规则（防 #3544 事故）
+### 3.6 Drawer 抽屉实现规范（防 #3544 事故）
 
-**`<Page>` 组件**源码只是 `<div class="relative">` wrapper（含可选 header/footer slot），不能用于 drawer/modal 内容，因它是**主页面布局语义**组件。
+**Drawer 首选方案：ant-design-vue 原生 `<Drawer>` 内嵌**，不用 `useVbenDrawer + connectedComponent` 复杂机制。
 
-**drawer 组件必须自带 overlay 容器**。`useVbenDrawer` 的 `h(connectedComponent, ...)` 会**直接渲染** `connectedComponent`，如果该组件 template 最外层不是 `<BasicDrawer>`，就会被当作 inline 组件渲染到主页面（#3544 事故根因）。
+#### ✅ 权威参考（实测可用）
 
-#### ✅ 权威参考（已实测验证 + 动态菜单可访问）
+**`frontend/apps/web-antd/src/views/operator/knowledgeBase/index.vue`**（用户确认 `/operate/knowledgeBase` 「创建知识库」抽屉在 Dev 工作正常）
 
-**首选参考 — `international-trade`**（代码正确 + Dev 动态菜单真实可访问）：
-
-| 项 | 值 |
-|---|---|
-| Dev URL | `http://3.211.167.122:8083/wande/international-trade` |
-| 菜单路径 | **万德业务 → 国际贸易** |
-| 主页面文件 | `frontend/apps/web-antd/src/views/business/international-trade/index.vue` |
-| Drawer 子组件 | `frontend/apps/web-antd/src/views/business/international-trade/prospect-detail-drawer.vue` |
-| `useVbenDrawer` 调用位置（子组件） | L45 — 无 `connectedComponent` 参数 |
-| `<BasicDrawer>` template 位置（子组件） | L118 — template 最外层 |
-
-**验证方法**：用 admin/admin123 登录 Dev → 万德业务 → 国际贸易 → 点击列表某行 → 看到右侧 900px overlay drawer 弹出即正确。
-
-#### 交叉验证（代码模式一致，3 文件相同）
-
-| 文件 | `useVbenDrawer` 行 | `<BasicDrawer>` 行 | 动态菜单可访问 |
-|------|-------------------|-------------------|---------------|
-| `views/business/international-trade/prospect-detail-drawer.vue` | **45** | **118** | ✅ 万德业务 → 国际贸易 |
-| `views/brand-center/content/brand-content-detail-drawer.vue` | 80 | 158 | ❌ 不在动态菜单（仅代码参考）|
-| `views/hr/employee/employee-drawer.vue` | 37 | 105 | ❌ 不在动态菜单（仅代码参考）|
-
-**3 个文件代码模式完全一致** — 这是 wande-play 的**标准 drawer 模板**。首选 `prospect-detail-drawer.vue` 因为它同时在 Dev 动态菜单里可以实测验证。
+| 位置 | 行号 | 作用 |
+|------|------|------|
+| `import { Drawer } from 'ant-design-vue';` | L13 | 原生 Drawer 组件 |
+| `const drawerVisible = ref(false);` | L90 | 本地 state 控制 open/close |
+| `drawerVisible.value = true;` | L155 | 打开抽屉 |
+| `<Drawer :visible :width :footer-style>` | L333-339 | template 内嵌 drawer |
+| `drawerVisible.value = false;` | L228 | 关闭抽屉 |
 
 #### 模板骨架（照抄即可）
-
-**子组件 `xxx-detail-drawer.vue`**（drawer 本体）：
 
 ```vue
 <script setup lang="ts">
 import { ref } from 'vue';
-import { useVbenDrawer } from '@vben/common-ui';
+import { Drawer } from 'ant-design-vue';
 
-const title = ref('');
-const loading = ref(false);
-const data = ref<any>({});
+const detailOpen = ref(false);
+const detailData = ref<any>(null);
 
-async function handleCancel() {
-  drawerApi.close();
-}
-
-async function handleConfirm() {
-  // 处理确认逻辑
-  drawerApi.close();
-}
-
-// ✅ 无 connectedComponent 调用,接收父级 inject 的 api
-const [BasicDrawer, drawerApi] = useVbenDrawer({
-  onCancel: handleCancel,
-  onConfirm: handleConfirm,
-  async onOpenChange(isOpen) {
-    if (!isOpen) return;
-    drawerApi.drawerLoading(true);
-    const payload = drawerApi.getData() as { id?: number };
-    // 加载 payload.id 对应的数据
-    data.value = /* 调用 API */;
-    title.value = `项目详情 #${payload.id}`;
-    drawerApi.drawerLoading(false);
-  },
-});
-</script>
-
-<template>
-  <!-- ✅ 必须是 BasicDrawer 作 template 最外层 -->
-  <BasicDrawer
-    :close-on-click-modal="false"
-    :title="title"
-    class="w-[900px]"
-    :width="900"
-  >
-    <!-- drawer 内容:Tab / 表单 / 表格等 -->
-    <a-tabs>...</a-tabs>
-  </BasicDrawer>
-</template>
-```
-
-**外部调用方 `index.vue`**（主页面）：
-
-```vue
-<script setup lang="ts">
-import { useVbenDrawer } from '@vben/common-ui';
-import XxxDetailDrawer from './xxx-detail-drawer.vue';
-
-// ✅ 父级传 connectedComponent,拿到 DetailDrawer 渲染组件 + api
-const [DetailDrawer, detailDrawerApi] = useVbenDrawer({
-  connectedComponent: XxxDetailDrawer,
-});
-
-async function handleDetail(row: any) {
-  detailDrawerApi.setData({ id: row.id }).open();
+function handleDetail(row: any) {
+  detailData.value = row;
+  detailOpen.value = true;
 }
 </script>
 
 <template>
   <Page>
+    <!-- 主列表 -->
     <BasicTable @row-click="handleDetail" />
-    <!-- ✅ template 末尾必须挂 DetailDrawer (overlay 挂载点) -->
-    <DetailDrawer @refresh="refreshTable" />
+
+    <!-- ✅ 原生 Drawer,直接内嵌在 index.vue 的同一 template -->
+    <Drawer
+      v-model:open="detailOpen"
+      title="项目详情"
+      :width="900"
+      :footer-style="{ textAlign: 'right' }"
+    >
+      <!-- drawer 内容:Tab / 表单 / 表格等 -->
+      <a-tabs>
+        <a-tab-pane key="info" tab="基本信息">...</a-tab-pane>
+        <a-tab-pane key="partner" tab="配合单位">...</a-tab-pane>
+      </a-tabs>
+
+      <template #footer>
+        <a-button style="margin-right: 8px" @click="detailOpen = false">关闭</a-button>
+      </template>
+    </Drawer>
   </Page>
 </template>
 ```
 
-#### ❌ 错误写法（#3544 PR #3553 修复仍错）
+> **AntDV 4.x 注意**：新代码用 `v-model:open="detailOpen"`，不要用旧的 `:visible` + `@close`（ui-guide §1 绝对禁止清单）。knowledgeBase 的 `:visible` 是旧代码保留，**不要照抄 visible**，**只照抄结构**。
+
+#### ❌ 禁止的 3 种写法
+
+**反模式 1（#3544 事故）**：把 drawer 内容拆成独立 `.vue` 文件，然后用 `useVbenDrawer({ connectedComponent })` 连接，但子组件 template 最外层是 `<div>` 或 `<Page>`
 
 ```vue
-<!-- xxx-detail-drawer.vue -->
-<script setup>
-// ❌ 缺少 useVbenDrawer 调用,没有 drawerApi 接收 inject
-import CounterpartTab from './counterpart-tab.vue';
-</script>
-
+<!-- ❌ xxx-detail-drawer.vue -->
 <template>
-  <div>  <!-- ❌ 或 <Page> -- 没有 BasicDrawer 容器,会被 inline 渲染到主页面 -->
+  <div>  <!-- 或 <Page> 都会被 inline 渲染到主页面,不是 overlay -->
     <a-tabs>...</a-tabs>
   </div>
 </template>
 ```
 
-#### Modal 同规则
+**反模式 2**：用 `:visible` + `@close`（AntDV 4.x 已废弃）
 
-`useVbenModal` 的 `connectedComponent` 同样需要 `<BasicModal>` 作 template 最外层。
+```vue
+<!-- ❌ -->
+<Drawer :visible="open" @close="open = false">...</Drawer>
+<!-- ✅ -->
+<Drawer v-model:open="open">...</Drawer>
+```
+
+**反模式 3**：Drawer 嵌套 Drawer（shared-conventions.md 绝对禁止清单）
+
+#### 拆子组件的正确姿势
+
+drawer 内容复杂需要拆分时：
+1. **父页面 `index.vue`** 负责 drawer overlay（`<Drawer v-model:open>`）
+2. **子组件 `xxx-detail-content.vue`** 只是**纯内容组件**（`<div>` + props 接收数据）
+3. 父页面在 `<Drawer>` slot 里引用子组件：`<Drawer><XxxDetailContent :data="detailData" /></Drawer>`
+
+这样 drawer overlay 机制 100% 由 `<Drawer>` 原生提供，子组件不涉及任何 overlay 逻辑。
 
 #### 检测规则
 
 本规则已纳入 `pr-reviewer.md` P0.6 审查清单：
-- 发现 `connectedComponent: XxxDrawer` → 检查 `XxxDrawer.vue` template 最外层
-- 不是 `<BasicDrawer>` / `<BasicModal>` → block merge + 评论「drawer 组件缺 overlay 容器 (#3544 同款反模式)，参考 `brand-content-detail-drawer.vue` 正确写法」
+- 发现 `connectedComponent: XxxDrawer` + XxxDrawer 文件 template 最外层不是 `<a-drawer>`/`<BasicDrawer>` → block merge
+- 建议直接重构为原生 `<Drawer v-model:open>` + 纯内容子组件，参考 `operator/knowledgeBase/index.vue`
 
 ---
 

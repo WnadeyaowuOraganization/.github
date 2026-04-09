@@ -50,7 +50,10 @@ stop_ci_backend() {
 start_ci_backend() {
     mkdir -p "$CI_BACKEND_DIR/logs"
 
-    if [ "$BACKEND_CHANGED" = "true" ]; then
+    # 首先检查是否已经有构建好的 jar 文件（从 build job 复用）
+    if [ -f "$CI_BACKEND_DIR/ruoyi-admin.jar" ] && [ "$BACKEND_CHANGED" != "true" ]; then
+        log "复用 build job 构建好的 jar: $CI_BACKEND_DIR/ruoyi-admin.jar"
+    elif [ "$BACKEND_CHANGED" = "true" ]; then
         log "PR 修改了后端，构建 CI 后端..."
         cd "$CI_DIR"
         # 如果有PR分支，切换到PR分支构建
@@ -64,12 +67,29 @@ start_ci_backend() {
         # ⚠️ 安全：彻底清空 target，避免残留 jar 在 mvn 失败时被 find 找到
         find . -name target -type d -prune -exec rm -rf {} + 2>/dev/null || true
 
+        # 用独立 tmpfs maven repo（避免污染 ~/.m2 影响其他 CC）
+        # tag = ci-pr-${PR_NUM} 区分多 PR 并发场景
+        SCRIPT_DIR_M2="$(dirname "$(readlink -f "$0")")"
+        M2_TAG="ci-pr-${PR_NUM:-unknown}"
+        M2_OPTS=$(bash "$SCRIPT_DIR_M2/m2-cc-prepare.sh" "$M2_TAG" 2>&1 | tail -1)
+        if [ -n "$M2_OPTS" ] && echo "$M2_OPTS" | grep -q "^-Dmaven.repo.local="; then
+            log "使用独立 maven repo: ${M2_OPTS#-Dmaven.repo.local=}"
+            export MAVEN_OPTS="$M2_OPTS"
+        else
+            warn "m2-cc-prepare.sh 失败，回退到默认 ~/.m2"
+        fi
+
         # 全程把构建输出写入 BUILD_LOG，并通过 PIPESTATUS 严格检查 mvn 退出码
         log "执行 mvn clean package -Pprod -Dmaven.test.skip=true（日志: $BUILD_LOG）..."
         set +e
         mvn clean package -Pprod -Dmaven.test.skip=true -B 2>&1 | tee -a "$BUILD_LOG"
         MVN_RC=${PIPESTATUS[0]}
         set -e
+
+        # mvn 完成后立即 cleanup（无论成功失败），避免残留 tmpfs
+        if [ -n "$M2_OPTS" ] && [ -x "$SCRIPT_DIR_M2/m2-cc-cleanup.sh" ]; then
+            bash "$SCRIPT_DIR_M2/m2-cc-cleanup.sh" "$M2_TAG" 2>&1 | sed 's/^/[ci-env] /' || true
+        fi
         if [ "$MVN_RC" -ne 0 ]; then
             err "mvn 构建失败 (exit=$MVN_RC)，PR 不允许继续部署 CI 环境"
             err "完整构建日志：$BUILD_LOG"
@@ -79,6 +99,10 @@ start_ci_backend() {
         fi
 
         JAR_FILE=$(find ruoyi-admin/target -name "ruoyi-admin*.jar" -type f -newer "$BUILD_LOG" 2>/dev/null | head -1)
+        if [ -z "$JAR_FILE" ] || [ ! -f "$JAR_FILE" ]; then
+            # 如果 -newer 找不到，尝试不限制时间（兼容 e2e job 复用场景）
+            JAR_FILE=$(find ruoyi-admin/target -name "ruoyi-admin*.jar" -type f 2>/dev/null | head -1)
+        fi
         if [ -z "$JAR_FILE" ] || [ ! -f "$JAR_FILE" ]; then
             err "mvn 退出 0 但未找到本次构建产物 jar — 视为构建失败"
             exit 1

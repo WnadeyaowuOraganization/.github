@@ -16,15 +16,18 @@
 7. **🚨 前端必补 smoke 用例** — 改动 `views/**/index.vue` 必须 `cp e2e/tests/front/smoke/_template.spec.ts e2e/tests/front/smoke/<module>-page.spec.ts` 并保留 3 条反事故断言
 8. **PR create 前必 rebase** — `git fetch origin dev && git rebase origin/dev && git push --force-with-lease`
 9. **PR create 后必轮询** — `while [ "$(gh pr view $PR --json state -q .state)" != "MERGED" ]; do sleep 120; done`；超 30min 未 merged 在 Issue 评论说明后退出
-10. **阶段性主动汇报** — 4 个节点用通知 API 汇报研发经理，禁止静默工作：
+10. **阶段性主动汇报** — 4 个节点直接向研发经理汇报（tmux 即时 + claude-office 通知），禁止静默工作：
     - 开工（读完 Issue + task.md 后）
     - 阶段完成（编译通过 / 单测绿 / 提 PR / PR merged）
     - 卡住（连续 10 分钟同一问题无进展）
-    - **结论前**（下「问题不存在/无需修改/已修复」结论前必须先 warning 等确认，禁止自行 close Issue）
+    - **结论前**（下「问题不存在/无需修改/已修复」结论前必须先汇报等确认，禁止自行 close Issue）
     ```bash
+    # 一条命令同时发 tmux (研发经理即时收到) + claude-office 通知
+    MSG="[#${ISSUE}] <一句话现状>" && TYPE=info && \
+    tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $MSG" Enter 2>/dev/null; \
     curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
-      -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"[#${ISSUE}] <一句话现状>\",\"type\":\"info\"}"
-    # type: info=进度 / warning=卡住需关注 / success=阶段完成 / error=必须介入
+      -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"$MSG\",\"type\":\"$TYPE\"}" >/dev/null
+    # TYPE: info=进度 / warning=卡住需关注 / success=阶段完成 / error=必须介入
     ```
 
 ## 绝对禁止（YOU MUST NOT）

@@ -266,12 +266,34 @@ bash "$SCRIPT_DIR/ensure-test-pg.sh" "$KIMI_TAG" 2>&1 | tail -3 || true
 TEST_PG_ENV="export TEST_PG_HOST=localhost; export TEST_PG_PORT=5434; export TEST_PG_DB=${TEST_PG_DB}; export TEST_PG_USER=wande; export TEST_PG_PASSWORD=wande_test;"
 
 # === 每个 kimi 用独立 maven repo（避免并发 mvn install race condition）===
-M2_REPO="${HOME_DIR}/.m2-${KIMI_TAG}/repository"
-if [ ! -d "$M2_REPO" ]; then
-  mkdir -p "$M2_REPO"
-  cp -al "${HOME_DIR}/.m2/repository/." "$M2_REPO/" 2>/dev/null || true
+# 实现：m2-cc-prepare.sh 在 /dev/shm/m2-cc-${KIMI_TAG} 准备一份独立 repo
+#   - 第一次调用时把 ~/.m2-base 加载到 /dev/shm/m2-base/（共享 base，refcount 管理）
+#   - 每次调用 cp -a base → /dev/shm/m2-cc-${KIMI_TAG}/（独立写入区）
+#   - CC 退出时由 release-cc-lock.sh 调 m2-cc-cleanup.sh 释放
+# 完全 tmpfs，无 hardlink 元信息污染。base 共享只占 1 份内存。
+# 兜底：如果 m2-cc-prepare.sh 不存在（升级中）或失败，回退到旧的 .m2-${KIMI_TAG} 模式
+M2_OPTS=$(bash "$SCRIPT_DIR/m2-cc-prepare.sh" "$KIMI_TAG" 2>&1 | tail -1)
+if [ -n "$M2_OPTS" ] && echo "$M2_OPTS" | grep -q "^-Dmaven.repo.local="; then
+  MAVEN_ENV="export MAVEN_OPTS='${M2_OPTS}';"
+  M2_REPO_PATH="${M2_OPTS#-Dmaven.repo.local=}"
+else
+  echo "⚠️ m2-cc-prepare.sh 失败，回退到磁盘 .m2-${KIMI_TAG} 模式"
+  M2_REPO_PATH="${HOME_DIR}/.m2-${KIMI_TAG}/repository"
+  if [ ! -d "$M2_REPO_PATH" ]; then
+    mkdir -p "$M2_REPO_PATH"
+    cp -al "${HOME_DIR}/.m2/repository/." "$M2_REPO_PATH/" 2>/dev/null || true
+  fi
+  MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO_PATH}';"
 fi
-MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO}';"
+
+# 把 maven repo 路径写入锁文件，便于 cleanup / 监控
+if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
+  if grep -q "^m2_repo=" "$LOCK_FILE" 2>/dev/null; then
+    sed -i "s|^m2_repo=.*|m2_repo=${M2_REPO_PATH}|" "$LOCK_FILE"
+  else
+    echo "m2_repo=${M2_REPO_PATH}" >> "$LOCK_FILE"
+  fi
+fi
 
 # === 启动tmux（交互模式，支持attach和注入）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \

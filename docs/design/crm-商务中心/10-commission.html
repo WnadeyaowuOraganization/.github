@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>我的提成 — CRM商务中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #fff; color: #333; margin:0; }
+  .nav-bar { height: 48px; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-left { font-size: 14px; color: #666; }
+  .nav-left strong { color: #333; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666; }
+  .stats-section { background: #fff; border-bottom: 1px solid #f0f0f0; padding: 16px 24px; }
+  .stat-row { display: flex; align-items: center; gap: 16px; margin-bottom: 10px; }
+  .stat-label { font-size: 13px; color: #666; width: 180px; min-width: 180px; }
+  .stat-numbers { font-size: 13px; color: #333; width: 260px; }
+  .stat-numbers .current { font-weight: 700; }
+  .stat-numbers .target { color: #999; }
+  .progress-track { flex: 1; height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; max-width: 360px; }
+  .progress-fill { height: 100%; border-radius: 5px; }
+  .stat-pct { font-size: 13px; font-weight: 600; width: 50px; }
+  .commission-highlight { background: #f0f7ff; border-left: 3px solid #1890ff; padding: 8px 16px; font-size: 14px; color: #333; margin-top: 6px; border-radius: 0 3px 3px 0; }
+  .filter-bar { padding: 12px 24px; display: flex; align-items: center; gap: 10px; background: #fff; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
+  input[type="text"], select { height: 32px; border: 1px solid #d9d9d9; border-radius: 3px; padding: 0 10px; font-size: 13px; color: #333; background: #fff; outline: none; }
+  .btn { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 13px; cursor: pointer; background: #fff; color: #555; gap: 4px; white-space: nowrap; }
+  .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 13px; font-weight: 600; color: #555; padding: 11px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; height: 44px; vertical-align: middle; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; }
+  .tag-gray { background: #f0f0f0; color: #8c8c8c; }
+  .table-wrap { padding: 0 24px 20px; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px 12px; }
+  .page-title { font-size: 18px; font-weight: 700; color: #333; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: #bbb; border-top: 1px solid #f0f0f0; }
+  .total-row td { background: #fafafa; font-weight: 600; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="nav-bar">
+  <div class="nav-left">CRM商务中心 &gt; <strong>我的提成</strong></div>
+  <div class="nav-right">
+    <span>📥 <span style="color:#1890ff;font-weight:700;">4</span></span>
+    <span>📢 <span style="color:#1890ff;font-weight:700;">3</span></span>
+    <span>🔔 <span style="color:#1890ff;font-weight:700;">2</span></span>
+    <span style="color:#333;font-weight:500;">张三 | 拓展一部</span>
+  </div>
+</div>
+
+<!-- 业绩统计 -->
+<div class="stats-section">
+  <!-- 本月业绩 -->
+  <div class="stat-row">
+    <div class="stat-label">本月业绩（已签约）</div>
+    <div class="stat-numbers">
+      <span class="current" style="color:#52c41a;">￥628,100</span>
+      <span class="target"> / 目标 ￥1,000,000</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:62.8%; background:#52c41a;"></div>
+    </div>
+    <div class="stat-pct" style="color:#52c41a;">62.8%</div>
+  </div>
+  <!-- 年度累计 -->
+  <div class="stat-row">
+    <div class="stat-label">年度累计（2026年）</div>
+    <div class="stat-numbers">
+      <span class="current" style="color:#1890ff;">￥628,100</span>
+      <span class="target"> / 目标 ￥8,000,000</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:7.9%; background:#1890ff;"></div>
+    </div>
+    <div class="stat-pct" style="color:#1890ff;">7.9%</div>
+  </div>
+  <!-- 预计提成 -->
+  <div class="commission-highlight">
+    预计提成：<strong style="color:#1890ff; font-size:16px;">￥18,843</strong>
+    <span style="color:#999; font-size:12px; margin-left:12px;">（基于已结清回款计算 · 最终以财务确认为准）</span>
+  </div>
+</div>
+
+<!-- 页面标题 -->
+<div class="page-header">
+  <div class="page-title">提成明细</div>
+  <div style="display:flex; gap:8px;">
+    <select style="height:32px; width:140px;">
+      <option>2026年 4月</option>
+      <option>2026年 3月</option>
+      <option>2026年 2月</option>
+      <option>2026年 1月</option>
+    </select>
+    <button class="btn">导出明细</button>
+  </div>
+</div>
+
+<!-- 筛选栏 -->
+<div class="filter-bar">
+  <input type="text" placeholder="搜索合同编号/客户名称..." style="width:220px;">
+  <select style="width:130px;">
+    <option value="">状态：全部</option>
+    <option>预计提成</option><option>待确认</option><option>已确认</option><option>已发放</option>
+  </select>
+  <button class="btn btn-primary">搜索</button>
+  <button class="btn">重置</button>
+</div>
+
+<!-- 提成明细表格 -->
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>合同编号</th>
+        <th>客户</th>
+        <th>签约金额</th>
+        <th>回款金额</th>
+        <th>提成基数</th>
+        <th>提成比例</th>
+        <th>提成金额</th>
+        <th>状态</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0028-01</td>
+        <td>Playpoint Pte Ltd</td>
+        <td>$120,000<br><span style="font-size:11px; color:#999;">≈￥868,800</span></td>
+        <td style="color:#52c41a; font-weight:500;">$36,000<br><span style="font-size:11px; color:#999;">≈￥260,640</span></td>
+        <td>￥260,640</td>
+        <td style="color:#1890ff; font-weight:600;">3%</td>
+        <td style="color:#1890ff; font-weight:700;">￥7,819</td>
+        <td><span class="tag tag-yellow">待确认</span></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0024-01</td>
+        <td>杭州乐动体育</td>
+        <td>￥1,600,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥1,600,000</td>
+        <td>￥1,600,000</td>
+        <td style="color:#1890ff; font-weight:600;">2.5%</td>
+        <td style="color:#52c41a; font-weight:700;">￥40,000</td>
+        <td><span class="tag tag-green">已确认</span></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0021-01</td>
+        <td>合肥蜀山区教育局</td>
+        <td>￥2,100,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥1,260,000</td>
+        <td>￥1,260,000</td>
+        <td style="color:#1890ff; font-weight:600;">2%</td>
+        <td style="color:#1890ff; font-weight:700;">￥25,200</td>
+        <td><span class="tag tag-yellow">待确认</span></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0015-01</td>
+        <td>北京海淀区住建委</td>
+        <td>￥3,200,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥2,560,000</td>
+        <td>￥2,560,000</td>
+        <td style="color:#1890ff; font-weight:600;">2.5%</td>
+        <td style="color:#52c41a; font-weight:700;">￥64,000</td>
+        <td><span class="tag tag-green">已发放</span></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0008-01</td>
+        <td>武汉东湖高新区</td>
+        <td>￥2,800,000</td>
+        <td style="color:#888; font-weight:500;">￥0（未签约）</td>
+        <td>—</td>
+        <td style="color:#bbb;">—</td>
+        <td style="color:#bbb;">—</td>
+        <td><span class="tag tag-gray">签约中</span></td>
+      </tr>
+      <tr class="total-row">
+        <td colspan="3" style="text-align:right; color:#888; font-size:12px;">合计（已回款部分）</td>
+        <td style="color:#52c41a; font-weight:700;">￥5,680,640</td>
+        <td style="font-weight:700;">￥5,680,640</td>
+        <td>—</td>
+        <td style="color:#1890ff; font-weight:700; font-size:15px;">￥137,019</td>
+        <td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="margin-top:12px; font-size:12px; color:#bbb; text-align:center;">
+    提成规则由综合管理中心配置 · 以上数据仅供参考 · 最终提成以财务审核结果为准
+  </div>
+</div>
+
+<footer>万德AI平台 — CRM商务中心原型 v3.0 | 2026年4月</footer>
+</body>
+</html>

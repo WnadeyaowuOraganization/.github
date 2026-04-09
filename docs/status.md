@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-09 17:56 by Perplexity
+> ⏰ 最后更新：2026-04-10 00:00 by Perplexity
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 ---
 ## 🔄 Issue 生命周期 + 测试层级
@@ -673,6 +673,19 @@ Sprint-8 生态售后     █████████████ 生态闭环
 - assign-guide.md修正：Step顺序改为run-cc.sh成功后再标In Progress（原反序），删除死代码ISSUE_ASSIGN_HISTORY.md步骤
 - check-cc-status.sh：去除超时自动kill+标Fail逻辑，改为30min发warning通知人工重启（防误杀正常CC）
 - Reject Issue批量清理：121个Reject状态Issue全部标Done（均已CLOSED，为迁移/替代/过时旧需求）
+### 矿场管线紧急修复（04-09）— 6个故障修复·管线恢复运转
+- **根本原因**：Monorepo迁移后，Flyway创建的新表使用`wdpp_`前缀（如`wdpp_discovered_projects`），但4个旧脚本仍引用旧表名（如`discovered_projects`），导致`UndefinedTable`错误
+- **故障1**：`project_verifier.py` — 旧表名`discovered_projects`+旧列名`created_at`/`updated_at` → 修复为`wdpp_discovered_projects`+`create_time`/`update_time`
+- **故障2**：`match_grade_calculator.py` — 旧表名+`source_type`列不存在+`company_name`列不存在 → 修复为`source_name`+`NULL as company_name`
+- **故障3**：`project_activity_monitor.py` — 旧表名 → 修复为`wdpp_discovered_projects`
+- **故障4**：`tender_crawler_v3.py` — 旧表名`tender_data`+序列号不同步(next=10289 vs max=17080) → 修复表名+重置序列号
+- **故障5**：`project_mine_pipeline.sh` — 缺执行权限(644→755)+SCRIPT_DIR指向旧路径`/opt/agent/` → 修复权限+改为wande-play路径
+- **故障6**：SearXNG容器消失 → 重新启动(`--restart unless-stopped`)
+- **附带修复**：安装`antiword`(kb_pipeline需要)、添加`relationship_score`列到`wdpp_discovered_projects`
+- **正常运转的脚本**：`smart_project_discovery.py`和`project_mine_sync.py`（已在之前更新过表名）
+- **验证结果**：6个管线全部恢复运转，tender_crawler首次运行即新增40条数据
+- **Issue**：#3552 记录完整故障清单和修复过程
+- **教训**：Monorepo迁移时需建立「表名/列名兼容性检查清单」，pipeline脚本应统一表名常量
 ### 基础设施变更（04-07）— Claude Office重构+文档体系整理
 - Claude Office server.py四区域独立扫描：_scan_play_sessions/_scan_e2e_sessions/_scan_gh_plugins_sessions/_scan_manager_tmux_sessions，日志改tmux capture-pane直读（替代JSONL解析+SESSION_MAP），chrome行过滤（保留状态栏）
 - get-gh-token.sh删除：逻辑合并到gh-app-token.py（e2e路径→wandeyaowu PAT，默认→GitHub App Token，兜底→weiping PAT），更新17处引用

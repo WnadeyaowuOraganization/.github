@@ -2714,17 +2714,20 @@ PR #3547 未完成，请继续工作：
 | 2 | 13:50 | C 类 | CC 静默 22min 自认为任务完成 | B + C + D + E |
 | 3 | 14:05 | B 类 | CC 误判 quality-gate 失败原因想 push 空 commit | F + G |
 
-**漏洞完整清单**：
-| 漏洞 | 名称 | 严重度 | 状态 |
-|-----|------|-------|------|
-| A | pr-test.yml 在 PR CONFLICTING 时 skip quality-gate | 🔴 严重 | ✅ 已修 |
-| B | CC 创 PR 前未自动 rebase | 🟠 重要 | ✅ 已修 |
-| C | CC 对"本地视觉验证"认知偏差 | 🟡 中等 | ✅ 已修（约束 3 正例 + #3547 CC 的做法参考） |
-| D | CC 跳过约束 7 补 smoke | 🔴 严重 | ✅ 已修（约束 7 加粗 🚨 + pr-body-lint 门 4） |
-| E | CC 提 PR 后不自检 PR 状态 | 🟠 重要 | ✅ 已修（约束 9 轮询循环） |
-| F | 假勾选（勾 checkbox 不做实事）| 🔴 严重 | ✅ 已修（约束 2 警告 + quality-gate 门 3 cross-check + pr-body-lint cross-check） |
-| G | quality-gate 失败日志不清晰 | 🟡 中等 | ✅ 已修（gh pr comment 含门号+诊断命令+当前数值+修复方法） |
-| H | 截图时间/来源未校验 | 🟢 低 | P3 延后（风险可控） |
+**漏洞完整清单**（A-H #3543 事故 + I-K #3544 事故）：
+| 漏洞 | 名称 | 严重度 | 发现于 | 状态 |
+|-----|------|-------|-------|------|
+| A | pr-test.yml 在 PR CONFLICTING 时 skip quality-gate | 🔴 严重 | #3543 | ✅ 已修 |
+| B | CC 创 PR 前未自动 rebase | 🟠 重要 | #3543 | ✅ 已修（约束 8） |
+| C | CC 对"本地视觉验证"认知偏差 | 🟡 中等 | #3543 | ✅ 已修 |
+| D | CC 跳过约束 7 补 smoke | 🔴 严重 | #3543 | ✅ 已修（约束 7 🚨 + 门 4） |
+| E | CC 提 PR 后不自检 PR 状态 | 🟠 重要 | #3543 | ✅ 已修（约束 9） |
+| F | 假勾选（勾 checkbox 不做实事）| 🔴 严重 | #3543 | ✅ 已修（门 3 cross-check） |
+| G | quality-gate 失败日志不清晰 | 🟡 中等 | #3543 | ✅ 已修（gh pr comment 增强） |
+| H | 截图时间/来源未校验 | 🟢 低 | #3543 | P3 延后 |
+| **I** | **CC 无 ground truth 时得出否定结论**（静态代码审查 + 失败 Playwright 就敢说"问题不存在"） | 🔴 严重 | **#3544** | ⏳ 待修（v2.3 约束 10 + pr-body-lint 门 6） |
+| **J** | **CC 搜索策略单一**（只 grep 组件名不 grep 中文字符串/CSS class，首次找不到就放弃） | 🟠 重要 | **#3544** | ⏳ 待修（v2.3 "调查方法指引" + 3 次不同搜索词） |
+| **K** | **干预语言精度问题** — 研发经理注入时指定具体文件会误导 CC，应只写症状+验证方法 | 🟡 流程 | **#3544** | ⏳ 待修（研发经理 assign-guide 增加"干预边界"小节） |
 
 ## 🛠️ 漏洞修复记录（2026-04-09 14:20）
 
@@ -2783,11 +2786,126 @@ $ bash scripts/pr-body-lint.sh --pr-body /tmp/test-pr-body.md --issue 99999 --fr
 exit=3  ← ✓ 正确拦截假勾选
 ```
 
-## 最终状态总结
+---
 
-- ✅ **#3543 PR #3547 已 merged，评分 7.70/10**（首次突破 7.5 目标）
-- ✅ **8 个漏洞 7 个已修复**（A/B/C/D/E/F/G 全修，H 延后）
-- ✅ **干预 cron `c3005604` 已停止**
-- ✅ **全部修复已 commit 到 .github 和 wande-play**
-- 🔔 **等用户拍板**：是否继续指派 #3544/#3545/#3546 追补 Issue，用升级后的 v2.2 prompt + 修复后的 quality-gate 验证效果
+# 📋 #3544 跟踪日志（v2.2 精简 prompt 第二次压测）
+
+## [2026-04-09 14:58] A 类干预 — CC 错误结论「问题不存在」
+
+**触发原因**：A 类干预（方向偏离真相，基于静态代码审查得出「无需修改」结论，主动等用户确认）
+
+**症状**：
+- CC 运行 13m 后得出结论：「当前代码状态完全正确，不存在验证报告描述的误植问题」「无文件修改」
+- CC 写了 `e2e/tests/issue-3544-misplaced-content.spec.ts` 想用 Playwright 验证，但测试 exit 1 失败
+- CC 主动停下问用户：「是否关闭此Issue？」
+- **研发经理用 Playwright 重新截图 Dev（2026-04-09 14:58）证实误植内容仍然存在**：配合单位 8 个角色 + 任务看板 3 列 + 选择商务人员列表全部平铺在主表格下方
+
+**根因分析**：
+1. CC grep 组件名 `CounterpartManagementTab|TaskManagementTab` 没找到 → 误植内容**不是独立子组件**，而是**内联 template** 直接写的 `a-card / a-row` 结构
+2. CC 的 Playwright 测试失败（配置问题），没拿到运行时 ground truth
+3. CC 在**没有视觉证据**的情况下相信了静态代码审查的结论 — 这跟 #3487 "CC 没打开过页面看" 是同一类错误
+
+**注入内容**：
+
+```
+你的结论错误，不要关闭Issue。Dev 页面 http://3.211.167.122:8083/wande-project/project 最新截图
+(2026-04-09 14:58 Playwright 登录 admin/admin123，在 /tmp/3458-compare/actual-project.png 可访问)
+显示：配合单位/任务看板/选择商务人员确实平铺在主表格下方，bug 真实存在。
+
+调查失败根因：
+(1) grep 组件名没找到 — 误植内容可能是内联 template a-card/a-row 结构不是独立组件
+(2) Playwright 测试 exit 1 失败 — 没运行时 ground truth
+
+重新调查推荐：
+  grep -rn '配合单位' frontend/apps/web-antd/src/views/
+  grep -rn '任务看板' frontend/apps/web-antd/src/views/
+  grep -rn '选择商务' frontend/apps/web-antd/src/views/
+
+定位到后把这部分模板从主页面移到 mine-detail-drawer.vue 对应 Tab。
+继续按约束 1-9 执行。
+```
+
+**事后该修的流程漏洞**：
+
+### 漏洞 I — CC 在无运行时 ground truth 时得出否定结论
+
+**触发**：CC 用静态代码审查 + 失败的 Playwright 测试得出「问题不存在」，等待用户确认
+
+**修复建议**（P1 优先级）：
+1. **v2.3 prompt 约束 10**（新增）：「如果要得出『bug 不存在 / 已修复 / 无需修改』的结论，必须先有一张成功的 Playwright 截图或 Dev 环境实际访问截图作为证据贴到 task.md 或 Issue 评论中，否则视为未验证，禁止关闭 Issue 或提空 PR」
+2. `scripts/pr-body-lint.sh` 增加门 6：task.md 里如果有「无需修改 / 问题不存在 / 无文件修改」类字样，必须有 `![](.*\.(png|jpg))` 证据
+3. **Playwright 测试失败时的降级策略**：在 v2.3 prompt 约束 3 里明确「如果 Playwright 本地跑不起来，用 chrome-headless + curl 的组合作为降级方案（`google-chrome --headless --screenshot=/tmp/x.png <URL>`），不能因为 Playwright 挂了就放弃视觉验证」
+
+### 漏洞 J — CC 搜索策略单一（只 grep 组件名不 grep 中文字符串）
+
+**触发**：CC 用 `CounterpartManagementTab|TaskManagementTab` grep 没找到，但误植内容是内联中文字符串
+
+**修复建议**（P2 优先级）：
+1. **v2.3 prompt 新增"调查方法指引"**：遇到找不到组件时，同时 grep 组件名 + 中文 label 字符串 + 关键 CSS class + 相邻兄弟节点
+2. 或者更普适的：「如果第一次搜索没找到，必须换 3 种不同的搜索词再搜一次才能下结论」
+
+### 漏洞 K — #3544 误植的真正根因（研发经理私下调查发现，不注入 CC）
+
+**发现时间**：2026-04-09 15:05（第 6 轮观察时）
+
+**根因链**：
+1. CC grep 中文字符串没找到 `配合单位/任务看板/选择商务` 在 `project/index.vue` 里 — **grep 是对的**
+2. 字符串实际分布在独立子组件：
+   - `counterpart-management-tab.vue` Line 213 `<h3>配合单位</h3>`
+   - `task-board.vue` Line 164 `<h3>任务看板</h3>`
+   - `assign-modal.vue` Line 92 `<div>选择商务人员</div>`
+3. 这些子组件又被 `mine-detail-drawer.vue` import 并作为 drawer 内部的 a-tab-pane Tab（这是**正确**的设计）
+4. **真正的 bug** 在 `views/wande/project/index.vue:208`：
+   ```js
+   connectedComponent: MineDetailDrawer
+   ```
+   `connectedComponent` 是 vxe-grid 的**内联组件注册机制**，导致 `MineDetailDrawer` 的完整内容（包括所有 Tab）被**静态渲染**在主表格底部，而不是作为 overlay drawer 响应点击行触发弹出
+
+**正确修复方向**（等 CC 自己找到，不注入）：
+- 把 `connectedComponent: MineDetailDrawer` 改为通过 `v-model:open="drawerOpen"` 状态管理的 `<a-drawer>` 组件
+- 或者使用 `useVbenDrawer` hook 模式（index.vue:10 行已 import），绑定到行点击事件
+
+**干预边界的经验教训**（重要）：
+- ❌ **反例（第 4 轮 A 类干预）**：我注入时写了「从主页面移到 mine-detail-drawer.vue 对应 Tab 下」，CC 理解成「从 project/index.vue 里找内联模板移走」。实际上误植**不是内联模板**而是 `connectedComponent` 配置。我指向了错的修复方向
+- ✅ **正确做法**：注入应该只包含「症状 + 验证方法」，不应该包含「具体文件 + 具体修复步骤」
+- ✅ **根本规则**：研发经理的定位能力 ≠ CC 的执行能力。研发经理可能看得更远但不应该代替 CC 做调查
+
+---
+
+## 最终状态总结（持续更新）
+
+### ✅ #3543 已完成（基线）
+- PR #3547 merged 2026-04-09，评分 **7.70/10** 🟢
+- 干预次数 3（paste mode / C 静默 / B 假勾选）
+- 漏洞 A-G 已修复，H 延后
+
+### 🔄 #3544 进行中（v2.2 精简 prompt + quality-gate 第二次压测）
+- CC: kimi2 cc-wande-play-kimi2-3544（启动 2026-04-09 14:47）
+- 已运行 ~45 分钟，cron `412fc424` 5 分钟循环跟踪
+- 累计干预：**1** 次 A 类（第 4 轮 14:58 — 纠正"无需修改"错误结论）
+- 当前状态：CC 已 auto-compact 一次，正在推理 `connectedComponent: MineDetailDrawer` 根因
+- 发现新漏洞：**I**（CC 无 ground truth 否定结论）、**J**（搜索策略单一）、**K**（干预语言精度）
+- 压测对比 #3543：
+  | 指标 | #3543 | #3544 截至第 7 轮 |
+  |------|------|-----------------|
+  | 干预次数 | 3 | **1** ↓ |
+  | paste 模式卡住 | 有 | ❌ 无（修复生效）|
+  | CC 主动 grep 中文 | ❌ 需干预 | ⏳ 响应干预后做 |
+  | CC 主动 rebase | ❌ 需干预 | 🕐 未到 rebase 阶段 |
+  | CC 主动轮询 PR | ❌ 需干预 | 🕐 未到提 PR 阶段 |
+
+### ⏳ #3545 / #3546 未启动
+- #3545: [P0追补][#3118-fix] 前端 ECharts 关系图谱（fullstack high）
+- #3546: [P0追补][#2391-fix] trustLevel 接入 + 看板（fullstack medium）
+- **决策**：等 #3544 完成后再并行启动（避免 kimi2 目录冲突 + 验证 v2.2 稳定性）
+
+### 📊 四 PR 评分趋势
+| PR | Issue | 评分 | 状态 |
+|----|------|------|------|
+| #3487 | #3458 主 | 4.20/10 🔴 | merged（事故基线）|
+| #3541 | #3118 | 5.40/10 🔴 | merged（半成品）|
+| #3542 | #2391 | 6.70/10 🟡 | merged |
+| #3547 | #3543 | 7.70/10 🟢 | merged（v2 首次过格）|
+| TBD | #3544 | ? | 🔄 进行中（v2.2 压测）|
+| **平均** | — | **6.00** | — |
 

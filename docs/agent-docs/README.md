@@ -1,21 +1,12 @@
 # CC Agent Docs 导航
 
-本目录是 **万德AI平台所有 prompt / CC 相关文档的唯一权威源**。除 `CLAUDE.md` 外，任何 prompt 文档都应放在这里，按角色分门别类。
+本目录是万德AI平台所有 prompt / CC 文档的唯一权威源。除 `CLAUDE.md` 外，prompt 相关文档都放在这里。
 
-## 🚨 业务仓库引用规范（2026-04-09 立规）
+## 引用规范
 
-**业务仓库（wande-play / wande-gh-plugins / 等）引用本目录文档时**：
-
-| 引用方式 | 状态 | 示例 |
-|---------|------|------|
-| ✅ **首选** | 绝对路径 `~/` 开头 | `~/projects/.github/docs/agent-docs/share/cc-default-prompt.md` |
-| ✅ **备选** | 完整绝对路径 | `/home/ubuntu/projects/.github/docs/agent-docs/share/cc-default-prompt.md` |
-| ❌ **禁止** | 相对路径 `./` `../` | `../../.github/docs/agent-docs/...`（脆弱，目录层级一变就断） |
-| ❌ **禁止** | 仅文件名 | `default-issue.md`（找不到所属目录） |
-
-**理由**：业务仓库的工作目录可能在 `wande-play-kimiN/frontend` 等多层嵌套位置，相对路径容易解析错误；统一绝对路径让 CC 在任何 `cwd` 下都能正确引用文档。
-
-`.github` 仓库**内部**文档相互引用时（如 `agent-docs/manager/issue-creation-sop.md` 引用 `agent-docs/manager/wande-label.md`）可以用相对路径 `./wande-label.md`，因为它们在同一仓库稳定位置。
+- **业务仓库引用** → 用 `~/projects/.github/docs/agent-docs/...` 绝对路径
+- **agent-docs 内部互引** → 同目录用 `./xxx.md` 相对路径 OK
+- **禁止** → 跨仓库 `./` `../` 或裸文件名
 
 ## 目录结构
 
@@ -96,16 +87,15 @@ docs/agent-docs/
 
 ## CC Prompt 版本化
 
-| 版本 | 日期 | 触发事件 | 主要变更 |
-|-----|------|---------|---------|
-| v1 | ~2026-03 | 初版 | 仅一句话「阅读 issue-source.md 按流程完成任务」 |
-| **v2** | 2026-04-09 | #3458 事故（评分 4.2/10） | 追加 6 条硬约束（约束 1-6） |
-| **v2.1** | 2026-04-09 | 用户问"图形测试在哪个环节" | 追加约束 7（必补 smoke 用例）+ quality-gate 门 4 |
-| **v2.2** | 2026-04-09 | #3543 首次压测发现漏洞 B/E/F | 追加约束 8（必 rebase）+ 约束 9（PR 创建后轮询）+ 约束 2 假勾选警告 + 约束 7 加粗 🚨 |
+| 版本 | 日期 | 触发 | 变更 |
+|-----|------|------|------|
+| v1 | 2026-03 | 初版 | 一句话 prompt |
+| v2 | 2026-04-09 | #3458 事故 4.2/10 | + 6 条硬约束 |
+| v2.1 | 2026-04-09 | 图形测试覆盖 | + 约束 7 + 门 4 |
+| v2.2 | 2026-04-09 | #3543 压测漏洞 B/E/F | + 约束 8/9 + 假勾选警告 |
 
-**度量方法**：用 `scripts/weekly-quality-report.sh` 对比版本前后的批次评估平均分和反模式出现次数。目标：每次 prompt 升级带来 ≥ +0.5 平均分提升。
-
-**事故档案**：`docs/workflow/新harness验证报告.md` 是所有事故 → 修复 → 防复发的完整档案，每次事故评分 < 6 必须新增独立章节。
+度量：`scripts/weekly-quality-report.sh` 对比前后平均分。目标 +0.5/版本。
+事故档案：`docs/workflow/新harness验证报告.md`，评分 < 6 必须新建章节。
 
 ## 仓库信息
 

@@ -193,7 +193,6 @@ if [ "$MODE" = "issue" ]; then
   # 优先使用 dev 分支预下载的 issue-source.md（由 prefetch-issues.sh 提前写入并推送）
   if [ -f "$ISSUE_SOURCE" ]; then
     echo "$(date): Issue #${ISSUE} 已预下载 ($(wc -l < "$ISSUE_SOURCE") 行)，跳过 gh fetch"
-    CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
   else
     echo "$(date): Fetching Issue #${ISSUE} from GitHub ($GH_REPO)..."
     ISSUE_BODY=$(gh issue view "$ISSUE" --repo "$GH_REPO" --json number,title,body,labels,state \
@@ -201,14 +200,24 @@ if [ "$MODE" = "issue" ]; then
     ISSUE_COMMENTS=$(gh issue view "$ISSUE" --repo "$GH_REPO" --comments --json comments \
       --jq 'if (.comments | length) > 0 then "\n\n---\n\n## 评论\n\n" + ([.comments[] | "### \(.author.login) (\(.createdAt | split("T")[0]))\n\n\(.body)"] | join("\n\n---\n\n")) else "" end' 2>/dev/null)
 
-    if [ -z "$ISSUE_BODY" ]; then
-      echo "WARNING: Failed to fetch Issue #${ISSUE}, CC will fetch from GitHub"
-      CC_PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
-    else
+    if [ -n "$ISSUE_BODY" ]; then
       echo "${ISSUE_BODY}${ISSUE_COMMENTS}" > "$ISSUE_SOURCE"
       echo "$(date): Issue #${ISSUE} saved to $ISSUE_SOURCE ($(wc -l < "$ISSUE_SOURCE") lines)"
-      CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
     fi
+  fi
+
+  # === 构建 prompt（v2 - 2026-04-09 起引用 default-issue.md 模板，含 6 条硬约束） ===
+  PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/cc-prompts/default-issue.md"
+  if [ -f "$PROMPT_TEMPLATE" ]; then
+    # 用 envsubst 或 bash 字符串替换 ${ISSUE}
+    CC_PROMPT=$(ISSUE="$ISSUE" envsubst '${ISSUE}' < "$PROMPT_TEMPLATE" 2>/dev/null || sed "s/\${ISSUE}/${ISSUE}/g" "$PROMPT_TEMPLATE")
+    echo "$(date): 使用 prompt 模板 v2 (default-issue.md, $(wc -l < "$PROMPT_TEMPLATE") 行)"
+  elif [ -f "$ISSUE_SOURCE" ]; then
+    # fallback v1 纯字符串（兼容性）
+    CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
+    echo "$(date): [WARN] prompt 模板 v2 不存在，fallback 到 v1"
+  else
+    CC_PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
   fi
 
   # 检查详细设计文档

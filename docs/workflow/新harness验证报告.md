@@ -1960,17 +1960,337 @@ test('<page> smoke — 关键组件渲染', async ({ page }) => {
 
 ### 执行进度（初版：2026-04-09 10:50）
 
-- [ ] P0.1 三 Issue 追补指派
-- [ ] P0.2 run-cc.sh prompt 追加硬约束
-- [ ] P1.1 quality-gate 三道预检门
-- [ ] P1.2 prompt 模板完整升级
-- [ ] P1.3 pr-body-lint.sh
-- [ ] P2.1 视觉回归 bot
-- [ ] P2.2 E2E smoke coverage gate
-- [ ] P2.3 AI code-reviewer agent
-- [ ] P3 流程文化建设
+- [x] P0.1 四 Issue 追补（#3543 #3544 #3545 #3546 已创建，指派暂缓等 quality-gate 部署）
+- [x] P0.2 run-cc.sh prompt 追加硬约束（通过引用 default-issue.md 模板）
+- [x] P1.1 quality-gate 三道预检门（wande-play `.github/workflows/pr-test.yml`）
+- [x] P1.2 prompt 模板完整升级（`docs/agent-docs/cc-prompts/default-issue.md` v2）
+- [x] P1.3 pr-body-lint.sh（`scripts/pr-body-lint.sh` + 本地自测通过）
+- [x] P2.1 视觉回归 bot（wande-play `.github/workflows/visual-review.yml`）
+- [x] P2.2 E2E smoke coverage gate（`scripts/e2e-smoke-coverage-gate.sh` + `_template.spec.ts`）
+- [x] P2.3 AI code-reviewer agent（`.claude/agents/pr-reviewer.md`）
+- [x] P3 流程文化建设（`scripts/weekly-quality-report.sh` + `cc-prompts/README.md`）
 
 ---
 
-**本报告章节是 #3458 生态事故从发现到系统性修复的完整档案，吴总审阅后可据此拍板排程 Sprint-2 质量补课。**
+# 🛠️ P0–P3 执行详情（2026-04-09 11:00）
+
+> 本章节记录每一步的**具体改动 + 文件清单 + 测试证据**，吴总可直接按文件路径 review
+
+## P0.1 — 四个追补 Issue（已创建，指派暂缓）
+
+| 追补 Issue | 标题 | 模块 | 优先级 | 对应源事故 |
+|-----------|------|-----|-------|----------|
+| **#3543** | [P0追补][#3458-fix1] data.ts slot HTML字符串 + 旧筛选器清理 | frontend | P0 | PR #3487 评分 4.2/10 |
+| **#3544** | [P0追补][#3458-fix2] 主页面底部误植内容归位到 drawer | frontend | P0 | PR #3487 |
+| **#3545** | [P0追补][#3118-fix] 前端关系网络 Tab（ECharts 可视化） | fullstack | P0 | PR #3541 评分 5.40/10 |
+| **#3546** | [P0追补][#2391-fix] #3458 trustLevel 接入 + 可信度看板 | fullstack | P1 | PR #3542 评分 6.70/10 |
+
+**指派策略**：**暂缓指派**，等 P1.1 quality-gate 部署生效后再启动 CC，避免新 CC 再次踩同样的坑。部署完成后可在 Sprint 任务窗口内按顺序指派：
+1. kimi2 → #3543（effort high，有 data.ts slot 用法示范）
+2. kimi3 → #3544（effort high，依赖 #3543 合并后）
+3. kimi4 → #3545（effort high，独立可并行）
+4. kimi5 → #3546（effort medium，依赖 #3543 合并后）
+
+**验证命令**：
+```bash
+gh issue view 3543 --repo WnadeyaowuOraganization/wande-play
+gh issue view 3544 --repo WnadeyaowuOraganization/wande-play
+gh issue view 3545 --repo WnadeyaowuOraganization/wande-play
+gh issue view 3546 --repo WnadeyaowuOraganization/wande-play
+```
+
+## P0.2 — `scripts/run-cc.sh` prompt 模板引用升级
+
+**改动定位**：`scripts/run-cc.sh` 第 188-229 行（CC_PROMPT 构建逻辑）
+
+**v1（旧）**：
+```bash
+CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
+```
+
+**v2（新）**：
+```bash
+PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/cc-prompts/default-issue.md"
+if [ -f "$PROMPT_TEMPLATE" ]; then
+  CC_PROMPT=$(ISSUE="$ISSUE" envsubst '${ISSUE}' < "$PROMPT_TEMPLATE" 2>/dev/null || sed "s/\${ISSUE}/${ISSUE}/g" "$PROMPT_TEMPLATE")
+  echo "$(date): 使用 prompt 模板 v2 (default-issue.md)"
+elif [ -f "$ISSUE_SOURCE" ]; then
+  CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
+  echo "$(date): [WARN] prompt 模板 v2 不存在，fallback 到 v1"
+else
+  CC_PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
+fi
+```
+
+**效果**：下一次 `run-cc.sh --issue XXX` 启动的 CC 都会收到完整的 v2 prompt（含 6 条硬约束）
+
+## P1.1 — quality-gate 三道预检门
+
+**改动定位**：`wande-play/.github/workflows/pr-test.yml` 在 `auto-merge` job 之前新增 `quality-gate` job
+
+**job 结构**：
+```yaml
+quality-gate:
+  name: 质量预检（checkbox/task.md/前端截图）
+  needs: [conflict-check]
+  if: success() && needs.conflict-check.outputs.mergeable != 'CONFLICTING'
+  outputs:
+    passed: ${{ steps.gate.outputs.passed }}
+  steps:
+    - 门 1 — PR body 无未勾 checkbox（grep '^- \[ \]' 计数）
+    - 门 2 — task.md 全勾（gh api 读取 issue-XXXX/task.md）
+    - 门 3 — 前端 PR 必须含截图（gh pr view files + body regex）
+    - 失败时 gh pr comment 写入拦截原因 + exit 1/2/3
+
+auto-merge:
+  needs: [e2e-test, quality-gate]
+  if: success() && needs.quality-gate.outputs.passed == 'true'
+```
+
+**回归验证对照**（如果 quality-gate 已上线，三起事故会如何被拦截）：
+| PR | 拦截门 | 原因 |
+|----|-------|------|
+| #3487 (#3458) | **门 1** | PR body 6 项 E2E `- [ ]` 未勾 |
+| #3541 (#3118) | **门 1 + 门 2** | PR body `- [ ] 前端页面实现（下一阶段）` + task.md 4/8 未勾 |
+| #3542 (#2391) | **门 3** 不适用 / 门 2 通过 / 门 1 通过 | 纯后端 PR，quality-gate 允许通过（但会被 P2.3 pr-reviewer 捕获单测警示语） |
+
+**已知限制**：门 2 读取 `task.md` 依赖 PR 分支已推送该文件，如果 CC 忘记提交 task.md 则此门静默跳过
+
+## P1.2 — prompt 模板文件
+
+**新文件**：`docs/agent-docs/cc-prompts/default-issue.md`（143 行）
+
+**核心内容**：6 条硬约束 + quality-gate 拦截说明 + 反例/正例对照
+
+| 约束 | 规则 | 关联门 | 反例来源 |
+|-----|------|-------|---------|
+| 1 | task.md 全勾 | 门 2 | #3541 #3118 |
+| 2 | PR body checkbox 全勾 | 门 1 | #3487 #3541 |
+| 3 | 前端必须截图 | 门 3 | #3487 |
+| 4 | slot 返回 VNode 不得返回字符串 | pr-reviewer P0 | #3487 data.ts:445 |
+| 5 | 集成链显式声明 | pr-reviewer P0 | #3542 未接入 #3458 |
+| 6 | 单测必须本地跑通 | pr-reviewer P1 | #3542 task.md 第 5 步 |
+
+## P1.3 — 本地预检脚本
+
+**新文件**：`scripts/pr-body-lint.sh`（145 行，可执行）
+
+**本地自测结果**：
+```bash
+$ cat > /tmp/test-pr-body.md <<'EOF'
+## Summary
+- [x] 完成了后端 API
+- [x] 编写了单元测试
+- [ ] 前端页面实现（下一阶段）
+EOF
+
+$ bash scripts/pr-body-lint.sh --pr-body /tmp/test-pr-body.md --issue 99999
+═══ 门 1 失败：PR body 存在 1 项未勾 checkbox ═══
+4:- [ ] 前端页面实现（下一阶段）
+❌ 门 1: PR body 必须全勾，请补齐或删除 placeholder 再提交
+exit=1  ← ✓ 正确拦截
+
+# 改为全勾后
+- [x] 前端页面实现
+$ bash scripts/pr-body-lint.sh --pr-body /tmp/test-pr-body.md --issue 99999
+✅ 门 1 通过：PR body 无未勾 checkbox
+🎉 pr-body-lint 全部通过，可以 gh pr create
+exit=0  ← ✓ 正确放行
+```
+
+**参数**：`--pr-body <file>` / `--pr-body-stdin` / `--issue N` / `--frontend-changes N` / `--verbose`
+
+## P2.1 — Playwright 视觉回归 workflow
+
+**新文件**：`wande-play/.github/workflows/visual-review.yml`
+
+**触发**：PR 改动 `frontend/apps/web-antd/src/views/**`
+
+**流程**：
+1. Checkout PR 分支
+2. 从 diff 提取变更视图文件 → 映射到路由（硬映射表：`views/wande/project/**` → `/wande-project/project`）
+3. 用 Playwright headless chromium 登录 Dev（admin/admin123）截图
+4. 用 chrome headless 截图 `docs/design/*/prototype.html`
+5. 上传 artifact + 评论 PR「视觉回归截图已生成，请在 Actions 下载对比」
+6. **LLM 对比**：当前为占位实现，未来可接入 Claude Vision API：`claude -p "对比差异 %" --image actual.png --image proto.png`
+
+**已知限制**：
+- 路由映射表需手动维护（下阶段：从 `frontend/apps/web-antd/src/router/**` 自动解析）
+- LLM 对比未真正接入，当前仅上传 artifact 供人工审查
+
+## P2.2 — E2E smoke coverage gate + 用例模板
+
+**新文件 1**：`scripts/e2e-smoke-coverage-gate.sh`（100 行，可执行）
+- 输入：`--pr <N>` 或 `--branch <name>`
+- 逻辑：从 PR diff 提取 `views/**/index.vue` → 检查 `e2e/tests/front/smoke/` 是否有对应 `<module>-page.spec.ts`
+- 失败：返回 1 + 打印缺失清单 + 模板路径提示
+
+**新文件 2**：`wande-play/e2e/tests/front/smoke/_template.spec.ts`（52 行）
+- 每个新页面至少 3 个断言：
+  1. **标题正确**（`toHaveTitle`）
+  2. **关键组件渲染**（`.ant-tag / .vxe-body--row` 可见）
+  3. **核心反事故断言**：`表格首 20 个单元格的文本不得以 < 开头`（防 #3487 slot 字符串事故）
+
+**集成点**（下阶段）：需要在 `pr-test.yml` 新增一个调用 `e2e-smoke-coverage-gate.sh` 的 job，与 quality-gate 并列
+
+## P2.3 — AI code-reviewer subagent
+
+**新文件**：`.claude/agents/pr-reviewer.md`（frontmatter + 140 行审查清单）
+
+**审查清单 8 项**（P0 阻塞 5 项 + P1 提醒 3 项）：
+- P0.1 slot 返回 HTML 字符串（反例 PR #3487）
+- P0.2 task.md 未勾（反例 PR #3541）
+- P0.3 PR body 未勾 / 免责语（反例 PR #3487 #3541）
+- P0.4 fullstack Issue 无前端文件（反例 PR #3541）
+- P0.5 集成链声明但未实现（反例 PR #3542）
+- P1.1 单测未本地验证（反例 PR #3542）
+- P1.2 前端无截图（门 3 提前提醒）
+- P1.3 新页面无 smoke 用例
+
+**使用**：
+```bash
+PR_NUM=3487 claude -p "使用 pr-reviewer agent 审查当前 PR"
+# 或后续接入 pr-reviewer.yml workflow 在 PR 创建后自动调用
+```
+
+**产出**：Markdown 结构化报告 + 综合评分 + `gh pr comment`
+
+## P3 — 流程文化建设
+
+### P3.1 质量评分周报脚本
+
+**新文件**：`scripts/weekly-quality-report.sh`（90 行，可执行）
+
+**首次运行结果**：
+```
+批次数：6
+平均分：6.95 / 10  ← < 7.0 触发警告
+
+反模式出现次数（全报告累计）：
+  slot 返回 HTML 字符串        1 次
+  半成品合并                   3 次
+  task.md.*未勾                6 次
+  checkbox.*未勾               2 次
+  前端.*未做                    5 次
+  集成.*未                     3 次
+
+⚠️ 平均分 6.95 < 7.0，建议：
+  1. 暂停恢复常规 auto-merge 指派，优先推进 P1.1 quality-gate 补丁
+  2. 召集超管 review 反模式，更新 docs/agent-docs/cc-prompts/default-issue.md
+  3. 低分 PR 的负责 kimi 下一轮默认 effort 提一档
+```
+
+### P3.2 prompt 模板版本化
+
+**新文件**：`docs/agent-docs/cc-prompts/README.md`（35 行）
+
+**内容**：
+- 模板版本表（v1 → v2 演进）
+- 如何添加新模板（按场景分文件）
+- 如何度量升级效果（对比前后平均分）
+- v2 缘起（#3458 事故）
+
+### P3.3 事故档案化
+
+**已完成**：本报告 `docs/workflow/新harness验证报告.md` 已成为事实上的"质量事故档案"，包含：
+- 批次评估章节（累计 6 批）
+- PR #3487 紧急修正章节
+- PR #3541 半成品事故章节
+- PR #3542 评估 + 三 PR 汇总章节
+- 最终优化方案章节
+- **本 P0-P3 执行详情章节**
+
+**规范**：每次重大事故（评分 < 6）必须新增独立章节；研发经理循环任务中增加一步"读最近 5 个事故章节避免重复犯错"
+
+---
+
+# 📁 本轮 P0–P3 全部文件变更清单
+
+## `.github` 仓库（main 分支）
+
+### 新增文件
+
+| 路径 | 行数 | 用途 |
+|------|------|------|
+| `docs/agent-docs/cc-prompts/default-issue.md` | 143 | P1.2 prompt 模板 v2，含 6 条硬约束 |
+| `docs/agent-docs/cc-prompts/README.md` | 35 | P3.2 prompt 模板版本化索引 |
+| `scripts/pr-body-lint.sh` | 145 | P1.3 本地 PR body / task.md 预检脚本（chmod +x） |
+| `scripts/e2e-smoke-coverage-gate.sh` | 100 | P2.2 E2E smoke 覆盖率预检脚本（chmod +x） |
+| `scripts/weekly-quality-report.sh` | 90 | P3.1 质量评分周报脚本（chmod +x） |
+| `.claude/agents/pr-reviewer.md` | 140 | P2.3 AI code-reviewer subagent 定义 |
+
+### 修改文件
+
+| 路径 | 改动范围 | 用途 |
+|------|---------|------|
+| `scripts/run-cc.sh` | 第 188-229 行 CC_PROMPT 构建逻辑 | P0.2 引用 default-issue.md 模板 |
+| `docs/workflow/新harness验证报告.md` | 追加 P0–P3 执行详情章节 + 文件变更清单 | 本次报告更新 |
+| `sprints/sprint-1/PLAN.md` | 之前已更新（#3118/#2391 划线） | 历史改动 |
+
+## `wande-play` 仓库（dev 分支）
+
+### 新增文件
+
+| 路径 | 行数 | 用途 |
+|------|------|------|
+| `.github/workflows/visual-review.yml` | 105 | P2.1 Playwright 视觉回归 workflow |
+| `e2e/tests/front/smoke/_template.spec.ts` | 52 | P2.2 smoke 用例模板（含 3 个反事故断言） |
+
+### 修改文件
+
+| 路径 | 改动范围 | 用途 |
+|------|---------|------|
+| `.github/workflows/pr-test.yml` | `auto-merge` job 之前插入 `quality-gate` job（~75 行新增） | P1.1 三道预检门 |
+
+## 新建的追补 Issue（wande-play）
+
+| Issue | 类型 | 状态 |
+|-------|-----|------|
+| `#3543` | [P0追补][#3458-fix1] data.ts slot + 筛选器 | OPEN，待指派 |
+| `#3544` | [P0追补][#3458-fix2] 主页面底部归位 drawer | OPEN，待指派 |
+| `#3545` | [P0追补][#3118-fix] 前端 ECharts 关系图谱 | OPEN，待指派 |
+| `#3546` | [P0追补][#2391-fix] trustLevel 接入 + 看板 | OPEN，待指派 |
+
+## 提交规划
+
+### commit 1 — `.github` 主仓库（main 分支）
+```
+docs(harness): P0-P3 方案落地 — prompt模板v2 + 预检脚本 + agent + 质量周报
+
+P0.2 run-cc.sh 引用 default-issue.md v2 模板
+P1.2 default-issue.md 6 条硬约束
+P1.3 pr-body-lint.sh 本地预检
+P2.2 e2e-smoke-coverage-gate.sh
+P2.3 .claude/agents/pr-reviewer.md
+P3.1 weekly-quality-report.sh
+P3.2 cc-prompts/README.md
+```
+
+### commit 2 — `wande-play` 仓库（dev 分支）
+```
+ci(quality): P1.1 quality-gate 三道预检门 + P2.1 visual-review + P2.2 smoke template
+
+- pr-test.yml 新增 quality-gate job (门1-3)
+- auto-merge 依赖 quality-gate.outputs.passed
+- visual-review.yml 新 workflow (Playwright 截图 + artifact)
+- e2e/tests/front/smoke/_template.spec.ts 含反事故断言
+```
+
+## 部署顺序建议
+
+1. **立即**：commit 1 到 `.github` main（脚本立即可用）
+2. **紧接**：commit 2 到 `wande-play` dev，触发 pr-test.yml 自检（quality-gate 对自身 PR 生效）
+3. **24h 观察**：看 quality-gate 是否误伤正常 PR；如误伤调整门规则
+4. **48h 后**：指派 4 个追补 Issue（#3543-#3546）到 kimi CC，观察新 prompt + quality-gate 组合效果
+5. **1 周后**：跑一次 `weekly-quality-report.sh`，对比 v2 上线前后的平均分和反模式次数
+
+## 成功判据
+
+- **短期（1 周）**：下一批次 PR 平均分 ≥ 7.5（对比当前 6.95）
+- **中期（1 个月）**：「slot HTML 字符串」「半成品合并」反模式次数降为 0
+- **长期**：auto-merge 可恢复常规指派，无需人工 gate
+
+---
+
+**本章节完整记录了 P0-P3 方案的落地细节，每一步都可按文件路径 review 和 git diff 审查。下一步等用户/超管 review 后，拍板 commit + push 时序。**
 

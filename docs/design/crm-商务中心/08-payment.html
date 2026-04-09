@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>回款跟踪 — CRM商务中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #fff; color: #333; margin:0; }
+  .nav-bar { height: 48px; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; padding: 0 24px; justify-content: space-between; position: sticky; top: 0; z-index: 100; }
+  .nav-left { font-size: 14px; color: #666; }
+  .nav-left strong { color: #333; }
+  .nav-right { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #666; }
+  .kpi-section { background: #fff; border-bottom: 1px solid #f0f0f0; padding: 12px 24px; }
+  .kpi-bar { display: flex; align-items: center; gap: 0; font-size: 13px; margin-bottom: 10px; flex-wrap: wrap; }
+  .kpi-item { display: flex; align-items: center; gap: 6px; padding: 0 20px; }
+  .kpi-item:first-child { padding-left: 0; }
+  .kpi-item + .kpi-item { border-left: 1px solid #f0f0f0; }
+  .kpi-label { color: #666; }
+  .kpi-val { font-weight: 700; font-size: 16px; }
+  .progress-row { display: flex; align-items: center; gap: 12px; }
+  .progress-label { font-size: 12px; color: #666; white-space: nowrap; }
+  .progress-track { flex: 1; height: 10px; background: #f0f0f0; border-radius: 5px; overflow: hidden; max-width: 400px; }
+  .progress-fill { height: 100%; border-radius: 5px; }
+  .progress-pct { font-size: 12px; font-weight: 600; }
+  .filter-bar { padding: 12px 24px; display: flex; align-items: center; gap: 10px; background: #fff; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
+  input[type="text"], select { height: 32px; border: 1px solid #d9d9d9; border-radius: 3px; padding: 0 10px; font-size: 13px; color: #333; background: #fff; outline: none; }
+  .btn { display: inline-flex; align-items: center; height: 32px; padding: 0 14px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 13px; cursor: pointer; background: #fff; color: #555; gap: 4px; white-space: nowrap; }
+  .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 13px; font-weight: 600; color: #555; padding: 11px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; height: 44px; vertical-align: middle; }
+  tr:hover td { background: #fafafa; }
+  tr.overdue td { background: #fff1f0; }
+  tr.overdue:hover td { background: #ffe8e6; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; }
+  .tag-gray { background: #f0f0f0; color: #8c8c8c; }
+  .btn-link { color: #1890ff; background: none; border: none; cursor: pointer; font-size: 13px; padding: 2px 4px; }
+  .btn-warn { color: #ff4d4f; background: none; border: 1px solid #ff4d4f; border-radius: 3px; cursor: pointer; font-size: 12px; padding: 2px 8px; }
+  .table-wrap { padding: 0 24px 20px; }
+  .page-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px 12px; }
+  .page-title { font-size: 18px; font-weight: 700; color: #333; }
+  footer { text-align: center; padding: 20px; font-size: 12px; color: #bbb; border-top: 1px solid #f0f0f0; }
+</style>
+</head>
+<body>
+
+<!-- 顶部导航栏 -->
+<div class="nav-bar">
+  <div class="nav-left">CRM商务中心 &gt; <strong>回款跟踪</strong></div>
+  <div class="nav-right">
+    <span>📥 <span style="color:#1890ff;font-weight:700;">4</span></span>
+    <span>📢 <span style="color:#1890ff;font-weight:700;">3</span></span>
+    <span>🔔 <span style="color:#1890ff;font-weight:700;">2</span></span>
+    <span style="color:#333;font-weight:500;">张三 | 拓展一部</span>
+  </div>
+</div>
+
+<!-- KPI统计条 + 进度条 -->
+<div class="kpi-section">
+  <div class="kpi-bar">
+    <div class="kpi-item">
+      <span class="kpi-label">应收总额</span>
+      <span class="kpi-val" style="color:#333;">￥12,800,000</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-label">已收</span>
+      <span class="kpi-val" style="color:#52c41a;">￥8,200,000</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-label">逾期</span>
+      <span class="kpi-val" style="color:#ff4d4f;">￥1,500,000</span>
+    </div>
+    <div class="kpi-item">
+      <span class="kpi-label">回款率</span>
+      <span class="kpi-val" style="color:#1890ff;">64%</span>
+    </div>
+  </div>
+  <div class="progress-row">
+    <span class="progress-label">回款进度 64%</span>
+    <div class="progress-track">
+      <div class="progress-fill" style="width:64%; background:#52c41a;"></div>
+    </div>
+    <span class="progress-pct" style="color:#52c41a;">已收 ￥8,200,000 / ￥12,800,000</span>
+  </div>
+</div>
+
+<!-- 回款周报提醒条 -->
+<div style="background:#fffbe6; border-bottom:1px solid #ffe58f; padding:10px 24px; display:flex; align-items:center; justify-content:space-between; font-size:13px;">
+  <div>
+    <span style="color:#d48806; font-weight:600;">📋 回款周报</span>
+    <span style="color:#666; margin-left:12px;">本周截止：周四 16:00 · 你有 <span style="color:#ff4d4f; font-weight:700;">3笔</span> 应收款未填写本周跟进</span>
+  </div>
+  <button class="btn btn-primary" style="height:28px; font-size:12px;">填写回款周报</button>
+</div>
+
+<!-- 页面标题 + 筛选 -->
+<div class="page-header">
+  <div class="page-title">回款明细列表</div>
+  <div style="display:flex; gap:8px;">
+    <button class="btn">导出Excel</button>
+    <button class="btn btn-primary">填写回款周报</button>
+  </div>
+</div>
+
+<!-- 筛选栏 -->
+<div class="filter-bar">
+  <input type="text" placeholder="搜索合同编号/客户名称..." style="width:240px;">
+  <select style="width:130px;">
+    <option value="">状态：全部</option>
+    <option>正常</option><option>逾期</option><option>已完成</option>
+  </select>
+  <select style="width:140px;">
+    <option value="">负责人：全部</option>
+    <option>张三</option><option>李四</option><option>王五</option><option>赵六</option>
+  </select>
+  <select style="width:130px;">
+    <option value="">业务线：全部</option>
+    <option>直销甲方</option><option>国内经销</option><option>国际客户</option>
+  </select>
+  <button class="btn btn-primary">搜索</button>
+  <button class="btn">重置</button>
+</div>
+
+<!-- 回款表格 -->
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th>合同编号</th>
+        <th>客户</th>
+        <th>合同金额</th>
+        <th>已收金额</th>
+        <th>待收金额</th>
+        <th>逾期金额</th>
+        <th>最近回款日</th>
+        <th>状态</th>
+        <th>本周周报</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0024-01</td>
+        <td>杭州乐动体育</td>
+        <td>￥1,600,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥1,600,000</td>
+        <td>￥0</td>
+        <td>—</td>
+        <td>2026-04-02</td>
+        <td><span class="tag tag-green">已完成</span></td>
+        <td style="color:#8c8c8c;">—</td>
+        <td><button class="btn-link">详情</button></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0028-01</td>
+        <td>Playpoint Pte Ltd</td>
+        <td>$120,000</td>
+        <td style="color:#52c41a; font-weight:500;">$36,000</td>
+        <td style="color:#1890ff;">$84,000</td>
+        <td>—</td>
+        <td>2026-03-20</td>
+        <td><span class="tag tag-blue">进行中</span></td>
+        <td><span class="tag tag-green">✅ 已填</span></td>
+        <td><button class="btn-link">填周报</button> <button class="btn-link">详情</button></td>
+      </tr>
+      <tr class="overdue">
+        <td style="font-size:12px; color:#999;">CT-2026-0019-01</td>
+        <td>PT Funworld Indonesia</td>
+        <td>$95,000</td>
+        <td style="color:#52c41a; font-weight:500;">$28,500</td>
+        <td style="color:#1890ff;">$66,500</td>
+        <td style="color:#ff4d4f; font-weight:600;">$19,000</td>
+        <td style="color:#ff4d4f;">2026-02-28</td>
+        <td><span class="tag tag-red">逾期42天</span></td>
+        <td><span style="color:#ff4d4f; font-size:12px; font-weight:600;">⚠️ 未填写</span></td>
+        <td><button class="btn-warn">填周报</button> <button class="btn-link">详情</button></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0021-01</td>
+        <td>合肥蜀山区教育局</td>
+        <td>￥2,100,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥1,260,000</td>
+        <td style="color:#1890ff;">￥840,000</td>
+        <td>—</td>
+        <td>2026-03-31</td>
+        <td><span class="tag tag-blue">进行中</span></td>
+        <td><span class="tag tag-green">✅ 已填</span></td>
+        <td><button class="btn-link">填周报</button> <button class="btn-link">详情</button></td>
+      </tr>
+      <tr class="overdue">
+        <td style="font-size:12px; color:#999;">CT-2026-0015-01</td>
+        <td>北京海淀区住建委</td>
+        <td>￥3,200,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥2,560,000</td>
+        <td style="color:#1890ff;">￥640,000</td>
+        <td style="color:#ff4d4f; font-weight:600;">￥640,000</td>
+        <td style="color:#ff4d4f;">2026-02-15</td>
+        <td><span class="tag tag-red">逾期53天</span></td>
+        <td><span style="color:#ff4d4f; font-size:12px; font-weight:600;">⚠️ 连续2周未填</span></td>
+        <td><button class="btn-warn">填周报</button> <button class="btn-link">详情</button></td>
+      </tr>
+      <tr>
+        <td style="font-size:12px; color:#999;">CT-2026-0038-01</td>
+        <td>安徽乐翔体育</td>
+        <td>￥1,880,000</td>
+        <td style="color:#52c41a; font-weight:500;">￥564,000</td>
+        <td style="color:#1890ff;">￥1,316,000</td>
+        <td>—</td>
+        <td>2026-04-05</td>
+        <td><span class="tag tag-blue">进行中</span></td>
+        <td><span style="color:#fa8c16; font-size:12px;">⏳ 待填写</span></td>
+        <td><button class="btn-link">填周报</button> <button class="btn-link">详情</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<footer>万德AI平台 — CRM商务中心原型 v3.0 | 2026年4月</footer>
+</body>
+</html>

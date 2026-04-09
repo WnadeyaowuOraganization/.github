@@ -48,6 +48,50 @@ if [ -z "$OPTION_ID" ]; then
     exit 1
 fi
 
+# === DONE GUARD: 防止人工/LLM 误判改 Done ===
+# Done 应由 pr-test.yml 在 PR squash-merge 后自动设置（issue-sync.yml）。
+# 任何手动调用本脚本传 --status "Done" 都必须先证明：
+#   存在引用该 issue 且 mergedAt 非空的 PR。
+# 校验失败 → exit 2，并提示如何用 FORCE_DONE=1 绕过（仅限超管）。
+if [ "$NEW_STATUS" = "Done" ]; then
+    GUARD_REPO="${REPO_SHORT:-play}"
+    case "$GUARD_REPO" in
+        backend|frontend|pipeline|play) GUARD_REPO_FULL="wande-play" ;;
+        plugins|gh-plugins)             GUARD_REPO_FULL="wande-gh-plugins" ;;
+        *)                              GUARD_REPO_FULL="wande-play" ;;
+    esac
+    # 同时按 branch / title / body 搜索引用（issue-sync 创建的 feature 分支命名为 feature-Issue-N）
+    # gh pr list --search 默认搜全文 + 分支名，不需要 in: 限定符
+    GUARD_MERGED_COUNT=$(gh pr list \
+        --repo "WnadeyaowuOraganization/$GUARD_REPO_FULL" \
+        --state all \
+        --search "Issue-$ISSUE_NUMBER" \
+        --json number,mergedAt \
+        --jq '[.[] | select(.mergedAt != null)] | length' 2>/dev/null || echo "0")
+    # 兜底：搜索可能漏掉只在 commit message 提及的，再用 --head 精确匹配 feature-Issue-N 分支
+    if [ -z "$GUARD_MERGED_COUNT" ] || [ "$GUARD_MERGED_COUNT" = "0" ]; then
+        GUARD_MERGED_COUNT=$(gh pr list \
+            --repo "WnadeyaowuOraganization/$GUARD_REPO_FULL" \
+            --state all \
+            --head "feature-Issue-$ISSUE_NUMBER" \
+            --json number,mergedAt \
+            --jq '[.[] | select(.mergedAt != null)] | length' 2>/dev/null || echo "0")
+    fi
+    if [ -z "$GUARD_MERGED_COUNT" ] || [ "$GUARD_MERGED_COUNT" = "0" ]; then
+        echo "⛔ DONE GUARD: Issue #$ISSUE_NUMBER 没有 mergedAt 非空的 PR，拒绝改 Done" >&2
+        echo "   理由：Done 应由 pr-test.yml 在 PR squash-merge 后自动设置，不应被研发经理/LLM 主动改" >&2
+        echo "   排查：gh pr list --repo WnadeyaowuOraganization/$GUARD_REPO_FULL --state all --head feature-Issue-$ISSUE_NUMBER --json number,state,mergedAt" >&2
+        if [ "${FORCE_DONE:-0}" = "1" ]; then
+            echo "   ⚠️ FORCE_DONE=1 已设置，绕过 guard（仅限超管手动操作）" >&2
+        else
+            echo "   如需绕过：FORCE_DONE=1 $0 --repo $REPO_SHORT --issue $ISSUE_NUMBER --status Done" >&2
+            exit 2
+        fi
+    else
+        echo "✓ DONE GUARD: Issue #$ISSUE_NUMBER 已有 $GUARD_MERGED_COUNT 个 mergedAt 非空的 PR，放行"
+    fi
+fi
+
 # repo短名 → 仓库全名映射
 declare -A REPO_MAP
 REPO_MAP["backend"]="wande-play"

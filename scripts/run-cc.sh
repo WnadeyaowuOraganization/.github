@@ -89,7 +89,11 @@ if [ ! -d "$PROJECT_DIR" ]; then
 fi
 
 # === 锁检测（在pre-task之前，避免checkout dev丢弃SAVED状态的改动）===
-LOCK_FILE="${BASE_DIR}/.cc-lock"
+# 2026-04-09: lock 文件迁移到 /home/ubuntu/cc_scheduler/lock/<dirname>.lock
+# 不再放在 BASE_DIR 内，避免被 git tracked + 误 commit + 跨 kimi 目录污染
+LOCK_DIR="${HOME_DIR}/cc_scheduler/lock"
+mkdir -p "$LOCK_DIR" 2>/dev/null
+LOCK_FILE="${LOCK_DIR}/$(basename ${BASE_DIR}).lock"
 
 if [ -f "$LOCK_FILE" ]; then
   LOCK_ISSUE=$(grep "^issue=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)

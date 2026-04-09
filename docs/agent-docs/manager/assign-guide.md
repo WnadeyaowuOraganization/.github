@@ -49,6 +49,15 @@ Done 由 `pr-test.yml` 的 auto-merge job 自动触发。研发经理 ⛔ 永远
 - In Progress 直接跳 Done 不经过 PR squash-merge
 - 批量把多个 issue 改 Done
 
+### 🛡️ Done Guard（硬隔离，2026-04-08 起生效）
+
+`update-project-status.sh --status "Done"` 内置硬校验：必须存在引用该 issue 且
+`mergedAt` 非空的 PR，否则 **exit 2** 拒绝执行。这是兜底防护，**不是替代**上述判断。
+
+- 命中 guard → 说明你的判断已经踩到了红线，**先排查 PR 状态**，不要直接绕过
+- 真有特殊情况（如 PR 被异常清理需手动补 Done）→ `FORCE_DONE=1` 前缀，仅限超管手动操作
+- 研发经理 ⛔ 不允许自行设置 `FORCE_DONE=1`
+
 ### 拿不准时
 
 ```bash
@@ -138,25 +147,78 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 > ⚠️ "CC 进程退出" 不是事件触发器！CC 进程退出后 Issue 仍处于 In Progress
 > 阶段（等 PR 创建/CI 跑/auto-merge）。只有 PR mergedAt 非空才允许标 Done。
 
-## 任务二：巡检 CC 进度
+## 任务二：巡检 CC 进度（attention-only 模式，2026-04-08 改造）
+
+> **重大变更**：不再 tmux capture-pane 全场扫描。改用 server.py 规则引擎预筛 + 只对
+> `needs_attention=true` 的少数 CC 做精细介入。单轮 token 从 ~70k 降到 ~5k。
+
+### Step 1：一次性拉取全场摘要 + 注意力列表
 
 ```bash
-# 全面锁状态总览（含 RUNNING/SAVED/超时）
-bash scripts/cc-check.sh
+# 全部 CC 状态（瘦身 JSON，非 raw 日志）
+curl -s http://localhost:9872/api/status | jq '.agents[] | {
+  id, issue_number, module, status,
+  silent_minutes, lock_state,
+  pr_summary, needs_attention, attention_reason,
+  estimated_progress, progress_source
+}'
 
-# 读取指定会话实时输出（最近200行），判断是否卡住/报错/等待输入
-tmux capture-pane -t cc-wande-play-kimi1-1234 -p -S -200
+# 只看需要介入的（通常 0~3 个）
+ATTENTION=$(curl -s http://localhost:9872/api/status \
+  | jq -c '.agents[] | select(.needs_attention)')
 
-# 检查最近 15 分钟内 squash-merged 的 PR（找出需要 PLAN.md 划删除线的 issue）
-gh pr list --repo WnadeyaowuOraganization/wande-play --state merged \
-  --search "merged:>$(date -u -d '15 minutes ago' +%Y-%m-%dT%H:%M:%S)" \
-  --json number,title,mergedAt,headRefName --jq '.[] | "\(.number)\t\(.headRefName)\t\(.mergedAt)"'
+if [ -z "$ATTENTION" ]; then
+  echo "✓ 全场自监控中，本轮无需巡检介入"
+fi
 ```
 
-### 发现问题时注入提示词
+### Step 2：对每个 attention CC 做精细巡检
+
+`needs_attention=true` 时，根据 `attention_reason` 选择处理策略：
 
 ```bash
-tmux send-keys -t cc-wande-play-kimi3-1567 "请检查编译错误并修复" Enter
+echo "$ATTENTION" | jq -c '.' | while read agent; do
+  ID=$(echo "$agent" | jq -r '.id')
+  ISSUE=$(echo "$agent" | jq -r '.issue_number')
+  REASON=$(echo "$agent" | jq -r '.attention_reason')
+  SILENT=$(echo "$agent" | jq -r '.silent_minutes')
+  PR=$(echo "$agent" | jq -r '.pr_summary.number // "none"')
+
+  echo "=== $ID (issue #$ISSUE) — $REASON ==="
+
+  # 只在真的需要时才 capture（200 行 → 100 行就够）
+  case "$REASON" in
+    *"静默"*"分钟无新输出"*)
+      tmux capture-pane -t "$ID" -p -S -100 | tail -50
+      # 根据最后输出决定注入策略
+      ;;
+    *"无 PR"*"编码卡住"*)
+      tmux capture-pane -t "$ID" -p -S -50 | tail -30
+      bash scripts/inject-cc-prompt.sh $ISSUE "请确认当前进度，如已完成请 push + gh pr create；如卡住请说明阻塞"
+      ;;
+    *"Fail 终态"*)
+      bash scripts/update-project-status.sh --repo play --issue $ISSUE --status "Fail"
+      gh issue comment $ISSUE --repo WnadeyaowuOraganization/wande-play --body "❌ 标记 Fail。原因：$REASON"
+      ;;
+  esac
+done
+```
+
+### Step 3：检查最近 squash-merged 的 PR（PLAN.md 同步用）
+
+```bash
+# 仅用于「指派历史」表的 ~~Done~~ 划线同步，不触发任何状态变更
+gh pr list --repo WnadeyaowuOraganization/wande-play --state merged \
+  --search "merged:>$(date -u -d '15 minutes ago' +%Y-%m-%dT%H:%M:%S)" \
+  --json number,title,mergedAt,headRefName \
+  --jq '.[] | "\(.number)\t\(.headRefName)\t\(.mergedAt)"'
+```
+
+### 兜底命令（仅 attention 列表为空但仍需排查时用）
+
+```bash
+bash scripts/cc-check.sh                                       # 全面锁状态总览
+tmux capture-pane -t cc-wande-play-kimi1-1234 -p -S -200       # 单 CC 完整 capture
 ```
 
 ### 判断标准（覆盖 CC 退出 → PR 创建 → CI → merged 全链路）

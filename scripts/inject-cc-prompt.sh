@@ -35,12 +35,12 @@ fi
 
 SESSIONS=()
 
-# 1) lock 文件查找
-for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
-  [ ! -f "$dir/.cc-lock" ] && continue
-  LOCK_ISSUE=$(grep "^issue=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+# 1) lock 文件查找(2026-04-09 路径迁移到 ${HOME_DIR}/cc_scheduler/lock/<dirname>.lock)
+for lockfile in ${HOME_DIR}/cc_scheduler/lock/wande-play-kimi*.lock; do
+  [ ! -f "$lockfile" ] && continue
+  LOCK_ISSUE=$(grep "^issue=" "$lockfile" 2>/dev/null | cut -d= -f2)
   [ "$LOCK_ISSUE" != "$ISSUE" ] && continue
-  DIRNAME=$(basename "$dir")
+  DIRNAME=$(basename "$lockfile" .lock)
   CAND="cc-${DIRNAME}-${ISSUE}"
   if tmux has-session -t "$CAND" 2>/dev/null; then
     SESSIONS+=("$CAND")
@@ -76,6 +76,10 @@ for SESSION in "${SESSIONS[@]}"; do
   printf '%s\n' "$PROMPT" > "$TMP_BUF"
   tmux load-buffer -b "inject-$$" "$TMP_BUF"
   tmux paste-buffer -b "inject-$$" -t "$SESSION"
+  # 关键: paste-buffer 后 Claude Code 输入框需要时间识别 paste 完成（显示 [Pasted text]）
+  # 没 sleep 直接 send-keys Enter 会让 Enter 被吞或被当作 paste 内部换行 → CC 看到内容但不启动一轮
+  # （2026-04-08 凌晨 14 个 CC 卡住事件根因，已修复）
+  sleep 0.5
   tmux send-keys -t "$SESSION" Enter
   tmux delete-buffer -b "inject-$$" 2>/dev/null || true
   rm -f "$TMP_BUF"

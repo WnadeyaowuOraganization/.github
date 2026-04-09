@@ -16,14 +16,17 @@ fi
 echo "[release-cc-lock] 处理 Issue #$ISSUE"
 
 FOUND=false
+LOCK_DIR="${HOME_DIR}/cc_scheduler/lock"
 
-for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
-  [ ! -f "$dir/.cc-lock" ] && continue
+# 2026-04-09: lock 路径迁移到 ${LOCK_DIR}/<dirname>.lock
+for lockfile in $LOCK_DIR/wande-play-kimi*.lock; do
+  [ ! -f "$lockfile" ] && continue
 
-  LOCK_ISSUE=$(grep "^issue=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  LOCK_ISSUE=$(grep "^issue=" "$lockfile" 2>/dev/null | cut -d= -f2)
   [ "$LOCK_ISSUE" != "$ISSUE" ] && continue
 
-  DIRNAME=$(basename "$dir")
+  DIRNAME=$(basename "$lockfile" .lock)   # wande-play-kimi1
+  dir="${HOME_DIR}/projects/$DIRNAME"
   SESSION="cc-${DIRNAME}-${ISSUE}"
 
   # 停止 tmux 会话
@@ -35,11 +38,11 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   fi
 
   # 释放目录锁
-  rm -f "$dir/.cc-lock"
-  echo "[release-cc-lock] ✅ 已释放锁: $dir/.cc-lock"
+  rm -f "$lockfile"
+  echo "[release-cc-lock] ✅ 已释放锁: $lockfile"
 
   # 切回 dev 分支
-  cd "$dir" && git checkout dev 2>/dev/null && echo "[release-cc-lock] ✅ 已切回 dev 分支"
+  [ -d "$dir" ] && cd "$dir" && git checkout dev 2>/dev/null && echo "[release-cc-lock] ✅ 已切回 dev 分支"
 
   FOUND=true
   break

@@ -41,7 +41,7 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
     # DIRNAME = wande-play-kimiN，从lock文件读取module等其他信息
     dirname_part=$(echo "$session" | sed 's/^cc-//' | rev | cut -d- -f2- | rev)
     kimi_dir=$(echo "$dirname_part" | grep -oP 'kimi\d+$')
-    lock_file="${HOME_DIR}/projects/wande-play-${kimi_dir}/.cc-lock"
+    lock_file="${HOME_DIR}/cc_scheduler/lock/wande-play-${kimi_dir}.lock"
     if [ -n "$kimi_dir" ] && [ -f "$lock_file" ]; then
         issue=$(grep "^issue=" "$lock_file" | cut -d= -f2)
         module=$(grep "^module=" "$lock_file" | cut -d= -f2)
@@ -162,17 +162,18 @@ TIMEOUT_COUNT=0
 for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
   [ ! -d "$dir" ] && continue
   DIRNAME=$(basename "$dir")
+  LOCK_FILE="${HOME_DIR}/cc_scheduler/lock/${DIRNAME}.lock"
 
-  if [ ! -f "$dir/.cc-lock" ]; then
+  if [ ! -f "$LOCK_FILE" ]; then
     FREE_COUNT=$((FREE_COUNT + 1))
     continue
   fi
 
-  LOCK_ISSUE=$(grep "^issue=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
-  LOCK_MODULE=$(grep "^module=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
-  LOCK_STATE=$(grep "^state=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
-  LOCK_RETRY=$(grep "^retry_count=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
-  LOCK_TS=$(grep "^timestamp=" "$dir/.cc-lock" 2>/dev/null | cut -d= -f2)
+  LOCK_ISSUE=$(grep "^issue=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  LOCK_MODULE=$(grep "^module=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  LOCK_STATE=$(grep "^state=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  LOCK_RETRY=$(grep "^retry_count=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
+  LOCK_TS=$(grep "^timestamp=" "$LOCK_FILE" 2>/dev/null | cut -d= -f2)
   AGE_SECS=$((NOW - ${LOCK_TS:-0}))
   AGE_MINS=$((AGE_SECS / 60))
 

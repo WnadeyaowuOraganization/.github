@@ -15,14 +15,21 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
 log() { echo "[cc-check] $1"; }
 
-for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
-  [ ! -f "$dir/.cc-lock" ] && continue
+# 2026-04-09: lock 文件迁移到 /home/ubuntu/cc_scheduler/lock/<dirname>.lock
+LOCK_DIR="${HOME_DIR}/cc_scheduler/lock"
 
-  ISSUE=$(grep "^issue=" "$dir/.cc-lock" | cut -d= -f2)
-  MODULE=$(grep "^module=" "$dir/.cc-lock" | cut -d= -f2)
-  DIR_SUFFIX=$(grep "^dir=" "$dir/.cc-lock" | cut -d= -f2)
-  EFFORT=$(grep "^effort=" "$dir/.cc-lock" | cut -d= -f2)
-  RETRY=$(grep "^retry_count=" "$dir/.cc-lock" | cut -d= -f2)
+for lockfile in $LOCK_DIR/wande-play-kimi*.lock; do
+  [ ! -f "$lockfile" ] && continue
+
+  KIMI_NAME=$(basename "$lockfile" .lock)   # wande-play-kimi1
+  dir="${HOME_DIR}/projects/$KIMI_NAME"
+  [ ! -d "$dir" ] && continue
+
+  ISSUE=$(grep "^issue=" "$lockfile" | cut -d= -f2)
+  MODULE=$(grep "^module=" "$lockfile" | cut -d= -f2)
+  DIR_SUFFIX=$(grep "^dir=" "$lockfile" | cut -d= -f2)
+  EFFORT=$(grep "^effort=" "$lockfile" | cut -d= -f2)
+  RETRY=$(grep "^retry_count=" "$lockfile" | cut -d= -f2)
   RETRY=${RETRY:-0}
   DIRNAME=$(basename "$dir")
 
@@ -53,7 +60,7 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
     --json state --jq '.state' 2>/dev/null)
   if [ "$ISSUE_STATE" = "CLOSED" ]; then
     log "$DIRNAME Issue#$ISSUE: 已CLOSED，清理锁文件，不重启"
-    rm -f "$dir/.cc-lock"
+    rm -f "$lockfile"
     cd "$dir" && git checkout dev 2>/dev/null && git branch -D "feature-Issue-${ISSUE}" 2>/dev/null
     continue
   fi
@@ -64,14 +71,14 @@ for dir in ${HOME_DIR}/projects/wande-play-kimi{1..20}; do
     bash "$SCRIPT_DIR/update-project-status.sh" --repo play --issue "$ISSUE" --status "Fail" 2>/dev/null
     gh issue comment "$ISSUE" --repo WnadeyaowuOraganization/wande-play \
       --body "❌ CC自动恢复失败：已重试${MAX_RETRY}次，标记为Fail。目录: $DIRNAME" 2>/dev/null || true
-    rm -f "$dir/.cc-lock"
+    rm -f "$lockfile"
     cd "$dir" && git checkout dev 2>/dev/null && git branch -D "feature-Issue-${ISSUE}" 2>/dev/null
     continue
   fi
 
   # 更新重试次数
   NEW_RETRY=$((RETRY + 1))
-  sed -i "s/^retry_count=.*/retry_count=${NEW_RETRY}/" "$dir/.cc-lock"
+  sed -i "s/^retry_count=.*/retry_count=${NEW_RETRY}/" "$lockfile"
 
   # run-cc.sh检测到锁存在且同Issue → SAVED状态重入，在feature分支继续
   bash "$SCRIPT_DIR/run-cc.sh" \

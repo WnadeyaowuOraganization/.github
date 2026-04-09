@@ -4,7 +4,10 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # run-manager.sh — 启动并保活两个研发经理CC
 # crontab: */10 * * * *
 # 会话存在则跳过，崩溃则重启；经理内部用 \loop 10m 自驱动
-# 模式：Claude Max 订阅（Sonnet）
+# 模式：Claude Max 订阅
+#   - 排程经理：Haiku 4.5（结构化清单驱动，省 token）
+#   - 研发经理：Haiku 4.5（W1+W2+W3 改造后，巡检瘦身为 attention-only，
+#     工作复杂度大幅下降；Done Guard 已硬隔离误判风险，可切 Haiku 省 token）
 # 查看日志: tail -f ~/cc_scheduler/manager.log
 # ==============================================================
 
@@ -71,6 +74,7 @@ if os.path.exists(f):
 start_manager() {
   local ROLE="$1"      # 排程经理 | 研发经理
   local LOOP_PROMPT="$2"
+  local MODEL="${3:-claude-sonnet-4-6}"   # 默认 Sonnet 4.6；调用方可显式传 Haiku
   local SESSION="manager-${ROLE}"
 
   if tmux has-session -t "$SESSION" 2>/dev/null; then
@@ -99,7 +103,7 @@ start_manager() {
      unset ANTHROPIC_API_KEY; unset ANTHROPIC_BASE_URL; \
      export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1; \
      export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
-     claude --model claude-sonnet-4-6 --dangerously-skip-permissions; \
+     claude --model ${MODEL} --dangerously-skip-permissions; \
      rm -rf ${CONFIG_DIR}; exec bash"
 
   # 等待 Claude Code CLI 初始化并关联 JSONL（后台执行，不阻塞下一个经理启动）
@@ -113,8 +117,10 @@ start_manager() {
     _associate_jsonl "$SESSION" "$BEFORE_LIST"
   ) &
 
-  log "✓ ${ROLE} 已启动，JSONL关联中..."
+  log "✓ ${ROLE} 已启动 (model=${MODEL})，JSONL关联中..."
 }
 
-start_manager "排程经理" "\\loop 10m 你是排程经理，按 docs/agent-docs/manager/scheduler-guide.md 执行本轮巡检"
-start_manager "研发经理" "\\loop 10m 你是研发经理，按 docs/agent-docs/manager/assign-guide.md 执行本轮任务"
+# 排程经理：结构化清单驱动 → Haiku 4.5（速度快、token 省）
+start_manager "排程经理" "\\loop 10m 你是排程经理，按 docs/agent-docs/manager/scheduler-guide.md 执行本轮巡检" "claude-haiku-4-5-20251001"
+# 研发经理：W1+W2+W3 改造后任务二瘦身为 attention-only，Done Guard 硬隔离 → Haiku 4.5
+start_manager "研发经理" "\\loop 10m 你是研发经理，按 docs/agent-docs/manager/assign-guide.md 执行本轮任务" "claude-haiku-4-5-20251001"

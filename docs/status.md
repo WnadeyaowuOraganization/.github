@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-09 06:55 by Claude
+> ⏰ 最后更新：2026-04-09 17:56 by Perplexity
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 ---
 ## 🔄 Issue 生命周期 + 测试层级
@@ -540,6 +540,10 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D52 | 04-06 | ✅ | CLAUDE.md文档路径改为绝对路径 | wande-play所有kimi目录CLAUDE.md中子模块指南由相对路径`../../.github/docs/...`改为绝对路径`/home/ubuntu/projects/.github/docs/...`，避免编程CC在子目录操作时路径解析错误，也避免与项目自身`.github/workflows/`混淆 | 伟平 |
 | D53 | 04-06 | ✅ | post-cc-check.sh进程检测Bug修复 + session命名统一 | **Bug根因**：`HAS_PROCESS`检测用`DIRNAME=wande-play-kimi11`匹配session名`cc-kimi11-backend-1633`，grep永远不匹配→所有CC误判无进程→每5分钟retry+1→触发retry=10标Fail，CC实际正在运行。**修复**：session命名统一为`cc-{basename(BASE_DIR)}-{issue}`（如`cc-wande-play-kimi11-1633`），post-cc-check.sh改为精确匹配`cc-{DIRNAME}-{ISSUE}`，无需读DIR_SUFFIX字段。**check-cc-status.sh**：session解析从`cc-wande-play-kimiN-1234`提取kimiN和issue。**Claude Office兼容**：`/log`接口`rsplit("-",1)`提取dir_name=`wande-play-kimi11`→`_find_jsonl`按最近修改匹配JSONL，功能不受影响 | 伟平 |
 | D55 | 04-07 | ✅ | CC目录锁完整生命周期重构 | **CC不退出**：issue-workflow.md改为PR创建后轮询等待合并，不主动退出。**锁释放**：新增release-cc-lock.sh（kill session+rm .cc-lock+checkout dev），唯一出口。**cc-lock-manager.yml**：双触发路径——①workflow_run(build-deploy-dev完成后，不受cancel-in-progress影响)→部署成功释放锁/失败注入提示；②pull_request merged兜底（仅改issues/docs等被paths-ignore过滤时dev CI不触发，靠PR事件直接释放）。**CI注入**：pr-test.yml/build-deploy-dev.yml失败时改为inject-cc-prompt.sh直接注入活跃CC会话，不再创建新Issue。**post-cc-check.sh简化**：去掉commit/push/SAVED状态机，只做保活——进程消失注入恢复提示词，session消失重启run-cc.sh。**全量同步**：所有kimi1-20目录+main分支同步 | 伟平 |
+| D56 | 04-09 | ✅ | CRM商务中心Sprint-1：原型确认+13个Issue | 10页HTML原型+详细设计文档→.github/docs/design/crm-商务中心/。#3526-#3538创建(Sprint-1)。代码对账：7个新Issue补已有代码路径。关闭13个旧重复Issue(#3099-3102/#3110/#1706/#2130/#2210-2212/#1464/#2247/#2248)，Sprint调整8个(#3103-3108→S2/#3109#3111→S3) | 吴耀 |
+| D57 | 04-09 | ✅ | 产品技术中心联邦架构确立 | 调研Odoo PLM/Arena/Tacton CPQ最佳实践→确立"PLM作数字主干"联邦架构。8页原型(总览/零件/BOM/ECO/配置器/技术确认/D3工作台/合规)。Phase0零件号命名→Phase1 PLM核心+D3桥接→Phase2超级BOM+配置器→Phase3 ETO→CTO转化 | 吴耀 |
+| D58 | 04-09 | ✅ | 产品技术中心Issue对账清理 | 关闭12个被PLM取代Issue(#2155/#2084/#2128/#1863等)。合并7对重叠(#1935→#3390, #2055→#3379, #1936→#1845, #2315→#2306, #1859→#3388, #1860→#3380, #1918→#3391)。新标签biz:ptc标记26个Issue | 吴耀 |
+| D59 | 04-09 | ✅ | 产品技术中心32个Issue→Sprint-2 | PLM20个+D3Web6个+合规6个统一从Sprint-3移入sprint:2。Sprint-1保留D3 GH电池包(纯GH/Python不依赖PLM)，S2 PLM建好后通过#3390桥接 | 吴耀 |
 | D54 | 04-07 | ✅ | Sprint-1矿场优先级提升：矿场P0(5个)+投标引擎(1个)+矿场增量同步(1个)→Todo | Sprint-1矿场完成率0%(19个Issue全部未启动)，算力被D3吸收。矿场P0的5个Issue(#1534/#1535/#2256/#2257/#2407)+投标引擎#2206(P0)+#2028(P1)看板状态从Plan→Todo，确保研发经理CC能排程。矿场P0优先于D3剩余Todo | 吴耀 |
 | D56 | 04-06 | ✅ | Claude Office Safari/iPhone兼容性修复 | **Safari相对URL**：fetch从`window.location.origin+'/api/inject'`改为`'api/inject'`（Safari不接受origin拼接）。**iPhone注入栏不可见**：`height:100vh`→`100dvh`（动态视口高度，排除浏览器地址栏）+`padding-bottom:max(10px,env(safe-area-inset-bottom,10px))`（Home Indicator遮挡）。**viewport**：`<meta>`加`viewport-fit=cover`（iOS safe-area-inset生效前提） | 伟平 |
 | D57 | 04-06 | ✅ | Claude Office研发经理CC日志Tab重构 | **问题**：manager session无法通过JSONL uuid直接找到tmux会话，注入失效+tab名错误。**方案**：新增`tmux_session`字段（真实tmux会话名）与`log_session`（JSONL uuid）分离。`_scan_manager_tmux_sessions()`扫描非cc-前缀tmux会话→找claude进程→按进程启动时间vs JSONL mtime分配最近修改文件。Tab名特殊处理：cc-前缀截去`cc-{org}-{repo}-`前缀保留`kimiN-issue`，manager按uuid前8位显示。前端inject用`cur.tmux_session||cur.log_session` | 伟平 |

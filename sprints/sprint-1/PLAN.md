@@ -780,7 +780,7 @@
 | kimi10 | #1993 | T1 | backend | [项目中心Phase16] 健康度评分引擎 | In Progress |
 | kimi13 | #1796 | T1 | frontend | [合同管理] 合同审批流程页面 | In Progress |
 | kimi12 | #1856 | P1 | backend | [产品平台][P1] 非标件成本系数库 | In Progress |
-| kimi14 | #1507 | P1 | backend | [矿场-Phase2][11/16] 政策信号关联推送 | In Progress |
+| kimi14 | #1507 | P1 | backend | ~~[矿场-Phase2][11/16] 政策信号关联推送~~ | ~~Done~~ |
 
 ---
 

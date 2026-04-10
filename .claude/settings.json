@@ -1,0 +1,15 @@
+{
+  "hooks": {
+    "Skill": [
+      {
+        "matcher": "cc-diagnose",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash ${HOME_DIR}/projects/.github/scripts/cc-diagnose-stuck.sh"
+          }
+        ]
+      }
+    ]
+  }
+}

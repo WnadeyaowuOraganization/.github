@@ -48,11 +48,81 @@ log "🔍 Smoke探活开始"
 
 # --- Step 1: 后端健康检查 ---
 BACKEND_OK=false
+BACKEND_PID=""
+
+# 检查进程是否存在且端口被占用
+check_backend_process() {
+    local pid=$(pgrep -f "ruoyi-admin" 2>/dev/null || true)
+    if [ -n "$pid" ]; then
+        # 检查端口是否被占用
+        if ss -tlnp 2>/dev/null | grep -q ":6040"; then
+            echo "$pid"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 尝试检测僵死进程（端口占用但不响应HTTP）
+detect_zombie_backend() {
+    local pid=$(check_backend_process)
+    if [ -n "$pid" ]; then
+        # 端口被占用但HTTP不响应
+        if ! curl -sf "http://localhost:6040/" > /dev/null 2>&1; then
+            log "⚠️ 检测到僵死进程 PID=$pid（端口6040占用但HTTP无响应）"
+            return 0
+        fi
+    fi
+    return 1
+}
+
+# 尝试恢复后端服务
+recover_backend() {
+    log "🔄 尝试恢复后端服务..."
+
+    # 先尝试使用 systemd 重启
+    if systemctl is-active wande-backend > /dev/null 2>&1 || systemctl is-enabled wande-backend > /dev/null 2>&1; then
+        log ">>> 使用 systemctl 重启 wande-backend"
+        sudo systemctl restart wande-backend 2>&1 | head -5 >> "$LOGFILE"
+        sleep 10
+    else
+        # 回退到传统方式
+        log ">>> 使用传统方式重启"
+        local pid=$(pgrep -f "ruoyi-admin" 2>/dev/null || true)
+        if [ -n "$pid" ]; then
+            kill -9 $pid 2>/dev/null || true
+            sleep 3
+        fi
+        if [ -x "/apps/wande-ai-backend/start.sh" ]; then
+            bash "/apps/wande-ai-backend/start.sh" > /dev/null 2>&1 &
+            sleep 10
+        fi
+    fi
+
+    # 验证恢复结果
+    if curl -sf "http://localhost:6040/" > /dev/null 2>&1; then
+        log "✅ 后端服务恢复成功"
+        return 0
+    else
+        log "❌ 后端服务恢复失败"
+        return 1
+    fi
+}
+
+# 主检查逻辑
 if curl -sf "http://localhost:6040/" > /dev/null 2>&1; then
     BACKEND_OK=true
     log "✅ 后端健康检查通过 (:6040)"
 else
-    log "❌ 后端不可达 (:6040)"
+    log "❌ 后端HTTP不可达 (:6040)"
+
+    # 检测是否为僵死进程
+    if detect_zombie_backend; then
+        log "🔴 发现僵死进程，尝试自动恢复..."
+        if recover_backend; then
+            BACKEND_OK=true
+        fi
+    fi
 fi
 
 # --- Step 2: 前端健康检查 ---

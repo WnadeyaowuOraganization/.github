@@ -2844,6 +2844,52 @@ exit=3  ← ✓ 正确拦截假勾选
 1. **v2.3 prompt 新增"调查方法指引"**：遇到找不到组件时，同时 grep 组件名 + 中文 label 字符串 + 关键 CSS class + 相邻兄弟节点
 2. 或者更普适的：「如果第一次搜索没找到，必须换 3 种不同的搜索词再搜一次才能下结论」
 
+### [2026-04-09 16:45] 重大事实纠正 — 研发经理第 11 轮结论链本身是错的
+
+**触发**：用户要求"修复 #3544 的 CI 问题让 Dev 正常部署"后，研发经理重新核实：
+- `build-deploy-dev.yml` 最近 5 次运行都 **success** — CI 本身没问题
+- 重新 grep **全局** dev HEAD 源码，发现 `配合单位`/`任务看板` **确实在**：
+  - `counterpart-management-tab.vue:213`
+  - `task-board.vue:164`
+  - `mine-detail-drawer.vue:256`
+- 重新 Playwright 截图（16:41），Dev 页面仍有误植
+- **结论**：第 11 轮"dev HEAD 源码已不含 bug"是**错误结论**，因为我只 grep 了 `project-center/` 子目录漏掉 `project/` 子组件
+
+**错误链条**：
+1. 第 4 轮 A 类干预 — 基于 Dev 截图指挥 CC 改 `project/index.vue`（语言不够精准）
+2. 第 6 轮私下调查 — 错误认为 `connectedComponent: MineDetailDrawer` 是根因（实际是 useVbenDrawer 的**正确用法**）
+3. 第 11 轮 B 类干预 — 基于 `project-center/` **局部** grep 错误得出"dev HEAD 无 bug"结论
+4. 第 12 轮 — 让 CC 执行 `gh issue close 3544 --reason "not planned"` 关闭了一个**真实存在的 bug**
+
+**用户介入发现的真相**：
+- Dev 部署 CI 完全正常（`build-deploy-dev.yml` 5/5 success）
+- dev HEAD 源码**真实存在**误植组件
+- **#3544 被错误关闭**
+
+**本次纠正**（2026-04-09 16:45）：
+- 研发经理注入纠正指令给 `cc-wande-play-kimi2-3544`（session 仍存活）
+- 要求 CC：`gh issue reopen 3544` + 评论说明 + 重新调查
+- 调查必须覆盖 3 点：(A) 路由 /wande-project/project 的真实映射（可能是动态路由/菜单）(B) 映射组件的 template 中 Drawer 使用方式 (C) 是否有其他 .vue 直接 import 这些子组件
+- **禁止**在 A+B+C 全部查清前再下"问题不存在"结论
+
+### 漏洞 L 升级 — 研发经理调查全链路可靠性
+
+**原漏洞 L**：研发经理基于 Dev 截图追补 Issue 时未核实 dev 源码同步状态
+
+**升级后（2026-04-09 16:45 发现）**：研发经理**自己的调查过程**也会出错：
+- grep 子目录范围写错（漏掉 project/）
+- 对框架 API 误判（`connectedComponent` 当成 bug，实际是 hook 参数）
+- 基于局部结果下全局结论
+
+**完整修复建议**：
+1. **v2.3 prompt 约束 10**：CC 和研发经理得出"问题不存在/无需修改"结论前，**必须有 3 个独立验证通道同时支持**：
+   - (a) 全局 grep（非局部子目录）
+   - (b) Playwright 运行时 DOM 断言
+   - (c) 代码 import/render 链完整追踪
+   - 三者任一不一致则"需要继续调查"
+2. **研发经理 assign-guide.md**：追补 Issue 创建前的核实流程要求 **严格使用全局 grep**，不得限定子目录
+3. **`scripts/research-ground-truth.sh`**（新脚本）：封装"用户截图 + dev HEAD 全局 grep + Playwright headless" 三路交叉验证，任一失败即 block 追补 Issue 创建
+
 ### 漏洞 L — 研发经理基于 Dev 截图追补 Issue 时未核实 dev 源码同步状态（重大）
 
 **发现时间**：2026-04-09 15:25（第 11 轮跟踪）

@@ -26582,3 +26582,312 @@ Caused by: java.lang.ClassNotFoundException: reactor.core.Exceptions
 2026-04-07 10:43:11 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Custom destroy method 'shutdown' on bean with name 'redisson' propagated an exception: java.lang.NoClassDefFoundError: org/redisson/MapWriteBehindTask
 2026-04-07 10:43:11 [SpringApplicationShutdownHook] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource start closing ....
 2026-04-07 10:43:11 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'dataSource': java.lang.NoClassDefFoundError: com/baomidou/dynamic/datasource/destroyer/DefaultDataSourceDestroyer
+2026-04-07 10:50:38 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-07 10:50:46 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lock4j-com.baomidou.lock.spring.boot.autoconfigure.Lock4jProperties' of type [com.baomidou.lock.spring.boot.autoconfigure.Lock4jProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:50:46 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.baomidou.lock.spring.boot.autoconfigure.LockAutoConfiguration' of type [com.baomidou.lock.spring.boot.autoconfigure.LockAutoConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:50:46 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockKeyBuilder' of type [com.baomidou.lock.DefaultLockKeyBuilder] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:50:46 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockFailureStrategy' of type [com.baomidou.lock.DefaultLockFailureStrategy] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:50:46 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockInterceptor' of type [com.baomidou.lock.aop.LockInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:50:46 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockAnnotationAdvisor' of type [com.baomidou.lock.aop.LockAnnotationAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:50:46 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2026-04-07 10:50:46 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2026-04-07 10:50:46 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2026-04-07 10:50:47 [main] INFO  com.zaxxer.hikari.pool.HikariPool - master - Added connection org.postgresql.jdbc.PgConnection@68f4c7e8
+2026-04-07 10:50:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2026-04-07 10:50:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Starting...
+2026-04-07 10:50:47 [main] INFO  com.zaxxer.hikari.pool.HikariPool - wande - Added connection org.postgresql.jdbc.PgConnection@113050bf
+2026-04-07 10:50:47 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Start completed.
+2026-04-07 10:50:47 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2026-04-07 10:50:47 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [wande] success
+2026-04-07 10:50:47 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2026-04-07 10:50:49 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mapper.ProjectCounterpartsMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:50:49 [main] WARN  c.b.m.c.injector.methods.SelectById - [org.ruoyi.wande.mapper.ProjectCounterpartsMapper.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-04-07 10:50:50 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.domain.d3.competitor.mapper.CompetitorProductMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mine.mapper.BidFeatureVectorMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:50:51 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationResultMapper.selectByProjectIdOrderByTime] is ignored, because it exists, maybe from xml file
+2026-04-07 10:50:51 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationResultMapper.selectLatestByProjectId] is ignored, because it exists, maybe from xml file
+2026-04-07 10:50:51 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationScheduleMapper.selectDueSchedules] is ignored, because it exists, maybe from xml file
+2026-04-07 10:50:51 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationScheduleMapper.updateVerifyTime] is ignored, because it exists, maybe from xml file
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mapper.SampleInventoryMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.SelectById - [org.ruoyi.wande.mapper.SampleInventoryMapper.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mapper.SampleKitItemMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.DeleteById - [org.ruoyi.wande.mapper.SampleKitItemMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.SelectById - [org.ruoyi.wande.mapper.SampleKitItemMapper.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-04-07 10:50:51 [main] WARN  c.b.m.c.injector.methods.DeleteById - [org.ruoyi.wande.mapper.SampleKitMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2026-04-07 10:50:52 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2026-04-07 10:50:53 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:50:53 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:51:05 [main] WARN  o.r.wande.config.WecomCryptoConfig - 企微回调 Token/AESKey 未配置，WecomCryptoUtil Bean 不可用
+2026-04-07 10:51:12 [main] INFO  o.n.driver.internal.DriverFactory - Direct driver instance 1537265468 created for server address localhost:7687
+2026-04-07 10:51:12 [main] INFO  io.undertow - starting server: Undertow - 2.3.18.Final
+2026-04-07 10:51:12 [main] INFO  org.xnio - XNIO version 3.8.16.Final
+2026-04-07 10:51:12 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
+2026-04-07 10:51:12 [main] INFO  org.jboss.threads - JBoss Threads version 3.5.0.Final
+2026-04-07 10:51:48 [XNIO-1 task-2] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2026-04-07 10:51:51 [XNIO-1 task-2] ERROR o.r.c.s.h.GlobalExceptionHandler - 请求地址'/auth/captchaImage',发生系统异常.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource auth/captchaImage.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:527)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.ruoyi.common.web.filter.RepeatableFilter.doFilter(RepeatableFilter.java:30)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:114)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)
+	at io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at io.undertow.servlet.handlers.RedirectDirHandler.handleRequest(RedirectDirHandler.java:68)
+	at io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:117)
+	at io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)
+	at io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)
+	at io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet.handlers.SendErrorPageHandler.handleRequest(SendErrorPageHandler.java:52)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:276)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:132)
+	at io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:256)
+	at io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:101)
+	at io.undertow.server.Connectors.executeRootHandler(Connectors.java:395)
+	at io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:861)
+	at org.jboss.threads.ContextHandler$1.runWith(ContextHandler.java:18)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2513)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1538)
+	at org.xnio.XnioWorker$WorkerThreadFactory$1$1.run(XnioWorker.java:1282)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-04-07 10:51:58 [XNIO-1 task-2] ERROR o.r.c.s.h.GlobalExceptionHandler - 请求地址'/auth/captchaImage',发生系统异常.
+org.springframework.web.servlet.resource.NoResourceFoundException: No static resource auth/captchaImage.
+	at org.springframework.web.servlet.resource.ResourceHttpRequestHandler.handleRequest(ResourceHttpRequestHandler.java:585)
+	at org.springframework.web.servlet.mvc.HttpRequestHandlerAdapter.handle(HttpRequestHandlerAdapter.java:52)
+	at org.springframework.web.servlet.DispatcherServlet.doDispatch(DispatcherServlet.java:1089)
+	at org.springframework.web.servlet.DispatcherServlet.doService(DispatcherServlet.java:979)
+	at org.springframework.web.servlet.FrameworkServlet.processRequest(FrameworkServlet.java:1014)
+	at org.springframework.web.servlet.FrameworkServlet.doGet(FrameworkServlet.java:903)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:527)
+	at org.springframework.web.servlet.FrameworkServlet.service(FrameworkServlet.java:885)
+	at jakarta.servlet.http.HttpServlet.service(HttpServlet.java:614)
+	at io.undertow.servlet.handlers.ServletHandler.handleRequest(ServletHandler.java:74)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:129)
+	at org.springframework.web.filter.CorsFilter.doFilterInternal(CorsFilter.java:91)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.ruoyi.common.web.filter.RepeatableFilter.doFilter(RepeatableFilter.java:30)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.RequestContextFilter.doFilterInternal(RequestContextFilter.java:100)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.FormContentFilter.doFilterInternal(FormContentFilter.java:93)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.ServerHttpObservationFilter.doFilterInternal(ServerHttpObservationFilter.java:114)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at org.springframework.web.filter.CharacterEncodingFilter.doFilterInternal(CharacterEncodingFilter.java:201)
+	at org.springframework.web.filter.OncePerRequestFilter.doFilter(OncePerRequestFilter.java:116)
+	at io.undertow.servlet.core.ManagedFilter.doFilter(ManagedFilter.java:67)
+	at io.undertow.servlet.handlers.FilterHandler$FilterChainImpl.doFilter(FilterHandler.java:131)
+	at io.undertow.servlet.handlers.FilterHandler.handleRequest(FilterHandler.java:84)
+	at io.undertow.servlet.handlers.security.ServletSecurityRoleHandler.handleRequest(ServletSecurityRoleHandler.java:62)
+	at io.undertow.servlet.handlers.ServletChain$1.handleRequest(ServletChain.java:68)
+	at io.undertow.servlet.handlers.ServletDispatchingHandler.handleRequest(ServletDispatchingHandler.java:36)
+	at io.undertow.servlet.handlers.RedirectDirHandler.handleRequest(RedirectDirHandler.java:68)
+	at io.undertow.servlet.handlers.security.SSLInformationAssociationHandler.handleRequest(SSLInformationAssociationHandler.java:117)
+	at io.undertow.servlet.handlers.security.ServletAuthenticationCallHandler.handleRequest(ServletAuthenticationCallHandler.java:57)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.security.handlers.AbstractConfidentialityHandler.handleRequest(AbstractConfidentialityHandler.java:46)
+	at io.undertow.servlet.handlers.security.ServletConfidentialityConstraintHandler.handleRequest(ServletConfidentialityConstraintHandler.java:64)
+	at io.undertow.security.handlers.AuthenticationMechanismsHandler.handleRequest(AuthenticationMechanismsHandler.java:60)
+	at io.undertow.servlet.handlers.security.CachedAuthenticatedSessionHandler.handleRequest(CachedAuthenticatedSessionHandler.java:77)
+	at io.undertow.security.handlers.AbstractSecurityContextAssociationHandler.handleRequest(AbstractSecurityContextAssociationHandler.java:43)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet.handlers.SendErrorPageHandler.handleRequest(SendErrorPageHandler.java:52)
+	at io.undertow.server.handlers.PredicateHandler.handleRequest(PredicateHandler.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.handleFirstRequest(ServletInitialHandler.java:276)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:135)
+	at io.undertow.servlet.handlers.ServletInitialHandler$2.call(ServletInitialHandler.java:132)
+	at io.undertow.servlet.core.ServletRequestContextThreadSetupAction$1.call(ServletRequestContextThreadSetupAction.java:48)
+	at io.undertow.servlet.core.ContextClassLoaderSetupAction$1.call(ContextClassLoaderSetupAction.java:43)
+	at io.undertow.servlet.handlers.ServletInitialHandler.dispatchRequest(ServletInitialHandler.java:256)
+	at io.undertow.servlet.handlers.ServletInitialHandler$1.handleRequest(ServletInitialHandler.java:101)
+	at io.undertow.server.Connectors.executeRootHandler(Connectors.java:395)
+	at io.undertow.server.HttpServerExchange$1.run(HttpServerExchange.java:861)
+	at org.jboss.threads.ContextHandler$1.runWith(ContextHandler.java:18)
+	at org.jboss.threads.EnhancedQueueExecutor$Task.run(EnhancedQueueExecutor.java:2513)
+	at org.jboss.threads.EnhancedQueueExecutor$ThreadBody.run(EnhancedQueueExecutor.java:1538)
+	at org.xnio.XnioWorker$WorkerThreadFactory$1$1.run(XnioWorker.java:1282)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.c.s.DefaultLifecycleProcessor - Failed to stop bean 'webServerGracefulShutdown'
+java.lang.NoClassDefFoundError: io/undertow/server/handlers/GracefulShutdownHandler$ShutdownListener
+	at org.springframework.boot.web.embedded.undertow.UndertowWebServer.shutDownGracefully(UndertowWebServer.java:328)
+	at org.springframework.boot.web.context.WebServerGracefulShutdownLifecycle.stop(WebServerGracefulShutdownLifecycle.java:62)
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStop(DefaultLifecycleProcessor.java:384)
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.stop(DefaultLifecycleProcessor.java:526)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.support.DefaultLifecycleProcessor.stopBeans(DefaultLifecycleProcessor.java:353)
+	at org.springframework.context.support.DefaultLifecycleProcessor.onClose(DefaultLifecycleProcessor.java:253)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1172)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:179)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ClassNotFoundException: io.undertow.server.handlers.GracefulShutdownHandler$ShutdownListener
+	at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:445)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:592)
+	at org.springframework.boot.loader.net.protocol.jar.JarUrlClassLoader.loadClass(JarUrlClassLoader.java:107)
+	at org.springframework.boot.loader.launch.LaunchedClassLoader.loadClass(LaunchedClassLoader.java:91)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	... 14 common frames omitted
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] INFO  io.undertow - stopping server: Undertow - 2.3.18.Final
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.c.s.DefaultLifecycleProcessor - Failed to stop bean 'webServerStartStop'
+java.lang.NoClassDefFoundError: org/xnio/XnioWorker$ExternalTaskPool
+	at org.xnio.XnioWorker.isTaskPoolExternal(XnioWorker.java:831)
+	at org.xnio.XnioWorker.shutDownTaskPool(XnioWorker.java:798)
+	at org.xnio.nio.NioXnioWorker.shutdown(NioXnioWorker.java:284)
+	at io.undertow.Undertow.stop(Undertow.java:272)
+	at org.springframework.boot.web.embedded.undertow.UndertowWebServer.stop(UndertowWebServer.java:281)
+	at org.springframework.boot.web.servlet.context.WebServerStartStopLifecycle.stop(WebServerStartStopLifecycle.java:53)
+	at org.springframework.context.SmartLifecycle.stop(SmartLifecycle.java:120)
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStop(DefaultLifecycleProcessor.java:384)
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.stop(DefaultLifecycleProcessor.java:526)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.support.DefaultLifecycleProcessor.stopBeans(DefaultLifecycleProcessor.java:353)
+	at org.springframework.context.support.DefaultLifecycleProcessor.onClose(DefaultLifecycleProcessor.java:253)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1172)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:179)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ClassNotFoundException: org.xnio.XnioWorker$ExternalTaskPool
+	at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:445)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:592)
+	at org.springframework.boot.loader.net.protocol.jar.JarUrlClassLoader.loadClass(JarUrlClassLoader.java:107)
+	at org.springframework.boot.loader.launch.LaunchedClassLoader.loadClass(LaunchedClassLoader.java:91)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	... 19 common frames omitted
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.c.s.DefaultLifecycleProcessor - Failed to stop bean 'reactorResourceFactory'
+java.lang.NoClassDefFoundError: reactor/core/Exceptions
+	at reactor.core.publisher.Operators.reportThrowInSubscribe(Operators.java:229)
+	at reactor.core.publisher.Mono.subscribe(Mono.java:4579)
+	at reactor.core.publisher.Mono.block(Mono.java:1778)
+	at org.springframework.http.client.ReactorResourceFactory.stop(ReactorResourceFactory.java:298)
+	at org.springframework.context.SmartLifecycle.stop(SmartLifecycle.java:120)
+	at org.springframework.context.support.DefaultLifecycleProcessor.doStop(DefaultLifecycleProcessor.java:384)
+	at org.springframework.context.support.DefaultLifecycleProcessor$LifecycleGroup.stop(DefaultLifecycleProcessor.java:526)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.context.support.DefaultLifecycleProcessor.stopBeans(DefaultLifecycleProcessor.java:353)
+	at org.springframework.context.support.DefaultLifecycleProcessor.onClose(DefaultLifecycleProcessor.java:253)
+	at org.springframework.context.support.AbstractApplicationContext.doClose(AbstractApplicationContext.java:1172)
+	at org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext.doClose(ServletWebServerApplicationContext.java:179)
+	at org.springframework.context.support.AbstractApplicationContext.close(AbstractApplicationContext.java:1126)
+	at org.springframework.boot.SpringApplicationShutdownHook.closeAndWait(SpringApplicationShutdownHook.java:147)
+	at java.base/java.lang.Iterable.forEach(Iterable.java:75)
+	at org.springframework.boot.SpringApplicationShutdownHook.run(SpringApplicationShutdownHook.java:116)
+	at java.base/java.lang.Thread.run(Thread.java:840)
+Caused by: java.lang.ClassNotFoundException: reactor.core.Exceptions
+	at java.base/java.net.URLClassLoader.findClass(URLClassLoader.java:445)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:592)
+	at org.springframework.boot.loader.net.protocol.jar.JarUrlClassLoader.loadClass(JarUrlClassLoader.java:107)
+	at org.springframework.boot.loader.launch.LaunchedClassLoader.loadClass(LaunchedClassLoader.java:91)
+	at java.base/java.lang.ClassLoader.loadClass(ClassLoader.java:525)
+	... 17 common frames omitted
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] INFO  o.n.driver.internal.InternalDriver - Closing driver instance 1537265468
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of close method failed on bean with name 'neo4jDriver': java.lang.NoClassDefFoundError: io/netty/channel/group/CombinedIterator
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Custom destroy method 'shutdown' on bean with name 'lettuceClientResources' propagated an exception: java.lang.NoClassDefFoundError: io/netty/util/concurrent/PromiseCombiner
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Custom destroy method 'shutdown' on bean with name 'redisson' propagated an exception: java.lang.NoClassDefFoundError: org/redisson/MapWriteBehindTask
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource start closing ....
+2026-04-07 10:53:15 [SpringApplicationShutdownHook] WARN  o.s.b.f.s.DisposableBeanAdapter - Invocation of destroy method failed on bean with name 'dataSource': java.lang.NoClassDefFoundError: com/baomidou/dynamic/datasource/destroyer/DefaultDataSourceDestroyer
+2026-04-07 10:53:20 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.2.Final
+2026-04-07 10:53:28 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lock4j-com.baomidou.lock.spring.boot.autoconfigure.Lock4jProperties' of type [com.baomidou.lock.spring.boot.autoconfigure.Lock4jProperties] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:53:28 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'com.baomidou.lock.spring.boot.autoconfigure.LockAutoConfiguration' of type [com.baomidou.lock.spring.boot.autoconfigure.LockAutoConfiguration$$SpringCGLIB$$0] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:53:28 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockKeyBuilder' of type [com.baomidou.lock.DefaultLockKeyBuilder] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:53:28 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockFailureStrategy' of type [com.baomidou.lock.DefaultLockFailureStrategy] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:53:28 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockInterceptor' of type [com.baomidou.lock.aop.LockInterceptor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:53:28 [main] WARN  o.s.c.s.PostProcessorRegistrationDelegate$BeanPostProcessorChecker - Bean 'lockAnnotationAdvisor' of type [com.baomidou.lock.aop.LockAnnotationAdvisor] is not eligible for getting processed by all BeanPostProcessors (for example: not eligible for auto-proxying). Is this bean getting eagerly injected/applied to a currently created BeanPostProcessor [meterRegistryPostProcessor]? Check the corresponding BeanPostProcessor declaration and its dependencies/advisors. If this bean does not have to be post-processed, declare it with ROLE_INFRASTRUCTURE.
+2026-04-07 10:53:28 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2026-04-07 10:53:29 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2026-04-07 10:53:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2026-04-07 10:53:29 [main] INFO  com.zaxxer.hikari.pool.HikariPool - master - Added connection org.postgresql.jdbc.PgConnection@68f4c7e8
+2026-04-07 10:53:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2026-04-07 10:53:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Starting...
+2026-04-07 10:53:29 [main] INFO  com.zaxxer.hikari.pool.HikariPool - wande - Added connection org.postgresql.jdbc.PgConnection@113050bf
+2026-04-07 10:53:29 [main] INFO  com.zaxxer.hikari.HikariDataSource - wande - Start completed.
+2026-04-07 10:53:29 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2026-04-07 10:53:29 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [wande] success
+2026-04-07 10:53:29 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [2] datasource,primary datasource named [master]
+2026-04-07 10:53:32 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mapper.ProjectCounterpartsMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:53:32 [main] WARN  c.b.m.c.injector.methods.SelectById - [org.ruoyi.wande.mapper.ProjectCounterpartsMapper.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-04-07 10:53:33 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.domain.d3.competitor.mapper.CompetitorProductMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:53:33 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mine.mapper.BidFeatureVectorMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:53:34 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationResultMapper.selectByProjectIdOrderByTime] is ignored, because it exists, maybe from xml file
+2026-04-07 10:53:34 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationResultMapper.selectLatestByProjectId] is ignored, because it exists, maybe from xml file
+2026-04-07 10:53:34 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationScheduleMapper.selectDueSchedules] is ignored, because it exists, maybe from xml file
+2026-04-07 10:53:34 [main] ERROR c.b.m.core.MybatisConfiguration - mapper[org.ruoyi.wande.mapper.mine.VerificationScheduleMapper.updateVerifyTime] is ignored, because it exists, maybe from xml file
+2026-04-07 10:53:34 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mapper.SampleInventoryMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:53:34 [main] WARN  c.b.m.c.injector.methods.SelectById - [org.ruoyi.wande.mapper.SampleInventoryMapper.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-04-07 10:53:34 [main] WARN  c.b.m.c.injector.methods.SelectList - [org.ruoyi.wande.mapper.SampleKitItemMapper.selectList] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectList]
+2026-04-07 10:53:34 [main] WARN  c.b.m.c.injector.methods.DeleteById - [org.ruoyi.wande.mapper.SampleKitItemMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2026-04-07 10:53:34 [main] WARN  c.b.m.c.injector.methods.SelectById - [org.ruoyi.wande.mapper.SampleKitItemMapper.selectById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.SelectById]
+2026-04-07 10:53:34 [main] WARN  c.b.m.c.injector.methods.DeleteById - [org.ruoyi.wande.mapper.SampleKitMapper.deleteById] Has been loaded by XML or SqlProvider or Mybatis's Annotation, so ignoring this injection for [class com.baomidou.mybatisplus.core.injector.methods.DeleteById]
+2026-04-07 10:53:35 [main] INFO  org.redisson.Version - Redisson 3.20.1
+2026-04-07 10:53:35 [redisson-netty-2-5] INFO  o.r.c.p.MasterPubSubConnectionPool - 1 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:53:35 [redisson-netty-2-4] INFO  o.r.c.pool.MasterConnectionPool - 8 connections initialized for localhost/127.0.0.1:6380
+2026-04-07 10:53:48 [main] WARN  o.r.wande.config.WecomCryptoConfig - 企微回调 Token/AESKey 未配置，WecomCryptoUtil Bean 不可用
+2026-04-07 10:53:55 [main] INFO  o.n.driver.internal.DriverFactory - Direct driver instance 96415425 created for server address localhost:7687
+2026-04-07 10:53:55 [main] INFO  io.undertow - starting server: Undertow - 2.3.18.Final
+2026-04-07 10:53:55 [main] INFO  org.xnio - XNIO version 3.8.16.Final
+2026-04-07 10:53:55 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
+2026-04-07 10:53:55 [main] INFO  org.jboss.threads - JBoss Threads version 3.5.0.Final
+2026-04-07 10:54:01 [SpringApplicationShutdownHook] INFO  io.undertow - stopping server: Undertow - 2.3.18.Final
+2026-04-07 10:54:03 [SpringApplicationShutdownHook] INFO  o.n.driver.internal.InternalDriver - Closing driver instance 96415425
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource start closing ....
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - master - Shutdown initiated...
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - master - Shutdown completed.
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  c.b.d.d.d.DefaultDataSourceDestroyer - dynamic-datasource close the datasource named [master] success,
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - wande - Shutdown initiated...
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  com.zaxxer.hikari.HikariDataSource - wande - Shutdown completed.
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  c.b.d.d.d.DefaultDataSourceDestroyer - dynamic-datasource close the datasource named [wande] success,
+2026-04-07 10:54:04 [SpringApplicationShutdownHook] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource all closed success,bye

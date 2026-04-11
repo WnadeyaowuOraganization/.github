@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>万德AI平台 - 整合原型</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; background: #f5f5f5; overflow: hidden; }
+
+/* 侧边栏样式 */
+.sidebar { width: 240px; background: #001529; height: 100vh; position: fixed; left: 0; top: 0; z-index: 100; overflow-y: auto; }
+.sidebar-logo { height: 64px; display: flex; align-items: center; padding: 0 20px; color: #fff; font-size: 18px; font-weight: 600; border-bottom: 1px solid rgba(255,255,255,0.1); }
+.sidebar-menu { padding: 8px 0; }
+.menu-item { position: relative; }
+.menu-header { display: flex; align-items: center; padding: 12px 20px; color: rgba(255,255,255,0.7); cursor: pointer; transition: all 0.3s; font-size: 14px; }
+.menu-header:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.menu-header.active { color: #1890ff; background: rgba(24,144,255,0.1); }
+.menu-icon { width: 20px; margin-right: 10px; font-size: 16px; }
+.menu-arrow { margin-left: auto; font-size: 12px; transition: transform 0.3s; }
+.menu-arrow.expanded { transform: rotate(90deg); }
+.submenu { display: none; background: rgba(0,0,0,0.15); }
+.submenu.expanded { display: block; }
+.submenu-item { padding: 10px 20px 10px 50px; color: rgba(255,255,255,0.6); cursor: pointer; font-size: 13px; transition: all 0.3s; }
+.submenu-item:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.submenu-item.active { color: #1890ff; background: rgba(24,144,255,0.1); }
+
+/* 主内容区 */
+.main { margin-left: 240px; height: 100vh; display: flex; flex-direction: column; }
+.topbar { height: 64px; background: #fff; border-bottom: 1px solid #e8e8e8; display: flex; align-items: center; justify-content: space-between; padding: 0 24px; flex-shrink: 0; }
+.topbar-title { font-size: 18px; font-weight: 600; color: #333; }
+.topbar-right { display: flex; align-items: center; gap: 20px; font-size: 14px; color: #666; }
+.user-info { display: flex; align-items: center; gap: 8px; }
+
+/* iframe容器 */
+.iframe-container { flex: 1; position: relative; overflow: hidden; }
+.iframe-container iframe { width: 100%; height: 100%; border: none; }
+
+/* 面包屑导航 */
+.breadcrumb { font-size: 14px; color: #666; }
+.breadcrumb span { color: #999; margin: 0 8px; }
+</style>
+</head>
+<body>
+
+<!-- 侧边栏 -->
+<div class="sidebar">
+  <div class="sidebar-logo">🏢 万德AI平台</div>
+  <div class="sidebar-menu">
+
+    <!-- 1. 超管驾驶舱 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-cockpit')">
+        <span class="menu-icon">⚙️</span>
+        <span>超管驾驶舱</span>
+        <span class="menu-arrow" id="arrow-menu-cockpit">▶</span>
+      </div>
+      <div class="submenu" id="menu-cockpit">
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '总览仪表盘')">总览仪表盘</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'Claude Office')">Claude Office</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'Token Pool管理')">Token Pool管理</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '采集管控面板')">采集管控面板</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '定时任务管理')">定时任务管理</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '实时日志流')">实时日志流</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'FinOps成本看板')">FinOps成本看板</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'GPU资源监控')">GPU资源监控</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '外部工具管理')">外部工具管理</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '确认中心')">确认中心</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'Issue看板')">Issue看板</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'Agent效率看板')">Agent效率看板</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '验收队列')">验收队列</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'DORA指标')">DORA指标</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', '安全审计日志')">安全审计日志</div>
+        <div class="submenu-item" onclick="switchPage('超管驾驶舱/prototype.html', '超管驾驶舱', 'Prompt管理')">Prompt管理</div>
+      </div>
+    </div>
+
+    <!-- 2. 耀总驾驶舱 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="switchPage('耀总驾驶舱/prototype.html', '耀总驾驶舱', '')">
+        <span class="menu-icon">📊</span>
+        <span>耀总驾驶舱</span>
+      </div>
+    </div>
+
+    <!-- 3. 商务部 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-business')">
+        <span class="menu-icon">💼</span>
+        <span>商务部</span>
+        <span class="menu-arrow" id="arrow-menu-business">▶</span>
+      </div>
+      <div class="submenu" id="menu-business">
+        <div class="submenu-item" onclick="switchPage('全球项目矿场/prototype.html', '商务部', '全球项目矿场')">📍 全球项目矿场</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/01-dashboard.html', '商务部', '商务Dashboard')">📋 商务Dashboard</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/02-customers.html', '商务部', '客户管理')">👥 客户管理</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/03-pipeline.html', '商务部', '商机Pipeline')">🔄 商机Pipeline</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/04-opportunity-detail.html', '商务部', '商机详情')">💡 商机详情</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/05-inquiry.html', '商务部', '询盘管理')">📞 询盘管理</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/06-records.html', '商务部', '销售记录')">📝 销售记录</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/07-bidding.html', '商务部', '招投标中心')">🏗️ 招投标中心</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/08-payment.html', '商务部', '回款管理')">💰 回款管理</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/10-commission.html', '商务部', '佣金管理')">💵 佣金管理</div>
+        <div class="submenu-item" onclick="switchPage('crm-商务中心/09-dealers.html', '商务部', '经销商管理')">🤝 经销商管理</div>
+      </div>
+    </div>
+
+    <!-- 4. 项目中心 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-project')">
+        <span class="menu-icon">📁</span>
+        <span>项目中心</span>
+        <span class="menu-arrow" id="arrow-menu-project">▶</span>
+      </div>
+      <div class="submenu" id="menu-project">
+        <div class="submenu-item" onclick="switchPage('全球项目矿场/prototype.html', '项目中心', '项目列表')">项目列表</div>
+        <div class="submenu-item" onclick="switchPage('全球项目矿场/prototype.html', '项目中心', '项目详情')">项目详情</div>
+      </div>
+    </div>
+
+    <!-- 5. 支持中心 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-support')">
+        <span class="menu-icon">🎧</span>
+        <span>支持中心</span>
+        <span class="menu-arrow" id="arrow-menu-support">▶</span>
+      </div>
+      <div class="submenu" id="menu-support">
+        <div class="submenu-item placeholder" data-page="placeholder">品牌中心</div>
+        <div class="submenu-item placeholder" data-page="placeholder">方案引擎</div>
+        <div class="submenu-item placeholder" data-page="placeholder">供应商管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">协同修改</div>
+      </div>
+    </div>
+
+    <!-- 6. 综合管理中心 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-management')">
+        <span class="menu-icon">🏢</span>
+        <span>综合管理中心</span>
+        <span class="menu-arrow" id="arrow-menu-management">▶</span>
+      </div>
+      <div class="submenu" id="menu-management">
+        <div class="submenu-item placeholder" data-page="placeholder">人事管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">提成绩效</div>
+        <div class="submenu-item placeholder" data-page="placeholder">报销费控</div>
+        <div class="submenu-item placeholder" data-page="placeholder">统一权限管理</div>
+      </div>
+    </div>
+
+    <!-- 7. 安装售后中心 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-service')">
+        <span class="menu-icon">🔧</span>
+        <span>安装售后中心</span>
+        <span class="menu-arrow" id="arrow-menu-service">▶</span>
+      </div>
+      <div class="submenu" id="menu-service">
+        <div class="submenu-item placeholder" data-page="placeholder">执行管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">质保售后</div>
+      </div>
+    </div>
+
+    <!-- 8. 公共板块 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-common')">
+        <span class="menu-icon">🌐</span>
+        <span>公共板块</span>
+        <span class="menu-arrow" id="arrow-menu-common">▶</span>
+      </div>
+      <div class="submenu" id="menu-common">
+        <div class="submenu-item placeholder" data-page="placeholder">产品主数据</div>
+        <div class="submenu-item placeholder" data-page="placeholder">合同管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">执行管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">业务审批中心</div>
+        <div class="submenu-item placeholder" data-page="placeholder">通知中心</div>
+        <div class="submenu-item placeholder" data-page="placeholder">文件管理</div>
+      </div>
+    </div>
+
+    <!-- 9. 资源中心 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-resource')">
+        <span class="menu-icon">📚</span>
+        <span>资源中心</span>
+        <span class="menu-arrow" id="arrow-menu-resource">▶</span>
+      </div>
+      <div class="submenu" id="menu-resource">
+        <div class="submenu-item placeholder" data-page="placeholder">🔍 竞品情报</div>
+        <div class="submenu-item placeholder" data-page="placeholder">📖 产品知识库</div>
+      </div>
+    </div>
+
+    <!-- 10. 系统管理 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-system')">
+        <span class="menu-icon">⚙️</span>
+        <span>系统管理</span>
+        <span class="menu-arrow" id="arrow-menu-system">▶</span>
+      </div>
+      <div class="submenu" id="menu-system">
+        <div class="submenu-item placeholder" data-page="placeholder">用户管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">角色管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">菜单管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">部门管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">字典管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">参数管理</div>
+        <div class="submenu-item placeholder" data-page="placeholder">日志管理</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- 主内容区 -->
+<div class="main">
+  <!-- 顶部栏 -->
+  <div class="topbar">
+    <div class="breadcrumb">
+      <span id="breadcrumb-module">商务部</span>
+      <span>/</span>
+      <span id="breadcrumb-page" style="color: #333; font-weight: 500;">全球项目矿场</span>
+    </div>
+    <div class="topbar-right">
+      <span>🔔</span>
+      <span>💬</span>
+      <div class="user-info">
+        <span>👤</span>
+        <span>吴耀 | 超级管理员</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- iframe容器 -->
+  <div class="iframe-container">
+    <iframe id="content-iframe" src="../全球项目矿场/prototype.html"></iframe>
+  </div>
+</div>
+
+<script>
+// 菜单展开/收起
+function toggleMenu(menuId) {
+  const menu = document.getElementById(menuId);
+  const arrow = document.getElementById('arrow-' + menuId);
+  if (menu.classList.contains('expanded')) {
+    menu.classList.remove('expanded');
+    arrow.classList.remove('expanded');
+    arrow.textContent = '▶';
+  } else {
+    menu.classList.add('expanded');
+    arrow.classList.add('expanded');
+    arrow.textContent = '▼';
+  }
+}
+
+// 切换页面
+function switchPage(url, module, page) {
+  // 更新面包屑
+  document.getElementById('breadcrumb-module').textContent = module;
+  document.getElementById('breadcrumb-page').textContent = page || module;
+
+  // 更新iframe
+  const iframe = document.getElementById('content-iframe');
+  iframe.src = '../' + url;
+
+  // 更新菜单激活状态
+  document.querySelectorAll('.submenu-item').forEach(item => {
+    item.classList.remove('active');
+  });
+  document.querySelectorAll('.menu-header').forEach(item => {
+    item.classList.remove('active');
+  });
+
+  // 激活当前菜单项
+  const clickedItem = event.target;
+  clickedItem.classList.add('active');
+
+  // 激活父菜单
+  const parentMenu = clickedItem.closest('.submenu');
+  if (parentMenu) {
+    const parentHeader = parentMenu.previousElementSibling;
+    if (parentHeader) {
+      parentHeader.classList.add('active');
+    }
+  }
+}
+
+// 处理占位符菜单项点击
+document.querySelectorAll('.submenu-item.placeholder').forEach(item => {
+  item.addEventListener('click', function(e) {
+    e.preventDefault();
+    alert('该功能模块正在开发中，敬请期待...');
+  });
+});
+
+// 初始化展开商务部菜单
+document.addEventListener('DOMContentLoaded', function() {
+  toggleMenu('menu-business');
+  // 激活全球项目矿场
+  const projectMineItem = document.querySelector('[onclick*="全球项目矿场/prototype.html"]');
+  if (projectMineItem) {
+    projectMineItem.classList.add('active');
+    projectMineItem.closest('.submenu').previousElementSibling.classList.add('active');
+  }
+});
+</script>
+
+</body>
+</html>

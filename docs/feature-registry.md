@@ -491,3 +491,27 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 | 日期 | 变更 | 原因 |
 |------|------|------|
 | 2026-04-08 | 新建S3数据管线业务域(#61-#78)，18个Issue | D47决策：S3 4.5TB数据资产挖掘管线，G7e自托管方案(月$10)替代全AWS托管($310/月) |
+
+---
+
+## 业务域：经销商产品展示门户
+
+> 2026-04-11 新增。参考竞品Cemer（土耳其）3D爆炸图产品展示系统，为经销商提供产品3D展示+备件查找+技术资料分级下载。3D引擎选用ExplodeView（MIT开源），利用S3已有227个STEP模型。2级权限：L0访客/L1经销商。Master Issue: #3579。
+
+| # | 功能模块 | Issue范围 | 状态 | Sprint | 策略备注 |
+|---|---------|-----------|------|--------|---------|
+| 79 | 数据库表创建(product/document/part) | #3580 (1个) | 📋 Plan | Sprint-2 | P0基础，Flyway迁移 |
+| 80 | 产品展示API — CRUD+权限过滤 | #3581 (1个) | 📋 Plan | Sprint-2 | P0基础，L0/L1分级过滤 |
+| 81 | 产品目录页前端 — 卡片网格+筛选 | #3582 (1个) | 📋 Plan | Sprint-2 | P0，需review:needed |
+| 82 | 产品详情页前端 — 参数+3D+资料 | #3583 (1个) | 📋 Plan | Sprint-2 | P0，需review:needed |
+| 83 | ExplodeView集成+G7e Docker+STEP Pipeline | #3584 (1个) | 📋 Plan | Sprint-2 | P1核心，fullstack，Docker 3-service |
+| 84 | 备件目录页前端+爆炸图联动 | #3585 (1个) | 📋 Plan | Sprint-2 | P1，3D↔列表双向联动 |
+| 85 | 资料下载S3 presigned URL分级 | #3586 (1个) | 📋 Plan | Sprint-2 | P1，fullstack，15分钟时效URL |
+| 86 | 备件API+询价购物车 | #3587 (1个) | 📋 Plan | Sprint-2 | P1，经销商询价单流程 |
+| 87 | H5移动端适配 | #3588 (1个) | 📋 Plan | Sprint-2 | P2，三页面响应式 |
+| 88 | 3D渲染图批量生成Pipeline | #3589 (1个) | 📋 Plan | Sprint-2 | P2，Blender headless多角度渲染 |
+
+### 策略变更日志
+| 日期 | 变更 | 原因 |
+|------|------|------|
+| 2026-04-11 | 新建经销商产品展示门户(#79-#88)，10个Issue | 客户Play Concept要求对标竞品Cemer。用ExplodeView(MIT)替代Partful(SaaS付费，被否决) |

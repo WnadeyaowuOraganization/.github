@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>问题发现</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-biz-problem" class="tab-content">
+        <!-- Mode Toggle -->
+        <div class="flex gap-2 mb-4">
+          <button id="mode-problem" onclick="toggleProblemMode('problem')" class="px-4 py-2 rounded text-sm bg-red-500 text-white">🔴 问题模式</button>
+          <button id="mode-opportunity" onclick="toggleProblemMode('opportunity')" class="px-4 py-2 rounded text-sm bg-gray-200 text-gray-600 hover:bg-gray-300">🟢 机会模式</button>
+        </div>
+
+        <!-- Problem Mode -->
+        <div id="problem-content" class="space-y-3">
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <div class="alert-bar bg-red-400 self-stretch flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">前端404路由不匹配</div>
+                <div class="mt-2 bg-gray-50 border border-gray-200 rounded p-2 text-xs text-gray-600">
+                  <strong>AI根因分析：</strong>router/index.ts 中 /wande/cockpit 路由未注册，需添加懒加载配置
+                </div>
+                <div class="mt-2 flex gap-2 text-xs">
+                  <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded">关联 Issue #3472</span>
+                  <span class="bg-green-100 text-green-600 px-2 py-0.5 rounded">建议：添加路由守卫+404兜底页</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <div class="alert-bar bg-orange-400 self-stretch flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">Token Pool频繁切换</div>
+                <div class="mt-2 bg-gray-50 border border-gray-200 rounded p-2 text-xs text-gray-600">
+                  <strong>AI根因分析：</strong>智谱API间歇性超时导致fallback触发频繁，建议调整超时阈值从5s→10s
+                </div>
+                <div class="mt-2 flex gap-2 text-xs">
+                  <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded">关联 Token Pool 配置</span>
+                  <span class="bg-green-100 text-green-600 px-2 py-0.5 rounded">建议：增加超时容忍度+添加重试机制</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <div class="alert-bar bg-yellow-400 self-stretch flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">CC kimi3 超时</div>
+                <div class="mt-2 bg-gray-50 border border-gray-200 rounded p-2 text-xs text-gray-600">
+                  <strong>AI根因分析：</strong>Issue #3472 涉及路由重构，kimi3陷入循环修复loop，建议人工介入拆分Issue
+                </div>
+                <div class="mt-2 flex gap-2 text-xs">
+                  <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded">关联 Issue #3472</span>
+                  <span class="bg-green-100 text-green-600 px-2 py-0.5 rounded">建议：拆分为2个子Issue + 重新分配CC</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Opportunity Mode (hidden by default) -->
+        <div id="opportunity-content" class="space-y-3 hidden">
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <div class="alert-bar bg-green-400 self-stretch flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">发现开源替代方案可降低模型成本30%</div>
+                <div class="mt-2 bg-green-50 border border-green-200 rounded p-2 text-xs text-gray-600">
+                  Qwen3.5-122B本地部署效果接近GLM-4，可将30%的API调用切换至本地推理，预估月省￥2,550
+                </div>
+                <div class="mt-2 flex gap-2 text-xs">
+                  <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded">影响 FinOps成本</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start gap-3">
+              <div class="alert-bar bg-green-400 self-stretch flex-shrink-0"></div>
+              <div class="flex-1">
+                <div class="font-medium text-sm">新版Claude支持Agent Teams并行度提升</div>
+                <div class="mt-2 bg-green-50 border border-green-200 rounded p-2 text-xs text-gray-600">
+                  Claude新版本支持同时运行更多并发Agent，可将CC并行度从8提升至12，产能预估提升50%
+                </div>
+                <div class="mt-2 flex gap-2 text-xs">
+                  <span class="bg-blue-100 text-blue-600 px-2 py-0.5 rounded">影响 Claude Office</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

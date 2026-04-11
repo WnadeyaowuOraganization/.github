@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>基本信息</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; margin: 0; color: #333; font-size: 13px; }
+  .wireframe-block { border: 1px dashed #d9d9d9; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff; position: relative; }
+  .wireframe-label { position: absolute; top: -8px; left: 12px; background: #f5f5f5; padding: 0 6px; font-size: 10px; color: #999; }
+  .btn-primary { background: #1890ff; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .btn-primary:hover { background: #40a9ff; }
+  .btn-ghost { background: #fff; border: 1px solid #d9d9d9; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #333; }
+  .btn-ghost:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-danger { background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .c-blue { color: #1890ff; text-decoration: none; }
+  .c-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
+  .tag-gray { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+  .tab { display: inline-block; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #999; font-size: 13px; }
+  .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+  .tab:hover { color: #1890ff; }
+  .stage-bar { display: flex; gap: 2px; margin: 8px 0; }
+  .stage-item { flex: 1; text-align: center; padding: 6px 4px; font-size: 10px; border-radius: 3px; }
+  .stage-done { background: #52c41a; color: #fff; }
+  .stage-current { background: #1890ff; color: #fff; font-weight: 700; }
+  .stage-future { background: #f0f0f0; color: #999; }
+  .field-row { display: flex; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+  .field-label { width: 100px; color: #999; font-size: 12px; flex-shrink: 0; }
+  .field-value { flex: 1; font-size: 12px; }
+  .auto-tag { background: #e6f7ff; color: #1890ff; font-size: 9px; padding: 0 4px; border-radius: 2px; margin-left: 4px; }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e8e8e8; position: fixed; left: 0; top: 40px; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; }
+  .sidebar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; cursor: pointer; font-size: 18px; }
+  .sidebar-icon:hover, .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-basic">
+            <div class="wireframe-block" style="border:none;padding:0;">
+              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+                <h3 style="font-size:14px;font-weight:600;margin:0;">基本信息</h3>
+                <div style="font-size:10px;color:#999;">标 <span class="auto-tag">自动</span> 的字段由商机自动继承，无需手动填写</div>
+              </div>
+              
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:0 24px;">
+                <div class="field-row"><span class="field-label">商机名称</span><span class="field-value">【时利和】×× 项目</span></div>
+                <div class="field-row"><span class="field-label">商机代码</span><span class="field-value">TY20260258 <span class="auto-tag">自动编号</span></span></div>
+                <div class="field-row"><span class="field-label">客户名称</span><span class="field-value">时利和集团 <span class="auto-tag">自动</span></span></div>
+                <div class="field-row"><span class="field-label">客户性质</span><span class="field-value">终端客户 <span class="auto-tag">自动</span></span></div>
+                <div class="field-row"><span class="field-label">负责人</span><span class="field-value">孙晓坤 <span class="auto-tag">自动</span></span></div>
+                <div class="field-row"><span class="field-label">所属部门</span><span class="field-value">拓展三部 <span class="auto-tag">自动</span></span></div>
+                <div class="field-row"><span class="field-label">项目类型</span><span class="field-value">市政体育设施</span></div>
+                <div class="field-row"><span class="field-label">项目等级</span><span class="field-value"><span class="tag tag-yellow">A级 — 高端项目</span></span></div>
+                <div class="field-row"><span class="field-label">预算金额</span><span class="field-value" style="font-weight:600;">¥500,000</span></div>
+                <div class="field-row"><span class="field-label">资金来源</span><span class="field-value">政府采购</span></div>
+                <div class="field-row"><span class="field-label">业务类型</span><span class="field-value"><span class="tag tag-blue">直销业务</span></span></div>
+                <div class="field-row"><span class="field-label">产品类型</span><span class="field-value">标准品类 + 非标类</span></div>
+                <div class="field-row"><span class="field-label">预计签约日</span><span class="field-value">2026-05-15</span></div>
+                <div class="field-row"><span class="field-label">开标时间</span><span class="field-value">2026-04-25</span></div>
+                <div class="field-row"><span class="field-label">是否有设计单</span><span class="field-value"><span class="tag tag-green">是</span> <span class="auto-tag">系统自动判断</span></span></div>
+                <div class="field-row"><span class="field-label">是否有报价单</span><span class="field-value"><span class="tag tag-yellow">审批中</span> <span class="auto-tag">系统自动判断</span></span></div>
+                <div class="field-row"><span class="field-label">成单预测</span><span class="field-value">70% <span style="color:#999;font-size:10px;">（系统预测65%，商务调整为70%）</span></span></div>
+                <div class="field-row"><span class="field-label">预测依据</span><span class="field-value" style="color:#666;">对接进展良好，客户已确认场地尺寸 <span style="color:#1890ff;font-size:10px;">AI草稿已预填</span></span></div>
+              </div>
+
+              <!-- 潜在风险（AI预填） -->
+              <div style="margin-top:12px;padding:10px;background:#fffbe6;border-radius:4px;border:1px solid #ffe58f;">
+                <div style="font-size:12px;font-weight:600;color:#faad14;margin-bottom:4px;">⚠️ 潜在风险 <span style="font-weight:400;color:#1890ff;font-size:10px;">AI预填，可修改</span></div>
+                <div style="font-size:12px;color:#666;">1. 客户资金为政府采购，付款周期可能较长（参考同类项目平均90天）<br>2. 竞品牧童在本区域有渠道优势<br>3. 开标日期2026-04-25，设计方案需在4月20日前完成</div>
+              </div>
+
+              <!-- 项目说明 -->
+              <div style="margin-top:8px;">
+                <div class="field-row"><span class="field-label">项目说明</span><span class="field-value" style="color:#666;">安徽省合肥市长丰县体育设施升级改造，含户外健身路径+儿童游乐区+老年康体区三个分区 <span style="color:#1890ff;font-size:10px;">AI草稿已预填</span></span></div>
+                <div class="field-row" style="border:none;"><span class="field-label">安装条件</span><span class="field-value" style="color:#666;">场地已硬化，道路可通行大型车辆，有380V工业电源 <span style="color:#1890ff;font-size:10px;">AI草稿已预填</span></span></div>
+              </div>
+            </div>
+          </div>
+</body>
+</html>

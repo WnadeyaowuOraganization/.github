@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Claude Office</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-sys-cc" class="tab-content">
+        <div class="grid grid-cols-3 gap-4">
+          <!-- Left: CC Status Matrix -->
+          <div class="col-span-2 bg-white border border-gray-300 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [CC状态矩阵] -->CC状态矩阵</h3>
+            <div class="grid grid-cols-5 gap-2">
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi1</div><div class="text-gray-500">Issue #3470</div><div>🟢 运行</div>
+                <div class="tooltip-box">API 404修复 · 运行 2h15m</div>
+              </div>
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi2</div><div class="text-gray-500">Issue #3481</div><div>🟢 运行</div>
+                <div class="tooltip-box">日志流功能 · 运行 1h42m</div>
+              </div>
+              <div class="tooltip-wrap border border-yellow-200 bg-yellow-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi3</div><div class="text-gray-500">Issue #3472</div><div>🟡 超时</div>
+                <div class="tooltip-box">前端路由修复 · 超时 35m</div>
+              </div>
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi4</div><div class="text-gray-500">Issue #3482</div><div>🟢 运行</div>
+                <div class="tooltip-box">FinOps看板 · 运行 0h58m</div>
+              </div>
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi5</div><div class="text-gray-500">Issue #3483</div><div>🟢 运行</div>
+                <div class="tooltip-box">安全审计日志 · 运行 3h07m</div>
+              </div>
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi6</div><div class="text-gray-500">Issue #3484</div><div>🟢 运行</div>
+                <div class="tooltip-box">Prompt管理 · 运行 0h33m</div>
+              </div>
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi7</div><div class="text-gray-500">Issue #2849</div><div>🟢 运行</div>
+                <div class="tooltip-box">Agent效率看板 · 运行 4h21m</div>
+              </div>
+              <div class="tooltip-wrap border border-green-200 bg-green-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi8</div><div class="text-gray-500">Issue #2851</div><div>🟢 运行</div>
+                <div class="tooltip-box">验收队列 · 运行 1h15m</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi9</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi10</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi11</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi12</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi13</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi14</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi15</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi16</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi17</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi18</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi19</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+              <div class="tooltip-wrap border border-gray-200 bg-gray-50 rounded p-2 text-center text-xs cursor-default">
+                <div class="font-bold">kimi20</div><div class="text-gray-500">—</div><div>🔴 空闲</div>
+                <div class="tooltip-box">空闲中</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Column -->
+          <div class="space-y-4">
+            <!-- Research Manager Log -->
+            <div class="bg-white border border-gray-300 rounded-lg p-4">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [研发经理CC日志] -->研发经理CC日志</h3>
+              <div class="bg-gray-900 text-green-400 rounded p-3 font-mono text-xs space-y-1 h-36 overflow-y-auto">
+                <div>[14:32:01] 分配 Issue #3484 → kimi6 (Prompt管理)</div>
+                <div>[14:28:15] kimi8 完成 Issue #2851 验收队列 PR#892</div>
+                <div>[14:25:00] 检测到 kimi3 超时，准备重新分配</div>
+                <div>[14:20:33] E2E 测试通过: Issue #3470 API修复</div>
+                <div>[14:15:12] 创建新 Issue #3485 from 问题发现模块</div>
+              </div>
+            </div>
+
+            <!-- Kanban Simplified -->
+            <div class="bg-white border border-gray-300 rounded-lg p-4">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [Kanban看板简化版] -->Kanban看板</h3>
+              <div class="flex gap-2 overflow-x-auto">
+                <div class="kanban-col bg-gray-50 border border-gray-200 rounded p-2 text-center">
+                  <div class="text-xs text-gray-500 mb-1">Plan</div>
+                  <div class="text-xl font-bold text-gray-700">668</div>
+                </div>
+                <div class="kanban-col bg-blue-50 border border-blue-200 rounded p-2 text-center">
+                  <div class="text-xs text-gray-500 mb-1">Todo</div>
+                  <div class="text-xl font-bold text-blue-600">113</div>
+                </div>
+                <div class="kanban-col bg-yellow-50 border border-yellow-200 rounded p-2 text-center">
+                  <div class="text-xs text-gray-500 mb-1">In Progress</div>
+                  <div class="text-xl font-bold text-yellow-600">29</div>
+                </div>
+                <div class="kanban-col bg-red-50 border border-red-200 rounded p-2 text-center">
+                  <div class="text-xs text-gray-500 mb-1">E2E Fail</div>
+                  <div class="text-xl font-bold text-red-500">2</div>
+                </div>
+                <div class="kanban-col bg-green-50 border border-green-200 rounded p-2 text-center">
+                  <div class="text-xs text-gray-500 mb-1">Done</div>
+                  <div class="text-xl font-bold text-green-600">465</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

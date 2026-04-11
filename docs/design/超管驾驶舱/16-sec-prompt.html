@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-sec-prompt" class="tab-content">
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Left: Dependency Graph -->
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [Prompt依赖图] -->Prompt依赖树</h3>
+            <div class="pl-2">
+              <!-- Root -->
+              <div class="flex items-center gap-2 py-2">
+                <span class="text-lg">📄</span>
+                <span class="font-mono text-sm font-bold">CLAUDE.md</span>
+                <span class="text-green-500 text-xs">✅ 同步</span>
+              </div>
+              <!-- Children -->
+              <div class="ml-6 border-l-2 border-gray-200 pl-4 space-y-2">
+                <div class="flex items-center gap-2 py-1">
+                  <span class="text-sm">📄</span>
+                  <span class="font-mono text-xs">backend/CLAUDE.md</span>
+                  <span class="text-green-500 text-xs">✅</span>
+                </div>
+                <div class="flex items-center gap-2 py-1">
+                  <span class="text-sm">📄</span>
+                  <span class="font-mono text-xs">frontend/CLAUDE.md</span>
+                  <span class="text-yellow-500 text-xs">⚠️ 未同步</span>
+                </div>
+                <div class="flex items-center gap-2 py-1">
+                  <span class="text-sm">📄</span>
+                  <span class="font-mono text-xs">pipeline/CLAUDE.md</span>
+                  <span class="text-green-500 text-xs">✅</span>
+                </div>
+                <div class="flex items-center gap-2 py-1">
+                  <span class="text-sm">📄</span>
+                  <span class="font-mono text-xs">e2e/CLAUDE.md</span>
+                  <span class="text-yellow-500 text-xs">⚠️ 未同步</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right -->
+          <div class="space-y-4">
+            <!-- Consistency Check -->
+            <div class="bg-white border border-gray-300 rounded-lg p-4">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [一致性检查] -->一致性检查报告</h3>
+              <div class="text-xs text-gray-400 mb-3">最近扫描: 今日 06:00</div>
+              <div class="space-y-2">
+                <div class="flex items-center gap-2 text-sm"><span class="text-red-500">❌</span><span>1个矛盾: backend与根CLAUDE.md的API风格指南冲突</span></div>
+                <div class="flex items-center gap-2 text-sm"><span class="text-yellow-500">⚠️</span><span>2个未同步: frontend + e2e 落后根文件3个commit</span></div>
+                <div class="flex items-center gap-2 text-sm"><span class="text-green-500">✅</span><span>12个检查项正常</span></div>
+              </div>
+            </div>
+
+            <!-- Prompt File List -->
+            <div class="bg-white border border-gray-300 rounded-lg p-4">
+              <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [Prompt文件列表] -->Prompt文件管理</h3>
+              <table class="w-full text-xs">
+                <thead><tr class="border-b border-gray-200 text-gray-500">
+                  <th class="text-left py-1.5 px-2">文件</th><th class="text-left py-1.5 px-2">更新时间</th><th class="text-left py-1.5 px-2">修改人</th><th class="text-left py-1.5 px-2">操作</th>
+                </tr></thead>
+                <tbody>
+                  <tr class="border-b border-gray-100"><td class="py-1.5 px-2 font-mono">根/CLAUDE.md</td><td class="py-1.5 px-2">04-09 06:00</td><td class="py-1.5 px-2">吴耀</td><td class="py-1.5 px-2"><button class="text-blue-500 hover:underline mr-1">查看</button><button class="text-blue-500 hover:underline mr-1">编辑</button><button class="text-gray-400 hover:underline">历史</button></td></tr>
+                  <tr class="border-b border-gray-100"><td class="py-1.5 px-2 font-mono">backend/</td><td class="py-1.5 px-2">04-08 22:00</td><td class="py-1.5 px-2">kimi4</td><td class="py-1.5 px-2"><button class="text-blue-500 hover:underline mr-1">查看</button><button class="text-blue-500 hover:underline mr-1">编辑</button><button class="text-gray-400 hover:underline">历史</button></td></tr>
+                  <tr class="border-b border-gray-100"><td class="py-1.5 px-2 font-mono">frontend/</td><td class="py-1.5 px-2">04-07 18:00</td><td class="py-1.5 px-2">kimi2</td><td class="py-1.5 px-2"><button class="text-blue-500 hover:underline mr-1">查看</button><button class="text-blue-500 hover:underline mr-1">编辑</button><button class="text-gray-400 hover:underline">历史</button></td></tr>
+                  <tr class="border-b border-gray-100"><td class="py-1.5 px-2 font-mono">pipeline/</td><td class="py-1.5 px-2">04-09 03:00</td><td class="py-1.5 px-2">kimi5</td><td class="py-1.5 px-2"><button class="text-blue-500 hover:underline mr-1">查看</button><button class="text-blue-500 hover:underline mr-1">编辑</button><button class="text-gray-400 hover:underline">历史</button></td></tr>
+                  <tr><td class="py-1.5 px-2 font-mono">e2e/</td><td class="py-1.5 px-2">04-06 12:00</td><td class="py-1.5 px-2">kimi7</td><td class="py-1.5 px-2"><button class="text-blue-500 hover:underline mr-1">查看</button><button class="text-blue-500 hover:underline mr-1">编辑</button><button class="text-gray-400 hover:underline">历史</button></td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

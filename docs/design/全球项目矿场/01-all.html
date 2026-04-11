@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全部</title>
+  <style>
+
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;margin:0}
+.sidebar{width:56px;background:#001529;min-height:100vh;position:fixed;left:0;top:0;z-index:50}
+.sidebar-icon{width:56px;height:48px;display:flex;align-items:center;justify-content:center;color:#ffffffa0;font-size:18px;cursor:pointer}
+.sidebar-icon:hover,.sidebar-icon.active{background:#1890ff33;color:#fff}
+.main{margin-left:56px;padding:16px 24px}
+.kpi-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;flex:1}
+.kpi-num{font-size:28px;font-weight:700;color:#333}
+.kpi-label{font-size:13px;color:#999;margin-bottom:4px}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #e8e8e8;margin:16px 0 0}
+.tab{padding:10px 20px;cursor:pointer;font-size:14px;color:#666;border-bottom:2px solid transparent;transition:.2s}
+.tab:hover{color:#1890ff}
+.tab.active{color:#1890ff;border-bottom-color:#1890ff;font-weight:600}
+.filter-bar{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px;margin:12px 0;display:grid;grid-template-columns:repeat(5,1fr) auto;gap:12px;align-items:end}
+.filter-bar label{font-size:12px;color:#999;display:block;margin-bottom:4px}
+.filter-bar input,.filter-bar select{width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s}
+.btn:hover{border-color:#1890ff;color:#1890ff}
+.btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+.btn-primary:hover{background:#40a9ff}
+.btn-sm{padding:3px 8px;font-size:12px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;border-radius:6px;font-size:13px}
+thead{background:#fafafa}
+th{padding:10px 12px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:top}
+tr:hover{background:#fafafa}
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap}
+.tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f}
+.tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+.tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+.tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e}
+.tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+.tag-purple{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7}
+.tag-cyan{background:#e6fffb;color:#13c2c2;border:1px solid #87e8de}
+.tag-gray{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+.tag-magenta{background:#fff0f6;color:#eb2f96;border:1px solid #ffadd2}
+.trust-high{color:#52c41a;font-weight:600}
+.trust-mid{color:#fa8c16;font-weight:600}
+.trust-low{color:#f5222d;font-weight:600}
+.score-badge{display:inline-flex;align-items:center;gap:4px;cursor:pointer;position:relative}
+.score-badge:hover .score-tooltip{display:block}
+.score-tooltip{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:12px;width:260px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;font-size:12px;line-height:1.8}
+.score-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin:2px 0}
+.score-bar-fill{height:100%;border-radius:3px;background:#1890ff}
+.drawer-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.3);z-index:100;display:none}
+.drawer{position:fixed;top:0;right:-960px;width:920px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.1);z-index:101;transition:right .3s;overflow-y:auto}
+.drawer.open{right:0}
+.drawer-header{padding:16px 24px;border-bottom:1px solid #e8e8e8;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:10}
+.drawer-body{padding:24px}
+.contact-card{background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:16px;margin-bottom:20px}
+.contact-card h4{margin:0 0 8px;font-size:15px;color:#333}
+.contact-card .info{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:#555}
+.detail-tabs{display:flex;gap:0;border-bottom:1px solid #e8e8e8;margin-bottom:16px}
+.detail-tab{padding:8px 16px;cursor:pointer;font-size:13px;color:#666;border-bottom:2px solid transparent}
+.detail-tab:hover{color:#1890ff}
+.detail-tab.active{color:#1890ff;border-bottom-color:#1890ff;font-weight:600}
+.detail-section{display:none}
+.detail-section.active{display:block}
+.trust-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:20px}
+.trust-level{font-size:13px;padding:4px 12px;border-radius:4px;font-weight:600;display:inline-block;margin-bottom:12px}
+.trust-level.high{background:#f6ffed;color:#52c41a}
+.trust-level.mid{background:#fff7e6;color:#fa8c16}
+.trust-level.low{background:#fff1f0;color:#f5222d}
+.layer-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
+.layer-stars{color:#faad14}
+.assign-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:8px;padding:24px;width:520px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:200;display:none}
+.assign-modal h3{margin:0 0 16px;font-size:16px}
+.biz-option{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid #e8e8e8;border-radius:6px;margin-bottom:8px;cursor:pointer;transition:.2s}
+.biz-option:hover,.biz-option.selected{border-color:#1890ff;background:#e6f7ff}
+.biz-option .name{font-weight:600;font-size:14px}
+.biz-option .meta{font-size:12px;color:#999}
+.deadline-tag{font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px}
+.deadline-red{background:#fff1f0;color:#f5222d}
+.deadline-orange{background:#fff7e6;color:#fa8c16}
+.deadline-blue{background:#e6f7ff;color:#1890ff}
+.deadline-gray{background:#fafafa;color:#8c8c8c}
+.pagination{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:13px;color:#666}
+.page-btn{padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:13px}
+.page-btn.active{background:#1890ff;color:#fff;border-color:#1890ff}
+.edit-history{font-size:11px;color:#999;margin-top:4px}
+
+  body { padding: 16px; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <div class="bg-yellow-50 border border-yellow-200 rounded p-3 mb-4 text-sm text-yellow-800">当前视图筛选：<strong>全部</strong> — 显示全部项目</div>
+<!-- [筛选栏] -->
+  <div class="filter-bar">
+    <div><label>项目名称</label><input type="text" placeholder="搜索项目名称/关键词"></div>
+    <div><label>省份/国家</label><select><option>全部区域（多选）</option></select></div>
+    <div><label>阶段</label><select><option>全部阶段（多选）</option></select></div>
+    <div><label>验证状态</label><select><option>全部</option><option>已验证</option><option>待验证</option><option>验证失败</option><option>待确认</option></select></div>
+    <div><label>匹配等级</label><select><option>全部</option><option>A级</option><option>B级</option><option>C级</option></select></div>
+    <div><button class="btn btn-primary" style="height:32px">🔍 搜索</button></div>
+  </div>
+
+  <!-- [工具栏] -->
+  <div class="toolbar">
+    <div style="display:flex;gap:8px">
+      <button class="btn btn-primary">+ 新增</button>
+      <button class="btn">↓ 导出</button>
+      <button class="btn" onclick="showAssign()">→ 分配选中</button>
+      <button class="btn">批量操作 ▾</button>
+    </div>
+    <div style="font-size:13px;color:#999">已选 <b style="color:#1890ff">0</b> 项 | 共 9,015 条</div>
+  </div>
+
+  <!-- [数据表格] -->
+  <div style="overflow-x:auto">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:36px"><input type="checkbox"></th>
+        <th style="min-width:280px">项目标题</th>
+        <th>省份</th>
+        <th>分类</th>
+        <th>等级</th>
+        <th>总分 <span style="color:#999;font-weight:400">(hover看详情)</span></th>
+        <th>投资金额</th>
+        <th>真实性</th>
+        <th>验证状态</th>
+        <th>状态</th>
+        <th>发现时间</th>
+        <th>反馈</th>
+        <th style="min-width:200px;text-align:center">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 行1: A级高可信 -->
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><a href="#" onclick="openDrawer();return false" style="color:#1890ff;text-decoration:none;font-weight:500">深圳市光明区儿童公园游乐设施采购项目</a></td>
+        <td>广东</td>
+        <td><span class="tag tag-gold">早期金矿</span></td>
+        <td><span class="tag tag-red" style="font-weight:700">A</span></td>
+        <td>
+          <div class="score-badge">
+            <span style="font-size:16px;font-weight:700;color:#333">88</span>
+            <span style="font-size:11px;color:#999">/ 100</span>
+            <span style="color:#999;font-size:12px">ⓘ</span>
+            <div class="score-tooltip">
+              <div style="font-weight:600;margin-bottom:8px">评分详情 (88/100)</div>
+              <div>规模匹配 <span style="float:right">25/30</span></div><div class="score-bar"><div class="score-bar-fill" style="width:83%"></div></div>
+              <div>时效性 <span style="float:right">20/25</span></div><div class="score-bar"><div class="score-bar-fill" style="width:80%"></div></div>
+              <div>产品匹配 <span style="float:right">23/25</span></div><div class="score-bar"><div class="score-bar-fill" style="width:92%"></div></div>
+              <div>竞争强度 <span style="float:right">10/10</span></div><div class="score-bar"><div class="score-bar-fill" style="width:100%"></div></div>
+              <div>信源质量 <span style="float:right">10/10</span></div><div class="score-bar"><div class="score-bar-fill" style="width:100%"></div></div>
+              <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f0f0f0;color:#666">
+                <b>匹配理由:</b> 游乐设备采购, 金额匹配万德能力范围<br>
+                <b>AI建议:</b> 建议优先跟进, 设计院已确定为XX设计院
+              </div>
+            </div>
+          </div>
+        </td>
+        <td style="font-weight:500">500万</td>
+        <td>
+          <span class="trust-high">✅ 高可信</span>
+          <div style="font-size:11px;color:#888;margin-top:2px">3源交叉验证通过</div>
+        </td>
+        <td><span class="tag tag-blue">已验证</span></td>
+        <td><span class="tag tag-green">跟进中</span></td>
+        <td>2026-03-15</td>
+        <td><span class="tag tag-green">有效线索</span></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm" onclick="openDrawer()">详情</button>
+          <button class="btn btn-sm" title="修正信息（保留历史版本）">修正</button>
+          <button class="btn btn-sm btn-primary" onclick="showAssign()">分配</button>
+          <button class="btn btn-sm">流转▾</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">🗑</button>
+        </td>
+      </tr>
+      <!-- 行2: 设备招标+倒计时 -->
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><a href="#" onclick="openDrawer();return false" style="color:#1890ff;text-decoration:none;font-weight:500">成都天府新区综合公园游乐设备招标</a></td>
+        <td>四川</td>
+        <td>
+          <span class="tag tag-blue">设备招标</span>
+          <span class="deadline-tag deadline-red">⏰ 距截止3天</span>
+        </td>
+        <td><span class="tag tag-red" style="font-weight:700">A</span></td>
+        <td>
+          <div class="score-badge">
+            <span style="font-size:16px;font-weight:700;color:#333">92</span>
+            <span style="font-size:11px;color:#999">/ 100</span>
+            <span style="color:#999;font-size:12px">ⓘ</span>
+            <div class="score-tooltip">
+              <div style="font-weight:600;margin-bottom:8px">评分详情 (92/100)</div>
+              <div>规模匹配 <span style="float:right">28/30</span></div><div class="score-bar"><div class="score-bar-fill" style="width:93%"></div></div>
+              <div>时效性 <span style="float:right">22/25</span></div><div class="score-bar"><div class="score-bar-fill" style="width:88%"></div></div>
+              <div>产品匹配 <span style="float:right">24/25</span></div><div class="score-bar"><div class="score-bar-fill" style="width:96%"></div></div>
+              <div>竞争强度 <span style="float:right">8/10</span></div><div class="score-bar"><div class="score-bar-fill" style="width:80%"></div></div>
+              <div>信源质量 <span style="float:right">10/10</span></div><div class="score-bar"><div class="score-bar-fill" style="width:100%"></div></div>
+              <div style="margin-top:8px;padding-top:8px;border-top:1px solid #f0f0f0;color:#666">
+                <b>匹配理由:</b> 设备招标明确指定游乐设施, 1200万大项目<br>
+                <b>AI建议:</b> 紧急! 招标截止仅3天, 如要参与需立即准备标书
+              </div>
+            </div>
+          </div>
+        </td>
+        <td style="font-weight:500">1,200万</td>
+        <td>
+          <span class="trust-mid">⚠️ 中等</span>
+          <div style="font-size:11px;color:#888;margin-top:2px">仅1信源, 待复检</div>
+        </td>
+        <td><span class="tag tag-gray">待验证</span></td>
+        <td><span class="tag tag-purple">备标中</span></td>
+        <td>2026-03-20</td>
+        <td>—</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm" onclick="openDrawer()">详情</button>
+          <button class="btn btn-sm">修正</button>
+          <button class="btn btn-sm btn-primary" onclick="showAssign()">分配</button>
+          <button class="btn btn-sm">流转▾</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">🗑</button>
+        </td>
+      </tr>
+      <!-- 行3: B级 -->
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><a href="#" style="color:#1890ff;text-decoration:none;font-weight:500">杭州滨江区滨江公园儿童乐园改造</a></td>
+        <td>浙江</td>
+        <td><span class="tag tag-orange">施工谈判</span></td>
+        <td><span class="tag tag-orange" style="font-weight:700">B</span></td>
+        <td>
+          <div class="score-badge">
+            <span style="font-size:16px;font-weight:700;color:#333">75</span>
+            <span style="font-size:11px;color:#999">/ 100</span>
+            <span style="color:#999;font-size:12px">ⓘ</span>
+          </div>
+        </td>
+        <td style="font-weight:500">300万</td>
+        <td>
+          <span class="trust-high">✅ 高可信</span>
+          <div style="font-size:11px;color:#888;margin-top:2px">2源交叉验证</div>
+        </td>
+        <td><span class="tag tag-blue">已验证</span></td>
+        <td><span class="tag tag-cyan">已联系</span></td>
+        <td>2026-03-18</td>
+        <td>—</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm">详情</button>
+          <button class="btn btn-sm">修正</button>
+          <button class="btn btn-sm">流转▾</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">🗑</button>
+        </td>
+      </tr>
+      <!-- 行4: 幼儿园项目 -->
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><a href="#" style="color:#1890ff;text-decoration:none;font-weight:500">武汉市江夏区示范幼儿园户外游乐设备采购</a></td>
+        <td>湖北</td>
+        <td><span class="tag tag-blue">设备招标</span>
+          <span class="deadline-tag deadline-orange">⏰ 距截止7天</span>
+        </td>
+        <td><span class="tag tag-orange" style="font-weight:700">B</span></td>
+        <td>
+          <div class="score-badge">
+            <span style="font-size:16px;font-weight:700;color:#333">68</span>
+            <span style="font-size:11px;color:#999">/ 100</span>
+            <span style="color:#999;font-size:12px">ⓘ</span>
+          </div>
+        </td>
+        <td style="font-weight:500">80万</td>
+        <td>
+          <span class="trust-mid">⚠️ 中等</span>
+          <div style="font-size:11px;color:#888;margin-top:2px">1源, 待人工确认</div>
+        </td>
+        <td><span class="tag tag-orange">待确认</span></td>
+        <td><span class="tag tag-gray">未分配</span></td>
+        <td>2026-03-25</td>
+        <td>—</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm">详情</button>
+          <button class="btn btn-sm">修正</button>
+          <button class="btn btn-sm btn-primary" onclick="showAssign()">分配</button>
+          <button class="btn btn-sm" style="color:#52c41a;border-color:#b7eb8f">✓有效</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">✗无效</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">🗑</button>
+        </td>
+      </tr>
+      <!-- 行5: 低可信 -->
+      <tr style="background:#fffbe6">
+        <td><input type="checkbox"></td>
+        <td><a href="#" style="color:#1890ff;text-decoration:none;font-weight:500">广州南沙区综合运动游乐场设备采购</a></td>
+        <td>广东</td>
+        <td><span class="tag tag-gold">早期金矿</span></td>
+        <td><span class="tag tag-green" style="font-weight:700">C</span></td>
+        <td>
+          <div class="score-badge">
+            <span style="font-size:16px;font-weight:700;color:#999">42</span>
+            <span style="font-size:11px;color:#999">/ 100</span>
+            <span style="color:#999;font-size:12px">ⓘ</span>
+          </div>
+        </td>
+        <td style="font-weight:500">200万</td>
+        <td>
+          <span class="trust-low">❌ 低可信</span>
+          <div style="font-size:11px;color:#888;margin-top:2px">信息过期>90天</div>
+        </td>
+        <td><span class="tag tag-red">验证失败</span></td>
+        <td><span class="tag tag-gray" style="color:#bbb">休眠</span></td>
+        <td>2026-02-28</td>
+        <td><span class="tag tag-red">无效线索</span></td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm">详情</button>
+          <button class="btn btn-sm">修正</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">🗑</button>
+        </td>
+      </tr>
+      <!-- 行6: 国际项目 -->
+      <tr>
+        <td><input type="checkbox"></td>
+        <td><a href="#" style="color:#1890ff;text-decoration:none;font-weight:500">Dubai Creek Park Playground Equipment Procurement</a></td>
+        <td>🇦🇪 迪拜</td>
+        <td><span class="tag tag-blue">设备招标</span>
+          <span class="deadline-tag deadline-blue">⏰ 距截止14天</span>
+        </td>
+        <td><span class="tag tag-red" style="font-weight:700">A</span></td>
+        <td>
+          <div class="score-badge">
+            <span style="font-size:16px;font-weight:700;color:#333">85</span>
+            <span style="font-size:11px;color:#999">/ 100</span>
+            <span style="color:#999;font-size:12px">ⓘ</span>
+          </div>
+        </td>
+        <td style="font-weight:500">$320K</td>
+        <td>
+          <span class="trust-mid">⚠️ 中等</span>
+          <div style="font-size:11px;color:#888;margin-top:2px">GlobalTenders采集</div>
+        </td>
+        <td><span class="tag tag-blue">已验证</span></td>
+        <td><span class="tag tag-gray">未分配</span></td>
+        <td>2026-04-01</td>
+        <td>—</td>
+        <td style="white-space:nowrap">
+          <button class="btn btn-sm">详情</button>
+          <button class="btn btn-sm">修正</button>
+          <button class="btn btn-sm btn-primary" onclick="showAssign()">分配</button>
+          <button class="btn btn-sm" style="color:#52c41a;border-color:#b7eb8f">✓有效</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">✗无效</button>
+          <button class="btn btn-sm" style="color:#f5222d;border-color:#ffa39e">🗑</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <!-- [分页] -->
+  <div class="pagination">
+    <span>共 <b>9,015</b> 条</span>
+    <div style="display:flex;gap:4px;align-items:center">
+      <button class="page-btn">‹</button>
+      <button class="page-btn active">1</button>
+      <button class="page-btn">2</button>
+      <button class="page-btn">3</button>
+      <span>...</span>
+      <button class="page-btn">451</button>
+      <button class="page-btn">›</button>
+      <span style="margin-left:8px">每页</span>
+      <select style="border:1px solid #d9d9d9;border-radius:4px;padding:2px 4px;font-size:13px"><option>20</option><option>50</option><option>100</option></select>
+      <span>条</span>
+    </div>
+
+<!-- [详情抽屉] -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-header">
+    <div>
+      <div style="font-size:16px;font-weight:600">深圳市光明区儿童公园游乐设施采购项目</div>
+      <div style="font-size:12px;color:#999;margin-top:4px">
+        <span class="tag tag-gold" style="margin-right:4px">早期金矿</span>
+        <span class="tag tag-red" style="font-weight:700;margin-right:4px">A级</span>
+        <span style="font-weight:600">88分</span>
+        <span style="margin-left:8px">研判: <span style="color:#52c41a;font-weight:600">● Green 可跟进</span></span>
+      </div>
+    </div>
+    <button onclick="closeDrawer()" style="background:none;border:none;font-size:20px;cursor:pointer;color:#999">✕</button>
+  </div>
+  <div class="drawer-body">
+
+    <!-- [甲方联系卡 - 置顶] -->
+    <div class="contact-card">
+      <h4>🏢 甲方联系信息</h4>
+      <div class="info">
+        <div>👤 <b>张建国</b>（采购部主任）</div>
+        <div>📱 <a href="tel:13800138001" style="color:#1890ff">138-0013-8001</a></div>
+        <div>🏢 深圳市光明区城市管理和综合执法局</div>
+        <div>📧 zjg@gm.sz.gov.cn</div>
+      </div>
+      <div style="font-size:11px;color:#999;margin-top:8px">来源: 招标公告公示 | 最后验证: 3天前 | 信息可信度: ✅ 已交叉验证</div>
+    </div>
+
+    <!-- [详情Tab] -->
+    <div class="detail-tabs">
+      <div class="detail-tab active" onclick="switchDetailTab(this,'info')">基本信息</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'trust')">真实性论证</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'judge')">研判分析</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'source')">信源链接</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'partner')">配合单位</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'task')">任务看板</div>
+      <div class="detail-tab" onclick="switchDetailTab(this,'log')">操作记录</div>
+    </div>
+
+    <!-- Tab: 基本信息 -->
+    <div class="detail-section active" id="tab-info">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px 24px;font-size:13px">
+        <div><span style="color:#999">项目标题:</span> 深圳市光明区儿童公园游乐设施采购项目</div>
+        <div><span style="color:#999">省份/城市:</span> 广东 / 深圳</div>
+        <div><span style="color:#999">分类:</span> 早期金矿</div>
+        <div><span style="color:#999">阶段:</span> 前期调研</div>
+        <div><span style="color:#999">匹配等级:</span> <span class="tag tag-red" style="font-weight:700">A</span></div>
+        <div><span style="color:#999">总分:</span> <b>88</b> / 100</div>
+        <div><span style="color:#999">投资金额:</span> 500万元</div>
+        <div><span style="color:#999">预估万德金额:</span> 150万元</div>
+        <div><span style="color:#999">状态:</span> <span class="tag tag-green">跟进中</span></div>
+        <div><span style="color:#999">分配给:</span> 邓文涛（2026-03-20分配）</div>
+        <div><span style="color:#999">发现时间:</span> 2026-03-15 14:23</div>
+        <div><span style="color:#999">最后更新:</span> 2026-04-05 09:12 (自动)</div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:#f9f9f9;border-radius:6px;font-size:13px">
+        <div style="color:#999;margin-bottom:4px">AI建议:</div>
+        <div>建议联系设计院XX了解选型进度。设计院项目经理李工(139xxxx)曾与万德在2024年龙华项目合作过，可作为突破口。光明区2026年财政预算已列入公园改造专项经费。</div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:#999">
+        修改历史: <a href="#" style="color:#1890ff">查看3次修改记录</a>
+        <div class="edit-history">最近修改: 2026-04-01 吴耀 将"投资金额"从"300万"修正为"500万"</div>
+      </div>
+    </div>
+
+    <!-- Tab: 真实性论证 -->
+    <div class="detail-section" id="tab-trust">
+      <div class="trust-card">
+        <div class="trust-level high">✅ 高可信 — 综合评分 87/100</div>
+        <div style="font-size:13px;line-height:2">
+          <div class="layer-row">
+            <span style="width:120px">L1 源头评分</span>
+            <span class="layer-stars">★★★★☆</span>
+            <span>政府采购网直接采集，源头可信度高</span>
+          </div>
+          <div class="layer-row">
+            <span style="width:120px">L2 完整度</span>
+            <span class="layer-stars">★★★★★</span>
+            <span>关键字段填充率 100%（标题/金额/甲方/阶段全有）</span>
+          </div>
+          <div class="layer-row">
+            <span style="width:120px">L3 交叉验证</span>
+            <span class="layer-stars">★★★★☆</span>
+            <span>3个独立信源匹配（政府采购网 + 发改委 + 招标代理官网）</span>
+          </div>
+          <div class="layer-row">
+            <span style="width:120px">L4 时效复检</span>
+            <span class="layer-stars">★★★☆☆</span>
+            <span>上次自动复检: 7天前 | 项目状态: 仍在推进中</span>
+          </div>
+          <div class="layer-row">
+            <span style="width:120px">L5 商务反馈</span>
+            <span class="layer-stars" style="color:#d9d9d9">☆☆☆☆☆</span>
+            <span style="color:#999">待首次商务反馈（邓文涛已分配但未反馈）</span>
+          </div>
+        </div>
+        <div style="margin-top:16px;padding:12px;background:#f6ffed;border-radius:6px;font-size:13px;border:1px solid #b7eb8f">
+          <b>AI论证摘要:</b><br>
+          该项目已通过发改委立项批复（信源1: 发改委官网 2026-01-15），预算列入2026年光明区财政预算（信源2: 区财政局 2026-02-20），设计招标已完成（信源3: 招标代理官网 2026-03-01）。三个独立信源信息一致性高，项目推进正常。<b>建议放心分配给商务跟进。</b>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: 研判分析 -->
+    <div class="detail-section" id="tab-judge">
+      <div style="text-align:center;margin-bottom:16px">
+        <div style="display:inline-block;width:100px;height:100px;border-radius:50%;border:6px solid #52c41a;display:flex;align-items:center;justify-content:center;margin:0 auto">
+          <div><div style="font-size:28px;font-weight:700;color:#52c41a">78</div><div style="font-size:11px;color:#999">Green</div></div>
+        </div>
+      </div>
+      <div style="font-size:13px;line-height:2.2">
+        <div>历史关系度 (40分) <span style="float:right;font-weight:600">32/40</span></div>
+        <div class="score-bar" style="height:8px"><div class="score-bar-fill" style="width:80%;background:#52c41a"></div></div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px">万德2024年曾中标光明区龙华公园项目(同甲方), 广东省累计中标12次</div>
+
+        <div>人脉可达性 (20分) <span style="float:right;font-weight:600">16/20</span></div>
+        <div class="score-bar" style="height:8px"><div class="score-bar-fill" style="width:80%;background:#52c41a"></div></div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px">设计院XX与万德有合作关系(李工), 邓文涛在深圳有3个活跃客户</div>
+
+        <div>竞品威胁度 (15分) <span style="float:right;font-weight:600">10/15</span></div>
+        <div class="score-bar" style="height:8px"><div class="score-bar-fill" style="width:67%;background:#faad14"></div></div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px">凯奇在深圳近1年中标2次, 但未涉及光明区</div>
+
+        <div>项目匹配度 (15分) <span style="float:right;font-weight:600">12/15</span></div>
+        <div class="score-bar" style="height:8px"><div class="score-bar-fill" style="width:80%;background:#52c41a"></div></div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px">游乐设备采购, 金额匹配万德能力范围(500万)</div>
+
+        <div>时间窗口 (10分) <span style="float:right;font-weight:600">8/10</span></div>
+        <div class="score-bar" style="height:8px"><div class="score-bar-fill" style="width:80%;background:#52c41a"></div></div>
+        <div style="font-size:11px;color:#888;margin-bottom:8px">前期调研阶段, 预计6-12个月后招标, 充足准备时间</div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:#e6f7ff;border-radius:6px;font-size:13px;border:1px solid #91d5ff">
+        <b>AI研判建议:</b> 建议派邓文涛跟进。万德在光明区有历史中标记录(龙华公园)，设计院李工是合作关系可作为切入点。竞品凯奇虽在深圳有布局但尚未进入光明区。项目时间窗口充裕，建议提前接触甲方建立关系。
+      </div>
+    </div>
+
+    <!-- Tab: 信源链接 -->
+    <div class="detail-section" id="tab-source">
+      <div style="font-size:13px">
+        <div style="padding:12px;border:1px solid #e8e8e8;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <span class="tag tag-blue" style="margin-right:8px">招标公告</span>
+            <b>深圳市光明区儿童公园游乐设施采购项目招标公告</b>
+            <div style="font-size:11px;color:#999;margin-top:4px">来源: 深圳市政府采购网 | 发现时间: 2026-03-15</div>
+          </div>
+          <a href="#" style="color:#1890ff;font-size:12px">打开链接 →</a>
+        </div>
+        <div style="padding:12px;border:1px solid #e8e8e8;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <span class="tag tag-green" style="margin-right:8px">立项批复</span>
+            <b>光明区2026年公园改造专项-发改委批复</b>
+            <div style="font-size:11px;color:#999;margin-top:4px">来源: 深圳市发改委 | 发现时间: 2026-01-15</div>
+          </div>
+          <a href="#" style="color:#1890ff;font-size:12px">打开链接 →</a>
+        </div>
+        <div style="padding:12px;border:1px solid #e8e8e8;border-radius:6px;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+          <div>
+            <span class="tag tag-purple" style="margin-right:8px">预算文件</span>
+            <b>光明区2026年财政预算-公园改造专项经费</b>
+            <div style="font-size:11px;color:#999;margin-top:4px">来源: 光明区财政局 | 发现时间: 2026-02-20</div>
+          </div>
+          <a href="#" style="color:#1890ff;font-size:12px">打开链接 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- Tab: 配合单位 -->
+    <div class="detail-section" id="tab-partner">
+      <table style="font-size:13px">
+        <thead><tr><th>角色</th><th>单位名称</th><th>联系人</th><th>电话</th><th>职位</th></tr></thead>
+        <tbody>
+          <tr><td><span class="tag tag-red">甲方</span></td><td>深圳市光明区城市管理和综合执法局</td><td>张建国</td><td><a href="tel:" style="color:#1890ff">138-0013-8001</a></td><td>采购部主任</td></tr>
+          <tr><td><span class="tag tag-blue">设计院</span></td><td>深圳市XX园林设计有限公司</td><td>李工</td><td><a href="tel:" style="color:#1890ff">139-0023-4567</a></td><td>项目经理</td></tr>
+          <tr><td><span class="tag tag-cyan">施工总包</span></td><td>（待确认）</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td><span class="tag tag-gray">监理</span></td><td>（待确认）</td><td>—</td><td>—</td><td>—</td></tr>
+          <tr><td><span class="tag tag-purple">招标代理</span></td><td>深圳市XX招标有限公司</td><td>王助理</td><td><a href="tel:" style="color:#1890ff">136-0045-6789</a></td><td>项目助理</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Tab: 任务看板 -->
+    <div class="detail-section" id="tab-task">
+      <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px">
+        <div style="background:#fff7e6;border-radius:6px;padding:12px"><div style="font-weight:600;margin-bottom:8px">待接收 (1)</div><div style="background:#fff;border-radius:4px;padding:8px;font-size:12px;border:1px solid #ffe58f">联系设计院李工了解选型进度</div></div>
+        <div style="background:#e6f7ff;border-radius:6px;padding:12px"><div style="font-weight:600;margin-bottom:8px">进行中 (0)</div><div style="color:#999;font-size:12px">暂无</div></div>
+        <div style="background:#f6ffed;border-radius:6px;padding:12px"><div style="font-weight:600;margin-bottom:8px">已完成 (0)</div><div style="color:#999;font-size:12px">暂无</div></div>
+      </div>
+    </div>
+
+    <!-- Tab: 操作记录 -->
+    <div class="detail-section" id="tab-log">
+      <div style="font-size:13px;border-left:2px solid #e8e8e8;padding-left:16px">
+        <div style="margin-bottom:16px;position:relative">
+          <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#1890ff"></div>
+          <div style="font-weight:600">2026-04-01 吴耀 修正信息</div>
+          <div style="color:#666;margin-top:4px">将"投资金额"从 <s>300万</s> 修正为 <b>500万</b>（原因：获取到最新预算文件）</div>
+        </div>
+        <div style="margin-bottom:16px;position:relative">
+          <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#52c41a"></div>
+          <div style="font-weight:600">2026-03-20 吴耀 分配项目</div>
+          <div style="color:#666;margin-top:4px">分配给 <b>邓文涛</b>，备注：深圳区域，邓文涛熟悉光明区</div>
+        </div>
+        <div style="margin-bottom:16px;position:relative">
+          <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#faad14"></div>
+          <div style="font-weight:600">2026-03-18 系统 自动验证通过</div>
+          <div style="color:#666;margin-top:4px">L3交叉验证: 3个信源匹配，真实性评分 87/100</div>
+        </div>
+        <div style="margin-bottom:16px;position:relative">
+          <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#1890ff"></div>
+          <div style="font-weight:600">2026-03-16 吴耀 标记有效线索</div>
+          <div style="color:#666;margin-top:4px">反馈类型: 有效线索</div>
+        </div>
+        <div style="position:relative">
+          <div style="position:absolute;left:-22px;top:2px;width:12px;height:12px;border-radius:50%;background:#d9d9d9"></div>
+          <div style="font-weight:600">2026-03-15 系统 采集入库</div>
+          <div style="color:#666;margin-top:4px">来源: 深圳市政府采购网 | 自动分类: 早期金矿 | 评分: 82/100</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [分配弹窗] -->
+<div class="drawer-overlay" id="assignOverlay" onclick="hideAssign()" style="z-index:150"></div>
+<div class="assign-modal" id="assignModal">
+  <h3>→ 分配项目给商务</h3>
+  <div style="font-size:12px;color:#999;margin-bottom:12px">选择商务人员（显示当前工作量和区域关系）</div>
+  <div class="biz-option selected">
+    <div>
+      <div class="name">邓文涛</div>
+      <div class="meta">当前跟进 <b>12</b> 个项目 | 广东区域 <span style="color:#52c41a">★★★</span> 熟悉</div>
+    </div>
+
+<script>
+
+function switchDetailTab(el,key){
+  document.querySelectorAll('.detail-tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.detail-section').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  document.getElementById('tab-'+key).classList.add('active');
+}
+function openDrawer(){
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').style.display='block';
+}
+function closeDrawer(){
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawerOverlay').style.display='none';
+}
+function showAssign(){
+  document.getElementById('assignModal').style.display='block';
+  document.getElementById('assignOverlay').style.display='block';
+}
+function hideAssign(){
+  document.getElementById('assignModal').style.display='none';
+  document.getElementById('assignOverlay').style.display='none';
+}
+document.querySelectorAll('.biz-option').forEach(opt=>{
+  opt.onclick=function(){
+    document.querySelectorAll('.biz-option').forEach(o=>o.classList.remove('selected'));
+    this.classList.add('selected');
+  }
+});
+
+</script>
+</body>
+</html>

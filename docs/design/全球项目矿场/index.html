@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 全球项目矿场 低保真原型</title>
+  <style>
+
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f5f5f5;margin:0}
+.sidebar{width:56px;background:#001529;min-height:100vh;position:fixed;left:0;top:0;z-index:50}
+.sidebar-icon{width:56px;height:48px;display:flex;align-items:center;justify-content:center;color:#ffffffa0;font-size:18px;cursor:pointer}
+.sidebar-icon:hover,.sidebar-icon.active{background:#1890ff33;color:#fff}
+.main{margin-left:56px;padding:16px 24px}
+.kpi-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;flex:1}
+.kpi-num{font-size:28px;font-weight:700;color:#333}
+.kpi-label{font-size:13px;color:#999;margin-bottom:4px}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #e8e8e8;margin:16px 0 0}
+.tab{padding:10px 20px;cursor:pointer;font-size:14px;color:#666;border-bottom:2px solid transparent;transition:.2s}
+.tab:hover{color:#1890ff}
+.tab.active{color:#1890ff;border-bottom-color:#1890ff;font-weight:600}
+.filter-bar{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px;margin:12px 0;display:grid;grid-template-columns:repeat(5,1fr) auto;gap:12px;align-items:end}
+.filter-bar label{font-size:12px;color:#999;display:block;margin-bottom:4px}
+.filter-bar input,.filter-bar select{width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px}
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0}
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s}
+.btn:hover{border-color:#1890ff;color:#1890ff}
+.btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+.btn-primary:hover{background:#40a9ff}
+.btn-sm{padding:3px 8px;font-size:12px}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;border-radius:6px;font-size:13px}
+thead{background:#fafafa}
+th{padding:10px 12px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:top}
+tr:hover{background:#fafafa}
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap}
+.tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f}
+.tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+.tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+.tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e}
+.tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+.tag-purple{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7}
+.tag-cyan{background:#e6fffb;color:#13c2c2;border:1px solid #87e8de}
+.tag-gray{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+.tag-magenta{background:#fff0f6;color:#eb2f96;border:1px solid #ffadd2}
+.trust-high{color:#52c41a;font-weight:600}
+.trust-mid{color:#fa8c16;font-weight:600}
+.trust-low{color:#f5222d;font-weight:600}
+.score-badge{display:inline-flex;align-items:center;gap:4px;cursor:pointer;position:relative}
+.score-badge:hover .score-tooltip{display:block}
+.score-tooltip{display:none;position:absolute;top:100%;left:0;background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:12px;width:260px;box-shadow:0 4px 12px rgba(0,0,0,.1);z-index:100;font-size:12px;line-height:1.8}
+.score-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin:2px 0}
+.score-bar-fill{height:100%;border-radius:3px;background:#1890ff}
+.drawer-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.3);z-index:100;display:none}
+.drawer{position:fixed;top:0;right:-960px;width:920px;height:100vh;background:#fff;box-shadow:-4px 0 24px rgba(0,0,0,.1);z-index:101;transition:right .3s;overflow-y:auto}
+.drawer.open{right:0}
+.drawer-header{padding:16px 24px;border-bottom:1px solid #e8e8e8;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:#fff;z-index:10}
+.drawer-body{padding:24px}
+.contact-card{background:#f6ffed;border:1px solid #b7eb8f;border-radius:8px;padding:16px;margin-bottom:20px}
+.contact-card h4{margin:0 0 8px;font-size:15px;color:#333}
+.contact-card .info{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13px;color:#555}
+.detail-tabs{display:flex;gap:0;border-bottom:1px solid #e8e8e8;margin-bottom:16px}
+.detail-tab{padding:8px 16px;cursor:pointer;font-size:13px;color:#666;border-bottom:2px solid transparent}
+.detail-tab:hover{color:#1890ff}
+.detail-tab.active{color:#1890ff;border-bottom-color:#1890ff;font-weight:600}
+.detail-section{display:none}
+.detail-section.active{display:block}
+.trust-card{background:#fff;border:1px solid #e8e8e8;border-radius:8px;padding:20px}
+.trust-level{font-size:13px;padding:4px 12px;border-radius:4px;font-weight:600;display:inline-block;margin-bottom:12px}
+.trust-level.high{background:#f6ffed;color:#52c41a}
+.trust-level.mid{background:#fff7e6;color:#fa8c16}
+.trust-level.low{background:#fff1f0;color:#f5222d}
+.layer-row{display:flex;align-items:center;gap:8px;padding:6px 0;font-size:13px}
+.layer-stars{color:#faad14}
+.assign-modal{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:8px;padding:24px;width:520px;box-shadow:0 8px 24px rgba(0,0,0,.15);z-index:200;display:none}
+.assign-modal h3{margin:0 0 16px;font-size:16px}
+.biz-option{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid #e8e8e8;border-radius:6px;margin-bottom:8px;cursor:pointer;transition:.2s}
+.biz-option:hover,.biz-option.selected{border-color:#1890ff;background:#e6f7ff}
+.biz-option .name{font-weight:600;font-size:14px}
+.biz-option .meta{font-size:12px;color:#999}
+.deadline-tag{font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px}
+.deadline-red{background:#fff1f0;color:#f5222d}
+.deadline-orange{background:#fff7e6;color:#fa8c16}
+.deadline-blue{background:#e6f7ff;color:#1890ff}
+.deadline-gray{background:#fafafa;color:#8c8c8c}
+.pagination{display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:13px;color:#666}
+.page-btn{padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:13px}
+.page-btn.active{background:#1890ff;color:#fff;border-color:#1890ff}
+.edit-history{font-size:11px;color:#999;margin-top:4px}
+
+    .tab-bar-main { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item-main { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; flex-shrink: 0; }
+    .tab-item-main.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item-main:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 300px); }
+  </style>
+</head>
+<body>
+<div class="sidebar">
+  <div class="sidebar-icon" style="background:#1890ff33;height:56px;font-size:14px;font-weight:700;color:#fff">万德</div>
+  <div class="sidebar-icon" title="首页">🏠</div>
+  <div class="sidebar-icon active" title="商务部" style="position:relative">💼<div style="position:absolute;left:56px;top:0;background:#001529;width:120px;padding:4px 0;border-radius:0 4px 4px 0;font-size:12px"><div style="padding:6px 12px;color:#1890ff;background:#1890ff15">📍 项目矿场</div><div style="padding:6px 12px;color:#ffffffa0">📋 销售记录</div><div style="padding:6px 12px;color:#ffffffa0">📞 询盘管理</div></div>
+
+<div class="main">
+  <!-- [面包屑] -->
+  <div style="font-size:13px;color:#999;margin-bottom:12px">
+    首页 / 商务部 / <span style="color:#333">全球项目矿场</span>
+    <span style="float:right;color:#333;font-size:13px">👤 吴耀</span>
+  </div>
+  
+  <!-- [KPI卡片区] -->
+  <div style="display:flex;gap:16px;margin-bottom:4px">
+    <div class="kpi-card">
+      <div class="kpi-label">总项目数</div>
+      <div class="kpi-num">9,015</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">A级项目</div>
+      <div class="kpi-num" style="color:#f5222d">1,247</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">B级项目</div>
+      <div class="kpi-num" style="color:#fa8c16">3,582</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">数据更新</div>
+      <div style="font-size:16px;font-weight:600;color:#52c41a">● 自动运行中</div>
+      <div style="font-size:11px;color:#999">最近更新: 10分钟前 | 每2小时自动刷新</div>
+    </div>
+  </div>
+
+  <!-- [Tab栏] -->
+  <div class="tab-bar-main" id="tabBar"></div>
+
+  <!-- [Tab内容 — iframe加载] -->
+  <iframe id="tabFrame" class="tab-content-frame" src="01-all.html"></iframe>
+</div>
+
+<!-- [原型说明] -->
+<div style="margin:32px 80px;background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:20px">
+  <h3 style="font-size:15px;font-weight:bold;color:#333;margin-bottom:12px">原型说明</h3>
+  <table class="w-full text-sm text-left" style="border-collapse:collapse;font-size:12px">
+    <thead><tr style="background:#f5f5f5">
+      <th style="padding:8px;border:1px solid #d9d9d9">Tab页</th>
+      <th style="padding:8px;border:1px solid #d9d9d9">文件名</th>
+      <th style="padding:8px;border:1px solid #d9d9d9">功能描述</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">01-all.html</td><td class="p-2 border border-gray-300">全部视图</td></tr>
+        <tr><td class="p-2 border border-gray-300">前期金矿</td><td class="p-2 border border-gray-300">02-early.html</td><td class="p-2 border border-gray-300">前期金矿视图</td></tr>
+        <tr><td class="p-2 border border-gray-300">当前可投</td><td class="p-2 border border-gray-300">03-invest.html</td><td class="p-2 border border-gray-300">当前可投视图</td></tr>
+        <tr><td class="p-2 border border-gray-300">待我确认</td><td class="p-2 border border-gray-300">04-confirm.html</td><td class="p-2 border border-gray-300">待我确认视图</td></tr>
+        <tr><td class="p-2 border border-gray-300">休眠/无效</td><td class="p-2 border border-gray-300">05-dormant.html</td><td class="p-2 border border-gray-300">休眠/无效视图</td></tr>
+        <tr><td class="p-2 border border-gray-300">垃圾桶</td><td class="p-2 border border-gray-300">06-trash.html</td><td class="p-2 border border-gray-300">垃圾桶视图</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'all', label: '全部', src: '01-all.html' },
+      { key: 'early', label: '前期金矿', src: '02-early.html' },
+      { key: 'invest', label: '当前可投', src: '03-invest.html' },
+      { key: 'confirm', label: '待我确认', src: '04-confirm.html' },
+      { key: 'dormant', label: '休眠/无效', src: '05-dormant.html' },
+      { key: 'trash', label: '垃圾桶', src: '06-trash.html' }
+  ];
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item-main ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item-main');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = h + 'px';
+    } catch(e) {}
+  });
+
+  renderTabs();
+</script>
+</body>
+</html>

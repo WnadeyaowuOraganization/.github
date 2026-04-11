@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent效率看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-dev-agent" class="tab-content">
+        <!-- CC Efficiency Table -->
+        <div class="bg-white border border-gray-300 rounded-lg p-4 mb-6">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [CC效率表格] -->CC效率矩阵（抽样）</h3>
+          <table class="w-full text-sm">
+            <thead><tr class="border-b border-gray-200 text-gray-500 text-xs">
+              <th class="text-left py-2 px-3">CC</th><th class="text-left py-2 px-3">当前目录</th><th class="text-right py-2 px-3">成功率</th><th class="text-right py-2 px-3">平均耗时</th><th class="text-right py-2 px-3">Token消耗</th><th class="text-right py-2 px-3">Merge Rate</th>
+            </tr></thead>
+            <tbody>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-medium">kimi1</td><td class="py-2 px-3 text-xs text-gray-500">backend/</td><td class="py-2 px-3 text-right text-green-500">94%</td><td class="py-2 px-3 text-right">2.1h</td><td class="py-2 px-3 text-right">12.3k</td><td class="py-2 px-3 text-right">87%</td></tr>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-medium">kimi2</td><td class="py-2 px-3 text-xs text-gray-500">frontend/</td><td class="py-2 px-3 text-right text-green-500">91%</td><td class="py-2 px-3 text-right">1.8h</td><td class="py-2 px-3 text-right">9.7k</td><td class="py-2 px-3 text-right">82%</td></tr>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-medium">kimi3</td><td class="py-2 px-3 text-xs text-gray-500">frontend/</td><td class="py-2 px-3 text-right text-yellow-500">72%</td><td class="py-2 px-3 text-right">3.5h</td><td class="py-2 px-3 text-right">18.1k</td><td class="py-2 px-3 text-right">65%</td></tr>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-medium">kimi4</td><td class="py-2 px-3 text-xs text-gray-500">backend/</td><td class="py-2 px-3 text-right text-green-500">96%</td><td class="py-2 px-3 text-right">1.5h</td><td class="py-2 px-3 text-right">8.4k</td><td class="py-2 px-3 text-right">92%</td></tr>
+              <tr><td class="py-2 px-3 font-medium">kimi5</td><td class="py-2 px-3 text-xs text-gray-500">pipeline/</td><td class="py-2 px-3 text-right text-green-500">89%</td><td class="py-2 px-3 text-right">2.8h</td><td class="py-2 px-3 text-right">15.2k</td><td class="py-2 px-3 text-right">78%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Productivity Trend -->
+        <div class="bg-white border border-gray-300 rounded-lg p-4">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [产能趋势] -->日完成Issue数趋势</h3>
+          <div class="flex items-end gap-2 h-32">
+            <div class="flex flex-col items-center flex-1"><div class="bg-blue-300 w-full rounded-t" style="height:50%"></div><div class="text-xs text-gray-400 mt-1">周一</div></div>
+            <div class="flex flex-col items-center flex-1"><div class="bg-blue-300 w-full rounded-t" style="height:65%"></div><div class="text-xs text-gray-400 mt-1">周二</div></div>
+            <div class="flex flex-col items-center flex-1"><div class="bg-blue-400 w-full rounded-t" style="height:80%"></div><div class="text-xs text-gray-400 mt-1">周三</div></div>
+            <div class="flex flex-col items-center flex-1"><div class="bg-blue-300 w-full rounded-t" style="height:55%"></div><div class="text-xs text-gray-400 mt-1">周四</div></div>
+            <div class="flex flex-col items-center flex-1"><div class="bg-blue-200 w-full rounded-t" style="height:70%"></div><div class="text-xs text-gray-400 mt-1">周五</div></div>
+            <div class="flex flex-col items-center flex-1"><div class="bg-gray-200 w-full rounded-t" style="height:30%"></div><div class="text-xs text-gray-400 mt-1">周六</div></div>
+            <div class="flex flex-col items-center flex-1"><div class="bg-gray-200 w-full rounded-t" style="height:20%"></div><div class="text-xs text-gray-400 mt-1">周日</div></div>
+          </div>
+          <div class="text-xs text-gray-400 mt-2 text-right">本周均值: 12.6 Issues/天</div>
+        </div>
+      </div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>确认中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-dev-confirm" class="tab-content">
+        <div class="space-y-4">
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded">高风险</span>
+                  <span class="font-medium">数据库 Migration 需确认</span>
+                </div>
+                <div class="text-xs text-gray-500">CC kimi2 请求执行 V45__add_prompt_table.sql，影响表: wande_prompt, wande_prompt_history</div>
+                <div class="text-xs text-gray-400 mt-1">来自 Issue #3484 · 5分钟前</div>
+              </div>
+              <div class="flex gap-2 flex-shrink-0">
+                <button class="bg-green-500 text-white px-3 py-1.5 rounded text-xs hover:bg-green-600">✅ 确认</button>
+                <button class="bg-red-500 text-white px-3 py-1.5 rounded text-xs hover:bg-red-600">❌ 拒绝</button>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="bg-yellow-100 text-yellow-600 text-xs px-2 py-0.5 rounded">中风险</span>
+                <span class="font-medium ml-2">权限变更需确认</span>
+                <div class="text-xs text-gray-500 mt-1">CC kimi5 请求为 security_audit 模块添加 ADMIN 权限</div>
+                <div class="text-xs text-gray-400 mt-1">来自 Issue #3483 · 12分钟前</div>
+              </div>
+              <div class="flex gap-2 flex-shrink-0">
+                <button class="bg-green-500 text-white px-3 py-1.5 rounded text-xs hover:bg-green-600">✅ 确认</button>
+                <button class="bg-red-500 text-white px-3 py-1.5 rounded text-xs hover:bg-red-600">❌ 拒绝</button>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="bg-red-100 text-red-600 text-xs px-2 py-0.5 rounded">高风险</span>
+                <span class="font-medium ml-2">API 破坏性变更需确认</span>
+                <div class="text-xs text-gray-500 mt-1">CC kimi1 修改 /api/project/list 返回结构，影响前端3个组件</div>
+                <div class="text-xs text-gray-400 mt-1">来自 Issue #3470 · 20分钟前</div>
+              </div>
+              <div class="flex gap-2 flex-shrink-0">
+                <button class="bg-green-500 text-white px-3 py-1.5 rounded text-xs hover:bg-green-600">✅ 确认</button>
+                <button class="bg-red-500 text-white px-3 py-1.5 rounded text-xs hover:bg-red-600">❌ 拒绝</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

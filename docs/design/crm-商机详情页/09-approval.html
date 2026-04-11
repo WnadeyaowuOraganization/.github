@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>流程监控</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; margin: 0; color: #333; font-size: 13px; }
+  .wireframe-block { border: 1px dashed #d9d9d9; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff; position: relative; }
+  .wireframe-label { position: absolute; top: -8px; left: 12px; background: #f5f5f5; padding: 0 6px; font-size: 10px; color: #999; }
+  .btn-primary { background: #1890ff; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .btn-primary:hover { background: #40a9ff; }
+  .btn-ghost { background: #fff; border: 1px solid #d9d9d9; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #333; }
+  .btn-ghost:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-danger { background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .c-blue { color: #1890ff; text-decoration: none; }
+  .c-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
+  .tag-gray { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+  .tab { display: inline-block; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #999; font-size: 13px; }
+  .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+  .tab:hover { color: #1890ff; }
+  .stage-bar { display: flex; gap: 2px; margin: 8px 0; }
+  .stage-item { flex: 1; text-align: center; padding: 6px 4px; font-size: 10px; border-radius: 3px; }
+  .stage-done { background: #52c41a; color: #fff; }
+  .stage-current { background: #1890ff; color: #fff; font-weight: 700; }
+  .stage-future { background: #f0f0f0; color: #999; }
+  .field-row { display: flex; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+  .field-label { width: 100px; color: #999; font-size: 12px; flex-shrink: 0; }
+  .field-value { flex: 1; font-size: 12px; }
+  .auto-tag { background: #e6f7ff; color: #1890ff; font-size: 9px; padding: 0 4px; border-radius: 2px; margin-left: 4px; }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e8e8e8; position: fixed; left: 0; top: 40px; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; }
+  .sidebar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; cursor: pointer; font-size: 18px; }
+  .sidebar-icon:hover, .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-approval" style="">
+            <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;">流程监控</h3>
+            <div style="border:1px solid #e8e8e8;border-radius:4px;padding:12px;margin-bottom:8px;">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <span><span class="tag tag-yellow">审批中</span> 体游报价审批流程 — BJ202604085436</span>
+                <span style="font-size:11px;color:#999;">耗时 1天</span>
+              </div>
+              <div style="margin-top:8px;display:flex;gap:4px;font-size:11px;">
+                <span style="background:#f6ffed;padding:2px 8px;border-radius:10px;">✅ 黎培燕 提交</span>
+                <span>→</span>
+                <span style="background:#fffbe6;padding:2px 8px;border-radius:10px;font-weight:600;">🔄 董事长确认成本价</span>
+                <span>→</span>
+                <span style="background:#f5f5f5;padding:2px 8px;border-radius:10px;color:#999;">完成</span>
+              </div>
+            </div>
+          </div>
+</body>
+</html>

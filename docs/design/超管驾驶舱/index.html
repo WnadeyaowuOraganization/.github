@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 超管驾驶舱 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sidebar-tab-btn { font-size: 13px; border: none; background: none; cursor: pointer; }
+    .sidebar-tab-btn.active { color: #1890ff; background: #e6f7ff; font-weight: 500; }
+    .sidebar-tab-btn:hover { background: #f5f5f5; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 80px); }
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- [左侧主导航] -->
+    <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center pt-4 gap-4">
+      <div class="w-8 h-8 bg-blue-500 rounded text-white flex items-center justify-center text-xs font-bold">W</div>
+      <div class="text-xs text-center text-gray-400 mt-2">万德AI平台</div>
+      <div class="mt-4 flex flex-col gap-3 text-gray-400 text-lg">
+        <span title="耀总驾驶舱">📊</span>
+        <span title="CRM中心">👥</span>
+        <span title="项目中心">📁</span>
+        <span class="text-blue-500" title="超管驾驶舱">⚙️</span>
+      </div>
+    </aside>
+
+    <!-- [左侧Tab导航] -->
+    <aside class="w-52 bg-white border-r border-gray-200 flex-shrink-0 pt-4 overflow-y-auto">
+      <div class="px-4 py-2 font-bold text-gray-700 text-sm border-b border-gray-100 mb-2">⚙️ 超管驾驶舱</div>
+      
+          <div class="mb-2">
+            <div class="px-4 py-2 text-xs text-gray-400 font-bold uppercase tracking-wider cursor-pointer flex items-center justify-between" 
+                 onclick="toggleGroup(this)">
+              平台系统 <span class="text-xs">▼</span>
+            </div>
+            <div class="group-items">
+            <button onclick="switchTab('sys-overview')" data-tab="sys-overview" class="sidebar-tab-btn active w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">总览仪表盘</button>
+            <button onclick="switchTab('sys-cc')" data-tab="sys-cc" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">Claude Office</button>
+            <button onclick="switchTab('sys-token')" data-tab="sys-token" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">Token Pool管理</button>
+            <button onclick="switchTab('sys-collect')" data-tab="sys-collect" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">采集管控面板</button>
+            <button onclick="switchTab('sys-cron')" data-tab="sys-cron" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">定时任务管理</button>
+            <button onclick="switchTab('sys-logs')" data-tab="sys-logs" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">实时日志流</button>
+            <button onclick="switchTab('sys-finops')" data-tab="sys-finops" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">FinOps成本看板</button>
+            <button onclick="switchTab('sys-gpu')" data-tab="sys-gpu" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">GPU资源监控</button>
+            <button onclick="switchTab('sys-tools')" data-tab="sys-tools" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">外部工具管理</button>
+            </div>
+          </div>
+          <div class="mb-2">
+            <div class="px-4 py-2 text-xs text-gray-400 font-bold uppercase tracking-wider cursor-pointer flex items-center justify-between" 
+                 onclick="toggleGroup(this)">
+              开发管理 <span class="text-xs">▼</span>
+            </div>
+            <div class="group-items">
+            <button onclick="switchTab('dev-confirm')" data-tab="dev-confirm" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">确认中心</button>
+            <button onclick="switchTab('dev-issue')" data-tab="dev-issue" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">Issue看板</button>
+            <button onclick="switchTab('dev-agent')" data-tab="dev-agent" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">Agent效率看板</button>
+            <button onclick="switchTab('dev-accept')" data-tab="dev-accept" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">验收队列</button>
+            <button onclick="switchTab('dev-dora')" data-tab="dev-dora" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">DORA指标</button>
+            </div>
+          </div>
+          <div class="mb-2">
+            <div class="px-4 py-2 text-xs text-gray-400 font-bold uppercase tracking-wider cursor-pointer flex items-center justify-between" 
+                 onclick="toggleGroup(this)">
+              安全合规 <span class="text-xs">▼</span>
+            </div>
+            <div class="group-items">
+            <button onclick="switchTab('sec-audit')" data-tab="sec-audit" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">安全审计日志</button>
+            <button onclick="switchTab('sec-prompt')" data-tab="sec-prompt" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">Prompt管理</button>
+            </div>
+          </div>
+          <div class="mb-2">
+            <div class="px-4 py-2 text-xs text-gray-400 font-bold uppercase tracking-wider cursor-pointer flex items-center justify-between" 
+                 onclick="toggleGroup(this)">
+              业务洞察 <span class="text-xs">▼</span>
+            </div>
+            <div class="group-items">
+            <button onclick="switchTab('biz-problem')" data-tab="biz-problem" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">问题发现</button>
+            <button onclick="switchTab('biz-chat')" data-tab="biz-chat" class="sidebar-tab-btn  w-full text-left px-7 py-1.5 text-gray-600 hover:bg-gray-50">AI对话监控</button>
+            </div>
+          </div>
+    </aside>
+
+    <!-- [主内容区] -->
+    <main class="flex-1 flex flex-col">
+      <!-- [面包屑] -->
+      <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+        首页 &gt; 超管驾驶舱 &gt; <span id="breadcrumb-tab">总览仪表盘</span>
+      </div>
+
+      <!-- [Tab内容 — iframe加载] -->
+      <div class="flex-1">
+        <iframe id="tabFrame" class="tab-content-frame" src="01-sys-overview.html"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="p-6 bg-white border-t border-gray-300 mt-4">
+    <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+    <table class="w-full text-sm text-left border-collapse">
+      <thead><tr class="bg-gray-100">
+        <th class="p-2 border border-gray-300">Tab页</th>
+        <th class="p-2 border border-gray-300">文件名</th>
+        <th class="p-2 border border-gray-300">功能描述</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="p-2 border border-gray-300">总览仪表盘</td><td class="p-2 border border-gray-300">01-sys-overview.html</td><td class="p-2 border border-gray-300">总览仪表盘页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">Claude Office</td><td class="p-2 border border-gray-300">02-sys-cc.html</td><td class="p-2 border border-gray-300">Claude Office页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">Token Pool管理</td><td class="p-2 border border-gray-300">03-sys-token.html</td><td class="p-2 border border-gray-300">Token Pool管理页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">采集管控面板</td><td class="p-2 border border-gray-300">04-sys-collect.html</td><td class="p-2 border border-gray-300">采集管控面板页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">定时任务管理</td><td class="p-2 border border-gray-300">05-sys-cron.html</td><td class="p-2 border border-gray-300">定时任务管理页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">实时日志流</td><td class="p-2 border border-gray-300">06-sys-logs.html</td><td class="p-2 border border-gray-300">实时日志流页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">FinOps成本看板</td><td class="p-2 border border-gray-300">07-sys-finops.html</td><td class="p-2 border border-gray-300">FinOps成本看板页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">GPU资源监控</td><td class="p-2 border border-gray-300">08-sys-gpu.html</td><td class="p-2 border border-gray-300">GPU资源监控页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">外部工具管理</td><td class="p-2 border border-gray-300">09-sys-tools.html</td><td class="p-2 border border-gray-300">外部工具管理页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">确认中心</td><td class="p-2 border border-gray-300">10-dev-confirm.html</td><td class="p-2 border border-gray-300">确认中心页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">Issue看板</td><td class="p-2 border border-gray-300">11-dev-issue.html</td><td class="p-2 border border-gray-300">Issue看板页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">Agent效率看板</td><td class="p-2 border border-gray-300">12-dev-agent.html</td><td class="p-2 border border-gray-300">Agent效率看板页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">验收队列</td><td class="p-2 border border-gray-300">13-dev-accept.html</td><td class="p-2 border border-gray-300">验收队列页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">DORA指标</td><td class="p-2 border border-gray-300">14-dev-dora.html</td><td class="p-2 border border-gray-300">DORA指标页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">安全审计日志</td><td class="p-2 border border-gray-300">15-sec-audit.html</td><td class="p-2 border border-gray-300">安全审计日志页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">Prompt管理</td><td class="p-2 border border-gray-300">16-sec-prompt.html</td><td class="p-2 border border-gray-300">Prompt管理页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">问题发现</td><td class="p-2 border border-gray-300">17-biz-problem.html</td><td class="p-2 border border-gray-300">问题发现页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">AI对话监控</td><td class="p-2 border border-gray-300">18-biz-chat.html</td><td class="p-2 border border-gray-300">AI对话监控页面内容</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const fileMap = {
+        'sys-overview': '01-sys-overview.html',
+        'sys-cc': '02-sys-cc.html',
+        'sys-token': '03-sys-token.html',
+        'sys-collect': '04-sys-collect.html',
+        'sys-cron': '05-sys-cron.html',
+        'sys-logs': '06-sys-logs.html',
+        'sys-finops': '07-sys-finops.html',
+        'sys-gpu': '08-sys-gpu.html',
+        'sys-tools': '09-sys-tools.html',
+        'dev-confirm': '10-dev-confirm.html',
+        'dev-issue': '11-dev-issue.html',
+        'dev-agent': '12-dev-agent.html',
+        'dev-accept': '13-dev-accept.html',
+        'dev-dora': '14-dev-dora.html',
+        'sec-audit': '15-sec-audit.html',
+        'sec-prompt': '16-sec-prompt.html',
+        'biz-problem': '17-biz-problem.html',
+        'biz-chat': '18-biz-chat.html'
+    };
+    
+    const labelMap = {
+        'sys-overview': '总览仪表盘','sys-cc': 'Claude Office','sys-token': 'Token Pool管理','sys-collect': '采集管控面板','sys-cron': '定时任务管理','sys-logs': '实时日志流','sys-finops': 'FinOps成本看板','sys-gpu': 'GPU资源监控','sys-tools': '外部工具管理','dev-confirm': '确认中心','dev-issue': 'Issue看板','dev-agent': 'Agent效率看板','dev-accept': '验收队列','dev-dora': 'DORA指标','sec-audit': '安全审计日志','sec-prompt': 'Prompt管理','biz-problem': '问题发现','biz-chat': 'AI对话监控'
+    };
+
+    const tabFrame = document.getElementById('tabFrame');
+    const breadcrumb = document.getElementById('breadcrumb-tab');
+
+    function switchTab(tabId) {
+      // Update active state
+      document.querySelectorAll('.sidebar-tab-btn').forEach(btn => btn.classList.remove('active'));
+      const activeBtn = document.querySelector(`[data-tab="${tabId}"]`);
+      if (activeBtn) activeBtn.classList.add('active');
+      
+      // Update iframe
+      tabFrame.src = fileMap[tabId];
+      
+      // Update breadcrumb
+      if (breadcrumb && labelMap[tabId]) breadcrumb.textContent = labelMap[tabId];
+      
+      // Auto height
+      tabFrame.addEventListener('load', () => {
+        try {
+          const h = tabFrame.contentDocument.documentElement.scrollHeight;
+          tabFrame.style.height = h + 'px';
+        } catch(e) {}
+      }, { once: true });
+    }
+
+    function toggleGroup(el) {
+      const items = el.nextElementSibling;
+      const arrow = el.querySelector('span');
+      if (items.style.display === 'none') {
+        items.style.display = 'block';
+        arrow.textContent = '▼';
+      } else {
+        items.style.display = 'none';
+        arrow.textContent = '▶';
+      }
+    }
+  </script>
+</body>
+</html>

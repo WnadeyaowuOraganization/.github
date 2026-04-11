@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>采集管控面板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif; }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .sidebar-group-items { display: none; }
+  .sidebar-group-items.expanded { display: block; }
+  .sidebar-tab-btn.active { background-color: #eff6ff; color: #3b82f6; font-weight: 600; }
+  table tbody tr:hover { background-color: #f9fafb; }
+  .alert-bar { width: 4px; min-height: 100%; border-radius: 2px; }
+  .tooltip-wrap { position: relative; }
+  .tooltip-wrap .tooltip-box { display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%); background: #1f2937; color: #fff; padding: 4px 8px; border-radius: 4px; font-size: 12px; white-space: nowrap; z-index: 50; margin-bottom: 4px; }
+  .tooltip-wrap:hover .tooltip-box { display: block; }
+  .radar-bar { height: 20px; border-radius: 4px; }
+  .kanban-col { min-width: 160px; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-sys-collect" class="tab-content">
+        <!-- Pipeline Status -->
+        <div class="bg-white border border-gray-300 rounded-lg p-4 mb-6">
+          <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [管线状态表格] -->采集管线状态</h3>
+          <table class="w-full text-sm">
+            <thead><tr class="border-b border-gray-200 text-gray-500 text-xs">
+              <th class="text-left py-2 px-3">管线名</th><th class="text-left py-2 px-3">上次运行</th><th class="text-left py-2 px-3">状态</th><th class="text-left py-2 px-3">数据量</th><th class="text-left py-2 px-3">覆盖率</th>
+            </tr></thead>
+            <tbody>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-mono text-xs">domestic_projects</td><td class="py-2 px-3">04-09 02:00</td><td class="py-2 px-3"><span class="text-green-500">✅ 成功</span></td><td class="py-2 px-3">12,847条</td><td class="py-2 px-3">85%</td></tr>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-mono text-xs">competitors</td><td class="py-2 px-3">04-09 01:30</td><td class="py-2 px-3"><span class="text-green-500">✅ 成功</span></td><td class="py-2 px-3">3,421条</td><td class="py-2 px-3">92%</td></tr>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-mono text-xs">tender</td><td class="py-2 px-3">04-09 02:30</td><td class="py-2 px-3"><span class="text-green-500">✅ 成功</span></td><td class="py-2 px-3">5,612条</td><td class="py-2 px-3">78%</td></tr>
+              <tr class="border-b border-gray-100"><td class="py-2 px-3 font-mono text-xs">shenzhen_govt</td><td class="py-2 px-3">04-08 22:00</td><td class="py-2 px-3"><span class="text-red-500">❌ 失败</span></td><td class="py-2 px-3">890条</td><td class="py-2 px-3">45%</td></tr>
+              <tr><td class="py-2 px-3 font-mono text-xs">d3_knowledge</td><td class="py-2 px-3">04-09 03:00</td><td class="py-2 px-3"><span class="text-green-500">✅ 成功</span></td><td class="py-2 px-3">8,234条</td><td class="py-2 px-3">95%</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="grid grid-cols-2 gap-4">
+          <!-- Data Quality Radar (color blocks) -->
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [数据质量6维度] -->数据质量评分</h3>
+            <div class="space-y-2">
+              <div class="flex items-center gap-3"><span class="w-16 text-xs text-gray-500">完整度</span><div class="flex-1 bg-gray-100 rounded-full h-5"><div class="radar-bar bg-green-400" style="width:92%"></div></div><span class="text-xs font-medium w-10 text-right">92%</span></div>
+              <div class="flex items-center gap-3"><span class="w-16 text-xs text-gray-500">准确度</span><div class="flex-1 bg-gray-100 rounded-full h-5"><div class="radar-bar bg-green-400" style="width:88%"></div></div><span class="text-xs font-medium w-10 text-right">88%</span></div>
+              <div class="flex items-center gap-3"><span class="w-16 text-xs text-gray-500">时效性</span><div class="flex-1 bg-gray-100 rounded-full h-5"><div class="radar-bar bg-green-400" style="width:95%"></div></div><span class="text-xs font-medium w-10 text-right">95%</span></div>
+              <div class="flex items-center gap-3"><span class="w-16 text-xs text-gray-500">唯一性</span><div class="flex-1 bg-gray-100 rounded-full h-5"><div class="radar-bar bg-green-400" style="width:97%"></div></div><span class="text-xs font-medium w-10 text-right">97%</span></div>
+              <div class="flex items-center gap-3"><span class="w-16 text-xs text-gray-500">一致性</span><div class="flex-1 bg-gray-100 rounded-full h-5"><div class="radar-bar bg-green-400" style="width:90%"></div></div><span class="text-xs font-medium w-10 text-right">90%</span></div>
+              <div class="flex items-center gap-3"><span class="w-16 text-xs text-gray-500">覆盖度</span><div class="flex-1 bg-gray-100 rounded-full h-5"><div class="radar-bar bg-yellow-400" style="width:85%"></div></div><span class="text-xs font-medium w-10 text-right">85%</span></div>
+            </div>
+          </div>
+
+          <!-- Anomaly Detection -->
+          <div class="bg-white border border-gray-300 rounded-lg p-4">
+            <h3 class="text-sm font-semibold text-gray-700 mb-3"><!-- [异常检测面板] -->异常检测（7天基线）</h3>
+            <div class="flex items-stretch gap-3 bg-orange-50 border border-orange-200 rounded p-3">
+              <div class="alert-bar bg-orange-400"></div>
+              <div>
+                <div class="font-medium text-sm text-orange-700">domestic_projects 数据量下降 35%</div>
+                <div class="text-xs text-gray-500 mt-1">7天基线均值: 19,764条 → 今日: 12,847条</div>
+                <div class="text-xs text-gray-400 mt-1">可能原因：源站结构变更 / 反爬策略升级</div>
+              </div>
+            </div>
+            <div class="mt-3 text-xs text-gray-400">下次检查: 04-09 06:00</div>
+          </div>
+        </div>
+      </div>
+</body>
+</html>

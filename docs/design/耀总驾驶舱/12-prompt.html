@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Prompt管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+body{font-family:'JetBrains Mono',monospace;background:#0d1117;color:#c9d1d9;margin:0;font-size:13px}
+a{color:#58a6ff;text-decoration:none}
+.sidebar{width:48px;background:#161b22;min-height:100vh;position:fixed;left:0;top:0;z-index:50;border-right:1px solid #30363d}
+.sidebar-icon{width:48px;height:44px;display:flex;align-items:center;justify-content:center;color:#8b949e;font-size:16px;cursor:pointer}
+.sidebar-icon:hover,.sidebar-icon.active{background:#1f6feb22;color:#58a6ff}
+.main{margin-left:48px}
+.topbar{background:#161b22;border-bottom:1px solid #30363d;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40}
+.topbar-title{font-size:16px;font-weight:700;color:#f0f6fc}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.dot-green{background:#3fb950}
+.dot-red{background:#f85149}
+.dot-yellow{background:#d29922}
+.content{padding:12px 16px}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #30363d;background:#161b22;padding:0 16px;position:sticky;top:41px;z-index:39}
+.tab{padding:10px 16px;cursor:pointer;color:#8b949e;border-bottom:2px solid transparent;font-size:13px}
+.tab:hover{color:#c9d1d9}
+.tab.active{color:#f0f6fc;border-bottom-color:#58a6ff}
+.tab .badge{background:#f85149;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:600;color:#f0f6fc;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.card-title .link{font-size:11px;color:#58a6ff;font-weight:400}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+.stat{text-align:center;padding:8px}
+.stat-num{font-size:22px;font-weight:700;color:#f0f6fc}
+.stat-label{font-size:11px;color:#8b949e;margin-top:2px}
+.stat-green .stat-num{color:#3fb950}
+.stat-red .stat-num{color:#f85149}
+.stat-yellow .stat-num{color:#d29922}
+.stat-blue .stat-num{color:#58a6ff}
+.mini-table{width:100%;font-size:12px;border-collapse:collapse}
+.mini-table th{text-align:left;padding:6px 8px;color:#8b949e;border-bottom:1px solid #30363d;font-weight:500}
+.mini-table td{padding:6px 8px;border-bottom:1px solid #21262d;color:#c9d1d9}
+.mini-table tr:hover{background:#1f6feb11}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.tag-green{background:#3fb95020;color:#3fb950;border:1px solid #3fb95040}
+.tag-red{background:#f8514920;color:#f85149;border:1px solid #f8514940}
+.tag-yellow{background:#d2992220;color:#d29922;border:1px solid #d2992240}
+.tag-blue{background:#58a6ff20;color:#58a6ff;border:1px solid #58a6ff40}
+.tag-purple{background:#bc8cff20;color:#bc8cff;border:1px solid #bc8cff40}
+.tag-gray{background:#8b949e20;color:#8b949e;border:1px solid #8b949e40}
+.progress{height:4px;background:#21262d;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px}
+.cc-slot{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;margin:2px;border:1px solid #30363d}
+.cc-slot.running{background:#3fb95015;border-color:#3fb95040;color:#3fb950}
+.cc-slot.idle{background:#21262d;color:#8b949e}
+.cc-slot.error{background:#f8514915;border-color:#f8514940;color:#f85149}
+.log-line{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 0;color:#8b949e;border-bottom:1px solid #21262d}
+.log-line .time{color:#6e7681}
+.log-line .level-info{color:#58a6ff}
+.log-line .level-warn{color:#d29922}
+.log-line .level-error{color:#f85149}
+.alert-item{padding:8px 10px;border-left:3px solid;margin-bottom:6px;background:#161b22;border-radius:0 4px 4px 0;font-size:12px}
+.alert-critical{border-color:#f85149;background:#f8514908}
+.alert-warning{border-color:#d29922;background:#d2992208}
+.alert-info{border-color:#58a6ff;background:#58a6ff08}
+.dora-metric{text-align:center;padding:10px}
+.dora-value{font-size:20px;font-weight:700}
+.dora-label{font-size:10px;color:#8b949e;margin-top:2px}
+.dora-target{font-size:10px;color:#6e7681;margin-top:2px}
+.section-hidden{display:none}
+.section-visible{display:block}
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-prompt" class="section-hidden" style="margin-left:48px;padding:12px 16px">
+  <div class="card">
+    <div class="card-title">📝 CC Prompt统一管理</div>
+
+    <!-- 依赖图可视化 -->
+    <div class="grid-2" style="margin-bottom:16px">
+      <div>
+        <div style="font-size:12px;color:#8b949e;margin-bottom:6px">Prompt依赖图</div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:12px;font-family:'JetBrains Mono',monospace;font-size:11px;color:#c9d1d9">
+wande-play/CLAUDE.md  ← <span style="color:#58a6ff">公共层</span>
+  ├─ backend/CLAUDE.md    <span style="color:#bc8cff">v8</span>  <span style="color:#3fb950">✅ 已同步</span>
+  ├─ frontend/CLAUDE.md   <span style="color:#bc8cff">v6</span>  <span style="color:#d29922">⚠️ 待同步</span>
+  ├─ pipeline/CLAUDE.md   <span style="color:#bc8cff">v4</span>  <span style="color:#3fb950">✅ 已同步</span>
+  └─ e2e/CLAUDE.md        <span style="color:#bc8cff">v5</span>  <span style="color:#3fb950">✅ 已同步</span>
+        </div>
+      </div>
+      <div>
+        <div style="font-size:12px;color:#8b949e;margin-bottom:6px">一致性检查报告 <span style="color:#3fb950">今日 06:00 自动扫描</span></div>
+        <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:12px;font-size:12px">
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #21262d">
+            <span><span style="color:#f85149">❌</span> frontend/CLAUDE.md — 缺少effort参数说明</span>
+            <span style="color:#58a6ff;cursor:pointer">修复</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px solid #21262d">
+            <span><span style="color:#d29922">⚠️</span> frontend/CLAUDE.md — 公共层新增“run-cc.sh --module”未同步</span>
+            <span style="color:#58a6ff;cursor:pointer">同步</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:4px 0">
+            <span><span style="color:#3fb950">✅</span> 其他3个Prompt无矛盾</span>
+            <span style="color:#6e7681">—</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 变更影响分析结果（当前有待同步） -->
+    <div style="background:#d2992210;border:1px solid #d2992230;border-radius:6px;padding:12px;margin-bottom:16px">
+      <div style="font-weight:600;color:#d29922;margin-bottom:8px">⚠️ 待同步: 公共层昨天更新了 §4 Issue拾取规则，frontend/CLAUDE.md 未同步</div>
+      <div style="font-size:12px;color:#c9d1d9;margin-bottom:8px">
+        变更内容: 新增 "run-cc.sh --module frontend --issue N" 启动方式说明（D30决策）
+      </div>
+      <div style="display:flex;gap:8px">
+        <button style="background:#d2992230;border:1px solid #d2992250;color:#d29922;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">查看变更diff</button>
+        <button style="background:#3fb95020;border:1px solid #3fb95040;color:#3fb950;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">一键同步到frontend</button>
+        <button style="background:#21262d;border:1px solid #30363d;color:#8b949e;padding:4px 12px;border-radius:4px;cursor:pointer;font-size:12px">忽略本次</button>
+      </div>
+    </div>
+    <table class="mini-table">
+      <thead><tr><th>Prompt文件</th><th>作用域</th><th>最后修改</th><th>版本</th><th>状态</th><th>操作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><code>wande-play/CLAUDE.md</code></td>
+          <td><span class="tag tag-blue">公共层</span> Issue拾取+架构+Git规范+Agent Teams</td>
+          <td>2026-04-08</td><td>v12</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>backend/CLAUDE.md</code></td>
+          <td><span class="tag tag-purple">后端CC</span> Spring Boot + TDD + 编译检查</td>
+          <td>2026-04-06</td><td>v8</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>frontend/CLAUDE.md</code></td>
+          <td><span class="tag tag-blue">前端CC</span> Vue3 + Vben + Ant Design Vue</td>
+          <td>2026-04-05</td><td>v6</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>pipeline/CLAUDE.md</code></td>
+          <td><span class="tag tag-yellow">Pipeline CC</span> Python数据采集+清洗</td>
+          <td>2026-04-02</td><td>v4</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+        <tr>
+          <td><code>e2e/CLAUDE.md</code></td>
+          <td><span class="tag tag-red">测试CC</span> Playwright E2E + 结果处理</td>
+          <td>2026-04-04</td><td>v5</td>
+          <td><span class="tag tag-green">生产</span></td>
+          <td><a href="#">查看</a> | <a href="#">编辑</a> | <a href="#">历史</a></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 变更日志时间线 -->
+    <div style="font-size:12px;color:#8b949e;margin-bottom:6px">最近变更日志</div>
+    <div style="background:#0d1117;border:1px solid #30363d;border-radius:4px;padding:12px;font-size:12px;border-left:2px solid #30363d;margin-bottom:16px">
+      <div style="margin-bottom:12px;padding-left:12px;border-left:2px solid #d29922">
+        <div style="color:#f0f6fc"><b>昨天 22:15</b> 吴耀 修改了 <code>wande-play/CLAUDE.md</code> v11→v12</div>
+        <div style="color:#8b949e;margin-top:2px">变更: §4 Issue拾取规则新增 run-cc.sh --module 启动方式说明</div>
+        <div style="color:#d29922;margin-top:2px">影响: backend ✅ frontend <b>⚠️待同步</b> pipeline ✅ e2e ✅</div>
+      </div>
+      <div style="margin-bottom:12px;padding-left:12px;border-left:2px solid #3fb950">
+        <div style="color:#f0f6fc"><b>4月8日 14:12</b> 吴耀 修改了 <code>backend/CLAUDE.md</code> v7→v8</div>
+        <div style="color:#8b949e;margin-top:2px">变更: 新增 Flyway迁移脚本命名规范</div>
+        <div style="color:#3fb950;margin-top:2px">影响: 仅backend，无需同步其他</div>
+      </div>
+      <div style="padding-left:12px;border-left:2px solid #3fb950">
+        <div style="color:#f0f6fc"><b>4月5日 09:30</b> 吴耀 修改了 <code>e2e/CLAUDE.md</code> v4→v5</div>
+        <div style="color:#8b949e;margin-top:2px">变更: e2e-result-handler.py统一处理逻辑(D32)</div>
+        <div style="color:#3fb950;margin-top:2px">影响: 仅e2e，无需同步其他</div>
+      </div>
+    </div>
+
+    <!-- Prompt性能对比 -->
+    <div style="font-size:12px;color:#8b949e;margin-bottom:6px">Prompt版本性能对比</div>
+    <table class="mini-table">
+      <thead><tr><th>Prompt</th><th>版本</th><th>CC成功率</th><th>平均耗时</th><th>Token消耗</th><th>E2E通过</th><th>趋势</th></tr></thead>
+      <tbody>
+        <tr><td>wande-play/CLAUDE.md</td><td>v12</td><td><span style="color:#3fb950">94%</span></td><td>42m</td><td>35K</td><td><span style="color:#3fb950">89%</span></td><td><span style="color:#3fb950">↑ vs v11</span></td></tr>
+        <tr><td>backend/CLAUDE.md</td><td>v8</td><td><span style="color:#3fb950">91%</span></td><td>38m</td><td>28K</td><td><span style="color:#3fb950">92%</span></td><td><span style="color:#3fb950">↑ vs v7</span></td></tr>
+        <tr><td>frontend/CLAUDE.md</td><td>v6</td><td><span style="color:#d29922">82%</span></td><td>55m</td><td>42K</td><td><span style="color:#d29922">75%</span></td><td><span style="color:#f85149">↓ vs v5</span></td></tr>
+        <tr><td>pipeline/CLAUDE.md</td><td>v4</td><td><span style="color:#3fb950">96%</span></td><td>25m</td><td>18K</td><td><span style="color:#3fb950">95%</span></td><td><span style="color:#8b949e">→ 稳定</span></td></tr>
+        <tr><td>e2e/CLAUDE.md</td><td>v5</td><td><span style="color:#3fb950">88%</span></td><td>18m</td><td>15K</td><td><span style="color:#3fb950">90%</span></td><td><span style="color:#3fb950">↑ vs v4</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+</body>
+</html>

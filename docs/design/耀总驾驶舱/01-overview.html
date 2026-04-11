@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>总览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+body{font-family:'JetBrains Mono',monospace;background:#0d1117;color:#c9d1d9;margin:0;font-size:13px}
+a{color:#58a6ff;text-decoration:none}
+.sidebar{width:48px;background:#161b22;min-height:100vh;position:fixed;left:0;top:0;z-index:50;border-right:1px solid #30363d}
+.sidebar-icon{width:48px;height:44px;display:flex;align-items:center;justify-content:center;color:#8b949e;font-size:16px;cursor:pointer}
+.sidebar-icon:hover,.sidebar-icon.active{background:#1f6feb22;color:#58a6ff}
+.main{margin-left:48px}
+.topbar{background:#161b22;border-bottom:1px solid #30363d;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:40}
+.topbar-title{font-size:16px;font-weight:700;color:#f0f6fc}
+.status-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:4px}
+.dot-green{background:#3fb950}
+.dot-red{background:#f85149}
+.dot-yellow{background:#d29922}
+.content{padding:12px 16px}
+.tab-bar{display:flex;gap:0;border-bottom:1px solid #30363d;background:#161b22;padding:0 16px;position:sticky;top:41px;z-index:39}
+.tab{padding:10px 16px;cursor:pointer;color:#8b949e;border-bottom:2px solid transparent;font-size:13px}
+.tab:hover{color:#c9d1d9}
+.tab.active{color:#f0f6fc;border-bottom-color:#58a6ff}
+.tab .badge{background:#f85149;color:#fff;font-size:10px;padding:1px 6px;border-radius:10px;margin-left:4px}
+.card{background:#161b22;border:1px solid #30363d;border-radius:6px;padding:14px;margin-bottom:12px}
+.card-title{font-size:13px;font-weight:600;color:#f0f6fc;margin-bottom:10px;display:flex;justify-content:space-between;align-items:center}
+.card-title .link{font-size:11px;color:#58a6ff;font-weight:400}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.grid-4{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:12px}
+.stat{text-align:center;padding:8px}
+.stat-num{font-size:22px;font-weight:700;color:#f0f6fc}
+.stat-label{font-size:11px;color:#8b949e;margin-top:2px}
+.stat-green .stat-num{color:#3fb950}
+.stat-red .stat-num{color:#f85149}
+.stat-yellow .stat-num{color:#d29922}
+.stat-blue .stat-num{color:#58a6ff}
+.mini-table{width:100%;font-size:12px;border-collapse:collapse}
+.mini-table th{text-align:left;padding:6px 8px;color:#8b949e;border-bottom:1px solid #30363d;font-weight:500}
+.mini-table td{padding:6px 8px;border-bottom:1px solid #21262d;color:#c9d1d9}
+.mini-table tr:hover{background:#1f6feb11}
+.tag{display:inline-block;padding:1px 6px;border-radius:3px;font-size:10px;font-weight:600}
+.tag-green{background:#3fb95020;color:#3fb950;border:1px solid #3fb95040}
+.tag-red{background:#f8514920;color:#f85149;border:1px solid #f8514940}
+.tag-yellow{background:#d2992220;color:#d29922;border:1px solid #d2992240}
+.tag-blue{background:#58a6ff20;color:#58a6ff;border:1px solid #58a6ff40}
+.tag-purple{background:#bc8cff20;color:#bc8cff;border:1px solid #bc8cff40}
+.tag-gray{background:#8b949e20;color:#8b949e;border:1px solid #8b949e40}
+.progress{height:4px;background:#21262d;border-radius:2px;overflow:hidden}
+.progress-fill{height:100%;border-radius:2px}
+.cc-slot{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:4px;font-size:11px;margin:2px;border:1px solid #30363d}
+.cc-slot.running{background:#3fb95015;border-color:#3fb95040;color:#3fb950}
+.cc-slot.idle{background:#21262d;color:#8b949e}
+.cc-slot.error{background:#f8514915;border-color:#f8514940;color:#f85149}
+.log-line{font-family:'JetBrains Mono',monospace;font-size:11px;padding:2px 0;color:#8b949e;border-bottom:1px solid #21262d}
+.log-line .time{color:#6e7681}
+.log-line .level-info{color:#58a6ff}
+.log-line .level-warn{color:#d29922}
+.log-line .level-error{color:#f85149}
+.alert-item{padding:8px 10px;border-left:3px solid;margin-bottom:6px;background:#161b22;border-radius:0 4px 4px 0;font-size:12px}
+.alert-critical{border-color:#f85149;background:#f8514908}
+.alert-warning{border-color:#d29922;background:#d2992208}
+.alert-info{border-color:#58a6ff;background:#58a6ff08}
+.dora-metric{text-align:center;padding:10px}
+.dora-value{font-size:20px;font-weight:700}
+.dora-label{font-size:10px;color:#8b949e;margin-top:2px}
+.dora-target{font-size:10px;color:#6e7681;margin-top:2px}
+.section-hidden{display:none}
+.section-visible{display:block}
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-overview" class="section-visible">
+
+  <!-- 服务健康一览 -->
+  <div class="card">
+    <div class="card-title">🟢 服务健康一览 <span class="link">详细监控 →</span></div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap">
+      <div class="cc-slot running">后端API :6040 <span style="color:#3fb950">● 正常</span> 响应12ms</div>
+      <div class="cc-slot running">前端 :8083 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">CI前端 :8084 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">CI后端 :6041 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">PostgreSQL :5433 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">Redis :6380 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">vLLM :8000 <span style="color:#3fb950">● 正常</span> Qwen3.5-122B</div>
+      <div class="cc-slot running">Token Proxy :9855 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">Webhook :9800 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">SearXNG :8888 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot running">Status Page :9850 <span style="color:#3fb950">● 正常</span></div>
+      <div class="cc-slot idle">Lightsail 生产 <span style="color:#d29922">● 待部署</span></div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- DORA指标 -->
+    <div class="card">
+      <div class="card-title">📈 DORA四指标（本周） <span class="link">#2275</span></div>
+      <div class="grid-4">
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#3fb950">4.2/天</div>
+          <div class="dora-label">部署频率</div>
+          <div class="dora-target">目标: ≥3/天 ✓</div>
+        </div>
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#3fb950">38分</div>
+          <div class="dora-label">交付时长</div>
+          <div class="dora-target">目标: <1h ✓</div>
+        </div>
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#d29922">18%</div>
+          <div class="dora-label">变更失败率</div>
+          <div class="dora-target">目标: <15% ✗</div>
+        </div>
+        <div class="dora-metric">
+          <div class="dora-value" style="color:#3fb950">52分</div>
+          <div class="dora-label">MTTR</div>
+          <div class="dora-target">目标: <1h ✓</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CC集群状态 -->
+    <div class="card">
+      <div class="card-title">🤖 CC集群状态 <span class="link"><a href="/cla/">Claude Office →</a></span></div>
+      <div class="grid-4">
+        <div class="stat stat-green"><div class="stat-num">16</div><div class="stat-label">活跃CC</div></div>
+        <div class="stat"><div class="stat-num">4</div><div class="stat-label">空闲槽位</div></div>
+        <div class="stat stat-yellow"><div class="stat-num">10</div><div class="stat-label">PR待处理</div></div>
+        <div class="stat stat-red"><div class="stat-num">2</div><div class="stat-label">E2E失败</div></div>
+      </div>
+      <div style="margin-top:8px;display:flex;gap:4px;flex-wrap:wrap">
+        <span class="cc-slot running">kimi1 #3288</span>
+        <span class="cc-slot running">kimi10 #3449</span>
+        <span class="cc-slot running">kimi11 #1520</span>
+        <span class="cc-slot running">kimi12 #1858</span>
+        <span class="cc-slot running">kimi13 #1796</span>
+        <span class="cc-slot running">kimi14 #2589</span>
+        <span class="cc-slot running">kimi15 #1862</span>
+        <span class="cc-slot running">kimi16 #3452</span>
+        <span class="cc-slot idle">kimi17 空闲</span>
+        <span class="cc-slot idle">kimi18 空闲</span>
+        <span class="cc-slot idle">kimi19 空闲</span>
+        <span class="cc-slot idle">kimi20 空闲</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <!-- 告警面板 -->
+    <div class="card">
+      <div class="card-title">🔔 活跃告警 <span class="link">告警规则管理 →</span></div>
+      <div class="alert-item alert-critical">
+        <b>E2E失败</b> — #3288 验收队列前端组件 pr-test.yml编译失败
+        <div style="font-size:11px;color:#6e7681;margin-top:2px">10分钟前 | kimi1 正在修复</div>
+      </div>
+      <div class="alert-item alert-warning">
+        <b>变更失败率偏高</b> — 本周18%（目标<15%），主要来自frontend模块
+        <div style="font-size:11px;color:#6e7681;margin-top:2px">持续中 | 建议review近期PR质量</div>
+      </div>
+      <div class="alert-item alert-info">
+        <b>Token Pool</b> — 智谱Key#3 冷却中（限额触发），已自动切换到Key#4
+        <div style="font-size:11px;color:#6e7681;margin-top:2px">2小时前 | 自动恢复</div>
+      </div>
+    </div>
+
+    <!-- 今日产出 -->
+    <div class="card">
+      <div class="card-title">📦 今日产出</div>
+      <div class="grid-4">
+        <div class="stat stat-green"><div class="stat-num">8</div><div class="stat-label">PR合并</div></div>
+        <div class="stat stat-blue"><div class="stat-num">12</div><div class="stat-label">Issue推进</div></div>
+        <div class="stat"><div class="stat-num">3,420</div><div class="stat-label">代码行变更</div></div>
+        <div class="stat stat-yellow"><div class="stat-num">2</div><div class="stat-label">E2E失败</div></div>
+      </div>
+      <div style="margin-top:8px;font-size:11px;color:#8b949e">
+        Sprint-1进度: <b style="color:#f0f6fc">458/524</b> Done (87%)
+        <div class="progress" style="margin-top:4px"><div class="progress-fill" style="width:87%;background:#3fb950"></div></div>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

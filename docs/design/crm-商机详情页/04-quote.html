@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>报价</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; margin: 0; color: #333; font-size: 13px; }
+  .wireframe-block { border: 1px dashed #d9d9d9; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff; position: relative; }
+  .wireframe-label { position: absolute; top: -8px; left: 12px; background: #f5f5f5; padding: 0 6px; font-size: 10px; color: #999; }
+  .btn-primary { background: #1890ff; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .btn-primary:hover { background: #40a9ff; }
+  .btn-ghost { background: #fff; border: 1px solid #d9d9d9; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #333; }
+  .btn-ghost:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-danger { background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .c-blue { color: #1890ff; text-decoration: none; }
+  .c-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
+  .tag-gray { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+  .tab { display: inline-block; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #999; font-size: 13px; }
+  .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+  .tab:hover { color: #1890ff; }
+  .stage-bar { display: flex; gap: 2px; margin: 8px 0; }
+  .stage-item { flex: 1; text-align: center; padding: 6px 4px; font-size: 10px; border-radius: 3px; }
+  .stage-done { background: #52c41a; color: #fff; }
+  .stage-current { background: #1890ff; color: #fff; font-weight: 700; }
+  .stage-future { background: #f0f0f0; color: #999; }
+  .field-row { display: flex; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+  .field-label { width: 100px; color: #999; font-size: 12px; flex-shrink: 0; }
+  .field-value { flex: 1; font-size: 12px; }
+  .auto-tag { background: #e6f7ff; color: #1890ff; font-size: 9px; padding: 0 4px; border-radius: 2px; margin-left: 4px; }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e8e8e8; position: fixed; left: 0; top: 40px; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; }
+  .sidebar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; cursor: pointer; font-size: 18px; }
+  .sidebar-icon:hover, .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<div id="tab-quote" style="">
+            <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;">报价 <span style="color:#999;font-weight:400;font-size:12px;">共1个</span></h3>
+            <table style="width:100%;font-size:12px;border-collapse:collapse;">
+              <thead><tr style="background:#fafafa;"><th style="padding:8px;text-align:left;border-bottom:1px solid #e8e8e8;">报价编号</th><th style="padding:8px;text-align:left;border-bottom:1px solid #e8e8e8;">报价金额</th><th style="padding:8px;text-align:left;border-bottom:1px solid #e8e8e8;">状态</th><th style="padding:8px;text-align:left;border-bottom:1px solid #e8e8e8;">审批人</th><th style="padding:8px;text-align:left;border-bottom:1px solid #e8e8e8;">日期</th></tr></thead>
+              <tbody>
+                <tr><td style="padding:8px;border-bottom:1px solid #f5f5f5;"><a href="#" class="c-blue">BJ202604085436</a></td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">¥500,000</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;"><span class="tag tag-yellow">审批中</span> → 董事长</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">吴耀</td><td style="padding:8px;border-bottom:1px solid #f5f5f5;">2026-04-08</td></tr>
+              </tbody>
+            </table>
+          </div>
+</body>
+</html>

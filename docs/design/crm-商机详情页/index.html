@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — crm-商机详情页 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; flex-shrink: 0; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .badge { background: #ff4d4f; color: #fff; font-size: 9px; padding: 0 5px; border-radius: 8px; margin-left: 4px; }
+
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; margin: 0; color: #333; font-size: 13px; }
+  .wireframe-block { border: 1px dashed #d9d9d9; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff; position: relative; }
+  .wireframe-label { position: absolute; top: -8px; left: 12px; background: #f5f5f5; padding: 0 6px; font-size: 10px; color: #999; }
+  .btn-primary { background: #1890ff; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .btn-primary:hover { background: #40a9ff; }
+  .btn-ghost { background: #fff; border: 1px solid #d9d9d9; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #333; }
+  .btn-ghost:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-danger { background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .c-blue { color: #1890ff; text-decoration: none; }
+  .c-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
+  .tag-gray { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+  .tab { display: inline-block; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #999; font-size: 13px; }
+  .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+  .tab:hover { color: #1890ff; }
+  .stage-bar { display: flex; gap: 2px; margin: 8px 0; }
+  .stage-item { flex: 1; text-align: center; padding: 6px 4px; font-size: 10px; border-radius: 3px; }
+  .stage-done { background: #52c41a; color: #fff; }
+  .stage-current { background: #1890ff; color: #fff; font-weight: 700; }
+  .stage-future { background: #f0f0f0; color: #999; }
+  .field-row { display: flex; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+  .field-label { width: 100px; color: #999; font-size: 12px; flex-shrink: 0; }
+  .field-value { flex: 1; font-size: 12px; }
+  .auto-tag { background: #e6f7ff; color: #1890ff; font-size: 9px; padding: 0 4px; border-radius: 2px; margin-left: 4px; }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e8e8e8; position: fixed; left: 0; top: 40px; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; }
+  .sidebar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; cursor: pointer; font-size: 18px; }
+  .sidebar-icon:hover, .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- [侧边栏] -->
+    <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center pt-4 gap-4">
+      <div class="w-8 h-8 bg-blue-500 rounded text-white flex items-center justify-center text-xs font-bold">W</div>
+      <div class="text-xs text-center text-gray-400 mt-2">万德AI</div>
+      <div class="mt-4 flex flex-col gap-3 text-gray-400 text-lg">
+        <span>📊</span><span>⛏️</span><span>📋</span><span>⚙️</span>
+      </div>
+    </aside>
+
+    <!-- [主内容区] -->
+    <main class="flex-1 flex flex-col">
+
+      <!-- [面包屑] -->
+      <div class="px-6 py-3 text-sm text-gray-500">
+        首页 &gt; crm-商机详情页
+      </div>
+
+      <!-- [Tab栏] -->
+      <div class="tab-bar" id="tabBar"></div>
+
+      <!-- [Tab内容 — iframe加载] -->
+      <div class="flex-1">
+        <iframe id="tabFrame" class="tab-content-frame" src="01-basic-info.html"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="p-6 bg-white border-t border-gray-300 mt-4">
+    <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+    <table class="w-full text-sm text-left border-collapse">
+      <thead><tr class="bg-gray-100">
+        <th class="p-2 border border-gray-300">Tab页</th>
+        <th class="p-2 border border-gray-300">文件名</th>
+        <th class="p-2 border border-gray-300">功能描述</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="p-2 border border-gray-300">基本信息</td><td class="p-2 border border-gray-300">01-basic-info.html</td><td class="p-2 border border-gray-300">基本信息页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">跟进记录</td><td class="p-2 border border-gray-300">02-followup.html</td><td class="p-2 border border-gray-300">跟进记录页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">设计单</td><td class="p-2 border border-gray-300">03-design.html</td><td class="p-2 border border-gray-300">设计单页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">报价</td><td class="p-2 border border-gray-300">04-quote.html</td><td class="p-2 border border-gray-300">报价页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">合同</td><td class="p-2 border border-gray-300">05-contract.html</td><td class="p-2 border border-gray-300">合同页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">回款</td><td class="p-2 border border-gray-300">06-payment.html</td><td class="p-2 border border-gray-300">回款页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">投标HZ</td><td class="p-2 border border-gray-300">07-bidding.html</td><td class="p-2 border border-gray-300">投标HZ页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">资料</td><td class="p-2 border border-gray-300">08-files.html</td><td class="p-2 border border-gray-300">资料页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">流程监控</td><td class="p-2 border border-gray-300">09-approval.html</td><td class="p-2 border border-gray-300">流程监控页面内容</td></tr>
+        <tr><td class="p-2 border border-gray-300">变更日志</td><td class="p-2 border border-gray-300">10-changelog.html</td><td class="p-2 border border-gray-300">变更日志页面内容</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const tabs = [
+      { key: 'basic', label: '基本信息', src: '01-basic-info.html' },
+      { key: 'followup', label: '跟进记录', src: '02-followup.html' },
+      { key: 'design', label: '设计单', src: '03-design.html' },
+      { key: 'quote', label: '报价', src: '04-quote.html' },
+      { key: 'contract', label: '合同', src: '05-contract.html' },
+      { key: 'payment', label: '回款', src: '06-payment.html' },
+      { key: 'bid', label: '投标HZ', src: '07-bidding.html' },
+      { key: 'files', label: '资料', src: '08-files.html' },
+      { key: 'approval', label: '流程监控', src: '09-approval.html' },
+      { key: 'changelog', label: '变更日志', src: '10-changelog.html' }
+    ];
+
+    const tabBar = document.getElementById('tabBar');
+    const tabFrame = document.getElementById('tabFrame');
+    let activeKey = tabs[0].key;
+
+    function renderTabs() {
+      tabBar.innerHTML = tabs.map(t =>
+        `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+      ).join('');
+    }
+
+    tabBar.addEventListener('click', (e) => {
+      const item = e.target.closest('.tab-item');
+      if (!item) return;
+      activeKey = item.dataset.key;
+      tabFrame.src = item.dataset.src;
+      renderTabs();
+    });
+
+    tabFrame.addEventListener('load', () => {
+      try {
+        const h = tabFrame.contentDocument.documentElement.scrollHeight;
+        tabFrame.style.height = h + 'px';
+      } catch(e) {}
+    });
+
+    renderTabs();
+  </script>
+</body>
+</html>

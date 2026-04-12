@@ -141,7 +141,9 @@ curl -s -X POST http://localhost:9872/api/notify \
 ## 截图托管（参考 #3547 CC 做法）
 
 ```bash
-# 本地 pnpm dev 或 Playwright 连 Dev http://172.31.31.227:8080 (admin/admin123) 截图
+# ⚠️ 截图必须使用你自己的 kimi 测试环境，禁止连接主 Dev 环境！
+# kimi 测试环境地址：http://localhost:${CC_TEST_FRONTEND_PORT} (如 kimi1=8101)
+# 登录凭证：admin/admin123
 gh release create screenshot-${PR_NUM} --notes "screenshot" /tmp/<file>.png
 # 拿到 https://github.com/.../releases/download/... URL
 gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>

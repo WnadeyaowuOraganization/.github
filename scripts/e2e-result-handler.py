@@ -163,7 +163,7 @@ def create_issue(source, module, fail_detail, total, failed_count):
 
 ## 环境
 - 测试时间: {now}
-- 环境: G7e Dev (:6040/:8083)
+- 环境: G7e Dev (:6040/:8080)
 - 来源: {source_label}
 
 ## 处理步骤

@@ -226,19 +226,8 @@ if [ "$MODE" = "issue" ]; then
     fi
   fi
 
-  # === 构建 prompt（v2.2 - 2026-04-09 起引用 share/shared-conventions.md 模板，含 9 条硬约束） ===
-  PROMPT_TEMPLATE="$SCRIPT_DIR/../docs/agent-docs/share/shared-conventions.md"
-  if [ -f "$PROMPT_TEMPLATE" ]; then
-    # 用 envsubst 或 bash 字符串替换 ${ISSUE}
-    CC_PROMPT=$(ISSUE="$ISSUE" envsubst '${ISSUE}' < "$PROMPT_TEMPLATE" 2>/dev/null || sed "s/\${ISSUE}/${ISSUE}/g" "$PROMPT_TEMPLATE")
-    echo "$(date): 使用 prompt 模板 v2.2 (share/shared-conventions.md, $(wc -l < "$PROMPT_TEMPLATE") 行)"
-  elif [ -f "$ISSUE_SOURCE" ]; then
-    # fallback v1 纯字符串（兼容性）
-    CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 中的 Issue 内容，按流程完成任务。Issue 编号: #${ISSUE}"
-    echo "$(date): [WARN] prompt 模板 v2 不存在，fallback 到 v1"
-  else
-    CC_PROMPT="拾取（包含评论）并完成 Issue #${ISSUE}"
-  fi
+  # === 构建 prompt（v3 — 简短一行，规范通过 --append-system-prompt-file 注入）===
+  CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 完成 Issue #${ISSUE}。"
 
   # 检查详细设计文档
   DESIGN_DOC=$(find "$SCRIPT_DIR/../docs/design/" -name "*详细设计.md" -newer "$ISSUE_DIR" 2>/dev/null | head -1)
@@ -247,10 +236,22 @@ if [ "$MODE" = "issue" ]; then
   fi
   if [ -n "$DESIGN_DOC" ]; then
     cp "$DESIGN_DOC" "$ISSUE_DIR/design.md"
-    CC_PROMPT="$CC_PROMPT
-
-重要：本Issue有详细设计文档，请先阅读 issues/issue-${ISSUE}/design.md 并严格按设计实现。"
+    CC_PROMPT="${CC_PROMPT} 本Issue有详细设计文档，请先阅读 issues/issue-${ISSUE}/design.md 并严格按设计实现。"
     echo "$(date): 详细设计文档已注入: $(basename $DESIGN_DOC)"
+  fi
+
+  # shared-conventions.md 作为 system prompt 追加（含硬约束+工作流规范）
+  # envsubst 替换 ${ISSUE} 占位符
+  CONVENTIONS_FILE="$SCRIPT_DIR/../docs/agent-docs/share/shared-conventions.md"
+  CONVENTIONS_INJECT="/tmp/cc-conventions-${SESSION}.md"
+  if [ -f "$CONVENTIONS_FILE" ]; then
+    ISSUE="$ISSUE" envsubst '${ISSUE}' < "$CONVENTIONS_FILE" > "$CONVENTIONS_INJECT" 2>/dev/null \
+      || sed "s/\${ISSUE}/${ISSUE}/g" "$CONVENTIONS_FILE" > "$CONVENTIONS_INJECT"
+    CONVENTIONS_FLAG="--append-system-prompt-file ${CONVENTIONS_INJECT}"
+    echo "$(date): 共享规范注入 system prompt ($(wc -l < "$CONVENTIONS_FILE") 行)"
+  else
+    CONVENTIONS_FLAG=""
+    echo "$(date): [WARN] shared-conventions.md 不存在，跳过规范注入"
   fi
 else
   CC_PROMPT="$PROMPT"
@@ -263,7 +264,7 @@ if [ "$EFFORT" = "max" ]; then
   CONFIG_DIR_ENV=""
   CLEANUP_CMD=""
 else
-  API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
+  API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
   API_SOURCE="Token Pool Proxy"
   # 隔离 claude.ai 凭证，避免 Auth conflict；日志目录软链到原始位置保证页面正常展示
   PROXY_CONFIG_DIR="/tmp/cc-config-${SESSION}"
@@ -302,21 +303,17 @@ if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
   TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log;"
 fi
 
-# === 启动tmux（交互模式，支持attach和注入）===
+# === 启动tmux（交互模式）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \
-   claude --model ${MODEL} --dangerously-skip-permissions; \
-   ${CLEANUP_CMD} exec bash"
+   claude --model ${MODEL} --dangerously-skip-permissions ${CONVENTIONS_FLAG}; \
+   rm -f ${CONVENTIONS_INJECT:-/dev/null}; ${CLEANUP_CMD} exec bash"
 
-# 等待 Claude Code CLI 初始化完成（出现输入提示符）
-sleep 5
+# 等待 Claude Code CLI 初始化完成
+sleep 8
 
-# 注入初始 prompt
-# v2 prompt (126 行) 会被 Claude Code CLI 识别为 paste mode，需补一个额外 Enter 触发提交
-# v1 单行 prompt 也能兼容额外 Enter（只是多一次空回车）
+# 注入简短 prompt（一行，无多行粘贴问题）
 tmux send-keys -t "$SESSION" "$CC_PROMPT" Enter
-sleep 3
-tmux send-keys -t "$SESSION" "" Enter
 
 echo "✓ CC已在tmux会话 '$SESSION' 中启动 (effort: $EFFORT, api: $API_SOURCE)"
 echo "  tmux attach -t $SESSION    查看/注入消息"

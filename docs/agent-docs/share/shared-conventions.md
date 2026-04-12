@@ -101,7 +101,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 - **YOU MUST NOT** 在 `useVbenDrawer/Modal` 的 `connectedComponent` 里用 `<Page>`/`<div>` 作 template 最外层 — 必须是 `<BasicDrawer>`/`<VbenDrawer>`/`<a-drawer>` overlay 容器（#3544 事故，详见 `frontend/ui-guide.md` §3.5）
 - **YOU MUST NOT** 加前端路由而不配置后端 `sys_menu` 表
 - **YOU MUST NOT** 使用 `any` 类型
-- **YOU MUST NOT** 直接编辑 `schema.sql` — 新表用 `schemas/issue_XXXX.sql` + `script/sql/update/` 增量脚本
+- **YOU MUST NOT** 直接编辑基线 SQL — 新表/变更用 Flyway 增量脚本 `db/migration/V<N>__<desc>.sql`
 - **YOU MUST NOT** 在 `wande-ai-api` 目录新增业务代码（已废弃）— 写在 `ruoyi-modules/wande-ai/` 下
 - **YOU MUST NOT** 用 root 执行 mvn（target 权限污染）— CC 已在 ubuntu 用户直接 `mvn` 即可
 - **YOU MUST NOT** push 到 `dev` 或 `main` 分支 — 只 push `feature-Issue-<N>`
@@ -132,7 +132,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 ## 截图托管（参考 #3547 CC 做法）
 
 ```bash
-# 本地 pnpm dev 或 Playwright 连 Dev http://3.211.167.122:8083 (admin/admin123) 截图
+# 本地 pnpm dev 或 Playwright 连 Dev http://172.31.31.227:8083 (admin/admin123) 截图
 gh release create screenshot-${PR_NUM} --notes "screenshot" /tmp/<file>.png
 # 拿到 https://github.com/.../releases/download/... URL
 gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
@@ -140,12 +140,12 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 
 ## 环境信息
 
-| 服务 | Dev (G7e) | 生产 (Lightsail) |
+| 服务 | Dev (m7i) | 生产 (Lightsail) |
 |------|-----------|----------------- |
-| 前端 | http://3.211.167.122:8083 | http://47.131.77.9 |
-| 后端 API | http://3.211.167.122:6040 | Docker |
+| 前端 | http://172.31.31.227:8083 | http://47.131.77.9 |
+| 后端 API | http://172.31.31.227:6040 | Docker |
 | API 代理 | :8083/prod-api/ → :6040 | nginx |
-| PostgreSQL | localhost:5433 / wande / wande_dev_2026 | Docker |
+| MySQL | 127.0.0.1:3306 / wande-ai / wande / wande_dev_2026 (Docker) | Docker |
 | Redis | localhost:6380 / redis_dev_2026 | Docker |
 
 ## Git 分支
@@ -169,10 +169,11 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 
 ## 数据库规范
 
+- **数据库**：MySQL 8.0，库名 `wande-ai`，单数据源（master），无需 `@DS` 注解
 - **新表必须用 `wdpp_` 前缀**（如 `wdpp_tender_project`）
 - 新表必须包含 `create_time` / `update_time`（与 BaseEntity 一致）
 - 老表（`created_at`）需增量 SQL 或 `@TableField("created_at")` 映射
-- **万德业务 Mapper/Service 必须加 `@DS("wande")`** — 不加会走 master 库报错
+- **增量 SQL 使用 Flyway**：`backend/ruoyi-admin/src/main/resources/db/migration/V<N>__<desc>.sql`
 
 ## 认证机制
 
@@ -186,8 +187,35 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 新页面完整清单：
 1. `views/wande/` 创建页面组件
 2. `api/wande/` 创建 API 调用
-3. **后端**创建 `sys_menu` 增量 SQL（决定菜单显示）
+3. **后端**创建 `sys_menu` 增量 SQL（Flyway `db/migration/V*__xxx.sql`）
 4. `component` 字段值匹配 `views/` 下路径（不含 `views/` 前缀和 `.vue` 后缀）
+
+### 权限标识规范
+
+C 类菜单（页面）的 `perms` 必须以 `:list` 结尾，遵循 ruoyi-ai 框架三段式约定：`module:entity:list`。
+子模块场景可扩展为四段：`module:sub:entity:list`（框架做字符串精确匹配，不限段数）。
+
+```
+✅ cockpit:dashboard:list          — 标准三段
+✅ biz:tender:prospect:list        — 子模块四段
+❌ cockpit:dashboard               — 缺少 :list，前端权限校验会失败
+```
+
+Controller 注解必须与 `sys_menu.perms` 完全一致：`@SaCheckPermission("biz:tender:prospect:list")`
+
+### 外部链接 iframe 嵌入
+
+ruoyi-ai 内置 InnerLink 机制：`path` 以 `http` 开头时自动渲染为 IFrameView，**无需自定义 Vue 组件**。
+
+```sql
+-- 正确做法：通过菜单表配置 iframe
+UPDATE sys_menu SET path='http://example.com/page', component='', is_frame=0 WHERE menu_id=xxx;
+-- path: 完整 http URL
+-- component: 留空（框架自动使用 InnerLink）
+-- is_frame: 0（在页签内嵌入），1（新窗口打开）
+```
+
+**YOU MUST NOT** 为外部链接创建自定义 iframe Vue 组件 — 使用 sys_menu 配置即可。
 
 调试菜单不显示：检查 `/system/menu/getRouters` → `sys_menu` → `sys_role_menu` → `component` 路径。
 

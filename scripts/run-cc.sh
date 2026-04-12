@@ -303,11 +303,23 @@ if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
   TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log;"
 fi
 
+# === 构建 CC 退出后的清理命令 ===
+# claude 退出后: 更新锁状态为 DONE + 关闭Issue(兜底) + 清理测试环境 + 删除临时文件
+POST_EXIT_CMD=""
+if [ "$MODE" = "issue" ]; then
+  POST_EXIT_CMD="bash ${SCRIPT_DIR}/set-lock-state.sh ${ISSUE} DONE 2>/dev/null;"
+  # 兜底：CC 退出后检查 PR 是否已合并，如果已合并则自动 close issue + 标 Done
+  POST_EXIT_CMD="${POST_EXIT_CMD} bash ${SCRIPT_DIR}/post-cc-cleanup.sh ${ISSUE} 2>/dev/null;"
+  if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
+    POST_EXIT_CMD="${POST_EXIT_CMD} bash ${SCRIPT_DIR}/cc-test-env.sh stop ${KIMI_TAG} 2>/dev/null;"
+  fi
+fi
+
 # === 启动tmux（交互模式）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \
    claude --model ${MODEL} --dangerously-skip-permissions ${CONVENTIONS_FLAG}; \
-   rm -f ${CONVENTIONS_INJECT:-/dev/null}; ${CLEANUP_CMD} exec bash"
+   ${POST_EXIT_CMD} rm -f ${CONVENTIONS_INJECT:-/dev/null}; ${CLEANUP_CMD} exec bash"
 
 # 等待 Claude Code CLI 初始化完成
 sleep 8

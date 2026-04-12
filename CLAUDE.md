@@ -61,27 +61,9 @@ bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort medium
 | `high` | 多文件重构、复杂业务 | Token Pool Proxy |
 | `max` | 架构级决策 | **Claude Max订阅**（默认Sonnet） |
 
-## 通知规范（公共）
+## 团队内沟通机制（必读）
 
-每轮任务结束后必须发送通知：
-
-```bash
-curl -s -X POST http://localhost:9872/api/notify \
-  -H "Content-Type: application/json" \
-  -d "{\"session\":\"$(tmux display-message -p '#S' 2>/dev/null || echo 'manager')\",\"message\":\"摘要（50字内）\",\"type\":\"success\"}"
-```
-
-**type 取值**：`success`（正常完成）/ `info`（进度播报）/ `warning`（发现异常）/ `error`（需人工介入）
-
-**何时用哪个**：
-- 研发经理：每轮巡检 + 指派完成 → `success`；CC 卡住已注入修复 → `warning`；超管必须介入（如 cc-keepalive 失效、PR 误关）→ `error`
-- 排程经理：每轮分析完成 → `success`；新 Jump/Fail 已重排 → `info`；依赖死锁无法排程 → `warning`
-
----
-
-## 团队内沟通机制
-
-见 `docs/agent-docs/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」。
+> **启动后立即阅读** `docs/agent-docs/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」，每次向他人发送消息前必须遵守。
 
 ## 文档更新规范（必读）
 

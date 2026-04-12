@@ -290,14 +290,12 @@ KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
 M2_REPO_PATH="${HOME_DIR}/.m2/repository"
 MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO_PATH}';"
 
-# === 预启动独立测试环境（MySQL schema隔离 + Redis DB隔离 + 前后端独立端口）===
+# === 预创建独立数据库（MySQL schema + Redis DB，秒级完成）===
+# 只初始化数据，不启动服务。服务由编程CC按需通过 cc-test-env.sh start 启动
 TEST_ENV_INFO=""
 if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
-  ENV_STATUS=$(bash "$SCRIPT_DIR/cc-test-env.sh" status "$KIMI_TAG" 2>/dev/null || echo "STOPPED")
-  if ! echo "$ENV_STATUS" | grep -q "RUNNING"; then
-    echo "🚀 预启动 ${KIMI_TAG} 独立测试环境..."
-    bash "$SCRIPT_DIR/cc-test-env.sh" start "$KIMI_TAG" 2>&1 || true
-  fi
+  echo "📦 初始化 ${KIMI_TAG} 独立数据库..."
+  bash "$SCRIPT_DIR/cc-test-env.sh" init-db "$KIMI_TAG" 2>&1 || true
   CC_BE_PORT=$((7100 + KIMI_NUM))
   CC_FE_PORT=$((8100 + KIMI_NUM))
   CC_LOG_DIR="/apps/wande-ai-backend-${KIMI_TAG}/logs"

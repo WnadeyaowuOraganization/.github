@@ -89,3 +89,32 @@ for lockfile in $LOCK_DIR/wande-play-kimi*.lock; do
 
   log "$DIRNAME Issue#$ISSUE: 已触发重启 (retry=${NEW_RETRY})"
 done
+
+# === 孤立会话清理：tmux session 存在但锁文件已释放 ===
+# 场景：release-cc-lock.sh 未执行（workflow缺失/失败），或锁被手动删除
+for session in $(tmux list-sessions -F "#{session_name}" 2>/dev/null | grep "^cc-wande-play-kimi"); do
+  # 从 session 名提取 issue 号：cc-wande-play-kimi1-3602 → 3602
+  ORPHAN_ISSUE=$(echo "$session" | grep -oE '[0-9]+$')
+  [ -z "$ORPHAN_ISSUE" ] && continue
+
+  # 检查是否有对应锁文件（有锁=上面的循环已处理，跳过）
+  HAS_LOCK=false
+  for lockfile in $LOCK_DIR/wande-play-kimi*.lock; do
+    [ ! -f "$lockfile" ] && continue
+    LOCK_ISSUE=$(grep "^issue=" "$lockfile" 2>/dev/null | cut -d= -f2)
+    [ "$LOCK_ISSUE" = "$ORPHAN_ISSUE" ] && HAS_LOCK=true && break
+  done
+  $HAS_LOCK && continue
+
+  # 无锁文件，检查 Issue 是否已关闭
+  ISSUE_STATE=$(gh issue view "$ORPHAN_ISSUE" --repo WnadeyaowuOraganization/wande-play \
+    --json state --jq '.state' 2>/dev/null || echo "UNKNOWN")
+  if [ "$ISSUE_STATE" = "CLOSED" ]; then
+    log "孤立会话清理: $session (Issue#$ORPHAN_ISSUE CLOSED, 无锁文件)"
+    tmux kill-session -t "$session" 2>/dev/null || true
+    # 切回 dev 分支
+    KIMI_DIR=$(echo "$session" | sed 's/^cc-//' | sed "s/-${ORPHAN_ISSUE}$//")
+    DIR_PATH="${HOME_DIR}/projects/${KIMI_DIR}"
+    [ -d "$DIR_PATH" ] && cd "$DIR_PATH" && git checkout dev 2>/dev/null && git branch -D "feature-Issue-${ORPHAN_ISSUE}" 2>/dev/null
+  fi
+done

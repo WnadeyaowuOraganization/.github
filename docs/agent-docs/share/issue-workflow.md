@@ -14,13 +14,13 @@ Issue创建 → CI自动关联Project Status=Plan
 
 ## 任务来源
 
-**所有任务通过 GitHub Issue 下发，由调度器CC分配。**
+**所有任务通过 GitHub Issue 下发，由研发经理CC分配。**
 
-调度器已完成：选定Issue → 创建工作目录 `./issues/issue-<N>` → 签出 feature 分支 → 预取Issue内容到 `issue-source.md`。
+研发经理已完成：选定Issue → 创建工作目录 `./issues/issue-<N>` → 签出 feature 分支 → 预取Issue内容到 `issue-source.md`。
 
 ### 第一件事
 
-1. 读取Issue内容：优先读 `./issues/issue-<N>/issue-source.md`（调度器预取）
+1. 读取Issue内容：优先读 `./issues/issue-<N>/issue-source.md`（研发经理预取）
 2. 如不存在：`gh issue view <N> --repo WnadeyaowuOraganization/wande-play --comments`
 3. **检查详细设计文档**：如果 `../../.github/docs/design/` 下有本Issue相关的 `*-详细设计.md`，必须先阅读并按设计实现
 4. 恢复工作：如果 `./issues/issue-<N>/task.md` 已存在，读取后继续

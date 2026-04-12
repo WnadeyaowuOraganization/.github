@@ -325,9 +325,22 @@ if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
   fi
 fi
 
+# === 预启动独立测试环境（常驻，编程CC可随时运行E2E测试）===
+if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
+  ENV_STATUS=$(bash "$SCRIPT_DIR/cc-test-env.sh" status "$KIMI_TAG" 2>/dev/null || echo "STOPPED")
+  if ! echo "$ENV_STATUS" | grep -q "RUNNING"; then
+    echo "🚀 预启动 ${KIMI_TAG} 独立测试环境..."
+    bash "$SCRIPT_DIR/cc-test-env.sh" start "$KIMI_TAG" 2>&1 | tail -3 || true
+  fi
+  CC_TEST_PORT=$((7100 + $(echo "$KIMI_TAG" | grep -oE '[0-9]+$')))
+  TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_TEST_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_TEST_PORT};"
+else
+  TEST_ENV_INFO=""
+fi
+
 # === 启动tmux（交互模式，支持attach和注入）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
-  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${TEST_PG_ENV} ${MAVEN_ENV} \
+  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${TEST_PG_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \
    claude --model ${MODEL} --dangerously-skip-permissions; \
    ${CLEANUP_CMD} exec bash"
 

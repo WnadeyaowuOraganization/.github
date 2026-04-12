@@ -20,19 +20,79 @@
    gh pr create --base dev --title "..." --body "..."   # --base dev 必填,不能省
    ```
 9. **PR create 后必轮询** — `while [ "$(gh pr view $PR --json state -q .state)" != "MERGED" ]; do sleep 120; done`；超 30min 未 merged 在 Issue 评论说明后退出
-10. **阶段性主动汇报** — 4 个节点直接向研发经理汇报（tmux 即时 + claude-office 通知），禁止静默工作：
+10. **阶段性主动汇报** — 4 个节点直接向研发经理汇报（tmux 即时 + notify），禁止静默工作：
     - 开工（读完 Issue + task.md 后）
     - 阶段完成（编译通过 / 单测绿 / 提 PR / PR merged）
     - 卡住（连续 10 分钟同一问题无进展）
     - **结论前**（下「问题不存在/无需修改/已修复」结论前必须先汇报等确认，禁止自行 close Issue）
     ```bash
-    # 一条命令同时发 tmux (研发经理即时收到) + claude-office 通知
+    # 标准汇报命令（必须同时发 tmux + notify）
     MSG="[#${ISSUE}] <一句话现状>" && TYPE=info && \
     tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $MSG" Enter 2>/dev/null; \
     curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
       -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"$MSG\",\"type\":\"$TYPE\"}" >/dev/null
     # TYPE: info=进度 / warning=卡住需关注 / success=阶段完成 / error=必须介入
     ```
+
+## 团队内沟通机制
+
+### 强制要求
+**每次**发送消息给其他人，必须调用 notify API（方便人工查看沟通进度）。
+
+### 标准流程
+```bash
+# 1. 发送详细内容到对应CC的tmux会话（回车符不可省略）
+tmux send-keys -t 'manager-研发经理' "详细消息" Enter
+
+# 2. 发送notify（强制）
+curl -s -X POST http://localhost:9872/api/notify \
+  -H "Content-Type: application/json" \
+  -d '{"session":"manager-研发经理","message":"【类型】内容摘要","type":"info"}'
+```
+
+### 消息格式
+**标题**：`【类型】- <回复标识> 一句话摘要`（≤50字）  
+**类型**：方案评审 / 进度播报 / 异常发现 / 需人工介入  
+**回复标识**：
+- `【需回复】` - 需要对方确认/决策/反馈
+- `【阅即可】` - 纯同步信息，无需回复
+
+### 消息模板
+```markdown
+【方案评审】-【需回复】 Issue #2367建议采用纯数据库操作
+from: <发送方tmux会话名称>
+to: <接收方tmux会话名称>
+=============
+ <消息内容-`less is more`原则>
+```
+
+**使用样例**：
+```bash
+# 场景：向研发经理汇报方案评审结论
+CONTENT='【方案评审】-【需回复】 Issue #2367建议采用纯数据库操作
+from: manager-排程经理
+to: manager-研发经理
+=============
+分析结论：菜单重组无需前端改动，仅通过Flyway脚本操作sys_menu表即可。
+实施步骤：1)创建资源中心一级菜单 2)迁移竞品情报子菜单 3)隐藏旧菜单
+预计工时：0.5人日（仅后端脚本）
+请确认此方案是否可行，或需要调整实施策略。'
+
+tmux send-keys -t 'manager-研发经理' "$CONTENT" Enter
+
+curl -s -X POST http://localhost:9872/api/notify \
+  -H "Content-Type: application/json" \
+  -d '{"session":"manager-研发经理","message":"【方案评审】-【需回复】 Issue #2367建议采用纯数据库操作","type":"info"}'
+```
+
+### 场景速查
+
+| 场景 | notify type | 回复标识 |
+|-----|-------------|---------|
+| 方案评审 | `info` | `[需回复]` |
+| 进度播报 | `success` | `[阅即可]` |
+| 异常发现 | `warning` | `[需回复]` |
+| 需人工介入 | `error` | `[需回复]` |
 
 ## 绝对禁止（YOU MUST NOT）
 

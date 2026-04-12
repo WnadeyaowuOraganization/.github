@@ -221,7 +221,7 @@ Week 4 (5/03-5/09):
 | kimi1 | ~~#3458~~ | P0 | fullstack | ~~Tier-2: 全球项目矿场v3.0 — 新环境重做~~ PR#3606✅merged 2026-04-12 22:38 | ~~Done~~ |
 | kimi2 | ~~#3522~~ | P1 | fullstack | ~~Tier-1: Dashboard Widget配置表+动态渲染引擎~~ PR#3609✅merged 2026-04-12 21:58 | ~~Done~~ |
 | kimi3 | ~~#3466~~ | P0 | fullstack | ~~Tier-3: 超管驾驶舱Master — 框架验证~~ PR#3607✅merged 2026-04-12 21:54 | ~~Done~~ |
-| kimi4 | #3526 | P1 | fullstack | Tier-4: CRM商务中心Master — Sprint-1总协调 | In Progress |
+| kimi4 | ~~#3526~~ | P1 | fullstack | ~~Tier-4: CRM商务中心Master — Sprint-1总协调~~ PR#3610✅merged 2026-04-12 22:44 | ~~Done~~ |
 | kimi5 | #3527 | P0 | backend | Tier-4: CRM-DB 数据库基础建表(9张表) | In Progress |
 | kimi6 | #3579 | P1 | fullstack | Tier-5: 产品门户Master — 路由+权限+布局 | In Progress |
 
@@ -229,6 +229,5 @@ Week 4 (5/03-5/09):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi4 | #3526 | P1 | fullstack | Tier-4: CRM商务中心Master — Sprint-1总协调 |
 | kimi5 | #3527 | P0 | backend | Tier-4: CRM-DB 数据库基础建表(9张表) |
 | kimi6 | #3579 | P1 | fullstack | Tier-5: 产品门户Master — 路由+权限+布局 |

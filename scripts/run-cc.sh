@@ -263,18 +263,13 @@ if [ "$EFFORT" = "max" ]; then
   CONFIG_DIR_ENV=""
   CLEANUP_CMD=""
 else
-  API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
+  API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
   API_SOURCE="Token Pool Proxy"
   # 隔离 claude.ai 凭证，避免 Auth conflict；日志目录软链到原始位置保证页面正常展示
   PROXY_CONFIG_DIR="/tmp/cc-config-${SESSION}"
   mkdir -p "$PROXY_CONFIG_DIR"
   rsync -a --exclude='.credentials.json' --exclude='projects' "${HOME_DIR}/.claude/" "$PROXY_CONFIG_DIR/"
   ln -sfn "${HOME_DIR}/.claude/projects" "$PROXY_CONFIG_DIR/projects"
-  # 写入结构完整的 stub credentials：让 CC 跳过 onboarding 和主题选择
-  # accessToken/refreshToken 为无效值，CC 检测到 ANTHROPIC_API_KEY 后会走代理路线
-  cat > "$PROXY_CONFIG_DIR/.credentials.json" << 'CREDS_EOF'
-{"claudeAiOauth":{"accessToken":"stub-proxy-mode","refreshToken":"stub-proxy-mode","expiresAt":1,"scopes":["user:inference"],"subscriptionType":"free","rateLimitTier":"free"}}
-CREDS_EOF
   # 复制全局 .claude.json（含 onboarding 状态/主题/approved keys），剥离 oauth 凭证已在 .credentials.json 中处理
   [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$PROXY_CONFIG_DIR/.claude.json"
   CONFIG_DIR_ENV="export CLAUDE_CONFIG_DIR=${PROXY_CONFIG_DIR};"

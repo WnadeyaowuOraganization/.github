@@ -203,15 +203,16 @@ ACTION="${1:-status}"
 KIMI_TAG="${2:-}"
 
 if [ -z "$KIMI_TAG" ]; then
-  echo "用法: $0 <start|stop|status|port> <kimi_tag>"
+  echo "用法: $0 <start|stop|restart|status|port> <kimi_tag>"
   echo "  例: $0 start kimi18"
   exit 1
 fi
 
 case "$ACTION" in
-  start)  cmd_start "$KIMI_TAG" ;;
-  stop)   cmd_stop "$KIMI_TAG" ;;
-  status) cmd_status "$KIMI_TAG" ;;
-  port)   cmd_port "$KIMI_TAG" ;;
-  *)      echo "未知操作: $ACTION"; exit 1 ;;
+  start)   cmd_start "$KIMI_TAG" ;;
+  stop)    cmd_stop "$KIMI_TAG" ;;
+  restart) cmd_stop "$KIMI_TAG"; sleep 2; cmd_start "$KIMI_TAG" ;;
+  status)  cmd_status "$KIMI_TAG" ;;
+  port)    cmd_port "$KIMI_TAG" ;;
+  *)       echo "未知操作: $ACTION"; exit 1 ;;
 esac

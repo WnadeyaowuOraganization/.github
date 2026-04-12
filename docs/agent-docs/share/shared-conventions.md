@@ -245,8 +245,9 @@ Controller 注解与 `sys_menu.perms` 完全一致：`@SaCheckPermission("biz:te
 `path` 以 `http` 开头 → 框架自动 iframe 内嵌，无需 Vue 组件：
 
 ```sql
-UPDATE sys_menu SET path='http://example.com/page', component='', is_frame=0 WHERE menu_id=xxx;
--- is_frame: 0=页签内嵌入, 1=新窗口打开
+UPDATE sys_menu SET path='http://example.com/page', component='', is_frame=1 WHERE menu_id=xxx;
+-- is_frame 字段 = "是否外链"：1=否（非外链，页签内嵌）, 0=是（外链，新窗口打开）
+-- ⚠️ 注意：1=否, 0=是，与直觉相反！
 ```
 
 调试菜单不显示：检查 `/system/menu/getRouters` → `sys_menu` → `sys_role_menu` → `component` 路径。

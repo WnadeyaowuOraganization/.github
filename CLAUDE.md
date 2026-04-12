@@ -68,3 +68,17 @@ bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort medium
 ## 文档更新规范（必读）
 
 > **启动后立即阅读** `docs/agent-docs/README.md` §更新规范，更新 `docs/agent-docs/` 下任何文档前必须遵守。
+
+## wande-play 项目改动规范
+
+基础设施文件（`.claude/skills`、`CLAUDE.md`、`.gitignore`、Flyway 迁移脚本等）在基础目录 `wande-play` 修改并推送 dev，外接目录 git pull 同步：
+
+```bash
+cd ~/projects/wande-play && git add <files> && git commit -m "..." && git push origin dev
+
+for dir in ~/projects/wande-play-kimi{1..20} ~/projects/wande-play-e2e-mid ~/projects/wande-play-e2e-top; do
+  [ -d "$dir/.git" ] && (cd "$dir" && git pull origin dev)
+done
+```
+
+**禁止**在外接目录改基础设施文件再手动 cp 到其他目录。

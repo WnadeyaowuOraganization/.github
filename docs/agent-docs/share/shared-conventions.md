@@ -168,20 +168,6 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 - Commit: `feat(scope): description #N`
 - 开发前必须确认当前分支，不在 feature 分支则从 dev 签出新分支
 
-## wande-play 项目改动规范
-
-基础设施文件（`.claude/skills`、`CLAUDE.md`、`.gitignore`、Flyway 迁移脚本等）在基础目录 `wande-play` 修改并推送 dev，外接目录 git pull 同步：
-
-```bash
-cd ~/projects/wande-play && git add <files> && git commit -m "..." && git push origin dev
-
-for dir in ~/projects/wande-play-kimi{1..20} ~/projects/wande-play-e2e-mid ~/projects/wande-play-e2e-top; do
-  [ -d "$dir/.git" ] && (cd "$dir" && git pull origin dev)
-done
-```
-
-**禁止**在外接目录改基础设施文件再手动 cp 到其他目录。
-
 ## 构建命令
 
 | 命令 | 用途 |

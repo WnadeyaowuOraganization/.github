@@ -113,9 +113,9 @@ exit
 | 服务 | Dev环境 |
 |------|---------|
 | 后端API | `http://localhost:6040` |
-| 前端页面 | `http://localhost:8083` |
-| PostgreSQL | `localhost:5433` / wande / wande_dev_2026 |
-| Redis | `localhost:6380` / redis_dev_2026 |
+| 前端页面 | `http://localhost:8080` |
+| MySQL | `127.0.0.1:3306` / wande-ai / root / root |
+| Redis | `localhost:6379` / db0 |
 | 登录 | admin / admin123 |
 
 ## 关键约束

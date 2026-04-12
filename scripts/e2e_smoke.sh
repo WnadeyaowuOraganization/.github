@@ -127,11 +127,11 @@ fi
 
 # --- Step 2: 前端健康检查 ---
 FRONTEND_OK=false
-if curl -sf "http://localhost:8083/" > /dev/null 2>&1; then
+if curl -sf "http://localhost:8080/" > /dev/null 2>&1; then
     FRONTEND_OK=true
-    log "✅ 前端健康检查通过 (:8083)"
+    log "✅ 前端健康检查通过 (:8080)"
 else
-    log "❌ 前端不可达 (:8083)"
+    log "❌ 前端不可达 (:8080)"
 fi
 
 # 如果后端和前端都不可达，跳过Playwright测试（环境未启动）

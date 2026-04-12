@@ -141,7 +141,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 ## 截图托管（参考 #3547 CC 做法）
 
 ```bash
-# 本地 pnpm dev 或 Playwright 连 Dev http://172.31.31.227:8083 (admin/admin123) 截图
+# 本地 pnpm dev 或 Playwright 连 Dev http://172.31.31.227:8080 (admin/admin123) 截图
 gh release create screenshot-${PR_NUM} --notes "screenshot" /tmp/<file>.png
 # 拿到 https://github.com/.../releases/download/... URL
 gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
@@ -151,11 +151,13 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 
 | 服务 | Dev (m7i) | 生产 (Lightsail) |
 |------|-----------|----------------- |
-| 前端 | http://172.31.31.227:8083 | http://47.131.77.9 |
-| 后端 API | http://172.31.31.227:6040 | Docker |
-| API 代理 | :8083/prod-api/ → :6040 | nginx |
-| MySQL | 127.0.0.1:3306 / wande-ai / wande / wande_dev_2026 (Docker) | Docker |
-| Redis | localhost:6380 / redis_dev_2026 | Docker |
+| 前端 | http://172.31.31.227:8080 | http://47.131.77.9 |
+| 后端 API | http://172.31.31.227:6040 (test profile, root用户) | Docker |
+| API 代理 | :8080/api/ → :6040 | nginx |
+| MySQL | 127.0.0.1:3306 / wande-ai / root / root (Docker) | Docker |
+| Redis | localhost:6379 / db0 | Docker |
+
+> **编程CC 隔离环境**：每个 kimi 有独立 MySQL schema（`wande-ai-kimi{N}`）和 Redis DB（`db{N}`），使用 `wande` 用户。`wande` 用户**无**主 `wande-ai` 库权限，防止编程CC误操作主环境。
 
 ## Git 分支
 
@@ -175,6 +177,31 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 | `cd backend && mvn clean compile -Pprod -DskipTests` | 后端编译 |
 | `cd backend && mvn test -pl ruoyi-modules/wande-ai` | 后端测试 |
 | `cd frontend && pnpm build` | 前端构建 |
+
+## 项目目录结构
+
+```
+$(git rev-parse --show-toplevel)/
+├── backend/                  # 后端（Maven 多模块）
+│   ├── ruoyi-admin/          # 主启动模块（spring-boot-maven-plugin 在此）
+│   ├── ruoyi-common/
+│   ├── ruoyi-extend/
+│   └── ruoyi-modules/
+│       └── wande-ai/         # 万德业务模块
+├── frontend/                 # 前端（pnpm monorepo）
+│   └── apps/web-antd/        # 主应用（vite.config.mts）
+├── e2e/                      # E2E 测试（在项目根目录，不在 frontend 下！）
+│   ├── tests/front/smoke/    # Smoke 测试用例
+│   └── node_modules/         # Playwright 依赖
+├── issues/                   # Issue 工作目录
+│   └── issue-${ISSUE}/
+│       ├── issue-source.md   # Issue 原文
+│       ├── task.md           # 任务清单
+│       └── design.md         # 详细设计（如有）
+└── shared/api-contracts/     # 接口契约
+```
+
+> **注意**：`e2e/` 目录在**项目根**下，不在 `frontend/` 下。Playwright 脚本用 `import from '项目根/e2e/node_modules/playwright/...'`。
 
 ## 数据库规范
 

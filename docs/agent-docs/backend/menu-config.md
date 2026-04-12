@@ -65,7 +65,7 @@ INSERT INTO sys_role_menu (role_id, menu_id) VALUES (1, 2XXX4) ON CONFLICT DO NO
 | component | 前端组件路径，如 `wande/supplier-rating/index`（对应 views/wande/supplier-rating/index.vue） |
 | perms | 权限标识，格式 `wande:模块:操作`，必须与 Controller 的 `@SaCheckPermission` 一致 |
 | visible | `0`=显示 `1`=隐藏 |
-| is_frame | `1`=否/非外链（页签内嵌iframe） `0`=是/外链（新窗口打开）⚠️ 1=否,0=是 与直觉相反！ |
+| is_frame | `1`=非外链 `0`=外链 |
 
 #### 自查清单
 

@@ -1,4 +1,4 @@
-等一下。# CC Agent Docs 导航
+# CC Agent Docs 导航
 
 本目录是万德AI平台所有 prompt / CC 文档的唯一权威源。除 `CLAUDE.md` 外，prompt 相关文档都放在这里。
 
@@ -101,7 +101,6 @@ docs/agent-docs/
 | v2.3 | 2026-04-09 | #3544 静默误判事故 | + 约束 10（阶段性主动汇报）|
 | v2.4 | 2026-04-09 | 汇报通道整合 | 约束 10 汇报改为 tmux send-keys 即时 + /api/notify 双通道 |
 | v2.5 | 2026-04-12 | D82 环境迁移 | + 菜单perms必须`:list`结尾 + iframe用sys_menu配置禁自建组件 + 环境G7e→m7i + DB PG→MySQL + 删@DS("wande") + 增量SQL改Flyway |
-| v2.6 | 2026-04-12 | #3604 isFrame误设 | 修正is_frame注释：1=否/非外链(内嵌), 0=是/外链(新窗口)。旧注释0/1语义反转导致CC误设 |
 
 度量：`scripts/weekly-quality-report.sh` 对比前后平均分。目标 +0.5/版本。
 事故档案：`docs/workflow/新harness验证报告.md`，评分 < 6 必须新建章节。

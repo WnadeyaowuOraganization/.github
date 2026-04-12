@@ -195,7 +195,7 @@ Week 4 (5/03-5/09):
 |-------|------|------|------|------|
 | ~~kimi1~~ | ~~#3598~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页左上角名称为 Wande AI Admin~~ | ~~✅ PR#3599 merged 2026-04-12 18:37~~ |
 | ~~kimi1~~ | ~~#3600~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页底部版权信息为 Copyright © 2026 Wande AI~~ | ~~✅ PR#3601 merged 2026-04-12 19:31~~ |
-| kimi1 | #3602 | P0 | backend | 超管驾驶舱：Claude Office菜单地址改为公网IP + 取消外链 | 🔴 In Progress(effort=max) |
+| ~~kimi1~~ | ~~#3602~~ | ~~P0~~ | ~~backend~~ | ~~超管驾驶舱：Claude Office菜单地址改为公网IP + 取消外链~~ | ~~✅ PR#3603 merged 2026-04-12 20:48~~ |
 
 ## 指派历史（完成后划线）
 
@@ -205,4 +205,4 @@ Week 4 (5/03-5/09):
 |---------|-------|------|------|------|---------|
 | kimi1 | ~~#3598~~ | P0 | frontend | ~~替换登录页左上角名称为 Wande AI Admin~~ PR#3599✅merged 2026-04-12 18:37 | ~~Done~~ |
 | kimi1 | ~~#3600~~ | P0 | frontend | ~~替换登录页底部版权信息为 Copyright © 2026 Wande AI~~ PR#3601✅merged 2026-04-12 19:31 | ~~Done~~ |
-| kimi1 | #3602 | P0 | backend | 超管驾驶舱：Claude Office菜单地址改为公网IP + 取消外链 | In Progress |
+| kimi1 | ~~#3602~~ | P0 | backend | ~~超管驾驶舱：Claude Office菜单地址改为公网IP + 取消外链~~ PR#3603✅merged 2026-04-12 20:48 | ~~Done~~ |

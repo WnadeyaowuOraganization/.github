@@ -161,11 +161,11 @@ start_backend() {
   : > "$LOG_DIR/backend.log"
 
   # 用 mvn spring-boot:run 从源码启动，无需预编译jar
-  # -pl ruoyi-admin: 只启动admin模块
-  # spring-boot.run.arguments: 覆盖端口、数据库、Redis
+  # -pl ruoyi-admin -am: 启动admin模块并自动编译其依赖模块
+  # 首次启动会编译全部依赖（约2-3分钟），后续重启只编译变更模块（快很多）
   cd "$KIMI_DIR/backend"
   nohup mvn spring-boot:run \
-    -pl ruoyi-admin \
+    -pl ruoyi-admin -am \
     -Dspring-boot.run.profiles=dev \
     -Dspring-boot.run.arguments="\
 --server.port=${BACKEND_PORT} \
@@ -181,10 +181,10 @@ start_backend() {
   local pid=$!
   echo "$pid" > "$PID_FILE"
 
-  # 健康检查（mvn先编译再启动，给120秒）
+  # 健康检查（首次mvn编译+启动约2-3分钟，给180秒）
   echo ""
   echo -n "  等待后端就绪 (PID=$pid)..."
-  for i in $(seq 1 120); do
+  for i in $(seq 1 180); do
     if ! kill -0 "$pid" 2>/dev/null; then
       echo " FAIL (进程退出)"
       tail -30 "$LOG_DIR/backend.log"
@@ -199,7 +199,7 @@ start_backend() {
     sleep 1
   done
 
-  echo " TIMEOUT (120s)"
+  echo " TIMEOUT (180s)"
   tail -30 "$LOG_DIR/backend.log"
   kill "$pid" 2>/dev/null
   rm -f "$PID_FILE"

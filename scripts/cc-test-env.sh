@@ -1,8 +1,13 @@
 #!/bin/bash
 # cc-test-env.sh — 编程CC独立测试环境管理
 #
-# 为每个kimi目录分配独立端口，管理后端服务生命周期
+# 为每个kimi目录分配独立端口+独立数据库，管理后端服务生命周期
 # 编程CC在完成代码后调用此脚本启动独立测试环境
+#
+# 隔离策略:
+#   MySQL: 同实例不同schema — wande-ai-kimi{N} (dev主环境: wande-ai)
+#   Redis: 同实例不同DB    — db{N}            (dev主环境: db0)
+#   端口:  kimi{N}        — backend:7100+N, frontend:8100+N
 #
 # 用法:
 #   cc-test-env.sh start <kimi_tag>   启动kimi的独立测试环境
@@ -13,8 +18,20 @@
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
-# === 端口分配 ===
-# kimi{N} -> backend:7100+N, frontend:8100+N
+# === MySQL/Redis 连接配置 ===
+MYSQL_HOST="127.0.0.1"
+MYSQL_PORT="3306"
+MYSQL_ROOT_USER="root"
+MYSQL_ROOT_PASS="wande_dev_2026"
+MYSQL_USER="wande"
+MYSQL_PASS="wande_dev_2026"
+MYSQL_DEV_DB="wande-ai"
+REDIS_HOST="localhost"
+REDIS_PORT="6379"
+FLYWAY_DIR="${HOME_DIR}/projects/wande-play/backend/ruoyi-admin/src/main/resources/db/migration"
+
+# === 端口+隔离分配 ===
+# kimi{N} -> backend:7100+N, frontend:8100+N, mysql:wande-ai-kimi{N}, redis:db{N}
 get_ports() {
   local tag="$1"
   local num=$(echo "$tag" | grep -oE '[0-9]+$')
@@ -24,6 +41,9 @@ get_ports() {
   fi
   BACKEND_PORT=$((7100 + num))
   FRONTEND_PORT=$((8100 + num))
+  KIMI_NUM="$num"
+  KIMI_DB="${MYSQL_DEV_DB}-kimi${num}"
+  REDIS_DB="$num"
   echo "$BACKEND_PORT $FRONTEND_PORT"
 }
 
@@ -70,6 +90,35 @@ cmd_start() {
     kill -9 "$conflict_pid" 2>/dev/null || true
   fi
 
+  # === 创建独立MySQL schema ===
+  echo -n "  MySQL: 创建 ${KIMI_DB}..."
+  docker exec mysql-dev mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" \
+    -e "CREATE DATABASE IF NOT EXISTS \`${KIMI_DB}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;" 2>/dev/null
+  # 检查是否已有表（避免重复导入）
+  local existing_tables
+  existing_tables=$(docker exec mysql-dev mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" -N \
+    -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='${KIMI_DB}';" 2>/dev/null)
+  if [ "${existing_tables:-0}" -lt 10 ]; then
+    # 导入baseline
+    if [ -f "$FLYWAY_DIR/V1__baseline_wande_ai.sql" ]; then
+      docker exec -i mysql-dev mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" "$KIMI_DB" 2>/dev/null \
+        < "$FLYWAY_DIR/V1__baseline_wande_ai.sql"
+      echo " baseline已导入"
+    else
+      echo " WARN: baseline文件不存在，使用空schema"
+    fi
+  else
+    echo " 已存在(${existing_tables}表)，跳过导入"
+  fi
+
+  # === 授权kimi用户访问 ===
+  docker exec mysql-dev mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" \
+    -e "GRANT ALL PRIVILEGES ON \`${KIMI_DB}\`.* TO '${MYSQL_USER}'@'%'; FLUSH PRIVILEGES;" 2>/dev/null
+
+  # === Redis DB隔离：清空kimi专属DB ===
+  echo "  Redis: 使用 db${REDIS_DB}"
+  docker exec redis-dev redis-cli -n "$REDIS_DB" FLUSHDB 2>/dev/null >/dev/null
+
   # 确保产物目录存在
   mkdir -p "$PRODUCT_DIR" "$LOG_DIR"
 
@@ -85,17 +134,18 @@ cmd_start() {
     fi
   fi
 
-  # 启动后端
+  # 启动后端（指向kimi独立的MySQL schema + Redis DB）
   : > "$LOG_DIR/backend.log"
   nohup java -jar "$jar_file" \
     --spring.profiles.active=dev \
     --server.port="${be_port}" \
-    --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://127.0.0.1:3306/wande-ai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true" \
-    --spring.datasource.dynamic.datasource.master.username=wande \
-    --spring.datasource.dynamic.datasource.master.password=wande_dev_2026 \
-    --spring.data.redis.host=localhost \
-    --spring.data.redis.port=6380 \
-    --spring.data.redis.password=redis_dev_2026 \
+    --spring.flyway.enabled=false \
+    --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true" \
+    --spring.datasource.dynamic.datasource.master.username="${MYSQL_USER}" \
+    --spring.datasource.dynamic.datasource.master.password="${MYSQL_PASS}" \
+    --spring.data.redis.host="${REDIS_HOST}" \
+    --spring.data.redis.port="${REDIS_PORT}" \
+    --spring.data.redis.database="${REDIS_DB}" \
     > "$LOG_DIR/backend.log" 2>&1 &
 
   local pid=$!
@@ -113,10 +163,12 @@ cmd_start() {
     if curl -sf "http://localhost:${be_port}/actuator/health" --max-time 2 >/dev/null 2>&1; then
       echo " OK (${i}s)"
       echo "✅ ${tag} 测试环境就绪"
-      echo "   后端: http://localhost:${be_port}"
-      echo "   前端: http://localhost:${fe_port}"
-      echo "   PID: $pid"
-      echo "   日志: $LOG_DIR/backend.log"
+      echo "   后端:  http://localhost:${be_port}"
+      echo "   前端:  http://localhost:${fe_port}"
+      echo "   MySQL: ${KIMI_DB} (port ${MYSQL_PORT})"
+      echo "   Redis: db${REDIS_DB} (port ${REDIS_PORT})"
+      echo "   PID:   $pid"
+      echo "   日志:  $LOG_DIR/backend.log"
       return 0
     fi
     [ $((i % 10)) -eq 0 ] && echo -n " ${i}s"
@@ -159,7 +211,20 @@ cmd_stop() {
     kill -9 "$leftover" 2>/dev/null || true
   fi
 
-  echo "✅ ${tag} 测试环境已停止"
+  # 清理独立MySQL schema
+  if [ -n "$KIMI_DB" ]; then
+    echo "  MySQL: 删除 ${KIMI_DB}..."
+    docker exec mysql-dev mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" \
+      -e "DROP DATABASE IF EXISTS \`${KIMI_DB}\`;" 2>/dev/null
+  fi
+
+  # 清理Redis DB
+  if [ -n "$REDIS_DB" ] && [ "$REDIS_DB" -gt 0 ] 2>/dev/null; then
+    echo "  Redis: 清空 db${REDIS_DB}"
+    docker exec redis-dev redis-cli -n "$REDIS_DB" FLUSHDB 2>/dev/null >/dev/null
+  fi
+
+  echo "✅ ${tag} 测试环境已停止（含数据清理）"
 }
 
 # === 查看状态 ===
@@ -174,9 +239,9 @@ cmd_status() {
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
       if curl -sf "http://localhost:${be_port}/actuator/health" --max-time 2 >/dev/null 2>&1; then
-        echo "RUNNING (PID=$pid, port=${be_port}, healthy)"
+        echo "RUNNING (PID=$pid, port=${be_port}, mysql:${KIMI_DB}, redis:db${REDIS_DB}, healthy)"
       else
-        echo "STARTING (PID=$pid, port=${be_port}, not yet healthy)"
+        echo "STARTING (PID=$pid, port=${be_port}, mysql:${KIMI_DB}, redis:db${REDIS_DB}, not yet healthy)"
       fi
       return 0
     fi
@@ -192,7 +257,7 @@ cmd_port() {
   ports=$(get_ports "$tag") || exit 1
   local be_port=$(echo "$ports" | awk '{print $1}')
   local fe_port=$(echo "$ports" | awk '{print $2}')
-  echo "backend=${be_port} frontend=${fe_port}"
+  echo "backend=${be_port} frontend=${fe_port} mysql=${KIMI_DB} redis=db${REDIS_DB}"
 }
 
 # === 主入口 ===

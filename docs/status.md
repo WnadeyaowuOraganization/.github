@@ -753,6 +753,8 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | **开发者文档** | wande-play-kimi*/CLAUDE.md新增：快速启动命令+6个技能详细使用方式+board查询+design文档位置+FAQ+troubleshooting。绝对路径参考.github文档，避免相对路径解析错误 |
 | **Claude Office整合** | systemd service启动(port 9872)+nginx反向代理(http://172.31.31.227:8083/cla/)。新增看板可视化(Project#4实时数据)+技能执行面板+日志查看(所有区域:play/e2e/gh-plugins/manager) |
 | **验收标准达成** | ✅ 编程CC可在任意kimi目录快速启动、独立编译测试；✅ 菜单基线验证通过(8大工作区+角色权限)；✅ 排程计划确认(6 Tier优先级+CC资源分配)；✅ 全景服务(文档/脚本/技能/环境)完整可用 |
+| **管线日志统一+Crontab恢复** | g7e停机后管线cron未迁移。修复：21个Python脚本日志路径统一到`~/logs/pipeline/`(消除/var/log权限问题+/tmp重启丢失+~/logs根目录混杂3类散乱路径)；GGZY采集器路径修复(`wande-data-pipeline-glm2`→`wande-play-kimi12`)；`reverify_robust.py` `/opt/agent`旧路径修复；合并4个cron配置到`pipeline_crontab`并注册到m7i crontab(score_decay每日5:00+GGZY每4h+竞品中标每日2:30+cron告警每10min) |
+| **CC提示词治理** | shared-conventions.md v2.5：新增perms `:list`规则+iframe嵌入规则+通讯录(角色/tmux会话/何时联系)；修正6处过时内容(G7e→m7i/PG→MySQL/Flyway路径等)。flyway-validate skill修正6处路径+psql→mysql+ON CONFLICT→INSERT IGNORE。CLAUDE.md增经理专属工作流+两个必读指令。.gitignore启用skills git跟踪。全部同步到20个kimi目录 |
 
 ### 已完成（2026-04-12 新开发环境完整交付）
 - ✅ 编程开发环境完全迁移到m7i.8xlarge (172.31.31.227)

@@ -24,7 +24,7 @@ docs/agent-docs/
 │   ├── issue-workflow.md          ← Issue生命周期与三阶段开发流程
 │   ├── api-contracts.md           ← 前后端接口契约规范
 │   └── db-schema.md               ← 数据库列名规范（新旧表差异）
-│   (shared-conventions.md 同时包含 CC 启动 prompt v2.3：10 条硬约束 + quality-gate 4 道门 + 绝对禁止清单，run-cc.sh 引用)
+│   (shared-conventions.md 同时包含 CC 启动 prompt v2.5：10 条硬约束 + quality-gate 4 道门 + 绝对禁止清单 + 菜单perms/iframe规范，run-cc.sh 引用)
 ├── backend/                       ← 后端CC专属文档
 │   ├── backend-guide.md           ← 主指引（必读）
 │   ├── common-pitfalls.md         ← ⚠️ 高频错误与规范
@@ -85,7 +85,7 @@ docs/agent-docs/
 
 | 文档 | 内容摘要 |
 |------|---------|
-| [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | 🚦 **唯一权威源** — CC 启动 prompt v2.3（10 条硬约束 + quality-gate 4 门 + 绝对禁止 + slot 写法 + 标准流程 + 截图托管）+ 环境/Git/DB/认证/菜单/契约/GitHub CLI/模块指南链接。`run-cc.sh` 自动注入。 |
+| [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | 🚦 **唯一权威源** — CC 启动 prompt v2.5（10 条硬约束 + quality-gate 4 门 + 绝对禁止 + slot 写法 + 标准流程 + 截图托管 + 菜单perms规范 + iframe嵌入规范）+ 环境/Git/DB/认证/菜单/契约/GitHub CLI/模块指南链接。`run-cc.sh` 自动注入。 |
 | [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue从Plan到Done的完整生命周期、三阶段开发流程（准备→执行→提交） |
 | [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约文件路径规范、YAML契约格式、修改流程 |
 | [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（create_time/created_at差异）、新表wdpp_前缀、BaseEntity字段映射 |
@@ -100,6 +100,7 @@ docs/agent-docs/
 | v2.2 | 2026-04-09 | #3543 压测漏洞 B/E/F | + 约束 8/9 + 假勾选警告 |
 | v2.3 | 2026-04-09 | #3544 静默误判事故 | + 约束 10（阶段性主动汇报）|
 | v2.4 | 2026-04-09 | 汇报通道整合 | 约束 10 汇报改为 tmux send-keys 即时 + /api/notify 双通道 |
+| v2.5 | 2026-04-12 | D82 环境迁移 | + 菜单perms必须`:list`结尾 + iframe用sys_menu配置禁自建组件 + 环境G7e→m7i + DB PG→MySQL + 删@DS("wande") + 增量SQL改Flyway |
 
 度量：`scripts/weekly-quality-report.sh` 对比前后平均分。目标 +0.5/版本。
 事故档案：`docs/workflow/新harness验证报告.md`，评分 < 6 必须新建章节。

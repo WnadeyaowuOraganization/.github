@@ -100,6 +100,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 - **YOU MUST NOT** 嵌套 Drawer/Modal — 独立组件 + 事件通信
 - **YOU MUST NOT** 在 `useVbenDrawer/Modal` 的 `connectedComponent` 里用 `<Page>`/`<div>` 作 template 最外层 — 必须是 `<BasicDrawer>`/`<VbenDrawer>`/`<a-drawer>` overlay 容器（#3544 事故，详见 `frontend/ui-guide.md` §3.5）
 - **YOU MUST NOT** 加前端路由而不配置后端 `sys_menu` 表
+- **YOU MUST NOT** 为外部链接创建自定义 iframe Vue 组件 — 用 `sys_menu` path=http URL 配置即可
 - **YOU MUST NOT** 使用 `any` 类型
 - **YOU MUST NOT** 直接编辑基线 SQL — 新表/变更用 Flyway 增量脚本 `db/migration/V<N>__<desc>.sql`
 - **YOU MUST NOT** 在 `wande-ai-api` 目录新增业务代码（已废弃）— 写在 `ruoyi-modules/wande-ai/` 下
@@ -192,30 +193,24 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 
 ### 权限标识规范
 
-C 类菜单（页面）的 `perms` 必须以 `:list` 结尾，遵循 ruoyi-ai 框架三段式约定：`module:entity:list`。
-子模块场景可扩展为四段：`module:sub:entity:list`（框架做字符串精确匹配，不限段数）。
+C 类菜单 `perms` 必须以 `:list` 结尾：
 
 ```
-✅ cockpit:dashboard:list          — 标准三段
-✅ biz:tender:prospect:list        — 子模块四段
-❌ cockpit:dashboard               — 缺少 :list，前端权限校验会失败
+✅ cockpit:dashboard:list
+✅ biz:tender:prospect:list
+❌ cockpit:dashboard
 ```
 
-Controller 注解必须与 `sys_menu.perms` 完全一致：`@SaCheckPermission("biz:tender:prospect:list")`
+Controller 注解与 `sys_menu.perms` 完全一致：`@SaCheckPermission("biz:tender:prospect:list")`
 
 ### 外部链接 iframe 嵌入
 
-ruoyi-ai 内置 InnerLink 机制：`path` 以 `http` 开头时自动渲染为 IFrameView，**无需自定义 Vue 组件**。
+`path` 以 `http` 开头 → 框架自动 iframe 内嵌，无需 Vue 组件：
 
 ```sql
--- 正确做法：通过菜单表配置 iframe
 UPDATE sys_menu SET path='http://example.com/page', component='', is_frame=0 WHERE menu_id=xxx;
--- path: 完整 http URL
--- component: 留空（框架自动使用 InnerLink）
--- is_frame: 0（在页签内嵌入），1（新窗口打开）
+-- is_frame: 0=页签内嵌入, 1=新窗口打开
 ```
-
-**YOU MUST NOT** 为外部链接创建自定义 iframe Vue 组件 — 使用 sys_menu 配置即可。
 
 调试菜单不显示：检查 `/system/menu/getRouters` → `sys_menu` → `sys_role_menu` → `component` 路径。
 

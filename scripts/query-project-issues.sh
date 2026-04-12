@@ -232,7 +232,7 @@ for item in items:
     results.append((status, num, repo_short, title, module, priority, labels))
 
 # 按状态排序
-status_order = {'Plan': 0, 'Todo': 1, 'In Progress': 2, 'pause': 3, 'Fail': 4, 'Done': 5, '?': 6}
+status_order = {'Jump': 0, 'Plan': 1, 'Todo': 2, 'In Progress': 3, 'E2E Fail': 4, 'Fail': 5, 'pause': 6, 'Done': 7, 'Reject': 8, '?': 9}
 results.sort(key=lambda x: (status_order.get(x[0], 9), x[1]))
 
 for status, num, repo, title, module, priority, labels in results:

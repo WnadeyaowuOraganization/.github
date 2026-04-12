@@ -100,7 +100,6 @@ REPO_MAP["pipeline"]="wande-play"
 REPO_MAP["plugins"]="wande-gh-plugins"
 REPO_MAP["gh-plugins"]="wande-gh-plugins"
 REPO_MAP["play"]="wande-play"
-REPO_MAP["play"]="wande-play"
 
 # Project routing by repo
 if [ "$REPO_SHORT" = "play" ]; then

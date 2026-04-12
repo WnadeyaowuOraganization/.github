@@ -176,13 +176,7 @@ def create_issue(source, module, fail_detail, total, failed_count):
 """
 
     labels = f"priority/P0,type:bugfix,status:test-failed,module:{module}"
-    result = run_cmd(
-        f'gh issue create --repo {REPO} '
-        f'--title "{title}" '
-        f'--body-file /dev/stdin '
-        f'--label "{labels}"',
-    )
-    # 上面用stdin不方便，改用tempfile
+    # 用tempfile传body，避免shell转义问题
     with tempfile.NamedTemporaryFile(mode="w", suffix=".md", delete=False) as f:
         f.write(body)
         f.flush()

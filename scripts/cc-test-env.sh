@@ -90,12 +90,9 @@ cmd_start() {
   nohup java -jar "$jar_file" \
     --spring.profiles.active=dev \
     --server.port="${be_port}" \
-    --spring.datasource.dynamic.datasource.master.url="jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified" \
+    --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://127.0.0.1:3306/wande-ai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true" \
     --spring.datasource.dynamic.datasource.master.username=wande \
     --spring.datasource.dynamic.datasource.master.password=wande_dev_2026 \
-    --spring.datasource.dynamic.datasource.wande.url="jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified" \
-    --spring.datasource.dynamic.datasource.wande.username=wande \
-    --spring.datasource.dynamic.datasource.wande.password=wande_dev_2026 \
     --spring.data.redis.host=localhost \
     --spring.data.redis.port=6380 \
     --spring.data.redis.password=redis_dev_2026 \

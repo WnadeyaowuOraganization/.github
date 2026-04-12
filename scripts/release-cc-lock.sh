@@ -44,21 +44,7 @@ for lockfile in $LOCK_DIR/wande-play-kimi*.lock; do
   # 切回 dev 分支
   [ -d "$dir" ] && cd "$dir" && git checkout dev 2>/dev/null && echo "[release-cc-lock] ✅ 已切回 dev 分支"
 
-  # 释放临时 maven repo（优先从 lock 文件读 m2_repo 字段，找不到则按 KIMI_TAG 兜底）
-  M2_REPO_FROM_LOCK=$(grep "^m2_repo=" "$lockfile" 2>/dev/null | cut -d= -f2-)
-  KIMI_TAG=$(echo "$DIRNAME" | sed 's/^wande-play-//')
-  SCRIPT_DIR="$(dirname "$(readlink -f "$0")")"
-  if [ -n "$M2_REPO_FROM_LOCK" ] && [[ "$M2_REPO_FROM_LOCK" == /dev/shm/* ]]; then
-    # 直接 rm 锁里记录的路径（避免 KIMI_TAG 推算错）
-    PARENT_DIR=$(dirname "$M2_REPO_FROM_LOCK")
-    [ -d "$PARENT_DIR" ] && rm -rf "$PARENT_DIR" && echo "[release-cc-lock] ✅ 释放 maven repo: $PARENT_DIR"
-    # 同时 refcount -1 / 可能释放 base
-    if [ -x "$SCRIPT_DIR/m2-cc-cleanup.sh" ]; then
-      bash "$SCRIPT_DIR/m2-cc-cleanup.sh" "$KIMI_TAG" 2>&1 | sed 's/^/[release-cc-lock] /'
-    fi
-  elif [ -x "$SCRIPT_DIR/m2-cc-cleanup.sh" ]; then
-    bash "$SCRIPT_DIR/m2-cc-cleanup.sh" "$KIMI_TAG" 2>&1 | sed 's/^/[release-cc-lock] /'
-  fi
+  # Maven repo 已改为共享 ~/.m2（NVMe SSD），无需 per-kimi 清理
 
   FOUND=true
   break

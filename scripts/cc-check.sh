@@ -2,7 +2,7 @@
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # check-cc-status.sh — 检查CC状态和Issue完成情况
 
-LOGDIR=/var/log/coding-cc
+LOGDIR="${HOME_DIR}/cc_scheduler/cc-logs"
 SCRIPT_DIR="${HOME_DIR}/projects/.github/scripts"
 REPORT_FILE="${HOME_DIR}/cc_scheduler/status-report.md"
 
@@ -87,23 +87,25 @@ for session in $(tmux list-sessions 2>/dev/null | grep "^cc-" | cut -d: -f1); do
     if [ "$has_claude_running" = "true" ]; then
         # claude还在运行，检查最近活跃时间（从 .claude/projects/ JSONL文件mtime）
         # 精确匹配：用Claude项目路径格式精确定位
-        # Claude存储路径格式：-home-ubuntu-projects-wande-play-{kimiN}-{module}/
+        # M7i 迁移后 realpath 变为 -data-home-ubuntu-，需兼容两种前缀
         if [ -n "$kimi_dir" ] && [ -n "$module" ] && [ "$module" != "unknown" ]; then
-            proj_dir_name="-home-ubuntu-projects-wande-play-${kimi_dir}-${module}"
-            jsonl_file=$(find "${HOME_DIR}/.claude/projects/${proj_dir_name}/" -name "*.jsonl" \
-                -not -path "*/subagents/*" -mmin -120 2>/dev/null \
+            jsonl_file=$(find \
+                "${HOME_DIR}/.claude/projects/-data-home-ubuntu-projects-wande-play-${kimi_dir}-${module}/" \
+                "${HOME_DIR}/.claude/projects/-home-ubuntu-projects-wande-play-${kimi_dir}-${module}/" \
+                -name "*.jsonl" -not -path "*/subagents/*" -mmin -120 2>/dev/null \
                 | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         elif [ -n "$kimi_dir" ]; then
-            proj_dir_name="-home-ubuntu-projects-wande-play-${kimi_dir}"
-            jsonl_file=$(find "${HOME_DIR}/.claude/projects/${proj_dir_name}/" -name "*.jsonl" \
-                -not -path "*/subagents/*" -mmin -120 2>/dev/null \
+            jsonl_file=$(find \
+                "${HOME_DIR}/.claude/projects/-data-home-ubuntu-projects-wande-play-${kimi_dir}/" \
+                "${HOME_DIR}/.claude/projects/-home-ubuntu-projects-wande-play-${kimi_dir}/" \
+                -name "*.jsonl" -not -path "*/subagents/*" -mmin -120 2>/dev/null \
                 | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         else
             jsonl_file=$(find ${HOME_DIR}/.claude/projects/ -name "*.jsonl" -path "*wande-play*" -mmin -120 2>/dev/null \
                 | xargs -I{} stat -c "%Y {}" {} 2>/dev/null | sort -n | tail -1 | cut -d' ' -f2-)
         fi
         if [ -z "$jsonl_file" ]; then
-            jsonl_file="$logfile"  # fallback到/var/log/coding-cc/日志
+            jsonl_file="$logfile"  # fallback到cc-logs日志
         fi
         last_active=$(stat -c "%Y" "$jsonl_file" 2>/dev/null || stat -c "%Y" "$logfile" 2>/dev/null)
         now=$(date +%s)

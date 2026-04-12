@@ -15,7 +15,15 @@ GITHUB_DIR="${HOME_DIR}/projects/.github"
 SCRIPT_DIR="${GITHUB_DIR}/scripts"
 LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
 SESSION_MAP="/tmp/manager-session-map.json"
-JSONL_DIR="${HOME_DIR}/.claude/projects/-home-ubuntu-projects--github"
+# 2026-04-12: M7i 迁移后 Claude 解析 realpath，JSONL 目录前缀从
+# -home-ubuntu- 变为 -data-home-ubuntu-，需兼容两种格式
+_JSONL_DIR_NEW="${HOME_DIR}/.claude/projects/-data-home-ubuntu-projects--github"
+_JSONL_DIR_OLD="${HOME_DIR}/.claude/projects/-home-ubuntu-projects--github"
+if [ -d "$_JSONL_DIR_NEW" ]; then
+  JSONL_DIR="$_JSONL_DIR_NEW"
+else
+  JSONL_DIR="$_JSONL_DIR_OLD"
+fi
 
 mkdir -p "$(dirname "$LOG_FILE")"
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"; }

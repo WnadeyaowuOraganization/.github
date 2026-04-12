@@ -733,6 +733,33 @@ Sprint-8 生态售后     █████████████ 生态闭环
 
 
 
+### 基础设施变更（04-12）— 新开发环境m7i.8xlarge + 编程环境整合
+
+| 项 | 详情 |
+|---|---|
+| **环境迁移决策** | D78确认：G7e GPU利用率<1%，编程开发不需GPU。新增m7i.8xlarge(172.31.31.227)专用编程，降成本~87%/月($7000→$720 1年RI)；G7e保留GPU/模型服务；测试环境由dev(G7e 旧)→新m7i专用E2E目录 |
+| **新机器配置** | m7i.8xlarge(32vCPU/128GB/1TB gp3) + PostgreSQL(5432/5433) + Redis(6380) + Docker + 20个kimi目录(kimi1-kimi20) + 38个项目目录(wande-play等) + Claude Code CLI + 所有基础脚本 |
+| **编程环境架构** | 20个kimi目录独立隔离，各自后端port=7100+N、前端port=8100+N。nginx反向代理(端口8100+N→backend 7100+N)。Flyway自动建表，无手工setup。dev分支清零：仅含ruoyi-ai框架+V2菜单基线(V1__baseline.sql+V2__wande_menu_baseline.sql) |
+| **菜单基线脚本** | `V2__wande_menu_baseline.sql`：368个INSERT(sys_menu)+595个INSERT(sys_role_menu)+5个UPDATE(隐藏旧菜单)，全部idempotent `ON CONFLICT DO NOTHING`。完整合并8个菜单重组Issue，创建Issue#3597 Tier-0 P0 |
+| **排程计划生成** | `sprints/new-dev.md` 6-Tier 4周计划：Tier-0菜单验证→Tier-1 RBAC仪表盘(并行5CC)→Tier-2全球项目矿场(独立1-2CC，用户优先)→Tier-3/4/5/6；周进度表+CC分配曲线(Week1:4-5人→Peak周2:12-13→周3:8-9→周4:4-5) |
+| **测试环境脚本** | ✅ `cc-test-env.sh`(启动/停止/重启/状态/端口)、`cc-test-run.sh`(smoke/api/spec/full + --compile)、`cc-test-nginx-setup.sh`(20个server block)。BASE_URL/BASE_URL_FRONT/BASE_URL_API环境变量补全，restart命令已添加 |
+| **技能部署完成** | 9个技能全部部署到20个kimi目录：6个custom(e2e-test/smoke-scaffold/pr-preflight/screenshot/phase-report/flyway-validate) + 3个official(webapp-testing/frontend-design/skill-creator)。spot check验证kimi1/5/10/15/20全部就绪 |
+| **开发者文档** | wande-play-kimi*/CLAUDE.md新增：快速启动命令+6个技能详细使用方式+board查询+design文档位置+FAQ+troubleshooting。绝对路径参考.github文档，避免相对路径解析错误 |
+| **Claude Office整合** | systemd service启动(port 9872)+nginx反向代理(http://172.31.31.227:8083/cla/)。新增看板可视化(Project#4实时数据)+技能执行面板+日志查看(所有区域:play/e2e/gh-plugins/manager) |
+| **验收标准达成** | ✅ 编程CC可在任意kimi目录快速启动、独立编译测试；✅ 菜单基线验证通过(8大工作区+角色权限)；✅ 排程计划确认(6 Tier优先级+CC资源分配)；✅ 全景服务(文档/脚本/技能/环境)完整可用 |
+
+### 已完成（2026-04-12 新开发环境完整交付）
+- ✅ 编程开发环境完全迁移到m7i.8xlarge (172.31.31.227)
+- ✅ 20个kimi目录完整配置(后端+前端+Flyway)
+- ✅ 菜单基线Issue#3597创建(V2脚本+8个重组合并)
+- ✅ 排程计划sprints/new-dev.md生成(6 Tier+全球矿场Tier-2优先)
+- ✅ 9个技能部署到所有kimi目录(custom+official全覆盖)
+- ✅ E2E测试脚本完整(smoke/api/spec/full模式)
+- ✅ nginx反向代理配置完成(20个server block)
+- ✅ Claude Office整合(systemd+nginx+看板)
+- ✅ 开发者文档完成(CLAUDE.md+快速启动)
+- ✅ 技能验收通过(6个custom skill全部可用)
+
 ### 已完成（2026-04-09 代码↔Issue对账清理）
 - ✅ 81个过期feature分支已删除（Issue均已CLOSED）
 - ✅ auto-delete head branches 已开启（PR merge后自动清理分支）

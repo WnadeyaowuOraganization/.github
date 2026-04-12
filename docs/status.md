@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-10 00:00 by Perplexity
+> ⏰ 最后更新：2026-04-12 by 研发经理CC
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 ---
 ## 🔄 Issue 生命周期 + 测试层级
@@ -567,6 +567,7 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D78 | 04-12 | ✅ | 编程开发环境迁移至m7i.8xlarge（无GPU） | G7e的GPU利用率<1%，编程开发不需要GPU。新增m7i.8xlarge(32vCPU/128GB/1TB gp3)专用于编程CC开发，预计月费从~$7000降至~$720(1年RI)，节省~87%。G7e保留用于GPU/模型服务。新机器已完成：20个kimi目录+38个项目目录+MySQL8.0+Redis(6380)+Docker+Claude Code+所有脚本 | 吴耀 |
 | D79 | 04-12 | ✅ | 数据库从PostgreSQL切换为MySQL 8.0 | 上游ruoyi-ai原生使用MySQL，PG转换问题太多（类型不兼容、列缺失、AUTO_INCREMENT等）。直接使用MySQL 8.0，上游SQL一次导入75张表+完整初始数据，零错误。E2E验证6/8通过（登录/认证/数据库读写OK），菜单待#3597基线脚本 | 吴耀 |
 | D80 | 04-12 | ✅ | dev分支重建：基于上游ruoyi-ai/ruoyi-admin最新版 | 旧dev归档为dev-old。新dev分支orphan提交，后端基于ageerle/ruoyi-ai@bf7b5ea，前端基于ageerle/ruoyi-admin@e20addf。Monorepo结构保持不变（backend/frontend/e2e/pipeline）。旧wande业务代码不保留，按新设计文档从零开发 | 吴耀 |
+| D81 | 04-12 | ✅ | MySQL统一wande-ai + Pipeline PG→MySQL + DB/LLM收拢 | **数据库统一**：ruoyi-ai(75张表)RENAME TABLE原子迁移至wande-ai；删除ry-vue和ruoyi-ai空库。MySQL仅保留`wande-ai`一个业务库。后端44个yml+Pipeline 66个py全量更新。Flyway基线重命名V1__baseline_wande_ai.sql。**DB/LLM调用收拢**：40个文件内联DB_CONFIG统一到shared/db.py；12个文件内联VLLM_URL+call_vllm统一到shared/llm_client.py。改配置只改2个shared文件。**vLLM→Token Pool Proxy**：G7e已停机，shared/llm_client.py从localhost:8000 vLLM切换为localhost:9855 Token Pool Proxy(Anthropic格式→kimi/zhipu)。已提交dev分支(90 files changed)。**验证**：DB连接+LLM调用+语法检查+E2E冒烟测试全部通过 | 研发经理CC |
 | D75 | 04-08 | ✅ | S3三级检索架构确立：Perplexity直连S3知识库 | **管道已验证**：Perplexity AWS连接器(aws__pipedream) presigned URL→curl下载→本地解析，端到端可用。**三级优先级**：L0 Skill内嵌 references/（零成本）→ L1 S3直接读取 JSON/TXT/CSV/MD/DOCX/XLSX（低credit）→ L2 G7e RAG pgvector PDF/扫描件（零credit）。**Skill更新**：wande-industry v3.0（§3.2新增S3实时检索执行协议）+ wande-ai v55.0（§3新增S3检索场景+§7新增Perplexity独有能力）。**已知限制**：无List Objects（依赖directory_mapping.json索引）、presigned URL 1h有效期、本地无OCR。下一步：#37数据管线P0上线打通L2通路 | 吴耀 |
 | D70 | 04-07 | ✅ | 研发经理架构拆分：排程经理+研发经理双角色CC | **角色分离**：单一研发经理CC拆为两个独立角色——排程经理（监控Jump/Fail/排程分析/维护PLAN.md）、研发经理（指派CC/巡检进度/注入提示词/验收报告）。**run-manager.sh**：统一启动脚本，幂等启动`manager-排程经理`+`manager-研发经理`两个tmux会话，`\loop 10m`自驱动，cron每30分钟保活。**CLAUDE.md重构**：统一角色路由入口，公共信息（看板ID/脚本/Effort/通知）集中管理，各角色读对应guide文件。**guide文件**：scheduler-guide.md（排程经理专属）/ assign-guide.md（研发经理专属），去除与CLAUDE.md重复内容。**脚本重命名**：check-cc-status.sh→cc-check.sh，post-cc-check.sh→cc-keepalive.sh，cc_manager.sh删除。**巡检改进**：研发经理巡检改为tmux capture-pane实时输出，不再读滞后的task.md。**Sprint多版本支持**：guide中路径统一用sprints/sprint-N，由CC从status.md「🟢进行中」行自行识别当前Sprint。**PLAN.md整合**：增加指派目录列，删除独立ISSUE_ASSIGN_HISTORY.md；sprint-1目录清理19个过时文件 | 伟平 |
 | D77 | 04-08 | ✅ | Sprint体系重构：5+Backlog→8个Sprint，每个Sprint有清晰主题 | 矿场核心45个Issue从Backlog移入Sprint-2形成商务全闭环；商战情报前移Sprint-3；原Backlog拆分为Sprint 5(组织管理)/6(财务运营)/7(AI增强)/8(生态售后)。8个Sprint主线：能用→能赚钱→能决策→能获客→能管人→能管钱→更智能→生态闭环 | 吴耀 |
@@ -740,10 +741,10 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | 项 | 详情 |
 |---|---|
 | **环境迁移决策** | D78确认：G7e GPU利用率<1%，编程开发不需GPU。新增m7i.8xlarge(172.31.31.227)专用编程，降成本~87%/月($7000→$720 1年RI)；G7e保留GPU/模型服务 |
-| **数据库+代码重建** | D79：数据库从PostgreSQL切换为MySQL 8.0（上游原生，零转换问题）。D80：dev分支基于上游ruoyi-ai/ruoyi-admin最新版重建，旧dev归档为dev-old，旧wande业务代码不保留 |
-| **新机器配置** | m7i.8xlarge(32vCPU/128GB/1TB gp3) + PostgreSQL(5432/5433) + Redis(6380) + Docker + 20个kimi目录(kimi1-kimi20) + 38个项目目录(wande-play等) + Claude Code CLI + 所有基础脚本 |
+| **数据库+代码重建** | D79：PG→MySQL 8.0。D80：dev分支重建。D81：库名统一`wande-ai`+Pipeline 66个py从PG切MySQL+DB/LLM调用收拢(改配置只改shared/db.py和shared/llm_client.py 2个文件)+vLLM切Token Pool Proxy |
+| **新机器配置** | m7i.8xlarge(32vCPU/128GB/1TB gp3) + MySQL 8.0(3306) + Redis(6380) + Docker + 20个kimi目录(kimi1-kimi20) + 38个项目目录(wande-play等) + Claude Code CLI + 所有基础脚本 |
 | **编程环境架构** | 20个kimi目录独立隔离，各自后端port=7100+N、前端port=8100+N。nginx反向代理(端口8100+N→backend 7100+N)。Flyway自动建表，无手工setup。dev分支清零：仅含ruoyi-ai框架+V2菜单基线(V1__baseline.sql+V2__wande_menu_baseline.sql) |
-| **菜单基线脚本** | `V2__wande_menu_baseline.sql`：368个INSERT(sys_menu)+595个INSERT(sys_role_menu)+5个UPDATE(隐藏旧菜单)，全部idempotent `ON CONFLICT DO NOTHING`。完整合并8个菜单重组Issue，创建Issue#3597 Tier-0 P0 |
+| **菜单基线脚本** | `V2__wande_menu_baseline.sql`：368个INSERT(sys_menu)+595个INSERT(sys_role_menu)+5个UPDATE(隐藏旧菜单)，全部idempotent `INSERT IGNORE`。完整合并8个菜单重组Issue，创建Issue#3597 Tier-0 P0 |
 | **排程计划生成** | `sprints/new-dev.md` 6-Tier 4周计划：Tier-0菜单验证→Tier-1 RBAC仪表盘(并行5CC)→Tier-2全球项目矿场(独立1-2CC，用户优先)→Tier-3/4/5/6；周进度表+CC分配曲线(Week1:4-5人→Peak周2:12-13→周3:8-9→周4:4-5) |
 | **测试环境脚本** | ✅ `cc-test-env.sh`(启动/停止/重启/状态/端口)、`cc-test-run.sh`(smoke/api/spec/full + --compile)、`cc-test-nginx-setup.sh`(20个server block)。BASE_URL/BASE_URL_FRONT/BASE_URL_API环境变量补全，restart命令已添加 |
 | **技能部署完成** | 9个技能全部部署到20个kimi目录：6个custom(e2e-test/smoke-scaffold/pr-preflight/screenshot/phase-report/flyway-validate) + 3个official(webapp-testing/frontend-design/skill-creator)。spot check验证kimi1/5/10/15/20全部就绪 |

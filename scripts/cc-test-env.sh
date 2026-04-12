@@ -10,7 +10,8 @@
 #
 # 用法:
 #   cc-test-env.sh init-db <kimi_tag>  创建独立MySQL schema + Redis DB（run-cc.sh预调用）
-#   cc-test-env.sh start  <kimi_tag>   启动后端+前端服务
+#   cc-test-env.sh start  <kimi_tag>   启动后端+前端服务（非阻塞，立即返回）
+#   cc-test-env.sh wait   <kimi_tag>   等待后端健康检查通过（默认300s，WAIT_TIMEOUT可调）
 #   cc-test-env.sh stop   <kimi_tag>   停止服务 + 删除数据库
 #   cc-test-env.sh status <kimi_tag>   检查环境状态
 #   cc-test-env.sh port   <kimi_tag>   输出端口分配
@@ -97,6 +98,14 @@ cmd_init_db() {
   # 确保日志目录
   mkdir -p "$LOG_DIR"
 
+  # 同步 .env 文件（被 .gitignore 忽略，kimi目录不会自动有）
+  local base_env="${HOME_DIR}/projects/wande-play/frontend/apps/web-antd/.env"
+  local kimi_env="$KIMI_DIR/frontend/apps/web-antd/.env"
+  if [ -f "$base_env" ] && [ -d "$(dirname "$kimi_env")" ]; then
+    cp "$base_env" "$kimi_env"
+    echo "  .env: 已同步"
+  fi
+
   echo "✅ ${tag} 数据库就绪 (mysql:${KIMI_DB}, redis:db${REDIS_DB})"
 }
 
@@ -118,22 +127,73 @@ cmd_start() {
 
   # --- 后端 ---
   start_backend "$tag"
-  local be_rc=$?
 
   # --- 前端 ---
   start_frontend "$tag"
 
-  if [ $be_rc -eq 0 ]; then
-    echo ""
-    echo "✅ ${tag} 测试环境就绪"
-    echo "   后端:  http://localhost:${BACKEND_PORT}  (mvn spring-boot:run)"
-    echo "   前端:  http://localhost:${FRONTEND_PORT}  (vite dev server)"
-    echo "   MySQL: ${KIMI_DB} (port ${MYSQL_PORT})"
-    echo "   Redis: db${REDIS_DB} (port ${REDIS_PORT})"
-    echo "   日志(后端): $LOG_DIR/backend.log"
-    echo "   日志(前端): $LOG_DIR/frontend.log"
+  echo ""
+  echo "✅ ${tag} 测试环境进程已启动（后端编译中，约2-3分钟后就绪）"
+  echo "   后端:  http://localhost:${BACKEND_PORT}  (mvn spring-boot:run)"
+  echo "   前端:  http://localhost:${FRONTEND_PORT}  (vite dev server)"
+  echo "   MySQL: ${KIMI_DB} (port ${MYSQL_PORT})"
+  echo "   Redis: db${REDIS_DB} (port ${REDIS_PORT})"
+  echo "   日志(后端): $LOG_DIR/backend.log"
+  echo "   日志(前端): $LOG_DIR/frontend.log"
+  echo ""
+  echo "💡 用 '$0 wait $tag' 等待后端健康检查通过"
+  return 0
+}
+
+# ============================================================
+#  wait: 等待后端健康检查通过（可被编程CC用timeout参数调用）
+# ============================================================
+cmd_wait() {
+  local tag="$1"
+  get_dirs "$tag"
+  get_ports "$tag" || exit 1
+
+  if [ ! -f "$PID_FILE" ]; then
+    echo "ERROR: 后端未启动（PID文件不存在）"
+    return 1
   fi
-  return $be_rc
+
+  local pid=$(cat "$PID_FILE")
+  if ! kill -0 "$pid" 2>/dev/null; then
+    echo "ERROR: 后端进程已退出 (PID=$pid)"
+    tail -30 "$LOG_DIR/backend.log"
+    rm -f "$PID_FILE"
+    return 1
+  fi
+
+  echo -n "等待后端就绪 (PID=$pid, port=${BACKEND_PORT})..."
+  local max_wait=${WAIT_TIMEOUT:-300}
+  for i in $(seq 1 "$max_wait"); do
+    if ! kill -0 "$pid" 2>/dev/null; then
+      echo " FAIL (进程退出)"
+      tail -30 "$LOG_DIR/backend.log"
+      rm -f "$PID_FILE"
+      return 1
+    fi
+    if curl -sf "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 >/dev/null 2>&1; then
+      echo " OK (${i}s)"
+      return 0
+    fi
+    # 备用检查：如果actuator没开，检查端口是否在监听
+    if [ "$i" -ge 60 ] && ss -tlnp 2>/dev/null | grep -q ":${BACKEND_PORT} " ; then
+      # 端口已监听但actuator不通，再试一次基础HTTP
+      if curl -sf "http://localhost:${BACKEND_PORT}/" --max-time 2 >/dev/null 2>&1; then
+        echo " OK (${i}s, 端口已监听)"
+        return 0
+      fi
+    fi
+    [ $((i % 30)) -eq 0 ] && echo -n " ${i}s"
+    sleep 1
+  done
+
+  echo " TIMEOUT (${max_wait}s)"
+  echo "最后30行日志:"
+  tail -30 "$LOG_DIR/backend.log"
+  return 1
 }
 
 start_backend() {
@@ -157,14 +217,15 @@ start_backend() {
     kill -9 "$conflict_pid" 2>/dev/null || true
   fi
 
-  echo -n "  启动后端 mvn spring-boot:run (port=${BACKEND_PORT})..."
+  echo "  启动后端 mvn spring-boot:run (port=${BACKEND_PORT})..."
   : > "$LOG_DIR/backend.log"
 
   # 用 mvn spring-boot:run 从源码启动，无需预编译jar
   # 必须在 ruoyi-admin 子目录执行（spring-boot-maven-plugin 只在此模块定义）
   # 共享 ~/.m2 有基础目录预编译的依赖，首次启动仅增量编译
+  # 使用 setsid 确保进程独立于父shell，不会因脚本被杀而级联退出
   cd "$KIMI_DIR/backend/ruoyi-admin"
-  nohup mvn spring-boot:run \
+  setsid mvn spring-boot:run \
     -Dspring-boot.run.profiles=dev \
     -Dspring-boot.run.arguments="\
 --server.port=${BACKEND_PORT} \
@@ -179,30 +240,9 @@ start_backend() {
 
   local pid=$!
   echo "$pid" > "$PID_FILE"
-
-  # 健康检查（首次mvn编译+启动约2-3分钟，给180秒）
-  echo ""
-  echo -n "  等待后端就绪 (PID=$pid)..."
-  for i in $(seq 1 180); do
-    if ! kill -0 "$pid" 2>/dev/null; then
-      echo " FAIL (进程退出)"
-      tail -30 "$LOG_DIR/backend.log"
-      rm -f "$PID_FILE"
-      return 1
-    fi
-    if curl -sf "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 >/dev/null 2>&1; then
-      echo " OK (${i}s)"
-      return 0
-    fi
-    [ $((i % 15)) -eq 0 ] && echo -n " ${i}s"
-    sleep 1
-  done
-
-  echo " TIMEOUT (180s)"
-  tail -30 "$LOG_DIR/backend.log"
-  kill "$pid" 2>/dev/null
-  rm -f "$PID_FILE"
-  return 1
+  echo "  后端进程已启动 (PID=$pid)，编译+启动约2-3分钟"
+  echo "  日志: $LOG_DIR/backend.log"
+  return 0
 }
 
 start_frontend() {
@@ -231,33 +271,19 @@ start_frontend() {
     kill -9 "$conflict_pid" 2>/dev/null || true
   fi
 
-  echo -n "  启动前端 vite dev (port=${FRONTEND_PORT}, proxy→${BACKEND_PORT})..."
+  echo "  启动前端 vite dev (port=${FRONTEND_PORT}, proxy→${BACKEND_PORT})..."
   : > "$LOG_DIR/frontend.log"
 
   cd "$front_src"
+  # setsid 确保进程独立于父shell
   VITE_PROXY_TARGET="http://127.0.0.1:${BACKEND_PORT}" \
-    nohup npx pnpm -C apps/web-antd run dev -- --port "${FRONTEND_PORT}" --host 0.0.0.0 \
+    setsid npx pnpm -C apps/web-antd run dev -- --port "${FRONTEND_PORT}" --host 0.0.0.0 \
     > "$LOG_DIR/frontend.log" 2>&1 &
 
   local front_pid=$!
   echo "$front_pid" > "$FRONT_PID_FILE"
-
-  # 等待vite就绪（最多30秒）
-  for j in $(seq 1 30); do
-    if ! kill -0 "$front_pid" 2>/dev/null; then
-      echo " FAIL"
-      tail -10 "$LOG_DIR/frontend.log"
-      rm -f "$FRONT_PID_FILE"
-      return 1
-    fi
-    if curl -sf "http://localhost:${FRONTEND_PORT}" --max-time 2 >/dev/null 2>&1; then
-      echo " OK (${j}s, PID=$front_pid)"
-      return 0
-    fi
-    sleep 1
-  done
-
-  echo " WARN (启动中, PID=$front_pid)"
+  echo "  前端进程已启动 (PID=$front_pid)"
+  echo "  日志: $LOG_DIR/frontend.log"
   return 0
 }
 
@@ -271,17 +297,18 @@ cmd_stop() {
 
   echo "=== 停止 ${tag} ==="
 
-  # 停后端
+  # 停后端（setsid启动的进程需要杀整个进程组）
   if [ -f "$PID_FILE" ]; then
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
       echo "  停止后端 (PID=$pid)..."
-      kill "$pid" 2>/dev/null
+      # 先尝试优雅关闭进程组
+      kill -- -"$pid" 2>/dev/null || kill "$pid" 2>/dev/null
       for i in $(seq 1 10); do
         kill -0 "$pid" 2>/dev/null || break
         sleep 1
       done
-      kill -9 "$pid" 2>/dev/null || true
+      kill -9 -- -"$pid" 2>/dev/null || kill -9 "$pid" 2>/dev/null || true
     fi
     rm -f "$PID_FILE"
   fi
@@ -289,14 +316,14 @@ cmd_stop() {
   local be_left=$(lsof -ti ":${BACKEND_PORT}" 2>/dev/null || true)
   [ -n "$be_left" ] && kill -9 "$be_left" 2>/dev/null || true
 
-  # 停前端
+  # 停前端（setsid启动的进程需要杀整个进程组）
   if [ -f "$FRONT_PID_FILE" ]; then
     local front_pid=$(cat "$FRONT_PID_FILE")
     if kill -0 "$front_pid" 2>/dev/null; then
       echo "  停止前端 (PID=$front_pid)..."
-      kill "$front_pid" 2>/dev/null
+      kill -- -"$front_pid" 2>/dev/null || kill "$front_pid" 2>/dev/null
       sleep 2
-      kill -9 "$front_pid" 2>/dev/null || true
+      kill -9 -- -"$front_pid" 2>/dev/null || kill -9 "$front_pid" 2>/dev/null || true
     fi
     rm -f "$FRONT_PID_FILE"
   fi
@@ -373,11 +400,12 @@ if [ -z "$KIMI_TAG" ]; then
 fi
 
 case "$ACTION" in
-  init-db) cmd_init_db "$KIMI_TAG" ;;
-  start)   cmd_start "$KIMI_TAG" ;;
-  stop)    cmd_stop "$KIMI_TAG" ;;
-  restart) cmd_stop "$KIMI_TAG"; sleep 2; cmd_init_db "$KIMI_TAG"; cmd_start "$KIMI_TAG" ;;
-  status)  cmd_status "$KIMI_TAG" ;;
-  port)    cmd_port "$KIMI_TAG" ;;
-  *)       echo "未知操作: $ACTION"; exit 1 ;;
+  init-db)  cmd_init_db "$KIMI_TAG" ;;
+  start)    cmd_start "$KIMI_TAG" ;;
+  wait)     cmd_wait "$KIMI_TAG" ;;
+  stop)     cmd_stop "$KIMI_TAG" ;;
+  restart)  cmd_stop "$KIMI_TAG"; sleep 2; cmd_init_db "$KIMI_TAG"; cmd_start "$KIMI_TAG" ;;
+  status)   cmd_status "$KIMI_TAG" ;;
+  port)     cmd_port "$KIMI_TAG" ;;
+  *)        echo "未知操作: $ACTION"; exit 1 ;;
 esac

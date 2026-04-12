@@ -4,7 +4,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 # CI专用测试环境 启动/停止/健康检查
 # 用途: pr-test.yml 调用，与dev环境(:6040/:8080)隔离
 # 端口: 后端6041 / 前端8084
-# 数据库: 共用dev环境 localhost:5433（无需双份迁移）
+# 数据库: 共用dev环境 MySQL localhost:3306/wande-ai（PG→MySQL迁移后更新）
 #
 # 安全约束（2026-04-08 修复漏洞）:
 # 1. BACKEND_CHANGED=true 时，mvn 构建失败必须 hard fail，禁止 fallback 旧 jar
@@ -125,15 +125,12 @@ start_ci_backend() {
     nohup java -jar "$CI_BACKEND_DIR/ruoyi-admin.jar" \
         --spring.profiles.active=dev \
         --server.port=$CI_BACKEND_PORT \
-        --spring.datasource.dynamic.datasource.master.url="jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified" \
-        --spring.datasource.dynamic.datasource.master.username=wande \
-        --spring.datasource.dynamic.datasource.master.password=wande_dev_2026 \
-        --spring.datasource.dynamic.datasource.wande.url="jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified" \
-        --spring.datasource.dynamic.datasource.wande.username=wande \
-        --spring.datasource.dynamic.datasource.wande.password=wande_dev_2026 \
+        --spring.datasource.dynamic.datasource.master.driverClassName=com.mysql.cj.jdbc.Driver \
+        --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://127.0.0.1:3306/wande-ai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true" \
+        --spring.datasource.dynamic.datasource.master.username=root \
+        --spring.datasource.dynamic.datasource.master.password=root \
         --spring.data.redis.host=localhost \
-        --spring.data.redis.port=6380 \
-        --spring.data.redis.password=redis_dev_2026 \
+        --spring.data.redis.port=6379 \
         > "$CI_BACKEND_DIR/logs/backend.log" 2>&1 &
 
     log "CI后端PID: $!"

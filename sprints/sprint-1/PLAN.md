@@ -191,12 +191,22 @@ Week 4 (5/03-5/09):
 # 以下内容由排程经理每次排程后维护
 
 ## 指派建议（最近20个）
-| Issue | 优先 | 模块 | 内容 | 启动 |
-|-------|------|------|------|------|
-| ~~kimi1~~ | ~~#3598~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页左上角名称为 Wande AI Admin~~ | ~~✅ PR#3599 merged 2026-04-12 18:37~~ |
-| ~~kimi1~~ | ~~#3600~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页底部版权信息为 Copyright © 2026 Wande AI~~ | ~~✅ PR#3601 merged 2026-04-12 19:31~~ |
-| ~~kimi1~~ | ~~#3602~~ | ~~P0~~ | ~~backend~~ | ~~超管驾驶舱：Claude Office菜单地址改为公网IP + 取消外链~~ | ~~✅ PR#3603 merged 2026-04-12 20:48~~ |
-| kimi1 | #3604 | bug | backend | fix: Claude Office菜单is_frame值修正（应为1=否） | 🔴 In Progress(effort=low) |
+
+> Tier-0(#3597菜单基线)已CLOSED，前置满足。#3458矿场旧环境Done但新环境需重做。
+> Week 1 排程：Tier-2矿场(优先) + Tier-1引擎 + Tier-3超管 + Tier-4 CRM前两个 + Tier-5门户，共6CC并行。
+
+| 目录 | Issue | 优先 | 模块 | 内容 | effort |
+|------|-------|------|------|------|--------|
+| ~~kimi1~~ | ~~#3598~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页左上角名称~~ | ~~✅ merged~~ |
+| ~~kimi1~~ | ~~#3600~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页底部版权~~ | ~~✅ merged~~ |
+| ~~kimi1~~ | ~~#3602~~ | ~~P0~~ | ~~backend~~ | ~~Claude Office菜单改公网IP~~ | ~~✅ merged~~ |
+| ~~kimi1~~ | ~~#3604~~ | ~~bug~~ | ~~backend~~ | ~~is_frame值修正~~ | ~~✅ PR#3605 merged~~ |
+| kimi1 | #3458 | P0 | fullstack | **Tier-2: 全球项目矿场v3.0 — 新环境重做** | high |
+| kimi2 | #3522 | P1 | fullstack | Tier-1: Dashboard Widget配置表+动态渲染引擎 | high |
+| kimi3 | #3466 | P0 | fullstack | Tier-3: 超管驾驶舱Master — 框架验证 | high |
+| kimi4 | #3526 | P1 | fullstack | Tier-4: CRM商务中心Master — Sprint-1总协调 | medium |
+| kimi5 | #3527 | P0 | backend | Tier-4: CRM-DB 数据库基础建表(9张表) | high |
+| kimi6 | #3579 | P1 | fullstack | Tier-5: 产品门户Master — 路由+权限+布局 | medium |
 
 ## 指派历史（完成后划线）
 

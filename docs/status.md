@@ -58,16 +58,16 @@ Issue创建
               squash merge  + [E2E Fail]
                    │
     ══════════════════════════════════════════════════════════════
-    CD层 (build-deploy-dev.yml)  merge到dev触发
+    CD层 (pr-test.yml auto-merge job 内联)
     ══════════════════════════════════════════════════════════════
                    │
                    ▼
-              后端: mvn package → 部署 → 健康检查
-              前端: pnpm build → rsync → nginx reload
+              后端: mvn package → 部署 → 健康检查（仅backend变更）
+              前端: pnpm build → rsync → nginx reload（仅frontend变更）
                    │
-                   ├── ❌ 部署失败 → inject-cc-prompt.sh 注入修复提示词
+                   ├── ❌ 部署失败 → 后端自动回滚
                    ▼
-              Dev环境更新完成(:6040/:8083)
+              Dev环境更新完成(:6040/:8080)
                    │
                    ├─► cc-lock-manager.yml → release-cc-lock.sh
                    │                         (kill tmux session + rm .cc-lock)

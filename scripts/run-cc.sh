@@ -281,34 +281,32 @@ if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
   sed -i "s/^api_source=.*/api_source=${API_SOURCE}/" "$LOCK_FILE"
 fi
 
-# === 准备测试 PG 独立 DB（per-kimi 隔离）===
-# BASE_DIR 形如 .../wande-play-kimi3，提取 kimi3 作为 DB suffix
+# === kimi标签提取 ===
 KIMI_TAG=$(basename "$BASE_DIR" | sed 's/wande-play-//;s/wande-play//')
 [ -z "$KIMI_TAG" ] && KIMI_TAG="main"
-TEST_PG_DB="wande_test_${KIMI_TAG}"
-bash "$SCRIPT_DIR/ensure-test-pg.sh" "$KIMI_TAG" 2>&1 | tail -3 || true
-TEST_PG_ENV="export TEST_PG_HOST=localhost; export TEST_PG_PORT=5434; export TEST_PG_DB=${TEST_PG_DB}; export TEST_PG_USER=wande; export TEST_PG_PASSWORD=wande_test;"
+KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
 
-# === Maven repo：所有 kimi 共享 ~/.m2（NVMe SSD，实测与 tmpfs 无性能差异）===
+# === Maven repo：所有 kimi 共享 ~/.m2（NVMe SSD）===
 M2_REPO_PATH="${HOME_DIR}/.m2/repository"
 MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO_PATH}';"
 
-# === 预启动独立测试环境（常驻，编程CC可随时运行E2E测试）===
+# === 预启动独立测试环境（MySQL schema隔离 + Redis DB隔离 + 前后端独立端口）===
+TEST_ENV_INFO=""
 if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
   ENV_STATUS=$(bash "$SCRIPT_DIR/cc-test-env.sh" status "$KIMI_TAG" 2>/dev/null || echo "STOPPED")
   if ! echo "$ENV_STATUS" | grep -q "RUNNING"; then
     echo "🚀 预启动 ${KIMI_TAG} 独立测试环境..."
-    bash "$SCRIPT_DIR/cc-test-env.sh" start "$KIMI_TAG" 2>&1 | tail -3 || true
+    bash "$SCRIPT_DIR/cc-test-env.sh" start "$KIMI_TAG" 2>&1 || true
   fi
-  CC_TEST_PORT=$((7100 + $(echo "$KIMI_TAG" | grep -oE '[0-9]+$')))
-  TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_TEST_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_TEST_PORT};"
-else
-  TEST_ENV_INFO=""
+  CC_BE_PORT=$((7100 + KIMI_NUM))
+  CC_FE_PORT=$((8100 + KIMI_NUM))
+  CC_LOG_DIR="/apps/wande-ai-backend-${KIMI_TAG}/logs"
+  TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log;"
 fi
 
 # === 启动tmux（交互模式，支持attach和注入）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
-  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${TEST_PG_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \
+  "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \
    claude --model ${MODEL} --dangerously-skip-permissions; \
    ${CLEANUP_CMD} exec bash"
 

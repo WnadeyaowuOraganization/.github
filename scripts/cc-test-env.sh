@@ -55,6 +55,84 @@ get_dirs() {
   FRONT_DIR="/apps/wande-ai-front-${tag}"
   LOG_DIR="${PRODUCT_DIR}/logs"
   PID_FILE="/tmp/cc-test-${tag}.pid"
+  FRONT_PID_FILE="/tmp/cc-test-${tag}-front.pid"
+}
+
+# === 启动前端 vite dev server ===
+start_frontend() {
+  local tag="$1"
+  local be_port="$2"
+  local fe_port="$3"
+
+  local front_src="$KIMI_DIR/frontend"
+  if [ ! -d "$front_src/apps/web-antd" ]; then
+    echo "  ⚠️ 前端目录不存在，跳过前端启动"
+    return 0
+  fi
+
+  # 检查是否已在运行
+  if [ -f "$FRONT_PID_FILE" ]; then
+    local old_front_pid=$(cat "$FRONT_PID_FILE")
+    if kill -0 "$old_front_pid" 2>/dev/null; then
+      echo "  前端已在运行 (PID=$old_front_pid)"
+      return 0
+    fi
+    rm -f "$FRONT_PID_FILE"
+  fi
+
+  echo -n "  启动前端 vite dev (port=${fe_port}, proxy→${be_port})..."
+  : > "$LOG_DIR/frontend.log"
+
+  # VITE_PROXY_TARGET: vite.config.mts 读取此变量作为 /api proxy target
+  # --port: 覆盖 .env 中的 VITE_PORT
+  # --host: 允许外部访问
+  cd "$front_src"
+  VITE_PROXY_TARGET="http://127.0.0.1:${be_port}" \
+    nohup npx pnpm -C apps/web-antd run dev -- --port "${fe_port}" --host 0.0.0.0 \
+    > "$LOG_DIR/frontend.log" 2>&1 &
+
+  local front_pid=$!
+  echo "$front_pid" > "$FRONT_PID_FILE"
+
+  # 等待vite就绪（最多20秒）
+  for j in $(seq 1 20); do
+    if ! kill -0 "$front_pid" 2>/dev/null; then
+      echo " FAIL (进程退出)"
+      tail -10 "$LOG_DIR/frontend.log"
+      rm -f "$FRONT_PID_FILE"
+      return 1
+    fi
+    if curl -sf "http://localhost:${fe_port}" --max-time 2 >/dev/null 2>&1; then
+      echo " OK (${j}s, PID=$front_pid)"
+      return 0
+    fi
+    sleep 1
+  done
+
+  echo " WARN (${front_pid}启动中，可能需要更多时间)"
+  return 0
+}
+
+# === 停止前端 ===
+stop_frontend() {
+  if [ -f "$FRONT_PID_FILE" ]; then
+    local front_pid=$(cat "$FRONT_PID_FILE")
+    if kill -0 "$front_pid" 2>/dev/null; then
+      echo "  停止前端 (PID=$front_pid)..."
+      kill "$front_pid" 2>/dev/null
+      sleep 2
+      kill -9 "$front_pid" 2>/dev/null || true
+    fi
+    rm -f "$FRONT_PID_FILE"
+  fi
+
+  # 兜底：按前端端口清理
+  if [ -n "$FRONTEND_PORT" ]; then
+    local fe_leftover=$(lsof -ti ":${FRONTEND_PORT}" 2>/dev/null || true)
+    if [ -n "$fe_leftover" ]; then
+      kill -9 "$fe_leftover" 2>/dev/null || true
+    fi
+  fi
 }
 
 # === 启动测试环境 ===
@@ -72,23 +150,25 @@ cmd_start() {
     exit 1
   fi
 
-  # 检查是否已在运行
+  # 检查是否已在运行（后端+前端都在才算运行中）
   if [ -f "$PID_FILE" ]; then
     local old_pid=$(cat "$PID_FILE")
     if kill -0 "$old_pid" 2>/dev/null; then
-      echo "✅ ${tag} 测试环境已在运行 (PID=$old_pid, backend:${be_port})"
+      echo "✅ ${tag} 测试环境已在运行 (backend PID=$old_pid, port=${be_port})"
       return 0
     fi
     rm -f "$PID_FILE"
   fi
 
-  # 停止可能占用端口的旧进程
-  local conflict_pid=$(lsof -ti ":${be_port}" 2>/dev/null || true)
-  if [ -n "$conflict_pid" ]; then
-    echo "⚠️ 端口 ${be_port} 被占用 (PID=$conflict_pid)，正在停止..."
-    kill "$conflict_pid" 2>/dev/null; sleep 2
-    kill -9 "$conflict_pid" 2>/dev/null || true
-  fi
+  # 停止可能占用端口的旧进程（后端+前端端口）
+  for check_port in "$be_port" "$fe_port"; do
+    local conflict_pid=$(lsof -ti ":${check_port}" 2>/dev/null || true)
+    if [ -n "$conflict_pid" ]; then
+      echo "⚠️ 端口 ${check_port} 被占用 (PID=$conflict_pid)，正在停止..."
+      kill "$conflict_pid" 2>/dev/null; sleep 2
+      kill -9 "$conflict_pid" 2>/dev/null || true
+    fi
+  done
 
   # === 创建独立MySQL schema ===
   echo -n "  MySQL: 创建 ${KIMI_DB}..."
@@ -162,13 +242,17 @@ cmd_start() {
     fi
     if curl -sf "http://localhost:${be_port}/actuator/health" --max-time 2 >/dev/null 2>&1; then
       echo " OK (${i}s)"
+
+      # === 启动前端 vite dev server ===
+      start_frontend "$tag" "$be_port" "$fe_port"
+
       echo "✅ ${tag} 测试环境就绪"
       echo "   后端:  http://localhost:${be_port}"
       echo "   前端:  http://localhost:${fe_port}"
       echo "   MySQL: ${KIMI_DB} (port ${MYSQL_PORT})"
       echo "   Redis: db${REDIS_DB} (port ${REDIS_PORT})"
-      echo "   PID:   $pid"
-      echo "   日志:  $LOG_DIR/backend.log"
+      echo "   日志(后端): $LOG_DIR/backend.log"
+      echo "   日志(前端): $LOG_DIR/frontend.log"
       return 0
     fi
     [ $((i % 10)) -eq 0 ] && echo -n " ${i}s"
@@ -205,11 +289,14 @@ cmd_stop() {
     rm -f "$PID_FILE"
   fi
 
-  # 兜底：按端口清理
+  # 兜底：按后端端口清理
   local leftover=$(lsof -ti ":${be_port}" 2>/dev/null || true)
   if [ -n "$leftover" ]; then
     kill -9 "$leftover" 2>/dev/null || true
   fi
+
+  # 停止前端
+  stop_frontend
 
   # 清理独立MySQL schema
   if [ -n "$KIMI_DB" ]; then
@@ -235,13 +322,23 @@ cmd_status() {
   ports=$(get_ports "$tag") || exit 1
   local be_port=$(echo "$ports" | awk '{print $1}')
 
+  local fe_status="stopped"
+  if [ -f "$FRONT_PID_FILE" ]; then
+    local front_pid=$(cat "$FRONT_PID_FILE")
+    if kill -0 "$front_pid" 2>/dev/null; then
+      fe_status="running(PID=$front_pid)"
+    fi
+  fi
+
   if [ -f "$PID_FILE" ]; then
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
       if curl -sf "http://localhost:${be_port}/actuator/health" --max-time 2 >/dev/null 2>&1; then
-        echo "RUNNING (PID=$pid, port=${be_port}, mysql:${KIMI_DB}, redis:db${REDIS_DB}, healthy)"
+        echo "RUNNING backend(PID=$pid,port=${be_port},healthy) frontend(${fe_status},port=${fe_port}) mysql:${KIMI_DB} redis:db${REDIS_DB}"
+        echo "  日志(后端): $LOG_DIR/backend.log"
+        echo "  日志(前端): $LOG_DIR/frontend.log"
       else
-        echo "STARTING (PID=$pid, port=${be_port}, mysql:${KIMI_DB}, redis:db${REDIS_DB}, not yet healthy)"
+        echo "STARTING backend(PID=$pid,port=${be_port}) frontend(${fe_status},port=${fe_port}) mysql:${KIMI_DB} redis:db${REDIS_DB}"
       fi
       return 0
     fi

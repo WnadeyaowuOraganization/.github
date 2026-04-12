@@ -161,11 +161,10 @@ start_backend() {
   : > "$LOG_DIR/backend.log"
 
   # 用 mvn spring-boot:run 从源码启动，无需预编译jar
-  # -pl ruoyi-admin -am: 启动admin模块并自动编译其依赖模块
-  # 首次启动会编译全部依赖（约2-3分钟），后续重启只编译变更模块（快很多）
-  cd "$KIMI_DIR/backend"
+  # 必须在 ruoyi-admin 子目录执行（spring-boot-maven-plugin 只在此模块定义）
+  # 共享 ~/.m2 有基础目录预编译的依赖，首次启动仅增量编译
+  cd "$KIMI_DIR/backend/ruoyi-admin"
   nohup mvn spring-boot:run \
-    -pl ruoyi-admin -am \
     -Dspring-boot.run.profiles=dev \
     -Dspring-boot.run.arguments="\
 --server.port=${BACKEND_PORT} \

@@ -71,7 +71,7 @@ bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort medium
 
 ## wande-play 项目改动规范
 
-基础设施文件（`.claude/skills`、`CLAUDE.md`、`.gitignore`、Flyway 迁移脚本等）在基础目录 `wande-play` 修改并推送 dev，外接目录 git pull 同步：
+基础设施文件（`.claude/skills`、`CLAUDE.md`、`.gitignore`、Flyway 迁移脚本、CI脚本等）在基础目录 `wande-play` 修改并推送 dev，外接目录 git pull 同步：
 
 ```bash
 cd ~/projects/wande-play && git add <files> && git commit -m "..." && git push origin dev

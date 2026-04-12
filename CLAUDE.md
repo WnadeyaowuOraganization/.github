@@ -82,3 +82,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 ## 团队内沟通机制
 
 见 `docs/agent-docs/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」。
+
+## 文档更新规范（必读）
+
+> **启动后立即阅读** `docs/agent-docs/README.md` §更新规范，更新 `docs/agent-docs/` 下任何文档前必须遵守。

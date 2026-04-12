@@ -304,6 +304,26 @@ grep -A 25 "指派建议" sprints/sprint-<N>/PLAN.md
 
 ---
 
+## wande-play 项目改动规范
+
+wande-play 相关改动（.claude/skills、CLAUDE.md、.gitignore、Flyway 迁移脚本等）优先在基础目录 `wande-play` 中修改并提交推送到 dev 分支，再去外接目录 git pull 同步：
+
+```bash
+# 1. 在基础目录改动并推送
+cd ~/projects/wande-play
+# ... 修改文件 ...
+git add <files> && git commit -m "..." && git push origin dev
+
+# 2. 外接目录同步（kimi目录 / e2e-mid / e2e-top）
+for dir in ~/projects/wande-play-kimi{1..20} ~/projects/wande-play-e2e-mid ~/projects/wande-play-e2e-top; do
+  [ -d "$dir/.git" ] && (cd "$dir" && git pull origin dev)
+done
+```
+
+**禁止**反向操作（在 kimi 目录改基础设施文件再手动 cp 到其他目录）。
+
+---
+
 ## 辅助 Agent
 
 - [pr-reviewer.md](./pr-reviewer.md) — AI PR 审查员 subagent，`.claude/agents/pr-reviewer.md` symlink 到此文件，Claude Code 加载后可用 `PR_NUM=X claude -p "用 pr-reviewer agent 审查"` 调用

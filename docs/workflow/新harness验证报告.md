@@ -3090,3 +3090,86 @@ exit=3  ← ✓ 正确拦截假勾选
 4. **研发经理主动修复能力有效**：直接编辑 PR body、上传截图、修复 Flyway 版本号，减少了来回注入的等待时间
 5. **CC 认知混乱（kimi5）是低频但高成本问题**：单个 Issue 重启 2 次，总耗时远超其他 Issue
 
+---
+
+## 批次三：新开发环境首批 6CC 并行（2026-04-12 排程经理视角）
+
+> **时间**: 2026-04-12 21:30 ~ 2026-04-13 00:10（约 2.5 小时）
+> **环境**: 新机器 172.31.31.227，全新 dev 基线
+> **验证范围**: 排程经理 + 研发经理双 CC 协作，6 个 Issue 并行
+> **结果**: ✅ 6/6 Issue 全部完成（5 CLOSED + 1 Master OPEN）
+
+### 指派批次
+
+| 目录 | Issue | 内容 | PR | 完成时间 | 耗时 |
+|------|-------|------|-----|---------|------|
+| kimi1 | #3458 | Tier-2: 全球项目矿场v3.0 | #3606 merged | 21:53 | ~23m |
+| kimi2 | #3522 | Tier-1: Dashboard Widget引擎 | #3609 merged | ~23:00 | ~90m |
+| kimi3 | #3466 | Tier-3: 超管驾驶舱Master | #3607 merged | 21:53 | ~23m |
+| kimi4 | #3526 | Tier-4: CRM商务中心Master | #3610 merged | 22:03 | ~33m |
+| kimi5 | #3527 | Tier-4: CRM-DB建表(9张表) | #3612 merged | 23:34 | ~2h |
+| kimi6 | #3579 | Tier-5: 产品门户Master | #3608,#3611 merged | ~23:30 | ~2h |
+
+### 发现的流程卡点
+
+#### 卡点1：Workspace Trust 弹窗阻塞（高频，影响大）
+
+**现象**: 新 kimi 目录首次启动 CC 时弹出 "trust this folder" 安全确认对话框，`run-cc.sh` 的 `sleep 8` + `tmux send-keys` 注入提示词被弹窗吞掉，导致 CC 进入空闲状态。
+
+**影响范围**: 首批 6 CC 中 5 个（kimi2~kimi6）全部卡住；kimi5 后续反复卡住 3 次（CC 内部切换子目录触发）。
+
+**根因**: `--dangerously-skip-permissions` 只跳过工具权限检查，不跳过 workspace trust dialog。`-p` (print) 模式才跳过 trust。
+
+**已修复**:
+- 用 `claude -p "ok" --model haiku --dangerously-skip-permissions` 批量 pre-trust kimi1~20 的根目录、backend、frontend 子目录（共 60 个）
+- 补充 trust e2e-top/e2e、e2e-mid/e2e、wande-play/e2e 子目录
+
+**建议**: `run-cc.sh` 启动前应先检查目标目录是否已 trust，或在初始化脚本中批量 pre-trust。
+
+#### 卡点2：CC 轮询卡死（中频）
+
+**现象**: PR merged 后 CC 进入 `while [ state != MERGED ]; do sleep 120; done` 轮询，但状态栏冻结不更新，CC 进程存活但长时间无响应（1h+）。4 个 CC 最终都进入此状态。
+
+**影响**: CC 不会自行退出，占用 tmux 会话和进程资源。
+
+**建议**: 排查轮询逻辑中的 GH_TOKEN 过期或 API 调用异常；考虑加超时机制。
+
+#### 卡点3：e2e-top 目录缺失
+
+**现象**: `wande-play-e2e-top/e2e` 子目录不存在，`e2e_top_tier.sh` 启动失败。
+
+**根因**: 新 clone 的目录有未跟踪文件冲突，`git pull` 失败。
+
+**已修复**: `git checkout -- . && git clean -fd && git pull origin dev`。
+
+#### 卡点4：kimi5 反复崩溃重启
+
+**现象**: kimi5 (#3527 CRM-DB) 在运行过程中 CC 进程退出，重新进入 trust 弹窗 → 提示词被吞 → 空闲，循环 3 次。
+
+**根因**: 未完全确定，可能与 backend 子目录的 CC 在编译/Flyway 操作时内存或进程异常退出有关。
+
+**最终结果**: 研发经理重新注入提示词后完成，PR #3612 merged。
+
+### E2E 测试基线
+
+清理旧环境 380 个过时测试文件（-38,187 行），修复并保留 13 个认证相关测试：
+- `auth.spec.ts`: 对齐 AUTH_CONFIG，补 clientid header（修复 smoke 2 failed）
+- `health.spec.ts`: 移除旧 `/wande/tender/list` 测试
+- `login-flow.spec.ts`: 改 UI 登录（vben storage 加密格式不可直接注入）
+- `_template.spec.ts`: 模板指向登录页
+- **结果**: 13 passed, 0 failed
+
+### Crontab 配置
+
+新增两条 E2E 定时任务：
+- `*/30 * * * *` — Smoke 探活（纯脚本，零 AI 消耗）
+- `7 */6 * * *` — 顶层 E2E 全量回归（AI 驱动，幂等）
+
+### 经验总结
+
+1. **Workspace trust 是新环境最大阻塞源**: 必须在 `run-cc.sh` 或环境初始化阶段解决，否则每个新 CC 都会卡
+2. **6 并发 CC 吞吐量验证通过**: 2.5 小时内 6 个 Issue 全部完成，含 trust 修复时间
+3. **排程经理 + 研发经理分工有效**: 排程经理监控看板状态/发现卡点，研发经理处理 CC 重启/提示词注入，职责边界清晰
+4. **CC 轮询卡死需要超时机制**: 所有完成的 CC 最终都停留在轮询状态不退出，需要强制超时清理
+5. **E2E 测试必须随环境迁移同步更新**: 旧脚本不可直接复用，认证参数、路由、Storage Key 都会变化
+

@@ -121,7 +121,7 @@ exit
 ## 关键约束
 
 - **不修改业务代码**（backend/frontend/pipeline），只操作e2e/目录
-- 测试环境是G7e dev，不是生产
+- 测试环境是m7i dev，不是生产
 - Playwright headless模式，失败截图自动保存
 - 后端认证：HTTP状态码始终200，用 `body.code` 判断（`code:200`成功, `code:401`未认证）
 - 页面路由由 `sys_menu` 表驱动，测试前查询确认：

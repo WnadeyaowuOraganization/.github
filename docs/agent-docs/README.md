@@ -23,14 +23,14 @@ docs/agent-docs/
 │   ├── shared-conventions.md      ← Git分支、环境、通用规则
 │   ├── issue-workflow.md          ← Issue生命周期与三阶段开发流程
 │   ├── api-contracts.md           ← 前后端接口契约规范
-│   └── db-schema.md               ← 数据库列名规范（新旧表差异）
+│   └── db-schema.md               ← 数据库列名规范+新表必需列
 │   (shared-conventions.md 同时包含 CC 启动 prompt v2.5：10 条硬约束 + quality-gate 4 道门 + 绝对禁止清单 + 菜单perms/iframe规范，run-cc.sh 引用)
 ├── backend/                       ← 后端CC专属文档
 │   ├── backend-guide.md           ← 主指引（必读）
 │   ├── common-pitfalls.md         ← ⚠️ 高频错误与规范
 │   ├── architecture.md            ← 项目概述与技术栈
 │   ├── conventions.md             ← Entity/Mapper/Service/Controller模板
-│   ├── db-schema.md               ← 数据库变更管理与增量SQL流程
+│   ├── db-schema.md               ← 数据库变更管理+Flyway增量SQL流程
 │   ├── testing.md                 ← TDD流程与单元测试规范
 │   ├── workflow.md                ← TDD三阶段开发流程
 │   ├── menu-config.md             ← 菜单与权限注册
@@ -88,7 +88,7 @@ docs/agent-docs/
 | [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | 🚦 **唯一权威源** — CC 启动 prompt v2.5（10 条硬约束 + quality-gate 4 门 + 绝对禁止 + slot 写法 + 标准流程 + 截图托管 + 菜单perms规范 + iframe嵌入规范）+ 环境/Git/DB/认证/菜单/契约/GitHub CLI/模块指南链接。`run-cc.sh` 自动注入。 |
 | [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue从Plan到Done的完整生命周期、三阶段开发流程（准备→执行→提交） |
 | [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约文件路径规范、YAML契约格式、修改流程 |
-| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（create_time/created_at差异）、新表wdpp_前缀、BaseEntity字段映射 |
+| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范、新表7个强制列(tenant_id等)、BaseEntity字段映射 |
 
 ## CC Prompt 版本化
 

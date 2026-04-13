@@ -6,7 +6,7 @@
 
 - **框架**: Spring Boot (RuoYi框架)
 - **ORM**: MyBatis-Plus
-- **数据库**: PostgreSQL (多数据源)
+- **数据库**: MySQL 8.0 (单库 wande-ai)
 - **认证**: Sa-Token
 
 ## 项目结构
@@ -20,10 +20,10 @@
 
 ## 核心规则
 
-1. **测试先行（TDD）** — 理解Issue后第一件事是编写/补充单元测试
-2. **万德业务Mapper/Service必须加 `@DS("wande")`** — 不加会默认走master库导致运行时报错
+1. **测试先行（TDD）** — 编写单元测试和playwright脚本，运行确认红灯，必做！不能省略
+2. **新表必须包含7个标准列** — tenant_id/create_dept/create_by/update_by/create_time/update_time/del_flag，详见 [db-schema.md](db-schema.md)
 3. **必须用ubuntu用户执行构建** — root执行会导致CI/CD Runner权限失败
-4. **数据库新表必须用 `wdpp_` 前缀** + `create_time`/`update_time` 列
+4. **数据库新表用 `wdpp_` 前缀** + Flyway脚本放 `ruoyi-admin/src/main/resources/db/migration/`
 5. **每个Issue必须有对应测试** — 没有测试 = 没完成
 6. **编译检查必须通过** — 提交前 `mvn clean package -Pprod -Dmaven.test.skip=true` 必须成功
 7. **只push feature分支** — 创建feature->dev的PR
@@ -45,6 +45,7 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 1. 分析Issue需要测试的Service方法
 2. 编写 `src/test/java/` 下的 `XxxServiceTest.java`（继承 `BaseServiceTest`）
 3. 运行确认红灯：`mvn test -pl ruoyi-modules/wande-ai -Dtest=XxxServiceTest`
+4. 编写/更新`e2e/tests/backend/api/<功能模块>.ts`playwright接口测试，运行确认红灯
 
 ### Step 2: 编写业务代码
 
@@ -170,18 +171,17 @@ mvn test
 
 ## 门禁检查
 
-| 检查项 | 命令 | 状态 |
-|--------|------|------|
-| 单元测试已写 | 检查 `src/test/java/` 下有新增/修改的测试文件 | PASS |
-| 单元测试全部通过 | `mvn test -pl ruoyi-modules/wande-ai` | PASS |
+| 检查项                    | 命令                                    | 状态 |
+|------------------------|---------------------------------------|------|
+| 单元测试已写                 | 检查 `src/test/java/` 下有新增/修改的测试文件      | PASS |
+| 单元测试全部通过               | `mvn test -pl ruoyi-modules/wande-ai` | PASS |
 | mvn clean compile 编译通过 | `mvn clean compile -Pprod -DskipTests` | PASS |
-| 无新增编译警告 | 检查编译输出 | PASS |
+| playwright脚本通过         | `npx playwright test <功能模块>.ts`             | PASS |
+| 无新增编译警告                | 检查编译输出                                | PASS |
 
-## 数据库变更管理规范
+## 数据库变更管理规范（更新/新增表时必读）
 
-详见 [db-schema.md](db-schema.md)。
-
-> **2026-04-07 起单元测试由 H2 改为 Docker PostgreSQL**，CC 只需维护一套 PG 增量脚本到 `backend/script/sql/update/wande_ai/`，不再需要 H2 测试 schema。
+详见 [db-schema.md](~/projects/.github/docs/agent-docs/share/db-schema.md)
 
 ## API集成测试
 
@@ -195,20 +195,20 @@ mvn test
 
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
-| [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范、环境信息、通用开发规则 | 首次接触项目时 |
-| [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
-| [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
-| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据库字段映射时 |
+| [shared-conventions.md](~/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范、环境信息、通用开发规则 | 首次接触项目时 |
+| [issue-workflow.md](~/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
+| [api-contracts.md](~/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
+| [db-schema.md](~/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据库字段映射时 |
 
 ### 后端专属文档
 
 | 文档 | 内容 | 何时读取 |
 |------|------|---------|
-| [**common-pitfalls.md**](/home/ubuntu/projects/.github/docs/agent-docs/backend/common-pitfalls.md) | **⚠️ 必读：高频错误与规范，CI 曾踩过的坑** | **开始每个 Issue 前** |
-| [architecture.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
-| [conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
-| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/db-schema.md) | 数据库变更管理、增量SQL、H2测试Schema | 涉及数据库变更时 |
-| [testing.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
-| [workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
-| [menu-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/menu-contracts.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |
-| [wechat-integration.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/wechat-integration.md) | 企微/微信集成规范 | 涉及企微功能时 |
+| [**common-pitfalls.md**](~/projects/.github/docs/agent-docs/backend/common-pitfalls.md) | **⚠️ 必读：高频错误与规范，CI 曾踩过的坑** | **开始每个 Issue 前** |
+| [architecture.md](~/projects/.github/docs/agent-docs/backend/architecture.md) | 项目概述、技术栈、构建命令 | 首次接触项目时 |
+| [conventions.md](~/projects/.github/docs/agent-docs/backend/conventions.md) | Entity/Mapper/Service/Controller编码模板 | 写代码时 |
+| [db-schema.md](~/projects/.github/docs/agent-docs/backend/db-schema.md) | 数据库变更管理、Flyway增量SQL | 涉及数据库变更时 |
+| [testing.md](~/projects/.github/docs/agent-docs/backend/testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
+| [workflow.md](~/projects/.github/docs/agent-docs/backend/workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
+| [menu-contracts.md](~/projects/.github/docs/agent-docs/share/menu-contracts.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |
+| [wechat-integration.md](~/projects/.github/docs/agent-docs/backend/wechat-integration.md) | 企微/微信集成规范 | 涉及企微功能时 |

@@ -232,16 +232,6 @@ Week 4 (5/03-5/09):
 | kimi1 | ~~#3615~~ | P0-bug | fullstack | ~~Tier-2: 全球项目矿场 #3458 验收8项缺陷修复~~ PR#3616✅merged 2026-04-13 05:36 | ~~Done~~ |
 | kimi2 | #3617 | P0-bug | fullstack | Tier-2: 全球项目矿场v3 第二轮验收缺陷（8项） | In Progress |
 | kimi1 | #3618 | P0-bug | fullstack | bug: 建表缺RuoYi标准列 + CRM Controller未注册 | In Progress |
-| kimi3 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | In Progress |
-| kimi4 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | In Progress |
-| kimi5 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | In Progress |
-| kimi6 | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | In Progress |
-| kimi7 | #3521 | P1 | frontend | Tier-1: Boss耀总Dashboard — 8大板块导航页 | In Progress |
-| kimi8 | #3481 | P1 | fullstack | Tier-3: 超管驾驶舱 实时日志流Tab | In Progress |
-| kimi9 | #3482 | P1 | fullstack | Tier-3: 超管驾驶舱 FinOps成本Tab | In Progress |
-| kimi10 | #3483 | P1 | fullstack | Tier-3: 超管驾驶舱 安全审计Tab | In Progress |
-| kimi11 | #3484 | P1 | fullstack | Tier-3: 超管驾驶舱 Prompt管理Tab | In Progress |
-| kimi12 | #3582 | P0 | frontend | Tier-5: 产品目录页 — 卡片网格+筛选搜索 | In Progress |
 
 ## 当前运行
 
@@ -249,13 +239,3 @@ Week 4 (5/03-5/09):
 |---------|-------|------|------|------|
 | kimi1 | #3618 | P0-bug | fullstack | bug修复: 建表标准列 + CRM Controller注册 |
 | kimi2 | #3617 | P0-bug | fullstack | 矿场v3第二轮验收缺陷（stats/详情500/流转/分配mock/工具栏/tenant_id） |
-| kimi3 | #3517 | P0 | fullstack | 商务主页Dashboard — 8个Widget |
-| kimi4 | #3518 | P1 | fullstack | 支持中心主页Dashboard — 6个Widget |
-| kimi5 | #3519 | P1 | fullstack | 项目安装主页Dashboard — 7个Widget |
-| kimi6 | #3520 | P1 | fullstack | 综合管理主页Dashboard — 6个Widget |
-| kimi7 | #3521 | P1 | frontend | Boss耀总Dashboard — 8大板块导航页 |
-| kimi8 | #3481 | P1 | fullstack | 超管驾驶舱 实时日志流Tab |
-| kimi9 | #3482 | P1 | fullstack | 超管驾驶舱 FinOps成本Tab |
-| kimi10 | #3483 | P1 | fullstack | 超管驾驶舱 安全审计Tab |
-| kimi11 | #3484 | P1 | fullstack | 超管驾驶舱 Prompt管理Tab |
-| kimi12 | #3582 | P0 | frontend | 产品目录页 — 卡片网格+筛选搜索 |

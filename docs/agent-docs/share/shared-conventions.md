@@ -3,6 +3,23 @@
 > 所有编程 CC 启动时 `run-cc.sh` 自动注入本文件作为初始 prompt。
 > 任何规则变更必须改本文件，不得分散到其他文件。
 
+## 🚨 菜单规则（最高优先级）
+
+**禁止 INSERT 新菜单**。平台菜单结构已通过 8 个 Issue 统一建好，所有页面都有对应的占位菜单。
+
+开发新页面时：
+1. 查 `sys_menu` 找到对应的占位菜单（`component` 为空或指向占位组件的记录）
+2. 用 Flyway 增量 SQL **UPDATE** 该菜单的 `component` 字段，指向你的 Vue 组件路径
+3. 菜单结构参考：`.github/docs/design/all-in-one/菜单重组完整规划.md`
+
+```sql
+-- ✅ 正确：UPDATE 已有占位菜单
+UPDATE sys_menu SET component = 'business/tender/project-mine/index' WHERE menu_name = '项目挖掘' AND menu_type = 'C';
+
+-- ❌ 错误：INSERT 新菜单
+INSERT INTO sys_menu (...) VALUES (...);
+```
+
 阅读 `issues/issue-${ISSUE}/issue-source.md` 完成 Issue #${ISSUE}。
 
 ## 10 条硬约束（违反任一项被 quality-gate 拦截）

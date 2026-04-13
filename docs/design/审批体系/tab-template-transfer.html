@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模板迁移</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================== -->
+  <!-- [ImportExport] 导入导出 -->
+  <!-- ============================== -->
+  <section class="mb-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">模板导入 / 导出 <span class="text-xs font-normal text-gray-400 bg-gray-100 px-2 py-0.5 rounded ml-2">管理员专用 🔒</span></h2>
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+
+      <!-- 左卡片 — 导出模板 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <h3 class="text-sm font-semibold text-gray-700 mb-3">导出模板</h3>
+        <p class="text-xs text-gray-400 mb-4">导出为 JSON 文件，包含 Schema + 审批流配置 + 分类信息</p>
+
+        <!-- 模板多选列表 -->
+        <div class="border border-gray-200 rounded-lg divide-y divide-gray-100 mb-4 max-h-56 overflow-y-auto">
+          <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" checked class="accent-blue-500 w-3.5 h-3.5">
+            <span class="text-sm text-gray-700">报价审批表</span>
+            <span class="ml-auto text-xs text-gray-400">财务</span>
+          </label>
+          <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" checked class="accent-blue-500 w-3.5 h-3.5">
+            <span class="text-sm text-gray-700">合同盖章申请</span>
+            <span class="ml-auto text-xs text-gray-400">行政</span>
+          </label>
+          <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5">
+            <span class="text-sm text-gray-700">出差报销单</span>
+            <span class="ml-auto text-xs text-gray-400">人事</span>
+          </label>
+          <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5">
+            <span class="text-sm text-gray-700">设计变更申请</span>
+            <span class="ml-auto text-xs text-gray-400">技术</span>
+          </label>
+          <label class="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 cursor-pointer">
+            <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5">
+            <span class="text-sm text-gray-700">用印申请</span>
+            <span class="ml-auto text-xs text-gray-400">印章</span>
+          </label>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <button class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600 bg-white hover:bg-gray-50">全选</button>
+          <button class="bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-1.5 text-sm font-medium">导出选中 (JSON)</button>
+          <span class="text-xs text-gray-400 ml-auto">已选 2 个模板</span>
+        </div>
+      </div>
+
+      <!-- 右卡片 — 导入模板 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <h3 class="text-sm font-semibold text-gray-700 mb-3">导入模板</h3>
+
+        <!-- 上传区域 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg py-8 px-4 text-center mb-4 hover:border-blue-300 hover:bg-blue-50/30 transition cursor-pointer">
+          <svg class="w-8 h-8 text-gray-300 mx-auto mb-2" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 16V4m0 0L8 8m4-4 4 4M4 17v2a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-2"/></svg>
+          <p class="text-sm text-gray-500">点击或拖拽 JSON 文件导入</p>
+          <p class="text-xs text-gray-400 mt-1">支持 .json 格式</p>
+        </div>
+
+        <!-- 冲突检测结果 -->
+        <div class="space-y-2.5 mb-4">
+          <p class="text-xs font-medium text-gray-500">冲突检测结果</p>
+          <!-- 成功项 -->
+          <div class="flex items-center gap-2 bg-green-50 border border-green-200 rounded px-3 py-2">
+            <span class="text-green-500 text-sm">✅</span>
+            <span class="text-sm text-gray-700">出差报销单</span>
+            <span class="ml-auto text-xs text-green-600">新模板，直接导入</span>
+          </div>
+          <!-- 冲突项 -->
+          <div class="flex items-center gap-2 bg-amber-50 border border-amber-200 rounded px-3 py-2 flex-wrap">
+            <span class="text-amber-500 text-sm">⚠️</span>
+            <span class="text-sm text-gray-700">报价审批表</span>
+            <span class="text-xs text-amber-600 ml-1">— 已存在同名模板</span>
+            <div class="flex gap-1.5 ml-auto">
+              <button class="text-xs text-blue-500 border border-blue-200 rounded px-2 py-0.5 bg-white hover:bg-blue-50">覆盖</button>
+              <button class="text-xs text-blue-500 border border-blue-200 rounded px-2 py-0.5 bg-white hover:bg-blue-50">重命名导入</button>
+              <button class="text-xs text-gray-500 border border-gray-200 rounded px-2 py-0.5 bg-white hover:bg-gray-50">跳过</button>
+            </div>
+          </div>
+        </div>
+
+        <button class="bg-blue-500 hover:bg-blue-600 text-white rounded px-4 py-1.5 text-sm font-medium w-full">确认导入</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- [ConfigWizard] 配置向导 -->
+  <!-- ============================== -->
+  <section class="mb-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">新建模板配置向导</h2>
+    <div class="bg-white border border-gray-300 rounded-lg p-5">
+
+      <!-- 步骤条 -->
+      <div class="flex items-center justify-center mb-6">
+        <!-- Step 1 — 完成 -->
+        <div class="flex items-center">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-green-500 text-white flex items-center justify-center text-xs font-bold">✓</div>
+            <span class="text-sm font-medium text-green-600">选择分类</span>
+          </div>
+        </div>
+        <div class="w-16 h-px bg-green-400 mx-2"></div>
+        <!-- Step 2 — 当前 -->
+        <div class="flex items-center">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold ring-4 ring-blue-100">2</div>
+            <span class="text-sm font-medium text-blue-600">选择字段</span>
+          </div>
+        </div>
+        <div class="w-16 h-px bg-gray-300 mx-2"></div>
+        <!-- Step 3 — 未到达 -->
+        <div class="flex items-center">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 rounded-full bg-gray-200 text-gray-400 flex items-center justify-center text-xs font-bold">3</div>
+            <span class="text-sm font-medium text-gray-400">配置审批流</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Step 2 内容 -->
+      <div class="border border-gray-200 rounded-lg">
+        <div class="border-b border-gray-200 px-5 py-3 bg-gray-50 rounded-t-lg">
+          <h3 class="text-sm font-semibold text-gray-700">Step 2: 选择字段</h3>
+          <p class="text-xs text-gray-400 mt-0.5">基于您在 Step 1 选择的分类「<span class="text-blue-500 font-medium">财务</span>」，系统推荐以下常用字段</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-0">
+
+          <!-- 左侧 — 推荐字段列表 -->
+          <div class="p-5 border-r border-gray-200">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">推荐字段</p>
+            <div class="space-y-2">
+              <label class="flex items-center gap-3 px-3 py-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" checked class="accent-blue-500 w-3.5 h-3.5">
+                <span class="text-sm text-gray-700">项目名称</span>
+                <span class="ml-auto text-xs text-red-400 bg-red-50 px-1.5 py-0.5 rounded">必填</span>
+              </label>
+              <label class="flex items-center gap-3 px-3 py-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" checked class="accent-blue-500 w-3.5 h-3.5">
+                <span class="text-sm text-gray-700">报价金额</span>
+                <span class="ml-auto text-xs text-red-400 bg-red-50 px-1.5 py-0.5 rounded">必填</span>
+              </label>
+              <label class="flex items-center gap-3 px-3 py-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" checked class="accent-blue-500 w-3.5 h-3.5">
+                <span class="text-sm text-gray-700">客户名称</span>
+              </label>
+              <label class="flex items-center gap-3 px-3 py-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5">
+                <span class="text-sm text-gray-700">报价币种</span>
+              </label>
+              <label class="flex items-center gap-3 px-3 py-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5">
+                <span class="text-sm text-gray-700">有效期</span>
+              </label>
+              <label class="flex items-center gap-3 px-3 py-2 rounded border border-gray-100 hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" class="accent-blue-500 w-3.5 h-3.5">
+                <span class="text-sm text-gray-700">毛利率</span>
+              </label>
+            </div>
+            <button class="mt-3 text-sm text-blue-500 hover:underline flex items-center gap-1">
+              <span>+</span> 添加自定义字段
+            </button>
+          </div>
+
+          <!-- 右侧 — 实时表单预览 -->
+          <div class="p-5">
+            <p class="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">表单预览</p>
+            <div class="border border-gray-200 rounded-lg p-4 bg-gray-50 space-y-3">
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">项目名称 <span class="text-red-400">*</span></label>
+                <div class="h-8 bg-white border border-gray-200 rounded px-3 flex items-center text-xs text-gray-300">请输入项目名称</div>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">报价金额 <span class="text-red-400">*</span></label>
+                <div class="h-8 bg-white border border-gray-200 rounded px-3 flex items-center text-xs text-gray-300">¥ 0.00</div>
+              </div>
+              <div>
+                <label class="block text-xs text-gray-500 mb-1">客户名称</label>
+                <div class="h-8 bg-white border border-gray-200 rounded px-3 flex items-center text-xs text-gray-300">请选择客户</div>
+              </div>
+              <div class="border-t border-dashed border-gray-200 pt-3">
+                <p class="text-xs text-gray-300 text-center">勾选更多字段以预览效果</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 底部操作按钮 -->
+      <div class="flex items-center justify-between mt-5">
+        <button class="border border-gray-300 rounded px-4 py-1.5 text-sm text-gray-600 bg-white hover:bg-gray-50">上一步</button>
+        <div class="flex gap-3">
+          <button class="border border-gray-300 rounded px-4 py-1.5 text-sm text-gray-600 bg-white hover:bg-gray-50">保存草稿</button>
+          <button class="bg-blue-500 hover:bg-blue-600 text-white rounded px-5 py-1.5 text-sm font-medium">下一步</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================== -->
+  <!-- [TemplateRecommend] 向导内置模板推荐 -->
+  <!-- ============================== -->
+  <section class="mb-4">
+    <div class="bg-white border border-gray-300 rounded-lg p-5">
+      <p class="text-sm text-gray-600 mb-4">根据您选择的分类「<span class="font-medium text-blue-500">财务</span>」，推荐以下模板作为起点：</p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+
+        <!-- 推荐卡片 1 -->
+        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="text-sm font-semibold text-gray-700">标准报价审批表</h4>
+            <span class="text-xs bg-green-50 text-green-600 px-1.5 py-0.5 rounded flex-shrink-0">热门</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-gray-400 mb-3">
+            <span>12 字段</span>
+            <span>·</span>
+            <span>已被使用 328 次</span>
+          </div>
+          <button class="w-full bg-blue-500 hover:bg-blue-600 text-white rounded px-3 py-1.5 text-sm font-medium">使用此模板</button>
+        </div>
+
+        <!-- 推荐卡片 2 -->
+        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="text-sm font-semibold text-gray-700">简易报价表</h4>
+            <span class="text-xs bg-gray-100 text-gray-500 px-1.5 py-0.5 rounded flex-shrink-0">轻量</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-gray-400 mb-3">
+            <span>6 字段</span>
+            <span>·</span>
+            <span>适合小额报价</span>
+          </div>
+          <button class="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 rounded px-3 py-1.5 text-sm font-medium">使用此模板</button>
+        </div>
+
+        <!-- 推荐卡片 3 -->
+        <div class="border border-gray-200 rounded-lg p-4 hover:border-blue-300 hover:shadow-sm transition">
+          <div class="flex items-start justify-between mb-2">
+            <h4 class="text-sm font-semibold text-gray-700">国贸 PI 审批表</h4>
+            <span class="text-xs bg-blue-50 text-blue-500 px-1.5 py-0.5 rounded flex-shrink-0">国贸</span>
+          </div>
+          <div class="flex items-center gap-3 text-xs text-gray-400 mb-3">
+            <span>14 字段</span>
+            <span>·</span>
+            <span>含币种和付款条款</span>
+          </div>
+          <button class="w-full border border-blue-500 text-blue-500 hover:bg-blue-50 rounded px-3 py-1.5 text-sm font-medium">使用此模板</button>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

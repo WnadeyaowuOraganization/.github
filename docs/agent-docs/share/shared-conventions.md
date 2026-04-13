@@ -10,7 +10,9 @@
 开发新页面时：
 1. 查 `sys_menu` 找到对应的占位菜单（`component` 为空或指向占位组件的记录）
 2. 用 Flyway 增量 SQL **UPDATE** 该菜单的 `component` 字段，指向你的 Vue 组件路径
-3. 菜单结构参考：`.github/docs/design/all-in-one/菜单重组完整规划.md`
+3. **前端优先替换占位页面** — 在 `frontend/apps/web-antd/src/views/` 对应路由目录下查找占位页面（含 `🚧` 或 `占位` 标识的组件），直接替换其内容为实际业务组件。没有占位页面时才新建文件
+4. 菜单结构参考：`.github/docs/design/all-in-one/菜单重组完整规划.md`
+5. 菜单规范详细文档：`.github/docs/agent-docs/backend/menu-contracts.md`
 
 ```sql
 -- ✅ 正确：UPDATE 已有占位菜单

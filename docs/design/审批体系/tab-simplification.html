@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>流程简化配置</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .sub-tab-active {
+      color: #3b82f6;
+      border-bottom: 2px solid #3b82f6;
+      font-weight: 600;
+    }
+    .sub-tab-inactive {
+      color: #6b7280;
+      border-bottom: 2px solid transparent;
+    }
+    .sub-tab-inactive:hover {
+      color: #374151;
+      background-color: #f3f4f6;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- [子Tab导航] -->
+  <div class="border-b border-gray-200 mb-6">
+    <nav class="flex gap-0" id="subTabNav">
+      <button onclick="switchTab('skip')" data-tab="skip" class="sub-tab-active px-5 py-3 text-sm cursor-pointer transition-colors">跳过规则</button>
+      <button onclick="switchTab('auto')" data-tab="auto" class="sub-tab-inactive px-5 py-3 text-sm cursor-pointer transition-colors">自动审批</button>
+      <button onclick="switchTab('route')" data-tab="route" class="sub-tab-inactive px-5 py-3 text-sm cursor-pointer transition-colors">路由规则</button>
+      <button onclick="switchTab('report')" data-tab="report" class="sub-tab-inactive px-5 py-3 text-sm cursor-pointer transition-colors">简化效果报告</button>
+    </nav>
+  </div>
+
+  <!-- ==================== 跳过规则 子Tab ==================== -->
+  <div id="panel-skip" class="tab-panel">
+
+    <!-- [跳过规则操作栏] -->
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-semibold text-gray-800">跳过规则管理</h2>
+        <p class="text-xs text-gray-400 mt-0.5">当满足条件时，自动跳过指定审批节点</p>
+      </div>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded transition-colors">+ 新建跳过规则</button>
+    </div>
+
+    <!-- [跳过规则表格] -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">规则名称</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">审批模板</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">条件</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">跳过节点</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">状态</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">触发次数</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-800">小额报销免总监</td>
+            <td class="px-4 py-3 text-gray-600">报销审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-xs">金额 &lt; 2000</code></td>
+            <td class="px-4 py-3 text-gray-600">跳过"总监审批"</td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>启用</span></td>
+            <td class="px-4 py-3 text-gray-600 font-mono text-xs">45次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-gray-400 hover:text-gray-600 text-xs">禁用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-800">白名单客户免审</td>
+            <td class="px-4 py-3 text-gray-600">报价审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-xs">客户 in [万科,碧桂园,恒大]</code></td>
+            <td class="px-4 py-3 text-gray-600">跳过"风控审核"</td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>启用</span></td>
+            <td class="px-4 py-3 text-gray-600 font-mono text-xs">12次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-gray-400 hover:text-gray-600 text-xs">禁用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-400">内部调拨免采购</td>
+            <td class="px-4 py-3 text-gray-400">采购审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-400 px-1.5 py-0.5 rounded text-xs">类型 = "内部调拨"</code></td>
+            <td class="px-4 py-3 text-gray-400">跳过"采购主管"</td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-gray-400 bg-gray-100 border border-gray-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-gray-400 rounded-full"></span>停用</span></td>
+            <td class="px-4 py-3 text-gray-400 font-mono text-xs">0次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-green-500 hover:text-green-700 text-xs">启用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- [可视化条件编辑器占位 - RuleEditor组件] -->
+    <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 mb-6 bg-white">
+      <h3 class="text-sm font-semibold text-gray-600 mb-4">条件构建器</h3>
+      <div class="space-y-3">
+        <!-- 条件行1 -->
+        <div class="flex items-center gap-2 text-sm">
+          <span class="text-gray-500 w-8">当</span>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[120px]">
+            <option>金额</option>
+            <option>部门</option>
+            <option>产品类型</option>
+            <option>供应商</option>
+            <option>客户</option>
+          </select>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[100px]">
+            <option>&lt;</option>
+            <option>&gt;</option>
+            <option>==</option>
+            <option>in</option>
+            <option>not in</option>
+            <option>between</option>
+          </select>
+          <input type="text" placeholder="值..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-40" value="2000">
+          <span class="text-gray-300">时</span>
+        </div>
+        <!-- AND条件 -->
+        <div class="flex items-center gap-2 text-sm ml-8">
+          <span class="inline-flex items-center justify-center bg-gray-100 border border-gray-300 text-gray-500 text-xs font-mono rounded px-2 py-0.5">AND</span>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[120px]">
+            <option>部门</option>
+            <option>金额</option>
+            <option>产品类型</option>
+          </select>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[100px]">
+            <option>==</option>
+            <option>&lt;</option>
+            <option>&gt;</option>
+          </select>
+          <input type="text" placeholder="值..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-40">
+          <button class="text-gray-400 hover:text-red-500 text-xs ml-1">✕</button>
+        </div>
+        <!-- OR条件 -->
+        <div class="flex items-center gap-2 text-sm ml-8">
+          <span class="inline-flex items-center justify-center bg-gray-100 border border-gray-300 text-gray-500 text-xs font-mono rounded px-2 py-0.5">OR</span>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[120px]">
+            <option>客户</option>
+            <option>金额</option>
+            <option>供应商</option>
+          </select>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[100px]">
+            <option>in</option>
+            <option>not in</option>
+          </select>
+          <input type="text" placeholder="值..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-40">
+          <button class="text-gray-400 hover:text-red-500 text-xs ml-1">✕</button>
+        </div>
+        <!-- 添加条件按钮 -->
+        <div class="ml-8 flex gap-2">
+          <button class="text-blue-500 hover:text-blue-700 text-xs border border-blue-200 rounded px-2 py-1">+ AND 条件</button>
+          <button class="text-blue-500 hover:text-blue-700 text-xs border border-blue-200 rounded px-2 py-1">+ OR 条件</button>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 mt-4 pt-4">
+        <div class="flex items-center gap-2 text-sm">
+          <span class="text-gray-500">操作: 跳过节点 →</span>
+          <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 min-w-[160px]">
+            <option>选择审批节点...</option>
+            <option>部门主管审批</option>
+            <option>总监审批</option>
+            <option>财务审核</option>
+            <option>风控审核</option>
+            <option>总经理审批</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-200 mt-4 pt-4 flex items-center justify-between">
+        <div class="text-xs text-gray-400">支持字段：金额 / 部门 / 产品类型 / 供应商 / 客户 等 ｜ 操作符：&lt; / &gt; / == / in / not in / between ｜ 支持 AND/OR 组合条件</div>
+        <div class="flex gap-2">
+          <button class="border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm px-4 py-1.5 rounded transition-colors">测试规则</button>
+          <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded transition-colors">保存</button>
+        </div>
+      </div>
+
+      <!-- 实时预览 -->
+      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-xs text-blue-700">
+        <span class="font-medium">实时预览：</span>输入示例数据后，显示"此规则会跳过 XX 节点"
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== 自动审批 子Tab ==================== -->
+  <div id="panel-auto" class="tab-panel hidden">
+
+    <!-- [自动审批操作栏] -->
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-semibold text-gray-800">自动审批规则</h2>
+        <p class="text-xs text-gray-400 mt-0.5">当满足条件时，自动通过指定或全部审批节点</p>
+      </div>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded transition-colors">+ 新建自动审批规则</button>
+    </div>
+
+    <!-- [自动审批规则表格] -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">规则名称</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">审批模板</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">条件</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">自动操作</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">状态</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">触发次数</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-800">续签合同免审</td>
+            <td class="px-4 py-3 text-gray-600">合同审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-xs">客户合作 &gt; 3年 AND 金额变动 &lt; 10%</code></td>
+            <td class="px-4 py-3 text-gray-600">自动通过全部节点</td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>启用</span></td>
+            <td class="px-4 py-3 text-gray-600 font-mono text-xs">28次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-gray-400 hover:text-gray-600 text-xs">禁用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-800">低风险变更</td>
+            <td class="px-4 py-3 text-gray-600">变更审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-xs">变更级别 = "C级"</code></td>
+            <td class="px-4 py-3 text-gray-600">自动通过"总工审批"</td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>启用</span></td>
+            <td class="px-4 py-3 text-gray-600 font-mono text-xs">9次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-gray-400 hover:text-gray-600 text-xs">禁用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- [自动审批条件编辑器占位] -->
+    <div class="border-2 border-dashed border-gray-300 rounded-lg p-5 bg-white">
+      <p class="text-sm text-gray-400 text-center">条件编辑器 — 与跳过规则共享同一套 RuleEditor 组件，操作类型切换为"自动通过"</p>
+    </div>
+  </div>
+
+  <!-- ==================== 路由规则 子Tab ==================== -->
+  <div id="panel-route" class="tab-panel hidden">
+
+    <!-- [路由规则操作栏] -->
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-semibold text-gray-800">智能路由规则</h2>
+        <p class="text-xs text-gray-400 mt-0.5">根据条件动态调整审批路径（串行↔并行、优先级等）</p>
+      </div>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded transition-colors">+ 新建路由规则</button>
+    </div>
+
+    <!-- [路由规则表格] -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden mb-6">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">规则名称</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">审批模板</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">条件</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">路由调整</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">状态</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">触发次数</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-500 text-xs uppercase tracking-wider">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-800">大额审批升级</td>
+            <td class="px-4 py-3 text-gray-600">报价审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-xs">金额 &gt; 50万</code></td>
+            <td class="px-4 py-3 text-gray-600">串行 → 并行 <span class="text-xs text-gray-400">(财务 + 总经理)</span></td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>启用</span></td>
+            <td class="px-4 py-3 text-gray-600 font-mono text-xs">7次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-gray-400 hover:text-gray-600 text-xs">禁用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50 transition-colors">
+            <td class="px-4 py-3 font-medium text-gray-800">紧急采购快速通道</td>
+            <td class="px-4 py-3 text-gray-600">采购审批</td>
+            <td class="px-4 py-3"><code class="bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded text-xs">标记 = "紧急"</code></td>
+            <td class="px-4 py-3 text-gray-600">跳过排队，优先处理</td>
+            <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs font-medium text-green-700 bg-green-50 border border-green-200 rounded-full px-2.5 py-0.5"><span class="w-1.5 h-1.5 bg-green-500 rounded-full"></span>启用</span></td>
+            <td class="px-4 py-3 text-gray-600 font-mono text-xs">15次</td>
+            <td class="px-4 py-3">
+              <div class="flex gap-2">
+                <button class="text-blue-500 hover:text-blue-700 text-xs">编辑</button>
+                <button class="text-gray-400 hover:text-gray-600 text-xs">禁用</button>
+                <button class="text-gray-400 hover:text-red-500 text-xs">删除</button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- [路由规则说明] -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4 text-xs text-gray-500">
+      <p class="font-medium text-gray-600 mb-1">路由规则说明</p>
+      <ul class="list-disc ml-4 space-y-1">
+        <li><b>串行 → 并行</b>：将原本依次审批的节点改为同时审批，缩短等待时间</li>
+        <li><b>优先处理</b>：跳过普通排队队列，在审批人待办列表中置顶显示</li>
+        <li><b>升级路由</b>：满足条件时自动增加更高级别审批人</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- ==================== 简化效果报告 子Tab ==================== -->
+  <div id="panel-report" class="tab-panel hidden">
+
+    <!-- [简化效果统计卡片] -->
+    <div class="grid grid-cols-3 gap-4 mb-6">
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <p class="text-xs text-gray-400 mb-1">本月节省审批节点</p>
+        <p class="text-2xl font-bold text-gray-800">127<span class="text-sm font-normal text-gray-400 ml-1">个</span></p>
+      </div>
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <p class="text-xs text-gray-400 mb-1">预估节省时间</p>
+        <p class="text-2xl font-bold text-gray-800">约186<span class="text-sm font-normal text-gray-400 ml-1">小时</span></p>
+      </div>
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <p class="text-xs text-gray-400 mb-1">自动审批率</p>
+        <p class="text-2xl font-bold text-gray-800">23<span class="text-sm font-normal text-gray-400">%</span></p>
+      </div>
+    </div>
+
+    <!-- [各规则触发统计表] -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-200">
+        <h3 class="text-sm font-semibold text-gray-700">各规则触发统计</h3>
+      </div>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-4 py-2.5 font-medium text-gray-500 text-xs">规则名称</th>
+            <th class="text-left px-4 py-2.5 font-medium text-gray-500 text-xs">类型</th>
+            <th class="text-left px-4 py-2.5 font-medium text-gray-500 text-xs">本月触发</th>
+            <th class="text-left px-4 py-2.5 font-medium text-gray-500 text-xs">节省节点</th>
+            <th class="text-left px-4 py-2.5 font-medium text-gray-500 text-xs">预估节省时间</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr>
+            <td class="px-4 py-2.5 text-gray-800">小额报销免总监</td>
+            <td class="px-4 py-2.5"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">跳过</span></td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">45次</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">45个</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">约67h</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-800">续签合同免审</td>
+            <td class="px-4 py-2.5"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">自动审批</span></td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">28次</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">56个</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">约84h</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-800">白名单客户免审</td>
+            <td class="px-4 py-2.5"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">跳过</span></td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">12次</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">12个</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">约18h</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-800">紧急采购快速通道</td>
+            <td class="px-4 py-2.5"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">路由</span></td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">15次</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">—</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">约12h</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-800">低风险变更</td>
+            <td class="px-4 py-2.5"><span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">自动审批</span></td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">9次</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">9个</td>
+            <td class="px-4 py-2.5 font-mono text-gray-600">约5h</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ==================== 流程模拟器（所有子Tab下可见） ==================== -->
+  <!-- [流程模拟器占位 - FlowSimulator组件] -->
+  <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 mt-6 bg-white">
+    <h3 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+      <span class="text-base">📌</span> 流程模拟器
+    </h3>
+
+    <div class="grid grid-cols-2 gap-6">
+      <!-- 左侧：输入区 -->
+      <div class="space-y-3">
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">选择审批模板</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white text-gray-700">
+            <option>报价审批流</option>
+            <option>合同审批流</option>
+            <option>报销审批流</option>
+            <option>采购审批流</option>
+            <option>变更审批流</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">输入模拟数据</label>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <span class="text-xs text-gray-400">报价金额</span>
+              <input type="text" value="1500" class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm mt-0.5">
+            </div>
+            <div>
+              <span class="text-xs text-gray-400">客户</span>
+              <input type="text" value="万科" class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm mt-0.5">
+            </div>
+          </div>
+          <div class="mt-2">
+            <span class="text-xs text-gray-400">报价类型</span>
+            <select class="w-full border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 mt-0.5">
+              <option>标准</option>
+              <option>加急</option>
+              <option>特批</option>
+            </select>
+          </div>
+        </div>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded transition-colors w-full mt-2">▶ 运行模拟</button>
+      </div>
+
+      <!-- 右侧：模拟结果 -->
+      <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+        <h4 class="text-xs font-semibold text-gray-500 mb-3 uppercase tracking-wider">模拟结果</h4>
+
+        <!-- 完整路径 -->
+        <div class="mb-3">
+          <p class="text-xs text-gray-400 mb-1">完整路径（5节点）</p>
+          <div class="flex items-center gap-1 text-xs flex-wrap">
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">发起</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">报价组</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">成本</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">风控</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">总监</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">完成</span>
+          </div>
+        </div>
+
+        <!-- 简化后路径 -->
+        <div class="mb-3">
+          <p class="text-xs text-gray-400 mb-1">简化后路径（3节点）</p>
+          <div class="flex items-center gap-1 text-xs flex-wrap">
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">发起</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">报价组</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">成本</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-red-50 border border-red-200 rounded px-2 py-1 text-red-400 line-through">风控 跳过</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-red-50 border border-red-200 rounded px-2 py-1 text-red-400 line-through">总监 跳过</span>
+            <span class="text-gray-300">→</span>
+            <span class="bg-white border border-gray-300 rounded px-2 py-1 text-gray-600">完成</span>
+          </div>
+          <p class="text-xs text-blue-500 mt-2">↑ 命中规则：「白名单客户免审」+「小额免总监」</p>
+        </div>
+
+        <!-- 预估节省 -->
+        <div class="border-t border-gray-200 pt-2 mt-2 flex items-center gap-3 text-xs">
+          <span class="text-gray-400">预估耗时：</span>
+          <span class="text-gray-500 line-through">约2天</span>
+          <span class="text-gray-300">→</span>
+          <span class="text-green-600 font-semibold">约0.5天</span>
+          <span class="text-green-600 text-[10px] bg-green-50 border border-green-200 rounded px-1.5 py-0.5 ml-1">节省75%</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [子Tab切换脚本] -->
+  <script>
+    function switchTab(tabName) {
+      // Hide all panels
+      document.querySelectorAll('.tab-panel').forEach(function(panel) {
+        panel.classList.add('hidden');
+      });
+      // Show target panel
+      document.getElementById('panel-' + tabName).classList.remove('hidden');
+      // Update tab styles
+      document.querySelectorAll('#subTabNav button').forEach(function(btn) {
+        if (btn.dataset.tab === tabName) {
+          btn.className = 'sub-tab-active px-5 py-3 text-sm cursor-pointer transition-colors';
+        } else {
+          btn.className = 'sub-tab-inactive px-5 py-3 text-sm cursor-pointer transition-colors';
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>

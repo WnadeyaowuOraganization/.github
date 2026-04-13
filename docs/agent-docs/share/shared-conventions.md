@@ -121,6 +121,45 @@ curl -s -X POST http://localhost:9872/api/notify \
 | 异常发现 | `warning` | `[需回复]` |
 | 需人工介入 | `error` | `[需回复]` |
 
+## RuoYi 响应格式（违反导致前端弹窗报错、数据不展示）
+
+**列表接口**：必须用 `TableDataInfo.build(list)` 构造响应。
+
+```java
+// ✅ 正确
+return TableDataInfo.build(list);
+
+// ❌ 错误：new TableDataInfo<>() 丢失 code/msg，前端拦截器判定失败
+TableDataInfo<XxxVO> result = new TableDataInfo<>();
+result.setRows(list);
+result.setTotal(list.size());
+return result;
+```
+
+**单体接口**：必须用 `R.ok(data)` / `R.fail(msg)`，禁止手动 `new R<>()`。
+
+## 原型驱动开发（有设计文档/HTML原型的Issue必读）
+
+Issue 引用了 `docs/design/` 下的设计文档或 HTML 原型时：
+
+1. **开发前**：读原型 HTML 源码，在 task.md 中列出原型要求的字段/按钮/交互清单，标注对应设计文档章节号
+2. **开发中**：逐项实现清单内容，每完成一项在 task.md 中勾选
+3. **开发后**：curl 验证 API 响应格式 + 截图对照原型核对
+
+```markdown
+<!-- task.md 示例 -->
+## 原型核对清单（§2.3 列表页）
+- [x] 表格列：项目名称/项目编码/类型/区域/... （共13列，与01-all.html一致）
+- [x] 筛选栏：项目类型/区域/真实性/等级/最低评分 （与原型一致）
+- [x] 操作按钮：详情/修正/有效/无效/分配/删除 （tooltip文字已核对）
+```
+
+## 自测要求（API改动 + UI改动）
+
+- **后端 API 改动**：修改后必须 curl 验证响应格式（`code=200` + 业务字段完整），结果贴到 task.md
+- **前端 UI 改动**：修改后必须用 `/screenshot` 截图，对照原型核对渲染结果
+- 禁止以"编译通过"替代功能验证
+
 ## 绝对禁止（YOU MUST NOT）
 
 - **YOU MUST NOT** 使用 `visible` 属性 — 用 `open`（Ant Design Vue 4.x）

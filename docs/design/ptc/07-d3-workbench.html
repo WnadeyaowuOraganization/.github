@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>D3设计工作台 — 万德AI PLM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 树形缩进 */
+    .tree-folder { cursor: pointer; user-select: none; }
+    .tree-folder:hover { background: #f3f4f6; }
+    .tree-item:hover { background: #eff6ff; }
+    .tree-item.active { background: #dbeafe; }
+    /* 工具栏按钮 */
+    .tool-btn { transition: background .15s; }
+    .tool-btn:hover { background: #e5e7eb; }
+    .tool-btn.active { background: #dbeafe; border-color: #3b82f6; }
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 5px; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 text-gray-700 text-sm">
+
+<!-- ============================== -->
+<!-- D3设计工作台 — 三栏布局 -->
+<!-- 对应Issue: #2306 #2316 #1926 -->
+<!-- ============================== -->
+
+<div class="flex gap-4 h-[calc(100vh-48px)]">
+
+  <!-- ================================ -->
+  <!-- [左栏 — 组件库面板] 宽度22% -->
+  <!-- ================================ -->
+  <div class="w-[22%] min-w-[220px] bg-white border border-gray-300 rounded-lg flex flex-col overflow-hidden">
+
+    <!-- 面板标题 -->
+    <div class="px-4 py-3 border-b border-gray-200 font-semibold text-gray-800 text-sm flex items-center justify-between">
+      <span>组件库</span>
+      <span class="text-xs text-gray-400 font-normal">v3.2</span>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="px-3 py-2 border-b border-gray-100">
+      <div class="flex items-center bg-gray-50 border border-gray-300 rounded px-2 py-1.5">
+        <svg class="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="搜索组件..." class="bg-transparent text-sm w-full outline-none text-gray-600 placeholder-gray-400">
+      </div>
+    </div>
+
+    <!-- 分类树形列表 -->
+    <div class="flex-1 overflow-y-auto px-1 py-2">
+
+      <!-- 📁 滑梯组件 -->
+      <div class="tree-folder flex items-center px-3 py-1.5 rounded text-gray-700 font-medium">
+        <span class="mr-2">📁</span>
+        <span>滑梯组件</span>
+        <span class="ml-auto text-xs text-gray-400">(12)</span>
+      </div>
+      <div class="pl-9 pr-2">
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">直滑道-标准</div>
+        <div class="tree-item active px-2 py-1 rounded text-gray-600 cursor-pointer font-medium">螺旋滑道-S型</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">波浪滑道</div>
+      </div>
+
+      <!-- 📁 平台组件 -->
+      <div class="tree-folder flex items-center px-3 py-1.5 rounded text-gray-700 font-medium mt-1">
+        <span class="mr-2">📁</span>
+        <span>平台组件</span>
+        <span class="ml-auto text-xs text-gray-400">(8)</span>
+      </div>
+      <div class="pl-9 pr-2">
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">钢制平台-1.2m</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">钢制平台-1.5m</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">六角平台</div>
+      </div>
+
+      <!-- 📁 攀爬组件 -->
+      <div class="tree-folder flex items-center px-3 py-1.5 rounded text-gray-700 font-medium mt-1">
+        <span class="mr-2">📁</span>
+        <span>攀爬组件</span>
+        <span class="ml-auto text-xs text-gray-400">(15)</span>
+      </div>
+      <div class="pl-9 pr-2">
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">攀爬网-方形</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">攀岩墙-斜面</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">消防滑杆</div>
+      </div>
+
+      <!-- 📁 连接件 -->
+      <div class="tree-folder flex items-center px-3 py-1.5 rounded text-gray-700 font-medium mt-1">
+        <span class="mr-2">📁</span>
+        <span>连接件</span>
+        <span class="ml-auto text-xs text-gray-400">(23)</span>
+      </div>
+      <div class="pl-9 pr-2">
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">弯头管件-90°</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">三通管件</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">法兰盘</div>
+      </div>
+
+      <!-- 📁 秋千组件 -->
+      <div class="tree-folder flex items-center px-3 py-1.5 rounded text-gray-700 font-medium mt-1">
+        <span class="mr-2">📁</span>
+        <span>秋千组件</span>
+        <span class="ml-auto text-xs text-gray-400">(9)</span>
+      </div>
+      <div class="pl-9 pr-2">
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">标准座椅-橡胶</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">吊篮座椅</div>
+      </div>
+
+      <!-- 📁 装饰件 -->
+      <div class="tree-folder flex items-center px-3 py-1.5 rounded text-gray-700 font-medium mt-1">
+        <span class="mr-2">📁</span>
+        <span>装饰件</span>
+        <span class="ml-auto text-xs text-gray-400">(18)</span>
+      </div>
+      <div class="pl-9 pr-2">
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">顶棚-城堡造型</div>
+        <div class="tree-item px-2 py-1 rounded text-gray-600 cursor-pointer">围栏板-动物</div>
+      </div>
+
+    </div>
+
+    <!-- 底部统计 -->
+    <div class="px-4 py-2.5 border-t border-gray-200 text-xs text-gray-400 flex justify-between">
+      <span>组件总数: 1,165</span>
+      <span>更新: 2026-04-10</span>
+    </div>
+  </div>
+
+  <!-- ================================ -->
+  <!-- [中栏 — 3D设计画布] 宽度52% -->
+  <!-- ================================ -->
+  <div class="w-[52%] flex flex-col gap-3">
+
+    <!-- 项目信息栏 -->
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-2.5 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <span class="font-semibold text-gray-800">合肥体育公园-超级滑梯</span>
+        <span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded text-xs font-mono">v2.1</span>
+        <span class="text-xs text-gray-400">已放置 8 个组件</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="text-xs text-gray-500 border border-gray-300 rounded px-2 py-1 hover:bg-gray-50">导出GLB</button>
+        <button class="text-xs text-gray-500 border border-gray-300 rounded px-2 py-1 hover:bg-gray-50">全屏</button>
+      </div>
+    </div>
+
+    <!-- 3D画布占位 -->
+    <!-- Three.js 3D设计画布 — CC实现时加载GLB组件、拖拽放置、连接点自动吸附 -->
+    <div class="flex-1 bg-white border border-gray-300 rounded-lg flex flex-col items-center justify-center relative overflow-hidden">
+      <!-- 网格背景模拟 -->
+      <div class="absolute inset-0" style="background-image: linear-gradient(#e5e7eb 1px, transparent 1px), linear-gradient(90deg, #e5e7eb 1px, transparent 1px); background-size: 40px 40px; opacity: 0.5;"></div>
+
+      <!-- 画布中心内容 -->
+      <div class="relative z-10 text-center">
+        <div class="w-16 h-16 mx-auto mb-4 rounded-xl bg-gray-100 flex items-center justify-center">
+          <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg>
+        </div>
+        <p class="text-gray-400 text-sm mb-1">Three.js 3D 设计画布</p>
+        <p class="text-gray-300 text-xs">CC实现时加载GLB组件 · 拖拽放置 · 连接点自动吸附</p>
+      </div>
+
+      <!-- 模拟已放置组件标签 -->
+      <div class="absolute top-4 left-4 flex flex-wrap gap-2 z-10">
+        <span class="bg-white/80 border border-gray-300 text-xs px-2 py-1 rounded shadow-sm">螺旋滑道 ×1</span>
+        <span class="bg-white/80 border border-gray-300 text-xs px-2 py-1 rounded shadow-sm">钢制平台 ×4</span>
+        <span class="bg-white/80 border border-gray-300 text-xs px-2 py-1 rounded shadow-sm">攀爬网 ×2</span>
+        <span class="bg-white/80 border border-gray-300 text-xs px-2 py-1 rounded shadow-sm">消防滑杆 ×1</span>
+      </div>
+
+      <!-- 右下角视角控制 -->
+      <div class="absolute bottom-4 right-4 z-10 flex flex-col gap-1">
+        <button class="w-8 h-8 bg-white border border-gray-300 rounded flex items-center justify-center text-gray-500 hover:bg-gray-50 text-xs">+</button>
+        <button class="w-8 h-8 bg-white border border-gray-300 rounded flex items-center justify-center text-gray-500 hover:bg-gray-50 text-xs">−</button>
+        <button class="w-8 h-8 bg-white border border-gray-300 rounded flex items-center justify-center text-gray-500 hover:bg-gray-50 text-xs">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5v-4m0 4h-4m4 0l-5-5"/></svg>
+        </button>
+      </div>
+
+      <!-- 左下角坐标 -->
+      <div class="absolute bottom-4 left-4 z-10 text-xs text-gray-400 font-mono">
+        X: 12.4m &nbsp; Y: 0.0m &nbsp; Z: 8.2m
+      </div>
+    </div>
+
+    <!-- 底部工具栏 -->
+    <!-- 画布工具栏：选择/移动/旋转/连接/删除/撤销/重做/标尺/网格 -->
+    <div class="bg-white border border-gray-300 rounded-lg px-3 py-2 flex items-center gap-1">
+      <button class="tool-btn active flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-700">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 3l7.07 16.97 2.51-7.39 7.39-2.51L3 3z"/></svg>
+        选择
+      </button>
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 9l4-4 4 4m-4-4v12m10-4l-4 4-4-4m4 4V5"/></svg>
+        移动
+      </button>
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+        旋转
+      </button>
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"/></svg>
+        连接
+      </button>
+
+      <div class="w-px h-5 bg-gray-200 mx-1"></div>
+
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+        删除
+      </button>
+
+      <div class="w-px h-5 bg-gray-200 mx-1"></div>
+
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6"/></svg>
+        撤销
+      </button>
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6"/></svg>
+        重做
+      </button>
+
+      <div class="w-px h-5 bg-gray-200 mx-1"></div>
+
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+        标尺
+      </button>
+      <button class="tool-btn flex items-center gap-1.5 px-2.5 py-1.5 rounded border border-transparent text-xs text-gray-500">
+        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+        网格
+      </button>
+
+      <div class="ml-auto text-xs text-gray-400">缩放: 100% | FPS: 60</div>
+    </div>
+  </div>
+
+  <!-- ================================ -->
+  <!-- [右栏 — 属性+推送面板] 宽度26% -->
+  <!-- ================================ -->
+  <div class="w-[26%] min-w-[260px] flex flex-col gap-3 overflow-y-auto">
+
+    <!-- ============================== -->
+    <!-- [选中组件属性] -->
+    <!-- ============================== -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <div class="px-4 py-2.5 border-b border-gray-200 font-semibold text-gray-800 text-sm flex items-center justify-between">
+        <span>组件属性</span>
+        <span class="text-xs text-gray-400 font-normal">已选中</span>
+      </div>
+      <div class="px-4 py-3 space-y-3">
+        <div class="flex justify-between text-xs">
+          <span class="text-gray-500">组件名称</span>
+          <span class="text-gray-800 font-medium">螺旋滑道-S型</span>
+        </div>
+        <div class="flex justify-between text-xs">
+          <span class="text-gray-500">组件编码</span>
+          <span class="text-gray-800 font-mono">WD-TU-SL-0003</span>
+        </div>
+        <div class="flex justify-between text-xs">
+          <span class="text-gray-500">分类</span>
+          <span class="text-gray-800">滑梯组件</span>
+        </div>
+
+        <!-- 参数表格 -->
+        <table class="w-full text-xs border-collapse mt-2">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="text-left py-1.5 px-2 text-gray-500 font-medium border-b border-gray-200">参数</th>
+              <th class="text-left py-1.5 px-2 text-gray-500 font-medium border-b border-gray-200">值</th>
+              <th class="text-left py-1.5 px-2 text-gray-500 font-medium border-b border-gray-200">范围</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr class="border-b border-gray-100">
+              <td class="py-1.5 px-2 text-gray-600">长度</td>
+              <td class="py-1.5 px-2 text-gray-800 font-medium">4.2m</td>
+              <td class="py-1.5 px-2 text-gray-400">2.0-6.0m</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-1.5 px-2 text-gray-600">角度</td>
+              <td class="py-1.5 px-2 text-gray-800 font-medium">30°</td>
+              <td class="py-1.5 px-2 text-gray-400">25-45°</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-1.5 px-2 text-gray-600">圈数</td>
+              <td class="py-1.5 px-2 text-gray-800 font-medium">1.5</td>
+              <td class="py-1.5 px-2 text-gray-400">1-3</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-1.5 px-2 text-gray-600">材质</td>
+              <td class="py-1.5 px-2 text-gray-800 font-medium">LLDPE</td>
+              <td class="py-1.5 px-2 text-gray-400">—</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="py-1.5 px-2 text-gray-600">颜色</td>
+              <td class="py-1.5 px-2 text-gray-800 font-medium">黄色</td>
+              <td class="py-1.5 px-2 text-gray-400">可选</td>
+            </tr>
+            <tr>
+              <td class="py-1.5 px-2 text-gray-600">壁厚</td>
+              <td class="py-1.5 px-2 text-gray-800 font-medium">6mm</td>
+              <td class="py-1.5 px-2 text-gray-400">4-8mm</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- [BOM推送到PLM] — 核心功能 -->
+    <!-- ============================== -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <div class="px-4 py-2.5 border-b border-gray-200 font-semibold text-gray-800 text-sm">
+        BOM 推送到 PLM
+      </div>
+      <div class="px-4 py-3 space-y-3">
+
+        <!-- 推送检查清单 -->
+        <div class="text-xs text-gray-500 mb-1 font-medium">推送检查清单</div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 text-xs">
+            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span class="text-gray-600">所有组件有编码</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span class="text-gray-600">连接点全部吸附</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <svg class="w-4 h-4 text-red-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
+            <span class="text-red-600 font-medium">安全区域未计算</span>
+          </div>
+          <div class="flex items-center gap-2 text-xs">
+            <svg class="w-4 h-4 text-green-500 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/></svg>
+            <span class="text-gray-600">材质全部指定</span>
+          </div>
+        </div>
+
+        <!-- 推送状态 -->
+        <div class="flex items-center justify-between text-xs pt-1">
+          <span class="text-gray-500">推送检查</span>
+          <span class="font-medium text-orange-500">3/4 通过</span>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="flex gap-2 pt-1">
+          <button class="flex-1 text-xs bg-white border border-blue-500 text-blue-500 rounded px-3 py-2 hover:bg-blue-50 font-medium">计算安全区域</button>
+        </div>
+        <button class="w-full text-xs bg-gray-200 text-gray-400 rounded px-3 py-2 font-medium cursor-not-allowed" disabled>
+          推送到 PLM 创建 EBOM
+        </button>
+        <div class="text-xs text-gray-400 pt-1">
+          上次推送: 2026-04-09 14:30 → <span class="font-mono">EBOM-2026-0142 v1.0</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- [设计历史] — 小表格 -->
+    <!-- ============================== -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <div class="px-4 py-2.5 border-b border-gray-200 font-semibold text-gray-800 text-sm">
+        设计历史
+      </div>
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="text-left py-1.5 px-3 text-gray-500 font-medium border-b border-gray-200">时间</th>
+            <th class="text-left py-1.5 px-3 text-gray-500 font-medium border-b border-gray-200">操作</th>
+            <th class="text-left py-1.5 px-3 text-gray-500 font-medium border-b border-gray-200">版本</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-gray-100">
+            <td class="py-1.5 px-3 text-gray-400 whitespace-nowrap">04-10 09:15</td>
+            <td class="py-1.5 px-3 text-gray-600">添加攀爬网×2</td>
+            <td class="py-1.5 px-3 text-gray-500 font-mono">v2.1</td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-1.5 px-3 text-gray-400 whitespace-nowrap">04-09 16:42</td>
+            <td class="py-1.5 px-3 text-gray-600">调整平台高度</td>
+            <td class="py-1.5 px-3 text-gray-500 font-mono">v2.0</td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-1.5 px-3 text-gray-400 whitespace-nowrap">04-09 14:30</td>
+            <td class="py-1.5 px-3 text-gray-600">推送EBOM到PLM</td>
+            <td class="py-1.5 px-3 text-gray-500 font-mono">v1.0</td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-1.5 px-3 text-gray-400 whitespace-nowrap">04-08 11:20</td>
+            <td class="py-1.5 px-3 text-gray-600">替换滑道为S型</td>
+            <td class="py-1.5 px-3 text-gray-500 font-mono">v0.9</td>
+          </tr>
+          <tr>
+            <td class="py-1.5 px-3 text-gray-400 whitespace-nowrap">04-07 15:05</td>
+            <td class="py-1.5 px-3 text-gray-600">初始设计创建</td>
+            <td class="py-1.5 px-3 text-gray-500 font-mono">v0.1</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>安全合规中心 — 万德AI PLM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 子Tab样式 */
+    .sub-tab { cursor: pointer; transition: all .15s; }
+    .sub-tab:hover { color: #374151; }
+    .sub-tab.active { color: #1d4ed8; border-color: #3b82f6; font-weight: 600; }
+    /* 状态标签 */
+    .tag-valid { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .tag-expiring { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+    .tag-expired { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .tag-testing { background: #eff6ff; color: #2563eb; border: 1px solid #bfdbfe; }
+    /* 滚动条 */
+    ::-webkit-scrollbar { width: 5px; height: 5px; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 4px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 text-gray-700 text-sm">
+
+<!-- ============================== -->
+<!-- 安全合规中心 -->
+<!-- 对应Issue: #1845 #1923 #2271 -->
+<!-- ============================== -->
+
+<div class="space-y-4">
+
+  <!-- ============================== -->
+  <!-- [KPI统计行] — 顶部 -->
+  <!-- ============================== -->
+  <div class="grid grid-cols-5 gap-4">
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">有效证书</div>
+      <div class="text-2xl font-bold text-gray-800">89</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">即将过期 (30天内)</div>
+      <div class="text-2xl font-bold text-orange-500">5</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">已过期</div>
+      <div class="text-2xl font-bold text-red-500">2</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">待检测产品</div>
+      <div class="text-2xl font-bold text-blue-500">8</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">合规率</div>
+      <div class="text-2xl font-bold text-gray-800">96.2%</div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- [标准管理子Tab] — 页内二级Tab -->
+  <!-- ============================== -->
+  <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+
+    <!-- 二级Tab栏 -->
+    <div class="flex border-b border-gray-200 px-4">
+      <button onclick="switchTab('all')" id="tab-all" class="sub-tab active px-4 py-2.5 text-sm border-b-2 border-transparent -mb-px">全部</button>
+      <button onclick="switchTab('en')" id="tab-en" class="sub-tab px-4 py-2.5 text-sm border-b-2 border-transparent -mb-px text-gray-500">EN 1176</button>
+      <button onclick="switchTab('gb')" id="tab-gb" class="sub-tab px-4 py-2.5 text-sm border-b-2 border-transparent -mb-px text-gray-500">GB 19272</button>
+      <button onclick="switchTab('astm')" id="tab-astm" class="sub-tab px-4 py-2.5 text-sm border-b-2 border-transparent -mb-px text-gray-500">ASTM F1487</button>
+    </div>
+
+    <!-- ============================== -->
+    <!-- [合规检测记录表格] — 主体 -->
+    <!-- ============================== -->
+
+    <!-- 筛选栏 -->
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center gap-3 flex-wrap">
+      <div class="flex items-center bg-gray-50 border border-gray-300 rounded px-2 py-1.5 w-64">
+        <svg class="w-4 h-4 text-gray-400 mr-2 flex-shrink-0" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+        <input type="text" placeholder="搜索产品名称 / 证书编号..." class="bg-transparent text-sm w-full outline-none text-gray-600 placeholder-gray-400">
+      </div>
+      <select class="bg-gray-50 border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-600 outline-none">
+        <option>全部标准</option>
+        <option>EN 1176</option>
+        <option>GB 19272</option>
+        <option>ASTM F1487</option>
+      </select>
+      <select class="bg-gray-50 border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-600 outline-none">
+        <option>全部状态</option>
+        <option>有效</option>
+        <option>即将过期</option>
+        <option>已过期</option>
+        <option>检测中</option>
+      </select>
+      <div class="ml-auto">
+        <button class="bg-blue-500 text-white text-sm px-4 py-1.5 rounded hover:bg-blue-600 font-medium">发起检测</button>
+      </div>
+    </div>
+
+    <!-- 主数据表格 -->
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">产品名称</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">零件编码</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">BOM版本</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">适用标准</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">证书编号</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">有效期</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">状态</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">检测机构</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">操作</th>
+          </tr>
+        </thead>
+        <tbody id="compliance-table">
+          <!-- 行1 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="en">
+            <td class="py-2 px-3 text-gray-800 font-medium">超级滑梯A型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-SL-A-001</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v3.2</td>
+            <td class="py-2 px-3 text-gray-600">EN 1176-3</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2025-0891</td>
+            <td class="py-2 px-3 text-gray-600">2027-03-15</td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+            <td class="py-2 px-3 text-gray-600">TÜV SÜD</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行2 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="astm">
+            <td class="py-2 px-3 text-gray-800 font-medium">攀爬架B型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-CL-B-002</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v2.1</td>
+            <td class="py-2 px-3 text-gray-600">ASTM F1487</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">ASTM-2024-1203</td>
+            <td class="py-2 px-3 text-orange-500 font-medium">2026-05-15</td>
+            <td class="py-2 px-3"><span class="tag-expiring text-xs px-2 py-0.5 rounded-full">即将过期</span></td>
+            <td class="py-2 px-3 text-gray-600">SGS</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行3 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="gb">
+            <td class="py-2 px-3 text-gray-800 font-medium">秋千组件C型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-SW-C-003</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v1.4</td>
+            <td class="py-2 px-3 text-gray-600">GB 19272-2011</td>
+            <td class="py-2 px-3 text-gray-400 italic">检测中</td>
+            <td class="py-2 px-3 text-gray-400">—</td>
+            <td class="py-2 px-3"><span class="tag-testing text-xs px-2 py-0.5 rounded-full">检测中</span></td>
+            <td class="py-2 px-3 text-gray-600">中国检验认证集团</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-gray-300 cursor-not-allowed mr-2">续期</button>
+              <button class="text-gray-300 cursor-not-allowed">下载</button>
+            </td>
+          </tr>
+          <!-- 行4 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="en">
+            <td class="py-2 px-3 text-gray-800 font-medium">组合滑梯D型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-SL-D-004</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v4.0</td>
+            <td class="py-2 px-3 text-gray-600">EN 1176-1</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2024-0567</td>
+            <td class="py-2 px-3 text-gray-600">2026-12-20</td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+            <td class="py-2 px-3 text-gray-600">TÜV Rheinland</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行5 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="gb">
+            <td class="py-2 px-3 text-gray-800 font-medium">蹦床E型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-TR-E-005</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v2.0</td>
+            <td class="py-2 px-3 text-gray-600">GB 19272-2011</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CCC-2025-0234</td>
+            <td class="py-2 px-3 text-gray-600">2027-06-30</td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+            <td class="py-2 px-3 text-gray-600">中国质量认证中心</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行6 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="astm">
+            <td class="py-2 px-3 text-gray-800 font-medium">旋转木马F型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-MR-F-006</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v1.2</td>
+            <td class="py-2 px-3 text-gray-600">ASTM F1487</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">ASTM-2023-0899</td>
+            <td class="py-2 px-3 text-red-500 font-medium">2026-03-01</td>
+            <td class="py-2 px-3"><span class="tag-expired text-xs px-2 py-0.5 rounded-full">已过期</span></td>
+            <td class="py-2 px-3 text-gray-600">SGS</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行7 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="en">
+            <td class="py-2 px-3 text-gray-800 font-medium">攀爬网G型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-CL-G-007</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v1.8</td>
+            <td class="py-2 px-3 text-gray-600">EN 1176-1</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2025-1102</td>
+            <td class="py-2 px-3 text-gray-600">2027-11-10</td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+            <td class="py-2 px-3 text-gray-600">Bureau Veritas</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行8 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="gb">
+            <td class="py-2 px-3 text-gray-800 font-medium">平衡木H型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-BL-H-008</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v3.1</td>
+            <td class="py-2 px-3 text-gray-600">GB 19272-2011</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CCC-2024-0812</td>
+            <td class="py-2 px-3 text-orange-500 font-medium">2026-05-28</td>
+            <td class="py-2 px-3"><span class="tag-expiring text-xs px-2 py-0.5 rounded-full">即将过期</span></td>
+            <td class="py-2 px-3 text-gray-600">中国检验认证集团</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行9 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="en">
+            <td class="py-2 px-3 text-gray-800 font-medium">消防滑杆I型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-FP-I-009</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v2.3</td>
+            <td class="py-2 px-3 text-gray-600">EN 1176-1</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2025-0743</td>
+            <td class="py-2 px-3 text-gray-600">2027-07-22</td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+            <td class="py-2 px-3 text-gray-600">TÜV SÜD</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行10 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="astm">
+            <td class="py-2 px-3 text-gray-800 font-medium">跷跷板J型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-SS-J-010</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v1.0</td>
+            <td class="py-2 px-3 text-gray-600">ASTM F1487</td>
+            <td class="py-2 px-3 text-gray-400 italic">检测中</td>
+            <td class="py-2 px-3 text-gray-400">—</td>
+            <td class="py-2 px-3"><span class="tag-testing text-xs px-2 py-0.5 rounded-full">检测中</span></td>
+            <td class="py-2 px-3 text-gray-600">Intertek</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-gray-300 cursor-not-allowed mr-2">续期</button>
+              <button class="text-gray-300 cursor-not-allowed">下载</button>
+            </td>
+          </tr>
+          <!-- 行11 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="en">
+            <td class="py-2 px-3 text-gray-800 font-medium">钢制平台K型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-PF-K-011</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v5.0</td>
+            <td class="py-2 px-3 text-gray-600">EN 1176-2</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2023-0421</td>
+            <td class="py-2 px-3 text-red-500 font-medium">2025-12-31</td>
+            <td class="py-2 px-3"><span class="tag-expired text-xs px-2 py-0.5 rounded-full">已过期</span></td>
+            <td class="py-2 px-3 text-gray-600">TÜV Rheinland</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+          <!-- 行12 -->
+          <tr class="border-b border-gray-100 hover:bg-gray-50 compliance-row" data-std="gb">
+            <td class="py-2 px-3 text-gray-800 font-medium">秋千架L型</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">WD-SW-L-012</td>
+            <td class="py-2 px-3 text-gray-500 font-mono">v2.6</td>
+            <td class="py-2 px-3 text-gray-600">GB 19272-2011</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">CCC-2025-0567</td>
+            <td class="py-2 px-3 text-gray-600">2027-09-18</td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+            <td class="py-2 px-3 text-gray-600">中国质量认证中心</td>
+            <td class="py-2 px-3 whitespace-nowrap">
+              <button class="text-blue-500 hover:underline mr-2">详情</button>
+              <button class="text-blue-500 hover:underline mr-2">续期</button>
+              <button class="text-blue-500 hover:underline">下载</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分页 -->
+    <div class="px-4 py-2.5 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+      <span>共 96 条记录，显示 1-12</span>
+      <div class="flex items-center gap-1">
+        <button class="px-2 py-1 border border-gray-300 rounded text-gray-400 cursor-not-allowed">上一页</button>
+        <button class="px-2 py-1 border border-blue-500 bg-blue-500 text-white rounded">1</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">2</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">3</button>
+        <span class="px-1">...</span>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">8</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">下一页</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- [证书绑定BOM版本] — 关键功能区域 -->
+  <!-- 证书必须绑定到具体的BOM版本，BOM版本变更(ECO)后需要重新认证 -->
+  <!-- ============================== -->
+  <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+    <div class="px-4 py-2.5 border-b border-gray-200 flex items-center justify-between">
+      <div class="font-semibold text-gray-800 text-sm">证书绑定 BOM 版本</div>
+      <span class="text-xs text-gray-400">证书必须绑定到具体BOM版本，版本变更(ECO)后需重新认证</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="bg-gray-50">
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">证书编号</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">绑定产品</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">绑定BOM版本</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">当前最新版</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">是否最新版</th>
+            <th class="text-left py-2 px-3 text-gray-500 font-medium border-b border-gray-200 whitespace-nowrap">状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-gray-100">
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2025-0891</td>
+            <td class="py-2 px-3 text-gray-800 font-medium">超级滑梯A型</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v3.2</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v3.2</td>
+            <td class="py-2 px-3"><span class="text-green-600">✓ 是</span></td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+          </tr>
+          <tr class="border-b border-gray-100 bg-red-50/50">
+            <td class="py-2 px-3 text-gray-600 font-mono">CE-2024-0567</td>
+            <td class="py-2 px-3 text-gray-800 font-medium">组合滑梯D型</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v3.8</td>
+            <td class="py-2 px-3 text-red-500 font-mono font-medium">v4.0</td>
+            <td class="py-2 px-3"><span class="text-red-600 font-medium">✗ 否</span></td>
+            <td class="py-2 px-3">
+              <span class="text-red-600 text-xs font-medium">⚠ BOM已更新，需重新认证</span>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-2 px-3 text-gray-600 font-mono">CCC-2025-0234</td>
+            <td class="py-2 px-3 text-gray-800 font-medium">蹦床E型</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v2.0</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v2.0</td>
+            <td class="py-2 px-3"><span class="text-green-600">✓ 是</span></td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+          </tr>
+          <tr class="border-b border-gray-100 bg-red-50/50">
+            <td class="py-2 px-3 text-gray-600 font-mono">ASTM-2024-1203</td>
+            <td class="py-2 px-3 text-gray-800 font-medium">攀爬架B型</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v1.9</td>
+            <td class="py-2 px-3 text-red-500 font-mono font-medium">v2.1</td>
+            <td class="py-2 px-3"><span class="text-red-600 font-medium">✗ 否</span></td>
+            <td class="py-2 px-3">
+              <span class="text-red-600 text-xs font-medium">⚠ BOM已更新，需重新认证</span>
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2 px-3 text-gray-600 font-mono">CCC-2025-0567</td>
+            <td class="py-2 px-3 text-gray-800 font-medium">秋千架L型</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v2.6</td>
+            <td class="py-2 px-3 text-gray-600 font-mono">v2.6</td>
+            <td class="py-2 px-3"><span class="text-green-600">✓ 是</span></td>
+            <td class="py-2 px-3"><span class="tag-valid text-xs px-2 py-0.5 rounded-full">有效</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- [AI合规报告] — 底部功能区 -->
+  <!-- 对应#1923 AI合规报告自动生成 -->
+  <!-- ============================== -->
+  <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+    <div class="px-4 py-2.5 border-b border-gray-200 flex items-center gap-2">
+      <span class="font-semibold text-gray-800 text-sm">AI 合规报告生成</span>
+      <span class="bg-blue-50 text-blue-600 text-xs px-2 py-0.5 rounded font-medium">AI</span>
+    </div>
+    <div class="p-4">
+      <div class="flex gap-4">
+        <!-- 左侧：配置 -->
+        <div class="w-1/3 space-y-3">
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">选择产品</label>
+            <select class="w-full bg-gray-50 border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-600 outline-none">
+              <option>超级滑梯A型</option>
+              <option>攀爬架B型</option>
+              <option>秋千组件C型</option>
+              <option>组合滑梯D型</option>
+              <option>蹦床E型</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">选择目标标准（可多选）</label>
+            <div class="space-y-1.5">
+              <label class="flex items-center gap-2 text-xs text-gray-600">
+                <input type="checkbox" checked class="rounded border-gray-300"> EN 1176 (欧洲)
+              </label>
+              <label class="flex items-center gap-2 text-xs text-gray-600">
+                <input type="checkbox" class="rounded border-gray-300"> GB 19272 (中国)
+              </label>
+              <label class="flex items-center gap-2 text-xs text-gray-600">
+                <input type="checkbox" checked class="rounded border-gray-300"> ASTM F1487 (美国)
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">报告语言</label>
+            <select class="w-full bg-gray-50 border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-600 outline-none">
+              <option>中文</option>
+              <option>英文</option>
+              <option>中英双语</option>
+            </select>
+          </div>
+          <button class="w-full bg-blue-500 text-white text-sm px-4 py-2 rounded hover:bg-blue-600 font-medium">
+            生成合规报告
+          </button>
+          <div class="text-xs text-gray-400">预计生成时间: 约2-3分钟</div>
+        </div>
+        <!-- 右侧：报告预览占位 -->
+        <!-- PDF报告预览区 — 包含检测项逐条结果+合格/不合格判定+整改建议 -->
+        <div class="w-2/3 bg-gray-50 border border-gray-300 border-dashed rounded-lg flex flex-col items-center justify-center min-h-[220px]">
+          <svg class="w-12 h-12 text-gray-300 mb-3" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg>
+          <p class="text-gray-400 text-sm mb-1">PDF 报告预览区</p>
+          <p class="text-gray-300 text-xs text-center px-6">检测项逐条结果 · 合格/不合格判定 · 整改建议 · 标准条文引用</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============================== -->
+<!-- 页内Tab切换脚本 -->
+<!-- ============================== -->
+<script>
+function switchTab(tab) {
+  // 更新Tab样式
+  document.querySelectorAll('.sub-tab').forEach(el => {
+    el.classList.remove('active');
+    el.classList.add('text-gray-500');
+  });
+  const activeTab = document.getElementById('tab-' + tab);
+  activeTab.classList.add('active');
+  activeTab.classList.remove('text-gray-500');
+
+  // 过滤表格行
+  document.querySelectorAll('.compliance-row').forEach(row => {
+    if (tab === 'all') {
+      row.style.display = '';
+    } else {
+      row.style.display = row.dataset.std === tab ? '' : 'none';
+    }
+  });
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ECO工程变更</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 审批流步骤条 */
+    .step-line { height: 2px; flex: 1; min-width: 3rem; }
+    .step-dot { width: 1.75rem; height: 1.75rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.65rem; font-weight: 600; flex-shrink: 0; }
+    .step-done { background-color: #d1fae5; color: #065f46; border: 2px solid #6ee7b7; }
+    .step-active { background-color: #dbeafe; color: #1e40af; border: 2px solid #3b82f6; }
+    .step-pending { background-color: #f3f4f6; color: #9ca3af; border: 2px solid #d1d5db; }
+    .line-done { background-color: #6ee7b7; }
+    .line-pending { background-color: #d1d5db; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================== -->
+  <!-- [ECO统计] — 顶部KPI行 -->
+  <!-- ============================================== -->
+  <div class="grid grid-cols-5 gap-4 mb-4">
+    <div class="bg-white border border-gray-300 rounded px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">本月发起</div>
+      <div class="text-2xl font-bold text-gray-900">8</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">审批中</div>
+      <div class="text-2xl font-bold text-yellow-600">3</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">执行中</div>
+      <div class="text-2xl font-bold text-blue-600">2</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">已关闭</div>
+      <div class="text-2xl font-bold text-gray-900">15</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3">
+      <div class="text-xs text-gray-500 mb-1">平均审批天数</div>
+      <div class="text-2xl font-bold text-gray-900">3.2<span class="text-sm font-normal text-gray-400 ml-0.5">天</span></div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- [筛选栏] — 顶部筛选 -->
+  <!-- ============================================== -->
+  <div class="bg-white border border-gray-300 rounded mb-4 px-4 py-3 flex items-center gap-3 flex-wrap">
+    <input type="text" placeholder="搜索ECO编号/描述…" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-56 focus:outline-none focus:border-blue-400">
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600">
+      <option>全部级别</option>
+      <option>A级 — 重大</option>
+      <option>B级 — 中等</option>
+      <option>C级 — 轻微</option>
+    </select>
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600">
+      <option>全部状态</option>
+      <option>草稿</option>
+      <option>评审中</option>
+      <option>已批准</option>
+      <option>执行中</option>
+      <option>已关闭</option>
+    </select>
+    <div class="flex items-center gap-1.5">
+      <input type="date" class="border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-600">
+      <span class="text-gray-400 text-xs">至</span>
+      <input type="date" class="border border-gray-300 rounded px-2 py-1.5 text-sm text-gray-600">
+    </div>
+    <div class="flex-1"></div>
+    <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded">+ 发起ECO</button>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- [ECO列表 — 全宽表格] — 主体 -->
+  <!-- ============================================== -->
+  <div class="bg-white border border-gray-300 rounded overflow-hidden mb-4">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600">
+        <tr>
+          <th class="text-left px-4 py-2.5 font-medium">ECO编号</th>
+          <th class="text-left px-4 py-2.5 font-medium">变更标题</th>
+          <th class="text-left px-4 py-2.5 font-medium">级别</th>
+          <th class="text-right px-4 py-2.5 font-medium">影响零件</th>
+          <th class="text-right px-4 py-2.5 font-medium">影响BOM</th>
+          <th class="text-right px-4 py-2.5 font-medium">预估成本影响</th>
+          <th class="text-left px-4 py-2.5 font-medium">发起人</th>
+          <th class="text-left px-4 py-2.5 font-medium">状态</th>
+          <th class="text-left px-4 py-2.5 font-medium">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200">
+        <!-- Row 1 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0023</td>
+          <td class="px-4 py-2.5 text-gray-900">滑梯主体钢管材质升级Q345→Q355</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-red-100 text-red-700 font-medium">A级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">12</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">5</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥8,200</td>
+          <td class="px-4 py-2.5 text-gray-600">李工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">评审中</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs" onclick="toggleEcoDetail('eco23')">详情</button>
+            <button class="text-blue-500 hover:text-blue-700 text-xs">审批</button>
+          </td>
+        </tr>
+        <!-- Row 2 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0024</td>
+          <td class="px-4 py-2.5 text-gray-900">攀爬架握把防滑纹路优化</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-700 font-medium">B级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">3</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">2</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥1,100</td>
+          <td class="px-4 py-2.5 text-gray-600">张工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">执行中</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-blue-500 hover:text-blue-700 text-xs">审批</button>
+          </td>
+        </tr>
+        <!-- Row 3 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0025</td>
+          <td class="px-4 py-2.5 text-gray-900">螺栓规格标注修正</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-600 font-medium">C级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">1</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">8</td>
+          <td class="px-4 py-2.5 text-right text-gray-500">¥0</td>
+          <td class="px-4 py-2.5 text-gray-600">王工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已关闭</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-gray-300 text-xs cursor-not-allowed">审批</button>
+          </td>
+        </tr>
+        <!-- Row 4 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0026</td>
+          <td class="px-4 py-2.5 text-gray-900">秋千座椅支架加强筋增设</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-red-100 text-red-700 font-medium">A级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">8</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">3</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥4,500</td>
+          <td class="px-4 py-2.5 text-gray-600">陈工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">评审中</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-blue-500 hover:text-blue-700 text-xs">审批</button>
+          </td>
+        </tr>
+        <!-- Row 5 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0027</td>
+          <td class="px-4 py-2.5 text-gray-900">综合游乐架地基预埋件尺寸调整</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-700 font-medium">B级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">5</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">4</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥2,800</td>
+          <td class="px-4 py-2.5 text-gray-600">刘工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已批准</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-gray-300 text-xs cursor-not-allowed">审批</button>
+          </td>
+        </tr>
+        <!-- Row 6 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0028</td>
+          <td class="px-4 py-2.5 text-gray-900">滑梯护栏高度国标GB/T调整</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-red-100 text-red-700 font-medium">A级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">15</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">7</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥12,600</td>
+          <td class="px-4 py-2.5 text-gray-600">胡总</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-blue-100 text-blue-700">执行中</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-gray-300 text-xs cursor-not-allowed">审批</button>
+          </td>
+        </tr>
+        <!-- Row 7 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0029</td>
+          <td class="px-4 py-2.5 text-gray-900">攀爬网绳索直径由10mm改12mm</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-700 font-medium">B级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">2</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">3</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥960</td>
+          <td class="px-4 py-2.5 text-gray-600">赵工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已关闭</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-gray-300 text-xs cursor-not-allowed">审批</button>
+          </td>
+        </tr>
+        <!-- Row 8 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0030</td>
+          <td class="px-4 py-2.5 text-gray-900">旋转滑梯轴承型号更换</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-orange-100 text-orange-700 font-medium">B级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">4</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">2</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥3,400</td>
+          <td class="px-4 py-2.5 text-gray-600">李工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">评审中</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-blue-500 hover:text-blue-700 text-xs">审批</button>
+          </td>
+        </tr>
+        <!-- Row 9 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0031</td>
+          <td class="px-4 py-2.5 text-gray-900">涂装颜色编码体系统一</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-600 font-medium">C级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">0</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">0</td>
+          <td class="px-4 py-2.5 text-right text-gray-500">¥0</td>
+          <td class="px-4 py-2.5 text-gray-600">王工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已关闭</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-gray-300 text-xs cursor-not-allowed">审批</button>
+          </td>
+        </tr>
+        <!-- Row 10 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2.5 font-mono text-xs text-gray-700">ECO-2026-0032</td>
+          <td class="px-4 py-2.5 text-gray-900">双人秋千链条防护套新增</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-600 font-medium">C级</span></td>
+          <td class="px-4 py-2.5 text-right text-gray-700">2</td>
+          <td class="px-4 py-2.5 text-right text-gray-700">1</td>
+          <td class="px-4 py-2.5 text-right text-red-600 font-medium">+¥320</td>
+          <td class="px-4 py-2.5 text-gray-600">张工</td>
+          <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-600">草稿</span></td>
+          <td class="px-4 py-2.5 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            <button class="text-blue-500 hover:text-blue-700 text-xs">审批</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- [ECO详情展开区域] — 以ECO-2026-0023为示例 -->
+  <!-- CC实现时此区域为点击"详情"后展开或弹出的面板 -->
+  <!-- ============================================== -->
+  <div id="ecoDetail-eco23" class="bg-white border border-gray-300 rounded overflow-hidden mb-4 hidden">
+    
+    <!-- 详情头部 -->
+    <div class="bg-gray-100 px-4 py-2.5 flex items-center justify-between border-b border-gray-300">
+      <div class="flex items-center gap-3">
+        <span class="text-sm font-medium text-gray-700">ECO-2026-0023 详情</span>
+        <span class="inline-block px-2 py-0.5 rounded text-xs bg-red-100 text-red-700 font-medium">A级</span>
+        <span class="inline-block px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">评审中</span>
+      </div>
+      <button class="text-gray-400 hover:text-gray-600 text-xs" onclick="toggleEcoDetail('eco23')">收起 ✕</button>
+    </div>
+
+    <div class="p-4 space-y-5">
+
+      <!-- 变更原因 + 描述 -->
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <div class="text-xs font-medium text-gray-500 mb-1">变更原因</div>
+          <div class="text-sm text-gray-800 bg-gray-50 rounded border border-gray-200 p-3">
+            根据2026年国标GB/T 19694更新要求，游乐设备承重结构件材质需由Q345升级至Q355，以提升结构安全系数。供应商已确认Q355价格及交期。
+          </div>
+        </div>
+        <div>
+          <div class="text-xs font-medium text-gray-500 mb-1">变更内容描述</div>
+          <div class="text-sm text-gray-800 bg-gray-50 rounded border border-gray-200 p-3">
+            1. 所有滑梯系列主体钢管材质由Q345替换为Q355<br>
+            2. 相关图纸标注更新<br>
+            3. 供应商合格供方清单同步更新<br>
+            4. 相关BOM成本Roll-up重算
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- [影响分析表格] — 受影响的零件+BOM列表 -->
+      <!-- ============================================== -->
+      <div>
+        <div class="text-xs font-medium text-gray-500 mb-2">影响分析 — 受影响零件</div>
+        <div class="border border-gray-300 rounded overflow-hidden">
+          <table class="w-full text-xs">
+            <thead class="bg-gray-100 text-gray-600">
+              <tr>
+                <th class="text-left px-3 py-2 font-medium">零件编码</th>
+                <th class="text-left px-3 py-2 font-medium">名称</th>
+                <th class="text-left px-3 py-2 font-medium">变更前</th>
+                <th class="text-left px-3 py-2 font-medium">变更后</th>
+                <th class="text-right px-3 py-2 font-medium">成本影响</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">WD-TU-ST-0048</td>
+                <td class="px-3 py-2 text-gray-800">主体钢管 Φ89×3.5</td>
+                <td class="px-3 py-2 text-gray-600">Q345 / ¥620</td>
+                <td class="px-3 py-2 text-gray-800 font-medium">Q355 / ¥680</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥240</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">WD-TU-ST-0049</td>
+                <td class="px-3 py-2 text-gray-800">立柱钢管 Φ114×4.0</td>
+                <td class="px-3 py-2 text-gray-600">Q345 / ¥880</td>
+                <td class="px-3 py-2 text-gray-800 font-medium">Q355 / ¥950</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥280</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">WD-TU-ST-0050</td>
+                <td class="px-3 py-2 text-gray-800">横梁钢管 Φ60×3.0</td>
+                <td class="px-3 py-2 text-gray-600">Q345 / ¥420</td>
+                <td class="px-3 py-2 text-gray-800 font-medium">Q355 / ¥460</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥160</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">WD-TU-ST-0051</td>
+                <td class="px-3 py-2 text-gray-800">连接弯管 Φ89</td>
+                <td class="px-3 py-2 text-gray-600">Q345 / ¥350</td>
+                <td class="px-3 py-2 text-gray-800 font-medium">Q355 / ¥385</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥140</td>
+              </tr>
+            </tbody>
+            <tfoot class="bg-gray-50 border-t border-gray-300">
+              <tr>
+                <td class="px-3 py-2 text-gray-500" colspan="4">合计（12个受影响零件中显示4个）</td>
+                <td class="px-3 py-2 text-right text-red-600 font-bold">+¥8,200</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- 受影响BOM -->
+      <div>
+        <div class="text-xs font-medium text-gray-500 mb-2">受影响BOM</div>
+        <div class="border border-gray-300 rounded overflow-hidden">
+          <table class="w-full text-xs">
+            <thead class="bg-gray-100 text-gray-600">
+              <tr>
+                <th class="text-left px-3 py-2 font-medium">BOM编码</th>
+                <th class="text-left px-3 py-2 font-medium">产品名称</th>
+                <th class="text-left px-3 py-2 font-medium">当前版本</th>
+                <th class="text-left px-3 py-2 font-medium">变更后版本</th>
+                <th class="text-right px-3 py-2 font-medium">成本变动</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">BOM-SL-2026-001</td>
+                <td class="px-3 py-2 text-gray-800">超级滑梯组件</td>
+                <td class="px-3 py-2">v3.2</td>
+                <td class="px-3 py-2 font-medium">→ v3.3</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥2,400</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">BOM-SL-2026-004</td>
+                <td class="px-3 py-2 text-gray-800">旋转滑梯组件</td>
+                <td class="px-3 py-2">v1.5</td>
+                <td class="px-3 py-2 font-medium">→ v1.6</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥1,800</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">BOM-SL-2026-008</td>
+                <td class="px-3 py-2 text-gray-800">管状滑梯封闭型</td>
+                <td class="px-3 py-2">v2.3</td>
+                <td class="px-3 py-2 font-medium">→ v2.4</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥1,600</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">BOM-ZH-2026-006</td>
+                <td class="px-3 py-2 text-gray-800">综合游乐架</td>
+                <td class="px-3 py-2">v5.1</td>
+                <td class="px-3 py-2 font-medium">→ v5.2</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥1,680</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 font-mono text-gray-500">BOM-PP-2026-002</td>
+                <td class="px-3 py-2 text-gray-800">攀爬架组件A型</td>
+                <td class="px-3 py-2">v2.1</td>
+                <td class="px-3 py-2 font-medium">→ v2.2</td>
+                <td class="px-3 py-2 text-right text-red-600">+¥720</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- [审批流可视化] — 横向步骤条 -->
+      <!-- A级审批流：发起人 → 技术评审(胡总) → 成本评审(财务) → 总经理会签 → 执行 -->
+      <!-- ============================================== -->
+      <div>
+        <div class="text-xs font-medium text-gray-500 mb-3">A级审批流程</div>
+        <div class="flex items-center px-2">
+          <!-- Step 1: 发起人 ✓ -->
+          <div class="flex flex-col items-center">
+            <div class="step-dot step-done">✓</div>
+            <div class="text-xs text-gray-600 mt-1.5 text-center leading-tight">发起人<br><span class="text-gray-400">李工</span></div>
+          </div>
+          <div class="step-line line-done"></div>
+          <!-- Step 2: 技术评审 — 当前 -->
+          <div class="flex flex-col items-center">
+            <div class="step-dot step-active">2</div>
+            <div class="text-xs text-blue-700 mt-1.5 text-center leading-tight font-medium">技术评审<br><span class="text-blue-500">胡总</span></div>
+          </div>
+          <div class="step-line line-pending"></div>
+          <!-- Step 3: 成本评审 -->
+          <div class="flex flex-col items-center">
+            <div class="step-dot step-pending">3</div>
+            <div class="text-xs text-gray-400 mt-1.5 text-center leading-tight">成本评审<br><span>财务部</span></div>
+          </div>
+          <div class="step-line line-pending"></div>
+          <!-- Step 4: 总经理会签 -->
+          <div class="flex flex-col items-center">
+            <div class="step-dot step-pending">4</div>
+            <div class="text-xs text-gray-400 mt-1.5 text-center leading-tight">总经理会签<br><span>周总</span></div>
+          </div>
+          <div class="step-line line-pending"></div>
+          <!-- Step 5: 执行 -->
+          <div class="flex flex-col items-center">
+            <div class="step-dot step-pending">5</div>
+            <div class="text-xs text-gray-400 mt-1.5 text-center leading-tight">执行</div>
+          </div>
+        </div>
+
+        <!-- B级/C级审批流说明 -->
+        <div class="mt-4 flex gap-6 text-xs text-gray-400 border-t border-gray-200 pt-3">
+          <div>
+            <span class="font-medium text-gray-500">B级流程：</span>
+            发起人 → 技术评审 → 执行
+          </div>
+          <div>
+            <span class="font-medium text-gray-500">C级流程：</span>
+            发起人 → 自动执行
+          </div>
+        </div>
+      </div>
+
+      <!-- ============================================== -->
+      <!-- [执行状态] — 零件版本更新进度 + BOM版本递增状态 -->
+      <!-- ============================================== -->
+      <div>
+        <div class="text-xs font-medium text-gray-500 mb-2">执行状态（审批通过后激活）</div>
+        <div class="border border-gray-300 rounded overflow-hidden">
+          <table class="w-full text-xs">
+            <thead class="bg-gray-100 text-gray-600">
+              <tr>
+                <th class="text-left px-3 py-2 font-medium">执行项</th>
+                <th class="text-left px-3 py-2 font-medium">目标</th>
+                <th class="text-left px-3 py-2 font-medium">进度</th>
+                <th class="text-left px-3 py-2 font-medium">状态</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-3 py-2 text-gray-700">零件版本更新</td>
+                <td class="px-3 py-2 text-gray-600">12个零件升版</td>
+                <td class="px-3 py-2">
+                  <div class="w-32 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-gray-400 h-1.5 rounded-full" style="width:0%"></div>
+                  </div>
+                </td>
+                <td class="px-3 py-2"><span class="text-gray-400">待审批通过</span></td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-gray-700">BOM版本递增</td>
+                <td class="px-3 py-2 text-gray-600">5个BOM升版</td>
+                <td class="px-3 py-2">
+                  <div class="w-32 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-gray-400 h-1.5 rounded-full" style="width:0%"></div>
+                  </div>
+                </td>
+                <td class="px-3 py-2"><span class="text-gray-400">待审批通过</span></td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-gray-700">图纸更新</td>
+                <td class="px-3 py-2 text-gray-600">8份图纸变更标注</td>
+                <td class="px-3 py-2">
+                  <div class="w-32 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-gray-400 h-1.5 rounded-full" style="width:0%"></div>
+                  </div>
+                </td>
+                <td class="px-3 py-2"><span class="text-gray-400">待审批通过</span></td>
+              </tr>
+              <tr>
+                <td class="px-3 py-2 text-gray-700">供应商通知</td>
+                <td class="px-3 py-2 text-gray-600">通知3家供应商</td>
+                <td class="px-3 py-2">
+                  <div class="w-32 bg-gray-200 rounded-full h-1.5">
+                    <div class="bg-gray-400 h-1.5 rounded-full" style="width:0%"></div>
+                  </div>
+                </td>
+                <td class="px-3 py-2"><span class="text-gray-400">待审批通过</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    // ECO详情展开/收起
+    function toggleEcoDetail(id) {
+      const panel = document.getElementById('ecoDetail-' + id);
+      if (panel) {
+        panel.classList.toggle('hidden');
+        if (!panel.classList.contains('hidden')) {
+          panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+      }
+    }
+  </script>
+
+</body>
+</html>

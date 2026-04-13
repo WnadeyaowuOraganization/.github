@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 产品技术中心(PLM) 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; flex-shrink: 0; transition: all 0.15s; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+    .tab-item:hover { color: #333; }
+    .tab-item .badge { display: inline-block; background: #1890ff; color: #fff; font-size: 10px; padding: 1px 6px; border-radius: 10px; margin-left: 6px; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .sidebar-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 8px; cursor: pointer; color: #999; transition: all 0.15s; margin-bottom: 4px; }
+    .sidebar-icon:hover { background: #f0f0f0; color: #333; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- [侧边栏] 万德平台折叠菜单 -->
+    <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center py-4">
+      <!-- Logo -->
+      <div class="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center mb-6">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="2" y="2" width="16" height="16" rx="3" stroke="#666" stroke-width="1.5"/><path d="M6 10h8M10 6v8" stroke="#666" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <!-- 菜单图标 -->
+      <div class="sidebar-icon" title="CRM商务中心">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M3 4h14M3 10h14M3 16h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="sidebar-icon" title="项目中心">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M3 8h14" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <div class="sidebar-icon active" title="产品技术中心">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="7" stroke="currentColor" stroke-width="1.5"/><path d="M10 6v4l3 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+      </div>
+      <div class="sidebar-icon" title="审批中心">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M6 10l3 3 5-6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/><rect x="3" y="3" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+      <div class="sidebar-icon" title="超管驾驶舱">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none"><rect x="3" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="3" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="11" y="11" width="6" height="6" rx="1" stroke="currentColor" stroke-width="1.5"/></svg>
+      </div>
+    </aside>
+
+    <!-- [主内容区] -->
+    <main class="flex-1 flex flex-col">
+      <!-- [面包屑] -->
+      <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+        首页 &gt; 产品技术中心 &gt; <span class="text-gray-700" id="breadcrumb-tab">总览仪表盘</span>
+      </div>
+
+      <!-- [Tab栏] -->
+      <div class="tab-bar" id="tabBar"></div>
+
+      <!-- [Tab内容 — iframe加载] -->
+      <div class="flex-1 p-0">
+        <iframe id="tabFrame" class="tab-content-frame" src="01-dashboard.html"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="p-6 bg-white border-t border-gray-300 mt-4">
+    <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 — 产品技术中心(PLM)联邦架构</h3>
+    <p class="text-sm text-gray-500 mb-4">本原型覆盖PLM核心（零件+BOM+ECO）+ D3 Web前端 + 安全合规，共8个页面。对应 Sprint-2 的 25个 biz:ptc Issue。</p>
+    <table class="w-full text-sm text-left border-collapse">
+      <thead><tr class="bg-gray-100">
+        <th class="p-2 border border-gray-300">Tab页</th>
+        <th class="p-2 border border-gray-300">文件名</th>
+        <th class="p-2 border border-gray-300">功能描述</th>
+        <th class="p-2 border border-gray-300">对应Issue</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="p-2 border border-gray-300">① 总览仪表盘</td><td class="p-2 border border-gray-300">01-dashboard.html</td><td class="p-2 border border-gray-300">联邦架构数据流动图，6个模块连接关系，KPI统计</td><td class="p-2 border border-gray-300">全局概览</td></tr>
+        <tr><td class="p-2 border border-gray-300">② 零件主数据</td><td class="p-2 border border-gray-300">02-part-master.html</td><td class="p-2 border border-gray-300">Part Master列表 + 四段式编码 + 版本状态机(Draft→Released)</td><td class="p-2 border border-gray-300">#3377 #3378 #3379 #3394</td></tr>
+        <tr><td class="p-2 border border-gray-300">③ BOM管理中心</td><td class="p-2 border border-gray-300">03-bom-center.html</td><td class="p-2 border border-gray-300">EBOM/超级BOM/MBOM/项目BOM 四Tab + BOM树 + 版本对比</td><td class="p-2 border border-gray-300">#3380 #3381 #3383 #3384 #3388 #3389 #3395</td></tr>
+        <tr><td class="p-2 border border-gray-300">④ ECO工程变更</td><td class="p-2 border border-gray-300">04-eco-center.html</td><td class="p-2 border border-gray-300">A/B/C三级分类 + 影响分析 + 审批流 + 执行引擎</td><td class="p-2 border border-gray-300">#3385 #3386 #3387 #3396</td></tr>
+        <tr><td class="p-2 border border-gray-300">⑤ 产品配置器</td><td class="p-2 border border-gray-300">05-configurator.html</td><td class="p-2 border border-gray-300">三栏布局：左选配+中3D预览+右BOM报价</td><td class="p-2 border border-gray-300">#3391 #3392 #3393 #3397</td></tr>
+        <tr><td class="p-2 border border-gray-300">⑥ 技术确认中心</td><td class="p-2 border border-gray-300">06-tech-confirm.html</td><td class="p-2 border border-gray-300">3D标注 + 参数对比 + 确认锁定版本（胡总在线确认）</td><td class="p-2 border border-gray-300">#2317</td></tr>
+        <tr><td class="p-2 border border-gray-300">⑦ D3设计工作台</td><td class="p-2 border border-gray-300">07-d3-workbench.html</td><td class="p-2 border border-gray-300">GH电池包拖拽 + BOM推送PLM + 推送检查</td><td class="p-2 border border-gray-300">#2306 #2316 #1926</td></tr>
+        <tr><td class="p-2 border border-gray-300">⑧ 安全合规中心</td><td class="p-2 border border-gray-300">08-compliance.html</td><td class="p-2 border border-gray-300">EN1176/GB19272/ASTM三标准 + 证书绑定BOM版本</td><td class="p-2 border border-gray-300">#1845 #1923 #2271</td></tr>
+      </tbody>
+    </table>
+    <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-sm text-blue-700">
+      <strong>数据流关系</strong>：⑦D3工作台 → 推送BOM → ③BOM中心创建EBOM → 超级BOM规则 → 驱动⑤配置器选配 → 生成报价 → 发送⑥确认中心 → 确认通过 → 触发④ECO版本锁定 → ⑧合规证书绑定版本
+    </div>
+  </div>
+
+  <script>
+    const tabs = [
+      { key: 'dashboard',    label: '① 总览仪表盘',  src: '01-dashboard.html' },
+      { key: 'part-master',  label: '② 零件主数据',  src: '02-part-master.html' },
+      { key: 'bom-center',   label: '③ BOM管理中心', src: '03-bom-center.html' },
+      { key: 'eco-center',   label: '④ ECO工程变更', src: '04-eco-center.html' },
+      { key: 'configurator', label: '⑤ 产品配置器',  src: '05-configurator.html' },
+      { key: 'tech-confirm', label: '⑥ 技术确认中心', src: '06-tech-confirm.html' },
+      { key: 'd3-workbench', label: '⑦ D3设计工作台', src: '07-d3-workbench.html' },
+      { key: 'compliance',   label: '⑧ 安全合规中心', src: '08-compliance.html' },
+    ];
+
+    const tabBar = document.getElementById('tabBar');
+    const tabFrame = document.getElementById('tabFrame');
+    const breadcrumb = document.getElementById('breadcrumb-tab');
+    let activeKey = tabs[0].key;
+
+    function renderTabs() {
+      tabBar.innerHTML = tabs.map(t =>
+        `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}" data-label="${t.label}">${t.label}</div>`
+      ).join('');
+    }
+
+    tabBar.addEventListener('click', (e) => {
+      const item = e.target.closest('.tab-item');
+      if (!item) return;
+      activeKey = item.dataset.key;
+      tabFrame.src = item.dataset.src;
+      breadcrumb.textContent = item.dataset.label.replace(/^[①-⑧]\s*/, '');
+      renderTabs();
+    });
+
+    tabFrame.addEventListener('load', () => {
+      try {
+        const h = tabFrame.contentDocument.documentElement.scrollHeight;
+        tabFrame.style.height = Math.max(h, 600) + 'px';
+      } catch(e) {}
+    });
+
+    renderTabs();
+  </script>
+</body>
+</html>

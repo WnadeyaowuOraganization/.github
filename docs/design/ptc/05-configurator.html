@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>产品配置器 — 万德AI平台PLM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .section-label { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================ -->
+  <!-- 产品配置器 — 三栏布局                          -->
+  <!-- 对应Issue: #3391 #3392 #3393 #3397            -->
+  <!-- ============================================ -->
+  <div class="flex gap-5 min-h-[calc(100vh-48px)]">
+
+    <!-- ============================== -->
+    <!-- [左栏 — 选配面板] 宽度30%        -->
+    <!-- ============================== -->
+    <div class="w-[30%] flex-shrink-0 space-y-4">
+
+      <!-- 产品系列选择 -->
+      <div class="bg-white border border-gray-300 rounded p-4">
+        <div class="section-label">产品系列选择</div>
+        <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:border-blue-400">
+          <option selected>超级滑梯系列</option>
+          <option>攀爬探险系列</option>
+          <option>综合体系列</option>
+        </select>
+      </div>
+
+      <!-- 选配参数表单（基于超级BOM规则动态渲染） -->
+      <div class="bg-white border border-gray-300 rounded p-4 space-y-4">
+        <div class="section-label">选配参数 <span class="font-normal text-gray-400 text-xs">— 基于超级BOM规则动态渲染</span></div>
+
+        <!-- 滑道类型: N选1 — radio -->
+        <div>
+          <label class="block text-xs text-gray-500 mb-1.5">滑道类型</label>
+          <div class="flex gap-4 text-sm text-gray-700">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="slide_type" class="accent-blue-500"> 直滑
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="slide_type" class="accent-blue-500" checked> 螺旋
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="slide_type" class="accent-blue-500"> 波浪
+            </label>
+          </div>
+        </div>
+
+        <!-- 平台数量: 数量型 — number input -->
+        <div>
+          <label class="block text-xs text-gray-500 mb-1.5">平台数量</label>
+          <input type="number" min="1" max="4" value="4" class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-blue-400">
+          <span class="text-xs text-gray-400 mt-0.5 block">范围: 1-4个</span>
+        </div>
+
+        <!-- 平台高度: 参数化 — select -->
+        <div>
+          <label class="block text-xs text-gray-500 mb-1.5">平台高度</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm bg-white text-gray-700 focus:outline-none focus:border-blue-400">
+            <option>1.2m</option>
+            <option>1.5m</option>
+            <option selected>1.8m</option>
+            <option>2.0m</option>
+          </select>
+        </div>
+
+        <!-- 护栏材质: N选1 — radio -->
+        <div>
+          <label class="block text-xs text-gray-500 mb-1.5">护栏材质</label>
+          <div class="space-y-1.5 text-sm text-gray-700">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="rail_material" class="accent-blue-500"> 镀锌钢管
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="rail_material" class="accent-blue-500" checked> 不锈钢304
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="radio" name="rail_material" class="accent-blue-500"> 木纹铝合金
+            </label>
+          </div>
+        </div>
+
+        <!-- 附加模块: 多选 — checkbox -->
+        <div>
+          <label class="block text-xs text-gray-500 mb-1.5">附加模块</label>
+          <div class="grid grid-cols-2 gap-1.5 text-sm text-gray-700">
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" class="accent-blue-500" checked> 攀爬网
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" class="accent-blue-500"> 消防滑杆
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" class="accent-blue-500" checked> 传声筒
+            </label>
+            <label class="flex items-center gap-1.5 cursor-pointer">
+              <input type="checkbox" class="accent-blue-500"> 望远镜
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <!-- 生成配置方案按钮 -->
+      <button class="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2.5 rounded transition-colors">
+        生成配置方案
+      </button>
+
+      <!-- 约束冲突提示区域 -->
+      <div class="bg-white border border-gray-300 rounded p-3">
+        <div class="text-xs text-gray-400 mb-1.5">约束规则校验</div>
+        <div class="text-xs text-red-500 leading-relaxed">
+          ⚠ 螺旋滑道需要平台高度 ≥ 1.5m（当前: 1.8m ✓）
+        </div>
+        <div class="text-xs text-red-500 leading-relaxed mt-1">
+          ⚠ 4平台配置需选择不锈钢304或木纹铝合金护栏（当前: 不锈钢304 ✓）
+        </div>
+        <div class="text-xs text-gray-400 leading-relaxed mt-1">
+          ✓ 所有约束规则校验通过
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- [中栏 — 3D预览区] 宽度40%       -->
+    <!-- ============================== -->
+    <div class="w-[40%] flex-shrink-0 space-y-4">
+
+      <!-- 3D模型预览占位框 -->
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-500">3D模型预览</span>
+          <span class="text-xs text-gray-400">超级滑梯-螺旋-4平台</span>
+        </div>
+        <!-- 3D预览区占位 -->
+        <div class="relative bg-gray-100 flex items-center justify-center" style="height: 420px;">
+          <!-- 模拟3D线框 -->
+          <svg width="280" height="320" viewBox="0 0 280 320" fill="none" class="opacity-30">
+            <!-- 平台结构 -->
+            <rect x="40" y="60" width="80" height="10" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <rect x="40" y="120" width="80" height="10" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <rect x="40" y="180" width="80" height="10" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <rect x="40" y="240" width="80" height="10" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <!-- 支柱 -->
+            <line x1="50" y1="60" x2="50" y2="280" stroke="#6b7280" stroke-width="1.5"/>
+            <line x1="110" y1="60" x2="110" y2="280" stroke="#6b7280" stroke-width="1.5"/>
+            <!-- 螺旋滑道 -->
+            <path d="M120 65 C160 80, 180 100, 160 130 C140 160, 170 180, 190 200 C210 220, 200 250, 180 280" stroke="#6b7280" stroke-width="2" stroke-dasharray="4 3"/>
+            <!-- 攀爬网 -->
+            <line x1="40" y1="130" x2="20" y2="250" stroke="#6b7280" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="30" y1="130" x2="10" y2="250" stroke="#6b7280" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="10" y1="160" x2="40" y2="160" stroke="#6b7280" stroke-width="1" stroke-dasharray="3 3"/>
+            <line x1="10" y1="200" x2="40" y2="200" stroke="#6b7280" stroke-width="1" stroke-dasharray="3 3"/>
+            <!-- 地面线 -->
+            <line x1="0" y1="280" x2="280" y2="280" stroke="#9ca3af" stroke-width="1"/>
+          </svg>
+          <div class="absolute inset-0 flex items-center justify-center">
+            <div class="text-center">
+              <div class="text-sm text-gray-400 font-medium">3D模型预览区</div>
+              <div class="text-xs text-gray-300 mt-1">CC实现时使用Three.js加载GLB模型</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部操作按钮 -->
+        <div class="border-t border-gray-200 px-4 py-2.5 flex items-center gap-2">
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1v12M1 7h12" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" transform="rotate(45 7 7)"/></svg>
+            旋转
+          </button>
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="4" stroke="currentColor" stroke-width="1.2"/><path d="M10 10l3 3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            缩放
+          </button>
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M7 3v8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/><path d="M2 2l2 2M12 2l-2 2M2 12l2-2M12 12l-2-2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+            爆炸图
+          </button>
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2 py-1 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1.5" stroke="currentColor" stroke-width="1.2"/><path d="M2 5h10" stroke="currentColor" stroke-width="1"/></svg>
+            重置视角
+          </button>
+        </div>
+      </div>
+
+      <!-- 选配结果摘要 -->
+      <div class="bg-white border border-gray-300 rounded px-4 py-3">
+        <div class="text-xs text-gray-400 mb-1">选配结果摘要</div>
+        <div class="text-sm text-gray-700 font-medium">超级滑梯-螺旋-4平台-1.8m-不锈钢护栏</div>
+        <div class="text-xs text-gray-400 mt-1">附加: 攀爬网 + 传声筒 | 配置编码: CFG-SL-SP4-18-SS304-A13</div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- [右栏 — BOM+报价] 宽度30%       -->
+    <!-- ============================== -->
+    <div class="w-[30%] flex-shrink-0 space-y-4">
+
+      <!-- 生成的EBOM表格 -->
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="bg-gray-100 border-b border-gray-200 px-4 py-2">
+          <span class="text-xs font-medium text-gray-500">生成的EBOM</span>
+          <span class="text-xs text-gray-400 ml-2">共8项</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="bg-gray-50 text-gray-500 border-b border-gray-200">
+                <th class="px-3 py-2 font-medium">零件编码</th>
+                <th class="px-3 py-2 font-medium">名称</th>
+                <th class="px-3 py-2 font-medium text-center">数量</th>
+                <th class="px-3 py-2 font-medium text-right">单价</th>
+                <th class="px-3 py-2 font-medium text-right">小计</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-FRM-001</td>
+                <td class="px-3 py-2">主框架立柱</td>
+                <td class="px-3 py-2 text-center">4</td>
+                <td class="px-3 py-2 text-right">¥2,800</td>
+                <td class="px-3 py-2 text-right">¥11,200</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-PLT-002</td>
+                <td class="px-3 py-2">钢制平台板</td>
+                <td class="px-3 py-2 text-center">4</td>
+                <td class="px-3 py-2 text-right">¥1,600</td>
+                <td class="px-3 py-2 text-right">¥6,400</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-SPR-003</td>
+                <td class="px-3 py-2">螺旋滑道体</td>
+                <td class="px-3 py-2 text-center">1</td>
+                <td class="px-3 py-2 text-right">¥8,500</td>
+                <td class="px-3 py-2 text-right">¥8,500</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-RAL-004</td>
+                <td class="px-3 py-2">不锈钢304护栏</td>
+                <td class="px-3 py-2 text-center">8</td>
+                <td class="px-3 py-2 text-right">¥960</td>
+                <td class="px-3 py-2 text-right">¥7,680</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-CLB-005</td>
+                <td class="px-3 py-2">攀爬网组件</td>
+                <td class="px-3 py-2 text-center">1</td>
+                <td class="px-3 py-2 text-right">¥3,200</td>
+                <td class="px-3 py-2 text-right">¥3,200</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-TLK-006</td>
+                <td class="px-3 py-2">传声筒套件</td>
+                <td class="px-3 py-2 text-center">1</td>
+                <td class="px-3 py-2 text-right">¥1,200</td>
+                <td class="px-3 py-2 text-right">¥1,200</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-FTN-007</td>
+                <td class="px-3 py-2">地基固定件</td>
+                <td class="px-3 py-2 text-center">6</td>
+                <td class="px-3 py-2 text-right">¥520</td>
+                <td class="px-3 py-2 text-right">¥3,120</td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 text-gray-400 font-mono">SL-HRD-008</td>
+                <td class="px-3 py-2">五金连接套</td>
+                <td class="px-3 py-2 text-center">1</td>
+                <td class="px-3 py-2 text-right">¥4,300</td>
+                <td class="px-3 py-2 text-right">¥4,300</td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr class="bg-gray-50 font-medium text-gray-700">
+                <td class="px-3 py-2" colspan="4">合计</td>
+                <td class="px-3 py-2 text-right">¥45,600</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- 报价汇总 -->
+      <div class="bg-white border border-gray-300 rounded p-4">
+        <div class="section-label mb-3">报价汇总</div>
+        <div class="space-y-2 text-sm">
+          <div class="flex justify-between text-gray-600">
+            <span>材料成本</span>
+            <span class="text-gray-800">¥45,600</span>
+          </div>
+          <div class="flex justify-between text-gray-600">
+            <span>加工成本</span>
+            <span class="text-gray-800">¥12,300</span>
+          </div>
+          <div class="flex justify-between text-gray-600">
+            <span>安装费</span>
+            <span class="text-gray-800">¥8,000</span>
+          </div>
+          <div class="border-t border-gray-200 my-2"></div>
+          <div class="flex justify-between text-gray-600">
+            <span>总成本</span>
+            <span class="text-gray-800 font-medium">¥65,900</span>
+          </div>
+          <div class="flex justify-between items-center">
+            <span class="text-gray-600">利润率</span>
+            <span class="text-green-600 font-semibold text-sm">35% ✓ <span class="text-xs font-normal text-gray-400">红线28%</span></span>
+          </div>
+          <div class="border-t border-gray-200 my-2"></div>
+          <div class="flex justify-between items-center text-base font-bold text-gray-800">
+            <span>建议报价</span>
+            <span>¥89,000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="space-y-2">
+        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2.5 rounded transition-colors">
+          导出报价单
+        </button>
+        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium py-2.5 rounded transition-colors">
+          发送技术确认
+        </button>
+        <button class="w-full border border-gray-300 text-gray-600 hover:bg-gray-50 text-sm font-medium py-2.5 rounded transition-colors bg-white">
+          保存配置
+        </button>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

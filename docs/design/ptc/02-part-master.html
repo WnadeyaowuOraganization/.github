@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>零件主数据 — 万德AI PLM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 让 checkbox 在表格里对齐 */
+    input[type="checkbox"] { accent-color: #3b82f6; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 text-gray-700 text-sm">
+
+  <!-- ============================================ -->
+  <!-- [筛选栏] 顶部一行搜索 + 筛选 + 操作              -->
+  <!-- ============================================ -->
+  <div class="bg-white border border-gray-300 rounded px-4 py-3 mb-4 flex items-center gap-3 flex-wrap">
+    <!-- 搜索框 -->
+    <div class="relative flex-1 min-w-[200px] max-w-xs">
+      <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+      <input type="text" placeholder="零件编码 / 名称" class="w-full border border-gray-300 rounded pl-8 pr-3 py-1.5 text-xs focus:outline-none focus:border-blue-400 focus:ring-1 focus:ring-blue-200">
+    </div>
+    <!-- 类别下拉 -->
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-xs bg-white focus:outline-none focus:border-blue-400">
+      <option value="">类别：全部</option>
+      <option>管件</option>
+      <option>平台</option>
+      <option>滑梯</option>
+      <option>秋千</option>
+      <option>攀爬</option>
+      <option>配件</option>
+    </select>
+    <!-- 状态下拉 -->
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-xs bg-white focus:outline-none focus:border-blue-400">
+      <option value="">状态：全部</option>
+      <option>Draft</option>
+      <option>Review</option>
+      <option>Released</option>
+      <option>Obsolete</option>
+    </select>
+    <!-- 材料下拉 -->
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-xs bg-white focus:outline-none focus:border-blue-400">
+      <option value="">材料：全部</option>
+      <option>镀锌钢管</option>
+      <option>不锈钢</option>
+      <option>LLDPE</option>
+      <option>HPL</option>
+    </select>
+    <!-- 新建零件按钮 -->
+    <button class="ml-auto bg-blue-500 hover:bg-blue-600 text-white px-4 py-1.5 rounded text-xs font-medium whitespace-nowrap">
+      + 新建零件
+    </button>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [批量操作栏] 选中行后的操作描述                    -->
+  <!-- ============================================ -->
+  <div class="bg-gray-100 border border-gray-300 rounded px-4 py-2 mb-2 flex items-center gap-4 text-xs text-gray-500">
+    <span>已选 <span class="font-medium text-gray-700" id="selectedCount">0</span> 项</span>
+    <span class="text-gray-300">|</span>
+    <button class="hover:text-blue-500 disabled:opacity-40" disabled>批量修改状态</button>
+    <button class="hover:text-blue-500 disabled:opacity-40" disabled>批量导出</button>
+    <button class="hover:text-blue-500 disabled:opacity-40" disabled>批量打印标签</button>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [零件列表 — 全宽数据表格] 主体                    -->
+  <!-- ============================================ -->
+  <div class="bg-white border border-gray-300 rounded overflow-hidden">
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="bg-gray-50 text-gray-500 text-left border-b border-gray-200">
+          <th class="px-3 py-2 w-8"><input type="checkbox" class="rounded"></th>
+          <th class="px-3 py-2 font-medium">零件编码</th>
+          <th class="px-3 py-2 font-medium">名称</th>
+          <th class="px-3 py-2 font-medium">类别</th>
+          <th class="px-3 py-2 font-medium">材料</th>
+          <th class="px-3 py-2 font-medium w-14">版本</th>
+          <th class="px-3 py-2 font-medium w-20">状态</th>
+          <th class="px-3 py-2 font-medium w-20">引用BOM数</th>
+          <th class="px-3 py-2 font-medium">创建人</th>
+          <th class="px-3 py-2 font-medium">更新时间</th>
+          <th class="px-3 py-2 font-medium w-28">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <!-- 行 1 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-TU-ST-0048</td>
+          <td class="px-3 py-2">Ø60 立柱镀锌钢管 L=3000</td>
+          <td class="px-3 py-2">管件</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v3</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">7</td>
+          <td class="px-3 py-2">张三</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-15</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 2 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-TU-ST-0049</td>
+          <td class="px-3 py-2">Ø60 横梁镀锌钢管 L=2400</td>
+          <td class="px-3 py-2">管件</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v2</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">5</td>
+          <td class="px-3 py-2">张三</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-14</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 3 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-PL-HPL-0012</td>
+          <td class="px-3 py-2">HPL 平台板 1200×1200×18</td>
+          <td class="px-3 py-2">平台</td>
+          <td class="px-3 py-2">HPL</td>
+          <td class="px-3 py-2 text-center">v1</td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-xs">Review</span></td>
+          <td class="px-3 py-2 text-center">3</td>
+          <td class="px-3 py-2">李四</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-14</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 4 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-SL-PE-0005</td>
+          <td class="px-3 py-2">LLDPE 直滑梯槽体 H=1500</td>
+          <td class="px-3 py-2">滑梯</td>
+          <td class="px-3 py-2">LLDPE</td>
+          <td class="px-3 py-2 text-center">v4</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">2</td>
+          <td class="px-3 py-2">王五</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-13</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 5 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-SW-ST-0031</td>
+          <td class="px-3 py-2">秋千横梁组件 L=3600</td>
+          <td class="px-3 py-2">秋千</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v2</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">4</td>
+          <td class="px-3 py-2">赵六</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-12</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 6 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-CL-SS-0018</td>
+          <td class="px-3 py-2">不锈钢攀爬杆 Ø32 L=2000</td>
+          <td class="px-3 py-2">攀爬</td>
+          <td class="px-3 py-2">不锈钢</td>
+          <td class="px-3 py-2 text-center">v1</td>
+          <td class="px-3 py-2"><span class="bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded text-xs">Draft</span></td>
+          <td class="px-3 py-2 text-center">0</td>
+          <td class="px-3 py-2">孙七</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-12</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 7 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-AC-ST-0102</td>
+          <td class="px-3 py-2">镀锌法兰连接件 M12</td>
+          <td class="px-3 py-2">配件</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v5</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">12</td>
+          <td class="px-3 py-2">周八</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-11</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 8 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-SL-PE-0006</td>
+          <td class="px-3 py-2">LLDPE 螺旋滑梯槽体 H=2500</td>
+          <td class="px-3 py-2">滑梯</td>
+          <td class="px-3 py-2">LLDPE</td>
+          <td class="px-3 py-2 text-center">v2</td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-xs">Review</span></td>
+          <td class="px-3 py-2 text-center">1</td>
+          <td class="px-3 py-2">王五</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-10</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 9 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-PL-HPL-0013</td>
+          <td class="px-3 py-2">HPL 六边形平台板 R=600</td>
+          <td class="px-3 py-2">平台</td>
+          <td class="px-3 py-2">HPL</td>
+          <td class="px-3 py-2 text-center">v1</td>
+          <td class="px-3 py-2"><span class="bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded text-xs">Draft</span></td>
+          <td class="px-3 py-2 text-center">0</td>
+          <td class="px-3 py-2">李四</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-10</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 10 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-TU-SS-0021</td>
+          <td class="px-3 py-2">不锈钢扶手管 Ø42 L=1200</td>
+          <td class="px-3 py-2">管件</td>
+          <td class="px-3 py-2">不锈钢</td>
+          <td class="px-3 py-2 text-center">v3</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">6</td>
+          <td class="px-3 py-2">张三</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-09</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 11 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-SW-PE-0032</td>
+          <td class="px-3 py-2">LLDPE 秋千座椅板</td>
+          <td class="px-3 py-2">秋千</td>
+          <td class="px-3 py-2">LLDPE</td>
+          <td class="px-3 py-2 text-center">v1</td>
+          <td class="px-3 py-2"><span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-xs">Obsolete</span></td>
+          <td class="px-3 py-2 text-center">0</td>
+          <td class="px-3 py-2">赵六</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-08</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 12 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-CL-ST-0019</td>
+          <td class="px-3 py-2">攀爬网框架 W=1800×H=2400</td>
+          <td class="px-3 py-2">攀爬</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v2</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded text-xs">Released</span></td>
+          <td class="px-3 py-2 text-center">3</td>
+          <td class="px-3 py-2">孙七</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-07</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 13 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-AC-SS-0103</td>
+          <td class="px-3 py-2">不锈钢螺栓套件 M10×80</td>
+          <td class="px-3 py-2">配件</td>
+          <td class="px-3 py-2">不锈钢</td>
+          <td class="px-3 py-2 text-center">v1</td>
+          <td class="px-3 py-2"><span class="bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded text-xs">Draft</span></td>
+          <td class="px-3 py-2 text-center">0</td>
+          <td class="px-3 py-2">周八</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-06</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 14 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-TU-ST-0050</td>
+          <td class="px-3 py-2">Ø48 斜撑管 镀锌 L=1800</td>
+          <td class="px-3 py-2">管件</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v1</td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-xs">Review</span></td>
+          <td class="px-3 py-2 text-center">2</td>
+          <td class="px-3 py-2">张三</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-05</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+        <!-- 行 15 -->
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2"><input type="checkbox"></td>
+          <td class="px-3 py-2 font-mono text-gray-800">WD-SL-ST-0007</td>
+          <td class="px-3 py-2">滑梯支撑架 镀锌钢 H=1500</td>
+          <td class="px-3 py-2">滑梯</td>
+          <td class="px-3 py-2">镀锌钢管</td>
+          <td class="px-3 py-2 text-center">v6</td>
+          <td class="px-3 py-2"><span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-xs">Obsolete</span></td>
+          <td class="px-3 py-2 text-center">0</td>
+          <td class="px-3 py-2">王五</td>
+          <td class="px-3 py-2 text-gray-400">2026-01-04</td>
+          <td class="px-3 py-2 space-x-2">
+            <button class="text-blue-500 hover:text-blue-700">详情</button>
+            <button class="text-blue-500 hover:text-blue-700">编辑</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- 分页器 -->
+    <div class="px-4 py-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+      <span>共 1,247 条记录，第 1/84 页</span>
+      <div class="flex items-center gap-1">
+        <button class="px-2 py-1 border border-gray-300 rounded text-gray-400 cursor-not-allowed">&laquo;</button>
+        <button class="px-2 py-1 border border-gray-300 rounded text-gray-400 cursor-not-allowed">&lsaquo;</button>
+        <button class="px-2 py-1 border border-blue-500 bg-blue-500 text-white rounded">1</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">2</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">3</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">4</button>
+        <span class="px-1">…</span>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">84</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">&rsaquo;</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">&raquo;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [版本状态机说明] 底部注释区                       -->
+  <!-- ============================================ -->
+  <div class="mt-4 bg-white border border-gray-300 rounded px-4 py-3 text-xs text-gray-500">
+    <div class="font-semibold text-gray-700 mb-1.5">版本状态机</div>
+    <div class="flex items-center gap-2 mb-2">
+      <span class="bg-gray-200 text-gray-600 px-2 py-0.5 rounded">Draft</span>
+      <span class="text-gray-400">→</span>
+      <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">Review</span>
+      <span class="text-gray-400">→</span>
+      <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded">Released</span>
+      <span class="text-gray-400">→</span>
+      <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded">Obsolete</span>
+    </div>
+    <p class="text-gray-400">备注：Released 状态下修改将自动创建新版本（version +1），原版本保持 Released 不变。Obsolete 为终态，不可回退。</p>
+  </div>
+
+</body>
+</html>

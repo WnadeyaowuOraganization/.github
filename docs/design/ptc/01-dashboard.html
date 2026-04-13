@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>总览仪表盘 — 万德AI PLM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 状态指示灯动画 */
+    @keyframes pulse-green {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .status-pulse { animation: pulse-green 2s ease-in-out infinite; }
+    /* 数据流虚线 */
+    .flow-arrow {
+      border-top: 2px dashed #9ca3af;
+      position: relative;
+    }
+    .flow-arrow::after {
+      content: '→';
+      position: absolute;
+      right: -6px;
+      top: -12px;
+      color: #6b7280;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 text-gray-700 text-sm">
+
+  <!-- ============================================ -->
+  <!-- [KPI统计行] 一行6个数字统计块                    -->
+  <!-- ============================================ -->
+  <div class="grid grid-cols-6 gap-4 mb-6">
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-gray-900">1,247</div>
+      <div class="text-xs text-gray-500 mt-1">零件总数</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-gray-900">386</div>
+      <div class="text-xs text-gray-500 mt-1">BOM 总数</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-gray-900">23</div>
+      <div class="text-xs text-gray-500 mt-1">活跃 ECO</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-gray-900">158</div>
+      <div class="text-xs text-gray-500 mt-1">配置器订单</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-gray-900">12</div>
+      <div class="text-xs text-gray-500 mt-1">待确认</div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 text-center">
+      <div class="text-2xl font-bold text-gray-900">89</div>
+      <div class="text-xs text-gray-500 mt-1">合规证书</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [联邦架构数据流图] 模块关系图                     -->
+  <!-- ============================================ -->
+  <div class="bg-white border border-gray-300 rounded p-5 mb-6">
+    <h2 class="text-sm font-semibold text-gray-800 mb-4">联邦架构 · 模块数据流</h2>
+
+    <!-- 模块流程图：上排3个 + 下排3个，虚线箭头连接 -->
+    <div class="flex flex-col gap-6">
+      <!-- 上排 3 模块 -->
+      <div class="grid grid-cols-3 gap-6">
+        <!-- D3设计工作台 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-gray-800 text-sm">D3 设计工作台</span>
+            <span class="flex items-center gap-1 text-xs text-green-600">
+              <span class="w-2 h-2 rounded-full bg-green-500 status-pulse inline-block"></span>正常
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 space-y-1">
+            <div>活跃图纸: <span class="text-gray-700 font-medium">342</span></div>
+            <div>今日更新: <span class="text-gray-700 font-medium">17</span></div>
+          </div>
+        </div>
+        <!-- BOM管理中心 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-gray-800 text-sm">BOM 管理中心</span>
+            <span class="flex items-center gap-1 text-xs text-green-600">
+              <span class="w-2 h-2 rounded-full bg-green-500 status-pulse inline-block"></span>正常
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 space-y-1">
+            <div>BOM 总数: <span class="text-gray-700 font-medium">386</span></div>
+            <div>待审核: <span class="text-gray-700 font-medium">8</span></div>
+          </div>
+        </div>
+        <!-- 产品配置器 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-gray-800 text-sm">产品配置器</span>
+            <span class="flex items-center gap-1 text-xs text-green-600">
+              <span class="w-2 h-2 rounded-full bg-green-500 status-pulse inline-block"></span>正常
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 space-y-1">
+            <div>配置规则: <span class="text-gray-700 font-medium">64</span></div>
+            <div>本月订单: <span class="text-gray-700 font-medium">158</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 数据流说明行 -->
+      <div class="grid grid-cols-3 gap-6 -my-3">
+        <div class="flex items-center justify-center">
+          <div class="text-xs text-gray-400 bg-gray-50 px-2">零件数据 ↓ 图纸关联</div>
+        </div>
+        <div class="flex items-center justify-center">
+          <div class="text-xs text-gray-400 bg-gray-50 px-2">BOM 结构 ↕ 变更通知</div>
+        </div>
+        <div class="flex items-center justify-center">
+          <div class="text-xs text-gray-400 bg-gray-50 px-2">配置结果 ↓ 合规校验</div>
+        </div>
+      </div>
+
+      <!-- 箭头连接线 -->
+      <div class="grid grid-cols-3 gap-6 -my-2">
+        <div class="flex justify-center"><div class="w-px h-4 border-l-2 border-dashed border-gray-300"></div></div>
+        <div class="flex justify-center"><div class="w-px h-4 border-l-2 border-dashed border-gray-300"></div></div>
+        <div class="flex justify-center"><div class="w-px h-4 border-l-2 border-dashed border-gray-300"></div></div>
+      </div>
+
+      <!-- 下排 3 模块 -->
+      <div class="grid grid-cols-3 gap-6">
+        <!-- 技术确认中心 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-gray-800 text-sm">技术确认中心</span>
+            <span class="flex items-center gap-1 text-xs text-yellow-600">
+              <span class="w-2 h-2 rounded-full bg-yellow-500 inline-block"></span>待处理
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 space-y-1">
+            <div>待确认: <span class="text-gray-700 font-medium">12</span></div>
+            <div>已完成: <span class="text-gray-700 font-medium">1,034</span></div>
+          </div>
+        </div>
+        <!-- ECO工程变更 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-gray-800 text-sm">ECO 工程变更</span>
+            <span class="flex items-center gap-1 text-xs text-green-600">
+              <span class="w-2 h-2 rounded-full bg-green-500 status-pulse inline-block"></span>正常
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 space-y-1">
+            <div>活跃 ECO: <span class="text-gray-700 font-medium">23</span></div>
+            <div>本月关闭: <span class="text-gray-700 font-medium">9</span></div>
+          </div>
+        </div>
+        <!-- 安全合规中心 -->
+        <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 relative">
+          <div class="flex items-center justify-between mb-2">
+            <span class="font-semibold text-gray-800 text-sm">安全合规中心</span>
+            <span class="flex items-center gap-1 text-xs text-red-600">
+              <span class="w-2 h-2 rounded-full bg-red-500 inline-block"></span>异常
+            </span>
+          </div>
+          <div class="text-xs text-gray-500 space-y-1">
+            <div>合规证书: <span class="text-gray-700 font-medium">89</span></div>
+            <div>即将过期: <span class="text-gray-700 font-medium">3</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 水平数据流注释 -->
+    <div class="mt-4 pt-3 border-t border-gray-200 flex flex-wrap gap-x-6 gap-y-1 text-xs text-gray-400">
+      <span>D3 设计工作台 → BOM 管理中心（零件 + 图纸同步）</span>
+      <span>BOM 管理中心 → 产品配置器（可选件清单推送）</span>
+      <span>产品配置器 → 技术确认中心（配置结果确认）</span>
+      <span>ECO 工程变更 ↔ BOM 管理中心（变更单双向同步）</span>
+      <span>安全合规中心 ← 全模块（合规校验请求）</span>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [近期活动表格] 最近10条跨模块操作日志              -->
+  <!-- ============================================ -->
+  <div class="bg-white border border-gray-300 rounded mb-6">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <h2 class="text-sm font-semibold text-gray-800">近期活动</h2>
+    </div>
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="bg-gray-50 text-gray-500 text-left">
+          <th class="px-4 py-2 font-medium">时间</th>
+          <th class="px-4 py-2 font-medium">模块</th>
+          <th class="px-4 py-2 font-medium">操作</th>
+          <th class="px-4 py-2 font-medium">操作人</th>
+          <th class="px-4 py-2 font-medium">对象</th>
+          <th class="px-4 py-2 font-medium">状态</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 14:32</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">零件主数据</span></td>
+          <td class="px-4 py-2">创建零件</td>
+          <td class="px-4 py-2">张三</td>
+          <td class="px-4 py-2 font-mono text-gray-600">WD-TU-ST-0048</td>
+          <td class="px-4 py-2"><span class="text-green-600">成功</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 14:10</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">ECO 工程变更</span></td>
+          <td class="px-4 py-2">提交变更单</td>
+          <td class="px-4 py-2">李四</td>
+          <td class="px-4 py-2 font-mono text-gray-600">ECO-2026-0023</td>
+          <td class="px-4 py-2"><span class="text-yellow-600">审核中</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 13:45</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">BOM 管理</span></td>
+          <td class="px-4 py-2">发起版本对比</td>
+          <td class="px-4 py-2">王五</td>
+          <td class="px-4 py-2 font-mono text-gray-600">BOM-SLD-0012 v3↔v4</td>
+          <td class="px-4 py-2"><span class="text-green-600">完成</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 11:58</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">产品配置器</span></td>
+          <td class="px-4 py-2">生成配置订单</td>
+          <td class="px-4 py-2">赵六</td>
+          <td class="px-4 py-2 font-mono text-gray-600">CFG-2026-0158</td>
+          <td class="px-4 py-2"><span class="text-green-600">成功</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 11:30</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">安全合规</span></td>
+          <td class="px-4 py-2">上传 EN-1176 证书</td>
+          <td class="px-4 py-2">孙七</td>
+          <td class="px-4 py-2 font-mono text-gray-600">CERT-EN1176-089</td>
+          <td class="px-4 py-2"><span class="text-green-600">已归档</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 10:22</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">技术确认</span></td>
+          <td class="px-4 py-2">批准技术确认</td>
+          <td class="px-4 py-2">周八</td>
+          <td class="px-4 py-2 font-mono text-gray-600">TC-2026-0412</td>
+          <td class="px-4 py-2"><span class="text-green-600">已批准</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 09:50</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">D3 设计工作台</span></td>
+          <td class="px-4 py-2">上传 3D 模型</td>
+          <td class="px-4 py-2">张三</td>
+          <td class="px-4 py-2 font-mono text-gray-600">DWG-SLD-0048-A3</td>
+          <td class="px-4 py-2"><span class="text-green-600">成功</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-15 09:15</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">ECO 工程变更</span></td>
+          <td class="px-4 py-2">关闭变更单</td>
+          <td class="px-4 py-2">李四</td>
+          <td class="px-4 py-2 font-mono text-gray-600">ECO-2026-0019</td>
+          <td class="px-4 py-2"><span class="text-gray-500">已关闭</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-14 17:40</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">BOM 管理</span></td>
+          <td class="px-4 py-2">新增 BOM</td>
+          <td class="px-4 py-2">王五</td>
+          <td class="px-4 py-2 font-mono text-gray-600">BOM-CLB-0087</td>
+          <td class="px-4 py-2"><span class="text-green-600">成功</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2 text-gray-400 whitespace-nowrap">2026-01-14 16:25</td>
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs">零件主数据</span></td>
+          <td class="px-4 py-2">状态变更 → Released</td>
+          <td class="px-4 py-2">赵六</td>
+          <td class="px-4 py-2 font-mono text-gray-600">WD-SS-CNC-0021</td>
+          <td class="px-4 py-2"><span class="text-green-600">成功</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [待办事项表格] 需要处理的事项                     -->
+  <!-- ============================================ -->
+  <div class="bg-white border border-gray-300 rounded">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <h2 class="text-sm font-semibold text-gray-800">待办事项</h2>
+    </div>
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="bg-gray-50 text-gray-500 text-left">
+          <th class="px-4 py-2 font-medium w-20">优先级</th>
+          <th class="px-4 py-2 font-medium">事项</th>
+          <th class="px-4 py-2 font-medium">来源模块</th>
+          <th class="px-4 py-2 font-medium w-28">截止日期</th>
+          <th class="px-4 py-2 font-medium w-20">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2"><span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-xs font-medium">紧急</span></td>
+          <td class="px-4 py-2 text-gray-800">ECO-2026-0023 变更单需审批 — 涉及滑梯立柱材料替换</td>
+          <td class="px-4 py-2">ECO 工程变更</td>
+          <td class="px-4 py-2 text-gray-400">2026-01-16</td>
+          <td class="px-4 py-2"><button class="text-blue-500 hover:text-blue-700 font-medium">处理</button></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2"><span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded text-xs font-medium">紧急</span></td>
+          <td class="px-4 py-2 text-gray-800">EN-1176 合规证书 CERT-067 将于 3 日内过期</td>
+          <td class="px-4 py-2">安全合规中心</td>
+          <td class="px-4 py-2 text-gray-400">2026-01-18</td>
+          <td class="px-4 py-2"><button class="text-blue-500 hover:text-blue-700 font-medium">处理</button></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-xs font-medium">高</span></td>
+          <td class="px-4 py-2 text-gray-800">技术确认 TC-2026-0415 等待结构工程师签字</td>
+          <td class="px-4 py-2">技术确认中心</td>
+          <td class="px-4 py-2 text-gray-400">2026-01-20</td>
+          <td class="px-4 py-2"><button class="text-blue-500 hover:text-blue-700 font-medium">处理</button></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2"><span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded text-xs font-medium">高</span></td>
+          <td class="px-4 py-2 text-gray-800">配置订单 CFG-2026-0155 BOM 缺件需补充</td>
+          <td class="px-4 py-2">产品配置器</td>
+          <td class="px-4 py-2 text-gray-400">2026-01-22</td>
+          <td class="px-4 py-2"><button class="text-blue-500 hover:text-blue-700 font-medium">处理</button></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-2"><span class="bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded text-xs font-medium">中</span></td>
+          <td class="px-4 py-2 text-gray-800">BOM-SLD-0012 新版本 v5 待发布确认</td>
+          <td class="px-4 py-2">BOM 管理中心</td>
+          <td class="px-4 py-2 text-gray-400">2026-01-25</td>
+          <td class="px-4 py-2"><button class="text-blue-500 hover:text-blue-700 font-medium">处理</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

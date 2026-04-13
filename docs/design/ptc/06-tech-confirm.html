@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>技术确认中心 — 万德AI平台PLM</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif; }
+    .section-label { font-size: 13px; font-weight: 600; color: #374151; margin-bottom: 8px; }
+    .annotation-dot {
+      width: 28px; height: 28px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 600; position: absolute;
+      border: 2px solid; cursor: pointer;
+    }
+    .annotation-dot.confirmed { background: #dcfce7; border-color: #22c55e; color: #16a34a; }
+    .annotation-dot.pending { background: #fef3c7; border-color: #f59e0b; color: #d97706; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================ -->
+  <!-- 技术确认中心 — 左右分栏布局                     -->
+  <!-- 对应Issue: #2317                              -->
+  <!-- ============================================ -->
+  <div class="flex gap-5 min-h-[calc(100vh-48px)]">
+
+    <!-- ============================== -->
+    <!-- [左栏 — 3D标注区] 宽度55%       -->
+    <!-- ============================== -->
+    <div class="w-[55%] flex-shrink-0 space-y-4">
+
+      <!-- 3D模型+标注区占位框 -->
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-500">3D模型 + 标注区</span>
+          <div class="flex items-center gap-3 text-xs text-gray-400">
+            <span>TC-2026-0089</span>
+            <span class="px-1.5 py-0.5 bg-orange-100 text-orange-600 rounded text-xs font-medium">待确认</span>
+          </div>
+        </div>
+
+        <!-- 3D标注区占位 -->
+        <div class="relative bg-gray-100" style="height: 480px;">
+          <!-- 模拟3D线框结构 -->
+          <svg class="absolute inset-0 w-full h-full opacity-20" viewBox="0 0 700 480" fill="none">
+            <!-- 平台结构 -->
+            <rect x="180" y="100" width="140" height="12" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <rect x="180" y="180" width="140" height="12" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <rect x="180" y="260" width="140" height="12" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <rect x="180" y="340" width="140" height="12" rx="2" stroke="#6b7280" stroke-width="1.5"/>
+            <!-- 支柱 -->
+            <line x1="195" y1="100" x2="195" y2="390" stroke="#6b7280" stroke-width="1.5"/>
+            <line x1="305" y1="100" x2="305" y2="390" stroke="#6b7280" stroke-width="1.5"/>
+            <!-- 螺旋滑道 -->
+            <path d="M320 106 C380 120, 420 160, 380 195 C340 230, 390 260, 420 290 C450 320, 430 360, 400 390" stroke="#6b7280" stroke-width="2" stroke-dasharray="5 3"/>
+            <!-- 护栏线 -->
+            <line x1="180" y1="90" x2="180" y2="106" stroke="#6b7280" stroke-width="1.5"/>
+            <line x1="320" y1="90" x2="320" y2="106" stroke="#6b7280" stroke-width="1.5"/>
+            <line x1="180" y1="90" x2="320" y2="90" stroke="#6b7280" stroke-width="1.5"/>
+            <!-- 地面 -->
+            <line x1="80" y1="390" x2="620" y2="390" stroke="#9ca3af" stroke-width="1"/>
+            <!-- 安全区域虚线框 -->
+            <rect x="120" y="50" width="430" height="380" rx="4" stroke="#9ca3af" stroke-width="1" stroke-dasharray="6 4"/>
+          </svg>
+
+          <!-- 标注点 ① -->
+          <div class="annotation-dot confirmed" style="left: 130px; top: 200px;">①</div>
+          <div class="absolute bg-white border border-green-300 rounded px-2 py-1 text-xs shadow-sm" style="left: 162px; top: 196px;">
+            <span class="text-gray-600">平台高度</span>
+            <span class="font-semibold text-gray-800 ml-1">1.8m</span>
+            <span class="text-green-500 ml-1">✓</span>
+          </div>
+
+          <!-- 标注点 ② -->
+          <div class="annotation-dot confirmed" style="left: 420px; top: 240px;">②</div>
+          <div class="absolute bg-white border border-green-300 rounded px-2 py-1 text-xs shadow-sm" style="left: 452px; top: 236px;">
+            <span class="text-gray-600">滑道角度</span>
+            <span class="font-semibold text-gray-800 ml-1">30°</span>
+            <span class="text-green-500 ml-1">✓</span>
+          </div>
+
+          <!-- 标注点 ③ -->
+          <div class="annotation-dot pending" style="left: 500px; top: 80px;">③</div>
+          <div class="absolute bg-white border border-orange-300 rounded px-2 py-1 text-xs shadow-sm" style="left: 532px; top: 76px;">
+            <span class="text-gray-600">安全区域</span>
+            <span class="font-semibold text-gray-800 ml-1">8.5m × 6.2m</span>
+            <span class="text-orange-500 ml-1">⚠ 需确认</span>
+          </div>
+
+          <!-- 中心提示文字 -->
+          <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div class="text-center">
+              <div class="text-sm text-gray-400 font-medium">3D模型 + 标注区</div>
+              <div class="text-xs text-gray-300 mt-1">CC实现时Three.js + 标注插件</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 底部工具栏 -->
+        <div class="border-t border-gray-200 px-4 py-2.5 flex items-center gap-2">
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2.5 py-1.5 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><circle cx="7" cy="7" r="5" stroke="currentColor" stroke-width="1.2"/><path d="M7 4v3h3" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+            添加标注
+          </button>
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2.5 py-1.5 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M2 12L12 2M2 12h4M2 12v-4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            测量距离
+          </button>
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2.5 py-1.5 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="2" width="10" height="10" rx="1" stroke="currentColor" stroke-width="1.2"/><path d="M2 7h10" stroke="currentColor" stroke-width="1.2" stroke-dasharray="2 1.5"/></svg>
+            截面视图
+          </button>
+          <button class="flex items-center gap-1 text-xs text-gray-500 hover:text-blue-500 px-2.5 py-1.5 rounded hover:bg-gray-50 transition-colors">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 11V3h8v8H3z" stroke="currentColor" stroke-width="1.2"/><path d="M6 11v2M8 11v2M11 6h2M11 8h2" stroke="currentColor" stroke-width="1" stroke-linecap="round"/></svg>
+            导出PDF
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================== -->
+    <!-- [右栏 — 确认面板] 宽度45%       -->
+    <!-- ============================== -->
+    <div class="w-[45%] flex-shrink-0 space-y-4">
+
+      <!-- [确认单信息] -->
+      <div class="bg-white border border-gray-300 rounded p-4">
+        <div class="section-label">确认单信息</div>
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+          <div class="flex">
+            <span class="text-gray-400 w-16 flex-shrink-0">确认单号</span>
+            <span class="text-gray-700 font-mono">TC-2026-0089</span>
+          </div>
+          <div class="flex">
+            <span class="text-gray-400 w-16 flex-shrink-0">产品</span>
+            <span class="text-gray-700">超级滑梯-螺旋-4平台</span>
+          </div>
+          <div class="flex">
+            <span class="text-gray-400 w-16 flex-shrink-0">项目</span>
+            <span class="text-gray-700">合肥体育公园二期</span>
+          </div>
+          <div class="flex">
+            <span class="text-gray-400 w-16 flex-shrink-0">发起人</span>
+            <span class="text-gray-700">张三（销售）</span>
+          </div>
+          <div class="flex">
+            <span class="text-gray-400 w-16 flex-shrink-0">确认人</span>
+            <span class="text-gray-700">胡总（技术总监）</span>
+          </div>
+          <div class="flex items-center">
+            <span class="text-gray-400 w-16 flex-shrink-0">状态</span>
+            <span class="px-2 py-0.5 bg-orange-100 text-orange-600 rounded text-xs font-medium">待确认</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- [参数对比表格] — 核心内容 -->
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="bg-gray-100 border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-500">参数对比表</span>
+          <span class="text-xs text-gray-400">6已确认 / 2待确认</span>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs text-left">
+            <thead>
+              <tr class="bg-gray-50 text-gray-500 border-b border-gray-200">
+                <th class="px-3 py-2 font-medium">参数项</th>
+                <th class="px-3 py-2 font-medium">客户要求</th>
+                <th class="px-3 py-2 font-medium">实际方案</th>
+                <th class="px-3 py-2 font-medium">差异</th>
+                <th class="px-3 py-2 font-medium text-center">确认状态</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 font-medium">平台高度</td>
+                <td class="px-3 py-2">≥1.5m</td>
+                <td class="px-3 py-2">1.8m</td>
+                <td class="px-3 py-2 text-green-600">+0.3m</td>
+                <td class="px-3 py-2 text-center"><span class="text-green-600">✓ 已确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 font-medium">坠落高度</td>
+                <td class="px-3 py-2">≤2.0m</td>
+                <td class="px-3 py-2">1.8m</td>
+                <td class="px-3 py-2 text-green-600">合规</td>
+                <td class="px-3 py-2 text-center"><span class="text-green-600">✓ 已确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100 bg-orange-50/50">
+                <td class="px-3 py-2 font-medium">安全区域</td>
+                <td class="px-3 py-2">≥50m²</td>
+                <td class="px-3 py-2">52.7m²</td>
+                <td class="px-3 py-2 text-green-600">+2.7m²</td>
+                <td class="px-3 py-2 text-center"><span class="text-orange-500 font-medium">⚠ 待确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 font-medium">材质</td>
+                <td class="px-3 py-2">不锈钢</td>
+                <td class="px-3 py-2">不锈钢304</td>
+                <td class="px-3 py-2 text-green-600">匹配</td>
+                <td class="px-3 py-2 text-center"><span class="text-green-600">✓ 已确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100 bg-orange-50/50">
+                <td class="px-3 py-2 font-medium">年龄段</td>
+                <td class="px-3 py-2">6-12岁</td>
+                <td class="px-3 py-2">6-14岁</td>
+                <td class="px-3 py-2 text-orange-500">扩大</td>
+                <td class="px-3 py-2 text-center"><span class="text-orange-500 font-medium">⚠ 待确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 font-medium">滑道角度</td>
+                <td class="px-3 py-2">25°-35°</td>
+                <td class="px-3 py-2">30°</td>
+                <td class="px-3 py-2 text-green-600">居中</td>
+                <td class="px-3 py-2 text-center"><span class="text-green-600">✓ 已确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 font-medium">护栏高度</td>
+                <td class="px-3 py-2">≥1.1m</td>
+                <td class="px-3 py-2">1.2m</td>
+                <td class="px-3 py-2 text-green-600">+0.1m</td>
+                <td class="px-3 py-2 text-center"><span class="text-green-600">✓ 已确认</span></td>
+              </tr>
+              <tr class="border-b border-gray-100">
+                <td class="px-3 py-2 font-medium">承重标准</td>
+                <td class="px-3 py-2">≥150kg/m²</td>
+                <td class="px-3 py-2">180kg/m²</td>
+                <td class="px-3 py-2 text-green-600">+30kg/m²</td>
+                <td class="px-3 py-2 text-center"><span class="text-green-600">✓ 已确认</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- [审批操作区] -->
+      <div class="bg-white border border-gray-300 rounded p-4 space-y-3">
+        <div class="section-label">审批操作</div>
+        <div>
+          <label class="block text-xs text-gray-400 mb-1">确认意见</label>
+          <textarea rows="3" class="w-full border border-gray-300 rounded px-3 py-2 text-sm text-gray-700 focus:outline-none focus:border-blue-400 resize-none" placeholder="输入确认意见或修改说明...">安全区域满足标准要求，年龄段扩大需与客户二次确认是否接受。</textarea>
+        </div>
+        <div class="flex gap-2">
+          <button class="flex-1 bg-blue-500 hover:bg-blue-600 text-white text-xs font-medium py-2 rounded transition-colors">
+            全部确认并锁定版本
+          </button>
+          <button class="flex-1 border border-blue-500 text-blue-500 hover:bg-blue-50 text-xs font-medium py-2 rounded transition-colors">
+            部分确认，标注修改项
+          </button>
+          <button class="flex-1 border border-gray-300 text-gray-600 hover:bg-gray-50 text-xs font-medium py-2 rounded transition-colors">
+            退回修改
+          </button>
+        </div>
+        <div class="text-xs text-gray-400 bg-gray-50 rounded p-2">
+          💡 确认通过后自动锁定BOM版本，触发ECO版本锁定流程
+        </div>
+      </div>
+
+      <!-- [历史确认记录] -->
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="bg-gray-100 border-b border-gray-200 px-4 py-2">
+          <span class="text-xs font-medium text-gray-500">历史确认记录</span>
+        </div>
+        <table class="w-full text-xs text-left">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500 border-b border-gray-200">
+              <th class="px-3 py-2 font-medium">时间</th>
+              <th class="px-3 py-2 font-medium">操作人</th>
+              <th class="px-3 py-2 font-medium">动作</th>
+              <th class="px-3 py-2 font-medium">备注</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-100">
+              <td class="px-3 py-2 text-gray-400">2026-01-15 09:30</td>
+              <td class="px-3 py-2">张三</td>
+              <td class="px-3 py-2"><span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded text-xs">发起确认</span></td>
+              <td class="px-3 py-2 text-gray-500">配置器生成方案，提交技术确认</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="px-3 py-2 text-gray-400">2026-01-15 14:20</td>
+              <td class="px-3 py-2">胡总</td>
+              <td class="px-3 py-2"><span class="px-1.5 py-0.5 bg-orange-50 text-orange-600 rounded text-xs">部分确认</span></td>
+              <td class="px-3 py-2 text-gray-500">6项通过，安全区域和年龄段需补充说明</td>
+            </tr>
+            <tr class="border-b border-gray-100">
+              <td class="px-3 py-2 text-gray-400">2026-01-16 10:05</td>
+              <td class="px-3 py-2">张三</td>
+              <td class="px-3 py-2"><span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-xs">补充材料</span></td>
+              <td class="px-3 py-2 text-gray-500">附现场勘测报告及客户确认函</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+</body>
+</html>

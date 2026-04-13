@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOM管理中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 自定义树形缩进 */
+    .tree-l0 { padding-left: 0.5rem; }
+    .tree-l1 { padding-left: 2rem; }
+    .tree-l2 { padding-left: 3.5rem; }
+    .tree-l1::before, .tree-l2::before {
+      content: '└─';
+      color: #9ca3af;
+      margin-right: 0.25rem;
+      font-family: monospace;
+    }
+    /* 版本对比高亮 */
+    .diff-added { background-color: #f0fdf4; }
+    .diff-removed { background-color: #fef2f2; text-decoration: line-through; color: #9ca3af; }
+    .diff-modified { background-color: #fefce8; }
+    /* Tab 激活态 */
+    .sub-tab { cursor: pointer; padding: 0.5rem 1rem; border-bottom: 2px solid transparent; color: #6b7280; font-size: 0.875rem; }
+    .sub-tab.active { border-bottom-color: #3b82f6; color: #1f2937; font-weight: 600; }
+    .sub-tab:hover:not(.active) { color: #374151; }
+    /* 隐藏非激活内容 */
+    .tab-panel { display: none; }
+    .tab-panel.active { display: block; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================== -->
+  <!-- [BOM类型子Tab栏] — 页内二级Tab -->
+  <!-- ============================================== -->
+  <div class="border-b border-gray-300 mb-6 flex gap-0" id="bomSubTabs">
+    <div class="sub-tab active" data-tab="ebom">EBOM（工程BOM）</div>
+    <div class="sub-tab" data-tab="superbom">超级BOM（选配规则）</div>
+    <div class="sub-tab" data-tab="mbom">MBOM（制造BOM）</div>
+    <div class="sub-tab" data-tab="projbom">项目BOM（派生）</div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- [EBOM面板] — 默认显示 -->
+  <!-- ============================================== -->
+  <div class="tab-panel active" id="panel-ebom">
+
+    <!-- [成本Roll-up汇总] — 顶部统计行 -->
+    <div class="bg-white border border-gray-300 rounded mb-4 px-5 py-3 flex items-center gap-8 text-sm">
+      <div class="flex items-center gap-1.5">
+        <span class="text-gray-500">材料成本:</span>
+        <span class="font-semibold text-gray-800">¥12,450</span>
+      </div>
+      <div class="w-px h-4 bg-gray-300"></div>
+      <div class="flex items-center gap-1.5">
+        <span class="text-gray-500">加工成本:</span>
+        <span class="font-semibold text-gray-800">¥3,200</span>
+      </div>
+      <div class="w-px h-4 bg-gray-300"></div>
+      <div class="flex items-center gap-1.5">
+        <span class="text-gray-500">总成本:</span>
+        <span class="font-bold text-gray-900">¥15,650</span>
+      </div>
+      <div class="w-px h-4 bg-gray-300"></div>
+      <div class="flex items-center gap-1.5">
+        <span class="text-gray-500">上版成本:</span>
+        <span class="text-gray-700">¥14,800</span>
+      </div>
+      <div class="w-px h-4 bg-gray-300"></div>
+      <div class="flex items-center gap-1.5">
+        <span class="text-gray-500">变动:</span>
+        <span class="text-red-600 font-semibold">+5.7%</span>
+      </div>
+    </div>
+
+    <!-- [EBOM筛选栏] -->
+    <div class="bg-white border border-gray-300 rounded mb-4 px-4 py-3 flex items-center gap-3 flex-wrap">
+      <input type="text" placeholder="搜索BOM编码/产品名称…" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:border-blue-400">
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600">
+        <option>全部版本状态</option>
+        <option>设计中</option>
+        <option>已发布</option>
+        <option>已归档</option>
+        <option>废弃</option>
+      </select>
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600">
+        <option>全部产品线</option>
+        <option>滑梯系列</option>
+        <option>攀爬系列</option>
+        <option>秋千系列</option>
+        <option>综合系列</option>
+      </select>
+      <div class="flex-1"></div>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded">+ 新建EBOM</button>
+    </div>
+
+    <!-- [EBOM列表 — 全宽表格] -->
+    <div class="bg-white border border-gray-300 rounded overflow-hidden mb-4">
+      <table class="w-full text-sm">
+        <thead class="bg-gray-100 text-gray-600">
+          <tr>
+            <th class="text-left px-4 py-2.5 font-medium">BOM编码</th>
+            <th class="text-left px-4 py-2.5 font-medium">产品名称</th>
+            <th class="text-left px-4 py-2.5 font-medium">版本</th>
+            <th class="text-right px-4 py-2.5 font-medium">零件数</th>
+            <th class="text-right px-4 py-2.5 font-medium">总成本(¥)</th>
+            <th class="text-left px-4 py-2.5 font-medium">状态</th>
+            <th class="text-left px-4 py-2.5 font-medium">创建人</th>
+            <th class="text-left px-4 py-2.5 font-medium">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-SL-2026-001</td>
+            <td class="px-4 py-2.5 text-gray-900">超级滑梯组件</td>
+            <td class="px-4 py-2.5 text-gray-700">v3.2</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">47</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">15,650</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已发布</span></td>
+            <td class="px-4 py-2.5 text-gray-600">李工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs" onclick="toggleBomTree()">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs" onclick="toggleVersionDiff()">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-PP-2026-002</td>
+            <td class="px-4 py-2.5 text-gray-900">攀爬架组件A型</td>
+            <td class="px-4 py-2.5 text-gray-700">v2.1</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">32</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">11,200</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已发布</span></td>
+            <td class="px-4 py-2.5 text-gray-600">张工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-QQ-2026-003</td>
+            <td class="px-4 py-2.5 text-gray-900">秋千组件标准型</td>
+            <td class="px-4 py-2.5 text-gray-700">v4.0</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">28</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">8,900</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">设计中</span></td>
+            <td class="px-4 py-2.5 text-gray-600">王工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-SL-2026-004</td>
+            <td class="px-4 py-2.5 text-gray-900">旋转滑梯组件</td>
+            <td class="px-4 py-2.5 text-gray-700">v1.5</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">53</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">22,300</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已发布</span></td>
+            <td class="px-4 py-2.5 text-gray-600">陈工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-PP-2026-005</td>
+            <td class="px-4 py-2.5 text-gray-900">攀爬网组件</td>
+            <td class="px-4 py-2.5 text-gray-700">v2.0</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">19</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">6,750</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-green-100 text-green-700">已发布</span></td>
+            <td class="px-4 py-2.5 text-gray-600">刘工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-ZH-2026-006</td>
+            <td class="px-4 py-2.5 text-gray-900">综合游乐架</td>
+            <td class="px-4 py-2.5 text-gray-700">v5.1</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">86</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">45,200</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-yellow-100 text-yellow-700">设计中</span></td>
+            <td class="px-4 py-2.5 text-gray-600">胡总</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-QQ-2026-007</td>
+            <td class="px-4 py-2.5 text-gray-900">双人秋千加强型</td>
+            <td class="px-4 py-2.5 text-gray-700">v1.0</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">22</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">9,600</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-gray-200 text-gray-600">草稿</span></td>
+            <td class="px-4 py-2.5 text-gray-600">赵工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-700">BOM-SL-2026-008</td>
+            <td class="px-4 py-2.5 text-gray-900">管状滑梯封闭型</td>
+            <td class="px-4 py-2.5 text-gray-700">v2.3</td>
+            <td class="px-4 py-2.5 text-right text-gray-700">41</td>
+            <td class="px-4 py-2.5 text-right text-gray-900 font-medium">18,100</td>
+            <td class="px-4 py-2.5"><span class="inline-block px-2 py-0.5 rounded text-xs bg-red-100 text-red-600">已归档</span></td>
+            <td class="px-4 py-2.5 text-gray-600">李工</td>
+            <td class="px-4 py-2.5 space-x-2">
+              <button class="text-blue-500 hover:text-blue-700 text-xs">展开BOM树</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">版本对比</button>
+              <button class="text-blue-500 hover:text-blue-700 text-xs">详情</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- [BOM树展开区域] -->
+    <!-- 此区域为BOM树展开后的缩进列表，CC实现时用a-tree或递归表格 -->
+    <!-- 层级通过padding-left缩进模拟树形结构 -->
+    <!-- ============================================== -->
+    <div id="bomTreePanel" class="bg-white border border-gray-300 rounded overflow-hidden mb-4 hidden">
+      <div class="bg-gray-100 px-4 py-2.5 flex items-center justify-between border-b border-gray-300">
+        <span class="text-sm font-medium text-gray-700">BOM树 — BOM-SL-2026-001 超级滑梯组件 v3.2</span>
+        <button class="text-gray-400 hover:text-gray-600 text-xs" onclick="toggleBomTree()">收起 ✕</button>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-gray-600">
+          <tr>
+            <th class="text-left px-4 py-2 font-medium w-1/3">零件编码 / 名称</th>
+            <th class="text-right px-4 py-2 font-medium">数量</th>
+            <th class="text-right px-4 py-2 font-medium">单价(¥)</th>
+            <th class="text-right px-4 py-2 font-medium">小计(¥)</th>
+            <th class="text-right px-4 py-2 font-medium">Where-Used</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <!-- L0 根节点 -->
+          <tr class="bg-blue-50/50">
+            <td class="px-4 py-2 tree-l0">
+              <span class="font-mono text-xs text-gray-500">WD-TU-SL-0001</span>
+              <span class="ml-2 font-medium text-gray-900">超级滑梯组件</span>
+              <span class="ml-1 text-xs text-gray-400">v3.2</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">1</td>
+            <td class="px-4 py-2 text-right text-gray-500">—</td>
+            <td class="px-4 py-2 text-right font-medium text-gray-900">15,650</td>
+            <td class="px-4 py-2 text-right text-gray-500">—</td>
+          </tr>
+          <!-- L1 主体钢管 -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l1">
+              <span class="font-mono text-xs text-gray-500">WD-TU-ST-0048</span>
+              <span class="ml-2 text-gray-800">主体钢管 Q345</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×4</td>
+            <td class="px-4 py-2 text-right text-gray-700">680</td>
+            <td class="px-4 py-2 text-right text-gray-900">2,720</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">5个BOM</td>
+          </tr>
+          <!-- L1 LLDPE滑道 -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l1">
+              <span class="font-mono text-xs text-gray-500">WD-TU-PL-0012</span>
+              <span class="ml-2 text-gray-800">LLDPE滑道</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×1</td>
+            <td class="px-4 py-2 text-right text-gray-700">3,200</td>
+            <td class="px-4 py-2 text-right text-gray-900">3,200</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">3个BOM</td>
+          </tr>
+          <!-- L2 紧固螺栓（LLDPE滑道子件） -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l2">
+              <span class="font-mono text-xs text-gray-500">WD-TU-BT-0003</span>
+              <span class="ml-2 text-gray-800">紧固螺栓 M10×40</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×16</td>
+            <td class="px-4 py-2 text-right text-gray-700">4.5</td>
+            <td class="px-4 py-2 text-right text-gray-900">72</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">12个BOM</td>
+          </tr>
+          <!-- L1 钢制平台 -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l1">
+              <span class="font-mono text-xs text-gray-500">WD-TU-PF-0005</span>
+              <span class="ml-2 text-gray-800">钢制平台</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×2</td>
+            <td class="px-4 py-2 text-right text-gray-700">1,850</td>
+            <td class="px-4 py-2 text-right text-gray-900">3,700</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">4个BOM</td>
+          </tr>
+          <!-- L1 防滑踏板 -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l1">
+              <span class="font-mono text-xs text-gray-500">WD-TU-TB-0009</span>
+              <span class="ml-2 text-gray-800">防滑踏板</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×6</td>
+            <td class="px-4 py-2 text-right text-gray-700">120</td>
+            <td class="px-4 py-2 text-right text-gray-900">720</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">7个BOM</td>
+          </tr>
+          <!-- L1 护栏组件 -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l1">
+              <span class="font-mono text-xs text-gray-500">WD-TU-HL-0015</span>
+              <span class="ml-2 text-gray-800">安全护栏组件</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×4</td>
+            <td class="px-4 py-2 text-right text-gray-700">560</td>
+            <td class="px-4 py-2 text-right text-gray-900">2,240</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">6个BOM</td>
+          </tr>
+          <!-- L1 连接件包 -->
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-2 tree-l1">
+              <span class="font-mono text-xs text-gray-500">WD-TU-CN-0022</span>
+              <span class="ml-2 text-gray-800">连接件包（含垫片）</span>
+            </td>
+            <td class="px-4 py-2 text-right text-gray-700">×1</td>
+            <td class="px-4 py-2 text-right text-gray-700">580</td>
+            <td class="px-4 py-2 text-right text-gray-900">580</td>
+            <td class="px-4 py-2 text-right text-blue-500 text-xs">9个BOM</td>
+          </tr>
+        </tbody>
+        <tfoot class="border-t border-gray-300 bg-gray-50">
+          <tr>
+            <td class="px-4 py-2 text-sm font-medium text-gray-700" colspan="3">合计（7个直接子件）</td>
+            <td class="px-4 py-2 text-right font-bold text-gray-900">15,650</td>
+            <td></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+    <!-- ============================================== -->
+    <!-- [版本对比面板] -->
+    <!-- 左右双列对比布局，高亮新增/删除/修改的零件行 -->
+    <!-- CC实现时用diff算法自动比较两个BOM版本差异 -->
+    <!-- ============================================== -->
+    <div id="versionDiffPanel" class="bg-white border border-gray-300 rounded overflow-hidden mb-4 hidden">
+      <div class="bg-gray-100 px-4 py-2.5 flex items-center justify-between border-b border-gray-300">
+        <span class="text-sm font-medium text-gray-700">版本对比 — 超级滑梯组件</span>
+        <div class="flex items-center gap-3">
+          <span class="text-xs text-gray-500">
+            <span class="inline-block w-3 h-3 bg-green-100 border border-green-300 mr-1 align-middle rounded-sm"></span>新增
+            <span class="inline-block w-3 h-3 bg-red-100 border border-red-300 ml-2 mr-1 align-middle rounded-sm"></span>删除
+            <span class="inline-block w-3 h-3 bg-yellow-100 border border-yellow-300 ml-2 mr-1 align-middle rounded-sm"></span>修改
+          </span>
+          <button class="text-gray-400 hover:text-gray-600 text-xs" onclick="toggleVersionDiff()">收起 ✕</button>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 divide-x divide-gray-300">
+        <!-- 左列 v3.1 -->
+        <div>
+          <div class="bg-gray-50 px-4 py-2 text-xs font-medium text-gray-600 border-b border-gray-200">v3.1（旧版）</div>
+          <table class="w-full text-xs">
+            <thead class="text-gray-500 bg-gray-50/50">
+              <tr>
+                <th class="text-left px-3 py-1.5 font-medium">零件编码</th>
+                <th class="text-left px-3 py-1.5 font-medium">名称</th>
+                <th class="text-right px-3 py-1.5 font-medium">数量</th>
+                <th class="text-right px-3 py-1.5 font-medium">单价</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="diff-modified">
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-ST-0048</td>
+                <td class="px-3 py-1.5 text-gray-800">主体钢管 <b>Q345</b></td>
+                <td class="px-3 py-1.5 text-right">×4</td>
+                <td class="px-3 py-1.5 text-right">620</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-PL-0012</td>
+                <td class="px-3 py-1.5 text-gray-800">LLDPE滑道</td>
+                <td class="px-3 py-1.5 text-right">×1</td>
+                <td class="px-3 py-1.5 text-right">3,200</td>
+              </tr>
+              <tr class="diff-modified">
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-BT-0003</td>
+                <td class="px-3 py-1.5 text-gray-800">紧固螺栓 M10×40</td>
+                <td class="px-3 py-1.5 text-right">×<b>12</b></td>
+                <td class="px-3 py-1.5 text-right">4.5</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-PF-0005</td>
+                <td class="px-3 py-1.5 text-gray-800">钢制平台</td>
+                <td class="px-3 py-1.5 text-right">×2</td>
+                <td class="px-3 py-1.5 text-right">1,850</td>
+              </tr>
+              <tr class="diff-removed">
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-RB-0007</td>
+                <td class="px-3 py-1.5">橡胶缓冲垫</td>
+                <td class="px-3 py-1.5 text-right">×4</td>
+                <td class="px-3 py-1.5 text-right">45</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-TB-0009</td>
+                <td class="px-3 py-1.5 text-gray-800">防滑踏板</td>
+                <td class="px-3 py-1.5 text-right">×6</td>
+                <td class="px-3 py-1.5 text-right">120</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <!-- 右列 v3.2 -->
+        <div>
+          <div class="bg-gray-50 px-4 py-2 text-xs font-medium text-gray-600 border-b border-gray-200">v3.2（新版）</div>
+          <table class="w-full text-xs">
+            <thead class="text-gray-500 bg-gray-50/50">
+              <tr>
+                <th class="text-left px-3 py-1.5 font-medium">零件编码</th>
+                <th class="text-left px-3 py-1.5 font-medium">名称</th>
+                <th class="text-right px-3 py-1.5 font-medium">数量</th>
+                <th class="text-right px-3 py-1.5 font-medium">单价</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100">
+              <tr class="diff-modified">
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-ST-0048</td>
+                <td class="px-3 py-1.5 text-gray-800">主体钢管 <b>Q355</b></td>
+                <td class="px-3 py-1.5 text-right">×4</td>
+                <td class="px-3 py-1.5 text-right"><b>680</b></td>
+              </tr>
+              <tr>
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-PL-0012</td>
+                <td class="px-3 py-1.5 text-gray-800">LLDPE滑道</td>
+                <td class="px-3 py-1.5 text-right">×1</td>
+                <td class="px-3 py-1.5 text-right">3,200</td>
+              </tr>
+              <tr class="diff-modified">
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-BT-0003</td>
+                <td class="px-3 py-1.5 text-gray-800">紧固螺栓 M10×40</td>
+                <td class="px-3 py-1.5 text-right">×<b>16</b></td>
+                <td class="px-3 py-1.5 text-right">4.5</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-PF-0005</td>
+                <td class="px-3 py-1.5 text-gray-800">钢制平台</td>
+                <td class="px-3 py-1.5 text-right">×2</td>
+                <td class="px-3 py-1.5 text-right">1,850</td>
+              </tr>
+              <tr class="diff-added">
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-HL-0015</td>
+                <td class="px-3 py-1.5 text-gray-800"><b>安全护栏组件</b></td>
+                <td class="px-3 py-1.5 text-right">×4</td>
+                <td class="px-3 py-1.5 text-right">560</td>
+              </tr>
+              <tr>
+                <td class="px-3 py-1.5 font-mono text-gray-500">WD-TU-TB-0009</td>
+                <td class="px-3 py-1.5 text-gray-800">防滑踏板</td>
+                <td class="px-3 py-1.5 text-right">×6</td>
+                <td class="px-3 py-1.5 text-right">120</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- 对比汇总 -->
+      <div class="border-t border-gray-300 px-4 py-2.5 flex items-center gap-6 text-xs text-gray-600 bg-gray-50">
+        <span>v3.1 总成本: <b>¥14,800</b></span>
+        <span>→</span>
+        <span>v3.2 总成本: <b>¥15,650</b></span>
+        <span class="text-red-600 font-medium">+¥850 (+5.7%)</span>
+        <span class="ml-4">变更: 2项修改 · 1项新增 · 1项删除</span>
+      </div>
+    </div>
+
+  </div><!-- end panel-ebom -->
+
+  <!-- ============================================== -->
+  <!-- [超级BOM面板] — 选配规则 -->
+  <!-- ============================================== -->
+  <div class="tab-panel" id="panel-superbom">
+    <div class="bg-white border border-gray-300 rounded px-6 py-12 text-center">
+      <div class="text-gray-400 text-sm mb-2">超级BOM（选配规则）</div>
+      <div class="text-gray-300 text-xs">此Tab页内容结构与EBOM类似，增加选配规则矩阵和约束条件配置表。CC实现时参照EBOM列表 + 选配规则管理模块。</div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- [MBOM面板] — 制造BOM -->
+  <!-- ============================================== -->
+  <div class="tab-panel" id="panel-mbom">
+    <div class="bg-white border border-gray-300 rounded px-6 py-12 text-center">
+      <div class="text-gray-400 text-sm mb-2">MBOM（制造BOM）</div>
+      <div class="text-gray-300 text-xs">此Tab页展示制造BOM列表，含工艺路线绑定、工序关联和制造替代件。CC实现时参照EBOM列表结构 + 工序关联列。</div>
+    </div>
+  </div>
+
+  <!-- ============================================== -->
+  <!-- [项目BOM面板] — 派生 -->
+  <!-- ============================================== -->
+  <div class="tab-panel" id="panel-projbom">
+    <div class="bg-white border border-gray-300 rounded px-6 py-12 text-center">
+      <div class="text-gray-400 text-sm mb-2">项目BOM（派生）</div>
+      <div class="text-gray-300 text-xs">此Tab页展示从EBOM/MBOM派生的项目级BOM，含项目编号关联和客户定制标记。CC实现时增加派生来源和项目筛选器。</div>
+    </div>
+  </div>
+
+  <script>
+    // 子Tab切换
+    document.querySelectorAll('#bomSubTabs .sub-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('#bomSubTabs .sub-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+        tab.classList.add('active');
+        document.getElementById('panel-' + tab.dataset.tab).classList.add('active');
+      });
+    });
+
+    // BOM树展开/收起
+    function toggleBomTree() {
+      const panel = document.getElementById('bomTreePanel');
+      panel.classList.toggle('hidden');
+      if (!panel.classList.contains('hidden')) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+
+    // 版本对比展开/收起
+    function toggleVersionDiff() {
+      const panel = document.getElementById('versionDiffPanel');
+      panel.classList.toggle('hidden');
+      if (!panel.classList.contains('hidden')) {
+        panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+      }
+    }
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>动态表单渲染器</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- 顶部说明条 -->
+  <div class="bg-gray-100 border border-gray-300 rounded-lg px-4 py-3 mb-6 flex items-start gap-2">
+    <svg class="w-4 h-4 text-gray-400 mt-0.5 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+    </svg>
+    <p class="text-sm text-gray-500">动态表单渲染器 — 根据 JSON Schema 自动生成表单 UI。本页展示渲染效果，实际由 <span class="font-mono text-gray-600">#3168</span> 组件实现。</p>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [FormRenderer] 表单渲染效果展示 -->
+  <!-- ============================================ -->
+  <div class="mb-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">表单渲染效果展示</h2>
+
+    <div class="flex gap-6">
+
+      <!-- 左侧: Schema定义预览 (40%) -->
+      <div class="w-2/5 shrink-0">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-2">Schema 定义</p>
+        <div class="bg-gray-800 rounded-lg p-4 overflow-auto" style="max-height: 720px;">
+          <pre class="text-xs text-gray-300 leading-relaxed font-mono"><code>{
+  <span class="text-green-400">"title"</span>: <span class="text-amber-300">"报价审批表"</span>,
+  <span class="text-green-400">"version"</span>: <span class="text-amber-300">"1.2"</span>,
+  <span class="text-green-400">"sections"</span>: [
+    {
+      <span class="text-green-400">"label"</span>: <span class="text-amber-300">"基本信息"</span>,
+      <span class="text-green-400">"fields"</span>: [
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"projectName"</span>,
+          <span class="text-green-400">"label"</span>: <span class="text-amber-300">"项目名称"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"string"</span>,
+          <span class="text-green-400">"required"</span>: <span class="text-purple-400">true</span>
+        },
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"customerName"</span>,
+          <span class="text-green-400">"label"</span>: <span class="text-amber-300">"客户名称"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"string"</span>,
+          <span class="text-green-400">"widget"</span>: <span class="text-amber-300">"search"</span>
+        },
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"opportunityId"</span>,
+          <span class="text-green-400">"label"</span>: <span class="text-amber-300">"商机编号"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"string"</span>,
+          <span class="text-green-400">"readOnly"</span>: <span class="text-purple-400">true</span>,
+          <span class="text-green-400">"autoGenerate"</span>: <span class="text-purple-400">true</span>
+        },
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"quoteType"</span>,
+          <span class="text-green-400">"label"</span>: <span class="text-amber-300">"报价类型"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"string"</span>,
+          <span class="text-green-400">"widget"</span>: <span class="text-amber-300">"radio"</span>,
+          <span class="text-green-400">"enum"</span>: [
+            <span class="text-amber-300">"标准报价"</span>,
+            <span class="text-amber-300">"特殊报价"</span>,
+            <span class="text-amber-300">"补充报价"</span>
+          ]
+        }
+      ]
+    },
+    {
+      <span class="text-green-400">"label"</span>: <span class="text-amber-300">"报价明细"</span>,
+      <span class="text-green-400">"fields"</span>: [
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"amount"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"number"</span>,
+          <span class="text-green-400">"label"</span>: <span class="text-amber-300">"报价金额(元)"</span>
+        },
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"currency"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"string"</span>,
+          <span class="text-green-400">"widget"</span>: <span class="text-amber-300">"select"</span>,
+          <span class="text-green-400">"enum"</span>: [<span class="text-amber-300">"CNY"</span>, <span class="text-amber-300">"USD"</span>]
+        },
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"validDays"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"number"</span>
+        },
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"marginRate"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"number"</span>,
+          <span class="text-green-400">"hint"</span>: <span class="text-amber-300">"低于25%需总经理审批"</span>
+        }
+      ]
+    },
+    {
+      <span class="text-green-400">"label"</span>: <span class="text-amber-300">"附件"</span>,
+      <span class="text-green-400">"fields"</span>: [
+        {
+          <span class="text-green-400">"key"</span>: <span class="text-amber-300">"attachments"</span>,
+          <span class="text-green-400">"type"</span>: <span class="text-amber-300">"file"</span>,
+          <span class="text-green-400">"multiple"</span>: <span class="text-purple-400">true</span>
+        }
+      ]
+    }
+  ]
+}</code></pre>
+        </div>
+      </div>
+
+      <!-- 右侧: 渲染后的表单预览 (60%) -->
+      <div class="flex-1">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-2">渲染预览</p>
+        <div class="bg-white border border-gray-300 rounded-lg p-6">
+
+          <!-- 表单标题 -->
+          <h3 class="text-base font-semibold text-gray-800 mb-5 pb-3 border-b border-gray-200">报价审批表</h3>
+
+          <!-- Section 1: 基本信息 -->
+          <div class="mb-6">
+            <p class="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
+              <span class="w-1 h-4 bg-blue-500 rounded-full inline-block"></span>
+              基本信息
+            </p>
+            <div class="space-y-4">
+              <!-- 项目名称 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">项目名称 <span class="text-red-400">*</span></label>
+                <input type="text" value="国际学校游乐设备项目" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none" readonly>
+              </div>
+              <!-- 客户名称 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">客户名称</label>
+                <div class="relative">
+                  <input type="text" placeholder="搜索客户" class="w-full px-3 py-2 pr-9 text-sm border border-gray-300 rounded-md bg-white text-gray-400 focus:outline-none">
+                  <svg class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                  </svg>
+                </div>
+              </div>
+              <!-- 商机编号 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">商机编号 <span class="text-xs text-gray-400">(自动生成)</span></label>
+                <input type="text" value="TY20254529" class="w-full px-3 py-2 text-sm border border-gray-200 rounded-md bg-gray-50 text-gray-400 cursor-not-allowed" readonly>
+              </div>
+              <!-- 报价类型 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">报价类型</label>
+                <div class="flex items-center gap-6 mt-1">
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <span class="w-4 h-4 rounded-full border-2 border-blue-500 flex items-center justify-center">
+                      <span class="w-2 h-2 rounded-full bg-blue-500"></span>
+                    </span>
+                    <span class="text-sm text-gray-700">标准报价</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <span class="w-4 h-4 rounded-full border-2 border-gray-300"></span>
+                    <span class="text-sm text-gray-700">特殊报价</span>
+                  </label>
+                  <label class="flex items-center gap-2 cursor-pointer">
+                    <span class="w-4 h-4 rounded-full border-2 border-gray-300"></span>
+                    <span class="text-sm text-gray-700">补充报价</span>
+                  </label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 2: 报价明细 -->
+          <div class="mb-6">
+            <p class="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
+              <span class="w-1 h-4 bg-blue-500 rounded-full inline-block"></span>
+              报价明细
+            </p>
+            <div class="space-y-4">
+              <!-- 报价金额 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">报价金额 (元)</label>
+                <input type="text" value="158,000" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none" readonly>
+              </div>
+              <!-- 报价币种 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">报价币种</label>
+                <div class="relative">
+                  <select class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-800 appearance-none focus:outline-none">
+                    <option>人民币 CNY</option>
+                    <option>美元 USD</option>
+                  </select>
+                  <svg class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                  </svg>
+                </div>
+              </div>
+              <!-- 有效期 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">有效期 (天)</label>
+                <input type="text" value="30" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none" readonly>
+              </div>
+              <!-- 毛利率 -->
+              <div>
+                <label class="block text-sm text-gray-600 mb-1">毛利率 (%)</label>
+                <div class="flex items-center gap-3">
+                  <input type="text" value="35" class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-800 focus:outline-none" readonly>
+                  <span class="text-xs text-amber-600 bg-amber-50 border border-amber-200 px-2 py-1 rounded whitespace-nowrap">低于25%需总经理审批</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section 3: 附件 -->
+          <div class="mb-6">
+            <p class="text-sm font-medium text-gray-700 mb-4 flex items-center gap-2">
+              <span class="w-1 h-4 bg-blue-500 rounded-full inline-block"></span>
+              附件
+            </p>
+            <!-- 上传区 -->
+            <div class="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center mb-3 hover:border-gray-400 transition cursor-pointer">
+              <svg class="w-8 h-8 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/>
+              </svg>
+              <p class="text-sm text-gray-400">点击或拖拽上传报价单附件</p>
+            </div>
+            <!-- 已上传文件 -->
+            <div class="flex items-center gap-3 bg-gray-50 border border-gray-200 rounded-md px-3 py-2">
+              <svg class="w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+              </svg>
+              <span class="text-sm text-gray-600 flex-1">报价单_国际学校_v2.xlsx</span>
+              <span class="text-xs text-gray-400">245KB</span>
+              <button class="text-gray-400 hover:text-gray-600 transition">
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <!-- 底部备注 -->
+          <div class="mb-4">
+            <label class="block text-sm text-gray-600 mb-1">备注</label>
+            <textarea rows="3" placeholder="请填写报价备注说明" class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md bg-white text-gray-400 resize-none focus:outline-none"></textarea>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [FieldTypes] 字段类型展示 -->
+  <!-- ============================================ -->
+  <div class="mb-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">字段类型支持</h2>
+
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 border-b border-gray-200">
+            <th class="text-left px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">字段类型</th>
+            <th class="text-left px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">Schema type</th>
+            <th class="text-left px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">渲染组件</th>
+            <th class="text-left px-4 py-2.5 text-xs font-medium text-gray-500 uppercase tracking-wider">示例</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">单行文本</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">string</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-input</td>
+            <td class="px-4 py-2.5 text-gray-400">项目名称</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">多行文本</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">string + textarea</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-textarea</td>
+            <td class="px-4 py-2.5 text-gray-400">备注说明</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">数字</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">number</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-input-number</td>
+            <td class="px-4 py-2.5 text-gray-400">报价金额</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">下拉选择</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">string + enum</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-select</td>
+            <td class="px-4 py-2.5 text-gray-400">报价币种</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">单选</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">string + radio</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-radio-group</td>
+            <td class="px-4 py-2.5 text-gray-400">报价类型</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">多选</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">array + checkbox</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-checkbox-group</td>
+            <td class="px-4 py-2.5 text-gray-400">涉及产品线</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">日期</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">string + date</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-date-picker</td>
+            <td class="px-4 py-2.5 text-gray-400">报价日期</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">文件上传</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">file</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-upload</td>
+            <td class="px-4 py-2.5 text-gray-400">附件</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">用户选择器</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">user</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">自定义</td>
+            <td class="px-4 py-2.5 text-gray-400">审批人</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">部门选择器</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">department</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">自定义</td>
+            <td class="px-4 py-2.5 text-gray-400">所属部门</td>
+          </tr>
+          <tr>
+            <td class="px-4 py-2.5 text-gray-700">金额</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">money</td>
+            <td class="px-4 py-2.5 font-mono text-xs text-gray-500">a-input-number + 前缀 ¥</td>
+            <td class="px-4 py-2.5 text-gray-400">合同金额</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [ConditionalVisibility] 条件显隐演示 -->
+  <!-- ============================================ -->
+  <div class="mb-4">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">条件显隐演示</h2>
+
+    <!-- [条件显隐逻辑演示] -->
+    <div class="border-2 border-dashed border-gray-300 rounded-lg p-4 mb-5 bg-white">
+      <p class="text-sm text-gray-500 font-mono leading-relaxed">
+        <span class="text-gray-400">conditionalVisibility</span> 规则示例：<br>
+        当 <span class="text-gray-700 font-medium">"报价类型"</span> 选择 <span class="text-gray-700 font-medium">"特殊报价"</span> 时，显示 <span class="text-gray-700 font-medium">"特殊报价原因"</span> 字段<br>
+        <span class="text-gray-400">前端根据 conditionalVisibility 配置动态显隐字段</span>
+      </p>
+    </div>
+
+    <!-- 两个并排的迷你表单对比 -->
+    <div class="grid grid-cols-2 gap-6">
+
+      <!-- 左: 标准报价 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-3">场景A · 标准报价</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">报价类型</label>
+            <div class="flex items-center gap-4">
+              <label class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded-full border-2 border-blue-500 flex items-center justify-center">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                </span>
+                <span class="text-xs text-gray-700">标准报价</span>
+              </label>
+              <label class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded-full border-2 border-gray-300"></span>
+                <span class="text-xs text-gray-500">特殊报价</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">报价金额</label>
+            <input type="text" value="158,000" class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded bg-white text-gray-700" readonly>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">毛利率 (%)</label>
+            <input type="text" value="35" class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded bg-white text-gray-700" readonly>
+          </div>
+          <!-- 无额外字段 -->
+          <div class="pt-2 border-t border-gray-100">
+            <p class="text-xs text-gray-300 italic">— 无额外字段 —</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 右: 特殊报价 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-5">
+        <p class="text-xs text-gray-400 uppercase tracking-wider mb-3">场景B · 特殊报价</p>
+        <div class="space-y-3">
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">报价类型</label>
+            <div class="flex items-center gap-4">
+              <label class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded-full border-2 border-gray-300"></span>
+                <span class="text-xs text-gray-500">标准报价</span>
+              </label>
+              <label class="flex items-center gap-1.5">
+                <span class="w-3.5 h-3.5 rounded-full border-2 border-blue-500 flex items-center justify-center">
+                  <span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span>
+                </span>
+                <span class="text-xs text-gray-700">特殊报价</span>
+              </label>
+            </div>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">报价金额</label>
+            <input type="text" value="158,000" class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded bg-white text-gray-700" readonly>
+          </div>
+          <div>
+            <label class="block text-xs text-gray-500 mb-1">毛利率 (%)</label>
+            <input type="text" value="35" class="w-full px-2.5 py-1.5 text-xs border border-gray-300 rounded bg-white text-gray-700" readonly>
+          </div>
+          <!-- 条件显示的字段 - 黄色高亮边框 -->
+          <div class="pt-2 border-t border-gray-100">
+            <label class="block text-xs text-gray-500 mb-1">
+              特殊报价原因 <span class="text-amber-500 text-xs">● 条件显示</span>
+            </label>
+            <textarea rows="2" placeholder="请说明特殊报价原因..." class="w-full px-2.5 py-1.5 text-xs border-2 border-amber-400 rounded bg-amber-50 text-gray-600 resize-none focus:outline-none"></textarea>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</body>
+</html>

@@ -61,6 +61,15 @@ bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort medium
 | `high` | 多文件重构、复杂业务 | Token Pool Proxy |
 | `max` | 架构级决策 | **Claude Max订阅**（默认Sonnet） |
 
+## 编程CC测试能力（公共）
+
+每个编程CC拥有独立的前后端环境（独立端口、独立数据库），可以：
+- 启动后端服务并用 curl 验证 API
+- 启动前端 dev server 并用 **Playwright** 连接自己独立环境的端口进行图形化测试
+- 使用 `/screenshot` skill 截图验证页面渲染
+
+评估编程CC的自测计划时，**不要否定其图形化测试能力**，应鼓励CC充分利用 Playwright + 截图进行前端功能验证。
+
 ## 团队内沟通机制（必读）
 
 > **启动后立即阅读** `docs/agent-docs/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」，每次向他人发送消息前必须遵守。

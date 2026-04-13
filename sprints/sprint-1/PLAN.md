@@ -38,7 +38,7 @@
 | #3518 | P1 | fullstack | 支持中心主页Dashboard — 6个Widget | ⏳ | #3522 |
 | #3519 | P1 | fullstack | 项目安装主页Dashboard — 7个Widget | ⏳ | #3522 |
 | #3520 | P1 | fullstack | 综合管理主页Dashboard — 6个Widget | ⏳ | #3522 |
-| #3521 | P1 | frontend | Boss耀总Dashboard — 8大板块导航页 | ⏳ | #3522 |
+| ~~#3521~~ | ~~P1~~ | ~~frontend~~ | ~~Boss耀总Dashboard — 8大板块导航页~~ ✅ CLOSED | ~~Done~~ | #3522 |
 
 > **并行策略**：#3522引擎完成后，#3517~#3521可并行开发（5个CC同时）
 
@@ -53,7 +53,8 @@
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
 | #3458 | P0 | fullstack | ~~全球项目矿场v3.0 — 基于确认原型的完整改版~~ ✅ PR#3606 merged | ✅ | #3597(菜单基线) |
-| **#3615** | **P0** | **fullstack** | **#3458验收8项缺陷修复（分页/Tab/字段/详情/分配/修正/有效无效/tooltip）** | **立即** | #3458 |
+| ~~#3615~~ | ~~P0~~ | ~~fullstack~~ | ~~#3458验收8项缺陷修复~~ ✅ PR#3616 merged | ~~Done~~ | #3458 |
+| **#3617** | **P0** | **fullstack** | **#3458第二轮验收8项缺陷修复（统计卡片/详情500/流转/分配mock）** | **进行中** | #3615 |
 
 > **快速路线**：仅依赖菜单，可独立快速推进，支撑商务部日常运营
 > **⚠️ #3615 紧急修复**：#3458 验收不通过，8项功能缺陷，需立即修复
@@ -87,8 +88,8 @@
 |-------|------|------|------|------|------|
 | #3526 | P0 | fullstack | CRM商务中心Master — Sprint-1 总协调 | ✅ | #3597 |
 | #3527 | P0 | backend | CRM-DB 数据库基础建表 — Flyway迁移脚本(9张表) | ✅ | #3526 |
-| #3528 | P1 | fullstack | CRM-01 商务工作台 — KPI+收件箱+业绩面板 | ⏳ | #3527 |
-| #3529 | P1 | fullstack | CRM-02 客户管理 — CRUD+三类型+详情页 | ⏳ | #3528 |
+| ~~#3528~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-01 商务工作台 — KPI+收件箱+业绩面板~~ ✅ CLOSED | ~~Done~~ | #3527 |
+| #3529 | P1 | fullstack | CRM-02 客户管理 — CRUD+三类型+详情页 | ✅ | ~~#3528~~ CLOSED |
 | #3530 | P1 | fullstack | CRM-03 商机管道 — 列表+看板+7阶段 | ⏳ | #3529 |
 | #3531 | P1 | fullstack | CRM-04 商机详情页 — 10Tab+阶段推进 | ⏳ | #3530 |
 | #3532 | P1 | fullstack | CRM-05 询盘工作台 — 5状态+报价+转商机 | ⏳ | #3529 |
@@ -129,7 +130,7 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3461 | P1 | fullstack | 耀总驾驶舱v1.0 — 8大区块 | ⏳ | #3521(Boss Dashboard) |
+| #3461 | P1 | fullstack | 耀总驾驶舱v1.0 — 8大区块 | ✅ | ~~#3521(Boss Dashboard)~~ CLOSED |
 
 ---
 
@@ -195,22 +196,32 @@ Week 4 (5/03-5/09):
 
 ## 指派建议（最近20个）
 
-> Tier-0(#3597菜单基线)已CLOSED，前置满足。#3458矿场旧环境Done但新环境需重做。
-> Week 1 排程：Tier-2矿场(优先) + Tier-1引擎 + Tier-3超管 + Tier-4 CRM前两个 + Tier-5门户，共6CC并行。
+> Week 1 Master全部完成。Week 2 排程：bug修复(kimi1/2) + Tier-1五角色Dashboard(kimi3-7) + Tier-3四Tab(kimi8-11) + Tier-5产品目录(kimi12) + CRM/耀总接力。
+> 依赖变化：#3521(Boss Dashboard)已CLOSED → #3461(耀总)解锁；#3528(CRM-01)已CLOSED → #3529/#3537解锁。
+> ⚠️ kimi7原锁定#3521已CLOSED，建议释放改派#3529或#3461。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | effort |
 |------|-------|------|------|------|--------|
-| ~~kimi1~~ | ~~#3598~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页左上角名称~~ | ~~✅ merged~~ |
-| ~~kimi1~~ | ~~#3600~~ | ~~P0~~ | ~~frontend~~ | ~~替换登录页底部版权~~ | ~~✅ merged~~ |
-| ~~kimi1~~ | ~~#3602~~ | ~~P0~~ | ~~backend~~ | ~~Claude Office菜单改公网IP~~ | ~~✅ merged~~ |
-| ~~kimi1~~ | ~~#3604~~ | ~~bug~~ | ~~backend~~ | ~~is_frame值修正~~ | ~~✅ PR#3605 merged~~ |
-| ~~kimi1~~ | ~~#3458~~ | ~~P0~~ | ~~fullstack~~ | ~~Tier-2: 全球项目矿场v3.0 — 新环境重做~~ | ~~✅ merged~~ |
-| **kimi1** | **#3615** | **P0** | **fullstack** | **Tier-2: #3458验收8项缺陷修复（紧急）** | **high** |
-| kimi2 | #3522 | P1 | fullstack | Tier-1: Dashboard Widget配置表+动态渲染引擎 | high |
-| kimi3 | #3466 | P0 | fullstack | Tier-3: 超管驾驶舱Master — 框架验证 | high |
-| kimi4 | #3526 | P1 | fullstack | Tier-4: CRM商务中心Master — Sprint-1总协调 | medium |
-| kimi5 | #3527 | P0 | backend | Tier-4: CRM-DB 数据库基础建表(9张表) | high |
-| kimi6 | #3579 | P1 | fullstack | Tier-5: 产品门户Master — 路由+权限+布局 | medium |
+| kimi1 | #3618 | P0-bug | fullstack | bug: 建表标准列+CRM Controller注册（进行中） | high |
+| kimi2 | #3617 | P0-bug | fullstack | Tier-2: 矿场v3第二轮验收8项缺陷（进行中） | high |
+| kimi3 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
+| kimi4 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |
+| kimi5 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | high |
+| kimi6 | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | high |
+| kimi7 | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理(原#3521已CLOSED，改派) | high |
+| kimi8 | #3481 | P1 | fullstack | Tier-3: 实时日志流Tab | high |
+| kimi9 | #3482 | P1 | fullstack | Tier-3: FinOps开发运维成本Tab | high |
+| kimi10 | #3483 | P1 | fullstack | Tier-3: 安全审计Tab | high |
+| kimi11 | #3484 | P1 | fullstack | Tier-3: Prompt管理Tab | high |
+| kimi12 | #3582 | P0 | frontend | Tier-5: 产品目录页 — 卡片网格+筛选搜索 | high |
+| — | #3461 | P1 | fullstack | Tier-6: 耀总驾驶舱v1.0(前置#3521✅) | high |
+| — | #3537 | P1 | fullstack | Tier-4: CRM-10 我的提成(前置#3527✅) | medium |
+| — | #3548 | P1 | fullstack | Tier-4: CRM-13 公司通讯录 | medium |
+| — | #3583 | P0 | frontend | Tier-5: 产品详情页(前置#3582⏳) | high |
+| — | #3530 | P1 | fullstack | Tier-4: CRM-03 商机管道(前置#3529⏳) | high |
+| — | #3532 | P1 | fullstack | Tier-4: CRM-05 询盘工作台(前置#3529⏳) | high |
+| — | #3533 | P1 | fullstack | Tier-4: CRM-06 记录中心(前置#3529⏳) | medium |
+| — | #3536 | P1 | fullstack | Tier-4: CRM-09 经销商管理(前置#3529⏳) | high |
 
 ## 指派历史（完成后划线）
 

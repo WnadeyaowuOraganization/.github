@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>审批进度追踪</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes pulse-node {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(59,130,246,0.4); }
+      50% { box-shadow: 0 0 0 6px rgba(59,130,246,0); }
+    }
+    .animate-node-pulse { animation: pulse-node 2s ease-in-out infinite; }
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- [顶部选择栏] -->
+  <div class="flex flex-wrap items-center gap-4 mb-6">
+    <div class="flex items-center gap-2">
+      <label class="text-sm text-gray-500 flex-shrink-0">审批实例</label>
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-700 w-72">
+        <option>TY20254529 体游报价审批 — 国际学校项目报价单</option>
+        <option>SP20254601 总排期审批 — WDG250708排期变更</option>
+        <option>SO20254715 销售订单盖章 — 满江红项目合同</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-1 ml-auto">
+      <button
+        onclick="switchView('flowchart')"
+        id="view-btn-flowchart"
+        class="view-btn px-3 py-1.5 text-sm rounded-l border border-gray-300 bg-blue-500 text-white"
+      >流程图</button>
+      <button
+        onclick="switchView('timeline')"
+        id="view-btn-timeline"
+        class="view-btn px-3 py-1.5 text-sm rounded-r border border-gray-300 bg-white text-gray-600 hover:bg-gray-50"
+      >时间轴</button>
+    </div>
+  </div>
+
+  <!-- ======================== -->
+  <!-- [流程图视图] -->
+  <!-- ======================== -->
+  <div id="view-flowchart">
+
+    <!-- [DAG流程图组件占位] -->
+    <div class="border-2 border-dashed border-gray-300 rounded-lg bg-white p-6 mb-6">
+      <div class="text-center text-gray-400 text-sm leading-relaxed">
+        <p class="font-medium text-gray-500 mb-2"><!-- [DAG流程图组件占位] -->[DAG 流程图组件占位区域]</p>
+        <p>此区域将渲染 <code class="bg-gray-100 px-1 py-0.5 rounded text-xs">ApprovalProgressTracker</code> 组件</p>
+        <p class="mt-1">- 支持串行 / 并行 / 会签三种布局模式</p>
+        <p>- 节点颜色：✅ 已完成(绿) &nbsp;/&nbsp; 🔵 当前(蓝+动画) &nbsp;/&nbsp; ⚪ 未到达(灰) &nbsp;/&nbsp; 🔴 驳回(红)</p>
+        <p>- 点击节点查看详情弹窗</p>
+      </div>
+
+      <!-- [静态流程图示意] -->
+      <div class="mt-8 flex items-center justify-center gap-0 overflow-x-auto pb-2">
+
+        <!-- 节点: 发起 (已完成) -->
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-28 py-2.5 rounded-lg bg-green-500 text-white text-xs font-medium text-center shadow-sm">
+            发起
+          </div>
+          <div class="text-xs text-gray-400 mt-1">张三 · 09:00</div>
+        </div>
+
+        <!-- 箭头 -->
+        <div class="flex-shrink-0 text-gray-300 text-lg px-2">→</div>
+
+        <!-- 节点: 报价审核 (已完成) -->
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-28 py-2.5 rounded-lg bg-green-500 text-white text-xs font-medium text-center shadow-sm">
+            报价审核
+          </div>
+          <div class="text-xs text-gray-400 mt-1">李审 · 10:30</div>
+        </div>
+
+        <!-- 箭头 -->
+        <div class="flex-shrink-0 text-gray-300 text-lg px-2">→</div>
+
+        <!-- 节点: 成本审核 (当前, 蓝色+动画) -->
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-28 py-2.5 rounded-lg bg-blue-500 text-white text-xs font-medium text-center shadow-sm animate-node-pulse">
+            成本审核
+          </div>
+          <div class="text-xs text-blue-500 mt-1 font-medium">王审 · 处理中</div>
+        </div>
+
+        <!-- 箭头 -->
+        <div class="flex-shrink-0 text-gray-300 text-lg px-2">→</div>
+
+        <!-- 节点: 总监审批 (未到达) -->
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-28 py-2.5 rounded-lg bg-gray-200 text-gray-400 text-xs font-medium text-center">
+            总监审批
+          </div>
+          <div class="text-xs text-gray-300 mt-1">待分配</div>
+        </div>
+
+        <!-- 箭头 -->
+        <div class="flex-shrink-0 text-gray-300 text-lg px-2">→</div>
+
+        <!-- 节点: 完成 (未到达) -->
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-28 py-2.5 rounded-lg bg-gray-200 text-gray-400 text-xs font-medium text-center">
+            完成
+          </div>
+          <div class="text-xs text-gray-300 mt-1">—</div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- [流程统计卡片区] -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-xs text-gray-500 mb-1">总节点数</div>
+        <div class="text-2xl font-semibold text-gray-800">5</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-xs text-gray-500 mb-1">已完成</div>
+        <div class="text-2xl font-semibold text-green-600">2</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-xs text-gray-500 mb-1">当前节点</div>
+        <div class="text-sm font-semibold text-blue-600 mt-1">成本审核</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-lg p-4 text-center">
+        <div class="text-xs text-gray-500 mb-1">预估剩余</div>
+        <div class="text-2xl font-semibold text-gray-800">4.2<span class="text-sm font-normal text-gray-400">h</span></div>
+      </div>
+    </div>
+
+    <!-- [卡点预警区] -->
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg px-4 py-3 flex items-start gap-2">
+      <span class="text-yellow-500 flex-shrink-0 mt-0.5">⚠</span>
+      <div class="text-sm text-yellow-800">
+        当前节点 <strong>"成本审核·王审"</strong> 已等待 <strong>2.3h</strong>，SLA阈值 4h，使用率 <strong>58%</strong>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== -->
+  <!-- [时间轴视图] -->
+  <!-- ======================== -->
+  <div id="view-timeline" class="hidden">
+
+    <!-- [纵向时间轴] -->
+    <div class="bg-white border border-gray-200 rounded-lg p-6">
+      <div class="relative pl-10 space-y-8">
+        <!-- 竖线 -->
+        <div class="absolute left-[15px] top-2 bottom-2 w-px bg-gray-200"></div>
+
+        <!-- 时间轴节点 1 — 发起 (已完成, 绿) -->
+        <div class="relative">
+          <div class="absolute -left-10 top-0.5 w-5 h-5 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+            <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs text-gray-500">张</div>
+            <div class="flex-1">
+              <div class="text-sm text-gray-800">
+                <span class="font-medium">张三</span>
+                <span class="text-gray-400 ml-1">发起审批</span>
+              </div>
+              <div class="text-xs text-gray-400 mt-0.5">2025-03-23 09:00</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 时间轴节点 2 — 报价审核 (已完成, 绿) -->
+        <div class="relative">
+          <div class="absolute -left-10 top-0.5 w-5 h-5 rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+            <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+          </div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs text-gray-500">李</div>
+            <div class="flex-1">
+              <div class="text-sm text-gray-800">
+                <span class="font-medium">报价组·李审</span>
+                <span class="text-green-600 ml-1">通过</span>
+                <span class="text-xs text-gray-400 ml-2">耗时 1.5h</span>
+              </div>
+              <div class="text-xs text-gray-400 mt-0.5">2025-03-23 10:30</div>
+              <div class="mt-2 text-xs text-gray-500 bg-gray-50 border-l-2 border-gray-300 px-3 py-1.5 rounded-r">
+                "已估价，成本合理"
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 时间轴节点 3 — 成本审核 (当前, 蓝) -->
+        <div class="relative">
+          <div class="absolute -left-10 top-0.5 w-5 h-5 rounded-full bg-blue-500 border-2 border-white animate-pulse-dot"></div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-200 flex-shrink-0 flex items-center justify-center text-xs text-gray-500">王</div>
+            <div class="flex-1">
+              <div class="text-sm text-gray-800">
+                <span class="font-medium">成本审核·王审</span>
+                <span class="text-blue-500 ml-1">待处理</span>
+                <span class="text-xs text-gray-400 ml-2">已等待 2.3h</span>
+              </div>
+              <div class="text-xs text-blue-400 mt-0.5">等待中…</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 时间轴节点 4 — 总监审批 (未开始, 灰) -->
+        <div class="relative">
+          <div class="absolute -left-10 top-0.5 w-5 h-5 rounded-full bg-gray-200 border-2 border-white"></div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-xs text-gray-300">—</div>
+            <div class="flex-1">
+              <div class="text-sm text-gray-400">
+                <span class="font-medium">销售总监</span>
+                <span class="ml-1">未开始</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 时间轴节点 5 — 完成 (未开始, 灰) -->
+        <div class="relative">
+          <div class="absolute -left-10 top-0.5 w-5 h-5 rounded-full bg-gray-200 border-2 border-white"></div>
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 rounded-full bg-gray-100 flex-shrink-0 flex items-center justify-center text-xs text-gray-300">✓</div>
+            <div class="flex-1">
+              <div class="text-sm text-gray-400">
+                <span class="font-medium">审批完成</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- 底部预估 -->
+      <div class="mt-8 pt-4 border-t border-gray-100 text-sm text-gray-500">
+        预估剩余时间：<strong class="text-gray-700">约 4.2h</strong>
+        <span class="text-gray-400 ml-1">（基于历史同类审批平均耗时）</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ======================== -->
+  <!-- [交互脚本] -->
+  <!-- ======================== -->
+  <script>
+    function switchView(viewName) {
+      // 隐藏所有视图
+      document.getElementById('view-flowchart').classList.add('hidden');
+      document.getElementById('view-timeline').classList.add('hidden');
+      // 重置按钮样式
+      document.querySelectorAll('.view-btn').forEach(function(b) {
+        b.className = b.className.replace(/bg-blue-500 text-white/g, 'bg-white text-gray-600 hover:bg-gray-50');
+      });
+      // 显示目标视图
+      document.getElementById('view-' + viewName).classList.remove('hidden');
+      // 激活对应按钮
+      var btn = document.getElementById('view-btn-' + viewName);
+      btn.className = btn.className.replace(/bg-white text-gray-600 hover:bg-gray-50/g, 'bg-blue-500 text-white');
+    }
+  </script>
+
+</body>
+</html>

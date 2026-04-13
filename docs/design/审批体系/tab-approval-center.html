@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>审批中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 闪烁动画 for 当前节点 */
+    @keyframes pulse-dot {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- [子Tab导航] -->
+  <div class="border-b border-gray-200 mb-6">
+    <nav class="flex space-x-8" role="tablist">
+      <button
+        onclick="switchTab('pending')"
+        id="tab-btn-pending"
+        class="tab-btn pb-3 text-sm font-medium border-b-2 border-blue-500 text-blue-600"
+        role="tab"
+      >待我审批 (3)</button>
+      <button
+        onclick="switchTab('initiated')"
+        id="tab-btn-initiated"
+        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700"
+        role="tab"
+      >我发起的 (12)</button>
+      <button
+        onclick="switchTab('cc')"
+        id="tab-btn-cc"
+        class="tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700"
+        role="tab"
+      >抄送我的 (5)</button>
+    </nav>
+  </div>
+
+  <!-- ======================== -->
+  <!-- [待我审批 子Tab内容] -->
+  <!-- ======================== -->
+  <div id="panel-pending" class="tab-panel">
+
+    <!-- [顶部操作栏] -->
+    <div class="flex flex-wrap items-center gap-3 mb-4">
+      <input
+        type="text"
+        placeholder="搜索审批标题、发起人…"
+        class="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 bg-white focus:outline-none focus:border-blue-400"
+      />
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-600">
+        <option>全部模板类型</option>
+        <option>体游报价审批</option>
+        <option>总排期审批</option>
+        <option>销售订单盖章</option>
+      </select>
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-600">
+        <option>全部状态</option>
+        <option>等待中</option>
+        <option>超时</option>
+      </select>
+      <button
+        id="batch-approve-btn"
+        class="ml-auto px-4 py-1.5 text-sm rounded bg-gray-200 text-gray-400 cursor-not-allowed"
+        disabled
+      >批量通过已选(0)</button>
+    </div>
+
+    <!-- [待办列表] -->
+    <div class="space-y-3">
+
+      <!-- 待办条目 1 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4 hover:shadow-sm transition-shadow">
+        <input type="checkbox" class="pending-checkbox w-4 h-4 accent-blue-500 flex-shrink-0" onchange="updateBatchCount()" />
+        <span class="text-xl flex-shrink-0">💰</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">体游报价审批 — 国际学校项目报价单</div>
+          <div class="text-xs text-gray-500 mt-1">发起人: 张三 &nbsp;|&nbsp; 当前: 成本审核 &nbsp;|&nbsp; 等待: 2.3h</div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button onclick="openModal()" class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50">详情</button>
+          <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">通过</button>
+          <button class="px-3 py-1 text-xs border border-red-300 text-red-500 rounded hover:bg-red-50">驳回</button>
+        </div>
+      </div>
+
+      <!-- 待办条目 2 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4 hover:shadow-sm transition-shadow">
+        <input type="checkbox" class="pending-checkbox w-4 h-4 accent-blue-500 flex-shrink-0" onchange="updateBatchCount()" />
+        <span class="text-xl flex-shrink-0">📋</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">总排期审批 — WDG250708排期变更</div>
+          <div class="text-xs text-gray-500 mt-1">发起人: 李四 &nbsp;|&nbsp; 当前: PMC审批 &nbsp;|&nbsp; 等待: 0.5h</div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50">详情</button>
+          <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">通过</button>
+          <button class="px-3 py-1 text-xs border border-red-300 text-red-500 rounded hover:bg-red-50">驳回</button>
+        </div>
+      </div>
+
+      <!-- 待办条目 3 — 超时项 -->
+      <div class="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-4 hover:shadow-sm transition-shadow">
+        <input type="checkbox" class="pending-checkbox w-4 h-4 accent-blue-500 flex-shrink-0" onchange="updateBatchCount()" />
+        <span class="text-xl flex-shrink-0">🔴</span>
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate flex items-center gap-1">
+            销售订单盖章 — 满江红项目合同
+            <span class="inline-flex items-center gap-0.5 text-xs text-red-600 font-semibold ml-2">⚠ 超时</span>
+          </div>
+          <div class="text-xs text-red-600 mt-1">发起人: 王五 &nbsp;|&nbsp; 当前: 财务审核 &nbsp;|&nbsp; 等待: <strong>26h</strong></div>
+        </div>
+        <div class="flex items-center gap-2 flex-shrink-0">
+          <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50">详情</button>
+          <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">通过</button>
+          <button class="px-3 py-1 text-xs border border-red-300 text-red-500 rounded hover:bg-red-50">驳回</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== -->
+  <!-- [我发起的 子Tab内容] -->
+  <!-- ======================== -->
+  <div id="panel-initiated" class="tab-panel hidden">
+
+    <!-- [筛选栏] -->
+    <div class="flex items-center gap-3 mb-4">
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white text-gray-600">
+        <option>全部状态</option>
+        <option>进行中</option>
+        <option>已通过</option>
+        <option>已驳回</option>
+        <option>已撤回</option>
+      </select>
+    </div>
+
+    <!-- [我发起的列表] -->
+    <div class="space-y-3">
+
+      <!-- 条目 1 — 进行中 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">体游报价审批 — 国际学校项目报价单</div>
+          <div class="text-xs text-gray-500 mt-1">发起时间: 2025-03-23 09:00</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">进行中</span>
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50">撤回</button>
+      </div>
+
+      <!-- 条目 2 — 已通过 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">采购申请 — 办公用品批量采购Q2</div>
+          <div class="text-xs text-gray-500 mt-1">发起时间: 2025-03-18 14:20</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">已通过</span>
+        <button class="px-3 py-1 text-xs border border-gray-200 rounded text-gray-300 cursor-not-allowed" disabled>撤回</button>
+      </div>
+
+      <!-- 条目 3 — 已驳回 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">总排期审批 — WDG250615排期新增</div>
+          <div class="text-xs text-gray-500 mt-1">发起时间: 2025-03-15 11:05</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">已驳回</span>
+        <button class="px-3 py-1 text-xs border border-gray-200 rounded text-gray-300 cursor-not-allowed" disabled>撤回</button>
+      </div>
+
+      <!-- 条目 4 — 已撤回 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">销售订单盖章 — 碧海项目合同(已作废)</div>
+          <div class="text-xs text-gray-500 mt-1">发起时间: 2025-03-10 16:30</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-500">已撤回</span>
+        <button class="px-3 py-1 text-xs border border-gray-200 rounded text-gray-300 cursor-not-allowed" disabled>撤回</button>
+      </div>
+
+      <!-- 条目 5 — 进行中 -->
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">付款申请 — 供应商结算（3月）</div>
+          <div class="text-xs text-gray-500 mt-1">发起时间: 2025-03-22 08:45</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">进行中</span>
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 hover:bg-gray-50">撤回</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================== -->
+  <!-- [抄送我的 子Tab内容] -->
+  <!-- ======================== -->
+  <div id="panel-cc" class="tab-panel hidden">
+
+    <!-- [抄送列表] -->
+    <div class="space-y-3">
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">体游报价审批 — 青山景区项目</div>
+          <div class="text-xs text-gray-500 mt-1">发起人: 赵六 &nbsp;|&nbsp; 抄送时间: 2025-03-22 15:00</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-700">进行中</span>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">采购申请 — 服务器硬件升级</div>
+          <div class="text-xs text-gray-500 mt-1">发起人: 孙七 &nbsp;|&nbsp; 抄送时间: 2025-03-21 10:20</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">已通过</span>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4 flex items-center gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">总排期审批 — WDG250701排期调整</div>
+          <div class="text-xs text-gray-500 mt-1">发起人: 周八 &nbsp;|&nbsp; 抄送时间: 2025-03-20 09:10</div>
+        </div>
+        <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">已驳回</span>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================================ -->
+  <!-- [审批详情弹窗] -->
+  <!-- ================================ -->
+  <div id="detail-modal" class="fixed inset-0 z-50 hidden" onclick="closeModalOnBg(event)">
+    <!-- overlay -->
+    <div class="absolute inset-0 bg-black bg-opacity-30"></div>
+    <!-- modal body -->
+    <div class="absolute inset-0 flex items-center justify-center p-4">
+      <div class="bg-white rounded-lg shadow-xl w-full max-w-[600px] max-h-[90vh] overflow-y-auto" onclick="event.stopPropagation()">
+
+        <!-- 弹窗标题 -->
+        <div class="flex items-center justify-between px-6 py-4 border-b border-gray-200">
+          <h2 class="text-base font-semibold text-gray-800">体游报价审批 — 国际学校项目报价单</h2>
+          <button onclick="closeModal()" class="text-gray-400 hover:text-gray-600 text-xl leading-none">&times;</button>
+        </div>
+
+        <div class="px-6 py-5 space-y-6">
+
+          <!-- [业务数据] -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">业务数据</h3>
+            <div class="grid grid-cols-2 gap-x-6 gap-y-2 text-sm">
+              <div class="flex">
+                <span class="text-gray-500 w-20 flex-shrink-0">项目名称</span>
+                <span class="text-gray-800">国际学校户外拓展项目</span>
+              </div>
+              <div class="flex">
+                <span class="text-gray-500 w-20 flex-shrink-0">报价金额</span>
+                <span class="text-gray-800">¥ 128,500.00</span>
+              </div>
+              <div class="flex">
+                <span class="text-gray-500 w-20 flex-shrink-0">商机编号</span>
+                <span class="text-gray-800">OPP-2025-04529</span>
+              </div>
+              <div class="flex">
+                <span class="text-gray-500 w-20 flex-shrink-0">负责销售</span>
+                <span class="text-gray-800">张三</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- [审批进度] -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-3">审批进度</h3>
+            <div class="relative pl-6 space-y-4">
+              <!-- 竖线 -->
+              <div class="absolute left-[9px] top-1 bottom-1 w-px bg-gray-200"></div>
+
+              <!-- 节点 1 — 已完成 -->
+              <div class="relative flex gap-3">
+                <div class="absolute -left-6 top-0.5 w-[18px] h-[18px] rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+                  <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-800 font-medium">张三 <span class="text-gray-400 font-normal">发起</span></div>
+                  <div class="text-xs text-gray-400">03-23 09:00</div>
+                </div>
+              </div>
+
+              <!-- 节点 2 — 已完成 -->
+              <div class="relative flex gap-3">
+                <div class="absolute -left-6 top-0.5 w-[18px] h-[18px] rounded-full bg-green-500 border-2 border-white flex items-center justify-center">
+                  <svg class="w-2.5 h-2.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3"><path stroke-linecap="round" stroke-linejoin="round" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div>
+                  <div class="text-sm text-gray-800 font-medium">报价组·李审 <span class="text-gray-400 font-normal">通过</span> <span class="text-xs text-gray-400 ml-1">(1.5h)</span></div>
+                  <div class="text-xs text-gray-400">03-23 10:30</div>
+                  <div class="mt-1 text-xs text-gray-500 bg-gray-50 border-l-2 border-gray-300 px-2 py-1 rounded-r">已估价，成本合理</div>
+                </div>
+              </div>
+
+              <!-- 节点 3 — 当前处理中 -->
+              <div class="relative flex gap-3">
+                <div class="absolute -left-6 top-0.5 w-[18px] h-[18px] rounded-full bg-blue-500 border-2 border-white animate-pulse-dot"></div>
+                <div>
+                  <div class="text-sm text-blue-600 font-medium">成本审核·王审 <span class="font-normal">待处理</span></div>
+                  <div class="text-xs text-blue-400">等待中…</div>
+                </div>
+              </div>
+
+              <!-- 节点 4 — 未到达 -->
+              <div class="relative flex gap-3">
+                <div class="absolute -left-6 top-0.5 w-[18px] h-[18px] rounded-full bg-gray-200 border-2 border-white"></div>
+                <div>
+                  <div class="text-sm text-gray-400 font-medium">销售总监 <span class="font-normal">未开始</span></div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+
+          <!-- [审批意见] -->
+          <div>
+            <h3 class="text-sm font-semibold text-gray-700 mb-2">审批意见</h3>
+            <textarea
+              class="w-full border border-gray-300 rounded px-3 py-2 text-sm resize-none focus:outline-none focus:border-blue-400"
+              rows="3"
+              placeholder="请输入审批意见（选填）…"
+            ></textarea>
+          </div>
+        </div>
+
+        <!-- [底部操作按钮] -->
+        <div class="flex items-center justify-end gap-2 px-6 py-4 border-t border-gray-200">
+          <button class="px-4 py-1.5 text-sm rounded bg-green-500 text-white hover:bg-green-600">通过</button>
+          <button class="px-4 py-1.5 text-sm rounded bg-red-500 text-white hover:bg-red-600">驳回</button>
+          <button class="px-4 py-1.5 text-sm rounded border border-gray-300 text-gray-600 hover:bg-gray-50">退回</button>
+          <button class="px-4 py-1.5 text-sm rounded border border-gray-300 text-gray-600 hover:bg-gray-50">转交</button>
+          <button class="px-4 py-1.5 text-sm rounded border border-gray-300 text-gray-600 hover:bg-gray-50">加签</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================== -->
+  <!-- [交互脚本] -->
+  <!-- ======================== -->
+  <script>
+    // 子Tab切换
+    function switchTab(tabName) {
+      // 隐藏所有面板
+      document.querySelectorAll('.tab-panel').forEach(function(p) { p.classList.add('hidden'); });
+      // 重置所有Tab按钮样式
+      document.querySelectorAll('.tab-btn').forEach(function(b) {
+        b.className = 'tab-btn pb-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700';
+      });
+      // 显示目标面板
+      document.getElementById('panel-' + tabName).classList.remove('hidden');
+      // 激活对应按钮
+      var btn = document.getElementById('tab-btn-' + tabName);
+      btn.className = 'tab-btn pb-3 text-sm font-medium border-b-2 border-blue-500 text-blue-600';
+    }
+
+    // 批量选中计数
+    function updateBatchCount() {
+      var checked = document.querySelectorAll('.pending-checkbox:checked').length;
+      var btn = document.getElementById('batch-approve-btn');
+      btn.textContent = '批量通过已选(' + checked + ')';
+      if (checked > 0) {
+        btn.className = 'ml-auto px-4 py-1.5 text-sm rounded bg-blue-500 text-white hover:bg-blue-600 cursor-pointer';
+        btn.disabled = false;
+      } else {
+        btn.className = 'ml-auto px-4 py-1.5 text-sm rounded bg-gray-200 text-gray-400 cursor-not-allowed';
+        btn.disabled = true;
+      }
+    }
+
+    // 弹窗控制
+    function openModal() {
+      document.getElementById('detail-modal').classList.remove('hidden');
+    }
+    function closeModal() {
+      document.getElementById('detail-modal').classList.add('hidden');
+    }
+    function closeModalOnBg(e) {
+      if (e.target === document.getElementById('detail-modal') || e.target.classList.contains('bg-black')) {
+        closeModal();
+      }
+    }
+    // ESC关闭
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
+
+</body>
+</html>

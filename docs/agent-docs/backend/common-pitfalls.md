@@ -211,6 +211,51 @@ public class XxxServiceImpl extends ServiceImpl<XxxMapper, XxxEntity>
 
 ---
 
+## 10. 新模块 ComponentScan：`com.wande.ai` 包下的 Controller 不会被自动扫描
+
+**错误现象：** 新增的 Controller 放在 `com.wande.ai.xxx` 包下，启动后 API 返回 404，但代码编译正常。
+
+**根因：** Spring Boot 主类在 `org.ruoyi` 包下，默认只扫描 `org.ruoyi.**`。`com.wande.ai` 不在扫描范围内，需要通过配置类显式引入。
+
+**规范：**
+```java
+// 新模块的 Controller/Service 如果在 com.wande.ai 包下，
+// 必须确保项目中存在 WandeAiModuleConfig（或等效配置类）注册该包扫描路径：
+@Configuration
+@ComponentScan("com.wande.ai")
+public class WandeAiModuleConfig { }
+```
+
+- 新建 `com.wande.ai` 子包前，先确认 `WandeAiModuleConfig` 已存在
+- 若 Controller 注册后仍 404，检查 `@RequestMapping` 路径是否与 nginx 代理规则匹配
+
+---
+
+## 11. Flyway 增量 SQL：MySQL 与 MariaDB 语法差异
+
+**错误现象：** Flyway 迁移脚本使用了 MariaDB 特有语法（如 `ADD KEY IF NOT EXISTS`），在 MySQL 8.x 上执行失败。
+
+**根因：** MariaDB 对 DDL 做了许多 `IF NOT EXISTS` / `IF EXISTS` 扩展，MySQL 不支持这些写法。
+
+**规范：**
+```sql
+-- ❌ MariaDB 专有语法，MySQL 不支持
+ALTER TABLE xxx ADD KEY IF NOT EXISTS idx_name (col);
+ALTER TABLE xxx ADD COLUMN IF NOT EXISTS col_name VARCHAR(255);
+
+-- ✅ MySQL 兼容写法：先查再加（或直接 CREATE INDEX IF NOT EXISTS 仅 MySQL 8.0.29+）
+-- 推荐做法：Flyway 脚本保持幂等，用标准 MySQL 语法
+ALTER TABLE xxx ADD INDEX idx_name (col);        -- 重复执行会报错，由版本号保证幂等
+CREATE INDEX IF NOT EXISTS idx_name ON xxx(col); -- MySQL 8.0.29+ 支持
+```
+
+**附加检查：**
+- 新增数据库列时，Entity 字段类型必须与表列类型匹配（如 `update_by` 列为 `BIGINT` 则 Entity 用 `Long`，不能用 `String`）
+- 新业务表必须包含 RuoYi 标准列：`tenant_id`、`create_dept`、`create_by`、`update_by`、`create_time`、`update_time`、`del_flag`
+- 提交前用 `mvn flyway:validate` 或启动后端验证迁移脚本无报错
+
+---
+
 ## 快速检查清单（PR 前自查）
 
 | 检查项 | 说明 |
@@ -224,3 +269,7 @@ public class XxxServiceImpl extends ServiceImpl<XxxMapper, XxxEntity>
 | ✅ wande-ai-api 同名 XML 已删除 | 避免 ResultMap duplicate 冲突 |
 | ✅ 新建 ServiceImpl 无同名 Bean 冲突 | 检查跨包同名类，必要时指定 `@Service("uniqueName")` |
 | ✅ IService 子接口存根用 ServiceImpl 继承 | 不能仅 `implements`，需配套 Mapper |
+| ✅ `com.wande.ai` 包下有 ComponentScan 配置 | 确认 `WandeAiModuleConfig` 存在 |
+| ✅ Flyway SQL 用标准 MySQL 语法 | 不用 MariaDB 专有 `IF NOT EXISTS` DDL |
+| ✅ 新表包含 RuoYi 标准 7 列 | `tenant_id`、`create_dept`、`create_by` 等 |
+| ✅ Entity 字段类型与表列类型一致 | `BIGINT` → `Long`，不能用 `String` |

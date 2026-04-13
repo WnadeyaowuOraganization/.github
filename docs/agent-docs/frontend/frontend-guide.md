@@ -186,6 +186,7 @@ export const columns: VxeGridProps['columns'] = [
 | [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
 | [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
 | [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据字段映射时 |
+| [menu-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/menu-contracts.md) | 菜单注册规范、component/perms前缀、完整目录树 | **新增页面时必读** |
 
 ### 前端专属文档
 

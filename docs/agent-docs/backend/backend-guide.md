@@ -210,5 +210,5 @@ mvn test
 | [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/db-schema.md) | 数据库变更管理、增量SQL、H2测试Schema | 涉及数据库变更时 |
 | [testing.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/testing.md) | TDD流程、单元测试、质量门禁 | 每次开始新Issue时 |
 | [workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/workflow.md) | TDD三阶段开发流程 | 每次开始新Issue时 |
-| [menu-config.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/menu-config.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |
+| [menu-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/menu-contracts.md) | 菜单与权限注册（sys_menu） | 新增功能模块时 |
 | [wechat-integration.md](/home/ubuntu/projects/.github/docs/agent-docs/backend/wechat-integration.md) | 企微/微信集成规范 | 涉及企微功能时 |

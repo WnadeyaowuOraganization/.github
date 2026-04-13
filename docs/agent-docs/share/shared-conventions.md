@@ -235,39 +235,11 @@ $(git rev-parse --show-toplevel)/
 - **后端**：HTTP 状态码恒为 200，用 `body.code` 判断（`200` 成功 / `401` 未认证）
 - **前端**：统一返回 `R<T>`（`R.ok(data)` / `R.fail(msg)`）
 
-## 菜单机制
+## 菜单机制（新增页面时必读）
 
-侧边栏菜单由**后端 `sys_menu` 表**驱动，不是前端路由静态定义。
+**唯一权威规范**：[`shared/menu-contracts.md`](/home/ubuntu/projects/.github/docs/agent-docs/share/menu-contracts.md)
 
-新页面完整清单：
-1. `views/wande/` 创建页面组件
-2. `api/wande/` 创建 API 调用
-3. **后端**创建 `sys_menu` 增量 SQL（Flyway `db/migration/V*__xxx.sql`）
-4. `component` 字段值匹配 `views/` 下路径（不含 `views/` 前缀和 `.vue` 后缀）
-
-### 权限标识规范
-
-C 类菜单 `perms` 必须以 `:list` 结尾：
-
-```
-✅ cockpit:dashboard:list
-✅ biz:tender:prospect:list
-❌ cockpit:dashboard
-```
-
-Controller 注解与 `sys_menu.perms` 完全一致：`@SaCheckPermission("biz:tender:prospect:list")`
-
-### 外部链接 iframe 嵌入
-
-`path` 以 `http` 开头 → 框架自动 iframe 内嵌，无需 Vue 组件：
-
-```sql
-UPDATE sys_menu SET path='http://example.com/page', component='', is_frame=1 WHERE menu_id=xxx;
--- is_frame 字段 = "是否外链"：1=否（非外链，页签内嵌）, 0=是（外链，新窗口打开）
--- ⚠️ 注意：1=否, 0=是，与直觉相反！
-```
-
-调试菜单不显示：检查 `/system/menu/getRouters` → `sys_menu` → `sys_role_menu` → `component` 路径。
+包含：操作步骤、Flyway模板、字段说明、component/perms前缀对照表、完整菜单目录树。新增页面前**必须阅读**。
 
 ## 接口契约
 

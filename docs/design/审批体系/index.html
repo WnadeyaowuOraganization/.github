@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 审批体系 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; transition: all 0.2s; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-item .badge { display: inline-block; background: #ff4d4f; color: #fff; font-size: 11px; padding: 0 6px; border-radius: 10px; margin-left: 4px; line-height: 18px; }
+    .tab-divider { width: 1px; background: #e8e8e8; margin: 8px 4px; flex-shrink: 0; }
+    .tab-group-label { padding: 12px 8px; font-size: 11px; color: #bbb; letter-spacing: 1px; white-space: nowrap; align-self: center; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .sidebar-item { padding: 12px; text-align: center; color: #999; cursor: pointer; border-left: 3px solid transparent; transition: all 0.15s; }
+    .sidebar-item:hover { background: #f5f5f5; color: #333; }
+    .sidebar-item.active { color: #1890ff; border-left-color: #1890ff; background: #e6f7ff; }
+    .sidebar-icon { font-size: 18px; margin-bottom: 2px; }
+    .sidebar-label { font-size: 10px; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- [侧边栏] 万德平台左侧菜单（折叠状态） -->
+    <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col">
+      <div class="p-3 text-center border-b border-gray-200">
+        <div class="w-8 h-8 bg-gray-300 rounded mx-auto"></div>
+      </div>
+      <div class="sidebar-item" title="首页">
+        <div class="sidebar-icon">🏠</div>
+        <div class="sidebar-label">首页</div>
+      </div>
+      <div class="sidebar-item" title="CRM">
+        <div class="sidebar-icon">👥</div>
+        <div class="sidebar-label">CRM</div>
+      </div>
+      <div class="sidebar-item" title="项目">
+        <div class="sidebar-icon">📋</div>
+        <div class="sidebar-label">项目</div>
+      </div>
+      <div class="sidebar-item active" title="审批">
+        <div class="sidebar-icon">✅</div>
+        <div class="sidebar-label">审批</div>
+      </div>
+      <div class="sidebar-item" title="驾驶舱">
+        <div class="sidebar-icon">📊</div>
+        <div class="sidebar-label">驾驶舱</div>
+      </div>
+      <div class="sidebar-item" title="设置">
+        <div class="sidebar-icon">⚙️</div>
+        <div class="sidebar-label">设置</div>
+      </div>
+    </aside>
+
+    <!-- [主内容区] -->
+    <main class="flex-1 flex flex-col">
+      <!-- [面包屑] -->
+      <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200 flex items-center justify-between">
+        <span>首页 &gt; 公共板块 &gt; 审批体系</span>
+        <span class="text-xs text-gray-400">原型版本 v1.0 | 2026-04-13</span>
+      </div>
+
+      <!-- [Tab栏] 全员区 + 分隔线 + 管理员区 -->
+      <div class="tab-bar" id="tabBar"></div>
+
+      <!-- [Tab内容 — iframe加载] -->
+      <div class="flex-1 p-0">
+        <iframe id="tabFrame" class="tab-content-frame" src="tab-approval-center.html"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="p-6 bg-white border-t border-gray-300 mt-4">
+    <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+    <p class="text-sm text-gray-500 mb-4">本原型覆盖审批体系9个Issue的前端页面设计（#2366, #3149, #3150, #3151, #3155, #3156, #3163, #3168, #3169, #3174）。全员区Tab①-④所有员工可见，管理员区Tab⑤-⑧仅管理员/超管可见。</p>
+    <table class="w-full text-sm text-left border-collapse">
+      <thead>
+        <tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300">Tab页</th>
+          <th class="p-2 border border-gray-300">文件名</th>
+          <th class="p-2 border border-gray-300">关联Issue</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+          <th class="p-2 border border-gray-300">用户角色</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="p-2 border border-gray-300">① 审批中心</td>
+          <td class="p-2 border border-gray-300">tab-approval-center.html</td>
+          <td class="p-2 border border-gray-300">#2366</td>
+          <td class="p-2 border border-gray-300">待我审批/我发起的/抄送我的 三Tab + 审批详情弹窗 + 批量审批</td>
+          <td class="p-2 border border-gray-300">全员</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">② 进度追踪</td>
+          <td class="p-2 border border-gray-300">tab-progress-tracker.html</td>
+          <td class="p-2 border border-gray-300">#3149, #3150</td>
+          <td class="p-2 border border-gray-300">审批流程DAG可视化 + 时间轴模式 + 节点状态 + SLA预警</td>
+          <td class="p-2 border border-gray-300">全员</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">③ 流程帮助</td>
+          <td class="p-2 border border-gray-300">tab-help-center.html</td>
+          <td class="p-2 border border-gray-300">#3151</td>
+          <td class="p-2 border border-gray-300">流程选择助手 + 常见问题FAQ + 新手引导预览</td>
+          <td class="p-2 border border-gray-300">全员</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">④ 动态表单</td>
+          <td class="p-2 border border-gray-300">tab-dynamic-form.html</td>
+          <td class="p-2 border border-gray-300">#3168</td>
+          <td class="p-2 border border-gray-300">JSON Schema→表单渲染效果 + 字段类型清单 + 条件显隐演示</td>
+          <td class="p-2 border border-gray-300">全员</td>
+        </tr>
+        <tr class="bg-blue-50">
+          <td class="p-2 border border-gray-300">⑤ 模板管理</td>
+          <td class="p-2 border border-gray-300">tab-template-mgmt.html</td>
+          <td class="p-2 border border-gray-300">#3169</td>
+          <td class="p-2 border border-gray-300">表单模板CRUD + 可视化编辑器 + 审批流绑定</td>
+          <td class="p-2 border border-gray-300">管理员 🔒</td>
+        </tr>
+        <tr class="bg-blue-50">
+          <td class="p-2 border border-gray-300">⑥ 模板迁移</td>
+          <td class="p-2 border border-gray-300">tab-template-transfer.html</td>
+          <td class="p-2 border border-gray-300">#3174</td>
+          <td class="p-2 border border-gray-300">模板导入/导出 + 3步配置向导 + 模板推荐</td>
+          <td class="p-2 border border-gray-300">管理员 🔒</td>
+        </tr>
+        <tr class="bg-blue-50">
+          <td class="p-2 border border-gray-300">⑦ 流程简化</td>
+          <td class="p-2 border border-gray-300">tab-simplification.html</td>
+          <td class="p-2 border border-gray-300">#3155</td>
+          <td class="p-2 border border-gray-300">跳过/自动审批/路由规则配置 + 流程模拟器</td>
+          <td class="p-2 border border-gray-300">管理员 🔒</td>
+        </tr>
+        <tr class="bg-blue-50">
+          <td class="p-2 border border-gray-300">⑧ 效率分析</td>
+          <td class="p-2 border border-gray-300">tab-analytics.html</td>
+          <td class="p-2 border border-gray-300">#3156</td>
+          <td class="p-2 border border-gray-300">KPI卡片 + 瓶颈热力图 + 趋势图 + AI优化建议</td>
+          <td class="p-2 border border-gray-300">管理员 🔒</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const tabs = [
+      { key: 'approval-center', label: '① 审批中心', src: 'tab-approval-center.html', badge: '3', group: 'user' },
+      { key: 'progress-tracker', label: '② 进度追踪', src: 'tab-progress-tracker.html', group: 'user' },
+      { key: 'help-center', label: '③ 流程帮助', src: 'tab-help-center.html', group: 'user' },
+      { key: 'dynamic-form', label: '④ 动态表单', src: 'tab-dynamic-form.html', group: 'user' },
+      { key: 'divider', type: 'divider' },
+      { key: 'admin-label', type: 'label', text: '🔒 管理员' },
+      { key: 'template-mgmt', label: '⑤ 模板管理', src: 'tab-template-mgmt.html', group: 'admin' },
+      { key: 'template-transfer', label: '⑥ 模板迁移', src: 'tab-template-transfer.html', group: 'admin' },
+      { key: 'simplification', label: '⑦ 流程简化', src: 'tab-simplification.html', group: 'admin' },
+      { key: 'analytics', label: '⑧ 效率分析', src: 'tab-analytics.html', group: 'admin' },
+    ];
+
+    const tabBar = document.getElementById('tabBar');
+    const tabFrame = document.getElementById('tabFrame');
+    let activeKey = tabs[0].key;
+
+    function renderTabs() {
+      tabBar.innerHTML = tabs.map(t => {
+        if (t.type === 'divider') return '<div class="tab-divider"></div>';
+        if (t.type === 'label') return `<div class="tab-group-label">${t.text}</div>`;
+        const badgeHtml = t.badge ? `<span class="badge">${t.badge}</span>` : '';
+        return `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}${badgeHtml}</div>`;
+      }).join('');
+    }
+
+    tabBar.addEventListener('click', (e) => {
+      const item = e.target.closest('.tab-item');
+      if (!item) return;
+      activeKey = item.dataset.key;
+      tabFrame.src = item.dataset.src;
+      renderTabs();
+    });
+
+    tabFrame.addEventListener('load', () => {
+      try {
+        const h = tabFrame.contentDocument.documentElement.scrollHeight;
+        tabFrame.style.height = Math.max(h, 600) + 'px';
+      } catch(e) {}
+    });
+
+    renderTabs();
+  </script>
+</body>
+</html>

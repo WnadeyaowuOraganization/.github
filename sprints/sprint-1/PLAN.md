@@ -241,13 +241,12 @@ Week 4 (5/03-5/09):
 | kimi6 | ~~#3579~~ | P1 | fullstack | ~~Tier-5: 产品门户Master — 路由+权限+布局~~ PR#3608✅merged 2026-04-12 23:04 | ~~Done~~ |
 | kimi1 | ~~#3613~~ | P0 | fullstack | ~~Tier-0: CRM菜单component/perms前缀整改~~ | Done（排程经理确认） |
 | kimi1 | ~~#3615~~ | P0-bug | fullstack | ~~Tier-2: 全球项目矿场 #3458 验收8项缺陷修复~~ PR#3616✅merged 2026-04-13 05:36 | ~~Done~~ |
-| kimi2 | #3617 | P0-bug | fullstack | Tier-2: 全球项目矿场v3 第二轮验收缺陷（8项） | In Progress |
+| kimi2 | ~~#3617~~ | P0-bug | fullstack | ~~Tier-2: 全球项目矿场v3 第二轮验收缺陷（8项）~~ PR#3623✅merged 2026-04-13 13:40 | ~~Done~~ |
 | kimi1 | ~~#3618~~ | P0-bug | fullstack | ~~bug: 建表缺RuoYi标准列 + CRM Controller未注册~~ PR#3620✅merged 2026-04-13 08:57 | ~~Done~~ |
-| kimi1 | #3619 | P0-bug | backend | bug: Portal产品表缺model3d_file/model3d_render列 | In Progress |
+| kimi1 | ~~#3619~~ | P0-bug | backend | ~~bug: Portal产品表缺model3d_file/model3d_render列~~ PR#3621✅merged 2026-04-13 10:33 | ~~Done~~ |
 
 ## 当前运行
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #3619 | P0-bug | backend | Portal产品表缺model3d_file业务列 |
-| kimi2 | #3617 | P0-bug | fullstack | 矿场v3第二轮验收缺陷（stats/详情500/流转/分配mock/工具栏/tenant_id） |
+| (空) | — | — | — | 第一批bug修复全部完成，等待第二批指派 |

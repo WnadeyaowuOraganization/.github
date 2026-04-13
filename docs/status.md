@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-12 by 排程经理CC
+> ⏰ 最后更新：2026-04-13 by Perplexity
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 ---
 ## 🔄 Issue 生命周期 + 测试层级
@@ -574,6 +574,7 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D82 | 04-12 | ✅ | M7i迁移后脚本适配+Maven去tmpfs | **JSONL路径兼容**：run-manager.sh/cc-check.sh双路径检测(`-data-home-ubuntu-`和`-home-ubuntu-`前缀)，适配`realpath`解析symlink后路径变化。**日志目录迁移**：cc-check.sh的LOGDIR从`/var/log/coding-cc`改为`~/cc_scheduler/cc-logs`。**Maven去tmpfs**：SSD vs tmpfs实测仅~1%差异(20.9s vs 20.7s)，移除run-cc.sh的30行tmpfs逻辑，改为所有kimi共享`~/.m2`(NVMe SSD)；release-cc-lock.sh去掉per-kimi m2清理。**前端依赖同步**：20个kimi目录批量`pnpm install --no-frozen-lockfile`。commits: `2d4dbe5`(脚本适配)+`c4e0729`(去除dummy API key) | 伟平 |
 | D84 | 04-12 | ✅ | G7e实例已停机，全部工作负载迁��至m7i | D78原计划G7e保留GPU/模型服务，实际GPU利用率<1%无保留价值。G7e(g7e.2xlarge/3.211.167.122)已停止。影响：(1)vLLM已在D81切换为Token Pool Proxy(localhost:9855)；(2)管线cron已迁移至m7i并注册crontab(4个定时任务)；(3)日志统一到~/logs/pipeline/(21个脚本修复)；(4)SearXNG已部署m7i(localhost:8888)。当前架构简化为：m7i(172.31.31.227)=开发+管线+CC / Lightsail(47.131.77.9)=生产 | 吴耀 |
 | D83 | 04-12 | ✅ | Sprint Issue全量审计+wande-ai模块创建 | **前端路径对齐**(16个Issue)：`views/wande/`前缀全部替换为V2菜单基线实际component路径(如`views/business/crm/customer/`/`views/cockpit/`等)。**虚假复用声明**(10个Issue)：添加"老系统代码已归档不可参考"评论。**已完成Issue关闭**(9个)：#3597+8个菜单基线相关→Done。**blocked-by占位符修复**(6个)：`#[Issue3编号]`→#3597(菜单基线✅)，`#[Issue4编号]`→#3522(Dashboard引擎)，#3522自引用修正为#3597。**编程CC澄清评论**(6个)：前端文件需新建/API需从零实现/dashboard/index.vue需新建非改造workspace。**Flyway路径修正**：#3522 `ruoyi-system`→`ruoyi-admin`。**wande-ai模块创建**：`ruoyi-modules/wande-ai/`骨架(pom.xml+controller/domain/mapper/service)，包名`org.ruoyi.wande`，注册到根pom dependencyManagement+ruoyi-admin依赖，编译通过，推送dev，同步20个kimi目录 | 伟平 |
+| D85 | 04-13 | ✅ | 原型流程升级v3.0：多形式需求路由+代码资产扫描+三级边界规则 | **wande-prototype v2.0→v3.0**：(1)新增Step 0需求形式路由表——4种形式(低保真原型/截图标注/Spec文本/架构+Spec)按需求类型自动匹配，不再所有需求都画原型；(2)新增Step 3.5代码资产扫描——原型确认后、写设计文档前，扫描已有Controller/Vue/API，标记🟢复用/🟡改造/🔴新建（超管驾驶舱对账教训固化）；(3)详细设计文档模板增强——每个功能区域加「代码现状」+「已有文件」行，新增§2.x三级边界规则(Always/Ask First/Never)为CC提供决策框架。**wande-ai v59→v60**：§3场景路由表「原型设计」→「需求设计」，触发词扩展。设计来源：GitHub Spec Kit四阶段门控+O'Reilly AI Agent Spec框架(Addy Osmani)+Alloy原型vsPRD研究 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

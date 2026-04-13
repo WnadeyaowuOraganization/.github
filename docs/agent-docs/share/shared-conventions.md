@@ -251,7 +251,9 @@ $(git rev-parse --show-toplevel)/
 ├── frontend/                 # 前端（pnpm monorepo）
 │   └── apps/web-antd/        # 主应用（vite.config.mts）
 ├── e2e/                      # E2E 测试（在项目根目录，不在 frontend 下！）
-│   ├── tests/front/smoke/    # Smoke 测试用例
+│   ├── tests/frontend/smoke/ # 前端 Smoke 测试用例（编程CC自己写，smoke-e2e定期回归主测试环境）
+│   ├── tests/backend/smoke/  # 后端 Smoke 测试用例（编程CC自己写，smoke-e2e定期回归主测试环境）
+│   ├── tests/top-e2e/        # 完整前后端回归测试用例（顶层E2E定时更新，有新issue完成，根据issue关联的原型和详细设计编写）
 │   └── node_modules/         # Playwright 依赖
 ├── issues/                   # Issue 工作目录
 │   └── issue-${ISSUE}/
@@ -261,7 +263,7 @@ $(git rev-parse --show-toplevel)/
 └── shared/api-contracts/     # 接口契约
 ```
 
-> **注意**：`e2e/` 目录在**项目根**下，不在 `frontend/` 下。Playwright 脚本用 `import from '项目根/e2e/node_modules/playwright/...'`。
+> **注意**：`e2e/` 目录在**wande-play-[N]项目根**下，不在 `frontend/` 下。Playwright 脚本用 `import from '项目根/e2e/node_modules/playwright/...'`。
 
 ## 数据库规范
 

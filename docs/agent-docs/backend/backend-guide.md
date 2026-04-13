@@ -181,7 +181,7 @@ mvn test
 
 ## 数据库变更管理规范（更新/新增表时必读）
 
-详见 [db-schema.md](~/projects/.github/docs/agent-docs/share/db-schema.md)
+详见 [db-schema.md](~/projects/.github/docs/agent-docs/backend/db-schema.md)
 
 ## API集成测试
 
@@ -193,12 +193,12 @@ mvn test
 
 ### 共享文档（前后端通用）
 
-| 文档 | 内容 | 何时读取 |
-|------|------|---------|
+| 文档                                                                                      | 内容 | 何时读取 |
+|-----------------------------------------------------------------------------------------|------|---------|
 | [shared-conventions.md](~/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范、环境信息、通用开发规则 | 首次接触项目时 |
-| [issue-workflow.md](~/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
-| [api-contracts.md](~/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
-| [db-schema.md](~/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据库字段映射时 |
+| [issue-workflow.md](~/projects/.github/docs/agent-docs/share/issue-workflow.md)         | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
+| [api-contracts.md](~/projects/.github/docs/agent-docs/share/api-contracts.md)           | 前后端接口契约规范 | 涉及API对接时 |
+| [share/db-schema.md](~/projects/.github/docs/agent-docs/share/db-schema.md)             | 数据库列名规范（新旧表差异） | 涉及数据库字段映射时 |
 
 ### 后端专属文档
 

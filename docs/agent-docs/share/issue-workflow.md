@@ -65,7 +65,7 @@ Issue创建 → CI自动关联Project Status=Plan
 （无）
 ```
 
-3. **测试先行（TDD）** — 编写单元测试，运行确认红灯
+3. **测试先行（TDD）** — 编写单元测试和playwright脚本，运行确认红灯，必做！不能省略
 4. 更新task.md：Phase=IMPLEMENT，标记测试步骤完成
 
 ### 第二阶段：编码 + 验证

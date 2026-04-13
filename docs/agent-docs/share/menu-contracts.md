@@ -122,7 +122,7 @@ INSERT IGNORE INTO sys_role_menu (role_id, menu_id) VALUES (1, @max_id + 6);
 
 | 菜单名 | path | component | perms |
 |--------|------|-----------|-------|
-| 项目挖掘 | `prospect` | `business/tender/prospect/index` | `biz:tender:prospect:list` |
+| 项目挖掘 | `project-mine` | `business/tender/project-mine/index` | `biz:tender:project-mine:list` |
 | 商机管理 | `opportunity` | `business/tender/opportunity/index` | `biz:tender:opportunity:list` |
 | 招投标管理 | `bid` | `business/tender/bid/index` | `biz:tender:bid:list` |
 | AI评估 | `ai-eval` | `business/tender/ai-eval/index` | `biz:tender:aieval:list` |

@@ -15,7 +15,7 @@ Vue 3 (Composition API `<script setup>`) + TypeScript + Vite + Ant Design Vue + 
 
 ## 核心规则
 
-1. **测试先行** — 每个Issue必须有组件测试（Vitest），没有测试=没完成
+1. **测试先行（TDD）** — 编写单元测试和playwright脚本，运行确认红灯，必做！不能省略
 2. **页面规范（强制）** — 必须遵循UI-GUIDE.md
 3. **构建验证** — 提交前 `pnpm build` 必须通过
 4. **必须用ubuntu用户构建** — root会导致CI/CD权限失败
@@ -180,13 +180,13 @@ export const columns: VxeGridProps['columns'] = [
 
 ### 共享文档（前后端通用）
 
-| 文档 | 内容 | 何时读取 |
-|------|------|---------|
+| 文档                                                                                                 | 内容 | 何时读取 |
+|----------------------------------------------------------------------------------------------------|------|---------|
 | [shared-conventions.md](/home/ubuntu/projects/.github/docs/agent-docs/share/shared-conventions.md) | Git分支规范、环境信息、通用开发规则 | 首次接触项目时 |
-| [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md) | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
-| [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md) | 前后端接口契约规范 | 涉及API对接时 |
-| [db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md) | 数据库列名规范（新旧表差异） | 涉及数据字段映射时 |
-| [menu-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/menu-contracts.md) | 菜单注册规范、component/perms前缀、完整目录树 | **新增页面时必读** |
+| [issue-workflow.md](/home/ubuntu/projects/.github/docs/agent-docs/share/issue-workflow.md)         | Issue生命周期与三阶段开发流程 | 每次开始新Issue时 |
+| [api-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/api-contracts.md)           | 前后端接口契约规范 | 涉及API对接时 |
+| [share/db-schema.md](/home/ubuntu/projects/.github/docs/agent-docs/share/db-schema.md)             | 数据库列名规范（新旧表差异） | 涉及数据字段映射时 |
+| [menu-contracts.md](/home/ubuntu/projects/.github/docs/agent-docs/share/menu-contracts.md)         | 菜单注册规范、component/perms前缀、完整目录树 | **新增页面时必读** |
 
 ### 前端专属文档
 

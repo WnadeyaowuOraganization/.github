@@ -41,6 +41,7 @@ CREATE TABLE IF NOT EXISTS wdpp_supplier_ratings (
 **强制要求**：
 - MySQL 8.0 语法（`BIGINT`/`VARCHAR`/`DATETIME`/`DECIMAL`）
 - 幂等性：`CREATE TABLE IF NOT EXISTS`，`INSERT ... ON DUPLICATE KEY UPDATE`，`INSERT IGNORE`
+- **表名前缀 `wdpp_`**（万德业务表统一前缀，与 ruoyi 框架 `sys_` 表区分）
 - 新表必须包含 7 个标准列（tenant_id/create_dept/create_by/update_by/create_time/update_time/del_flag），详见 [share/db-schema.md](../share/db-schema.md)
 - 头部注释包含变更说明、关联 Issue
 

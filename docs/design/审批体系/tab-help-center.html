@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>流程帮助中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Smooth accordion transitions */
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+    .faq-answer.open {
+      max-height: 400px;
+    }
+    .faq-chevron {
+      transition: transform 0.3s ease;
+    }
+    .faq-chevron.rotated {
+      transform: rotate(180deg);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================ -->
+  <!-- [FlowFinder] 流程选择助手 -->
+  <!-- ============================================ -->
+  <div class="mb-8">
+    <div class="text-center mb-6">
+      <h2 class="text-xl font-semibold text-gray-800 mb-1">流程选择助手</h2>
+      <p class="text-sm text-gray-500">不知道该走哪个流程？搜索或浏览下方推荐</p>
+    </div>
+
+    <!-- 搜索框 -->
+    <div class="max-w-2xl mx-auto mb-4">
+      <div class="relative">
+        <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-400">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+          </svg>
+        </span>
+        <input type="text"
+          class="w-full pl-12 pr-4 py-3 text-base border border-gray-300 rounded-lg bg-white placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          placeholder="我要做什么？（如：报价审批、出差报销、合同盖章）"
+        />
+      </div>
+    </div>
+
+    <!-- 热门标签 -->
+    <div class="max-w-2xl mx-auto flex flex-wrap gap-2 justify-center mb-6">
+      <span class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-full text-gray-600 cursor-pointer hover:bg-gray-100 transition">报价审批</span>
+      <span class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-full text-gray-600 cursor-pointer hover:bg-gray-100 transition">合同盖章</span>
+      <span class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-full text-gray-600 cursor-pointer hover:bg-gray-100 transition">出差报销</span>
+      <span class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-full text-gray-600 cursor-pointer hover:bg-gray-100 transition">设计变更</span>
+      <span class="px-3 py-1.5 text-sm bg-white border border-gray-300 rounded-full text-gray-600 cursor-pointer hover:bg-gray-100 transition">采购申请</span>
+    </div>
+
+    <!-- 搜索结果 / 推荐流程 -->
+    <div class="max-w-3xl mx-auto space-y-3">
+      <p class="text-xs text-gray-400 uppercase tracking-wider mb-2">推荐流程</p>
+
+      <!-- 流程卡片 1 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-4 flex items-center justify-between hover:shadow-sm transition">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="font-medium text-gray-800">报价审批流程</span>
+            <span class="px-2 py-0.5 text-xs bg-gray-100 border border-gray-200 rounded text-gray-500">财务</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-gray-400">
+            <span>预估耗时: <span class="text-gray-600">约2天</span></span>
+            <span class="text-gray-200">|</span>
+            <span>审批节点: <span class="text-gray-600">3个</span></span>
+            <span class="text-gray-200">|</span>
+            <span>上次使用: <span class="text-gray-600">3天前</span></span>
+          </div>
+        </div>
+        <button class="ml-4 px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition shrink-0">发起审批</button>
+      </div>
+
+      <!-- 流程卡片 2 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-4 flex items-center justify-between hover:shadow-sm transition">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="font-medium text-gray-800">合同盖章审批</span>
+            <span class="px-2 py-0.5 text-xs bg-gray-100 border border-gray-200 rounded text-gray-500">行政</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-gray-400">
+            <span>预估耗时: <span class="text-gray-600">约1天</span></span>
+            <span class="text-gray-200">|</span>
+            <span>审批节点: <span class="text-gray-600">4个</span></span>
+            <span class="text-gray-200">|</span>
+            <span>上次使用: <span class="text-gray-600">1周前</span></span>
+          </div>
+        </div>
+        <button class="ml-4 px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition shrink-0">发起审批</button>
+      </div>
+
+      <!-- 流程卡片 3 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-4 flex items-center justify-between hover:shadow-sm transition">
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1.5">
+            <span class="font-medium text-gray-800">设计变更审批</span>
+            <span class="px-2 py-0.5 text-xs bg-gray-100 border border-gray-200 rounded text-gray-500">技术</span>
+          </div>
+          <div class="flex items-center gap-4 text-xs text-gray-400">
+            <span>预估耗时: <span class="text-gray-600">约3天</span></span>
+            <span class="text-gray-200">|</span>
+            <span>审批节点: <span class="text-gray-600">5个（含三级变更分级）</span></span>
+            <span class="text-gray-200">|</span>
+            <span>上次使用: <span class="text-gray-600">2周前</span></span>
+          </div>
+        </div>
+        <button class="ml-4 px-4 py-2 bg-blue-500 text-white text-sm rounded-md hover:bg-blue-600 transition shrink-0">发起审批</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [FAQ] 常见问题 -->
+  <!-- ============================================ -->
+  <div class="mb-8">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">常见问题</h2>
+
+    <div class="max-w-3xl space-y-2" id="faq-list">
+
+      <!-- FAQ 1 (默认展开) -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span class="text-sm font-medium text-gray-700">配合招投标需要走什么流程？</span>
+          <svg class="faq-chevron w-4 h-4 text-gray-400 shrink-0 rotated" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-answer open px-4 pb-4">
+          <div class="text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
+            招投标通常涉及以下流程：
+            <ul class="mt-2 space-y-1 ml-4 list-disc">
+              <li><span class="text-gray-700 font-medium">报价审批流程</span> — 提交报价方案及金额审批</li>
+              <li><span class="text-gray-700 font-medium">合同盖章审批</span> — 中标后合同用印审批</li>
+              <li><span class="text-gray-700 font-medium">投标保证金审批</span> — 需缴纳保证金时走财务流程</li>
+            </ul>
+            <p class="mt-2 text-gray-400 text-xs">建议先发起报价审批，中标后再走合同盖章流程。</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 2 -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span class="text-sm font-medium text-gray-700">审批被驳回了怎么办？</span>
+          <svg class="faq-chevron w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-answer px-4 pb-4">
+          <div class="text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
+            审批被驳回后，您可以在「我的申请」中找到被驳回的单据，查看驳回原因。修改后点击「重新提交」即可，无需新建审批单。若对驳回有异议，可联系直属上级或流程管理员协调。
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 3 -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span class="text-sm font-medium text-gray-700">如何撤回已发起的审批？</span>
+          <svg class="faq-chevron w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-answer px-4 pb-4">
+          <div class="text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
+            在「我的申请」中找到对应审批单，若当前节点审批人尚未操作，可点击「撤回」按钮。已经被审批人通过的节点无法撤回，需联系流程管理员进行作废处理。
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 4 -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span class="text-sm font-medium text-gray-700">审批卡住了找谁？</span>
+          <svg class="faq-chevron w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-answer px-4 pb-4">
+          <div class="text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
+            先查看审批详情中的当前节点和处理人。可通过系统「催办」功能发送提醒，或直接联系当前审批人。若审批人长期未处理（超过3个工作日），可联系流程管理员进行转办或代审批操作。
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ 5 -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <button class="faq-toggle w-full flex items-center justify-between px-4 py-3 text-left hover:bg-gray-50 transition" onclick="toggleFaq(this)">
+          <span class="text-sm font-medium text-gray-700">如何查看审批进度？</span>
+          <svg class="faq-chevron w-4 h-4 text-gray-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+          </svg>
+        </button>
+        <div class="faq-answer px-4 pb-4">
+          <div class="text-sm text-gray-500 leading-relaxed border-t border-gray-100 pt-3">
+            进入「我的申请」列表，点击任意审批单可查看完整的审批流程图和各节点处理状态。绿色表示已通过，黄色表示待处理，灰色表示未到达。您也可以在审批详情页底部查看审批日志和评论记录。
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- [Onboarding] 新手引导预览 -->
+  <!-- ============================================ -->
+  <div class="mb-4">
+    <h2 class="text-lg font-semibold text-gray-800 mb-4">新手引导预览</h2>
+
+    <!-- [新手引导组件占位] -->
+    <div class="border-2 border-dashed border-gray-300 rounded-lg p-5 mb-5 bg-white">
+      <p class="text-sm text-gray-500 font-mono leading-relaxed">
+        <span class="text-gray-400">ApprovalOnboarding</span> 组件效果预览：<br>
+        <span class="text-gray-400 ml-4">•</span> 首次进入审批表单时自动触发<br>
+        <span class="text-gray-400 ml-4">•</span> 4步 Tooltip 引导：① 填写表单 → ② 上传附件 → ③ 选择审批人 → ④ 提交<br>
+        <span class="text-gray-400 ml-4">•</span> localStorage 记忆，每个模板只弹一次
+      </p>
+    </div>
+
+    <!-- 4步引导卡片 -->
+    <div class="grid grid-cols-4 gap-4">
+
+      <div class="bg-white border border-gray-300 rounded-lg p-4 text-center relative">
+        <div class="w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-semibold flex items-center justify-center mx-auto mb-3">1</div>
+        <p class="text-sm font-medium text-gray-700 mb-1">填写表单</p>
+        <p class="text-xs text-gray-400">根据模板填写审批信息</p>
+        <!-- Arrow -->
+        <div class="absolute top-1/2 -right-3 transform -translate-y-1/2 text-gray-300 hidden md:block">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-300 rounded-lg p-4 text-center relative">
+        <div class="w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-semibold flex items-center justify-center mx-auto mb-3">2</div>
+        <p class="text-sm font-medium text-gray-700 mb-1">上传附件</p>
+        <p class="text-xs text-gray-400">添加报价单、合同等文件</p>
+        <div class="absolute top-1/2 -right-3 transform -translate-y-1/2 text-gray-300 hidden md:block">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-300 rounded-lg p-4 text-center relative">
+        <div class="w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-semibold flex items-center justify-center mx-auto mb-3">3</div>
+        <p class="text-sm font-medium text-gray-700 mb-1">选择审批人</p>
+        <p class="text-xs text-gray-400">系统自动匹配或手动指定</p>
+        <div class="absolute top-1/2 -right-3 transform -translate-y-1/2 text-gray-300 hidden md:block">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+        </div>
+      </div>
+
+      <div class="bg-white border border-gray-300 rounded-lg p-4 text-center">
+        <div class="w-8 h-8 rounded-full bg-blue-500 text-white text-sm font-semibold flex items-center justify-center mx-auto mb-3">4</div>
+        <p class="text-sm font-medium text-gray-700 mb-1">提交</p>
+        <p class="text-xs text-gray-400">提交后自动流转至审批人</p>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- FAQ 手风琴交互脚本 -->
+  <script>
+    function toggleFaq(btn) {
+      const answer = btn.nextElementSibling;
+      const chevron = btn.querySelector('.faq-chevron');
+      const isOpen = answer.classList.contains('open');
+
+      // Close all
+      document.querySelectorAll('.faq-answer').forEach(a => a.classList.remove('open'));
+      document.querySelectorAll('.faq-chevron').forEach(c => c.classList.remove('rotated'));
+
+      // Toggle clicked
+      if (!isOpen) {
+        answer.classList.add('open');
+        chevron.classList.add('rotated');
+      }
+    }
+  </script>
+
+</body>
+</html>

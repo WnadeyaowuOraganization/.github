@@ -242,11 +242,12 @@ Week 4 (5/03-5/09):
 | kimi1 | ~~#3613~~ | P0 | fullstack | ~~Tier-0: CRM菜单component/perms前缀整改~~ | Done（排程经理确认） |
 | kimi1 | ~~#3615~~ | P0-bug | fullstack | ~~Tier-2: 全球项目矿场 #3458 验收8项缺陷修复~~ PR#3616✅merged 2026-04-13 05:36 | ~~Done~~ |
 | kimi2 | #3617 | P0-bug | fullstack | Tier-2: 全球项目矿场v3 第二轮验收缺陷（8项） | In Progress |
-| kimi1 | #3618 | P0-bug | fullstack | bug: 建表缺RuoYi标准列 + CRM Controller未注册 | In Progress |
+| kimi1 | ~~#3618~~ | P0-bug | fullstack | ~~bug: 建表缺RuoYi标准列 + CRM Controller未注册~~ PR#3620✅merged 2026-04-13 08:57 | ~~Done~~ |
+| kimi1 | #3619 | P0-bug | backend | bug: Portal产品表缺model3d_file/model3d_render列 | In Progress |
 
 ## 当前运行
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #3618 | P0-bug | fullstack | bug修复: 建表标准列 + CRM Controller注册 |
+| kimi1 | #3619 | P0-bug | backend | Portal产品表缺model3d_file业务列 |
 | kimi2 | #3617 | P0-bug | fullstack | 矿场v3第二轮验收缺陷（stats/详情500/流转/分配mock/工具栏/tenant_id） |

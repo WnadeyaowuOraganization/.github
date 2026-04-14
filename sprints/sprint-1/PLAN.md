@@ -217,8 +217,8 @@ Week 4 (5/03-5/09):
 > **✅ 2026-04-14 矿场页面 30 条 seed 已注入** wdpp_project_mine（覆盖 6 Tab：early_gold/bidding/needs_confirm/dormant/invalid + assigned/contacted/tracking/bid_preparing 各 mine_status），脚本 `scripts/seed/project_mine_seed.sql` 可重复刷。
 > **🔥🔥 2026-04-14 20:07 用户最高优先级指令**：**优先完成 #3631 矿场接入 Master 的剩余子 Issue**，其他 Tier 全部让路。
 > **📊 2026-04-14 22:47 #3631 子 Issue 进度**：**#3638 CLOSED ✅**，**#3636 终于派给 kimi5**（连续 12 轮 120 分钟待派后），#3631 全链只剩 #3636 in-progress，完成即 Master 收尾。
-> **📊 2026-04-14 22:47 大规模补池**：研发经理新派 kimi1 #3518 / kimi2 #3519 / kimi3 #3520（Tier-1 Dashboard 三连）+ kimi4 #3582（Tier-5 产品目录）+ kimi5 #3636。池 **5/5 满**。
-> **♻ 清理**：已 CLOSED 的 #3517/#3481/#3483/#3484/#3638 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
+> **📊 2026-04-14 22:57 池快照**：kimi1 #3518 / kimi2 #3519 / kimi3 #3520（Tier-1 Dashboard 三连）+ kimi4 **#3529**（#3582 已 CLOSED 经 PR#3664 覆盖，kimi4 改派 CRM-02）+ kimi5 #3636。池 **5/5 满**。
+> **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
@@ -226,9 +226,10 @@ Week 4 (5/03-5/09):
 | kimi1 | #3518 | P1 | fullstack | [运行中] Tier-1: 支持中心主页Dashboard — 6 Widget | `docs/design/rbac-homepage/详细设计.md` | high |
 | kimi2 | #3519 | P1 | fullstack | [运行中] Tier-1: 项目安装主页Dashboard — 7 Widget | `docs/design/rbac-homepage/详细设计.md` | high |
 | kimi3 | #3520 | P1 | fullstack | [运行中] Tier-1: 综合管理主页Dashboard — 6 Widget | `docs/design/rbac-homepage/详细设计.md` | high |
-| kimi4 | #3582 | P0 | frontend | [运行中] Tier-5: 产品目录页 — 卡片网格+筛选搜索 | `docs/design/product-portal/01-catalog.html` | high |
-| — | #3529 #3549 #3550 #3551 | P1 | fullstack | Tier-4: CRM-02 客户管理 + CRM-14/11/12（后续批次，池满后补派） | `docs/design/crm-商务中心/详细设计.md` | high |
+| kimi4 | #3529 | P1 | fullstack | [运行中] Tier-4: CRM-02 客户管理 — CRUD+三类型+详情页五Tab（#3582 已由 PR#3664 覆盖改派） | `docs/design/crm-商务中心/详细设计.md` | high |
+| — | #3549 #3550 #3551 | P1 | fullstack | Tier-4: CRM-14/11/12（后续批次，池满后补派） | `docs/design/crm-商务中心/详细设计.md` | high |
 | — | #3461 | P1 | fullstack | Tier-6: 耀总驾驶舱 v1.0（超管驾驶舱 4 Tab 全部 CLOSED，可启动） | `docs/design/耀总驾驶舱/详细设计.md` | high |
+| — | #3583 #3585 #3588 | P0/P1/P2 | frontend | Tier-5: 产品详情页（3D）/备件目录/H5 适配（#3582 已随 PR#3664 合并） | `docs/design/product-portal/02-detail.html` 等 | medium |
 
 ## 指派历史（完成后划线）
 

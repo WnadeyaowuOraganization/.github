@@ -251,6 +251,15 @@ Week 4 (5/03-5/09):
 | kimi2 | ~~#3617~~ | P0-bug | fullstack | ~~Tier-2: 全球项目矿场v3 第二轮验收缺陷（8项）~~ PR#3623✅merged 2026-04-13 13:40 | ~~Done~~ |
 | kimi1 | ~~#3618~~ | P0-bug | fullstack | ~~bug: 建表缺RuoYi标准列 + CRM Controller未注册~~ PR#3620✅merged 2026-04-13 08:57 | ~~Done~~ |
 | kimi1 | ~~#3619~~ | P0-bug | backend | ~~bug: Portal产品表缺model3d_file/model3d_render列~~ PR#3621✅merged 2026-04-13 10:33 | ~~Done~~ |
+| kimi15 | ~~#3632~~ | P0 | fullstack | ~~矿场Phase2 A: 3张老矿场表迁移 wdpp_project_mine~~ PR#3655✅merged 2026-04-14 15:48 | ~~Done~~ |
+| kimi7 | ~~#3635~~ | P1 | fullstack | ~~管线健康度 Tab 后端（替换 CLOSED #3521）~~ PR#3658✅merged 2026-04-14 16:07 | ~~Done~~ |
+| kimi11 | ~~#3484~~ | P1 | fullstack | ~~超管驾驶舱·Prompt 管理 Tab~~ PR#3661✅merged 2026-04-14 16:33 | ~~Done~~ |
+| kimi14 | ~~#3634~~ | P1 | fullstack | ~~矿场Phase3 C: 省份热力图 API + 前端真数据~~ PR#3663✅merged 2026-04-14 16:47 | ~~Done~~ |
+| kimi12 | ~~#3640 + #3582 + #3583~~ | P1 | fullstack | ~~Phase4 I: 产品目录/详情真数据接入~~ PR#3664✅merged 2026-04-14 17:06 | ~~Done~~ |
+| kimi3 | ~~#3517~~ | P0 | fullstack | ~~Tier-1: 商务主页Dashboard 8 个 Widget~~ PR#3665✅merged 2026-04-14 17:13 | ~~Done~~ |
+| kimi13 | ~~#3633~~ | P1 | fullstack | ~~矿场Phase3 B 关键词池 CRUD + 配置页~~ PR#3666✅merged 2026-04-14 18:06 | ~~Done~~ |
+| kimi4 | ~~#3641~~ | P1 | frontend | ~~超管驾驶舱·管线健康度 Tab 前端~~ PR#3667✅merged 2026-04-14 18:06 | ~~Done~~ |
+| kimi10 | ~~#3483~~ | P0 | fullstack | ~~超管驾驶舱·安全审计Tab~~ PR#3668✅merged 2026-04-14 18:58 | ~~Done~~ |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 
@@ -295,19 +304,5 @@ Week 4 (5/03-5/09):
 | kimi9 | #3482 | P1 | fullstack | FinOps 开发运维成本 Tab | PR 已创建，轮询 merge 中 |
 | kimi16 | #3636 | P1 | fullstack | 矿场Phase4 E 幼儿园采购+预算专题 | smoke 2/3 过；getRouters 缺招投标中心父菜单（visible/status 或 role_menu 父链）调试中 |
 
-## 指派历史补录（Sprint-1 Week 2，2026-04-14 批量合入）
-
-| 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |
-|---------|-------|------|------|------|---------|
-| kimi15 | ~~#3632~~ | P0 | fullstack | ~~矿场Phase2 A: 3张老矿场表迁移 wdpp_project_mine~~ PR#3655✅merged 2026-04-14 15:48 | ~~Done~~ |
-| kimi7 | ~~#3635~~ | P1 | fullstack | ~~管线健康度 Tab 后端（替换 CLOSED #3521）~~ PR#3658✅merged 2026-04-14 16:07 | ~~Done~~ |
-| kimi11 | ~~#3484~~ | P1 | fullstack | ~~超管驾驶舱·Prompt 管理 Tab~~ PR#3661✅merged 2026-04-14 16:33 | ~~Done~~ |
-| kimi14 | ~~#3634~~ | P1 | fullstack | ~~矿场Phase3 C: 省份热力图 API + 前端真数据~~ PR#3663✅merged 2026-04-14 16:47 | ~~Done~~ |
-| kimi12 | ~~#3640 + #3582 + #3583~~ | P1 | fullstack | ~~Phase4 I: 产品目录/详情真数据接入~~ PR#3664✅merged 2026-04-14 17:06 | ~~Done~~ |
-| kimi3 | ~~#3517~~ | P0 | fullstack | ~~Tier-1: 商务主页Dashboard 8 个 Widget~~ PR#3665✅merged 2026-04-14 17:13 | ~~Done~~ |
-| kimi13 | ~~#3633~~ | P1 | fullstack | ~~矿场Phase3 B 关键词池 CRUD + 配置页~~ PR#3666✅merged 2026-04-14 18:06 | ~~Done~~ |
-| kimi4 | ~~#3641~~ | P1 | frontend | ~~超管驾驶舱·管线健康度 Tab 前端~~ PR#3667✅merged 2026-04-14 18:06 | ~~Done~~ |
-| kimi10 | ~~#3483~~ | P0 | fullstack | ~~超管驾驶舱·安全审计Tab~~ PR#3668✅merged 2026-04-14 18:58 | ~~Done~~ |
-
 > **2026-04-14 18:10 槽位释放 + 补池**：PR #3666 / #3667 先后 merged → kimi13/4 释放 → 补 kimi10 接 #3483 完成 PR #3668。
-> **2026-04-14 19:55 当前活跃**：kimi8 (#3481)、kimi9 (#3482)、kimi16 (#3636) 共 3；kimi1/2 token 耗尽冷却至 2026-04-15。Flyway 链路 V185402~185405 / V190339~343 已经由研发经理+排程经理联手封堵连环失败。
+> **2026-04-14 19:55 当前活跃**：kimi8 (#3481)、kimi9 (#3482)、kimi16 (#3636) 共 3；kimi1/2 token 耗尽冷却至 2026-04-15。Flyway 链路 V185402~185405 / V190339~343 已由研发经理+排程经理联手封堵连环失败。

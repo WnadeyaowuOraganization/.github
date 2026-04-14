@@ -293,22 +293,10 @@ KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
 M2_SHARED="${HOME_DIR}/.m2/repository"
 M2_REPO_PATH="${HOME_DIR}/cc_scheduler/m2/${KIMI_TAG}/repository"
 if [ "$KIMI_TAG" != "main" ] && [ ! -d "$M2_REPO_PATH" ] && [ -d "$M2_SHARED" ]; then
-  echo "📦 首次初始化 per-kimi M2（从共享 m2 seed，排除业务模块）..."
+  echo "📦 首次初始化 per-kimi M2（从共享 m2 seed，排除 wande-ai 业务 jar）..."
   mkdir -p "$M2_REPO_PATH"
-  rsync -a --exclude='org/ruoyi/' "$M2_SHARED/" "$M2_REPO_PATH/" 2>&1 | tail -1
-  echo "✅ M2 seed 完成 → $M2_REPO_PATH (业务模块将在本 kimi 独立编译)"
-fi
-
-# 预装 ruoyi-common 业务模块到 per-kimi M2（含 ruoyi-common-bom）
-# BOM 是源码 sibling module，远程镜像没有，spring-boot:run 缺 BOM 会直接挂。
-# 这里在 run-cc.sh 首次启动时一次装好，避免后续 cc-test-env.sh start 延迟 30s。
-if [ "$KIMI_TAG" != "main" ] && [ -d "$M2_REPO_PATH" ] && [ ! -d "$M2_REPO_PATH/org/ruoyi/ruoyi-common-bom" ]; then
-  if [ -d "$BASE_DIR/backend/ruoyi-common" ]; then
-    echo "📦 预装 ruoyi-common 业务模块到 per-kimi M2（含 BOM，约 30s）..."
-    (cd "$BASE_DIR/backend" && mvn install -pl ruoyi-common -am -DskipTests -Dmaven.repo.local="$M2_REPO_PATH" -q 2>&1 | tail -3) \
-      && echo "✅ ruoyi-common 预装完成" \
-      || echo "⚠️ ruoyi-common 预装失败（cc-test-env.sh start 会再重试一次）"
-  fi
+  rsync -a --exclude='org/ruoyi/wande-ai/' "$M2_SHARED/" "$M2_REPO_PATH/" 2>&1 | tail -1
+  echo "✅ M2 seed 完成 → $M2_REPO_PATH (ruoyi 框架含在种子中，wande-ai 由本 kimi 独立编译)"
 fi
 MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO_PATH}';"
 

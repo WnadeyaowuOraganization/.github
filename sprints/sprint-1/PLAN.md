@@ -263,7 +263,8 @@ Week 4 (5/03-5/09):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 启动 |
 |---------|-------|------|------|------|------|
-| kimi1 | **#3624** | P0 | app | 矿场Phase1: ggzy_collector+Java去mock | 11:55 |
+| ~~kimi1~~ | ~~**#3624**~~ | P0 | app | ~~矿场Phase1: ggzy_collector+Java去mock~~ ✅ PR#3644 merged 13:31 | ~~11:55~~ |
+| kimi1 | **#3637** | P1 | app | 矿场Phase4 F: wdpp_competitor_* 5张表→#3118关系网络 | 13:35 |
 | kimi3 | #3517 | P0 | app | 商务主页Dashboard 8Widget（恢复） | 旧锁11:54 |
 | kimi4 | #3518 | P1 | app | 支持中心主页Dashboard（恢复） | 旧锁11:54 |
 | kimi5 | #3519 | P1 | app | 项目安装主页Dashboard（恢复） | 旧锁11:54 |

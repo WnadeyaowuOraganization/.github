@@ -216,16 +216,19 @@ Week 4 (5/03-5/09):
 > **🛠 2026-04-14 #3637/#3640 决策已锁定**（取代评论中的"评估"段）：#3637 只用 5 张核心竞品表，runs/company_status/errors/design_analysis/updates 不建；#3640 pipeline 写 wdpp_products → 门户前端**直接读** wdpp_products（V20260414012 已加门户展示字段），wdpp_product_portal_* 保留供运营手动维护。
 > **✅ 2026-04-14 矿场页面 30 条 seed 已注入** wdpp_project_mine（覆盖 6 Tab：early_gold/bidding/needs_confirm/dormant/invalid + assigned/contacted/tracking/bid_preparing 各 mine_status），脚本 `scripts/seed/project_mine_seed.sql` 可重复刷。
 > **🔥🔥 2026-04-14 20:07 用户最高优先级指令**：**优先完成 #3631 矿场接入 Master 的剩余子 Issue**，其他 Tier 全部让路。
-> **📊 2026-04-14 21:27 #3631 子 Issue 进度**：#3637 PR#3672 merged ✅（kimi1 释放）；#3638 kimi16 In Progress；#3641/#3639 先前已 merged。**⚠️ #3636 连续 5 轮（50 分钟）待补派**（空位 kimi8/kimi9/kimi17，幼儿园采购专题 smoke 2/3 过可续）。#3481 kimi8 已 CLOSED。
-> **♻ 清理**：已 CLOSED 的 #3624/#3630/#3632/#3633/#3634/#3635/#3637/#3639/#3640 + #3641(PR merged) 从指派建议表移除（明细表仍保留追踪）。
+> **📊 2026-04-14 22:47 #3631 子 Issue 进度**：**#3638 CLOSED ✅**，**#3636 终于派给 kimi5**（连续 12 轮 120 分钟待派后），#3631 全链只剩 #3636 in-progress，完成即 Master 收尾。
+> **📊 2026-04-14 22:47 大规模补池**：研发经理新派 kimi1 #3518 / kimi2 #3519 / kimi3 #3520（Tier-1 Dashboard 三连）+ kimi4 #3582（Tier-5 产品目录）+ kimi5 #3636。池 **5/5 满**。
+> **♻ 清理**：已 CLOSED 的 #3517/#3481/#3483/#3484/#3638 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
-| — | **#3636** | **🔥P0** | **fullstack** | **[#3631 子][连续5轮待派] Phase4 E: 幼儿园采购+预算项目专题页（V007/V013 表已建；smoke 2/3 过可续；kimi8/9/17 任一可接）** | `docs/design/全球项目矿场/01-all.html`（套布局） | medium |
-| kimi12 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | `docs/design/rbac-homepage/详细设计.md` | high |
-| — | #3518 #3519 #3520 | P1 | fullstack | Tier-1: 支持/安装/综管主页Dashboard | `docs/design/rbac-homepage/详细设计.md` | high |
-| — | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 | `docs/design/crm-商务中心/详细设计.md` | high |
-| — | #3481 #3482 #3483 #3484 | P1 | fullstack | Tier-3: 超管驾驶舱 实时日志/FinOps/安全审计/Prompt Tab | `docs/design/超管驾驶舱/06/07/15/16-*.html` | high |
+| kimi5 | **#3636** | **🔥P0** | **fullstack** | **[#3631 子][运行中] Phase4 E: 幼儿园采购+预算项目专题页（终于派发，22:4x 启动）** | `docs/design/全球项目矿场/01-all.html`（套布局） | medium |
+| kimi1 | #3518 | P1 | fullstack | [运行中] Tier-1: 支持中心主页Dashboard — 6 Widget | `docs/design/rbac-homepage/详细设计.md` | high |
+| kimi2 | #3519 | P1 | fullstack | [运行中] Tier-1: 项目安装主页Dashboard — 7 Widget | `docs/design/rbac-homepage/详细设计.md` | high |
+| kimi3 | #3520 | P1 | fullstack | [运行中] Tier-1: 综合管理主页Dashboard — 6 Widget | `docs/design/rbac-homepage/详细设计.md` | high |
+| kimi4 | #3582 | P0 | frontend | [运行中] Tier-5: 产品目录页 — 卡片网格+筛选搜索 | `docs/design/product-portal/01-catalog.html` | high |
+| — | #3529 #3549 #3550 #3551 | P1 | fullstack | Tier-4: CRM-02 客户管理 + CRM-14/11/12（后续批次，池满后补派） | `docs/design/crm-商务中心/详细设计.md` | high |
+| — | #3461 | P1 | fullstack | Tier-6: 耀总驾驶舱 v1.0（超管驾驶舱 4 Tab 全部 CLOSED，可启动） | `docs/design/耀总驾驶舱/详细设计.md` | high |
 
 ## 指派历史（完成后划线）
 

@@ -274,10 +274,12 @@ Week 4 (5/03-5/09):
 | kimi10 | #3483 | P1 | app | 安全审计Tab（恢复） | 旧锁11:54 |
 | kimi11 | #3484 | P1 | app | Prompt管理Tab（恢复） | 旧锁11:54 |
 | kimi12 | #3582 | P0 | app | 产品目录页（恢复） | 旧锁11:54 |
-| ~~kimi20~~ | ~~**#3630**~~ | P0 | backend | ~~矿场Phase2字段对齐（skill冒烟验证）~~ ✅ PR#3643 创建 12:04 等auto-merge | ~~11:46~~ |
+| ~~kimi20~~ | ~~**#3630**~~ | P0 | backend | ~~矿场Phase2字段对齐~~ ✅ PR#3643 merged 12:06 | ~~11:46~~ |
 | kimi13 | **#3633** | P1 | app | 矿场Phase3 B: 关键词池 CRUD + 超管采集配置页 | 12:04 |
 | kimi14 | **#3634** | P1 | app | 矿场Phase3 C: 省份热力图 API + 前端真数据 | 12:04 |
+| kimi15 | **#3632** | P0 | app | 矿场Phase2 A: 3张老矿场表迁移 wdpp_project_mine | 12:13 |
+| kimi16 | **#3636** | P1 | app | 矿场Phase4 E: 幼儿园采购+预算项目专题页 | 12:13 |
 
-> 池：14 / 15（kimi20 即将释放回 15）。空闲 kimi2/15/16/17/18/19。
-> 🎉 **skill化机制首个完整闭环**：kimi20 #3630 走完 issue-task-md→cc-report start→backend-coding→backend-test→cc-report stage-done→pr-visual-proof→cc-report close 全流程。
+> 池：14 / 15（kimi20 已释放，13 活跃 + 2 新派 = 14）。空闲 kimi2/17/18/19。
+> 🎉 **skill化机制首个完整闭环**：kimi20 #3630 走完 issue-task-md→cc-report start→backend-coding→backend-test→cc-report stage-done→pr-visual-proof→cc-report close 全流程，PR #3643 已 merged。
 > 多 CC 触发 sys_menu 占位疑问（#3482/#3483/#3484/#3520），统一按 menu-contract 例外条款放行 INSERT。

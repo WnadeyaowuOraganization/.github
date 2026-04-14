@@ -68,8 +68,6 @@ gh pr view <PR> --repo WnadeyaowuOraganization/wande-play --comments | head -200
 - [x] T_fix_<N>_3 代码修复
 - [x] T_fix_<N>_4 本地绿灯
 - [ ] T_fix_<N>_5 push 触发新一轮 CI
-
-> ⚠️ 不要把"轮询 merged"写成 task.md 步骤 —— push 时 quality-gate 门 2 必然因此失败。轮询由 cc-report close 负责。
 ```
 
 ### 5. push + 重新触发 CI

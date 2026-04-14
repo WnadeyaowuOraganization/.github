@@ -84,8 +84,6 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 - [ ] T10 task.md 全勾 + pr-body-lint 通过
 - [ ] T11 rebase origin/dev + gh pr create --base dev
 
-> ⚠️ 不要把"轮询 merged"写进 task.md ——  这是 push 之后的动作，而 quality-gate 门 2 在 push 时就会检查全勾，语义必然失败。轮询由 cc-report close 的标准轮询模板负责。
-
 ## Files Changed
 （随开发更新）
 

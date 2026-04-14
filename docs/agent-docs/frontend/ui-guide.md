@@ -825,11 +825,6 @@ const gridOptions: VxeGridProps = {
 | 页面 | 文件路径 | 特点 |
 |------|---------|------|
 | **用户管理** | `views/system/user/index.vue` | 三层布局 + 完整 CRUD — **RuoYi 框架首选参考** |
-| **竞品分析** | `views/wande/competitor/index.vue` | 多 Tab + 对比功能 |
-| **项目挖掘** | `views/wande/project/index.vue` | 复杂统计 + 多模式切换 |
-| **CRM 客户** | `views/wande/crm/index.vue` | 标准列表页 + AI 助手集成 |
-| **经销商管理** | `views/wande/dealer/index.vue` | 多 Tab 列表 + 抽屉详情 |
-| **样品管理** | `views/wande/sample/index.vue` | 库存管理 + 出入库操作 |
 
 ### 8.2 改造后的良好示例（2026-04-01 Issue #408 验收）
 

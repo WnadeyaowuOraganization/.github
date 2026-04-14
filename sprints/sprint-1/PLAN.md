@@ -209,30 +209,26 @@ Week 4 (5/03-5/09):
 > **♻ 2026-04-14 刷新**：#3617 已CLOSED，移除；kimi2 空出可接下一任务。
 > **🔥 2026-04-14 新增 #3630 (P0)**：wdpp_project_mine 字段与 ggzy_collector 对齐（ALTER+uk_source_url+9列），阻塞 #3624 真数据落地。建议 kimi2 优先启动（medium effort），纯后端实体/VO/Mapper 同步。
 > **📋 2026-04-14 新增 Master #3631 (P1，Plan 状态)**：pipeline ↔ 后端表对齐全景规划（19张表，Phase1~5），规划性 Issue 不直接开发。
-> **🔥 2026-04-14 拆子完成**：#3631 子 Issue #3632-#3640 全部 Todo 化。矿场数据闭环优先级最高，现置于指派建议表**前 11 位**。
+> **🔥 2026-04-14 拆子完成**：#3631 子 Issue #3632-#3640 全部 Todo 化 + #3641 管线健康度 Tab 前端配对。矿场数据闭环优先级最高。
+> **📐 2026-04-14 原型对账**：指派建议表已标注对应的 `docs/design/` 原型路径 — 研发经理派发 CC 前必须让 CC 先读取对应原型+详细设计，验收必须附平台截图。
 
-| 目录 | Issue | 优先 | 模块 | 内容 | effort |
-|------|-------|------|------|------|--------|
-| kimi2 | **#3630** | **P0** | **backend** | **🔥矿场接入Phase2: wdpp_project_mine 字段对齐（Flyway就绪，同步Entity/VO/Mapper 9新字段）** | **medium** |
-| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock** | **high** |
-| kimi3 | **#3632** | **P0** | **fullstack** | **🔥Phase2 A: 3张老矿场表迁移到 wdpp_project_mine（取代 #3552；迁移脚本+改写4个 Python 脚本+DROP 旧表）** | **high** |
-| kimi4 | **#3640** | **P1** | **backend** | **Phase4 I: products/product_series/product_specs/product_images → wdpp_product_portal_* 命名对齐** | **high** |
-| kimi5 | **#3633** | **P1** | **fullstack** | **Phase3 B: wdpp_keyword_pool 后端CRUD + 超管配置页** | **medium** |
-| kimi6 | **#3634** | **P1** | **fullstack** | **Phase3 C: wdpp_province_stats 统计API + 驾驶舱省份热力图** | **medium** |
-| kimi7 | **#3635** | **P1** | **fullstack** | **Phase3 D: wdpp_pipeline_runs + alerts 接入超管驾驶舱"管线健康度"Tab** | **high** |
-| kimi8 | **#3636** | **P1** | **fullstack** | **Phase4 E: 幼儿园采购 + dept_budget_items 专题页** | **high** |
-| kimi9 | **#3637** | **P1** | **backend** | **Phase4 F: 竞品5张表后端接入，供 #3118 关系网络真数据** | **high** |
-| kimi10 | **#3638** | **P2** | **backend** | **Phase4 G: D3组件库 pipeline 表与后端 D3 模块表对齐** | **medium** |
-| kimi11 | **#3639** | **P2** | **backend** | **Phase4 H: wdpp_s3_asset_index 接入 AI 助手模块** | **medium** |
-| kimi12 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
-| — | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |
-| — | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | high |
-| — | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | high |
-| — | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 | high |
-| — | #3481 | P1 | fullstack | Tier-3: 实时日志流Tab | high |
-| — | #3482 | P1 | fullstack | Tier-3: FinOps开发运维成本Tab | high |
-| — | #3483 | P1 | fullstack | Tier-3: 安全审计Tab | high |
-| — | #3582 | P0 | frontend | Tier-5: 产品目录页（注意：与 #3640 存在表字段关联，建议 #3640 先行） | high |
+| 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
+|------|-------|------|------|------|--------------|--------|
+| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场Phase1: ggzy_collector+Java去mock，真数据落到 wdpp_project_mine** | `docs/design/全球项目矿场/详细设计.md` + `01-all.html`~`06-trash.html` | high |
+| kimi2 | **#3630** | **P0** | **backend** | **🔥矿场Phase2: wdpp_project_mine 字段对齐（Entity/VO/Mapper 9新字段）** | `docs/design/全球项目矿场/详细设计.md` | medium |
+| kimi3 | **#3632** | **P0** | **fullstack** | **🔥Phase2 A: 3张老矿场表迁移 wdpp_project_mine（取代#3552+迁移SQL+改4脚本）** | `docs/design/全球项目矿场/详细设计.md` | high |
+| kimi4 | **#3640 + #3582 + #3583** | **P1** | **fullstack** | **Phase4 I: products 4表→wdpp_product_portal_* + 产品目录页+详情页前端真数据验证** | `docs/design/product-portal/详细设计.md` + `01-catalog.html` `02-detail.html` `03-parts.html` | high |
+| kimi5 | **#3633** | **P1** | **fullstack** | **Phase3 B: wdpp_keyword_pool CRUD + 超管采集配置页** | `docs/design/超管驾驶舱/04-sys-collect.html` + `详细设计.md` | medium |
+| kimi6 | **#3634** | **P1** | **fullstack** | **Phase3 C: wdpp_province_stats API + 矿场地图省份热力图（01-all.html 地图区真数据）** | `docs/design/全球项目矿场/01-all.html` + `详细设计.md` | medium |
+| kimi7 | **#3635 + #3641** | **P1** | **fullstack** | **Phase3 D: wdpp_pipeline_runs/alerts 后端 + 超管驾驶舱"管线健康度"Tab 前端** | `docs/design/超管驾驶舱/04-sys-collect.html` `05-sys-cron.html` + `详细设计.md` | high |
+| kimi8 | **#3636** | **P1** | **fullstack** | **Phase4 E: 幼儿园采购 + dept_budget_items 专题页（若无原型，参考 01-all.html 矿场布局）** | `docs/design/全球项目矿场/01-all.html`（套布局） | high |
+| kimi9 | **#3637** | **P1** | **fullstack** | **Phase4 F: 竞品5张表后端 + 激活 #3118 已有前端（从 mock 切真数据）** | `docs/design/全球项目矿场/详细设计.md`（关系网络章节） | high |
+| kimi10 | **#3638** | **P2** | **backend** | **Phase4 G: D3组件库 pipeline 表与后端 D3 模块表对齐（排查字段冲突）** | 后端 D3 模块代码+`ptc/` 若有 | medium |
+| kimi11 | **#3639** | **P2** | **fullstack** | **Phase4 H: wdpp_s3_asset_index 接入 AI 助手检索面板（若无原型，参考 12-dev-agent.html）** | `docs/design/超管驾驶舱/12-dev-agent.html`（套布局） | medium |
+| kimi12 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | `docs/design/rbac-homepage/详细设计.md` | high |
+| — | #3518 #3519 #3520 | P1 | fullstack | Tier-1: 支持/安装/综管主页Dashboard | `docs/design/rbac-homepage/详细设计.md` | high |
+| — | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 | `docs/design/crm-商务中心/详细设计.md` | high |
+| — | #3481 #3482 #3483 #3484 | P1 | fullstack | Tier-3: 超管驾驶舱 实时日志/FinOps/安全审计/Prompt Tab | `docs/design/超管驾驶舱/06/07/15/16-*.html` | high |
 
 ## 指派历史（完成后划线）
 

@@ -76,15 +76,29 @@ cmd_init_db() {
     -e "SELECT COUNT(*) FROM information_schema.tables WHERE table_schema='${KIMI_DB}';" 2>/dev/null)
 
   if [ "${existing_tables:-0}" -lt 10 ]; then
-    if [ -f "$FLYWAY_DIR/V1__baseline_wande_ai.sql" ]; then
-      docker exec -i mysql-dev mysql -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" "$KIMI_DB" 2>/dev/null \
-        < "$FLYWAY_DIR/V1__baseline_wande_ai.sql"
-      echo " baseline已导入"
-    else
-      echo " WARN: baseline不存在"
-    fi
+    echo " 初始化中"
+    mkdir -p "$LOG_DIR"
+    local flyway_log="$LOG_DIR/init-db-flyway.log"
+    : > "$flyway_log"
+    # 依版本号顺序应用全部 V*.sql（baseline + 所有后续迁移）
+    # kimi 环境后端启动时 --spring.flyway.enabled=false，由本脚本一次性把 schema 拉到最新
+    # --force 容忍已知非关键错误（如 create_by='admin' 字符串→bigint、重复列 '广东省' 等）
+    local applied=0 failed=0
+    for f in $(ls "$FLYWAY_DIR"/V*.sql 2>/dev/null | sort -V); do
+      local fname
+      fname=$(basename "$f")
+      if docker exec -i mysql-dev mysql --force -u"$MYSQL_ROOT_USER" -p"$MYSQL_ROOT_PASS" "$KIMI_DB" \
+        < "$f" >>"$flyway_log" 2>&1; then
+        echo "    ✓ $fname"
+        applied=$((applied+1))
+      else
+        echo "    ✗ $fname (详见 $flyway_log)"
+        failed=$((failed+1))
+      fi
+    done
+    echo "  Flyway: 应用 $applied 个脚本 (失败 $failed)，日志: $flyway_log"
   else
-    echo " 已存在(${existing_tables}表)"
+    echo " 已存在(${existing_tables}表)，跳过 Flyway"
   fi
 
   # 授权
@@ -222,21 +236,12 @@ start_backend() {
 
   # 用 mvn spring-boot:run 从源码启动，无需预编译jar
   # 必须在 ruoyi-admin 子目录执行（spring-boot-maven-plugin 只在此模块定义）
-  # 共享 ~/.m2 有基础目录预编译的依赖，首次启动仅增量编译
+  # per-kimi M2 隔离：强制用本 kimi 的 .m2-local 仓库（由 run-cc.sh 首次启动时 rsync seed）
   # 使用 setsid 确保进程独立于父shell，不会因脚本被杀而级联退出
   cd "$KIMI_DIR/backend/ruoyi-admin"
-  setsid mvn spring-boot:run \
-    -Dspring-boot.run.profiles=dev \
-    -Dspring-boot.run.arguments="\
---server.port=${BACKEND_PORT} \
---spring.flyway.enabled=false \
---spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true \
---spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} \
---spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} \
---spring.data.redis.host=${REDIS_HOST} \
---spring.data.redis.port=${REDIS_PORT} \
---spring.data.redis.database=${REDIS_DB}" \
-    > "$LOG_DIR/backend.log" 2>&1 &
+  KIMI_M2="${KIMI_DIR}/.m2-local/repository"
+  [ -d "$KIMI_M2" ] && MVN_M2_OPT="-Dmaven.repo.local=${KIMI_M2}" || MVN_M2_OPT=""
+  setsid mvn spring-boot:run $MVN_M2_OPT -o -Dspring-boot.run.profiles=dev -Dspring-boot.run.arguments="--server.port=${BACKEND_PORT} --spring.flyway.enabled=false --spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true --spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} --spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} --spring.data.redis.host=${REDIS_HOST} --spring.data.redis.port=${REDIS_PORT} --spring.data.redis.database=${REDIS_DB}" > "$LOG_DIR/backend.log" 2>&1 &
 
   local pid=$!
   echo "$pid" > "$PID_FILE"

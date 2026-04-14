@@ -287,8 +287,16 @@ KIMI_TAG=$(basename "$BASE_DIR" | sed 's/wande-play-//;s/wande-play//')
 [ -z "$KIMI_TAG" ] && KIMI_TAG="main"
 KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
 
-# === Maven repo：所有 kimi 共享 ~/.m2（NVMe SSD）===
-M2_REPO_PATH="${HOME_DIR}/.m2/repository"
+# === Maven repo：per-kimi 独立 m2（防止 wande-ai 等业务模块 artifact 互相覆盖）===
+# 主 ~/.m2 作为只读 seed，首次启动 rsync 复制到 per-kimi 路径；已存在则跳过
+M2_SHARED="${HOME_DIR}/.m2/repository"
+M2_REPO_PATH="${BASE_DIR}/.m2-local/repository"
+if [ "$KIMI_TAG" != "main" ] && [ ! -d "$M2_REPO_PATH" ] && [ -d "$M2_SHARED" ]; then
+  echo "📦 首次初始化 per-kimi M2（从共享 m2 seed，排除业务模块）..."
+  mkdir -p "$M2_REPO_PATH"
+  rsync -a --exclude='org/ruoyi/' "$M2_SHARED/" "$M2_REPO_PATH/" 2>&1 | tail -1
+  echo "✅ M2 seed 完成 → $M2_REPO_PATH (业务模块将在本 kimi 独立编译)"
+fi
 MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO_PATH}';"
 
 # === 预创建独立数据库（MySQL schema + Redis DB，秒级完成）===

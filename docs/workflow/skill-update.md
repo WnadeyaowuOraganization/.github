@@ -18,6 +18,39 @@
 
 ---
 
+### 2026-04-14 23:12 🚨 CC 误执行 `git clean` 删除所有未提交新文件
+
+- **症状**：kimi5 #3636 后端 16 文件 + 前端 API 层 + 契约全部未 stage 未 commit，误跑 `git clean -fd` 后全部消失。git stash 空、reflog 无，只剩 target/classes 里的 .class 存活
+- **频次**：kimi5 #3636（第 1 次）；此前未见，但未提交文件保护失败模式风险极高，先预警登记
+- **根因**：
+  1. CC 在开发过程中长时间不 `git add/commit`，所有新文件处于 untracked 状态
+  2. `git clean -fd` 直接移除所有 untracked → 全丢
+  3. 模板/skill 未强制"阶段性 WIP commit"或"clean 前 stash -u 护栏"
+- **已处置**：
+  1. 教 kimi5 用 `javap -p + __Javadoc.json` 从 target/classes 反编译恢复后端（16 文件全可还原）
+  2. 前端 API/契约从 Controller 注解反推
+  3. Flyway 脚本 origin/dev 还在（排程经理预置的 V007/V013）
+- **建议改进**：
+  1. shared-conventions.md 新增：**禁止** `git clean -fd/-fdx` 于 feature 分支；若需要清理，先 `git stash push -u -m "safety-net"` 或 `git add -A && git commit -m "WIP before clean"`
+  2. skill/backend-coding 和 skill/frontend-coding 模板在 T1 契约之后加硬点：**每个阶段结束必须 WIP commit**（Entity/Mapper/Service/Controller/前端页面），不留未追踪文件过夜
+  3. 或 post-tool hook 检测 `git clean` → 强制先 stash
+- **状态**：观察中（本次成功恢复；若再犯 1 次立即落地红线）
+
+---
+
+### 2026-04-14 21:55 🚨 研发经理误指令 `pkill -f vite` 会污染整个池
+
+- **症状**：研发经理给 kimi8/kimi16 的指令 `pkill -f vite` 用于解决 Vite glob 缓存。**事实**：pkill -f 按 cmdline grep，会无差别杀所有 kimi (1-20) 的 vite 进程
+- **频次**：研发经理 1 次（kimi8 + kimi16 同时下发）；用户拦截
+- **根因**：研发经理把单机 dev 思维带入多 kimi 隔离环境，忘了 `cc-test-env.sh` 已封装按 kimi 隔离的 PID 文件 kill 逻辑
+- **已处置**：紧急更正发 kimi8/kimi16；登记本条
+- **建议改进**：
+  1. CLAUDE.md 红线新增（待用户批准）：**禁止** `pkill -f vite/node/pnpm` / `killall vite/node`，**只能** `bash cc-test-env.sh restart kimiN` 或 `fuser -k 810N/tcp`
+  2. shared-conventions.md 在"环境硬隔离"段补一条进程操作约束
+- **状态**：观察中（下次再有 CC 用 pkill -f 立即拦截）
+
+---
+
 ### 2026-04-14 21:22 🚨 auto-code-agent bot 误关 PR body 中引用的他人 Issue
 
 - **症状**：PR#3672 (#3637) merge 到 dev → bot 自动 close #3481 + 评论 "PR #3672 merged to dev. Issue auto-closed." 实际 PR body 仅"依赖 #3481 修复"、"系统性问题，正在 #3481 中修复"等上下文说明，**未**含 closes/fixes/resolves 关键词

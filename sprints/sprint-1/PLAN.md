@@ -291,12 +291,12 @@ Week 4 (5/03-5/09):
 
 | 指派目录 | Issue | 优先级 | 模块 | 内容 | 阶段 |
 |---------|-------|-------|------|------|------|
-| kimi13 | #3633 | P1 | fullstack | 矿场Phase3 B 关键词池 CRUD + 配置页 | PR #3666 CI 跑中（task.md 补勾后第二轮）|
-| kimi4 | **#3641**（原 #3518）| P1 | frontend | 超管驾驶舱·管线健康度 Tab 前端（接 #3635 已合入 API）| 前端完，后端 Maven offline 已修（rsync kimi13 M2），等待 curl 自测+Playwright |
-| kimi8 | #3481 | P1 | fullstack | 实时日志流 Tab（CC/CI/API 集中查看）| T1 菜单 Flyway 完成，T2 进行中 |
-| kimi9 | #3482 | P1 | fullstack | FinOps 开发运维成本 Tab | 开工 PREPARE |
-| kimi16 | #3636 | P1 | fullstack | 矿场Phase4 E 幼儿园采购+预算专题 | 开工 PREPARE |
+| ~~kimi13~~ | #3633 | P1 | fullstack | 矿场Phase3 B 关键词池 CRUD + 配置页 | ✅ PR #3666 merged，会话已释放 |
+| ~~kimi4~~ | **#3641** | P1 | frontend | 超管驾驶舱·管线健康度 Tab 前端 | ✅ PR #3667 merged 2026-04-14T18:06:14Z |
+| kimi8 | #3481 | P1 | fullstack | 实时日志流 Tab（CC/CI/API 集中查看）| T8 前端 smoke 2/3，log-stream 路由 404 调试中 |
+| kimi9 | #3482 | P1 | fullstack | FinOps 开发运维成本 Tab | T10 菜单 INSERT 授权（先例 V20260414014），继续 |
+| kimi16 | #3636 | P1 | fullstack | 矿场Phase4 E 幼儿园采购+预算专题 | 后端编译绿，T3 单测+Playwright 进行中 |
+| **kimi10**（新唤醒） | **#3483** | **P0** | **fullstack** | **超管驾驶舱·安全审计Tab** | **18:11 恢复（原 paused 15→5 时保留），补池 5 活跃** |
 
-> **kimi4 派发变更**：原 PLAN 223/269 行派 kimi4 → #3640+#3582+#3583 / #3518，实际本轮经理侧决策改派 **#3641**（管线健康度前端），理由：#3635 后端 API 已合入，#3641 轻量前端配对正合适；kimi4 工作目录 `feature-Issue-3641` 分支在 15→5 paused 前已存在，恢复成本最低。原 #3518/#3582/#3583 改其他轮次重派或拆独立 Issue。
-
-> **paused 保留**：kimi1（token 耗尽）/5/6/10 仍有 WIP Issue（#3637/#3519/#3520/#3483），待本轮 PR 合入释放槽后分批唤醒。
+> **2026-04-14 18:10 槽位释放 + 补池**：PR #3666 / #3667 先后 merged → kimi13/4 释放 → 补 kimi10 接 #3483（P0 最高优先级，lock 从 paused 恢复）。当前活跃 kimi8/9/10/16 共 4，kimi1/2 token 耗尽保持 paused 至 21-22:00。
+> **paused 保留**：kimi1（token）/5/6 仍有 WIP Issue（#3637/#3519/#3520），待 kimi8/9/16 PR 合入再批量唤醒。

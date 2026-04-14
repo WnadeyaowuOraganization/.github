@@ -15,9 +15,10 @@
 
 set -e
 
-G7E_HOST="${G7E_HOST:-172.31.33.224}"       # 默认 VPC 内网 IP（更快）；回退公网 3.211.167.122
+G7E_HOST="${G7E_HOST:-172.31.33.224}"       # VPC 内网实测 397MB/s 最快；备选公网 3.211.167.122 / tailscale 100.99.88.7
 G7E_USER="${G7E_USER:-ubuntu}"
 G7E_SSH_KEY="${G7E_SSH_KEY:-$HOME/.ssh/id_ed25519}"
+G7E_SSH_PASS="${G7E_SSH_PASS:-}"             # 若设置了密码则优先用 sshpass 走密码认证
 PG_USER="${PG_USER:-wande}"
 PG_PASS="${PG_PASS:-wande_dev_2026}"
 PG_DB="${PG_DB:-wande_ai}"
@@ -78,9 +79,17 @@ else
   fi
   log "✓ G7e SSH 端口可达"
 
-  ssh -i "$G7E_SSH_KEY" -o StrictHostKeyChecking=accept-new \
-      -o ServerAliveInterval=30 -N -L ${PG_LOCAL_PORT}:localhost:${PG_REMOTE_PORT} \
-      "${G7E_USER}@${G7E_HOST}" &
+  SSH_BASE_OPTS="-o StrictHostKeyChecking=accept-new -o ServerAliveInterval=30 -N -L ${PG_LOCAL_PORT}:localhost:${PG_REMOTE_PORT}"
+  if [ -n "$G7E_SSH_PASS" ]; then
+    if ! command -v sshpass >/dev/null; then
+      die "需要 sshpass (apt install sshpass) 才能使用 G7E_SSH_PASS"
+    fi
+    log "使用密码认证 (sshpass)"
+    SSHPASS="$G7E_SSH_PASS" sshpass -e ssh -o PreferredAuthentications=password $SSH_BASE_OPTS "${G7E_USER}@${G7E_HOST}" &
+  else
+    log "使用 key 认证 ($G7E_SSH_KEY)"
+    ssh -i "$G7E_SSH_KEY" $SSH_BASE_OPTS "${G7E_USER}@${G7E_HOST}" &
+  fi
   TUNNEL_PID=$!
   sleep 3
 

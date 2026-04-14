@@ -21,7 +21,7 @@
 ### 2026-04-14 23:50 🚨 CC 手动 mvn spring-boot:run 绕过 cc-test-env.sh → profile=test 连错库
 
 - **症状**：kimi2 #3461 后端启动 50min 无进展，报 `Access denied for user 'wande'@'172.17.0.1'`，CC 认为是"MySQL 密码/环境问题"请求跳过截图提 PR
-- **频次**：kimi2 #3461（第 1 次）；此前指派 CC 也出现过"手动 run 后端"踩坑，纳入频繁预警
+- **频次**：kimi2 #3461（第 1 次，50min 卡住）+ kimi5 #3636（第 2 次，同轮 1h10min 卡住）→ 已达"频繁"阈值，建议立即落地 skill 硬点
 - **根因**：
   1. CC 用 `mvn spring-boot:run -Dspring-boot.run.profiles=test`，test profile application-test.yml 写死 `root/root` + 库名 `wande-ai`（非 kimi 隔离库）
   2. `cc-test-env.sh start/restart` 才是正确入口：它用 profile=dev + **命令行参数**覆盖 `spring.datasource.dynamic.datasource.master.url/username/password` → 指向 `wande-ai-kimiN` + `wande/wande_dev_2026`

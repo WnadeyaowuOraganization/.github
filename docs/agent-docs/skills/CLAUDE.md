@@ -43,6 +43,48 @@
 
 > 所有 skill 在 `.claude/skills/` 下，描述会自动匹配。**结论前**（"问题不存在"/"无需修改"）必须先 cc-report 等研发经理确认，**禁止**自行 `gh issue close`。
 
+### Skill 一般调用顺序（典型 Issue）
+
+```
+┌─ 阶段 0：理解
+│   1. issue-task-md        读 Issue + 原型 + 现有代码 → 写 task.md
+│   2. cc-report (start)    汇报开工
+│
+├─ 阶段 1：契约 / 数据层（按需）
+│   3. api-contract         若涉及前后端联调 → 写/改 shared/api-contracts/*.yaml
+│   4. backend-schema       若涉及表结构变更 → Flyway V*.sql（DB迁移）
+│
+├─ 阶段 2：实现
+│   5. backend-coding       Entity/VO/Mapper/Service/Controller
+│   6. backend-test         curl smoke + JUnit（必须红→绿 TDD）
+│   7. frontend-coding      index.vue/data.ts/Drawer/Modal
+│   8. frontend-e2e         smoke spec（views/**/index.vue 强制配对）
+│   9. menu-contract        若有新页面入口 → UPDATE 占位 sys_menu
+│   ─ cc-report (stage-done) 后端绿 / 前端绿 / 编译绿 等节点
+│
+├─ 阶段 3：交付
+│   10. pr-visual-proof     截图 + Release 上传 + PR body + pr-body-lint 预检
+│   11. cc-report (close)   PR 创建汇报，轮询 merge
+│
+└─ 异常：cc-report (stuck)  卡住 ≥10 分钟 立即求助
+   异常：cc-report (结论前)  下"问题不存在"等结论前先确认，禁止自行 close
+```
+
+| Issue 类型 | 必经 skill |
+|-----------|-----------|
+| 纯后端 CRUD | issue-task-md → cc-report → backend-schema → backend-coding → backend-test → cc-report → pr-visual-proof（无图）→ cc-report |
+| 纯前端页面 | issue-task-md → cc-report → frontend-coding → frontend-e2e → menu-contract（如新入口）→ cc-report → pr-visual-proof → cc-report |
+| 全栈新功能 | 全部走一遍（按上图顺序） |
+| Bug 修复 | issue-task-md → cc-report → backend-test/frontend-e2e（先写复现红灯）→ backend-coding/frontend-coding 修 → 测试转绿 → cc-report → pr-visual-proof → cc-report |
+| 仅菜单调整 | issue-task-md → cc-report → menu-contract → cc-report → PR |
+| 仅文档/配置 | issue-task-md → cc-report → 修改 → cc-report close（task.md 注明跳过测试原因）|
+
+辅助 skill（按需独立调用）：
+
+- **frontend-design** — 前端 UI 美学规范参考
+- **skill-creator** — 创建/改进新 skill（一般 CC 用不到，研发经理用）
+- **webapp-testing** — 通用 Playwright 操作参考
+
 ## 不可逾越的红线（共 10 条硬约束的最关键项）
 
 1. **禁止静默工作**：四节点主动汇报缺一即违规（见 cc-report skill）

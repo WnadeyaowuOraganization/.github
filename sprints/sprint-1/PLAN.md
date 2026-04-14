@@ -57,7 +57,7 @@
 | ~~#3617~~ | ~~P0~~ | ~~fullstack~~ | ~~#3458第二轮验收8项缺陷修复~~ ✅ Done | ~~Done~~ | #3615 |
 | **#3625** | **P0** | **frontend** | **#3458第三轮回归：KPI/工具栏/Modal触发 6项页面缺陷** | **kimi1 In Progress** | #3617 |
 | **#3626** | **P1** | **frontend** | **详情抽屉补齐：任务看板Tab + 甲方联系卡置顶** | **kimi2 In Progress** | #3617 |
-| **#3627** | **P1** | **fullstack** | **新增功能 + 批量操作（标记/导出）完整实现** | **kimi13 In Progress** | #3617 |
+| ~~#3627~~ | ~~P1~~ | ~~fullstack~~ | ~~新增功能 + 批量操作（标记/导出）完整实现~~ ✅ PR #3628 Merged | ~~Done~~ | #3617 |
 
 > **快速路线**：仅依赖菜单，可独立快速推进，支撑商务部日常运营
 > **第三轮回归来源**：Playwright 全量回归脚本 `e2e/tests/front/e2e/project-mine-regression.spec.ts`

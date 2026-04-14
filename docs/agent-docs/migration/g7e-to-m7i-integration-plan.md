@@ -13,17 +13,16 @@
 ```bash
 cd ~/projects/.github/scripts/g7e-migration
 
-# 指定 G7e 连接（默认值已对齐历史配置）
-export G7E_HOST=3.211.167.122        # 若 Elastic IP 变更请调整
-export G7E_USER=ubuntu
-export G7E_SSH_KEY=~/.ssh/id_ed25519 # 若 G7e 用其它 key 请调整
-
-# 一键迁移
+# 默认走 VPC 内网直连 G7e (172.31.33.224:5433)，速度最快
 bash run-migration.sh
+
+# 若内网探测失败，脚本会自动回退到 SSH 隧道模式
+# 公网回退：G7E_HOST=3.211.167.122 VPC_DIRECT=no bash run-migration.sh
 ```
 
 脚本做的事：
-1. SSH 隧道把 G7e:5433 映射到 m7i:15433
+1. **优先 VPC 直连**（m7i 172.31.31.227 ↔ G7e 172.31.33.224，同子网），不开 SSH 隧道
+2. 若内网 5433 不可达，自动回退 SSH 隧道把 G7e:5433 映射到 m7i:15433
 2. 探活 PG 并打印所有表 + 源端 row count（存档到 `reports/pg_rowcount_*.txt`）
 3. 在 m7i MySQL 建 `wande_ai_legacy`（若存在则 DROP 重建）
 4. `pgloader migration.load` 执行全量迁移，包含：

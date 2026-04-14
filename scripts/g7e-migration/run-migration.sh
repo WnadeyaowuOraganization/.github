@@ -15,7 +15,7 @@
 
 set -e
 
-G7E_HOST="${G7E_HOST:-3.211.167.122}"
+G7E_HOST="${G7E_HOST:-172.31.33.224}"       # 默认 VPC 内网 IP（更快）；回退公网 3.211.167.122
 G7E_USER="${G7E_USER:-ubuntu}"
 G7E_SSH_KEY="${G7E_SSH_KEY:-$HOME/.ssh/id_ed25519}"
 PG_USER="${PG_USER:-wande}"
@@ -23,6 +23,8 @@ PG_PASS="${PG_PASS:-wande_dev_2026}"
 PG_DB="${PG_DB:-wande_ai}"
 PG_REMOTE_PORT="${PG_REMOTE_PORT:-5433}"
 PG_LOCAL_PORT="${PG_LOCAL_PORT:-15433}"
+# VPC 直连模式：若 G7e PG 5433 内网直接可达，跳过 SSH 隧道（默认自动探测）
+VPC_DIRECT="${VPC_DIRECT:-auto}"             # auto | yes | no
 MYSQL_HOST="${MYSQL_HOST:-127.0.0.1}"
 MYSQL_PORT="${MYSQL_PORT:-3306}"
 MYSQL_USER="${MYSQL_USER:-root}"
@@ -48,53 +50,73 @@ cleanup() {
 trap cleanup EXIT INT TERM
 
 #=============================================================================
-# Step 1: 开 SSH 隧道
+# Step 1: 建立 PG 连接（优先 VPC 直连，否则回退 SSH 隧道）
 #=============================================================================
-log "=== Step 1: 建立 SSH 隧道 G7e:${PG_REMOTE_PORT} → localhost:${PG_LOCAL_PORT} ==="
-log "G7E_HOST=$G7E_HOST G7E_USER=$G7E_USER SSH_KEY=$G7E_SSH_KEY"
+log "=== Step 1: 建立 PostgreSQL 连接 ==="
+log "G7E_HOST=$G7E_HOST G7E_USER=$G7E_USER VPC_DIRECT=$VPC_DIRECT"
 
-# 探活 G7e
-if ! nc -zw3 "$G7E_HOST" 22 2>/dev/null; then
-  die "G7e ($G7E_HOST:22) 不可达，请确认机器已启动"
+# 自动探测 VPC 直连
+if [ "$VPC_DIRECT" = "auto" ]; then
+  if nc -zw3 "$G7E_HOST" "$PG_REMOTE_PORT" 2>/dev/null; then
+    VPC_DIRECT=yes
+    log "✓ 自动探测：PG 5433 内网直连可达"
+  else
+    VPC_DIRECT=no
+    log "·  自动探测：PG 5433 不可直连，回退 SSH 隧道"
+  fi
 fi
-log "✓ G7e SSH 端口可达"
 
-ssh -i "$G7E_SSH_KEY" -o StrictHostKeyChecking=accept-new \
-    -o ServerAliveInterval=30 -N -L ${PG_LOCAL_PORT}:localhost:${PG_REMOTE_PORT} \
-    "${G7E_USER}@${G7E_HOST}" &
-TUNNEL_PID=$!
-sleep 3
+if [ "$VPC_DIRECT" = "yes" ]; then
+  # 直连模式：不开隧道，PG_LOCAL_PORT 改为远端真实地址
+  PG_CONN_HOST="$G7E_HOST"
+  PG_CONN_PORT="$PG_REMOTE_PORT"
+  log "✓ 使用 VPC 直连模式：PG 目标 ${PG_CONN_HOST}:${PG_CONN_PORT}"
+else
+  # 隧道模式：探活 SSH 再建隧道
+  if ! nc -zw3 "$G7E_HOST" 22 2>/dev/null; then
+    die "G7e ($G7E_HOST:22) SSH 不可达，且 PG 也不直连；请确认机器已启动"
+  fi
+  log "✓ G7e SSH 端口可达"
 
-if ! kill -0 "$TUNNEL_PID" 2>/dev/null; then
-  die "SSH 隧道建立失败"
+  ssh -i "$G7E_SSH_KEY" -o StrictHostKeyChecking=accept-new \
+      -o ServerAliveInterval=30 -N -L ${PG_LOCAL_PORT}:localhost:${PG_REMOTE_PORT} \
+      "${G7E_USER}@${G7E_HOST}" &
+  TUNNEL_PID=$!
+  sleep 3
+
+  if ! kill -0 "$TUNNEL_PID" 2>/dev/null; then
+    die "SSH 隧道建立失败"
+  fi
+  log "✓ SSH 隧道已建立 (pid=$TUNNEL_PID)"
+  PG_CONN_HOST="127.0.0.1"
+  PG_CONN_PORT="$PG_LOCAL_PORT"
 fi
-log "✓ SSH 隧道已建立 (pid=$TUNNEL_PID)"
 
 #=============================================================================
 # Step 2: 探活 PG 连接
 #=============================================================================
 log "=== Step 2: 探活 PostgreSQL ==="
 export PGPASSWORD="$PG_PASS"
-if ! psql -h 127.0.0.1 -p "$PG_LOCAL_PORT" -U "$PG_USER" -d "$PG_DB" -c "SELECT version();" >/dev/null 2>&1; then
+if ! psql -h "$PG_CONN_HOST" -p "$PG_CONN_PORT" -U "$PG_USER" -d "$PG_DB" -c "SELECT version();" >/dev/null 2>&1; then
   die "PostgreSQL 连接失败 — 检查凭据 ${PG_USER}@localhost:${PG_LOCAL_PORT}/${PG_DB}"
 fi
-PG_VERSION=$(psql -h 127.0.0.1 -p "$PG_LOCAL_PORT" -U "$PG_USER" -d "$PG_DB" -tAc "SELECT version();")
+PG_VERSION=$(psql -h "$PG_CONN_HOST" -p "$PG_CONN_PORT" -U "$PG_USER" -d "$PG_DB" -tAc "SELECT version();")
 log "✓ PG 版本：$PG_VERSION"
 
 # 源端表清单 + 行数快照
 log "--- 源端表清单（schema=public）---"
-psql -h 127.0.0.1 -p "$PG_LOCAL_PORT" -U "$PG_USER" -d "$PG_DB" -c "
+psql -h "$PG_CONN_HOST" -p "$PG_CONN_PORT" -U "$PG_USER" -d "$PG_DB" -c "
   SELECT table_name FROM information_schema.tables
    WHERE table_schema='public' ORDER BY table_name;
 " | tee -a "$LOG"
 
 log "--- 源端行数快照 ---"
-psql -h 127.0.0.1 -p "$PG_LOCAL_PORT" -U "$PG_USER" -d "$PG_DB" -tAc "
+psql -h "$PG_CONN_HOST" -p "$PG_CONN_PORT" -U "$PG_USER" -d "$PG_DB" -tAc "
   SELECT 'SELECT '''||table_name||''' AS t, COUNT(*) FROM '||quote_ident(table_name)
     FROM information_schema.tables
    WHERE table_schema='public';
 " | tr '\n' ' ' | sed 's/ SELECT/ UNION ALL SELECT/g' | \
-  xargs -I{} psql -h 127.0.0.1 -p "$PG_LOCAL_PORT" -U "$PG_USER" -d "$PG_DB" -c "{} ORDER BY t;" > "${REPORT_DIR}/pg_rowcount_${TS}.txt" 2>&1 || true
+  xargs -I{} psql -h "$PG_CONN_HOST" -p "$PG_CONN_PORT" -U "$PG_USER" -d "$PG_DB" -c "{} ORDER BY t;" > "${REPORT_DIR}/pg_rowcount_${TS}.txt" 2>&1 || true
 cat "${REPORT_DIR}/pg_rowcount_${TS}.txt" | tee -a "$LOG"
 
 #=============================================================================
@@ -112,8 +134,15 @@ log "✓ 目标库 ${TARGET_DB} 已就绪（已 DROP 重建）"
 #=============================================================================
 log "=== Step 4: pgloader 迁移（可能需要 2-10 分钟） ==="
 cd "$SCRIPT_DIR"
+
+# 根据连接模式动态生成 pgloader 配置（覆盖 migration.load 中的源连接）
+GEN_LOAD="${REPORT_DIR}/migration_runtime_${TS}.load"
+sed -E "s|postgresql://wande:wande_dev_2026@localhost:15433/wande_ai|postgresql://${PG_USER}:${PG_PASS}@${PG_CONN_HOST}:${PG_CONN_PORT}/${PG_DB}|" \
+  migration.load > "$GEN_LOAD"
+log "生成运行时配置：$GEN_LOAD"
+
 set +e
-pgloader --with "prefetch rows = 1000" migration.load 2>&1 | tee -a "$LOG"
+pgloader --with "prefetch rows = 1000" "$GEN_LOAD" 2>&1 | tee -a "$LOG"
 PGLOADER_RC=${PIPESTATUS[0]}
 set -e
 if [ "$PGLOADER_RC" -ne 0 ]; then

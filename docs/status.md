@@ -758,6 +758,13 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | **管线日志统一+Crontab恢复** | g7e停机后管线cron未迁移。修复：21个Python脚本日志路径统一到`~/logs/pipeline/`(消除/var/log权限问题+/tmp重启丢失+~/logs根目录混杂3类散乱路径)；GGZY采集器路径修复(`wande-data-pipeline-glm2`→`wande-play-kimi12`)；`reverify_robust.py` `/opt/agent`旧路径修复；合并4个cron配置到`pipeline_crontab`并注册到m7i crontab(score_decay每日5:00+GGZY每4h+竞品中标每日2:30+cron告警每10min) |
 | **CC提示词治理** | shared-conventions.md v2.5：新增perms `:list`规则+iframe嵌入规则+通讯录(角色/tmux会话/何时联系)；修正6处过时内容(G7e→m7i/PG→MySQL/Flyway路径等)。flyway-validate skill修正6处路径+psql→mysql+ON CONFLICT→INSERT IGNORE。CLAUDE.md增经理专属工作流+两个必读指令。.gitignore启用skills git跟踪。全部同步到20个kimi目录 |
 
+### 已完成（2026-04-14 Skill 体系治理）
+- ✅ **Skill 软链分发收敛**：dev 分支 `.claude/skills/` 残留 14 个失效软链清理（PR#3670 merged）；run-cc.sh 启动时强制软链到权威源 `~/projects/.github/docs/agent-docs/skills/`，源一改全 kimi 生效
+- ✅ **CLAUDE.md 红线 #13**：禁动 `.claude/skills/` 和根 `CLAUDE.md`（运行时资产，untracked 属正常）；提供 `git clean -fd -e` 安全排除写法（commit 558a05b）
+- ✅ **task.md 模板 T12 "轮询 merged" 移除**：语义与 quality-gate 门 2 矛盾（push 时检查全勾，但 T12 按定义在 push 后执行），issue-task-md / fix-ci-failure 两模板同步删行（commit 4a2c82f）
+- ✅ **Skill 改进跟踪文件建立**：`docs/workflow/skill-update.md`，每轮 loop 巡检发现频繁问题 ≥2 次追加一条，累积后批量落地为 skill/红线/CI 改动
+- ✅ **双向污染风险评估**：选方案 1（git 审计兜底）不改 run-cc.sh 软链方式，保留 skill-creator 回写源的功能；`.github` 工作树历史无被污染
+
 ### 已完成（2026-04-12 新开发环境完整交付）
 - ✅ 编程开发环境完全迁移到m7i.8xlarge (172.31.31.227)
 - ✅ 20个kimi目录完整配置(后端+前端+Flyway)

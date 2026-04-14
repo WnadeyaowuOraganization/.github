@@ -18,6 +18,23 @@
 
 ---
 
+### 2026-04-14 23:50 🚨 CC 手动 mvn spring-boot:run 绕过 cc-test-env.sh → profile=test 连错库
+
+- **症状**：kimi2 #3461 后端启动 50min 无进展，报 `Access denied for user 'wande'@'172.17.0.1'`，CC 认为是"MySQL 密码/环境问题"请求跳过截图提 PR
+- **频次**：kimi2 #3461（第 1 次）；此前指派 CC 也出现过"手动 run 后端"踩坑，纳入频繁预警
+- **根因**：
+  1. CC 用 `mvn spring-boot:run -Dspring-boot.run.profiles=test`，test profile application-test.yml 写死 `root/root` + 库名 `wande-ai`（非 kimi 隔离库）
+  2. `cc-test-env.sh start/restart` 才是正确入口：它用 profile=dev + **命令行参数**覆盖 `spring.datasource.dynamic.datasource.master.url/username/password` → 指向 `wande-ai-kimiN` + `wande/wande_dev_2026`
+  3. CC 不知 cc-test-env.sh 已封装所有环境注入逻辑，误判为"环境坏了"
+- **已处置**：经理直查 docker mysql GRANT 验证 wande 用户可用（`wande_dev_2026` 密码正确、wande-ai-kimi2 库 92 表 105 条菜单数据完好），向 kimi2 发精准指令：pkill 手启 mvn → `cc-test-env.sh restart kimi2`
+- **建议改进**：
+  1. skill/backend-coding T_run_backend 增硬点：**启动后端只能用 `bash ~/projects/.github/scripts/cc-test-env.sh restart kimiN`**，禁止直接 `mvn spring-boot:run`
+  2. 红线："若后端报 Access denied / 找不到 wande-ai 库 → 90% 是你用错 profile，不是环境坏"
+  3. cc-test-env.sh 可选增 lint：检测 7102 端口外的 mvn spring-boot:run → 警告
+- **状态**：观察中（再犯落地 skill 硬点）
+
+---
+
 ### 2026-04-14 23:35 🚨 CC 新增 Controller 后 spring-boot:run 仍 404（m2 本地仓库旧 jar）
 
 - **症状**：kimi3 #3520 / kimi4 #3529 同时出现 —— 在 `ruoyi-modules/wande-ai` 新建 Controller 后，`mvn spring-boot:run -pl ruoyi-admin` 启动，所有 `org.ruoyi.wande.controller.*` 全部 404（包括此前已 merged 能工作的 ProvinceStatsController），CC 误以为是 Spring 未扫描到包，反复改 `@ComponentScan` / `mvn -U` 绕弯

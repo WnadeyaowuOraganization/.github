@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投标总览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    /* Kanban columns */
+    .kanban-col { min-width: 0; }
+    .kanban-card { transition: box-shadow 0.15s ease; }
+    .kanban-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    /* Countdown badge */
+    .countdown-red { color: #dc2626; background: #fef2f2; }
+    .countdown-orange { color: #d97706; background: #fffbeb; }
+    .countdown-green { color: #16a34a; background: #f0fdf4; }
+    /* Todo item hover */
+    .todo-item { transition: background 0.15s ease; }
+    .todo-item:hover { background: #f9fafb; }
+    /* Scrollbar for kanban */
+    .kanban-scroll::-webkit-scrollbar { height: 6px; }
+    .kanban-scroll::-webkit-scrollbar-track { background: #f3f4f6; border-radius: 3px; }
+    .kanban-scroll::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- [区域1: 顶部KPI卡片区] -->
+  <section class="mb-6">
+    <div class="grid grid-cols-5 gap-4">
+      <!-- 在投项目数 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4">
+        <div class="text-xs text-gray-400 mb-1">在投项目数</div>
+        <div class="text-3xl font-bold text-blue-500">12</div>
+        <div class="text-xs text-gray-400 mt-1">较上月 <span class="text-blue-500">+2</span></div>
+      </div>
+      <!-- 本月中标 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4">
+        <div class="text-xs text-gray-400 mb-1">本月中标</div>
+        <div class="text-3xl font-bold text-green-500">3</div>
+        <div class="text-xs text-gray-400 mt-1">金额 ¥1,280,000</div>
+      </div>
+      <!-- 本月落标 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4">
+        <div class="text-xs text-gray-400 mb-1">本月落标</div>
+        <div class="text-3xl font-bold text-red-500">2</div>
+        <div class="text-xs text-gray-400 mt-1">主因：报价偏高</div>
+      </div>
+      <!-- 中标率 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4">
+        <div class="text-xs text-gray-400 mb-1">中标率</div>
+        <div class="text-3xl font-bold text-blue-500">60%</div>
+        <div class="mt-2 w-full bg-gray-100 rounded-full h-1.5">
+          <div class="bg-blue-500 h-1.5 rounded-full" style="width: 60%"></div>
+        </div>
+      </div>
+      <!-- 保证金在外 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4">
+        <div class="text-xs text-gray-400 mb-1">保证金在外</div>
+        <div class="text-2xl font-bold text-orange-500">¥580,000</div>
+        <div class="text-xs text-gray-400 mt-1">共 10 笔</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- [区域2: 项目阶段分布看板] -->
+  <section class="mb-6">
+    <div class="bg-white rounded-lg border border-gray-300 p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h2 class="text-sm font-semibold text-gray-700">项目阶段分布看板</h2>
+        <span class="text-xs text-gray-400">共 20 个项目</span>
+      </div>
+      <div class="grid grid-cols-6 gap-3 kanban-scroll">
+
+        <!-- 信息发现(3) -->
+        <div class="kanban-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-medium text-gray-600">信息发现</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">3</span>
+          </div>
+          <div class="bg-gray-50 rounded-md p-2 space-y-2 min-h-[120px]">
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">武汉儿童乐园设备采购</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">武汉市园林局</div>
+              <div class="text-xs text-gray-400 mt-1">发现于 3天前</div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">重庆社区健身设施</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">渝中区住建局</div>
+              <div class="text-xs text-gray-400 mt-1">发现于 1天前</div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">Dubai Mall Play Area</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">Emaar Properties</div>
+              <div class="text-xs text-gray-400 mt-1">发现于 今天</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 机会评估(2) -->
+        <div class="kanban-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-medium text-gray-600">机会评估</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">2</span>
+          </div>
+          <div class="bg-gray-50 rounded-md p-2 space-y-2 min-h-[120px]">
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">苏州太湖公园游乐设施</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">苏州市园林局</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs countdown-orange px-1.5 py-0.5 rounded">评估中</span>
+              </div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">某县文体广场设备</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">XX县文旅局</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs countdown-green px-1.5 py-0.5 rounded">待评审</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 投标准备(4) -->
+        <div class="kanban-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-medium text-gray-600">投标准备</span>
+            <span class="text-xs bg-blue-50 text-blue-500 rounded-full px-1.5 py-0.5 font-medium">4</span>
+          </div>
+          <div class="bg-gray-50 rounded-md p-2 space-y-2 min-h-[120px]">
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">合肥体育公园儿童乐园</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">合肥市体育局</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs countdown-red px-1.5 py-0.5 rounded">距开标 2天</span>
+              </div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">南京鼓楼幼儿园设备</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">鼓楼区教育局</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs countdown-orange px-1.5 py-0.5 rounded">距开标 5天</span>
+              </div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">Playpoint Singapore</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">NParks Singapore</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs countdown-green px-1.5 py-0.5 rounded">距开标 12天</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 已投标(2) -->
+        <div class="kanban-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-medium text-gray-600">已投标</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">2</span>
+          </div>
+          <div class="bg-gray-50 rounded-md p-2 space-y-2 min-h-[120px]">
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">深圳湾公园游乐区</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">深圳市城管局</div>
+              <div class="text-xs text-gray-400 mt-1">投标于 2天前</div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">上海青浦学校设施</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">青浦区教育局</div>
+              <div class="text-xs text-gray-400 mt-1">投标于 5天前</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 等待结果(1) -->
+        <div class="kanban-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-medium text-gray-600">等待结果</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">1</span>
+          </div>
+          <div class="bg-gray-50 rounded-md p-2 space-y-2 min-h-[120px]">
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">广州天河公园设备</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">天河区住建局</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs countdown-orange px-1.5 py-0.5 rounded">预计 3天出结果</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 已结案(8) -->
+        <div class="kanban-col">
+          <div class="flex items-center justify-between mb-2 px-1">
+            <span class="text-xs font-medium text-gray-600">已结案</span>
+            <span class="text-xs bg-gray-100 text-gray-500 rounded-full px-1.5 py-0.5">8</span>
+          </div>
+          <div class="bg-gray-50 rounded-md p-2 space-y-2 min-h-[120px]">
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">杭州钱塘江公园设备</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">杭州城投</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">中标</span>
+              </div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">南京某社区健身路径</div>
+              <div class="text-xs text-gray-400 mt-1 truncate">鼓楼区住建局</div>
+              <div class="flex items-center mt-1">
+                <span class="text-xs text-red-500 bg-red-50 px-1.5 py-0.5 rounded">落标</span>
+              </div>
+            </div>
+            <div class="kanban-card bg-white rounded border border-gray-200 p-2.5">
+              <div class="text-xs font-medium text-gray-700 truncate">+6 更多项目…</div>
+              <div class="text-xs text-gray-400 mt-1">中标5 / 落标1</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- [区域3 + 区域4: 中部两栏布局] -->
+  <section class="mb-6 grid grid-cols-3 gap-4">
+
+    <!-- [区域3: 近期里程碑倒计时] -->
+    <div class="col-span-2 bg-white rounded-lg border border-gray-300 p-5">
+      <h2 class="text-sm font-semibold text-gray-700 mb-3">近期里程碑倒计时</h2>
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="text-left py-2 px-2 text-gray-400 font-medium">项目名</th>
+            <th class="text-left py-2 px-2 text-gray-400 font-medium">事项</th>
+            <th class="text-left py-2 px-2 text-gray-400 font-medium">截止日期</th>
+            <th class="text-left py-2 px-2 text-gray-400 font-medium">倒计时</th>
+            <th class="text-left py-2 px-2 text-gray-400 font-medium">状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 px-2 text-gray-700 font-medium">合肥体育公园儿童乐园</td>
+            <td class="py-2.5 px-2 text-gray-600">投标截止</td>
+            <td class="py-2.5 px-2 text-gray-500">2025-04-16</td>
+            <td class="py-2.5 px-2">
+              <span class="countdown-red text-xs font-medium px-2 py-0.5 rounded-full">剩余 2天</span>
+            </td>
+            <td class="py-2.5 px-2">
+              <span class="inline-flex items-center text-red-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>紧急
+              </span>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 px-2 text-gray-700 font-medium">南京鼓楼幼儿园设备</td>
+            <td class="py-2.5 px-2 text-gray-600">保证金缴纳</td>
+            <td class="py-2.5 px-2 text-gray-500">2025-04-17</td>
+            <td class="py-2.5 px-2">
+              <span class="countdown-red text-xs font-medium px-2 py-0.5 rounded-full">剩余 3天</span>
+            </td>
+            <td class="py-2.5 px-2">
+              <span class="inline-flex items-center text-red-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-500 mr-1"></span>紧急
+              </span>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 px-2 text-gray-700 font-medium">南京鼓楼幼儿园设备</td>
+            <td class="py-2.5 px-2 text-gray-600">投标截止</td>
+            <td class="py-2.5 px-2 text-gray-500">2025-04-19</td>
+            <td class="py-2.5 px-2">
+              <span class="countdown-orange text-xs font-medium px-2 py-0.5 rounded-full">剩余 5天</span>
+            </td>
+            <td class="py-2.5 px-2">
+              <span class="inline-flex items-center text-orange-500">
+                <span class="w-1.5 h-1.5 rounded-full bg-orange-400 mr-1"></span>注意
+              </span>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 px-2 text-gray-700 font-medium">Playpoint Singapore</td>
+            <td class="py-2.5 px-2 text-gray-600">投标截止</td>
+            <td class="py-2.5 px-2 text-gray-500">2025-04-26</td>
+            <td class="py-2.5 px-2">
+              <span class="countdown-green text-xs font-medium px-2 py-0.5 rounded-full">剩余 12天</span>
+            </td>
+            <td class="py-2.5 px-2">
+              <span class="inline-flex items-center text-green-600">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>正常
+              </span>
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2.5 px-2 text-gray-700 font-medium">广州天河公园设备</td>
+            <td class="py-2.5 px-2 text-gray-600">开标日</td>
+            <td class="py-2.5 px-2 text-gray-500">2025-04-28</td>
+            <td class="py-2.5 px-2">
+              <span class="countdown-green text-xs font-medium px-2 py-0.5 rounded-full">剩余 14天</span>
+            </td>
+            <td class="py-2.5 px-2">
+              <span class="inline-flex items-center text-green-600">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-500 mr-1"></span>正常
+              </span>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- [区域4: 待办事项] -->
+    <div class="col-span-1 bg-white rounded-lg border border-gray-300 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold text-gray-700">待办事项</h2>
+        <span class="text-xs bg-red-50 text-red-500 font-medium rounded-full px-2 py-0.5">8 项待处理</span>
+      </div>
+      <div class="space-y-0">
+        <!-- 待审批的投标申请 -->
+        <div class="todo-item flex items-center justify-between py-3 border-b border-gray-100 px-2 rounded">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="flex-shrink-0 w-5 h-5 rounded bg-orange-50 flex items-center justify-center text-xs text-orange-500 font-bold">2</span>
+            <span class="text-xs text-gray-700 truncate">待审批的投标申请</span>
+          </div>
+          <button class="flex-shrink-0 text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-400 rounded px-2 py-1 hover:bg-blue-50 transition-colors">去处理</button>
+        </div>
+        <!-- 待审批的标书申请 -->
+        <div class="todo-item flex items-center justify-between py-3 border-b border-gray-100 px-2 rounded">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="flex-shrink-0 w-5 h-5 rounded bg-orange-50 flex items-center justify-center text-xs text-orange-500 font-bold">1</span>
+            <span class="text-xs text-gray-700 truncate">待审批的标书申请</span>
+          </div>
+          <button class="flex-shrink-0 text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-400 rounded px-2 py-1 hover:bg-blue-50 transition-colors">去处理</button>
+        </div>
+        <!-- 待审批的授权申请 -->
+        <div class="todo-item flex items-center justify-between py-3 border-b border-gray-100 px-2 rounded">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="flex-shrink-0 w-5 h-5 rounded bg-orange-50 flex items-center justify-center text-xs text-orange-500 font-bold">1</span>
+            <span class="text-xs text-gray-700 truncate">待审批的授权申请</span>
+          </div>
+          <button class="flex-shrink-0 text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-400 rounded px-2 py-1 hover:bg-blue-50 transition-colors">去处理</button>
+        </div>
+        <!-- 证书即将到期 -->
+        <div class="todo-item flex items-center justify-between py-3 border-b border-gray-100 px-2 rounded">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="flex-shrink-0 w-5 h-5 rounded bg-red-50 flex items-center justify-center text-xs text-red-500 font-bold">3</span>
+            <span class="text-xs text-gray-700 truncate">证书即将到期</span>
+          </div>
+          <button class="flex-shrink-0 text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-400 rounded px-2 py-1 hover:bg-blue-50 transition-colors">去处理</button>
+        </div>
+        <!-- 检测报告待更新 -->
+        <div class="todo-item flex items-center justify-between py-3 px-2 rounded">
+          <div class="flex items-center gap-2 min-w-0">
+            <span class="flex-shrink-0 w-5 h-5 rounded bg-yellow-50 flex items-center justify-center text-xs text-yellow-600 font-bold">1</span>
+            <span class="text-xs text-gray-700 truncate">检测报告待更新</span>
+          </div>
+          <button class="flex-shrink-0 text-xs text-blue-500 hover:text-blue-700 border border-blue-200 hover:border-blue-400 rounded px-2 py-1 hover:bg-blue-50 transition-colors">去处理</button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- [区域5: 保证金占用概览] -->
+  <section>
+    <div class="bg-white rounded-lg border border-gray-300 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold text-gray-700">保证金占用概览</h2>
+        <span class="text-xs text-gray-400">合计 ¥580,000 · 10笔 · 待退4笔</span>
+      </div>
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="border-b border-gray-200">
+            <th class="text-left py-2 px-3 text-gray-400 font-medium">类型</th>
+            <th class="text-left py-2 px-3 text-gray-400 font-medium">笔数</th>
+            <th class="text-left py-2 px-3 text-gray-400 font-medium">金额</th>
+            <th class="text-left py-2 px-3 text-gray-400 font-medium">待退还</th>
+            <th class="text-left py-2 px-3 text-gray-400 font-medium">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 px-3 text-gray-700 font-medium">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-blue-400"></span>
+                投标保证金
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-gray-600">5 笔</td>
+            <td class="py-2.5 px-3 text-gray-700 font-medium">¥200,000</td>
+            <td class="py-2.5 px-3">
+              <span class="text-orange-500 font-medium">待退 3 笔</span>
+            </td>
+            <td class="py-2.5 px-3">
+              <button class="text-blue-500 hover:text-blue-700 hover:underline">查看明细</button>
+            </td>
+          </tr>
+          <tr class="border-b border-gray-100">
+            <td class="py-2.5 px-3 text-gray-700 font-medium">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-green-400"></span>
+                履约保证金
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-gray-600">3 笔</td>
+            <td class="py-2.5 px-3 text-gray-700 font-medium">¥280,000</td>
+            <td class="py-2.5 px-3">
+              <span class="text-orange-500 font-medium">待退 1 笔</span>
+            </td>
+            <td class="py-2.5 px-3">
+              <button class="text-blue-500 hover:text-blue-700 hover:underline">查看明细</button>
+            </td>
+          </tr>
+          <tr>
+            <td class="py-2.5 px-3 text-gray-700 font-medium">
+              <span class="inline-flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                质保金
+              </span>
+            </td>
+            <td class="py-2.5 px-3 text-gray-600">2 笔</td>
+            <td class="py-2.5 px-3 text-gray-700 font-medium">¥100,000</td>
+            <td class="py-2.5 px-3">
+              <span class="text-gray-400">待退 0 笔</span>
+            </td>
+            <td class="py-2.5 px-3">
+              <button class="text-blue-500 hover:text-blue-700 hover:underline">查看明细</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</body>
+</html>

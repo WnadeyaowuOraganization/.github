@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>资质证书管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+
+    /* 树形导航 */
+    .tree-item { padding: 8px 12px; cursor: pointer; border-radius: 4px; font-size: 13px; color: #555; transition: all 0.15s; }
+    .tree-item:hover { background: #f3f4f6; }
+    .tree-item.active { background: #eff6ff; color: #3b82f6; font-weight: 600; }
+    .tree-child { padding: 5px 12px 5px 28px; font-size: 12px; color: #888; cursor: pointer; border-radius: 4px; }
+    .tree-child:hover { background: #f9fafb; color: #555; }
+
+    /* 表格 */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { background: #f9fafb; color: #666; font-weight: 600; text-align: left; padding: 10px 12px; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+    .data-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; color: #333; }
+    .data-table tr:hover td { background: #fafbfc; }
+
+    /* 状态标签 */
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+    .tag-green { background: #ecfdf5; color: #059669; }
+    .tag-yellow { background: #fefce8; color: #a16207; }
+    .tag-orange { background: #fff7ed; color: #c2410c; }
+    .tag-red { background: #fef2f2; color: #dc2626; }
+
+    /* 统计卡片 */
+    .stat-card { display: flex; flex-direction: column; gap: 2px; }
+    .stat-card .label { font-size: 12px; color: #999; }
+    .stat-card .value { font-size: 22px; font-weight: 700; color: #333; }
+
+    /* 折叠区域 */
+    .collapse-header { cursor: pointer; user-select: none; }
+    .collapse-body { display: none; }
+    .collapse-body.open { display: block; }
+
+    /* 操作按钮 */
+    .btn-primary { background: #3b82f6; color: #fff; padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-outline { background: #fff; color: #3b82f6; border: 1px solid #3b82f6; padding: 5px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .btn-outline:hover { background: #eff6ff; }
+    .btn-danger { background: #fff; color: #dc2626; border: 1px solid #fca5a5; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+    .btn-danger:hover { background: #fef2f2; }
+    .btn-warn { background: #fff; color: #c2410c; border: 1px solid #fdba74; padding: 4px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; }
+    .btn-warn:hover { background: #fff7ed; }
+    .btn-link { color: #3b82f6; font-size: 12px; cursor: pointer; background: none; border: none; text-decoration: underline; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================================ -->
+  <!-- 区域1: 顶部预警统计条 -->
+  <!-- ============================================================ -->
+  <div class="bg-white rounded-lg border border-gray-300 p-4 mb-5 flex items-center justify-between">
+    <div class="flex items-center gap-8">
+      <!-- 证书总数 -->
+      <div class="stat-card">
+        <span class="label">证书总数</span>
+        <span class="value">47</span>
+      </div>
+      <div class="w-px h-10 bg-gray-200"></div>
+      <!-- 90天内到期 -->
+      <div class="stat-card">
+        <span class="label">90天内到期</span>
+        <div class="flex items-center gap-2">
+          <span class="value text-yellow-500">5</span>
+          <span class="tag tag-yellow">🟡 预警</span>
+        </div>
+      </div>
+      <div class="w-px h-10 bg-gray-200"></div>
+      <!-- 30天内到期 -->
+      <div class="stat-card">
+        <span class="label">30天内到期</span>
+        <div class="flex items-center gap-2">
+          <span class="value text-orange-500">2</span>
+          <span class="tag tag-orange">🟠 紧急</span>
+        </div>
+      </div>
+      <div class="w-px h-10 bg-gray-200"></div>
+      <!-- 已过期 -->
+      <div class="stat-card">
+        <span class="label">已过期</span>
+        <div class="flex items-center gap-2">
+          <span class="value text-red-500">1</span>
+          <span class="tag tag-red">🔴 过期</span>
+        </div>
+      </div>
+    </div>
+    <button class="btn-primary" onclick="alert('新增证书弹窗（原型占位）')">+ 新增证书</button>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 区域2 + 区域3: 左侧分类树 + 右侧证书列表 -->
+  <!-- ============================================================ -->
+  <div class="flex gap-5 mb-5">
+
+    <!-- 区域2: 左侧分类树形导航 -->
+    <div class="bg-white rounded-lg border border-gray-300 p-3 flex-shrink-0" style="width: 200px;">
+      <div class="text-xs text-gray-400 font-semibold mb-2 px-2 tracking-wide">证书分类</div>
+      <nav id="treeNav">
+        <div class="tree-item active" data-cat="all" onclick="selectCategory(this, 'all')">
+          📂 全部证书 <span class="text-gray-400 text-xs">(47)</span>
+        </div>
+        <div class="tree-item" data-cat="legal" onclick="selectCategory(this, 'legal')">
+          📄 法律主体资质 <span class="text-gray-400 text-xs">(3)</span>
+        </div>
+        <div class="tree-child hidden" data-parent="legal">营业执照</div>
+        <div class="tree-child hidden" data-parent="legal">税务登记证</div>
+        <div class="tree-child hidden" data-parent="legal">组织机构代码</div>
+
+        <div class="tree-item" data-cat="industry" onclick="selectCategory(this, 'industry')">
+          🏭 行业生产许可 <span class="text-gray-400 text-xs">(4)</span>
+        </div>
+        <div class="tree-child hidden" data-parent="industry">特种设备生产许可证</div>
+        <div class="tree-child hidden" data-parent="industry">安全生产许可证</div>
+        <div class="tree-child hidden" data-parent="industry">压力容器许可证</div>
+        <div class="tree-child hidden" data-parent="industry">制造许可证</div>
+
+        <div class="tree-item" data-cat="quality" onclick="selectCategory(this, 'quality')">
+          ✅ 质量管理体系 <span class="text-gray-400 text-xs">(5)</span>
+        </div>
+        <div class="tree-child hidden" data-parent="quality">ISO 9001</div>
+        <div class="tree-child hidden" data-parent="quality">ISO 14001</div>
+        <div class="tree-child hidden" data-parent="quality">ISO 45001</div>
+        <div class="tree-child hidden" data-parent="quality">ISO 50001</div>
+        <div class="tree-child hidden" data-parent="quality">OHSAS 18001</div>
+
+        <div class="tree-item" data-cat="product" onclick="selectCategory(this, 'product')">
+          🏷️ 产品认证 <span class="text-gray-400 text-xs">(12)</span>
+        </div>
+        <div class="tree-child hidden" data-parent="product">CE认证</div>
+        <div class="tree-child hidden" data-parent="product">TÜV认证</div>
+        <div class="tree-child hidden" data-parent="product">IPEMA认证</div>
+        <div class="tree-child hidden" data-parent="product">CCC认证</div>
+
+        <div class="tree-item" data-cat="honor" onclick="selectCategory(this, 'honor')">
+          🏆 荣誉资质 <span class="text-gray-400 text-xs">(15)</span>
+        </div>
+        <div class="tree-child hidden" data-parent="honor">高新技术企业</div>
+        <div class="tree-child hidden" data-parent="honor">专精特新企业</div>
+        <div class="tree-child hidden" data-parent="honor">AAA信用评级</div>
+
+        <div class="tree-item" data-cat="personnel" onclick="selectCategory(this, 'personnel')">
+          👤 人员资质 <span class="text-gray-400 text-xs">(8)</span>
+        </div>
+        <div class="tree-child hidden" data-parent="personnel">焊工证</div>
+        <div class="tree-child hidden" data-parent="personnel">安全管理员证</div>
+        <div class="tree-child hidden" data-parent="personnel">电工操作证</div>
+      </nav>
+    </div>
+
+    <!-- 区域3: 右侧证书列表 -->
+    <div class="flex-1 bg-white rounded-lg border border-gray-300">
+      <!-- 筛选栏 -->
+      <div class="p-4 border-b border-gray-200 flex items-center gap-3 flex-wrap">
+        <input type="text" placeholder="搜索证书名称/编号..." class="border border-gray-300 rounded px-3 py-1.5 text-sm w-52 focus:outline-none focus:border-blue-400">
+        <select class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600 focus:outline-none focus:border-blue-400">
+          <option value="">预警状态</option>
+          <option>✅ 正常</option>
+          <option>🟡 90天内到期</option>
+          <option>🟠 30天内到期</option>
+          <option>🔴 已过期</option>
+        </select>
+        <select class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600 focus:outline-none focus:border-blue-400">
+          <option value="">适用市场</option>
+          <option>国内</option>
+          <option>欧洲</option>
+          <option>北美</option>
+          <option>全球</option>
+        </select>
+        <button class="btn-primary" style="padding: 6px 20px;">搜索</button>
+      </div>
+
+      <!-- 证书表格 -->
+      <div class="overflow-x-auto">
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>证书名称</th>
+              <th>证书编号</th>
+              <th>发证机构</th>
+              <th>有效期至</th>
+              <th>预警状态</th>
+              <th>适用产品线</th>
+              <th>操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- 行1: 营业执照 -->
+            <tr>
+              <td class="font-medium">营业执照</td>
+              <td class="text-gray-500 text-xs font-mono">91320100MA1X...</td>
+              <td>南京市市监局</td>
+              <td>长期有效</td>
+              <td><span class="tag tag-green">✅ 正常</span></td>
+              <td>全部</td>
+              <td><button class="btn-link" onclick="alert('查看证书详情（原型占位）')">查看</button></td>
+            </tr>
+            <!-- 行2: 特种设备生产许可证 -->
+            <tr>
+              <td class="font-medium">特种设备生产许可证(A级)</td>
+              <td class="text-gray-500 text-xs font-mono">TS3210082-2025</td>
+              <td>市场监管总局</td>
+              <td>2027-06-15</td>
+              <td><span class="tag tag-green">✅ 正常</span></td>
+              <td>大型游乐设施</td>
+              <td><button class="btn-link" onclick="alert('查看证书详情（原型占位）')">查看</button></td>
+            </tr>
+            <!-- 行3: ISO 9001 -->
+            <tr>
+              <td class="font-medium">ISO 9001:2015</td>
+              <td class="text-gray-500 text-xs font-mono">CN-QMS-2023-4567</td>
+              <td>SGS</td>
+              <td>2026-08-20</td>
+              <td><span class="tag tag-yellow">🟡 90天内</span></td>
+              <td>全部</td>
+              <td><button class="btn-outline" onclick="alert('启动续期流程（原型占位）')">续期</button></td>
+            </tr>
+            <!-- 行4: CE认证 -->
+            <tr>
+              <td class="font-medium">CE认证 (EN 1176)</td>
+              <td class="text-gray-500 text-xs font-mono">CE-1176-WD-2024</td>
+              <td>TÜV Rheinland</td>
+              <td>2026-06-01</td>
+              <td><span class="tag tag-orange">🟠 30天内</span></td>
+              <td>出口欧洲</td>
+              <td><button class="btn-warn" onclick="alert('紧急续期流程（原型占位）')">🔔 紧急续期</button></td>
+            </tr>
+            <!-- 行5: IPEMA认证 -->
+            <tr>
+              <td class="font-medium">IPEMA认证</td>
+              <td class="text-gray-500 text-xs font-mono">IP-ASTM-WD-2024</td>
+              <td>IPEMA / TÜV SÜD</td>
+              <td>2026-05-10</td>
+              <td><span class="tag tag-orange">🟠 30天内</span></td>
+              <td>出口北美</td>
+              <td><button class="btn-warn" onclick="alert('紧急续期流程（原型占位）')">🔔 紧急续期</button></td>
+            </tr>
+            <!-- 行6: 高新技术企业 -->
+            <tr>
+              <td class="font-medium">国家高新技术企业</td>
+              <td class="text-gray-500 text-xs font-mono">GR202332010...</td>
+              <td>科技厅</td>
+              <td>2027-12-31</td>
+              <td><span class="tag tag-green">✅ 正常</span></td>
+              <td>加分项</td>
+              <td><button class="btn-link" onclick="alert('查看证书详情（原型占位）')">查看</button></td>
+            </tr>
+            <!-- 行7: 焊工证 -->
+            <tr class="bg-red-50/40">
+              <td class="font-medium text-red-700">焊工证 — 张师傅</td>
+              <td class="text-gray-500 text-xs font-mono">FW-TS-2022-089</td>
+              <td>特检院</td>
+              <td class="text-red-600 font-medium">2026-04-30</td>
+              <td><span class="tag tag-red">🔴 已过期</span></td>
+              <td>—</td>
+              <td><button class="btn-danger" onclick="alert('紧急处理流程（原型占位）')">⚠️ 紧急处理</button></td>
+            </tr>
+            <!-- 行8: ISO 14001 -->
+            <tr>
+              <td class="font-medium">ISO 14001</td>
+              <td class="text-gray-500 text-xs font-mono">CN-EMS-2024-1122</td>
+              <td>BSI</td>
+              <td>2026-11-15</td>
+              <td><span class="tag tag-green">✅ 正常</span></td>
+              <td>出口优先</td>
+              <td><button class="btn-link" onclick="alert('查看证书详情（原型占位）')">查看</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页 -->
+      <div class="p-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+        <span>共 47 条证书，当前显示第 1-8 条</span>
+        <div class="flex items-center gap-1">
+          <span class="px-2 py-1 rounded bg-blue-500 text-white">1</span>
+          <span class="px-2 py-1 rounded hover:bg-gray-100 cursor-pointer">2</span>
+          <span class="px-2 py-1 rounded hover:bg-gray-100 cursor-pointer">3</span>
+          <span class="px-2 py-1 rounded hover:bg-gray-100 cursor-pointer">...</span>
+          <span class="px-2 py-1 rounded hover:bg-gray-100 cursor-pointer">6</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 区域4: 底部 — 资质匹配引擎（折叠区域） -->
+  <!-- ============================================================ -->
+  <div class="bg-white rounded-lg border border-gray-300">
+    <!-- 折叠头部 -->
+    <div class="collapse-header p-4 flex items-center justify-between" onclick="toggleCollapse()">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🔍</span>
+        <span class="font-semibold text-sm text-gray-700">资质匹配引擎</span>
+        <span class="text-xs text-gray-400">粘贴招标文件资质要求，智能匹配现有证书</span>
+      </div>
+      <svg id="collapseArrow" class="w-4 h-4 text-gray-400 transition-transform" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path d="M19 9l-7 7-7-7"/>
+      </svg>
+    </div>
+
+    <!-- 折叠内容 -->
+    <div id="collapseBody" class="collapse-body border-t border-gray-200">
+      <!-- 输入区 -->
+      <div class="p-4 flex gap-3 items-start">
+        <textarea class="flex-1 border border-gray-300 rounded-lg p-3 text-sm focus:outline-none focus:border-blue-400 resize-none" rows="3" placeholder="粘贴招标文件中的资质要求关键词，例如：&#10;1. 具备ISO9001质量管理体系认证&#10;2. 具有特种设备生产许可证&#10;3. 提供近3年类似项目业绩&#10;4. 提供产品安全检测报告">1. 具备ISO9001质量管理体系认证
+2. 具有特种设备生产许可证
+3. 提供近3年类似项目业绩
+4. 提供产品安全检测报告</textarea>
+        <button class="btn-primary flex items-center gap-1 whitespace-nowrap" style="padding: 10px 20px; margin-top: 4px;" onclick="showMatchResult()">
+          <span>⚡</span> 智能匹配
+        </button>
+      </div>
+
+      <!-- 匹配结果 -->
+      <div id="matchResult" class="px-4 pb-4">
+        <div class="text-xs text-gray-400 mb-2 flex items-center gap-2">
+          匹配结果
+          <span class="bg-green-50 text-green-600 px-2 py-0.5 rounded-full text-xs">匹配率 50%（2/4）</span>
+        </div>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th style="width: 30%">资质要求</th>
+              <th style="width: 35%">匹配证书</th>
+              <th style="width: 35%">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-sm">ISO9001质量管理体系认证</td>
+              <td class="text-sm font-medium">ISO 9001:2015 <span class="text-xs text-gray-400">(CN-QMS-2023-4567)</span></td>
+              <td>
+                <span class="tag tag-green">✅ 已匹配</span>
+                <span class="tag tag-yellow ml-1">90天内到期 ⚠️</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-sm">特种设备生产许可证</td>
+              <td class="text-sm font-medium">特种设备生产许可证A级 <span class="text-xs text-gray-400">(TS3210082-2025)</span></td>
+              <td>
+                <span class="tag tag-green">✅ 已匹配</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-sm">近3年类似项目业绩</td>
+              <td class="text-sm text-gray-400">—</td>
+              <td>
+                <span class="tag tag-red">❌ 未匹配</span>
+                <span class="text-xs text-gray-500 ml-2">需手动补充</span>
+              </td>
+            </tr>
+            <tr>
+              <td class="text-sm">产品安全检测报告</td>
+              <td class="text-sm text-gray-400">—</td>
+              <td>
+                <button class="btn-link text-xs" onclick="alert('跳转检测报告管理Tab（原型占位）')">🔗 跳转检测报告管理</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // 树形导航选择
+    function selectCategory(el, cat) {
+      // 取消所有高亮
+      document.querySelectorAll('.tree-item').forEach(i => i.classList.remove('active'));
+      // 高亮当前
+      el.classList.add('active');
+
+      // 收起所有子项
+      document.querySelectorAll('.tree-child').forEach(c => c.classList.add('hidden'));
+
+      // 如果非"全部"，展开当前分类的子项
+      if (cat !== 'all') {
+        document.querySelectorAll(`.tree-child[data-parent="${cat}"]`).forEach(c => c.classList.remove('hidden'));
+      }
+    }
+
+    // 折叠区域切换
+    function toggleCollapse() {
+      const body = document.getElementById('collapseBody');
+      const arrow = document.getElementById('collapseArrow');
+      body.classList.toggle('open');
+      arrow.style.transform = body.classList.contains('open') ? 'rotate(180deg)' : 'rotate(0deg)';
+    }
+
+    // 模拟匹配结果显示
+    function showMatchResult() {
+      document.getElementById('matchResult').style.display = 'block';
+    }
+
+    // 默认展开折叠区
+    document.getElementById('collapseBody').classList.add('open');
+    document.getElementById('collapseArrow').style.transform = 'rotate(180deg)';
+  </script>
+</body>
+</html>

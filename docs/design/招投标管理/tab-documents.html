@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>投标文件编制工作台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+
+    /* 数据表格 */
+    .data-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .data-table th { background: #f9fafb; color: #666; font-weight: 600; text-align: left; padding: 10px 12px; border-bottom: 1px solid #e5e7eb; white-space: nowrap; }
+    .data-table td { padding: 10px 12px; border-bottom: 1px solid #f3f4f6; color: #333; }
+    .data-table tr:hover td { background: #fafbfc; }
+
+    /* 状态标签 */
+    .tag { display: inline-flex; align-items: center; gap: 4px; padding: 2px 10px; border-radius: 999px; font-size: 12px; font-weight: 500; }
+    .tag-green { background: #ecfdf5; color: #059669; }
+    .tag-yellow { background: #fefce8; color: #a16207; }
+    .tag-red { background: #fef2f2; color: #dc2626; }
+    .tag-blue { background: #eff6ff; color: #3b82f6; }
+
+    /* 按钮 */
+    .btn-primary { background: #3b82f6; color: #fff; padding: 6px 16px; border-radius: 6px; font-size: 13px; font-weight: 500; border: none; cursor: pointer; transition: background 0.15s; }
+    .btn-primary:hover { background: #2563eb; }
+    .btn-outline { background: #fff; color: #3b82f6; border: 1px solid #3b82f6; padding: 5px 14px; border-radius: 6px; font-size: 13px; font-weight: 500; cursor: pointer; transition: all 0.15s; }
+    .btn-outline:hover { background: #eff6ff; }
+    .btn-sm { padding: 4px 10px; font-size: 12px; border-radius: 4px; }
+    .btn-link { color: #3b82f6; font-size: 12px; cursor: pointer; background: none; border: none; text-decoration: underline; }
+
+    /* 进度条动画 */
+    .progress-bar { transition: width 0.5s ease; }
+
+    /* 模板子Tab */
+    .sub-tab { padding: 6px 16px; cursor: pointer; font-size: 13px; color: #888; border-bottom: 2px solid transparent; transition: all 0.15s; }
+    .sub-tab:hover { color: #333; }
+    .sub-tab.active { color: #3b82f6; border-bottom-color: #3b82f6; font-weight: 600; }
+
+    /* 模板列表项 */
+    .tpl-item { transition: background 0.12s ease; }
+    .tpl-item:hover { background: #f9fafb; }
+
+    /* 上传区虚线 */
+    .upload-zone { border: 2px dashed #d1d5db; border-radius: 8px; padding: 28px 16px; text-align: center; color: #9ca3af; cursor: pointer; transition: all 0.15s; }
+    .upload-zone:hover { border-color: #3b82f6; background: #f8faff; color: #3b82f6; }
+
+    /* 资质匹配列表 */
+    .qual-item { padding: 6px 0; border-bottom: 1px solid #f3f4f6; font-size: 13px; display: flex; align-items: flex-start; gap: 8px; }
+    .qual-item:last-child { border-bottom: none; }
+
+    /* 卡片悬浮 */
+    .bid-card { transition: box-shadow 0.15s ease; }
+    .bid-card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+
+    /* 风险色条 */
+    .risk-bar { display: flex; gap: 0; border-radius: 6px; overflow: hidden; height: 8px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================================ -->
+  <!-- 区域1: 当前编制中的标书（顶部卡片区） -->
+  <!-- ============================================================ -->
+  <section class="mb-6">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-semibold text-gray-700">当前编制中的标书</h2>
+      <button class="btn-primary btn-sm flex items-center gap-1">
+        <span>+</span> 新建标书
+      </button>
+    </div>
+    <div class="grid grid-cols-3 gap-4">
+
+      <!-- 卡片1: 合肥体育公园 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4 bid-card">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-semibold text-gray-800">合肥体育公园</span>
+          <span class="tag tag-yellow">T-15天</span>
+        </div>
+        <!-- 进度条 -->
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs text-gray-400 mb-1">
+            <span>总进度</span>
+            <span class="font-medium text-gray-600">60%</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-blue-500 h-2 rounded-full progress-bar" style="width: 60%"></div>
+          </div>
+        </div>
+        <!-- 分工 -->
+        <div class="space-y-1.5 mb-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">技术标 — 张三</span>
+            <div class="flex items-center gap-2">
+              <div class="w-16 bg-gray-100 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width:80%"></div></div>
+              <span class="text-gray-400 w-8 text-right">80%</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">商务标 — 王五</span>
+            <div class="flex items-center gap-2">
+              <div class="w-16 bg-gray-100 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width:50%"></div></div>
+              <span class="text-gray-400 w-8 text-right">50%</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">资格标 — 李四</span>
+            <div class="flex items-center gap-2">
+              <div class="w-16 bg-gray-100 rounded-full h-1.5"><div class="bg-green-400 h-1.5 rounded-full" style="width:90%"></div></div>
+              <span class="text-gray-400 w-8 text-right">90%</span>
+            </div>
+          </div>
+        </div>
+        <!-- 下一节点 -->
+        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span class="text-xs text-gray-400">下一节点</span>
+          <span class="text-xs font-medium text-gray-600">内审（T-12天）</span>
+        </div>
+      </div>
+
+      <!-- 卡片2: 杭州钱塘江公园 -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4 bid-card">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-semibold text-gray-800">杭州钱塘江公园</span>
+          <span class="tag tag-red">T-5天</span>
+        </div>
+        <!-- 进度条 -->
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs text-gray-400 mb-1">
+            <span>总进度</span>
+            <span class="font-medium text-gray-600">90%</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-blue-500 h-2 rounded-full progress-bar" style="width: 90%"></div>
+          </div>
+        </div>
+        <!-- 分工 -->
+        <div class="space-y-1.5 mb-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">技术标</span>
+            <span class="tag tag-green text-xs" style="padding:1px 8px; font-size:11px;">完成 ✅</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">商务标</span>
+            <span class="tag tag-green text-xs" style="padding:1px 8px; font-size:11px;">完成 ✅</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">资格标 — 赵六</span>
+            <div class="flex items-center gap-2">
+              <div class="w-16 bg-gray-100 rounded-full h-1.5"><div class="bg-green-400 h-1.5 rounded-full" style="width:85%"></div></div>
+              <span class="text-gray-400 w-8 text-right">85%</span>
+            </div>
+          </div>
+        </div>
+        <!-- 下一节点 -->
+        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span class="text-xs text-gray-400">下一节点</span>
+          <span class="text-xs font-medium text-red-500">终审→打印（T-3天）</span>
+        </div>
+      </div>
+
+      <!-- 卡片3: Playpoint Singapore -->
+      <div class="bg-white rounded-lg border border-gray-300 p-4 bid-card">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-sm font-semibold text-gray-800">Playpoint Singapore <span class="text-xs font-normal text-gray-400">EN</span></span>
+          <span class="tag tag-yellow">T-8天</span>
+        </div>
+        <!-- 进度条 -->
+        <div class="mb-3">
+          <div class="flex items-center justify-between text-xs text-gray-400 mb-1">
+            <span>总进度</span>
+            <span class="font-medium text-gray-600">80%</span>
+          </div>
+          <div class="w-full bg-gray-100 rounded-full h-2">
+            <div class="bg-blue-500 h-2 rounded-full progress-bar" style="width: 80%"></div>
+          </div>
+        </div>
+        <!-- 分工 -->
+        <div class="space-y-1.5 mb-3">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">Technical</span>
+            <span class="tag tag-green text-xs" style="padding:1px 8px; font-size:11px;">完成 ✅</span>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">Commercial — 张三</span>
+            <div class="flex items-center gap-2">
+              <div class="w-16 bg-gray-100 rounded-full h-1.5"><div class="bg-blue-400 h-1.5 rounded-full" style="width:70%"></div></div>
+              <span class="text-gray-400 w-8 text-right">70%</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-500">Qualification</span>
+            <span class="tag tag-green text-xs" style="padding:1px 8px; font-size:11px;">完成 ✅</span>
+          </div>
+        </div>
+        <!-- 下一节点 -->
+        <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+          <span class="text-xs text-gray-400">下一节点</span>
+          <span class="text-xs font-medium text-gray-600">翻译审核（T-6天）</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 中间区域: 左右分栏（AI解析 + 模板库） -->
+  <!-- ============================================================ -->
+  <section class="mb-6 grid grid-cols-5 gap-4" style="grid-template-columns: 3fr 2fr;">
+
+    <!-- ============================================================ -->
+    <!-- 区域2: AI招标文件解析（左侧面板） -->
+    <!-- ============================================================ -->
+    <div class="bg-white rounded-lg border border-gray-300 p-5">
+      <h2 class="text-sm font-semibold text-gray-700 mb-4 flex items-center gap-2">
+        <span class="text-base">🤖</span> AI招标文件解析
+      </h2>
+
+      <!-- 上传区 -->
+      <div class="upload-zone mb-4">
+        <div class="text-2xl mb-1">📄</div>
+        <div class="text-sm font-medium">上传招标文件（PDF / Word）</div>
+        <div class="text-xs mt-1">点击或拖拽上传，支持批量解析</div>
+      </div>
+
+      <!-- 解析结果 — 已解析状态示例 -->
+      <div class="border border-gray-200 rounded-lg p-4">
+        <div class="flex items-center justify-between mb-3">
+          <span class="text-xs font-semibold text-gray-500 tracking-wide uppercase">解析结果</span>
+          <span class="tag tag-green" style="font-size:11px;">已解析</span>
+        </div>
+
+        <!-- 基本信息网格 -->
+        <div class="grid grid-cols-2 gap-x-6 gap-y-2 mb-4 text-xs">
+          <div>
+            <span class="text-gray-400">项目名称</span>
+            <p class="text-gray-700 font-medium mt-0.5">合肥体育公园儿童游乐设施采购</p>
+          </div>
+          <div>
+            <span class="text-gray-400">采购方式</span>
+            <p class="text-gray-700 font-medium mt-0.5">公开招标</p>
+          </div>
+          <div>
+            <span class="text-gray-400">预算金额</span>
+            <p class="text-gray-700 font-medium mt-0.5">¥680万</p>
+          </div>
+          <div>
+            <span class="text-gray-400">提交截止</span>
+            <p class="text-gray-700 font-medium mt-0.5">2026-05-15 14:30</p>
+          </div>
+          <div class="col-span-2">
+            <span class="text-gray-400">评分规则</span>
+            <p class="text-gray-700 font-medium mt-0.5">技术 40% ＋ 商务 30% ＋ 价格 30%</p>
+          </div>
+        </div>
+
+        <!-- 资质要求清单 -->
+        <div class="border-t border-gray-100 pt-3">
+          <div class="text-xs font-semibold text-gray-500 mb-2">资质要求清单（自动提取）</div>
+          <div class="qual-item">
+            <span class="text-green-500 flex-shrink-0">✅</span>
+            <div>
+              <span class="text-gray-700">营业执照</span>
+              <span class="text-gray-400 ml-2">→ 已匹配</span>
+            </div>
+          </div>
+          <div class="qual-item">
+            <span class="text-green-500 flex-shrink-0">✅</span>
+            <div>
+              <span class="text-gray-700">特种设备生产许可证</span>
+              <span class="text-gray-400 ml-2">→ 已匹配</span>
+            </div>
+          </div>
+          <div class="qual-item">
+            <span class="text-green-500 flex-shrink-0">✅</span>
+            <div>
+              <span class="text-gray-700">ISO 9001</span>
+              <span class="text-gray-400 ml-2">→ 已匹配</span>
+              <span class="tag tag-yellow ml-2" style="font-size:11px; padding:1px 6px;">⚠️ 90天内到期</span>
+            </div>
+          </div>
+          <div class="qual-item">
+            <span class="text-green-500 flex-shrink-0">✅</span>
+            <div>
+              <span class="text-gray-700">近3年类似业绩≥3份</span>
+              <span class="text-gray-400 ml-2">→ 已匹配（4份）</span>
+            </div>
+          </div>
+          <div class="qual-item">
+            <span class="text-red-500 flex-shrink-0">❌</span>
+            <div>
+              <span class="text-gray-700">安全管理人员≥2人证书</span>
+              <span class="text-red-400 ml-2">→ 缺1人</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="mt-4 pt-3 border-t border-gray-100">
+          <button class="btn-primary w-full text-center">自动生成投标工作台</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============================================================ -->
+    <!-- 区域3: 标书模板库（右侧面板） -->
+    <!-- ============================================================ -->
+    <div class="bg-white rounded-lg border border-gray-300 p-5">
+      <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+        <span class="text-base">📚</span> 模板库
+      </h2>
+
+      <!-- 分类Tab -->
+      <div class="flex border-b border-gray-200 mb-3">
+        <div class="sub-tab active">技术方案</div>
+        <div class="sub-tab">商务报价</div>
+        <div class="sub-tab">资格文件</div>
+        <div class="sub-tab">售后服务</div>
+      </div>
+
+      <!-- 模板列表 -->
+      <div class="space-y-0">
+        <!-- 模板项1 -->
+        <div class="tpl-item flex items-center justify-between py-3 px-2 border-b border-gray-50">
+          <div>
+            <div class="text-sm text-gray-700 font-medium">公司介绍_标准版_v3.2</div>
+            <div class="text-xs text-gray-400 mt-0.5">最近使用：3天前</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-primary btn-sm">使用模板</button>
+            <button class="btn-outline btn-sm">编辑</button>
+          </div>
+        </div>
+        <!-- 模板项2 -->
+        <div class="tpl-item flex items-center justify-between py-3 px-2 border-b border-gray-50">
+          <div>
+            <div class="text-sm text-gray-700 font-medium">技术方案_政府采购_模板</div>
+            <div class="text-xs text-gray-400 mt-0.5">最近使用：7天前</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-primary btn-sm">使用模板</button>
+            <button class="btn-outline btn-sm">编辑</button>
+          </div>
+        </div>
+        <!-- 模板项3 -->
+        <div class="tpl-item flex items-center justify-between py-3 px-2 border-b border-gray-50">
+          <div>
+            <div class="text-sm text-gray-700 font-medium">售后服务承诺_国内版</div>
+            <div class="text-xs text-gray-400 mt-0.5">最近使用：15天前</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-primary btn-sm">使用模板</button>
+            <button class="btn-outline btn-sm">编辑</button>
+          </div>
+        </div>
+        <!-- 模板项4 -->
+        <div class="tpl-item flex items-center justify-between py-3 px-2 border-b border-gray-50">
+          <div>
+            <div class="text-sm text-gray-700 font-medium">技术方案_EN版_出口</div>
+            <div class="text-xs text-gray-400 mt-0.5">最近使用：30天前</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-primary btn-sm">使用模板</button>
+            <button class="btn-outline btn-sm">编辑</button>
+          </div>
+        </div>
+        <!-- 模板项5 -->
+        <div class="tpl-item flex items-center justify-between py-3 px-2">
+          <div>
+            <div class="text-sm text-gray-700 font-medium flex items-center gap-2">
+              安全方案_EN1176合规版
+              <span class="tag tag-blue" style="font-size:11px; padding:1px 6px;">新增</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">刚刚添加</div>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="btn-primary btn-sm">使用模板</button>
+            <button class="btn-outline btn-sm">编辑</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 区域4: 废标风险扫描（底部警告区） -->
+  <!-- ============================================================ -->
+  <section class="mb-6">
+    <div class="bg-white rounded-lg border border-gray-300 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          <span class="text-base">⚠️</span> 废标风险扫描 — 合肥体育公园
+        </h2>
+        <button class="btn-outline btn-sm">重新扫描</button>
+      </div>
+
+      <!-- 风险等级概览条 -->
+      <div class="flex items-center gap-4 mb-4">
+        <div class="flex items-center gap-6 text-xs">
+          <span class="flex items-center gap-1.5">
+            <span class="inline-block w-3 h-3 rounded-full bg-green-400"></span>
+            <span class="text-gray-500">低风险</span>
+            <span class="font-semibold text-gray-700">1项</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="inline-block w-3 h-3 rounded-full bg-yellow-400"></span>
+            <span class="text-gray-500">中风险</span>
+            <span class="font-semibold text-gray-700">2项</span>
+          </span>
+          <span class="flex items-center gap-1.5">
+            <span class="inline-block w-3 h-3 rounded-full bg-red-400"></span>
+            <span class="text-gray-500">高风险</span>
+            <span class="font-semibold text-gray-700">0项</span>
+          </span>
+        </div>
+        <!-- 色条 -->
+        <div class="flex-1">
+          <div class="risk-bar">
+            <div class="bg-yellow-400 h-full" style="width:66%"></div>
+            <div class="bg-green-400 h-full" style="width:34%"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 风险项表格 -->
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:28%">风险项</th>
+            <th style="width:10%">严重度</th>
+            <th>说明</th>
+            <th style="width:14%">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="font-medium">ISO 9001证书90天内到期</td>
+            <td><span class="tag tag-yellow" style="font-size:11px; padding:1px 8px;">🟡 中</span></td>
+            <td class="text-gray-500">开标日（5/15）前需确认续期进度</td>
+            <td><button class="btn-link">跳转续期</button></td>
+          </tr>
+          <tr>
+            <td class="font-medium">安全管理人员证书缺1人</td>
+            <td><span class="tag tag-yellow" style="font-size:11px; padding:1px 8px;">🟡 中</span></td>
+            <td class="text-gray-500">需补充张师傅焊工证（已过期）</td>
+            <td><button class="btn-link">跳转证书管理</button></td>
+          </tr>
+          <tr>
+            <td class="font-medium">社保证明时效</td>
+            <td><span class="tag tag-green" style="font-size:11px; padding:1px 8px;">🟢 低</span></td>
+            <td class="text-gray-500">当前证明有效，开标前需更新至最新月份</td>
+            <td><span class="text-xs text-gray-400">提醒已设置 ✓</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ============================================================ -->
+  <!-- 区域5: 技术参数偏离表 -->
+  <!-- ============================================================ -->
+  <section class="mb-6">
+    <div class="bg-white rounded-lg border border-gray-300 p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          <span class="text-base">📊</span> 技术参数偏离表 — 合肥体育公园
+        </h2>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-400">正偏离 4 ｜ 无偏离 1 ｜ 负偏离 1</span>
+          <button class="btn-outline btn-sm">导出</button>
+        </div>
+      </div>
+
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th style="width:6%">序号</th>
+            <th style="width:22%">招标要求</th>
+            <th style="width:16%">万德参数</th>
+            <th style="width:14%">偏离类型</th>
+            <th>说明</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="text-gray-400">1</td>
+            <td>滑梯高度≥2.5m</td>
+            <td class="font-medium">2.8m</td>
+            <td><span class="tag tag-green" style="font-size:11px; padding:1px 8px;">✅ 正偏离</span></td>
+            <td class="text-gray-500">安全裕度12%</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400">2</td>
+            <td>不锈钢厚度≥2mm</td>
+            <td class="font-medium">2.5mm</td>
+            <td><span class="tag tag-green" style="font-size:11px; padding:1px 8px;">✅ 正偏离</span></td>
+            <td class="text-gray-500">耐久性提升25%</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400">3</td>
+            <td>质保期≥2年</td>
+            <td class="font-medium">3年</td>
+            <td><span class="tag tag-green" style="font-size:11px; padding:1px 8px;">✅ 正偏离</span></td>
+            <td class="text-gray-500">增值服务</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400">4</td>
+            <td>安装工期≤45天</td>
+            <td class="font-medium">40天</td>
+            <td><span class="tag tag-green" style="font-size:11px; padding:1px 8px;">✅ 正偏离</span></td>
+            <td class="text-gray-500">快速交付</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400">5</td>
+            <td>EPDM地垫厚度≥25mm</td>
+            <td class="font-medium">25mm</td>
+            <td><span class="text-xs text-gray-400 font-medium">⚪ 无偏离</span></td>
+            <td class="text-gray-500">完全匹配</td>
+          </tr>
+          <tr>
+            <td class="text-gray-400">6</td>
+            <td>立柱壁厚≥3mm</td>
+            <td class="font-medium text-red-500">2.75mm</td>
+            <td><span class="tag tag-red" style="font-size:11px; padding:1px 8px;">❌ 负偏离</span></td>
+            <td class="text-gray-500">需技术说明（强度等效）</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</body>
+</html>

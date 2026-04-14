@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>检测报告管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    /* Wireframe gray palette — only blue-500 for action buttons */
+    .btn-action { background: #3b82f6; color: #fff; }
+    .btn-action:hover { background: #2563eb; }
+    .btn-outline { border: 1px solid #d1d5db; color: #6b7280; background: #fff; }
+    .btn-outline:hover { background: #f3f4f6; }
+    .stat-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; padding: 16px 20px; }
+    .stat-value { font-size: 28px; font-weight: 700; color: #111827; line-height: 1.2; }
+    .stat-label { font-size: 13px; color: #9ca3af; margin-top: 2px; }
+    .stat-icon { width: 40px; height: 40px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    table th { background: #f9fafb; font-weight: 600; font-size: 13px; color: #6b7280; }
+    table td { font-size: 13px; color: #374151; }
+    table th, table td { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; text-align: left; }
+    table tr:hover { background: #f9fafb; }
+    .badge { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 9999px; font-size: 12px; font-weight: 500; }
+    .badge-green { background: #f0fdf4; color: #16a34a; border: 1px solid #bbf7d0; }
+    .badge-yellow { background: #fffbeb; color: #d97706; border: 1px solid #fde68a; }
+    .badge-orange { background: #fff7ed; color: #ea580c; border: 1px solid #fed7aa; }
+    .badge-red { background: #fef2f2; color: #dc2626; border: 1px solid #fecaca; }
+    .badge-gray { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+    .section-title { font-size: 15px; font-weight: 700; color: #111827; margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+    .panel { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; }
+    select, input[type="text"] {
+      border: 1px solid #d1d5db; border-radius: 6px; padding: 6px 12px; font-size: 13px; color: #374151; background: #fff; outline: none;
+    }
+    select:focus, input[type="text"]:focus { border-color: #3b82f6; box-shadow: 0 0 0 2px rgba(59,130,246,0.15); }
+    .coverage-cell-green { background: #f0fdf4; color: #15803d; }
+    .coverage-cell-yellow { background: #fefce8; color: #a16207; }
+    .coverage-cell-red { background: #fef2f2; color: #b91c1c; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ============================================ -->
+  <!-- 区域1: 顶部统计卡片 -->
+  <!-- ============================================ -->
+  <div class="grid grid-cols-4 gap-4 mb-6">
+    <!-- 报告总数 -->
+    <div class="stat-card flex items-center justify-between">
+      <div>
+        <div class="stat-value">156</div>
+        <div class="stat-label">报告总数</div>
+      </div>
+      <div class="stat-icon bg-gray-100">📄</div>
+    </div>
+    <!-- 有效报告 -->
+    <div class="stat-card flex items-center justify-between">
+      <div>
+        <div class="stat-value text-green-600">142</div>
+        <div class="stat-label">有效报告</div>
+      </div>
+      <div class="stat-icon bg-green-50">✅</div>
+    </div>
+    <!-- 即将过期 -->
+    <div class="stat-card flex items-center justify-between">
+      <div>
+        <div class="stat-value text-orange-500">8</div>
+        <div class="stat-label">即将过期</div>
+      </div>
+      <div class="stat-icon bg-orange-50">⏰</div>
+    </div>
+    <!-- 待更新 -->
+    <div class="stat-card flex items-center justify-between">
+      <div>
+        <div class="stat-value text-yellow-600">6</div>
+        <div class="stat-label">待更新</div>
+      </div>
+      <div class="stat-icon bg-yellow-50">🔄</div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 区域2: 筛选栏 -->
+  <!-- ============================================ -->
+  <div class="panel p-4 mb-6">
+    <div class="flex flex-wrap items-center gap-3">
+      <!-- 搜索框 -->
+      <input type="text" placeholder="搜索报告名称 / 编号 / 机构…" class="w-56" />
+      <!-- 报告类型 -->
+      <select class="w-40">
+        <option value="">报告类型</option>
+        <option>型式检验</option>
+        <option>出厂检验</option>
+        <option>监督检验</option>
+        <option>第三方安全评估</option>
+        <option>材料检测</option>
+        <option>环保合规</option>
+      </select>
+      <!-- 产品线 -->
+      <select class="w-40">
+        <option value="">产品线</option>
+        <option>组合滑梯</option>
+        <option>攀爬系列</option>
+        <option>摇荡系列</option>
+        <option>运动健身</option>
+        <option>定制主题</option>
+        <option>1165框架</option>
+      </select>
+      <!-- 有效状态 -->
+      <select class="w-32">
+        <option value="">有效状态</option>
+        <option>有效</option>
+        <option>即将过期</option>
+        <option>已失效</option>
+      </select>
+      <!-- 按钮 -->
+      <button class="btn-action px-4 py-1.5 rounded text-sm font-medium">搜索</button>
+      <button class="btn-outline px-4 py-1.5 rounded text-sm font-medium">重置</button>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 区域3: 报告列表（主表格） -->
+  <!-- ============================================ -->
+  <div class="panel mb-6">
+    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+      <div class="section-title mb-0">📋 检测报告列表</div>
+      <span class="text-xs text-gray-400">共 156 条记录，当前显示第 1-8 条</span>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th class="whitespace-nowrap">报告名称</th>
+            <th class="whitespace-nowrap">报告编号</th>
+            <th class="whitespace-nowrap">类型</th>
+            <th class="whitespace-nowrap">关联产品</th>
+            <th class="whitespace-nowrap">检测机构</th>
+            <th class="whitespace-nowrap">出具日期</th>
+            <th class="whitespace-nowrap">有效状态</th>
+            <th class="whitespace-nowrap">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 行1 -->
+          <tr>
+            <td class="font-medium">WD-1165型式检验报告</td>
+            <td class="text-gray-500 font-mono text-xs">TX-2025-001</td>
+            <td><span class="badge badge-gray">型式检验</span></td>
+            <td>1165框架系列</td>
+            <td>国家特检院</td>
+            <td class="tabular-nums">2025-03-15</td>
+            <td><span class="badge badge-green">✅ 有效</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs mr-1">查看</button>
+              <button class="btn-action px-2.5 py-1 rounded text-xs">覆盖分析</button>
+            </td>
+          </tr>
+          <!-- 行2 -->
+          <tr>
+            <td class="font-medium">PE滑梯材料REACH报告</td>
+            <td class="text-gray-500 font-mono text-xs">MAT-2025-012</td>
+            <td><span class="badge badge-gray">材料检测</span></td>
+            <td>组合滑梯(出口)</td>
+            <td>SGS</td>
+            <td class="tabular-nums">2025-06-20</td>
+            <td><span class="badge badge-yellow">🟡 SVHC更新</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">更新</button>
+            </td>
+          </tr>
+          <!-- 行3 -->
+          <tr>
+            <td class="font-medium">304不锈钢RoHS报告</td>
+            <td class="text-gray-500 font-mono text-xs">MAT-2025-013</td>
+            <td><span class="badge badge-gray">环保合规</span></td>
+            <td>不锈钢滑道</td>
+            <td>TÜV</td>
+            <td class="tabular-nums">2025-01-10</td>
+            <td><span class="badge badge-green">✅ 有效</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">查看</button>
+            </td>
+          </tr>
+          <!-- 行4 -->
+          <tr>
+            <td class="font-medium">攀爬架EN1176测试报告</td>
+            <td class="text-gray-500 font-mono text-xs">EN-2024-005</td>
+            <td><span class="badge badge-gray">型式检验</span></td>
+            <td>攀爬系列</td>
+            <td>TÜV Rheinland</td>
+            <td class="tabular-nums">2024-09-01</td>
+            <td><span class="badge badge-green">✅ 有效</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">查看</button>
+            </td>
+          </tr>
+          <!-- 行5 -->
+          <tr>
+            <td class="font-medium">合肥体育公园监督检验</td>
+            <td class="text-gray-500 font-mono text-xs">JD-2025-008</td>
+            <td><span class="badge badge-gray">监督检验</span></td>
+            <td>定制主题(合肥)</td>
+            <td>安徽特检院</td>
+            <td class="tabular-nums">2025-11-10</td>
+            <td><span class="badge badge-green">✅ 有效</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">查看</button>
+            </td>
+          </tr>
+          <!-- 行6 -->
+          <tr>
+            <td class="font-medium">EPDM地垫冲击吸收报告</td>
+            <td class="text-gray-500 font-mono text-xs">SA-2024-003</td>
+            <td><span class="badge badge-gray">第三方安全评估</span></td>
+            <td>安全地面</td>
+            <td>CNAS实验室</td>
+            <td class="tabular-nums">2024-05-18</td>
+            <td><span class="badge badge-orange">🟠 即将过期</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">续检</button>
+            </td>
+          </tr>
+          <!-- 行7 -->
+          <tr>
+            <td class="font-medium">出厂检验-批次WD250301</td>
+            <td class="text-gray-500 font-mono text-xs">FC-2025-030</td>
+            <td><span class="badge badge-gray">出厂检验</span></td>
+            <td>1165框架-批次301</td>
+            <td>万德质检部</td>
+            <td class="tabular-nums">2025-03-01</td>
+            <td><span class="badge badge-green">✅ 有效</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">查看</button>
+            </td>
+          </tr>
+          <!-- 行8 -->
+          <tr>
+            <td class="font-medium">ASTM F1487符合性报告</td>
+            <td class="text-gray-500 font-mono text-xs">US-2024-002</td>
+            <td><span class="badge badge-gray">型式检验</span></td>
+            <td>出口北美全系列</td>
+            <td>TÜV SÜD America</td>
+            <td class="tabular-nums">2024-07-20</td>
+            <td><span class="badge badge-green">✅ 有效</span></td>
+            <td class="whitespace-nowrap">
+              <button class="btn-action px-2.5 py-1 rounded text-xs">查看</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- 分页 -->
+    <div class="px-5 py-3 border-t border-gray-100 flex items-center justify-between text-xs text-gray-400">
+      <span>共 156 条</span>
+      <div class="flex items-center gap-1">
+        <button class="px-2 py-1 rounded border border-gray-200 bg-white text-gray-400 cursor-not-allowed">上一页</button>
+        <button class="px-2.5 py-1 rounded bg-blue-500 text-white text-xs font-medium">1</button>
+        <button class="px-2.5 py-1 rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50">2</button>
+        <button class="px-2.5 py-1 rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50">3</button>
+        <span class="px-1">…</span>
+        <button class="px-2.5 py-1 rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50">20</button>
+        <button class="px-2 py-1 rounded border border-gray-200 bg-white text-gray-500 hover:bg-gray-50">下一页</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 区域4: 覆盖分析面板 -->
+  <!-- ============================================ -->
+  <div class="panel mb-6">
+    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between cursor-pointer" onclick="togglePanel('coveragePanel', 'coverageArrow')">
+      <div class="section-title mb-0">📊 覆盖分析（TSG 71-2023覆盖原则）</div>
+      <svg id="coverageArrow" class="w-5 h-5 text-gray-400 transform transition-transform rotate-0" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+    </div>
+    <div id="coveragePanel">
+      <!-- 说明文字 -->
+      <div class="px-5 py-3 bg-blue-50 border-b border-blue-100">
+        <p class="text-xs text-blue-700 leading-relaxed">
+          <strong>覆盖原则：</strong>根据TSG 71-2023，高参数产品的型式试验证书可向下覆盖低参数产品。同一型式检验证书可覆盖多个系列产品，减少重复检测。
+        </p>
+      </div>
+
+      <!-- 覆盖矩阵表格 -->
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead>
+            <tr>
+              <th class="whitespace-nowrap">型式检验证书</th>
+              <th class="whitespace-nowrap">直接覆盖产品</th>
+              <th class="whitespace-nowrap">可向下覆盖</th>
+              <th class="whitespace-nowrap">不覆盖（需单独检测）</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-medium">
+                <div>WD-1165 A级证书</div>
+                <div class="text-xs text-gray-400 mt-0.5">TX-2025-001</div>
+              </td>
+              <td class="coverage-cell-green">
+                <span class="font-medium">1165全系列</span>
+                <div class="text-xs mt-0.5 opacity-75">含WD-1165A/B/C/D</div>
+              </td>
+              <td class="coverage-cell-yellow">
+                <span class="font-medium">小型滑梯组合</span>
+                <div class="text-xs mt-0.5 opacity-75">参数低于1165的组合</div>
+              </td>
+              <td class="coverage-cell-red">
+                <span class="font-medium">定制非标设备</span>
+                <div class="text-xs mt-0.5 opacity-75">超出型式检验参数范围</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="font-medium">
+                <div>攀爬架EN1176</div>
+                <div class="text-xs text-gray-400 mt-0.5">EN-2024-005</div>
+              </td>
+              <td class="coverage-cell-green">
+                <span class="font-medium">标准攀爬架</span>
+                <div class="text-xs mt-0.5 opacity-75">CL系列全型号</div>
+              </td>
+              <td class="coverage-cell-yellow">
+                <span class="font-medium">缩小版攀爬架</span>
+                <div class="text-xs mt-0.5 opacity-75">低龄段缩小款</div>
+              </td>
+              <td class="coverage-cell-red">
+                <span class="font-medium">新材料攀爬架</span>
+                <div class="text-xs mt-0.5 opacity-75">采用新型材料的改款</div>
+              </td>
+            </tr>
+            <tr>
+              <td class="font-medium">
+                <div>ASTM F1487 证书</div>
+                <div class="text-xs text-gray-400 mt-0.5">US-2024-002</div>
+              </td>
+              <td class="coverage-cell-green">
+                <span class="font-medium">北美出口全系列</span>
+                <div class="text-xs mt-0.5 opacity-75">已通过ASTM认证产品</div>
+              </td>
+              <td class="coverage-cell-yellow">
+                <span class="font-medium">尺寸缩小款</span>
+                <div class="text-xs mt-0.5 opacity-75">同材料低参数产品</div>
+              </td>
+              <td class="coverage-cell-red">
+                <span class="font-medium">新增品类</span>
+                <div class="text-xs mt-0.5 opacity-75">未纳入检验范围的新产品</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 总结 -->
+      <div class="px-5 py-4 bg-gray-50 border-t border-gray-200">
+        <div class="flex items-center gap-6">
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-full bg-green-100 text-green-700 flex items-center justify-center text-sm font-bold">3</span>
+            <div>
+              <div class="text-sm font-semibold text-gray-800">张型式检验证书</div>
+              <div class="text-xs text-gray-400">一证可覆盖多产品</div>
+            </div>
+          </div>
+          <div class="text-gray-300">→</div>
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center text-sm font-bold">8</span>
+            <div>
+              <div class="text-sm font-semibold text-gray-800">个产品系列已覆盖</div>
+              <div class="text-xs text-gray-400">直接覆盖+向下覆盖</div>
+            </div>
+          </div>
+          <div class="text-gray-300">→</div>
+          <div class="flex items-center gap-2">
+            <span class="w-8 h-8 rounded-full bg-yellow-100 text-yellow-700 flex items-center justify-center text-sm font-bold">¥</span>
+            <div>
+              <div class="text-sm font-semibold text-gray-800">节省约 ¥120,000</div>
+              <div class="text-xs text-gray-400">减少重复检测费用</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================ -->
+  <!-- 区域5: 检测计划（底部简表） -->
+  <!-- ============================================ -->
+  <div class="panel">
+    <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+      <div class="section-title mb-0">📅 待执行检测计划</div>
+      <button class="btn-action px-3 py-1 rounded text-xs font-medium">+ 新建计划</button>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead>
+          <tr>
+            <th class="whitespace-nowrap">计划名称</th>
+            <th class="whitespace-nowrap">产品</th>
+            <th class="whitespace-nowrap">检测类型</th>
+            <th class="whitespace-nowrap">检测机构</th>
+            <th class="whitespace-nowrap">计划日期</th>
+            <th class="whitespace-nowrap">状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="font-medium">新款秋千型式检验</td>
+            <td>摇荡系列-SW200</td>
+            <td><span class="badge badge-gray">型式检验</span></td>
+            <td>国家特检院</td>
+            <td class="tabular-nums">2026-05-15</td>
+            <td><span class="badge badge-yellow">待预约</span></td>
+          </tr>
+          <tr>
+            <td class="font-medium">REACH年度更新</td>
+            <td>出口欧洲全系列</td>
+            <td><span class="badge badge-gray">材料检测</span></td>
+            <td>SGS</td>
+            <td class="tabular-nums">2026-06-01</td>
+            <td><span class="badge badge-green">已预约</span></td>
+          </tr>
+          <tr>
+            <td class="font-medium">出口美国ASTM更新</td>
+            <td>出口北美全系列</td>
+            <td><span class="badge badge-gray">型式检验</span></td>
+            <td>TÜV SÜD</td>
+            <td class="tabular-nums">2026-07-01</td>
+            <td><span class="badge badge-orange">待确认</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 折叠交互 -->
+  <script>
+    function togglePanel(panelId, arrowId) {
+      const panel = document.getElementById(panelId);
+      const arrow = document.getElementById(arrowId);
+      if (panel.style.display === 'none') {
+        panel.style.display = '';
+        arrow.classList.remove('rotate-180');
+      } else {
+        panel.style.display = 'none';
+        arrow.classList.add('rotate-180');
+      }
+    }
+  </script>
+
+</body>
+</html>

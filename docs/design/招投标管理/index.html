@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 招投标全链条管理 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; }
+    .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; align-items: center; padding-top: 16px; gap: 8px; }
+    .sidebar-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #999; cursor: pointer; }
+    .sidebar-icon:hover { background: #f3f4f6; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; transition: all 0.2s; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 120px); }
+    .breadcrumb { padding: 12px 24px; font-size: 13px; color: #999; background: #fff; }
+    .breadcrumb strong { color: #333; }
+  </style>
+</head>
+<body class="bg-gray-50">
+  <div class="flex min-h-screen">
+    <!-- [侧边栏] -->
+    <aside class="sidebar flex-shrink-0">
+      <div class="sidebar-icon" title="首页">🏠</div>
+      <div class="sidebar-icon" title="CRM商务中心">💼</div>
+      <div class="sidebar-icon active" title="招投标管理">📋</div>
+      <div class="sidebar-icon" title="项目中心">📁</div>
+      <div class="sidebar-icon" title="审批中心">✅</div>
+      <div class="sidebar-icon" title="设置">⚙️</div>
+    </aside>
+
+    <!-- [主内容区] -->
+    <main class="flex-1 flex flex-col">
+      <!-- [面包屑] -->
+      <div class="breadcrumb">
+        首页 &gt; 商务中心 &gt; <strong>招投标全链条管理</strong>
+      </div>
+
+      <!-- [Tab栏] -->
+      <div class="tab-bar" id="tabBar"></div>
+
+      <!-- [Tab内容 — iframe加载] -->
+      <div class="flex-1">
+        <iframe id="tabFrame" class="tab-content-frame" src="tab-overview.html"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="p-6 bg-white border-t border-gray-300 mt-4">
+    <h3 class="text-base font-bold text-gray-700 mb-3">📋 招投标全链条管理 — 原型说明</h3>
+    <table class="w-full text-sm text-left border-collapse">
+      <thead><tr class="bg-gray-100">
+        <th class="p-2 border border-gray-300">Tab页</th>
+        <th class="p-2 border border-gray-300">文件名</th>
+        <th class="p-2 border border-gray-300">优先级</th>
+        <th class="p-2 border border-gray-300">功能描述</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="p-2 border border-gray-300">投标总览</td>
+          <td class="p-2 border border-gray-300">tab-overview.html</td>
+          <td class="p-2 border border-gray-300">P0</td>
+          <td class="p-2 border border-gray-300">全局看板：在投项目状态分布、本月KPI、里程碑倒计时、待办清单、保证金占用概览</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">资质证书管理</td>
+          <td class="p-2 border border-gray-300">tab-certificates.html</td>
+          <td class="p-2 border border-gray-300">P0</td>
+          <td class="p-2 border border-gray-300">证书数字档案库（6分类14字段）、3级预警（90/30/到期）、匹配引擎、续期进度</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">检测报告管理</td>
+          <td class="p-2 border border-gray-300">tab-reports.html</td>
+          <td class="p-2 border border-gray-300">P0</td>
+          <td class="p-2 border border-gray-300">6类报告归档、有效性评估、覆盖分析（TSG 71-2023）、产品关联、计划管理</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">投标立项与进度</td>
+          <td class="p-2 border border-gray-300">tab-projects.html</td>
+          <td class="p-2 border border-gray-300">P1</td>
+          <td class="p-2 border border-gray-300">Go/No-Go决策引擎、项目看板（6列）、任务自动分配、里程碑倒计时、审批流（投标申请/标书申请/授权申请）</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">投标文件编制</td>
+          <td class="p-2 border border-gray-300">tab-documents.html</td>
+          <td class="p-2 border border-gray-300">P1</td>
+          <td class="p-2 border border-gray-300">模板库、招标文件AI解析、多人协作编制、合规检查引擎、废标风险扫描、偏离表</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">报价决策与保证金</td>
+          <td class="p-2 border border-gray-300">tab-pricing.html</td>
+          <td class="p-2 border border-gray-300">P2</td>
+          <td class="p-2 border border-gray-300">成本模板、竞争对手报价库、基准价模拟器、保证金台账（投标/履约/质保3类）、资金占用分析</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="text-sm font-bold text-gray-600 mt-4 mb-2">数据流</h4>
+    <div class="text-xs text-gray-500 bg-gray-50 p-3 rounded font-mono">
+      矿场(Sprint-1) → 投标申请(审批) → 投标立项(C) → 标书申请(审批) → 资质匹配(A) + 检测报告(B) → 投标文件编制(D) → 授权申请(审批,按需) → 报价决策(E) → 开标/中标 → 执行管理接手
+    </div>
+
+    <h4 class="text-sm font-bold text-gray-600 mt-4 mb-2">3个审批流程</h4>
+    <table class="w-full text-xs text-left border-collapse">
+      <thead><tr class="bg-gray-100">
+        <th class="p-2 border border-gray-300">审批流程</th>
+        <th class="p-2 border border-gray-300">触发时机</th>
+        <th class="p-2 border border-gray-300">审批级数</th>
+        <th class="p-2 border border-gray-300">所在Tab</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="p-2 border border-gray-300">投标申请</td>
+          <td class="p-2 border border-gray-300">矿场确认商机后，决定"要不要投"</td>
+          <td class="p-2 border border-gray-300">商务→部门经理→总经理</td>
+          <td class="p-2 border border-gray-300">投标立项</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">标书申请</td>
+          <td class="p-2 border border-gray-300">投标申请通过后，申请标书编制资源</td>
+          <td class="p-2 border border-gray-300">商务→投标经理</td>
+          <td class="p-2 border border-gray-300">投标立项</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">授权申请</td>
+          <td class="p-2 border border-gray-300">需要厂家授权函时发起</td>
+          <td class="p-2 border border-gray-300">商务→综合管理</td>
+          <td class="p-2 border border-gray-300">投标立项</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    const tabs = [
+      { key: 'overview', label: '📊 投标总览', src: 'tab-overview.html' },
+      { key: 'certificates', label: '📜 资质证书管理', src: 'tab-certificates.html' },
+      { key: 'reports', label: '🔬 检测报告管理', src: 'tab-reports.html' },
+      { key: 'projects', label: '📋 投标立项与进度', src: 'tab-projects.html' },
+      { key: 'documents', label: '📝 投标文件编制', src: 'tab-documents.html' },
+      { key: 'pricing', label: '💰 报价决策与保证金', src: 'tab-pricing.html' },
+    ];
+
+    const tabBar = document.getElementById('tabBar');
+    const tabFrame = document.getElementById('tabFrame');
+    let activeKey = tabs[0].key;
+
+    function renderTabs() {
+      tabBar.innerHTML = tabs.map(t =>
+        `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+      ).join('');
+    }
+
+    tabBar.addEventListener('click', (e) => {
+      const item = e.target.closest('.tab-item');
+      if (!item) return;
+      activeKey = item.dataset.key;
+      tabFrame.src = item.dataset.src;
+      renderTabs();
+    });
+
+    tabFrame.addEventListener('load', () => {
+      try {
+        const h = tabFrame.contentDocument.documentElement.scrollHeight;
+        tabFrame.style.height = Math.max(h, 600) + 'px';
+      } catch(e) {}
+    });
+
+    renderTabs();
+  </script>
+</body>
+</html>

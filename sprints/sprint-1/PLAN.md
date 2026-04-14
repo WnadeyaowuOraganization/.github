@@ -200,11 +200,13 @@ Week 4 (5/03-5/09):
 > 依赖变化：#3521(Boss Dashboard)已CLOSED → #3461(耀总)解锁；#3528(CRM-01)已CLOSED → #3529/#3537解锁。
 > ⚠️ kimi7原锁定#3521已CLOSED，建议释放改派#3529或#3461。
 > **🔥 2026-04-13 新增 #3624 矿场接入 Phase1 (P0)**：wdpp_discovered_projects 建表 + pymysql安装 + ProjectMineServiceImpl去mock。建议 kimi1 优先启动（high effort），接入真数据后矿场页面才脱离mock。
+> **✅ 2026-04-14 G7e 数据已抢救**：`legacy-pg` Docker (localhost:15432, pw=legacy) 保留 449 张表全量零错误；MySQL `wande_ai_legacy` (3306) 载入 92-98%。#3624 数据源就绪，可立即启动。
+> **♻ 2026-04-14 刷新**：#3617 已CLOSED，移除；kimi2 空出可接下一任务。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | effort |
 |------|-------|------|------|------|--------|
-| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock** | **high** |
-| kimi2 | #3617 | P0-bug | fullstack | Tier-2: 矿场v3第二轮验收8项缺陷（进行中） | high |
+| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock（数据源已就绪：legacy-pg:15432 / mysql wande_ai_legacy）** | **high** |
+| kimi2 | #3530 | P1 | fullstack | Tier-4: CRM-03 商机管道（前置#3529进行中，可先做backend） | high |
 | kimi3 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
 | kimi4 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |
 | kimi5 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | high |

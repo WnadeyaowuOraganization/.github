@@ -199,10 +199,11 @@ Week 4 (5/03-5/09):
 > Week 1 Master全部完成。Week 2 排程：bug修复(kimi1/2) + Tier-1五角色Dashboard(kimi3-7) + Tier-3四Tab(kimi8-11) + Tier-5产品目录(kimi12) + CRM/耀总接力。
 > 依赖变化：#3521(Boss Dashboard)已CLOSED → #3461(耀总)解锁；#3528(CRM-01)已CLOSED → #3529/#3537解锁。
 > ⚠️ kimi7原锁定#3521已CLOSED，建议释放改派#3529或#3461。
+> **🔥 2026-04-13 新增 #3624 矿场接入 Phase1 (P0)**：wdpp_discovered_projects 建表 + pymysql安装 + ProjectMineServiceImpl去mock。建议 kimi1 优先启动（high effort），接入真数据后矿场页面才脱离mock。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | effort |
 |------|-------|------|------|------|--------|
-| kimi1 | #3618 | P0-bug | fullstack | bug: 建表标准列+CRM Controller注册（进行中） | high |
+| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock** | **high** |
 | kimi2 | #3617 | P0-bug | fullstack | Tier-2: 矿场v3第二轮验收8项缺陷（进行中） | high |
 | kimi3 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
 | kimi4 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |

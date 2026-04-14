@@ -215,15 +215,14 @@ Week 4 (5/03-5/09):
 > **🛠 2026-04-14 排程经理预置 V20260414003~V013 已建好 11 张/组孤岛表**（commit `88b50f18`，flyway_schema_history 已对齐 rank 7-17）：CC 派发后**禁止再写 Flyway 建表 SQL**，直接做 Entity/VO/DTO/Mapper/Service/Controller/前端。各 Issue 评论已附「确定指令清单」（API 路径 + 验收 + 配对前端），无 CC 评估空间。
 > **🛠 2026-04-14 #3637/#3640 决策已锁定**（取代评论中的"评估"段）：#3637 只用 5 张核心竞品表，runs/company_status/errors/design_analysis/updates 不建；#3640 pipeline 写 wdpp_products → 门户前端**直接读** wdpp_products（V20260414012 已加门户展示字段），wdpp_product_portal_* 保留供运营手动维护。
 > **✅ 2026-04-14 矿场页面 30 条 seed 已注入** wdpp_project_mine（覆盖 6 Tab：early_gold/bidding/needs_confirm/dormant/invalid + assigned/contacted/tracking/bid_preparing 各 mine_status），脚本 `scripts/seed/project_mine_seed.sql` 可重复刷。
-> **🔥🔥 2026-04-14 20:07 用户最高优先级指令**：**优先完成 #3631 矿场接入 Master 的剩余 4 个子 Issue（#3637/#3638/#3639/#3641）**，其他 Tier（Dashboard/CRM/产品门户等）全部让路。#3636 kimi16 已在跑。这 4 条插入建议表队首，研发经理下一轮指派前必须先消化这 4 个，空 kimi 全部派给它们。
-> **♻ 清理**：已 CLOSED 的 #3624/#3630/#3632/#3633/#3634/#3635/#3640 从指派建议表移除（明细表仍保留追踪）。
+> **🔥🔥 2026-04-14 20:07 用户最高优先级指令**：**优先完成 #3631 矿场接入 Master 的剩余 3 个子 Issue（#3637/#3638/#3639）**，其他 Tier（Dashboard/CRM/产品门户等）全部让路。#3636 kimi16 已在跑，#3641 PR#3667 已 merged（20:15 看板补 Done）。研发经理下一轮指派前必须先消化这 3 个，空 kimi 全部派给它们。
+> **♻ 清理**：已 CLOSED 的 #3624/#3630/#3632/#3633/#3634/#3635/#3640 + #3641(PR merged) 从指派建议表移除（明细表仍保留追踪）。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
 | — | **#3637 + #3118** | **🔥P0** | **fullstack** | **[#3631 子] Phase4 F: 5张竞品表后端CRUD + 激活 #3118 关系网络前端切真数据**（runs/updates 等 5 张运行时表不做） | `docs/design/全球项目矿场/详细设计.md`（关系网络章节） | medium |
 | — | **#3638** | **🔥P0** | **backend** | **[#3631 子] Phase4 G: D3组件库 pipeline 表与后端 D3 模块表对齐（排查字段冲突）** | 后端 D3 模块代码+`ptc/` 若有 | medium |
 | — | **#3639** | **🔥P0** | **fullstack** | **[#3631 子] Phase4 H: wdpp_s3_asset_index 接入 AI 助手检索面板** | `docs/design/超管驾驶舱/12-dev-agent.html`（套布局） | medium |
-| — | **#3641** | **🔥P0** | **fullstack** | **[#3631 子] 管线健康度 Tab 前端**（#3635 后端已完成，接前端剩余部分） | `docs/design/超管驾驶舱/04-sys-collect.html` `05-sys-cron.html` | medium |
 | kimi16 | **#3636** | **P1** | **fullstack** | **[#3631 子][运行中] Phase4 E: 幼儿园采购+预算项目专题页（V007/V013 表已建）** | `docs/design/全球项目矿场/01-all.html`（套布局） | medium |
 | kimi12 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | `docs/design/rbac-homepage/详细设计.md` | high |
 | — | #3518 #3519 #3520 | P1 | fullstack | Tier-1: 支持/安装/综管主页Dashboard | `docs/design/rbac-homepage/详细设计.md` | high |

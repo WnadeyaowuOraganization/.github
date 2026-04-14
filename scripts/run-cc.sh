@@ -267,7 +267,7 @@ else
   API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
   API_SOURCE="Token Pool Proxy"
   # 隔离 claude.ai 凭证，避免 Auth conflict；日志目录软链到原始位置保证页面正常展示
-  PROXY_CONFIG_DIR="/tmp/cc-config-${SESSION}"
+  PROXY_CONFIG_DIR="${HOME_DIR}/cc_scheduler/cc-configs/${SESSION}"
   mkdir -p "$PROXY_CONFIG_DIR"
   rsync -a --exclude='.credentials.json' --exclude='projects' "${HOME_DIR}/.claude/" "$PROXY_CONFIG_DIR/"
   ln -sfn "${HOME_DIR}/.claude/projects" "$PROXY_CONFIG_DIR/projects"

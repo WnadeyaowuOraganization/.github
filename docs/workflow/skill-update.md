@@ -36,8 +36,8 @@
 ### 2026-04-14 21:05 task.md 模板 T12 "轮询 merged" 语义矛盾
 
 - **症状**：PR 推送后 quality-gate 门 2 报 "task.md 存在 1 项未勾 steps"，唯一未勾就是 T12/T14 "轮询 merged"
-- **频次**：kimi9 #3482 PR#3669；历史看盘可能更多（用户反馈"经常出现"）
-- **根因**：T12 按定义在 push 后执行，但门 2 在 push 时立即检查 task.md 全勾 → 逻辑矛盾
-- **已处置**：issue-task-md / fix-ci-failure 模板删除 T12/T_fix_N_6 行（commit 4a2c82f）
-- **建议改进**：无（根除）
-- **状态**：✅ 已实施 4a2c82f
+- **频次**：kimi9 #3482 PR#3669；kimi1 #3637 PR#3672（第 2 次；开工时模板旧，task.md 遗留 T10 行）；历史看盘可能更多
+- **根因**：T12 按定义在 push 后执行，但门 2 在 push 时立即检查 task.md 全勾 → 逻辑矛盾。模板已改但已生成的 task.md 不会回溯更新 → 老 task.md 继续撞门
+- **已处置**：issue-task-md / fix-ci-failure 模板删除 T12/T_fix_N_6 行（commit 4a2c82f）；对已生成 task.md 的在跑 CC 人工通知删除 T10 行
+- **建议改进**：模板层已根除；过渡期老任务遗留 task.md 由研发经理按需通知删行
+- **状态**：✅ 模板层已实施 4a2c82f；过渡期观察

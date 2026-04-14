@@ -1,0 +1,50 @@
+/*
+ * pgloader 迁移配置 — G7e PostgreSQL(5433/wande_ai) → m7i MySQL(3306/wande_ai_legacy)
+ *
+ * 用法：
+ *   pgloader migration.load
+ *
+ * 前置条件：
+ *   1. G7e 已开机，且本机已经建立 SSH 隧道将 G7e:5433 映射到 localhost:15433
+ *   2. m7i MySQL 已创建目标库：CREATE DATABASE `wande_ai_legacy`;
+ *
+ * 运行时长预估：取决于数据量（24k 行主表量级通常 2-5 分钟）
+ */
+
+LOAD DATABASE
+     FROM      postgresql://wande:wande_dev_2026@localhost:15433/wande_ai
+     INTO      mysql://root:root@127.0.0.1:3306/wande_ai_legacy
+
+ WITH include drop,
+      create tables,
+      create indexes,
+      reset sequences,
+      foreign keys,
+      downcase identifiers,
+      data only = false,
+      workers = 4,
+      concurrency = 2,
+      batch rows = 1000,
+      batch size = 20MB,
+      prefetch rows = 1000
+
+ SET MySQL PARAMETERS
+      net_buffer_length to '16M',
+      max_allowed_packet to '256M'
+
+ CAST type timestamp                to datetime drop default drop not null,
+      type timestamptz              to datetime drop default drop not null,
+      type jsonb                    to json,
+      type json                     to json,
+      type uuid                     to "varchar(36)",
+      type inet                     to "varchar(45)",
+      type "text[]"                 to json using array-to-json,
+      type "varchar[]"              to json using array-to-json,
+      type "integer[]"              to json using array-to-json,
+      type "bigint[]"               to json using array-to-json,
+      type boolean                  to "tinyint(1)" using boolean-to-int,
+      type bigserial                to bigint drop typemod generate always as identity,
+      type serial                   to int drop typemod generate always as identity
+
+;
+/* 目标库 wande_ai_legacy 必须由外部脚本预先创建；本配置不做 DROP/CREATE 以避免误删源数据。*/

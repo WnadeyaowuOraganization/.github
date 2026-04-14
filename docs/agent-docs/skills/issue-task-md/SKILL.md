@@ -74,17 +74,16 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 ## Steps
 - [ ] T1 建表 wdpp_xxx + Flyway 脚本
 - [ ] T2 Entity + Mapper + Service + Controller
-- [ ] T3 curl smoke（3条：正/缺参/鉴权） —— 后端门 1
-- [ ] T4 JUnit 单测（BaseServiceTest，有业务分支时必写） —— 后端门 2
-- [ ] T5 Playwright API spec（`e2e/tests/backend/api/<module>.ts`，**每个后端 Issue 必做**） —— 后端门 3
-- [ ] T6 index.vue + data.ts + detail-drawer.vue
-- [ ] T7 cp smoke 模板改 ROUTE/PAGE_NAME 保留 3 条反事故断言
-- [ ] T8 pnpm build 通过
-- [ ] T9 Playwright e2e spec 通过（前端门）
-- [ ] T10 截图上传 Release screenshot-<PR>
-- [ ] T11 task.md 全勾 + pr-body-lint 通过
-- [ ] T12 rebase origin/dev + gh pr create --base dev
-- [ ] T13 轮询 merged
+- [ ] T3 JUnit 单测（BaseServiceTest）通过 + mvn compile 绿 —— 后端门 1（必先过，否则后端启不了）
+- [ ] T4 Playwright API spec（`e2e/tests/backend/api/<module>.ts`）通过 —— 后端门 2（取代 curl smoke，**每个后端 Issue 必做**）
+- [ ] T5 index.vue + data.ts + detail-drawer.vue
+- [ ] T6 cp smoke 模板改 ROUTE/PAGE_NAME 保留 3 条反事故断言
+- [ ] T7 pnpm build 通过
+- [ ] T8 Playwright e2e spec 通过（前端门）
+- [ ] T9 截图上传 Release screenshot-<PR>
+- [ ] T10 task.md 全勾 + pr-body-lint 通过
+- [ ] T11 rebase origin/dev + gh pr create --base dev
+- [ ] T12 轮询 merged
 
 ## Files Changed
 （随开发更新）

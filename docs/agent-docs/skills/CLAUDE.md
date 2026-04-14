@@ -76,8 +76,8 @@
 
 | Issue 类型 | 必经 skill |
 |-----------|-----------|
-| 纯后端 CRUD | issue-task-md → cc-report → backend-schema → backend-coding → backend-test → cc-report → pr-visual-proof（无图）→ cc-report |
-| 纯前端页面 | issue-task-md → cc-report → frontend-coding → frontend-e2e → menu-contract（如新入口）→ cc-report → pr-visual-proof → cc-report |
+| 纯后端 CRUD | issue-task-md → cc-report → backend-schema → backend-coding → backend-test（**curl + JUnit + Playwright API spec 三门必过**）→ cc-report → pr-visual-proof（无图）→ cc-report |
+| 纯前端页面 | issue-task-md → cc-report → frontend-coding → frontend-e2e（Playwright e2e spec 必写）→ menu-contract（如新入口）→ cc-report → pr-visual-proof → cc-report |
 | 全栈新功能 | 全部走一遍（按上图顺序） |
 | Bug 修复 | issue-task-md → cc-report → backend-test/frontend-e2e（先写复现红灯）→ backend-coding/frontend-coding 修 → 测试转绿 → cc-report → pr-visual-proof → cc-report |
 | E2E Fail 重派 | issue-task-md（走 `E2E Fail 分支`续原 task.md）→ fix-ci-failure（TDD 红→修→绿）→ push → cc-report → 标准轮询模板 |
@@ -103,7 +103,7 @@
 8. **禁止免责语**：task.md / PR body 不准出现"待 CI 验证 / 配置待解决"
 9. **禁止自行 close Issue**：必须研发经理确认
 10. **PR 提交后必须轮询到 merged 才算完工**；**必须**用 cc-report 的**标准前台轮询模板**（`while + sleep 60` + 末尾 `sleep infinity`），**禁止**自写 `/tmp/poll-*.sh` 后台脚本（主线程会失去状态感知，研发经理无法唤醒）
-11. **禁止无测试的 PR**：feature 分支的 diff 必须包含本 Issue 相关的**新单测 / 新 spec**（Bug 修复则为"复现红灯"测试）；纯文档 / 配置 Issue 必须在 task.md 显式注明"跳过测试原因"
+11. **禁止无测试的 PR**：后端改动 feature 分支 diff 必须**同时**包含 curl smoke 证据 + JUnit 单测（有业务分支时）+ **Playwright API spec**（三道并列强制门，缺一 CI 拦截）；前端改动必须含 Playwright e2e spec；Bug 修复必含"复现红灯"测试；纯文档 / 配置 Issue 必须在 task.md 显式注明"跳过测试原因"
 12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
 
 ## 共用脚本速查

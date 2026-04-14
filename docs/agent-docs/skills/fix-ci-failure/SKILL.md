@@ -45,7 +45,8 @@ gh pr view <PR> --repo WnadeyaowuOraganization/wande-play --comments | head -200
 | 构建失败 (后端) | `mvn compile` / `mvn package` 报错 | 本地 `mvn -pl <module> compile` 复现 → 改代码 → 绿 |
 | 构建失败 (前端) | `pnpm build` 报错 | 本地 `cd frontend && pnpm build` 复现 → 绿 |
 | 单元测试 | `mvn test` / `vitest` 红 | 本地跑失败测试 → TDD 转绿 |
-| Playwright E2E | `e2e/tests/**/*.spec.ts` 红 | 本地 `pnpm --filter e2e playwright test <spec>` 复现 |
+| **Playwright API spec** | `e2e/tests/backend/**/*.spec.ts` 红 | **与 E2E 同等必修**。本地 `npx playwright test tests/backend/<spec> --workers=1` 复现 |
+| Playwright E2E | `e2e/tests/front/**/*.spec.ts` 红 | 本地 `npx playwright test tests/front/<spec> --workers=1` 复现 |
 | Visual diff | `playwright-visual-compare` 红 | 检查原型路径 `docs/design/**`，调整实现或更新基线图 |
 | 健康检查 | `curl /actuator/health` 502 | 排查端口占用 / DB 连接 / Flyway 启动报错 |
 

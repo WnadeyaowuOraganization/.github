@@ -208,31 +208,31 @@ Week 4 (5/03-5/09):
 > **✅ 2026-04-14 G7e 数据已抢救**：`legacy-pg` Docker (localhost:15432, pw=legacy) 保留 449 张表全量零错误；MySQL `wande_ai_legacy` (3306) 载入 92-98%。#3624 数据源就绪，可立即启动。
 > **♻ 2026-04-14 刷新**：#3617 已CLOSED，移除；kimi2 空出可接下一任务。
 > **🔥 2026-04-14 新增 #3630 (P0)**：wdpp_project_mine 字段与 ggzy_collector 对齐（ALTER+uk_source_url+9列），阻塞 #3624 真数据落地。建议 kimi2 优先启动（medium effort），纯后端实体/VO/Mapper 同步。
-> **📋 2026-04-14 新增 Master #3631 (P1，Plan 状态)**：pipeline ↔ 后端表对齐全景规划（19张表，Phase1~5），规划性 Issue 不直接开发，待 Phase1 完成后由排程经理拆 9 个子 Issue (A-I) 进 Todo 队列。取代原 #3552 方向。
+> **📋 2026-04-14 新增 Master #3631 (P1，Plan 状态)**：pipeline ↔ 后端表对齐全景规划（19张表，Phase1~5），规划性 Issue 不直接开发。
+> **🔥 2026-04-14 拆子完成**：#3631 子 Issue #3632-#3640 全部 Todo 化。矿场数据闭环优先级最高，现置于指派建议表**前 11 位**。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | effort |
 |------|-------|------|------|------|--------|
-| kimi2 | **#3630** | **P0** | **backend** | **🔥矿场接入Phase2: wdpp_project_mine 字段对齐 ggzy_collector（Flyway已就绪，同步Entity/VO/Mapper 9新字段）** | **medium** |
-| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock（数据源已就绪：legacy-pg:15432 / mysql wande_ai_legacy）** | **high** |
-| — | #3530 | P1 | fullstack | Tier-4: CRM-03 商机管道（前置#3529进行中，可先做backend） | high |
-| kimi3 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
-| kimi4 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |
-| kimi5 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | high |
-| kimi6 | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | high |
-| kimi7 | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理(原#3521已CLOSED，改派) | high |
-| kimi8 | #3481 | P1 | fullstack | Tier-3: 实时日志流Tab | high |
-| kimi9 | #3482 | P1 | fullstack | Tier-3: FinOps开发运维成本Tab | high |
-| kimi10 | #3483 | P1 | fullstack | Tier-3: 安全审计Tab | high |
-| kimi11 | #3484 | P1 | fullstack | Tier-3: Prompt管理Tab | high |
-| kimi12 | #3582 | P0 | frontend | Tier-5: 产品目录页 — 卡片网格+筛选搜索 | high |
-| — | #3461 | P1 | fullstack | Tier-6: 耀总驾驶舱v1.0(前置#3521✅) | high |
-| — | #3537 | P1 | fullstack | Tier-4: CRM-10 我的提成(前置#3527✅) | medium |
-| — | #3548 | P1 | fullstack | Tier-4: CRM-13 公司通讯录 | medium |
-| — | #3583 | P0 | frontend | Tier-5: 产品详情页(前置#3582⏳) | high |
-| — | #3530 | P1 | fullstack | Tier-4: CRM-03 商机管道(前置#3529⏳) | high |
-| — | #3532 | P1 | fullstack | Tier-4: CRM-05 询盘工作台(前置#3529⏳) | high |
-| — | #3533 | P1 | fullstack | Tier-4: CRM-06 记录中心(前置#3529⏳) | medium |
-| — | #3536 | P1 | fullstack | Tier-4: CRM-09 经销商管理(前置#3529⏳) | high |
+| kimi2 | **#3630** | **P0** | **backend** | **🔥矿场接入Phase2: wdpp_project_mine 字段对齐（Flyway就绪，同步Entity/VO/Mapper 9新字段）** | **medium** |
+| kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock** | **high** |
+| kimi3 | **#3632** | **P0** | **fullstack** | **🔥Phase2 A: 3张老矿场表迁移到 wdpp_project_mine（取代 #3552；迁移脚本+改写4个 Python 脚本+DROP 旧表）** | **high** |
+| kimi4 | **#3640** | **P1** | **backend** | **Phase4 I: products/product_series/product_specs/product_images → wdpp_product_portal_* 命名对齐** | **high** |
+| kimi5 | **#3633** | **P1** | **fullstack** | **Phase3 B: wdpp_keyword_pool 后端CRUD + 超管配置页** | **medium** |
+| kimi6 | **#3634** | **P1** | **fullstack** | **Phase3 C: wdpp_province_stats 统计API + 驾驶舱省份热力图** | **medium** |
+| kimi7 | **#3635** | **P1** | **fullstack** | **Phase3 D: wdpp_pipeline_runs + alerts 接入超管驾驶舱"管线健康度"Tab** | **high** |
+| kimi8 | **#3636** | **P1** | **fullstack** | **Phase4 E: 幼儿园采购 + dept_budget_items 专题页** | **high** |
+| kimi9 | **#3637** | **P1** | **backend** | **Phase4 F: 竞品5张表后端接入，供 #3118 关系网络真数据** | **high** |
+| kimi10 | **#3638** | **P2** | **backend** | **Phase4 G: D3组件库 pipeline 表与后端 D3 模块表对齐** | **medium** |
+| kimi11 | **#3639** | **P2** | **backend** | **Phase4 H: wdpp_s3_asset_index 接入 AI 助手模块** | **medium** |
+| kimi12 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
+| — | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |
+| — | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | high |
+| — | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | high |
+| — | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 | high |
+| — | #3481 | P1 | fullstack | Tier-3: 实时日志流Tab | high |
+| — | #3482 | P1 | fullstack | Tier-3: FinOps开发运维成本Tab | high |
+| — | #3483 | P1 | fullstack | Tier-3: 安全审计Tab | high |
+| — | #3582 | P0 | frontend | Tier-5: 产品目录页（注意：与 #3640 存在表字段关联，建议 #3640 先行） | high |
 
 ## 指派历史（完成后划线）
 

@@ -207,11 +207,13 @@ Week 4 (5/03-5/09):
 > **🔥 2026-04-13 新增 #3624 矿场接入 Phase1 (P0)**：wdpp_discovered_projects 建表 + pymysql安装 + ProjectMineServiceImpl去mock。建议 kimi1 优先启动（high effort），接入真数据后矿场页面才脱离mock。
 > **✅ 2026-04-14 G7e 数据已抢救**：`legacy-pg` Docker (localhost:15432, pw=legacy) 保留 449 张表全量零错误；MySQL `wande_ai_legacy` (3306) 载入 92-98%。#3624 数据源就绪，可立即启动。
 > **♻ 2026-04-14 刷新**：#3617 已CLOSED，移除；kimi2 空出可接下一任务。
+> **🔥 2026-04-14 新增 #3630 (P0)**：wdpp_project_mine 字段与 ggzy_collector 对齐（ALTER+uk_source_url+9列），阻塞 #3624 真数据落地。建议 kimi2 优先启动（medium effort），纯后端实体/VO/Mapper 同步。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | effort |
 |------|-------|------|------|------|--------|
+| kimi2 | **#3630** | **P0** | **backend** | **🔥矿场接入Phase2: wdpp_project_mine 字段对齐 ggzy_collector（Flyway已就绪，同步Entity/VO/Mapper 9新字段）** | **medium** |
 | kimi1 | **#3624** | **P0** | **fullstack** | **🔥矿场接入Phase1: wdpp_discovered_projects建表+pymysql+Java去mock（数据源已就绪：legacy-pg:15432 / mysql wande_ai_legacy）** | **high** |
-| kimi2 | #3530 | P1 | fullstack | Tier-4: CRM-03 商机管道（前置#3529进行中，可先做backend） | high |
+| — | #3530 | P1 | fullstack | Tier-4: CRM-03 商机管道（前置#3529进行中，可先做backend） | high |
 | kimi3 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | high |
 | kimi4 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | high |
 | kimi5 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | high |

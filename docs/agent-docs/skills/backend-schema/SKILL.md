@@ -7,15 +7,23 @@ description: Design MySQL tables and write Flyway migration scripts for Wande-Pl
 
 **任何新表 / 改表必须走 Flyway 增量脚本**，严禁直接编辑 baseline `wande-ai-pg.sql` / `test-base-schema.pg.sql`。
 
-## 文件位置与命名
+## 文件位置与命名（强制秒级时间戳）
 
 ```
-backend/ruoyi-admin/src/main/resources/db/migration/V<YYYYMMDD><NNN>__<desc>.sql
+backend/ruoyi-admin/src/main/resources/db/migration/V<YYYYMMDDHHMMSS>__<desc>.sql
 ```
 
-- `YYYYMMDD`：当天日期（例 `20260414`）
-- `NNN`：当天三位序号 `001` / `002`（同日多脚本必须递增不撞号）
-- 描述用下划线小写：`V20260414001__create_project_mine.sql`
+- 14 位秒级时间戳，**用命令生成，禁止手编序号**：
+
+```bash
+echo "V$(date +%Y%m%d%H%M%S)__<desc>.sql"
+# 例：V20260414184530__create_project_mine.sql
+```
+
+- 描述用下划线小写，动词+对象：`create_xxx` / `add_xxx_field` / `update_xxx_menu`
+- Flyway `version` 字段上限 VARCHAR(50)，14 位完全安全
+
+**历史问题（2026-04-14 dev 事故）**：手编 `YYYYMMDD+NNN` 三位序号多 CC 并发时撞号（V20260414014 一天出现 4 份），Flyway 抛 `DuplicateMigration` 整批迁移被拒。秒级时间戳并发概率几乎为 0。
 
 ## wdpp_ 前缀（强制）
 
@@ -136,7 +144,7 @@ cd backend && mvn flyway:validate
 - ❌ 字段无 COMMENT
 - ❌ `@DS` 注解（单库已取消）
 - ❌ 漏 7 列中任何一列
-- ❌ 同日脚本序号撞车
+- ❌ 手编 NNN 三位序号（必须 `date +%Y%m%d%H%M%S` 生成）
 - ❌ MariaDB `IF NOT EXISTS` DDL 扩展
 - ❌ 直接编辑 baseline SQL 文件
 - ❌ create_by / update_by 写成 VARCHAR

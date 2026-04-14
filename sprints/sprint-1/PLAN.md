@@ -258,6 +258,15 @@ Week 4 (5/03-5/09):
 | kimi4 | ~~#3641~~ | P1 | frontend | ~~超管驾驶舱·管线健康度 Tab 前端~~ PR#3667✅merged 2026-04-14 18:06 | ~~Done~~ |
 | kimi10 | ~~#3483~~ | P0 | fullstack | ~~超管驾驶舱·安全审计Tab~~ PR#3668✅merged 2026-04-14 18:58 | ~~Done~~ |
 | kimi17 | ~~#3639~~ | 🔥P0 | backend | ~~矿场Phase4 H: wdpp_s3_asset_index 后端API~~ PR#3671✅merged 2026-04-14 20:5x | ~~Done~~ |
+| kimi1 | ~~#3637~~ | P1 | fullstack | ~~矿场Phase4 F: 竞品关系网络可视化~~ PR#3672✅merged 2026-04-14 21:19 | ~~Done~~ |
+| kimi9 | ~~#3482~~ | P1 | fullstack | ~~超管驾驶舱·FinOps开发运维成本看板~~ PR#3669✅merged 2026-04-14 21:04 | ~~Done~~ |
+| kimi8 | ~~#3481~~ | P1 | fullstack | ~~超管驾驶舱·实时日志流Tab~~ PR#3673✅merged 2026-04-14 22:35 | ~~Done~~ |
+| kimi16 | ~~#3638~~ | P1 | fullstack | ~~矿场Phase4 D: D3组件库 CRUD~~ PR#3674✅merged 2026-04-14 22:39 | ~~Done~~ |
+| kimi1 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | 22:42 |
+| kimi2 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | 22:42 |
+| kimi3 | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | 22:42 |
+| kimi4 | #3582 | P0 | frontend | Tier-5: 产品目录页前端 — 卡片网格+筛选搜索 | 22:42 |
+| kimi5 | #3636 | P1 | fullstack | 矿场Phase4 E: 幼儿园采购+预算项目专题页 | 22:43 |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

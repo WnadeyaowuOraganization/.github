@@ -17,7 +17,7 @@ if [ -z "$KIMI_TAG" ]; then
     exit 1
 fi
 
-BASE_SRC="/home/ubuntu/.m2-base/repository"
+BASE_SRC="/home/ubuntu/.m2/repository"
 SHM_BASE="/dev/shm/m2-base/repository"
 SHM_CC="/dev/shm/m2-cc-${KIMI_TAG}/repository"
 REFCOUNT="/dev/shm/m2-cc-refcount"

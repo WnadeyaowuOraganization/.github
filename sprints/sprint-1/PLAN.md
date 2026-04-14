@@ -255,8 +255,25 @@ Week 4 (5/03-5/09):
 | kimi1 | ~~#3618~~ | P0-bug | fullstack | ~~bug: 建表缺RuoYi标准列 + CRM Controller未注册~~ PR#3620✅merged 2026-04-13 08:57 | ~~Done~~ |
 | kimi1 | ~~#3619~~ | P0-bug | backend | ~~bug: Portal产品表缺model3d_file/model3d_render列~~ PR#3621✅merged 2026-04-13 10:33 | ~~Done~~ |
 
-## 当前运行
+## 当前运行（2026-04-14 11:55 刷新）
 
-| 指派目录 | Issue | Tier | 模块 | 内容 |
-|---------|-------|------|------|------|
-| (空) | — | — | — | 第一批bug修复全部完成，等待第二批指派 |
+> 11 个僵尸锁经 cc-keepalive 自动恢复（kimi3-12 复用旧 issue id 重启），#3521 已 CLOSED 已停 + 改派 #3635。
+> 新派：kimi1 #3624（矿场Phase1 P0），kimi7 #3635（管线健康 P1）。
+> kimi20 #3630 是 skill 化机制冒烟验证 + 矿场Phase2，运行中 25%。
+
+| 指派目录 | Issue | Tier | 模块 | 内容 | 启动 |
+|---------|-------|------|------|------|------|
+| kimi1 | **#3624** | P0 | app | 矿场Phase1: ggzy_collector+Java去mock | 11:55 |
+| kimi3 | #3517 | P0 | app | 商务主页Dashboard 8Widget（恢复） | 旧锁11:54 |
+| kimi4 | #3518 | P1 | app | 支持中心主页Dashboard（恢复） | 旧锁11:54 |
+| kimi5 | #3519 | P1 | app | 项目安装主页Dashboard（恢复） | 旧锁11:54 |
+| kimi6 | #3520 | P1 | app | 综合管理主页Dashboard（恢复） | 旧锁11:54 |
+| kimi7 | **#3635** | P1 | app | 管线健康度Tab（替换已CLOSED #3521） | 11:55 |
+| kimi8 | #3481 | P1 | app | 实时日志流Tab（恢复） | 旧锁11:54 |
+| kimi9 | #3482 | P1 | app | FinOps Tab（恢复） | 旧锁11:54 |
+| kimi10 | #3483 | P1 | app | 安全审计Tab（恢复） | 旧锁11:54 |
+| kimi11 | #3484 | P1 | app | Prompt管理Tab（恢复） | 旧锁11:54 |
+| kimi12 | #3582 | P0 | app | 产品目录页（恢复） | 旧锁11:54 |
+| kimi20 | **#3630** | P0 | backend | 矿场Phase2字段对齐（skill冒烟验证）| 11:46 |
+
+> 池：12 / 15。空闲 kimi2/13/14/15/16/17/18/19。下一批观察 token pool 压力后再派 #3632/#3633/#3634/#3640+#3582+#3583。

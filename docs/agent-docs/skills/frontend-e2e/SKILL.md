@@ -178,9 +178,20 @@ cat test-results/<spec>-<case>/error-context.md
 | 中文按钮名带全角空格 | 用 regex `name: /确\s*定/` |
 | `waitForTimeout(N)` 偶现 flaky | 换 `waitForSelector` / `waitForLoadState` |
 
+## 主环境 (:6040/:8080) 使用边界（2026-04-14 起）
+
+| 允许 | 禁止 |
+|------|------|
+| ✅ Playwright / `page.screenshot` 打开主环境页面**只读截图**，作为"修复前 / 原型对比"图贴 PR body（看看线上是什么样） | ❌ 任何 POST / PUT / DELETE / PATCH 请求 |
+| ✅ 浏览器 GET 页面、查看列表 | ❌ 填表单 + 提交（`page.click('提交')` / `page.fill` 后 submit）|
+| ✅ 纯 `page.goto` + `screenshot` 流程 | ❌ 登录后触发写接口、创建/修改/删除任何记录 |
+
+**硬红线**：E2E spec 的 `test(...)` 主体（做断言、跑业务流程）、数据构造、回归验证，**只能**指向自己的 `:710N` / `:810N`。主环境仅用于生成对比截图素材。
+
 ## 禁止
 
-- ❌ 连主 Dev 环境 `:8080` 跑 Playwright（污染共享数据）
+- ❌ 在 spec 主体里用 `:6040 / :8080` 做业务流程断言（污染共享数据、抢登录 session）
+- ❌ 对主环境任何写请求（POST/PUT/DELETE，不管是 curl 还是 Playwright `page.click('新增')`）
 - ❌ 改 `playwright.config.ts` 的 baseURL 绕过环境隔离
 - ❌ 用 `waitForTimeout` 替代 `waitForSelector`
 - ❌ 并行 worker > 1（session 抢占）

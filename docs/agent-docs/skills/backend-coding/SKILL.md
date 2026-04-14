@@ -159,6 +159,7 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 
 ## 禁止清单
 
+- ❌ 新建类放 `com.wande.*` 包（主类仅扫 `org.ruoyi.**`，落到 `com.wande.*` → API 404 / Bean 不注册；#3517 踩过）。新代码**只**用 `org.ruoyi.wande.*`，除非已显式配置 `@ComponentScan("com.wande.ai")`
 - ❌ `@DS("wande")` / `@DS("slave")` / `@DS("master")` — 单库无多数据源
 - ❌ 在 `wande-ai-api` 新增业务代码（已废弃）
 - ❌ `wande.domain.{feature}` 旧包路径

@@ -56,7 +56,34 @@ echo $TOKEN
 
 ## curl 手动 debug
 
-仅联调用：`curl -H "Authorization: Bearer $TOKEN" ...`。不是 PR 证据，不要贴 task.md。
+仅联调用，**必须带 3 个鉴权头**，缺任一 → 401 / 租户错乱：
+
+```bash
+curl -H "Authorization: Bearer $TOKEN" \
+     -H "clientid: e5cd7e4891bf95d1d19206ce24a7b32e" \
+     -H "tenantId: 000000" \
+     http://localhost:${PORT}/wande/xxx/list
+```
+
+不是 PR 证据，不要贴 task.md。
+
+## 后端启动失败：M2 BOM 缺失恢复（2026-04-14 起）
+
+`cc-test-env.sh start` 会自愈装 `ruoyi-common-bom`，但若手动跑 `mvn spring-boot:run` 遇到：
+
+- `Non-resolvable import POM: ... ruoyi-common-bom:pom:3.0.0`
+- `'dependencies.dependency.version' for org.ruoyi:ruoyi-common-* is missing`
+- `failure was cached in the local repository` → failure cache 阻止重试
+
+**恢复步骤**（优先用 `cc-test-env.sh restart kimi<N>` 自愈）：
+
+```bash
+# 1. 删失败缓存
+rm -rf /home/ubuntu/cc_scheduler/m2/kimi<N>/repository/org/ruoyi/ruoyi-common-bom
+
+# 2. 让 cc-test-env.sh 重启时自动装（推荐）
+bash ~/projects/.github/scripts/cc-test-env.sh restart kimi<N>
+```
 
 ## JUnit 单测（有业务分支时才写）
 

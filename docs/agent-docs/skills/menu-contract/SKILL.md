@@ -41,7 +41,11 @@ WHERE menu_name = '项目挖掘' AND menu_type = 'C';
 INSERT INTO sys_menu (...) VALUES (...);
 ```
 
-例外：若目录树里**确实没有**对应占位（极少见，需先检查「完整菜单目录树」），才可 INSERT，且需在 Issue / PR 说明并让研发经理确认。
+例外：若目录树里**确实没有**对应占位（极少见，需先检查「完整菜单目录树」），才可 INSERT，且：
+
+1. **必须**在 `issues/issue-<N>/task.md` + PR body 明文列出「同类先例」（如 `#3484 V20260414014__add_cockpit_xxx_menu.sql`），否则 pr-body-lint / quality-gate 会把无据 INSERT 当违规拦
+2. **必须**在派发 Issue 时由研发经理书面确认「走例外 INSERT」
+3. `perms` 前缀 **严格**对应所属板块（见「component / perms 前缀对照表」），例如挂在超管驾驶舱下 → `perms = cockpit:xxx:list`，错前缀 = Controller `@SaCheckPermission` 对不上 → 403
 
 ## 何时必须操作 sys_menu
 

@@ -243,6 +243,19 @@ start_backend() {
   cd "$KIMI_DIR/backend/ruoyi-admin"
   KIMI_M2="${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository"
   [ -d "$KIMI_M2" ] && MVN_M2_OPT="-Dmaven.repo.local=${KIMI_M2}" || MVN_M2_OPT=""
+
+  # 自愈：若 per-kimi M2 缺 ruoyi-common-bom（seed rsync 排除了 org/ruoyi/），
+  # 先把源码业务模块装进去，规避 kimi4 类型的「Non-resolvable import POM」启动失败。
+  # 原因：BOM 是源码 sibling module（backend/ruoyi-common/ruoyi-common-bom），远程镜像没有；
+  # spring-boot:run 单模块启动不会触发 reactor 构建，缺 BOM 就直接挂。
+  if [ -n "$MVN_M2_OPT" ] && [ ! -d "${KIMI_M2}/org/ruoyi/ruoyi-common-bom" ]; then
+    echo "  🔧 per-kimi M2 缺 ruoyi-common-bom，先装业务模块（约 30s）..."
+    # 清理可能的失败缓存
+    rm -rf "${KIMI_M2}/org/ruoyi/ruoyi-common-bom" 2>/dev/null
+    (cd "$KIMI_DIR/backend" && mvn install -pl ruoyi-common -am -DskipTests $MVN_M2_OPT -q 2>&1 | tail -5) \
+      || { echo "  ❌ ruoyi-common 预装失败，后端启动大概率也会失败"; }
+  fi
+
   setsid mvn spring-boot:run $MVN_M2_OPT -Dspring-boot.run.profiles=dev -Dspring-boot.run.arguments="--server.port=${BACKEND_PORT} --spring.flyway.enabled=false --spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true --spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} --spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} --spring.data.redis.host=${REDIS_HOST} --spring.data.redis.port=${REDIS_PORT} --spring.data.redis.database=${REDIS_DB}" > "$LOG_DIR/backend.log" 2>&1 &
 
   local pid=$!

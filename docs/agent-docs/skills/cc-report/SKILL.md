@@ -226,3 +226,4 @@ curl -s -X POST http://localhost:9872/api/notify \
 - ❌ 回车符漏写 → tmux 消息没发送（停在输入框）
 - ❌ 消息无 `from:` / `to:` 字段 → 人工追溯困难
 - ❌ 一次汇报塞 500 字 → `less is more`
+- ❌ 写 `/tmp/poll-pr-*.sh` / `nohup ... &` / `disown` 等**后台**轮询脚本（主线程失去状态感知，研发经理无法通过 inject-cc-prompt 唤醒；CI 红也吃不到失败注入）。**只用**本 skill「close 阶段标准轮询模板」（前台 `while` + `sleep 60` + 末尾 `sleep infinity`）

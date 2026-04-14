@@ -298,6 +298,18 @@ if [ "$KIMI_TAG" != "main" ] && [ ! -d "$M2_REPO_PATH" ] && [ -d "$M2_SHARED" ];
   rsync -a --exclude='org/ruoyi/' "$M2_SHARED/" "$M2_REPO_PATH/" 2>&1 | tail -1
   echo "✅ M2 seed 完成 → $M2_REPO_PATH (业务模块将在本 kimi 独立编译)"
 fi
+
+# 预装 ruoyi-common 业务模块到 per-kimi M2（含 ruoyi-common-bom）
+# BOM 是源码 sibling module，远程镜像没有，spring-boot:run 缺 BOM 会直接挂。
+# 这里在 run-cc.sh 首次启动时一次装好，避免后续 cc-test-env.sh start 延迟 30s。
+if [ "$KIMI_TAG" != "main" ] && [ -d "$M2_REPO_PATH" ] && [ ! -d "$M2_REPO_PATH/org/ruoyi/ruoyi-common-bom" ]; then
+  if [ -d "$BASE_DIR/backend/ruoyi-common" ]; then
+    echo "📦 预装 ruoyi-common 业务模块到 per-kimi M2（含 BOM，约 30s）..."
+    (cd "$BASE_DIR/backend" && mvn install -pl ruoyi-common -am -DskipTests -Dmaven.repo.local="$M2_REPO_PATH" -q 2>&1 | tail -3) \
+      && echo "✅ ruoyi-common 预装完成" \
+      || echo "⚠️ ruoyi-common 预装失败（cc-test-env.sh start 会再重试一次）"
+  fi
+fi
 MAVEN_ENV="export MAVEN_OPTS='-Dmaven.repo.local=${M2_REPO_PATH}';"
 
 # === 预创建独立数据库（MySQL schema + Redis DB，秒级完成）===

@@ -9,12 +9,21 @@ description: Take browser screenshots from the kimi test environment (8101/7101 
 
 ## 环境强制
 
-**只能用自己的 kimi 测试环境**，禁止连主 Dev：
+**"after"/功能验证截图只能用自己的 kimi 测试环境**：
 
 | 资源 | kimiN 值 | 登录 |
 |------|---------|------|
 | 前端 | `http://localhost:710N` | admin / admin123 |
 | 后端 | `http://localhost:810N` | （token 走后端）|
+
+**主环境 (`:6040` / `:8080`) 只读截图允许**（2026-04-14 起）：
+
+- ✅ 修 bug 的**"修复前"对比图**可用主环境 `:6040` Playwright `goto` + `screenshot`
+- ✅ 与线上 / 原型对照的参考截图
+- ❌ 任何 POST/PUT/DELETE/PATCH（禁止创建/修改/删除数据）
+- ❌ 主环境上做业务交互（填表、点提交、触发写接口）
+
+硬红线：**"修复后"图（after）必须是自己 `:710N` 的截图**，不得用主环境冒充。
 
 ## 截图（Playwright）
 
@@ -177,7 +186,8 @@ Fixes #<Issue号>
 
 ## 反模式
 
-- ❌ 截图用主 Dev 环境（`:8080` / `:6040`）
+- ❌ "修复后"/"功能实现"截图用主 Dev 环境（after 必须是 `:710N`）
+- ❌ 在主环境做写操作凑截图（POST/PUT/DELETE 全禁）
 - ❌ PR body 写"已截图"但没真图
 - ❌ 图片只贴本地路径 `file:///tmp/...`
 - ❌ 只贴一张总览图，关键交互步骤没截

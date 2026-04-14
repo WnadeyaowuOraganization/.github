@@ -315,6 +315,26 @@ if [ "$MODE" = "issue" ]; then
   fi
 fi
 
+# === 同步 skill 化 CLAUDE.md + 软链 skills 到工作目录（每次启动强制覆盖）===
+SKILLS_SRC="${HOME_DIR}/projects/.github/docs/agent-docs/skills"
+if [ -d "$SKILLS_SRC" ]; then
+  # 1. 覆盖 CLAUDE.md（位于 BASE_DIR 根，被 PROJECT_DIR/parents 自动加载）
+  if [ -f "$SKILLS_SRC/CLAUDE.md" ]; then
+    cp -f "$SKILLS_SRC/CLAUDE.md" "$BASE_DIR/CLAUDE.md"
+    echo "✅ 同步 CLAUDE.md → $BASE_DIR/CLAUDE.md"
+  fi
+  # 2. 软链每个 skill 子目录到 BASE_DIR/.claude/skills/<name>
+  mkdir -p "$BASE_DIR/.claude/skills"
+  # 清掉旧的失效 symlink（保留非 symlink 的本地 skill 不动）
+  find "$BASE_DIR/.claude/skills" -maxdepth 1 -type l -exec rm -f {} \; 2>/dev/null || true
+  for skill_dir in "$SKILLS_SRC"/*/; do
+    [ -f "${skill_dir}SKILL.md" ] || continue
+    skill_name=$(basename "$skill_dir")
+    ln -sfn "${skill_dir%/}" "$BASE_DIR/.claude/skills/$skill_name"
+  done
+  echo "✅ 同步 skills → $BASE_DIR/.claude/skills/ (软链 $(ls -1 $BASE_DIR/.claude/skills/ | wc -l) 个)"
+fi
+
 # === 启动tmux（交互模式）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \

@@ -1,0 +1,124 @@
+---
+name: issue-task-md
+description: Evaluate an Issue against design docs and existing code, produce a task.md plan with checkboxes, split complex work via Agent Teams when needed, and resume from last checkpoint after a restart or /compact. This is the mandatory first action for every new Issue in Wande-Play.
+---
+
+# Issue 评估与 task.md 计划
+
+收到 Issue 号后的**第一步**。输出 `issues/issue-<N>/task.md`（仓库根 `issues/` 目录，研发经理已预建），作为后续编码/测试/PR 的唯一进度源。重启或 /compact 后读它找下一步。
+
+## 使用时机
+
+- 首次拿到 Issue：`--issue N` 参数启动 CC
+- 重启 / compact 后恢复
+- 研发经理要求拆分复杂 Issue
+
+## 三方对仗（强制顺序）
+
+缺一步 = 漏需求 / 字段错位 / 返工。
+
+| 来源 | 读取命令 | 用途 |
+|------|---------|------|
+| 1. Issue 原文 | 优先 `cat issues/issue-<N>/issue-source.md`；兜底 `gh issue view <N> --repo WnadeyaowuOraganization/wande-play --comments` | 需求 + 验收标准 |
+| 2. 原型/详设 | `~/projects/.github/docs/design/**/*.md`，Issue 正文通常含链接 | 字段 / UI / 交互细节 |
+| 3. 现有代码 | 读 Issue "涉及文件" 列出的路径 | 已实现部分 / 冲突点 |
+
+**若 gh 失败**：
+
+```bash
+export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
+curl -s -H "Authorization: token $GH_TOKEN" \
+  "https://api.github.com/repos/WnadeyaowuOraganization/wande-play/issues/<N>" | python3 -m json.tool
+```
+
+## 复杂度判定
+
+| 判定 | 触发条件 | 动作 |
+|------|---------|------|
+| 简单 | 单文件 < 200 行改动 | 单 CC 串行 |
+| 中等 | 前后端都涉及 / 3~8 文件 | 单 CC + task.md 分阶段 |
+| **复杂** | 跨模块 / 建表 / > 8 文件 / 含 E2E / `module:fullstack` 标签 | **必须 Agent Teams**（Backend + Frontend + Integration 三角色并行） |
+
+复杂 Issue 硬扛 = 返工。`module:fullstack` 标签还要求先提交契约才能开始编码。
+
+## Agent Teams 模板（复杂 Issue 专用）
+
+```
+创建 3-Agent 团队开发 Issue #N：
+- Backend Agent：只改 backend/，按 shared/api-contracts 实现 API
+- Frontend Agent：只改 frontend/，API 调用对齐契约
+- Integration Agent：只改 e2e/、shared/，验证前后端一致性
+门控：backend mvn compile 通过 + frontend pnpm build 通过 + 契约两端都有实现
+```
+
+## task.md 标准结构
+
+写入 `issues/issue-<N>/task.md`：
+
+```markdown
+# Task: Issue #N — <一句话标题>
+
+## Status: IN_PROGRESS
+## Phase: PREPARE
+
+## 对账表（原型 vs 现状）
+| 设计要求 | 现状 | Gap | 任务 |
+|---------|------|-----|------|
+| 5张KPI卡片 | 未渲染 | 接stats接口 | T1 |
+
+## 原型核对清单（§X.X）
+- [ ] 表格列：项目名称/编码/类型/... (共13列，与01-all.html一致)
+- [ ] 筛选栏：项目类型/区域/...
+- [ ] 操作按钮：详情/修正/有效/无效/分配/删除 (tooltip文字已核对)
+
+## Steps
+- [ ] T1 建表 wdpp_xxx + Flyway 脚本
+- [ ] T2 Entity + Mapper + Service + Controller
+- [ ] T3 curl smoke（3条：正/缺参/鉴权）
+- [ ] T4 index.vue + data.ts + detail-drawer.vue
+- [ ] T5 cp smoke 模板改 ROUTE/PAGE_NAME 保留 3 条反事故断言
+- [ ] T6 pnpm build 通过
+- [ ] T7 Playwright e2e 通过
+- [ ] T8 截图上传 Release screenshot-<PR>
+- [ ] T9 task.md 全勾 + pr-body-lint 通过
+- [ ] T10 rebase origin/dev + gh pr create --base dev
+- [ ] T11 轮询 merged
+
+## Files Changed
+（随开发更新）
+
+## Blockers
+（无 / 列出阻塞项）
+```
+
+## 质量门（task.md 全部 `- [ ]` 必须勾完）
+
+- `任何 - [ ]` 未勾 = quality-gate 门 2 拦截
+- 做不完的项：拆追补 Issue 后勾选原步骤，在 task.md 备注 `→ 追补 #M`
+
+## 开工同步
+
+task.md 提交后发开工汇报（tmux + notify 双通道）：
+
+```bash
+MSG="[#${ISSUE}] 开工：复杂度<简单/中等/复杂>, 涉及 <文件>, 预计阶段 <A→B→C>"
+tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $MSG" Enter
+curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
+  -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"$MSG\",\"type\":\"info\"}"
+```
+
+## 恢复规则（重启 / compact 后）
+
+1. `cat issues/issue-<N>/task.md` 找第一个 `- [ ]`
+2. `git status` + `git diff` 看当前文件真实状态（可能半途完成）
+3. **不重新规划**：若已部分完成则先勾选已做部分，直接接续做下一项
+4. 不清楚现状时才主动问研发经理，不要自行推翻计划
+
+## 反模式
+
+- ❌ 跳过三方对账直接开码
+- ❌ 把所有任务堆一个阶段（失败不易恢复）
+- ❌ 复杂/fullstack Issue 单 CC 硬扛
+- ❌ task.md 放 `/tmp` 或非仓库路径（重启丢失）
+- ❌ 勾选"截图"却 body 里没真截图（quality-gate 门 3 拦截）
+- ❌ 对账表缺省（后期验收时对不上原型）

@@ -258,6 +258,6 @@ TS 报错禁用 `@ts-ignore` 绕过，除非注释说清原因。
 
 | 页面 | 路径 | 特点 |
 |------|------|------|
-| 招投标管理 | `views/wande/tender/index.vue` | 三层布局标准模板 |
+| 用户管理 | `views/system/user/index.vue` | 三层布局 + 完整 CRUD — RuoYi 框架首选参考 |
 | knowledgeBase | `views/operator/knowledgeBase/index.vue` | 原生 Drawer 典型用法（照抄结构，不照抄旧 `:visible`） |
 | Cockpit | 多 Tab 各自 useVbenVxeGrid | 拆分标杆 |

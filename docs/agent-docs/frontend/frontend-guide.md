@@ -172,7 +172,7 @@ export const columns: VxeGridProps['columns'] = [
 
 | 页面 | 文件路径 | 特点 |
 |------|---------|------|
-| **招投标管理** | `views/wande/tender/index.vue` | 标准三层布局 + 统计卡片 + 完整CRUD — **首选参考** |
+| **用户管理** | `views/system/user/index.vue` | 三层布局 + 完整 CRUD — **RuoYi 框架首选参考** |
 | **竞品分析** | `views/wande/competitor/index.vue` | 多Tab + 对比功能 |
 | **CRM客户** | `views/wande/crm/index.vue` | 标准列表页 + AI助手集成 |
 

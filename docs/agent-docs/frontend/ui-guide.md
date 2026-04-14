@@ -820,11 +820,11 @@ const gridOptions: VxeGridProps = {
 
 ### 8.1 标杆页面（必读）
 
-开发新页面时，**首先阅读 `tender/index.vue` 和 `tender/data.ts`** 作为基准模板。
+开发新页面时，**首先阅读 `system/user/index.vue` 和 `system/user/data.tsx`** 作为基准模板。
 
 | 页面 | 文件路径 | 特点 |
 |------|---------|------|
-| **招投标管理** | `views/wande/tender/index.vue` | 标准三层布局 + 统计卡片 + 完整 CRUD — **首选参考** |
+| **用户管理** | `views/system/user/index.vue` | 三层布局 + 完整 CRUD — **RuoYi 框架首选参考** |
 | **竞品分析** | `views/wande/competitor/index.vue` | 多 Tab + 对比功能 |
 | **项目挖掘** | `views/wande/project/index.vue` | 复杂统计 + 多模式切换 |
 | **CRM 客户** | `views/wande/crm/index.vue` | 标准列表页 + AI 助手集成 |

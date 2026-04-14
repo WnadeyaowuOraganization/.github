@@ -659,7 +659,52 @@ def _truncate_messages_if_needed(body_dict, context_window):
         )
 
     body_dict = dict(body_dict)
-    body_dict["messages"] = [first_msg] + kept_tail
+    final_messages = [first_msg] + kept_tail
+
+    # === 修复 tool_call/tool_result 配对完整性 ===
+    # 收集所有保留的 tool_use id
+    tool_call_ids = set()
+    for msg in final_messages:
+        if msg.get("role") == "assistant":
+            content = msg.get("content", [])
+            if isinstance(content, list):
+                for block in content:
+                    if isinstance(block, dict) and block.get("type") == "tool_use":
+                        tool_call_ids.add(block.get("id"))
+
+    # 移除引用了不存在 tool_call_id 的 tool_result 消息
+    cleaned = []
+    removed_orphans = 0
+    for msg in final_messages:
+        if msg.get("role") == "user":
+            content = msg.get("content", [])
+            if isinstance(content, list):
+                has_orphan = any(
+                    isinstance(b, dict)
+                    and b.get("type") == "tool_result"
+                    and b.get("tool_use_id") not in tool_call_ids
+                    for b in content
+                )
+                if has_orphan:
+                    # 过滤掉孤立的 tool_result block，保留其他内容
+                    filtered = [
+                        b for b in content
+                        if not (isinstance(b, dict)
+                                and b.get("type") == "tool_result"
+                                and b.get("tool_use_id") not in tool_call_ids)
+                    ]
+                    if filtered:
+                        msg = dict(msg)
+                        msg["content"] = filtered
+                    else:
+                        removed_orphans += 1
+                        continue  # 整条消息都是孤立 tool_result，跳过
+        cleaned.append(msg)
+
+    if removed_orphans > 0:
+        logger.info(f"[context_truncate] 移除{removed_orphans}条孤立tool_result消息")
+
+    body_dict["messages"] = cleaned
     return body_dict
 
 

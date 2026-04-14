@@ -236,10 +236,10 @@ start_backend() {
 
   # 用 mvn spring-boot:run 从源码启动，无需预编译jar
   # 必须在 ruoyi-admin 子目录执行（spring-boot-maven-plugin 只在此模块定义）
-  # per-kimi M2 隔离：强制用本 kimi 的 .m2-local 仓库（由 run-cc.sh 首次启动时 rsync seed）
+  # per-kimi M2 隔离：放在项目外 ${HOME}/cc_scheduler/m2/<kimi>/repository（由 run-cc.sh 首次启动 rsync seed）
   # 使用 setsid 确保进程独立于父shell，不会因脚本被杀而级联退出
   cd "$KIMI_DIR/backend/ruoyi-admin"
-  KIMI_M2="${KIMI_DIR}/.m2-local/repository"
+  KIMI_M2="${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository"
   [ -d "$KIMI_M2" ] && MVN_M2_OPT="-Dmaven.repo.local=${KIMI_M2}" || MVN_M2_OPT=""
   setsid mvn spring-boot:run $MVN_M2_OPT -o -Dspring-boot.run.profiles=dev -Dspring-boot.run.arguments="--server.port=${BACKEND_PORT} --spring.flyway.enabled=false --spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true --spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} --spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} --spring.data.redis.host=${REDIS_HOST} --spring.data.redis.port=${REDIS_PORT} --spring.data.redis.database=${REDIS_DB}" > "$LOG_DIR/backend.log" 2>&1 &
 

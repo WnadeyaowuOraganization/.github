@@ -287,10 +287,11 @@ KIMI_TAG=$(basename "$BASE_DIR" | sed 's/wande-play-//;s/wande-play//')
 [ -z "$KIMI_TAG" ] && KIMI_TAG="main"
 KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
 
-# === Maven repo：per-kimi 独立 m2（防止 wande-ai 等业务模块 artifact 互相覆盖）===
-# 主 ~/.m2 作为只读 seed，首次启动 rsync 复制到 per-kimi 路径；已存在则跳过
+# === Maven repo：per-kimi 独立 m2（放在项目目录外，避免 CC 误提交）===
+# 路径：${HOME_DIR}/cc_scheduler/m2/<kimi_tag>/repository
+# 主 ~/.m2 作为只读 seed，首次启动 rsync 复制；已存在则跳过
 M2_SHARED="${HOME_DIR}/.m2/repository"
-M2_REPO_PATH="${BASE_DIR}/.m2-local/repository"
+M2_REPO_PATH="${HOME_DIR}/cc_scheduler/m2/${KIMI_TAG}/repository"
 if [ "$KIMI_TAG" != "main" ] && [ ! -d "$M2_REPO_PATH" ] && [ -d "$M2_SHARED" ]; then
   echo "📦 首次初始化 per-kimi M2（从共享 m2 seed，排除业务模块）..."
   mkdir -p "$M2_REPO_PATH"

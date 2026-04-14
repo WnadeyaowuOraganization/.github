@@ -9,19 +9,25 @@ description: Maintain YAML API contracts in shared/api-contracts/ as the single 
 
 ## 位置
 
+目录结构**与菜单 component 前缀保持一致**（见 `menu-contract` skill「component / perms 前缀对照表」），一级目录即板块：
+
 ```
 shared/api-contracts/
-├── cockpit/        # 超管驾驶舱
-│   ├── wecom.yaml
-│   └── approval.yaml
-├── crm/
-├── execution/
-├── d3/
-├── sales/
-└── wande/<module>.yaml   # 万德业务模块（project-mine、tender 等）
+├── cockpit/                  # 超管驾驶舱      （component: cockpit/）
+├── business/
+│   ├── tender/               # 商务部 → 招投标   （component: business/tender/）
+│   ├── crm/                  # 商务部 → CRM     （component: business/crm/）
+│   ├── trade/                # 商务部 → 贸易     （component: business/trade/）
+│   └── dealer/               # 商务部 → 经销     （component: business/dealer/）
+├── support/                  # 支持中心         （component: support/）
+├── admin-center/             # 综合管理中心      （component: admin-center/）
+├── install/                  # 安装售后中心      （component: install/）
+├── common/                   # 公共板块         （component: common/）
+├── resource/                 # 资源中心         （component: resource/）
+└── system/                   # 系统管理         （component: system/）
 ```
 
-一个业务模块一个 yaml，一组相关接口放一起。
+一个业务模块一个 yaml（例 `business/tender/project-mine.yaml`），一组相关接口放一起。yaml 路径 = 前端 `views/<component>/` = 后端 `perms` 前缀对应板块，**三处同源**。新增 yaml 前先查 menu-contract 前缀表，板块归属错放 = 后续重构负担。
 
 ## 契约文件格式
 
@@ -96,7 +102,7 @@ endpoints:
 |----|------|-------|
 | 契约 | `shared/api-contracts/**/*.yaml` | 路径 / 方法 / 字段 / 枚举 |
 | 后端 | `XxxController.java` + `XxxBo.java` + `XxxVo.java` | `@RequestMapping` 路径、`@SaCheckPermission`、BO/VO 字段名 |
-| 前端 | `src/api/wande/<module>.ts` + `types.ts` | `requestClient.get/post` 路径、入参 TS 类型、出参字段 |
+| 前端 | `src/api/<板块>/<module>.ts` + `types.ts`（板块路径与 yaml 一致，如 `api/business/tender/project-mine.ts`）| `requestClient.get/post` 路径、入参 TS 类型、出参字段 |
 
 **顺序**：契约 → 后端实现 → 前端调用。反过来（先前端 mock）容易漂移。
 

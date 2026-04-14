@@ -1,18 +1,18 @@
 ---
 name: frontend-e2e
-description: End-to-end test Wande-Play frontend pages with Playwright in the isolated kimi environment (backend :810N, frontend :710N). Covers smoke template generation (cp _template.spec.ts), 3 anti-regression assertions, ant-tabs HTMLElement.click workaround for AntDV 4.x, Drawer/Modal assertions with v-model:open, screenshot capture for evidence, single-worker execution, and failure diagnostics via trace reports.
+description: End-to-end test Wande-Play frontend pages with Playwright in the isolated kimi environment (backend :710N, frontend :810N). Covers smoke template generation (cp _template.spec.ts), 3 anti-regression assertions, ant-tabs HTMLElement.click workaround for AntDV 4.x, Drawer/Modal assertions with v-model:open, screenshot capture for evidence, single-worker execution, and failure diagnostics via trace reports.
 ---
 
 # 前端 E2E 测试
 
-前端改动的**最终验证**。必须在**自己的 kimi 独立环境**（`:810N` backend / `:710N` frontend）执行，严禁占用主 Dev 环境（`:8080`）。
+前端改动的**最终验证**。必须在**自己的 kimi 独立环境**（`:710N` backend / `:810N` frontend）执行，严禁占用主 Dev 环境（`:8080`）。
 
 ## 环境
 
 | 资源 | kimiN 值 |
 |------|---------|
-| 后端 | `http://localhost:810N`（kimi1=8101 ...）|
-| 前端 | `http://localhost:710N`（kimi1=7101 ...）|
+| 后端 | `http://localhost:710N`（kimi1=7101 ...）|
+| 前端 | `http://localhost:810N`（kimi1=8101 ...）|
 | 登录 | `admin` / `admin123` / tenant `000000` |
 | e2e 目录 | `/data/home/ubuntu/projects/wande-play-kimiN/e2e`（**不在 frontend 下**）|
 | Playwright 依赖 | `e2e/node_modules/playwright/...` |
@@ -24,7 +24,7 @@ cd /data/home/ubuntu/projects/wande-play-kimiN
 bash e2e/scripts/start-all.sh        # 一键拉起 backend + frontend
 # 或分开：
 bash e2e/scripts/start-backend.sh &
-cd frontend && pnpm dev --port 710N --host 0.0.0.0 &
+cd frontend && pnpm dev --port 810N --host 0.0.0.0 &
 # 等前端日志出现 "ready in ..." + 后端日志 "Started RuoYiApplication"
 ```
 
@@ -50,13 +50,13 @@ const PAGE_NAME = '项目挖掘';
 
 test.describe(`smoke: ${PAGE_NAME}`, () => {
   test('页面可渲染', async ({ page }) => {
-    await page.goto('http://localhost:7101/login');
+    await page.goto('http://localhost:8101/login');
     await page.fill('input[name="username"]', 'admin');
     await page.fill('input[name="password"]', 'admin123');
     await page.click('button[type="submit"]');
     await page.waitForURL('**/workbench');
 
-    await page.goto(`http://localhost:7101${ROUTE}`);
+    await page.goto(`http://localhost:8101${ROUTE}`);
 
     // 反事故 1：页面容器渲染（非白屏）
     await expect(page.locator('.ant-page-container, [class*="Page"]')).toBeVisible();
@@ -186,7 +186,7 @@ cat test-results/<spec>-<case>/error-context.md
 | ✅ 浏览器 GET 页面、查看列表 | ❌ 填表单 + 提交（`page.click('提交')` / `page.fill` 后 submit）|
 | ✅ 纯 `page.goto` + `screenshot` 流程 | ❌ 登录后触发写接口、创建/修改/删除任何记录 |
 
-**硬红线**：E2E spec 的 `test(...)` 主体（做断言、跑业务流程）、数据构造、回归验证，**只能**指向自己的 `:710N` / `:810N`。主环境仅用于生成对比截图素材。
+**硬红线**：E2E spec 的 `test(...)` 主体（做断言、跑业务流程）、数据构造、回归验证，**只能**指向自己的 `:810N`（前端）/ `:710N`（后端）。主环境仅用于生成对比截图素材。
 
 ## 禁止
 

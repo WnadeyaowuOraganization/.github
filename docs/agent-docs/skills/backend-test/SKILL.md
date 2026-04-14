@@ -1,6 +1,6 @@
 ---
 name: backend-test
-description: Test Wande-Play backend endpoints and services using curl integration smoke, JUnit unit tests (BaseServiceTest with @Transactional rollback), and Playwright API specs in the isolated kimi environment (:810N backend, wande-ai-kimi{N} schema, Redis db{N}, wande user without main-DB access). Covers startup, auth token acquisition, positive/negative/auth cases, and TDD red/green workflow.
+description: Test Wande-Play backend endpoints and services using curl integration smoke, JUnit unit tests (BaseServiceTest with @Transactional rollback), and Playwright API specs in the isolated kimi environment (:710N backend, wande-ai-kimi{N} schema, Redis db{N}, wande user without main-DB access). Covers startup, auth token acquisition, positive/negative/auth cases, and TDD red/green workflow.
 ---
 
 # 后端测试
@@ -18,8 +18,8 @@ description: Test Wande-Play backend endpoints and services using curl integrati
 
 | 资源 | kimiN 值 |
 |------|---------|
-| 后端端口 | `810N`（kimi1=8101、kimi2=8102 ...） |
-| 前端端口 | `710N` |
+| 后端端口 | `710N`（kimi1=7101、kimi2=7102 ...） |
+| 前端端口 | `810N`（kimi1=8101 ...） |
 | MySQL schema | `wande-ai-kimi{N}` |
 | Redis DB | `db{N}` |
 | DB 用户 | `wande`（无主库 `wande-ai` 权限）|
@@ -38,7 +38,7 @@ description: Test Wande-Play backend endpoints and services using curl integrati
 
 ```bash
 cd /data/home/ubuntu/projects/wande-play-kimiN
-bash e2e/scripts/start-backend.sh      # 启动 810N，连 kimiN 独立 DB
+bash e2e/scripts/start-backend.sh      # 启动 710N，连 kimiN 独立 DB
 tail -f logs/sys-info.log              # 启动日志
 # 看到 "Started RuoYiApplication" 即就绪（~60s）
 ```
@@ -46,7 +46,7 @@ tail -f logs/sys-info.log              # 启动日志
 ## 拿登录 token
 
 ```bash
-PORT=810N  # 替换 N
+PORT=710N  # 替换 N（后端=710N，前端=810N）
 TOKEN=$(curl -s -X POST http://localhost:${PORT}/auth/login \
   -H "Content-Type: application/json" \
   -d '{"tenantId":"000000","clientId":"e5cd7e4891bf95d1d19206ce24a7b32e","grantType":"password","username":"admin","password":"admin123"}' \
@@ -152,7 +152,7 @@ mvn test                                                            # 全项目
 ```ts
 import { test, expect, request } from '@playwright/test';
 test('project-mine list 返回分页结构', async () => {
-  const api = await request.newContext({ baseURL: 'http://localhost:8101' });
+  const api = await request.newContext({ baseURL: 'http://localhost:7101' });
   const login = await api.post('/auth/login', { data: {...} });
   const token = (await login.json()).data.access_token;
   const res = await api.get('/wande/project/mine/list', {

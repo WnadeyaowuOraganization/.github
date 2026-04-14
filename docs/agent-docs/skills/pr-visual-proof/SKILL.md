@@ -1,6 +1,6 @@
 ---
 name: pr-visual-proof
-description: Take browser screenshots from the kimi test environment (8101/7101 etc, admin/admin123), upload to GitHub Release as PR evidence, attach Markdown image references to PR body with before/after comparison, and run pr-body-lint.sh to pass quality-gate doors 2/3 (no unchecked boxes, no fake screenshot claims without matching images). Use before every gh pr create for any change under frontend/apps/web-antd/src/views/.
+description: Take browser screenshots from the kimi test environment (frontend 8101/8102 etc, admin/admin123), upload to GitHub Release as PR evidence, attach Markdown image references to PR body with before/after comparison, and run pr-body-lint.sh to pass quality-gate doors 2/3 (no unchecked boxes, no fake screenshot claims without matching images). Use before every gh pr create for any change under frontend/apps/web-antd/src/views/.
 ---
 
 # PR 视觉证据
@@ -13,8 +13,8 @@ description: Take browser screenshots from the kimi test environment (8101/7101 
 
 | 资源 | kimiN 值 | 登录 |
 |------|---------|------|
-| 前端 | `http://localhost:710N` | admin / admin123 |
-| 后端 | `http://localhost:810N` | （token 走后端）|
+| 前端 | `http://localhost:810N` | admin / admin123 |
+| 后端 | `http://localhost:710N` | （token 走后端）|
 
 **主环境 (`:6040` / `:8080`) 只读截图允许**（2026-04-14 起）：
 
@@ -23,7 +23,7 @@ description: Take browser screenshots from the kimi test environment (8101/7101 
 - ❌ 任何 POST/PUT/DELETE/PATCH（禁止创建/修改/删除数据）
 - ❌ 主环境上做业务交互（填表、点提交、触发写接口）
 
-硬红线：**"修复后"图（after）必须是自己 `:710N` 的截图**，不得用主环境冒充。
+硬红线：**"修复后"图（after）必须是自己 `:810N` 的截图**，不得用主环境冒充。
 
 ## 截图（Playwright）
 
@@ -37,13 +37,13 @@ import { chromium } from '/data/home/ubuntu/projects/wande-play-kimiN/e2e/node_m
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 
-  await page.goto('http://localhost:7101/login');
+  await page.goto('http://localhost:8101/login');
   await page.fill('input[name="username"]', 'admin');
   await page.fill('input[name="password"]', 'admin123');
   await page.click('button[type="submit"]');
   await page.waitForURL('**/workbench');
 
-  await page.goto('http://localhost:7101/business/tender/project-mine');
+  await page.goto('http://localhost:8101/business/tender/project-mine');
   await page.waitForSelector('.vxe-table--main-wrapper', { timeout: 10000 });
   await page.waitForTimeout(1000);
   await page.screenshot({ path: '/tmp/after.png', fullPage: true });
@@ -186,7 +186,7 @@ Fixes #<Issue号>
 
 ## 反模式
 
-- ❌ "修复后"/"功能实现"截图用主 Dev 环境（after 必须是 `:710N`）
+- ❌ "修复后"/"功能实现"截图用主 Dev 环境（after 必须是 `:810N`）
 - ❌ 在主环境做写操作凑截图（POST/PUT/DELETE 全禁）
 - ❌ PR body 写"已截图"但没真图
 - ❌ 图片只贴本地路径 `file:///tmp/...`

@@ -10,8 +10,8 @@
 |---|---|
 | 工作目录 | `~/projects/wande-play-kimi<N>/`（N=1~20，main 时为 `~/projects/wande-play/`） |
 | tmux 会话名 | `cc-wande-play-kimi<N>-<ISSUE>` （`tmux display-message -p '#S'` 自查） |
-| 后端端口 | `810<N>` （kimi1=8101 ...） |
-| 前端端口 | `710<N>` （kimi1=7101 ...） |
+| 后端端口 | `710<N>` （kimi1=7101 ...） |
+| 前端端口 | `810<N>` （kimi1=8101 ...） |
 | MySQL Schema | `wande-ai-kimi<N>` （DB 用户 `wande`，无主库权限） |
 | Redis DB | `db<N>` |
 | 登录账号 | `admin` / `admin123` / tenant `000000` |
@@ -21,7 +21,7 @@
 
 - **禁止**访问主 Dev 环境：`localhost:6040` `localhost:8080`、CI 环境 `:6041` `:8084`
 - **禁止**连接主库 `wande-ai` schema（root 用户）
-- 截图 / curl / Playwright **只能**指向 `localhost:710<N>` / `localhost:810<N>`
+- 截图 / curl / Playwright **只能**指向 `localhost:810<N>`（前端）/ `localhost:710<N>`（后端）
 - 自己的 kimi 后端未启动 → `bash ~/projects/.github/scripts/cc-test-env.sh start kimi<N>`，**禁止**转向主环境
 
 ## 工作流入口

@@ -18,6 +18,23 @@
 
 ---
 
+### 2026-04-14 23:35 🚨 CC 新增 Controller 后 spring-boot:run 仍 404（m2 本地仓库旧 jar）
+
+- **症状**：kimi3 #3520 / kimi4 #3529 同时出现 —— 在 `ruoyi-modules/wande-ai` 新建 Controller 后，`mvn spring-boot:run -pl ruoyi-admin` 启动，所有 `org.ruoyi.wande.controller.*` 全部 404（包括此前已 merged 能工作的 ProvinceStatsController），CC 误以为是 Spring 未扫描到包，反复改 `@ComponentScan` / `mvn -U` 绕弯
+- **频次**：kimi3 #3520（第 1 次，22 分钟）+ kimi4 #3529（第 1 次，50 分钟）同轮并发 → 算"频繁"
+- **根因**：
+  1. `ruoyi-admin/pom.xml` 以 artifact 依赖方式引用 `wande-ai`（非 source reactor）
+  2. `mvn spring-boot:run -pl ruoyi-admin` 只编译 ruoyi-admin 自身，wande-ai 从本地 m2 仓库 `~/cc_scheduler/m2/kimiN/repository` 取**旧 jar**，新 Controller 根本没进 classpath
+  3. skill/backend-coding T6/T_run_backend 文档没强调"改 wande-ai 模块后必须先 install 到本地 m2"
+- **已处置**：向 kimi3/kimi4 发统一指令：`mvn install -pl ruoyi-modules/wande-ai -am -DskipTests -Dmaven.repo.local=~/cc_scheduler/m2/kimiN/repository`，再 `cc-test-env.sh restart kimiN`
+- **建议改进**：
+  1. skill/backend-coding 在启动后端步骤增加前置："**若本次改动涉及 ruoyi-modules/wande-ai（或任何非 ruoyi-admin 的模块），必须先 mvn install -pl <改动模块> -am -DskipTests 到本地 m2，再 spring-boot:run ruoyi-admin**"
+  2. cc-test-env.sh restart 可封装该逻辑：接受 `--install-module wande-ai` 参数自动 install
+  3. 报告 404 时的诊断清单：检查 target/classes 里有无新 Controller 的 .class → 有 .class 就是 m2 jar 旧
+- **状态**：观察中（本轮 2 CC 同时卡 ≥22min，若再犯落地 skill 硬点 + cc-test-env 封装）
+
+---
+
 ### 2026-04-14 23:12 🚨 CC 误执行 `git clean` 删除所有未提交新文件
 
 - **症状**：kimi5 #3636 后端 16 文件 + 前端 API 层 + 契约全部未 stage 未 commit，误跑 `git clean -fd` 后全部消失。git stash 空、reflog 无，只剩 target/classes 里的 .class 存活

@@ -216,14 +216,12 @@ Week 4 (5/03-5/09):
 > **🛠 2026-04-14 #3637/#3640 决策已锁定**（取代评论中的"评估"段）：#3637 只用 5 张核心竞品表，runs/company_status/errors/design_analysis/updates 不建；#3640 pipeline 写 wdpp_products → 门户前端**直接读** wdpp_products（V20260414012 已加门户展示字段），wdpp_product_portal_* 保留供运营手动维护。
 > **✅ 2026-04-14 矿场页面 30 条 seed 已注入** wdpp_project_mine（覆盖 6 Tab：early_gold/bidding/needs_confirm/dormant/invalid + assigned/contacted/tracking/bid_preparing 各 mine_status），脚本 `scripts/seed/project_mine_seed.sql` 可重复刷。
 > **🔥🔥 2026-04-14 20:07 用户最高优先级指令**：**优先完成 #3631 矿场接入 Master 的剩余子 Issue**，其他 Tier 全部让路。
-> **📊 2026-04-14 21:07 #3631 子 Issue 进度**：#3639 PR#3671 merged ✅；#3637 kimi1 / #3638 kimi16 In Progress；#3641 已 merged。**⚠️ #3636 仍待补派**（kimi17 释放可接手，幼儿园采购专题 smoke 2/3 过可继续）。
-> **♻ 清理**：已 CLOSED 的 #3624/#3630/#3632/#3633/#3634/#3635/#3640/#3639 + #3641(PR merged) 从指派建议表移除（明细表仍保留追踪）。
+> **📊 2026-04-14 21:27 #3631 子 Issue 进度**：#3637 PR#3672 merged ✅（kimi1 释放）；#3638 kimi16 In Progress；#3641/#3639 先前已 merged。**⚠️ #3636 连续 5 轮（50 分钟）待补派**（空位 kimi8/kimi9/kimi17，幼儿园采购专题 smoke 2/3 过可续）。#3481 kimi8 已 CLOSED。
+> **♻ 清理**：已 CLOSED 的 #3624/#3630/#3632/#3633/#3634/#3635/#3637/#3639/#3640 + #3641(PR merged) 从指派建议表移除（明细表仍保留追踪）。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
-| — | **#3637 + #3118** | **🔥P0** | **fullstack** | **[#3631 子] Phase4 F: 5张竞品表后端CRUD + 激活 #3118 关系网络前端切真数据**（runs/updates 等 5 张运行时表不做） | `docs/design/全球项目矿场/详细设计.md`（关系网络章节） | medium |
-| — | **#3638** | **🔥P0** | **backend** | **[#3631 子] Phase4 G: D3组件库 pipeline 表与后端 D3 模块表对齐（排查字段冲突）** | 后端 D3 模块代码+`ptc/` 若有 | medium |
-| — | **#3636** | **🔥P0** | **fullstack** | **[#3631 子][待接力] Phase4 E: 幼儿园采购+预算项目专题页（V007/V013 表已建；原 kimi16 已切 #3638 smoke 2/3 过；kimi17 空位可接）** | `docs/design/全球项目矿场/01-all.html`（套布局） | medium |
+| — | **#3636** | **🔥P0** | **fullstack** | **[#3631 子][连续5轮待派] Phase4 E: 幼儿园采购+预算项目专题页（V007/V013 表已建；smoke 2/3 过可续；kimi8/9/17 任一可接）** | `docs/design/全球项目矿场/01-all.html`（套布局） | medium |
 | kimi12 | #3517 | P0 | fullstack | Tier-1: 商务主页Dashboard — 8个Widget | `docs/design/rbac-homepage/详细设计.md` | high |
 | — | #3518 #3519 #3520 | P1 | fullstack | Tier-1: 支持/安装/综管主页Dashboard | `docs/design/rbac-homepage/详细设计.md` | high |
 | — | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 | `docs/design/crm-商务中心/详细设计.md` | high |

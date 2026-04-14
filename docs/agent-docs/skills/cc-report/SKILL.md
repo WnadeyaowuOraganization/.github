@@ -146,7 +146,7 @@ curl -s -X POST http://localhost:9872/api/notify \
 发完 close 汇报后，**必须**在主线程用下述标准模板等待 merge。**禁止**写后台 `poll-pr-*.sh` 脚本（会让主线程失去状态感知，研发经理 / 排程经理只能手动唤醒；另外 shell hook 会 block `sleep ≥ 5s` 的前台命令，写后台脚本也是在绕过 hook）。
 
 ```bash
-# 前台阻塞式轮询（主线程保持可响应，每次 sleep 60 在后台由 CC 内置允许）
+# 前台阻塞式轮询（主线程保持可响应，每次 sleep 180 由 CC 内置允许）
 while true; do
   STATE=$(gh pr view --head "feature-Issue-${ISSUE}" \
     --repo WnadeyaowuOraganization/wande-play \
@@ -159,15 +159,15 @@ while true; do
     # PR 被手动关闭（非 merge）→ 立刻 cc-report stuck
     break
   fi
-  echo "PR state=${STATE:-unknown}, sleep 60"
-  sleep 60   # CI 环境允许，shell hook 仅 block 脚本里的 sleep
+  echo "PR state=${STATE:-unknown}, sleep 180"
+  sleep 180   # 3 分钟一次，降低 gh API / tmux 刷新频率
 done
 
 # merged 后，不要退出 CC。cc-lock-manager.yml 会自动 kill 本 tmux 会话并释放 .cc-lock
 sleep infinity
 ```
 
-轮询过程中若 CI 红 / 失败 → 会收到 `inject-cc-prompt.sh` 注入的"❌ CI 失败"提示词，此时 `sleep 60` 会被 tmux 输入流打断，**立刻切 `fix-ci-failure` skill**。
+轮询过程中若 CI 红 / 失败 → 会收到 `inject-cc-prompt.sh` 注入的"❌ CI 失败"提示词，此时 `sleep 180` 会被 tmux 输入流打断，**立刻切 `fix-ci-failure` skill**。
 
 ### 结论前 — 禁止自行下结论
 
@@ -226,4 +226,4 @@ curl -s -X POST http://localhost:9872/api/notify \
 - ❌ 回车符漏写 → tmux 消息没发送（停在输入框）
 - ❌ 消息无 `from:` / `to:` 字段 → 人工追溯困难
 - ❌ 一次汇报塞 500 字 → `less is more`
-- ❌ 写 `/tmp/poll-pr-*.sh` / `nohup ... &` / `disown` 等**后台**轮询脚本（主线程失去状态感知，研发经理无法通过 inject-cc-prompt 唤醒；CI 红也吃不到失败注入）。**只用**本 skill「close 阶段标准轮询模板」（前台 `while` + `sleep 60` + 末尾 `sleep infinity`）
+- ❌ 写 `/tmp/poll-pr-*.sh` / `nohup ... &` / `disown` 等**后台**轮询脚本（主线程失去状态感知，研发经理无法通过 inject-cc-prompt 唤醒；CI 红也吃不到失败注入）。**只用**本 skill「close 阶段标准轮询模板」（前台 `while` + `sleep 180` + 末尾 `sleep infinity`）

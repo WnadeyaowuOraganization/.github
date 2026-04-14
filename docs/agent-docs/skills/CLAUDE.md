@@ -38,7 +38,7 @@
    - 新页面入口 → **menu-contract**（sys_menu UPDATE 占位）
 4. **cc-report** stage-done — 主要节点完成（编译绿 / smoke 绿 / PR 提交）
 5. **pr-visual-proof** — 截图 + 上传 Release + 贴 PR body + pr-body-lint 预检（**前置**：`git fetch origin dev && git rebase origin/dev`，冲突解不了立刻 abort 再 push）
-6. PR 创建后 **cc-report** close，按其中的**标准轮询模板**（前台 `while` + `sleep 60` + 末尾 `sleep infinity`）等 merge，**禁止**自写后台 poll 脚本
+6. PR 创建后 **cc-report** close，按其中的**标准轮询模板**（前台 `while` + `sleep 180` + 末尾 `sleep infinity`）等 merge，**禁止**自写后台 poll 脚本
 7. CI 红 / 注入提示词到达 → 立即切 **fix-ci-failure** skill 进修复循环
 8. 卡住 ≥10 分钟 → **cc-report** stuck 求助
 
@@ -67,7 +67,7 @@
 │   10. pr-visual-proof     截图 + Release 上传 + PR body + pr-body-lint 预检
 │   10a. git fetch origin dev && git rebase origin/dev（解不了冲突立刻 abort，push 让 CI 兜底）
 │   10b. git push --force-with-lease + gh pr create --base dev
-│   11. cc-report (close)   PR 创建汇报，按标准轮询模板等 merge（前台 while + sleep 60 + sleep infinity）
+│   11. cc-report (close)   PR 创建汇报，按标准轮询模板等 merge（前台 while + sleep 180 + sleep infinity）
 │
 └─ 异常：fix-ci-failure     收到 CI 失败注入 / Issue 标 status:test-failed → 立即进入修复循环
    异常：cc-report (stuck)  卡住 ≥10 分钟 / 同一 CI 失败连续 3 轮未修好 立即求助
@@ -102,7 +102,7 @@
 7. **禁止 `--no-verify` 跳 hook、`--force-with-lease` 之外的 force push**
 8. **禁止免责语**：task.md / PR body 不准出现"待 CI 验证 / 配置待解决"
 9. **禁止自行 close Issue**：必须研发经理确认
-10. **PR 提交后必须轮询到 merged 才算完工**；**必须**用 cc-report 的**标准前台轮询模板**（`while + sleep 60` + 末尾 `sleep infinity`），**禁止**自写 `/tmp/poll-*.sh` 后台脚本（主线程会失去状态感知，研发经理无法唤醒）
+10. **PR 提交后必须轮询到 merged 才算完工**；**必须**用 cc-report 的**标准前台轮询模板**（`while + sleep 180` + 末尾 `sleep infinity`），**禁止**自写 `/tmp/poll-*.sh` 后台脚本（主线程会失去状态感知，研发经理无法唤醒）
 11. **禁止无测试的 PR**：后端改动**必须按顺序**包含 JUnit 单测（先）+ Playwright API spec（后）；前端改动**必须**含 Playwright e2e spec；Bug 修复**必含**"复现红灯"测试；纯文档/配置 Issue **必须**在 task.md 显式注明"跳过测试原因"
 12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
 

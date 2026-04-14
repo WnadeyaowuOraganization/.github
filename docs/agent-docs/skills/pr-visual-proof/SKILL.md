@@ -215,6 +215,6 @@ gh pr create --repo WnadeyaowuOraganization/wande-play \
 
 # 5. 轮询到 merged（约束 9）
 while [ "$(gh pr view $PR --repo WnadeyaowuOraganization/wande-play --json state -q .state)" != "MERGED" ]; do
-  sleep 120
+  sleep 180
 done
 ```

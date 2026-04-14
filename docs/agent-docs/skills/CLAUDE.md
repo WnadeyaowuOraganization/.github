@@ -103,7 +103,7 @@
 8. **禁止免责语**：task.md / PR body 不准出现"待 CI 验证 / 配置待解决"
 9. **禁止自行 close Issue**：必须研发经理确认
 10. **PR 提交后必须轮询到 merged 才算完工**；**必须**用 cc-report 的**标准前台轮询模板**（`while + sleep 60` + 末尾 `sleep infinity`），**禁止**自写 `/tmp/poll-*.sh` 后台脚本（主线程会失去状态感知，研发经理无法唤醒）
-11. **禁止无测试的 PR**：后端 = JUnit（先）+ Playwright API（后）；前端 = Playwright e2e；Bug 修复 = 先写复现红灯；纯文档/配置 = task.md 注明跳过原因
+11. **禁止无测试的 PR**：后端改动**必须按顺序**包含 JUnit 单测（先）+ Playwright API spec（后）；前端改动**必须**含 Playwright e2e spec；Bug 修复**必含**"复现红灯"测试；纯文档/配置 Issue **必须**在 task.md 显式注明"跳过测试原因"
 12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
 
 ## 共用脚本速查

@@ -5,12 +5,12 @@ description: Test Wande-Play backend endpoints and services using curl integrati
 
 # 后端测试
 
-后端改动 PR 两道强制门，**按顺序**过：
+后端改动提 PR 前**必须按顺序**通过**两道强制门**（缺一 CI 拦截）：
 
-1. **JUnit 单测**（继承 `BaseServiceTest`）绿 + `mvn compile` 通过——不过后端起不来。
-2. **Playwright API spec**（`e2e/tests/backend/**/*.spec.ts`）绿——断 status/body/落库。
+1. **JUnit 单测**（继承 `BaseServiceTest`）绿 + `mvn compile` 通过——**每个后端 Issue 必做**，不过后端起不来。
+2. **Playwright API spec**（`e2e/tests/backend/**/*.spec.ts`）绿——**每个后端 Issue 必做**，断 status/body/落库。
 
-两门证据贴 `issues/issue-<N>/task.md`。纯文档/配置可跳，task.md 注明原因。curl 仅作手动 debug，不是 PR 证据。
+两门证据**必须**贴 `issues/issue-<N>/task.md`。纯文档/配置 Issue 可跳，**必须**在 task.md 显式注明跳过原因。curl 仅作手动 debug，**不作** PR 证据。
 
 ## 独立 kimi 环境
 

@@ -1,5 +1,11 @@
 # G7e PostgreSQL → m7i MySQL 接入方案
 
+> **抢救状态（2026-04-14）**：数据已 100% 保真拉回 m7i。两个库并存：
+> - **权威备份**：本地 Docker PG `legacy-pg`（端口 15432，pw=legacy，db=wande_ai）— 449 张表，全部数据 0 误差
+> - **MySQL 预迁移**：`wande_ai_legacy`（3306）— 438/442 表，关键表 `wdpp_discovered_projects` 8287/9015 (91.9%)、`wdpp_tender_data` 16869/17120 (98.5%)。JSON/特殊字符兼容剩余尾部可后续按表补齐
+>
+> **G7e 可随时关机**。Phase 1 接入可优先用 PG 源做权威对齐，MySQL 侧可作为 RuoYi 业务库的初始化基线。
+
 > **目标**：G7e 开机 1 小时内，把停机前的全量历史表+数据抢救到 m7i MySQL 的独立 `wande_ai_legacy` 库，并据此规划业务库 `wande-ai` 的接入路径。
 >
 > 范围：`wande_ai` 数据库 public schema 下所有表（包括 44+ 个 `wdpp_*` 表和其他历史遗留表）。

@@ -144,14 +144,24 @@ log "✓ 目标库 ${TARGET_DB} 已就绪（已 DROP 重建）"
 log "=== Step 4: pgloader 迁移（可能需要 2-10 分钟） ==="
 cd "$SCRIPT_DIR"
 
-# 根据连接模式动态生成 pgloader 配置（覆盖 migration.load 中的源连接）
+# pgloader 3.6.7 跨引擎迁移必须走 load 文件（命令行模式只支持 PG→PG）
+# 动态生成 load 文件，替换连接串
 GEN_LOAD="${REPORT_DIR}/migration_runtime_${TS}.load"
-sed -E "s|postgresql://wande:wande_dev_2026@localhost:15433/wande_ai|postgresql://${PG_USER}:${PG_PASS}@${PG_CONN_HOST}:${PG_CONN_PORT}/${PG_DB}|" \
+sed -E \
+  -e "s|127\.0\.0\.1:15433|${PG_CONN_HOST}:${PG_CONN_PORT}|g" \
+  -e "s|wande:wande_dev_2026|${PG_USER}:${PG_PASS}|g" \
+  -e "s|root:root|${MYSQL_USER}:${MYSQL_PASS}|g" \
+  -e "s|wande_ai_legacy|${TARGET_DB}|g" \
   migration.load > "$GEN_LOAD"
 log "生成运行时配置：$GEN_LOAD"
 
 set +e
-pgloader --with "prefetch rows = 1000" "$GEN_LOAD" 2>&1 | tee -a "$LOG"
+# Ubuntu pgloader 3.6.7 没编 MySQL 支持，用 Docker 版
+# --network=host 保证容器能直接访问 m7i 上的 15433 SSH 隧道 + 3306 MySQL
+docker run --rm --network=host \
+  -v "${REPORT_DIR}:/reports:ro" \
+  ghcr.io/dimitri/pgloader:latest \
+  pgloader --verbose "/reports/$(basename $GEN_LOAD)" 2>&1 | tee -a "$LOG"
 PGLOADER_RC=${PIPESTATUS[0]}
 set -e
 if [ "$PGLOADER_RC" -ne 0 ]; then

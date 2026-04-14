@@ -268,8 +268,9 @@ Week 4 (5/03-5/09):
 | kimi1 | #3518 | P1 | fullstack | Tier-1: 支持中心主页Dashboard — 6个Widget | 22:42 |
 | kimi2 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | 22:42 |
 | kimi3 | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | 22:42 |
-| kimi4 | #3582 | P0 | frontend | Tier-5: 产品目录页前端 — 卡片网格+筛选搜索 | 22:42 |
+| kimi4 | ~~#3582~~ | P0 | frontend | ~~Tier-5: 产品目录页前端~~ 已由 PR#3664 覆盖，kimi4 巡检确认空转→立即改派 #3529 | ~~Done~~ |
 | kimi5 | #3636 | P1 | fullstack | 矿场Phase4 E: 幼儿园采购+预算项目专题页 | 22:43 |
+| kimi4 | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 — CRUD+三类型+详情页五Tab | 22:48 |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

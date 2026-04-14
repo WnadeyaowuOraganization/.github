@@ -114,6 +114,18 @@ curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/j
 3. **不重新规划**：若已部分完成则先勾选已做部分，直接接续做下一项
 4. 不清楚现状时才主动问研发经理，不要自行推翻计划
 
+## E2E Fail / `status:test-failed` 分支（Issue 被重派时）
+
+Issue 若带 `status:test-failed` 标签或 Project#4 状态是 `[E2E Fail]`，说明**之前已经提过 PR 但 CI 红**，现在是修复轮次。**不要**重新写 task.md，按以下顺序续：
+
+1. **确认分支**：`git branch --show-current` 应是 `feature-Issue-<N>`；若不是，`git fetch origin feature-Issue-<N> && git checkout feature-Issue-<N>`
+2. **找历史 PR**：`gh pr list --head feature-Issue-<N> --state all --repo WnadeyaowuOraganization/wande-play` → 找 OPEN 或最近的
+3. **读 PR 评论中的失败摘要**（`e2e-result-handler.py` 会把失败 spec/log 贴进来）：`gh pr view <PR> --comments | head -200`
+4. **读原 task.md**（研发经理或 cc-lock-manager 通常保留了 `issues/issue-<N>/task.md`）找已勾选部分
+5. **切 `fix-ci-failure` skill** 进入修复循环（定位失败 → TDD 红 → 修 → 绿 → push）
+
+对账表 / 原型清单 / Steps 不重写，在 `## Phase` 加 `FIX_CI_ROUND_N` 并追加 `T_fix_*` 系列步骤即可。
+
 ## 反模式
 
 - ❌ 跳过三方对账直接开码

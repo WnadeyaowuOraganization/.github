@@ -37,9 +37,10 @@
    - 跨端契约 → **api-contract**
    - 新页面入口 → **menu-contract**（sys_menu UPDATE 占位）
 4. **cc-report** stage-done — 主要节点完成（编译绿 / smoke 绿 / PR 提交）
-5. **pr-visual-proof** — 截图 + 上传 Release + 贴 PR body + pr-body-lint 预检
-6. PR 创建后 **cc-report** close，轮询 merge 直至 Done
-7. 卡住 ≥10 分钟 → **cc-report** stuck 求助
+5. **pr-visual-proof** — 截图 + 上传 Release + 贴 PR body + pr-body-lint 预检（**前置**：`git fetch origin dev && git rebase origin/dev`，冲突解不了立刻 abort 再 push）
+6. PR 创建后 **cc-report** close，按其中的**标准轮询模板**（前台 `while` + `sleep 60` + 末尾 `sleep infinity`）等 merge，**禁止**自写后台 poll 脚本
+7. CI 红 / 注入提示词到达 → 立即切 **fix-ci-failure** skill 进修复循环
+8. 卡住 ≥10 分钟 → **cc-report** stuck 求助
 
 > 所有 skill 在 `.claude/skills/` 下，描述会自动匹配。**结论前**（"问题不存在"/"无需修改"）必须先 cc-report 等研发经理确认，**禁止**自行 `gh issue close`。
 
@@ -64,9 +65,12 @@
 │
 ├─ 阶段 3：交付
 │   10. pr-visual-proof     截图 + Release 上传 + PR body + pr-body-lint 预检
-│   11. cc-report (close)   PR 创建汇报，轮询 merge
+│   10a. git fetch origin dev && git rebase origin/dev（解不了冲突立刻 abort，push 让 CI 兜底）
+│   10b. git push --force-with-lease + gh pr create --base dev
+│   11. cc-report (close)   PR 创建汇报，按标准轮询模板等 merge（前台 while + sleep 60 + sleep infinity）
 │
-└─ 异常：cc-report (stuck)  卡住 ≥10 分钟 立即求助
+└─ 异常：fix-ci-failure     收到 CI 失败注入 / Issue 标 status:test-failed → 立即进入修复循环
+   异常：cc-report (stuck)  卡住 ≥10 分钟 / 同一 CI 失败连续 3 轮未修好 立即求助
    异常：cc-report (结论前)  下"问题不存在"等结论前先确认，禁止自行 close
 ```
 
@@ -76,6 +80,7 @@
 | 纯前端页面 | issue-task-md → cc-report → frontend-coding → frontend-e2e → menu-contract（如新入口）→ cc-report → pr-visual-proof → cc-report |
 | 全栈新功能 | 全部走一遍（按上图顺序） |
 | Bug 修复 | issue-task-md → cc-report → backend-test/frontend-e2e（先写复现红灯）→ backend-coding/frontend-coding 修 → 测试转绿 → cc-report → pr-visual-proof → cc-report |
+| E2E Fail 重派 | issue-task-md（走 `E2E Fail 分支`续原 task.md）→ fix-ci-failure（TDD 红→修→绿）→ push → cc-report → 标准轮询模板 |
 | 仅菜单调整 | issue-task-md → cc-report → menu-contract → cc-report → PR |
 | 仅文档/配置 | issue-task-md → cc-report → 修改 → cc-report close（task.md 注明跳过测试原因）|
 
@@ -84,8 +89,9 @@
 - **frontend-design** — 前端 UI 美学规范参考
 - **skill-creator** — 创建/改进新 skill（一般 CC 用不到，研发经理用）
 - **webapp-testing** — 通用 Playwright 操作参考
+- **fix-ci-failure** — CI 构建/E2E 失败注入修复循环（属"异常路径"，但每个跑 PR 的 CC 都可能触发，必读）
 
-## 不可逾越的红线（共 10 条硬约束的最关键项）
+## 不可逾越的红线（共 12 条硬约束的最关键项）
 
 1. **禁止静默工作**：四节点主动汇报缺一即违规（见 cc-report skill）
 2. **禁止跳过 task.md**：没有 task.md 不准开始编码
@@ -96,7 +102,9 @@
 7. **禁止 `--no-verify` 跳 hook、`--force-with-lease` 之外的 force push**
 8. **禁止免责语**：task.md / PR body 不准出现"待 CI 验证 / 配置待解决"
 9. **禁止自行 close Issue**：必须研发经理确认
-10. **PR 提交后必须轮询到 merged 才算完工**（约束 9）
+10. **PR 提交后必须轮询到 merged 才算完工**；**必须**用 cc-report 的**标准前台轮询模板**（`while + sleep 60` + 末尾 `sleep infinity`），**禁止**自写 `/tmp/poll-*.sh` 后台脚本（主线程会失去状态感知，研发经理无法唤醒）
+11. **禁止无测试的 PR**：feature 分支的 diff 必须包含本 Issue 相关的**新单测 / 新 spec**（Bug 修复则为"复现红灯"测试）；纯文档 / 配置 Issue 必须在 task.md 显式注明"跳过测试原因"
+12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
 
 ## 共用脚本速查
 

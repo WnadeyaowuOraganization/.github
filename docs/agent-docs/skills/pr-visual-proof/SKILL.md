@@ -170,7 +170,7 @@ Fixes #<Issue号>
 ## 自测
 - [x] 后端 `mvn compile` 通过
 - [x] 后端 `mvn test -pl ruoyi-modules/wande-ai` 全绿
-- [x] curl smoke: POST/GET/批量评估 3 路径全 code:200
+- [x] Playwright API spec `backend/api/<module>.spec.ts` 全绿（断 status+body+落库）
 - [x] 前端 `pnpm build` 通过
 - [x] Playwright smoke：`<module>-page.spec.ts` 绿灯
 - [x] E2E：`<module>-regression.spec.ts` 绿灯

@@ -87,12 +87,13 @@ curl -s -X POST http://localhost:9872/api/notify \
 ### stage-done — 阶段完成
 
 ```bash
-CONTENT='【进度播报】-【阅即可】 [#'${ISSUE}'] 后端完成：curl smoke 3 路径全绿
+CONTENT='【进度播报】-【阅即可】 [#'${ISSUE}'] 后端完成：JUnit + Playwright API 全绿
 from: cc-wande-play-kimi'${N}'-'${ISSUE}'
 to: manager-研发经理
 =============
 mvn compile ✅
-curl POST/GET/PUT 3 条 code:200 ✅
+JUnit wande-ai 模块 Tests run:N Failures:0 ✅
+Playwright API spec <module>.spec.ts 全绿 ✅
 下一步：前端 index.vue'
 
 tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $CONTENT" Enter

@@ -1,6 +1,6 @@
 ---
 name: backend-test
-description: Test Wande-Play backend endpoints and services using curl integration smoke, JUnit unit tests (BaseServiceTest with @Transactional rollback), and Playwright API specs in the isolated kimi environment (:710N backend, wande-ai-kimi{N} schema, Redis db{N}, wande user without main-DB access). Covers startup, auth token acquisition, positive/negative/auth cases, and TDD red/green workflow.
+description: Test Wande-Play backend endpoints and services using JUnit unit tests (BaseServiceTest with @Transactional rollback) and Playwright API specs in the isolated kimi environment (:710N backend, wande-ai-kimi{N} schema, Redis db{N}, wande user without main-DB access). Covers startup, auth token acquisition, positive/negative/auth cases, and TDD red/green workflow. Curl is debug-only and not a PR evidence.
 ---
 
 # 后端测试
@@ -54,9 +54,9 @@ TOKEN=$(curl -s -X POST http://localhost:${PORT}/auth/login \
 echo $TOKEN
 ```
 
-## curl 手动 debug
+## curl 手动 debug（非必做、非 PR 证据）
 
-仅联调用，**必须带 3 个鉴权头**，缺任一 → 401 / 租户错乱：
+仅用于 health check 或本地快速试探，**不要**把 curl 结果贴 task.md 当交付证据，也**不要**作为开发主流程（直接写 Playwright API spec 更快）。必须带 3 个鉴权头，缺任一 → 401 / 租户错乱：
 
 ```bash
 curl -H "Authorization: Bearer $TOKEN" \
@@ -64,8 +64,6 @@ curl -H "Authorization: Bearer $TOKEN" \
      -H "tenantId: 000000" \
      http://localhost:${PORT}/wande/xxx/list
 ```
-
-不是 PR 证据，不要贴 task.md。
 
 ## 后端启动失败：M2 BOM 缺失恢复（2026-04-14 起）
 

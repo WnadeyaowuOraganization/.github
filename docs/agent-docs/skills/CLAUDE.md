@@ -57,7 +57,7 @@
 │
 ├─ 阶段 2：实现
 │   5. backend-coding       Entity/VO/Mapper/Service/Controller
-│   6. backend-test         curl smoke + JUnit（必须红→绿 TDD）
+│   6. backend-test         JUnit + Playwright API spec（必须红→绿 TDD；curl 仅 debug，非证据）
 │   7. frontend-coding      index.vue/data.ts/Drawer/Modal
 │   8. frontend-e2e         smoke spec（views/**/index.vue 强制配对）
 │   9. menu-contract        若有新页面入口 → UPDATE 占位 sys_menu

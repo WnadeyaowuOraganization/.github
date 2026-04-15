@@ -239,6 +239,8 @@ Week 4 (5/03-5/09):
 > **✅ 2026-04-15 07:21 kimi5 重派**：kimi5 接 **#3536 CRM-09 经销商管理**（合作级别/返点结算/销售目标跟踪，fullstack P1 high），blocker #3527/#3529 均 CLOSED。池恢复 **5/5** 满。
 > **🎉 2026-04-15 07:50 #3534 PR#3690 merged**：kimi4 CRM-07 投标申请（审批流+中标录入）4h33m 交付。含中途红线 #13 触碰干预（rm -rf .claude/skills → git restore 恢复）+ API_TARGET 主机 IP 访问主 dev 红线 #3 告警。CI 全绿自动 merge，kimi4 会话退出。
 > **✅ 2026-04-15 07:51 kimi4 重派**：kimi4 接 **#3532 CRM-05 询盘工作台**（5状态Tab/报价/转商机流程，fullstack P1 high），blocker #3527 CRM-DB CLOSED。池恢复 **5/5** 满。
+> **🎉 2026-04-15 09:00 #3535 PR#3691 merged**：kimi3 CRM-08 回款跟踪（周报+逾期+警告）4h46m 交付，含偏离 scope 4h+ Churn（菜单基线）强干预 + mysql 裸 root 登记 + 429 TPP K2.6 耗尽 fallback。CI 全绿。
+> **✅ 2026-04-15 09:01 kimi3 重派**：kimi3 接 **#3537 CRM-10 我的提成**（个人KPI+月度明细只读，fullstack P1 medium），blocker #3527 CLOSED。池恢复 **5/5** 满。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
@@ -246,7 +248,7 @@ Week 4 (5/03-5/09):
 | kimi5 | **#3536** | P1 | fullstack | **[运行中]** Tier-4 CRM-09 经销商管理 合作级别+返点结算+销售目标（07:21 启动，#3530 PR#3689 merged 07:20 后派发） | `docs/design/crm-商务中心/详细设计.md` | high |
 | kimi1 | **#3531** | P1 | fullstack | **[运行中]** Tier-4 CRM-04 商机详情页（左摘要+右10Tab，阶段自动推进）07:10 启动，blocker #3527/#3529 均 CLOSED | `docs/design/crm-商务中心/04-opportunity-detail.html` | high |
 | kimi2 | **#3683** | P1 | frontend | **[运行中]** #3550 Tab2/Tab4 统计图表拆分追补（07:04 启动，#3533 PR#3686 merged 05:48 后派发） | `docs/design/crm-商务中心/详细设计.md` | medium |
-| kimi3 | **#3535** | P1 | fullstack | **[运行中]** Tier-4 CRM-08 回款跟踪 — 周报强制+逾期提醒+连续未填警告（04:13 启动，PR#3685 merged 04:12 后派发） | `docs/design/crm-商务中心/08-payment.html` | medium |
+| kimi3 | **#3537** | P1 | fullstack | **[运行中]** Tier-4 CRM-10 我的提成 个人KPI+月度明细（只读，09:01 启动，#3535 PR#3691 merged 09:00 后派发） | `docs/design/crm-商务中心/详细设计.md §13` | medium |
 | kimi4 | **#3532** | P1 | fullstack | **[运行中]** Tier-4 CRM-05 询盘工作台 5状态Tab+报价+转商机（07:51 启动，#3534 PR#3690 merged 07:50 后派发） | `docs/design/crm-商务中心/05-inquiry.html` | high |
 | — | #3583 #3585 #3588 | P0/P1/P2 | frontend | Tier-5: 产品详情页（3D）/备件目录/H5 适配（#3582 已随 PR#3664 合并） | `docs/design/product-portal/02-detail.html` 等 | medium |
 

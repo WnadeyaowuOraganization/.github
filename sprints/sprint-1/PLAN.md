@@ -221,11 +221,12 @@ Week 4 (5/03-5/09):
 > **📊 2026-04-15 00:18 池快照**：#3461 PR#3676 merged → kimi2 空闲。活跃 4/5：kimi1 #3518 / kimi3 #3520 / kimi4 #3529 / kimi5 #3636。建议 kimi2 接 **#3548 CRM-13 公司通讯录**（P1 fullstack medium，CRM Tier-4 批次轻量入口）。
 > **📊 2026-04-15 00:35 池快照**：**#3518 PR#3677 merged 00:24 / #3520 PR#3678 merged 00:3x** → 研发经理 3 连派 CRM 批次：**kimi1 #3549 / kimi2 #3548 / kimi3 #3550**。活跃 **5/5 满**：kimi1 #3549 / kimi2 #3548 / kimi3 #3550 / kimi4 #3529 / kimi5 #3636。
 > **📊 2026-04-15 00:45 池快照**：**#3529 PR#3679 merged 00:41** → kimi4 立即接 **#3551 CRM-12**。池 **5/5 满**：kimi1 #3549 / kimi2 #3548 / kimi3 #3550 / kimi4 **#3551** / kimi5 #3636。CRM Tier-4 批次（#3548/#3549/#3550/#3551）全部就位；#3551 merged 后 CRM-02 子矩阵收尾。
+> **📊 2026-04-15 01:00 池快照**：**#3636 PR#3680 merged 00:5x**（kimi5 2h9m 刹车后按规范出脱，Flyway INSERT 合规）→ #3631 矿场 Master 收尾 ✅。kimi5 空闲，建议改派 **#3530 CRM-03 商机管道**（列表+看板双视图，P1 fullstack high）延续 CRM Tier-4 批次。活跃 4/5。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
-| kimi5 | **#3636** | **🔥P0** | **fullstack** | **[#3631 子][运行中] Phase4 E: 幼儿园采购+预算项目专题页（终于派发，22:4x 启动）** | `docs/design/全球项目矿场/01-all.html`（套布局） | medium |
+| kimi5 | **#3530** | P1 | fullstack | [运行中] Tier-4 CRM-03 商机管道 列表+看板双视图 / 7阶段 / 15种来源（#3636 PR#3680 merged 00:5x 后改派，01:0x 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
 | kimi1 | #3549 | P1 | fullstack | [运行中] Tier-4 CRM-14（00:33 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
 | kimi2 | #3548 | P1 | fullstack | [运行中] Tier-4 CRM-13 公司通讯录（00:33 启动） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | kimi3 | #3550 | P1 | fullstack | [运行中] Tier-4 CRM-11（00:35 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
@@ -271,7 +272,7 @@ Week 4 (5/03-5/09):
 | kimi2 | #3519 | P1 | fullstack | Tier-1: 项目安装主页Dashboard — 7个Widget | 22:42 |
 | kimi3 | #3520 | P1 | fullstack | Tier-1: 综合管理主页Dashboard — 6个Widget | 22:42 |
 | kimi4 | ~~#3582~~ | P0 | frontend | ~~Tier-5: 产品目录页前端~~ 已由 PR#3664 覆盖，kimi4 巡检确认空转→立即改派 #3529 | ~~Done~~ |
-| kimi5 | #3636 | P1 | fullstack | 矿场Phase4 E: 幼儿园采购+预算项目专题页 | 22:43 |
+| kimi5 | ~~#3636~~ | P1 | fullstack | ~~矿场Phase4 E: 幼儿园采购+预算项目专题页~~ PR#3680✅merged 2026-04-15 00:5x | ~~Done~~ |
 | kimi4 | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 — CRUD+三类型+详情页五Tab | 22:48 |
 | kimi2 | ~~#3519~~ | P1 | fullstack | ~~Tier-1: 项目安装主页Dashboard — 7 Widget~~ PR#3675✅merged 2026-04-14 23:01 | ~~Done~~ |
 | kimi2 | #3461 | P0 | fullstack | Tier-6: 耀总驾驶舱v1.0 — 8大区块（矿场运营+团队+项目+财务+待办+复盘+市场+趋势） | 23:13 |
@@ -282,6 +283,8 @@ Week 4 (5/03-5/09):
 | kimi1 | #3549 | P1 | fullstack | Tier-4 CRM-14 责任人变更日志 — 审计追踪 | 00:31 |
 | kimi2 | #3548 | P1 | fullstack | Tier-4 CRM-13 公司通讯录 — 全员联系人+部门树 | 00:31 |
 | kimi3 | #3550 | P1 | fullstack | Tier-4 CRM-11 智能过会管理 — 异常驱动+三层节奏 | 00:33 |
+| kimi4 | #3551 | P1 | fullstack | Tier-4 CRM-12 授权管理 — 经销商授权+保证金+审批流 | 00:45 |
+| kimi5 | #3530 | P1 | fullstack | Tier-4 CRM-03 商机管道 — 列表+看板双视图/7阶段/15种来源 | 01:0x |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

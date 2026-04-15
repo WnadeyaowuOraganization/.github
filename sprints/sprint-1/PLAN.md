@@ -313,5 +313,6 @@ Week 4 (5/03-5/09):
 | kimi5 | #3714 | P0 | backend | 执行管理v2.0 [9/22] 交付节点API（里程碑+发货批次），配对#3717前端 | 02:50 启动 |
 | kimi1 | #3719 | P0 | frontend | 执行管理v2.0 [14/22] Tab7文档中心（360看板+分类树+文档列表），mock配对#3716 PR#3743⏳等待merge | 02:15 启动，PR已提交 |
 | kimi2 | #3717 | P0 | frontend | 执行管理v2.0 [12/22] Tab3合同与交付（合同状态+交付节点+发货跟踪），mock配对#3713/#3714 | 02:24 启动，T1完成build✅ |
-| kimi3 | #3713 | P0 | backend | 执行管理v2.0 [8/22] 合同信息API（关联crm_contract），配对#3717前端 PR#3745⏳等待merge | 02:27 启动，PR已提交 |
+| ~~kimi3~~ | ~~#3713~~ | P0 | backend | ~~执行管理v2.0 [8/22] 合同信息API（关联crm_contract）~~ PR#3745✅merged 2026-04-16 02:54 | ~~Done~~ |
+| kimi3 | #3712 | P0 | fullstack | 执行管理v2.0 [7/22] 阶段推进+审批引擎D66对接（fullstack high） | 02:57 启动，blocker #3707+#3711 全merged |
 

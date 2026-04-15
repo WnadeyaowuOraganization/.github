@@ -498,9 +498,14 @@ def classify_anthropic_compat(status_code, resp_body):
     if any(kw in message_lower for kw in ("insufficient", "balance", "余额", "额度不足", "credit")):
         return ErrorType.BALANCE_EXHAUSTED, err_type, None, message
 
-    # 限额耗尽（含 quota/exceeded 关键词）
-    if err_type == "rate_limit_error" and any(kw in message_lower for kw in ("quota", "exceeded", "limit reached")):
-        return ErrorType.QUOTA_EXHAUSTED, err_type, None, message
+    # 限额耗尽（含 quota/exceeded/5-hour 关键词，不强求 err_type，兼容火山方舟等 OpenAI 兼容格式）
+    if status_code == 429 and any(kw in message_lower for kw in ("quota", "exceeded", "limit reached", "usage quota")):
+        # 解析精确 reset 时间（格式: "reset at 2026-04-16 06:18:33 +0800 CST"）
+        reset_iso = None
+        _m = re.search(r'reset at (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})\s+\+0800', message)
+        if _m:
+            reset_iso = _m.group(1).replace(' ', 'T') + '+08:00'
+        return ErrorType.QUOTA_EXHAUSTED, err_type or "quota_exceeded", reset_iso, message
 
     # 速率限制（不含 quota 关键词）
     if err_type == "rate_limit_error" or status_code == 429:

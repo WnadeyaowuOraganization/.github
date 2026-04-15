@@ -253,6 +253,10 @@ Week 4 (5/03-5/09):
 >
 > **🚀 2026-04-15 12:17 待派**：kimi3 + kimi5 双空位，活跃 3/5（kimi1 #3531 / kimi2 #3683 / kimi4 #3532）。Todo 队列只有 7 个且 frontend 类 #3585 blocked-by #3584（OPEN ExplodeView 集成），其余为 pipeline 类。**已 ping 排程经理从 Plan 列推新 Todo**。
 >
+> **🚀 2026-04-15 12:30 补池 4/5**：排程经理建议推 #3587（P1 backend 备件API+询价车，解锁 #3585 前端）。派 **kimi5 #3587**（blocked-by #3580✅/#3581✅ 均 merged，纯后端 CRUD+Flyway；"配前端"精神通过紧跟 #3585 实现）。kimi3 仍空闲等 #3587 merged 或现有 CC 释放解锁前端 Issue。
+>
+> **🔧 2026-04-15 12:28 kimi4 #3532 根因排查**：smoke 持续 404 非前端代码，而是 **vite dev server 实际绑 localhost:5670**（pid 3807557，kimi4 手动 `cd frontend && pnpm dev` 无 port 参数 → vite 默认 5666 递增到 5670），**8104 被遗留僵尸 LISTEN 占据返空骨架 HTML**。已 tmux 指令 kimi4 执行 `pkill -f vite + cc-test-env.sh stop/start kimi4` 标准重启 + 验证 8104 真绑 vite 再跑 smoke。
+>
 > **✅ 2026-04-15 10:32 kimi5 重派 #3581**：排程经理筛选 **#3581 产品门户 2/10 产品展示API**（P0 backend status:ready，blocker #3580 已 merged），6 个 Controller endpoint + AWS S3 presigned URL + L0/L1 权限过滤。kimi5 上下文连贯（刚做完产品门户 DB）。池恢复 **5/5** 满。merge 后可解锁 #3584 ExplodeView。
 >
 > **🎉 2026-04-15 10:22 #3580 PR#3694 merged**：kimi5 产品门户 1/10 数据库表 3 张（product/document/part）纯 DDL 1h10m 交付，CI 全绿，解锁下游 #3585/#3588 的 DB 依赖（#3584 仍阻塞）。kimi5 tmux 会话已关闭，池子降为 **4/5**。已 ping 排程经理从 Plan 列推新 Todo。

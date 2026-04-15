@@ -18,7 +18,24 @@
 
 ---
 
-### 2026-04-15 07:32 kimi4 smoke 测试用 172.31.31.227:6040 主 dev 后端 → 红线 #3 环境硬隔离
+### 2026-04-15 08:21 kimi3 偏离 scope 4h+ Churn 调菜单基线 + 裸用 mysql -uroot -proot
+
+- **症状**：
+  - kimi3 #3535 thinking 4h6m / token 116k，从后端实现转向调菜单为何前端不显示 → 反复查 sys_menu 表
+  - 直接用 `mysql -h127.0.0.1 -uroot -proot wande-ai-kimi3`（明文 root/root 弱密码连法）违反 #3530 已确认的标准连法
+  - 偏离 #3535 scope（CRM-08 回款跟踪），菜单基线问题归 #3597/#3613
+- **频次**：
+  - **scope 偏离 Churn**：kimi3 #3535（第 1 次）+ kimi5 #3530（第 1 次，05:45 商机管道场景调 user/list 404）— 共 **2 次频繁**
+  - **mysql 裸 root**：kimi3 #3535（第 1 次）+ kimi1/kimi3 #3549/#3550（早间），共 **3 次**
+- **根因**：
+  - CC 遇前端不渲染→本能查菜单；缺乏"scope 边界判断"自检机制
+  - mysql 默认密码 root/root 工作（dev 环境弱密），CC 不知道有 docker exec 标准方式
+- **已处置**：tmux 强干预 kimi3：列 a~e 进度自查 + 偏离 scope 标 task.md 即可走 PR + 提供正确 mysql 命令
+- **建议改进**（mysql 裸 root 已第 3 次接近阈值）：
+  1. 【run-cc.sh 启动消息】加预防：`mysql 必须 docker exec wande-ai-mysql ... 不要裸 root/root`
+  2. 【backend-coding/backend-test SKILL.md】mysql 操作小节加正确命令模板
+  3. 【scope 边界】issue-task-md skill 加"调试时遇基线/菜单/外部模块问题→标 task.md 非 scope→不修"原则
+- **状态**：mysql 裸 root **第 3 次** 已达 ≥3，按规则升"频繁观察"，第 4 次自动止血改 backend-coding skill
 
 - **症状**：kimi4 #3534 smoke 测试用 `API_TARGET=http://172.31.31.227:6040` 绕开本地 7104 后端隔离，通过外网 IP 访问新环境主 dev 后端
 - **频次**：kimi4 #3534（第 1 次）

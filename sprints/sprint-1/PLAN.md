@@ -355,56 +355,12 @@ Week 4 (5/03-5/09):
 | kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP 批量处理 Pipeline | 22:06 启动，blocker #3580/#3581 均 CLOSED |
 | kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED，22:08 cc-report 中等复杂度 |
 | kimi5 | ~~#1697~~ | P2 | backend | ~~报销费控 7 张表 schema 建表（纯 Flyway，Sprint-4 预研）~~ PR#3702✅merged 2026-04-15 22:18 CST (~8m 惊人效率) | ~~Done~~ |
-| kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD API（依赖 #1697 7 表已 land） | 22:25 启动，Issue body 含 @DS 多数据源注解需忽略（单库架构），排程经理预估 2.5-3h |
+| ~~kimi5~~ | ~~#1693~~ | P2 | backend | ~~报销费控 报销单+借款 CRUD API（依赖 #1697 7 表已 land，Issue body 含 @DS 需忽略单库架构）~~ PR#3730✅merged 2026-04-15 16:05 | ~~Done~~ |
 | kimi1 | ~~#3728~~ | 🔥P0 | frontend | ~~CRM 13子页白屏回归验证 — #3701+#3705修复后复查，kimi1独立环境重现+修复+Playwright smoke~~ PR#3729✅merged 2026-04-16 00:01 | ~~Done~~ |
 | ~~kimi2~~ | ~~#2419~~ | P0 | backend | ~~pipeline DB Schema — wdpp_dealer_candidates + wdpp_intl_buyer_candidates~~ PR#3731✅merged 2026-04-16 00:14 | ~~Done~~ |
-| ~~kimi5~~ | ~~#1693~~ | P2 | backend | ~~报销费控 报销单+借款 CRUD API~~ PR#3730✅merged 2026-04-15 16:05 | ~~Done~~ |
 | kimi1 | #3706 | P0 | backend | 执行管理v2.0 [1/22] 执行项目实体+CRUD+列表API+统计API | 00:27 启动，blocker #3705 CLOSED |
 | kimi5 | #3707 | P0 | backend | 执行管理v2.0 [2/22] 阶段配置+阶段进度API（三种业务模式：直销12/经销8/国贸10阶段） | 00:27 启动 |
 | kimi2 | #3708 | P0 | frontend | 执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行 | 00:27 启动 |
-
-## 当前运行（2026-04-14 11:55 刷新）
-
-> 11 个僵尸锁经 cc-keepalive 自动恢复（kimi3-12 复用旧 issue id 重启），#3521 已 CLOSED 已停 + 改派 #3635。
-> 新派：kimi1 #3624（矿场Phase1 P0），kimi7 #3635（管线健康 P1）。
-> kimi20 #3630 是 skill 化机制冒烟验证 + 矿场Phase2，运行中 25%。
-
-| 指派目录 | Issue | Tier | 模块 | 内容 | 启动 |
-|---------|-------|------|------|------|------|
-| ~~kimi1~~ | ~~**#3624**~~ | P0 | app | ~~矿场Phase1: ggzy_collector+Java去mock~~ ✅ PR#3644 merged 13:31 | ~~11:55~~ |
-| kimi1 | **#3637** | P1 | app | 矿场Phase4 F: wdpp_competitor_* 5张表→#3118关系网络 | 13:35 |
-| kimi3 | #3517 | P0 | app | 商务主页Dashboard 8Widget（恢复） | 旧锁11:54 |
-| kimi4 | #3518 | P1 | app | 支持中心主页Dashboard（恢复） | 旧锁11:54 |
-| kimi5 | #3519 | P1 | app | 项目安装主页Dashboard（恢复） | 旧锁11:54 |
-| kimi6 | #3520 | P1 | app | 综合管理主页Dashboard（恢复） | 旧锁11:54 |
-| kimi7 | **#3635** | P1 | app | 管线健康度Tab（替换已CLOSED #3521） | 11:55 |
-| kimi8 | #3481 | P1 | app | 实时日志流Tab（恢复） | 旧锁11:54 |
-| kimi9 | #3482 | P1 | app | FinOps Tab（恢复） | 旧锁11:54 |
-| kimi10 | #3483 | P1 | app | 安全审计Tab（恢复） | 旧锁11:54 |
-| kimi11 | #3484 | P1 | app | Prompt管理Tab（恢复） | 旧锁11:54 |
-| kimi12 | #3582 | P0 | app | 产品目录页（恢复） | 旧锁11:54 |
-| ~~kimi20~~ | ~~**#3630**~~ | P0 | backend | ~~矿场Phase2字段对齐~~ ✅ PR#3643 merged 12:06 | ~~11:46~~ |
-| kimi13 | **#3633** | P1 | app | 矿场Phase3 B: 关键词池 CRUD + 超管采集配置页 | 12:04 |
-| kimi14 | **#3634** | P1 | app | 矿场Phase3 C: 省份热力图 API + 前端真数据 | 12:04 |
-| kimi15 | **#3632** | P0 | app | 矿场Phase2 A: 3张老矿场表迁移 wdpp_project_mine | 12:13 |
-| kimi16 | **#3636** | P1 | app | 矿场Phase4 E: 幼儿园采购+预算项目专题页 | 12:13 |
-
-> 池：14 / 15（kimi20 已释放，13 活跃 + 2 新派 = 14）。空闲 kimi2/17/18/19。
-> 🎉 **skill化机制首个完整闭环**：kimi20 #3630 走完 issue-task-md→cc-report start→backend-coding→backend-test→cc-report stage-done→pr-visual-proof→cc-report close 全流程，PR #3643 已 merged。
-> 多 CC 触发 sys_menu 占位疑问（#3482/#3483/#3484/#3520），统一按 menu-contract 例外条款放行 INSERT。
-
-### 📍 2026-04-14 17:30 当前池快照（15→5 规模化后的实际活跃）
-
-> Token Pool 耗尽 kimi1/2 → 21-22:00 前仅恢复 kimi3-16 中已有 WIP 的目录。池目标 5 活跃。
-
-| 指派目录 | Issue | 优先级 | 模块 | 内容 | 阶段 |
-|---------|-------|-------|------|------|------|
-| ~~kimi13~~ | #3633 | P1 | fullstack | 矿场Phase3 B 关键词池 CRUD + 配置页 | ✅ PR #3666 merged，会话已释放 |
-| ~~kimi4~~ | **#3641** | P1 | frontend | 超管驾驶舱·管线健康度 Tab 前端 | ✅ PR #3667 merged 2026-04-14T18:06:14Z |
-| ~~kimi10~~ | #3483 | P0 | fullstack | 超管驾驶舱·安全审计Tab | ✅ PR #3668 merged 2026-04-14T18:58，会话已释放 |
-| kimi8 | #3481 | P1 | fullstack | 实时日志流 Tab（CC/CI/API 集中查看）| Playwright smoke 调试中（log-stream spec 运行中）|
-| kimi9 | #3482 | P1 | fullstack | FinOps 开发运维成本 Tab | PR 已创建，轮询 merge 中 |
-| kimi16 | #3636 | P1 | fullstack | 矿场Phase4 E 幼儿园采购+预算专题 | smoke 2/3 过；getRouters 缺招投标中心父菜单（visible/status 或 role_menu 父链）调试中 |
 
 ### 📍 2026-04-15 23:10 当前池快照（3/15 活跃）
 

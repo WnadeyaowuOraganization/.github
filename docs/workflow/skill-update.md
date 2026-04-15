@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-15 07:08 研发经理派发前未查 Issue CLOSED/已交付状态
+
+- **症状**：kimi1 启动后发现 #3583 已于 2026-04-14 随 PR#3664（#3640+#3582+#3583 合并交付）merged，Issue 状态 CLOSED，分支与 dev 无差异
+- **频次**：kimi1 #3583（第 1 次）
+- **根因**：研发经理看板查询只看 project status 字段（In Progress/Todo），未交叉验证 Issue `state==CLOSED` + 关联 PR 是否已 merged。部分 Issue 随同批次 PR 一起合并但 project 字段未同步到 Done
+- **已处置**：表扬 kimi1 正确触发"结论前 cc-report"规则，指令其 close 会话；重派新任务
+- **建议改进**：run-cc.sh 或 assign-guide.md 增加前置校验：`gh issue view N --json state,closedAt` 若 CLOSED 则拒派；项目看板状态滞后时以 Issue state 为准
+- **状态**：观察中（第 1 次，暂不触发自动止血阈值）
+
+---
+
 ### 2026-04-15 04:41 📊 Token Pool 主力模型切换 glm-5.0 → K2.6-code-preview 运行 1h 评估
 
 **切换时刻**：2026-04-15 03:38（TPP 重启生效，PID 2815644）

@@ -18,6 +18,49 @@
 
 ---
 
+### 2026-04-15 04:41 📊 Token Pool 主力模型切换 glm-5.0 → K2.6-code-preview 运行 1h 评估
+
+**切换时刻**：2026-04-15 03:38（TPP 重启生效，PID 2815644）
+**评估窗口**：03:38 - 04:38（运行满 1h）
+**活跃 CC**：5 个并发（kimi1 #3549 / kimi2 #3533 / kimi3 #3550→#3535 / kimi4 #3534 / kimi5 #3530）
+
+#### 量化对比
+
+| 维度 | glm-5.0（03:13-03:38，前 25m） | K2.6-code-preview（03:38-04:38，1h） |
+|------|----------|----------|
+| merged PR | 1 个（#3682 CRM-12 授权管理） | **2 个**（#3684 CRM-11 智能过会 / #3685 kindergarten hotfix） |
+| 大规模 API 错误 | "thinking is enabled but reasoning_content missing" 卡 4/5 CC（03:30-03:39） | **0 次** |
+| 红线违规拦截 | ≥4 次阈值触发 auto-heal（kimi1 #3549 Flyway 硬编码 menu_id + 跨 scope） | **0 次** |
+| 单测 @Tag 误用 | 1 次（kimi1 `@Tag("unit")` 非项目标准） | 0 次 |
+| mysql 直连主库 | 2 次（kimi1 + kimi3） | 0 次 |
+| 一次编译成功率（新 Issue） | N/A | kimi3 #3535 一次 16 文件 + Mapper XML 编译绿（mvn clean compile BUILD SUCCESS 首跑通过） |
+
+#### K2.6-code-preview 做得更好的
+
+1. **无 API Error 400**：切换后 1h 内无任何 "reasoning_content missing" 事故（glm-5.0 切换前 10min 内同时卡 4 CC）
+2. **指令理解一次到位**：kimi1 收到 `@Tag("unit")` → `@Tag("dev")` 修复指令后一次调通 JUnit 4/4 绿，无反复追问
+3. **后端代码产出速度**：kimi3 #3535 从开工到 16 文件 + Mapper XML 编译绿约 15-18 分钟，glm-5.0 时期类似规模通常 30-45 分钟
+4. **三方对账结论清晰**：kimi3 #3535 开工汇报直接给出"前端占位 / 后端无代码 / schema 增量"三段结论 + 7 阶段计划，glm-5.0 多见反复追问
+5. **PR 提交节奏稳**：#3685 hotfix 从派单到 merge 约 10 分钟，一次过四道质量门
+6. **Context 消耗效率**：kimi3 #3535 复杂 Issue 开工 → 16 文件 63% ctx，glm-5.0 类似任务早期就打到 80%+
+
+#### K2.6-code-preview 做得不好 / 未改善的
+
+1. **长跑 Issue 未自动结束**：kimi5 #3530（CRM-03 商机管道）从 glm-5.0 时代持续至 K2.6 已 3h28m 仍无 PR，K2.6 未展现"主动收尾打包"能力
+2. **PR 提交阶段仍偏慢**：kimi1 #3549 达 4h0m 仍在 Playwright / 截图 / PR 阶段循环，接管后未明显提速（可能是 Playwright 套件本身耗时）
+3. **评估样本不足**：仅 1h 内观测到 2 merged PR，红线违规 0 可能因 menu-contract skill 硬化（commit 687d53d）抢先生效掩盖模型差异，需更长窗口验证
+4. **新问题监测**：本窗口未发现 K2.6 引入的新类型错误（grep 统计的 error_count 为历史字符残留，非 K2.6 期间新发）
+
+#### 结论
+
+K2.6-code-preview **整体优于 glm-5.0**，主要改进集中在：稳定性（无大规模 API 错误）、指令响应（一次到位）、后端大批量文件一次编译通过。建议保留 K2.6 为主力，继续观察 2-4h 验证长跑 Issue 行为。
+
+#### 待清理
+
+- 本评估完成后删除 `memory/project_k26_eval_deadline.md` + MEMORY.md 索引行 + `/tmp/k26-eval-context.md`（一次性任务，用户明示不留存）
+
+---
+
 ### 2026-04-15 03:38 CC 裸用 `mysql -h 127.0.0.1 root/root` 直连主 MySQL（2 次，观察）
 
 - **症状**：CC debug 数据库时直接 `mysql -h 127.0.0.1 -u root -proot -D wande-ai-kimiN` 裸连主机，实际应该 `docker exec wande-ai-mysql mysql ...` 走 docker 容器；易连错库或被密码拒绝

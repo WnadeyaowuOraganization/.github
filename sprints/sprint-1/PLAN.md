@@ -243,6 +243,10 @@ Week 4 (5/03-5/09):
 > **✅ 2026-04-15 09:01 kimi3 重派**：kimi3 接 **#3537 CRM-10 我的提成**（个人KPI+月度明细只读，fullstack P1 medium），blocker #3527 CLOSED。池恢复 **5/5** 满。
 > **🎉 2026-04-15 09:10 #3536 PR#3692 merged**：kimi5 CRM-09 经销商管理 1h49m 交付（26 files, 2390 insertions），CI 全绿含 CodeRabbit。
 > **✅ 2026-04-15 09:11 kimi5 重派**：kimi5 接 **#3580 产品门户 1/10 数据库表创建**（backend P1 medium，Sprint-2 标签但无 blocker，解锁下游 #3584/#3585/#3588）。CRM 主线 Todo 已派完（#3531/#3532/#3537 in progress），product-portal 系列 blocker #3580 先行。池恢复 **5/5** 满。
+>
+> **🚨 2026-04-15 10:15 P0 紧急止血 hotfix PR #3693**：用户发现"主环境看不见今日 CRM 合并"。排查发现 **PR #3689（CRM-03 商机管道）新建了 `frontend/apps/web-antd/src/api/system/user.ts`（15 行）与既有 `user/index.ts`（171 行）形成同名文件 vs 目录冲突**，Vite 别名 `#/api/system/user` 优先解析到 user.ts，导致 7 个消费方（dept/user/post/workflow 等）全部 build 失败。**今日 10 次 Dev 部署 CI 全 failed**，9 个 CRM PR（#3679/3682/3684/3686/3687/3689/3690/3691/3692）merged 但未部署。研发经理手动出 hotfix PR #3693（合并导出 + 删 user.ts），绕过 CC 池（紧急止血，无编程 CC 可用）。同步登记 docs/workflow/skill-update.md 等待是否需升级为 frontend-coding 红线。
+>
+> **🔄 2026-04-15 10:12 TPP 重启**：token-pool-proxy systemd 服务 10:07 restart（配置刷新为 infini:1/kimi:2/volcengine:1），kimi1/kimi2/kimi4/kimi5 之前 API Error 是重启窗口，已通过 tmux send-keys 通知继续推进。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |

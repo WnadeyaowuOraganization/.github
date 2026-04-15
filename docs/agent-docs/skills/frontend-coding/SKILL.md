@@ -245,6 +245,25 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 
 所有用户文案用 `$t('key')` / `t('key')`。硬编码中文 → Lint 报错。
 
+## 启动前端（硬点，违反=刹车）
+
+**只能**用 cc-test-env.sh 启动/重启前端 dev server：
+
+```bash
+bash ~/projects/.github/scripts/cc-test-env.sh restart kimiN    # N = 你所在 kimi 编号
+bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN       # 等就绪
+```
+
+**禁止**：
+- `cd frontend && pnpm dev` / `pnpm run dev:antd` —— vite 会占 5173/5174/5175... 污染其他 kimi 池子，并导致你 Playwright baseURL 错位
+- `pkill -f vite` / `killall vite` —— pkill -f 无差别杀所有 kimi 的 vite
+- `lsof -ti :56xx | xargs kill` —— 5666-5671/5173-5179 不是任何 kimi 的规范端口，乱杀会误伤其他 kimi
+
+你的前端端口是 **810N**（kimi1=8101, kimi2=8102, ..., kimi5=8105）。若 `curl localhost:810N` 无响应：
+1. `bash cc-test-env.sh stop kimiN && bash cc-test-env.sh start kimiN`
+2. 仍无响应看 `tail -100 /apps/wande-ai-frontend-kimiN/logs/frontend.log`
+3. **禁止**改 vite.config 端口适配错误端口
+
 ## 构建验证（提交前必过）
 
 ```bash

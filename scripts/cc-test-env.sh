@@ -200,17 +200,17 @@ cmd_wait() {
       rm -f "$PID_FILE"
       return 1
     fi
-    if curl -sf "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 >/dev/null 2>&1; then
-      echo " OK (${i}s)"
+    # 401=Spring Security 已启动需认证，视为 UP；只有 000（连接拒绝）才视为未就绪
+    local http_code
+    http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 2>/dev/null)
+    if [ "$http_code" != "000" ] && [ -n "$http_code" ]; then
+      echo " OK (${i}s, HTTP=${http_code})"
       return 0
     fi
-    # 备用检查：如果actuator没开，检查端口是否在监听
+    # 备用检查：端口已监听
     if [ "$i" -ge 60 ] && ss -tlnp 2>/dev/null | grep -q ":${BACKEND_PORT} " ; then
-      # 端口已监听但actuator不通，再试一次基础HTTP
-      if curl -sf "http://localhost:${BACKEND_PORT}/" --max-time 2 >/dev/null 2>&1; then
-        echo " OK (${i}s, 端口已监听)"
-        return 0
-      fi
+      echo " OK (${i}s, 端口已监听)"
+      return 0
     fi
     [ $((i % 30)) -eq 0 ] && echo -n " ${i}s"
     sleep 1
@@ -461,8 +461,10 @@ cmd_status() {
   if [ -f "$PID_FILE" ]; then
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
-      if curl -sf "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 >/dev/null 2>&1; then
-        be_status="running(PID=$pid,healthy)"
+      local _hc
+      _hc=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 2>/dev/null)
+      if [ "$_hc" != "000" ] && [ -n "$_hc" ]; then
+        be_status="running(PID=$pid,HTTP=${_hc})"
       else
         be_status="starting(PID=$pid)"
       fi

@@ -62,10 +62,28 @@ if [ ${#SESSIONS[@]} -eq 0 ]; then
 fi
 
 if [ ${#SESSIONS[@]} -eq 0 ]; then
-  echo "[inject] ❌ 未找到 Issue #$ISSUE 对应的CC会话（lock+tmux双查）"
+  echo "[inject] ⚠ 未找到 Issue #$ISSUE 对应的CC会话（lock+tmux双查）"
   echo "[inject]    现存 cc 会话："
   tmux list-sessions -F '  #{session_name}' 2>/dev/null | grep "^  cc-" || echo "    (无)"
-  exit 3
+
+  # 2026-04-15 #3704 事故 fallback：auto-merge 后 CC 已 kill，部署失败 prompt 回不到原 CC
+  # 退而通知研发经理/排程经理，由经理决定是否重派 CC 修复
+  FALLBACK_MSG="[部署失败回流] Issue #${ISSUE} 的CC已不在（大概率 auto-merge 后 kill）。原 prompt：${PROMPT}"
+  for MGR in manager-研发经理 manager-排程经理; do
+    if tmux has-session -t "$MGR" 2>/dev/null; then
+      TMP_BUF=$(mktemp)
+      printf '%s\n' "$FALLBACK_MSG" > "$TMP_BUF"
+      tmux load-buffer -b "inject-fb-$$" "$TMP_BUF"
+      tmux paste-buffer -b "inject-fb-$$" -t "$MGR"
+      sleep 0.5
+      tmux send-keys -t "$MGR" Enter
+      tmux delete-buffer -b "inject-fb-$$" 2>/dev/null || true
+      rm -f "$TMP_BUF"
+      echo "[inject] ↳ fallback 已通知 $MGR"
+    fi
+  done
+  # 退出码 0：fallback 成功即视为处理完成，避免 CC锁管理 workflow 红灯连锁报警
+  exit 0
 fi
 
 # 注入到所有匹配的 session

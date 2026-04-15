@@ -39,6 +39,22 @@
 
 ---
 
+### 2026-04-15 13:08 CC 误解"本地跑 Flyway"→ 虚假卡住
+
+- **症状**：kimi2 #3683 收到研发经理 "UPDATE flyway_schema_history 旧→新版本号" 广播后，在独立库执行 `SELECT FROM flyway_schema_history` 报 `Table doesn't exist` → 误判为"Flyway 历史需更新"卡住 10min+
+- **频次**：kimi2 #3683（第 1 次）— 但广播指令本身是**研发经理误发**给 kimi2/5，kimi 独立库根本不跑 Flyway
+- **根因**：
+  - **cc-test-env.sh:259 启动命令带 `-Dspring.flyway.enabled=false`**，kimi 独立库 124 表是 baseline import 的，从未创建 flyway_schema_history 表
+  - 研发经理广播时忘了这点，指令里写 `UPDATE flyway_schema_history...`，误导 CC 以为本地也跑 Flyway
+  - 排程经理的 rename 只对 CI 环境（走 Flyway）生效；kimi 本地无影响
+- **已处置**：tmux 纠正 kimi2 跳过 flyway 操作 + 直接 `cc-test-env.sh start kimi2` 重启后端
+- **建议改进**：
+  1. 【研发经理操作规范】广播 Flyway 相关指令前，先确认目标环境是否 `spring.flyway.enabled`。kimi 本地 false（baseline import）、CI 环境 true
+  2. 【shared-conventions】补一条"kimi 独立库不跑 Flyway，baseline 直接 import，CI 才跑迁移"明确区分
+- **状态**：🟡 观察中（首次），本条同时记研发经理自己的误操作以供复盘
+
+---
+
 ### 2026-04-15 13:00 【Flyway 命名 P0·blast radius 4 维全中】V{日期}_HHMMSS 版本号被 CC 人工挑"好看整数"撞车 4 对
 
 - **症状**：dev 今日 22 个 V20260415*.sql 中 4 对版本号重复（002000×3 / 003000×2 / 006000×2），其中 006000 秒值=60 根本非法时间戳。Flyway 启动抛 FlywayException → repair 失败 → 今日 0 条迁移落地 → 所有 CRM PR 后端 API 500

@@ -462,10 +462,10 @@ Week 4 (5/03-5/09):
 | 指派目录 | Issue | 优先级 | 模块 | 内容 | 进度 |
 |---------|-------|-------|------|------|------|
 | ~~kimi1~~ | ~~#3728~~ | P0 | frontend | ~~CRM全页面回归验证~~ ✅ PR#3729 merged 00:01 | ~~Done~~ |
-| kimi2 | #2419 | P0 | backend | pipeline DB Schema — wdpp_dealer_candidates + wdpp_intl | 6m，33%，正常 |
-| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView + Docker + STEP Pipeline | 39%，1h58m，无PR，正常 |
-| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 S3 presigned URL 分级 | 37%，1h57m，推进中 |
-| kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD | 43%，1h36m，推进中 |
+| ~~kimi2~~ | ~~#2419~~ | P0 | backend | ~~pipeline DB Schema — wdpp_dealer_candidates + wdpp_intl~~ PR#3731 merged 16:11 | ~~Done~~ |
+| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView + Docker + STEP Pipeline | 40%，2h8m，运行中 |
+| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 S3 presigned URL 分级 | 31%，2h7m，运行中 |
+| ~~kimi5~~ | ~~#1693~~ | P2 | backend | ~~报销费控 报销单+借款 CRUD~~ PR#3730 merged 16:05 | ~~Done~~ |
 
 > **巡检**：无异常。5th 槽位空闲，#3585/#3588 待 #3584 merged 后派发。
 > 排程经理直接迁移 dev-old 配合单位代码（wdpp_project_counterpart 建表+后端+前端 CRUD）。

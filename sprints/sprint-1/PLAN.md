@@ -278,6 +278,10 @@ Week 4 (5/03-5/09):
 | kimi2 | ~~#3461~~ | P0 | fullstack | ~~Tier-6: 耀总驾驶舱v1.0~~ PR#3676✅merged 2026-04-15 00:18 | ~~Done~~ |
 | kimi3 | ~~#3520~~ | P1 | fullstack | ~~Tier-1: 综合管理主页Dashboard — 6 Widget~~ PR#3678✅merged 2026-04-15 00:3x | ~~Done~~ |
 | kimi1 | ~~#3518~~ | P1 | fullstack | ~~Tier-1: 支持中心主页Dashboard — 6 Widget~~ PR#3677✅merged 2026-04-15 00:24 | ~~Done~~ |
+| kimi4 | ~~#3529~~ | P1 | fullstack | ~~Tier-4: CRM-02 客户管理 CRUD+三类型+详情五Tab~~ PR#3679✅merged 2026-04-15 00:41 | ~~Done~~ |
+| kimi1 | #3549 | P1 | fullstack | Tier-4 CRM-14 责任人变更日志 — 审计追踪 | 00:31 |
+| kimi2 | #3548 | P1 | fullstack | Tier-4 CRM-13 公司通讯录 — 全员联系人+部门树 | 00:31 |
+| kimi3 | #3550 | P1 | fullstack | Tier-4 CRM-11 智能过会管理 — 异常驱动+三层节奏 | 00:33 |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

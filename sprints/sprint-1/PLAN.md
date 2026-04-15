@@ -19,8 +19,8 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 说明 |
 |-------|------|------|------|------|------|
-| #3597 | P0 | backend | 菜单基线Flyway脚本验证 | **立即** | V2脚本已提交，需启动后端验证Flyway执行 |
-| #3613 | P0 | fullstack | CRM菜单component/perms前缀整改 | **立即** | CRM菜单 wande/crm→business/crm, crm:→biz:crm:，需读 menu-contracts.md |
+| ~~#3597~~ | ~~P0~~ | ~~backend~~ | ~~菜单基线Flyway脚本验证~~ ✅ CLOSED | ~~Done~~ | V2脚本已提交，需启动后端验证Flyway执行 |
+| ~~#3613~~ | ~~P0~~ | ~~fullstack~~ | ~~CRM菜单component/perms前缀整改~~ ✅ CLOSED | ~~Done~~ | CRM菜单 wande/crm→business/crm, crm:→biz:crm: |
 
 > **验收标准**：后端启动成功 + 8大工作区侧边栏正确 + 角色权限正确 + CRM菜单前缀符合规范
 
@@ -33,11 +33,11 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3522 | P1 | fullstack | Dashboard Widget配置表 + 动态渲染引擎 | ✅ | #3597 |
-| #3517 | P0 | fullstack | 商务主页Dashboard — 8个Widget | ⏳ | #3522 |
-| #3518 | P1 | fullstack | 支持中心主页Dashboard — 6个Widget | ⏳ | #3522 |
-| #3519 | P1 | fullstack | 项目安装主页Dashboard — 7个Widget | ⏳ | #3522 |
-| #3520 | P1 | fullstack | 综合管理主页Dashboard — 6个Widget | ⏳ | #3522 |
+| ~~#3522~~ | ~~P1~~ | ~~fullstack~~ | ~~Dashboard Widget配置表 + 动态渲染引擎~~ ✅ CLOSED | ~~Done~~ | #3597 |
+| ~~#3517~~ | ~~P0~~ | ~~fullstack~~ | ~~商务主页Dashboard — 8个Widget~~ ✅ CLOSED | ~~Done~~ | #3522 |
+| ~~#3518~~ | ~~P1~~ | ~~fullstack~~ | ~~支持中心主页Dashboard — 6个Widget~~ ✅ CLOSED | ~~Done~~ | #3522 |
+| ~~#3519~~ | ~~P1~~ | ~~fullstack~~ | ~~项目安装主页Dashboard — 7个Widget~~ ✅ CLOSED | ~~Done~~ | #3522 |
+| ~~#3520~~ | ~~P1~~ | ~~fullstack~~ | ~~综合管理主页Dashboard — 6个Widget~~ ✅ CLOSED | ~~Done~~ | #3522 |
 | ~~#3521~~ | ~~P1~~ | ~~frontend~~ | ~~Boss耀总Dashboard — 8大板块导航页~~ ✅ CLOSED | ~~Done~~ | #3522 |
 
 > **并行策略**：#3522引擎完成后，#3517~#3521可并行开发（5个CC同时）
@@ -52,7 +52,7 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3458 | P0 | fullstack | ~~全球项目矿场v3.0 — 基于确认原型的完整改版~~ ✅ PR#3606 merged | ✅ | #3597(菜单基线) |
+| ~~#3458~~ | ~~P0~~ | ~~fullstack~~ | ~~全球项目矿场v3.0 — 基于确认原型的完整改版~~ ✅ PR#3606 merged | ~~Done~~ | #3597(菜单基线) |
 | ~~#3615~~ | ~~P0~~ | ~~fullstack~~ | ~~#3458验收8项缺陷修复~~ ✅ PR#3616 merged | ~~Done~~ | #3458 |
 | ~~#3617~~ | ~~P0~~ | ~~fullstack~~ | ~~#3458第二轮验收8项缺陷修复~~ ✅ Done | ~~Done~~ | #3615 |
 | ~~#3625~~ | ~~P0~~ | ~~frontend~~ | ~~#3458第三轮回归：KPI/工具栏/Modal触发 6项页面缺陷~~ ✅ PR#3642 merged 2026-04-14 11:25 | ~~Done~~ | #3617 |
@@ -73,11 +73,11 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3466 | P0 | fullstack | 超管驾驶舱Master — 框架验证 | ✅ | #3597 |
-| #3481 | P1 | fullstack | 实时日志流Tab | ⏳ | #3466验证 |
-| #3482 | P1 | fullstack | FinOps开发运维成本Tab | ⏳ | #3466验证 |
-| #3483 | P1 | fullstack | 安全审计Tab | ⏳ | #3466验证 |
-| #3484 | P1 | fullstack | Prompt管理Tab | ⏳ | #3466验证 |
+| ~~#3466~~ | ~~P0~~ | ~~fullstack~~ | ~~超管驾驶舱Master — 框架验证~~ ✅ CLOSED | ~~Done~~ | #3597 |
+| ~~#3481~~ | ~~P1~~ | ~~fullstack~~ | ~~实时日志流Tab~~ ✅ CLOSED | ~~Done~~ | #3466验证 |
+| ~~#3482~~ | ~~P1~~ | ~~fullstack~~ | ~~FinOps开发运维成本Tab~~ ✅ CLOSED | ~~Done~~ | #3466验证 |
+| ~~#3483~~ | ~~P1~~ | ~~fullstack~~ | ~~安全审计Tab~~ ✅ CLOSED | ~~Done~~ | #3466验证 |
+| ~~#3484~~ | ~~P1~~ | ~~fullstack~~ | ~~Prompt管理Tab~~ ✅ CLOSED | ~~Done~~ | #3466验证 |
 
 > **并行策略**：#3466验证后，4个Tab可并行开发
 
@@ -91,22 +91,22 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3526 | P0 | fullstack | CRM商务中心Master — Sprint-1 总协调 | ✅ | #3597 |
-| #3527 | P0 | backend | CRM-DB 数据库基础建表 — Flyway迁移脚本(9张表) | ✅ | #3526 |
+| ~~#3526~~ | ~~P0~~ | ~~fullstack~~ | ~~CRM商务中心Master — Sprint-1 总协调~~ ✅ CLOSED | ~~Done~~ | #3597 |
+| ~~#3527~~ | ~~P0~~ | ~~backend~~ | ~~CRM-DB 数据库基础建表 — Flyway迁移脚本(9张表)~~ ✅ CLOSED | ~~Done~~ | #3526 |
 | ~~#3528~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-01 商务工作台 — KPI+收件箱+业绩面板~~ ✅ CLOSED | ~~Done~~ | #3527 |
-| #3529 | P1 | fullstack | CRM-02 客户管理 — CRUD+三类型+详情页 | ✅ | ~~#3528~~ CLOSED |
-| #3530 | P1 | fullstack | CRM-03 商机管道 — 列表+看板+7阶段 | ⏳ | #3529 |
-| #3531 | P1 | fullstack | CRM-04 商机详情页 — 10Tab+阶段推进 | ⏳ | #3530 |
-| #3532 | P1 | fullstack | CRM-05 询盘工作台 — 5状态+报价+转商机 | ⏳ | #3529 |
-| #3533 | P1 | fullstack | CRM-06 记录中心 — 四视角+周报月报 | ⏳ | #3529 |
-| #3534 | P1 | fullstack | CRM-07 投标申请 — 审批流+中标结果 | ⏳ | #3530 |
-| #3535 | P1 | fullstack | CRM-08 回款跟踪 — 周报+逾期提醒 | ⏳ | #3530 |
-| #3536 | P1 | fullstack | CRM-09 经销商管理 — 级别/返点/目标 | ⏳ | #3529 |
-| #3537 | P1 | fullstack | CRM-10 我的提成 — KPI+月度明细 | ⏳ | #3528 |
-| #3548 | P1 | fullstack | CRM-13 公司通讯录 — 全员联系人+部门树 | ⏳ | #3526 |
-| #3549 | P1 | fullstack | CRM-14 责任人变更日志 — 线索/商机/客户变更审计 | ⏳ | #3529 |
-| #3550 | P1 | fullstack | CRM-11 智能过会 — 异常驱动+过会视图 | ⏳ | #3530 |
-| #3551 | P1 | fullstack | CRM-12 授权管理 — 经销商授权+审批 | ⏳ | #3536 |
+| ~~#3529~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-02 客户管理 — CRUD+三类型+详情页~~ ✅ CLOSED | ~~Done~~ | #3528 |
+| ~~#3530~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-03 商机管道 — 列表+看板+7阶段~~ ✅ CLOSED | ~~Done~~ | #3529 |
+| ~~#3531~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-04 商机详情页 — 10Tab+阶段推进~~ ✅ CLOSED | ~~Done~~ | #3530 |
+| ~~#3532~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-05 询盘工作台 — 5状态+报价+转商机~~ ✅ CLOSED | ~~Done~~ | #3529 |
+| ~~#3533~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-06 记录中心 — 四视角+周报月报~~ ✅ CLOSED | ~~Done~~ | #3529 |
+| ~~#3534~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-07 投标申请 — 审批流+中标结果~~ ✅ CLOSED | ~~Done~~ | #3530 |
+| ~~#3535~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-08 回款跟踪 — 周报+逾期提醒~~ ✅ CLOSED | ~~Done~~ | #3530 |
+| ~~#3536~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-09 经销商管理 — 级别/返点/目标~~ ✅ CLOSED | ~~Done~~ | #3529 |
+| ~~#3537~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-10 我的提成 — KPI+月度明细~~ ✅ CLOSED | ~~Done~~ | #3528 |
+| ~~#3548~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-13 公司通讯录 — 全员联系人+部门树~~ ✅ CLOSED | ~~Done~~ | #3526 |
+| ~~#3549~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-14 责任人变更日志 — 线索/商机/客户变更审计~~ ✅ CLOSED | ~~Done~~ | #3529 |
+| ~~#3550~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-11 智能过会 — 异常驱动+过会视图~~ ✅ CLOSED | ~~Done~~ | #3530 |
+| ~~#3551~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-12 授权管理 — 经销商授权+审批~~ ✅ CLOSED | ~~Done~~ | #3536 |
 
 > **并行窗口**：#3529完成后可并行 #3530/#3532/#3533/#3536；#3530完成后可并行 #3531/#3534/#3535/#3550
 
@@ -119,11 +119,14 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3579 | P1 | fullstack | 产品门户Master — 路由+权限+布局 | ✅ | #3597 |
-| #3582 | P0 | frontend | 产品目录页 — 卡片网格+筛选搜索 | ⏳ | #3579 |
-| #3583 | P0 | frontend | 产品详情页 — 参数+3D查看器 | ⏳ | #3582 |
-| #3585 | P1 | frontend | 备件目录页+爆炸图联动 | ⏳ | #3583 |
-| #3588 | P2 | frontend | H5移动端适配 | ⏳ | #3583 |
+| ~~#3579~~ | ~~P1~~ | ~~fullstack~~ | ~~产品门户Master — 路由+权限+布局~~ ✅ CLOSED | ~~Done~~ | #3597 |
+| ~~#3582~~ | ~~P0~~ | ~~frontend~~ | ~~产品目录页 — 卡片网格+筛选搜索~~ ✅ CLOSED | ~~Done~~ | #3579 |
+| ~~#3583~~ | ~~P0~~ | ~~frontend~~ | ~~产品详情页 — 参数+3D查看器~~ ✅ CLOSED | ~~Done~~ | #3582 |
+| #3584 | P0 | fullstack | ExplodeView集成+G7e Docker部署+STEP批量处理Pipeline | 🔄 In Progress | #3583 |
+| ~~#3587~~ | ~~P1~~ | ~~backend~~ | ~~备件API + 询价购物车 CRUD~~ ✅ CLOSED | ~~Done~~ | #3579 |
+| #3585 | P1 | frontend | 备件目录页+爆炸图联动 | ⏳ blocked-by #3584 | #3584 |
+| #3586 | P1 | fullstack | 资料下载S3 presigned URL分级 | 🔄 In Progress | #3579 |
+| #3588 | P2 | frontend | H5移动端适配 | ⏳ blocked-by #3584 | #3584 |
 
 > **并行策略**：Tier-5与Tier-2/3/4完全独立，可同时启动
 
@@ -136,7 +139,7 @@
 
 | Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
 |-------|------|------|------|------|------|
-| #3461 | P1 | fullstack | 耀总驾驶舱v1.0 — 8大区块 | ✅ | ~~#3521(Boss Dashboard)~~ CLOSED |
+| ~~#3461~~ | ~~P1~~ | ~~fullstack~~ | ~~耀总驾驶舱v1.0 — 8大区块~~ ✅ CLOSED | ~~Done~~ | ~~#3521(Boss Dashboard)~~ CLOSED |
 
 ---
 

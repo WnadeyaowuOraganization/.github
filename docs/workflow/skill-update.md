@@ -18,6 +18,30 @@
 
 ---
 
+### 2026-04-15 03:38 CC 裸用 `mysql -h 127.0.0.1 root/root` 直连主 MySQL（2 次，观察）
+
+- **症状**：CC debug 数据库时直接 `mysql -h 127.0.0.1 -u root -proot -D wande-ai-kimiN` 裸连主机，实际应该 `docker exec wande-ai-mysql mysql ...` 走 docker 容器；易连错库或被密码拒绝
+- **频次**：
+  1. kimi1 #3549（root/root 失败后卡住，经理纠正）
+  2. kimi3 #3550（3h5m + API Error 400 叠加，经理纠正）
+- **根因**：shared-conventions / skill 未给出"查自己 kimi 的 MySQL"标准命令；CC 默认用本机 `mysql` 而非 `docker exec`
+- **已处置**：个案指令
+- **建议改进**（观察中，再 2 次达阈值落地）：frontend-coding/backend-coding skill 增"数据库直连速查"章节，给 `docker exec wande-ai-mysql mysql -uroot -p$(grep MYSQL_ROOT_PASSWORD ~/projects/.github/scripts/.env | cut -d= -f2) -D wande-ai-kimiN` 模板
+- **状态**：观察中（2/4）
+
+---
+
+### 2026-04-15 03:30 CC 用项目无效 `@Tag` 导致单测 0 运行（1 次，观察）
+
+- **症状**：kimi1 #3549 写单测用 `@Tag("unit")`，项目 surefire 配置 `<groups>${profiles.active}</groups>` 按 Maven profile 激活 Tag（local/dev/prod），`unit` 永远不被过滤到 → mvn test 显示 0 tests run → CC 误以为配置问题 → 摸索 Maven 配置 浪费时间
+- **频次**：1 次（kimi1 #3549）
+- **根因**：backend-coding/backend-test skill 未明确说明项目 `@Tag` 标准值（应为 `@Tag("dev")`，参考 FinOpsServiceTest），CC 默认 JUnit 5 习惯写 `@Tag("unit")`
+- **已处置**：个案指令改 `@Tag("dev")` + 运行 `mvn test -P dev`
+- **建议改进**（观察中）：backend-test skill 增"项目 @Tag 标准"段：`@Tag("dev")` 开发单测、`@Tag("prod")` 上线回归、禁止自创 tag
+- **状态**：观察中（1/4）
+
+---
+
 ### 2026-04-15 03:15 🚨🚨🚨 Flyway 硬编码 menu_id/role_id + 跨 scope 改已 merged 脚本（≥4 次自动止血触发）
 
 - **症状**：CC 诊断前端 404 时归因于 sys_menu.parent_id NULL，随即写 `UPDATE sys_menu SET parent_id=XXX WHERE menu_id=YYY` 硬编码菜单 ID，或硬编码 `role_id=1` 分配权限；部分 CC 修改**已合入 main** 的其他 Issue 的 Flyway 脚本（跨 scope 污染）

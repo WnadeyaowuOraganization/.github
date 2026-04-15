@@ -244,6 +244,8 @@ Week 4 (5/03-5/09):
 > **🎉 2026-04-15 09:10 #3536 PR#3692 merged**：kimi5 CRM-09 经销商管理 1h49m 交付（26 files, 2390 insertions），CI 全绿含 CodeRabbit。
 > **✅ 2026-04-15 09:11 kimi5 重派**：kimi5 接 **#3580 产品门户 1/10 数据库表创建**（backend P1 medium，Sprint-2 标签但无 blocker，解锁下游 #3584/#3585/#3588）。CRM 主线 Todo 已派完（#3531/#3532/#3537 in progress），product-portal 系列 blocker #3580 先行。池恢复 **5/5** 满。
 >
+> **✅ 2026-04-15 10:32 kimi5 重派 #3581**：排程经理筛选 **#3581 产品门户 2/10 产品展示API**（P0 backend status:ready，blocker #3580 已 merged），6 个 Controller endpoint + AWS S3 presigned URL + L0/L1 权限过滤。kimi5 上下文连贯（刚做完产品门户 DB）。池恢复 **5/5** 满。merge 后可解锁 #3584 ExplodeView。
+>
 > **🎉 2026-04-15 10:22 #3580 PR#3694 merged**：kimi5 产品门户 1/10 数据库表 3 张（product/document/part）纯 DDL 1h10m 交付，CI 全绿，解锁下游 #3585/#3588 的 DB 依赖（#3584 仍阻塞）。kimi5 tmux 会话已关闭，池子降为 **4/5**。已 ping 排程经理从 Plan 列推新 Todo。
 >
 > **✅ 2026-04-15 10:22 hotfix #3693 部署成功**：run 24448885319 前端构建绿、dev 部署成功，主环境 localhost:8080 返回 200，今日 9 个 CRM PR（#3679/3682/3684/3686/3687/3689/3690/3691/3692）**全部可见**。

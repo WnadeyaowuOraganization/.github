@@ -7,23 +7,30 @@ description: Design MySQL tables and write Flyway migration scripts for Wande-Pl
 
 **任何新表 / 改表必须走 Flyway 增量脚本**，严禁直接编辑 baseline `wande-ai-pg.sql` / `test-base-schema.pg.sql`。
 
-## 文件位置与命名（强制秒级时间戳）
+## 文件位置与命名（MUST：Issue号 + 秒级时间戳，禁止手挑数字）
 
 ```
-backend/ruoyi-admin/src/main/resources/db/migration/V<YYYYMMDDHHMMSS>__<desc>.sql
+backend/ruoyi-admin/src/main/resources/db/migration/V<YYYYMMDDHHMMSS>_<ISSUE>__<desc>.sql
 ```
 
-- 14 位秒级时间戳，**用命令生成，禁止手编序号**：
+- **MUST** 用命令生成时间戳 + 带 Issue 号（Issue 号跨 CC 天然互斥）：
 
 ```bash
-echo "V$(date +%Y%m%d%H%M%S)__<desc>.sql"
-# 例：V20260414184530__create_project_mine.sql
+ISSUE=3532  # 当前 Issue 号
+echo "V$(date +%Y%m%d%H%M%S)_${ISSUE}__<desc>.sql"
+# 例：V20260415130245_3532__alter_crm_inquiry.sql
 ```
 
-- 描述用下划线小写，动词+对象：`create_xxx` / `add_xxx_field` / `update_xxx_menu`
-- Flyway `version` 字段上限 VARCHAR(50)，14 位完全安全
+- **MUST NOT**：手挑"好看整数" HHMMSS（如 002000 / 003000 / 006000）。CC 独立分支 + 并发写文件 → 手挑数字必撞车
+- **MUST NOT**：秒值 ≥60（如 `006000` 意思 00:60:00 是非法时间）。真实 `date +%H%M%S` 不可能产生，只有手挑才会出
 
-**历史问题（2026-04-14 dev 事故）**：手编 `YYYYMMDD+NNN` 三位序号多 CC 并发时撞号（V20260414014 一天出现 4 份），Flyway 抛 `DuplicateMigration` 整批迁移被拒。秒级时间戳并发概率几乎为 0。
+**历史事故**：
+- 2026-04-14：手编 `YYYYMMDD+NNN` 三位序号撞 `V20260414014` 一天 4 份 → `DuplicateMigration` 整批拒绝
+- 2026-04-15：22 个 V20260415* 有 4 对撞号（002000×3 / 003000×2 / 006000×2，006000 秒=60 非法）→ Flyway 抛异常，今日 0 条迁移落地，所有 CRM PR 后端 API 500，排程经理手动 rename 止血
+
+**Flyway version 字段** VARCHAR(50)，`YYYYMMDDHHMMSS_ISSUE` 约 19 位完全安全。
+
+描述用下划线小写，动词+对象：`create_xxx` / `add_xxx_field` / `update_xxx_menu`
 
 ## wdpp_ 前缀（强制）
 

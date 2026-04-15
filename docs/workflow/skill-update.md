@@ -39,6 +39,20 @@
 
 ---
 
+### 2026-04-15 13:00 【Flyway 命名 P0·blast radius 4 维全中】V{日期}_HHMMSS 版本号被 CC 人工挑"好看整数"撞车 4 对
+
+- **症状**：dev 今日 22 个 V20260415*.sql 中 4 对版本号重复（002000×3 / 003000×2 / 006000×2），其中 006000 秒值=60 根本非法时间戳。Flyway 启动抛 FlywayException → repair 失败 → 今日 0 条迁移落地 → 所有 CRM PR 后端 API 500
+- **频次**：4 对冲突（一次事故命中 blast radius 全部 4 维度：阻塞 ≥3 PR / 波及多 CC 并发 Flyway 写 / 测试环境整体 CI in_progress / 失败信号隐蔽 CC 以为本地跑过就绿）
+- **根因**：`V{YYYYMMDD}{HHMMSS}__*.sql` 看似精确到秒，但 CC 不写 `date +%H%M%S` 取真实时间，而是**手工挑 6 位数字**——大家不约而同选 002000/003000/006000 这种规整整数。独立 kimi 目录 + 独立分支 → 文件名无跨 CC 协调约束 → 冲突必然
+- **已处置**：排程经理按 git commit 时间 rename 4 个冲突文件（002100/002200/003003/006100）+ DELETE 失败的 flyway_schema_history + push dev c2918ad9；研发经理广播 kimi1/2/5（kimi4 已 rebase 过）执行 `git fetch + rebase origin/dev + UPDATE flyway_schema_history 旧→新版本号` 同步本地库
+- **建议改进**（P0 blast radius，立即）：
+  1. 【backend-schema skill】强制命名 `V{YYYYMMDD}_{issue号}_{slug}.sql`——Issue 号天然互斥，CC 间无协调也不可能撞
+  2. 【flyway-validate skill】lint 增规则："同日 V{日期}* 文件版本号不得重复"，pre-commit / CI 双检测
+  3. 【backend-schema skill】如坚持 HHMMSS 格式，必须用 `$(date +%H%M%S)` 而非人工挑数字，并文档化"秒=60 非法"
+- **状态**：🔴 待实施 — 需改 `docs/agent-docs/skills/backend-schema/SKILL.md` + `docs/agent-docs/skills/flyway-validate/SKILL.md`
+
+---
+
 ### 2026-04-15 12:33 【基础设施 P0】nginx wande-kimiN 站点 (04-10 旧静态) 占用 810N 端口导致 vite dev 退到 5666+ / smoke 永远 404
 
 - **症状**：kimi4 #3532 smoke 持续 404；`curl localhost:8104/` 返 2597B 空骨架 HTML（title=万德AI平台、#app 空容器），**非 vite dev 页面**；vite 实际绑 localhost:5670（默认端口递增）；`ss -tlnp | grep 8104` 显示 nginx master pid=2014551 + 32 worker 持有

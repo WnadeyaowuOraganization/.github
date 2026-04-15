@@ -180,16 +180,22 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 
 ## 编译 + 启动验证（改完必跑）
 
-```bash
-cd backend
-mvn clean compile -Pprod -DskipTests      # 编译
-mvn test -pl ruoyi-modules/wande-ai       # 单测
-mvn clean package -Pprod -Dmaven.test.skip=true  # 打包（提交前必过）
+> **MUST NOT**: 禁止直接用 `mvn spring-boot:run`（`-Dspring-boot.run.profiles=test` 会连到公共库 `wande-ai` 而非隔离库 `wande-ai-kimiN`，导致数据污染且 Controller 404）。
 
-# 启动看 Flyway + Bean 冲突
-cd /data/home/ubuntu/projects/wande-play-kimiN
-bash e2e/scripts/start-backend.sh
-tail -f logs/sys-info.log
+```bash
+# 1. 编译 wande-ai 模块（新增 Controller 后必须先 install，否则启动时用旧 jar）
+cd /data/home/ubuntu/projects/wande-play-kimiN/backend
+mvn install -pl ruoyi-modules/wande-ai -am -DskipTests \
+    -Dmaven.repo.local=~/cc_scheduler/m2/kimiN/repository -q
+
+# 2. 单测
+mvn test -pl ruoyi-modules/wande-ai \
+    -Dmaven.repo.local=~/cc_scheduler/m2/kimiN/repository
+
+# 3. 启动（唯一正确方式，自动注入隔离库 wande-ai-kimiN + Redis dbN）
+bash ~/projects/.github/scripts/cc-test-env.sh restart-backend kimiN
+# 等待就绪（任意 HTTP 响应 = UP，包括 401）
+bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN
 ```
 
-看到 `Started RuoYiApplication` + 无 `ConflictingBeanDefinitionException` / `ClassNotFoundException` / `Unknown column` = 通过。
+看到 `Started RuoYiApplication` / wait 返回 `OK (Ns, HTTP=4xx/2xx)` + 无 `ConflictingBeanDefinitionException` / `ClassNotFoundException` / `Unknown column` = 通过。

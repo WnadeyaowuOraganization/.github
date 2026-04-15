@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文档中心 — 执行管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Tree node toggle */
+    .tree-caret { cursor: pointer; user-select: none; }
+    .tree-caret::before { content: '▶'; display: inline-block; margin-right: 4px; font-size: 9px; color: #9ca3af; transition: transform 0.15s; }
+    .tree-caret.open::before { transform: rotate(90deg); }
+    .tree-children { display: none; }
+    .tree-caret.open + .tree-children { display: block; }
+    /* Active tree item */
+    .tree-item.active { background: #eff6ff; color: #2563eb; font-weight: 600; }
+    .tree-item:hover { background: #f9fafb; }
+    /* Version panel slide */
+    .version-panel { transition: max-height 0.3s ease, opacity 0.3s ease; max-height: 0; opacity: 0; overflow: hidden; }
+    .version-panel.open { max-height: 400px; opacity: 1; }
+    /* Stage card hover */
+    .stage-card { transition: box-shadow 0.15s ease; cursor: pointer; }
+    .stage-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+    .stage-card.selected { border-color: #3b82f6; background: #eff6ff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 text-gray-700 text-sm">
+
+  <!-- ============================================================
+       1. 文档统计卡片（顶部）
+       ============================================================ -->
+  <section class="mb-6">
+    <div class="grid grid-cols-4 gap-4">
+      <!-- 文档总数 -->
+      <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+        <div class="text-xs text-gray-500 mb-1">文档总数</div>
+        <div class="text-2xl font-bold text-gray-800">28</div>
+        <div class="text-xs text-gray-400 mt-1">本项目所有文档</div>
+      </div>
+      <!-- 本周新增 -->
+      <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+        <div class="text-xs text-gray-500 mb-1">本周新增</div>
+        <div class="text-2xl font-bold text-gray-800">3</div>
+        <div class="text-xs text-gray-400 mt-1">本周上传的文档</div>
+      </div>
+      <!-- 待审核 -->
+      <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+        <div class="text-xs text-gray-500 mb-1">待审核</div>
+        <div class="text-2xl font-bold text-gray-800">2</div>
+        <div class="text-xs text-gray-400 mt-1">等待审核的文档</div>
+      </div>
+      <!-- 即将过期 -->
+      <div class="bg-white border border-gray-300 rounded-lg px-4 py-3">
+        <div class="text-xs text-gray-500 mb-1">即将过期</div>
+        <div class="text-2xl font-bold text-gray-800">1</div>
+        <div class="text-xs text-gray-400 mt-1">资质/证书类即将过期</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2 + 3. 文档分类导航（左侧） + 文档列表（右侧）
+       ============================================================ -->
+  <section class="mb-6 flex gap-4" style="min-height: 500px;">
+
+    <!-- 2. 文档分类导航（左侧树形菜单，20%宽度） -->
+    <div class="bg-white border border-gray-300 rounded-lg p-3 flex-shrink-0" style="width: 20%; min-width: 180px;">
+      <div class="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-2 px-1">文档分类</div>
+      <nav id="docTree" class="text-xs">
+        <!-- 全部文档 -->
+        <div class="tree-item active rounded px-2 py-1.5 mb-0.5 cursor-pointer" data-category="all" onclick="filterCategory('all', this)">
+          📁 全部文档 <span class="text-gray-400">(28)</span>
+        </div>
+
+        <!-- 商务文档 -->
+        <div class="mt-1">
+          <div class="tree-caret open px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 商务文档 <span class="text-gray-400 font-normal">(6)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="商务/合同" onclick="filterCategory('商务/合同', this)">合同文件 <span class="text-gray-400">(3)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="商务/报价" onclick="filterCategory('商务/报价', this)">报价文件 <span class="text-gray-400">(2)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="商务/投标" onclick="filterCategory('商务/投标', this)">投标文件 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+
+        <!-- 技术文档 -->
+        <div class="mt-1">
+          <div class="tree-caret open px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 技术文档 <span class="text-gray-400 font-normal">(8)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="技术/方案" onclick="filterCategory('技术/方案', this)">设计方案 <span class="text-gray-400">(3)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="技术/图纸" onclick="filterCategory('技术/图纸', this)">施工图纸 <span class="text-gray-400">(2)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="技术/协议" onclick="filterCategory('技术/协议', this)">技术协议 <span class="text-gray-400">(2)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="技术/BOM" onclick="filterCategory('技术/BOM', this)">BOM清单 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+
+        <!-- 生产文档 -->
+        <div class="mt-1">
+          <div class="tree-caret px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 生产文档 <span class="text-gray-400 font-normal">(5)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="生产/计划" onclick="filterCategory('生产/计划', this)">生产计划 <span class="text-gray-400">(1)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="生产/质检" onclick="filterCategory('生产/质检', this)">质检报告 <span class="text-gray-400">(3)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="生产/合格证" onclick="filterCategory('生产/合格证', this)">出厂合格证 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+
+        <!-- 物流文档 -->
+        <div class="mt-1">
+          <div class="tree-caret px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 物流文档 <span class="text-gray-400 font-normal">(2)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="物流/装箱" onclick="filterCategory('物流/装箱', this)">装箱单 <span class="text-gray-400">(1)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="物流/运输" onclick="filterCategory('物流/运输', this)">运输单据 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+
+        <!-- 安装文档 -->
+        <div class="mt-1">
+          <div class="tree-caret px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 安装文档 <span class="text-gray-400 font-normal">(3)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="安装/方案" onclick="filterCategory('安装/方案', this)">安装方案 <span class="text-gray-400">(1)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="安装/调试" onclick="filterCategory('安装/调试', this)">调试记录 <span class="text-gray-400">(1)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="安装/培训" onclick="filterCategory('安装/培训', this)">培训记录 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+
+        <!-- 验收文档 -->
+        <div class="mt-1">
+          <div class="tree-caret px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 验收文档 <span class="text-gray-400 font-normal">(2)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="验收/报告" onclick="filterCategory('验收/报告', this)">验收报告 <span class="text-gray-400">(1)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="验收/整改" onclick="filterCategory('验收/整改', this)">整改记录 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+
+        <!-- 财务文档 -->
+        <div class="mt-1">
+          <div class="tree-caret px-2 py-1 text-gray-600 font-medium" onclick="this.classList.toggle('open')">📁 财务文档 <span class="text-gray-400 font-normal">(2)</span></div>
+          <div class="tree-children pl-3">
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="财务/发票" onclick="filterCategory('财务/发票', this)">发票 <span class="text-gray-400">(1)</span></div>
+            <div class="tree-item rounded px-2 py-1 cursor-pointer" data-category="财务/收款" onclick="filterCategory('财务/收款', this)">收款凭证 <span class="text-gray-400">(1)</span></div>
+          </div>
+        </div>
+      </nav>
+    </div>
+
+    <!-- 3. 文档列表（右侧80%宽度，主体区域） -->
+    <div class="flex-1 flex flex-col">
+
+      <!-- 顶部操作栏 -->
+      <div class="bg-white border border-gray-300 rounded-t-lg px-4 py-2.5 flex items-center justify-between flex-wrap gap-2">
+        <div class="flex items-center gap-3">
+          <!-- 搜索框 -->
+          <div class="relative">
+            <input type="text" id="searchInput" placeholder="搜索文档名称/编号…" class="border border-gray-300 rounded px-3 py-1.5 text-xs w-52 pr-7 focus:outline-none focus:border-blue-400" oninput="renderTable()">
+            <span class="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-xs">🔍</span>
+          </div>
+          <!-- 视图切换 -->
+          <div class="flex items-center border border-gray-300 rounded overflow-hidden text-xs">
+            <button id="viewList" class="px-2.5 py-1 bg-gray-100 text-gray-700 font-medium" onclick="setView('list')">列表</button>
+            <button id="viewCard" class="px-2.5 py-1 text-gray-500 hover:bg-gray-50" onclick="setView('card')">卡片</button>
+          </div>
+          <!-- 筛选下拉 -->
+          <select id="filterStage" class="border border-gray-300 rounded px-2 py-1.5 text-xs text-gray-600 focus:outline-none" onchange="renderTable()">
+            <option value="">按阶段</option>
+            <option value="合同签订">合同签订</option>
+            <option value="技术交底">技术交底</option>
+            <option value="方案设计">方案设计</option>
+            <option value="设计确认">设计确认</option>
+            <option value="生产排期">生产排期</option>
+            <option value="生产制造">生产制造</option>
+          </select>
+          <select id="filterStatus" class="border border-gray-300 rounded px-2 py-1.5 text-xs text-gray-600 focus:outline-none" onchange="renderTable()">
+            <option value="">按状态</option>
+            <option value="已归档">已归档</option>
+            <option value="待审核">待审核</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">+ 上传文档</button>
+          <button class="px-3 py-1.5 border border-gray-300 rounded text-xs text-gray-600 hover:bg-gray-50">📁 批量上传</button>
+        </div>
+      </div>
+
+      <!-- 文档列表表格 -->
+      <div class="bg-white border border-t-0 border-gray-300 rounded-b-lg flex-1 flex flex-col overflow-hidden">
+        <!-- 列表视图 -->
+        <div id="listView" class="flex-1 overflow-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="bg-gray-100 border-b border-gray-300 sticky top-0">
+                <th class="text-left px-3 py-2 font-medium text-gray-600 whitespace-nowrap">文档名称</th>
+                <th class="text-left px-3 py-2 font-medium text-gray-600 whitespace-nowrap">文档编号</th>
+                <th class="text-left px-3 py-2 font-medium text-gray-600 whitespace-nowrap">分类</th>
+                <th class="text-left px-3 py-2 font-medium text-gray-600 whitespace-nowrap">阶段标签</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600 whitespace-nowrap">版本</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600 whitespace-nowrap">格式</th>
+                <th class="text-right px-3 py-2 font-medium text-gray-600 whitespace-nowrap">大小</th>
+                <th class="text-left px-3 py-2 font-medium text-gray-600 whitespace-nowrap">上传人</th>
+                <th class="text-left px-3 py-2 font-medium text-gray-600 whitespace-nowrap">上传时间</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600 whitespace-nowrap">状态</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600 whitespace-nowrap">操作</th>
+              </tr>
+            </thead>
+            <tbody id="docTableBody">
+            </tbody>
+          </table>
+        </div>
+
+        <!-- 卡片视图（默认隐藏） -->
+        <div id="cardView" class="flex-1 overflow-auto p-4 hidden">
+          <div id="docCardGrid" class="grid grid-cols-3 gap-3">
+          </div>
+        </div>
+
+        <!-- 分页器 -->
+        <div class="px-4 py-2.5 bg-gray-50 border-t border-gray-300 flex items-center justify-between text-xs text-gray-500">
+          <span>共 <strong class="text-gray-700" id="totalCount">28</strong> 份文档</span>
+          <div class="flex items-center gap-1">
+            <button class="px-2 py-1 border border-gray-300 rounded text-gray-400 cursor-not-allowed">‹ 上一页</button>
+            <button class="px-2.5 py-1 bg-blue-500 text-white rounded font-medium">1</button>
+            <button class="px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-50">2</button>
+            <button class="px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-50">3</button>
+            <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">下一页 ›</button>
+          </div>
+          <span>当前第 <strong class="text-gray-700">1</strong> 页</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4. 文档版本历史（右侧面板，点击某文档后展开）
+       ============================================================ -->
+  <section class="mb-6">
+    <div id="versionPanel" class="version-panel">
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <div class="px-4 py-2.5 bg-gray-100 border-b border-gray-300 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-semibold text-gray-700">📄 版本历史</span>
+            <span class="text-xs text-gray-500" id="versionDocName">— 总体设计方案</span>
+          </div>
+          <button class="text-gray-400 hover:text-gray-600 text-sm" onclick="closeVersionPanel()">✕</button>
+        </div>
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200">
+              <th class="text-left px-4 py-2 font-medium text-gray-600">版本</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">更新说明</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">更新人</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">更新时间</th>
+              <th class="text-center px-4 py-2 font-medium text-gray-600">操作</th>
+            </tr>
+          </thead>
+          <tbody id="versionBody">
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. 文档阶段视图（360看板核心功能）
+       ============================================================ -->
+  <section class="mb-6">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base font-semibold text-gray-800">文档阶段视图</h2>
+      <span class="text-xs text-gray-400">项目360看板 · 对应 Issue #3179-#3184</span>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg p-4 overflow-x-auto">
+      <div class="flex gap-3 min-w-max" id="stageCards">
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6. 文档模板库（底部链接区域）
+       ============================================================ -->
+  <section class="mb-2">
+    <div class="bg-white border border-gray-300 rounded-lg px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-4 text-xs">
+        <span class="text-gray-500 font-medium">快速模板：</span>
+        <button class="text-blue-500 hover:text-blue-600 hover:underline">📋 施工图模板</button>
+        <button class="text-blue-500 hover:text-blue-600 hover:underline">📋 质检报告模板</button>
+        <button class="text-blue-500 hover:text-blue-600 hover:underline">📋 验收报告模板</button>
+        <button class="text-blue-500 hover:text-blue-600 hover:underline">📋 竣工资料清单模板</button>
+      </div>
+      <button class="text-xs text-blue-500 hover:text-blue-600 hover:underline">管理模板 →</button>
+    </div>
+  </section>
+
+  <script>
+    // ========================================
+    // 文档数据
+    // ========================================
+    const documents = [
+      { name: '采购合同-深圳欢乐谷二期', code: 'DOC-001', category: '商务/合同', stage: '合同签订', version: 'V1.0', format: 'PDF', size: '2.3MB', uploader: '王五', date: '2026-01-15', status: '已归档', actions: ['查看','下载','分享'] },
+      { name: '合同补充协议-设计变更', code: 'DOC-002', category: '商务/合同', stage: '设计确认', version: 'V1.0', format: 'PDF', size: '1.1MB', uploader: '王五', date: '2026-03-20', status: '已归档', actions: ['查看','下载','分享'] },
+      { name: '总体设计方案', code: 'DOC-003', category: '技术/方案', stage: '方案设计', version: 'V2.0', format: 'PDF', size: '15.8MB', uploader: '赵六', date: '2026-02-18', status: '已归档', actions: ['查看','下载','分享'], hasVersions: true },
+      { name: '效果图-A区主入口', code: 'DOC-004', category: '技术/方案', stage: '方案设计', version: 'V3.0', format: 'JPG', size: '8.5MB', uploader: '赵六', date: '2026-03-10', status: '已归档', actions: ['查看','下载','分享'] },
+      { name: '施工图-钢结构', code: 'DOC-005', category: '技术/图纸', stage: '设计确认', version: 'V2.0', format: 'DWG', size: '22.1MB', uploader: '赵六', date: '2026-03-05', status: '已归档', actions: ['查看','下载','分享'] },
+      { name: '生产计划表', code: 'DOC-006', category: '生产/计划', stage: '生产排期', version: 'V1.0', format: 'XLSX', size: '0.5MB', uploader: '李四', date: '2026-03-14', status: '已归档', actions: ['查看','下载','分享'] },
+      { name: '质检报告-钢结构焊接', code: 'DOC-007', category: '生产/质检', stage: '生产制造', version: 'V1.0', format: 'PDF', size: '3.2MB', uploader: '质检部', date: '2026-04-05', status: '已归档', actions: ['查看','下载'] },
+      { name: '质检报告-FRP滑梯', code: 'DOC-008', category: '生产/质检', stage: '生产制造', version: 'V1.0', format: 'PDF', size: '2.8MB', uploader: '质检部', date: '2026-04-08', status: '待审核', actions: ['查看','审核'] },
+      { name: '变更申请单-CG-003', code: 'DOC-009', category: '技术/变更', stage: '生产制造', version: 'V1.0', format: 'PDF', size: '0.8MB', uploader: '赵六', date: '2026-04-05', status: '待审核', actions: ['查看','审核'] },
+      { name: '现场勘察报告', code: 'DOC-010', category: '安装/方案', stage: '技术交底', version: 'V1.0', format: 'PDF', size: '5.6MB', uploader: '张三', date: '2026-01-28', status: '已归档', actions: ['查看','下载'] },
+    ];
+
+    // Version history data for DOC-003
+    const versionHistory = {
+      'DOC-003': [
+        { version: 'V2.0', note: '根据CG-001/CG-002变更更新', author: '赵六', date: '2026-03-25' },
+        { version: 'V1.1', note: '客户反馈修改', author: '赵六', date: '2026-02-20' },
+        { version: 'V1.0', note: '初始版本', author: '赵六', date: '2026-02-18' },
+      ]
+    };
+
+    // Stage data for section 5
+    const stageData = [
+      { name: '合同签订', count: 3, status: 'complete', label: '✅ 齐全' },
+      { name: '技术交底', count: 2, status: 'complete', label: '✅ 齐全' },
+      { name: '方案设计', count: 5, status: 'complete', label: '✅ 齐全' },
+      { name: '设计确认', count: 4, status: 'complete', label: '✅ 齐全' },
+      { name: '生产排期', count: 2, status: 'complete', label: '✅ 齐全' },
+      { name: '生产制造', count: 6, status: 'active', label: '🔵 进行中' },
+      { name: '质检验收', count: 0, status: 'pending', label: '⭕ 待上传' },
+      { name: '包装发货', count: 0, status: 'pending', label: '⭕ 待上传' },
+      { name: '现场安装', count: 0, status: 'pending', label: '⭕ 待上传' },
+      { name: '调试验收', count: 0, status: 'pending', label: '⭕ 待上传' },
+    ];
+
+    // ========================================
+    // State
+    // ========================================
+    let currentCategory = 'all';
+    let currentView = 'list';
+    let selectedStage = '';
+
+    // ========================================
+    // Format icon mapping
+    // ========================================
+    const formatIcon = {
+      'PDF': '📕', 'XLSX': '📊', 'DWG': '📐', 'JPG': '🖼️', 'DOCX': '📘'
+    };
+
+    // ========================================
+    // Render document table (list view)
+    // ========================================
+    function getFilteredDocs() {
+      const search = document.getElementById('searchInput').value.toLowerCase();
+      const filterStage = document.getElementById('filterStage').value;
+      const filterStatus = document.getElementById('filterStatus').value;
+
+      return documents.filter(doc => {
+        // Category filter
+        if (currentCategory !== 'all' && doc.category !== currentCategory) return false;
+        // Stage filter from dropdown
+        if (filterStage && doc.stage !== filterStage) return false;
+        // Stage filter from stage cards
+        if (selectedStage && doc.stage !== selectedStage) return false;
+        // Status filter
+        if (filterStatus && doc.status !== filterStatus) return false;
+        // Search filter
+        if (search && !doc.name.toLowerCase().includes(search) && !doc.code.toLowerCase().includes(search)) return false;
+        return true;
+      });
+    }
+
+    function renderTable() {
+      const filtered = getFilteredDocs();
+      document.getElementById('totalCount').textContent = filtered.length;
+
+      // List view
+      const tbody = document.getElementById('docTableBody');
+      tbody.innerHTML = '';
+      filtered.forEach(doc => {
+        const statusBadge = doc.status === '已归档'
+          ? '<span class="inline-block px-2 py-0.5 rounded-full bg-gray-200 text-gray-600">✅ 已归档</span>'
+          : '<span class="inline-block px-2 py-0.5 rounded-full bg-yellow-50 text-yellow-700 border border-yellow-200">🟡 待审核</span>';
+
+        const actionBtns = doc.actions.map(a => {
+          if (a === '审核') return `<button class="text-blue-500 hover:underline font-medium">${a}</button>`;
+          return `<button class="text-blue-500 hover:underline">${a}</button>`;
+        }).join('<span class="text-gray-300 mx-0.5">·</span>');
+
+        const versionBtn = doc.hasVersions
+          ? `<button class="text-blue-500 hover:underline ml-1" onclick="event.stopPropagation(); showVersionHistory('${doc.code}', '${doc.name}')" title="查看版本历史">🕐</button>`
+          : '';
+
+        const tr = document.createElement('tr');
+        tr.className = 'border-b border-gray-100 hover:bg-gray-50 cursor-pointer';
+        tr.onclick = function() { if (doc.hasVersions) showVersionHistory(doc.code, doc.name); };
+        tr.innerHTML = `
+          <td class="px-3 py-2 text-gray-800 font-medium whitespace-nowrap">${formatIcon[doc.format] || '📄'} ${doc.name}${versionBtn}</td>
+          <td class="px-3 py-2 text-gray-500 whitespace-nowrap">${doc.code}</td>
+          <td class="px-3 py-2 whitespace-nowrap">${doc.category}</td>
+          <td class="px-3 py-2 whitespace-nowrap"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 text-[11px]">${doc.stage}</span></td>
+          <td class="px-3 py-2 text-center">${doc.version}</td>
+          <td class="px-3 py-2 text-center"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[11px] font-mono">${doc.format}</span></td>
+          <td class="px-3 py-2 text-right text-gray-500">${doc.size}</td>
+          <td class="px-3 py-2 whitespace-nowrap">${doc.uploader}</td>
+          <td class="px-3 py-2 text-gray-500 whitespace-nowrap">${doc.date}</td>
+          <td class="px-3 py-2 text-center">${statusBadge}</td>
+          <td class="px-3 py-2 text-center whitespace-nowrap">${actionBtns}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      // Card view
+      const cardGrid = document.getElementById('docCardGrid');
+      cardGrid.innerHTML = '';
+      filtered.forEach(doc => {
+        const statusBadge = doc.status === '已归档'
+          ? '<span class="text-[11px] text-gray-500">✅ 已归档</span>'
+          : '<span class="text-[11px] text-yellow-600">🟡 待审核</span>';
+
+        const card = document.createElement('div');
+        card.className = 'border border-gray-300 rounded-lg p-3 hover:shadow-md transition-shadow cursor-pointer bg-white';
+        card.innerHTML = `
+          <div class="flex items-start justify-between mb-2">
+            <span class="text-lg">${formatIcon[doc.format] || '📄'}</span>
+            ${statusBadge}
+          </div>
+          <div class="text-xs font-medium text-gray-800 mb-1 truncate" title="${doc.name}">${doc.name}</div>
+          <div class="text-[11px] text-gray-400 mb-2">${doc.code} · ${doc.version}</div>
+          <div class="flex items-center justify-between text-[11px] text-gray-500">
+            <span>${doc.category}</span>
+            <span>${doc.size}</span>
+          </div>
+          <div class="flex items-center justify-between text-[11px] text-gray-400 mt-1">
+            <span>${doc.uploader}</span>
+            <span>${doc.date}</span>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100">
+            <span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 text-[10px]">${doc.stage}</span>
+          </div>
+        `;
+        cardGrid.appendChild(card);
+      });
+    }
+
+    // ========================================
+    // Category filter (tree navigation)
+    // ========================================
+    function filterCategory(category, el) {
+      currentCategory = category;
+      // Reset active state
+      document.querySelectorAll('#docTree .tree-item').forEach(item => item.classList.remove('active'));
+      el.classList.add('active');
+      // Reset stage selection
+      selectedStage = '';
+      document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('selected'));
+      renderTable();
+    }
+
+    // ========================================
+    // View toggle
+    // ========================================
+    function setView(view) {
+      currentView = view;
+      if (view === 'list') {
+        document.getElementById('listView').classList.remove('hidden');
+        document.getElementById('cardView').classList.add('hidden');
+        document.getElementById('viewList').className = 'px-2.5 py-1 bg-gray-100 text-gray-700 font-medium';
+        document.getElementById('viewCard').className = 'px-2.5 py-1 text-gray-500 hover:bg-gray-50';
+      } else {
+        document.getElementById('listView').classList.add('hidden');
+        document.getElementById('cardView').classList.remove('hidden');
+        document.getElementById('viewCard').className = 'px-2.5 py-1 bg-gray-100 text-gray-700 font-medium';
+        document.getElementById('viewList').className = 'px-2.5 py-1 text-gray-500 hover:bg-gray-50';
+      }
+    }
+
+    // ========================================
+    // Version history panel
+    // ========================================
+    function showVersionHistory(docCode, docName) {
+      const panel = document.getElementById('versionPanel');
+      document.getElementById('versionDocName').textContent = '— ' + docName;
+      const tbody = document.getElementById('versionBody');
+      tbody.innerHTML = '';
+
+      const versions = versionHistory[docCode] || [];
+      if (versions.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-3 text-center text-gray-400">暂无版本历史</td></tr>';
+      } else {
+        versions.forEach((v, i) => {
+          const tr = document.createElement('tr');
+          tr.className = 'border-b border-gray-100' + (i === 0 ? ' bg-blue-50' : '');
+          tr.innerHTML = `
+            <td class="px-4 py-2 font-medium ${i === 0 ? 'text-blue-600' : 'text-gray-600'}">${v.version}${i === 0 ? ' <span class="text-[10px] font-normal text-blue-400">当前</span>' : ''}</td>
+            <td class="px-4 py-2 text-gray-700">${v.note}</td>
+            <td class="px-4 py-2 text-gray-600">${v.author}</td>
+            <td class="px-4 py-2 text-gray-500">${v.date}</td>
+            <td class="px-4 py-2 text-center">
+              <button class="text-blue-500 hover:underline">查看</button>
+              ${i !== 0 ? '<span class="text-gray-300 mx-1">·</span><button class="text-blue-500 hover:underline">恢复</button>' : ''}
+            </td>
+          `;
+          tbody.appendChild(tr);
+        });
+      }
+
+      panel.classList.add('open');
+      panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function closeVersionPanel() {
+      document.getElementById('versionPanel').classList.remove('open');
+    }
+
+    // ========================================
+    // Stage cards (section 5)
+    // ========================================
+    function renderStageCards() {
+      const container = document.getElementById('stageCards');
+      container.innerHTML = '';
+
+      stageData.forEach(s => {
+        let borderColor = 'border-gray-300';
+        let bgColor = 'bg-white';
+        let countColor = 'text-gray-800';
+
+        if (s.status === 'active') {
+          borderColor = 'border-gray-400';
+          bgColor = 'bg-gray-50';
+        } else if (s.status === 'pending') {
+          borderColor = 'border-dashed border-gray-300';
+          countColor = 'text-gray-400';
+        }
+
+        const card = document.createElement('div');
+        card.className = `stage-card border ${borderColor} ${bgColor} rounded-lg px-4 py-3 text-center min-w-[110px]`;
+        card.innerHTML = `
+          <div class="text-xs font-medium text-gray-700 mb-1.5">${s.name}</div>
+          <div class="text-lg font-bold ${countColor} mb-1">${s.count}<span class="text-xs font-normal text-gray-400 ml-0.5">份</span></div>
+          <div class="text-[11px] ${s.status === 'pending' ? 'text-gray-400' : 'text-gray-500'}">${s.label}</div>
+        `;
+        card.onclick = function() {
+          // Toggle selection
+          if (selectedStage === s.name) {
+            selectedStage = '';
+            card.classList.remove('selected');
+          } else {
+            selectedStage = s.name;
+            document.querySelectorAll('.stage-card').forEach(c => c.classList.remove('selected'));
+            card.classList.add('selected');
+          }
+          // Reset dropdown to avoid conflict
+          document.getElementById('filterStage').value = '';
+          renderTable();
+        };
+        container.appendChild(card);
+      });
+    }
+
+    // ========================================
+    // Init
+    // ========================================
+    renderTable();
+    renderStageCards();
+  </script>
+
+  <!-- Notify parent of height for iframe embedding -->
+  <script>
+    function notifyHeight() {
+      window.parent.postMessage({ type: 'setHeight', height: document.documentElement.scrollHeight }, '*');
+    }
+    setTimeout(notifyHeight, 200);
+    window.addEventListener('resize', notifyHeight);
+    // Re-notify when panels open/close
+    new MutationObserver(notifyHeight).observe(document.body, { childList: true, subtree: true, attributes: true });
+  </script>
+
+</body>
+</html>

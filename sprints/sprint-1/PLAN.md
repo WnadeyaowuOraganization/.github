@@ -220,6 +220,7 @@ Week 4 (5/03-5/09):
 > **📊 2026-04-14 23:17 池快照**：#3519 PR#3675 merged 23:01 → kimi2 改派 **#3461 Tier-6 耀总驾驶舱 v1.0** 23:13。活跃：kimi1 #3518 / kimi2 **#3461** / kimi3 #3520 / kimi4 #3529 / kimi5 #3636。池 **5/5 满**。
 > **📊 2026-04-15 00:18 池快照**：#3461 PR#3676 merged → kimi2 空闲。活跃 4/5：kimi1 #3518 / kimi3 #3520 / kimi4 #3529 / kimi5 #3636。建议 kimi2 接 **#3548 CRM-13 公司通讯录**（P1 fullstack medium，CRM Tier-4 批次轻量入口）。
 > **📊 2026-04-15 00:35 池快照**：**#3518 PR#3677 merged 00:24 / #3520 PR#3678 merged 00:3x** → 研发经理 3 连派 CRM 批次：**kimi1 #3549 / kimi2 #3548 / kimi3 #3550**。活跃 **5/5 满**：kimi1 #3549 / kimi2 #3548 / kimi3 #3550 / kimi4 #3529 / kimi5 #3636。
+> **📊 2026-04-15 00:45 池快照**：**#3529 PR#3679 merged 00:41** → kimi4 立即接 **#3551 CRM-12**。池 **5/5 满**：kimi1 #3549 / kimi2 #3548 / kimi3 #3550 / kimi4 **#3551** / kimi5 #3636。CRM Tier-4 批次（#3548/#3549/#3550/#3551）全部就位；#3551 merged 后 CRM-02 子矩阵收尾。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
@@ -228,8 +229,7 @@ Week 4 (5/03-5/09):
 | kimi1 | #3549 | P1 | fullstack | [运行中] Tier-4 CRM-14（00:33 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
 | kimi2 | #3548 | P1 | fullstack | [运行中] Tier-4 CRM-13 公司通讯录（00:33 启动） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | kimi3 | #3550 | P1 | fullstack | [运行中] Tier-4 CRM-11（00:35 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
-| kimi4 | #3529 | P1 | fullstack | [运行中] Tier-4: CRM-02 客户管理 — CRUD+三类型+详情页五Tab | `docs/design/crm-商务中心/详细设计.md` | high |
-| — | #3551 | P1 | fullstack | Tier-4 CRM-12（后续批次，池满后补派） | `docs/design/crm-商务中心/详细设计.md` | high |
+| kimi4 | #3551 | P1 | fullstack | [运行中] Tier-4 CRM-12（00:45 启动，#3529 PR#3679 merged 00:41 后改派） | `docs/design/crm-商务中心/详细设计.md` | high |
 | — | #3583 #3585 #3588 | P0/P1/P2 | frontend | Tier-5: 产品详情页（3D）/备件目录/H5 适配（#3582 已随 PR#3664 合并） | `docs/design/product-portal/02-detail.html` 等 | medium |
 
 ## 指派历史（完成后划线）

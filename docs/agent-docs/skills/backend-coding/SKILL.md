@@ -171,6 +171,11 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 - ❌ root 用户跑 `mvn`（target 权限污染）— 用 ubuntu
 - ❌ push `dev` / `main`，只能 push `feature-Issue-<N>`
 - ❌ 删 Mapper 接口不删 XML
+- ❌ **`mysql -uroot -proot ...` 裸连主 MySQL**（4 次再犯自动止血触发）— 属红线 #3 环境隔离违规。**必须**走 docker exec：
+  ```bash
+  docker exec wande-ai-mysql mysql -uroot -p$(grep MYSQL_ROOT_PASSWORD ~/projects/.github/scripts/.env | cut -d= -f2) -D wande-ai-kimi<N>
+  ```
+  **只**允许查自己的 schema `wande-ai-kimi<N>`，禁止访问 `wande-ai`（主库）。DB 用户应优先用 `wande`（`.env.kimi<N>`）而不是 root
 
 ## 编译 + 启动验证（改完必跑）
 

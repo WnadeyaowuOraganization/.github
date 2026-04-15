@@ -18,6 +18,27 @@
 
 ---
 
+### 2026-04-15 12:55 【前端构建 P0】同名 `xxx.ts` 影子文件覆盖 `xxx/index.ts` 目录导致 dev 部署连环失败 10 次
+
+- **症状**：2026-04-15 03:13~09:06 dev 部署 CI 连续 10 次 deploy-frontend failure，`pnpm build:antd` 报 `"listUserByDeptId" is not exported by "src/api/system/user.ts"` 等 7 个导出缺失；后端部署成功但前端源码停留在 03:12 以前版本 → 期间 9 个 CRM PR（#3679/#3682/#3684/#3686/#3687/#3689/#3690/#3691/#3692）在 `localhost:8080` 根本点不到（用户端完全"看不见"新功能），直到 10:13 #3693 紧急止血后才恢复
+- **频次**：1 次事故阻塞 10 次 CI + 9 个 PR。根因 PR 是 #3689（CRM-03 商机管道，kimi 未知），CC 新增 API 时**不看已有 `user/index.ts` 目录就直接 touch 同名 `user.ts`**
+- **根因**：
+  - Vite/TS path alias `#/api/system/user` 同时能解析到 `user.ts` 或 `user/index.ts`；Vite 解析**优先选 `.ts` 文件**，导致 15 行新建影子文件覆盖 171 行真实 index
+  - CC 在 `frontend-coding` 阶段只看自己 Issue 的字段/接口需求，未搜索已有 `src/api/**/<name>{.ts,/index.ts}` 冲突
+  - `pnpm build:antd` 失败后仅 deploy-frontend 变红；**deploy-backend 独立 success** → 后端 API 其实能调，但前端页面访问不到，表象隐蔽
+  - 同日排查另发现 1 潜伏影子：`src/views/system/dict/data.vue` vs `dict/data/` 目录（data.vue 是上游 ele 版本残留占位，内容 `"无实际意义"`）— 暂未触发但规则应覆盖
+- **已处置**：
+  - PR #3693 删除 `user.ts` + 合并 2 个导出到 `user/index.ts` → 10:13 merge 后首个 deploy-frontend 回绿
+  - 本轮额外扫描：全 `frontend/apps/web-antd/src` 仅 1 处潜伏（dict/data.vue，上游残留，留观不动）
+- **建议改进**（P0 立即实施）：
+  1. 【frontend-coding skill】加红线：**新建 `src/api/<seg>.ts` 或 `src/views/<seg>.ts` 前必须 `ls src/api/<seg>/` / `ls src/views/<seg>/` 检查同名目录；若存在目录则必须改为 `<seg>/<sub>.ts` 或向 `<seg>/index.ts` 追加导出，禁止并存**
+  2. 【pr-test.yml CI】新增 pre-build 检查步骤：`find frontend/apps/web-antd/src -type d | while read d; do base=$(basename $d); [ -f "$(dirname $d)/${base}.ts" ] && echo "SHADOW: $d vs $(dirname $d)/${base}.ts" && exit 1; done` — 让影子文件**在 PR 阶段就红**，而不是 merge 后才炸 dev 部署
+  3. 【frontend-e2e skill】smoke 前先 `curl localhost:8080/assets/ | grep -q <hash>` 验前端部署新鲜度（与 12:33 条目的 vite dev 校验互补，这里校验"主环境是否是最近一小时的包"）；过期 → cc-report stuck
+  4. 【dict/data.vue 潜伏】不修改，但 frontend-coding skill 文档里列为"已知历史残留白名单"，防止 CC 误重构引入回归
+- **状态**：🔴 P0 待实施 — #1 skill 改可立做；#2 CI 检查也可立做（几行 bash）；#4 文档化随 skill 改一起
+
+---
+
 ### 2026-04-15 12:33 【基础设施 P0】nginx wande-kimiN 站点 (04-10 旧静态) 占用 810N 端口导致 vite dev 退到 5666+ / smoke 永远 404
 
 - **症状**：kimi4 #3532 smoke 持续 404；`curl localhost:8104/` 返 2597B 空骨架 HTML（title=万德AI平台、#app 空容器），**非 vite dev 页面**；vite 实际绑 localhost:5670（默认端口递增）；`ss -tlnp | grep 8104` 显示 nginx master pid=2014551 + 32 worker 持有

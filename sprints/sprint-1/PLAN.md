@@ -350,7 +350,8 @@ Week 4 (5/03-5/09):
 | kimi1 | #3538 | P2 | backend | CRM-CRON 回款周报逾期检测定时任务（每周五 9:00 标记未填合同 + 企微通知，CRM Master #3526 最后 1 个子 Issue，收尾 Sprint-1 CRM） | 21:55 启动，blocker #3527+#3535 均 CLOSED，`docs/design/crm-商务中心/详细设计.md §10`，22:05 cc-report: 现有 PaymentWeeklyReportOverdueJob 基本骨架在，需重构类名+补企微通知+连续周数优化 |
 | kimi2 | #3701 | 🔥P0 | fullstack | CRM 11 子页白屏修复（`src/api/crm/opportunity.ts` 补 3 export: createOpportunity/getOpportunityKanban/advanceOpportunityStage + 11 `/views/business/crm/**/index.vue` 恢复 `<Page>` 容器，/business/tender/mining 同根因）| 22:05 启动，排程经理调研 5 截图 /tmp/crm-0[1-5]*.png |
 | kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP 批量处理 Pipeline | 22:06 启动，blocker #3580/#3581 均 CLOSED |
-| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED |
+| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED，22:08 cc-report 中等复杂度 |
+| kimi5 | #1697 | P2 | backend | 报销费控 7 张表 schema 建表（纯 Flyway，无前端/API 依赖，Sprint-4 预研） | 22:10 启动，排程经理预估 1.5h，池恢复 5/5 |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

@@ -754,3 +754,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 事实: 测 mapper.update() 被调用即可，不需要验证 wrapper 内部逻辑
 - 频次：第2次（kimi2/#3133 + kimi4/#3725）
 - 状态：🔴 高频趋势，第3次即改 skill
+
+## 2026-04-16 06:15 — `<style lang="less">` 导致 CI 构建失败（#3117，1次）
+
+- **现象**：CC 在 Vue 文件中写了 `<style scoped lang="less">`，项目未安装 less，dev 部署失败
+- **根因**：项目只有 scss/plain CSS，CC 未检查 package.json 中的 CSS 预处理器
+- **止血**：直接修 dev 分支（plain scoped CSS + :deep() 替换嵌套选择器）
+- **频次**：第1次
+- **待观察**：若再出现，更新 frontend-coding SKILL.md 明确禁止 lang="less"

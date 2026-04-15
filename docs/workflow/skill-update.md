@@ -731,3 +731,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 
 **频次**：首次记录，观察后续是否复现。若 ≥4 次改 webapp-testing SKILL.md。
 
+
+### 2026-04-16 05:40 【红线#11 跳过JUnit】kimi2/#3133 以"集成测试配置复杂"为由跳过JUnit直接写Playwright
+- CC: kimi2
+- Issue: #3133 审批引擎
+- 频次：第1次记录
+- 原因：CC误以为后端Service需要Spring Boot集成测试，实际只需Mockito单元测试
+- 处置：个案注入纠正（Mockito模式示例）
+- 状态：🟡 观察中

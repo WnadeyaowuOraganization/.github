@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>执行管理 — 项目列表</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Progress bar */
+    .progress-track {
+      height: 6px;
+      border-radius: 9999px;
+      background-color: #e5e7eb;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background-color: #9ca3af;
+      transition: width 0.3s ease;
+    }
+    /* Table row hover */
+    tbody tr:hover { background-color: #f9fafb; }
+    /* Radio button group */
+    .radio-group { display: flex; align-items: center; gap: 0; background: #f3f4f6; border-radius: 6px; padding: 2px; }
+    .radio-group input[type="radio"] { display: none; }
+    .radio-group label { cursor: pointer; }
+    .radio-group label span {
+      display: inline-block;
+      padding: 4px 12px;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #6b7280;
+      border: 1px solid transparent;
+      transition: all 0.15s ease;
+    }
+    .radio-group input[type="radio"]:checked + span {
+      color: #374151;
+      background-color: #fff;
+      border-color: #d1d5db;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    }
+    /* Status tag toggle */
+    .status-tag {
+      cursor: pointer;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      font-size: 12px;
+      border: 1px solid #d1d5db;
+      color: #9ca3af;
+      background: #fff;
+      transition: all 0.15s ease;
+      user-select: none;
+    }
+    .status-tag.active { border-color: #9ca3af; color: #374151; background-color: #f3f4f6; }
+    /* Scrollbar */
+    ::-webkit-scrollbar { width: 6px; height: 6px; }
+    ::-webkit-scrollbar-track { background: transparent; }
+    ::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6" style="margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+
+  <!-- ========== 1. KPI 卡片区域（顶部4个统计卡片） ========== -->
+  <section class="grid grid-cols-4 gap-4 mb-6">
+    <!-- 在执行项目 -->
+    <div class="bg-white rounded-lg border border-gray-200 p-4">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-gray-400 font-medium tracking-wide">在执行项目</span>
+        <span class="w-2 h-2 rounded-full bg-blue-400 inline-block" title="蓝色标记"></span>
+      </div>
+      <div class="text-2xl font-semibold text-gray-700 mb-1">47</div>
+      <div class="text-xs text-gray-400">直销28 / 经销12 / 国贸7</div>
+    </div>
+    <!-- 延期预警 -->
+    <div class="bg-white rounded-lg border border-gray-200 p-4">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-gray-400 font-medium tracking-wide">延期预警</span>
+        <span class="w-2 h-2 rounded-full bg-red-400 inline-block" title="红色标记"></span>
+      </div>
+      <div class="text-2xl font-semibold text-gray-700 mb-1">5</div>
+      <div class="text-xs text-gray-400">较上月 <span class="text-red-400 font-medium">+2</span></div>
+    </div>
+    <!-- 待回款金额 -->
+    <div class="bg-white rounded-lg border border-gray-200 p-4">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-gray-400 font-medium tracking-wide">待回款金额</span>
+        <span class="w-2 h-2 rounded-full bg-orange-400 inline-block" title="橙色标记"></span>
+      </div>
+      <div class="text-2xl font-semibold text-gray-700 mb-1">￥1,285万</div>
+      <div class="text-xs text-gray-400">已回款 68.5%</div>
+    </div>
+    <!-- 本月交付 -->
+    <div class="bg-white rounded-lg border border-gray-200 p-4">
+      <div class="flex items-center justify-between mb-1">
+        <span class="text-xs text-gray-400 font-medium tracking-wide">本月交付</span>
+        <span class="w-2 h-2 rounded-full bg-green-400 inline-block" title="绿色标记"></span>
+      </div>
+      <div class="text-2xl font-semibold text-gray-700 mb-1">8</div>
+      <div class="text-xs text-gray-400">已完成3 / 进行中5</div>
+    </div>
+  </section>
+
+  <!-- ========== 2. 筛选栏 ========== -->
+  <section class="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+    <div class="flex flex-wrap items-center gap-4">
+      <!-- 业务模式 Radio 按钮组 -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400 whitespace-nowrap">业务模式</span>
+        <div class="radio-group">
+          <label><input type="radio" name="bizMode" value="all" checked><span>全部</span></label>
+          <label><input type="radio" name="bizMode" value="direct"><span>直销</span></label>
+          <label><input type="radio" name="bizMode" value="dealer"><span>经销</span></label>
+          <label><input type="radio" name="bizMode" value="intl"><span>国贸</span></label>
+        </div>
+      </div>
+
+      <!-- 分隔线 -->
+      <div class="w-px h-6 bg-gray-200"></div>
+
+      <!-- 执行阶段 下拉 -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400 whitespace-nowrap">执行阶段</span>
+        <select class="text-xs border border-gray-200 rounded-md px-2 py-1.5 bg-white text-gray-600 focus:outline-none focus:border-gray-400">
+          <option>全部阶段</option>
+          <option>合同签订</option>
+          <option>设计确认</option>
+          <option>生产制造</option>
+          <option>发货安装</option>
+          <option>验收交付</option>
+          <option>质保期内</option>
+        </select>
+      </div>
+
+      <!-- 分隔线 -->
+      <div class="w-px h-6 bg-gray-200"></div>
+
+      <!-- 项目状态 多选Tag -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-400 whitespace-nowrap">状态</span>
+        <div class="flex items-center gap-1.5">
+          <button class="status-tag active" onclick="this.classList.toggle('active')">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-400 mr-1 align-middle"></span>正常
+          </button>
+          <button class="status-tag active" onclick="this.classList.toggle('active')">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-red-400 mr-1 align-middle"></span>延期
+          </button>
+          <button class="status-tag" onclick="this.classList.toggle('active')">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-gray-400 mr-1 align-middle"></span>暂停
+          </button>
+          <button class="status-tag" onclick="this.classList.toggle('active')">
+            <span class="inline-block w-1.5 h-1.5 rounded-full bg-blue-400 mr-1 align-middle"></span>已完成
+          </button>
+        </div>
+      </div>
+
+      <!-- 右侧：搜索 + 按钮 -->
+      <div class="flex items-center gap-2 ml-auto">
+        <div class="relative">
+          <svg class="absolute left-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-gray-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+          <input type="text" placeholder="项目名称 / 客户名称" class="text-xs border border-gray-200 rounded-md pl-8 pr-3 py-1.5 w-48 bg-white text-gray-600 placeholder-gray-300 focus:outline-none focus:border-gray-400">
+        </div>
+        <button class="text-xs text-gray-500 border border-gray-200 rounded-md px-3 py-1.5 hover:bg-gray-50 transition whitespace-nowrap">高级筛选</button>
+        <button class="text-xs text-white bg-blue-500 rounded-md px-3 py-1.5 hover:bg-blue-600 transition whitespace-nowrap">+ 新建项目</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 3. 项目列表表格 ========== -->
+  <section class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-xs">
+        <thead>
+          <tr class="border-b border-gray-200 bg-gray-50">
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">项目编号</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">项目名称</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">客户名称</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">业务模式</th>
+            <th class="text-right px-4 py-3 font-medium text-gray-400 whitespace-nowrap">合同金额</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">当前阶段</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap" style="min-width:110px">进度</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">项目经理</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">状态</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">预计交付</th>
+            <th class="text-left px-4 py-3 font-medium text-gray-400 whitespace-nowrap">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100" id="projectTableBody">
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ========== 4. 分页器 ========== -->
+    <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200">
+      <span class="text-xs text-gray-400">共 <span class="text-gray-600 font-medium">47</span> 个项目</span>
+      <div class="flex items-center gap-1">
+        <button class="text-xs px-2 py-1 rounded border border-gray-200 text-gray-300 cursor-not-allowed">&lt;</button>
+        <button class="text-xs px-2.5 py-1 rounded border border-blue-500 bg-blue-500 text-white">1</button>
+        <button class="text-xs px-2.5 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50 transition">2</button>
+        <button class="text-xs px-2.5 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50 transition">3</button>
+        <button class="text-xs px-2.5 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50 transition">4</button>
+        <button class="text-xs px-2.5 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50 transition">5</button>
+        <button class="text-xs px-2 py-1 rounded border border-gray-200 text-gray-500 hover:bg-gray-50 transition">&gt;</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 5. JavaScript：项目数据 + 渲染 + postMessage交互 ========== -->
+  <script>
+    // 项目假数据（8行，覆盖三种业务模式）
+    const projects = [
+      {
+        id: 'EX-2026-0047', name: '深圳欢乐谷二期游乐设施采购', customer: '深圳华侨城集团',
+        bizMode: '直销', amount: 2850000, stage: '生产制造', progress: 65,
+        manager: '张三', status: '正常', statusColor: 'green', deliveryDate: '2026-06-15', urgent: false
+      },
+      {
+        id: 'EX-2026-0042', name: '广州长隆水上乐园改造', customer: '广州长隆集团',
+        bizMode: '直销', amount: 4200000, stage: '发货安装', progress: 82,
+        manager: '李婷', status: '正常', statusColor: 'green', deliveryDate: '2026-05-20', urgent: true
+      },
+      {
+        id: 'EX-2026-0039', name: '成都融创乐园三期', customer: '成都融创文旅城',
+        bizMode: '直销', amount: 3680000, stage: '设计确认', progress: 30,
+        manager: '王磊', status: '延期', statusColor: 'red', deliveryDate: '2026-07-01', urgent: false
+      },
+      {
+        id: 'EX-2026-0035', name: '北京代理商A批次', customer: '北京乐动体育设备有限公司',
+        bizMode: '经销', amount: 1560000, stage: '生产制造', progress: 55,
+        manager: '赵鑫', status: '正常', statusColor: 'green', deliveryDate: '2026-07-10', urgent: false
+      },
+      {
+        id: 'EX-2026-0031', name: '上海代理商B批次', customer: '上海畅玩游乐设备有限公司',
+        bizMode: '经销', amount: 980000, stage: '合同签订', progress: 15,
+        manager: '孙悦', status: '正常', statusColor: 'green', deliveryDate: '2026-09-30', urgent: false
+      },
+      {
+        id: 'EX-2026-0028', name: 'Dubai Adventure Park', customer: 'Meraas Holding LLC',
+        bizMode: '国贸', amount: 5120000, stage: '生产制造', progress: 48,
+        manager: '陈国强', status: '正常', statusColor: 'green', deliveryDate: '2026-08-15', urgent: false
+      },
+      {
+        id: 'EX-2026-0024', name: 'Thailand Family Fun Center', customer: 'Siam Leisure Group',
+        bizMode: '国贸', amount: 3350000, stage: '发货安装', progress: 75,
+        manager: '刘洋', status: '正常', statusColor: 'green', deliveryDate: '2026-05-28', urgent: true
+      },
+      {
+        id: 'EX-2026-0019', name: '重庆方特欢乐世界', customer: '华强方特文化科技集团',
+        bizMode: '直销', amount: 6780000, stage: '验收交付', progress: 95,
+        manager: '周明', status: '正常', statusColor: 'green', deliveryDate: '2026-05-10', urgent: true
+      }
+    ];
+
+    // 阶段颜色映射（小圆点颜色）
+    const stageColorDot = {
+      '合同签订': 'bg-gray-300',
+      '设计确认': 'bg-yellow-400',
+      '生产制造': 'bg-blue-400',
+      '发货安装': 'bg-purple-400',
+      '验收交付': 'bg-green-400',
+      '质保期内': 'bg-gray-400'
+    };
+
+    // 状态颜色映射（小圆点颜色）
+    const statusDot = {
+      green: 'bg-green-400',
+      red: 'bg-red-400',
+      gray: 'bg-gray-400',
+      blue: 'bg-blue-400'
+    };
+
+    // 格式化金额
+    function formatAmount(n) {
+      return '￥' + n.toLocaleString('zh-CN');
+    }
+
+    // 点击项目 — 通过postMessage通知父窗口切换到详情页
+    function openProject(projectName) {
+      window.parent.postMessage({
+        type: 'openProject',
+        projectName: projectName
+      }, '*');
+    }
+
+    // 渲染表格
+    function renderTable() {
+      const tbody = document.getElementById('projectTableBody');
+      tbody.innerHTML = projects.map(p => {
+        const dotClass = stageColorDot[p.stage] || 'bg-gray-300';
+        const sDotClass = statusDot[p.statusColor] || 'bg-gray-400';
+        const escapedName = p.name.replace(/'/g, "\\'");
+        return '<tr class="hover:bg-gray-50 transition-colors">'
+          + '<td class="px-4 py-3 text-gray-400 font-mono whitespace-nowrap">' + p.id + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap">'
+          +   '<a href="javascript:void(0)" onclick="openProject(\'' + escapedName + '\')" class="text-blue-500 hover:text-blue-600 hover:underline">' + p.name + '</a>'
+          + '</td>'
+          + '<td class="px-4 py-3 text-gray-600 whitespace-nowrap">' + p.customer + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap">'
+          +   '<span class="inline-block px-2 py-0.5 rounded text-gray-500 bg-gray-100">' + p.bizMode + '</span>'
+          + '</td>'
+          + '<td class="px-4 py-3 text-gray-600 text-right whitespace-nowrap font-mono">' + formatAmount(p.amount) + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap">'
+          +   '<span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded bg-gray-100 text-gray-600">'
+          +     '<span class="w-1.5 h-1.5 rounded-full ' + dotClass + '"></span>' + p.stage
+          +   '</span>'
+          + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap">'
+          +   '<div class="flex items-center gap-2">'
+          +     '<div class="progress-track flex-1" style="min-width:60px">'
+          +       '<div class="progress-fill" style="width:' + p.progress + '%"></div>'
+          +     '</div>'
+          +     '<span class="text-gray-500 w-8 text-right">' + p.progress + '%</span>'
+          +   '</div>'
+          + '</td>'
+          + '<td class="px-4 py-3 text-gray-600 whitespace-nowrap">' + p.manager + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap">'
+          +   '<span class="inline-flex items-center gap-1.5 text-gray-600">'
+          +     '<span class="w-2 h-2 rounded-full ' + sDotClass + '"></span>' + p.status
+          +   '</span>'
+          + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap ' + (p.urgent ? 'text-red-400 font-medium' : 'text-gray-500') + '">' + p.deliveryDate + '</td>'
+          + '<td class="px-4 py-3 whitespace-nowrap">'
+          +   '<a href="javascript:void(0)" onclick="openProject(\'' + escapedName + '\')" class="text-blue-500 hover:text-blue-600 hover:underline">查看</a>'
+          +   '<span class="text-gray-300 mx-1">·</span>'
+          +   '<a href="javascript:void(0)" class="text-gray-400 hover:text-gray-600 hover:underline">编辑</a>'
+          + '</td>'
+          + '</tr>';
+      }).join('');
+    }
+
+    // 初始化渲染
+    renderTable();
+
+    // 通知父窗口高度（用于iframe自适应）
+    function sendHeight() {
+      const h = document.documentElement.scrollHeight;
+      window.parent.postMessage({ type: 'setHeight', height: h }, '*');
+    }
+    sendHeight();
+    setTimeout(sendHeight, 500);
+  </script>
+
+</body>
+</html>

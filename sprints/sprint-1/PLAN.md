@@ -244,6 +244,8 @@ Week 4 (5/03-5/09):
 > **🎉 2026-04-15 09:10 #3536 PR#3692 merged**：kimi5 CRM-09 经销商管理 1h49m 交付（26 files, 2390 insertions），CI 全绿含 CodeRabbit。
 > **✅ 2026-04-15 09:11 kimi5 重派**：kimi5 接 **#3580 产品门户 1/10 数据库表创建**（backend P1 medium，Sprint-2 标签但无 blocker，解锁下游 #3584/#3585/#3588）。CRM 主线 Todo 已派完（#3531/#3532/#3537 in progress），product-portal 系列 blocker #3580 先行。池恢复 **5/5** 满。
 >
+> **🎉 2026-04-15 10:22 #3580 PR#3694 merged**：kimi5 产品门户 1/10 数据库表 3 张（product/document/part）纯 DDL 1h10m 交付，CI 全绿，解锁下游 #3585/#3588 的 DB 依赖（#3584 仍阻塞）。kimi5 tmux 会话已关闭，池子降为 **4/5**。已 ping 排程经理从 Plan 列推新 Todo。
+>
 > **✅ 2026-04-15 10:22 hotfix #3693 部署成功**：run 24448885319 前端构建绿、dev 部署成功，主环境 localhost:8080 返回 200，今日 9 个 CRM PR（#3679/3682/3684/3686/3687/3689/3690/3691/3692）**全部可见**。
 >
 > **🚨 2026-04-15 10:15 P0 紧急止血 hotfix PR #3693**：用户发现"主环境看不见今日 CRM 合并"。排查发现 **PR #3689（CRM-03 商机管道）新建了 `frontend/apps/web-antd/src/api/system/user.ts`（15 行）与既有 `user/index.ts`（171 行）形成同名文件 vs 目录冲突**，Vite 别名 `#/api/system/user` 优先解析到 user.ts，导致 7 个消费方（dept/user/post/workflow 等）全部 build 失败。**今日 10 次 Dev 部署 CI 全 failed**，9 个 CRM PR（#3679/3682/3684/3686/3687/3689/3690/3691/3692）merged 但未部署。研发经理手动出 hotfix PR #3693（合并导出 + 删 user.ts），绕过 CC 池（紧急止血，无编程 CC 可用）。同步登记 docs/workflow/skill-update.md 等待是否需升级为 frontend-coding 红线。

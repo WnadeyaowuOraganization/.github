@@ -327,7 +327,7 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#3713~~ | P0 | backend | ~~执行管理v2.0 [8/22] 合同信息API（关联crm_contract）~~ PR#3745✅merged 2026-04-16 02:54 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3712~~ | ~~P0~~ | ~~fullstack~~ | ~~执行管理v2.0 [7/22] 阶段推进+审批引擎D66对接~~ PR#3748✅merged 2026-04-16 04:08 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3722~~ | P1 | backend | ~~执行管理v2.0 [17/22] 变更管理API（记录+影响分析+审批）~~ PR#3757✅merged | ~~Done~~ |
-| kimi3 | #2492 | P1 | pipeline | [D3参数化] 欧美竞品产品参数采集(KOMPAN/HAGS/Playcraft) | PR交付中（T0-T8全完成） |
+| kimi3 | #2492 | P1 | pipeline | [D3参数化] 欧美竞品产品参数采集(KOMPAN/HAGS/Playcraft) | PR#3761⏳ 等待CI merge |
 | ~~kimi4~~ | ~~#3716~~ | P0 | backend | ~~执行管理v2.0 [11/22] 文档中心API~~ PR#3746✅merged 2026-04-16 03:07 | ~~Done~~ |
 | ~~kimi4~~ | ~~#3720~~ | ~~P0~~ | ~~backend~~ | ~~执行管理v2.0 [15/22] BOM树API（BOM结构+工序路线，高复杂度）~~ PR#3750✅merged 2026-04-16 04:14 | ~~Done~~ |
 | kimi4 | #3725 | P0 | backend | 执行管理v2.0 [20/22] 验收管理API（5级验收+检查项） | JUnit✅ → Playwright API spec编写中 |

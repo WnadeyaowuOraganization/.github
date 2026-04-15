@@ -348,7 +348,7 @@ Week 4 (5/03-5/09):
 | kimi2 | ~~#3683~~ | P1 | frontend | ~~#3550 追补：Tab2 过会视图 + Tab4 月度 Pipeline 图表拆分~~ PR#3699✅merged 2026-04-15 21:44 CST (中途 #3683 被 PR#3684 bot 误关已 reopen + 后端 chat_model 缺列退化为静态截图 + gh pr create upstream 缺失修复) | ~~Done~~ |
 | kimi5 | ~~#3587~~ | P1 | backend | ~~产品门户 8/10 备件 API + 询价购物车（纯后端 CRUD+Flyway）~~ PR#3700✅merged 2026-04-15 22:05 CST (~9h35m，含 JUnit 18/0 + Playwright API spec + 中途 token pool thinking 兼容兜底) | ~~Done~~ |
 | kimi1 | ~~#3538~~ | P2 | backend | ~~CRM-CRON 回款周报逾期检测定时任务（每周五 9:00 标记未填合同 + 企微通知，CRM Master #3526 最后 1 个子 Issue，收尾 Sprint-1 CRM）~~ PR#3703✅merged 2026-04-15 14:36 | ~~Done~~ |
-| kimi2 | #3701 | 🔥P0 | fullstack | CRM 11 子页白屏修复（`src/api/crm/opportunity.ts` 补 3 export: createOpportunity/getOpportunityKanban/advanceOpportunityStage + 11 `/views/business/crm/**/index.vue` 恢复 `<Page>` 容器，/business/tender/mining 同根因）| 22:05 启动，排程经理调研 5 截图 /tmp/crm-0[1-5]*.png |
+| kimi2 | ~~#3701~~ | 🔥P0 | fullstack | ~~CRM 11 子页白屏修复（`src/api/crm/opportunity.ts` 补 3 export: createOpportunity/getOpportunityKanban/advanceOpportunityStage + 11 `/views/business/crm/**/index.vue` 恢复 `<Page>` 容器，/business/tender/mining 同根因）~~ PR#3704✅merged 2026-04-15 15:07 | ~~Done~~ |
 | kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP 批量处理 Pipeline | 22:06 启动，blocker #3580/#3581 均 CLOSED |
 | kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED，22:08 cc-report 中等复杂度 |
 | kimi5 | ~~#1697~~ | P2 | backend | ~~报销费控 7 张表 schema 建表（纯 Flyway，Sprint-4 预研）~~ PR#3702✅merged 2026-04-15 22:18 CST (~8m 惊人效率) | ~~Done~~ |
@@ -397,18 +397,21 @@ Week 4 (5/03-5/09):
 | kimi9 | #3482 | P1 | fullstack | FinOps 开发运维成本 Tab | PR 已创建，轮询 merge 中 |
 | kimi16 | #3636 | P1 | fullstack | 矿场Phase4 E 幼儿园采购+预算专题 | smoke 2/3 过；getRouters 缺招投标中心父菜单（visible/status 或 role_menu 父链）调试中 |
 
-### 📍 2026-04-15 23:04 当前池快照（5/5 满）
+### 📍 2026-04-15 23:10 当前池快照（3/15 活跃）
 
-**kimi1 已释放**（#3538 merged 14:36）。**新一轮派发完成**：5 个 CC 全部在线。
+**kimi1 + kimi2 已释放**（#3538 merged 14:36，#3701 merged 15:07）。**池子降为 3/15**，可派 12 位。
 
 | 指派目录 | Issue | 优先级 | 模块 | 内容 | 阶段 |
 |---------|-------|-------|------|------|------|
-| kimi2 | #3701 | 🔥P0 | fullstack | CRM 11 子页白屏修复（`src/api/crm/opportunity.ts` 3 export + 11 vue 恢复容器） | 22:05 启动，50% 进度中 |
-| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP Pipeline | 22:06 启动，34% 进度中 |
-| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，53% 进度中 |
-| kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD API（依赖 #1697 7 表 merged） | 22:25 启动，57% 进度中 |
+| ~~kimi2~~ | ~~#3701~~ | 🔥P0 | fullstack | ~~CRM 11 子页白屏修复~~ PR#3704 merged 15:07 | ~~Done~~ |
+| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP Pipeline | Forging 中（1h 7m，还有 31m 40s），34% 进度，正常 |
+| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，49% 进度中 |
+| kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD API（依赖 #1697 7 表 merged） | 22:25 启动 |
 
-> **巡检结论**：4 CC 均活跃无异常，e2e-top 47min 静默预期。**无需介入**。
+> **巡检处置**：
+> - kimi3 #3584 正在思考（Forging），长时间无输出但进度正常，无需介入
+> - e2e-top 56min 无新输出，已注入"继续全量回归"指令（需观察是否接受）
+> - **建议派发**：kimi1/kimi2 空位，但 #3585/#3588 均 blocked-by #3584，待其 merged；pipeline Issue 独立排程
 
 > **2026-04-14 18:10 槽位释放 + 补池**：PR #3666 / #3667 先后 merged → kimi13/4 释放 → 补 kimi10 接 #3483 完成 PR #3668。
 > **2026-04-14 19:55 当前活跃**：kimi8 (#3481)、kimi9 (#3482)、kimi16 (#3636) 共 3；kimi1/2 token 耗尽冷却至 2026-04-15。Flyway 链路 V185402~185405 / V190339~343 已由研发经理+排程经理联手封堵连环失败。

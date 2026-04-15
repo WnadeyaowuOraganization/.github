@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 执行管理 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Ant Design style tabs */
+    .tab-item {
+      position: relative;
+      padding: 10px 20px;
+      cursor: pointer;
+      color: #6b7280;
+      font-size: 14px;
+      white-space: nowrap;
+      transition: color 0.2s;
+      border-bottom: 2px solid transparent;
+    }
+    .tab-item:hover {
+      color: #374151;
+    }
+    .tab-item.active {
+      color: #3b82f6;
+      border-bottom-color: #3b82f6;
+      font-weight: 500;
+    }
+
+    /* Sidebar */
+    .sidebar-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      padding: 12px 0;
+      color: #9ca3af;
+      cursor: pointer;
+      transition: all 0.15s;
+      position: relative;
+    }
+    .sidebar-item:hover {
+      color: #e5e7eb;
+      background: rgba(255,255,255,0.06);
+    }
+    .sidebar-item.active {
+      color: #ffffff;
+      background: rgba(255,255,255,0.1);
+    }
+    .sidebar-item .icon {
+      font-size: 20px;
+      width: 24px;
+      text-align: center;
+    }
+
+    /* Sub-menu */
+    .submenu {
+      background: rgba(0,0,0,0.15);
+    }
+    .submenu-item {
+      padding: 8px 0;
+      font-size: 11px;
+      color: #9ca3af;
+      cursor: pointer;
+      text-align: center;
+      transition: color 0.15s;
+    }
+    .submenu-item:hover {
+      color: #e5e7eb;
+    }
+    .submenu-item.active {
+      color: #60a5fa;
+      font-weight: 500;
+    }
+
+    /* Tooltip on sidebar hover */
+    .sidebar-item .tooltip {
+      display: none;
+      position: absolute;
+      left: 68px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #1f2937;
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 12px;
+      white-space: nowrap;
+      z-index: 100;
+      pointer-events: none;
+    }
+    .sidebar-item:hover .tooltip {
+      display: block;
+    }
+
+    /* iframe seamless */
+    #content-frame {
+      width: 100%;
+      border: none;
+      min-height: 600px;
+    }
+
+    /* Breadcrumb separator */
+    .breadcrumb-sep::before {
+      content: '/';
+      margin: 0 8px;
+      color: #d1d5db;
+    }
+
+    /* Scrollbar for tabs */
+    .tab-bar::-webkit-scrollbar {
+      height: 0;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-700 m-0 p-0 font-sans">
+  <div class="flex h-screen overflow-hidden">
+
+    <!-- ========== SIDEBAR (64px) ========== -->
+    <aside class="w-16 flex-shrink-0 bg-gray-800 flex flex-col items-center py-3 overflow-y-auto overflow-x-hidden">
+      <!-- Logo -->
+      <div class="mb-4 w-10 h-10 rounded-lg bg-blue-500 flex items-center justify-center text-white font-bold text-sm select-none">
+        WD
+      </div>
+
+      <!-- Nav Items -->
+      <nav class="flex flex-col w-full flex-1">
+        <!-- 首页 -->
+        <div class="sidebar-item" title="首页">
+          <span class="icon">🏠</span>
+          <span class="tooltip">首页</span>
+        </div>
+        <!-- 超管驾驶舱 -->
+        <div class="sidebar-item" title="超管驾驶舱">
+          <span class="icon">📊</span>
+          <span class="tooltip">超管驾驶舱</span>
+        </div>
+        <!-- 商务中心 -->
+        <div class="sidebar-item" title="商务中心">
+          <span class="icon">💼</span>
+          <span class="tooltip">商务中心</span>
+        </div>
+        <!-- 项目中心 (active, with submenu) -->
+        <div class="sidebar-item active" title="项目中心">
+          <span class="icon">📋</span>
+          <span class="tooltip">项目中心</span>
+        </div>
+        <!-- Submenu under 项目中心 -->
+        <div class="submenu">
+          <div class="submenu-item">矿场</div>
+          <div class="submenu-item active">执行</div>
+          <div class="submenu-item">计划</div>
+        </div>
+        <!-- 系统管理 -->
+        <div class="sidebar-item" title="系统管理">
+          <span class="icon">🔧</span>
+          <span class="tooltip">系统管理</span>
+        </div>
+      </nav>
+
+      <!-- Bottom avatar placeholder -->
+      <div class="mt-auto pt-4">
+        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center text-xs text-gray-300 select-none">U</div>
+      </div>
+    </aside>
+
+    <!-- ========== MAIN AREA ========== -->
+    <div class="flex-1 flex flex-col overflow-hidden">
+
+      <!-- ===== TOP HEADER ===== -->
+      <header class="bg-white border-b border-gray-200 flex-shrink-0">
+        <!-- Breadcrumb Row -->
+        <div class="px-5 pt-3 pb-2 flex items-center justify-between">
+          <div class="flex items-center text-sm">
+            <span id="bc-home" class="text-gray-400 cursor-pointer hover:text-blue-500">首页</span>
+            <span class="breadcrumb-sep"></span>
+            <span class="text-gray-400 cursor-pointer hover:text-blue-500">项目中心</span>
+            <span class="breadcrumb-sep"></span>
+            <span id="bc-exec" class="text-gray-700 cursor-pointer hover:text-blue-500" onclick="backToList()">执行管理</span>
+            <!-- Project name breadcrumb (detail mode only) -->
+            <span id="bc-project-sep" class="breadcrumb-sep hidden"></span>
+            <span id="bc-project-name" class="text-gray-700 font-medium hidden"></span>
+          </div>
+          <!-- Back button (detail mode only) -->
+          <button id="btn-back" class="hidden items-center gap-1.5 text-sm text-blue-500 hover:text-blue-600 transition cursor-pointer bg-transparent border-none" onclick="backToList()">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
+            返回列表
+          </button>
+        </div>
+
+        <!-- Title Row (list mode) -->
+        <div id="list-title" class="px-5 pb-3 flex items-center justify-between">
+          <div>
+            <h1 class="text-lg font-semibold text-gray-800 leading-tight">中标后执行管理 <span class="text-xs font-normal text-gray-400 ml-1">v2.0</span></h1>
+            <p class="text-xs text-gray-400 mt-0.5">从中标到售后的全生命周期项目执行管理 · 支持直销(12阶段) / 经销(8阶段) / 国贸(10阶段)</p>
+          </div>
+        </div>
+
+        <!-- Detail Title Row (detail mode) -->
+        <div id="detail-title" class="px-5 pb-0 hidden">
+          <div class="flex items-center gap-3 pb-2">
+            <h1 id="detail-project-name" class="text-lg font-semibold text-gray-800 leading-tight"></h1>
+            <span id="detail-project-tag" class="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-600 border border-blue-200"></span>
+          </div>
+        </div>
+
+        <!-- TAB BAR (detail mode only) -->
+        <div id="tab-bar" class="hidden px-5 border-t border-gray-100">
+          <div class="tab-bar flex overflow-x-auto" id="tab-container">
+            <!-- Tabs injected by JS -->
+          </div>
+        </div>
+      </header>
+
+      <!-- ===== CONTENT AREA ===== -->
+      <main class="flex-1 overflow-auto bg-gray-50">
+        <iframe id="content-frame" src="tab-list.html" class="w-full" style="min-height:calc(100vh - 200px);"></iframe>
+
+        <!-- ===== PROTOTYPE INFO TABLE ===== -->
+        <div class="px-5 py-6">
+          <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+            <div class="px-4 py-3 bg-gray-50 border-b border-gray-200">
+              <h3 class="text-sm font-semibold text-gray-600">📄 原型说明 — 页面文件清单</h3>
+            </div>
+            <table class="w-full text-sm">
+              <thead>
+                <tr class="bg-gray-50 text-left text-xs text-gray-500 uppercase tracking-wider">
+                  <th class="px-4 py-2 w-12">#</th>
+                  <th class="px-4 py-2 w-28">层级</th>
+                  <th class="px-4 py-2 w-36">Tab名称</th>
+                  <th class="px-4 py-2 w-44">文件名</th>
+                  <th class="px-4 py-2">功能描述</th>
+                </tr>
+              </thead>
+              <tbody class="divide-y divide-gray-100" id="proto-table-body">
+                <!-- Injected by JS -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // ========================
+    // STATE
+    // ========================
+    let currentMode = 'list'; // 'list' | 'detail'
+    let currentTab = 0;
+    let currentProject = { name: '', tag: '' };
+
+    // Tab definitions
+    const tabs = [
+      { name: '项目概览', file: 'tab-overview.html',  desc: '横向流程图 + 基础信息 + 关键指标' },
+      { name: '阶段进度', file: 'tab-stages.html',    desc: '垂直时间线 + 阶段详情 + 里程碑管理' },
+      { name: '合同与交付', file: 'tab-contract.html', desc: '合同信息 + 交付节点 + 发货跟踪' },
+      { name: 'BOM与计划', file: 'tab-bom-plan.html',  desc: '项目计划 + 工艺路线 + 设备级进度追踪' },
+      { name: '变更管理', file: 'tab-change.html',     desc: '变更记录 + 影响分析 + 审批引擎对接' },
+      { name: '回款与资料', file: 'tab-payment.html',  desc: '回款计划 + 资料Checklist + 催收管理' },
+      { name: '文档中心', file: 'tab-docs.html',       desc: '项目360文档看板 + 文档归档管理' },
+      { name: '售后质保', file: 'tab-warranty.html',   desc: '验收管理 + 质保期 + 售后工单' },
+    ];
+
+    // ========================
+    // ELEMENTS
+    // ========================
+    const iframe        = document.getElementById('content-frame');
+    const tabBar        = document.getElementById('tab-bar');
+    const tabContainer  = document.getElementById('tab-container');
+    const listTitle     = document.getElementById('list-title');
+    const detailTitle   = document.getElementById('detail-title');
+    const btnBack       = document.getElementById('btn-back');
+    const bcExec        = document.getElementById('bc-exec');
+    const bcProjectSep  = document.getElementById('bc-project-sep');
+    const bcProjectName = document.getElementById('bc-project-name');
+    const detailName    = document.getElementById('detail-project-name');
+    const detailTag     = document.getElementById('detail-project-tag');
+
+    // ========================
+    // INIT TABS
+    // ========================
+    function renderTabs() {
+      tabContainer.innerHTML = '';
+      tabs.forEach((tab, i) => {
+        const el = document.createElement('div');
+        el.className = 'tab-item' + (i === currentTab ? ' active' : '');
+        el.textContent = tab.name;
+        el.onclick = () => switchTab(i);
+        tabContainer.appendChild(el);
+      });
+    }
+    renderTabs();
+
+    // ========================
+    // TAB SWITCHING
+    // ========================
+    function switchTab(index) {
+      currentTab = index;
+      iframe.src = tabs[index].file;
+      // Update active state
+      const items = tabContainer.querySelectorAll('.tab-item');
+      items.forEach((el, i) => {
+        el.classList.toggle('active', i === index);
+      });
+    }
+
+    // ========================
+    // MODE SWITCHING
+    // ========================
+    function enterDetail(projectName, projectTag) {
+      currentMode = 'detail';
+      currentProject = { name: projectName || '未命名项目', tag: projectTag || '直销' };
+      currentTab = 0;
+
+      // Show detail UI
+      tabBar.classList.remove('hidden');
+      detailTitle.classList.remove('hidden');
+      btnBack.classList.remove('hidden');
+      btnBack.style.display = 'flex';
+      bcProjectSep.classList.remove('hidden');
+      bcProjectName.classList.remove('hidden');
+
+      // Hide list UI
+      listTitle.classList.add('hidden');
+
+      // Update breadcrumb
+      bcExec.classList.remove('text-gray-700');
+      bcExec.classList.add('text-gray-400');
+      bcProjectName.textContent = currentProject.name;
+
+      // Update detail header
+      detailName.textContent = currentProject.name;
+      detailTag.textContent = currentProject.tag;
+
+      // Reset to first tab
+      renderTabs();
+      switchTab(0);
+    }
+
+    function backToList() {
+      currentMode = 'list';
+
+      // Hide detail UI
+      tabBar.classList.add('hidden');
+      detailTitle.classList.add('hidden');
+      btnBack.classList.add('hidden');
+      btnBack.style.display = 'none';
+      bcProjectSep.classList.add('hidden');
+      bcProjectName.classList.add('hidden');
+
+      // Show list UI
+      listTitle.classList.remove('hidden');
+
+      // Update breadcrumb
+      bcExec.classList.add('text-gray-700');
+      bcExec.classList.remove('text-gray-400');
+
+      // Load list page
+      iframe.src = 'tab-list.html';
+    }
+
+    // ========================
+    // MESSAGE LISTENER (from iframe)
+    // ========================
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'openProject') {
+        enterDetail(e.data.projectName, e.data.projectTag);
+      }
+    });
+
+    // ========================
+    // IFRAME AUTO-HEIGHT
+    // ========================
+    function adjustIframeHeight() {
+      try {
+        const body = iframe.contentDocument?.body;
+        const html = iframe.contentDocument?.documentElement;
+        if (body && html) {
+          const height = Math.max(
+            body.scrollHeight, body.offsetHeight,
+            html.scrollHeight, html.offsetHeight
+          );
+          iframe.style.height = Math.max(height, 500) + 'px';
+        }
+      } catch (e) {
+        // Cross-origin — ignore
+      }
+    }
+
+    iframe.addEventListener('load', () => {
+      adjustIframeHeight();
+      // Also listen for resize messages from iframe content
+      setTimeout(adjustIframeHeight, 300);
+      setTimeout(adjustIframeHeight, 800);
+    });
+
+    // Also respond to explicit height messages
+    window.addEventListener('message', (e) => {
+      if (e.data && e.data.type === 'setHeight') {
+        iframe.style.height = Math.max(e.data.height, 500) + 'px';
+      }
+    });
+
+    // ========================
+    // PROTOTYPE INFO TABLE
+    // ========================
+    const protoData = [
+      { level: '一级页面', name: '项目列表', file: 'tab-list.html', desc: 'KPI统计卡片 + 筛选条件 + 项目列表表格（点击行进入详情）' },
+      ...tabs.map(t => ({ level: '二级Tab', name: t.name, file: t.file, desc: t.desc }))
+    ];
+    const tbody = document.getElementById('proto-table-body');
+    protoData.forEach((row, i) => {
+      const tr = document.createElement('tr');
+      tr.className = 'hover:bg-gray-50';
+      tr.innerHTML = `
+        <td class="px-4 py-2.5 text-gray-400 text-xs">${i + 1}</td>
+        <td class="px-4 py-2.5"><span class="text-xs px-1.5 py-0.5 rounded ${row.level === '一级页面' ? 'bg-blue-50 text-blue-600' : 'bg-gray-100 text-gray-500'}">${row.level}</span></td>
+        <td class="px-4 py-2.5 font-medium text-gray-700 text-sm">${row.name}</td>
+        <td class="px-4 py-2.5 font-mono text-xs text-gray-500">${row.file}</td>
+        <td class="px-4 py-2.5 text-gray-500 text-sm">${row.desc}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  </script>
+</body>
+</html>

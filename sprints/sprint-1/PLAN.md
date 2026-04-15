@@ -346,7 +346,8 @@ Week 4 (5/03-5/09):
 | kimi5 | ~~#3581~~ | P0 | backend | ~~产品门户 2/10 产品展示 API（6 endpoints + S3 presigned + L0/L1 权限过滤）~~ PR#3696✅merged 2026-04-15 12:19 (1h45m, Playwright API 7/7 绿) | ~~Done~~ |
 | kimi4 | ~~#3532~~ | P1 | fullstack | ~~Tier-4 CRM-05 询盘工作台（5 状态 Tab + 报价 + 转商机 + vxe-table）~~ PR#3698✅merged 2026-04-15 13:06 (5h15m, smoke 退化为 /screenshot + CI 真跑) | ~~Done~~ |
 | kimi2 | ~~#3683~~ | P1 | frontend | ~~#3550 追补：Tab2 过会视图 + Tab4 月度 Pipeline 图表拆分~~ PR#3699✅merged 2026-04-15 21:44 CST (中途 #3683 被 PR#3684 bot 误关已 reopen + 后端 chat_model 缺列退化为静态截图 + gh pr create upstream 缺失修复) | ~~Done~~ |
-| kimi5 | #3587 | P1 | backend | 产品门户 8/10 备件 API + 询价购物车（纯后端 CRUD+Flyway，解锁 #3585 前端） | 12:30 启动，刚完成后端编译通过，写 API 契约和单测中 |
+| kimi5 | #3587 | P1 | backend | 产品门户 8/10 备件 API + 询价购物车（纯后端 CRUD+Flyway，解锁 #3585 前端） | 12:30 启动，JUnit 18/0 过，Playwright API spec 中（中途 thinking 兼容 bug 已修复） |
+| kimi1 | #3538 | P2 | backend | CRM-CRON 回款周报逾期检测定时任务（每周五 9:00 标记未填合同 + 企微通知，CRM Master #3526 最后 1 个子 Issue，收尾 Sprint-1 CRM） | 21:55 启动，blocker #3527+#3535 均 CLOSED，`docs/design/crm-商务中心/详细设计.md §10` |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

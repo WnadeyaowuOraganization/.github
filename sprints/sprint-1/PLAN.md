@@ -354,6 +354,11 @@ Week 4 (5/03-5/09):
 | kimi5 | ~~#1697~~ | P2 | backend | ~~报销费控 7 张表 schema 建表（纯 Flyway，Sprint-4 预研）~~ PR#3702✅merged 2026-04-15 22:18 CST (~8m 惊人效率) | ~~Done~~ |
 | kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD API（依赖 #1697 7 表已 land） | 22:25 启动，Issue body 含 @DS 多数据源注解需忽略（单库架构），排程经理预估 2.5-3h |
 | kimi1 | ~~#3728~~ | 🔥P0 | frontend | ~~CRM 13子页白屏回归验证 — #3701+#3705修复后复查，kimi1独立环境重现+修复+Playwright smoke~~ PR#3729✅merged 2026-04-16 00:01 | ~~Done~~ |
+| ~~kimi2~~ | ~~#2419~~ | P0 | backend | ~~pipeline DB Schema — wdpp_dealer_candidates + wdpp_intl_buyer_candidates~~ PR#3731✅merged 2026-04-16 00:14 | ~~Done~~ |
+| ~~kimi5~~ | ~~#1693~~ | P2 | backend | ~~报销费控 报销单+借款 CRUD API~~ PR#3730✅merged 2026-04-15 16:05 | ~~Done~~ |
+| kimi1 | #3706 | P0 | backend | 执行管理v2.0 [1/22] 执行项目实体+CRUD+列表API+统计API | 00:27 启动，blocker #3705 CLOSED |
+| kimi5 | #3707 | P0 | backend | 执行管理v2.0 [2/22] 阶段配置+阶段进度API（三种业务模式：直销12/经销8/国贸10阶段） | 00:27 启动 |
+| kimi2 | #3708 | P0 | frontend | 执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行 | 00:27 启动 |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

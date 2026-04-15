@@ -116,8 +116,8 @@ git push origin main
 
 **新增 skill 灰度发布规则**：
 
-若需**新建** skill（新目录 `docs/agent-docs/skills/<new-skill>/`），必须：
-1. 新 skill 目录 push 后，run-cc.sh 会自动把所有 skills 软链给新派 CC，**但只指定一个** kimi 目录去验证它（派 Issue 前让其他 kimi 避开用新 skill 的任务）
-2. 该 kimi 至少跑完 **5 个 Issue** 验证 skill 无误
-3. 验证通过后才能在经理派发里普遍引用该 skill
-4. 验证期间若 skill 引起卡点或误判，回滚 skill 目录即可（软链自动失效）
+1. 新 skill 必须放在 `docs/agent-docs/new-skills/<skill-name>/`（**不是** `skills/`，避免自动软链给所有 kimi）
+2. 只用 **kimi1** 做灰度验证（kimi1 的 `.claude/skills/` 需额外软链到 `new-skills/<skill-name>` — 由 run-cc.sh 或手动软链）
+3. kimi1 至少跑完 **5 个 Issue** 验证 skill 无误
+4. 验证通过后 `mv docs/agent-docs/new-skills/<skill-name> docs/agent-docs/skills/<skill-name>` 全面应用（push main 即对所有 kimi 生效）
+5. 验证期间出卡点直接 rm 或回滚 `new-skills/<skill-name>`，不污染其他 kimi

@@ -353,7 +353,7 @@ Week 4 (5/03-5/09):
 | kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED，22:08 cc-report 中等复杂度 |
 | kimi5 | ~~#1697~~ | P2 | backend | ~~报销费控 7 张表 schema 建表（纯 Flyway，Sprint-4 预研）~~ PR#3702✅merged 2026-04-15 22:18 CST (~8m 惊人效率) | ~~Done~~ |
 | kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD API（依赖 #1697 7 表已 land） | 22:25 启动，Issue body 含 @DS 多数据源注解需忽略（单库架构），排程经理预估 2.5-3h |
-| kimi1 | #3728 | 🔥P0 | frontend | CRM 13子页白屏回归验证 — #3701+#3705修复后复查，kimi1独立环境重现+修复+Playwright smoke | 23:40 启动
+| kimi1 | ~~#3728~~ | 🔥P0 | frontend | ~~CRM 13子页白屏回归验证 — #3701+#3705修复后复查，kimi1独立环境重现+修复+Playwright smoke~~ PR#3729✅merged 2026-04-16 00:01 | ~~Done~~ |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

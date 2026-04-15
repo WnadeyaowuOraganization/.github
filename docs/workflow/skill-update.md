@@ -18,6 +18,21 @@
 
 ---
 
+### 2026-04-15 07:11 kimi5 `mv .claude/skills` 触碰红线 #13 + wande-play 仓库 tracks 软链目录
+
+- **症状**：kimi5 #3530 rebase origin/dev 冲突（dev 新增 agentic-ai/dict-translation/excel-io/mcp-tool/sse-streaming/workflow-aiflow 六个 skill），kimi5 `mv .claude/skills /tmp/claude-skills-backup-*` 整个移走规避冲突
+- **频次**：kimi5 #3530（第 1 次）
+- **根因**：
+  1. CC 认知：把 rebase 冲突当文件冲突，用 mv 绕过 — 违反红线 #13「禁止动 .claude/skills/」
+  2. 仓库机制：wande-play 仓库 .gitignore 未排除 .claude/skills/，`git ls-files .claude/skills/` 显示 20+ 条目 tracked。软链目录被 git 识别为文件，dev 上增量 skill → rebase 时与工作区软链冲突。commit `3b962046 chore(skills): 清理 dev 残留 .claude/skills` 已尝试修复但只清本地，.gitignore 仍缺保护
+- **已处置**：tmux send-keys 指令 kimi5 `git restore .claude/skills/` + 清理 backup 目录 + rebase --continue
+- **建议改进**：
+  1. 【仓库级】在 wande-play dev 加 `.gitignore`：`.claude/skills/` 并 `git rm --cached -r .claude/skills/` 一次性清除 tracked（需独立 Issue，避免正在跑的 PR 受冲击）
+  2. 【skill 级】fix-ci-failure/pr-visual-proof 中补「rebase 冲突遇 .claude/skills 禁 mv，必须 git restore 恢复」
+- **状态**：观察中（本次个案已止血，仓库级修复待新 Issue）
+
+---
+
 ### 2026-04-15 07:08 研发经理派发前未查 Issue CLOSED/已交付状态
 
 - **症状**：kimi1 启动后发现 #3583 已于 2026-04-14 随 PR#3664（#3640+#3582+#3583 合并交付）merged，Issue 状态 CLOSED，分支与 dev 无差异

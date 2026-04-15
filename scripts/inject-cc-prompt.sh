@@ -69,7 +69,7 @@ if [ ${#SESSIONS[@]} -eq 0 ]; then
   # 2026-04-15 #3704 事故 fallback：auto-merge 后 CC 已 kill，部署失败 prompt 回不到原 CC
   # 退而通知研发经理/排程经理，由经理决定是否重派 CC 修复
   FALLBACK_MSG="[部署失败回流] Issue #${ISSUE} 的CC已不在（大概率 auto-merge 后 kill）。原 prompt：${PROMPT}"
-  for MGR in manager-研发经理 manager-排程经理; do
+  for MGR in manager-研发经理; do
     if tmux has-session -t "$MGR" 2>/dev/null; then
       TMP_BUF=$(mktemp)
       printf '%s\n' "$FALLBACK_MSG" > "$TMP_BUF"

@@ -205,78 +205,6 @@ Week 4 (5/03-5/09):
 
 ## 指派建议（最近20个）
 
-> Week 1 Master全部完成。Week 2 排程：bug修复(kimi1/2) + Tier-1五角色Dashboard(kimi3-7) + Tier-3四Tab(kimi8-11) + Tier-5产品目录(kimi12) + CRM/耀总接力。
-> 依赖变化：#3521(Boss Dashboard)已CLOSED → #3461(耀总)解锁；#3528(CRM-01)已CLOSED → #3529/#3537解锁。
-> ⚠️ kimi7原锁定#3521已CLOSED，建议释放改派#3529或#3461。
-> **🔥 2026-04-13 新增 #3624 矿场接入 Phase1 (P0)**：wdpp_discovered_projects 建表 + pymysql安装 + ProjectMineServiceImpl去mock。建议 kimi1 优先启动（high effort），接入真数据后矿场页面才脱离mock。
-> **✅ 2026-04-14 G7e 数据已抢救**：`legacy-pg` Docker (localhost:15432, pw=legacy) 保留 449 张表全量零错误；MySQL `wande_ai_legacy` (3306) 载入 92-98%。#3624 数据源就绪，可立即启动。
-> **♻ 2026-04-14 刷新**：#3617 已CLOSED，移除；kimi2 空出可接下一任务。
-> **🔥 2026-04-14 新增 #3630 (P0)**：wdpp_project_mine 字段与 ggzy_collector 对齐（ALTER+uk_source_url+9列），阻塞 #3624 真数据落地。建议 kimi2 优先启动（medium effort），纯后端实体/VO/Mapper 同步。
-> **📋 2026-04-14 新增 Master #3631 (P1，Plan 状态)**：pipeline ↔ 后端表对齐全景规划（19张表，Phase1~5），规划性 Issue 不直接开发。
-> **🔥 2026-04-14 拆子完成**：#3631 子 Issue #3632-#3640 全部 Todo 化 + #3641 管线健康度 Tab 前端配对。矿场数据闭环优先级最高。
-> **📐 2026-04-14 原型对账**：指派建议表已标注对应的 `docs/design/` 原型路径 — 研发经理派发 CC 前必须让 CC 先读取对应原型+详细设计，验收必须附平台截图。
-> **🛠 2026-04-14 排程经理预置 V20260414003~V013 已建好 11 张/组孤岛表**（commit `88b50f18`，flyway_schema_history 已对齐 rank 7-17）：CC 派发后**禁止再写 Flyway 建表 SQL**，直接做 Entity/VO/DTO/Mapper/Service/Controller/前端。各 Issue 评论已附「确定指令清单」（API 路径 + 验收 + 配对前端），无 CC 评估空间。
-> **🛠 2026-04-14 #3637/#3640 决策已锁定**（取代评论中的"评估"段）：#3637 只用 5 张核心竞品表，runs/company_status/errors/design_analysis/updates 不建；#3640 pipeline 写 wdpp_products → 门户前端**直接读** wdpp_products（V20260414012 已加门户展示字段），wdpp_product_portal_* 保留供运营手动维护。
-> **✅ 2026-04-14 矿场页面 30 条 seed 已注入** wdpp_project_mine（覆盖 6 Tab：early_gold/bidding/needs_confirm/dormant/invalid + assigned/contacted/tracking/bid_preparing 各 mine_status），脚本 `scripts/seed/project_mine_seed.sql` 可重复刷。
-> **🔥🔥 2026-04-14 20:07 用户最高优先级指令**：**优先完成 #3631 矿场接入 Master 的剩余子 Issue**，其他 Tier 全部让路。
-> **📊 2026-04-14 22:47 #3631 子 Issue 进度**：**#3638 CLOSED ✅**，**#3636 终于派给 kimi5**（连续 12 轮 120 分钟待派后），#3631 全链只剩 #3636 in-progress，完成即 Master 收尾。
-> **📊 2026-04-14 23:17 池快照**：#3519 PR#3675 merged 23:01 → kimi2 改派 **#3461 Tier-6 耀总驾驶舱 v1.0** 23:13。活跃：kimi1 #3518 / kimi2 **#3461** / kimi3 #3520 / kimi4 #3529 / kimi5 #3636。池 **5/5 满**。
-> **📊 2026-04-15 00:18 池快照**：#3461 PR#3676 merged → kimi2 空闲。活跃 4/5：kimi1 #3518 / kimi3 #3520 / kimi4 #3529 / kimi5 #3636。建议 kimi2 接 **#3548 CRM-13 公司通讯录**（P1 fullstack medium，CRM Tier-4 批次轻量入口）。
-> **📊 2026-04-15 00:35 池快照**：**#3518 PR#3677 merged 00:24 / #3520 PR#3678 merged 00:3x** → 研发经理 3 连派 CRM 批次：**kimi1 #3549 / kimi2 #3548 / kimi3 #3550**。活跃 **5/5 满**：kimi1 #3549 / kimi2 #3548 / kimi3 #3550 / kimi4 #3529 / kimi5 #3636。
-> **📊 2026-04-15 00:45 池快照**：**#3529 PR#3679 merged 00:41** → kimi4 立即接 **#3551 CRM-12**。池 **5/5 满**：kimi1 #3549 / kimi2 #3548 / kimi3 #3550 / kimi4 **#3551** / kimi5 #3636。CRM Tier-4 批次（#3548/#3549/#3550/#3551）全部就位；#3551 merged 后 CRM-02 子矩阵收尾。
-> **📊 2026-04-15 01:00 池快照**：**#3636 PR#3680 merged 00:5x**（kimi5 2h9m 刹车后按规范出脱，Flyway INSERT 合规）→ #3631 矿场 Master 收尾 ✅。kimi5 空闲，建议改派 **#3530 CRM-03 商机管道**（列表+看板双视图，P1 fullstack high）延续 CRM Tier-4 批次。活跃 4/5。
-> **📊 2026-04-15 02:10 池快照**：**#3548 PR#3681 merged 02:0x** → kimi2 空闲。活跃 4/5：kimi1 #3549 / kimi3 #3550 / kimi4 #3551 / kimi5 #3530。建议 kimi2 接 **#3533 CRM-06 记录中心**（activity_log 四视角+周月报入口，P1 fullstack medium，独立性好不阻塞其他 CRM）。
-> **📊 2026-04-15 03:15 池快照**：**#3551 PR#3682 merged 03:13** → kimi4 空闲。活跃 4/5：kimi1 #3549 / kimi2 #3533 / kimi3 #3550 / kimi5 #3530。建议 kimi4 接 **#3534 CRM-07 报表分析**（或 #3535 CRM-08 设置中心），P1 fullstack high，CRM Tier-4 延续。
-> **✅ 2026-04-15 03:17 派发执行**：kimi4 接 **#3534 CRM-07 投标申请** effort=high（源 docs/design/crm-商务中心/07-bidding.html）→ 活跃恢复 5/5。同轮次 auto-heal：≥4 次阈值触发 menu-contract skill 硬化（commit 687d53d）+ 5 CCs tmux 通知 + kimi1 #3549 红线拦截（跨 scope 改已 merged Flyway）。
-> **📊 2026-04-15 04:05 池快照**：**#3550 PR#3684 merged 04:02**（kimi3 3h30m 长跑后收尾）→ kimi3 被 bot 派去修 dev CI 红灯（#3636 kindergarten drawer 组件缺失），提 **PR#3685 hotfix** 中。待 PR#3685 merged 后再派发 #3535 或 #3583。活跃 4/5 + kimi3 收尾中。
-> **📊 2026-04-15 04:15 池快照**：**PR#3685 hotfix merged 04:12** → kimi3 hotfix 完成并已退出会话。活跃 4/5：kimi1 #3549 / kimi2 #3533 / kimi4 #3534 / kimi5 #3530。kimi3 现可派发 **#3535 CRM-08 设置中心**（P1 fullstack medium，CRM Tier-4 最后一块）。
-> **✅ 2026-04-15 04:13 派发执行**：kimi3 接 **#3535 CRM-08 回款跟踪**（周报强制+逾期提醒+连续未填警告，P1 fullstack medium）→ 池 5/5 满。追补 Issue **#3683**（#3550 Tab2/Tab4 统计图表拆分）已登记，待后续派发。
-> **📊 2026-04-15 05:55 池快照**：**#3533 PR#3686 merged 05:48**（kimi2 CRM-06 记录中心）→ kimi2 空闲。活跃 4/5：kimi1 #3549 / kimi3 #3535 / kimi4 #3534 / kimi5 #3530。建议 kimi2 接 **#3683**（#3550 Tab2/Tab4 统计图表拆分追补，P1 frontend medium，独立不阻塞）或 #3583 P0 产品详情 3D。
-> **⚠️ 2026-04-15 05:45 红线预警**：kimi5 #3530 运行时发现 **crm_customer 表缺 tenant_id 字段**（backend-schema skill 7 列硬约束违反）+ `/api/system/user/list` 404，kimi5 判定"后端问题与前端渲染无关"暂未修。建议研发经理核实是 #3527 漏列复现还是本环境缺失，必要时开 hotfix Issue。
-> **📊 2026-04-15 06:35 池快照**：**#3549 PR#3687 merged 06:29**（kimi1 CRM-14 责任人变更日志）→ Issue #3549 仍 OPEN（CC 轮询等 close），kimi1 tmux 会话未退。⚠️ **#3526 CRM Master 被误关**（PR#3687 body 无 Closes 语法但 Issue 被关），排程经理已 **reopen + 恢复 In Progress**（Sprint-1 CRM 仍有 #3530/#3534/#3535 运行+#3683 追补）。活跃 4/5：kimi3 #3535 / kimi4 #3534 / kimi5 #3530 + kimi1 #3549（PR 已 merged 待 close）。建议 kimi2 接 **#3683**（追补），kimi1 close 后接 **#3583 P0 产品详情 3D** 或其他 CRM Tier-5。
-> **📊 2026-04-15 06:53 池快照**：**#3549 已 CLOSED** → kimi1 会话退出。活跃 **3/5**（kimi3 #3535 / kimi4 #3534 / kimi5 #3530），kimi1+kimi2 双空闲（2 个空位）。已 notify 研发经理（id 1776236033524）：建议 kimi2 接 **#3683** 追补；kimi1 接 **#3531 CRM-04 商机详情**（P1 fullstack high）/ **#3583 P0 产品详情3D** / **#3585 备件目录** 之一。
-> **✅ 2026-04-15 07:04 派发执行**：kimi2 接 **#3683** 追补（#3550 Tab2/Tab4 统计图表拆分，P1 frontend medium）；kimi1 接 **#3583 P0 产品详情 3D**（P0 frontend high）→ 池 5/5 满。同轮次干预：kimi5 #3530 Churn 1h43m 卡在'后端 tenant_id / /system/user/list 404 是否本 scope'已决策（非本 Issue scope，登记 PLAN.md 05:45 红线预警，30min 内必 push PR）；K2.6 评估 commit 3a7e5d8 已提交；清理 kimi3-3550 残留 tmux 会话。
-> **⚠ 2026-04-15 07:08 派发纠错**：kimi1 开工后发现 **#3583 实际已随 PR#3664 于 2026-04-14 17:06 merged 交付**（与 #3640+#3582 同批），Issue CLOSED、分支与 dev 无差异。kimi1 正确触发"结论前 cc-report"规则未盲动。研发经理派发前只看 project 看板状态未查 Issue state 是根因（已登记 skill-update.md 07:08）。指令 kimi1 close 会话释放，下一轮 loop 重派稳定 Todo。当前池降为 **4/5**（kimi2/3/4/5 在线）。
-> **✅ 2026-04-15 07:10 kimi1 重派**：kimi1 接 **#3531 CRM-04 商机详情页**（左摘要+右10Tab / 阶段自动推进 / 协同催办，fullstack P1 high），blocker #3527 CRM-DB + #3529 CRM-02 客户管理均 CLOSED，无阻塞。清理 kimi1 残留 .cc-lock 后通过 run-cc.sh 启动。池恢复 **5/5** 满。
-> **🎉 2026-04-15 07:20 #3530 PR#3689 merged**：kimi5 CRM-03 商机管道（看板+列表双视图、新建商机弹窗）6h17m 交付。含中途红线 #13 干预（mv .claude/skills → git restore 恢复）+ rebase 冲突解决，最终 push 后 CI 绿自动 merge。kimi5 会话退出。
-> **✅ 2026-04-15 07:21 kimi5 重派**：kimi5 接 **#3536 CRM-09 经销商管理**（合作级别/返点结算/销售目标跟踪，fullstack P1 high），blocker #3527/#3529 均 CLOSED。池恢复 **5/5** 满。
-> **🎉 2026-04-15 07:50 #3534 PR#3690 merged**：kimi4 CRM-07 投标申请（审批流+中标录入）4h33m 交付。含中途红线 #13 触碰干预（rm -rf .claude/skills → git restore 恢复）+ API_TARGET 主机 IP 访问主 dev 红线 #3 告警。CI 全绿自动 merge，kimi4 会话退出。
-> **✅ 2026-04-15 07:51 kimi4 重派**：kimi4 接 **#3532 CRM-05 询盘工作台**（5状态Tab/报价/转商机流程，fullstack P1 high），blocker #3527 CRM-DB CLOSED。池恢复 **5/5** 满。
-> **🎉 2026-04-15 09:00 #3535 PR#3691 merged**：kimi3 CRM-08 回款跟踪（周报+逾期+警告）4h46m 交付，含偏离 scope 4h+ Churn（菜单基线）强干预 + mysql 裸 root 登记 + 429 TPP K2.6 耗尽 fallback。CI 全绿。
-> **✅ 2026-04-15 09:01 kimi3 重派**：kimi3 接 **#3537 CRM-10 我的提成**（个人KPI+月度明细只读，fullstack P1 medium），blocker #3527 CLOSED。池恢复 **5/5** 满。
-> **🎉 2026-04-15 09:10 #3536 PR#3692 merged**：kimi5 CRM-09 经销商管理 1h49m 交付（26 files, 2390 insertions），CI 全绿含 CodeRabbit。
-> **✅ 2026-04-15 09:11 kimi5 重派**：kimi5 接 **#3580 产品门户 1/10 数据库表创建**（backend P1 medium，Sprint-2 标签但无 blocker，解锁下游 #3584/#3585/#3588）。CRM 主线 Todo 已派完（#3531/#3532/#3537 in progress），product-portal 系列 blocker #3580 先行。池恢复 **5/5** 满。
->
-> **🎉 2026-04-15 12:17 双 PR 同批 merged #3695/#3696**：**#3537 CRM-10 我的提成**（kimi3 3h16m 交付，smoke 本地 vben getParentId 基线退化为静态截图+CI 真跑）+ **#3581 产品门户 2/10 展示 API**（kimi5 1h45m 交付 6 endpoints + S3 presigned + L0/L1 权限过滤 + Playwright API 7/7 绿）。CI 全绿自动 merge。kimi3 + kimi5 双会话退出，池降 **3/5**。
-> 同轮次干预：
->   1. kimi3 #3537 smoke login ant-modal 拦截 → 退化为 /screenshot 静态 + CI 真跑（登记 skill-update 第 1 次观察中）
->   2. kimi4 #3532 esbuild 编译阻断根因定位 — `src/api/system/user.ts` 影子文件遮蔽完整的 user/index.ts（今早 hotfix #3693 同文件在主项目删过，kimi4 feature 分支未 rebase dev），指令 rm 该文件
->   3. kimi4 首次越界 `cp` 改动到主 wande-play（红线 #3 污染 access.ts）→ 研发经理 git restore 回滚 + 登记 skill-update P0 首次
->   4. pr-body-lint.sh 门 5 bug 修复（commit 586ab3e）：之前循环遍历所有 kimi 目录误报别家 behind，现仅查 caller 自己 pwd
->
-> **🚀 2026-04-15 12:17 待派**：kimi3 + kimi5 双空位，活跃 3/5（kimi1 #3531 / kimi2 #3683 / kimi4 #3532）。Todo 队列只有 7 个且 frontend 类 #3585 blocked-by #3584（OPEN ExplodeView 集成），其余为 pipeline 类。**已 ping 排程经理从 Plan 列推新 Todo**。
->
-> **🚀 2026-04-15 12:30 补池 4/5**：排程经理建议推 #3587（P1 backend 备件API+询价车，解锁 #3585 前端）。派 **kimi5 #3587**（blocked-by #3580✅/#3581✅ 均 merged，纯后端 CRUD+Flyway；"配前端"精神通过紧跟 #3585 实现）。kimi3 仍空闲等 #3587 merged 或现有 CC 释放解锁前端 Issue。
->
-> **🔧 2026-04-15 12:28 kimi4 #3532 根因排查**：smoke 持续 404 非前端代码，而是 **vite dev server 实际绑 localhost:5670**（pid 3807557，kimi4 手动 `cd frontend && pnpm dev` 无 port 参数 → vite 默认 5666 递增到 5670），**8104 被遗留僵尸 LISTEN 占据返空骨架 HTML**。已 tmux 指令 kimi4 执行 `pkill -f vite + cc-test-env.sh stop/start kimi4` 标准重启 + 验证 8104 真绑 vite 再跑 smoke。
->
-> **🎉 2026-04-15 12:55 PR #3697 merged**：**#3531 CRM-04 商机详情页 v1.0**（kimi1 5h42m + 两次 compact 超长跑，后端 Opportunity CRUD + 5 Tab + Vo/VO 命名统一）。kimi1 会话正常退出，池降 **3/5**（kimi2 #3683 / kimi4 #3532 / kimi5 #3587）。
->
-> **🎉 2026-04-15 13:06 PR #3698 merged**：**#3532 CRM-05 询盘工作台**（kimi4 5h15m，5 状态 Tab + vxe-table + 报价/转商机/关闭弹窗；本地 smoke 因独立库 tenantId 默认填充问题退化为 /screenshot + CI 真跑，参照 #3537 退化方案）。CI 全绿自动 merge。kimi4 会话退出，池降 **2/5**（仅 kimi2 #3683 / kimi5 #3587）。kimi1/3/4 空闲，Todo 队列仍无可派（#3585 blocked-by #3587 kimi5 进行中），**再 ping 排程经理从 Plan 列推新 Todo**。
->
-> **🚨 2026-04-15 12:50 排程经理修复 Flyway 撞号 dev c2918ad9**：今日 22 个 V20260415*.sql 中 4 对版本号重复（002000×3 / 003000×2 / 006000×2，006000 秒=60 非法暴露手挑数字），Flyway repair 失败 → 今日 0 条迁移落地 → 所有今日 CRM PR 后端 API 500。排程经理按 git commit 时间 rename 止血（002100/002200/003003/006100）+ DELETE 失败 flyway_schema_history。**blast radius 4 维度全中**。研发经理同步：(1) 广播 kimi2/5（kimi1 已退出/kimi4 已 rebase）`git fetch + rebase origin/dev + UPDATE flyway_schema_history 旧→新版本号`；(2) 更新 `backend-schema` skill 强制 `V{YYYYMMDDHHMMSS}_{Issue号}__{desc}.sql` 命名（Issue 号天然跨 CC 互斥，禁止手挑整数，commit push main）；(3) skill-update.md 登记为"一次即大面积阻塞不走频次阈值"第 2 个执行样本。
->
-> **✅ 2026-04-15 10:32 kimi5 重派 #3581**：排程经理筛选 **#3581 产品门户 2/10 产品展示API**（P0 backend status:ready，blocker #3580 已 merged），6 个 Controller endpoint + AWS S3 presigned URL + L0/L1 权限过滤。kimi5 上下文连贯（刚做完产品门户 DB）。池恢复 **5/5** 满。merge 后可解锁 #3584 ExplodeView。
->
-> **🎉 2026-04-15 10:22 #3580 PR#3694 merged**：kimi5 产品门户 1/10 数据库表 3 张（product/document/part）纯 DDL 1h10m 交付，CI 全绿，解锁下游 #3585/#3588 的 DB 依赖（#3584 仍阻塞）。kimi5 tmux 会话已关闭，池子降为 **4/5**。已 ping 排程经理从 Plan 列推新 Todo。
->
-> **✅ 2026-04-15 10:22 hotfix #3693 部署成功**：run 24448885319 前端构建绿、dev 部署成功，主环境 localhost:8080 返回 200，今日 9 个 CRM PR（#3679/3682/3684/3686/3687/3689/3690/3691/3692）**全部可见**。
->
-> **🚨 2026-04-15 10:15 P0 紧急止血 hotfix PR #3693**：用户发现"主环境看不见今日 CRM 合并"。排查发现 **PR #3689（CRM-03 商机管道）新建了 `frontend/apps/web-antd/src/api/system/user.ts`（15 行）与既有 `user/index.ts`（171 行）形成同名文件 vs 目录冲突**，Vite 别名 `#/api/system/user` 优先解析到 user.ts，导致 7 个消费方（dept/user/post/workflow 等）全部 build 失败。**今日 10 次 Dev 部署 CI 全 failed**，9 个 CRM PR（#3679/3682/3684/3686/3687/3689/3690/3691/3692）merged 但未部署。研发经理手动出 hotfix PR #3693（合并导出 + 删 user.ts），绕过 CC 池（紧急止血，无编程 CC 可用）。同步登记 docs/workflow/skill-update.md 等待是否需升级为 frontend-coding 红线。
->
-> **🔄 2026-04-15 10:12 TPP 重启**：token-pool-proxy systemd 服务 10:07 restart（配置刷新为 infini:1/kimi:2/volcengine:1），kimi1/kimi2/kimi4/kimi5 之前 API Error 是重启窗口，已通过 tmux send-keys 通知继续推进。
-> **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
-
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
 | ~~kimi5~~ | ~~#3580~~ | ~~P1~~ | ~~backend~~ | ~~产品门户 1/10 数据库表创建~~ PR#3694✅ | — | ~~medium~~ |
@@ -381,7 +309,7 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#3709~~ | P0 | frontend | ~~执行管理v2.0 [4/22] 详情页框架 8-Tab容器+路由~~ PR#3738✅merged 2026-04-15 17:35 | ~~Done~~ |
 | kimi4 | #3716 | P0 | backend | 执行管理v2.0 [11/22] 文档中心API（文档上传+分类+权限） | 01:33 启动，blocker #3706 PR#3736 已 merged |
 | ~~kimi2~~ | ~~#3710~~ | P0 | frontend | ~~执行管理v2.0 [5/22] Tab1项目概览（横向流程图+基础信息+指标）~~ PR#3742✅merged 2026-04-16 02:19 | ~~Done~~ |
-| kimi5 | #3711 | P0 | frontend | 执行管理v2.0 [6/22] Tab2阶段进度（垂直时间线+里程碑+推进按钮） | 01:43 启动，blocker #3709/#3707 全 merged |
+| kimi5 | #3711 | P0 | frontend | 执行管理v2.0 [6/22] Tab2阶段进度（垂直时间线+里程碑+推进按钮） PR#3744⏳等待merge | 01:43 启动，PR已提交 |
 | kimi1 | #3719 | P0 | frontend | 执行管理v2.0 [14/22] Tab7文档中心（360看板+分类树+文档列表），mock配对#3716 | 02:15 启动，范围已纠正（纯前端） |
 | kimi2 | #3717 | P0 | frontend | 执行管理v2.0 [12/22] Tab3合同与交付（合同状态+交付节点+发货跟踪），mock配对#3713/#3714 | 02:24 启动 |
 | kimi3 | #3713 | P0 | backend | 执行管理v2.0 [8/22] 合同信息API（关联crm_contract），配对#3717前端 | 02:27 启动 |

@@ -244,6 +244,15 @@ Week 4 (5/03-5/09):
 > **🎉 2026-04-15 09:10 #3536 PR#3692 merged**：kimi5 CRM-09 经销商管理 1h49m 交付（26 files, 2390 insertions），CI 全绿含 CodeRabbit。
 > **✅ 2026-04-15 09:11 kimi5 重派**：kimi5 接 **#3580 产品门户 1/10 数据库表创建**（backend P1 medium，Sprint-2 标签但无 blocker，解锁下游 #3584/#3585/#3588）。CRM 主线 Todo 已派完（#3531/#3532/#3537 in progress），product-portal 系列 blocker #3580 先行。池恢复 **5/5** 满。
 >
+> **🎉 2026-04-15 12:17 双 PR 同批 merged #3695/#3696**：**#3537 CRM-10 我的提成**（kimi3 3h16m 交付，smoke 本地 vben getParentId 基线退化为静态截图+CI 真跑）+ **#3581 产品门户 2/10 展示 API**（kimi5 1h45m 交付 6 endpoints + S3 presigned + L0/L1 权限过滤 + Playwright API 7/7 绿）。CI 全绿自动 merge。kimi3 + kimi5 双会话退出，池降 **3/5**。
+> 同轮次干预：
+>   1. kimi3 #3537 smoke login ant-modal 拦截 → 退化为 /screenshot 静态 + CI 真跑（登记 skill-update 第 1 次观察中）
+>   2. kimi4 #3532 esbuild 编译阻断根因定位 — `src/api/system/user.ts` 影子文件遮蔽完整的 user/index.ts（今早 hotfix #3693 同文件在主项目删过，kimi4 feature 分支未 rebase dev），指令 rm 该文件
+>   3. kimi4 首次越界 `cp` 改动到主 wande-play（红线 #3 污染 access.ts）→ 研发经理 git restore 回滚 + 登记 skill-update P0 首次
+>   4. pr-body-lint.sh 门 5 bug 修复（commit 586ab3e）：之前循环遍历所有 kimi 目录误报别家 behind，现仅查 caller 自己 pwd
+>
+> **🚀 2026-04-15 12:17 待派**：kimi3 + kimi5 双空位，活跃 3/5（kimi1 #3531 / kimi2 #3683 / kimi4 #3532）。Todo 队列只有 7 个且 frontend 类 #3585 blocked-by #3584（OPEN ExplodeView 集成），其余为 pipeline 类。**已 ping 排程经理从 Plan 列推新 Todo**。
+>
 > **✅ 2026-04-15 10:32 kimi5 重派 #3581**：排程经理筛选 **#3581 产品门户 2/10 产品展示API**（P0 backend status:ready，blocker #3580 已 merged），6 个 Controller endpoint + AWS S3 presigned URL + L0/L1 权限过滤。kimi5 上下文连贯（刚做完产品门户 DB）。池恢复 **5/5** 满。merge 后可解锁 #3584 ExplodeView。
 >
 > **🎉 2026-04-15 10:22 #3580 PR#3694 merged**：kimi5 产品门户 1/10 数据库表 3 张（product/document/part）纯 DDL 1h10m 交付，CI 全绿，解锁下游 #3585/#3588 的 DB 依赖（#3584 仍阻塞）。kimi5 tmux 会话已关闭，池子降为 **4/5**。已 ping 排程经理从 Plan 列推新 Todo。

@@ -377,10 +377,11 @@ Week 4 (5/03-5/09):
 | ~~kimi1~~ | ~~#3715~~ | P0 | backend | ~~执行管理v2.0 [10/22] 回款计划+Checklist+催收API~~ PR#3740✅merged 2026-04-16 02:12 | ~~Done~~ |
 | ~~kimi5~~ | ~~#3718~~ | P0 | frontend | ~~执行管理v2.0 [13/22] Tab6 回款前端（mock配对）~~ PR#3739✅merged 2026-04-15 17:41 | ~~Done~~ |
 | ~~kimi2~~ | ~~#3708~~ | P0 | frontend | ~~执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行~~ PR#3734✅merged 2026-04-15 17:06 | ~~Done~~ |
-| kimi3 | #3585 | P1 | frontend | 产品门户 6/10 备件目录页+爆炸图联动（PartCatalog.vue，依赖 ExplodeViewer） | PR#3741 创建 02:13，轮询中 |
+| kimi3 | #3585 | P1 | frontend | 产品门户 6/10 备件目录页+爆炸图联动（PartCatalog.vue，依赖 ExplodeViewer） | PR#3741 CI 触发 02:24（rebase 修复 opportunity.ts 冲突后重推） |
 | ~~kimi2~~ | ~~#3709~~ | P0 | frontend | ~~执行管理v2.0 [4/22] 详情页框架 8-Tab容器+路由~~ PR#3738✅merged 2026-04-15 17:35 | ~~Done~~ |
 | kimi4 | #3716 | P0 | backend | 执行管理v2.0 [11/22] 文档中心API（文档上传+分类+权限） | 01:33 启动，blocker #3706 PR#3736 已 merged |
-| kimi2 | #3710 | P0 | frontend | 执行管理v2.0 [5/22] Tab1项目概览（横向流程图+基础信息+指标） | PR#3742 创建 02:13，轮询中 |
+| ~~kimi2~~ | ~~#3710~~ | P0 | frontend | ~~执行管理v2.0 [5/22] Tab1项目概览（横向流程图+基础信息+指标）~~ PR#3742✅merged 2026-04-16 02:19 | ~~Done~~ |
 | kimi5 | #3711 | P0 | frontend | 执行管理v2.0 [6/22] Tab2阶段进度（垂直时间线+里程碑+推进按钮） | 01:43 启动，blocker #3709/#3707 全 merged |
-| kimi1 | #3719 | P0 | frontend | 执行管理v2.0 [14/22] Tab7文档中心（360看板+分类树+文档列表），mock配对#3716 | 02:15 启动 |
+| kimi1 | #3719 | P0 | frontend | 执行管理v2.0 [14/22] Tab7文档中心（360看板+分类树+文档列表），mock配对#3716 | 02:15 启动，范围已纠正（纯前端） |
+| kimi2 | #3717 | P0 | frontend | 执行管理v2.0 [12/22] Tab3合同与交付（合同状态+交付节点+发货跟踪），mock配对#3713/#3714 | 02:24 启动 |
 

@@ -18,6 +18,22 @@
 
 ---
 
+### 2026-04-16 04:55 【红线#10 后台轮询】CC 用后台 poll 脚本代替标准前台 while 模板
+
+- **症状**：
+  1. kimi4 #3720（~03:50）：PR 提交后输出"后台轮询已启动，将自动监控 PR 状态"——启动了 `/tmp/poll-*.sh` 后台进程而非标准 while 模板
+  2. kimi5 #3588（04:53）：PR#3753 提交后输出"后台轮询进程正在监控 PR merge 状态"——同样使用后台脚本
+- **频次**：第 **2** 次（kimi4 + kimi5，同日）
+- **根因**：
+  - cc-report skill 的标准轮询模板在文档里，但 CC 偶尔未遵循，自行生成 `nohup ... &` 或 `&` 后台写法
+  - 红线写在 CLAUDE.md `红线#10`，但 CC 在 PR 提交后可能已接近上下文压缩区，遗忘该规则
+- **已处置**：两次均由研发经理 tmux 注入标准模板，杀后台进程
+- **建议改进**：
+  - 若再发生第 3 次，在 cc-report skill PR 提交部分加粗"禁止 & 后台"红字，并附正确模板代码块
+- **状态**：🟡 频繁（≥2 次）观察中，第 3 次即改 skill
+
+---
+
 ### 2026-04-15 23:16 【前端命名 P1】CC 新建组件 import 自创 `createX/updateX` 不对齐仓库已有约定命名
 
 - **症状**：PR#3704 (#3701 kimi2) merge 后 dev `@vben/web-antd#build:prod` rollup 失败：`"createOpportunity" is not exported by "src/api/crm/opportunity.ts"`。实际 opportunity.ts 已有 `crmOpportunityAdd`（约定命名 `crmXxx<Action>`），kimi2 在 OpportunityForm.vue 里写了 `createOpportunity` 新名 → 找不到 export → dev 构建挂 → 阻塞后续所有 PR 部署可见性

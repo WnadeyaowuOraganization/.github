@@ -746,3 +746,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 频次：第1次（之前 kimi1/kimi3/kimi4 的"Controller未注册"实为同一根因的不同表现）
 - 处置：注入强制 mvn install + restart-backend 修复
 - 状态：🟡 观察中，若再出现升为高频
+
+### 2026-04-16 05:52 【红线#11 跳过JUnit】第2次：kimi4/#3725 "LambdaUpdateWrapper无法Mockito"
+- CC: kimi4
+- Issue: #3725 验收管理API
+- 借口: LambdaUpdateWrapper 无法被 Mockito 模拟
+- 事实: 测 mapper.update() 被调用即可，不需要验证 wrapper 内部逻辑
+- 频次：第2次（kimi2/#3133 + kimi4/#3725）
+- 状态：🔴 高频趋势，第3次即改 skill

@@ -625,3 +625,73 @@ BASE_URL=http://localhost:810N npx playwright test tests/front/smoke/ --project=
 4. tmux 通知 kimi4（活跃后端 CC）
 
 **状态**：✅ 已止血（≥4次 → 立改 skill，commit df87950）
+
+---
+## 2026-04-16 02:35 — kimi3 裸连 mysql -h127.0.0.1 再次出现（第5次）
+
+**问题**：kimi3/#3713 在验证数据库表时使用 `mysql -h127.0.0.1 -P3306 -uroot -proot -Dwande-ai-kimi3` 直连，违反红线#3。SKILL.md 已有此红线（4次后加入），但 CC 仍未遵守。
+
+**频次**：第5次（SKILL.md 已于4次后更新，红线已落地）
+
+**当前止血**：
+- tmux 注入纠正：改用 docker exec mysql-dev mysql + 提示 Flyway 未跑表本来不存在
+
+**状态**：已止血，CC 无需额外改 skill（已有红线）。问题根因可能是 CC 未主动读 SKILL.md 或读取顺序靠后。
+
+---
+## 2026-04-16 02:44 — kimi4 注释@SaCheckPermission试图修复401（错误路径）
+
+**问题**：kimi4/#3716 遇到 API 返回 401，误判为权限配置问题，用 sed 临时注释 `@SaCheckPermission` 注解，并留 TODO 打算测试后恢复。401 实际原因是 curl 命令缺少 `clientid` header，与安全注解无关。
+
+**频次**：1次（首次发现）
+
+**危害**：若带注释代码进 PR，安全注解缺失直接影响生产权限控制。
+
+**当前止血**：tmux + notify 双通道强制纠正，要求立即恢复 @SaCheckPermission，使用正确 curl 测试姿势。
+
+**建议**：考虑在 backend-test SKILL.md 增加 401 排查快速清单：先查 clientid header → 再查路径前缀(/wande/ 非/api/) → 最后才考虑权限配置。禁止注释/删除 @SaCheckPermission。
+
+**状态**：观察中（1次，未达4次阈值）
+
+---
+## 2026-04-16 03:14 — 前端 CI 两次因共享文件 execution.ts 重复声明失败（大面积止血）
+
+**问题**：多个前端 CC 同时向 `src/api/wande/execution.ts` 追加 mock 数据，提交前未 rebase，导致合并后重复声明：
+- #3711: `const stageConfig` 与 `export function stageConfig` 重名（kimi5）
+- #3719: `DocCategoryVO` interface 缺闭括号导致 esbuild 语法错误（kimi1）
+
+**根因**：frontend-coding SKILL.md 构建验证节无 rebase 步骤，CC 在 kimi 本地通过 build，但未感知 dev 分支已有其他 CC 的改动。
+
+**止血操作**：
+1. frontend-coding SKILL.md `## 构建验证` 新增：pnpm build 前先 `git fetch origin dev && git rebase origin/dev`
+2. 新增共享文件重名快速检查命令
+3. 新增 MUST NOT 红线说明（带历史案例）
+4. commit b52d5af push main，tmux 广播通知活跃前端 CC
+
+**状态**：✅ 已止血（一次大面积阻塞，不走频次阈值直接改 skill）
+
+---
+## 2026-04-16 03:17 — 前端CC计划写后端Controller（第4次，触发阈值）
+
+**问题**：kimi1/#3723（module:frontend）开工报告包含"后端Controller"和"API契约"，即将越界写后端代码。这是第4次同类问题（前3次：kimi1/#3719 02:33、kimi5/#3711、kimi2/#3717 各一次）。
+
+**频次**：第4次，触发立即改 skill 规则。
+
+**当前止血**：tmux+notify双通道纠正。
+
+**待办**：检查 frontend-coding SKILL.md 是否已有前端CC禁止写后端的红线（上次计划≥4次时改skill，现在需要执行）。
+
+---
+## 2026-04-16 03:24 — execution.ts 第三次大面积 CI 故障（#3717合并导致：缺闭括号+197行重复API块）
+
+**问题**：PR#3747(#3717) 合并后 dev CI 报 `execution.ts:1573:0: Unexpected "export"`。
+根因：
+1. `checklistTemplates()` 函数缺少 `});` `}` 关闭（#3717 CC 提交前未本地 build 验证）
+2. 整段"API 函数"块（executionProjectList/Stats/paymentXxx/checklistTemplates）共197行被完整复制了一遍（多CC并发追加未先 rebase）
+
+**止血**：直接在 dev 分支 hotfix 提交 `5a7454ae`，删除重复块 + 补闭括号。
+
+**累计次数**：第3次同类根因（execution.ts 共享文件并发写不 rebase），已于 2026-04-16 03:14 更新 frontend-coding SKILL.md（见该条记录）。当前 skill 已包含 rebase + 重名检查，继续观察后续是否还有违规。
+
+**后续行动**：若再出现第4次，考虑在 SKILL.md 增加"最终提交前强制构建通过验证（CI 必须绿才能 PR）"的门禁说明。
+

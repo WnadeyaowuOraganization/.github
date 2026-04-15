@@ -91,3 +91,29 @@ done
 ```
 
 **禁止**在外接目录改基础设施文件再手动 cp 到其他目录。
+
+## 巡检问题自动止血规则（研发经理）
+
+> 每轮 loop 巡检发现的问题登记在 `docs/workflow/skill-update.md`，按以下阈值自动处置（**不等用户决策**）：
+
+| 频次 | 动作 |
+|------|------|
+| 1 次 | 个案精准指令 + 登记 skill-update.md |
+| 2-3 次 | 登记为"频繁"、观察中 |
+| **≥4 次** | **立即**更新对应 skill/红线/模板 + 通知所有在运行 CC（tmux send-keys 推送新规则），无需等用户批准 |
+
+**新增 skill 灰度发布规则**：
+
+若需新建 skill（而非改已有 skill），必须：
+1. 先只在**一个** kimi 目录启用该 skill（软链或单目录 cp）
+2. 该 kimi 至少跑完 **5 个 Issue** 验证 skill 无误
+3. 验证通过后才能全面开放（软链到 wande-play 基础目录，所有 kimi 自动同步）
+4. 验证期间若 skill 引起卡点或误判，立即回滚单 kimi 的软链，不污染全池
+
+**同步到在运行 CC 的方式**：
+```bash
+for dir in ~/projects/wande-play-kimi{1..20}; do
+  [ -d "$dir/.git" ] && (cd "$dir" && git pull origin dev)
+done
+# 然后 tmux send-keys 到每个活跃 CC 通知新规则/新 skill 路径
+```

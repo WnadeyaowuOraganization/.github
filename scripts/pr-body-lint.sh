@@ -181,26 +181,29 @@ else
 fi
 
 # 漏洞 B 修复：门 5 — 检查是否 rebase 过 dev（当前分支不应该 behind origin/dev）
-for kimi in /home/ubuntu/projects/wande-play-kimi* /home/ubuntu/projects/wande-play; do
-  if [ -d "$kimi/.git" ]; then
-    CURRENT_BRANCH=$(git -C "$kimi" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
-    if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "dev" ] && [ "$CURRENT_BRANCH" != "main" ]; then
-      git -C "$kimi" fetch origin dev --quiet 2>/dev/null || true
-      BEHIND=$(git -C "$kimi" rev-list --count HEAD..origin/dev 2>/dev/null || echo 0)
-      if [ "$BEHIND" -gt 0 ]; then
-        echo "═══ 门 5 失败：当前分支 $CURRENT_BRANCH 落后 origin/dev $BEHIND 个 commit ═══"
-        echo ""
-        echo "修复命令："
-        echo "  git fetch origin dev && git rebase origin/dev"
-        echo "  # 解决冲突后"
-        echo "  git push --force-with-lease"
-        fail 5 "门 5: 提 PR 前必须 rebase origin/dev（防 mergeable_state=dirty 导致 CI skip）"
-      fi
-      log "门 5 通过（分支 $CURRENT_BRANCH 已 up-to-date with origin/dev）"
-      break
+# 修复 2026-04-15：只查 caller 所在的 kimi 目录（pwd 的 git toplevel），不 loop 其他 kimi
+CALLER_KIMI=$(git rev-parse --show-toplevel 2>/dev/null || echo "")
+if [ -n "$CALLER_KIMI" ] && [ -d "$CALLER_KIMI/.git" ]; then
+  CURRENT_BRANCH=$(git -C "$CALLER_KIMI" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "")
+  if [ -n "$CURRENT_BRANCH" ] && [ "$CURRENT_BRANCH" != "dev" ] && [ "$CURRENT_BRANCH" != "main" ]; then
+    git -C "$CALLER_KIMI" fetch origin dev --quiet 2>/dev/null || true
+    BEHIND=$(git -C "$CALLER_KIMI" rev-list --count HEAD..origin/dev 2>/dev/null || echo 0)
+    if [ "$BEHIND" -gt 0 ]; then
+      echo "═══ 门 5 失败：当前分支 $CURRENT_BRANCH 落后 origin/dev $BEHIND 个 commit ═══"
+      echo ""
+      echo "修复命令："
+      echo "  git fetch origin dev && git rebase origin/dev"
+      echo "  # 解决冲突后"
+      echo "  git push --force-with-lease"
+      fail 5 "门 5: 提 PR 前必须 rebase origin/dev（防 mergeable_state=dirty 导致 CI skip）"
     fi
+    log "门 5 通过（分支 $CURRENT_BRANCH 已 up-to-date with origin/dev）"
+  else
+    log "门 5 跳过（在 $CURRENT_BRANCH 上，非 feature 分支）"
   fi
-done
+else
+  log "门 5 跳过（非 git 仓库）"
+fi
 
 echo ""
 echo "🎉 pr-body-lint 全部 5 道门通过，可以 gh pr create"

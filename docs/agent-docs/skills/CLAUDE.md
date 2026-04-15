@@ -112,8 +112,12 @@
 ```bash
 export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
 
-# 测试环境
-bash ~/projects/.github/scripts/cc-test-env.sh {start|stop|status|init-db} kimi<N>
+# 测试环境（细粒度重启，省 token/资源）
+bash ~/projects/.github/scripts/cc-test-env.sh start kimi<N>            # 初次拉起前后端
+bash ~/projects/.github/scripts/cc-test-env.sh restart-backend  kimi<N> # 只改后端代码时
+bash ~/projects/.github/scripts/cc-test-env.sh restart-frontend kimi<N> # 前端彻底重启（HMR 不够时）
+bash ~/projects/.github/scripts/cc-test-env.sh status kimi<N>
+# 其他：stop / init-db / wait / port / stop-backend / stop-frontend
 
 # PR 预检
 bash ~/projects/.github/scripts/pr-body-lint.sh --pr-body-stdin --issue ${ISSUE} < /tmp/pr-body-draft.md

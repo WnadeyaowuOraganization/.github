@@ -260,8 +260,11 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 **只能**用 cc-test-env.sh 启动/重启前端 dev server：
 
 ```bash
-bash ~/projects/.github/scripts/cc-test-env.sh restart kimiN    # N = 你所在 kimi 编号
-bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN       # 等就绪
+# 只重启前端（后端+DB 保留，省 token/资源，默认使用）
+bash ~/projects/.github/scripts/cc-test-env.sh restart-frontend kimiN
+# 极少数情况（新建 views/<模块>/ 目录触发 vite glob 缓存失效）才需前后端全重启：
+# bash ~/projects/.github/scripts/cc-test-env.sh restart kimiN   # ← 会删库重建，慎用
+bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN         # 等后端就绪（仅需验 API 时用）
 ```
 
 **禁止**：
@@ -270,7 +273,7 @@ bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN       # 等就绪
 - `lsof -ti :56xx | xargs kill` —— 5666-5671/5173-5179 不是任何 kimi 的规范端口，乱杀会误伤其他 kimi
 
 你的前端端口是 **810N**（kimi1=8101, kimi2=8102, ..., kimi5=8105）。若 `curl localhost:810N` 无响应：
-1. `bash cc-test-env.sh stop kimiN && bash cc-test-env.sh start kimiN`
+1. `bash cc-test-env.sh restart-frontend kimiN`（只重启前端，后端+DB 保留）
 2. 仍无响应看 `tail -100 /apps/wande-ai-frontend-kimiN/logs/frontend.log`
 3. **禁止**改 vite.config 端口适配错误端口
 

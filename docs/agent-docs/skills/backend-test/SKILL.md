@@ -73,14 +73,16 @@ curl -H "Authorization: Bearer $TOKEN" \
 - `'dependencies.dependency.version' for org.ruoyi:ruoyi-common-* is missing`
 - `failure was cached in the local repository` → failure cache 阻止重试
 
-**恢复步骤**（优先用 `cc-test-env.sh restart kimi<N>` 自愈）：
+**恢复步骤**（优先用 `cc-test-env.sh restart-backend kimi<N>` 自愈，**不删库**）：
 
 ```bash
 # 1. 删失败缓存
 rm -rf /home/ubuntu/cc_scheduler/m2/kimi<N>/repository/org/ruoyi/ruoyi-common-bom
 
-# 2. 让 cc-test-env.sh 重启时自动装（推荐）
-bash ~/projects/.github/scripts/cc-test-env.sh restart kimi<N>
+# 2. 只重启后端（保前端+DB，省 2-3min 初始化 + token）
+bash ~/projects/.github/scripts/cc-test-env.sh restart-backend kimi<N>
+
+# ⚠️ 仅当数据库真正损坏才用 `restart`（它会 DROP DATABASE 重建）
 ```
 
 ## JUnit 单测（有业务分支时才写）

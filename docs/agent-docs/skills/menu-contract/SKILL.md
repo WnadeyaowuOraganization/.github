@@ -11,7 +11,7 @@ description: Register frontend pages in the backend sys_menu table via Flyway UP
 
 前端路由 404 **严禁**一上来就归因于 `sys_menu.parent_id NULL`，按以下顺序排查：
 
-1. **Vite glob 缓存**：新建 `views/<模块>/` 目录后 vite 需**真重启**（`cc-test-env.sh stop kimiN && start kimiN`），`restart` 不足以刷 `import.meta.glob` 缓存
+1. **Vite glob 缓存**：新建 `views/<模块>/` 目录后 vite 需**真重启**（`cc-test-env.sh restart-frontend kimiN`，彻底杀 vite 进程重拉，能刷 `import.meta.glob` 缓存；HMR 热更新单独改代码不刷 glob）
 2. **Controller URL 多 `/api` 前缀**：`@RequestMapping("/api/xxx")` → vite proxy `/api` rewrite 剥前缀 → 后端 404。去掉 `/api/` 前缀
 3. **Flyway INSERT 漏写 parent_id 字段**：INSERT 必须**完整**写 parent_id，不依赖默认值；`@parent_id` 变量查不到时必有兜底
 4. **Vite dev port 错位**：见 frontend-coding skill，必须用 cc-test-env.sh 起前端

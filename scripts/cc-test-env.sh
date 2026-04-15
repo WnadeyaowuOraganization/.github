@@ -9,12 +9,24 @@
 #   前端:  pnpm dev（vite dev server，HMR热更新）
 #
 # 用法:
-#   cc-test-env.sh init-db <kimi_tag>  创建独立MySQL schema + Redis DB（run-cc.sh预调用）
-#   cc-test-env.sh start  <kimi_tag>   启动后端+前端服务（非阻塞，立即返回）
-#   cc-test-env.sh wait   <kimi_tag>   等待后端健康检查通过（默认300s，WAIT_TIMEOUT可调）
-#   cc-test-env.sh stop   <kimi_tag>   停止服务 + 删除数据库
-#   cc-test-env.sh status <kimi_tag>   检查环境状态
-#   cc-test-env.sh port   <kimi_tag>   输出端口分配
+#   cc-test-env.sh init-db <kimi_tag>           创建独立MySQL schema + Redis DB（run-cc.sh预调用）
+#   cc-test-env.sh start          <kimi_tag>    启动后端+前端（非阻塞）
+#   cc-test-env.sh start-backend  <kimi_tag>    只启动后端（后端代码改动场景）
+#   cc-test-env.sh start-frontend <kimi_tag>    只启动前端（前端代码改动场景）
+#   cc-test-env.sh wait           <kimi_tag>    等待后端健康检查通过（默认300s，WAIT_TIMEOUT可调）
+#   cc-test-env.sh stop           <kimi_tag>    停止服务 + 删除数据库
+#   cc-test-env.sh stop-backend   <kimi_tag>    只停后端进程（不删库）
+#   cc-test-env.sh stop-frontend  <kimi_tag>    只停前端进程（不删库）
+#   cc-test-env.sh restart-backend  <kimi_tag>  只重启后端（后端改代码高频场景，不删库）
+#   cc-test-env.sh restart-frontend <kimi_tag>  只重启前端（前端改代码高频场景，不删库）
+#   cc-test-env.sh status <kimi_tag>            检查环境状态
+#   cc-test-env.sh port   <kimi_tag>            输出端口分配
+#
+# 💡 调优指南：
+#   - 只改了后端代码 → restart-backend（保前端 HMR，省 Maven 重新解析）
+#   - 只改了前端代码 → 通常无需重启（vite HMR 自动热更新）；彻底重启用 restart-frontend
+#   - 改了 Flyway V*.sql → 必须走 restart（删库 + init-db + start），或手动 init-db + restart-backend
+#   - 初次启动或换分支后 → start（一把拉起）
 
 HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -316,21 +328,13 @@ start_frontend() {
 }
 
 # ============================================================
-#  stop: 停止服务 + 删除数据库
+#  stop_backend / stop_frontend: 只停进程，不碰数据库（供 restart-* 复用）
 # ============================================================
-cmd_stop() {
-  local tag="$1"
-  get_dirs "$tag"
-  get_ports "$tag" || exit 1
-
-  echo "=== 停止 ${tag} ==="
-
-  # 停后端（setsid启动的进程需要杀整个进程组）
+stop_backend() {
   if [ -f "$PID_FILE" ]; then
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
       echo "  停止后端 (PID=$pid)..."
-      # 先尝试优雅关闭进程组
       kill -- -"$pid" 2>/dev/null || kill "$pid" 2>/dev/null
       for i in $(seq 1 10); do
         kill -0 "$pid" 2>/dev/null || break
@@ -340,11 +344,11 @@ cmd_stop() {
     fi
     rm -f "$PID_FILE"
   fi
-  # 兜底端口清理
   local be_left=$(lsof -ti ":${BACKEND_PORT}" 2>/dev/null || true)
   [ -n "$be_left" ] && kill -9 "$be_left" 2>/dev/null || true
+}
 
-  # 停前端（setsid启动的进程需要杀整个进程组）
+stop_frontend() {
   if [ -f "$FRONT_PID_FILE" ]; then
     local front_pid=$(cat "$FRONT_PID_FILE")
     if kill -0 "$front_pid" 2>/dev/null; then
@@ -357,6 +361,80 @@ cmd_stop() {
   fi
   local fe_left=$(lsof -ti ":${FRONTEND_PORT}" 2>/dev/null || true)
   [ -n "$fe_left" ] && kill -9 "$fe_left" 2>/dev/null || true
+}
+
+cmd_start_backend() {
+  local tag="$1"
+  get_dirs "$tag"; get_ports "$tag" || exit 1
+  [ ! -d "$KIMI_DIR" ] && { echo "ERROR: kimi目录不存在: $KIMI_DIR"; exit 1; }
+  mkdir -p "$LOG_DIR"
+  start_backend "$tag"
+  echo ""
+  echo "✅ ${tag} 后端已启动 → http://localhost:${BACKEND_PORT} (日志: $LOG_DIR/backend.log)"
+  echo "💡 '$0 wait $tag' 等待健康检查"
+}
+
+cmd_start_frontend() {
+  local tag="$1"
+  get_dirs "$tag"; get_ports "$tag" || exit 1
+  [ ! -d "$KIMI_DIR" ] && { echo "ERROR: kimi目录不存在: $KIMI_DIR"; exit 1; }
+  mkdir -p "$LOG_DIR"
+  start_frontend "$tag"
+  echo ""
+  echo "✅ ${tag} 前端已启动 → http://localhost:${FRONTEND_PORT} (日志: $LOG_DIR/frontend.log)"
+}
+
+cmd_stop_backend() {
+  local tag="$1"
+  get_dirs "$tag"; get_ports "$tag" || exit 1
+  echo "=== 停止 ${tag} 后端 ==="
+  stop_backend
+  echo "✅ 后端已停止（数据库保留）"
+}
+
+cmd_stop_frontend() {
+  local tag="$1"
+  get_dirs "$tag"; get_ports "$tag" || exit 1
+  echo "=== 停止 ${tag} 前端 ==="
+  stop_frontend
+  echo "✅ 前端已停止"
+}
+
+cmd_restart_backend() {
+  local tag="$1"
+  get_dirs "$tag"; get_ports "$tag" || exit 1
+  echo "=== 重启 ${tag} 后端（保留前端 + 数据库）==="
+  stop_backend
+  sleep 1
+  mkdir -p "$LOG_DIR"
+  start_backend "$tag"
+  echo "✅ 后端重启进程已拉起（编译+启动约 2-3 分钟）"
+  echo "💡 '$0 wait $tag' 等待健康检查"
+}
+
+cmd_restart_frontend() {
+  local tag="$1"
+  get_dirs "$tag"; get_ports "$tag" || exit 1
+  echo "=== 重启 ${tag} 前端（保留后端 + 数据库）==="
+  stop_frontend
+  sleep 1
+  mkdir -p "$LOG_DIR"
+  start_frontend "$tag"
+  echo "✅ 前端已重启 → http://localhost:${FRONTEND_PORT}"
+}
+
+# ============================================================
+#  stop: 停止服务 + 删除数据库
+# ============================================================
+cmd_stop() {
+  local tag="$1"
+  get_dirs "$tag"
+  get_ports "$tag" || exit 1
+
+  echo "=== 停止 ${tag} ==="
+
+  stop_backend
+  stop_frontend
 
   # 删除MySQL schema
   echo "  MySQL: DROP ${KIMI_DB}"
@@ -420,20 +498,29 @@ ACTION="${1:-status}"
 KIMI_TAG="${2:-}"
 
 if [ -z "$KIMI_TAG" ]; then
-  echo "用法: $0 <init-db|start|stop|restart|status|port> <kimi_tag>"
-  echo "  例: $0 init-db kimi1    # run-cc.sh预调用"
-  echo "  例: $0 start kimi1      # 编程CC调用"
-  echo "  例: $0 stop kimi1       # 停止+清理数据库"
+  echo "用法: $0 <action> <kimi_tag>"
+  echo "  action:"
+  echo "    init-db | start | stop | restart | status | port | wait"
+  echo "    start-backend  | start-frontend"
+  echo "    stop-backend   | stop-frontend"
+  echo "    restart-backend  (后端改代码高频，保前端+DB)"
+  echo "    restart-frontend (前端彻底重启，保后端+DB)"
   exit 1
 fi
 
 case "$ACTION" in
-  init-db)  cmd_init_db "$KIMI_TAG" ;;
-  start)    cmd_start "$KIMI_TAG" ;;
-  wait)     cmd_wait "$KIMI_TAG" ;;
-  stop)     cmd_stop "$KIMI_TAG" ;;
-  restart)  cmd_stop "$KIMI_TAG"; sleep 2; cmd_init_db "$KIMI_TAG"; cmd_start "$KIMI_TAG" ;;
-  status)   cmd_status "$KIMI_TAG" ;;
-  port)     cmd_port "$KIMI_TAG" ;;
-  *)        echo "未知操作: $ACTION"; exit 1 ;;
+  init-db)           cmd_init_db "$KIMI_TAG" ;;
+  start)             cmd_start "$KIMI_TAG" ;;
+  start-backend)     cmd_start_backend "$KIMI_TAG" ;;
+  start-frontend)    cmd_start_frontend "$KIMI_TAG" ;;
+  wait)              cmd_wait "$KIMI_TAG" ;;
+  stop)              cmd_stop "$KIMI_TAG" ;;
+  stop-backend)      cmd_stop_backend "$KIMI_TAG" ;;
+  stop-frontend)     cmd_stop_frontend "$KIMI_TAG" ;;
+  restart)           cmd_stop "$KIMI_TAG"; sleep 2; cmd_init_db "$KIMI_TAG"; cmd_start "$KIMI_TAG" ;;
+  restart-backend)   cmd_restart_backend "$KIMI_TAG" ;;
+  restart-frontend)  cmd_restart_frontend "$KIMI_TAG" ;;
+  status)            cmd_status "$KIMI_TAG" ;;
+  port)              cmd_port "$KIMI_TAG" ;;
+  *)                 echo "未知操作: $ACTION"; exit 1 ;;
 esac

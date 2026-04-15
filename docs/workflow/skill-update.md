@@ -18,6 +18,23 @@
 
 ---
 
+### 2026-04-15 11:43 kimi4 cp 改动到主项目 wande-play + 改共享 access.ts（红线 #3 污染 + scope 越界）
+
+- **症状**：kimi4 #3532 前端 console 报 `未找到对应组件: /views/business/crm/inquiry/index.vue`（多个组件都报），错误地把 `access.ts` 默认分支改为 `${menu.component}.vue` 后缀，并执行 `cp .../kimi4/... /home/ubuntu/projects/wande-play/frontend/apps/web-antd/src/router/access.ts` 直接污染主项目
+- **频次**：kimi4 #3532（第 1 次 — 主项目污染）；scope 越界改共享路由（第 1 次）
+- **根因**：
+  - 真正问题：kimi4 前端 Vite 构建缓存污染（`.vite`/`dist`）导致 `import.meta.glob` 匹配失败；CC 看到多个组件 404 → 误判为全局路由代码 bug
+  - 越过 scope：询盘工作台 Issue 却改共享 `access.ts` 核心路由
+  - 主项目写入：试图 `cp` 将修改推到主项目以"让前端生效"（可能误以为主项目才是前端 serve 源）
+- **已处置**：`git restore /data/home/ubuntu/projects/wande-play/...access.ts` 回滚主项目；tmux 指令 kimi4 回滚 access.ts + 清 .vite/dist 缓存 + 重启 cc-test-env；明确禁止今后任何写操作指向 `/home/ubuntu/projects/wande-play/`
+- **建议改进**（主项目污染属 P0 级，但首次）：
+  1. 【共用 CLAUDE.md 红线 #3】加粗补充"禁止任何 cp/mv/write/git 操作指向 `/home/ubuntu/projects/wande-play/` 或 `/data/home/ubuntu/projects/wande-play/`（不带 kimi<N> 后缀）"
+  2. 【run-cc.sh 启动消息】增加"你的改动**只在** `wande-play-kimi<N>/` 目录，主项目**只读**；前端通过 kimi<N> 端口 810N serve 你自己的代码"
+  3. 【frontend-coding skill】加"页面 404/组件找不到 → 先清 `.vite` 缓存重启再排查，勿改 access.ts/router 框架"
+- **状态**：观察中（首次）；主项目污染若第 2 次立即实施 #1 #2 红线强化
+
+---
+
 ### 2026-04-15 11:40 smoke spec login() 用 nth(0/1).fill + 点击"登录"按钮 → ant-modal 拦截
 
 - **症状**：kimi3 #3537 前端 smoke 3/3 红，登录阶段 `button.click()` 被 `ant-modal-confirm-centered subtree intercepts pointer events` 拦截；API 注入 token 也失败

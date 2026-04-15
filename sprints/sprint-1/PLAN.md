@@ -241,11 +241,13 @@ Week 4 (5/03-5/09):
 > **✅ 2026-04-15 07:51 kimi4 重派**：kimi4 接 **#3532 CRM-05 询盘工作台**（5状态Tab/报价/转商机流程，fullstack P1 high），blocker #3527 CRM-DB CLOSED。池恢复 **5/5** 满。
 > **🎉 2026-04-15 09:00 #3535 PR#3691 merged**：kimi3 CRM-08 回款跟踪（周报+逾期+警告）4h46m 交付，含偏离 scope 4h+ Churn（菜单基线）强干预 + mysql 裸 root 登记 + 429 TPP K2.6 耗尽 fallback。CI 全绿。
 > **✅ 2026-04-15 09:01 kimi3 重派**：kimi3 接 **#3537 CRM-10 我的提成**（个人KPI+月度明细只读，fullstack P1 medium），blocker #3527 CLOSED。池恢复 **5/5** 满。
+> **🎉 2026-04-15 09:10 #3536 PR#3692 merged**：kimi5 CRM-09 经销商管理 1h49m 交付（26 files, 2390 insertions），CI 全绿含 CodeRabbit。
+> **✅ 2026-04-15 09:11 kimi5 重派**：kimi5 接 **#3580 产品门户 1/10 数据库表创建**（backend P1 medium，Sprint-2 标签但无 blocker，解锁下游 #3584/#3585/#3588）。CRM 主线 Todo 已派完（#3531/#3532/#3537 in progress），product-portal 系列 blocker #3580 先行。池恢复 **5/5** 满。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
-| kimi5 | **#3536** | P1 | fullstack | **[运行中]** Tier-4 CRM-09 经销商管理 合作级别+返点结算+销售目标（07:21 启动，#3530 PR#3689 merged 07:20 后派发） | `docs/design/crm-商务中心/详细设计.md` | high |
+| kimi5 | **#3580** | P1 | backend | **[运行中]** 产品门户 1/10 数据库表创建（product_portal_product/document/part）Sprint-2 但无 blocker，09:11 启动，#3536 PR#3692 merged 09:10 后派发，解锁下游 #3584/#3585/#3588 | `docs/design/product-portal/详细设计.md` | medium |
 | kimi1 | **#3531** | P1 | fullstack | **[运行中]** Tier-4 CRM-04 商机详情页（左摘要+右10Tab，阶段自动推进）07:10 启动，blocker #3527/#3529 均 CLOSED | `docs/design/crm-商务中心/04-opportunity-detail.html` | high |
 | kimi2 | **#3683** | P1 | frontend | **[运行中]** #3550 Tab2/Tab4 统计图表拆分追补（07:04 启动，#3533 PR#3686 merged 05:48 后派发） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | kimi3 | **#3537** | P1 | fullstack | **[运行中]** Tier-4 CRM-10 我的提成 个人KPI+月度明细（只读，09:01 启动，#3535 PR#3691 merged 09:00 后派发） | `docs/design/crm-商务中心/详细设计.md §13` | medium |

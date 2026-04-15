@@ -590,3 +590,21 @@ BASE_URL=http://localhost:810N npx playwright test tests/front/smoke/ --project=
 **建议改进**：当 frontend-coding skill 更新时，T_screenshot 步骤增加红线：禁止用 `node -e + require('playwright')`，必须走 `npx playwright test --screenshot=on` 或 `/screenshot` skill。
 
 **状态**：观察中（2次 → 若再出现第3次立改 skill）
+
+---
+## 2026-04-16 02:16 — 前端 Issue CC 自行规划后端实现（累计第3次）
+
+**问题**：kimi1 接到 #3719（title 明确含「前端」）后，开工报告规划「API契约+Flyway+Entity」等后端工作，与 kimi4/#3716 正在进行的后端形成重叠。
+
+**频次**：第 **3** 次同类越界：
+1. #3718 kimi5 规划 8-Tab 框架（#3709的工作）
+2. #3710 kimi2 规划新增后端 API
+3. #3719 kimi1 规划 Flyway+Entity（#3716的工作）
+
+**根因**：CC 看到 Issue 提及 API 契约/数据库设计文档就自行扩展范围，未识别 title「前端」边界。
+
+**已处置**：tmux 注入范围纠正指令，强调「title含前端=纯前端，mock数据先行」。
+
+**⚠️ 下一次（第4次）立即改 frontend-coding skill**：在 SKILL.md 增加红线：**Issue title 含「前端」时，禁止创建 Flyway 脚本/Entity/Service/Controller；所有 API 使用 mock 数据；PR body 注明「mock，待后端 #XXXX 替换」**。
+
+**状态**：观察中（达4次立改 skill）

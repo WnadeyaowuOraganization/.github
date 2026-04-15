@@ -695,3 +695,23 @@ BASE_URL=http://localhost:810N npx playwright test tests/front/smoke/ --project=
 
 **后续行动**：若再出现第4次，考虑在 SKILL.md 增加"最终提交前强制构建通过验证（CI 必须绿才能 PR）"的门禁说明。
 
+
+---
+## 2026-04-16 03:51 — Playwright 登录被 ant-modal 遮挡（首次记录）
+
+**问题**：kimi1/#3723 Playwright 截图时 `button[type="submit"]` 或 `button:has-text("登录")` 点击超时，报 `ant-modal-wrap ... intercepts pointer events`。
+
+**根因**：登录页面加载后会弹出一个 `ant-modal-confirm` 升级提示弹窗（按钮文字为"X秒后关闭" 或"我知道了，不再弹出"），该弹窗遮挡所有底层元素点击。
+
+**解法**：
+```javascript
+// 在点击登录按钮前，先关闭 modal
+const modalBtns = await page.locator('.ant-modal-confirm .ant-btn').all();
+for (const btn of modalBtns) { await btn.click({ force: true }); }
+// 然后用 force:true 点登录
+await page.locator('button[aria-label="login"]').click({ force: true });
+```
+或：`await page.keyboard.press('Escape')` 先尝试关闭。
+
+**频次**：首次记录，观察后续是否复现。若 ≥4 次改 webapp-testing SKILL.md。
+

@@ -337,5 +337,5 @@ Week 4 (5/03-5/09):
 | ~~kimi4~~ | ~~#3720~~ | ~~P0~~ | ~~backend~~ | ~~执行管理v2.0 [15/22] BOM树API（BOM结构+工序路线，高复杂度）~~ PR#3750✅merged 2026-04-16 04:14 | ~~Done~~ |
 | ~~kimi4~~ | ~~#3725~~ | P0 | backend | ~~执行管理v2.0 [20/22] 验收管理API（5级验收+检查项）~~ PR#3762✅merged | ~~Done~~ |
 | ~~kimi4~~ | ~~#3727~~ | P2 | frontend | ~~执行管理v2.0 [22/22] Tab8 售后质保前端~~ PR#3764✅merged | ~~Done~~ |
-| kimi4 | #1531 | P1 | backend | [矿场增强] 可赢性评分模型(Win Probability) — 4维度综合赢率计算 | PR#3767⏳ 等待CI merge |
+| ~~kimi4~~ | ~~#1531~~ | P1 | backend | ~~[矿场增强] 可赢性评分模型(Win Probability) — 4维度综合赢率计算~~ PR#3767✅merged 23:19 | ~~Done~~ |
 

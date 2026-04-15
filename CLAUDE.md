@@ -102,18 +102,22 @@ done
 | 2-3 次 | 登记为"频繁"、观察中 |
 | **≥4 次** | **立即**更新对应 skill/红线/模板 + 通知所有在运行 CC（tmux send-keys 推送新规则），无需等用户批准 |
 
+**更新已有 skill**：
+
+直接修改本仓库（`.github`）下的 `docs/agent-docs/skills/<skill>/SKILL.md` 并 push main。各 kimi 目录的 `.claude/skills/` 是软链，自动生效，**不需要**改 wande-play 或 kimi 目录，**不触发**人工批准。
+
+```bash
+vi docs/agent-docs/skills/frontend-coding/SKILL.md
+git add docs/agent-docs/skills/frontend-coding/SKILL.md
+git commit -m "feat(skill/<name>): ..."
+git push origin main
+# 然后 tmux send-keys 通知每个活跃 CC 新规则要点（CC 不会自动 reload skill，需文字提醒）
+```
+
 **新增 skill 灰度发布规则**：
 
-若需新建 skill（而非改已有 skill），必须：
-1. 先只在**一个** kimi 目录启用该 skill（软链或单目录 cp）
+若需**新建** skill（新目录 `docs/agent-docs/skills/<new-skill>/`），必须：
+1. 新 skill 目录 push 后，run-cc.sh 会自动把所有 skills 软链给新派 CC，**但只指定一个** kimi 目录去验证它（派 Issue 前让其他 kimi 避开用新 skill 的任务）
 2. 该 kimi 至少跑完 **5 个 Issue** 验证 skill 无误
-3. 验证通过后才能全面开放（软链到 wande-play 基础目录，所有 kimi 自动同步）
-4. 验证期间若 skill 引起卡点或误判，立即回滚单 kimi 的软链，不污染全池
-
-**同步到在运行 CC 的方式**：
-```bash
-for dir in ~/projects/wande-play-kimi{1..20}; do
-  [ -d "$dir/.git" ] && (cd "$dir" && git pull origin dev)
-done
-# 然后 tmux send-keys 到每个活跃 CC 通知新规则/新 skill 路径
-```
+3. 验证通过后才能在经理派发里普遍引用该 skill
+4. 验证期间若 skill 引起卡点或误判，回滚 skill 目录即可（软链自动失效）

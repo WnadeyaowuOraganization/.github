@@ -361,6 +361,7 @@ Week 4 (5/03-5/09):
 | kimi1 | #3706 | P0 | backend | 执行管理v2.0 [1/22] 执行项目实体+CRUD+列表API+统计API | 00:27 启动，blocker #3705 CLOSED |
 | kimi5 | #3707 | P0 | backend | 执行管理v2.0 [2/22] 阶段配置+阶段进度API（三种业务模式：直销12/经销8/国贸10阶段） | 00:27 启动 |
 | kimi2 | #3708 | P0 | frontend | 执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行 | 00:27 启动 |
+| kimi3 | #3585 | P1 | frontend | 产品门户 6/10 备件目录页+爆炸图联动（PartCatalog.vue，依赖 ExplodeViewer） | 00:58 启动，blocker #3584 PR#3733 已 merged |
 
 ## 指派建议（最近20个）
 

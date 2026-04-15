@@ -323,12 +323,14 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#3717~~ | ~~P0~~ | ~~frontend~~ | ~~执行管理v2.0 [12/22] Tab3合同与交付（合同状态+交付节点+发货跟踪）~~ PR#3747✅merged 2026-04-16 03:18 | ~~Done~~ |
 | ~~kimi2~~ | ~~#3721~~ | ~~P0~~ | ~~backend~~ | ~~执行管理v2.0 [16/22] 工艺路线+设备进度矩阵API~~ PR#3754✅merged 2026-04-16 04:41 | ~~Done~~ |
 | ~~kimi2~~ | ~~#3133~~ | P0 | backend | ~~[审批引擎] 审批节点回退增强（回退到指定节点+直达模式）~~ PR#3756✅merged | ~~Done~~ |
-| kimi2 | #2417 | P1 | pipeline | [经销商发现-2/4] 竞品官网经销商网络采集脚本 | PR#3760⏳ 等待CI merge |
+| ~~kimi2~~ | ~~#2417~~ | P1 | pipeline | ~~[经销商发现-2/4] 竞品官网经销商网络采集脚本~~ PR#3760✅merged | ~~Done~~ |
+| kimi2 | #1736 | P1 | frontend | 执行管理 验收列表+阶段配置+发起验收页面（配对#3725，mock先行） | 06:22 启动 |
 | ~~kimi3~~ | ~~#3713~~ | P0 | backend | ~~执行管理v2.0 [8/22] 合同信息API（关联crm_contract）~~ PR#3745✅merged 2026-04-16 02:54 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3712~~ | ~~P0~~ | ~~fullstack~~ | ~~执行管理v2.0 [7/22] 阶段推进+审批引擎D66对接~~ PR#3748✅merged 2026-04-16 04:08 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3722~~ | P1 | backend | ~~执行管理v2.0 [17/22] 变更管理API（记录+影响分析+审批）~~ PR#3757✅merged | ~~Done~~ |
-| kimi3 | #2492 | P1 | pipeline | [D3参数化] 欧美竞品产品参数采集(KOMPAN/HAGS/Playcraft) | PR#3761⏳ 等待CI merge |
+| ~~kimi3~~ | ~~#2492~~ | P1 | pipeline | ~~[D3参数化] 欧美竞品产品参数采集(KOMPAN/HAGS/Playcraft)~~ PR#3761✅merged | ~~Done~~ |
+| kimi3 | #2700 | P1 | pipeline | [商战情报中台] 早期项目信号检测 | 06:25 启动 |
 | ~~kimi4~~ | ~~#3716~~ | P0 | backend | ~~执行管理v2.0 [11/22] 文档中心API~~ PR#3746✅merged 2026-04-16 03:07 | ~~Done~~ |
 | ~~kimi4~~ | ~~#3720~~ | ~~P0~~ | ~~backend~~ | ~~执行管理v2.0 [15/22] BOM树API（BOM结构+工序路线，高复杂度）~~ PR#3750✅merged 2026-04-16 04:14 | ~~Done~~ |
-| kimi4 | #3725 | P0 | backend | 执行管理v2.0 [20/22] 验收管理API（5级验收+检查项） | JUnit✅ → Playwright API spec编写中 |
+| kimi4 | #3725 | P0 | backend | 执行管理v2.0 [20/22] 验收管理API（5级验收+检查项） | JUnit✅ Playwright 5/7✅ → PR提交中 |
 

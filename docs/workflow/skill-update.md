@@ -762,3 +762,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **止血**：直接修 dev 分支（plain scoped CSS + :deep() 替换嵌套选择器）
 - **频次**：第1次
 - **待观察**：若再出现，更新 frontend-coding SKILL.md 明确禁止 lang="less"
+
+## 2026-04-16 06:20 — M2 jar 未更新导致 Playwright 404（#3725，第2次）
+
+- **现象**：Controller 类已注册（/ping=401），但新增方法全返回 404；Playwright spec 全失败
+- **根因**：CC 写完代码后未执行 `mvn install`，后端加载的是旧 jar
+- **频次**：第2次（kimi3/#3722 第1次 05:50，kimi4/#3725 第2次 06:20）
+- **止血**：注入 `mvn install -pl ruoyi-modules/wande-ai -am -DskipTests ... && restart-backend && wait`
+- **阈值**：再出现2次（共4次）→ 立即更新 backend-coding SKILL.md 强制要求"写完代码必先 mvn install 再测试"

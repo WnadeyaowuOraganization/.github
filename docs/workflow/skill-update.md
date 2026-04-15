@@ -18,6 +18,29 @@
 
 ---
 
+### 2026-04-15 22:30 【CI P0】纯 SQL schema PR 绕过 unit-test → auto-merge → Flyway 崩在 dev 阻塞全局
+
+- **症状**：PR #3702（kimi5 #1697, 7 张报销表 V20260415221124_1697 共 450 行 SQL）**1m18s 就 auto-merge**。实际进 dev 部署时 Flyway 抛 1064（`ADD COLUMN IF NOT EXISTS` MySQL 8.0.45 不支持）+ 多处重复列错，导致后续所有 PR 的 dev 部署链路卡住 → 累计 22 条历史迁移脚本需要排程经理手工改幂等模板 + 7 轮 commit 才清空
+- **频次**：1 次事故阻塞 **22 条迁移脚本 + N 个 PR 的 dev 可见性**
+- **根因**：
+  - `pr-test.yml` unit-test.detect 用 `git diff origin/dev..origin/<branch>` 在 wande-play-ci 工作区判断 has_backend，**纯 SQL PR 在新克隆的 CI 仓里 diff 为空**（fetch 时序/缓存/branch 不存在）→ has_backend=false → 单测跳过 → 后续 build/e2e 各 job 独立 detect，SQL 变更**全流程零 gate**
+  - 后端启动脚本 `--spring.flyway.enabled=false`，CI 从不跑 Flyway；Flyway 失败只有 dev 部署才暴露，为时已晚
+  - bot `wande-auto-code-agent` 在 check 链路无硬失败时默认 auto-merge，无 SQL 专属 gate
+- **已处置**：
+  1. `pr-test.yml` detect 改用 `gh pr view --json files`（与 build job 同源，不依赖本地 diff）
+  2. 新增 `has_sql` 输出 + "Flyway 增量迁移预校验" step：`mysqldump` 克隆 dev 库 schema 到 `wande_flyway_pr_check`，仅回放 PR 新增/改动的 `V*.sql`，任一失败 exit 1 拒绝合入
+  3. 本地 dry-run 验证：注入重复列脚本 → mysql RC=1 正确失败
+  4. 已 commit 6177f254 → push dev
+- **建议改进**（已实施 P0，本条作历史档案）：
+  1. ✅ CI gate：纯 schema PR 现在必走 Flyway 预校验
+  2. ⏳ 建议后续在 `.github/workflows/*` 为 deploy-backend 也补等价 gate（deploy 前再 sanity-check，双层防御）
+  3. ⏳ backend-coding skill 应补红线：V 脚本**必须**用 `information_schema + PREPARE/EXECUTE` 幂等模板，禁用 `ADD COLUMN IF NOT EXISTS`（MySQL 8.0.45 不支持）
+- **状态**：✅ CI 已止血 commit 6177f254；skill 红线待下轮 loop 补
+
+> **触发 blast radius 一次即改规则**：1 次事故阻塞 22 条脚本 + N PR → 不走 ≥4 次阈值，立即改 CI。
+
+---
+
 ### 2026-04-15 12:55 【前端构建 P0】同名 `xxx.ts` 影子文件覆盖 `xxx/index.ts` 目录导致 dev 部署连环失败 10 次
 
 - **症状**：2026-04-15 03:13~09:06 dev 部署 CI 连续 10 次 deploy-frontend failure，`pnpm build:antd` 报 `"listUserByDeptId" is not exported by "src/api/system/user.ts"` 等 7 个导出缺失；后端部署成功但前端源码停留在 03:12 以前版本 → 期间 9 个 CRM PR（#3679/#3682/#3684/#3686/#3687/#3689/#3690/#3691/#3692）在 `localhost:8080` 根本点不到（用户端完全"看不见"新功能），直到 10:13 #3693 紧急止血后才恢复

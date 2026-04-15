@@ -301,7 +301,7 @@ def _mark_key_cooldown(key_name, error_type, error_code=None, cooldown_until_iso
             except Exception:
                 cooldown_until = now + timedelta(hours=5)  # 解析失败默认5h
         elif error_type == ErrorType.BALANCE_EXHAUSTED:
-            cooldown_until = now + timedelta(hours=24)
+            cooldown_until = now + timedelta(hours=5)  # Kimi 每 5h 重置配额（直到周上限），非 24h
         elif error_type == ErrorType.QUOTA_EXHAUSTED:
             cooldown_until = now + timedelta(hours=5)  # 默认5h，有精确时间时会被覆盖
         elif error_type == ErrorType.UNRECOVERABLE:

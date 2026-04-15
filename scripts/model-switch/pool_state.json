@@ -1,9 +1,16 @@
 {
-  "zhipu_max_1": {
-    "cooldown_until": "2026-04-13T10:00:03+08:00",
-    "marked_at": "2026-04-07T17:41:28.072788+08:00",
-    "error_type": "quota_exhausted",
-    "error_code": "1310",
-    "raw_error": "您已达到每周/每月使用上限，您的限额将在 2026-04-13 10:00:03 重置。"
+  "kimi1": {
+    "cooldown_until": "2026-04-15T23:06:39.304982+08:00",
+    "marked_at": "2026-04-15T18:06:39.304982+08:00",
+    "error_type": "balance_exhausted",
+    "error_code": "rate_limit_error",
+    "raw_error": "You've reached your usage limit for this period. Your quota will be refreshed in the next period. Upgrade to get more: https://www.kimi.com/code/console?from=limit-upgrade"
+  },
+  "kimi2": {
+    "cooldown_until": "2026-04-16T00:31:16.337434+08:00",
+    "marked_at": "2026-04-15T19:31:16.337434+08:00",
+    "error_type": "balance_exhausted",
+    "error_code": "rate_limit_error",
+    "raw_error": "You've reached your usage limit for this period. Your quota will be refreshed in the next period. Upgrade to get more: https://www.kimi.com/code/console?from=limit-upgrade"
   }
 }

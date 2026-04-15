@@ -18,6 +18,28 @@
 
 ---
 
+### 2026-04-15 23:16 【前端命名 P1】CC 新建组件 import 自创 `createX/updateX` 不对齐仓库已有约定命名
+
+- **症状**：PR#3704 (#3701 kimi2) merge 后 dev `@vben/web-antd#build:prod` rollup 失败：`"createOpportunity" is not exported by "src/api/crm/opportunity.ts"`。实际 opportunity.ts 已有 `crmOpportunityAdd`（约定命名 `crmXxx<Action>`），kimi2 在 OpportunityForm.vue 里写了 `createOpportunity` 新名 → 找不到 export → dev 构建挂 → 阻塞后续所有 PR 部署可见性
+- **频次**：本日第 **2** 次前端命名/导出不一致阻塞 dev：
+  1. 10:13 #3693 `user.ts` 影子文件（导出缺 7 个）
+  2. 23:08 #3704 `createOpportunity` 自创名（与 `crmOpportunityAdd` 不对齐）
+- **根因**：
+  - CC 在 frontend-coding 时写新组件调用 API，**不先 grep 已有 export 是否存在同功能的约定命名**
+  - wande-play 前端约定 `crmXxx<Action>`（`crmOpportunityAdd/Update/Remove`）/ `systemXxx<Action>`，但 skill 文档无硬约束
+  - CI 构建挂在 merge 之后（auto-merge 先于 deploy），已 merge 的 PR 无法 revert 只能追加 hotfix
+- **已处置**：
+  - PR#3705 hotfix 2 行改名 push（OpportunityForm.vue `createOpportunity` → `crmOpportunityAdd`）
+  - CC锁管理 run 24462258189 fail 附带暴露：inject-cc-prompt.sh 找不到 #3701 CC 会话（auto-merge 已 kill CC），"部署失败回流 CC" 机制不起作用
+- **建议改进**（达"2 次"频繁阈值，按 blast-radius 规则立改）：
+  1. 【frontend-coding skill 红线】新增约束：**写 `import { xxx } from '#/api/<seg>/<name>'` 前必须 `grep "^export.*function" <path>` 确认存在；若无，查找相近功能已有 export 名（约定 `<module><Action>` 如 `crmOpportunityAdd`），禁止自创 `createX/updateX/deleteX` 等非约定命名**
+  2. 【pr-test.yml CI】前端 build 应**在 auto-merge 之前**跑（目前 build 是 `Dev环境CI/CD` 下子 job，在 merge 之后触发）；考虑把 `pnpm build:prod` 移到 PR E2E 环节作为 gate
+  3. 【CC 锁管理 fallback】部署失败时若找不到原 CC 会话，应通知研发经理/排程经理 tmux 而非 exit 3 静默失败
+- **状态**：🔴 待实施 #1 frontend-coding skill 红线（blast-radius 规则立改）；#2/#3 建议下轮 loop 讨论
+
+
+---
+
 ### 2026-04-15 22:30 【CI P0】纯 SQL schema PR 绕过 unit-test → auto-merge → Flyway 崩在 dev 阻塞全局
 
 - **症状**：PR #3702（kimi5 #1697, 7 张报销表 V20260415221124_1697 共 450 行 SQL）**1m18s 就 auto-merge**。实际进 dev 部署时 Flyway 抛 1064（`ADD COLUMN IF NOT EXISTS` MySQL 8.0.45 不支持）+ 多处重复列错，导致后续所有 PR 的 dev 部署链路卡住 → 累计 22 条历史迁移脚本需要排程经理手工改幂等模板 + 7 轮 commit 才清空

@@ -770,3 +770,19 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **频次**：第2次（kimi3/#3722 第1次 05:50，kimi4/#3725 第2次 06:20）
 - **止血**：注入 `mvn install -pl ruoyi-modules/wande-ai -am -DskipTests ... && restart-backend && wait`
 - **阈值**：再出现2次（共4次）→ 立即更新 backend-coding SKILL.md 强制要求"写完代码必先 mvn install 再测试"
+
+## 2026-04-16 07:05 — M2 jar 未更新导致 Playwright 404（#3726，第3次）
+
+- **现象**：kimi1/#3726 Playwright 全返回 404，CC 自行检查 M2 jar 目录
+- **累计**：kimi3/#3722（05:50）+ kimi4/#3725（06:20）+ kimi1/#3726（07:05）= **3次**
+- **止血预警**：下次（第4次）立即更新 backend-coding SKILL.md，增加强制规则：
+  "写完后端代码必须先执行 `mvn install -pl ruoyi-modules/wande-ai -am -DskipTests -Dmaven.repo.local=~/cc_scheduler/m2/kimiN/repository -q && cc-test-env.sh restart-backend kimiN` 再运行任何测试"
+
+---
+2026-04-16 07:18 — M2 jar Controller 404 **第4次，触发自动止血**
+- kimi1/#3726：mvn install -q 静默吞掉编译错误，ExecutionWarrantyController 未打入jar
+- **处置**：立即更新 backend-coding SKILL.md
+  1. 去掉 `-q` 参数（让编译错误可见）
+  2. 新增 `jar tf` 验证步骤（必须看到新Controller在jar中才能restart-backend）
+- commit: fix(skill/backend-coding): 去掉mvn -q、新增jar内容验证步骤
+- 通知：所有5个在运行CC均已收到广播

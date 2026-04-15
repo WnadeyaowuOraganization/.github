@@ -293,9 +293,20 @@ bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN         # 等后端就
 ## 构建验证（提交前必过）
 
 ```bash
-cd frontend && pnpm build       # 必须零错误零新警告
+# 1. 先 rebase，合并其他 CC 的最新改动（必须，防止 duplicate declaration）
+git fetch origin dev && git rebase origin/dev
+# 有冲突解决后继续；解不了就 git rebase --abort 然后 push，让 CI 兜底
+
+# 2. 若改动了共享文件（如 src/api/wande/execution.ts），快速检查重名符号
+grep -n "^export\|^const \|^function \|^interface \|^type " \
+  frontend/apps/web-antd/src/api/wande/execution.ts | awk -F: '{print $NF}' | sort | uniq -d
+
+# 3. 构建（必须零错误）
+cd frontend && pnpm build
 cd frontend && pnpm lint        # 可选，Lint 警告建议修
 ```
+
+> **MUST NOT**：`pnpm build` 前不 rebase 直接提交 PR —— 多 CC 并行修改 `execution.ts` 等共享文件时会产生重复声明，导致 CI build 失败（2026-04-16 #3711 stageConfig重名 + #3719 DocCategoryVO缺闭括号，同一根因两次）。
 
 TS 报错禁用 `@ts-ignore` 绕过，除非注释说清原因。
 

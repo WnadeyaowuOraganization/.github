@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>合同与交付 - 执行管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Wireframe table styles */
+    .wf-table th {
+      font-weight: 600;
+      text-align: left;
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #6b7280;
+      background: #f9fafb;
+      border-bottom: 2px solid #e5e7eb;
+      white-space: nowrap;
+    }
+    .wf-table td {
+      padding: 10px 12px;
+      font-size: 13px;
+      color: #374151;
+      border-bottom: 1px solid #f3f4f6;
+      vertical-align: middle;
+    }
+    .wf-table tr:last-child td {
+      border-bottom: none;
+    }
+    .wf-table tbody tr:hover td {
+      background: #f9fafb;
+    }
+    /* Info grid */
+    .info-label {
+      font-size: 13px;
+      color: #9ca3af;
+      min-width: 80px;
+    }
+    .info-value {
+      font-size: 13px;
+      color: #1f2937;
+      font-weight: 500;
+    }
+    /* Status badges */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 8px;
+      border-radius: 9999px;
+      font-size: 12px;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+    .badge-green { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
+    .badge-yellow { background: #fefce8; color: #854d0e; border: 1px solid #fef08a; }
+    .badge-gray { background: #f3f4f6; color: #6b7280; border: 1px solid #e5e7eb; }
+    .badge-blue { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe; }
+    /* Stacked bar */
+    .stacked-bar-segment {
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 600;
+      color: white;
+      transition: opacity 0.15s;
+    }
+    .stacked-bar-segment:first-child { border-radius: 6px 0 0 6px; }
+    .stacked-bar-segment:last-child { border-radius: 0 6px 6px 0; }
+    .stacked-bar-segment:hover { opacity: 0.85; }
+    /* Section header */
+    .section-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #111827;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-title::before {
+      content: '';
+      display: block;
+      width: 3px;
+      height: 16px;
+      background: #9ca3af;
+      border-radius: 2px;
+    }
+    /* Progress bar */
+    .progress-track {
+      height: 6px;
+      background: #e5e7eb;
+      border-radius: 9999px;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      border-radius: 9999px;
+      background: #6b7280;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6" style="margin:0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;">
+
+  <div class="max-w-[1200px] mx-auto space-y-6">
+
+    <!-- ==================== 1. 合同信息卡片 ==================== -->
+    <div class="bg-white border border-gray-300 rounded-lg">
+      <div class="px-5 py-4 border-b border-gray-200">
+        <div class="section-title">合同信息</div>
+      </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 divide-y lg:divide-y-0 lg:divide-x divide-gray-200">
+
+        <!-- 合同基本信息（左栏） -->
+        <div class="p-5">
+          <div class="text-xs text-gray-400 font-medium uppercase tracking-wider mb-3">合同基本信息</div>
+          <div class="space-y-3">
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">合同编号</span>
+              <span class="info-value font-mono text-sm">HT-2026-0089</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">合同名称</span>
+              <span class="info-value">深圳欢乐谷二期游乐设施采购合同</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">合同类型</span>
+              <span class="info-value"><span class="badge badge-gray">采购合同</span></span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">甲方</span>
+              <span class="info-value">深圳华侨城集团有限公司</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">乙方</span>
+              <span class="info-value">深圳万德游乐设备有限公司</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">签订日期</span>
+              <span class="info-value">2026-01-15</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">合同金额</span>
+              <span class="info-value text-base font-bold text-gray-900">￥2,850,000</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">付款方式</span>
+              <span class="info-value text-xs leading-relaxed">3-3-3-1（预付30% / 发货30% / 安装30% / 验收10%）</span>
+            </div>
+            <div class="flex items-start">
+              <span class="info-label w-20 shrink-0">合同状态</span>
+              <span class="info-value"><span class="badge badge-green">● 执行中</span></span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 合同金额分解（右栏） -->
+        <div class="p-5">
+          <div class="text-xs text-gray-400 font-medium uppercase tracking-wider mb-3">合同金额分解</div>
+
+          <!-- 堆叠条形图 -->
+          <div class="mb-4">
+            <div class="flex rounded-lg overflow-hidden">
+              <div class="stacked-bar-segment" style="width: 77%; background: #6b7280;">77%</div>
+              <div class="stacked-bar-segment" style="width: 14%; background: #9ca3af;">14%</div>
+              <div class="stacked-bar-segment" style="width: 5%; background: #d1d5db; color: #6b7280; font-size: 10px;">5%</div>
+              <div class="stacked-bar-segment" style="width: 4%; background: #e5e7eb; color: #9ca3af; font-size: 10px;">4%</div>
+            </div>
+          </div>
+
+          <!-- 图例 -->
+          <div class="space-y-2.5">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-sm bg-gray-500 shrink-0"></span>
+                <span class="text-sm text-gray-700">设备费用</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-gray-900">￥2,200,000</span>
+                <span class="text-xs text-gray-400 w-8 text-right">77%</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-sm bg-gray-400 shrink-0"></span>
+                <span class="text-sm text-gray-700">安装费用</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-gray-900">￥400,000</span>
+                <span class="text-xs text-gray-400 w-8 text-right">14%</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-sm bg-gray-300 shrink-0"></span>
+                <span class="text-sm text-gray-700">运输费用</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-gray-900">￥150,000</span>
+                <span class="text-xs text-gray-400 w-8 text-right">5%</span>
+              </div>
+            </div>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <span class="w-3 h-3 rounded-sm bg-gray-200 shrink-0"></span>
+                <span class="text-sm text-gray-700">其他费用</span>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold text-gray-900">￥100,000</span>
+                <span class="text-xs text-gray-400 w-8 text-right">4%</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-4 pt-3 border-t border-gray-100">
+            <div class="flex items-center justify-between">
+              <span class="text-sm text-gray-500">合同总额</span>
+              <span class="text-base font-bold text-gray-900">￥2,850,000</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 2. 付款节点管理 ==================== -->
+    <div class="bg-white border border-gray-300 rounded-lg">
+      <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div class="section-title">付款节点管理</div>
+        <div class="flex items-center gap-3">
+          <div class="flex items-center gap-2">
+            <span class="text-xs text-gray-400">到账进度</span>
+            <div class="progress-track w-24">
+              <div class="progress-fill" style="width: 30%;"></div>
+            </div>
+            <span class="text-xs font-semibold text-gray-600">30%</span>
+          </div>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="wf-table w-full">
+          <thead>
+            <tr>
+              <th>期次</th>
+              <th>付款条件</th>
+              <th class="text-right">约定金额</th>
+              <th class="text-center">约定比例</th>
+              <th>应付日期</th>
+              <th>实际到账</th>
+              <th class="text-center">状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-medium">第1期</td>
+              <td>合同签订后7天</td>
+              <td class="text-right font-mono">￥855,000</td>
+              <td class="text-center">30%</td>
+              <td>2026-01-22</td>
+              <td>2026-01-20</td>
+              <td class="text-center"><span class="badge badge-green">✅ 已到账</span></td>
+            </tr>
+            <tr>
+              <td class="font-medium">第2期</td>
+              <td>发货前</td>
+              <td class="text-right font-mono">￥855,000</td>
+              <td class="text-center">30%</td>
+              <td>2026-05-10</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-yellow">⏳ 待付款</span></td>
+            </tr>
+            <tr>
+              <td class="font-medium">第3期</td>
+              <td>安装完成后</td>
+              <td class="text-right font-mono">￥855,000</td>
+              <td class="text-center">30%</td>
+              <td>2026-06-15</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 未到期</span></td>
+            </tr>
+            <tr>
+              <td class="font-medium">第4期</td>
+              <td>验收合格后</td>
+              <td class="text-right font-mono">￥285,000</td>
+              <td class="text-center">10%</td>
+              <td>2026-06-30</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 未到期</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <!-- 汇总行 -->
+      <div class="px-5 py-3 border-t border-gray-200 bg-gray-50 rounded-b-lg flex items-center justify-between">
+        <div class="flex items-center gap-4 text-sm">
+          <span class="text-gray-500">已到账</span>
+          <span class="font-bold text-gray-900">￥855,000</span>
+          <span class="text-gray-300">/</span>
+          <span class="text-gray-500">合同总额</span>
+          <span class="font-bold text-gray-900">￥2,850,000</span>
+        </div>
+        <div class="text-sm">
+          <span class="text-gray-400">到账比例</span>
+          <span class="ml-1 font-bold text-gray-700">30%</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ==================== 3. 交付节点管理 ==================== -->
+    <div class="bg-white border border-gray-300 rounded-lg">
+      <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div class="section-title">交付节点管理</div>
+        <div class="flex items-center gap-3 text-xs text-gray-400">
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-green-400"></span> 已交付 2</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-blue-400"></span> 进行中 1</span>
+          <span class="inline-flex items-center gap-1"><span class="w-2 h-2 rounded-full bg-gray-300"></span> 待启动 2</span>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="wf-table w-full">
+          <thead>
+            <tr>
+              <th class="w-12 text-center">序号</th>
+              <th>交付物</th>
+              <th>交付内容</th>
+              <th>计划日期</th>
+              <th>实际日期</th>
+              <th class="text-center">状态</th>
+              <th>责任人</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-center text-gray-400">1</td>
+              <td class="font-medium">设计方案</td>
+              <td>总体方案 + 效果图 + 施工图</td>
+              <td>2026-02-15</td>
+              <td>2026-02-18</td>
+              <td class="text-center"><span class="badge badge-green">✅ 已交付</span></td>
+              <td>赵六</td>
+            </tr>
+            <tr>
+              <td class="text-center text-gray-400">2</td>
+              <td class="font-medium">生产样品</td>
+              <td>关键部件样品确认</td>
+              <td>2026-03-20</td>
+              <td>2026-03-22</td>
+              <td class="text-center"><span class="badge badge-green">✅ 已交付</span></td>
+              <td>李四</td>
+            </tr>
+            <tr>
+              <td class="text-center text-gray-400">3</td>
+              <td class="font-medium">设备主体</td>
+              <td>全套游乐设备</td>
+              <td>2026-05-10</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-blue">🔵 生产中</span></td>
+              <td>李四</td>
+            </tr>
+            <tr>
+              <td class="text-center text-gray-400">4</td>
+              <td class="font-medium">安装调试</td>
+              <td>现场安装 + 调试 + 培训</td>
+              <td>2026-06-10</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 待启动</span></td>
+              <td>安装队</td>
+            </tr>
+            <tr>
+              <td class="text-center text-gray-400">5</td>
+              <td class="font-medium">竣工资料</td>
+              <td>竣工图 + 检测报告 + 合格证</td>
+              <td>2026-06-15</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 待启动</span></td>
+              <td>张三</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== 4. 发货跟踪 ==================== -->
+    <div class="bg-white border border-gray-300 rounded-lg">
+      <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div class="section-title">发货跟踪</div>
+        <div class="flex items-center gap-2">
+          <button class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors">
+            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+            新增发货批次
+          </button>
+          <button class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors">
+            📦 一键生成发货单
+          </button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="wf-table w-full">
+          <thead>
+            <tr>
+              <th>批次</th>
+              <th>发货内容</th>
+              <th class="text-center">数量</th>
+              <th>发货日期</th>
+              <th>物流单号</th>
+              <th class="text-center">物流状态</th>
+              <th class="text-center">收货确认</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="font-medium">第1批</td>
+              <td>钢结构主体框架</td>
+              <td class="text-center">1套</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 待发货</span></td>
+              <td class="text-center text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="font-medium">第2批</td>
+              <td>FRP滑梯组件</td>
+              <td class="text-center">3件</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 待发货</span></td>
+              <td class="text-center text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="font-medium">第3批</td>
+              <td>电气控制系统</td>
+              <td class="text-center">1套</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 待发货</span></td>
+              <td class="text-center text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="font-medium">第4批</td>
+              <td>安装辅材 + 配件</td>
+              <td class="text-center">1批</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-gray-300">—</td>
+              <td class="text-center"><span class="badge badge-gray">⭕ 待发货</span></td>
+              <td class="text-center text-gray-300">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ==================== 5. 合同附件 ==================== -->
+    <div class="bg-white border border-gray-300 rounded-lg">
+      <div class="px-5 py-4 border-b border-gray-200 flex items-center justify-between">
+        <div class="section-title">合同附件</div>
+        <button class="inline-flex items-center gap-1.5 px-3 py-1.5 text-xs font-medium text-blue-600 bg-blue-50 border border-blue-200 rounded-md hover:bg-blue-100 transition-colors">
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          上传附件
+        </button>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="wf-table w-full">
+          <thead>
+            <tr>
+              <th>文件名</th>
+              <th>类型</th>
+              <th>上传时间</th>
+              <th>上传人</th>
+              <th class="text-center">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-red-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <span class="font-medium">采购合同-深圳欢乐谷二期.pdf</span>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">合同正本</span></td>
+              <td>2026-01-15</td>
+              <td>王五</td>
+              <td class="text-center">
+                <span class="text-blue-500 text-xs cursor-pointer hover:underline">查看</span>
+                <span class="text-gray-300 mx-1">·</span>
+                <span class="text-blue-500 text-xs cursor-pointer hover:underline">下载</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-red-400 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <span class="font-medium">合同补充协议-设计变更.pdf</span>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">补充协议</span></td>
+              <td>2026-03-20</td>
+              <td>王五</td>
+              <td class="text-center">
+                <span class="text-blue-500 text-xs cursor-pointer hover:underline">查看</span>
+                <span class="text-gray-300 mx-1">·</span>
+                <span class="text-blue-500 text-xs cursor-pointer hover:underline">下载</span>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="flex items-center gap-2">
+                  <svg class="w-4 h-4 text-green-500 shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+                  <span class="font-medium">技术协议-设备参数清单.xlsx</span>
+                </div>
+              </td>
+              <td><span class="badge badge-gray">技术协议</span></td>
+              <td>2026-01-15</td>
+              <td>赵六</td>
+              <td class="text-center">
+                <span class="text-blue-500 text-xs cursor-pointer hover:underline">查看</span>
+                <span class="text-gray-300 mx-1">·</span>
+                <span class="text-blue-500 text-xs cursor-pointer hover:underline">下载</span>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 通知父页面高度 -->
+  <script>
+    function notifyHeight() {
+      window.parent.postMessage({ type: 'setHeight', height: document.documentElement.scrollHeight }, '*');
+    }
+    // Initial + delayed notifications for font/layout settling
+    notifyHeight();
+    setTimeout(notifyHeight, 200);
+    setTimeout(notifyHeight, 600);
+    window.addEventListener('resize', notifyHeight);
+  </script>
+
+</body>
+</html>

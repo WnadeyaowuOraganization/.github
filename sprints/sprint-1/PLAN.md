@@ -234,12 +234,13 @@ Week 4 (5/03-5/09):
 > **📊 2026-04-15 06:53 池快照**：**#3549 已 CLOSED** → kimi1 会话退出。活跃 **3/5**（kimi3 #3535 / kimi4 #3534 / kimi5 #3530），kimi1+kimi2 双空闲（2 个空位）。已 notify 研发经理（id 1776236033524）：建议 kimi2 接 **#3683** 追补；kimi1 接 **#3531 CRM-04 商机详情**（P1 fullstack high）/ **#3583 P0 产品详情3D** / **#3585 备件目录** 之一。
 > **✅ 2026-04-15 07:04 派发执行**：kimi2 接 **#3683** 追补（#3550 Tab2/Tab4 统计图表拆分，P1 frontend medium）；kimi1 接 **#3583 P0 产品详情 3D**（P0 frontend high）→ 池 5/5 满。同轮次干预：kimi5 #3530 Churn 1h43m 卡在'后端 tenant_id / /system/user/list 404 是否本 scope'已决策（非本 Issue scope，登记 PLAN.md 05:45 红线预警，30min 内必 push PR）；K2.6 评估 commit 3a7e5d8 已提交；清理 kimi3-3550 残留 tmux 会话。
 > **⚠ 2026-04-15 07:08 派发纠错**：kimi1 开工后发现 **#3583 实际已随 PR#3664 于 2026-04-14 17:06 merged 交付**（与 #3640+#3582 同批），Issue CLOSED、分支与 dev 无差异。kimi1 正确触发"结论前 cc-report"规则未盲动。研发经理派发前只看 project 看板状态未查 Issue state 是根因（已登记 skill-update.md 07:08）。指令 kimi1 close 会话释放，下一轮 loop 重派稳定 Todo。当前池降为 **4/5**（kimi2/3/4/5 在线）。
+> **✅ 2026-04-15 07:10 kimi1 重派**：kimi1 接 **#3531 CRM-04 商机详情页**（左摘要+右10Tab / 阶段自动推进 / 协同催办，fullstack P1 high），blocker #3527 CRM-DB + #3529 CRM-02 客户管理均 CLOSED，无阻塞。清理 kimi1 残留 .cc-lock 后通过 run-cc.sh 启动。池恢复 **5/5** 满。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
 | kimi5 | **#3530** | P1 | fullstack | [运行中] Tier-4 CRM-03 商机管道 列表+看板双视图 / 7阶段 / 15种来源（#3636 PR#3680 merged 00:5x 后改派，01:0x 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
-| kimi1 | ~~#3583~~ | — | — | ~~07:04 派发，07:08 发现已随 PR#3664 于 2026-04-14 merged，Issue CLOSED，kimi1 close 会话释放~~ **[空闲]** | — | — |
+| kimi1 | **#3531** | P1 | fullstack | **[运行中]** Tier-4 CRM-04 商机详情页（左摘要+右10Tab，阶段自动推进）07:10 启动，blocker #3527/#3529 均 CLOSED | `docs/design/crm-商务中心/04-opportunity-detail.html` | high |
 | kimi2 | **#3683** | P1 | frontend | **[运行中]** #3550 Tab2/Tab4 统计图表拆分追补（07:04 启动，#3533 PR#3686 merged 05:48 后派发） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | kimi3 | **#3535** | P1 | fullstack | **[运行中]** Tier-4 CRM-08 回款跟踪 — 周报强制+逾期提醒+连续未填警告（04:13 启动，PR#3685 merged 04:12 后派发） | `docs/design/crm-商务中心/08-payment.html` | medium |
 | kimi4 | **#3534** | P1 | fullstack | **[运行中]** Tier-4 CRM-07 投标申请 审批流+中标录入（03:17 启动，#3551 PR#3682 merged 03:13 后派发） | `docs/design/crm-商务中心/07-bidding.html` | high |

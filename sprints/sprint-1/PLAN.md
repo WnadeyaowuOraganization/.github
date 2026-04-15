@@ -367,13 +367,14 @@ Week 4 (5/03-5/09):
 | kimi1 | ~~#3538~~ | P2 | backend | ~~CRM-CRON 回款周报逾期检测定时任务（每周五 9:00 标记未填合同 + 企微通知，CRM Master #3526 最后 1 个子 Issue，收尾 Sprint-1 CRM）~~ PR#3703✅merged 2026-04-15 14:36 | ~~Done~~ |
 | kimi2 | ~~#3701~~ | 🔥P0 | fullstack | ~~CRM 11 子页白屏修复（`src/api/crm/opportunity.ts` 补 3 export: createOpportunity/getOpportunityKanban/advanceOpportunityStage + 11 `/views/business/crm/**/index.vue` 恢复 `<Page>` 容器，/business/tender/mining 同根因）~~ PR#3704✅merged 2026-04-15 15:07 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3584~~ | P0 | frontend | ~~产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP 批量处理 Pipeline~~ PR#3733✅merged 2026-04-15 16:54 | ~~Done~~ |
-| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED，22:08 cc-report 中等复杂度 |
+| ~~kimi4~~ | ~~#3586~~ | P1 | fullstack | ~~产品门户 7/10 资料下载 S3 presigned URL 分级~~ PR#3735✅merged 2026-04-15 17:12 | ~~Done~~ |
 | kimi5 | ~~#1697~~ | P2 | backend | ~~报销费控 7 张表 schema 建表（纯 Flyway，Sprint-4 预研）~~ PR#3702✅merged 2026-04-15 22:18 CST (~8m 惊人效率) | ~~Done~~ |
 | ~~kimi5~~ | ~~#1693~~ | P2 | backend | ~~报销费控 报销单+借款 CRUD API（依赖 #1697 7 表已 land，Issue body 含 @DS 需忽略单库架构）~~ PR#3730✅merged 2026-04-15 16:05 | ~~Done~~ |
 | kimi1 | ~~#3728~~ | 🔥P0 | frontend | ~~CRM 13子页白屏回归验证 — #3701+#3705修复后复查，kimi1独立环境重现+修复+Playwright smoke~~ PR#3729✅merged 2026-04-16 00:01 | ~~Done~~ |
 | ~~kimi2~~ | ~~#2419~~ | P0 | backend | ~~pipeline DB Schema — wdpp_dealer_candidates + wdpp_intl_buyer_candidates~~ PR#3731✅merged 2026-04-16 00:14 | ~~Done~~ |
 | kimi1 | #3706 | P0 | backend | 执行管理v2.0 [1/22] 执行项目实体+CRUD+列表API+统计API | 00:27 启动，blocker #3705 CLOSED |
 | kimi5 | #3707 | P0 | backend | 执行管理v2.0 [2/22] 阶段配置+阶段进度API（三种业务模式：直销12/经销8/国贸10阶段） | 00:27 启动 |
-| kimi2 | #3708 | P0 | frontend | 执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行 | 00:27 启动 |
+| ~~kimi2~~ | ~~#3708~~ | P0 | frontend | ~~执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行~~ PR#3734✅merged 2026-04-15 17:06 | ~~Done~~ |
 | kimi3 | #3585 | P1 | frontend | 产品门户 6/10 备件目录页+爆炸图联动（PartCatalog.vue，依赖 ExplodeViewer） | 00:58 启动，blocker #3584 PR#3733 已 merged |
+| kimi2 | #3709 | P0 | frontend | 执行管理v2.0 [4/22] 详情页框架 8-Tab容器+路由 | 01:13 启动，blocker #3708 PR#3734 已 merged |
 

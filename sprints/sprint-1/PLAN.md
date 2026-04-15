@@ -379,4 +379,5 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#3708~~ | P0 | frontend | ~~执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行~~ PR#3734✅merged 2026-04-15 17:06 | ~~Done~~ |
 | kimi3 | #3585 | P1 | frontend | 产品门户 6/10 备件目录页+爆炸图联动（PartCatalog.vue，依赖 ExplodeViewer） | 00:58 启动，blocker #3584 PR#3733 已 merged |
 | kimi2 | #3709 | P0 | frontend | 执行管理v2.0 [4/22] 详情页框架 8-Tab容器+路由 | 01:13 启动，blocker #3708 PR#3734 已 merged |
+| kimi4 | #3716 | P0 | backend | 执行管理v2.0 [11/22] 文档中心API（文档上传+分类+权限） | 01:33 启动，blocker #3706 PR#3736 已 merged |
 

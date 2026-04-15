@@ -236,6 +236,16 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 | 内联 `style="width:180px"` | Tailwind 类 / `<style scoped>` |
 | 硬编码颜色（`#1890ff`） | CSS 变量 `var(--primary)` / Tailwind |
 | 相对路径 `../../../` | `#/` 别名 |
+| 新建 `src/api/<seg>.ts` 与已有 `src/api/<seg>/` 目录同名（影子文件） | 向 `<seg>/index.ts` 追加导出，或改 `<seg>/<sub>.ts` |
+| 新建 `src/views/<seg>.vue` 与已有 `src/views/<seg>/` 目录同名 | 同上，改 `<seg>/<sub>.vue` |
+
+### 🚨 影子文件红线（2026-04-15 事故）
+
+新建任何 `<name>.ts` / `<name>.vue` 前 **必须先** `ls $(dirname)/` 确认不存在同名 `<name>/` 目录。违反会触发 Vite alias 优先解析到文件而覆盖目录 index，导致原目录全部导出失效。典型症状：`"xxx" is not exported by "src/api/.../<name>.ts"`。
+
+事故案例：#3689 新建 15 行 `api/system/user.ts` 覆盖 171 行 `api/system/user/index.ts` → 阻塞 10 次 dev 部署 + 9 个 CRM PR 不可见。修复：`PR #3693` 合并导出到目录 + 删除影子文件。
+
+白名单（已知上游残留、勿动）：`src/views/system/dict/data.vue`（ele 版本占位）。
 
 ## AntDV 4.x 可直接用的组件
 

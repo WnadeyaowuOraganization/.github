@@ -225,7 +225,7 @@ Week 4 (5/03-5/09):
 > **📊 2026-04-15 02:10 池快照**：**#3548 PR#3681 merged 02:0x** → kimi2 空闲。活跃 4/5：kimi1 #3549 / kimi3 #3550 / kimi4 #3551 / kimi5 #3530。建议 kimi2 接 **#3533 CRM-06 记录中心**（activity_log 四视角+周月报入口，P1 fullstack medium，独立性好不阻塞其他 CRM）。
 > **📊 2026-04-15 03:15 池快照**：**#3551 PR#3682 merged 03:13** → kimi4 空闲。活跃 4/5：kimi1 #3549 / kimi2 #3533 / kimi3 #3550 / kimi5 #3530。建议 kimi4 接 **#3534 CRM-07 报表分析**（或 #3535 CRM-08 设置中心），P1 fullstack high，CRM Tier-4 延续。
 > **✅ 2026-04-15 03:17 派发执行**：kimi4 接 **#3534 CRM-07 投标申请** effort=high（源 docs/design/crm-商务中心/07-bidding.html）→ 活跃恢复 5/5。同轮次 auto-heal：≥4 次阈值触发 menu-contract skill 硬化（commit 687d53d）+ 5 CCs tmux 通知 + kimi1 #3549 红线拦截（跨 scope 改已 merged Flyway）。
-> **📊 2026-04-15 04:05 池快照**：**#3550 PR#3684 merged 04:02**（kimi3 3h30m 长跑后收尾）→ kimi3 空闲。活跃 4/5：kimi1 #3549 / kimi2 #3533 / kimi4 #3534 / kimi5 #3530。建议 kimi3 接 **#3535 CRM-08 设置中心**（P1 fullstack medium，CRM Tier-4 最后一块）或 #3583 P0 产品详情 3D。
+> **📊 2026-04-15 04:05 池快照**：**#3550 PR#3684 merged 04:02**（kimi3 3h30m 长跑后收尾）→ kimi3 被 bot 派去修 dev CI 红灯（#3636 kindergarten drawer 组件缺失），提 **PR#3685 hotfix** 中。待 PR#3685 merged 后再派发 #3535 或 #3583。活跃 4/5 + kimi3 收尾中。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |

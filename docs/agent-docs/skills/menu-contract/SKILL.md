@@ -7,6 +7,29 @@ description: Register frontend pages in the backend sys_menu table via Flyway UP
 
 万德前端菜单由后端 `sys_menu` 表驱动，前端通过 `/system/menu/getRouters` 动态获取。**仅创建 Controller + 页面 + 路由不够，必须在 `sys_menu` 登记，否则前端不显示任何入口。**
 
+## 🚨🚨🚨 前端 404 诊断优先级（2026-04-15 auto-heal，≥4 次阈值触发）
+
+前端路由 404 **严禁**一上来就归因于 `sys_menu.parent_id NULL`，按以下顺序排查：
+
+1. **Vite glob 缓存**：新建 `views/<模块>/` 目录后 vite 需**真重启**（`cc-test-env.sh stop kimiN && start kimiN`），`restart` 不足以刷 `import.meta.glob` 缓存
+2. **Controller URL 多 `/api` 前缀**：`@RequestMapping("/api/xxx")` → vite proxy `/api` rewrite 剥前缀 → 后端 404。去掉 `/api/` 前缀
+3. **Flyway INSERT 漏写 parent_id 字段**：INSERT 必须**完整**写 parent_id，不依赖默认值；`@parent_id` 变量查不到时必有兜底
+4. **Vite dev port 错位**：见 frontend-coding skill，必须用 cc-test-env.sh 起前端
+5. **最后**才看 sys_menu 菜单 parent_id / role 绑定
+
+**MUST NOT**：写 `UPDATE sys_menu SET parent_id=XXX WHERE menu_id=YYY` 硬编码菜单 ID 试图修 404（100% 是错的方向，且违反红线 #14）
+
+## 🚨 红线：禁修改已 merged 的 Flyway 脚本（跨 scope 污染）
+
+**MUST NOT** 修改属于其他 Issue 的 Flyway 脚本。判断：
+
+```bash
+git log --oneline backend/ruoyi-admin/src/main/resources/db/migration/V20260414XXX.sql
+# 若 commit 信息包含其他 Issue 号（非你当前 Issue）= 属于别人的 scope，绝对不碰
+```
+
+若你改了，立刻 `git checkout -- <那些文件>` 回滚。修复自己的问题只能在**你自己新建**的 V*.sql 里。
+
 ## 🚨 最高优先级规则：禁 INSERT、只 UPDATE 占位
 
 平台菜单结构已通过 8 个 Issue 统一建好，**所有页面都有对应的占位菜单**（`component` 为空或指向占位组件的记录）。
@@ -203,7 +226,10 @@ WHERE menu_name = 'Grafana监控';
 ## 反模式
 
 - ❌ INSERT 新菜单而不查占位
-- ❌ 硬编码 `menu_id` 数值
+- ❌ 硬编码 `menu_id` 数值（必用 `@max_id + N`）
+- ❌ 硬编码 `role_id=1` → 用 `SET @admin_role = (SELECT role_id FROM sys_role WHERE role_key='admin' LIMIT 1);`
+- ❌ `UPDATE sys_menu SET parent_id=XXX WHERE menu_id=YYY` 硬编码菜单 ID 修 404（100% 错方向+违反红线 #14）
+- ❌ **修改已 merged Issue 的 Flyway 脚本**（跨 scope 污染，git log 一查就暴露）
 - ❌ `component` 前缀与所在板块不一致
 - ❌ `perms` 与 Controller `@SaCheckPermission` 不一致
 - ❌ 漏 `sys_role_menu` 绑定 → 超管看不到菜单

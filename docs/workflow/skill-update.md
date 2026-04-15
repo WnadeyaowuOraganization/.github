@@ -18,6 +18,28 @@
 
 ---
 
+### 2026-04-15 03:15 🚨🚨🚨 Flyway 硬编码 menu_id/role_id + 跨 scope 改已 merged 脚本（≥4 次自动止血触发）
+
+- **症状**：CC 诊断前端 404 时归因于 sys_menu.parent_id NULL，随即写 `UPDATE sys_menu SET parent_id=XXX WHERE menu_id=YYY` 硬编码菜单 ID，或硬编码 `role_id=1` 分配权限；部分 CC 修改**已合入 main** 的其他 Issue 的 Flyway 脚本（跨 scope 污染）
+- **频次**：
+  1. kimi8 #3481（硬编码 menu_id UPDATE，拦截）
+  2. kimi8 #3481（二次尝试同模式，再拦截）
+  3. kimi1 #3637（硬编码 menu_id UPDATE）
+  4. kimi1 #3549（硬编码 menu_id=16223/16224 + role_id=1 + 改 #3633/#3483 已 merged Flyway）
+  → **≥4 次，自动止血触发**
+- **根因**：
+  1. CC 把"前端路由 404"误诊为"菜单 parent_id=NULL"，实际多为 Vite glob 缓存未刷新 / Controller URL 多 `/api` 前缀 / Flyway INSERT 漏写 parent_id 字段
+  2. skill/backend-coding 的"菜单"部分未给出「动态 @max_id + 动态 @admin_role」样板，CC 习惯硬编码
+  3. skill 未明确"已合入 main 的 Flyway 脚本绝对不可改"
+- **已处置**：本轮个案拦截 kimi1（见 tmux 指令）；**触发 ≥4 次阈值自动止血**：skill/backend-coding 增菜单 Flyway 样板 + 跨 scope 红线 + 前端 404 排查清单；push main + tmux 通知 5 个 CC
+- **建议改进**：（本轮已实施）
+  1. skill/backend-coding 新增「菜单 Flyway 标准样板」：`SET @max_id = (SELECT IFNULL(MAX(menu_id),10000) FROM sys_menu); SET @parent = (SELECT menu_id FROM sys_menu WHERE menu_name='xxx' AND menu_type='M' LIMIT 1); INSERT ... VALUES (@max_id+1, ..., @parent, ...)`
+  2. 红线：**禁止修改已 merged Issue 的 Flyway 脚本**（`git log --oneline <file>` 有其他 Issue 号 = 不碰）
+  3. 前端 404 排查清单：先看 a) Vite glob（stop+start 非 restart），b) Controller URL 是否多 `/api`，c) Flyway INSERT 是否漏写 parent_id，**最后**才看菜单 parent_id
+- **状态**：🚨 本轮自动止血，skill push main + 全员 tmux 通知
+
+---
+
 ### 2026-04-15 02:00 🚨🚨 前端 vite 不走 cc-test-env.sh → 端口污染 / 逼近 pkill -f vite 红线（≥5 次达阈值）
 
 - **症状**：前端起在 vite 默认端口 5173/5666-5671/5668/5670 等（而非 kimi 隔离的 810N），CC 继而尝试 `lsof kill 5670` / `pkill -f vite` 清理（逼近红线污染整个 kimi 池），或改 Playwright baseURL 适配错误端口、反复登录 500/Modal 遮罩

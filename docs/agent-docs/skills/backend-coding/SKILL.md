@@ -184,9 +184,15 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 
 ```bash
 # 1. 编译 wande-ai 模块（新增 Controller 后必须先 install，否则启动时用旧 jar）
+#    MUST NOT: 去掉 -q，让编译错误可见（-q 会静默吞掉 ERROR 日志）
 cd /data/home/ubuntu/projects/wande-play-kimiN/backend
 mvn install -pl ruoyi-modules/wande-ai -am -DskipTests \
-    -Dmaven.repo.local=~/cc_scheduler/m2/kimiN/repository -q
+    -Dmaven.repo.local=~/cc_scheduler/m2/kimiN/repository
+
+# 1a. MUST: 验证新 Controller 类已打入 jar（缺失 = 编译失败或路径错误）
+jar tf ~/cc_scheduler/m2/kimiN/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar \
+    | grep "YourNewController"
+# 必须有输出，否则重查编译错误，禁止直接 restart-backend
 
 # 2. 单测
 mvn test -pl ruoyi-modules/wande-ai \

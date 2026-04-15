@@ -436,3 +436,21 @@ Week 4 (5/03-5/09):
 > - 无 SAVED 或超时 CC
 > 
 > **派发约束**：max 5 并发（运营决策）。当前 3/5，可派 2 位，但无无-blocker-Todo；kimi1/2 空闲等 #3584 merged 后派 #3585/#3588
+
+### 📍 2026-04-15 23:56 当前池快照（5/5 满员）
+
+**kimi1 重派 #3728（P0 CRM回归验证），kimi2 新派 #2419（pipeline DB Schema）**。池达 5/5 上限。
+
+| 指派目录 | Issue | 优先级 | 模块 | 内容 | 进度 |
+|---------|-------|-------|------|------|------|
+| kimi1 | #3728 | P0 | frontend | CRM 全页面回归验证（#3701+#3705后）| PR #3729 已提交，门2 CI失败（task.md 5项未勾），已注入修复指令 |
+| kimi2 | #2419 | P0 | backend | pipeline DB Schema — wdpp_dealer_candidates + wdpp_intl_buyer_candidates | 00:00 启动 |
+| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView + Docker + STEP Pipeline | 38%，1h51m，正常推进 |
+| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 S3 presigned URL 分级 | 1h48m 推进中 |
+| kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD（已 In Progress 更新）| 1h29m 推进中 |
+
+> **巡检处置**：
+> - PR #3729 门2失败（task.md T6-T10未勾）→ 已注入 fix-ci-failure 指令
+> - #1693 看板状态滞后 → 已修正为 In Progress
+> - 无 Fail/E2E Fail 积压，无超时 CC
+> - **5th 槽位**：#3585/#3588 blocked-by #3584，改派独立 #2419 pipeline schema 填满池子

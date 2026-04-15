@@ -247,6 +247,19 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 
 白名单（已知上游残留、勿动）：`src/views/system/dict/data.vue`（ele 版本占位）。
 
+### 🚨 API 层函数命名对齐红线（2026-04-15 第 2 次事故）
+
+新文件 import 后端 API 时 **必须先** `grep -r "export.*${functionName}" src/api/` 确认后端约定的函数名。**禁止**自创 `createX/updateX/deleteX` 新名，必须严格按后端现有导出名对齐。
+
+同日事故案例：#3704 (CRM 商机详情) kimi2 新建前端 API import 后，漏查后端约定，自创 `createOpportunity` 而后端实际导出 `crmOpportunityAdd` → dev 前端构建挂 rollup 报错。修复：`PR #3705` 改 import 名。
+
+**本周累计 2 次命名冲突**（#3693 user.ts 文件名 + #3704 函数名），已升级为强制红线。
+
+工作流：
+1. 后端 controller 改动后，参考 `docs/design/<模块>/` 设计文档或 Issue body 中的 "API 路径" 确认约定名
+2. 前端新建 `.ts` 时，先 `grep "export.*" src/api/<模块>/` 扫已有导出
+3. 新增的导出必须与约定名**完全一致**，不得增删前缀/后缀
+
 ## AntDV 4.x 可直接用的组件
 
 `Statistic / Card / Modal.confirm / Popconfirm / Space / Tag / Tabs / message / Drawer / @ant-design/icons-vue`。

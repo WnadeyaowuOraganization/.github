@@ -259,6 +259,8 @@ Week 4 (5/03-5/09):
 >
 > **🎉 2026-04-15 12:55 PR #3697 merged**：**#3531 CRM-04 商机详情页 v1.0**（kimi1 5h42m + 两次 compact 超长跑，后端 Opportunity CRUD + 5 Tab + Vo/VO 命名统一）。kimi1 会话正常退出，池降 **3/5**（kimi2 #3683 / kimi4 #3532 / kimi5 #3587）。
 >
+> **🎉 2026-04-15 13:06 PR #3698 merged**：**#3532 CRM-05 询盘工作台**（kimi4 5h15m，5 状态 Tab + vxe-table + 报价/转商机/关闭弹窗；本地 smoke 因独立库 tenantId 默认填充问题退化为 /screenshot + CI 真跑，参照 #3537 退化方案）。CI 全绿自动 merge。kimi4 会话退出，池降 **2/5**（仅 kimi2 #3683 / kimi5 #3587）。kimi1/3/4 空闲，Todo 队列仍无可派（#3585 blocked-by #3587 kimi5 进行中），**再 ping 排程经理从 Plan 列推新 Todo**。
+>
 > **🚨 2026-04-15 12:50 排程经理修复 Flyway 撞号 dev c2918ad9**：今日 22 个 V20260415*.sql 中 4 对版本号重复（002000×3 / 003000×2 / 006000×2，006000 秒=60 非法暴露手挑数字），Flyway repair 失败 → 今日 0 条迁移落地 → 所有今日 CRM PR 后端 API 500。排程经理按 git commit 时间 rename 止血（002100/002200/003003/006100）+ DELETE 失败 flyway_schema_history。**blast radius 4 维度全中**。研发经理同步：(1) 广播 kimi2/5（kimi1 已退出/kimi4 已 rebase）`git fetch + rebase origin/dev + UPDATE flyway_schema_history 旧→新版本号`；(2) 更新 `backend-schema` skill 强制 `V{YYYYMMDDHHMMSS}_{Issue号}__{desc}.sql` 命名（Issue 号天然跨 CC 互斥，禁止手挑整数，commit push main）；(3) skill-update.md 登记为"一次即大面积阻塞不走频次阈值"第 2 个执行样本。
 >
 > **✅ 2026-04-15 10:32 kimi5 重派 #3581**：排程经理筛选 **#3581 产品门户 2/10 产品展示API**（P0 backend status:ready，blocker #3580 已 merged），6 个 Controller endpoint + AWS S3 presigned URL + L0/L1 权限过滤。kimi5 上下文连贯（刚做完产品门户 DB）。池恢复 **5/5** 满。merge 后可解锁 #3584 ExplodeView。

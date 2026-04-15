@@ -417,3 +417,21 @@ Week 4 (5/03-5/09):
 > **2026-04-14 19:55 当前活跃**：kimi8 (#3481)、kimi9 (#3482)、kimi16 (#3636) 共 3；kimi1/2 token 耗尽冷却至 2026-04-15。Flyway 链路 V185402~185405 / V190339~343 已由研发经理+排程经理联手封堵连环失败。
 > **2026-04-14 20:5x 池快照刷新**：kimi17 #3639 PR#3671 merged → 释放；池 4/5（kimi1 #3637 + kimi8 #3481 + kimi9 #3482 + kimi16 #3638）。kimi17 可空位补派。
 > **2026-04-14 21:25 池快照刷新**：kimi9 #3482 PR#3669 merged 21:04 + kimi1 #3637 PR#3672 merged 21:19 → 两会话释放。🚨 **事故**：bot 误关 #3481（PR#3672 body 裸引用触发），已 reopen + 回 In Progress；kimi8 session 已无但工作保留（feature-Issue-3481 + commit 6010d810 + 5 M 文件）。当前池 **1/5**（仅 kimi16 #3638 活跃）。补派需用户决策 kimi8 恢复方案（详见 docs/workflow/skill-update.md 2026-04-14 21:22 条目）。
+
+### 📍 2026-04-15 23:23 当前池快照（3/5 活跃，运营约束最大 5 并发）
+
+**池状态稳定**：kimi3/4/5 均活跃，可派 2 位。无 Todo 可派（#3585/#3588 blocked-by #3584）。
+
+| 指派目录 | Issue | 优先级 | 模块 | 内容 | 进度 |
+|---------|-------|-------|------|------|------|
+| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + Docker + STEP Pipeline | 34% (Forging 中，76min 运行) |
+| kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 S3 presigned URL 分级 | 38% (76min 运行) |
+| kimi5 | #1693 | P2 | backend | 报销费控 报销单+借款 CRUD | 54% (58min 运行) |
+
+> **巡检结论**：
+> - 全场无需注意（api/status 无 needs_attention=true）
+> - kimi3/4/5 均自监控中，无异常
+> - e2e-top 已接受全量回归指令（7min 静默，可能正在执行）
+> - 无 SAVED 或超时 CC
+> 
+> **派发约束**：max 5 并发（运营决策）。当前 3/5，可派 2 位，但无无-blocker-Todo；kimi1/2 空闲等 #3584 merged 后派 #3585/#3588

@@ -284,11 +284,18 @@ start_frontend() {
     rm -f "$FRONT_PID_FILE"
   fi
 
-  # 清理端口占用
-  local conflict_pid=$(lsof -ti ":${FRONTEND_PORT}" 2>/dev/null || true)
-  if [ -n "$conflict_pid" ]; then
-    kill "$conflict_pid" 2>/dev/null; sleep 1
-    kill -9 "$conflict_pid" 2>/dev/null || true
+  # 清理端口占用 — 用 fuser 能看到 root 进程（含 nginx）；lsof 仅能看自己的
+  local port_holder=$(sudo -n fuser "${FRONTEND_PORT}/tcp" 2>/dev/null | awk '{print $1}' || true)
+  if [ -n "$port_holder" ]; then
+    # 如果是 nginx 根据之前事故不应 kill，而是报错提示 rm /etc/nginx/sites-enabled/wande-kimiN
+    local holder_cmd=$(ps -p "$port_holder" -o comm= 2>/dev/null || echo unknown)
+    if [ "$holder_cmd" = "nginx" ]; then
+      echo "⚠️  端口 ${FRONTEND_PORT} 被 nginx 占用（残留的 /etc/nginx/sites-enabled/wande-kimi<N>）"
+      echo "    请执行：sudo rm /etc/nginx/sites-enabled/wande-kimi${KIMI_NUM} && sudo nginx -s reload"
+      return 1
+    fi
+    kill "$port_holder" 2>/dev/null; sleep 1
+    kill -9 "$port_holder" 2>/dev/null || true
   fi
 
   echo "  启动前端 vite dev (port=${FRONTEND_PORT}, proxy→${BACKEND_PORT})..."
@@ -296,8 +303,9 @@ start_frontend() {
 
   cd "$front_src"
   # setsid 确保进程独立于父shell
+  # 修复：直接调 vite 二进制传 --port，避免 `pnpm run dev -- --port` 双 -- 吞参数导致 vite fallback 到 5666
   VITE_PROXY_TARGET="http://127.0.0.1:${BACKEND_PORT}" \
-    setsid npx pnpm -C apps/web-antd run dev -- --port "${FRONTEND_PORT}" --host 0.0.0.0 \
+    setsid npx pnpm -C apps/web-antd exec vite --mode development --port "${FRONTEND_PORT}" --host 0.0.0.0 \
     > "$LOG_DIR/frontend.log" 2>&1 &
 
   local front_pid=$!

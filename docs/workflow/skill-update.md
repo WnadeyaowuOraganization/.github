@@ -18,6 +18,26 @@
 
 ---
 
+### 2026-04-15 12:33 【基础设施 P0】nginx wande-kimiN 站点 (04-10 旧静态) 占用 810N 端口导致 vite dev 退到 5666+ / smoke 永远 404
+
+- **症状**：kimi4 #3532 smoke 持续 404；`curl localhost:8104/` 返 2597B 空骨架 HTML（title=万德AI平台、#app 空容器），**非 vite dev 页面**；vite 实际绑 localhost:5670（默认端口递增）；`ss -tlnp | grep 8104` 显示 nginx master pid=2014551 + 32 worker 持有
+- **频次**：kimi4 #3532（第 1 次 — 但属潜在影响所有 kimi 的基础设施问题，kimi1 #3531 的 8101 同样被 nginx 占）
+- **根因**：
+  - `/etc/nginx/sites-enabled/wande-kimiN`（N=1,4,6-20）是 04-10 旧生产静态部署残留，绑 `listen 810N` + `root /apps/wande-ai-front-kimiN`（5 天前旧 index.html）
+  - `cc-test-env.sh:288` 用 `lsof -ti ":810N"` 做端口冲突检测，**普通用户看不到 root 启动的 nginx 进程** → 以为端口空闲 → vite `--port 810N` bind 失败 → vite fallback 到 5666+（自动递增）
+  - Playwright smoke BASE_URL=`localhost:810N` → 命中 nginx 静态 → 永远不会测到最新代码，一切前端 Issue 的 smoke 实际都在"测 5 天前的旧产物"
+- **已处置**：
+  - `sudo rm /etc/nginx/sites-enabled/wande-kimi4 && sudo nginx -s reload` → 8104 释放
+  - tmux 指令 kimi4 `pkill vite + cc-test-env.sh stop/start kimi4` 重启让 vite 真绑 8104
+- **建议改进**（P0 基础设施，必须立即实施）：
+  1. 【sudo rm 所有 wande-kimiN nginx 站点】`for i in 1 4 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do sudo rm -f /etc/nginx/sites-enabled/wande-kimi$i; done; sudo nginx -s reload` — 这些纯残留
+  2. 【cc-test-env.sh 强化端口检测】将 `lsof -ti` 改 `sudo ss -tlnp | grep ":${FRONTEND_PORT} "` 或 `fuser -n tcp ${FRONTEND_PORT}`，能看到 root 进程；检测到非己方进程 → 立即 `fail 1 "端口 810N 被 pid X 占用（非 vite）"`
+  3. 【frontend-e2e skill】补"smoke 前必须 `curl -s http://localhost:${FRONTEND_PORT}/ | grep -q @vite/client` 验证 vite dev 真在 810N，否则是 nginx 或其它占用，pnpm dev 失败 fallback 到其它端口导致 smoke 永远测空骨架"
+  4. 【重要回溯】之前多个 kimi 的前端 smoke"莫名通过"可能因为测的是旧静态页有 login 表单 → 需审视是否误报绿
+- **状态**：🔴 P0 待实施 — 立即做 #1 (rm nginx 站点) + #2 (cc-test-env.sh 强化)
+
+---
+
 ### 2026-04-15 11:43 kimi4 cp 改动到主项目 wande-play + 改共享 access.ts（红线 #3 污染 + scope 越界）
 
 - **症状**：kimi4 #3532 前端 console 报 `未找到对应组件: /views/business/crm/inquiry/index.vue`（多个组件都报），错误地把 `access.ts` 默认分支改为 `${menu.component}.vue` 后缀，并执行 `cp .../kimi4/... /home/ubuntu/projects/wande-play/frontend/apps/web-antd/src/router/access.ts` 直接污染主项目

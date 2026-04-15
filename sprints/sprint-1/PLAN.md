@@ -352,7 +352,7 @@ Week 4 (5/03-5/09):
 | kimi5 | ~~#3587~~ | P1 | backend | ~~产品门户 8/10 备件 API + 询价购物车（纯后端 CRUD+Flyway）~~ PR#3700✅merged 2026-04-15 22:05 CST (~9h35m，含 JUnit 18/0 + Playwright API spec + 中途 token pool thinking 兼容兜底) | ~~Done~~ |
 | kimi1 | ~~#3538~~ | P2 | backend | ~~CRM-CRON 回款周报逾期检测定时任务（每周五 9:00 标记未填合同 + 企微通知，CRM Master #3526 最后 1 个子 Issue，收尾 Sprint-1 CRM）~~ PR#3703✅merged 2026-04-15 14:36 | ~~Done~~ |
 | kimi2 | ~~#3701~~ | 🔥P0 | fullstack | ~~CRM 11 子页白屏修复（`src/api/crm/opportunity.ts` 补 3 export: createOpportunity/getOpportunityKanban/advanceOpportunityStage + 11 `/views/business/crm/**/index.vue` 恢复 `<Page>` 容器，/business/tender/mining 同根因）~~ PR#3704✅merged 2026-04-15 15:07 | ~~Done~~ |
-| kimi3 | #3584 | P0 | frontend | 产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP 批量处理 Pipeline | 22:06 启动，blocker #3580/#3581 均 CLOSED |
+| ~~kimi3~~ | ~~#3584~~ | P0 | frontend | ~~产品门户 5/10 ExplodeView 集成 + G7e Docker 部署 + STEP 批量处理 Pipeline~~ PR#3733✅merged 2026-04-15 16:54 | ~~Done~~ |
 | kimi4 | #3586 | P1 | fullstack | 产品门户 7/10 资料下载 S3 presigned URL 分级 | 22:06 启动，blocker #3580/#3581 均 CLOSED，22:08 cc-report 中等复杂度 |
 | kimi5 | ~~#1697~~ | P2 | backend | ~~报销费控 7 张表 schema 建表（纯 Flyway，Sprint-4 预研）~~ PR#3702✅merged 2026-04-15 22:18 CST (~8m 惊人效率) | ~~Done~~ |
 | ~~kimi5~~ | ~~#1693~~ | P2 | backend | ~~报销费控 报销单+借款 CRUD API（依赖 #1697 7 表已 land，Issue body 含 @DS 需忽略单库架构）~~ PR#3730✅merged 2026-04-15 16:05 | ~~Done~~ |

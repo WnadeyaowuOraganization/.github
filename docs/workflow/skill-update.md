@@ -786,3 +786,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
   2. 新增 `jar tf` 验证步骤（必须看到新Controller在jar中才能restart-backend）
 - commit: fix(skill/backend-coding): 去掉mvn -q、新增jar内容验证步骤
 - 通知：所有5个在运行CC均已收到广播
+
+---
+2026-04-16 07:53 — Token Pool Proxy InvalidEncryptedContent 大面积阻塞
+- 症状：5个CC同时在长时间运算后遭遇 `API Error: 400 InvalidEncryptedContent`，全部idle
+- 影响：5个CC全部中断，无PR产出
+- 原因：Token Pool Proxy 对加密上下文解密失败（疑似长上下文压缩后密文格式问题）
+- 处置：逐个CC发送恢复注入消息
+- 注：此为基础设施问题，非代码问题，不需更新skill；建议监控 API Error率

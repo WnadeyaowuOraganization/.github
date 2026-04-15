@@ -279,12 +279,26 @@ Week 4 (5/03-5/09):
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
-| kimi5 | **#3580** | P1 | backend | **[运行中]** 产品门户 1/10 数据库表创建（product_portal_product/document/part）Sprint-2 但无 blocker，09:11 启动，#3536 PR#3692 merged 09:10 后派发，解锁下游 #3584/#3585/#3588 | `docs/design/product-portal/详细设计.md` | medium |
-| kimi1 | **#3531** | P1 | fullstack | **[运行中]** Tier-4 CRM-04 商机详情页（左摘要+右10Tab，阶段自动推进）07:10 启动，blocker #3527/#3529 均 CLOSED | `docs/design/crm-商务中心/04-opportunity-detail.html` | high |
-| kimi2 | **#3683** | P1 | frontend | **[运行中]** #3550 Tab2/Tab4 统计图表拆分追补（07:04 启动，#3533 PR#3686 merged 05:48 后派发） | `docs/design/crm-商务中心/详细设计.md` | medium |
-| kimi3 | **#3537** | P1 | fullstack | **[运行中]** Tier-4 CRM-10 我的提成 个人KPI+月度明细（只读，09:01 启动，#3535 PR#3691 merged 09:00 后派发） | `docs/design/crm-商务中心/详细设计.md §13` | medium |
-| kimi4 | **#3532** | P1 | fullstack | **[运行中]** Tier-4 CRM-05 询盘工作台 5状态Tab+报价+转商机（07:51 启动，#3534 PR#3690 merged 07:50 后派发） | `docs/design/crm-商务中心/05-inquiry.html` | high |
-| — | #3583 #3585 #3588 | P0/P1/P2 | frontend | Tier-5: 产品详情页（3D）/备件目录/H5 适配（#3582 已随 PR#3664 合并） | `docs/design/product-portal/02-detail.html` 等 | medium |
+| ~~kimi5~~ | ~~#3580~~ | ~~P1~~ | ~~backend~~ | ~~产品门户 1/10 数据库表创建~~ PR#3694✅ | — | ~~medium~~ |
+| ~~kimi1~~ | ~~#3531~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-04 商机详情页 v1.0~~ PR#3697✅ | — | ~~high~~ |
+| ~~kimi2~~ | ~~#3683~~ | ~~P1~~ | ~~frontend~~ | ~~#3550 Tab2/Tab4 图表拆分追补~~ PR#3699✅ | — | ~~medium~~ |
+| ~~kimi3~~ | ~~#3537~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-10 我的提成~~ PR#3695✅ | — | ~~medium~~ |
+| ~~kimi4~~ | ~~#3532~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-05 询盘工作台~~ PR#3698✅ | — | ~~high~~ |
+| kimi1 | **#3706** | P0 | backend | **[运行中]** 执行管理 [1/22] 执行项目实体+CRUD+列表API+统计API，00:27启动 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| kimi5 | **#3707** | P0 | backend | **[运行中]** 执行管理 [2/22] 阶段配置API（直销12/经销8/国贸10阶段），00:27启动 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| kimi2 | **#3708** | P0 | frontend | **[运行中]** 执行管理 [3/22] 列表页 KPI卡片+筛选+表格（mock优先），00:27启动 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| kimi3 | **#3584** | P0 | frontend | **[运行中]** 产品门户 [5/10] ExplodeView集成+G7e Docker+STEP批量处理，22:06启动 | `docs/design/product-portal/02-detail.html` | high |
+| kimi4 | **#3586** | P1 | fullstack | **[运行中]** 产品门户 [7/10] 资料下载S3 presigned URL分级，22:06启动 | `docs/design/product-portal/详细设计.md` | medium |
+| ~~kimi3~~ | ~~#3585~~ | ~~P1~~ | ~~frontend~~ | ~~产品门户 [6/10] 备件目录页+爆炸图联动~~ #3584 PR#3733 merged后00:58启动 | `docs/design/product-portal/06-parts.html` | ~~medium~~ |
+| — | **#3709** | P0 | frontend | 执行管理 [4/22] 详情页框架8-Tab容器+路由 ⏳ #3708合并后派 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| — | #3715+#3718 | P0 | backend+frontend | 执行管理 [10+13/22] 回款计划API+Tab6回款前端（mock配对）⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| — | #3716+#3719 | P0 | backend+frontend | 执行管理 [11+14/22] 文档中心API+Tab7文档+360看板（mock配对）⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| — | #3713+#3714+#3717 | P0 | backend+frontend | 执行管理 [8+9+12/22] 合同API+交付节点API+Tab3合同与交付 ⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| — | #3720+#3721+#3723 | P0 | backend+frontend | 执行管理 [15+16+18/22] BOM树+工艺路线+Tab4甘特图 ⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | high |
+| — | #3710+#3711 | P0 | frontend | 执行管理 [5+6/22] Tab1概览+Tab2阶段进度 ⏳ #3709+#3706+#3707全合并后 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| — | #3712 | P0 | fullstack | 执行管理 [7/22] 阶段推进+审批引擎D66对接 ⏳ #3707+#3711合并后 | `docs/design/execution-mgmt/详细设计.md` | high |
+| — | #3722+#3724 | P0 | backend+frontend | 执行管理 [17+19/22] 变更管理API+Tab5变更 ⏳ #3706+#3712合并后 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| — | #3725+#3726+#3727 | P0 | backend+frontend | 执行管理 [20+21+22/22] 验收+质保API+Tab8售后质保 ⏳ Wave4末尾 | `docs/design/execution-mgmt/详细设计.md` | medium |
 
 ## 指派历史（完成后划线）
 
@@ -363,33 +377,3 @@ Week 4 (5/03-5/09):
 | kimi2 | #3708 | P0 | frontend | 执行管理v2.0 [3/22] 前端列表页（KPI卡片+筛选+项目表格），mock数据先行 | 00:27 启动 |
 | kimi3 | #3585 | P1 | frontend | 产品门户 6/10 备件目录页+爆炸图联动（PartCatalog.vue，依赖 ExplodeViewer） | 00:58 启动，blocker #3584 PR#3733 已 merged |
 
-## 指派建议（最近20个）
-
-> 排程经理完成执行管理v2.0全系22个Issue依赖分析，审计补入#3722/3724/3726/3727（2026-04-16）
-> 批次说明：Wave1已运行 → Wave2等#3706合并 → Wave3等框架完成 → Wave4最终
-
-| Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
-|-------|------|------|------|------|------|
-| ~~#3706~~ | ~~P0~~ | ~~backend~~ | ~~[执行管理 1/22] 执行项目实体+CRUD+列表API+统计API~~ | ✅ 已派 kimi1（00:27） | — |
-| ~~#3707~~ | ~~P0~~ | ~~backend~~ | ~~[执行管理 2/22] 阶段配置API（直销12/经销8/国贸10阶段）~~ | ✅ 已派 kimi5（00:27） | #3706 并行 |
-| ~~#3708~~ | ~~P0~~ | ~~frontend~~ | ~~[执行管理 3/22] 列表页 KPI卡片+筛选+表格（mock优先）~~ | ✅ 已派 kimi2（00:27） | #3706 mock可并行 |
-| **#3585** | **P1** | **frontend** | **产品门户 6/10 备件目录页+爆炸图联动** | ⏳ #3584合并后立即派 | #3584 |
-| **#3709** | **P0** | **frontend** | **[执行管理 4/22] 详情页框架 8-Tab容器+路由** | ⏳ #3708合并后派 | #3708 |
-| **#3715** | **P0** | **backend** | **[执行管理 10/22] 回款计划+Checklist+催收API（配前端#3718）** | ⏳ #3706合并后可派 | #3706 |
-| **#3718** | **P0** | **frontend** | **[执行管理 13/22] Tab6回款与资料+Checklist（mock配#3715）** | ⏳ 与#3715同批派 | #3715 mock可并行 |
-| **#3716** | **P0** | **backend** | **[执行管理 11/22] 文档中心API（配前端#3719）** | ⏳ #3706合并后可派 | #3706 |
-| **#3719** | **P0** | **frontend** | **[执行管理 14/22] Tab7文档中心+360看板（mock配#3716）** | ⏳ 与#3716同批派 | #3716 mock可并行 |
-| #3713 | P0 | backend | [执行管理 8/22] 合同信息API（关联crm_contract，配#3714→#3717） | ⏳ #3706合并后可派 | #3706 |
-| #3714 | P0 | backend | [执行管理 9/22] 交付节点+发货跟踪API（配#3713→#3717） | ⏳ #3706合并后可派 | #3706 |
-| #3720 | P0 | backend | [执行管理 15/22] BOM管理API树形CRUD+版本（配#3721→#3723） | ⏳ #3706合并后可派 | #3706 |
-| #3721 | P0 | backend | [执行管理 16/22] 工艺路线+设备进度矩阵API（配#3720→#3723） | ⏳ #3706合并后可派 | #3706 |
-| #3725 | P0 | backend | [执行管理 20/22] 验收管理API（5级验收+检查项，配#3726→#3727） | ⏳ #3706合并后可派 | #3706 |
-| #3710 | P0 | frontend | [执行管理 5/22] Tab1项目概览（横向流程图+基础信息+指标） | ⏳ #3709+#3706+#3707全合并后 | 三者 |
-| #3711 | P0 | frontend | [执行管理 6/22] Tab2阶段进度（垂直时间线+里程碑+推进按钮） | ⏳ #3709+#3707合并后 | #3709,#3707 |
-| #3712 | P0 | fullstack | [执行管理 7/22] 阶段推进+审批引擎D66对接 | ⏳ #3707+#3711合并后 | #3707,#3711 |
-| #3717 | P0 | frontend | [执行管理 12/22] Tab3合同与交付（mock配#3713+#3714） | ⏳ #3713+#3714合并后 | #3713,#3714 |
-| #3722 | P0 | backend | [执行管理 17/22] 变更管理API+影响分析+审批引擎（配#3724） | ⏳ #3706+#3712合并后 | #3706,#3712 |
-| #3723 | P0 | frontend | [执行管理 18/22] Tab4 BOM与计划（甘特图+BOM树+工艺） | ⏳ #3720+#3721合并后 | #3720,#3721 |
-| #3724 | P0 | frontend | [执行管理 19/22] Tab5变更管理（mock配#3722） | ⏳ #3722合并后 | #3722 |
-| #3726 | P0 | backend | [执行管理 21/22] 质保+售后工单+设备档案API（配#3727） | ⏳ #3725合并后 | #3725 |
-| #3727 | P0 | frontend | [执行管理 22/22] Tab8售后质保（mock配#3726） | ⏳ #3725+#3726合并后 | #3725,#3726 |

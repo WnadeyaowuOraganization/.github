@@ -5,6 +5,14 @@ description: Write Vue 3 + Vben Admin 5.x + Ant Design Vue 4.x + vxe-table front
 
 # 前端编码规范
 
+> **⛔ MUST NOT（Issue title/label 含 `frontend` 时）**：
+> - **禁止**创建 Flyway SQL 脚本
+> - **禁止**创建 Entity / Mapper / Service / Controller / XML 任何后端类
+> - **禁止**创建或修改 `api-contract/*.yaml`
+> - 所有后端 API 用 **mock 数据**替代，PR body 注明「mock，待后端 #XXXX 合并后替换」
+>
+> 后端配对 Issue 由另一个 CC 负责；前端 CC 不拥有后端代码的所有权。（4次违规后加入红线：#3719/3711/3717/3723 均有此倾向）
+
 Vue 3 `<script setup>` + TypeScript + Vite + Vben Admin 5.x + Ant Design Vue 4.x + vxe-table + Tailwind CSS + pnpm。
 
 ## 文件组织（每个列表页模块）

@@ -739,3 +739,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 原因：CC误以为后端Service需要Spring Boot集成测试，实际只需Mockito单元测试
 - 处置：个案注入纠正（Mockito模式示例）
 - 状态：🟡 观察中
+
+### 2026-04-16 05:50 【旧jar导致方法404】kimi3/#3722 Controller注册但方法不存在
+- 现象：/ping 返回 401（Controller已注册），但 /{id}/changes/stats 返回 404
+- 根因：session 崩溃重启后，未重新执行 mvn install，运行中 jar 是旧版
+- 频次：第1次（之前 kimi1/kimi3/kimi4 的"Controller未注册"实为同一根因的不同表现）
+- 处置：注入强制 mvn install + restart-backend 修复
+- 状态：🟡 观察中，若再出现升为高频

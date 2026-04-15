@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-15 11:40 smoke spec login() 用 nth(0/1).fill + 点击"登录"按钮 → ant-modal 拦截
+
+- **症状**：kimi3 #3537 前端 smoke 3/3 红，登录阶段 `button.click()` 被 `ant-modal-confirm-centered subtree intercepts pointer events` 拦截；API 注入 token 也失败
+- **频次**：kimi3 #3537（第 1 次）
+- **根因**：万德登录页会弹隐私/租户 modal 遮挡登录按钮；`inputs.nth(0).fill()` + `button.click()` 模板对 modal 无容错。bidding spec 用 `input[name="username"]` + `press('Enter')` 绕过。
+- **已处置**：tmux 指令 kimi3 改 login 用 Enter 键 + 入页后 dismiss modal（参考 crm-bidding-page.spec.ts:36-57）
+- **建议改进**：frontend-e2e skill 补"smoke login 模板 — 必须用 `input[name]` 选择器 + `press('Enter')` 提交、禁用 `button.click()`；BASE_URL 必须 localhost:810N；ROUTE 后先 dismiss `.ant-modal-wrap button`"；提供一份可复用 `login(page)` helper 片段
+- **状态**：观察中（第 1 次）
+
+---
+
 ### 2026-04-15 08:21 kimi3 偏离 scope 4h+ Churn 调菜单基线 + 裸用 mysql -uroot -proot
 
 - **症状**：

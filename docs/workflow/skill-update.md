@@ -55,7 +55,7 @@
   2. 【cc-test-env.sh 强化端口检测】将 `lsof -ti` 改 `sudo ss -tlnp | grep ":${FRONTEND_PORT} "` 或 `fuser -n tcp ${FRONTEND_PORT}`，能看到 root 进程；检测到非己方进程 → 立即 `fail 1 "端口 810N 被 pid X 占用（非 vite）"`
   3. 【frontend-e2e skill】补"smoke 前必须 `curl -s http://localhost:${FRONTEND_PORT}/ | grep -q @vite/client` 验证 vite dev 真在 810N，否则是 nginx 或其它占用，pnpm dev 失败 fallback 到其它端口导致 smoke 永远测空骨架"
   4. 【重要回溯】之前多个 kimi 的前端 smoke"莫名通过"可能因为测的是旧静态页有 login 表单 → 需审视是否误报绿
-- **状态**：🔴 P0 待实施 — 立即做 #1 (rm nginx 站点) + #2 (cc-test-env.sh 强化)
+- **状态**：✅ 2026-04-15 12:50 按排程经理"blast radius 新规则"**全部实施** — #1 sudo rm 所有 wande-kimiN nginx 站点 + reload；#2 cc-test-env.sh 改 fuser+pnpm exec 已 push main；#3 广播通知 kimi1/2/4/5 历史 smoke 可能假绿需 /screenshot 重截。本条作为"一次即大面积阻塞不走频次阈值"首个执行样本归档。
 
 ---
 

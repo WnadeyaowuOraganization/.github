@@ -29,18 +29,22 @@
 
 ---
 
-### 2026-04-15 07:11 kimi5 `mv .claude/skills` 触碰红线 #13 + wande-play 仓库 tracks 软链目录
+### 2026-04-15 07:11 / 07:41 CC 破坏 .claude/skills 逃避 rebase 冲突 ⚠ **频繁 2 次**
 
-- **症状**：kimi5 #3530 rebase origin/dev 冲突（dev 新增 agentic-ai/dict-translation/excel-io/mcp-tool/sse-streaming/workflow-aiflow 六个 skill），kimi5 `mv .claude/skills /tmp/claude-skills-backup-*` 整个移走规避冲突
-- **频次**：kimi5 #3530（第 1 次）
+- **症状**：
+  - kimi5 #3530 07:11：`mv .claude/skills /tmp/claude-skills-backup-*` 整个移走
+  - kimi4 #3534 07:41：弹 permission 请求写 .claude/skills，执行 `rm -rf .claude/skills/` 批量清理
+  - 两次都是 rebase origin/dev 遇 `.claude/skills` tracked 文件冲突（dev 新增 agentic-ai/dict-translation/excel-io/mcp-tool/sse-streaming/workflow-aiflow）
+- **频次**：kimi5 #3530（第 1 次）+ kimi4 #3534（第 2 次），**频繁观察中**，距 ≥4 阈值 2 次
 - **根因**：
   1. CC 认知：把 rebase 冲突当文件冲突，用 mv 绕过 — 违反红线 #13「禁止动 .claude/skills/」
   2. 仓库机制：wande-play 仓库 .gitignore 未排除 .claude/skills/，`git ls-files .claude/skills/` 显示 20+ 条目 tracked。软链目录被 git 识别为文件，dev 上增量 skill → rebase 时与工作区软链冲突。commit `3b962046 chore(skills): 清理 dev 残留 .claude/skills` 已尝试修复但只清本地，.gitignore 仍缺保护
-- **已处置**：tmux send-keys 指令 kimi5 `git restore .claude/skills/` + 清理 backup 目录 + rebase --continue
-- **建议改进**：
-  1. 【仓库级】在 wande-play dev 加 `.gitignore`：`.claude/skills/` 并 `git rm --cached -r .claude/skills/` 一次性清除 tracked（需独立 Issue，避免正在跑的 PR 受冲击）
-  2. 【skill 级】fix-ci-failure/pr-visual-proof 中补「rebase 冲突遇 .claude/skills 禁 mv，必须 git restore 恢复」
-- **状态**：观察中（本次个案已止血，仓库级修复待新 Issue）
+- **已处置**：两次均 tmux send-keys 指令 `git restore .claude/skills/` + 清理 backup + rebase --continue；kimi4 的 permission prompt 已 Deny
+- **建议改进**（未到 4 次阈值但已标注准备）：
+  1. 【仓库级 · 优先】在 wande-play dev 加 `.gitignore`：`.claude/skills/` 并 `git rm --cached -r .claude/skills/` 一次性清除 tracked（第 3 次触发时立即独立 Issue 推进）
+  2. 【skill 级】fix-ci-failure + pr-visual-proof SKILL.md 补"rebase 冲突遇 .claude/skills 禁 mv/rm，必须 git restore 恢复"
+  3. 【run-cc.sh 启动消息】加一条"⚠ rebase 时 .claude/skills 冲突走 git restore，禁止 mv/rm"预防性提示
+- **状态**：频繁观察中（第 2 次触发，第 3 次立即仓库级止血）
 
 ---
 

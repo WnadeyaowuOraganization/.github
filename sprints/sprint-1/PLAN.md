@@ -232,13 +232,14 @@ Week 4 (5/03-5/09):
 > **⚠️ 2026-04-15 05:45 红线预警**：kimi5 #3530 运行时发现 **crm_customer 表缺 tenant_id 字段**（backend-schema skill 7 列硬约束违反）+ `/api/system/user/list` 404，kimi5 判定"后端问题与前端渲染无关"暂未修。建议研发经理核实是 #3527 漏列复现还是本环境缺失，必要时开 hotfix Issue。
 > **📊 2026-04-15 06:35 池快照**：**#3549 PR#3687 merged 06:29**（kimi1 CRM-14 责任人变更日志）→ Issue #3549 仍 OPEN（CC 轮询等 close），kimi1 tmux 会话未退。⚠️ **#3526 CRM Master 被误关**（PR#3687 body 无 Closes 语法但 Issue 被关），排程经理已 **reopen + 恢复 In Progress**（Sprint-1 CRM 仍有 #3530/#3534/#3535 运行+#3683 追补）。活跃 4/5：kimi3 #3535 / kimi4 #3534 / kimi5 #3530 + kimi1 #3549（PR 已 merged 待 close）。建议 kimi2 接 **#3683**（追补），kimi1 close 后接 **#3583 P0 产品详情 3D** 或其他 CRM Tier-5。
 > **📊 2026-04-15 06:53 池快照**：**#3549 已 CLOSED** → kimi1 会话退出。活跃 **3/5**（kimi3 #3535 / kimi4 #3534 / kimi5 #3530），kimi1+kimi2 双空闲（2 个空位）。已 notify 研发经理（id 1776236033524）：建议 kimi2 接 **#3683** 追补；kimi1 接 **#3531 CRM-04 商机详情**（P1 fullstack high）/ **#3583 P0 产品详情3D** / **#3585 备件目录** 之一。
+> **✅ 2026-04-15 07:04 派发执行**：kimi2 接 **#3683** 追补（#3550 Tab2/Tab4 统计图表拆分，P1 frontend medium）；kimi1 接 **#3583 P0 产品详情 3D**（P0 frontend high）→ 池 5/5 满。同轮次干预：kimi5 #3530 Churn 1h43m 卡在'后端 tenant_id / /system/user/list 404 是否本 scope'已决策（非本 Issue scope，登记 PLAN.md 05:45 红线预警，30min 内必 push PR）；K2.6 评估 commit 3a7e5d8 已提交；清理 kimi3-3550 残留 tmux 会话。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
 | kimi5 | **#3530** | P1 | fullstack | [运行中] Tier-4 CRM-03 商机管道 列表+看板双视图 / 7阶段 / 15种来源（#3636 PR#3680 merged 00:5x 后改派，01:0x 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
-| kimi1 | #3549 | P1 | fullstack | [运行中] Tier-4 CRM-14（00:33 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
-| kimi2 | **#3683** | P1 | frontend | **[空闲-建议]** #3550 Tab2/Tab4 统计图表拆分追补（#3533 PR#3686 merged 05:48 后释放） | `docs/design/crm-商务中心/详细设计.md` | medium |
+| kimi1 | **#3583** | P0 | frontend | **[运行中]** Tier-5 产品详情页 3D（07:04 启动，#3549 CLOSED 后派发） | `docs/design/product-portal/02-detail.html` | high |
+| kimi2 | **#3683** | P1 | frontend | **[运行中]** #3550 Tab2/Tab4 统计图表拆分追补（07:04 启动，#3533 PR#3686 merged 05:48 后派发） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | kimi3 | **#3535** | P1 | fullstack | **[运行中]** Tier-4 CRM-08 回款跟踪 — 周报强制+逾期提醒+连续未填警告（04:13 启动，PR#3685 merged 04:12 后派发） | `docs/design/crm-商务中心/08-payment.html` | medium |
 | kimi4 | **#3534** | P1 | fullstack | **[运行中]** Tier-4 CRM-07 投标申请 审批流+中标录入（03:17 启动，#3551 PR#3682 merged 03:13 后派发） | `docs/design/crm-商务中心/07-bidding.html` | high |
 | — | #3583 #3585 #3588 | P0/P1/P2 | frontend | Tier-5: 产品详情页（3D）/备件目录/H5 适配（#3582 已随 PR#3664 合并） | `docs/design/product-portal/02-detail.html` 等 | medium |

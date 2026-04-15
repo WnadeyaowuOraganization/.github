@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-15 07:32 kimi4 smoke 测试用 172.31.31.227:6040 主 dev 后端 → 红线 #3 环境硬隔离
+
+- **症状**：kimi4 #3534 smoke 测试用 `API_TARGET=http://172.31.31.227:6040` 绕开本地 7104 后端隔离，通过外网 IP 访问新环境主 dev 后端
+- **频次**：kimi4 #3534（第 1 次）
+- **根因**：自己 kimi4 后端 7104 未启动，smoke 需要真实 API 登录 → CC 选择了能 work 的捷径；CLAUDE.md 红线只禁 "localhost:6040"，外网 IP 访问主 dev 未显式禁止
+- **已处置**：tmux send-keys 推 PR 时指令 pr-visual-proof 阶段必须用自己 localhost:8104 + 如后端未启动先 `cc-test-env.sh start kimi4`
+- **建议改进**：frontend-e2e/pr-visual-proof skill 补"API_TARGET/BASE_URL 必须 localhost:710N/810N，禁主机 IP 跨指向主 dev"；CLAUDE.md 红线 #3 改为"禁止访问主 dev 环境（含 localhost 和任意主机 IP 的 6040/8080/6041/8084 端口）"
+- **状态**：观察中（第 1 次）
+
+---
+
 ### 2026-04-15 07:11 kimi5 `mv .claude/skills` 触碰红线 #13 + wande-play 仓库 tracks 软链目录
 
 - **症状**：kimi5 #3530 rebase origin/dev 冲突（dev 新增 agentic-ai/dict-translation/excel-io/mcp-tool/sse-streaming/workflow-aiflow 六个 skill），kimi5 `mv .claude/skills /tmp/claude-skills-backup-*` 整个移走规避冲突

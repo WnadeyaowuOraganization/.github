@@ -274,6 +274,7 @@ Week 4 (5/03-5/09):
 | kimi4 | #3529 | P1 | fullstack | Tier-4: CRM-02 客户管理 — CRUD+三类型+详情页五Tab | 22:48 |
 | kimi2 | ~~#3519~~ | P1 | fullstack | ~~Tier-1: 项目安装主页Dashboard — 7 Widget~~ PR#3675✅merged 2026-04-14 23:01 | ~~Done~~ |
 | kimi2 | #3461 | P0 | fullstack | Tier-6: 耀总驾驶舱v1.0 — 8大区块（矿场运营+团队+项目+财务+待办+复盘+市场+趋势） | 23:13 |
+| kimi2 | ~~#3461~~ | P0 | fullstack | ~~Tier-6: 耀总驾驶舱v1.0~~ PR#3676✅merged 2026-04-15 00:18 | ~~Done~~ |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

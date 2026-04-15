@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>售后质保 — 执行管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Future / placeholder rows: semi-transparent with dashed borders */
+    .future-row td {
+      color: #9ca3af;
+      background: repeating-linear-gradient(
+        135deg,
+        transparent,
+        transparent 10px,
+        rgba(229,231,235,0.25) 10px,
+        rgba(229,231,235,0.25) 20px
+      );
+    }
+    /* Disabled button style */
+    .btn-disabled {
+      opacity: 0.45;
+      cursor: not-allowed;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6 text-gray-700 text-sm">
+
+  <!-- ============================================================
+       1. 质保状态卡片（顶部）
+       ============================================================ -->
+  <section class="mb-6">
+    <div class="grid grid-cols-3 gap-4">
+      <!-- 验收状态 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-4">
+        <div class="text-xs text-gray-400 mb-1">验收状态</div>
+        <div class="flex items-center gap-2">
+          <span class="inline-flex items-center justify-center w-6 h-6 rounded-full border-2 border-gray-300 text-gray-300 text-xs">○</span>
+          <span class="text-lg font-semibold text-gray-500">未启动</span>
+        </div>
+        <div class="text-xs text-gray-400 mt-2">当前项目还在生产阶段，验收未开始</div>
+      </div>
+      <!-- 质保期 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-4">
+        <div class="text-xs text-gray-400 mb-1">质保期</div>
+        <div class="text-2xl font-semibold text-gray-300">—</div>
+        <div class="text-xs text-gray-400 mt-2">验收通过后开始计算（通常12个月）</div>
+      </div>
+      <!-- 售后工单 -->
+      <div class="bg-white border border-gray-300 rounded-lg p-4">
+        <div class="text-xs text-gray-400 mb-1">售后工单</div>
+        <div class="text-2xl font-semibold text-gray-800">0</div>
+        <div class="text-xs text-gray-400 mt-2">本项目当前无售后工单</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       2. 验收管理（主要区域）
+       ============================================================ -->
+  <section class="mb-6">
+    <h2 class="text-base font-semibold text-gray-800 mb-3">验收管理</h2>
+
+    <!-- 2.1 验收阶段配置 -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden mb-4">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <h3 class="text-sm font-medium text-gray-700">验收阶段配置</h3>
+        <div class="flex items-center gap-2">
+          <button class="text-xs text-blue-500 hover:text-blue-700">编辑验收阶段</button>
+          <span class="text-gray-300">|</span>
+          <button class="text-xs text-blue-500 hover:text-blue-700">+ 添加阶段</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-100 border-b border-gray-300">
+              <th class="text-left px-4 py-2 font-medium text-gray-600">阶段</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">验收类型</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">参与方</th>
+              <th class="text-center px-4 py-2 font-medium text-gray-600">状态</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">计划日期</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="px-4 py-2.5 font-medium text-gray-700">出厂验收</td>
+              <td class="px-4 py-2.5">工厂检验</td>
+              <td class="px-4 py-2.5 text-gray-500">乙方质检 + 甲方代表</td>
+              <td class="px-4 py-2.5 text-center"><span class="inline-flex items-center gap-1 text-gray-400"><span class="w-2 h-2 rounded-full border border-gray-400"></span>未开始</span></td>
+              <td class="px-4 py-2.5 text-gray-500">2026-05-10</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-medium text-gray-700">到货验收</td>
+              <td class="px-4 py-2.5">现场检验</td>
+              <td class="px-4 py-2.5 text-gray-500">甲方 + 乙方 + 监理</td>
+              <td class="px-4 py-2.5 text-center"><span class="inline-flex items-center gap-1 text-gray-400"><span class="w-2 h-2 rounded-full border border-gray-400"></span>未开始</span></td>
+              <td class="px-4 py-2.5 text-gray-500">2026-05-16</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-medium text-gray-700">安装验收</td>
+              <td class="px-4 py-2.5">分区验收</td>
+              <td class="px-4 py-2.5 text-gray-500">甲方 + 工程队 + 监理</td>
+              <td class="px-4 py-2.5 text-center"><span class="inline-flex items-center gap-1 text-gray-400"><span class="w-2 h-2 rounded-full border border-gray-400"></span>未开始</span></td>
+              <td class="px-4 py-2.5 text-gray-500">2026-06-01</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-medium text-gray-700">调试验收</td>
+              <td class="px-4 py-2.5">功能测试</td>
+              <td class="px-4 py-2.5 text-gray-500">甲方 + 乙方 + 第三方检测</td>
+              <td class="px-4 py-2.5 text-center"><span class="inline-flex items-center gap-1 text-gray-400"><span class="w-2 h-2 rounded-full border border-gray-400"></span>未开始</span></td>
+              <td class="px-4 py-2.5 text-gray-500">2026-06-08</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-medium text-gray-700">竣工验收</td>
+              <td class="px-4 py-2.5">终验</td>
+              <td class="px-4 py-2.5 text-gray-500">四方联合</td>
+              <td class="px-4 py-2.5 text-center"><span class="inline-flex items-center gap-1 text-gray-400"><span class="w-2 h-2 rounded-full border border-gray-400"></span>未开始</span></td>
+              <td class="px-4 py-2.5 text-gray-500">2026-06-10</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 2.2 验收检查项模板 -->
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <h3 class="text-sm font-medium text-gray-700">验收检查项模板 <span class="text-gray-400 font-normal">— 竣工验收</span></h3>
+        <div class="flex items-center gap-2">
+          <button class="text-xs text-blue-500 hover:text-blue-700">+ 添加检查项</button>
+          <span class="text-gray-300">|</span>
+          <button class="text-xs text-blue-500 hover:text-blue-700">📋 导入模板</button>
+          <span class="text-gray-300">|</span>
+          <button class="text-xs text-blue-500 hover:text-blue-700">导出检查单</button>
+        </div>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-100 border-b border-gray-300">
+              <th class="text-center px-3 py-2 font-medium text-gray-600 w-10">#</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">检查项</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">检查标准</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">来源</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600 w-12">必检</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600 w-16">检查结果</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600 w-16">检查人</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">1</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">设备外观检查</td>
+              <td class="px-4 py-2.5 text-gray-500">无明显划痕、变形、色差</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">模板</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">2</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">焊接质量</td>
+              <td class="px-4 py-2.5 text-gray-500">符合GB/T 12467标准</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">模板</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">3</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">安全防护检查</td>
+              <td class="px-4 py-2.5 text-gray-500">护栏高度≥1100mm，间隙≤89mm</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">EN1176</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">4</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">滑梯坡度检测</td>
+              <td class="px-4 py-2.5 text-gray-500">30°-50°范围内</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">GB 19272</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">5</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">电气安全检测</td>
+              <td class="px-4 py-2.5 text-gray-500">接地电阻≤4Ω</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">GB/T 14536</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">6</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">噪音检测</td>
+              <td class="px-4 py-2.5 text-gray-500">≤70dB(A)</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-600 text-[10px]">自定义</span></td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">7</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">承载测试</td>
+              <td class="px-4 py-2.5 text-gray-500">额定载荷1.5倍静载</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">EN1176</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr>
+              <td class="text-center px-3 py-2.5 text-gray-400">8</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">运行功能测试</td>
+              <td class="px-4 py-2.5 text-gray-500">连续运行2小时无故障</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">模板</span></td>
+              <td class="text-center px-3 py-2.5 text-green-600">✅</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="px-4 py-2.5 border-t border-gray-200 text-xs text-gray-400 bg-gray-50">
+        共 8 项检查（7 项必检 + 1 项可选）
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       3. 整改工单管理
+       ============================================================ -->
+  <section class="mb-6">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base font-semibold text-gray-800">整改工单管理</h2>
+      <button class="text-xs text-blue-500 hover:text-blue-700">+ 新建整改工单</button>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <!-- Empty state hint -->
+      <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <span class="text-xs text-gray-400">当前无整改工单 — 项目尚未进入验收阶段</span>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-100 border-b border-gray-300">
+              <th class="text-left px-4 py-2 font-medium text-gray-600">工单编号</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">问题描述</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">严重程度</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">发现阶段</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">责任方</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">整改期限</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">状态</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr class="future-row opacity-40">
+              <td class="px-4 py-2.5 font-mono">RW-001</td>
+              <td class="px-4 py-2.5"><span class="italic">(示例)</span> A区护栏焊接点不平整</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-yellow-50 text-yellow-600 text-[10px]">一般</span></td>
+              <td class="px-4 py-2.5">安装验收</td>
+              <td class="px-4 py-2.5">安装队</td>
+              <td class="text-center px-3 py-2.5">3天</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+            <tr class="future-row opacity-40">
+              <td class="px-4 py-2.5 font-mono">RW-002</td>
+              <td class="px-4 py-2.5"><span class="italic">(示例)</span> B区滑道表面粗糙度超标</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-red-50 text-red-500 text-[10px]">严重</span></td>
+              <td class="px-4 py-2.5">到货验收</td>
+              <td class="px-4 py-2.5">生产部</td>
+              <td class="text-center px-3 py-2.5">5天</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="px-4 py-2 border-t border-dashed border-gray-200 text-[10px] text-gray-300 bg-gray-50 italic">
+        以上为示例数据，实际工单将在验收阶段发现问题后生成
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       4. 质保管理
+       ============================================================ -->
+  <section class="mb-6">
+    <h2 class="text-base font-semibold text-gray-800 mb-3">质保管理</h2>
+
+    <div class="grid grid-cols-2 gap-4">
+      <!-- 4.1 质保信息 -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+          <h3 class="text-sm font-medium text-gray-700">质保信息</h3>
+        </div>
+        <div class="divide-y divide-gray-100">
+          <div class="flex px-4 py-2.5">
+            <span class="text-xs text-gray-400 w-24 shrink-0">质保起始日</span>
+            <span class="text-xs text-gray-600">竣工验收通过后（预计 2026-06-10）</span>
+          </div>
+          <div class="flex px-4 py-2.5">
+            <span class="text-xs text-gray-400 w-24 shrink-0">质保期限</span>
+            <span class="text-xs text-gray-700 font-medium">12 个月</span>
+          </div>
+          <div class="flex px-4 py-2.5">
+            <span class="text-xs text-gray-400 w-24 shrink-0">质保到期日</span>
+            <span class="text-xs text-gray-600">预计 2027-06-10</span>
+          </div>
+          <div class="flex px-4 py-2.5">
+            <span class="text-xs text-gray-400 w-24 shrink-0">质保金额</span>
+            <span class="text-xs text-gray-700 font-medium">¥285,000</span>
+            <span class="text-[10px] text-gray-400 ml-1">（合同10%，终验通过后释放）</span>
+          </div>
+          <div class="flex px-4 py-2.5">
+            <span class="text-xs text-gray-400 w-24 shrink-0">质保状态</span>
+            <span class="inline-flex items-center gap-1 text-xs text-gray-400"><span class="w-2 h-2 rounded-full border border-gray-400"></span>未启动</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4.2 维保计划 -->
+      <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+        <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+          <h3 class="text-sm font-medium text-gray-700">维保计划 <span class="text-gray-400 font-normal text-xs">（模板）</span></h3>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs">
+            <thead>
+              <tr class="bg-gray-100 border-b border-gray-300">
+                <th class="text-left px-4 py-2 font-medium text-gray-600">维保项目</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600">频率</th>
+                <th class="text-left px-4 py-2 font-medium text-gray-600">内容</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600">下次维保</th>
+                <th class="text-center px-3 py-2 font-medium text-gray-600">状态</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200">
+              <tr>
+                <td class="px-4 py-2.5 font-medium text-gray-700">结构安全巡检</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">每季度</span></td>
+                <td class="px-4 py-2.5 text-gray-500">焊接点、螺栓紧固度、防腐层</td>
+                <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-flex items-center gap-1 text-gray-400 text-[10px]"><span class="w-1.5 h-1.5 rounded-full border border-gray-400"></span>待激活</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-medium text-gray-700">运动部件润滑</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">每月</span></td>
+                <td class="px-4 py-2.5 text-gray-500">轴承、转动部件、传动链条</td>
+                <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-flex items-center gap-1 text-gray-400 text-[10px]"><span class="w-1.5 h-1.5 rounded-full border border-gray-400"></span>待激活</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-medium text-gray-700">电气系统检查</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">每半年</span></td>
+                <td class="px-4 py-2.5 text-gray-500">控制柜、线路、接地检测</td>
+                <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-flex items-center gap-1 text-gray-400 text-[10px]"><span class="w-1.5 h-1.5 rounded-full border border-gray-400"></span>待激活</span></td>
+              </tr>
+              <tr>
+                <td class="px-4 py-2.5 font-medium text-gray-700">FRP表面养护</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-gray-100 text-gray-500 text-[10px]">每年</span></td>
+                <td class="px-4 py-2.5 text-gray-500">表面打蜡、裂纹修补</td>
+                <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+                <td class="text-center px-3 py-2.5"><span class="inline-flex items-center gap-1 text-gray-400 text-[10px]"><span class="w-1.5 h-1.5 rounded-full border border-gray-400"></span>待激活</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       5. 售后工单
+       ============================================================ -->
+  <section class="mb-6">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base font-semibold text-gray-800">售后工单</h2>
+      <button class="btn-disabled text-xs bg-gray-200 text-gray-400 px-3 py-1.5 rounded">+ 新建工单</button>
+    </div>
+    <div class="bg-white border border-dashed border-gray-300 rounded-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-100 border-b border-gray-300">
+              <th class="text-left px-4 py-2 font-medium text-gray-600">工单编号</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">报修内容</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">报修人</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">报修时间</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">紧急程度</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">处理人</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">状态</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">响应时间</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td colspan="8" class="text-center py-10">
+                <div class="text-gray-300 text-3xl mb-2">📋</div>
+                <div class="text-xs text-gray-400 mb-1">当前无售后工单</div>
+                <div class="text-[10px] text-gray-300">项目尚未进入质保期，质保期开始后可在此管理售后工单</div>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============================================================
+       6. 设备档案
+       ============================================================ -->
+  <section class="mb-2">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-base font-semibold text-gray-800">设备档案</h2>
+      <div class="flex items-center gap-2">
+        <button class="text-xs text-blue-500 hover:text-blue-700">编辑设备信息</button>
+        <span class="text-gray-300">|</span>
+        <button class="text-xs text-blue-500 hover:text-blue-700">导出设备清单</button>
+      </div>
+    </div>
+    <div class="bg-white border border-gray-300 rounded-lg overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="bg-gray-100 border-b border-gray-300">
+              <th class="text-left px-4 py-2 font-medium text-gray-600">设备编号</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">设备名称</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">规格型号</th>
+              <th class="text-left px-4 py-2 font-medium text-gray-600">安装位置</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">出厂日期</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">质保到期</th>
+              <th class="text-center px-3 py-2 font-medium text-gray-600">状态</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200">
+            <tr>
+              <td class="px-4 py-2.5 font-mono text-gray-500">EQ-001</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">大型组合滑梯</td>
+              <td class="px-4 py-2.5 text-gray-500">WD-CS-3600</td>
+              <td class="px-4 py-2.5 text-gray-500">A区主入口</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">生产中</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-mono text-gray-500">EQ-002</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">攀爬网组合</td>
+              <td class="px-4 py-2.5 text-gray-500">WD-CL-1200</td>
+              <td class="px-4 py-2.5 text-gray-500">B区</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">生产中</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-mono text-gray-500">EQ-003</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">幼儿滑梯组</td>
+              <td class="px-4 py-2.5 text-gray-500">WD-KS-800</td>
+              <td class="px-4 py-2.5 text-gray-500">C区</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">生产中</span></td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5 font-mono text-gray-500">EQ-004</td>
+              <td class="px-4 py-2.5 font-medium text-gray-700">水上滑道</td>
+              <td class="px-4 py-2.5 text-gray-500">WD-WS-2400</td>
+              <td class="px-4 py-2.5 text-gray-500">D区</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5 text-gray-300">—</td>
+              <td class="text-center px-3 py-2.5"><span class="inline-block px-1.5 py-0.5 rounded bg-blue-50 text-blue-500 text-[10px]">生产中</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Height sync for iframe embedding -->
+  <script>
+    function notifyHeight() {
+      window.parent.postMessage({ type: 'setHeight', height: document.documentElement.scrollHeight }, '*');
+    }
+    // Notify on load and after Tailwind renders
+    setTimeout(notifyHeight, 100);
+    setTimeout(notifyHeight, 500);
+    window.addEventListener('resize', notifyHeight);
+  </script>
+</body>
+</html>

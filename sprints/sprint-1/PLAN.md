@@ -225,6 +225,7 @@ Week 4 (5/03-5/09):
 > **📊 2026-04-15 02:10 池快照**：**#3548 PR#3681 merged 02:0x** → kimi2 空闲。活跃 4/5：kimi1 #3549 / kimi3 #3550 / kimi4 #3551 / kimi5 #3530。建议 kimi2 接 **#3533 CRM-06 记录中心**（activity_log 四视角+周月报入口，P1 fullstack medium，独立性好不阻塞其他 CRM）。
 > **📊 2026-04-15 03:15 池快照**：**#3551 PR#3682 merged 03:13** → kimi4 空闲。活跃 4/5：kimi1 #3549 / kimi2 #3533 / kimi3 #3550 / kimi5 #3530。建议 kimi4 接 **#3534 CRM-07 报表分析**（或 #3535 CRM-08 设置中心），P1 fullstack high，CRM Tier-4 延续。
 > **✅ 2026-04-15 03:17 派发执行**：kimi4 接 **#3534 CRM-07 投标申请** effort=high（源 docs/design/crm-商务中心/07-bidding.html）→ 活跃恢复 5/5。同轮次 auto-heal：≥4 次阈值触发 menu-contract skill 硬化（commit 687d53d）+ 5 CCs tmux 通知 + kimi1 #3549 红线拦截（跨 scope 改已 merged Flyway）。
+> **📊 2026-04-15 04:05 池快照**：**#3550 PR#3684 merged 04:02**（kimi3 3h30m 长跑后收尾）→ kimi3 空闲。活跃 4/5：kimi1 #3549 / kimi2 #3533 / kimi4 #3534 / kimi5 #3530。建议 kimi3 接 **#3535 CRM-08 设置中心**（P1 fullstack medium，CRM Tier-4 最后一块）或 #3583 P0 产品详情 3D。
 > **♻ 清理**：已 CLOSED 的 #3517/#3481/#3482/#3483/#3484/#3519/#3638/#3582 及历史 #3624/#3630/#3632-#3635/#3637/#3639-#3641/#3640 从指派建议表移除。
 
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
@@ -232,9 +233,8 @@ Week 4 (5/03-5/09):
 | kimi5 | **#3530** | P1 | fullstack | [运行中] Tier-4 CRM-03 商机管道 列表+看板双视图 / 7阶段 / 15种来源（#3636 PR#3680 merged 00:5x 后改派，01:0x 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
 | kimi1 | #3549 | P1 | fullstack | [运行中] Tier-4 CRM-14（00:33 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
 | kimi2 | **#3533** | P1 | fullstack | [运行中] Tier-4 CRM-06 记录中心 — activity_log 四视角+周月报（#3548 PR#3681 merged 02:0x 后改派，02:1x 启动） | `docs/design/crm-商务中心/详细设计.md` | medium |
-| kimi3 | #3550 | P1 | fullstack | [运行中] Tier-4 CRM-11（00:35 启动） | `docs/design/crm-商务中心/详细设计.md` | high |
+| kimi3 | **#3535** | P1 | fullstack | **[空闲-建议]** Tier-4 CRM-08 设置中心（#3550 PR#3684 merged 04:02 后释放） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | kimi4 | **#3534** | P1 | fullstack | **[运行中]** Tier-4 CRM-07 投标申请 审批流+中标录入（03:17 启动，#3551 PR#3682 merged 03:13 后派发） | `docs/design/crm-商务中心/07-bidding.html` | high |
-| — | #3535 | P1 | fullstack | Tier-4 CRM-08 设置中心（kimi4 备选） | `docs/design/crm-商务中心/详细设计.md` | medium |
 | — | #3583 #3585 #3588 | P0/P1/P2 | frontend | Tier-5: 产品详情页（3D）/备件目录/H5 适配（#3582 已随 PR#3664 合并） | `docs/design/product-portal/02-detail.html` 等 | medium |
 
 ## 指派历史（完成后划线）

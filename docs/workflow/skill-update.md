@@ -35,7 +35,10 @@
   1. 【frontend-coding skill 红线】新增约束：**写 `import { xxx } from '#/api/<seg>/<name>'` 前必须 `grep "^export.*function" <path>` 确认存在；若无，查找相近功能已有 export 名（约定 `<module><Action>` 如 `crmOpportunityAdd`），禁止自创 `createX/updateX/deleteX` 等非约定命名**
   2. 【pr-test.yml CI】前端 build 应**在 auto-merge 之前**跑（目前 build 是 `Dev环境CI/CD` 下子 job，在 merge 之后触发）；考虑把 `pnpm build:prod` 移到 PR E2E 环节作为 gate
   3. 【CC 锁管理 fallback】部署失败时若找不到原 CC 会话，应通知研发经理/排程经理 tmux 而非 exit 3 静默失败
-- **状态**：🔴 待实施 #1 frontend-coding skill 红线（blast-radius 规则立改）；#2/#3 建议下轮 loop 讨论
+- **状态**：✅ 三条建议全落地（2026-04-15 23:40）：
+  - #1 frontend-coding skill API 命名对齐红线 → commit e7dce72（.github main）
+  - #2 pr-test.yml 前端构建改用 pnpm build:antd（同 deploy rollup 严格） → commit a70b4128（wande-play dev）
+  - #3 inject-cc-prompt.sh fallback 通知经理 tmux + 退出码 0 → commit 7ef3ad3（.github main）
 
 
 ---

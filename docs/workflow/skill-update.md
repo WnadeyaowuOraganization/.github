@@ -608,3 +608,20 @@ BASE_URL=http://localhost:810N npx playwright test tests/front/smoke/ --project=
 **⚠️ 下一次（第4次）立即改 frontend-coding skill**：在 SKILL.md 增加红线：**Issue title 含「前端」时，禁止创建 Flyway 脚本/Entity/Service/Controller；所有 API 使用 mock 数据；PR body 注明「mock，待后端 #XXXX 替换」**。
 
 **状态**：观察中（达4次立改 skill）
+
+---
+## 2026-04-16 02:26 — `mvn spring-boot:run` 绕过 cc-test-env.sh 达 ≥4 次，立即改 skill
+
+**问题**：kimi5/#3711 用 `nohup mvn spring-boot:run -Dspring-boot.run.profiles=test`，profile=test 连公共库 `wande-ai`（非 `wande-ai-kimi5`）。这是第 ≥4 次同类问题（2026-04-14 23:50 首次记录，建议未落地；今日再犯）。
+
+**频次**：≥4 次（跨 kimi2/kimi3/kimi4/kimi5 多个 CC）→ 触发立即改 skill 规则。
+
+**止血操作**：
+1. Ctrl+C 中断 kimi5 错误启动，注入正确指令
+2. 更新 `docs/agent-docs/skills/backend-coding/SKILL.md` 编译+启动章节：
+   - 增加 MUST NOT 红线：禁止 `mvn spring-boot:run`
+   - 改为 `mvn install -pl wande-ai` + `cc-test-env.sh restart-backend kimiN`
+3. commit df87950 push main（软链自动生效）
+4. tmux 通知 kimi4（活跃后端 CC）
+
+**状态**：✅ 已止血（≥4次 → 立改 skill，commit df87950）

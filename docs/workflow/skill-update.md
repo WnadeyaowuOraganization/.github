@@ -18,6 +18,44 @@
 
 ---
 
+### 2026-04-15 02:00 🚨🚨 前端 vite 不走 cc-test-env.sh → 端口污染 / 逼近 pkill -f vite 红线（≥5 次达阈值）
+
+- **症状**：前端起在 vite 默认端口 5173/5666-5671/5668/5670 等（而非 kimi 隔离的 810N），CC 继而尝试 `lsof kill 5670` / `pkill -f vite` 清理（逼近红线污染整个 kimi 池），或改 Playwright baseURL 适配错误端口、反复登录 500/Modal 遮罩
+- **频次**：
+  1. kimi5 #3636（5666-5671，2h9m 卡点，几乎 pkill 全池）
+  2. kimi3 #3550（5668，第一次）
+  3. kimi3 #3550（5670，第二次同 Issue）
+  4. kimi4 #3529（双 vite 进程，端口错位）
+  5. 2026-04-14 kimi8 + kimi16（研发经理误发 pkill -f vite 紧急拦截）
+  → **≥5 次，已达阈值，建议立即落地 skill 硬点**
+- **根因**：
+  1. CC 倾向 `cd frontend && pnpm run dev:antd` 或 `pnpm dev`，不知 `cc-test-env.sh start/restart kimiN` 已封装 vite port 配置
+  2. vite 默认 port 5173+1+1 递增，首个 kimi 占 5173 后续 kimi 手启 pnpm dev → 5174/5175/... 互相污染
+  3. skill/frontend-coding 未强调"只能用 cc-test-env.sh 启动"
+- **已处置**：每次个案精准发指令：stop → restart → 确认 810N 监听；禁止 pkill/lsof 杀非 810N 端口
+- **建议改进**：
+  1. skill/frontend-coding T_run_frontend 增硬点：**启动前端只能用 `bash ~/projects/.github/scripts/cc-test-env.sh restart kimiN`**，禁止 `pnpm dev` / `pnpm run dev:antd` 直接起
+  2. 红线："若前端端口 ≠ 810N（N = kimi 编号），100% 是你没走 cc-test-env.sh，不是 vite 坏"
+  3. cc-test-env.sh 可选增 lint：检测 kimiN 目录外起的 vite 进程 → 警告
+- **状态**：🚨 频次已达阈值（5 次），建议本周落地 skill 硬点
+
+---
+
+### 2026-04-15 02:00 Playwright API smoke 登录认证反复摸索（4 次，观察）
+
+- **症状**：CC 写 Playwright smoke 时被登录卡住 40-60min，问题形式不一：Sa-Token 401 / getRouters 路由 404 / 登录 Modal 遮罩 / smoke 找不到 tab
+- **频次**：
+  1. kimi2 #3548（Sa-Token 401 卡 45min）
+  2. kimi3 #3550（登录 Modal 遮罩 500）
+  3. kimi4 #3551（getRouters 路由 404）
+  4. kimi1 #3549（smoke getByRole('tab') 找不到）
+- **根因**：shared-conventions / skill 未提供 ruoyi Sa-Token 标准 Playwright API smoke 样板（Basic auth clientId + /auth/login body + Bearer token + addCookies 绕 UI 登录），CC 每次从零摸索
+- **已处置**：个案发完整 curl + Playwright 样板代码（见对话记录 #3548/#3550/#3551/#3549 指令）
+- **建议改进**：shared-conventions.md 或 skill/backend-coding / skill/frontend-coding 增标准 Playwright API smoke 模板（clientId + token 获取 + 带 Bearer 调业务 API + addCookies 走前端 mount smoke 绕 UI），CC 直接抄不用摸
+- **状态**：观察中（接近 5 次阈值，再犯 1 次落地）
+
+---
+
 ### 2026-04-14 23:50 🚨 CC 手动 mvn spring-boot:run 绕过 cc-test-env.sh → profile=test 连错库
 
 - **症状**：kimi2 #3461 后端启动 50min 无进展，报 `Access denied for user 'wande'@'172.17.0.1'`，CC 认为是"MySQL 密码/环境问题"请求跳过截图提 PR

@@ -330,12 +330,23 @@ Week 4 (5/03-5/09):
 | kimi3 | ~~#3520~~ | P1 | fullstack | ~~Tier-1: 综合管理主页Dashboard — 6 Widget~~ PR#3678✅merged 2026-04-15 00:3x | ~~Done~~ |
 | kimi1 | ~~#3518~~ | P1 | fullstack | ~~Tier-1: 支持中心主页Dashboard — 6 Widget~~ PR#3677✅merged 2026-04-15 00:24 | ~~Done~~ |
 | kimi4 | ~~#3529~~ | P1 | fullstack | ~~Tier-4: CRM-02 客户管理 CRUD+三类型+详情五Tab~~ PR#3679✅merged 2026-04-15 00:41 | ~~Done~~ |
-| kimi1 | #3549 | P1 | fullstack | Tier-4 CRM-14 责任人变更日志 — 审计追踪 | 00:31 |
-| kimi2 | ~~#3548~~ | P1 | fullstack | ~~Tier-4 CRM-13 公司通讯录 — 全员联系人+部门树~~ PR#3681✅merged 2026-04-15 02:0x | ~~Done~~ |
-| kimi2 | #3533 | P1 | fullstack | Tier-4 CRM-06 记录中心 — activity_log 四视角+周月报 | 02:1x |
-| kimi3 | #3550 | P1 | fullstack | Tier-4 CRM-11 智能过会管理 — 异常驱动+三层节奏 | 00:33 |
-| kimi4 | #3551 | P1 | fullstack | Tier-4 CRM-12 授权管理 — 经销商授权+保证金+审批流 | 00:45 |
-| kimi5 | #3530 | P1 | fullstack | Tier-4 CRM-03 商机管道 — 列表+看板双视图/7阶段/15种来源 | 01:0x |
+| kimi1 | ~~#3549~~ | P1 | fullstack | ~~Tier-4 CRM-14 责任人变更日志 — 审计追踪~~ PR#3687✅merged 2026-04-15 06:29 (+hotfix PR#3688 06:49 补 pnpm-lock) | ~~Done~~ |
+| kimi2 | ~~#3548~~ | P1 | fullstack | ~~Tier-4 CRM-13 公司通讯录 — 全员联系人+部门树~~ PR#3681✅merged 2026-04-15 02:04 | ~~Done~~ |
+| kimi2 | ~~#3533~~ | P1 | fullstack | ~~Tier-4 CRM-06 记录中心 — activity_log 四视角+周月报~~ PR#3686✅merged 2026-04-15 05:48 | ~~Done~~ |
+| kimi3 | ~~#3550~~ | P1 | fullstack | ~~Tier-4 CRM-11 智能过会管理 — 异常驱动+三层节奏~~ PR#3684✅merged 2026-04-15 04:02 (Tab2/Tab4 拆至追补 #3683) | ~~Done~~ |
+| kimi4 | ~~#3551~~ | P1 | fullstack | ~~Tier-4 CRM-12 授权管理 — 经销商授权+保证金+审批流~~ PR#3682✅merged 2026-04-15 03:13 | ~~Done~~ |
+| kimi5 | ~~#3530~~ | P1 | fullstack | ~~Tier-4 CRM-03 商机管道 — 列表+看板双视图/7阶段/15种来源~~ PR#3689✅merged 2026-04-15 07:20 (含红线 #13 mv .claude/skills 干预 + rebase 冲突) | ~~Done~~ |
+| kimi1 | ~~#3583~~ | P0 | frontend | ~~Tier-5 产品详情页 3D~~ 派发后 kimi1 发现已随 PR#3664 于 04-14 17:06 交付（cc-report 未盲动）→ 07:08 改派 #3531 | ~~Done（改派）~~ |
+| kimi1 | ~~#3531~~ | P1 | fullstack | ~~Tier-4 CRM-04 商机详情页 v1.0（左摘要+右10Tab/阶段自动推进/协同催办）~~ PR#3697✅merged 2026-04-15 12:55 (5h42m) | ~~Done~~ |
+| kimi5 | ~~#3536~~ | P1 | fullstack | ~~Tier-4 CRM-09 经销商管理（合作级别/返点/销售目标）~~ PR#3692✅merged 2026-04-15 09:06 (1h49m, 26 files) | ~~Done~~ |
+| kimi4 | ~~#3534~~ | P1 | fullstack | ~~Tier-4 CRM-07 投标申请（审批流+中标录入）~~ PR#3690✅merged 2026-04-15 07:46 (4h33m, 含红线 #13 rm -rf + 红线 #3 主机 IP) | ~~Done~~ |
+| kimi3 | ~~#3535~~ | P1 | fullstack | ~~Tier-4 CRM-08 回款跟踪（周报+逾期+警告）~~ PR#3691✅merged 2026-04-15 08:56 (4h46m, 含 4h+ Churn scope 强干预) | ~~Done~~ |
+| kimi5 | ~~#3580~~ | P1 | backend | ~~产品门户 1/10 数据库表创建（product/document/part 3 表 DDL）~~ PR#3694✅merged 2026-04-15 10:19 (1h10m) | ~~Done~~ |
+| kimi3 | ~~#3537~~ | P1 | fullstack | ~~Tier-4 CRM-10 我的提成（个人 KPI + 月度明细只读）~~ PR#3695✅merged 2026-04-15 12:16 (3h16m, smoke 退化为 /screenshot + CI 真跑) | ~~Done~~ |
+| kimi5 | ~~#3581~~ | P0 | backend | ~~产品门户 2/10 产品展示 API（6 endpoints + S3 presigned + L0/L1 权限过滤）~~ PR#3696✅merged 2026-04-15 12:19 (1h45m, Playwright API 7/7 绿) | ~~Done~~ |
+| kimi4 | ~~#3532~~ | P1 | fullstack | ~~Tier-4 CRM-05 询盘工作台（5 状态 Tab + 报价 + 转商机 + vxe-table）~~ PR#3698✅merged 2026-04-15 13:06 (5h15m, smoke 退化为 /screenshot + CI 真跑) | ~~Done~~ |
+| kimi2 | #3683 | P1 | frontend | #3550 追补：Tab2 过会视图 + Tab4 月度 Pipeline 图表拆分 | 07:04 启动，Issue 已 CLOSED 但无对应 merged PR（疑 bot 误关），kimi2 后端 7102 启动后 crash，会话仍在 idle 需介入 |
+| kimi5 | #3587 | P1 | backend | 产品门户 8/10 备件 API + 询价购物车（纯后端 CRUD+Flyway，解锁 #3585 前端） | 12:30 启动，刚完成后端编译通过，写 API 契约和单测中 |
 
 ## 当前运行（2026-04-14 11:55 刷新）
 

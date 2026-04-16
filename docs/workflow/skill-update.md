@@ -819,3 +819,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **频次**：第 1 次
 - **建议改进**：backend-test skill 或 backend-coding skill 加提示：在 wande-ai 模块新增代码后、restart-backend 前，必须先 install wande-ai 到 per-kimi M2
 - **状态**：🟡 登记观察，再出现 2 次改 backend-coding/backend-test skill
+
+---
+2026-04-16 09:14 — wande-ai M2 install miss → Controller 404【第2次，已更新skill】
+- **症状**：kimi2 #1584 PolicyController 未被 Spring 注册，404
+- **根因**：同 2026-04-16 08:59 条目（spring-boot:run 从 M2 加载旧 jar）
+- **频次**：第 **2 次**（kimi5 #1585 为第1次）
+- **处置**：注入修复指令（mvn install -pl wande-ai + restart-backend）；已更新 backend-coding SKILL.md 加显眼警告；广播所有在运行 CC
+- **状态**：🟠 第2次，skill 已更新；再出现 2 次触发全面止血

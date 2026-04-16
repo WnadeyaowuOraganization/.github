@@ -788,9 +788,34 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 通知：所有5个在运行CC均已收到广播
 
 ---
+
+### 2026-04-16 08:32 task.md 末尾步骤（T7/T8/T9）未勾 → 门2反复拦截
+
+- **症状**：
+  1. kimi4 #1532 PR#3768：task.md T7（task.md全勾+pr-body-lint）、T8（rebase+gh pr create）未勾
+  2. kimi5 #1467 PR#3772：task.md T8（rebase+gh pr create）、T9（轮询 merged）未勾
+- **频次**：第 **2~3 次**（2026-04-14 21:05 条目已有先例，T12 "轮询 merged" 语义矛盾已改模板）
+- **根因**：
+  - "轮询 merged" 步骤（T9）语义上在 PR merge 后才能勾，但门2在 push 时检查全勾 → 矛盾未根治
+  - CC 在 `cc-report close` 汇报前未逐行检查 task.md 全勾，遗漏 T7/T8
+  - #1532 的 T7/T8 是经理代提 PR，CC 未感知需要自行勾选
+- **已处置**：tmux 注入 sed 命令直接勾选推送，CI 重触发
+- **建议改进**：issue-task-md skill 中删除 "T_N 轮询直到 merged" 步骤（该步骤无法在 PR push 前完成）；pr-visual-proof/cc-report skill 中加提示：`gh pr create` 前必须确认 task.md 无 `- [ ]` 残留
+- **状态**：🟡 第2次，若再出现第4次立改 issue-task-md skill 模板
+
+---
 2026-04-16 07:53 — Token Pool Proxy InvalidEncryptedContent 大面积阻塞
 - 症状：5个CC同时在长时间运算后遭遇 `API Error: 400 InvalidEncryptedContent`，全部idle
 - 影响：5个CC全部中断，无PR产出
 - 原因：Token Pool Proxy 对加密上下文解密失败（疑似长上下文压缩后密文格式问题）
 - 处置：逐个CC发送恢复注入消息
 - 注：此为基础设施问题，非代码问题，不需更新skill；建议监控 API Error率
+
+---
+2026-04-16 08:59 — wande-ai 新代码未 install 到 per-kimi M2 导致 Controller 404
+- **症状**：kimi5 #1585 新增 policy Controller 后 restart-backend，访问 404 "No mapping"；Spring 启动日志无 Bean 创建记录无报错
+- **根因**：`cc-test-env.sh` 的 `start_backend` 用 `spring-boot:run` 在 `ruoyi-admin` 目录启动，`wande-ai` 模块从 per-kimi M2 仓库加载。CC 在 `wande-ai` 中新增代码后只做了 `compile`，未 `mvn install`，运行时加载的是 seed 版旧 jar，新增 Controller 不存在。
+- **修复**：`mvn install -pl ruoyi-modules/wande-ai -am -DskipTests -Dmaven.repo.local=~/cc_scheduler/m2/kimi<N>/repository` 后再 `restart-backend`
+- **频次**：第 1 次
+- **建议改进**：backend-test skill 或 backend-coding skill 加提示：在 wande-ai 模块新增代码后、restart-backend 前，必须先 install wande-ai 到 per-kimi M2
+- **状态**：🟡 登记观察，再出现 2 次改 backend-coding/backend-test skill

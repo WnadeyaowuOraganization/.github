@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 19:23 【e2e-top CLAUDE.md 工作流缺陷】step1 git reset --hard 删除新建测试文件
+
+- **症状**：e2e-top CC 写完 sprint1-visual-audit.spec.ts（35 test，7 失败），随后执行 CLAUDE.md step1 `git reset --hard origin/dev && git clean -fd`，把自己刚写的 spec 文件删除；然后运行 tests/regression/ 只剩 all-pages-smoke.spec.ts，1 个测试全过，误报"无回归"
+- **频次**：e2e-top（**一次即大面积误报**：7 个失败被隐藏）
+- **根因**：CLAUDE.md 的「准备」步骤写死 `git reset --hard`，未区分"更新现有代码"与"保留新建测试文件"。新建 spec 是 untracked 文件，`git clean -fd` 会删除
+- **已处置**：登记此条；kill e2e-top 并重启，新指令明确禁止 git reset/clean
+- **建议改进**：修改 e2e-top CLAUDE.md 准备步骤：`git fetch origin dev && git reset --hard origin/dev`（去掉 git clean -fd）；新建 spec 文件应先 `git add` 再 clean
+- **状态**：🔴 一次即大面积（测试误报），立即修复 CLAUDE.md
+
+---
+
 ### 2026-04-16 18:53 【e2e-top 0% context 卡死 — 第1次】CC 运行 12h+ 后 context compaction 导致无法处理新指令
 
 - **症状**：e2e-top CC 运行 12h+ 后静默 42 分钟，收到新指令后仅显示 `✽ Accomplishing… (16s)` 即停止，未写测试文件；多次 Enter/Escape/resend 仍无效；API 显示 `messages_count` 从 209→215（消息已接收但未有效处理）

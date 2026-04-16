@@ -362,6 +362,6 @@ Week 4 (5/03-5/09):
 | kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | T2✅→T4 JUnit中（Controller已入jar验证通过）|
 | ~~kimi3~~ | ~~#1576+#2278~~ | P2 | fullstack | ~~[制度管理][17+20/22] AI模板库+AI起草向导~~ | PR#3790✅merged（hotfix×3: layout/policy.ts×2 止血）| ~~Done~~ |
 | kimi3 | #1575+#1625 | P2/P1 | backend | [制度管理][18/22] AI制度生成API + [整改] 企微消息模板 | 14:12进行中（AI chat API集成中）|
-| kimi4 | #1587+#2287 | P1 | fullstack | [预算][31+?/32] 预算管控参数配置API+前端页面 | PR#3791已创建→质量门拦截(task.md T12-T15未勾)→修复注入 |
+| ~~kimi4~~ | ~~#1587+#2287~~ | P1 | fullstack | ~~[预算][31+?/32] 预算管控参数配置API+前端页面~~ | PR#3791✅merged 2026-04-16T06:15 | ~~Done~~ |
 | kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API（warm-flow） | commit✅→rebase unstaged changes→修复注入 |
 

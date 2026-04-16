@@ -871,6 +871,14 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **状态**：🟠 第2次，skill 已更新；再出现 2 次触发全面止血
 
 ---
+2026-04-16 12:10 — wande-ai M2 install miss → Controller 404【第5/6次，老会话重现】
+- **症状**：kimi4 #1542（3h13m 老会话） Playwright API 404；kimi3 #2280（16m 新会话）curl stats API 404
+- **根因**：两个 CC 均在写完代码后未执行 `mvn install`，只用了 compile 或旧 jar。与前述条目完全一致。
+- **频次**：第 **5+次**（kimi3/kimi4 均为 07:18 SKILL 更新前启动的会话，未生效）
+- **处置**：分别注入 `mvn install -pl ruoyi-modules/wande-ai -am -DskipTests -q ... && restart-backend && wait` 修复指令
+- **状态**：🟠 SKILL 已于 07:18 更新；老会话问题为预期现象（需经理手动注入）；新会话应已自愈
+
+---
 2026-04-16 11:28 — useVbenVxeGrid 从 @vben/common-ui 错误导入（第2次）
 - **症状**：kimi2 #2281 E2E 2/3 测试失败（组件未渲染）；之前 kimi1 #2282 导致 CI failure
 - **根因**：CC 写前端时将 `useVbenVxeGrid` 从 `@vben/common-ui` 导入，正确来源是 `#/adapter/vxe-table`；错误导入导致函数 undefined，表格组件无法初始化

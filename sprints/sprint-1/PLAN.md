@@ -343,7 +343,7 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#1524~~ | P1 | backend | ~~[D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全~~ | PR#3774✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#1586~~ | P1 | backend | ~~[制度管理][1/22] 数据模型 — 6张表Flyway~~ | PR#3773✅merged 00:51 | ~~Done~~ |
 | ~~kimi5~~ | ~~#1585~~ | P1 | backend | ~~[制度管理][2/22] 制度分类树CRUD API~~ | PR#3776✅merged 01:44 | ~~Done~~ |
-| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API | 编译失败：PolicyCategoryServiceTest引用不存在类，已注入删除指令（28%ctx） |
+| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API | warm-flow DB数据注入中（flow_definition+flow_node+flow_skip） |
 | ~~kimi1~~ | ~~#1522~~ | P1 | backend | ~~[方案引擎×D3][P1] 选型桥接JSON接口~~ | PR#3777✅merged 01:56 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1581~~ | P1 | backend | ~~[制度管理][9/22] 制度发布+员工签收API~~ | PR#3780✅merged 02:41 | ~~Done~~ |
 | ~~kimi1~~ | ~~#2282~~ | P1 | frontend | ~~[制度管理][8/22] 制度富文本编辑器~~ | PR#3782✅merged（hotfix import修复 0441473e）|
@@ -351,10 +351,10 @@ Week 4 (5/03-5/09):
 | kimi1 | #1579 | P1 | backend | [制度管理][11/22] 签收记录导出（举证包PDF） | 11:33启动 |
 | ~~kimi2~~ | ~~#1584~~ | P1 | backend | ~~[制度管理][3/22] 制度文档CRUD API~~ | PR#3778✅merged 02:10 | ~~Done~~ |
 | ~~kimi2~~ | ~~#2284~~ | P1 | frontend | ~~[制度管理][6/22] 制度管理中心页面（综管端）~~ | PR#3781✅merged 02:35（⚠️Bean冲突hotfix 9b7bf0de已推dev）| ~~Done~~ |
-| ~~kimi2~~ | ~~#2281~~ | P1 | frontend | ~~[制度管理][12/22] 员工制度查阅+签收页面~~ | PR#3785 CI全绿，等待merge确认 |
+| ~~kimi2~~ | ~~#2281~~ | P1 | frontend | ~~[制度管理][12/22] 员工制度查阅+签收页面~~ | PR#3785✅merged 2026-04-16T04:10（经理手动解冲突policy.ts rebase）| ~~Done~~ |
 | kimi2 | #1593 | P1 | backend | [预算][21/32] 预算执行率自动计算+分级预警 | 11:53启动 |
 | ~~kimi3~~ | ~~#1583~~ | P1 | backend | ~~[制度管理][4/22] 制度版本控制API~~ | PR#3779✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#2283~~ | P1 | frontend | ~~[制度管理][7/22] 制度详情+版本历史页面~~ | PR#3783✅merged 03:46 | ~~Done~~ |
 | kimi3 | #2280 | P1 | fullstack | [制度管理][13/22] 签收统计面板 | 11:50启动，UI/催办/PDF方案已确认 |
-| kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | JUnit 7/7✅（Mockito doReturn绕重载），进入Playwright API spec阶段 |
+| kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | JUnit 7/7✅，Playwright API 7/7❌(404)→注入mvn install修复 |
 

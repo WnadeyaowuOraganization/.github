@@ -998,3 +998,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **已处置**：注入停止指令 + hideInMenu 方案（cockpit 路由，无需 sys_menu）；SQL 文件已告知删除
 - **建议改进**：menu-contract SKILL.md 中补充「无占位时的正确路径：hideInMenu 路由 > 寻找 UPDATE 占位 > 严禁 INSERT」决策树；将 docker exec 必须使用作为醒目红线强化
 - **状态**：🟡 观察中（首次）
+
+---
+2026-04-16 15:53 — PR无测试无截图被auto-merge（kimi1 #1540，第1次）
+- **症状**：PR#3800 (13文件，0测试，0截图) 在经理拦截指令前已自动merge；kimi1会话随即退出
+- **根因**：CC提交PR后立即进入轮询模式，经理注入「补测试」指令抵达时PR已merge；auto-merge机制无质量门拦截
+- **频次**：第 1 次明确记录（之前部分PR也有此迹象）
+- **已处置**：#1540 Done处理（代码已在dev），下批Issue要求CC在 pr-body-lint 后主动确认「已包含JUnit+Playwright+截图」再提PR
+- **建议改进**：考虑在 pr-body-lint 脚本增加第6道门：检查PR关联文件中是否包含 spec.ts 和 Test.java 文件，无则阻断
+- **状态**：🟡 观察中（首次）

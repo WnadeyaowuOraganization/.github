@@ -45,7 +45,7 @@ cp tests/front/smoke/_template.spec.ts tests/front/smoke/<module>-page.spec.ts
 ```ts
 import { test, expect } from '@playwright/test';
 
-const ROUTE = '/business/tender/project-mine';
+const ROUTE = '/business/tender/prospect';   // ⚠️ sys_menu path 字段值，非 component 路径（project-mine 是 component 名，route 是 prospect）
 const PAGE_NAME = '项目挖掘';
 
 test.describe(`smoke: ${PAGE_NAME}`, () => {
@@ -189,6 +189,7 @@ cat test-results/<spec>-<case>/error-context.md
 | 登录 session 共享失败 | `storageState` 保存登录态，测前加载 |
 | 中文按钮名带全角空格 | 用 regex `name: /确\s*定/` |
 | `waitForTimeout(N)` 偶现 flaky | 换 `waitForSelector` / `waitForLoadState` |
+| 路由路径写错（用 component 名当 path）| 从 sys_menu.path 查真实路由：`docker exec mysql-dev mysql -u root -proot wande-ai -e "SELECT path,component FROM sys_menu WHERE component LIKE '%<module>%'"`；`/business/tender/prospect`（矿场）、`/cockpit`（超管）、`/bossCockpit`（耀总）、`/common/product-master/product-portal`（产品门户）|
 
 ## 主环境 (:6040/:8080) 使用边界（2026-04-14 起）
 

@@ -338,7 +338,7 @@ Week 4 (5/03-5/09):
 | ~~kimi4~~ | ~~#3725~~ | P0 | backend | ~~执行管理v2.0 [20/22] 验收管理API（5级验收+检查项）~~ PR#3762✅merged | ~~Done~~ |
 | ~~kimi4~~ | ~~#3727~~ | P2 | frontend | ~~执行管理v2.0 [22/22] Tab8 售后质保前端~~ PR#3764✅merged | ~~Done~~ |
 | ~~kimi4~~ | ~~#1531~~ | P1 | backend | ~~[矿场增强] 可赢性评分模型(Win Probability) — 4维度综合赢率计算~~ PR#3767✅merged 23:19 | ~~Done~~ |
-| ~~kimi4~~ | ~~#1532~~ | P1 | backend | ~~[矿场增强] 矿场转化漏斗统计API~~ | PR#3768⏳ CI运行中（rebase解冲突触发） |
+| ~~kimi4~~ | ~~#1532~~ | P1 | backend | ~~[矿场增强] 矿场转化漏斗统计API~~ | PR#3768✅merged 00:58 | ~~Done~~ |
 | ~~kimi1~~ | ~~#240~~ | P1 | fullstack | ~~[项目中心-P1] Phase6 [6/12]: 项目费用归集~~ | PR#3775✅merged | ~~Done~~ |
 | ~~kimi2~~ | ~~#1524~~ | P1 | backend | ~~[D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全~~ | PR#3774✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#1586~~ | P1 | backend | ~~[制度管理][1/22] 数据模型 — 6张表Flyway~~ | PR#3773✅merged 00:51 | ~~Done~~ |
@@ -346,5 +346,5 @@ Week 4 (5/03-5/09):
 | kimi1 | #1522 | P1 | backend | [方案引擎×D3][P1] 选型桥接JSON接口 | 08:50 启动 |
 | kimi2 | #1584 | P1 | backend | [制度管理][3/22] 制度文档CRUD API | 08:50 启动 |
 | kimi3 | #1583 | P1 | backend | [制度管理][4/22] 制度版本控制API | 08:55 启动 |
-| kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | 08:50 启动 |
+| kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | 08:50 启动（⚠️经理已修正分支→feature-Issue-1542） |
 

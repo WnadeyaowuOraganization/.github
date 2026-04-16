@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 12:35 【warm-flow tenant_id 缺失】flow_node/flow_skip INSERT 无 tenant_id 导致节点不可见
+
+- **症状**：kimi5 #1582 插入 warm-flow DB 数据后调用 startWorkFlow API 报 500 "流程缺少开始节点!"；flow_definition 查到，flow_node/flow_skip 被 TenantLineHandler 过滤掉（tenant_id=NULL 不匹配 '000000'）
+- **频次**：kimi5 #1582（**第1次**）
+- **根因**：CC 写 Flyway SQL 时，flow_definition INSERT 包含 tenant_id='000000'，但 flow_node 和 flow_skip 的 INSERT 列表中遗漏 tenant_id 字段；系统 TenantLineHandler 对所有 warm-flow 表做 tenant_id='000000' 过滤
+- **已处置**：经理直接执行 `UPDATE flow_node SET tenant_id='000000'`（5行）+ `UPDATE flow_skip SET tenant_id='000000'`（7行）修复 kimi5 DB；向 kimi5 注入 SQL 修复指令
+- **建议改进**：在 backend-coding SKILL 的 warm-flow DB 注入模板中加红线：**所有 flow_node/flow_skip INSERT 必须带 tenant_id='000000' 列**
+- **状态**：🟡 第1次，观察；若第2次发生立改 backend-coding skill warm-flow 模板
+
+---
+
 ### 2026-04-16 11:30 【git clean 全删 - 第3次】kimi4 #1542 再次 git clean 删业务文件（已止血：改 backend-coding SKILL 红线）
 
 - **症状**：kimi4 第三次运行 `git clean -fd`（未排除 .java/.sql），删除 Flyway SQL + src/test 目录；研发经理第3次为 kimi4 提供恢复指令

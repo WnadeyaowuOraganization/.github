@@ -346,7 +346,8 @@ Week 4 (5/03-5/09):
 | kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API | ⚠️方向切换：warm-flow替代WfEngineService，已注指令 |
 | ~~kimi1~~ | ~~#1522~~ | P1 | backend | ~~[方案引擎×D3][P1] 选型桥接JSON接口~~ | PR#3777✅merged 01:56 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1581~~ | P1 | backend | ~~[制度管理][9/22] 制度发布+员工签收API~~ | PR#3780✅merged 02:41 | ~~Done~~ |
-| ~~kimi1~~ | ~~#2282~~ | P1 | frontend | ~~[制度管理][8/22] 制度富文本编辑器~~ | PR#3782 已创建，轮询中 |
+| ~~kimi1~~ | ~~#2282~~ | P1 | frontend | ~~[制度管理][8/22] 制度富文本编辑器~~ | PR#3782✅merged（hotfix import修复 0441473e）|
+| kimi1 | #1577 | P1 | backend | [制度管理][15/22] 制度废止+归档API | 11:30 启动 |
 | ~~kimi2~~ | ~~#1584~~ | P1 | backend | ~~[制度管理][3/22] 制度文档CRUD API~~ | PR#3778✅merged 02:10 | ~~Done~~ |
 | ~~kimi2~~ | ~~#2284~~ | P1 | frontend | ~~[制度管理][6/22] 制度管理中心页面（综管端）~~ | PR#3781✅merged 02:35（⚠️Bean冲突hotfix 9b7bf0de已推dev）| ~~Done~~ |
 | kimi2 | #2281 | P1 | frontend | [制度管理][12/22] 员工制度查阅+签收页面 | 10:58 启动 |

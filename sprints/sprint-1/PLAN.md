@@ -375,5 +375,6 @@ Week 4 (5/03-5/09):
 | ~~kimi5~~ | ~~#1622+#2298~~ | P0 | fullstack | ~~[企微打通][3/18] ChannelAdapter + Cockpit监控面板~~ | PR#3808✅merged 2026-04-16T10:25:09Z（经理代提） | ~~Done~~ |
 | **e2e-top** | **Sprint-1回归** | — | e2e | **顶层全量图形化对账 8页面** | spec `cec239dc` 2026-04-16 20:05 ✅ 8/8通过（矿场/CRM/驾驶舱/产品门户/耀总仪表盘）🔍 非关键警告：security-audit路由组件未注册 |
 | **e2e-top** | **商务部完整测试** | — | e2e | **商务部10页面图形+CRUD+接口监控** | 2026-04-16 ✅ 3通过 ⚠️ 7警告 → Bug #3814（CRM新增按钮无弹窗，影响7页面）|
-| kimi1 | #3814 | P1 | frontend | [Sprint-1修复] CRM 7页面「新增」按钮点击无弹窗/抽屉 | 2026-04-16 启动 |
+| ~~kimi1~~ | ~~#3814~~ | P1 | frontend | ~~[Sprint-1修复] CRM 经销商新增/编辑功能实现~~ | PR#3816 created 2026-04-16T20:56Z，awaiting CI merge |
+| **生产部署** | **build-deploy** | — | devops | **E2E守门员✅→构建脚本修复→Lightsail部署** | E2E gate通过(4m28s) #3815✅merged；#3817 FETCH_HEAD修复 deployed |
 

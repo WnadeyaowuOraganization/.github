@@ -220,7 +220,6 @@ Week 4 (5/03-5/09):
 | ~~kimi4~~ | ~~#3586~~ | ~~P1~~ | ~~fullstack~~ | ~~产品门户 [7/10] 资料下载S3 presigned URL分级~~ ✅ CLOSED | `docs/design/product-portal/详细设计.md` | ~~medium~~ |
 | ~~kimi3~~ | ~~#3585~~ | ~~P1~~ | ~~frontend~~ | ~~产品门户 [6/10] 备件目录页+爆炸图联动~~ ✅ CLOSED | `docs/design/product-portal/06-parts.html` | ~~medium~~ |
 | ~~—~~ | ~~#3588~~ | ~~P2~~ | ~~frontend~~ | ~~产品门户 [9/10] H5移动端适配~~ ✅ CLOSED | `docs/design/product-portal/详细设计.md` | ~~low~~ |
-| — | **#3641** | **P1** | frontend | **【Sprint-1 最后1个】** 超管驾驶舱 管线健康度 Tab 前端 — 接入 #3635 真数据 | `docs/design/超管驾驶舱/详细设计.md` | medium |
 
 ## 指派历史（完成后划线）
 

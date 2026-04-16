@@ -358,13 +358,14 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#2280~~ | P1 | fullstack | ~~[制度管理][13/22] 签收统计面板~~ | PR#3786✅merged 2026-04-16T04:29（经理手动解冲突×2 rebase）| ~~Done~~ |
 | ~~kimi4~~ | ~~#1542~~ | P1 | budget | ~~[预算模板增强 4/12] 项目级科目增删（含补建4张依赖表）~~ | PR#3788✅merged 2026-04-16T04:49 | ~~Done~~ |
 | ~~kimi2~~ | ~~#1593~~ | P1 | backend | ~~[预算][21/32] 预算执行率自动计算+分级预警~~ | PR#3789✅merged 2026-04-16T05:34 | ~~Done~~ |
-| kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | ⚠️ 误删PolicyAcknowledgement文件→经理紧急注入恢复指令 |
-| kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | JUnit BOM缺失→经理注入ruoyi-common-bom install修复 |
+| kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | PolicyAcknowledgement文件已恢复→后端7101重启中→Playwright测试中 |
+| kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | BOM修复→DB结构探查中（正常）|
 | ~~kimi3~~ | ~~#1576+#2278~~ | P2 | fullstack | ~~[制度管理][17+20/22] AI模板库+AI起草向导~~ | PR#3790✅merged（hotfix×3: layout/policy.ts×2 止血）| ~~Done~~ |
 | ~~kimi3~~ | ~~#1575~~ | P2 | backend | ~~[制度管理][18/22] AI制度生成API~~ | PR#3793✅merged 2026-04-16T06:28（#1625 blocked by #1631 跳过）| ~~Done~~ |
-| kimi3 | #1595+#2291 | P1/P2 | fullstack | [预算][18/32] 报销冲账借款自动核销 + 借款管控增强页面 | 14:27启动 |
+| kimi3 | #1595+#2291 | P1/P2 | fullstack | [预算][18/32] 报销冲账借款自动核销 + 借款管控增强页面 | JUnit运行中 |
 | ~~kimi4~~ | ~~#1587+#2287~~ | P1 | fullstack | ~~[预算][31+?/32] 预算管控参数配置API+前端页面~~ | PR#3791✅merged 2026-04-16T06:15 | ~~Done~~ |
-| kimi4 | #1591+#2290 | P1 | fullstack | [预算][23+24/32] 项目利润预估API+预算执行仪表盘 | 14:16启动 |
+| ~~kimi4~~ | ~~#1591~~ | P1 | backend | ~~[预算][23/32] 项目利润预估API~~ | PR#3794✅merged 06:42（⚠️ fullstack派发提纯后端PR第3次，#2290补做）| ~~Done~~ |
+| kimi4 | #2290 | P1 | frontend | [预算][24/32] 预算执行仪表盘页面（补做） | 14:45启动，后端已在dev |
 | ~~kimi5~~ | ~~#1582~~ | P1 | backend | ~~[制度管理][5/22] 制度审批流API（warm-flow）~~ | PR#3792✅merged 06:23 / dev hotfix pom+ruoyi-workflow依赖 06:28✅ | ~~Done~~ |
 | kimi5 | #1564 | P2 | backend | [企微打通-P0][1/17] WecomAppService SDK | 14:27启动 |
 

@@ -970,3 +970,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **频次**：第 **2 次**（第1次为 kimi4 #1591 收到提醒后仍提 PR；之前 kimi4 #1587+#2287 组合也曾被提醒）
 - **处置**：拒绝合并 PR#3794；注入明确指令要求完成前端后 push 同分支更新 PR
 - **建议改进**：在 frontend-coding / backend-coding SKILL.md 中加「fullstack 指派时 PR 必须同时包含后端+前端文件，缺一不合并」醒目红线
+
+---
+2026-04-16 14:43 — fullstack 指派后 CC 提纯后端 PR 并 auto-merge（第3次）
+- **症状**：kimi4 #1591+#2290 → PR#3794 仅含后端9文件（frontend=0），manager 告知"不能合并"后 CC 已退出，但 PR 自动 merge 完成（06:42）
+- **根因**：CC 完成后端后立即退出会话 + PR auto-merge 已启用，manager 的"不合并"口头指令无法阻止
+- **频次**：第 **3 次**（第1次：kimi4 #1591 开工汇报仅规划后端；第2次：PR#3794 创建时 frontend=0；第3次：PR merge）
+- **已处置**：#1591 Done；重启 kimi4 单独做 #2290 前端；登记止血待 ≥4 次
+- **建议改进**（距止血阈值 1 次）：frontend-coding + backend-coding SKILL.md 加「fullstack 指派时 PR 质量门必须含前端文件，否则拦截」；考虑在质量预检 CI 加 fullstack 标签检测

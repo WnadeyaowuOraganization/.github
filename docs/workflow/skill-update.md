@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 10:52 【Bean 名冲突】CC 创建前未 grep 查重，新建与已有同名 Controller 导致启动崩溃
+
+- **症状**：#2284（kimi2）在 `org.ruoyi.wande.policy.controller` 新建 `PolicyCategoryController`，与 #1585 已在 `org.ruoyi.wande.controller` 的同名类 Bean 名冲突（`policyCategoryController`）→ dev 部署 `BeanDefinitionStoreException` 崩溃，后端回滚
+- **频次**：第 **1** 次
+- **根因**：CC 执行 `backend-coding` 时跳过"查重"步骤（`grep -rn "class PolicyCategoryController" --include="*.java" backend/`），直接新建类 → Bean 名自动推导为 `policyCategoryController` → Spring 检测 non-compatible 冲突拒绝启动
+- **已处置**：经理直接在 dev 推 hotfix commit `9b7bf0de`，删除 7 个重复文件，保留 `PolicyController` publish/abolish 端点（有效改动）
+- **建议改进**：backend-coding skill 的"查重"步骤已有明确说明，但 CC 可能跳过。需在 skill 查重节加 ⛔ 红字强调频次警告
+- **状态**：🟡 第1次，观察；若第2次发生立改 skill 加 MUST NOT
+
+---
+
 ### 2026-04-16 04:55 【红线#10 后台轮询】CC 用后台 poll 脚本代替标准前台 while 模板
 
 - **症状**：

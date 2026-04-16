@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 11:30 【git clean 全删 - 第3次】kimi4 #1542 再次 git clean 删业务文件（已止血：改 backend-coding SKILL 红线）
+
+- **症状**：kimi4 第三次运行 `git clean -fd`（未排除 .java/.sql），删除 Flyway SQL + src/test 目录；研发经理第3次为 kimi4 提供恢复指令
+- **频次**：kimi4 #1542（**第3次**）；kimi5 #1582 也出现 M2 路径误入 untracked（同源问题）
+- **根因**：(1) Maven `-Dmaven.repo.local=~/cc_scheduler/...` 在错误 cwd 运行时 `~/` 相对化为 `backend/~/cc_scheduler/`，造成大量 untracked 脏文件；(2) CC 看到脏目录习惯性 `git clean -fd`，忘记业务文件也是 untracked
+- **已处置**：经理直接写 SQL 到 kimi4 目录；向 kimi4 注入第3次恢复指令；更新 backend-coding SKILL 禁止清单加 git clean 红线
+- **建议改进**：已实施——backend-coding SKILL 禁止清单新增 git clean 安全规则（先 git add，再 clean 或加 .gitignore）
+- **状态**：🔴 已实施改 SKILL（本次 commit）
+
+---
+
 ### 2026-04-16 10:52 【Bean 名冲突】CC 创建前未 grep 查重，新建与已有同名 Controller 导致启动崩溃
 
 - **症状**：#2284（kimi2）在 `org.ruoyi.wande.policy.controller` 新建 `PolicyCategoryController`，与 #1585 已在 `org.ruoyi.wande.controller` 的同名类 Bean 名冲突（`policyCategoryController`）→ dev 部署 `BeanDefinitionStoreException` 崩溃，后端回滚

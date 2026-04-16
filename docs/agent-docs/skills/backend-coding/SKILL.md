@@ -171,6 +171,7 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 - ❌ root 用户跑 `mvn`（target 权限污染）— 用 ubuntu
 - ❌ push `dev` / `main`，只能 push `feature-Issue-<N>`
 - ❌ 删 Mapper 接口不删 XML
+- ❌ **`git clean -fd` 在业务文件未 staged 前执行**（3 次已触发全删灾难）— 正确流程：**先 `git add` 所有 .java/.sql/.ts/.yaml 业务文件，再处理脏目录**。Maven 产物路径（`backend/~/cc_scheduler/...`）出现在 git status 时，先加入 `.gitignore`，**绝不**用 git clean 清除；如必须清理非业务杂物，保留所有 `*.java/*.sql/*.ts/*.yaml/*.xml/*.md` 不删：`git clean -fd -e "*.java" -e "*.sql" -e "*.ts" -e "*.yaml" -e "*.xml" -e "*.md" -e ".claude/skills/" -e "CLAUDE.md"`
 - ❌ **`mysql -h 127.0.0.1 -uroot -proot ...` 从宿主机裸连**（4 次已触发自动止血）— 属红线 #3 环境隔离违规，容易连错库。**必须**走 docker exec：
   ```bash
   docker exec mysql-dev mysql -uroot -proot -D wande-ai-kimi<N>

@@ -367,7 +367,7 @@ Week 4 (5/03-5/09):
 | ~~kimi5~~ | ~~#1564~~ | P2 | backend | ~~[企微打通-P0][1/17] WecomAppService SDK~~ | PR#3798✅merged 07:05 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1540+#2259~~ | P1 | fullstack | ~~[预算模板增强 6+12/12] 科目间预算调剂API+申请页面~~ | PR#3800✅merged 07:46（⚠️无JUnit/E2E/截图，已auto-merge）| ~~Done~~ |
 | ~~kimi1~~ | ~~#2294~~ | P2 | frontend | ~~[预算][6/32] 项目预算编制页面（WBS树形表格）~~ | PR#3803✅merged 16:28（E2E+截图✅）| ~~Done~~ |
-| ~~kimi1~~ | ~~#2289~~ | P1 | frontend | ~~[预算][29/32] 金蝶导出页面~~ | PR#3806⏳rebase冲突已修（17:20 force push），CI重跑中 |
+| ~~kimi1~~ | ~~#2289~~ | P1 | frontend | ~~[预算][29/32] 金蝶导出页面~~ | PR#3806✅merged 17:21（rebase冲突经理修复）|
 | ~~kimi2~~ | ~~#2357~~ | P1 | frontend | ~~[资金闭环-P1][11/17] 应付账款管理页面~~ | PR#3807✅提交 17:19，smoke 3/3✅，CC轮询中 |
 | ~~kimi3~~ | ~~#2292~~ | P2 | frontend | ~~[预算][10/32] 预算模板选择与应用页面~~ | PR#3804✅merged 17:02 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3641~~ | P1 | frontend | ~~【Sprint-1最后1个】超管驾驶舱 管线健康度Tab前端~~ | PR#3667✅已merged 2026-04-14，#3641已验收Done 17:16 |

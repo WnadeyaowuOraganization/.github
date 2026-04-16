@@ -367,7 +367,8 @@ Week 4 (5/03-5/09):
 | kimi3 | #2291 | P2 | frontend | [预算][18/32] 借款管控增强页面（补做）| 15:04启动，#1595后端已在dev |
 | ~~kimi4~~ | ~~#1587+#2287~~ | P1 | fullstack | ~~[预算][31+?/32] 预算管控参数配置API+前端页面~~ | PR#3791✅merged 2026-04-16T06:15 | ~~Done~~ |
 | ~~kimi4~~ | ~~#1591~~ | P1 | backend | ~~[预算][23/32] 项目利润预估API~~ | PR#3794✅merged 06:42（⚠️ fullstack派发提纯后端PR第3次，#2290补做）| ~~Done~~ |
-| kimi4 | #2290 | P1 | frontend | [预算][24/32] 预算执行仪表盘页面（补做） | 14:45启动，401已注入解决方案 |
+| ~~kimi4~~ | ~~#2290~~ | P1 | frontend | ~~[预算][24/32] 预算执行仪表盘页面（补做）~~ | PR#3799✅merged 2026-04-16T07:20（frontend=2+e2e，dev CI✅）| ~~Done~~ |
+| kimi4 | #1541+#2260 | P1 | fullstack | [预算模板增强 5+11/12] 科目级限额信封API+预算编制增强页面 | 15:22启动，#2260已注入 |
 | ~~kimi5~~ | ~~#1582~~ | P1 | backend | ~~[制度管理][5/22] 制度审批流API（warm-flow）~~ | PR#3792✅merged 06:23 / dev hotfix pom+ruoyi-workflow依赖 06:28✅ | ~~Done~~ |
 | ~~kimi5~~ | ~~#1564~~ | P2 | backend | ~~[企微打通-P0][1/17] WecomAppService SDK~~ | PR#3798✅merged 07:05 | ~~Done~~ |
 | kimi1 | #1540+#2259 | P1 | fullstack | [预算模板增强 6+12/12] 科目间预算调剂API+申请页面 | 15:03启动，#2259已注入 |

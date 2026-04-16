@@ -364,5 +364,5 @@ Week 4 (5/03-5/09):
 | kimi3 | #1575+#1625 | P2/P1 | backend | [制度管理][18/22] AI制度生成API + [整改] 企微消息模板 | 14:12进行中（AI chat API集成中）|
 | ~~kimi4~~ | ~~#1587+#2287~~ | P1 | fullstack | ~~[预算][31+?/32] 预算管控参数配置API+前端页面~~ | PR#3791✅merged 2026-04-16T06:15 | ~~Done~~ |
 | kimi4 | #1591+#2290 | P1 | fullstack | [预算][23+24/32] 项目利润预估API+预算执行仪表盘 | 14:16启动 |
-| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API（warm-flow） | commit✅→rebase unstaged changes→修复注入 |
+| ~~kimi5~~ | ~~#1582~~ | P1 | backend | ~~[制度管理][5/22] 制度审批流API（warm-flow）~~ | PR#3792✅merged 2026-04-16T06:23（ruoyi-workflow双模块install修复+rebase stash修复）| ~~Done~~ |
 

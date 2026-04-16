@@ -962,3 +962,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **频次**：第 **2 次**（kimi1 #2282 第1次触发 CI failure，已在 hotfix 0441473e 修复）
 - **处置**：注入诊断+修复指令
 - **状态**：🟡 登记观察；再出现 2 次（累计≥4次）立即更新 frontend-coding SKILL.md
+
+---
+2026-04-16 14:35 — fullstack 指派后 CC 忽略前端提交纯后端 PR（第2次）
+- **症状**：kimi4 #1591+#2290（fullstack指派）→ 仅实现后端、仅提 PR#3794（无前端文件）；本轮循环前 kimi4 也曾收到一次口头提醒仍未完成前端
+- **根因**：CC 在完成后端后倾向于立即提 PR，未意识到 fullstack 指派意味着必须连带完成配对前端
+- **频次**：第 **2 次**（第1次为 kimi4 #1591 收到提醒后仍提 PR；之前 kimi4 #1587+#2287 组合也曾被提醒）
+- **处置**：拒绝合并 PR#3794；注入明确指令要求完成前端后 push 同分支更新 PR
+- **建议改进**：在 frontend-coding / backend-coding SKILL.md 中加「fullstack 指派时 PR 必须同时包含后端+前端文件，缺一不合并」醒目红线

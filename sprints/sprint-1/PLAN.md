@@ -359,13 +359,17 @@ Week 4 (5/03-5/09):
 | ~~kimi4~~ | ~~#1542~~ | P1 | budget | ~~[预算模板增强 4/12] 项目级科目增删（含补建4张依赖表）~~ | PR#3788✅merged 2026-04-16T04:49 | ~~Done~~ |
 | ~~kimi2~~ | ~~#1593~~ | P1 | backend | ~~[预算][21/32] 预算执行率自动计算+分级预警~~ | PR#3789✅merged 2026-04-16T05:34 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1574+#2277~~ | P2 | fullstack | ~~[制度管理][19+21/22] 条款库CRUD后端+条款库管理页面~~ | PR#3795✅merged 2026-04-16T06:52（backend10+frontend4，政策文件恢复+端口重启）| ~~Done~~ |
-| kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | BOM修复→DB结构探查中（正常）|
+| ~~kimi2~~ | ~~#1588+#1589~~ | P1 | fullstack | ~~[预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询~~ | #1588 PR#3796✅merged 07:03 |
+| kimi2 | #1589 | P2 | frontend | [预算][27/32] 历史成本基准查询页面 | 15:03启动，设计确认已回复 |
 | ~~kimi3~~ | ~~#1576+#2278~~ | P2 | fullstack | ~~[制度管理][17+20/22] AI模板库+AI起草向导~~ | PR#3790✅merged（hotfix×3: layout/policy.ts×2 止血）| ~~Done~~ |
 | ~~kimi3~~ | ~~#1575~~ | P2 | backend | ~~[制度管理][18/22] AI制度生成API~~ | PR#3793✅merged 2026-04-16T06:28（#1625 blocked by #1631 跳过）| ~~Done~~ |
-| kimi3 | #1595+#2291 | P1/P2 | fullstack | [预算][18/32] 报销冲账借款自动核销 + 借款管控增强页面 | JUnit运行中 |
+| ~~kimi3~~ | ~~#1595~~ | P1 | backend | ~~[预算][18/32] 报销冲账借款自动核销~~ | PR#3797✅merged 07:03（⚠️ fullstack派发提纯后端第4次→止血：backend-coding SKILL.md已更新）| ~~Done~~ |
+| kimi3 | #2291 | P2 | frontend | [预算][18/32] 借款管控增强页面（补做）| 15:04启动，#1595后端已在dev |
 | ~~kimi4~~ | ~~#1587+#2287~~ | P1 | fullstack | ~~[预算][31+?/32] 预算管控参数配置API+前端页面~~ | PR#3791✅merged 2026-04-16T06:15 | ~~Done~~ |
 | ~~kimi4~~ | ~~#1591~~ | P1 | backend | ~~[预算][23/32] 项目利润预估API~~ | PR#3794✅merged 06:42（⚠️ fullstack派发提纯后端PR第3次，#2290补做）| ~~Done~~ |
-| kimi4 | #2290 | P1 | frontend | [预算][24/32] 预算执行仪表盘页面（补做） | 14:45启动，后端已在dev |
+| kimi4 | #2290 | P1 | frontend | [预算][24/32] 预算执行仪表盘页面（补做） | 14:45启动，401已注入解决方案 |
 | ~~kimi5~~ | ~~#1582~~ | P1 | backend | ~~[制度管理][5/22] 制度审批流API（warm-flow）~~ | PR#3792✅merged 06:23 / dev hotfix pom+ruoyi-workflow依赖 06:28✅ | ~~Done~~ |
-| kimi5 | #1564 | P2 | backend | [企微打通-P0][1/17] WecomAppService SDK | 其他测试编译错误→经理注入-Dtest=指定类或Playwright API代替 |
+| ~~kimi5~~ | ~~#1564~~ | P2 | backend | ~~[企微打通-P0][1/17] WecomAppService SDK~~ | PR#3798✅merged 07:05 | ~~Done~~ |
+| kimi1 | #1540+#2259 | P1 | fullstack | [预算模板增强 6+12/12] 科目间预算调剂API+申请页面 | 15:03启动，#2259已注入 |
+| kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | 15:09启动，#2298已注入，#1564依赖已在dev |
 

@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 13:58 【合并冲突丢 } + /** — 第3+4次】kimi3 #1576 policy.ts 两处破损（触发止血阈值 ≥4）
+
+- **症状**：dev CI 24494523232/24494577500 连续两次失败：`policy.ts:115/238 Unexpected "*"` — 接口 `PolicyEmployeeListReq` 缺 `}`、`acknowledge()` 方法缺 `},`，两处 `/**` opener 均丢失
+- **频次**：#1576 (#1576 Java 2次 + TypeScript 2次 = **累计第3+4次**）；⚠️ 已达 ≥4 次止血阈值
+- **根因**：PR rebase 冲突解决时静默丢失 `}` 和 `/**`；PR CI 在构建未完成时就自动合并（auto-merge 不等 build job），导致破损代码进入 dev
+- **已处置**：经理直接 hotfix dev 两次（commit f5d806c7 + 9a36ec60）；更新 frontend-coding SKILL（commit 96fea8c）加入 python 扫描脚本 + BasicLayout 路由规范；广播通知所有活跃 CC
+- **建议改进**：考虑 CI 顺序调整：auto-merge job 必须等 构建CI环境 job 完成（当前 auto-merge 与 build 并行）
+- **状态**：✅ 已实施 SKILL 更新 96fea8c；CI 顺序问题需单独 Issue
+
+---
+
 ### 2026-04-16 13:55 【前端路由 layout 引用错误 — 第1次】kimi3 #1576 admin-center.ts 使用不存在路径导致 Rollup 构建失败
 
 - **症状**：dev CI 24494344231 前端构建失败：`Rollup failed to resolve import "#/layouts/default/index.vue" from "admin-center.ts"`

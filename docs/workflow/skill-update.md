@@ -989,3 +989,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
   2. ✅ 重启 kimi3 单独做 #2291 前端
   3. 通知所有活跃 CC（见下文）
 - **根因2（流程漏洞）**：经理指派 fullstack 对时若未通过 tmux 注入第二个 Issue，CC 无法感知配对。已在 kimi1 (1540+2259) 补注入；需形成习惯
+
+---
+2026-04-16 15:43 — INSERT sys_menu + mysql 裸连双红线（kimi5 #2298，第1次）
+- **症状**：kimi5 创建 `V20260416171000_2298__add_ai_chat_monitor_menu.sql`（含 INSERT INTO sys_menu 6行）；同时使用 `mysql -h 127.0.0.1 -P 3306 -u root -proot` 裸连查询
+- **频次**：第 1 次（双红线同时触发）
+- **根因**：CC 在无 sys_menu 占位的场景下，默认尝试 INSERT 创建新菜单；同时忘记使用 docker exec 命令格式
+- **已处置**：注入停止指令 + hideInMenu 方案（cockpit 路由，无需 sys_menu）；SQL 文件已告知删除
+- **建议改进**：menu-contract SKILL.md 中补充「无占位时的正确路径：hideInMenu 路由 > 寻找 UPDATE 占位 > 严禁 INSERT」决策树；将 docker exec 必须使用作为醒目红线强化
+- **状态**：🟡 观察中（首次）

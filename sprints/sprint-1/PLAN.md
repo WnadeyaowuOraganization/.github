@@ -358,8 +358,8 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#2280~~ | P1 | fullstack | ~~[制度管理][13/22] 签收统计面板~~ | PR#3786✅merged 2026-04-16T04:29（经理手动解冲突×2 rebase）| ~~Done~~ |
 | ~~kimi4~~ | ~~#1542~~ | P1 | budget | ~~[预算模板增强 4/12] 项目级科目增删（含补建4张依赖表）~~ | PR#3788✅merged 2026-04-16T04:49 | ~~Done~~ |
 | ~~kimi2~~ | ~~#1593~~ | P1 | backend | ~~[预算][21/32] 预算执行率自动计算+分级预警~~ | PR#3789✅merged 2026-04-16T05:34 | ~~Done~~ |
-| kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | 后端7/7✅+前端构建✅→准备提交PR |
-| kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | T2✅→T4 JUnit中（Controller已入jar验证通过）|
+| kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | ⚠️ 误删PolicyAcknowledgement文件→经理紧急注入恢复指令 |
+| kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | JUnit BOM缺失→经理注入ruoyi-common-bom install修复 |
 | ~~kimi3~~ | ~~#1576+#2278~~ | P2 | fullstack | ~~[制度管理][17+20/22] AI模板库+AI起草向导~~ | PR#3790✅merged（hotfix×3: layout/policy.ts×2 止血）| ~~Done~~ |
 | ~~kimi3~~ | ~~#1575~~ | P2 | backend | ~~[制度管理][18/22] AI制度生成API~~ | PR#3793✅merged 2026-04-16T06:28（#1625 blocked by #1631 跳过）| ~~Done~~ |
 | kimi3 | #1595+#2291 | P1/P2 | fullstack | [预算][18/32] 报销冲账借款自动核销 + 借款管控增强页面 | 14:27启动 |

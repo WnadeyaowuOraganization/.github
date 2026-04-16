@@ -344,7 +344,7 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#1586~~ | P1 | backend | ~~[制度管理][1/22] 数据模型 — 6张表Flyway~~ | PR#3773✅merged 00:51 | ~~Done~~ |
 | ~~kimi5~~ | ~~#1585~~ | P1 | backend | ~~[制度管理][2/22] 制度分类树CRUD API~~ | PR#3776✅merged 01:44 | ~~Done~~ |
 | kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API | 09:53 启动 |
-| kimi1 | #1522 | P1 | backend | [方案引擎×D3][P1] 选型桥接JSON接口 | PR#3777⏳ CI运行中 |
+| ~~kimi1~~ | ~~#1522~~ | P1 | backend | ~~[方案引擎×D3][P1] 选型桥接JSON接口~~ | PR#3777✅merged 01:56 | ~~Done~~ |
 | kimi2 | #1584 | P1 | backend | [制度管理][3/22] 制度文档CRUD API | 08:50 启动 |
 | kimi3 | #1583 | P1 | backend | [制度管理][4/22] 制度版本控制API | 08:55 启动 |
 | kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | 08:50 启动（⚠️经理已修正分支→feature-Issue-1542） |

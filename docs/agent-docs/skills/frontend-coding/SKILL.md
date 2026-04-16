@@ -305,16 +305,59 @@ bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN         # 等后端就
 git fetch origin dev && git rebase origin/dev
 # 有冲突解决后继续；解不了就 git rebase --abort 然后 push，让 CI 兜底
 
+# 1a. ⚠️ MUST: rebase 后立即扫 TS 文件中的破损 JSDoc（4次事故：2026-04-16 #1576 policy.ts）
+#     rebase 冲突合并会静默丢失 `}` 和 `/**`，导致 TS Syntax error 但本地不报（已缓存）
+python3 -c "
+import sys, os
+for root, dirs, files in os.walk('frontend/apps/web-antd/src/api'):
+    for f in files:
+        if not f.endswith('.ts'): continue
+        path=os.path.join(root,f)
+        lines=open(path).readlines()
+        for i,line in enumerate(lines,1):
+            s=line.lstrip()
+            if s.startswith('* ') and not s.startswith('*/'):
+                found=any(lines[j].strip().startswith('/**') for j in range(max(0,i-4),i-1))
+                if not found:
+                    print(f'{path}:{i}: 孤立 * —— 可能缺少 }}, 和 /**')
+"
+# 有输出 = 有破损，必须手动补 }} + /** 再提交
+
 # 2. 若改动了共享文件（如 src/api/wande/execution.ts），快速检查重名符号
 grep -n "^export\|^const \|^function \|^interface \|^type " \
   frontend/apps/web-antd/src/api/wande/execution.ts | awk -F: '{print $NF}' | sort | uniq -d
 
 # 3. 构建（必须零错误）
-cd frontend && pnpm build
+cd frontend && pnpm build:antd   # ⚠️ 用 build:antd 而非 pnpm build（后者走 turbo 可能缓存跳过）
 cd frontend && pnpm lint        # 可选，Lint 警告建议修
 ```
 
 > **MUST NOT**：`pnpm build` 前不 rebase 直接提交 PR —— 多 CC 并行修改 `execution.ts` 等共享文件时会产生重复声明，导致 CI build 失败（2026-04-16 #3711 stageConfig重名 + #3719 DocCategoryVO缺闭括号，同一根因两次）。
+
+## 新增路由模块（父级路由 component 用法）
+
+**parent route component 必须用 `BasicLayout`**，禁止直接 import layouts 路径：
+
+```typescript
+// ✅ 正确
+import { BasicLayout } from '#/layouts';
+import type { RouteRecordRaw } from 'vue-router';
+
+const routes: RouteRecordRaw[] = [
+  {
+    path: '/admin-center',
+    name: 'AdminCenter',
+    component: BasicLayout,  // ← BasicLayout，不是动态 import
+    children: [...]
+  }
+];
+
+// ❌ 错误（路径不存在，Rollup 构建报 "failed to resolve import"）
+component: () => import('#/layouts/default/index.vue'),
+component: () => import('#/layouts/basic/index.vue'),
+```
+
+`BasicLayout`、`AuthPageLayout`、`IFrameView` 三个 layout 均从 `#/layouts`（`src/layouts/index.ts`）导出。
 
 TS 报错禁用 `@ts-ignore` 绕过，除非注释说清原因。
 

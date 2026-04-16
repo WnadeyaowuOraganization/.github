@@ -320,23 +320,25 @@ Week 4 (5/03-5/09):
 | ~~kimi1~~ | ~~#3724~~ | ~~P1~~ | ~~frontend~~ | ~~执行管理v2.0 [19/22] Tab5变更管理（KPI+列表+详情），mock配对#3722~~ PR#3752✅merged 2026-04-16 04:23 | ~~Done~~ |
 | ~~kimi1~~ | ~~#3552~~ | ~~P0~~ | ~~backend~~ | ~~[矿场修复] 6个管线脚本表名不兼容修复（Python脚本wdpp_前缀）~~ PR#3755✅merged 2026-04-16 04:48 | ~~Done~~ |
 | ~~kimi1~~ | ~~#3117~~ | P1 | fullstack | ~~[经销商发现] 经销商-甲方客户关系图谱（可视化关联关系）~~ PR#3759✅merged | ~~Done~~ |
-| kimi1 | #3726 | P2 | backend | 执行管理v2.0 [21/22] 质保+售后工单+设备档案API | PR#3769⏳ 等待CI merge |
+| ~~kimi1~~ | ~~#3726~~ | P2 | backend | ~~执行管理v2.0 [21/22] 质保+售后工单+设备档案API~~ PR#3769✅merged（SaCheckPermission import hotfix dev 直推修复） | ~~Done~~ |
 | ~~kimi2~~ | ~~#3717~~ | ~~P0~~ | ~~frontend~~ | ~~执行管理v2.0 [12/22] Tab3合同与交付（合同状态+交付节点+发货跟踪）~~ PR#3747✅merged 2026-04-16 03:18 | ~~Done~~ |
 | ~~kimi2~~ | ~~#3721~~ | ~~P0~~ | ~~backend~~ | ~~执行管理v2.0 [16/22] 工艺路线+设备进度矩阵API~~ PR#3754✅merged 2026-04-16 04:41 | ~~Done~~ |
 | ~~kimi2~~ | ~~#3133~~ | P0 | backend | ~~[审批引擎] 审批节点回退增强（回退到指定节点+直达模式）~~ PR#3756✅merged | ~~Done~~ |
 | ~~kimi2~~ | ~~#2417~~ | P1 | pipeline | ~~[经销商发现-2/4] 竞品官网经销商网络采集脚本~~ PR#3760✅merged | ~~Done~~ |
 | ~~kimi2~~ | ~~#1736~~ | P1 | frontend | ~~执行管理 验收列表+阶段配置+发起验收页面（配对#3725）~~ PR#3766✅merged 23:09 | ~~Done~~ |
-| kimi2 | #1732 | P1 | frontend | [执行管理] 变更管理Tab前端（对接#3722真实API） | 07:05 启动 |
+| ~~kimi2~~ | ~~#1732~~ | P1 | frontend | ~~[执行管理] 变更管理Tab前端（对接#3722真实API）~~ PR#3771✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#3713~~ | P0 | backend | ~~执行管理v2.0 [8/22] 合同信息API（关联crm_contract）~~ PR#3745✅merged 2026-04-16 02:54 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3712~~ | ~~P0~~ | ~~fullstack~~ | ~~执行管理v2.0 [7/22] 阶段推进+审批引擎D66对接~~ PR#3748✅merged 2026-04-16 04:08 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3722~~ | P1 | backend | ~~执行管理v2.0 [17/22] 变更管理API（记录+影响分析+审批）~~ PR#3757✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#2492~~ | P1 | pipeline | ~~[D3参数化] 欧美竞品产品参数采集(KOMPAN/HAGS/Playcraft)~~ PR#3761✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#2700~~ | P1 | pipeline | ~~[商战情报中台] 早期项目信号检测~~ PR#3763✅merged | ~~Done~~ |
-| kimi3 | #2701 | P1 | pipeline | [商战情报中台] 买家行为画像·甲方偏好分析 | 06:52 启动 |
+| kimi3 | #2701 | P1 | pipeline | [商战情报中台] 买家行为画像·甲方偏好分析 | PR#3770⏳ 等待CI merge |
 | ~~kimi4~~ | ~~#3716~~ | P0 | backend | ~~执行管理v2.0 [11/22] 文档中心API~~ PR#3746✅merged 2026-04-16 03:07 | ~~Done~~ |
 | ~~kimi4~~ | ~~#3720~~ | ~~P0~~ | ~~backend~~ | ~~执行管理v2.0 [15/22] BOM树API（BOM结构+工序路线，高复杂度）~~ PR#3750✅merged 2026-04-16 04:14 | ~~Done~~ |
 | ~~kimi4~~ | ~~#3725~~ | P0 | backend | ~~执行管理v2.0 [20/22] 验收管理API（5级验收+检查项）~~ PR#3762✅merged | ~~Done~~ |
 | ~~kimi4~~ | ~~#3727~~ | P2 | frontend | ~~执行管理v2.0 [22/22] Tab8 售后质保前端~~ PR#3764✅merged | ~~Done~~ |
 | ~~kimi4~~ | ~~#1531~~ | P1 | backend | ~~[矿场增强] 可赢性评分模型(Win Probability) — 4维度综合赢率计算~~ PR#3767✅merged 23:19 | ~~Done~~ |
 | kimi4 | #1532 | P1 | backend | [矿场增强] 矿场转化漏斗统计API — 5级转化率+按商务人员拆分 | PR#3768⏳ 等待CI（经理代提，Token Pool耗尽）|
+| kimi1 | #240 | P1 | fullstack | [项目中心-P1] Phase6 [6/12]: 项目费用归集 — 报销/BOM/外包关联 + 利润计算 | 08:35 启动 |
+| kimi2 | #1524 | P1 | backend | [D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全 | 08:35 启动 |
 

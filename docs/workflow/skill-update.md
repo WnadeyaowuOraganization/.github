@@ -18,14 +18,25 @@
 
 ---
 
-### 2026-04-16 12:53 【经理手动合并冲突丢失语法结构】PolicyAcknowledgementController dev构建失败
+### 2026-04-16 12:57 【经理手动合并冲突丢失语法结构 — 第2次】IPolicyAcknowledgementService + ServiceImpl dev构建失败
+
+- **症状**：dev CI 24492817565 构建失败：`IPolicyAcknowledgementService.java:80 illegal start of type / illegal character \uff08`；合并时 `countUnacknowledged()` 和 `remindUnacknowledged()` 之后的 Javadoc `/**` 全部丢失；ServiceImpl `countUnacknowledged()` 末尾 `}` 和 `@Override` 丢失
+- **频次**：第 **2** 次（经理手动合并引入；首次 2026-04-16 12:53 已登记）
+- **根因**：同第1次——keep-both-sides Python 脚本合并接口文件时，各方法末尾 `;` 后紧跟下一方法的 Javadoc `/**` 未保留；ServiceImpl 方法末尾 `}` 未保留
+- **已处置**：hotfix commit `e7dd8e6a` 直推 dev，补回3处 `/**` + 1处 `}` + 1处 `@Override`
+- **建议改进**：**≥2次** → 立即改经理操作规范：手动合并冲突后必须本地执行 `mvn compile -pl ruoyi-modules/wande-ai -am -DskipTests` 验证，不允许直接 push dev
+- **状态**：🟡 第2次，正在制定操作规范；若第3次发生更新 keep-both-sides 脚本自动补全 `}`
+
+---
+
+### 2026-04-16 12:53 【经理手动合并冲突丢失语法结构 — 第1次】PolicyAcknowledgementController dev构建失败
 
 - **症状**：PR#3787 merge 后 dev CI 24492697898 构建失败：`PolicyAcknowledgementController.java:118 illegal start of expression / illegal character \uff08`；合并时 `countUnacknowledged()` 方法结束 `}` 和下一方法 `/**` 开头双双丢失
 - **频次**：第 **1** 次（经理手动合并引入）
 - **根因**：经理用 Python 脚本 keep-both-sides 合并冲突时，两个代码块衔接处未补充方法闭合 `}` 和新方法 Javadoc `/**`，导致语法错误
 - **已处置**：hotfix commit `fd00ffe5` 直推 dev，补回 `}` 和 `/**`
 - **建议改进**：经理手动合并冲突后，应 grep 检查关键结构完整性（`grep -n "return R.ok\|^\s*}" | 比对方法对数`），或本地 `javac` 快速验证
-- **状态**：✅ 已修复
+- **状态**：✅ 已修复（第2次发生后升为"必须 mvn compile 验证"）
 
 ---
 

@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 12:53 【经理手动合并冲突丢失语法结构】PolicyAcknowledgementController dev构建失败
+
+- **症状**：PR#3787 merge 后 dev CI 24492697898 构建失败：`PolicyAcknowledgementController.java:118 illegal start of expression / illegal character \uff08`；合并时 `countUnacknowledged()` 方法结束 `}` 和下一方法 `/**` 开头双双丢失
+- **频次**：第 **1** 次（经理手动合并引入）
+- **根因**：经理用 Python 脚本 keep-both-sides 合并冲突时，两个代码块衔接处未补充方法闭合 `}` 和新方法 Javadoc `/**`，导致语法错误
+- **已处置**：hotfix commit `fd00ffe5` 直推 dev，补回 `}` 和 `/**`
+- **建议改进**：经理手动合并冲突后，应 grep 检查关键结构完整性（`grep -n "return R.ok\|^\s*}" | 比对方法对数`），或本地 `javac` 快速验证
+- **状态**：✅ 已修复
+
+---
+
 ### 2026-04-16 12:35 【warm-flow tenant_id 缺失】flow_node/flow_skip INSERT 无 tenant_id 导致节点不可见
 
 - **症状**：kimi5 #1582 插入 warm-flow DB 数据后调用 startWorkFlow API 报 500 "流程缺少开始节点!"；flow_definition 查到，flow_node/flow_skip 被 TenantLineHandler 过滤掉（tenant_id=NULL 不匹配 '000000'）

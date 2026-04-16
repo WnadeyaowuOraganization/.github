@@ -367,10 +367,10 @@ Week 4 (5/03-5/09):
 | ~~kimi5~~ | ~~#1564~~ | P2 | backend | ~~[企微打通-P0][1/17] WecomAppService SDK~~ | PR#3798✅merged 07:05 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1540+#2259~~ | P1 | fullstack | ~~[预算模板增强 6+12/12] 科目间预算调剂API+申请页面~~ | PR#3800✅merged 07:46（⚠️无JUnit/E2E/截图，已auto-merge）| ~~Done~~ |
 | ~~kimi1~~ | ~~#2294~~ | P2 | frontend | ~~[预算][6/32] 项目预算编制页面（WBS树形表格）~~ | PR#3803✅merged 16:28（E2E+截图✅）| ~~Done~~ |
-| kimi1 | #2289 | P1 | frontend | [预算][29/32] 金蝶导出页面 | 16:35启动 |
-| kimi2 | #2357 | P1 | frontend | [资金闭环-P1][11/17] 应付账款管理页面 | 16:28启动 |
-| kimi3 | #2292 | P2 | frontend | [预算][10/32] 预算模板选择与应用页面 | PR#3804⏳CI门2失败（task.md未勾），已注入修复 |
-| kimi4 | #1541+#2260 | P1 | fullstack | [预算模板增强 5+11/12] 科目级限额信封+预算编制增强 | PR#3805⏳CI门2失败（task.md未勾），已注入修复 |
-| kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | 15:09启动，⚠️误删ruoyi-chat seed文件，已注入还原 |
-| ⏳ | #3641 | P1 | frontend | 【Sprint-1最后1个】超管驾驶舱 管线健康度Tab前端 | 等槽位空出即派，截止20:00 |
+| kimi1 | #2289 | P1 | frontend | [预算][29/32] 金蝶导出页面 | PR#3806⏳CI中（质量门全过，构建环境跑中）|
+| kimi2 | #2357 | P1 | frontend | [资金闭环-P1][11/17] 应付账款管理页面 | 16:28启动，smoke中 |
+| ~~kimi3~~ | ~~#2292~~ | P2 | frontend | ~~[预算][10/32] 预算模板选择与应用页面~~ | PR#3804✅merged 17:02 | ~~Done~~ |
+| kimi3 | #3641 | P1 | frontend | 【Sprint-1最后1个】超管驾驶舱 管线健康度Tab前端 | 17:04启动，截止今晚20:00 |
+| kimi4 | #1541+#2260 | P1 | fullstack | [预算模板增强 5+11/12] 科目级限额信封+预算编制增强 | PR#3805⏳task.md修复已推，CI重跑中 |
+| kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | JUnit调试中，⚠️误删seed文件已还原注入 |
 

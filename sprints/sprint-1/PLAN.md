@@ -357,9 +357,10 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#2283~~ | P1 | frontend | ~~[制度管理][7/22] 制度详情+版本历史页面~~ | PR#3783✅merged 03:46 | ~~Done~~ |
 | ~~kimi3~~ | ~~#2280~~ | P1 | fullstack | ~~[制度管理][13/22] 签收统计面板~~ | PR#3786✅merged 2026-04-16T04:29（经理手动解冲突×2 rebase）| ~~Done~~ |
 | ~~kimi4~~ | ~~#1542~~ | P1 | budget | ~~[预算模板增强 4/12] 项目级科目增删（含补建4张依赖表）~~ | PR#3788✅merged 2026-04-16T04:49 | ~~Done~~ |
+| ~~kimi2~~ | ~~#1593~~ | P1 | backend | ~~[预算][21/32] 预算执行率自动计算+分级预警~~ | PR#3789✅merged 2026-04-16T05:34 | ~~Done~~ |
 | kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | 12:41启动 → import修复✅ Playwright中（mvn install修复注入） |
-| kimi2 | #1593 | P1 | backend | [预算][21/32] 预算执行率自动计算+分级预警 | 11:53启动 → Playwright中（compile→install修复注入 BASE_URL_API修复）|
-| kimi3 | #1576+#2278 | P2 | fullstack | [制度管理][17+20/22] AI模板库后端+AI起草向导前端 | 12:41启动 → mvn install✅ Controller加载✅ SaToken权限处理中 |
-| kimi4 | #1587+#2287 | P1 | fullstack | [预算][31+?/32] 预算管控参数配置API+前端页面 | 12:52启动 → ISysConfigService方法名自调试中 |
-| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API（warm-flow） | JUnit✅4方法 → Playwright中（wdpp_policy表经理补建）|
+| kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | 13:41启动 |
+| kimi3 | #1576+#2278 | P2 | fullstack | [制度管理][17+20/22] AI模板库后端+AI起草向导前端 | PR准备中（全栈完成，pr-body-lint进行中）|
+| kimi4 | #1587+#2287 | P1 | fullstack | [预算][31+?/32] 预算管控参数配置API+前端页面 | mvn install注入→BudgetConfigController加载中 |
+| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API（warm-flow） | warm-flow FlwTaskServiceImpl.ignore修复注入中 |
 

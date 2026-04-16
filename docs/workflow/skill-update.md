@@ -1007,3 +1007,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **已处置**：#1540 Done处理（代码已在dev），下批Issue要求CC在 pr-body-lint 后主动确认「已包含JUnit+Playwright+截图」再提PR
 - **建议改进**：考虑在 pr-body-lint 脚本增加第6道门：检查PR关联文件中是否包含 spec.ts 和 Test.java 文件，无则阻断
 - **状态**：🟡 观察中（首次）
+
+---
+2026-04-16 16:13 — 业务代码放入 ruoyi-chat 而非 wande-ai（kimi5 #1622，第1次）
+- **症状**：kimi5 将 ChannelAdapter/ConversationLog 等新类放在 ruoyi-modules/ruoyi-chat/，cc-test-env.sh 只启动 wande-ai jar，新端点永远 404；mvn test -pl ruoyi-chat 因 ruoyi-common-bom 依赖缓存失败无法跑 JUnit
+- **频次**：第 1 次
+- **根因**：CC 看到功能与 chat 模块相关，选择在现有模块下扩展，未意识到业务代码必须在 wande-ai
+- **已处置**：注入指令要求将所有新类迁移到 ruoyi-modules/wande-ai/
+- **建议改进**：backend-coding SKILL.md「模块归属」章节强化：凡新建的 Entity/Service/Controller/Mapper，无论功能与哪个现有模块相关，一律放 wande-ai；扩展现有模块行为用 Service 调用方式
+- **状态**：🟡 观察中（首次）

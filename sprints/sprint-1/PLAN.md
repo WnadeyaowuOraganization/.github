@@ -342,7 +342,7 @@ Week 4 (5/03-5/09):
 | ~~kimi1~~ | ~~#240~~ | P1 | fullstack | ~~[项目中心-P1] Phase6 [6/12]: 项目费用归集~~ | PR#3775✅merged | ~~Done~~ |
 | ~~kimi2~~ | ~~#1524~~ | P1 | backend | ~~[D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全~~ | PR#3774✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#1586~~ | P1 | backend | ~~[制度管理][1/22] 数据模型 — 6张表Flyway~~ | PR#3773✅merged 00:51 | ~~Done~~ |
-| kimi5 | #1585 | P1 | backend | [制度管理][2/22] 制度分类树CRUD API | #1586已merge，接续init-db+rebase |
+| kimi5 | #1585 | P1 | backend | [制度管理][2/22] 制度分类树CRUD API | PR#3776⏳ CI运行中 |
 | kimi1 | #1522 | P1 | backend | [方案引擎×D3][P1] 选型桥接JSON接口 | 08:50 启动 |
 | kimi2 | #1584 | P1 | backend | [制度管理][3/22] 制度文档CRUD API | 08:50 启动 |
 | kimi3 | #1583 | P1 | backend | [制度管理][4/22] 制度版本控制API | 08:55 启动 |

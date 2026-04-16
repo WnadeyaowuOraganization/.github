@@ -869,3 +869,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **频次**：第 **2 次**（kimi5 #1585 为第1次）
 - **处置**：注入修复指令（mvn install -pl wande-ai + restart-backend）；已更新 backend-coding SKILL.md 加显眼警告；广播所有在运行 CC
 - **状态**：🟠 第2次，skill 已更新；再出现 2 次触发全面止血
+
+---
+2026-04-16 11:28 — useVbenVxeGrid 从 @vben/common-ui 错误导入（第2次）
+- **症状**：kimi2 #2281 E2E 2/3 测试失败（组件未渲染）；之前 kimi1 #2282 导致 CI failure
+- **根因**：CC 写前端时将 `useVbenVxeGrid` 从 `@vben/common-ui` 导入，正确来源是 `#/adapter/vxe-table`；错误导入导致函数 undefined，表格组件无法初始化
+- **正确写法**：`import { Page } from '@vben/common-ui'; import { useVbenVxeGrid } from '#/adapter/vxe-table';`
+- **频次**：第 **2 次**（kimi1 #2282 第1次触发 CI failure，已在 hotfix 0441473e 修复）
+- **处置**：注入诊断+修复指令
+- **状态**：🟡 登记观察；再出现 2 次（累计≥4次）立即更新 frontend-coding SKILL.md

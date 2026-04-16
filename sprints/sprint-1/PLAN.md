@@ -384,5 +384,9 @@ Week 4 (5/03-5/09):
 | kimi1 | ~~#3300~~ | P1 | fullstack | ~~[S3数据管线][11/18] 数据管线监控Dashboard页面~~ | PR#3822 创建 2026-04-16T21:58，pr-test 排队中 |
 | **e2e** | **smoke批量修复** | — | e2e | **批量修复37个smoke测试统一标准登录模式** | PR#3821✅merged 2026-04-16T21:54，CI run 24536014690 排队中 |
 | kimi3 | ~~#2387~~ | P1 | frontend | ~~[执行管理] 利润预估页面+商机详情Tab+预估vs实际对比~~ | PR#3823 创建 2026-04-17，pr-test 排队中 |
-| kimi2 | #1691 | P1 | backend | [执行管理] 项目利润仪表盘API+排行榜+复盘报告（会话崩溃T10-T13重启，mvn依赖修复中） | 2026-04-17重启 |
+| ~~kimi2~~ | ~~#1691~~ | P1 | backend | ~~[执行管理] 项目利润仪表盘API+排行榜+复盘报告~~ | PR#3824✅merged 2026-04-16T22:45Z，dev CI VITE_APP_TITLE修复后重部署 |
+| **e2e** | **smoke Round2修复** | — | e2e | **62个文件移除networkidle+无登录+getAuthToken→标准模式** | dev `e604e78a4`推送，磁盘同步，E2E gate `24538310005`触发中 |
+| **infra** | **VITE_APP_TITLE修复** | — | frontend | **补全 .env.production 缺失变量，修复生产build报错** | dev `02cc421bb`推送，run `24537671489`部署中 |
+| kimi3 | #2506 | P1 | fullstack | [执行管理] EVM 挣值管理 — SPI/CPI/EAC/健康度评分 | 2026-04-17启动 |
+| kimi5 | #3301 | P1 | fullstack | [S3数据管线][12/18] 加密文件管理页面 | 2026-04-17启动，经理已解答数据源/原型/依赖问题 |
 

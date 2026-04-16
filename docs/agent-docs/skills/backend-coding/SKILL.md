@@ -5,6 +5,11 @@ description: Write Spring Boot 3 backend Java code for Wande-Play following RuoY
 
 # 后端编码规范
 
+> **⛔ MUST NOT — fullstack 配对红线**（4次 kimi4/kimi3 违规后加入）：
+> 研发经理在启动你的会话后发消息告知「配对前端 Issue #XXXX」时，**禁止**在前端代码完成之前提交任何 PR。
+> **必须**：后端 + 前端全部完成后，在同一分支合并为一个 fullstack PR，PR body 中必须同时包含后端文件截图和前端截图（参考 pr-visual-proof skill）。
+> 违反 = manager 会拒绝 merge + 要求重做前端，PR 作废。
+
 Spring Boot 3 + MyBatis-Plus + Sa-Token + RuoYi-Vue-Plus。**业务代码只能写在 `ruoyi-modules/wande-ai/`**。
 
 ## 模块归属（强制）

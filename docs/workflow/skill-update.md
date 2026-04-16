@@ -978,3 +978,14 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **频次**：第 **3 次**（第1次：kimi4 #1591 开工汇报仅规划后端；第2次：PR#3794 创建时 frontend=0；第3次：PR merge）
 - **已处置**：#1591 Done；重启 kimi4 单独做 #2290 前端；登记止血待 ≥4 次
 - **建议改进**（距止血阈值 1 次）：frontend-coding + backend-coding SKILL.md 加「fullstack 指派时 PR 质量门必须含前端文件，否则拦截」；考虑在质量预检 CI 加 fullstack 标签检测
+
+---
+2026-04-16 15:03 — fullstack 指派后 CC 仅实现后端退出（第4次）⚡止血
+- **症状**：kimi3 #1595+#2291（fullstack指派）→ PR#3797 仅含后端7文件（frontend=0），PR auto-merge，kimi3 会话退出
+- **根因**：run-cc.sh 启动时只注入主 Issue #1595 的 source.md；CC 未收到配对 #2291 的指令，不知道需要实现前端
+- **频次**：第 **4 次**（达到止血阈值）
+- **已处置**：
+  1. ✅ 更新 `docs/agent-docs/skills/backend-coding/SKILL.md` 加 fullstack 配对红线（收到"配对前端 Issue"消息后，禁止在前端完成前提 PR）
+  2. ✅ 重启 kimi3 单独做 #2291 前端
+  3. 通知所有活跃 CC（见下文）
+- **根因2（流程漏洞）**：经理指派 fullstack 对时若未通过 tmux 注入第二个 Issue，CC 无法感知配对。已在 kimi1 (1540+2259) 补注入；需形成习惯

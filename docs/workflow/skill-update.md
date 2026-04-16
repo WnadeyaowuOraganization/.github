@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 13:55 【前端路由 layout 引用错误 — 第1次】kimi3 #1576 admin-center.ts 使用不存在路径导致 Rollup 构建失败
+
+- **症状**：dev CI 24494344231 前端构建失败：`Rollup failed to resolve import "#/layouts/default/index.vue" from "admin-center.ts"`
+- **频次**：kimi3 #1576（**第1次**）
+- **根因**：CC 在新增父级路由时直接写 `component: () => import('#/layouts/default/index.vue')`，但该路径不存在；正确用法是 `import { BasicLayout } from '#/layouts'` 然后 `component: BasicLayout`
+- **已处置**：经理 hotfix 直推 dev（commit `29b95a8a`），改为 `BasicLayout` 引用；CI run `24494523232` 重新构建中
+- **建议改进**：在 frontend-coding SKILL 增加一条父级路由 component 用法示例：必须用 `BasicLayout` 而非直接 import layouts 路径
+- **状态**：🟡 第1次，观察中；若再次出现立即更新 frontend-coding SKILL
+
+---
+
 ### 2026-04-16 13:23 【新增类不被 Spring 加载 — 第3次】kimi1 #1574 PolicyClauseController 404
 
 - **症状**：kimi1 Playwright 测试全部 404，`No endpoint GET /wande/policy/clause/list`

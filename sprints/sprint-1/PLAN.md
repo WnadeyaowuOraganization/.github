@@ -371,6 +371,6 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#2357~~ | P1 | frontend | ~~[资金闭环-P1][11/17] 应付账款管理页面~~ | PR#3807⏳task.md commit经理修复(df2dea9f)，新CI已排队 17:24 |
 | ~~kimi3~~ | ~~#2292~~ | P2 | frontend | ~~[预算][10/32] 预算模板选择与应用页面~~ | PR#3804✅merged 17:02 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3641~~ | P1 | frontend | ~~【Sprint-1最后1个】超管驾驶舱 管线健康度Tab前端~~ | PR#3667✅已merged 2026-04-14，#3641已验收Done 17:16 |
-| kimi4 | #1541+#2260 | P1 | fullstack | [预算模板增强 5+11/12] 科目级限额信封+预算编制增强 | PR#3805⏳smoke 3/3✅已修，新CI已排队 17:26（run#24502667282）|
+| ~~kimi4~~ | ~~#1541+#2260~~ | P1 | fullstack | ~~[预算模板增强 5+11/12] 科目级限额信封+预算编制增强~~ | PR#3805✅merged 17:29 | ~~Done~~ |
 | kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | Playwright API spec强制门限未做→已注入阻止PR，补写T7+T13中 |
 

@@ -348,6 +348,7 @@ Week 4 (5/03-5/09):
 | ~~kimi1~~ | ~~#1581~~ | P1 | backend | ~~[制度管理][9/22] 制度发布+员工签收API~~ | PR#3780✅merged 02:41 | ~~Done~~ |
 | ~~kimi1~~ | ~~#2282~~ | P1 | frontend | ~~[制度管理][8/22] 制度富文本编辑器~~ | PR#3782✅merged（hotfix import修复 0441473e）|
 | ~~kimi1~~ | ~~#1577~~ | P1 | backend | ~~[制度管理][15/22] 制度废止+归档API~~ | PR#3784✅merged | ~~Done~~ |
+| kimi1 | #1579 | P1 | backend | [制度管理][11/22] 签收记录导出（举证包PDF） | 11:33启动 |
 | ~~kimi2~~ | ~~#1584~~ | P1 | backend | ~~[制度管理][3/22] 制度文档CRUD API~~ | PR#3778✅merged 02:10 | ~~Done~~ |
 | ~~kimi2~~ | ~~#2284~~ | P1 | frontend | ~~[制度管理][6/22] 制度管理中心页面（综管端）~~ | PR#3781✅merged 02:35（⚠️Bean冲突hotfix 9b7bf0de已推dev）| ~~Done~~ |
 | kimi2 | #2281 | P1 | frontend | [制度管理][12/22] 员工制度查阅+签收页面 | E2E 3/3全绿，截图+PR提交中（72%ctx） |

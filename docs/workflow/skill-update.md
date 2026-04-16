@@ -18,6 +18,34 @@
 
 ---
 
+### 2026-04-16 18:53 【e2e-top 0% context 卡死 — 第1次】CC 运行 12h+ 后 context compaction 导致无法处理新指令
+
+- **症状**：e2e-top CC 运行 12h+ 后静默 42 分钟，收到新指令后仅显示 `✽ Accomplishing… (16s)` 即停止，未写测试文件；多次 Enter/Escape/resend 仍无效；API 显示 `messages_count` 从 209→215（消息已接收但未有效处理）
+- **频次**：e2e-top（**第1次**）；kimi5 #1622 当日早些时候也出现相同症状（context 0% Cogitated 30s loop）
+- **根因**：CC 运行超过 12 小时，context compaction 将历史压缩至 0%；compaction 后 CC 进入类 idle 状态，接收新消息但不完整处理（仅 `Accomplishing` 16s 即停）；标准 `/status`+Escape+resend 只在 compaction 前后过渡期有效，12h+ 后 context 完全重置无法通过消息唤醒
+- **已处置**：从旧日志 `/tmp/sprint1-audit.log` 手动提取7个失败项；暂不创建 Issue（16 workers 导致误报风险）；待 2026-04-17 testing window 以 `--workers=1` 重新验证
+- **建议改进**：
+  1. e2e-top cron 脚本应在 CC 运行超过 8h 时自动 kill + restart（防 context 枯竭）
+  2. 测试脚本中强制 `--workers=1`，禁止 `--workers=N`（N>1）出现在 `npx playwright test` 命令中
+- **状态**：🟡 第1次，观察；2026-04-17 testing window 重新验证7个失败项
+
+---
+
+### 2026-04-16 18:53 【Sprint-1 回归7项失败（16-worker误报待验证）】
+
+- **症状**：e2e-top sprint1-visual-audit.spec.ts（35 tests, **16 workers**）发现7个失败：
+  1. 全球项目矿场 - Tab "早期"/"投资" 不存在 + 新增按钮不存在
+  2. 超管驾驶舱 - 管线健康度 - 页面有错误提示
+  3. 耀总驾驶舱首页 - 页面没有数据卡片
+  4~7. 产品门户（产品目录/备件目录/门户产品管理/分类管理）- 表格不存在
+- **频次**：Sprint-1 回归（**第1次**）
+- **根因**：测试用 **16 workers** 违反 `--workers=1` 规定，session 竞态可能造成误报；产品门户可能需要经销商角色权限（admin 账号不可见）
+- **已处置**：未建 Issue（待验证）；旧日志保留在 `/tmp/sprint1-audit.log`
+- **建议改进**：2026-04-17 测试窗口用 `--workers=1` 重跑，确认失败后再逐项建 Issue
+- **状态**：🟡 待验证（2026-04-17 testing window）
+
+---
+
 ### 2026-04-16 13:58 【合并冲突丢 } + /** — 第3+4次】kimi3 #1576 policy.ts 两处破损（触发止血阈值 ≥4）
 
 - **症状**：dev CI 24494523232/24494577500 连续两次失败：`policy.ts:115/238 Unexpected "*"` — 接口 `PolicyEmployeeListReq` 缺 `}`、`acknowledge()` 方法缺 `},`，两处 `/**` opener 均丢失

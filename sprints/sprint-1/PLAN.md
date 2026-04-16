@@ -373,6 +373,9 @@ Week 4 (5/03-5/09):
 | ~~kimi5~~ | ~~#1582~~ | P1 | backend | ~~[制度管理][5/22] 制度审批流API（warm-flow）~~ | PR#3792✅merged 06:23 / dev hotfix pom+ruoyi-workflow依赖 06:28✅ | ~~Done~~ |
 | ~~kimi5~~ | ~~#1564~~ | P2 | backend | ~~[企微打通-P0][1/17] WecomAppService SDK~~ | PR#3798✅merged 07:05 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1540+#2259~~ | P1 | fullstack | ~~[预算模板增强 6+12/12] 科目间预算调剂API+申请页面~~ | PR#3800✅merged 07:46（⚠️无JUnit/E2E/截图，已auto-merge）| ~~Done~~ |
-| kimi1 | #2294 | P2 | frontend | [预算][6/32] 项目预算编制页面（WBS树形表格）| 15:53启动 |
+| ~~kimi1~~ | ~~#2294~~ | P2 | frontend | ~~[预算][6/32] 项目预算编制页面（WBS树形表格）~~ | PR#3803✅merged 16:28（E2E+截图✅）| ~~Done~~ |
+| kimi1 | #2289 | P1 | frontend | [预算][29/32] 金蝶导出页面 | 16:35启动 |
+| kimi2 | #2357 | P1 | frontend | [资金闭环-P1][11/17] 应付账款管理页面 | 16:28启动 |
+| kimi3 | #2292 | P2 | frontend | [预算][10/32] 预算模板选择与应用页面 | 15:53启动 |
 | kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | 15:09启动，#2298已注入，#1564依赖已在dev |
 

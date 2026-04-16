@@ -343,7 +343,7 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#1524~~ | P1 | backend | ~~[D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全~~ | PR#3774✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#1586~~ | P1 | backend | ~~[制度管理][1/22] 数据模型 — 6张表Flyway~~ | PR#3773✅merged 00:51 | ~~Done~~ |
 | ~~kimi5~~ | ~~#1585~~ | P1 | backend | ~~[制度管理][2/22] 制度分类树CRUD API~~ | PR#3776✅merged 01:44 | ~~Done~~ |
-| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API | warm-flow DB数据注入中（flow_definition+flow_node+flow_skip） |
+| kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API | curl验证✅（tenant_id修复）→ JUnit + Playwright API中 |
 | ~~kimi1~~ | ~~#1522~~ | P1 | backend | ~~[方案引擎×D3][P1] 选型桥接JSON接口~~ | PR#3777✅merged 01:56 | ~~Done~~ |
 | ~~kimi1~~ | ~~#1581~~ | P1 | backend | ~~[制度管理][9/22] 制度发布+员工签收API~~ | PR#3780✅merged 02:41 | ~~Done~~ |
 | ~~kimi1~~ | ~~#2282~~ | P1 | frontend | ~~[制度管理][8/22] 制度富文本编辑器~~ | PR#3782✅merged（hotfix import修复 0441473e）|
@@ -356,5 +356,7 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#1583~~ | P1 | backend | ~~[制度管理][4/22] 制度版本控制API~~ | PR#3779✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#2283~~ | P1 | frontend | ~~[制度管理][7/22] 制度详情+版本历史页面~~ | PR#3783✅merged 03:46 | ~~Done~~ |
 | ~~kimi3~~ | ~~#2280~~ | P1 | fullstack | ~~[制度管理][13/22] 签收统计面板~~ | PR#3786✅merged 2026-04-16T04:29（经理手动解冲突×2 rebase）| ~~Done~~ |
-| kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | JUnit 7/7✅ + Playwright API 7/7✅，进入 pr-visual-proof |
+| kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | Playwright PUT测试调试中 |
+| kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | 12:41启动 |
+| kimi3 | #1576+#2278 | P2 | fullstack | [制度管理][17+20/22] AI模板库后端+AI起草向导前端 | 12:41启动 |
 

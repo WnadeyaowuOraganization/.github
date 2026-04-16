@@ -122,11 +122,11 @@
 | ~~#3579~~ | ~~P1~~ | ~~fullstack~~ | ~~产品门户Master — 路由+权限+布局~~ ✅ CLOSED | ~~Done~~ | #3597 |
 | ~~#3582~~ | ~~P0~~ | ~~frontend~~ | ~~产品目录页 — 卡片网格+筛选搜索~~ ✅ CLOSED | ~~Done~~ | #3579 |
 | ~~#3583~~ | ~~P0~~ | ~~frontend~~ | ~~产品详情页 — 参数+3D查看器~~ ✅ CLOSED | ~~Done~~ | #3582 |
-| #3584 | P0 | fullstack | ExplodeView集成+G7e Docker部署+STEP批量处理Pipeline | 🔄 In Progress | #3583 |
+| ~~#3584~~ | ~~P0~~ | ~~fullstack~~ | ~~ExplodeView集成+G7e Docker部署+STEP批量处理Pipeline~~ ✅ CLOSED | ~~Done~~ | #3583 |
 | ~~#3587~~ | ~~P1~~ | ~~backend~~ | ~~备件API + 询价购物车 CRUD~~ ✅ CLOSED | ~~Done~~ | #3579 |
-| #3585 | P1 | frontend | 备件目录页+爆炸图联动 | ⏳ blocked-by #3584 | #3584 |
-| #3586 | P1 | fullstack | 资料下载S3 presigned URL分级 | 🔄 In Progress | #3579 |
-| #3588 | P2 | frontend | H5移动端适配 | ⏳ blocked-by #3584 | #3584 |
+| ~~#3585~~ | ~~P1~~ | ~~frontend~~ | ~~备件目录页+爆炸图联动~~ ✅ CLOSED | ~~Done~~ | #3584 |
+| ~~#3586~~ | ~~P1~~ | ~~fullstack~~ | ~~资料下载S3 presigned URL分级~~ ✅ CLOSED | ~~Done~~ | #3579 |
+| ~~#3588~~ | ~~P2~~ | ~~frontend~~ | ~~H5移动端适配~~ ✅ CLOSED | ~~Done~~ | #3584 |
 
 > **并行策略**：Tier-5与Tier-2/3/4完全独立，可同时启动
 
@@ -205,6 +205,10 @@ Week 4 (5/03-5/09):
 
 ## 指派建议（最近20个）
 
+> 🚨 **Sprint-1 交付截止：2026-04-16（今晚）20:00 前完成最后1个 Issue**
+> 下周一（2026-04-20）正式交付，留 2026-04-17~19 三天测试+修复。
+> Sprint-2 执行管理等 Issue 已移出排程槽位，待 Sprint-1 全部 Done 后再开放。
+
 | 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
 |------|-------|------|------|------|--------------|--------|
 | ~~kimi5~~ | ~~#3580~~ | ~~P1~~ | ~~backend~~ | ~~产品门户 1/10 数据库表创建~~ PR#3694✅ | — | ~~medium~~ |
@@ -212,21 +216,11 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#3683~~ | ~~P1~~ | ~~frontend~~ | ~~#3550 Tab2/Tab4 图表拆分追补~~ PR#3699✅ | — | ~~medium~~ |
 | ~~kimi3~~ | ~~#3537~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-10 我的提成~~ PR#3695✅ | — | ~~medium~~ |
 | ~~kimi4~~ | ~~#3532~~ | ~~P1~~ | ~~fullstack~~ | ~~CRM-05 询盘工作台~~ PR#3698✅ | — | ~~high~~ |
-| kimi1 | **#3706** | P0 | backend | **[运行中]** 执行管理 [1/22] 执行项目实体+CRUD+列表API+统计API，00:27启动 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| kimi5 | **#3707** | P0 | backend | **[运行中]** 执行管理 [2/22] 阶段配置API（直销12/经销8/国贸10阶段），00:27启动 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| kimi2 | **#3708** | P0 | frontend | **[运行中]** 执行管理 [3/22] 列表页 KPI卡片+筛选+表格（mock优先），00:27启动 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| kimi3 | **#3584** | P0 | frontend | **[运行中]** 产品门户 [5/10] ExplodeView集成+G7e Docker+STEP批量处理，22:06启动 | `docs/design/product-portal/02-detail.html` | high |
-| kimi4 | **#3586** | P1 | fullstack | **[运行中]** 产品门户 [7/10] 资料下载S3 presigned URL分级，22:06启动 | `docs/design/product-portal/详细设计.md` | medium |
-| ~~kimi3~~ | ~~#3585~~ | ~~P1~~ | ~~frontend~~ | ~~产品门户 [6/10] 备件目录页+爆炸图联动~~ #3584 PR#3733 merged后00:58启动 | `docs/design/product-portal/06-parts.html` | ~~medium~~ |
-| — | **#3709** | P0 | frontend | 执行管理 [4/22] 详情页框架8-Tab容器+路由 ⏳ #3708合并后派 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| — | #3715+#3718 | P0 | backend+frontend | 执行管理 [10+13/22] 回款计划API+Tab6回款前端（mock配对）⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| — | #3716+#3719 | P0 | backend+frontend | 执行管理 [11+14/22] 文档中心API+Tab7文档+360看板（mock配对）⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| — | #3713+#3714+#3717 | P0 | backend+frontend | 执行管理 [8+9+12/22] 合同API+交付节点API+Tab3合同与交付 ⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| — | #3720+#3721+#3723 | P0 | backend+frontend | 执行管理 [15+16+18/22] BOM树+工艺路线+Tab4甘特图 ⏳ #3706合并后批量派 | `docs/design/execution-mgmt/详细设计.md` | high |
-| — | #3710+#3711 | P0 | frontend | 执行管理 [5+6/22] Tab1概览+Tab2阶段进度 ⏳ #3709+#3706+#3707全合并后 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| — | #3712 | P0 | fullstack | 执行管理 [7/22] 阶段推进+审批引擎D66对接 ⏳ #3707+#3711合并后 | `docs/design/execution-mgmt/详细设计.md` | high |
-| — | #3722+#3724 | P0 | backend+frontend | 执行管理 [17+19/22] 变更管理API+Tab5变更 ⏳ #3706+#3712合并后 | `docs/design/execution-mgmt/详细设计.md` | medium |
-| — | #3725+#3726+#3727 | P0 | backend+frontend | 执行管理 [20+21+22/22] 验收+质保API+Tab8售后质保 ⏳ Wave4末尾 | `docs/design/execution-mgmt/详细设计.md` | medium |
+| ~~kimi3~~ | ~~#3584~~ | ~~P0~~ | ~~fullstack~~ | ~~产品门户 [5/10] ExplodeView集成+G7e Docker+STEP~~ ✅ CLOSED | `docs/design/product-portal/02-detail.html` | ~~high~~ |
+| ~~kimi4~~ | ~~#3586~~ | ~~P1~~ | ~~fullstack~~ | ~~产品门户 [7/10] 资料下载S3 presigned URL分级~~ ✅ CLOSED | `docs/design/product-portal/详细设计.md` | ~~medium~~ |
+| ~~kimi3~~ | ~~#3585~~ | ~~P1~~ | ~~frontend~~ | ~~产品门户 [6/10] 备件目录页+爆炸图联动~~ ✅ CLOSED | `docs/design/product-portal/06-parts.html` | ~~medium~~ |
+| ~~—~~ | ~~#3588~~ | ~~P2~~ | ~~frontend~~ | ~~产品门户 [9/10] H5移动端适配~~ ✅ CLOSED | `docs/design/product-portal/详细设计.md` | ~~low~~ |
+| — | **#3641** | **P1** | frontend | **【Sprint-1 最后1个】** 超管驾驶舱 管线健康度 Tab 前端 — 接入 #3635 真数据 | `docs/design/超管驾驶舱/详细设计.md` | medium |
 
 ## 指派历史（完成后划线）
 

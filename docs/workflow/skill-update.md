@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-16 13:15 【新增类不被 Spring 加载】mvn spring-boot:run 使用 M2 cache 中旧 wande-ai
+
+- **症状**：kimi3 新建 `PolicyTemplateController`，重编译、清理 target、重启后端均无效，curl 持续 404。Spring 日志无 BeanCreationException，但 `No mapping for GET /policy/templates/list`
+- **频次**：kimi3 #1576（**第1次**）
+- **根因**：`cc-test-env.sh restart-backend` 调用 `mvn spring-boot:run`，只重编 `ruoyi-admin`；`wande-ai` 模块的新类需先 `mvn install` 更新 M2 cache，否则 spring-boot:run 加载旧 jar
+- **已处置**：经理注入修复步骤：`mvn install -pl ruoyi-modules/wande-ai -am -DskipTests` → `restart-backend kimi3`
+- **建议改进**：**backend-coding SKILL** 明确：新增 Java 类后必须先 `mvn install -pl ruoyi-modules/wande-ai -am -DskipTests -Dmaven.test.skip=true` 再 `restart-backend`；仅修改已有类才可直接 `restart-backend`
+- **状态**：🟡 第1次，观察；若第2次发生立改 backend-coding SKILL
+
+---
+
 ### 2026-04-16 12:57 【经理手动合并冲突丢失语法结构 — 第2次】IPolicyAcknowledgementService + ServiceImpl dev构建失败
 
 - **症状**：dev CI 24492817565 构建失败：`IPolicyAcknowledgementService.java:80 illegal start of type / illegal character \uff08`；合并时 `countUnacknowledged()` 和 `remindUnacknowledged()` 之后的 Javadoc `/**` 全部丢失；ServiceImpl `countUnacknowledged()` 末尾 `}` 和 `@Override` 丢失

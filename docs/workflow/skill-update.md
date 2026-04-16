@@ -82,6 +82,26 @@
 
 ---
 
+### 2026-04-16 10:38 【git clean 误删】CC 执行 git clean -fd 清理 M2 untracked 时连带删除未提交业务代码
+
+- **症状**：kimi4 #1542（1h34m）在阶段6准备 PR 时执行 `git clean -fd`，清理 `backend/~/cc_scheduler/m2/kimi4/...` 等 M2 untracked 文件，**同时删除所有未 commit 的业务源码**（4张表 Flyway SQL + Entity/VO/BO/Mapper/Service/Controller + 测试文件 + task.md）
+- **频次**：第 **1** 次
+- **根因**：
+  - M2 per-kimi 仓库（`~/cc_scheduler/m2/kimiN/repository`）通过相对路径 `-Dmaven.repo.local=~/...` 写入，但 `~/` 展开为绝对路径时，`mvn` 有时会在项目目录下创建 `backend/~/...` 形式的占位目录（路径解析 bug）→ 大量 untracked
+  - CC 看到 untracked 整洁冲动触发 `git clean -fd`，**未加 `-e` 排除业务文件**
+  - CLAUDE.md 红线 #13 只讲 `.claude/skills/` 和 `CLAUDE.md`，**未明确禁止裸跑 `git clean -fd`**
+- **已处置**：
+  - 通过 `javap -p` 反编译 `target/classes` 下的 .class 文件恢复所有 Entity/Controller/Mapper 字段和方法签名
+  - 通过 jar `__Javadoc.json` 恢复 Service 接口方法文档
+  - 注入完整恢复指令（Entity字段+Controller方法+Mapper接口），kimi4 按结构重建源码
+  - application.yml typeAliasesPackage 修改（唯一 tracked 文件）完好无损
+- **建议改进**：
+  1. **CLAUDE.md 红线 #13 追加**：禁止裸跑 `git clean -fd`；清 untracked 必须用 `git clean -fd -e '.claude/skills/' -e 'CLAUDE.md' -e '*.java' -e '*.sql' -e '*.xml' -e '*.ts'`（仅清 target/M2 残留）
+  2. **backend-coding skill 追加**：写完代码立即 commit（至少 `git add -p` + `git commit --allow-empty-message`），不要积攒到阶段末尾再提交，防止 git clean / crash 丢失
+- **状态**：🟡 第1次，建议下轮改 CLAUDE.md 红线#13
+
+---
+
 ### 2026-04-15 12:55 【前端构建 P0】同名 `xxx.ts` 影子文件覆盖 `xxx/index.ts` 目录导致 dev 部署连环失败 10 次
 
 - **症状**：2026-04-15 03:13~09:06 dev 部署 CI 连续 10 次 deploy-frontend failure，`pnpm build:antd` 报 `"listUserByDeptId" is not exported by "src/api/system/user.ts"` 等 7 个导出缺失；后端部署成功但前端源码停留在 03:12 以前版本 → 期间 9 个 CRM PR（#3679/#3682/#3684/#3686/#3687/#3689/#3690/#3691/#3692）在 `localhost:8080` 根本点不到（用户端完全"看不见"新功能），直到 10:13 #3693 紧急止血后才恢复

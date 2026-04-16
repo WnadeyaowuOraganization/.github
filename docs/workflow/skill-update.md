@@ -1016,3 +1016,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **已处置**：注入指令要求将所有新类迁移到 ruoyi-modules/wande-ai/
 - **建议改进**：backend-coding SKILL.md「模块归属」章节强化：凡新建的 Entity/Service/Controller/Mapper，无论功能与哪个现有模块相关，一律放 wande-ai；扩展现有模块行为用 Service 调用方式
 - **状态**：🟡 观察中（首次）
+
+---
+2026-04-16 16:13 — 后端PR缺JUnit+Playwright API spec被auto-merge（第2次）
+- **症状**：PR#3802 (#1589 后端4文件) 仅含1个E2E smoke spec，无JUnit无Playwright API spec，经理要求补充后PR已在补充过程中auto-merge
+- **频次**：第 **2次**（第1次 PR#3800 #1540）
+- **根因**：CC提交PR后进入轮询，经理注入「补测试」指令时PR已经merge；CC未等待经理确认即开始轮询
+- **已处置**：#1589 Done处理，代码在dev
+- **建议改进**：cc-report skill 中的「等待merge轮询」模板前，增加强制确认步骤：「经理已确认PR质量门全过」才能开始轮询；或在pr-body-lint脚本增第6道门检查spec/Test文件
+- **状态**：🟠 频繁（≥2次），下次再出现立即更新skill

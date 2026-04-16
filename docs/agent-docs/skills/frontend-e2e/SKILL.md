@@ -49,12 +49,24 @@ const ROUTE = '/business/tender/project-mine';
 const PAGE_NAME = '项目挖掘';
 
 test.describe(`smoke: ${PAGE_NAME}`, () => {
+  // ⚠️ 登录 beforeEach 模板（3次踩坑后固定，禁止改动顺序）
+  test.beforeEach(async ({ page }) => {
+    await page.goto(`${BASE_URL}/auth/login`, { waitUntil: 'networkidle' });
+    // 1. 先 dismiss modal（必须在填账密之前！按钮文字是"知道了"不是"我知道了"）
+    try {
+      await page.waitForSelector('.ant-modal-close, button:has-text("知道了")', { timeout: 3000 });
+      await page.click('.ant-modal-close, button:has-text("知道了")');
+      await page.waitForTimeout(500);
+    } catch { /* 无 modal 忽略 */ }
+    // 2. 填账密
+    await page.getByPlaceholder('请输入用户名').fill('admin');
+    await page.getByRole('textbox', { name: '密码' }).fill('admin123');
+    // 3. 点登录（排除手机号/扫码按钮）
+    await page.locator('button:has-text("登录"):not(:has-text("手机号")):not(:has-text("扫码"))').first().click();
+    await page.waitForURL(url => !url.pathname.includes('/auth/login'), { timeout: 15000 });
+  });
+
   test('页面可渲染', async ({ page }) => {
-    await page.goto('http://localhost:8101/login');
-    await page.fill('input[name="username"]', 'admin');
-    await page.fill('input[name="password"]', 'admin123');
-    await page.click('button[type="submit"]');
-    await page.waitForURL('**/workbench');
 
     await page.goto(`http://localhost:8101${ROUTE}`);
 

@@ -1069,3 +1069,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **已处置**：注入 sed 命令全部标为完成 + push 修复
 - **建议改进**：pr-visual-proof SKILL 中补充"提PR后必须检查 task.md 已全勾再 push"顺序；考虑 pr-body-lint 脚本本地检查也对 task.md 更严格
 - **状态**：🟡 观察中
+
+## 2026-04-16 Playwright modal按钮文字"知道了"（第3次，kimi5确认）
+- **问题**：smoke spec 中 `button:has-text("我知道了")` 匹配不到，导致 modal 未关闭，login 失败
+- **根因**：kimi5 环境的 modal 按钮实际文字是 `"知道了"`（4字，非5字）
+- **修复**：`button:has-text("知道了")` 或 `.ant-modal-close` 二选一
+- **状态**：第3次出现（kimi3/kimi4/kimi5），已注入止血

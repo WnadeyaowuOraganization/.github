@@ -314,7 +314,7 @@ Week 4 (5/03-5/09):
 | ~~kimi5~~ | ~~#3588~~ | ~~P2~~ | ~~frontend~~ | ~~产品门户 [9/10] H5移动端适配（产品目录/详情/备件三页）~~ PR#3753✅merged | ~~Done~~ |
 | ~~kimi5~~ | ~~#1925~~ | P0 | pipeline | ~~[D3-v2.0] AI知识库扩充（产品参数/安全标准/安装规范/历史项目）~~ PR#3758✅merged | ~~Done~~ |
 | ~~kimi5~~ | ~~#1865~~ | P1 | pipeline | ~~[D3-AI] 设计师知识画像与自适应教学（ITS学员模型）~~ PR#3765✅merged | ~~Done~~ |
-| kimi5 | #1467 | P1 | backend | [商务赋能知识中台][25/28] 安装说明自动生成 | PR#3772⏳ 门2已修复推送，等待CI merge |
+| ~~kimi5~~ | ~~#1467~~ | P1 | backend | ~~[商务赋能知识中台][25/28] 安装说明自动生成~~ PR#3772✅merged 2026-04-16T00:36:10Z | ~~Done~~ |
 | ~~kimi1~~ | ~~#3719~~ | P0 | frontend | ~~执行管理v2.0 [14/22] Tab7文档中心（360看板+分类树+文档列表）~~ PR#3743✅merged 2026-04-16 03:10 | ~~Done~~ |
 | ~~kimi1~~ | ~~#3723~~ | ~~P0~~ | ~~frontend~~ | ~~执行管理v2.0 [18/22] Tab4甘特图+BOM预览（前端），mock配对#3720/#3721~~ PR#3749✅merged 2026-04-16 04:02 | ~~Done~~ |
 | ~~kimi1~~ | ~~#3724~~ | ~~P1~~ | ~~frontend~~ | ~~执行管理v2.0 [19/22] Tab5变更管理（KPI+列表+详情），mock配对#3722~~ PR#3752✅merged 2026-04-16 04:23 | ~~Done~~ |
@@ -339,7 +339,8 @@ Week 4 (5/03-5/09):
 | ~~kimi4~~ | ~~#3727~~ | P2 | frontend | ~~执行管理v2.0 [22/22] Tab8 售后质保前端~~ PR#3764✅merged | ~~Done~~ |
 | ~~kimi4~~ | ~~#1531~~ | P1 | backend | ~~[矿场增强] 可赢性评分模型(Win Probability) — 4维度综合赢率计算~~ PR#3767✅merged 23:19 | ~~Done~~ |
 | kimi4 | #1532 | P1 | backend | [矿场增强] 矿场转化漏斗统计API — 5级转化率+按商务人员拆分 | PR#3768⏳ 等待CI（经理代提，Token Pool耗尽）|
-| kimi1 | #240 | P1 | fullstack | [项目中心-P1] Phase6 [6/12]: 项目费用归集 — 报销/BOM/外包关联 + 利润计算 | 08:35 启动 |
-| kimi2 | #1524 | P1 | backend | [D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全 | 08:35 启动 |
-| kimi3 | #1586 | P1 | backend | [制度管理][1/22] 数据模型 — 6张表Flyway | 08:38 启动 |
+| kimi1 | #240 | P1 | fullstack | [项目中心-P1] Phase6 [6/12]: 项目费用归集 — 报销/BOM/外包关联 + 利润计算 | PR#3775⏳ 等待CI |
+| kimi2 | #1524 | P1 | backend | [D3-缺陷修复][P1][6/7] ComponentDependencyGraph DAG构建逻辑补全 | PR#3774⏳ 等待CI |
+| kimi3 | #1586 | P1 | backend | [制度管理][1/22] 数据模型 — 6张表Flyway | PR#3773⏳ 等待CI |
+| kimi5 | #1585 | P1 | backend | [制度管理][2/22] 制度分类树CRUD API | 08:44 启动（依赖#1586） |
 

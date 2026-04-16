@@ -372,5 +372,5 @@ Week 4 (5/03-5/09):
 | ~~kimi3~~ | ~~#2292~~ | P2 | frontend | ~~[预算][10/32] 预算模板选择与应用页面~~ | PR#3804✅merged 17:02 | ~~Done~~ |
 | ~~kimi3~~ | ~~#3641~~ | P1 | frontend | ~~【Sprint-1最后1个】超管驾驶舱 管线健康度Tab前端~~ | PR#3667✅已merged 2026-04-14，#3641已验收Done 17:16 |
 | ~~kimi4~~ | ~~#1541+#2260~~ | P1 | fullstack | ~~[预算模板增强 5+11/12] 科目级限额信封+预算编制增强~~ | PR#3805✅merged 17:29 | ~~Done~~ |
-| kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | Playwright API spec强制门限未做→已注入阻止PR，补写T7+T13中 |
+| kimi5 | #1622+#2298 | P0 | fullstack | [企微打通][3/18] ChannelAdapter + Cockpit监控面板 | T20经理修复(f580fb0be)，全勾，kimi5唤醒中进行T24→T25 |
 

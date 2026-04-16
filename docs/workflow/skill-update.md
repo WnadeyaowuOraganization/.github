@@ -18,14 +18,24 @@
 
 ---
 
-### 2026-04-16 13:15 【新增类不被 Spring 加载】mvn spring-boot:run 使用 M2 cache 中旧 wande-ai
+### 2026-04-16 13:23 【新增类不被 Spring 加载 — 第3次】kimi1 #1574 PolicyClauseController 404
+
+- **症状**：kimi1 Playwright 测试全部 404，`No endpoint GET /wande/policy/clause/list`
+- **频次**：kimi3 #1576（第1次）→ **kimi2 #1593（第2次，用了 compile）→ kimi1 #1574（第3次）**；SKILL 已有规则仍被忽略
+- **根因**：同第1次。backend-coding SKILL 第184行已明文规定必须 `mvn install`，但 CC 在实际操作时习惯性用 `mvn compile` 或直接 `restart-backend`
+- **已处置**：逐个注入修复指令（kimi3/kimi1/kimi2 各自 mvn install → restart-backend）；广播提醒所有在运行 CC
+- **建议改进**：SKILL 184行计数改为"3 CC"；考虑在 restart-backend 脚本中增加检测：若 wande-ai jar 未更新就报警
+- **状态**：🔴 第3次，已广播通知 + 更新 SKILL 计数
+
+---
+
+### 2026-04-16 13:15 【新增类不被 Spring 加载 — 第1次】mvn spring-boot:run 使用 M2 cache 中旧 wande-ai
 
 - **症状**：kimi3 新建 `PolicyTemplateController`，重编译、清理 target、重启后端均无效，curl 持续 404。Spring 日志无 BeanCreationException，但 `No mapping for GET /policy/templates/list`
 - **频次**：kimi3 #1576（**第1次**）
 - **根因**：`cc-test-env.sh restart-backend` 调用 `mvn spring-boot:run`，只重编 `ruoyi-admin`；`wande-ai` 模块的新类需先 `mvn install` 更新 M2 cache，否则 spring-boot:run 加载旧 jar
-- **已处置**：经理注入修复步骤：`mvn install -pl ruoyi-modules/wande-ai -am -DskipTests` → `restart-backend kimi3`
-- **建议改进**：**backend-coding SKILL** 明确：新增 Java 类后必须先 `mvn install -pl ruoyi-modules/wande-ai -am -DskipTests -Dmaven.test.skip=true` 再 `restart-backend`；仅修改已有类才可直接 `restart-backend`
-- **状态**：🟡 第1次，观察；若第2次发生立改 backend-coding SKILL
+- **已处置**：经理注入修复步骤；backend-coding SKILL 第184行已有规则
+- **状态**：✅ 已有 SKILL 规则，但第2/3次仍被忽略（见上条）
 
 ---
 

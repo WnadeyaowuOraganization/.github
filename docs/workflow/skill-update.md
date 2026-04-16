@@ -1047,3 +1047,25 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **已处置**：注入正确顺序（先关 modal → 再填表单 → 再点登录）；kimi3 改为复用已通过的 smoke spec 做截图
 - **建议改进**：在 frontend-e2e SKILL.md 中把 login beforeEach 标准模板置顶，明确"先关 modal 再填账号"顺序
 - **状态**：🟠 频繁，下次再出现更新 frontend-e2e SKILL
+
+---
+
+### 2026-04-16 17:00 — 误删 ruoyi-chat seed 文件（kimi5 #1622，第1次）
+
+- **症状**：kimi5 在 `git status` 中出现大量 `D` 标记（unstaged deletion）—— `ruoyi-chat/src/main/java/org/ruoyi/service/chat/` 下多个原生 service 文件被删除（AbstractChatService、IChatMessageService 等）
+- **频次**：第 1 次
+- **根因**：CC 被告知"从 ruoyi-chat 迁移代码到 wande-ai"，误将迁移理解为"删除 ruoyi-chat 下的文件"而非"在 wande-ai 里新建"
+- **已处置**：注入 `git restore backend/ruoyi-modules/ruoyi-chat/` 立即还原
+- **建议改进**：backend-coding SKILL 中"模块归属"章节补充：迁移代码 = 在 wande-ai 新建新文件，**绝不删除** ruoyi-chat / ruoyi-common / ruoyi-gateway 等框架目录下的任何文件
+- **状态**：🟡 观察中（第1次）
+
+---
+
+### 2026-04-16 17:00 — task.md 未勾 CI 门2失败（kimi3+kimi4，批量）
+
+- **症状**：PR#3804(kimi3) + PR#3805(kimi4) 同时被质量预检门2拦截：task.md 存在未勾 steps（kimi3本地已勾但未push，kimi4有20项未勾）
+- **频次**：kimi3 #2292 + kimi4 #1541（本轮2个PR同时失败）
+- **根因**：(1) kimi3 在PR提交后才改 task.md，未同步 push；(2) kimi4 本地 pr-body-lint 通过但task.md中仍有实际未完成步骤
+- **已处置**：注入 sed 命令全部标为完成 + push 修复
+- **建议改进**：pr-visual-proof SKILL 中补充"提PR后必须检查 task.md 已全勾再 push"顺序；考虑 pr-body-lint 脚本本地检查也对 task.md 更严格
+- **状态**：🟡 观察中

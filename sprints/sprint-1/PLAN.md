@@ -360,7 +360,7 @@ Week 4 (5/03-5/09):
 | ~~kimi2~~ | ~~#1593~~ | P1 | backend | ~~[预算][21/32] 预算执行率自动计算+分级预警~~ | PR#3789✅merged 2026-04-16T05:34 | ~~Done~~ |
 | kimi1 | #1574+#2277 | P2 | fullstack | [制度管理][19+21/22] 条款库CRUD后端+条款库管理页面 | 12:41启动 → import修复✅ Playwright中（mvn install修复注入） |
 | kimi2 | #1588+#1589 | P1 | fullstack | [预算][28+27/32] 金蝶凭证格式导出+历史成本基准查询 | 13:41启动 |
-| kimi3 | #1576+#2278 | P2 | fullstack | [制度管理][17+20/22] AI模板库后端+AI起草向导前端 | PR准备中（全栈完成，pr-body-lint进行中）|
+| kimi3 | #1576+#2278 | P2 | fullstack | [制度管理][17+20/22] AI模板库后端+AI起草向导前端 | PR#3790✅创建 CI构建中 |
 | kimi4 | #1587+#2287 | P1 | fullstack | [预算][31+?/32] 预算管控参数配置API+前端页面 | mvn install注入→BudgetConfigController加载中 |
 | kimi5 | #1582 | P1 | backend | [制度管理][5/22] 制度审批流API（warm-flow） | warm-flow FlwTaskServiceImpl.ignore修复注入中 |
 

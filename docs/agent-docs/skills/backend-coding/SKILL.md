@@ -180,6 +180,8 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 
 ## 编译 + 启动验证（改完必跑）
 
+> **⛔ MUST NOT — 高频踩坑（2 CC 已中招）**：`mvn compile` / `mvn clean compile` **不等于** `mvn install`。`spring-boot:run` 从 per-kimi M2 仓库（`~/cc_scheduler/m2/kimiN/repository`）加载 `wande-ai` 依赖 jar。只做 `compile` 不做 `install`，运行时加载的是 seed 旧 jar，新增 Controller/Service **永远不存在** → 404、Bean 未注册。**每次新增或改动 `ruoyi-modules/wande-ai/` 下的代码，必须先 `mvn install`，再 `restart-backend`，顺序不可颠倒。**
+
 > **MUST NOT**: 禁止直接用 `mvn spring-boot:run`（`-Dspring-boot.run.profiles=test` 会连到公共库 `wande-ai` 而非隔离库 `wande-ai-kimiN`，导致数据污染且 Controller 404）。
 
 ```bash

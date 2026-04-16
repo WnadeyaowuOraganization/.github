@@ -354,5 +354,6 @@ Week 4 (5/03-5/09):
 | kimi2 | #2281 | P1 | frontend | [制度管理][12/22] 员工制度查阅+签收页面 | PR#3785 rebase完成已push，等待CI |
 | ~~kimi3~~ | ~~#1583~~ | P1 | backend | ~~[制度管理][4/22] 制度版本控制API~~ | PR#3779✅merged | ~~Done~~ |
 | ~~kimi3~~ | ~~#2283~~ | P1 | frontend | ~~[制度管理][7/22] 制度详情+版本历史页面~~ | PR#3783✅merged 03:46 | ~~Done~~ |
+| kimi3 | #2280 | P1 | fullstack | [制度管理][13/22] 签收统计面板 | 11:50启动，UI/催办/PDF方案已确认 |
 | kimi4 | #1542 | P1 | budget | [预算模板增强 4/12] 项目级科目增删（含补建4张依赖表） | Mockito歧义→改集成测试，@SpringBootTest方案注入中（67%ctx） |
 

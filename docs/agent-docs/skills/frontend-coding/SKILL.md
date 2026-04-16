@@ -227,6 +227,7 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 | 禁止 | 正确替代 |
 |------|---------|
 | `visible` 属性 | `v-model:open`（AntDV 4.x） |
+| `useVbenForm` 里写 `layout: 'vertical'` | 省略 layout 字段（默认水平，label 与 input 同行，与系统管理风格一致） |
 | 嵌套 Drawer / Modal | 独立组件 + 事件通信 |
 | `useVbenDrawer({connectedComponent})` 内 template 最外层是 `<div>` / `<Page>` | 用原生 `<Drawer v-model:open>` 父页面内嵌 |
 | 前端路由不配 `sys_menu` | Flyway UPDATE 占位菜单 |
@@ -275,6 +276,8 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 ## 国际化
 
 所有用户文案用 `$t('key')` / `t('key')`。硬编码中文 → Lint 报错。
+
+新增路由模块时，**必须**同步向 `src/locales/langs/zh-CN/page.json` 添加对应键组；否则 `$t('page.xxx.yyy')` 找不到翻译，页签直接显示 key 字符串（`page.xxx.yyy`）。
 
 ## 启动前端（硬点，违反=刹车）
 

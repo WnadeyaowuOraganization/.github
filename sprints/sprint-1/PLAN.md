@@ -389,4 +389,8 @@ Week 4 (5/03-5/09):
 | **infra** | **VITE_APP_TITLE修复** | — | frontend | **补全 .env.production 缺失变量，修复生产build报错** | dev `02cc421bb`推送，run `24537671489`部署中 |
 | kimi3 | #2506 | P1 | fullstack | [执行管理] EVM 挣值管理 — SPI/CPI/EAC/健康度评分 | 2026-04-17启动 |
 | kimi5 | #3301 | P1 | fullstack | [S3数据管线][12/18] 加密文件管理页面 | 2026-04-17启动，经理已解答数据源/原型/依赖问题 |
+| ~~kimi1~~ | ~~#3300~~ | P1 | fullstack | ~~[S3数据管线][11/18] 数据管线监控Dashboard~~ | PR#3822✅merged 2026-04-16T22:57Z |
+| kimi1 | #3302 | P1 | fullstack | [S3数据管线][13/18] 管线错误告警+企微通知 | 2026-04-17启动 |
+| kimi2 | #3657 | P1 | fullstack | [全过程资料-P1] 甲方资料包一键打包 — ZIP+移交清单PDF | 2026-04-17启动 |
+| **e2e** | **smoke Round3修复** | — | e2e | **11个文件 placeholder登录+端口修正** | dev `4bcc416c0`推送，E2E gate `24538310005`结果待出 |
 

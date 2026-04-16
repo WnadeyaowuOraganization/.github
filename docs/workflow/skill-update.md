@@ -1025,3 +1025,25 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **已处置**：#1589 Done处理，代码在dev
 - **建议改进**：cc-report skill 中的「等待merge轮询」模板前，增加强制确认步骤：「经理已确认PR质量门全过」才能开始轮询；或在pr-body-lint脚本增第6道门检查spec/Test文件
 - **状态**：🟠 频繁（≥2次），下次再出现立即更新skill
+
+---
+
+### 2026-04-16 16:43 — mysql -h 127.0.0.1 裸连（kimi1 #2289，第2次）
+
+- **症状**：kimi1 执行 `mysql -h 127.0.0.1 -P 3306 -u root -proot -D wande-ai-kimi1` 查询 sys_menu
+- **频次**：第 **2次**（第1次 kimi5 #2298 2026-04-16 15:43）
+- **根因**：CC 不记得 docker exec 命令格式，直接用本地 mysql client
+- **已处置**：注入 docker exec 正确格式 + hideInMenu 方案
+- **建议改进**：backend-coding SKILL 已有红线，无需更新。提醒频率不足——考虑在 CLAUDE.md 中把 docker exec 模板放在更显眼位置
+- **状态**：🟡 观察中（第2次，未到4次阈值）
+
+---
+
+### 2026-04-16 16:43 — Playwright smoke spec login modal 阻塞（第2次，kimi3+kimi4）
+
+- **症状**：kimi3 #2292 截图脚本 + kimi4 #1541 smoke spec 均出现 `locator.click: Timeout 30000ms exceeded` 在登录按钮；modal 盖住按钮导致 click action 无法完成
+- **频次**：第 **2次**（kimi3 #2292 一轮前也出现；kimi4 #1541 本轮）
+- **根因**：CC 写的 login beforeEach 顺序错误：先填账号密码再关 modal，但 modal 在页面加载时已出现，覆盖了填写区域
+- **已处置**：注入正确顺序（先关 modal → 再填表单 → 再点登录）；kimi3 改为复用已通过的 smoke spec 做截图
+- **建议改进**：在 frontend-e2e SKILL.md 中把 login beforeEach 标准模板置顶，明确"先关 modal 再填账号"顺序
+- **状态**：🟠 频繁，下次再出现更新 frontend-e2e SKILL

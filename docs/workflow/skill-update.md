@@ -18,6 +18,21 @@
 
 ---
 
+### 2026-04-16 19:43 【E2E路由路径误用 — component名≠sys_menu path】e2e-top 建5个误报Issue
+
+- **症状**：e2e-top CC 建 Issue #3809~#3813，标题"页面404未找到"；研发经理验证后发现是测试 spec 路径错误，非真实回归。spec 检查 `/business/tender/project-mine`、`/admin-center/cockpit`、`/boss-cockpit` 等路径均 404，但正确路径全部 OK✅
+- **频次**：e2e-top（**一次即大面积误报**：5 个假 Issue 建入看板）
+- **根因**：CC 在写测试 spec 时用了 component 文件路径推断路由（如 `business/tender/project-mine/index` → `/business/tender/project-mine`），但 Vue 路由的实际 URL 由 **sys_menu.path 字段**决定，不同于 component 路径
+  - 全球项目矿场: component=`business/tender/project-mine/index`，path=`prospect` → 实际URL `/business/tender/prospect`
+  - 超管驾驶舱: component=`cockpit/dashboard/index` 等，parent path=`cockpit` → 实际URL `/cockpit`
+  - 耀总驾驶舱: parent path=`bossCockpit` → 实际URL `/bossCockpit/overview`
+  - 产品门户: path chain `common/product-master/product-portal` → 实际URL `/common/product-master/product-portal`
+- **已处置**：关闭 Issue #3809~#3813（not planned + 解释）；更新 frontend-e2e SKILL.md 修正示例 ROUTE + 增加路由查询陷阱条目；通知 e2e-top 修正 spec；SKILL.md commit `c5ca25d`
+- **建议改进**：在 frontend-e2e SKILL.md 和 testing-guide.md 加红线：**写路由前必须 `SELECT path FROM sys_menu WHERE component LIKE '%<module>%'` 确认真实 path**；不允许从 component 路径推断 URL
+- **状态**：✅ 已实施 SKILL 更新 + Issue 关闭
+
+---
+
 ### 2026-04-16 19:23 【e2e-top CLAUDE.md 工作流缺陷】step1 git reset --hard 删除新建测试文件
 
 - **症状**：e2e-top CC 写完 sprint1-visual-audit.spec.ts（35 test，7 失败），随后执行 CLAUDE.md step1 `git reset --hard origin/dev && git clean -fd`，把自己刚写的 spec 文件删除；然后运行 tests/regression/ 只剩 all-pages-smoke.spec.ts，1 个测试全过，误报"无回归"

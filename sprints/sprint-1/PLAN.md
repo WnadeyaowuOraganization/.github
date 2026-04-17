@@ -404,5 +404,6 @@ Week 4 (5/03-5/09):
 | ~~kimi5~~ | ~~#3301~~ | P1 | fullstack | ~~[S3数据管线][12/18] 加密文件管理页面~~ | PR#3828✅merged 2026-04-17 |
 | kimi1 | #3303+#3304 | P0 | fullstack | [S3数据管线][14+15/18] 管线状态API+驾驶舱Tab页集成 | 2026-04-17 10:17启动 |
 | kimi5 | #2096+#1734 | P1 | fullstack | [执行管理] 整改工单管理API+整改工单跟踪页 | 2026-04-17 10:19启动 |
-| **infra** | **VITE_APP_TITLE修复+磁盘清理** | — | infra | **补全.env.production缺失变量+清理/tmp+删旧Docker镜像(释放12G)** | main `d8d9d768b`推送；Round21 触发 Run `24544439333` |
+| **infra** | **VITE_APP_TITLE修复+磁盘清理** | — | infra | **补全.env.production缺失变量+清理/tmp+删旧Docker镜像(释放12G)** | main `d8d9d768b`推送；Round21 Run `24544439333` **全部✅** E2E+前端(4m37s)+后端 |
+| **infra** | **生产环境手动部署修复** | — | infra | **Lightsail:① docker save/load传输镜像 ② 创建.env修复DB密码空值 ③ 修复nginx端口映射5666** | 后端UP(postgres健康)+前端HTTP200；http://47.131.77.9:8082 ✅ 2026-04-17 |
 

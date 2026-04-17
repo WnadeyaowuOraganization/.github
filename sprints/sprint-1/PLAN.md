@@ -397,8 +397,12 @@ Week 4 (5/03-5/09):
 | ~~kimi1~~ | ~~#3302~~ | P1 | fullstack | ~~[S3数据管线][13/18] 管线错误告警+企微通知~~ | PR#3826✅merged 2026-04-16T23:44Z |
 | ~~kimi5~~ | ~~#3301~~ | P1 | fullstack | ~~[S3数据管线][12/18] 加密文件管理页面~~ | PR#3828✅merged 2026-04-17 |
 | **e2e** | **smoke Round7-9修复** | — | e2e | **pipeline-alert-page.spec.ts改为标准模板+登录** | Round9 **E2E守门员✅ success**；构建又Docker拉取超时FAIL→Round10触发 Run `24540641974` |
-| kimi1 | #1592 | P1 | backend+frontend | [预算预警] 企微推送 — 组群webhook，BudgetAlert集成 | 2026-04-17启动，后端编译+4单测通过，等待mvn install+API验证 |
-| kimi2 | #3657 | P1 | fullstack | [全过程资料-P1] 甲方资料包一键打包 ZIP+移交清单PDF | 2026-04-17启动，33% tokens |
-| kimi3 | #2506 | P1 | fullstack | [执行管理] EVM 挣值管理 — SPI/CPI/EAC/健康度评分 | 2026-04-17启动，任务清单完成，开工中 |
-| kimi4 | #2083 | P1 | fullstack | [执行管理] 开票管理 — 申请/审核/台账/发票跟踪+回款 | 2026-04-17启动（kimi4继续，前端目录已创建） |
+| ~~kimi1~~ | ~~#1592~~ | P1 | backend+frontend | ~~[预算预警] 企微推送 — 组群webhook，BudgetAlert集成~~ | PR#3827✅merged 2026-04-17 |
+| kimi2 | #3657 | P1 | fullstack | [全过程资料-P1] 甲方资料包一键打包 ZIP+移交清单PDF | 2026-04-17启动，工作中 |
+| kimi3 | #2506 | P1 | fullstack | [执行管理] EVM 挣值管理 — SPI/CPI/EAC/健康度评分 | 2026-04-17启动，工作中 |
+| kimi4 | #2083 | P1 | fullstack | [执行管理] 开票管理 — 申请/审核/台账/发票跟踪+回款 | 2026-04-17启动，工作中（305min+） |
+| ~~kimi5~~ | ~~#3301~~ | P1 | fullstack | ~~[S3数据管线][12/18] 加密文件管理页面~~ | PR#3828✅merged 2026-04-17 |
+| kimi1 | #3303+#3304 | P0 | fullstack | [S3数据管线][14+15/18] 管线状态API+驾驶舱Tab页集成 | 2026-04-17 10:17启动 |
+| kimi5 | #2096+#1734 | P1 | fullstack | [执行管理] 整改工单管理API+整改工单跟踪页 | 2026-04-17 10:19启动 |
+| **infra** | **VITE_APP_TITLE修复+磁盘清理** | — | infra | **补全.env.production缺失变量+清理/tmp+删旧Docker镜像(释放12G)** | main `d8d9d768b`推送；Round21 触发 Run `24544439333` |
 

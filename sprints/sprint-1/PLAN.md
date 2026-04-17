@@ -395,7 +395,7 @@ Week 4 (5/03-5/09):
 | **e2e** | **smoke Round3修复** | — | e2e | **11个文件 placeholder登录+端口修正** | dev `4bcc416c0`推送，E2E gate `24538310005`结果待出 |
 | **e2e** | **smoke Round4-6修复** | — | e2e | **57文件 waitForTimeout(1000)+threshold(0)+标准模板** | dev `b127c6ab8`+`81ca94086`推送；Round6 **E2E守门员✅ 167 passed (1.9m)**；构建因Docker拉取网络超时FAIL→重新触发Run `24539680467` |
 | ~~kimi1~~ | ~~#3302~~ | P1 | fullstack | ~~[S3数据管线][13/18] 管线错误告警+企微通知~~ | PR#3826✅merged 2026-04-16T23:44Z |
-| kimi5 | #3301 | P1 | fullstack | [S3数据管线][12/18] 加密文件管理页面 | 后端已完成mvn install后API通过，前端编译通过，修复VO转换中 |
+| ~~kimi5~~ | ~~#3301~~ | P1 | fullstack | ~~[S3数据管线][12/18] 加密文件管理页面~~ | PR#3828✅创建 2026-04-17，等待CI merge |
 | **e2e** | **smoke Round7-9修复** | — | e2e | **pipeline-alert-page.spec.ts改为标准模板+登录** | Round9 **E2E守门员✅ success**；构建又Docker拉取超时FAIL→Round10触发 Run `24540641974` |
 | kimi1 | #1592 | P1 | backend+frontend | [预算预警] 企微推送 — 组群webhook，BudgetAlert集成 | 2026-04-17启动，后端编译+4单测通过，等待mvn install+API验证 |
 | kimi2 | #3657 | P1 | fullstack | [全过程资料-P1] 甲方资料包一键打包 ZIP+移交清单PDF | 2026-04-17启动，33% tokens |

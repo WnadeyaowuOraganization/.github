@@ -402,8 +402,12 @@ Week 4 (5/03-5/09):
 | kimi3 | #2506 | P1 | fullstack | [执行管理] EVM 挣值管理 — SPI/CPI/EAC/健康度评分 | 2026-04-17启动，工作中 |
 | kimi4 | #2083 | P1 | fullstack | [执行管理] 开票管理 — 申请/审核/台账/发票跟踪+回款 | 2026-04-17启动，工作中（305min+） |
 | ~~kimi5~~ | ~~#3301~~ | P1 | fullstack | ~~[S3数据管线][12/18] 加密文件管理页面~~ | PR#3828✅merged 2026-04-17 |
-| kimi1 | #3303+#3304 | P0 | fullstack | [S3数据管线][14+15/18] 管线状态API+驾驶舱Tab页集成 | 2026-04-17 10:17启动 |
-| kimi5 | #2096+#1734 | P1 | fullstack | [执行管理] 整改工单管理API+整改工单跟踪页 | 2026-04-17 10:19启动 |
+| ~~kimi1~~ | ~~#3303+#3304(合并派发，已停止)~~ | P0 | fullstack | ~~卡住：找不到S3管线HTML原型~~ | 已停止，拆分重派 |
+| ~~kimi5~~ | ~~#2096+#1734(合并派发，已停止)~~ | P1 | fullstack | ~~卡住：读完issue-source停在idle~~ | 已停止，拆分重派 |
+| kimi1 | #3303 | P0 | backend | [S3数据管线][14/18] 管线状态统计API（队列/处理/错误，基于WdppPipelineRun/WdppPipelineAlert） | 2026-04-17 21:47启动 |
+| kimi5 | #3304 | P0 | frontend | [S3数据管线][15/18] 驾驶舱data-pipeline Tab页集成（3子Tab） | 2026-04-17 21:47启动 |
+| kimi6 | #2096 | P1 | backend | [执行管理] 整改工单管理API（责任人指派+复验流程CRUD） | 2026-04-17 21:48启动（超额允许） |
+| kimi7 | #1734 | P1 | frontend | [执行管理] 整改工单跟踪页（责任人/期限/前后照片对比） | 2026-04-17 21:49启动（超额允许） |
 | **infra** | **VITE_APP_TITLE修复+磁盘清理** | — | infra | **补全.env.production缺失变量+清理/tmp+删旧Docker镜像(释放12G)** | main `d8d9d768b`推送；Round21 Run `24544439333` **全部✅** E2E+前端(4m37s)+后端 |
 | **infra** | **生产环境手动部署修复** | — | infra | **Lightsail:① docker save/load传输镜像 ② 创建.env修复DB密码空值 ③ 修复nginx端口映射5666** | 后端UP(postgres健康)+前端HTTP200；http://47.131.77.9:8082 ✅ 2026-04-17 |
 

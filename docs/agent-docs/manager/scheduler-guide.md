@@ -25,7 +25,8 @@
 3. `priority/P0` > P1 > P2 > P3
 4. Sprint 重点模块优先
 5. 同模块内 Phase 编号升序
-6. `blocked-by` 依赖未关闭的排末尾
+6. **同一页面功能，后端 Issue 必须排在配对前端 Issue 之前** — 后端未 merged 前端只能 mock，造成集成风险
+7. `blocked-by` 依赖未关闭的排末尾
 
 ## 任务一：监控优先队列（Jump / Fail / E2E Fail / 新 Done）
 

@@ -78,7 +78,11 @@ bash scripts/cc-check.sh
 # 2. 读取排程经理维护的指派建议表（最高优先参考）
 cat sprints/sprint-<N>/PLAN.md | grep -A 25 "指派建议"
 
-# 3. prefetch Issue 到 dev 分支（减少 CC 启动时 gh fetch）
+# 3. 前端 Issue 指派前必须确认：配对后端 PR 已 merged
+#    gh pr list --repo WnadeyaowuOraganization/wande-play --state merged | grep <后端Issue>
+#    后端未 merged → 不得指派前端，避免前端以 mock 数据交付
+
+# 4. prefetch Issue 到 dev 分支（减少 CC 启动时 gh fetch）
 bash scripts/prefetch-issues.sh <issue1> <issue2> ...
 
 # 4. 启动 CC

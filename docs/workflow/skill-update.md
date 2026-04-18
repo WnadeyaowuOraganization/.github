@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-18 11:30 【VxeGrid toolbar slot 名写错 → 按钮不渲染】kimi1 #3838
+
+- **症状**：PR 合并后4个按钮（新增/导出/分配选中/批量操作）在页面上完全不可见
+- **频次**：kimi1 #3838（第 1 次）
+- **根因**：CC 用了 `#toolbar-buttons` slot，但本项目 VxeGrid 封装（`use-vxe-grid.vue`）只透传 `#toolbar-tools`，不存在 `toolbar-buttons`；slot 名写错则静默忽略，无编译错误，故门控没拦住
+- **已处置**：直接在 dev 分支将 `#toolbar-buttons` → `#toolbar-tools`，同时操作列宽 280→400（用户反馈一排放不下）
+- **建议改进**：在 `frontend-coding` SKILL.md 补充强制规定：**使用 `useVbenVxeGrid` 时，工具栏自定义按钮必须用 `#toolbar-tools` slot，禁止用 `#toolbar-buttons`（项目封装不支持）**；可参考 `views/system/post/index.vue`、`views/business/crm/customer/index.vue`
+- **状态**：已实施 b2ce55e63
+
+---
+
 ### 2026-04-18 11:00 【rebase 冲突解决引入重复字段 → dev 构建失败】经理操作 #1734
 
 - **症状**：PR #3835 (#1734) 合并后 dev 构建失败：`variable severity is already defined in class ExecutionRectificationOrder / RectificationOrderVO`

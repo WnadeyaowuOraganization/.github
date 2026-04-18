@@ -156,6 +156,26 @@ export const columns: VxeGridProps['columns'] = [
 ];
 ```
 
+## 🚨 VxeGrid toolbar 自定义按钮（约束：slot 名必须用 toolbar-tools）
+
+`useVbenVxeGrid` 返回的 `Grid` 组件，工具栏自定义按钮**必须**用 `#toolbar-tools` slot：
+
+```vue
+<Grid>
+  <template #toolbar-tools>
+    <Space>
+      <Button type="primary" @click="handleAdd">新增</Button>
+      <Button @click="handleExport">导出</Button>
+    </Space>
+  </template>
+  ...
+</Grid>
+```
+
+**禁止**用 `#toolbar-buttons`——项目封装 `use-vxe-grid.vue` 不存在此 slot，写了静默无效，无编译错误，门控不拦截。（#3838 事故：4个按钮全不渲染）
+
+参考页面：`views/system/post/index.vue`、`views/business/crm/customer/index.vue`
+
 ## slots 返回 VNode（约束 4）
 
 **`slots.default` 函数禁止返回 HTML 字符串**（#3487 事故）。

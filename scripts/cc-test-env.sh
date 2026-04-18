@@ -159,14 +159,10 @@ cmd_start() {
 
   echo ""
   echo "✅ ${tag} 测试环境进程已启动（后端编译中，约2-3分钟后就绪）"
-  echo "   后端:  http://localhost:${BACKEND_PORT}  (mvn spring-boot:run)"
-  echo "   前端:  http://localhost:${FRONTEND_PORT}  (vite dev server)"
-  echo "   MySQL: ${KIMI_DB} (port ${MYSQL_PORT})"
-  echo "   Redis: db${REDIS_DB} (port ${REDIS_PORT})"
+  echo "   后端端口:  ${BACKEND_PORT}"
+  echo "   前端端口:  ${FRONTEND_PORT}"
   echo "   日志(后端): $LOG_DIR/backend.log"
   echo "   日志(前端): $LOG_DIR/frontend.log"
-  echo ""
-  echo "💡 用 '$0 wait $tag' 等待后端健康检查通过"
   return 0
 }
 
@@ -243,7 +239,7 @@ start_backend() {
     kill -9 "$conflict_pid" 2>/dev/null || true
   fi
 
-  echo "  启动后端 mvn spring-boot:run (port=${BACKEND_PORT})..."
+  echo "  启动后端 (port=${BACKEND_PORT})..."
   : > "$LOG_DIR/backend.log"
 
   # 用 mvn spring-boot:run 从源码启动，无需预编译jar
@@ -310,7 +306,7 @@ start_frontend() {
     kill -9 "$port_holder" 2>/dev/null || true
   fi
 
-  echo "  启动前端 vite dev (port=${FRONTEND_PORT}, proxy→${BACKEND_PORT})..."
+  echo "  启动前端 (port=${FRONTEND_PORT})..."
   : > "$LOG_DIR/frontend.log"
 
   cd "$front_src"
@@ -370,8 +366,7 @@ cmd_start_backend() {
   mkdir -p "$LOG_DIR"
   start_backend "$tag"
   echo ""
-  echo "✅ ${tag} 后端已启动 → http://localhost:${BACKEND_PORT} (日志: $LOG_DIR/backend.log)"
-  echo "💡 '$0 wait $tag' 等待健康检查"
+  echo "✅ ${tag} 后端已启动 (端口: ${BACKEND_PORT}，日志: $LOG_DIR/backend.log)"
 }
 
 cmd_start_frontend() {
@@ -381,7 +376,7 @@ cmd_start_frontend() {
   mkdir -p "$LOG_DIR"
   start_frontend "$tag"
   echo ""
-  echo "✅ ${tag} 前端已启动 → http://localhost:${FRONTEND_PORT} (日志: $LOG_DIR/frontend.log)"
+  echo "✅ ${tag} 前端已启动 (端口: ${FRONTEND_PORT}，日志: $LOG_DIR/frontend.log)"
 }
 
 cmd_stop_backend() {
@@ -408,8 +403,7 @@ cmd_restart_backend() {
   sleep 1
   mkdir -p "$LOG_DIR"
   start_backend "$tag"
-  echo "✅ 后端重启进程已拉起（编译+启动约 2-3 分钟）"
-  echo "💡 '$0 wait $tag' 等待健康检查"
+  echo "✅ 后端重启进程已拉起 (端口: ${BACKEND_PORT}，编译+启动约 2-3 分钟)"
 }
 
 cmd_restart_frontend() {
@@ -420,7 +414,7 @@ cmd_restart_frontend() {
   sleep 1
   mkdir -p "$LOG_DIR"
   start_frontend "$tag"
-  echo "✅ 前端已重启 → http://localhost:${FRONTEND_PORT}"
+  echo "✅ 前端已重启 (端口: ${FRONTEND_PORT})"
 }
 
 # ============================================================

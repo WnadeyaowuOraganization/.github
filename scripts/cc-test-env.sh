@@ -159,8 +159,8 @@ cmd_start() {
 
   echo ""
   echo "✅ ${tag} 测试环境进程已启动（后端编译中，约2-3分钟后就绪）"
-  echo "   后端端口:  ${BACKEND_PORT}"
-  echo "   前端端口:  ${FRONTEND_PORT}"
+  echo "   后端:  http://localhost:${BACKEND_PORT}"
+  echo "   前端:  http://localhost:${FRONTEND_PORT}"
   echo "   日志(后端): $LOG_DIR/backend.log"
   echo "   日志(前端): $LOG_DIR/frontend.log"
   return 0
@@ -366,7 +366,7 @@ cmd_start_backend() {
   mkdir -p "$LOG_DIR"
   start_backend "$tag"
   echo ""
-  echo "✅ ${tag} 后端已启动 (端口: ${BACKEND_PORT}，日志: $LOG_DIR/backend.log)"
+  echo "✅ ${tag} 后端已启动 → http://localhost:${BACKEND_PORT} (日志: $LOG_DIR/backend.log)"
 }
 
 cmd_start_frontend() {
@@ -376,7 +376,7 @@ cmd_start_frontend() {
   mkdir -p "$LOG_DIR"
   start_frontend "$tag"
   echo ""
-  echo "✅ ${tag} 前端已启动 (端口: ${FRONTEND_PORT}，日志: $LOG_DIR/frontend.log)"
+  echo "✅ ${tag} 前端已启动 → http://localhost:${FRONTEND_PORT} (日志: $LOG_DIR/frontend.log)"
 }
 
 cmd_stop_backend() {
@@ -403,7 +403,7 @@ cmd_restart_backend() {
   sleep 1
   mkdir -p "$LOG_DIR"
   start_backend "$tag"
-  echo "✅ 后端重启进程已拉起 (端口: ${BACKEND_PORT}，编译+启动约 2-3 分钟)"
+  echo "✅ 后端重启进程已拉起 → http://localhost:${BACKEND_PORT}（编译+启动约 2-3 分钟）"
 }
 
 cmd_restart_frontend() {
@@ -414,7 +414,7 @@ cmd_restart_frontend() {
   sleep 1
   mkdir -p "$LOG_DIR"
   start_frontend "$tag"
-  echo "✅ 前端已重启 (端口: ${FRONTEND_PORT})"
+  echo "✅ 前端已重启 → http://localhost:${FRONTEND_PORT}"
 }
 
 # ============================================================

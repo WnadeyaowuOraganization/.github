@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-18 10:30 【纯前端改动误查DB + 误写E2E + HMR调试陷阱】kimi1 #3838
+
+- **症状**：纯前端布局调整（移动按钮位置、删除一个按钮、调整列宽），CC 执行了：①查 MySQL 数据库（`wande_ai_kimi1` 下划线命名报错）；②写 Playwright E2E spec；③反复调试 HMR 是否生效（清 vite cache、加红色测试div、验证文件路径等），共耗时 14+ 分钟仍未提 PR
+- **频次**：kimi1 #3838（第 1 次）
+- **根因**：CC 看到 Playwright 截图显示旧界面，误判为"HMR 未生效"，陷入调试循环。实际原因是截图在 vite 重启前拍摄，属正常现象。另外 CC 习惯性地为所有改动写 E2E 和查 DB，未判断该任务类型
+- **已处置**：注入精准指令：停止DB查询和E2E，删测试div，确认三项改动，pnpm build:antd，restart-frontend，/screenshot，提PR
+- **建议改进**：在 `frontend-coding` SKILL.md 补充：**纯布局/样式改动（无新API、无新路由）不需要写E2E spec，不需要查数据库，直接 build:antd + /screenshot 截图即可**；HMR 截图时序问题说明：改动后若截图仍显示旧界面，先 restart-frontend 再截图，不要调试 HMR 本身
+- **状态**：观察中（等 kimi1 按指令完成）
+
+---
+
 ### 2026-04-16 19:43 【E2E路由路径误用 — component名≠sys_menu path】e2e-top 建5个误报Issue
 
 - **症状**：e2e-top CC 建 Issue #3809~#3813，标题"页面404未找到"；研发经理验证后发现是测试 spec 路径错误，非真实回归。spec 检查 `/business/tender/project-mine`、`/admin-center/cockpit`、`/boss-cockpit` 等路径均 404，但正确路径全部 OK✅
@@ -1129,3 +1140,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **根因**：kimi5 环境的 modal 按钮实际文字是 `"知道了"`（4字，非5字）
 - **修复**：`button:has-text("知道了")` 或 `.ant-modal-close` 二选一
 - **状态**：第3次出现（kimi3/kimi4/kimi5），已注入止血
+
+## 2026-04-16 e2e-top 误报：按钮 locator 含空格
+- **现象**：Playwright `button:has-text('新 增')` 因按钮文本含全角空格匹配失败，误报 7 个 CRM 页面"新增按钮无响应"
+- **实际**：功能正常，抽屉正常弹出
+- **止血**：已关闭 #3814（Reject）
+- **后续建议**：e2e 测试脚本按钮选择器改用 `getByRole('button', { name: /新增/ })` 或 `.toolbar-btn:has-text('新')` 宽松匹配
+- **频次**：1次（首次发现）

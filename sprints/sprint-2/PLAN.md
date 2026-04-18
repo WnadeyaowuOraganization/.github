@@ -184,7 +184,6 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #3631 | Tier-A | bidding | pipeline↔后端表对齐全景规划 |
 | kimi2 | #2028 | Tier-A | backend | 矿场项目信息增量同步推送 |
 | kimi3 | #2243 | Tier-A | backend | 简报偏好设置页 |
 | kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 |
@@ -202,7 +201,7 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |
 |---------|-------|------|------|------|---------|
-| kimi1 | #3631 | Tier-A | bidding | pipeline↔后端表对齐全景规划 | In Progress |
+| kimi1 | #3631 | Tier-A | bidding | ~~pipeline↔后端表对齐全景规划~~ | ~~Done~~ |
 | kimi2 | #2028 | Tier-A | backend | 矿场项目信息增量同步推送 | In Progress |
 | kimi3 | #2243 | Tier-A | backend | 简报偏好设置页 | In Progress |
 | kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 | In Progress |

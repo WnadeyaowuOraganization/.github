@@ -189,6 +189,12 @@ Week 4 (5/10-5/16):
 | kimi3 | #2243 | Tier-A | backend | 简报偏好设置页 |
 | kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 |
 | kimi5 | #1692 | Tier-B | backend | 项目成本跟踪API |
+| kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 |
+| kimi7 | #2097 | Tier-B | backend | 验收检查项模板管理 |
+| kimi8 | #3108 | Tier-C | backend | 合同数据表扩展 |
+| kimi9 | #2113 | Tier-C | backend | 合同审批流程 |
+| kimi10 | #1999 | Tier-C | finance | 阶段凭证数据库 |
+| kimi11 | #1997 | Tier-C | finance | 回款周报数据库+引擎 |
 
 ## 指派历史（完成后划线）
 
@@ -201,3 +207,9 @@ Week 4 (5/10-5/16):
 | kimi3 | #2243 | Tier-A | backend | 简报偏好设置页 | In Progress |
 | kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 | In Progress |
 | kimi5 | #1692 | Tier-B | backend | 项目成本跟踪API | In Progress |
+| kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 | In Progress |
+| kimi7 | #2097 | Tier-B | backend | 验收检查项模板管理 | In Progress |
+| kimi8 | #3108 | Tier-C | backend | 合同数据表扩展 | In Progress |
+| kimi9 | #2113 | Tier-C | backend | 合同审批流程 | In Progress |
+| kimi10 | #1999 | Tier-C | finance | 阶段凭证数据库 | In Progress |
+| kimi11 | #1997 | Tier-C | finance | 回款周报数据库+引擎 | In Progress |

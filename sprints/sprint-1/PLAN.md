@@ -407,8 +407,8 @@ Week 4 (5/03-5/09):
 | ~~kimi1~~ | ~~#3303~~ | P0 | backend | ~~[S3数据管线][14/18] 管线状态统计API~~ | PR#3833✅merged 2026-04-17T14:40Z |
 | ~~kimi5~~ | ~~#3304~~ | P0 | frontend | ~~[S3数据管线][15/18] 驾驶舱data-pipeline Tab页集成~~ | PR#3832✅merged 2026-04-17T14:27Z |
 | ~~kimi6~~ | ~~#2096~~ | P1 | backend | ~~[执行管理] 整改工单管理API（责任人指派+复验流程CRUD）~~ | PR#3834✅merged 2026-04-17T14:47Z |
-| kimi7 | #1734 | P1 | frontend | [执行管理] 整改工单跟踪页（责任人/期限/前后照片对比） | PR#3835全检通过，待自动合并 |
-| kimi1 | #3838 | P1 | frontend | [全球项目矿场] toolbar按钮重排+删详情+操作列宽280 | 2026-04-18启动，PR准备中 |
+| ~~kimi7~~ | ~~#1734~~ | P1 | frontend | ~~[执行管理] 整改工单跟踪页（责任人/期限/前后照片对比）~~ | PR#3835✅merged 2026-04-18T02:46Z（rebase解冲突后合并） |
+| ~~kimi1~~ | ~~#3838~~ | P1 | frontend | ~~[全球项目矿场] toolbar按钮重排+删详情+操作列宽280~~ | PR#3839✅merged 2026-04-18 |
 | **infra** | **VITE_APP_TITLE修复+磁盘清理** | — | infra | **补全.env.production缺失变量+清理/tmp+删旧Docker镜像(释放12G)** | main `d8d9d768b`推送；Round21 Run `24544439333` **全部✅** E2E+前端(4m37s)+后端 |
 | **infra** | **生产环境手动部署修复** | — | infra | **Lightsail:① docker save/load传输镜像 ② 创建.env修复DB密码空值 ③ 修复nginx端口映射5666** | 后端UP(postgres健康)+前端HTTP200；http://47.131.77.9:8082 ✅ 2026-04-17 |
 

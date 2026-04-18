@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-18 11:00 【rebase 冲突解决引入重复字段 → dev 构建失败】经理操作 #1734
+
+- **症状**：PR #3835 (#1734) 合并后 dev 构建失败：`variable severity is already defined in class ExecutionRectificationOrder / RectificationOrderVO`
+- **频次**：1 次（本轮经理手动 rebase 解冲突）
+- **根因**：经理手动 rebase 解冲突时，看到 HEAD(dev) 端有 `verifyResult`，branch 端有 `severity`/`severityText`/`statusText`，两端都保留。但实际上 `severity` 字段在两个类中已存在于更早位置（entity line 60、VO line 66），导致同一字段在同一类中声明两次，Java 编译报 "variable already defined"
+- **已处置**：直接在 dev 分支删除重复字段并 push，触发重新部署
+- **建议改进**：经理手动 rebase 解冲突前，先 `grep -n "字段名" <文件>` 确认该字段是否已存在于冲突区域之外；涉及 entity/VO Java 文件的冲突，优先保留 HEAD 新增字段（`verifyResult`），branch 新增但不重复的字段（`statusText`/`severityText`）也保留，已存在字段不再重复添加
+- **状态**：已实施 5473177eb
+
+---
+
 ### 2026-04-18 10:30 【纯前端改动误查DB + 误写E2E + HMR调试陷阱】kimi1 #3838
 
 - **症状**：纯前端布局调整（移动按钮位置、删除一个按钮、调整列宽），CC 执行了：①查 MySQL 数据库（`wande_ai_kimi1` 下划线命名报错）；②写 Playwright E2E spec；③反复调试 HMR 是否生效（清 vite cache、加红色测试div、验证文件路径等），共耗时 14+ 分钟仍未提 PR

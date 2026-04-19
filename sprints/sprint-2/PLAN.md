@@ -176,7 +176,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #2329 | crm | 客户情报P4 客户详情页情报卡Tab | ✅ 已派（本批） |
 | kimi3  | #2027 | approval | 审批引擎P0 Entity+Service（审批模板/审批组/SLA规则） | ✅ 已派（本批，effort=high） |
 | kimi4  | #2119 | execution | 经销模式支持 — 阶段配置+经销商结算+门户API | ✅ 已派（本批） |
-| kimi6  | #1891 | crm | 客户情报P3 国贸客户尽调清单+风险评估 | ✅ PR#3896 已merge Done |
+| kimi6  | #2468 | execution | 图纸管理 API — 上传/版本控制/审批/下发工厂 | ✅ 已派（本批） |
 | kimi19 | #2328 | crm | 客户情报P4 商机详情页信息质量面板 | ✅ PR#3897 等CI merge |
 
 ## 指派历史（完成后划线）

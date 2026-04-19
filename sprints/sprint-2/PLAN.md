@@ -185,7 +185,7 @@ Week 4 (5/10-5/16):
 | kimi1 | #2352 | Tier-D | project | 风险台账Tab前端(风险列表+录入+处置+附件) |
 | kimi2 | #2520 | Tier-D | project | 项目文档中心数据库(project_documents+versions) |
 | kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) |
-| kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) |
+| kimi4 | — | — | — | #1523 PR#3871 等merge |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) |
 
@@ -224,7 +224,7 @@ Week 4 (5/10-5/16):
 | kimi2 | #2520 | Tier-D | project | 项目文档中心数据库(project_documents+versions) | In Progress |
 | kimi4 | #1752 | Tier-C | frontend | ~~合同审批前端(待审批列表+审批页面)~~ | ~~Done~~ |
 | kimi4 | #2023 | Tier-C | approval | ~~合同管理接入审批流(盖章/签署自动发起)~~ | ~~Done~~ |
-| kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) | In Progress |
+| kimi4 | #1523 | Tier-A | bidding | ~~区域品类矩阵统计API(省份×产品品类交叉)~~ | ~~PR#3871~~ |
 | kimi1 | #3105 | Tier-E | fullstack | ~~订单跟踪看板(PI确认→发货全流程)~~ | ~~Done(仅建表)~~ |
 | kimi20 | #3859 | infra | fullstack | ~~CC测试环境一键就绪验证~~ | ~~Done~~ |
 | kimi1 | #1830 | Tier-B | backend | ~~利润风险预警中心+仪表盘+项目详情预警~~ | ~~Done~~ |

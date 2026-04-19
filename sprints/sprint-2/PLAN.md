@@ -255,8 +255,9 @@ Week 4 (5/10-5/16):
 | kimi19 | #3167 | approval | ~~动态表单引擎JSON Schema(B1/8，解锁B2-B8)~~ | ~~Done(PR#3901 admin-merged)~~ |
 | kimi6  | #2468 | execution | ~~图纸管理API(上传/版本控制/审批/下发工厂)~~ | ~~Done(PR#3904 admin-merged)~~ |
 | kimi6  | #2024 | approval | AI预检服务（提交前质量/价格/规则检查，Phase5） | 已派 |
+| kimi19 | #2025 | approval | ~~SLA超时检测+企微催办通知~~ | ~~Done(PR#3905 admin-merged)~~ |
 | kimi1  | #3149 | approval | ~~审批进度追踪器组件(流程地图+步骤高亮+卡点提示)~~ | ~~Done(PR#3902 admin-merged)~~ |
 | kimi3  | #3150 | approval | ~~审批流程图渲染API(模板→实例DAG+节点状态+耗时)~~ | ~~Done(PR#3903 admin-merged)~~ |
 | kimi1  | #3168 | approval | 动态表单渲染器前端 — JSON Schema→Vue3组件自动渲染 | 已派 |
 | kimi4  | #3169 | approval | 表单模板管理 — 模板CRUD+分类+启用/停用+审批流绑定 | 已派 |
-| kimi19 | #2025 | approval | SLA超时检测+企微催办通知 | 已派 |
+| kimi19 | #2025 | approval | SLA超时检测+企微催办通知 | ✅ PR#3905 admin-merged |

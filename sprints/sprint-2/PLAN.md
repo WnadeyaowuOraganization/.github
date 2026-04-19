@@ -187,6 +187,7 @@ Week 4 (5/10-5/16):
 | kimi3 | #1790 | Tier-B | frontend | 变更影响分析面板+审批操作+全局变更看板 |
 | kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) |
 | kimi6 | #1808 | Tier-B | frontend | 采购/生产/安装/文档/历史 Tab 页面 |
+| kimi20 | #3859 | infra | fullstack | CC测试环境一键就绪(前后端+auth+冒烟) |
 
 ## 指派历史（完成后划线）
 

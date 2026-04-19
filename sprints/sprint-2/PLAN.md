@@ -185,7 +185,7 @@ Week 4 (5/10-5/16):
 | kimi1 | #1627 | Tier-D | project | 风险台账联动(严重整改自动升级risk_event) |
 | kimi2 | #2523 | Tier-D | project | 文档中心API(CRUD+分类+权限) |
 | kimi3 | #3103 | Tier-E | biz | 報價單生成+PDF導出(三線差異化模板) |
-| kimi4 | — | — | — | #2300 PR#3875 等merge |
+| kimi4 | — | — | — | 空位（并发上限5，等CC完成后补派） |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) |
 

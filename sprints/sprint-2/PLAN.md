@@ -186,7 +186,7 @@ Week 4 (5/10-5/16):
 | kimi2 | #1998 | Tier-C | finance | 阶段凭证管理API(上传+完整度检查+催收联动) |
 | kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) |
 | kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) |
-| kimi6 | #1672 | Tier-E | biz | 直销投标文档生成API |
+| kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) |
 
 ## 指派历史（完成后划线）
@@ -215,7 +215,7 @@ Week 4 (5/10-5/16):
 | kimi6 | #2350 | Tier-D | frontend | ~~经验库页面(卡片列表+详情+审阅)~~ | ~~Done~~ |
 | kimi6 | #1808 | Tier-B | frontend | ~~采购/生产/安装/文档/历史 Tab 页面~~ | ~~Done~~ |
 | kimi6 | #1896 | Tier-E | crm | ~~客户情报Phase1: business_opportunities增强~~ | ~~Done~~ |
-| kimi6 | #1672 | Tier-E | biz | 直销投标文档生成API | In Progress |
+| kimi6 | #1672 | Tier-E | biz | ~~直销投标文档生成API~~ | ~~Done~~ |
 | kimi2 | #1750 | Tier-C | frontend | ~~AI条款对比前端(左右分栏+差异高亮)~~ | ~~Done~~ |
 | kimi2 | #1728 | Tier-B | execution | ~~施工安全管理页面(仅建表+契约+菜单，Java+前端追补)~~ | ~~Done(部分)~~ |
 | kimi2 | #1998 | Tier-C | finance | 阶段凭证管理API(上传+完整度检查+催收联动) | In Progress |
@@ -232,3 +232,4 @@ Week 4 (5/10-5/16):
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
 | kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) | In Progress |
+| kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |

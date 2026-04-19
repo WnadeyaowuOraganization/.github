@@ -173,8 +173,8 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | 模块 | 内容 | 状态 |
 |---------|-------|------|------|------|
-| kimi1  | #2016 | approval | 企微审批消息卡片 — 点击直达H5审批页 | 已派 |
-| kimi3  | #3151 | approval | 新手引导+流程帮助中心 — Tooltip引导+流程说明+常见问题 | 集成测试中 |
+| kimi1  | #2016 | approval | 企微审批消息卡片 — 点击直达H5审批页 | 进行中 |
+| kimi3  | #2015 | approval | CRM商机/报价模块接入审批流 — 报价提交自动发起审批 | 已派 |
 | kimi4  | #3156 | approval | 流程效率分析看板 — 节点耗时/驳回率/瓶颈定位+优化建议 | 进行中(复杂) |
 | kimi6  | #3153 | approval | 自动审批规则引擎 — 预审条件+预清除回退+零人工审批路径 | 单测+API测试中 |
 | kimi19 | #3134 | approval | 设计变更分级审批 — 三级变更模板(微调/标准/重大)+自动路由 | 进行中 |
@@ -279,4 +279,6 @@ Week 4 (5/10-5/16):
 | kimi19 | #2266 | wecom | ~~H5审批操作页(approval-detail.vue+taskId字段+ProgressNodeVO)~~ | ~~Done(PR#3923 admin-merged)~~ |
 | kimi1  | #3154 | approval | ~~智能路由引擎(并行/串行/条件路由+动态审批人+部门专家匹配)~~ | ~~Done(PR#3924 admin-merged)~~ |
 | kimi19 | #3134 | approval | 设计变更分级审批 — 三级变更模板(微调/标准/重大)+自动路由 | 进行中 |
-| kimi1  | #2016 | approval | 企微审批消息卡片 — 点击直达H5审批页 | 已派 |
+| kimi3  | #3151 | approval | ~~新手引导+流程帮助中心(Tooltip+FAQ+OnboardingGuide+FlowFinder+HelpCenter)~~ | ~~Done(PR#3925 admin-merged)~~ |
+| kimi1  | #2016 | approval | 企微审批消息卡片 — 点击直达H5审批页 | 进行中 |
+| kimi3  | #2015 | approval | CRM商机/报价模块接入审批流 — 报价提交自动发起审批 | 已派 |

@@ -234,7 +234,7 @@ Week 4 (5/10-5/16):
 | kimi1 | #2352 | Tier-D | project | ~~风险台账Tab前端(风险列表+录入+处置+附件)~~ | ~~Done(PR#3873)~~ |
 | kimi1 | #1627 | Tier-D | project | ~~风险台账联动(严重整改自动升级risk_event)~~ | ~~Done(PR#3877)~~ |
 | kimi19 | #2351 | Tier-D | project | ~~项目列表健康度灯+阶段切换拦截弹窗~~ | ~~Done~~ |
-| kimi19 | #2398 | Tier-A | mine | ~~竞品中标记录采集(后端+前端)~~ | ~~PR#3884 轮询中~~ |
+| kimi19 | #2398 | Tier-A | mine | ~~竞品中标记录采集(后端+前端)~~ | ~~Done(PR#3884)~~ |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
 | kimi3 | #3103 | Tier-E | biz | ~~報價單生成+PDF導出(三線差異化模板)~~ | ~~Done(PR#3879)~~ |
 | kimi6 | #1715 | Tier-E | biz | ~~直销投标文档生成页面(选品→预览→导出)~~ | ~~Done(PR#3881)~~ |

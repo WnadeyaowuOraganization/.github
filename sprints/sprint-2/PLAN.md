@@ -187,6 +187,7 @@ Week 4 (5/10-5/16):
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 |
 | kimi2 | #1874 | Tier-A | backend | 前期项目分阶段跟进提醒 |
 | kimi3 | #1991 | Tier-D | backend | 经验卡片API |
+| kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 |
 | kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 |
 
 ## 指派历史（完成后划线）
@@ -209,3 +210,4 @@ Week 4 (5/10-5/16):
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 | In Progress |
 | kimi2 | #1874 | Tier-A | backend | 前期项目分阶段跟进提醒 | In Progress |
 | kimi3 | #1991 | Tier-D | backend | 经验卡片API | In Progress |
+| kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 | In Progress |

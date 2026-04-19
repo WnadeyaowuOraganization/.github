@@ -190,7 +190,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
 | kimi3  | #2005 | finance | 应付账款数据库 — fin_payables + fin_payment_schedules | 进行中 |
 | kimi4  | #2003 | finance | 经营分析数据聚合API — 收入/成本/毛利/现金流多维分析 | 进行中 |
-| kimi6  | #2354 | finance | 回款周报前端 — 商务填报+财务评估+管理层审阅三视图 | 进行中 |
+| kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
 
 ## 指派历史（完成后划线）
 
@@ -312,6 +312,6 @@ Week 4 (5/10-5/16):
 | kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
 | kimi3  | #2005 | finance | 应付账款数据库 — fin_payables + fin_payment_schedules | 进行中 |
 | kimi4  | #2003 | finance | 经营分析数据聚合API — 收入/成本/毛利/现金流多维分析 | 进行中 |
-| kimi6  | #2354 | finance | 回款周报前端 — 商务填报+财务评估+管理层审阅三视图 | 进行中 |
+| kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
 | kimi1  | #2006 | finance | 应收账款管理API — 客户应收余额+账龄分析+催收提醒 | 进行中 |
 | kimi19 | #1754 | frontend | 代理商工作台数据打通 — 关联项目+中标方标签 | 进行中 |

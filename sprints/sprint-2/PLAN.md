@@ -173,11 +173,11 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | 模块 | 内容 | 状态 |
 |---------|-------|------|------|------|
-| kimi1  | #2329 | crm | 客户情报P4 客户详情页情报卡Tab | ✅ 已派（本批） |
-| kimi3  | #2027 | approval | 审批引擎P0 Entity+Service（审批模板/审批组/SLA规则） | ✅ PR#3898 等CI merge |
-| kimi4  | #2119 | execution | 经销模式支持 — 阶段配置+经销商结算+门户API | ✅ 已派（本批） |
-| kimi6  | #2468 | execution | 图纸管理 API — 上传/版本控制/审批/下发工厂 | ✅ 已派（本批） |
-| kimi19 | #2328 | crm | 客户情报P4 商机详情页信息质量面板 | ✅ PR#3897 等CI merge |
+| kimi1  | #2329 | crm | 客户情报P4 客户详情页情报卡Tab | ✅ PR#3899 admin-merged（GitHub Actions startup_failure） |
+| kimi3  | #2027 | approval | 审批引擎P0 Entity+Service（审批模板/审批组/SLA规则） | ✅ PR#3898 admin-merged（关键路径，解锁#3150/#3149） |
+| kimi4  | #2119 | execution | 经销模式支持 — 阶段配置+经销商结算+门户API | 工作中 |
+| kimi6  | #2468 | execution | 图纸管理 API — 上传/版本控制/审批/下发工厂 | 后端完成，Playwright进行中 |
+| kimi19 | #2328 | crm | 客户情报P4 商机详情页信息质量面板 | ✅ PR#3897 admin-merged（GitHub Actions startup_failure） |
 
 ## 指派历史（完成后划线）
 
@@ -244,3 +244,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #2102 | warranty | backend | ~~质保售后触发二次商机(维修需求+满意度复购)~~ | ~~Done(PR#3894)~~ |
 | kimi3  | #1892 | crm | backend | ~~客户情报P3经销商信息提交模板+自动校验~~ | ~~Done(PR#3895)~~ |
 | kimi19 | #2327 | crm | frontend | ~~客户情报P4菜单注册+权限配置~~ | ~~Done(PR#3893)~~ |
+| kimi6  | #1891 | crm | backend | ~~客户情报P3后端(BO/VO/Mapper/Service+测试)~~ | ~~Done(PR#3896)~~ |
+| kimi3  | #2027 | approval | ~~审批引擎P0 Phase2 Entity+Service CRUD~~ | ~~Done(PR#3898 admin-merged)~~ |
+| kimi19 | #2328 | crm | ~~客户情报P4商机详情页信息质量面板~~ | ~~Done(PR#3897 admin-merged)~~ |
+| kimi1  | #2329 | crm | ~~客户情报P4客户详情页情报卡Tab~~ | ~~Done(PR#3899 admin-merged)~~ |

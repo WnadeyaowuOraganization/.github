@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-19 08:35 【/compact 后 API Error 400 thinking token 丢失 → CC 会话损坏】3CC同批次
+
+- **症状**：CC 执行 /compact 后，对话历史被压缩，后续 Tool Call 触发 `API Error: 400 {"error":{"type":"invalid_request_error","message":"thinking is enabled but reasoning_content is missing in assistant tool call message at index N"}}`，CC 停在 idle 无法继续
+- **频次**：kimi3 #3103（第1次）、kimi1 #1627（第2次）、kimi2 #2523（第3次）—— 同一巡检轮次 3 CC 同时中招，已达大面积阻塞阈值
+- **根因**：Claude Sonnet 4.6 开启 extended thinking 后，每个 assistant tool call message 必须含 reasoning_content。/compact 压缩历史时丢弃了 reasoning_content，导致后续 API 调用校验失败
+- **已处置**：kill 损坏会话 + rm lock + run-cc.sh 重启（kimi3/kimi1/kimi2 已重启），注入接手说明 + 告知新CC：出现此错误立即 /clear，不要重试
+- **建议改进**：在 CLAUDE.md 或 cc-report skill 中加红线：若遇 API Error 400 `thinking is enabled but reasoning_content is missing`，立即 /clear 重置对话，重新读取工作目录代码继续；不要重试出错操作，不要 /compact 修复（/compact 本身会再次触发）
+- **状态**：✅ 已止血（3 CC 重启）| 待更新 skill 红线
+
+---
+
 ### 2026-04-19 06:30 【JSX in Vue SFC → build:prod 失败】第4次，已达大面积阻塞阈值
 
 - **症状**：`profit-alert/index.vue` 使用 JSX 语法 `<Tag color={color}>/<Button>/<div>`，dev server 不报错，CI `build:prod` 报 `[vite:vue] Unexpected token`，dev 部署 CI 失败

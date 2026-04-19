@@ -106,6 +106,7 @@
 11. **禁止无测试的 PR**：后端改动**必须按顺序**包含 JUnit 单测（先）+ Playwright API spec（后）；前端改动**必须**含 Playwright e2e spec；Bug 修复**必含**"复现红灯"测试；纯文档/配置 Issue **必须**在 task.md 显式注明"跳过测试原因"
 12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
 13. **禁止动 `.claude/skills/` 和根 `CLAUDE.md`**：这两个是 `run-cc.sh` 启动时注入的运行时资产（`.claude/skills/*` 为软链到 `~/projects/.github/docs/agent-docs/skills/`，`CLAUDE.md` 由模板覆盖生成）。`git status` 里它们 untracked 属正常，**禁止** `rm -rf .claude/skills`、`git restore CLAUDE.md`、`git clean -fd` 不带排除。PR 提交前要清 untracked 用：`git clean -fd -e '.claude/skills/' -e 'CLAUDE.md'`
+14. **遇到 API Error 400 `thinking is enabled but reasoning_content is missing` 立即 `/clear`**：此错误表示对话历史中 thinking token 状态损坏（常发生在 /compact 后），**禁止**重试出错操作、**禁止**再次 /compact（会再次触发）。正确处理：立即执行 `/clear` 重置对话 → 重新 `git status` + 读取已有代码 → 从断点处继续（代码文件不受影响）
 
 ## 共用脚本速查
 

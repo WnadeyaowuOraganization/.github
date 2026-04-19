@@ -1209,3 +1209,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 **处置**：研发经理 kill 子 shell，注入标准前台模板
 **频次**：Sprint-2 已发生 2 次（含 kimi2/#1750 上次）
 **止血**：达 4 次频次阈值时更新 cc-report skill 前台模板说明强化
+
+## 2026-04-19 | 后台轮询违规第3次（kimi4/#1752）- 触发止血
+
+**现象**：kimi4 创建 PR#3863 后再次使用后台 poll 脚本（已是第3次）
+**处置**：kill 后台 shell，注入前台模板（CC已退出故注入未到达）
+**频次**：Sprint-2 共 3 次（kimi6/#1808, kimi4/#1752 x2）
+**止血动作**：待第4次时立即更新 cc-report skill 强化前台轮询规范说明

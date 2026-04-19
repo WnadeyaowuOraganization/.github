@@ -133,6 +133,32 @@ cmd_init_db() {
   fi
 
   echo "✅ ${tag} 数据库就绪 (mysql:${KIMI_DB}, redis:db${REDIS_DB})"
+
+  # ── 生成 kimi 专属 Spring Boot 配置（防止 CC 直接跑 mvn 时连到主库）──────────
+  # Spring Boot 优先级：./config/application-dev.yml > classpath:/application-dev.yml
+  # 工作目录 = backend/ruoyi-admin，故此文件自动覆盖 classpath 配置，无需命令行参数
+  local spring_config_dir="${KIMI_DIR}/backend/ruoyi-admin/config"
+  mkdir -p "$spring_config_dir"
+  cat > "${spring_config_dir}/application-dev.yml" << SPRINGCFG
+# 自动生成 by cc-test-env.sh init-db — 禁止手动修改，重跑 init-db 会覆盖
+# 作用：确保 mvn spring-boot:run 直接运行时也连接 kimi 独立库，而非主库
+spring:
+  datasource:
+    dynamic:
+      datasource:
+        master:
+          url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+          username: ${MYSQL_USER}
+          password: ${MYSQL_PASS}
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      database: ${REDIS_DB}
+server:
+  port: ${BACKEND_PORT}
+SPRINGCFG
+  echo "  spring config: ${spring_config_dir}/application-dev.yml (kimi专属，自动覆盖classpath)"
 }
 
 # ============================================================

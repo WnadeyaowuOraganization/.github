@@ -180,18 +180,39 @@ export const columns: VxeGridProps['columns'] = [
 
 **`slots.default` 函数禁止返回 HTML 字符串**（#3487 事故）。
 
+**⛔ MUST NOT：`<script setup lang="ts">` 中禁止使用 JSX 语法**（#2351/#1830 事故，连续4次导致 dev 部署失败）。
+
 ```ts
-// ❌ 错
+// ❌ 错 — HTML 字符串
 slots: { default: ({row}) => `<a-tag>${row.label}</a-tag>` }
 
-// ✅ 用 template slot 名
+// ❌ 错 — JSX（vite:vue 编译报错 "Unexpected token"，dev server 不报但 build:prod 失败）
+import { Tag } from 'ant-design-vue';
+slots: { default: ({row}) => (
+  <Tag color={row.color}>{row.label}</Tag>   // ← 禁止！<script setup lang="ts"> 不支持 JSX
+) }
+
+// ✅ 推荐 — template slot 名（最安全）
 slots: { default: 'colName' }
-// index.vue
+// index.vue template 中：
 <template #colName="{row}"><a-tag>{{row.label}}</a-tag></template>
 
-// ✅ 或 h() 函数返回（少用，仅简单场景）
+// ✅ 允许 — h() 函数返回（替代 JSX 的唯一方式）
 import { h } from 'vue';
-slots: { default: ({row}) => h(ATag, { color: 'green' }, () => row.label) }
+slots: { default: ({row}) => h(Tag, { color: row.color }, () => row.label) }
+
+// ✅ h() 多节点操作列示例
+slots: {
+  default: ({ row }) => {
+    const btns = [
+      h(Button, { type: 'link', size: 'small', onClick: () => handleEdit(row) }, () => '编辑'),
+    ];
+    if (row.canDelete) {
+      btns.push(h(Button, { type: 'link', size: 'small', danger: true, onClick: () => handleDelete(row.id) }, () => '删除'));
+    }
+    return h('div', null, btns);
+  }
+}
 ```
 
 ## API 层

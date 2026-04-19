@@ -13,7 +13,7 @@
 #   cc-test-env.sh start          <kimi_tag>    启动后端+前端（非阻塞）
 #   cc-test-env.sh start-backend  <kimi_tag>    只启动后端（后端代码改动场景）
 #   cc-test-env.sh start-frontend <kimi_tag>    只启动前端（前端代码改动场景）
-#   cc-test-env.sh wait           <kimi_tag>    等待后端健康检查通过（默认300s，WAIT_TIMEOUT可调）
+#   cc-test-env.sh wait           <kimi_tag>    等待后端+前端就绪，并预生成 kimi auth state（playwright storageState，6h复用）
 #   cc-test-env.sh stop           <kimi_tag>    停止服务 + 删除数据库
 #   cc-test-env.sh stop-backend   <kimi_tag>    只停后端进程（不删库）
 #   cc-test-env.sh stop-frontend  <kimi_tag>    只停前端进程（不删库）
@@ -167,7 +167,11 @@ cmd_start() {
 }
 
 # ============================================================
-#  wait: 等待后端健康检查通过（可被编程CC用timeout参数调用）
+#  wait: 等待后端+前端就绪，并预生成 kimi auth state
+#   1. 轮询后端 /actuator/health（默认300s，WAIT_TIMEOUT可调）
+#   2. 轮询前端 HTTP /（默认120s，FE_WAIT_TIMEOUT可调）
+#   3. 若 auth state 超过6h，运行 auth.setup.ts 预热 storageState
+#  完成后 CC 可直接 npx playwright test 跑图形化测试
 # ============================================================
 cmd_wait() {
   local tag="$1"
@@ -187,6 +191,7 @@ cmd_wait() {
     return 1
   fi
 
+  # ── 1. 等待后端就绪 ──────────────────────────────────────────────────────────
   echo -n "等待后端就绪 (PID=$pid, port=${BACKEND_PORT})..."
   local max_wait=${WAIT_TIMEOUT:-300}
   for i in $(seq 1 "$max_wait"); do
@@ -201,21 +206,68 @@ cmd_wait() {
     http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 2>/dev/null)
     if [ "$http_code" != "000" ] && [ -n "$http_code" ]; then
       echo " OK (${i}s, HTTP=${http_code})"
-      return 0
+      break
     fi
     # 备用检查：端口已监听
     if [ "$i" -ge 60 ] && ss -tlnp 2>/dev/null | grep -q ":${BACKEND_PORT} " ; then
       echo " OK (${i}s, 端口已监听)"
-      return 0
+      break
     fi
     [ $((i % 30)) -eq 0 ] && echo -n " ${i}s"
     sleep 1
+    if [ "$i" -eq "$max_wait" ]; then
+      echo " TIMEOUT (${max_wait}s)"
+      echo "最后30行日志:"
+      tail -30 "$LOG_DIR/backend.log"
+      return 1
+    fi
   done
 
-  echo " TIMEOUT (${max_wait}s)"
-  echo "最后30行日志:"
-  tail -30 "$LOG_DIR/backend.log"
-  return 1
+  # ── 2. 等待前端就绪（Vite dev server） ───────────────────────────────────────
+  echo -n "等待前端就绪 (port=${FRONTEND_PORT})..."
+  local fe_wait=${FE_WAIT_TIMEOUT:-120}
+  for i in $(seq 1 "$fe_wait"); do
+    local fe_code
+    fe_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${FRONTEND_PORT}/" --max-time 2 2>/dev/null)
+    if [ "$fe_code" != "000" ] && [ -n "$fe_code" ]; then
+      echo " OK (${i}s, HTTP=${fe_code})"
+      break
+    fi
+    [ $((i % 30)) -eq 0 ] && echo -n " ${i}s"
+    sleep 1
+    if [ "$i" -eq "$fe_wait" ]; then
+      echo " TIMEOUT (${fe_wait}s) — 前端可能尚未 start，跳过 auth 预热"
+      return 0
+    fi
+  done
+
+  # ── 3. 预生成 kimi auth state（给 playwright storageState 使用） ────────────
+  local auth_file="/tmp/e2e-auth-state-${tag}.json"
+  local auth_age=99999
+  if [ -f "$auth_file" ]; then
+    auth_age=$(( ($(date +%s) - $(stat -c %Y "$auth_file" 2>/dev/null || echo 0)) / 3600 ))
+  fi
+  if [ "$auth_age" -ge 6 ]; then
+    echo "🔑 生成 ${tag} auth state → ${auth_file}"
+    local e2e_dir="${KIMI_DIR}/e2e"
+    if [ -d "$e2e_dir" ]; then
+      (cd "$e2e_dir" && \
+        E2E_ENV="${tag}" \
+        CC_TEST_FRONTEND_URL="http://localhost:${FRONTEND_PORT}" \
+        BASE_URL_FRONT="http://localhost:${FRONTEND_PORT}" \
+        E2E_AUTH_STATE="${auth_file}" \
+        npx playwright test tests/setup/auth.setup.ts --project=setup 2>/dev/null \
+        && echo "✓ auth state 已生成: ${auth_file}" \
+        || echo "⚠ auth.setup.ts 运行失败，CC 首次跑 playwright 时再手动登录"
+      )
+    else
+      echo "⚠ e2e 目录不存在 (${e2e_dir})，跳过 auth 预热"
+    fi
+  else
+    echo "✓ auth state 有效 (age=${auth_age}h)，跳过预热"
+  fi
+
+  return 0
 }
 
 start_backend() {

@@ -183,7 +183,7 @@ Week 4 (5/10-5/16):
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
 | kimi1 | #1830 | Tier-B | frontend | 利润风险预警中心+仪表盘+项目详情预警 |
-| kimi2 | #1728→#1998 | Tier-C | finance | #1728 PR merge后即接#1998阶段凭证管理API |
+| kimi2 | #1998 | Tier-C | finance | 阶段凭证管理API(上传+完整度检查+催收联动) |
 | kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) |
 | kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) |
 | kimi6 | #1672 | Tier-E | biz | 直销投标文档生成API |
@@ -219,6 +219,8 @@ Week 4 (5/10-5/16):
 | kimi2 | #1750 | Tier-C | frontend | ~~AI条款对比前端(左右分栏+差异高亮)~~ | ~~Done~~ |
 | kimi2 | #1728 | Tier-B | execution | ~~施工安全管理页面(仅建表+契约+菜单，Java+前端追补)~~ | ~~Done(部分)~~ |
 | kimi2 | #1998 | Tier-C | finance | 阶段凭证管理API(上传+完整度检查+催收联动) | In Progress |
+| kimi2 | #1728-后端 | Tier-B | execution | (待拆Issue)施工安全6模块Java实现 | ⏳ 待派 |
+| kimi2 | #1728-前端 | Tier-B | execution | (待拆Issue)施工安全6模块前端页面 | ⏳ 待派 |
 | kimi4 | #1752 | Tier-C | frontend | ~~合同审批前端(待审批列表+审批页面)~~ | ~~Done~~ |
 | kimi4 | #2023 | Tier-C | approval | ~~合同管理接入审批流(盖章/签署自动发起)~~ | ~~Done~~ |
 | kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) | In Progress |

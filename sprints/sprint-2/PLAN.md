@@ -187,7 +187,6 @@ Week 4 (5/10-5/16):
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 |
 | kimi2 | #1874 | Tier-A | backend | 前期项目分阶段跟进提醒 |
 | kimi3 | #1991 | Tier-D | backend | 经验卡片API |
-| kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 |
 | kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 |
 
 ## 指派历史（完成后划线）
@@ -199,7 +198,7 @@ Week 4 (5/10-5/16):
 | kimi1 | #3631 | Tier-A | bidding | ~~pipeline↔后端表对齐全景规划~~ | ~~Done~~ |
 | kimi2 | #2028 | Tier-A | backend | ~~矿场项目信息增量同步推送~~ | ~~Done~~ |
 | kimi3 | #2243 | Tier-A | backend | ~~简报偏好设置页~~ | ~~Done~~ |
-| kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 | In Progress |
+| kimi4 | #3193 | Tier-B | backend | ~~项目主计划数据模型~~ | ~~Done~~ |
 | kimi5 | #1692 | Tier-B | backend | ~~项目成本跟踪API~~ | ~~Done~~ |
 | kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 | In Progress |
 | kimi7 | #2097 | Tier-B | backend | ~~验收检查项模板管理~~ | ~~Done~~ |

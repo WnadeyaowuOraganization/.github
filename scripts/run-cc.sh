@@ -312,6 +312,13 @@ if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
   TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log; export KIMI_ID=${KIMI_NUM}; export E2E_MAIN_AUTH=/tmp/e2e-auth-state-main.json;"
 fi
 
+# === e2e/node_modules 统一软链到 e2e-top（避免各 kimi 独立安装/版本不一致）===
+_TOP_E2E_NM="${HOME_DIR}/projects/wande-play-e2e-top/e2e/node_modules"
+_KIMI_E2E_NM="${WORK_DIR}/e2e/node_modules"
+if [ -d "$_TOP_E2E_NM" ] && [ ! -L "$_KIMI_E2E_NM" ]; then
+  rm -rf "$_KIMI_E2E_NM" && ln -sf "$_TOP_E2E_NM" "$_KIMI_E2E_NM"
+fi
+
 # === 预生成主环境 auth state（Top E2E + CC before 截图共用，6h 内复用）===
 if [ -f "${HOME_DIR}/projects/wande-play/e2e/tests/setup/auth.setup.ts" ]; then
   MAIN_AUTH_FILE="/tmp/e2e-auth-state-main.json"

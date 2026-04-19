@@ -173,11 +173,11 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | 模块 | 内容 | 状态 |
 |---------|-------|------|------|------|
-| kimi1  | #2016 | approval | 企微审批消息卡片 — 点击直达H5审批页 | 进行中 |
-| kimi3  | #2015 | approval | CRM商机/报价模块接入审批流 — 报价提交自动发起审批 | 进行中 |
-| kimi4  | #3156 | approval | 流程效率分析看板 — 节点耗时/驳回率/瓶颈定位+优化建议 | 进行中(复杂) |
-| kimi6  | #3155 | approval | 流程简化配置页 — 跳过/自动审批/路由规则可视化配置（#3152+#3153+#3154解锁） | 已派 |
-| kimi19 | #3134 | approval | 设计变更分级审批 — 三级变更模板(微调/标准/重大)+自动路由 | 进行中 |
+| kimi1  | #3174 | approval | 表单模板导入导出+配置向导 — 模板迁移+快速配置 [流程补齐8/8] | 已派 |
+| kimi3  | #3179 | project360 | 项目360统一看板页面 — 中标前后共用·阶段自动切换·多Tab聚合 [1/6] | 已派 |
+| kimi4  | #3185 | finance | 全阶段资料完成度看板 — 全项目×全阶段文件完整度+法规缺失预警 [1/13] | 已派 |
+| kimi6  | #3155 | approval | 流程简化配置页 — 跳过/自动审批/路由规则可视化配置（#3152+#3153+#3154解锁） | 进行中(后端done→前端开发中) |
+| kimi19 | #3188 | finance | 企业信息库 — 万德常用信息维护+一键填充到回款表单 [4/7] | 已派 |
 
 ## 指派历史（完成后划线）
 
@@ -261,7 +261,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #3171 | form | ~~行政服务表单组(资产/车辆/证照/名片/钥匙5模板)~~ | ~~Done(PR#3910 admin-merged)~~ |
 | kimi19 | #2025 | approval | ~~SLA超时检测+企微催办通知~~ | ~~Done(PR#3905 admin-merged)~~ |
 | kimi1  | #3168 | approval | ~~动态表单渲染器前端(JSON Schema→Vue3组件自动渲染)~~ | ~~Done(PR#3906 admin-merged)~~ |
-| kimi19 | #2270 | wecom | H5工作台入口页 — 企微内嵌H5+JS-SDK初始化 | 已派 |
+| kimi19 | #2270 | wecom | ~~H5工作台入口页(企微内嵌H5+JS-SDK初始化)~~ | ~~Done(PR#3914 admin-merged)~~ |
 | kimi1  | #3149 | approval | ~~审批进度追踪器组件(流程地图+步骤高亮+卡点提示)~~ | ~~Done(PR#3902 admin-merged)~~ |
 | kimi3  | #3150 | approval | ~~审批流程图渲染API(模板→实例DAG+节点状态+耗时)~~ | ~~Done(PR#3903 admin-merged)~~ |
 | kimi1  | #3161 | wecom | ~~企微审批贯通SDK封装(4核心API+错误码映射+Token刷新)~~ | ~~Done(PR#3913 admin-merged)~~ |
@@ -270,17 +270,17 @@ Week 4 (5/10-5/16):
 | kimi4  | #3132 | approval | ~~审批抄送功能(wf_cc_record表+Service+Controller+企微通知)~~ | ~~Done(PR#3917 admin-merged)~~ |
 | kimi4  | #3152 | approval | ~~条件跳过引擎(数据模型+规则评估+API+评估框架集成)~~ | ~~Done(PR#3921 admin-merged)~~ |
 | kimi3  | #2365 | approval | ~~SLA规则配置页+审批统计看板(CRUD接口+前端+E2E 4passed)~~ | ~~Done(PR#3922 admin-merged)~~ |
-| kimi4  | #3156 | approval | 流程效率分析看板 — 节点耗时/驳回率/瓶颈定位+优化建议 | 已派 |
+| kimi4  | #3156 | approval | ~~流程效率分析看板(节点耗时/驳回率/瓶颈+AI建议，13后端+9前端)~~ | ~~Done(PR#3927 admin-merged)~~ |
 | kimi3  | #3151 | approval | 新手引导+流程帮助中心 — Tooltip引导+流程说明+常见问题 | 已派 |
 | kimi19 | #3163 | wecom | ~~企微审批贯通3/6 H5审批发起页(WfTemplateController+initiate.vue+草稿)~~ | ~~Done(PR#3918 admin-merged)~~ |
 | kimi6  | #3164 | wecom | ~~企微审批贯通4/6 审批消息卡片增强(WecomCardBuilder+卡片发送+回调)~~ | ~~Done(PR#3919 admin-merged)~~ |
 | kimi1  | #3162 | wecom | ~~企微审批贯通2/6 审批流程引擎回调处理(Controller+Service+Processor+幂等+重试)~~ | ~~Done(PR#3920 admin-merged)~~ |
-| kimi6  | #3153 | approval | 自动审批规则引擎 — 预审条件+预清除回退+零人工审批路径 | 单测+API测试中 |
+| kimi6  | #3153 | approval | ~~自动审批规则引擎(预审条件+预清除回退+零人工路径)~~ | ~~Done(PR#3926 admin-merged)~~ |
 | kimi19 | #2266 | wecom | ~~H5审批操作页(approval-detail.vue+taskId字段+ProgressNodeVO)~~ | ~~Done(PR#3923 admin-merged)~~ |
 | kimi1  | #3154 | approval | ~~智能路由引擎(并行/串行/条件路由+动态审批人+部门专家匹配)~~ | ~~Done(PR#3924 admin-merged)~~ |
-| kimi19 | #3134 | approval | 设计变更分级审批 — 三级变更模板(微调/标准/重大)+自动路由 | 进行中 |
+| kimi19 | #3134 | approval | ~~设计变更分级审批(三级变更模板+自动路由+后端核心T1-T5)~~ | ~~Done(PR#3930 admin-merged)~~ |
 | kimi3  | #3151 | approval | ~~新手引导+流程帮助中心(Tooltip+FAQ+OnboardingGuide+FlowFinder+HelpCenter)~~ | ~~Done(PR#3925 admin-merged)~~ |
 | kimi6  | #3153 | approval | ~~自动审批规则引擎(预审条件+预清除回退+零人工路径+JUnit+Playwright)~~ | ~~Done(PR#3926 admin-merged)~~ |
 | kimi6  | #3155 | approval | 流程简化配置页 — 跳过/自动审批/路由规则可视化配置 | 已派 |
-| kimi1  | #2016 | approval | 企微审批消息卡片 — 点击直达H5审批页 | 进行中 |
-| kimi3  | #2015 | approval | CRM商机/报价模块接入审批流 — 报价提交自动发起审批 | 进行中 |
+| kimi1  | #2016 | approval | ~~企微审批消息卡片(审批结果卡片+H5深度链接配置化)~~ | ~~Done(PR#3928 admin-merged)~~ |
+| kimi3  | #2015 | approval | ~~CRM报价单接入审批流(报价提交自动发起审批+JUnit19tests)~~ | ~~Done(PR#3929 admin-merged)~~ |

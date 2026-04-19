@@ -184,7 +184,7 @@ Week 4 (5/10-5/16):
 | kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
 | kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
 | kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
-| kimi1  | #1717 | finance | 报销申请页面+发票上传+借款管理+审批中心 | 进行中 |
+| kimi1  | #1717 | finance | ~~报销申请页面+发票上传+借款管理+审批中心~~ | ~~Done(PR#3946 admin-merged)~~ |
 | kimi4  | #1722 | perf | ~~管理费分摊+绩效考核页面 — 费用录入+打分+结果看板~~ | ~~Done(PR#3943 admin-merged)~~ |
 | kimi6  | #1780 | supply | ~~供应商台账+询价比价+采购跟踪页面(Mock模式骨架)~~ | ~~Done(PR#3942 admin-merged)~~ |
 | kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
@@ -306,10 +306,12 @@ Week 4 (5/10-5/16):
 | kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
 | kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
 | kimi4  | #3187 | finance | ~~全阶段文件缺失预警(三级升级推送+企微/站内双通道+阶段门控)~~ | ~~Done(PR#3938 admin-merged)~~ |
-| kimi1  | #1717 | finance | 报销申请页面+发票上传+借款管理+审批中心 | 进行中 |
+| kimi1  | #1717 | finance | ~~报销申请页面+发票上传+借款管理+审批中心~~ | ~~Done(PR#3946 admin-merged)~~ |
 | kimi4  | #1722 | perf | ~~管理费分摊+绩效考核页面 — 费用录入+打分+结果看板~~ | ~~Done(PR#3943 admin-merged)~~ |
 | kimi6  | #1780 | supply | ~~供应商台账+询价比价+采购跟踪页面(Mock模式骨架)~~ | ~~Done(PR#3942 admin-merged)~~ |
 | kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
 | kimi3  | #2005 | finance | 应付账款数据库 — fin_payables + fin_payment_schedules | 进行中 |
 | kimi4  | #2003 | finance | 经营分析数据聚合API — 收入/成本/毛利/现金流多维分析 | 进行中 |
 | kimi6  | #2354 | finance | 回款周报前端 — 商务填报+财务评估+管理层审阅三视图 | 进行中 |
+| kimi1  | #2006 | finance | 应收账款管理API — 客户应收余额+账龄分析+催收提醒 | 进行中 |
+| kimi19 | #1754 | frontend | 代理商工作台数据打通 — 关联项目+中标方标签 | 进行中 |

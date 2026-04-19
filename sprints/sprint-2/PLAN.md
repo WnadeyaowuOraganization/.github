@@ -184,6 +184,7 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
+| kimi1 | #3105 | Tier-E | fullstack | 订单跟踪看板(PI确认→发货全流程) |
 | kimi2 | #1750 | Tier-C | frontend | AI条款对比前端(左右分栏+差异高亮) |
 | kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) |
 | kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) |
@@ -215,3 +216,4 @@ Week 4 (5/10-5/16):
 | kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) | In Progress |
 | kimi2 | #1750 | Tier-C | frontend | AI条款对比前端(左右分栏+差异高亮) | In Progress |
 | kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) | In Progress |
+| kimi1 | #3105 | Tier-E | fullstack | 订单跟踪看板(PI确认→发货全流程) | In Progress |

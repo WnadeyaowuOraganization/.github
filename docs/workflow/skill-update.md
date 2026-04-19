@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-19 06:30 【JSX in Vue SFC → build:prod 失败】第4次，已达大面积阻塞阈值
+
+- **症状**：`profit-alert/index.vue` 使用 JSX 语法 `<Tag color={color}>/<Button>/<div>`，dev server 不报错，CI `build:prod` 报 `[vite:vue] Unexpected token`，dev 部署 CI 失败
+- **频次**：#2351（第1次 JSX in computed），#2351（第2次 phantom import），profit-alert（#1830合并后第3次），再次出现（**共4次，已达大面积阻塞阈值**，每次阻断整个 dev 部署 CI）
+- **根因**：CC 在 `<script setup lang="ts">` 中使用 JSX 语法，在 dev server 模式因插件宽松不报错，但 `build:prod` 严格模式下 vite:vue 编译器无法解析 JSX。CC 误以为 dev server 验证通过即可
+- **已处置**：修复 `profit-alert/index.vue` 将 JSX 改为 `h()` 调用（commit 25858f39f），push dev 触发重新部署；更新 frontend-coding SKILL.md 加明确 JSX 禁止红线和 h() 示例（commit 2d81650）；广播所有活跃 CC
+- **建议改进**：已实施 SKILL.md 更新。进一步建议：在 `pr-visual-proof` skill 前置步骤加 `pnpm build:prod` 本地验证（cc-test-env 的前端已有 prod 构建能力）；或 grep 检测 `<[A-Z][^/].*{` 模式
+- **状态**：✅ 已实施 commit 25858f39f + 2d81650 + 广播
+
+---
+
 ### 2026-04-19 02:10 【createdTime/updatedTime 命名错误 → dev 编译失败】kimi11 #1997
 
 - **症状**：#3193 PR 合并后 dev deploy CI 失败：`cannot find symbol: setCreatedTime/setUpdatedTime/getUpdatedTime/getCreatedTime`，3个文件共7处

@@ -184,7 +184,7 @@ Week 4 (5/10-5/16):
 |---------|-------|------|------|------|
 | kimi1 | #2352 | Tier-D | project | 风险台账Tab前端(风险列表+录入+处置+附件) |
 | kimi2 | #2520 | Tier-D | project | 项目文档中心数据库(project_documents+versions) |
-| kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) |
+| kimi3 | — | — | — | #1996 PR#3872 等merge |
 | kimi4 | — | — | — | #1523 PR#3871 等merge |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) |
@@ -232,5 +232,5 @@ Week 4 (5/10-5/16):
 | kimi19 | #2351 | Tier-D | project | ~~项目列表健康度灯+阶段切换拦截弹窗~~ | ~~Done~~ |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
-| kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) | In Progress |
+| kimi3 | — | — | — | #1996 PR#3872 等merge | In Progress |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |

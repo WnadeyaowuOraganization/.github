@@ -184,7 +184,7 @@ Week 4 (5/10-5/16):
 |---------|-------|------|------|------|
 | kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(spec_share_stats表) |
 | kimi2 | — | — | — | 空位（并发5满，等CC完成后补派） |
-| kimi3 | #3103 | Tier-E | biz | 報價單生成+PDF導出(PR#3879 等CI+merge) |
+| kimi3 | #1499 | Phase4 | mine | 经销商数据模型(dealer表+覆盖区域+绩效指标) |
 | kimi4 | #1501 | Phase3 | mine | 区域市场BI数据模型(PR#3878 等CI+merge) |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(500错误排查中) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(后端实现中，200min+) |
@@ -239,3 +239,4 @@ Week 4 (5/10-5/16):
 | kimi3 | #3103 | Tier-E | biz | ~~報價單生成+PDF導出(三線差異化模板)~~ | ~~Done(PR#3879)~~ |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |
 | kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(spec_share_stats表+品牌提及率对比) | In Progress |
+| kimi3 | #1499 | Phase4 | mine | 经销商数据模型(dealer表+覆盖区域+绩效指标) | In Progress |

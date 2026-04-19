@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-19 02:10 【createdTime/updatedTime 命名错误 → dev 编译失败】kimi11 #1997
+
+- **症状**：#3193 PR 合并后 dev deploy CI 失败：`cannot find symbol: setCreatedTime/setUpdatedTime/getUpdatedTime/getCreatedTime`，3个文件共7处
+- **频次**：kimi11 #1997（第1次），同类问题第2次（第1次是 2026-04-19 Flyway字段命名，已有 fix commit）
+- **根因**：CC 在新建 CrmPaymentWeeklyReportJob/CrmPaymentServiceImpl/CrmOpportunityServiceImpl 时调用了 `setCreatedTime`/`setUpdatedTime`，但 BaseEntity 继承下来的字段名是 `createTime`/`updateTime`（Lombok 生成的 getter/setter 为 `getCreateTime`/`setCreateTime`），导致编译报错
+- **已处置**：直接在 dev 分支替换 7 处调用（Job+2个ServiceImpl），push dev，触发重新部署；广播给所有活跃 CC
+- **建议改进**：在 `backend-schema` SKILL.md 已有红线"字段名用 create_time/update_time"；需同步补充 **Java 调用层红线**：调用时间字段 setter/getter 必须用 `setCreateTime`/`setUpdateTime`/`getCreateTime`/`getUpdateTime`，禁止 `setCreatedTime`/`setUpdatedTime` 等带 d 的形式
+- **状态**：已实施 828bf6f5f，待检查 backend-schema SKILL.md 是否已覆盖 Java 调用层
+
+---
+
 ### 2026-04-18 11:30 【VxeGrid toolbar slot 名写错 → 按钮不渲染】kimi1 #3838
 
 - **症状**：PR 合并后4个按钮（新增/导出/分配选中/批量操作）在页面上完全不可见

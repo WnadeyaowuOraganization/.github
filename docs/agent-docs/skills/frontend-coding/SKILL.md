@@ -355,7 +355,9 @@ cd frontend && pnpm build:antd   # ⚠️ 用 build:antd 而非 pnpm build（后
 cd frontend && pnpm lint        # 可选，Lint 警告建议修
 ```
 
-> **MUST NOT**：`pnpm build` 前不 rebase 直接提交 PR —— 多 CC 并行修改 `execution.ts` 等共享文件时会产生重复声明，导致 CI build 失败（2026-04-16 #3711 stageConfig重名 + #3719 DocCategoryVO缺闭括号，同一根因两次）。
+> **🚨 红线**：`pnpm build:antd` **必须本地零错误通过，才能进入 pr-visual-proof 阶段**。失败则禁止提 PR，必须先修好。
+>
+> **MUST NOT**：`pnpm build:antd` 前不 rebase 直接提交 PR —— 多 CC 并行修改 `execution.ts` 等共享文件时会产生重复声明，导致 CI build 失败（2026-04-16 #3711 stageConfig重名 + #3719 DocCategoryVO缺闭括号，同一根因两次）。
 
 ## 新增路由模块（父级路由 component 用法）
 

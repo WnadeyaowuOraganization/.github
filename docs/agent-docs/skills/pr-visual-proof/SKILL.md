@@ -171,7 +171,7 @@ Fixes #<Issue号>
 - [x] 后端 `mvn compile` 通过
 - [x] 后端 `mvn test -pl ruoyi-modules/wande-ai` 全绿
 - [x] Playwright API spec `backend/api/<module>.spec.ts` 全绿（断 status+body+落库）
-- [x] 前端 `pnpm build` 通过
+- [x] 前端 `pnpm build:antd` 全量构建通过（零错误）
 - [x] Playwright smoke：`<module>-page.spec.ts` 绿灯
 - [x] E2E：`<module>-regression.spec.ts` 绿灯
 
@@ -201,19 +201,27 @@ Fixes #<Issue号>
 git fetch origin dev && git rebase origin/dev
 git push --force-with-lease
 
-# 2. 预检
+# 2. 【前端必做】全量构建验证（门禁，失败则不允许继续提 PR）
+# ⚠️ 本步骤仅在有前端改动时执行；纯后端 PR 可跳过
+cd frontend && pnpm build:antd
+# 若失败，常见根因：
+#   - <script setup> 内含 JSX 语法（h()/defineComponent 调用）→ 改为 <template> 或去掉 setup 属性
+#   - import 路径不存在（如 `#/adapter/modal`）→ 先 grep 确认文件存在再 import
+# 修完后重跑此步，确认零错误再继续
+
+# 3. 预检
 bash ~/projects/.github/scripts/pr-body-lint.sh --pr-body-stdin --issue ${ISSUE} < /tmp/pr-body-draft.md
 
-# 3. 截图 + 上传（若是首次发 PR，先建 draft PR 拿 PR 号再上传）
+# 4. 截图 + 上传（若是首次发 PR，先建 draft PR 拿 PR 号再上传）
 gh release create screenshot-${PR} ...
 
-# 4. 创建 PR（必须 --base dev）
+# 5. 创建 PR（必须 --base dev）
 gh pr create --repo WnadeyaowuOraganization/wande-play \
   --base dev --head feature-Issue-${ISSUE} \
   --title "feat(模块): 描述 #${ISSUE}" \
   --body-file /tmp/pr-body-draft.md
 
-# 5. 轮询到 merged（约束 9）
+# 6. 轮询到 merged（约束 9）
 while [ "$(gh pr view $PR --repo WnadeyaowuOraganization/wande-play --json state -q .state)" != "MERGED" ]; do
   sleep 180
 done

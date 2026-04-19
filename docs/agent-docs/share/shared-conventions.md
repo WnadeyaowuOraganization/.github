@@ -236,7 +236,7 @@ gh pr edit ${PR_NUM} --body-file <body 末尾追加 ![desc](URL)>
 |------|------|
 | `cd backend && mvn clean compile -Pprod -DskipTests` | 后端编译 |
 | `cd backend && mvn test -pl ruoyi-modules/wande-ai` | 后端测试 |
-| `cd frontend && pnpm build` | 前端构建 |
+| `cd frontend && pnpm build:antd` | 前端全量构建（提 PR 前必须用此命令，`pnpm build` 走 turbo 缓存可能跳过） |
 
 ## 项目目录结构
 

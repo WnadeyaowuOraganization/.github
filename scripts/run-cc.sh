@@ -309,7 +309,23 @@ if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
   CC_BE_PORT=$((7100 + KIMI_NUM))
   CC_FE_PORT=$((8100 + KIMI_NUM))
   CC_LOG_DIR="/apps/wande-ai-backend-${KIMI_TAG}/logs"
-  TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log;"
+  TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log; export KIMI_ID=${KIMI_NUM}; export E2E_MAIN_AUTH=/tmp/e2e-auth-state-main.json;"
+fi
+
+# === 预生成主环境 auth state（Top E2E + CC before 截图共用，6h 内复用）===
+if [ -f "${HOME_DIR}/projects/wande-play/e2e/tests/setup/auth.setup.ts" ]; then
+  MAIN_AUTH_FILE="/tmp/e2e-auth-state-main.json"
+  AUTH_AGE=99999
+  if [ -f "$MAIN_AUTH_FILE" ]; then
+    AUTH_AGE=$(( ($(date +%s) - $(stat -c %Y "$MAIN_AUTH_FILE" 2>/dev/null || echo 0)) / 3600 ))
+  fi
+  if [ "$AUTH_AGE" -ge 6 ]; then
+    echo "🔑 刷新主环境 auth state → $MAIN_AUTH_FILE"
+    cd "${HOME_DIR}/projects/wande-play/e2e" && \
+      E2E_ENV=main BASE_URL_FRONT=http://localhost:8080 \
+      npx playwright test tests/setup/auth.setup.ts --project=setup 2>/dev/null || true
+    cd - >/dev/null
+  fi
 fi
 
 # === 构建 CC 退出后的清理命令 ===

@@ -14,7 +14,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 SESSION_MAP="/tmp/manager-session-map.json"
 JSONL_DIR="${HOME_DIR}/.claude/projects/-home-ubuntu-projects-wande-play-e2e-top-e2e"
 
-LOG_FILE="${HOME_DIR}/cc_scheduler/manager.log"
+LOG_FILE="${HOME_DIR}/cc_scheduler/top-e2e.log"
 mkdir -p "$(dirname "$LOG_FILE")"
 log() { echo "[$(date '+%Y-%m-%d %H:%M:%S')] $1" | tee -a "$LOG_FILE"; }
 
@@ -72,6 +72,19 @@ log "启动 e2e-top → ${SESSION}"
 # pre-task：切换 dev 分支并 pull
 cd "$E2E_DIR"
 git checkout dev 2>/dev/null && git pull origin dev 2>/dev/null
+
+# 预生成主环境 auth state（Top E2E 使用主环境 8080，6h 内复用）
+MAIN_AUTH_FILE="/tmp/e2e-auth-state-main.json"
+AUTH_AGE=99999
+if [ -f "$MAIN_AUTH_FILE" ]; then
+  AUTH_AGE=$(( ($(date +%s) - $(stat -c %Y "$MAIN_AUTH_FILE" 2>/dev/null || echo 0)) / 3600 ))
+fi
+if [ "$AUTH_AGE" -ge 6 ]; then
+  log "🔑 刷新主环境 auth state → $MAIN_AUTH_FILE"
+  E2E_ENV=main BASE_URL_FRONT=http://localhost:8080 \
+    npx playwright test tests/setup/auth.setup.ts --project=setup 2>/dev/null || true
+  log "✓ auth state 就绪"
+fi
 
 # Token：使用个人账号PAT（App token无法自审核自己创建的PR）
 export GH_TOKEN=$(python3 "$SCRIPT_DIR/gh-app-token.py" weiping)

@@ -174,7 +174,7 @@ Week 4 (5/10-5/16):
 | 指派目录 | Issue | 模块 | 内容 | 状态 |
 |---------|-------|------|------|------|
 | kimi1  | #2102 | backend | 质保售后触发二次商机 | ✅ PR#3894 等CI merge |
-| kimi3  | #1892 | crm | 客户情报P3 经销商信息提交模板 | ✅ 已派（本批） |
+| kimi3  | #1892 | crm | 客户情报P3 经销商信息提交模板 | ✅ PR#3895 等CI merge |
 | kimi4  | #2119 | execution | 经销模式支持 — 阶段配置+经销商结算+门户API | ✅ 已派（本批） |
 | kimi6  | #1891 | crm | 客户情报P3 国贸客户尽调清单+风险评估 | ✅ 已派（本批） |
 | kimi19 | #2327 | crm | 客户情报P4 菜单注册+权限 | ✅ PR#3893 已merge Done |
@@ -242,5 +242,5 @@ Week 4 (5/10-5/16):
 | kimi20 | #3886 | infra  | test | hook体系验证+wdpp_project_mine复合索引 | In Progress |
 | kimi6  | #2103 | warranty | backend | ~~质保到期续保营销+自动推送+CRM商机~~ | ~~Done(PR#3891)~~ |
 | kimi1  | #2102 | warranty | backend | ~~质保售后触发二次商机(维修需求+满意度复购)~~ | ~~Done(PR#3894)~~ |
-| kimi3  | #1892 | crm | backend | 客户情报P3经销商信息提交模板+自动校验 | In Progress |
+| kimi3  | #1892 | crm | backend | ~~客户情报P3经销商信息提交模板+自动校验~~ | ~~Done(PR#3895)~~ |
 | kimi19 | #2327 | crm | frontend | ~~客户情报P4菜单注册+权限配置~~ | ~~Done(PR#3893)~~ |

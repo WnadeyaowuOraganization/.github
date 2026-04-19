@@ -167,3 +167,4 @@ cd backend && mvn flyway:validate
 - ❌ 直接编辑 baseline SQL 文件
 - ❌ create_by / update_by 写成 VARCHAR
 - ❌ 表名无 wdpp_ 前缀
+- ❌ `INSERT INTO sys_menu VALUES` 不带列名：`sys_menu` 有 20 列（含 `query_param`、`create_dept`），无列名 INSERT 若少列即报 `Column count doesn't match`（error 1136）。**必须**写 `INSERT INTO sys_menu (menu_id, menu_name, ...) VALUES`（2026-04-19 事故）

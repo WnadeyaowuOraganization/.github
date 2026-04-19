@@ -187,7 +187,7 @@ Week 4 (5/10-5/16):
 | kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) |
 | kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) |
 | kimi6 | #1672 | Tier-E | biz | 直销投标文档生成API |
-| kimi19 | #2351 | Tier-D | project | 项目列表健康度灯+阶段切换拦截弹窗 |
+| kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) |
 
 ## 指派历史（完成后划线）
 
@@ -227,6 +227,7 @@ Week 4 (5/10-5/16):
 | kimi1 | #3105 | Tier-E | fullstack | ~~订单跟踪看板(PI确认→发货全流程)~~ | ~~Done(仅建表)~~ |
 | kimi20 | #3859 | infra | fullstack | ~~CC测试环境一键就绪验证~~ | ~~Done~~ |
 | kimi1 | #1830 | Tier-B | backend | 利润风险预警中心+仪表盘+项目详情预警 | In Progress |
-| kimi19 | #2351 | Tier-D | project | 项目列表健康度灯+阶段切换拦截弹窗 | In Progress |
+| kimi19 | #2351 | Tier-D | project | ~~项目列表健康度灯+阶段切换拦截弹窗~~ | ~~Done~~ |
+| kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
 | kimi3 | #1996 | Tier-C | finance | 回款周报API(商务填写+评估+审阅全流程) | In Progress |

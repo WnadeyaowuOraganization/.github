@@ -186,7 +186,7 @@ Week 4 (5/10-5/16):
 | kimi2 | — | — | — | 空位（并发5满，等CC完成后补派） |
 | kimi3 | #1499 | Phase4 | mine | 经销商数据模型(dealer表+覆盖区域+绩效指标) |
 | kimi4 | #2397 | Phase3 | mine | 区域市场数据定时刷新(每周聚合+企微通知) |
-| kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(500错误排查中) |
+| kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(PR#3881 等CI+merge) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(后端实现中，200min+) |
 
 ## 指派历史（完成后划线）
@@ -237,7 +237,7 @@ Week 4 (5/10-5/16):
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(后端+前端实现中，210min+) | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
 | kimi3 | #3103 | Tier-E | biz | ~~報價單生成+PDF導出(三線差異化模板)~~ | ~~Done(PR#3879)~~ |
-| kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |
+| kimi6 | #1715 | Tier-E | biz | ~~直销投标文档生成页面(选品→预览→导出)~~ | ~~Done(PR#3881)~~ |
 | kimi1 | #1500 | Phase3 | mine | ~~竞品规格份额统计(spec_share_stats表+品牌提及率对比)~~ | ~~Done(PR#3880)~~ |
 | kimi1 | #2234 | Phase3 | mine | 竞品份额变化预警(连续2季度上升触发告警+站内通知) | In Progress |
 | kimi3 | #1499 | Phase4 | mine | 经销商数据模型(dealer表+覆盖区域+绩效指标) | In Progress |

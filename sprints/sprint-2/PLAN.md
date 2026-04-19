@@ -183,7 +183,7 @@ Week 4 (5/10-5/16):
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
 | kimi1 | #1627 | Tier-D | project | 风险台账联动(严重整改自动升级risk_event) |
-| kimi2 | — | — | — | #2520 PR#3874 等merge |
+| kimi2 | #2523 | Tier-D | project | 文档中心API(CRUD+分类+权限) |
 | kimi3 | #3103 | Tier-E | biz | 報價單生成+PDF導出(三線差異化模板) |
 | kimi4 | #2300 | Tier-D | project | AI审查结果展示(照片标注叠加层+标准对比) |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) |
@@ -221,7 +221,8 @@ Week 4 (5/10-5/16):
 | kimi2 | #1998 | Tier-C | finance | ~~阶段凭证管理API(上传+完整度检查+催收联动)~~ | ~~PR#3870~~ |
 | kimi2 | #1728-后端 | Tier-B | execution | (待拆Issue)施工安全6模块Java实现 | ⏳ 待派 |
 | kimi2 | #1728-前端 | Tier-B | execution | (待拆Issue)施工安全6模块前端页面 | ⏳ 待派 |
-| kimi2 | #2520 | Tier-D | project | ~~项目文档中心数据库(project_documents+versions)~~ | ~~PR#3874~~ |
+| kimi2 | #2520 | Tier-D | project | ~~项目文档中心数据库(project_documents+versions)~~ | ~~Done(PR#3874)~~ |
+| kimi2 | #2523 | Tier-D | project | 文档中心API(CRUD+分类+权限) | In Progress |
 | kimi4 | #1752 | Tier-C | frontend | ~~合同审批前端(待审批列表+审批页面)~~ | ~~Done~~ |
 | kimi4 | #2023 | Tier-C | approval | ~~合同管理接入审批流(盖章/签署自动发起)~~ | ~~Done~~ |
 | kimi4 | #1523 | Tier-A | bidding | ~~区域品类矩阵统计API(省份×产品品类交叉)~~ | ~~Done(PR#3871)~~ |

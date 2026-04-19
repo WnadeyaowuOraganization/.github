@@ -186,7 +186,6 @@ Week 4 (5/10-5/16):
 |---------|-------|------|------|------|
 | kimi4 | #3193 | Tier-B | backend | 项目主计划数据模型 |
 | kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 |
-| kimi8 | #3108 | Tier-C | backend | 合同数据表扩展 |
 
 ## 指派历史（完成后划线）
 
@@ -201,7 +200,7 @@ Week 4 (5/10-5/16):
 | kimi5 | #1692 | Tier-B | backend | ~~项目成本跟踪API~~ | ~~Done~~ |
 | kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 | In Progress |
 | kimi7 | #2097 | Tier-B | backend | ~~验收检查项模板管理~~ | ~~Done~~ |
-| kimi8 | #3108 | Tier-C | backend | 合同数据表扩展 | In Progress |
+| kimi8 | #3108 | Tier-C | backend | ~~合同数据表扩展~~ | ~~Done~~ |
 | kimi9 | #2113 | Tier-C | backend | ~~合同审批流程~~ | ~~Done~~ |
 | kimi10 | #1999 | Tier-C | finance | ~~阶段凭证数据库~~ | ~~Done~~ |
 | kimi11 | #1997 | Tier-C | finance | ~~回款周报数据库+引擎~~ | ~~Done~~ |

@@ -257,11 +257,12 @@ Week 4 (5/10-5/16):
 | kimi6  | #2024 | approval | AI预检服务（提交前质量/价格/规则检查，Phase5） | 已派 |
 | kimi6  | #2024 | approval | ~~AI预检服务(提交前质量/价格/规则检查)~~ | ~~Done(PR#3907 admin-merged)~~ |
 | kimi4  | #3169 | approval | ~~表单模板管理(CRUD+分类+启停+审批流绑定，全栈)~~ | ~~Done(PR#3908 admin-merged)~~ |
+| kimi19 | #3170 | form | ~~人事全生命周期表单组(入转调离+考勤+社保6模板)~~ | ~~Done(PR#3909 admin-merged)~~ |
 | kimi19 | #2025 | approval | ~~SLA超时检测+企微催办通知~~ | ~~Done(PR#3905 admin-merged)~~ |
 | kimi1  | #3168 | approval | ~~动态表单渲染器前端(JSON Schema→Vue3组件自动渲染)~~ | ~~Done(PR#3906 admin-merged)~~ |
 | kimi19 | #3170 | form | 人事全生命周期表单组 — 入转调离+考勤+社保6模板 | 已派 |
 | kimi1  | #3149 | approval | ~~审批进度追踪器组件(流程地图+步骤高亮+卡点提示)~~ | ~~Done(PR#3902 admin-merged)~~ |
 | kimi3  | #3150 | approval | ~~审批流程图渲染API(模板→实例DAG+节点状态+耗时)~~ | ~~Done(PR#3903 admin-merged)~~ |
 | kimi1  | #3171 | form | 行政服务表单组 — 资产/车辆/证照/名片/钥匙5模板 | 已派 |
-| kimi4  | #3169 | approval | 表单模板管理 — 模板CRUD+分类+启用/停用+审批流绑定 | ✅ PR#3908 admin-merged |
+| kimi4  | #3173 | form | 印章/运营/国贸表单组 — 用印/仓储/单证6模板（流程补齐7/8） | 已派 |
 | kimi19 | #2025 | approval | SLA超时检测+企微催办通知 | ✅ PR#3905 admin-merged |

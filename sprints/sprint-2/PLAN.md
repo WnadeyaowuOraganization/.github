@@ -244,3 +244,7 @@ Week 4 (5/10-5/16):
 | kimi3 | #1499 | Phase4 | mine | ~~经销商数据模型(dealer表+覆盖区域+绩效指标)~~ | ~~Done(PR#3882)~~ |
 | kimi4 | #2397 | Phase3 | mine | ~~区域市场数据定时刷新(每周日聚合+企微通知)~~ | ~~Done(PR#3883)~~ |
 | kimi4 | #1502 | Phase3 | mine | 竞品活跃度统计视图(按竞品×区域×项目类型汇总) | In Progress |
+| kimi1 | #2234 | Phase3 | mine | 竞品份额变化预警(连续2季度上升触发告警) | In Progress |
+| kimi6 | #2236 | Phase3 | mine | 竞品追踪分析页(热力图+趋势+排行榜) | In Progress |
+| kimi19 | #2233 | Phase4 | mine | 移动端响应式优化(项目列表/详情/跟进页适配手机) | In Progress |
+| kimi3 | #2231 | Phase4 | mine | 经销商绩效仪表盘(跟进数/成交数/管道金额) | In Progress |

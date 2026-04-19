@@ -1260,3 +1260,14 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 **处置**：kill 后台 shell，注入前台模板（CC已退出故注入未到达）
 **频次**：Sprint-2 共 3 次（kimi6/#1808, kimi4/#1752 x2）
 **止血动作**：待第4次时立即更新 cc-report skill 强化前台轮询规范说明
+
+---
+
+### 2026-04-20 20:30 【ruoyi-admin fat-jar 传递依赖缺失 → 启动 ClassNotFoundException】第3次，已达高频阈值
+
+- **症状**：后端编译（mvn compile/install）通过，但启动时报 `ClassNotFoundException`；具体：`WxCpConfigStorage`、`XmlMapper` 均来自 wande-ai 模块的传递依赖，未打包进 fat-jar
+- **频次**：kimi6 #1500（SQS，第1次）→ kimi19 #3188（weixin-java-cp，第2次）→ kimi19 #3188（jackson-dataformat-xml，第3次）—— 已达≥3次高频阈值，且两个 kimi（#3185/#3188）同时中招
+- **根因**：Spring Boot Maven Plugin `repackage` 生成的 fat-jar 依赖 `ruoyi-admin` 的直接依赖声明，不自动拉取 `wande-ai` 模块的传递依赖。新模块每引入一个 runtime 依赖，都需在 ruoyi-admin/pom.xml 显式声明
+- **已处置**：在基础 wande-play `backend/ruoyi-admin/pom.xml` 补充 `weixin-java-cp` + `jackson-dataformat-xml` 两个依赖，推送 dev，同步所有活跃 kimi 目录
+- **建议改进（立即）**：在 `backend-coding` SKILL.md 加红线——**wande-ai 模块新增第三方 dependency 后，必须同步在 `ruoyi-admin/pom.xml` 显式声明；否则 fat-jar 启动时 ClassNotFoundException。参考 SQS/WxJava 已有块**
+- **状态**：✅ 已修 pom + 推 dev | 待更新 backend-coding SKILL.md 红线

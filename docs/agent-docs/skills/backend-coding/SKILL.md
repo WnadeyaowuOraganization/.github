@@ -162,6 +162,29 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 - 查询不要手动 `eq("tenant_id", ...)`，拦截器自动拼 WHERE
 - 若需跨租户查询，在 application.yml `tenant.excludes` 列表排除该表
 
+## ruoyi-admin fat-jar 传递依赖（3 CC 踩过，必读）
+
+> **⛔ MUST** — 在 `wande-ai` 模块新增**第三方 dependency**（如 WxJava、Jackson XML、AWS SDK 等）后，**必须同步**在 `backend/ruoyi-admin/pom.xml` 的 `<dependencies>` 节点中显式声明该依赖。
+
+原因：Spring Boot Maven Plugin `repackage` 生成的 fat-jar 只打包 `ruoyi-admin` 直接声明的依赖，不自动包含子模块的传递依赖。编译（`mvn install`）可通过，但运行时报 `ClassNotFoundException`。
+
+```xml
+<!-- 示例：已有的 SQS / WxJava / jackson-dataformat-xml 块 -->
+<dependency>
+    <groupId>com.github.binarywang</groupId>
+    <artifactId>weixin-java-cp</artifactId>
+    <version>${weixin-java-cp.version}</version>
+</dependency>
+<dependency>
+    <groupId>com.fasterxml.jackson.dataformat</groupId>
+    <artifactId>jackson-dataformat-xml</artifactId>
+</dependency>
+```
+
+若新依赖版本由根 `pom.xml` `dependencyManagement` 管控，可省略 `<version>`；否则显式指定版本。
+
+---
+
 ## 禁止清单
 
 - ❌ 新建类放 `com.wande.*` 包（主类仅扫 `org.ruoyi.**`，落到 `com.wande.*` → API 404 / Bean 不注册；#3517 踩过）。新代码**只**用 `org.ruoyi.wande.*`，除非已显式配置 `@ComponentScan("com.wande.ai")`

@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-19 11:20 【新增 Controller POST 方法返回 405】kimi4 #2397（第1次）
+
+- **症状**：Controller 内 `@PostMapping("/refresh")` 编译正确（javap 验证），GET 接口 200 OK，但 POST 接口持续返回 `{"code":405,"msg":"Request method 'POST' is not supported"}`；后端重启 3+ 次无效
+- **频次**：kimi4 #2397（第1次）；kimi1 曾手动 cp JAR 规避（第0.5次）
+- **根因**：`cc-test-env.sh restart-backend` 在 `ruoyi-admin` 子目录单模块执行 `mvn spring-boot:run`，只 install `ruoyi-common -am`，**不 install `wande-ai` 模块**。`ruoyi-admin` 依赖 `wande-ai` 作为外部 Maven 依赖，从 per-kimi M2 缓存取旧 JAR。新增方法在源码中存在、编译正确，但运行时加载的是未更新的旧 JAR，导致 Spring MVC 找不到 POST handler → 405
+- **已处置**：注入指令：`cd backend && mvn install -pl ruoyi-modules/wande-ai -DskipTests -q`，再 `restart-backend kimi4`。POST 应正常
+- **建议改进**：在 `backend-coding` SKILL.md 加红线：**修改 `wande-ai` 模块后，必须先执行 `cd backend && mvn install -pl ruoyi-modules/wande-ai -DskipTests -q`，再 `restart-backend`，否则运行时仍加载旧 JAR，新接口返回 405**；`cc-test-env.sh` 可考虑在 restart-backend 时自动 install wande-ai（长期改进）
+- **状态**：观察中（等 kimi4 验证 POST 成功）
+
+---
+
 ### 2026-04-19 08:35 【/compact 后 API Error 400 thinking token 丢失 → CC 会话损坏】3CC同批次
 
 - **症状**：CC 执行 /compact 后，对话历史被压缩，后续 Tool Call 触发 `API Error: 400 {"error":{"type":"invalid_request_error","message":"thinking is enabled but reasoning_content is missing in assistant tool call message at index N"}}`，CC 停在 idle 无法继续

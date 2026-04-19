@@ -1180,3 +1180,24 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **止血**：已关闭 #3814（Reject）
 - **后续建议**：e2e 测试脚本按钮选择器改用 `getByRole('button', { name: /新增/ })` 或 `.toolbar-btn:has-text('新')` 宽松匹配
 - **频次**：1次（首次发现）
+
+---
+## 2026-04-19 smoke spec 数据依赖问题（#3859 kimi20 验证发现）
+
+**现象**：kimi20 全新环境 `npx playwright test --grep @smoke` → 151 passed / 70 failed。
+失败原因：`toBeVisible()`、`toBeGreaterThan(0)` 等断言依赖数据库有业务数据，新环境空DB必然失败。
+
+**影响**：新CC每次跑smoke，70个用例一定红，会引发CC误判为环境问题并开始推理。
+
+**根本方案**：smoke spec 应只验证"页面能加载、导航能到达"，不依赖数据存在。
+**临时方案**：issue说明"新环境70个数据依赖测试预期失败"，不算验收失败。
+
+**待开 Issue**：改进 smoke spec，所有用例在空DB可通过（页面加载 + auth验证即可）。
+
+## 2026-04-19 | smoke spec 数据依赖问题（kimi20/#3859 发现）
+
+**现象**：空 DB 环境跑 smoke，70/221 用例因断言列表非空而失败（数据依赖）
+**根因**：smoke spec 断言"表格有数据"而非"页面可访问 + 组件渲染正常"
+**建议**：smoke spec 只验证页面加载、组件挂载、API 可达（200/401），不断言具体数据行数
+**影响**：新 kimi 环境的 smoke 准确率虚低，CC 误以为环境异常
+**跟进**：待排程经理开 Issue 让 CC 改造 smoke spec

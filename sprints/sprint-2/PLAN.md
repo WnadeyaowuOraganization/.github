@@ -182,12 +182,12 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #3105 | Tier-E | fullstack | 订单跟踪看板(PI确认→发货全流程) |
+| kimi1 | #1830 | Tier-B | backend | 利润风险预警中心+仪表盘+项目详情预警 |
 | kimi2 | #1728 | Tier-B | execution | 施工安全管理页面(交底/日志/隐患/事故/培训/证书) |
 | kimi3 | #1790 | Tier-B | frontend | 变更影响分析面板+审批操作+全局变更看板 |
 | kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) |
 | kimi6 | #1808 | Tier-B | frontend | 采购/生产/安装/文档/历史 Tab 页面 |
-| kimi20 | #3859 | infra | fullstack | CC测试环境一键就绪(前后端+auth+冒烟) |
+| kimi19 | #2351 | Tier-D | project | 项目列表健康度灯+阶段切换拦截弹窗 |
 
 ## 指派历史（完成后划线）
 
@@ -217,5 +217,8 @@ Week 4 (5/10-5/16):
 | kimi2 | #1750 | Tier-C | frontend | ~~AI条款对比前端(左右分栏+差异高亮)~~ | ~~Done~~ |
 | kimi2 | #1728 | Tier-B | execution | 施工安全管理页面(交底/日志/隐患/事故/培训/证书) | In Progress |
 | kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) | In Progress |
-| kimi1 | #3105 | Tier-E | fullstack | 订单跟踪看板(PI确认→发货全流程) | In Progress |
+| kimi1 | #3105 | Tier-E | fullstack | ~~订单跟踪看板(PI确认→发货全流程)~~ | ~~Done(仅建表)~~ |
+| kimi20 | #3859 | infra | fullstack | ~~CC测试环境一键就绪验证~~ | ~~Done~~ |
+| kimi1 | #1830 | Tier-B | backend | 利润风险预警中心+仪表盘+项目详情预警 | In Progress |
+| kimi19 | #2351 | Tier-D | project | 项目列表健康度灯+阶段切换拦截弹窗 | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | 变更影响分析面板+审批操作+全局变更看板 | In Progress |

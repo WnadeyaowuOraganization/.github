@@ -182,7 +182,7 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(spec_share_stats表) |
+| kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(PR#3880 等CI+merge) |
 | kimi2 | — | — | — | 空位（并发5满，等CC完成后补派） |
 | kimi3 | #1499 | Phase4 | mine | 经销商数据模型(dealer表+覆盖区域+绩效指标) |
 | kimi4 | #2397 | Phase3 | mine | 区域市场数据定时刷新(每周聚合+企微通知) |
@@ -238,6 +238,6 @@ Week 4 (5/10-5/16):
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
 | kimi3 | #3103 | Tier-E | biz | ~~報價單生成+PDF導出(三線差異化模板)~~ | ~~Done(PR#3879)~~ |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |
-| kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(spec_share_stats表+品牌提及率对比) | In Progress |
+| kimi1 | #1500 | Phase3 | mine | ~~竞品规格份额统计(spec_share_stats表+品牌提及率对比)~~ | ~~Done(PR#3880)~~ |
 | kimi3 | #1499 | Phase4 | mine | 经销商数据模型(dealer表+覆盖区域+绩效指标) | In Progress |
 | kimi4 | #2397 | Phase3 | mine | 区域市场数据定时刷新(每周日聚合+企微通知) | In Progress |

@@ -1201,3 +1201,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 **建议**：smoke spec 只验证页面加载、组件挂载、API 可达（200/401），不断言具体数据行数
 **影响**：新 kimi 环境的 smoke 准确率虚低，CC 误以为环境异常
 **跟进**：待排程经理开 Issue 让 CC 改造 smoke spec
+
+## 2026-04-19 | 后台轮询脚本违规（kimi6/#1808）
+
+**现象**：CC 创建 PR 后用后台 & 脚本轮询，主线程仍活跃继续发 cc-report
+**违规**：硬约束10 — 禁止自写后台 poll 脚本，必须用前台 while+sleep180
+**处置**：研发经理 kill 子 shell，注入标准前台模板
+**频次**：Sprint-2 已发生 2 次（含 kimi2/#1750 上次）
+**止血**：达 4 次频次阈值时更新 cc-report skill 前台模板说明强化

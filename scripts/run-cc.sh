@@ -227,7 +227,7 @@ if [ "$MODE" = "issue" ]; then
   fi
 
   # === 构建 prompt（v3 — 简短一行，规范通过 --append-system-prompt-file 注入）===
-  CC_PROMPT="阅读 issues/issue-${ISSUE}/issue-source.md 完成 Issue #${ISSUE}。"
+  CC_PROMPT="你是 kimi${KIMI_NUM}，工作目录 ~/projects/wande-play-kimi${KIMI_NUM}/，独立环境端口 backend:${BACKEND_PORT} frontend:${FRONTEND_PORT} db:wande-ai-kimi${KIMI_NUM}。cc-test-env.sh 所有命令必须用 kimi${KIMI_NUM}，不得操作其他 kimi 环境。阅读 issues/issue-${ISSUE}/issue-source.md 完成 Issue #${ISSUE}。"
 
   # 检查详细设计文档
   DESIGN_DOC=$(find "$SCRIPT_DIR/../docs/design/" -name "*详细设计.md" -newer "$ISSUE_DIR" 2>/dev/null | head -1)

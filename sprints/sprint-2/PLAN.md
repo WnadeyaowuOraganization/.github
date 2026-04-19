@@ -182,10 +182,10 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #2352 | Tier-D | project | 风险台账Tab前端(风险列表+录入+处置+附件) |
+| kimi1 | — | — | — | #2352 PR#3873 等merge |
 | kimi2 | #2520 | Tier-D | project | 项目文档中心数据库(project_documents+versions) |
-| kimi3 | — | — | — | #1996 PR#3872 等merge |
-| kimi4 | — | — | — | #1523 PR#3871 等merge |
+| kimi3 | #3103 | Tier-E | biz | 報價單生成+PDF導出(三線差異化模板) |
+| kimi4 | #2300 | Tier-D | project | AI审查结果展示(照片标注叠加层+标准对比) |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) |
 
@@ -224,13 +224,14 @@ Week 4 (5/10-5/16):
 | kimi2 | #2520 | Tier-D | project | 项目文档中心数据库(project_documents+versions) | In Progress |
 | kimi4 | #1752 | Tier-C | frontend | ~~合同审批前端(待审批列表+审批页面)~~ | ~~Done~~ |
 | kimi4 | #2023 | Tier-C | approval | ~~合同管理接入审批流(盖章/签署自动发起)~~ | ~~Done~~ |
-| kimi4 | #1523 | Tier-A | bidding | ~~区域品类矩阵统计API(省份×产品品类交叉)~~ | ~~PR#3871~~ |
+| kimi4 | #1523 | Tier-A | bidding | ~~区域品类矩阵统计API(省份×产品品类交叉)~~ | ~~Done(PR#3871)~~ |
+| kimi4 | #2300 | Tier-D | project | AI审查结果展示(照片标注叠加层+标准对比) | In Progress |
 | kimi1 | #3105 | Tier-E | fullstack | ~~订单跟踪看板(PI确认→发货全流程)~~ | ~~Done(仅建表)~~ |
 | kimi20 | #3859 | infra | fullstack | ~~CC测试环境一键就绪验证~~ | ~~Done~~ |
 | kimi1 | #1830 | Tier-B | backend | ~~利润风险预警中心+仪表盘+项目详情预警~~ | ~~Done~~ |
-| kimi1 | #2352 | Tier-D | project | 风险台账Tab前端(风险列表+录入+处置+附件) | In Progress |
+| kimi1 | — | — | — | #2352 PR#3873 等merge | In Progress |
 | kimi19 | #2351 | Tier-D | project | ~~项目列表健康度灯+阶段切换拦截弹窗~~ | ~~Done~~ |
 | kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
-| kimi3 | — | — | — | #1996 PR#3872 等merge | In Progress |
+| kimi3 | #3103 | Tier-E | biz | 報價單生成+PDF導出(三線差異化模板) | In Progress |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |

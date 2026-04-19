@@ -403,6 +403,13 @@ start_frontend() {
   : > "$LOG_DIR/frontend.log"
 
   cd "$front_src"
+
+  # 同步前端依赖（dev分支新增包时kimi node_modules可能落后）
+  # --frozen-lockfile 保证与 pnpm-lock.yaml 一致，不升级版本，通常 < 10s（包已在 pnpm store）
+  echo "  📦 pnpm install --frozen-lockfile (同步前端依赖)..."
+  pnpm install --frozen-lockfile --prefer-offline >> "$LOG_DIR/frontend.log" 2>&1 \
+    || echo "  ⚠️ pnpm install 失败，尝试继续启动（依赖可能不完整）"
+
   # setsid 确保进程独立于父shell
   # 修复：直接调 vite 二进制传 --port，避免 `pnpm run dev -- --port` 双 -- 吞参数导致 vite fallback 到 5666
   VITE_PROXY_TARGET="http://127.0.0.1:${BACKEND_PORT}" \

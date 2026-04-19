@@ -157,32 +157,27 @@ Week 4 (5/10-5/16):
 
 ## 指派建议（下一批）
 
-> 更新于 2026-04-19 22:30。当前有效运行 kimi1/#2234 + kimi4/#1502（kimi3/kimi19 vLLM 500 等待中，空槽 10 个）。
-> 以下均已确认原型齐全、无未满足前置，可立即并发派出。
+> 更新于 2026-04-19（本批）。当前有效运行 kimi1/#2234 + kimi3/#2231等CI + kimi4/#1502（空槽 2 个：kimi6/kimi19）。
+> Sprint-2 主干 issue 已基本完成；审批体系 6 个 issue 全部被阻塞（#3167/#2027/#2270/#3161 仍 OPEN）。
+> 以下均已确认无未满足前置，可立即派出。
 
-| 建议kimi | Issue | 优先 | 模块 | 内容 | 原型 |
+| 建议kimi | Issue | 优先 | 模块 | 内容 | 备注 |
 |---------|-------|------|------|------|------|
-| kimi2  | #3169 | P1 | fullstack | 表单模板管理 CRUD+分类+启用/停用+审批流绑定 | `审批体系/tab-template-mgmt.html` |
-| kimi5  | #3174 | P2 | fullstack | **表单模板导入导出+配置向导**（导入优先）| `审批体系/tab-template-transfer.html` |
-| kimi7  | #3150 | P1 | backend  | 审批流程图渲染 API — 模板→实例DAG+节点状态 | `审批体系/tab-progress-tracker.html` |
-| kimi8  | #3149 | P1 | frontend | 审批进度追踪器组件 — 流程地图+当前步骤高亮 | `审批体系/tab-progress-tracker.html` |
-| kimi9  | #3168 | P1 | frontend | 动态表单渲染器 — JSON Schema→Vue3组件渲染 | `审批体系/tab-dynamic-form.html` |
-| kimi10 | #3163 | P1 | frontend | H5审批发起页 — 企微内嵌H5审批表单 | `审批体系/tab-approval-center.html` |
-| kimi11 | #2520 | P2 | backend  | 项目文档中心数据库（project_documents） | 纯建表 |
-| kimi12 | #3103 | P2 | fullstack| 报价单生成+PDF导出（三线差异化模板） | `招投标管理/tab-pricing.html` |
+| kimi6  | #1996 | P2 | finance/backend | 回款周报 API — 商务填写+胭脂评估+吴耀审阅全流程 | 前置 #1997 ✅ Done |
+| kimi19 | #2327 | P1 | crm/frontend | 客户情报P4 菜单注册+权限配置 — 信息质量页路由+角色权限 | status:ready，无强前置 |
 
-> ⚠️ #3174 依赖 #3169 的实体层，kimi5 在 PR 提交前需 rebase kimi2/#3169 的 merged commit。
-> ⚠️ #3105 追补（后端API+前端看板）在 kimi1/#2234 完成释放槽位后建 Issue 再派。
+> ⚠️ 审批体系 #3169/#3174/#3150/#3149/#3168/#3163 全部阻塞，待 #3167(动态表单引擎)/#2027(审批Entity+Service) 完成后解锁。
+> ⚠️ #1728-后端/前端（施工安全6模块追补）待研发经理拆 Issue 后派出。
 
 ## 当前运行
 
 | 指派目录 | Issue | 模块 | 内容 | 状态 |
 |---------|-------|------|------|------|
-| kimi1  | #2234 | mine | 竞品份额变化预警 | ✅ 工作中 38%（已注入/backend-test提示） |
-| kimi3  | #2231 | mine | 经销商绩效仪表盘 | ✅ PR#3889 已merge |
-| kimi4  | #1502 | mine | 竞品活跃度统计视图 | ✅ 工作中 30% |
-| kimi6  | #2236 | mine | 竞品追踪分析页 | ✅ PR#3887 已merge |
-| kimi19 | #2233 | mine | 移动端响应式优化 | ✅ PR#3888 已merge |
+| kimi1  | #2234 | mine | 竞品份额变化预警 | ✅ 工作中（已注入提示） |
+| kimi3  | #2231 | mine | 经销商绩效仪表盘 | ✅ PR#3889 等CI |
+| kimi4  | #1502 | mine | 竞品活跃度统计视图 | ✅ 工作中 |
+| kimi6  | #1996 | finance | 回款周报API | ✅ 已派（本批） |
+| kimi19 | #2327 | crm | 客户情报P4 菜单注册+权限 | ✅ 已派（本批） |
 
 ## 指派历史（完成后划线）
 

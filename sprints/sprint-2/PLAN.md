@@ -185,7 +185,7 @@ Week 4 (5/10-5/16):
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 |
-| kimi2 | #1874 | Tier-A | backend | 前期项目分阶段跟进提醒 |
+| kimi2 | #2404 | Tier-A | backend | 复盘数据驱动评分迭代 |
 | kimi3 | #1991 | Tier-D | backend | 经验卡片API |
 | kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 |
 | kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 |
@@ -208,6 +208,7 @@ Week 4 (5/10-5/16):
 | kimi10 | #1999 | Tier-C | finance | ~~阶段凭证数据库~~ | ~~Done~~ |
 | kimi11 | #1997 | Tier-C | finance | ~~回款周报数据库+引擎~~ | ~~Done~~ |
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 | In Progress |
-| kimi2 | #1874 | Tier-A | backend | 前期项目分阶段跟进提醒 | In Progress |
+| kimi2 | #1874 | Tier-A | backend | ~~前期项目分阶段跟进提醒~~ | ~~Done~~ |
 | kimi3 | #1991 | Tier-D | backend | 经验卡片API | In Progress |
+| kimi2 | #2404 | Tier-A | backend | 复盘数据驱动评分迭代 | In Progress |
 | kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 | In Progress |

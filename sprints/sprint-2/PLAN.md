@@ -186,9 +186,9 @@ Week 4 (5/10-5/16):
 |---------|-------|------|------|------|
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 |
 | kimi2 | #2404 | Tier-A | backend | 复盘数据驱动评分迭代 |
-| kimi3 | #1991 | Tier-D | backend | 经验卡片API |
+| kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) |
 | kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 |
-| kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 |
+| kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) |
 
 ## 指派历史（完成后划线）
 
@@ -201,7 +201,7 @@ Week 4 (5/10-5/16):
 | kimi3 | #2243 | Tier-A | backend | ~~简报偏好设置页~~ | ~~Done~~ |
 | kimi4 | #3193 | Tier-B | backend | ~~项目主计划数据模型~~ | ~~Done~~ |
 | kimi5 | #1692 | Tier-B | backend | ~~项目成本跟踪API~~ | ~~Done~~ |
-| kimi6 | #2238 | Tier-A | frontend | 作战资料包一页纸展示 | In Progress |
+| kimi6 | #2238 | Tier-A | frontend | ~~作战资料包一页纸展示~~ | ~~Done~~ |
 | kimi7 | #2097 | Tier-B | backend | ~~验收检查项模板管理~~ | ~~Done~~ |
 | kimi8 | #3108 | Tier-C | backend | ~~合同数据表扩展~~ | ~~Done~~ |
 | kimi9 | #2113 | Tier-C | backend | ~~合同审批流程~~ | ~~Done~~ |
@@ -209,6 +209,8 @@ Week 4 (5/10-5/16):
 | kimi11 | #1997 | Tier-C | finance | ~~回款周报数据库+引擎~~ | ~~Done~~ |
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 | In Progress |
 | kimi2 | #1874 | Tier-A | backend | ~~前期项目分阶段跟进提醒~~ | ~~Done~~ |
-| kimi3 | #1991 | Tier-D | backend | 经验卡片API | In Progress |
+| kimi3 | #1991 | Tier-D | backend | ~~经验卡片API~~ | ~~Done~~ |
 | kimi2 | #2404 | Tier-A | backend | 复盘数据驱动评分迭代 | In Progress |
 | kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 | In Progress |
+| kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) | In Progress |
+| kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) | In Progress |

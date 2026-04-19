@@ -177,7 +177,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #1892 | crm | 客户情报P3 经销商信息提交模板 | ✅ 已派（本批） |
 | kimi4  | #1502 | mine | 竞品活跃度统计视图 | ✅ PR#3892 等CI merge |
 | kimi6  | #1891 | crm | 客户情报P3 国贸客户尽调清单+风险评估 | ✅ 已派（本批） |
-| kimi19 | #2327 | crm | 客户情报P4 菜单注册+权限 | ✅ 工作中 |
+| kimi19 | #2327 | crm | 客户情报P4 菜单注册+权限 | ✅ PR#3893 等CI merge |
 
 ## 指派历史（完成后划线）
 
@@ -243,4 +243,4 @@ Week 4 (5/10-5/16):
 | kimi6  | #2103 | warranty | backend | ~~质保到期续保营销+自动推送+CRM商机~~ | ~~Done(PR#3891)~~ |
 | kimi1  | #2102 | warranty | backend | 质保售后触发二次商机(维修需求+满意度复购) | In Progress |
 | kimi3  | #1892 | crm | backend | 客户情报P3经销商信息提交模板+自动校验 | In Progress |
-| kimi19 | #2327 | crm | frontend | 客户情报P4菜单注册+权限配置 | In Progress |
+| kimi19 | #2327 | crm | frontend | ~~客户情报P4菜单注册+权限配置~~ | ~~Done(PR#3893)~~ |

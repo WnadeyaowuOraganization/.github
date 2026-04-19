@@ -316,5 +316,5 @@ Week 4 (5/10-5/16):
 | kimi4  | #2003 | finance | ~~经营分析数据聚合API(6维度收入/成本/毛利/现金流/ROI/总览)~~ | ~~Done(PR#3950 admin-merged)~~ |
 | kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
 | kimi6  | #1719 | finance | 绩效仪表盘+三级看板+趋势分析 | 进行中 |
-| kimi1  | #2006 | finance | 应收账款管理API — 客户应收余额+账龄分析+催收提醒 | 进行中 |
+| kimi1  | #2006 | finance | ~~应收账款管理API(账龄分析+催收提醒+企微，核心框架)~~ | ~~Done(PR#3951 admin-merged)~~ |
 | kimi19 | #1754 | frontend | ~~代理商工作台数据打通(关联项目+中标方标签，Mock模式)~~ | ~~Done(PR#3949 admin-merged)~~ |

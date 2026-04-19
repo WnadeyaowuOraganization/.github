@@ -176,7 +176,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #3149 | approval | 审批进度追踪器组件 — 流程地图+当前步骤高亮+卡点提示+预估耗时 | ✅ PR#3902 admin-merged |
 | kimi3  | #2366 | approval | 审批中心前端 — 我的待办/已办/发起（与#2025后端配对） | 已派 |
 | kimi4  | #2119 | execution | 经销模式支持 — 阶段配置+经销商结算+门户API | ✅ PR#3900 admin-merged |
-| kimi6  | #2024 | approval | AI预检服务 — 提交前自动质量/价格/规则检查 | ✅ PR#3907 admin-merged |
+| kimi6  | #3172 | form | 质量管理表单组 — 质检/不合格/纠正措施/供应商/客诉5模板 | 已派 |
 | kimi19 | #3167 | approval | 动态表单引擎 JSON Schema — 通用审批表单配置化基础 | ✅ PR#3901 admin-merged |
 
 ## 指派历史（完成后划线）

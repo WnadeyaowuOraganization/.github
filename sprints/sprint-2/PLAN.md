@@ -192,7 +192,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #2004 | finance | ~~应付账款管理API(付款计划+付款执行+聚合，审批/OCR留桩)~~ | ~~Done(PR#3952 admin-merged)~~ |
 | kimi4  | #2003 | finance | ~~经营分析数据聚合API(6维度收入/成本/毛利/现金流/ROI/总览)~~ | ~~Done(PR#3950 admin-merged)~~ |
 | kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
-| kimi6  | #1719 | finance | 绩效仪表盘+三级看板+趋势分析 | 进行中 |
+| kimi6  | #1719 | finance | ~~绩效仪表盘+三级Tab+ECharts趋势分析~~ | ~~Done(PR#3953 admin-merged)~~ |
 
 ## 指派历史（完成后划线）
 
@@ -315,7 +315,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #2005 | finance | ~~应付账款数据库+后端完整实现~~ | ~~Done(PR#3948 admin-merged)~~ |
 | kimi4  | #2003 | finance | ~~经营分析数据聚合API(6维度收入/成本/毛利/现金流/ROI/总览)~~ | ~~Done(PR#3950 admin-merged)~~ |
 | kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
-| kimi6  | #1719 | finance | 绩效仪表盘+三级看板+趋势分析 | 进行中 |
+| kimi6  | #1719 | finance | ~~绩效仪表盘+三级Tab+ECharts趋势分析~~ | ~~Done(PR#3953 admin-merged)~~ |
 | kimi1  | #2006 | finance | ~~应收账款管理API(账龄分析+催收提醒+企微，核心框架)~~ | ~~Done(PR#3951 admin-merged)~~ |
 | kimi19 | #1754 | frontend | ~~代理商工作台数据打通(关联项目+中标方标签，Mock模式)~~ | ~~Done(PR#3949 admin-merged)~~ |
 | kimi1  | #2356 | finance | 经营分析看板页面 — 收入成本趋势+毛利率排行+现金流图表 | 进行中 |

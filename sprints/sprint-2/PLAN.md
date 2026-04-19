@@ -186,6 +186,7 @@ Week 4 (5/10-5/16):
 |---------|-------|------|------|------|
 | kimi2 | #1750 | Tier-C | frontend | AI条款对比前端(左右分栏+差异高亮) |
 | kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) |
+| kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) |
 | kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) |
 
 ## 指派历史（完成后划线）
@@ -213,3 +214,4 @@ Week 4 (5/10-5/16):
 | kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) | In Progress |
 | kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) | In Progress |
 | kimi2 | #1750 | Tier-C | frontend | AI条款对比前端(左右分栏+差异高亮) | In Progress |
+| kimi4 | #1752 | Tier-C | frontend | 合同审批前端(待审批列表+审批页面) | In Progress |

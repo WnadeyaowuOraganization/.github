@@ -314,7 +314,7 @@ fi
 
 # === e2e/node_modules 统一软链到 e2e-top（避免各 kimi 独立安装/版本不一致）===
 _TOP_E2E_NM="${HOME_DIR}/projects/wande-play-e2e-top/e2e/node_modules"
-_KIMI_E2E_NM="${WORK_DIR}/e2e/node_modules"
+_KIMI_E2E_NM="${BASE_DIR}/e2e/node_modules"
 if [ -d "$_TOP_E2E_NM" ] && [ ! -L "$_KIMI_E2E_NM" ]; then
   rm -rf "$_KIMI_E2E_NM" && ln -sf "$_TOP_E2E_NM" "$_KIMI_E2E_NM"
 fi

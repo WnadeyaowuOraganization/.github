@@ -18,6 +18,17 @@
 
 ---
 
+### 2026-04-19 20:30 【JUnit @SpringBootTest 加载失败 + 全局 skipTests=true】kimi1 #2234（第1次）
+
+- **症状**：CC 写 `@SpringBootTest` 集成测试，`mvn test` 始终 `Tests run: 0` 或 SpringContext 加载失败报 placeholder 缺失；CC 误判为无法修复，自行决定跳过 JUnit 改用 Playwright API
+- **频次**：kimi1 #2234（第1次）
+- **根因**：①根 `pom.xml` 全局 `<skipTests>true</skipTests>`，必须用 `-DskipTests=false` 覆盖；②`-pl ruoyi-modules/wande-ai -am` 加 `-Dtest=SomeTest` 时依赖模块中找不到匹配测试会报错，需加 `-Dsurefire.failIfNoSpecifiedTests=false`；③CC 用 `@SpringBootTest` 加载完整 Spring 上下文，但 kimi 环境缺 application-dev.yml 中 placeholder → 正确方案是改用 `@ExtendWith(MockitoExtension.class)` + `@Mock/@InjectMocks`（不加载 Spring 上下文）
+- **已处置**：研发经理直接重写测试类为 Mockito 版，5/5 绿，运行命令：`mvn test -pl ruoyi-modules/wande-ai -am -DskipTests=false -Dsurefire.failIfNoSpecifiedTests=false -Dgroups=dev -Dtest=SomeTest`
+- **建议改进**：在 `backend-test` SKILL.md 补充：①Maven 运行命令必须加 `-DskipTests=false -Dsurefire.failIfNoSpecifiedTests=false`；②禁用 `@SpringBootTest`，统一用 Mockito 单元测试；③JUnit 跳过违反红线#11，任何情况不得跳过
+- **状态**：观察中
+
+---
+
 ### 2026-04-19 11:20 【新增 Controller POST 方法返回 405】kimi4 #2397（第1次）
 
 - **症状**：Controller 内 `@PostMapping("/refresh")` 编译正确（javap 验证），GET 接口 200 OK，但 POST 接口持续返回 `{"code":405,"msg":"Request method 'POST' is not supported"}`；后端重启 3+ 次无效

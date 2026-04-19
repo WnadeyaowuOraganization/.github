@@ -182,8 +182,8 @@ Week 4 (5/10-5/16):
 
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
-| kimi1 | #1627 | Tier-D | project | 风险台账联动(PR#3877 等CI+merge) |
-| kimi2 | — | — | — | 空位（kimi1/kimi4 merge后补派） |
+| kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(spec_share_stats表) |
+| kimi2 | — | — | — | 空位（并发5满，等CC完成后补派） |
 | kimi3 | #3103 | Tier-E | biz | 報價單生成+PDF導出(PR#3879 等CI+merge) |
 | kimi4 | #1501 | Phase3 | mine | 区域市场BI数据模型(PR#3878 等CI+merge) |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(500错误排查中) |
@@ -234,7 +234,8 @@ Week 4 (5/10-5/16):
 | kimi1 | #2352 | Tier-D | project | ~~风险台账Tab前端(风险列表+录入+处置+附件)~~ | ~~Done(PR#3873)~~ |
 | kimi1 | #1627 | Tier-D | project | ~~风险台账联动(严重整改自动升级risk_event)~~ | ~~Done(PR#3877)~~ |
 | kimi19 | #2351 | Tier-D | project | ~~项目列表健康度灯+阶段切换拦截弹窗~~ | ~~Done~~ |
-| kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(从中标公示识别竞争对手) | In Progress |
+| kimi19 | #2398 | Tier-A | mine | 竞品中标记录采集(后端+前端实现中，210min+) | In Progress |
 | kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
 | kimi3 | #3103 | Tier-E | biz | ~~報價單生成+PDF導出(三線差異化模板)~~ | ~~Done(PR#3879)~~ |
 | kimi6 | #1715 | Tier-E | biz | 直销投标文档生成页面(选品→预览→导出) | In Progress |
+| kimi1 | #1500 | Phase3 | mine | 竞品规格份额统计(spec_share_stats表+品牌提及率对比) | In Progress |

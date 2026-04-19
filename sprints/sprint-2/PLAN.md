@@ -183,7 +183,7 @@ Week 4 (5/10-5/16):
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
 | kimi1 | #1830 | Tier-B | frontend | 利润风险预警中心+仪表盘+项目详情预警 |
-| kimi2 | #1998 | Tier-C | finance | 阶段凭证管理API(上传+完整度检查+催收联动) |
+| kimi2 | #1728→#1998 | Tier-C | finance | #1728 PR merge后即接#1998阶段凭证管理API |
 | kimi3 | #1790 | Tier-B | frontend | 变更影响分析面板+审批操作+全局变更看板 |
 | kimi4 | #1523 | Tier-A | bidding | 区域品类矩阵统计API(省份×产品品类交叉) |
 | kimi6 | #1672 | Tier-E | biz | 直销投标文档生成API |

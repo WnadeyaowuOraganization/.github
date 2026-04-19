@@ -177,7 +177,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #3150 | approval | 审批流程图渲染API — 模板→实例DAG+节点状态+耗时统计 | 已派 |
 | kimi4  | #2119 | execution | 经销模式支持 — 阶段配置+经销商结算+门户API | ✅ PR#3900 admin-merged |
 | kimi6  | #2468 | execution | 图纸管理 API — 上传/版本控制/审批/下发工厂 | Playwright测试中 |
-| kimi19 | #3167 | approval | 动态表单引擎 JSON Schema — 通用审批表单配置化基础 | 已派 |
+| kimi19 | #3167 | approval | 动态表单引擎 JSON Schema — 通用审批表单配置化基础 | ✅ PR#3901 admin-merged |
 
 ## 指派历史（完成后划线）
 
@@ -252,3 +252,4 @@ Week 4 (5/10-5/16):
 | kimi1  | #3149 | approval | 审批进度追踪器组件（frontend，#3150配对） | 已派 |
 | kimi19 | #3167 | approval | 动态表单引擎JSON Schema（B1/8，解锁B2-B8） | 已派 |
 | kimi4  | #2119 | execution | ~~经销模式支持(阶段配置+经销商结算+门户API)~~ | ~~Done(PR#3900 admin-merged)~~ |
+| kimi19 | #3167 | approval | ~~动态表单引擎JSON Schema(B1/8，解锁B2-B8)~~ | ~~Done(PR#3901 admin-merged)~~ |

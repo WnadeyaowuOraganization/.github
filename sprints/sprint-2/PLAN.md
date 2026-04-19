@@ -185,7 +185,7 @@ Week 4 (5/10-5/16):
 | 指派目录 | Issue | Tier | 模块 | 内容 |
 |---------|-------|------|------|------|
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 |
-| kimi2 | #2404 | Tier-A | backend | 复盘数据驱动评分迭代 |
+| kimi2 | #1750 | Tier-C | frontend | AI条款对比前端(左右分栏+差异高亮) |
 | kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) |
 | kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 |
 | kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) |
@@ -210,7 +210,8 @@ Week 4 (5/10-5/16):
 | kimi1 | #2258 | Tier-E | frontend | 商机/项目下设计单前端 | In Progress |
 | kimi2 | #1874 | Tier-A | backend | ~~前期项目分阶段跟进提醒~~ | ~~Done~~ |
 | kimi3 | #1991 | Tier-D | backend | ~~经验卡片API~~ | ~~Done~~ |
-| kimi2 | #2404 | Tier-A | backend | 复盘数据驱动评分迭代 | In Progress |
+| kimi2 | #2404 | Tier-A | backend | ~~复盘数据驱动评分迭代~~ | ~~Done~~ |
 | kimi4 | #2299 | Tier-D | backend | 整改统计仪表盘 | In Progress |
 | kimi3 | #1992 | Tier-D | backend | 经验卡片Service(AI生成+双审+标签) | In Progress |
 | kimi6 | #2350 | Tier-D | frontend | 经验库页面(卡片列表+详情+审阅) | In Progress |
+| kimi2 | #1750 | Tier-C | frontend | AI条款对比前端(左右分栏+差异高亮) | In Progress |

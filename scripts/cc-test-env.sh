@@ -316,6 +316,21 @@ start_backend() {
       || { echo "  ❌ ruoyi-common 预装失败，后端启动大概率也会失败"; }
   fi
 
+  # 自愈：若 per-kimi M2 缺 wande-ai（根 POM 非远程 artifact，.lastUpdated 残留导致 Maven 拒绝使用本地缓存）
+  # 现象：Could not find artifact org.ruoyi:wande-ai:jar:3.0.0（kimi20 2026-04-19 事故）
+  # 修复：从主 M2 复制（主 M2 由 run-cc.sh seed rsync 保证存在）
+  if [ -n "$MVN_M2_OPT" ]; then
+    local wande_ai_jar="${KIMI_M2}/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
+    if [ ! -f "$wande_ai_jar" ]; then
+      echo "  🔧 per-kimi M2 缺 wande-ai，从主 M2 复制..."
+      mkdir -p "$(dirname "$wande_ai_jar")"
+      # 清除 lastUpdated 残留
+      rm -f "$(dirname "$wande_ai_jar")"/*.lastUpdated 2>/dev/null
+      cp ~/.m2/repository/org/ruoyi/wande-ai/3.0.0/* "$(dirname "$wande_ai_jar")/" 2>/dev/null \
+        || echo "  ⚠ 主 M2 也缺 wande-ai，后端启动可能失败"
+    fi
+  fi
+
   setsid mvn spring-boot:run $MVN_M2_OPT -Dspring-boot.run.profiles=dev -Dspring-boot.run.arguments="--server.port=${BACKEND_PORT} --spring.flyway.enabled=false --spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true --spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} --spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} --spring.data.redis.host=${REDIS_HOST} --spring.data.redis.port=${REDIS_PORT} --spring.data.redis.database=${REDIS_DB}" > "$LOG_DIR/backend.log" 2>&1 &
 
   local pid=$!

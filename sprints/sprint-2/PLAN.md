@@ -189,6 +189,7 @@ Week 4 (5/10-5/16):
 | kimi6  | #1780 | supply | ~~供应商台账+询价比价+采购跟踪页面(Mock模式骨架)~~ | ~~Done(PR#3942 admin-merged)~~ |
 | kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
 | kimi3  | #2005 | finance | ~~应付账款数据库+后端完整实现~~ | ~~Done(PR#3948 admin-merged)~~ |
+| kimi3  | #2004 | finance | 应付账款管理API — 付款计划+账期+审批+台账 | 进行中 |
 | kimi4  | #2003 | finance | 经营分析数据聚合API — 收入/成本/毛利/现金流多维分析 | 进行中 |
 | kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
 | kimi6  | #1719 | finance | 绩效仪表盘+三级看板+趋势分析 | 进行中 |

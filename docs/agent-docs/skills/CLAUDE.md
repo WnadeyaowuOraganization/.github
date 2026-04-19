@@ -103,6 +103,7 @@
 8. **禁止免责语**：task.md / PR body 不准出现"待 CI 验证 / 配置待解决"
 9. **禁止自行 close Issue**：必须研发经理确认
 10. **PR 提交后必须轮询到 merged 才算完工**；**必须**用 cc-report 的**标准前台轮询模板**（`while + sleep 180` + 末尾 `sleep infinity`），**禁止**自写 `/tmp/poll-*.sh` 后台脚本（主线程会失去状态感知，研发经理无法唤醒）
+10a. **收到研发经理"提PR"注入时，若自身上下文 ≥80%，必须先执行 `/compact`，等压缩完成再继续提PR流程**；禁止直接跳入 pr-visual-proof（上下文不足会导致代码不完整交付，如 #1728 仅交付建表，后端+前端未实现）
 11. **禁止无测试的 PR**：后端改动**必须按顺序**包含 JUnit 单测（先）+ Playwright API spec（后）；前端改动**必须**含 Playwright e2e spec；Bug 修复**必含**"复现红灯"测试；纯文档/配置 Issue **必须**在 task.md 显式注明"跳过测试原因"
 12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
 13. **禁止动 `.claude/skills/` 和根 `CLAUDE.md`**：这两个是 `run-cc.sh` 启动时注入的运行时资产（`.claude/skills/*` 为软链到 `~/projects/.github/docs/agent-docs/skills/`，`CLAUDE.md` 由模板覆盖生成）。`git status` 里它们 untracked 属正常，**禁止** `rm -rf .claude/skills`、`git restore CLAUDE.md`、`git clean -fd` 不带排除。PR 提交前要清 untracked 用：`git clean -fd -e '.claude/skills/' -e 'CLAUDE.md'`

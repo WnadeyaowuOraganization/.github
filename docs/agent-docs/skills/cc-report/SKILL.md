@@ -146,6 +146,16 @@ curl -s -X POST http://localhost:9872/api/notify \
 
 发完 close 汇报后，**必须**在主线程用下述标准模板等待 merge。**禁止**写后台 `poll-pr-*.sh` 脚本（会让主线程失去状态感知，研发经理 / 排程经理只能手动唤醒；另外 shell hook 会 block `sleep ≥ 5s` 的前台命令，写后台脚本也是在绕过 hook）。
 
+> **🚨 反例（已发生 ×3 次，每次导致研发经理注入失效）：**
+> ```bash
+> # ❌ 错误：后台脚本 — 主线程退出，CC 进入空闲，经理 tmux send-keys 无人响应
+> nohup bash /tmp/poll-pr-123.sh &
+> disown
+> # 此后 CC 再也收不到 inject-cc-prompt.sh 的 CI 失败注入
+> # 经理必须手动 kill 会话、重新分配 kimi 槽位
+> ```
+> **只有前台 while 循环才能让 CC 保持"可被唤醒"状态。**
+
 ```bash
 # 前台阻塞式轮询（主线程保持可响应，每次 sleep 180 由 CC 内置允许）
 while true; do

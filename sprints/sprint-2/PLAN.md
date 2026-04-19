@@ -261,9 +261,9 @@ Week 4 (5/10-5/16):
 | kimi1  | #3171 | form | ~~行政服务表单组(资产/车辆/证照/名片/钥匙5模板)~~ | ~~Done(PR#3910 admin-merged)~~ |
 | kimi19 | #2025 | approval | ~~SLA超时检测+企微催办通知~~ | ~~Done(PR#3905 admin-merged)~~ |
 | kimi1  | #3168 | approval | ~~动态表单渲染器前端(JSON Schema→Vue3组件自动渲染)~~ | ~~Done(PR#3906 admin-merged)~~ |
-| kimi19 | #3170 | form | 人事全生命周期表单组 — 入转调离+考勤+社保6模板 | 已派 |
+| kimi19 | #2270 | wecom | H5工作台入口页 — 企微内嵌H5+JS-SDK初始化 | 已派 |
 | kimi1  | #3149 | approval | ~~审批进度追踪器组件(流程地图+步骤高亮+卡点提示)~~ | ~~Done(PR#3902 admin-merged)~~ |
 | kimi3  | #3150 | approval | ~~审批流程图渲染API(模板→实例DAG+节点状态+耗时)~~ | ~~Done(PR#3903 admin-merged)~~ |
-| kimi1  | #3171 | form | 行政服务表单组 — 资产/车辆/证照/名片/钥匙5模板 | ✅ PR#3910 admin-merged |
+| kimi1  | #3161 | wecom | 企微审批贯通SDK封装（企微审批流程引擎API Java SDK） | 已派 |
 | kimi4  | #3173 | form | 印章/运营/国贸表单组 — 用印/仓储/单证6模板（流程补齐7/8） | 已派 |
 | kimi19 | #2025 | approval | SLA超时检测+企微催办通知 | ✅ PR#3905 admin-merged |

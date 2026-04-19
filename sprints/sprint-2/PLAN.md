@@ -176,7 +176,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #3174 | approval | 表单模板导入导出+配置向导 — 模板迁移+快速配置 [流程补齐8/8] | 已派 |
 | kimi3  | #3179 | project360 | 项目360统一看板页面 — 中标前后共用·阶段自动切换·多Tab聚合 [1/6] | 已派 |
 | kimi4  | #3185 | finance | 全阶段资料完成度看板 — 全项目×全阶段文件完整度+法规缺失预警 [1/13] | 已派 |
-| kimi6  | #3155 | approval | 流程简化配置页 — 跳过/自动审批/路由规则可视化配置（#3152+#3153+#3154解锁） | 进行中(后端done→前端开发中) |
+| kimi6  | #3189 | finance | 甲方表单填写辅助 — 项目数据关联填充+回款资料模板生成+导出 [5/7] | 已派 |
 | kimi19 | #3188 | finance | 企业信息库 — 万德常用信息维护+一键填充到回款表单 [4/7] | 已派 |
 
 ## 指派历史（完成后划线）
@@ -281,6 +281,6 @@ Week 4 (5/10-5/16):
 | kimi19 | #3134 | approval | ~~设计变更分级审批(三级变更模板+自动路由+后端核心T1-T5)~~ | ~~Done(PR#3930 admin-merged)~~ |
 | kimi3  | #3151 | approval | ~~新手引导+流程帮助中心(Tooltip+FAQ+OnboardingGuide+FlowFinder+HelpCenter)~~ | ~~Done(PR#3925 admin-merged)~~ |
 | kimi6  | #3153 | approval | ~~自动审批规则引擎(预审条件+预清除回退+零人工路径+JUnit+Playwright)~~ | ~~Done(PR#3926 admin-merged)~~ |
-| kimi6  | #3155 | approval | 流程简化配置页 — 跳过/自动审批/路由规则可视化配置 | 已派 |
+| kimi6  | #3155 | approval | ~~流程简化配置页(跳过规则/自动审批/路由可视化+菜单)~~ | ~~Done(PR#3931 admin-merged)~~ |
 | kimi1  | #2016 | approval | ~~企微审批消息卡片(审批结果卡片+H5深度链接配置化)~~ | ~~Done(PR#3928 admin-merged)~~ |
 | kimi3  | #2015 | approval | ~~CRM报价单接入审批流(报价提交自动发起审批+JUnit19tests)~~ | ~~Done(PR#3929 admin-merged)~~ |

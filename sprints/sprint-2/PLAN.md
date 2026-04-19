@@ -222,7 +222,7 @@ Week 4 (5/10-5/16):
 | kimi2 | #1728-后端 | Tier-B | execution | (待拆Issue)施工安全6模块Java实现 | ⏳ 待派 |
 | kimi2 | #1728-前端 | Tier-B | execution | (待拆Issue)施工安全6模块前端页面 | ⏳ 待派 |
 | kimi2 | #2520 | Tier-D | project | ~~项目文档中心数据库(project_documents+versions)~~ | ~~Done(PR#3874)~~ |
-| kimi2 | #2523 | Tier-D | project | 文档中心API(CRUD+分类+权限) | In Progress |
+| kimi2 | #2522+#2523 | Tier-D | project | 文档中心Service+API(合并实现) | In Progress |
 | kimi4 | #1752 | Tier-C | frontend | ~~合同审批前端(待审批列表+审批页面)~~ | ~~Done~~ |
 | kimi4 | #2023 | Tier-C | approval | ~~合同管理接入审批流(盖章/签署自动发起)~~ | ~~Done~~ |
 | kimi4 | #1523 | Tier-A | bidding | ~~区域品类矩阵统计API(省份×产品品类交叉)~~ | ~~Done(PR#3871)~~ |

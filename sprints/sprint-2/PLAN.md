@@ -182,7 +182,7 @@ Week 4 (5/10-5/16):
 | kimi19 | #3188 | finance | ~~企业信息库(万德常用信息维护+一键填充到回款表单)~~ | ~~Done(PR#3934 admin-merged)~~ |
 | kimi3  | #3183 | project360 | 项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作 | 进行中 |
 | kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
-| kimi19 | #1766 | frontend | 代理商工作台前端 — 五阶段管线+看板+列表 | 进行中 |
+| kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
 | kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
 | kimi1  | #1717 | finance | 报销申请页面+发票上传+借款管理+审批中心 | 进行中 |
 | kimi4  | #1722 | perf | ~~管理费分摊+绩效考核页面 — 费用录入+打分+结果看板~~ | ~~Done(PR#3943 admin-merged)~~ |
@@ -303,7 +303,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #3174 | approval | ~~表单模板导入导出+配置向导(模板迁移+快速配置，流程补齐8/8)~~ | ~~Done(PR#3937 admin-merged)~~ |
 | kimi3  | #3183 | project360 | 项目360文档Tab前端(对内/对外分组+阶段进度+批量操作) | 进行中 |
 | kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
-| kimi19 | #1766 | frontend | 代理商工作台前端(五阶段管线+看板+列表) | 进行中 |
+| kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
 | kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
 | kimi4  | #3187 | finance | ~~全阶段文件缺失预警(三级升级推送+企微/站内双通道+阶段门控)~~ | ~~Done(PR#3938 admin-merged)~~ |
 | kimi1  | #1717 | finance | 报销申请页面+发票上传+借款管理+审批中心 | 进行中 |

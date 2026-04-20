@@ -355,6 +355,6 @@ Week 4 (5/10-5/16):
 | kimi4  | #3652 | fullstack | 招投标-D 投标文件编制工作台 | 进行中 |
 | kimi1  | #3377 | backend | ~~PLM子系统数据库初始化 — 7张核心表建表+索引~~ | ~~Done(PR#3977 admin-merged)~~ |
 | kimi3  | #3653 | fullstack | 招投标-E 报价决策与保证金台账 | 进行中 |
-| kimi1  | #3378 | backend | PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机 | 进行中 |
+| kimi1  | #3378 | backend | ~~PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机~~ | ~~Done(PR#3979 admin-merged)~~ |
 | kimi6  | #2204 | backend | ~~品牌中心数据库建表~~ | ~~Done(PR#3978 admin-merged)~~ |
 | kimi6  | #2203 | backend | 品牌中心内容CRUD API + 状态流转 + S3文件上传 | 进行中 |

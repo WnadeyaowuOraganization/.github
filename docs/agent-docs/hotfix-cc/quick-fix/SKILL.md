@@ -1,9 +1,18 @@
 ---
 name: quick-fix
-description: Full-stack engineer skill for rapid fixes to the main test environment (http://localhost:8080). Push directly to dev branch to trigger CI/CD auto-deployment. Emphasizes think-before-act, minimal blast radius, and full traceability via GitHub Issues with before/after screenshots.
+description: Full-stack engineer skill for rapid fixes to the main test environment (http://localhost:8080). Push directly to dev branch to trigger CI/CD auto-deployment. Emphasizes think-before-act, minimal blast radius, and full traceability via GitHub Issues with before/after screenshots. Use this skill whenever the user mentions bugs in test env, client complaints, quick patches, urgent fixes, mock data cleanup, or any change that must deploy immediately without going through the feature branch + PR workflow. NOT for feature development, refactoring, or cross-module restructuring.
 ---
 
 # Quick-Fix — 主测试环境快速修复
+
+> **快速开始**：
+> ```bash
+> source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+> init-gh-token
+> verify-local  # 必须通过才能 push
+> wait-ci-complete "$RUN_ID"  # 自动轮询至完成或超时
+> rollback-complete  # CI 失败时自动回滚
+> ```
 
 > **适用场景**：甲方在主测试环境（`http://localhost:8080`）发现问题，需要直接修复并立即生效，不走 feature 分支 + PR 流程，直接推 `dev` 触发 CI/CD 部署。
 >
@@ -37,6 +46,22 @@ description: Full-stack engineer skill for rapid fixes to the main test environm
 
 在动代码之前，用 Playwright 截图记录**现象**（before 截图），作为 Issue 的 before 证据：
 
+**🆕 使用工具函数（推荐）**：
+```bash
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+
+# 自动登录 + 截图（参数化）
+take-screenshot \
+  "http://localhost:8080/crm/customer/list" \
+  "/tmp/before-fix.png" \
+  "admin" \
+  "admin123" \
+  2000 \
+  1440 \
+  900
+```
+
+**或手动脚本**：
 ```bash
 cat > /tmp/before-screenshot.ts << 'EOF'
 import { chromium } from '/data/home/ubuntu/projects/wande-play-e2e-top/e2e/node_modules/playwright';
@@ -48,16 +73,13 @@ import { chromium } from '/data/home/ubuntu/projects/wande-play-e2e-top/e2e/node
   await page.fill('input[placeholder*="密码"]', 'admin123');
   await page.click('button[type="submit"]');
   await page.waitForTimeout(2000);
-  // TODO: 导航到问题页面
   await page.goto('http://localhost:8080/<问题页面路径>');
   await page.waitForTimeout(2000);
   await page.screenshot({ path: '/tmp/before-fix.png', fullPage: true });
   await browser.close();
-  console.log('截图完成: /tmp/before-fix.png');
 })();
 EOF
-npx ts-node --esm /tmp/before-screenshot.ts 2>/dev/null || \
-  node --loader ts-node/esm /tmp/before-screenshot.ts
+node --loader ts-node/esm /tmp/before-screenshot.ts
 ```
 
 ### 1.3 阅读相关代码（定位根因）
@@ -85,50 +107,57 @@ find backend/ruoyi-modules/wande-ai/src -name "*Controller.java" | xargs grep -l
 
 ## 阶段二：创建 Issue（动手前必做）
 
-每一条甲方要求都必须有对应的 Issue 留痕：
+每一条甲方要求都必须有对应的 Issue 留痕。**按问题类型使用对应的 Issue 创建函数**：
+
+**🆕 使用工具函数（推荐 — 自动化 + 模板分化）**：
 
 ```bash
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+
+# 初始化 token（一次性）
+init-gh-token
+
+# 上传 before 截图
+BEFORE_URL=$(upload-release-asset "/tmp/before-fix.png")
+
+# 根据问题类型创建 Issue，自动填充对应模板
+case "$PROBLEM_TYPE" in
+  # 【优化6】前端问题 — 强调样式截图
+  frontend)
+    ISSUE_NUM=$(create-issue-frontend \
+      "页面样式错误" \
+      "$BEFORE_URL" \
+      "用户反馈：CRM客户列表页面表头错位")
+    ;;
+
+  # 【优化6】API 问题 — 强调接口和返回值
+  api)
+    ISSUE_NUM=$(create-issue-api \
+      "获取客户列表 API 超时" \
+      "$BEFORE_URL" \
+      "用户反馈：客户管理页面加载缓慢，API 返回 504" \
+      "GET /api/crm/customer/list")
+    ;;
+
+  # 【优化6】数据问题 — 强调 SQL 和数据一致性
+  data)
+    ISSUE_NUM=$(create-issue-data \
+      "客户数据不同步" \
+      "$BEFORE_URL" \
+      "用户反馈：新增客户后在报表中看不到" \
+      "crm_customer")
+    ;;
+esac
+
+echo "✅ Issue #$ISSUE_NUM created"
+```
+
+**或手动创建（不推荐，易遗漏细节）**：
+```bash
 export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
-
-# 上传 before 截图到 GitHub Release
-gh release upload sprint-assets /tmp/before-fix.png \
-  --repo WnadeyaowuOraganization/wande-play \
-  --clobber 2>/dev/null
+gh release upload sprint-assets /tmp/before-fix.png --repo WnadeyaowuOraganization/wande-play --clobber
 BEFORE_URL="https://github.com/WnadeyaowuOraganization/wande-play/releases/download/sprint-assets/before-fix.png"
-
-# 创建 Issue
-ISSUE_NUM=$(gh issue create \
-  --repo WnadeyaowuOraganization/wande-play \
-  --title "[Quick-Fix] <一句话描述问题>" \
-  --body "## 甲方要求
-
-<甲方原话或截图描述>
-
-## 整改时间
-
-$(date '+%Y-%m-%d %H:%M')
-
-## 问题现象（修复前）
-
-![修复前](${BEFORE_URL})
-
-## 根因分析
-
-<简要说明根因>
-
-## 改动范围
-
-- [ ] 后端：<文件路径>
-- [ ] 前端：<文件路径>
-- [ ] 数据库：<SQL语句>
-
-## 修复后截图
-
-（修复完成后补充）" \
-  --label "quick-fix" \
-  2>/dev/null | grep -oP '(?<=issues/)\d+')
-
-echo "Issue #${ISSUE_NUM} 已创建"
+ISSUE_NUM=$(gh issue create --repo WnadeyaowuOraganization/wande-play --title "[Quick-Fix] 标题" --body "..." --label "quick-fix" 2>/dev/null | grep -oP '(?<=issues/)\d+')
 ```
 
 ---
@@ -182,26 +211,34 @@ echo "Issue #${ISSUE_NUM} 已创建"
 ❌ 不升级依赖版本
 ```
 
-### 3.3 本地验证
+### 3.3 本地验证 — 【优化1】强制 Gate（禁止不验证就推送）
 
-**后端**：
+**🆕 使用工具函数（推荐 — 自动化 + 强制拦截）**：
 ```bash
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+
+# 一行命令通过所有验证，失败自动停止
+verify-local "ruoyi-modules/wande-ai" || exit 1
+
+echo "✅ 所有验证通过，可以 push"
+```
+
+**验证通过前，禁止执行以下命令**：
+- ❌ `git push origin dev`
+- ❌ `git commit -m ...`（会推送未验证代码）
+
+**验证失败时的调试**：
+```bash
+# 后端编译详细错误
 cd /data/home/ubuntu/projects/wande-play-quick-fix/backend
-mvn -pl ruoyi-modules/wande-ai compile -q 2>&1 | tail -10
-# 如有单测：mvn -pl ruoyi-modules/wande-ai test -Dtest=<TestClass> -q
-```
+mvn -pl ruoyi-modules/wande-ai compile 2>&1 | grep -A 20 "ERROR"
 
-**前端**：
-```bash
+# 前端类型错误详细信息
 cd /data/home/ubuntu/projects/wande-play-quick-fix/frontend
-pnpm build 2>&1 | tail -5
-# 或只做类型检查（更快）
-pnpm vue-tsc --noEmit 2>&1 | tail -10
-```
+pnpm vue-tsc --noEmit 2>&1
 
-**数据库变更**：在本机 DB 先执行验证（如有测试 DB 权限）：
-```bash
-mysql -h 127.0.0.1 -u root -p<密码> <db_name> < /tmp/fix.sql
+# 数据库变更测试（如有权限）
+mysql -h 127.0.0.1 -u root -p<password> <db_name> < backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/V*.sql
 ```
 
 ---
@@ -213,61 +250,85 @@ mysql -h 127.0.0.1 -u root -p<密码> <db_name> < /tmp/fix.sql
 ```bash
 cd /data/home/ubuntu/projects/wande-play-quick-fix
 
-git add <只添加改动文件，禁止 git add .>
+# 必须逐文件 add，禁止 git add .（防止带入临时文件）
+git add backend/ruoyi-modules/wande-ai/src/main/java/...
+git add frontend/apps/web-antd/src/views/...
+# ... 只添加改动文件
+
 git commit -m "fix: <一句话描述> (quick-fix #${ISSUE_NUM})"
 git push origin dev
 ```
 
-### 4.2 观察 CI/CD（必须等待结果）
+### 4.2 观察 CI/CD — 【优化3】函数化轮询 + 指数退避
 
+**🆕 使用工具函数（推荐 — 自动化 + 智能重试）**：
 ```bash
-export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
 
-# 等待 CI 开始（push 后约 10-30s）
+# 等待 CI 开始
 sleep 15
 
-# 获取最新 run
+# 获取最新 run ID
 RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play \
   --branch dev --workflow build-deploy-dev.yml \
   --limit 1 --json databaseId -q '.[0].databaseId')
 
 echo "CI Run: https://github.com/WnadeyaowuOraganization/wande-play/actions/runs/${RUN_ID}"
 
-# 轮询等待完成（后端部署约 3-5 分钟）
+# 自动轮询至完成（带指数退避，最多 10 分钟等待）
+if wait-ci-complete "$RUN_ID" 600; then
+  echo "✅ CI passed"
+else
+  echo "❌ CI failed — rolling back..."
+  rollback-complete
+  exit 1
+fi
+```
+
+**或手动观察（不推荐，不会自动回滚）**：
+```bash
+export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
+RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play --branch dev --workflow build-deploy-dev.yml --limit 1 --json databaseId -q '.[0].databaseId')
 while true; do
-  STATUS=$(gh run view $RUN_ID \
-    --repo WnadeyaowuOraganization/wande-play \
-    --json status,conclusion -q '.status + "/" + (.conclusion // "pending")')
+  STATUS=$(gh run view $RUN_ID --repo WnadeyaowuOraganization/wande-play --json status,conclusion -q '.status + "/" + (.conclusion // "pending")')
   echo "[$(date '+%H:%M:%S')] $STATUS"
   [[ "$STATUS" == "completed/"* ]] && break
   sleep 15
 done
-
-# 检查结果
-CONCLUSION=$(gh run view $RUN_ID \
-  --repo WnadeyaowuOraganization/wande-play \
-  --json conclusion -q '.conclusion')
-echo "结果: $CONCLUSION"
 ```
 
-### 4.3 部署失败处理
+### 4.3 部署失败处理 — 【优化2】自动回滚 + 完整检查
 
+**🆕 使用工具函数（推荐 — 自动回滚后端 + 前端 + 验证）**：
 ```bash
-# 查看失败日志
-gh run view $RUN_ID --repo WnadeyaowuOraganization/wande-play --log-failed | head -50
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
 
-# 后端健康检查
-curl -sf http://localhost:6040/ && echo "后端正常" || echo "后端异常"
-
-# 如后端挂了，手动回滚
-if [ -f /apps/wande-ai-backend/ruoyi-admin.jar.bak ]; then
-  cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar
-  bash /apps/wande-ai-backend/start.sh
-  echo "已回滚到上一版本"
+# 自动完整回滚
+if ! rollback-complete; then
+  echo "❌ Rollback incomplete — manual intervention required"
+  # 通知研发经理
+  exit 1
 fi
 ```
 
-> ⚠️ **CI 失败时**：立即通知研发经理，说明失败原因和影响，不要独自尝试多次 push 修复。
+**或手动回滚**：
+```bash
+# 后端回滚
+pkill -9 -f "java.*6040"
+cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar
+bash /apps/wande-ai-backend/start.sh
+sleep 5
+
+# 前端回滚
+pkill -9 -f nginx
+cd /apps/wande-ai-front && tar -xf dist.bak.tar && nginx
+sleep 3
+
+# 验证
+curl -sf http://localhost:6040 && curl -sf http://localhost:8080 && echo "✅ Rollback OK"
+```
+
+> **⛔ 红线**：CI 失败后，**最多尝试 1 次修复**，失败立即汇报研发经理。禁止连续多次 push 尝试修复。
 
 ---
 
@@ -275,59 +336,43 @@ fi
 
 ### 5.1 功能验证截图（after 截图）
 
+**🆕 使用工具函数（推荐）**：
 ```bash
-cat > /tmp/after-screenshot.ts << 'EOF'
-import { chromium } from '/data/home/ubuntu/projects/wande-play-e2e-top/e2e/node_modules/playwright';
-(async () => {
-  const browser = await chromium.launch({ headless: true });
-  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
-  await page.goto('http://localhost:8080/login');
-  await page.fill('input[placeholder*="账号"]', 'admin');
-  await page.fill('input[placeholder*="密码"]', 'admin123');
-  await page.click('button[type="submit"]');
-  await page.waitForTimeout(2000);
-  await page.goto('http://localhost:8080/<问题页面路径>');
-  await page.waitForTimeout(2000);
-  await page.screenshot({ path: '/tmp/after-fix.png', fullPage: true });
-  await browser.close();
-  console.log('截图完成: /tmp/after-fix.png');
-})();
-EOF
-node --loader ts-node/esm /tmp/after-screenshot.ts
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+
+# 自动登录 + 截图
+take-screenshot \
+  "http://localhost:8080/crm/customer/list" \
+  "/tmp/after-fix.png" \
+  "admin" \
+  "admin123"
+
+echo "✅ After 截图完成"
 ```
 
-### 5.2 更新 Issue（补充 after 截图 + 关闭）
+### 5.2 更新 Issue — 【优化6】按问题类型自动评论 + 关闭
 
+**🆕 使用工具函数（推荐 — 自动填充改动摘要）**：
 ```bash
-export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
 
 # 上传 after 截图
-gh release upload sprint-assets /tmp/after-fix.png \
-  --repo WnadeyaowuOraganization/wande-play --clobber
+AFTER_URL=$(upload-release-asset "/tmp/after-fix.png")
+
+# 自动评论 + 关闭 Issue
+comment-issue-fixed "$ISSUE_NUM" "$AFTER_URL" "$RUN_ID"
+close-issue-fixed "$ISSUE_NUM"
+
+echo "✅ Issue #$ISSUE_NUM 已更新并关闭"
+```
+
+**或手动更新**：
+```bash
+export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
+gh release upload sprint-assets /tmp/after-fix.png --repo WnadeyaowuOraganization/wande-play --clobber
 AFTER_URL="https://github.com/WnadeyaowuOraganization/wande-play/releases/download/sprint-assets/after-fix.png"
-
-# 追评 Issue，附修复后截图
-gh issue comment $ISSUE_NUM \
-  --repo WnadeyaowuOraganization/wande-play \
-  --body "## ✅ 修复完成
-
-**部署时间**：$(date '+%Y-%m-%d %H:%M')
-**CI Run**：https://github.com/WnadeyaowuOraganization/wande-play/actions/runs/${RUN_ID}
-
-### 修复后效果
-
-![修复后](${AFTER_URL})
-
-### 改动摘要
-
-\`\`\`
-$(git log --oneline -1)
-\`\`\`"
-
-# 关闭 Issue
-gh issue close $ISSUE_NUM \
-  --repo WnadeyaowuOraganization/wande-play \
-  --comment "Quick-fix 已部署到主测试环境，请甲方验收。"
+gh issue comment $ISSUE_NUM --repo WnadeyaowuOraganization/wande-play --body "## ✅ 修复完成\n\n![修复后](${AFTER_URL})\n\nCI: https://github.com/WnadeyaowuOraganization/wande-play/actions/runs/${RUN_ID}"
+gh issue close $ISSUE_NUM --repo WnadeyaowuOraganization/wande-play
 ```
 
 ---
@@ -337,22 +382,37 @@ gh issue close $ISSUE_NUM \
 ```
 甲方反馈问题
     ↓
-1. 追问到清楚（不猜测）
-2. 复现 + before 截图
-3. 创建 Issue
-4. 读代码 → 定位根因
-5. 最小改动 + 本地验证
-6. git push origin dev
-7. 等 CI 完成（3-5分钟）
-8. after 截图 + 更新 Issue + 关闭
+1. source utils.sh && init-gh-token          ← 初始化工具库
+2. 追问到清楚（不猜测）
+3. take-screenshot 记录 before
+4. create-issue-{frontend|api|data} 创建
+5. 读代码 → 定位根因
+6. 最小改动 + verify-local 强制验证通过    ← 【优化1】强制 gate
+7. git add <逐文件> && git commit && git push
+8. wait-ci-complete 等待 CI                 ← 【优化3】指数退避轮询
+9. take-screenshot 记录 after
+10. comment-issue-fixed && close-issue-fixed ← 【优化6】自动评论
 ```
 
 ### 常用命令速查
 
 ```bash
+# === 【推荐】使用工具库完整流程 ===
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+init-gh-token
+verify-local "ruoyi-modules/wande-ai"
+wait-ci-complete "$RUN_ID"
+rollback-complete
+
+# === 【快捷】单个工具函数 ===
+take-screenshot "http://localhost:8080/path" "/tmp/screen.png"
+upload-release-asset "/tmp/screen.png"
+verify-backend "ruoyi-modules/wande-ai"
+verify-frontend
+
+# === 【传统】原始命令 ===
 # 同步最新 dev
-cd /data/home/ubuntu/projects/wande-play-quick-fix
-git fetch origin dev && git reset --hard origin/dev
+cd /data/home/ubuntu/projects/wande-play-quick-fix && git fetch origin dev && git reset --hard origin/dev
 
 # 刷新 GH Token
 export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
@@ -377,15 +437,17 @@ ls -la /apps/wande-ai-front/index.html
 
 ## ⛔ 红线清单（违反即停止，立即汇报研发经理）
 
-| # | 红线 |
-|---|------|
-| 1 | 禁止不创建 Issue 就推代码 |
-| 2 | 禁止不复现问题就动代码 |
-| 3 | 禁止 `git add .`（必须逐文件 add，防止带入临时文件）|
-| 4 | 禁止推送后不观察 CI 结果就汇报「修复完成」|
-| 5 | 禁止 CI 失败后独自连续 push 尝试（最多 1 次修复尝试，失败立即汇报）|
-| 6 | 禁止改动不相关功能代码 |
-| 7 | 禁止 DROP TABLE / TRUNCATE（数据操作不可逆）|
-| 8 | 禁止 INSERT sys_menu（用 UPDATE 占位菜单）|
-| 9 | 禁止 Issue 没有 before/after 截图就关闭 |
-| 10 | 禁止影响主环境超过 10 分钟不汇报研发经理 |
+| # | 红线 | 优化关联 |
+|---|------|--------|
+| 1 | 禁止不创建 Issue 就推代码 | 【优化6】Issue 按类型分化 |
+| 2 | 禁止不复现问题就动代码 | 【优化5】take-screenshot |
+| 3 | **禁止 `git add .`**（必须逐文件 add，防止带入临时文件）| |
+| 4 | **禁止本地编译/类型检查失败就推送** | 【优化1】verify-local gate |
+| 5 | 禁止推送后不观察 CI 结果就汇报「修复完成」| 【优化3】wait-ci-complete |
+| 6 | **禁止 CI 失败后独自连续 push 尝试**（最多 1 次修复，失败立即汇报）| 【优化2】rollback-complete |
+| 7 | 禁止改动不相关功能代码 | |
+| 8 | 禁止 DROP TABLE / TRUNCATE（数据操作不可逆）| |
+| 9 | 禁止 INSERT sys_menu（用 UPDATE 占位菜单）| |
+| 10 | 禁止 Issue 没有 before/after 截图就关闭 | 【优化5】自动截图上传 |
+| 11 | 禁止影响主环境超过 10 分钟不汇报研发经理 | 【优化2】自动回滚 |
+| 12 | **禁止 Issue 创建时跳过模板**（必须选择问题类型） | 【优化6】按类型分化模板 |

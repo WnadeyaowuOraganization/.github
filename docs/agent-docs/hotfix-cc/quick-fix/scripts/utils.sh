@@ -50,7 +50,9 @@ function verify-backend() {
   echo -e "${BLUE}⏳ Verifying backend compilation: $module${NC}"
 
   cd "$QF_DIR/backend"
-  if ! mvn -pl "$module" compile -q 2>&1 | tail -20 > /tmp/mvn-error.log; then
+  # 使用共享 Maven 本地仓库（quick-fix 是 fresh clone，本地无 parent 模块）
+  local m2_repo="/home/ubuntu/.m2/repository"
+  if ! mvn -pl "$module" compile -q -Dmaven.repo.local="$m2_repo" 2>&1 | tail -20 > /tmp/mvn-error.log; then
     echo -e "${RED}❌ Backend compilation failed:${NC}"
     cat /tmp/mvn-error.log
     return 1

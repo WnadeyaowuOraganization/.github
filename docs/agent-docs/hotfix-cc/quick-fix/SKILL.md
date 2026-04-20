@@ -231,7 +231,7 @@ echo "✅ 所有验证通过，可以 push"
 ```bash
 # 后端编译详细错误
 cd /data/home/ubuntu/projects/wande-play-quick-fix/backend
-mvn -pl ruoyi-modules/wande-ai compile 2>&1 | grep -A 20 "ERROR"
+mvn -pl ruoyi-modules/wande-ai compile -Dmaven.repo.local=/home/ubuntu/.m2/repository 2>&1 | grep -A 20 "ERROR"
 
 # 前端类型错误详细信息
 cd /data/home/ubuntu/projects/wande-play-quick-fix/frontend
@@ -418,7 +418,7 @@ cd /data/home/ubuntu/projects/wande-play-quick-fix && git fetch origin dev && gi
 export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
 
 # 后端编译检查
-cd backend && mvn -pl ruoyi-modules/wande-ai compile -q
+cd backend && mvn -pl ruoyi-modules/wande-ai compile -q -Dmaven.repo.local=/home/ubuntu/.m2/repository
 
 # 前端类型检查
 cd frontend && pnpm vue-tsc --noEmit

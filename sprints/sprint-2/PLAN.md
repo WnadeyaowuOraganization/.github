@@ -198,7 +198,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #3651 | bidding | ~~招投标-C 投标立项与进度管理~~ | ~~Done(PR#3988 admin-merged)~~ |
 | kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 admin-merged)~~ |
 | kimi4  | #3383 | plm | ~~PLM[6/20] BOM成本Roll-up API + 企微推送~~ | ~~Done(PR#3991 admin-merged)~~ |
-| kimi6  | #3384 | plm | PLM[7/20] 零件服务与供应商集成API | 进行中 |
+| kimi6  | #3384 | plm | ~~PLM[7/20] 零件服务与供应商集成API~~ | ~~Done(PR#3992 待merge，需rebase)~~ |
 | kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 待merge)~~ |
 | kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
 | kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
@@ -383,7 +383,7 @@ Week 4 (5/10-5/16):
 | kimi19 | #3654 | bidding | ~~招投标-Dashboard 投标总览仪表盘~~ | ~~Done(PR#3986 admin-merged)~~ |
 | kimi1  | #3381 | plm | ~~PLM BOM版本对比与回滚API~~ | ~~Done(PR#3987 admin-merged)~~ |
 | kimi4  | #3383 | plm | ~~PLM BOM成本Roll-up API~~ | ~~Done(PR#3991 admin-merged)~~ |
-| kimi6  | #3384 | plm | PLM BOM Where-Used反查API | 进行中 |
+| kimi6  | #3384 | plm | ~~PLM BOM Where-Used反查API~~ | ~~Done(PR#3992 待merge，需rebase)~~ |
 | kimi1  | #3385 | plm | PLM ECO变更申请与影响评估API | 进行中 |
 | kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 待merge)~~ |
 | kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 admin-merged)~~ |

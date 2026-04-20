@@ -259,31 +259,42 @@ git commit -m "fix: <一句话描述> (quick-fix #${ISSUE_NUM})"
 git push origin dev
 ```
 
-### 4.2 观察 CI/CD — 【优化3】函数化轮询 + 指数退避
+### 4.2 观察 CI/CD + 主动监听后端日志
 
-**🆕 使用工具函数（推荐 — 自动化 + 智能重试）**：
+> **重要**：不要被动等待CI轮询结果再去看日志。push后**立即主动监听后端启动日志**，能在健康检查失败前发现问题。
+
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
+# 推送后立即开始监听后端日志（后台）
+tail -f /apps/wande-ai-backend/logs/backend.log | grep -E "ERROR|Exception|Started|启动" &
+LOG_PID=$!
 
-# 等待 CI 开始
+# 同时轮询CI状态
 sleep 15
-
-# 获取最新 run ID
 RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play \
   --branch dev --workflow build-deploy-dev.yml \
   --limit 1 --json databaseId -q '.[0].databaseId')
-
 echo "CI Run: https://github.com/WnadeyaowuOraganization/wande-play/actions/runs/${RUN_ID}"
 
-# 自动轮询至完成（带指数退避，最多 10 分钟等待）
+# 轮询CI（最多10分钟）
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
 if wait-ci-complete "$RUN_ID" 600; then
   echo "✅ CI passed"
 else
-  echo "❌ CI failed — rolling back..."
+  echo "❌ CI failed"
+  # 立即看日志定位原因
+  tail -50 /apps/wande-ai-backend/logs/backend.log | grep -B5 "ERROR\|Exception"
   rollback-complete
-  exit 1
 fi
+
+# 停止日志监听
+kill $LOG_PID 2>/dev/null
 ```
+
+**日志关注点**：
+- `FlywayException` → SQL迁移脚本语法错误
+- `BeanCreationException` → Spring Bean冲突（包扫描/重复注入）
+- `ClassNotFoundException` → typeAliasesPackage 未更新
+- `Started RuoYiApplication in` → 启动成功标志
 
 **或手动观察（不推荐，不会自动回滚）**：
 ```bash

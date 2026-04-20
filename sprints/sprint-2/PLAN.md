@@ -349,7 +349,7 @@ Week 4 (5/10-5/16):
 | kimi6  | #1875 | mine | ~~赢/输复盘模板+系统化采集（矿场主线）~~ | ~~Done(PR#3976 admin-merged)~~ |
 | kimi1  | #2086 | backend | ~~变更影响联动API — BOM差异自动计算+成本影响+工期更新~~ | ~~Done(历史PR#2781/#3356已merged，E2E历史遗留无需修复)~~ |
 | kimi3  | #2195 | backend | ~~品牌中心多平台数据采集~~ | ~~Done(PR#3975 admin-merged)~~ |
-| kimi4  | #3652 | fullstack | 招投标-D 投标文件编制工作台 | 进行中 |
+| kimi4  | #3652 | fullstack | ~~招投标-D 投标文件编制工作台~~ | ~~Done(PR#3984 admin-merged)~~ |
 | kimi1  | #3377 | backend | ~~PLM子系统数据库初始化 — 7张核心表建表+索引~~ | ~~Done(PR#3977 admin-merged)~~ |
 | kimi3  | #3653 | fullstack | ~~招投标-E 报价决策与保证金台账~~ | ~~Done(PR#3980 admin-merged)~~ |
 | kimi1  | #3378 | backend | ~~PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机~~ | ~~Done(PR#3979 admin-merged)~~ |

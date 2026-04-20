@@ -342,8 +342,8 @@ Week 4 (5/10-5/16):
 | kimi6  | #3149 | frontend | ~~审批进度追踪器组件 — 流程地图+步骤高亮+卡点提示+预估耗时~~ | ~~Done(PR#3902 已于04-19完成)~~ |
 | kimi6  | #3183 | frontend | ~~项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作~~ | ~~Done(PR#3940 已于04-19完成)~~ |
 | kimi6  | #3648 | backend | ~~招投标-DB 数据库建表 — 10张表 Flyway迁移~~ | ~~Done(PR#3969 admin-merged)~~ |
-| kimi6  | #3649 | fullstack | 招投标-A 资质证书管理中心 | 进行中 |
-| kimi1  | #3182 | backend | 文档自动归集 — 审批/合同/设计附件自动入项目文档库 | 进行中 |
-| kimi3  | #3656 | backend | 法规文件预置模板 — TSG 71-2023 七阶段38项法定文件种子数据 | 进行中 |
+| kimi6  | #3649 | fullstack | ~~招投标-A 资质证书管理中心~~ | ~~Done(PR#3972 admin-merged)~~ |
+| kimi1  | #3182 | backend | ~~文档自动归集 — 审批/合同/设计附件自动入项目文档库~~ | ~~Done(PR#3973 admin-merged)~~ |
+| kimi3  | #3656 | backend | ~~法规文件预置模板 — TSG 71-2023 七阶段38项法定文件种子数据~~ | ~~Done(PR#3971 admin-merged)~~ |
 | kimi19 | #1685 | backend | ~~项目费用关联API+财务报表导出功能~~ | ~~Done(PR#3970 admin-merged)~~ |
 | kimi19 | #3650 | fullstack | 招投标-B 检测报告管理 | 进行中 |

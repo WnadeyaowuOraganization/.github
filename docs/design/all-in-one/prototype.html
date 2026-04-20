@@ -188,6 +188,19 @@ body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC'
       </div>
     </div>
 
+    <!-- 6.5 业务运营中心 -->
+    <div class="menu-item">
+      <div class="menu-header" onclick="toggleMenu('menu-opshub')">
+        <span class="menu-icon">📊</span>
+        <span>业务运营中心</span>
+        <span class="menu-arrow" id="arrow-menu-opshub">▶</span>
+      </div>
+      <div class="submenu" id="menu-opshub">
+        <div class="submenu-item" onclick="switchPage('销售记录体系/prototype/index.html', '业务运营中心', '销售记录中心')">📝 销售记录中心</div>
+        <div class="submenu-item" onclick="switchPage('销售记录体系/prototype-boss-report/prototype.html', '业务运营中心', '老板周报')">📨 老板周报</div>
+      </div>
+    </div>
+
     <!-- 7. 安装售后中心 -->
     <div class="menu-item">
       <div class="menu-header" onclick="toggleMenu('menu-service')">

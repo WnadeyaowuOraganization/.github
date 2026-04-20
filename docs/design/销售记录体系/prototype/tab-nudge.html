@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Nudge管理 - 销售记录中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  /* 灰阶 wireframe 风格 */
+  .wire-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 8px; }
+  .wire-muted { color: #6b7280; }
+  .wire-bar { background: #9ca3af; }
+  .wire-bar-light { background: #d1d5db; }
+  .badge { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:9999px; font-size:12px; font-weight:500; border:1px solid; white-space:nowrap; }
+  .badge-wait  { background:#f3f4f6; color:#4b5563; border-color:#d1d5db; }
+  .badge-done  { background:#f9fafb; color:#374151; border-color:#e5e7eb; }
+  .badge-over  { background:#e5e7eb; color:#1f2937; border-color:#9ca3af; }
+  .badge-ignore{ background:#fafafa; color:#9ca3af; border-color:#e5e7eb; }
+  .row-hover:hover { background: #f9fafb; cursor: pointer; }
+  .drawer-mask { background: rgba(17,24,39,0.35); }
+  /* 折线图样式 */
+  .spark-svg { width: 100%; height: 60px; }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- [SPEC-CARD] 需求说明卡 v4.1 -->
+<details class="mb-4 wire-card border-dashed border-2 border-gray-300 bg-white">
+  <summary class="px-4 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-2">
+      <span class="text-gray-500 text-sm">📋</span>
+      <span class="font-semibold text-gray-800 text-sm">需求说明卡 · Nudge管理 Tab</span>
+      <span class="text-xs text-gray-400">(点击展开)</span>
+    </div>
+    <a href="../详细设计.md" class="text-xs text-gray-500 hover:text-gray-800 underline">§2.4 Nudge管理 ↗</a>
+  </summary>
+  <div class="px-4 pb-4 text-sm text-gray-700 grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 border-t border-gray-200 pt-3">
+    <div><span class="font-medium text-gray-500">页面目的：</span>吴耀+商务主管追踪所有催更新的发起、响应、超时情况，形成管理-执行闭环</div>
+    <div><span class="font-medium text-gray-500">主要用户：</span>吴耀、商务主管</div>
+    <div class="md:col-span-2"><span class="font-medium text-gray-500">核心功能：</span>4状态筛选 / 列表展示 / 详情抽屉 / 异常告警 / 趋势图 / 一键升级</div>
+    <div class="md:col-span-2"><span class="font-medium text-gray-500">关键操作：</span>筛选 / 行点击查看上下文 / 提醒 / 升级给上级</div>
+    <div class="md:col-span-2"><span class="font-medium text-gray-500">验收要点：</span>4状态可筛选 / 超时24h自动标记 / 升级触发新Nudge给上级</div>
+    <div class="md:col-span-2 text-xs text-gray-400 pt-1 border-t border-gray-100 mt-1">design_doc: <a href="../详细设计.md" class="underline">../详细设计.md</a> · §2.4 Nudge管理</div>
+  </div>
+</details>
+
+<!-- [异常告警条] -->
+<div class="mb-4 wire-card border-l-4 border-gray-700 bg-gray-100 flex items-center justify-between px-4 py-3">
+  <div class="flex items-center gap-3">
+    <span class="text-xl">🚨</span>
+    <div>
+      <div class="font-semibold text-gray-800 text-sm">3条Nudge已超过24小时未响应，建议升级</div>
+      <div class="text-xs text-gray-500 mt-0.5">涉及商务：王五、赵六、周七 · 最长已超时 52h</div>
+    </div>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="px-3 py-1.5 text-xs border border-gray-400 rounded text-gray-700 bg-white hover:bg-gray-50">查看详情</button>
+    <button class="px-3 py-1.5 text-xs rounded bg-gray-800 text-white hover:bg-gray-900">⚡ 一键升级</button>
+  </div>
+</div>
+
+<!-- [KPI卡片 + 趋势小图] -->
+<div class="grid grid-cols-12 gap-4 mb-4">
+  <!-- KPI x4 占 8 列 -->
+  <div class="col-span-12 lg:col-span-8 grid grid-cols-2 md:grid-cols-4 gap-3">
+    <div class="wire-card p-4">
+      <div class="text-xs wire-muted mb-1">⏳ 待响应Nudge</div>
+      <div class="text-2xl font-bold text-gray-800">8</div>
+      <div class="text-xs text-gray-400 mt-1">较昨日 +2</div>
+    </div>
+    <div class="wire-card p-4">
+      <div class="text-xs wire-muted mb-1">📨 24h内响应率</div>
+      <div class="text-2xl font-bold text-gray-800">67<span class="text-base font-medium">%</span></div>
+      <div class="text-xs text-gray-400 mt-1">目标 ≥80%</div>
+    </div>
+    <div class="wire-card p-4">
+      <div class="text-xs wire-muted mb-1">⏱ 平均响应时长</div>
+      <div class="text-2xl font-bold text-gray-800">4.2<span class="text-base font-medium">h</span></div>
+      <div class="text-xs text-gray-400 mt-1">上周 5.1h</div>
+    </div>
+    <div class="wire-card p-4">
+      <div class="text-xs wire-muted mb-1">📮 本周新发Nudge</div>
+      <div class="text-2xl font-bold text-gray-800">23</div>
+      <div class="text-xs text-gray-400 mt-1">吴耀 15 · 主管 8</div>
+    </div>
+  </div>
+  <!-- 趋势小图 占 4 列 -->
+  <div class="col-span-12 lg:col-span-4 wire-card p-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs font-semibold text-gray-700">近30天Nudge趋势</div>
+      <div class="flex items-center gap-3 text-[10px] text-gray-500">
+        <span class="flex items-center gap-1"><span class="inline-block w-2 h-2 bg-gray-500"></span>新发</span>
+        <span class="flex items-center gap-1"><span class="inline-block w-2 h-0.5 bg-gray-800"></span>响应率</span>
+      </div>
+    </div>
+    <!-- 柱+折线 纯CSS/SVG 模拟 -->
+    <div class="relative h-[80px]">
+      <!-- 柱状图：30天 -->
+      <div class="absolute inset-0 flex items-end gap-[2px] pb-[1px]">
+        <!-- 30 个柱子：高度代表当日新发条数 -->
+        <div class="flex-1 wire-bar-light" style="height:20%"></div>
+        <div class="flex-1 wire-bar-light" style="height:35%"></div>
+        <div class="flex-1 wire-bar-light" style="height:28%"></div>
+        <div class="flex-1 wire-bar-light" style="height:45%"></div>
+        <div class="flex-1 wire-bar-light" style="height:30%"></div>
+        <div class="flex-1 wire-bar-light" style="height:18%"></div>
+        <div class="flex-1 wire-bar-light" style="height:22%"></div>
+        <div class="flex-1 wire-bar-light" style="height:40%"></div>
+        <div class="flex-1 wire-bar-light" style="height:55%"></div>
+        <div class="flex-1 wire-bar-light" style="height:48%"></div>
+        <div class="flex-1 wire-bar-light" style="height:32%"></div>
+        <div class="flex-1 wire-bar-light" style="height:38%"></div>
+        <div class="flex-1 wire-bar-light" style="height:60%"></div>
+        <div class="flex-1 wire-bar-light" style="height:52%"></div>
+        <div class="flex-1 wire-bar-light" style="height:42%"></div>
+        <div class="flex-1 wire-bar-light" style="height:35%"></div>
+        <div class="flex-1 wire-bar-light" style="height:50%"></div>
+        <div class="flex-1 wire-bar-light" style="height:65%"></div>
+        <div class="flex-1 wire-bar-light" style="height:58%"></div>
+        <div class="flex-1 wire-bar-light" style="height:45%"></div>
+        <div class="flex-1 wire-bar-light" style="height:38%"></div>
+        <div class="flex-1 wire-bar-light" style="height:55%"></div>
+        <div class="flex-1 wire-bar-light" style="height:70%"></div>
+        <div class="flex-1 wire-bar-light" style="height:62%"></div>
+        <div class="flex-1 wire-bar-light" style="height:48%"></div>
+        <div class="flex-1 wire-bar-light" style="height:42%"></div>
+        <div class="flex-1 wire-bar-light" style="height:58%"></div>
+        <div class="flex-1 wire-bar-light" style="height:75%"></div>
+        <div class="flex-1 wire-bar-light" style="height:68%"></div>
+        <div class="flex-1 wire-bar" style="height:80%"></div>
+      </div>
+      <!-- 折线图：响应率 -->
+      <svg class="spark-svg absolute inset-0" viewBox="0 0 300 80" preserveAspectRatio="none">
+        <polyline fill="none" stroke="#1f2937" stroke-width="1.5"
+          points="5,35 15,30 25,32 35,25 45,28 55,38 65,36 75,28 85,22 95,24 105,30 115,26 125,20 135,22 145,28 155,30 165,24 175,18 185,20 195,26 205,30 215,22 225,16 235,20 245,24 255,28 265,22 275,14 285,18 295,12" />
+        <!-- 端点 -->
+        <circle cx="295" cy="12" r="2.5" fill="#1f2937"/>
+      </svg>
+    </div>
+    <div class="flex justify-between text-[10px] text-gray-400 mt-1">
+      <span>3-24</span><span>4-08</span><span>4-23</span>
+    </div>
+  </div>
+</div>
+
+<!-- [筛选栏] -->
+<div class="wire-card p-4 mb-4">
+  <div class="flex flex-wrap items-center gap-3">
+    <!-- 状态多选（chip 样式） -->
+    <div class="flex items-center gap-1">
+      <span class="text-xs text-gray-500 mr-1">状态：</span>
+      <button class="px-3 py-1 text-xs border border-gray-800 bg-gray-800 text-white rounded-full">⏳ 待响应 (8)</button>
+      <button class="px-3 py-1 text-xs border border-gray-300 text-gray-700 rounded-full bg-white hover:border-gray-500">✅ 已响应 (15)</button>
+      <button class="px-3 py-1 text-xs border border-gray-300 text-gray-700 rounded-full bg-white hover:border-gray-500">⚠️ 超时 (3)</button>
+      <button class="px-3 py-1 text-xs border border-gray-300 text-gray-700 rounded-full bg-white hover:border-gray-500">🚫 已忽略 (2)</button>
+    </div>
+
+    <div class="h-5 w-px bg-gray-200"></div>
+
+    <!-- 发起人 -->
+    <label class="flex items-center gap-1 text-xs">
+      <span class="text-gray-500">发起人：</span>
+      <select class="border border-gray-300 rounded px-2 py-1 text-xs bg-white text-gray-700">
+        <option>全部</option>
+        <option>吴耀</option>
+        <option>商务主管A</option>
+        <option>商务主管B</option>
+      </select>
+    </label>
+
+    <!-- 被催商务 -->
+    <label class="flex items-center gap-1 text-xs">
+      <span class="text-gray-500">被催商务：</span>
+      <select class="border border-gray-300 rounded px-2 py-1 text-xs bg-white text-gray-700">
+        <option>全部</option>
+        <option>张三</option><option>李四</option><option>王五</option><option>赵六</option><option>周七</option>
+      </select>
+    </label>
+
+    <!-- 项目搜索 -->
+    <label class="flex items-center gap-1 text-xs">
+      <span class="text-gray-500">项目：</span>
+      <input type="text" placeholder="搜索项目名称..." class="border border-gray-300 rounded px-2 py-1 text-xs w-40 bg-white" />
+    </label>
+
+    <!-- 时间范围 -->
+    <div class="flex items-center gap-1 ml-auto">
+      <span class="text-xs text-gray-500 mr-1">时间：</span>
+      <button class="px-2.5 py-1 text-xs border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50">今日</button>
+      <button class="px-2.5 py-1 text-xs border border-gray-800 bg-gray-100 rounded text-gray-800 font-medium">本周</button>
+      <button class="px-2.5 py-1 text-xs border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50">本月</button>
+      <button class="px-2.5 py-1 text-xs border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50">自定义 📅</button>
+    </div>
+  </div>
+</div>
+
+<!-- [Nudge列表] -->
+<div class="wire-card overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gray-50">
+    <div class="flex items-center gap-2">
+      <span class="text-sm font-semibold text-gray-800">Nudge列表</span>
+      <span class="text-xs text-gray-500">共 28 条 · 已筛选显示 14 条</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="text-xs text-gray-600 hover:text-gray-800">↓ 导出</button>
+      <button class="text-xs text-gray-600 hover:text-gray-800">⚙ 列设置</button>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-gray-600 text-xs border-b border-gray-200">
+        <tr>
+          <th class="text-left px-3 py-2 font-medium w-28">状态</th>
+          <th class="text-left px-3 py-2 font-medium w-20">发起人</th>
+          <th class="text-left px-3 py-2 font-medium w-20">被催商务</th>
+          <th class="text-left px-3 py-2 font-medium w-40">关联项目</th>
+          <th class="text-left px-3 py-2 font-medium">附言</th>
+          <th class="text-left px-3 py-2 font-medium w-28">发起时间</th>
+          <th class="text-left px-3 py-2 font-medium w-28">响应时间</th>
+          <th class="text-left px-3 py-2 font-medium">响应内容</th>
+          <th class="text-left px-3 py-2 font-medium w-32">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 text-gray-700" id="nudgeTbody">
+
+        <!-- 1 待响应 -->
+        <tr class="row-hover" onclick="openDrawer(1)">
+          <td class="px-3 py-3"><span class="badge badge-wait">⏳ 待响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">张三</td>
+          <td class="px-3 py-3"><div class="truncate">深圳XX文旅小镇</div></td>
+          <td class="px-3 py-3 text-gray-600">已超10天未更新，进展如何？</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-21 14:30</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">提醒</button>
+            <span class="text-gray-300 mx-1">|</span>
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">升级</button>
+          </td>
+        </tr>
+
+        <!-- 2 已响应 -->
+        <tr class="row-hover" onclick="openDrawer(2)">
+          <td class="px-3 py-3"><span class="badge badge-done">✅ 已响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">李四</td>
+          <td class="px-3 py-3"><div class="truncate">杭州XX欢乐乐园</div></td>
+          <td class="px-3 py-3 text-gray-600">进展如何？</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-20 09:15</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-20 14:22</td>
+          <td class="px-3 py-3 text-gray-600"><div class="truncate max-w-[240px]">已与客户确定下周二会议，初稿方案已发</div></td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">查看详情</button>
+          </td>
+        </tr>
+
+        <!-- 3 超时 -->
+        <tr class="row-hover" onclick="openDrawer(3)">
+          <td class="px-3 py-3"><span class="badge badge-over">⚠️ 超时</span></td>
+          <td class="px-3 py-3">商务主管A</td>
+          <td class="px-3 py-3">王五</td>
+          <td class="px-3 py-3"><div class="truncate">沙特XX主题乐园</div></td>
+          <td class="px-3 py-3 text-gray-600">客户催报价，请速更新</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-18 10:00</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-900 font-medium hover:underline">升级给吴耀</button>
+          </td>
+        </tr>
+
+        <!-- 4 已响应 -->
+        <tr class="row-hover" onclick="openDrawer(4)">
+          <td class="px-3 py-3"><span class="badge badge-done">✅ 已响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">赵六</td>
+          <td class="px-3 py-3"><div class="truncate">成都XX大熊猫主题街区</div></td>
+          <td class="px-3 py-3 text-gray-600">方案进度更新</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-19 11:00</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-19 16:45</td>
+          <td class="px-3 py-3 text-gray-600"><div class="truncate max-w-[240px]">客户已签意向书，进入合同阶段</div></td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">查看详情</button>
+          </td>
+        </tr>
+
+        <!-- 5 待响应 -->
+        <tr class="row-hover" onclick="openDrawer(5)">
+          <td class="px-3 py-3"><span class="badge badge-wait">⏳ 待响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">钱八</td>
+          <td class="px-3 py-3"><div class="truncate">上海XX商业综合体</div></td>
+          <td class="px-3 py-3 text-gray-600">本周是否能拿到决策反馈？</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-22 09:40</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">提醒</button>
+            <span class="text-gray-300 mx-1">|</span>
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">升级</button>
+          </td>
+        </tr>
+
+        <!-- 6 已忽略 -->
+        <tr class="row-hover" onclick="openDrawer(6)">
+          <td class="px-3 py-3"><span class="badge badge-ignore">🚫 已忽略</span></td>
+          <td class="px-3 py-3">商务主管B</td>
+          <td class="px-3 py-3">孙九</td>
+          <td class="px-3 py-3"><div class="truncate">广州XX文化艺术中心</div></td>
+          <td class="px-3 py-3 text-gray-500">客户是否回复</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-17 15:20</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">已标记无需跟进</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-600 hover:text-gray-800 underline">重新发起</button>
+          </td>
+        </tr>
+
+        <!-- 7 已响应 -->
+        <tr class="row-hover" onclick="openDrawer(7)">
+          <td class="px-3 py-3"><span class="badge badge-done">✅ 已响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">张三</td>
+          <td class="px-3 py-3"><div class="truncate">北京XX冰雪世界</div></td>
+          <td class="px-3 py-3 text-gray-600">招标文件准备情况</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-19 08:30</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-19 10:12</td>
+          <td class="px-3 py-3 text-gray-600"><div class="truncate max-w-[240px]">技术标已完成80%，下周一提交</div></td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">查看详情</button>
+          </td>
+        </tr>
+
+        <!-- 8 超时 -->
+        <tr class="row-hover" onclick="openDrawer(8)">
+          <td class="px-3 py-3"><span class="badge badge-over">⚠️ 超时</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">周七</td>
+          <td class="px-3 py-3"><div class="truncate">重庆XX两江文旅</div></td>
+          <td class="px-3 py-3 text-gray-600">上次汇报已超15天</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-16 10:00</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-900 font-medium hover:underline">升级给总监</button>
+          </td>
+        </tr>
+
+        <!-- 9 待响应 -->
+        <tr class="row-hover" onclick="openDrawer(9)">
+          <td class="px-3 py-3"><span class="badge badge-wait">⏳ 待响应</span></td>
+          <td class="px-3 py-3">商务主管A</td>
+          <td class="px-3 py-3">李四</td>
+          <td class="px-3 py-3"><div class="truncate">三亚XX滨海度假区</div></td>
+          <td class="px-3 py-3 text-gray-600">预算终稿何时出</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-22 16:00</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">提醒</button>
+            <span class="text-gray-300 mx-1">|</span>
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">升级</button>
+          </td>
+        </tr>
+
+        <!-- 10 已响应 -->
+        <tr class="row-hover" onclick="openDrawer(10)">
+          <td class="px-3 py-3"><span class="badge badge-done">✅ 已响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">王五</td>
+          <td class="px-3 py-3"><div class="truncate">西安XX历史文化园</div></td>
+          <td class="px-3 py-3 text-gray-600">客户意向度确认</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-18 14:30</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-18 17:50</td>
+          <td class="px-3 py-3 text-gray-600"><div class="truncate max-w-[240px]">高意向，计划5月初现场踏勘</div></td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">查看详情</button>
+          </td>
+        </tr>
+
+        <!-- 11 超时 -->
+        <tr class="row-hover" onclick="openDrawer(11)">
+          <td class="px-3 py-3"><span class="badge badge-over">⚠️ 超时</span></td>
+          <td class="px-3 py-3">商务主管B</td>
+          <td class="px-3 py-3">赵六</td>
+          <td class="px-3 py-3"><div class="truncate">苏州XX古城更新项目</div></td>
+          <td class="px-3 py-3 text-gray-600">合同盖章进度</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-17 09:00</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-900 font-medium hover:underline">升级给吴耀</button>
+          </td>
+        </tr>
+
+        <!-- 12 已响应 -->
+        <tr class="row-hover" onclick="openDrawer(12)">
+          <td class="px-3 py-3"><span class="badge badge-done">✅ 已响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">孙九</td>
+          <td class="px-3 py-3"><div class="truncate">青岛XX海洋世界</div></td>
+          <td class="px-3 py-3 text-gray-600">第二轮方案修改反馈</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-20 10:00</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-20 11:30</td>
+          <td class="px-3 py-3 text-gray-600"><div class="truncate max-w-[240px]">客户已确认大方向，调整细节中</div></td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">查看详情</button>
+          </td>
+        </tr>
+
+        <!-- 13 已忽略 -->
+        <tr class="row-hover" onclick="openDrawer(13)">
+          <td class="px-3 py-3"><span class="badge badge-ignore">🚫 已忽略</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">钱八</td>
+          <td class="px-3 py-3"><div class="truncate">长沙XX文旅夜游</div></td>
+          <td class="px-3 py-3 text-gray-500">是否继续推进</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-15 11:20</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">项目已暂停</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-600 hover:text-gray-800 underline">归档</button>
+          </td>
+        </tr>
+
+        <!-- 14 待响应 -->
+        <tr class="row-hover" onclick="openDrawer(14)">
+          <td class="px-3 py-3"><span class="badge badge-wait">⏳ 待响应</span></td>
+          <td class="px-3 py-3">吴耀</td>
+          <td class="px-3 py-3">周七</td>
+          <td class="px-3 py-3"><div class="truncate">迪拜XX娱乐综合体</div></td>
+          <td class="px-3 py-3 text-gray-600">当地合作方谈判进展</td>
+          <td class="px-3 py-3 text-xs text-gray-500">4-22 20:15</td>
+          <td class="px-3 py-3 text-xs text-gray-400">-</td>
+          <td class="px-3 py-3 text-gray-400">-</td>
+          <td class="px-3 py-3" onclick="event.stopPropagation()">
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">提醒</button>
+            <span class="text-gray-300 mx-1">|</span>
+            <button class="text-xs text-gray-700 hover:text-gray-900 underline">升级</button>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 分页 -->
+  <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-gray-50 text-xs text-gray-600">
+    <div>显示 1-14 / 共 28 条</div>
+    <div class="flex items-center gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded bg-white">‹</button>
+      <button class="px-2.5 py-1 border border-gray-800 bg-gray-800 text-white rounded">1</button>
+      <button class="px-2.5 py-1 border border-gray-300 bg-white rounded">2</button>
+      <button class="px-2 py-1 border border-gray-300 rounded bg-white">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- [详情抽屉] 行点击触发 -->
+<div id="drawerMask" class="drawer-mask fixed inset-0 z-40 hidden" onclick="closeDrawer()"></div>
+<aside id="drawer" class="fixed top-0 right-0 h-full w-full max-w-xl bg-white shadow-2xl z-50 transform translate-x-full transition-transform duration-200 overflow-y-auto">
+  <div class="sticky top-0 bg-white border-b border-gray-200 px-5 py-4 flex items-center justify-between">
+    <div>
+      <div class="text-xs text-gray-500 mb-0.5">Nudge详情 · #<span id="dId">1</span></div>
+      <div class="text-base font-semibold text-gray-800">深圳XX文旅小镇</div>
+    </div>
+    <button class="text-gray-400 hover:text-gray-800 text-xl" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <div class="p-5 space-y-5">
+
+    <!-- 基本信息 -->
+    <section>
+      <div class="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">基本信息</div>
+      <div class="wire-card p-4 grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+        <div><span class="text-gray-500 text-xs">状态：</span><span class="badge badge-wait">⏳ 待响应</span></div>
+        <div><span class="text-gray-500 text-xs">发起人：</span>吴耀</div>
+        <div><span class="text-gray-500 text-xs">被催商务：</span>张三</div>
+        <div><span class="text-gray-500 text-xs">发起时间：</span>4-21 14:30</div>
+        <div class="col-span-2"><span class="text-gray-500 text-xs">附言：</span>已超10天未更新，进展如何？</div>
+      </div>
+    </section>
+
+    <!-- 关联项目 -->
+    <section>
+      <div class="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">关联项目 & 客户</div>
+      <div class="wire-card p-4 text-sm">
+        <div class="flex items-center justify-between mb-2">
+          <div class="font-medium text-gray-800">深圳XX文旅小镇</div>
+          <span class="badge badge-wait">方案阶段</span>
+        </div>
+        <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-600">
+          <div><span class="text-gray-400">客户：</span>深圳XX文旅集团</div>
+          <div><span class="text-gray-400">对接人：</span>刘总（决策）/ 陈经理（对接）</div>
+          <div><span class="text-gray-400">预算：</span>约 3200 万</div>
+          <div><span class="text-gray-400">阶段：</span>方案报价中</div>
+          <div class="col-span-2"><span class="text-gray-400">上次有效更新：</span>4-11 张三填写周报</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 时间线（Nudge前后上下文） -->
+    <section>
+      <div class="text-xs font-semibold text-gray-500 mb-2 uppercase tracking-wide">相关记录时间线</div>
+      <div class="wire-card p-4">
+        <ol class="relative border-l border-gray-200 ml-2 space-y-4">
+          <li class="ml-4">
+            <span class="absolute -left-[5px] w-2.5 h-2.5 bg-gray-400 rounded-full mt-1.5"></span>
+            <div class="text-xs text-gray-400">4-11 18:20</div>
+            <div class="text-sm text-gray-700">张三 · 周报更新：已完成初稿，等客户确认需求</div>
+          </li>
+          <li class="ml-4">
+            <span class="absolute -left-[5px] w-2.5 h-2.5 bg-gray-300 rounded-full mt-1.5"></span>
+            <div class="text-xs text-gray-400">4-14 10:05</div>
+            <div class="text-sm text-gray-700">客户邮件：希望下周三前看到修改稿</div>
+          </li>
+          <li class="ml-4">
+            <span class="absolute -left-[5px] w-2.5 h-2.5 bg-gray-300 rounded-full mt-1.5"></span>
+            <div class="text-xs text-gray-400">4-18 09:00</div>
+            <div class="text-sm text-gray-500">系统：项目连续7天无活动提醒</div>
+          </li>
+          <li class="ml-4">
+            <span class="absolute -left-[5px] w-3 h-3 bg-gray-800 rounded-full mt-1.5 ring-2 ring-gray-200"></span>
+            <div class="text-xs text-gray-500 font-medium">4-21 14:30 · 当前Nudge</div>
+            <div class="text-sm text-gray-900">吴耀 → 张三：已超10天未更新，进展如何？</div>
+          </li>
+          <li class="ml-4">
+            <span class="absolute -left-[5px] w-2.5 h-2.5 bg-gray-200 rounded-full mt-1.5"></span>
+            <div class="text-xs text-gray-400">等待响应中…</div>
+            <div class="text-sm text-gray-400">尚未收到张三回复</div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- 操作 -->
+    <section class="flex items-center gap-2 pt-2 border-t border-gray-100">
+      <button class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50">📨 再次提醒</button>
+      <button class="flex-1 px-3 py-2 text-sm rounded bg-gray-800 text-white hover:bg-gray-900">⚡ 升级给上级</button>
+      <button class="px-3 py-2 text-sm border border-gray-300 rounded bg-white text-gray-600 hover:bg-gray-50">🚫 忽略</button>
+    </section>
+
+  </div>
+</aside>
+
+<script>
+  function openDrawer(id) {
+    document.getElementById('dId').textContent = id;
+    document.getElementById('drawerMask').classList.remove('hidden');
+    const d = document.getElementById('drawer');
+    d.classList.remove('translate-x-full');
+  }
+  function closeDrawer() {
+    document.getElementById('drawerMask').classList.add('hidden');
+    document.getElementById('drawer').classList.add('translate-x-full');
+  }
+</script>
+
+</body>
+</html>

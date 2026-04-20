@@ -3,6 +3,16 @@
 > 研发经理巡检时发现的频繁问题 → 登记到此，累计后沉淀为 skill/红线/模板改进。
 > 规则：每次 loop 巡检新增一条（若发现频繁问题），按日期倒序。同一问题出现 ≥2 次即算"频繁"。
 
+---
+**[2026-04-20 20:15] Token Pool 全天不可用 — kimi1/kimi2额度耗尽+无问星穹全天429+火山方舟EC2不可达**
+- 影响：5个CC全部阻塞约1h40min（20:05-21:45）
+- 根因：①kimi1耗尽(00:14恢复) ②kimi2耗尽(21:45恢复) ③zhipu_max_1/2/3: 1313公平使用封锁+401认证失败 ④无问星穹全天HTTP 429 ⑤火山方舟ark.cn-beijing.volces.com EC2不可达
+- 止血：禁用全部zhipu+火山方舟，等待kimi2 21:45恢复
+- 研发经理代劳：所有5个分支代码直接提交+push+注入等待指令
+- 复盘：需要备用的可从EC2访问的API key；无问星穹每日额度应关注补充
+
+---
+
 ## 记录格式
 
 ```
@@ -1283,3 +1293,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 **止血规则**：遇到这三个文件的编译错误 → 直接跳过（-Dmaven.test.skip=true），PR body注明「历史存量测试编译错误，非本次改动引入」，不修复。
 
 **TODO**：需要专门开一个Issue修复这三个测试文件（永久止血）。
+
+---
+**[2026-04-20] git clean/checkout 误操作导致代码丢失 — kimi3/#3651**
+- 现象：CC 执行 `git checkout .` + `git clean` 导致 src/ 下 #3651 全部新建文件丢失
+- 影响：1 CC / 1 Issue，单次事故，需重新实现（约 30-60min 损失）
+- 救援路径：M2 cache .class 文件仍存 + target/generated-sources MapStruct 文件保留字段信息 + 后端进程仍运行 → 方案2重实现
+- 频次：首次，观察中
+- TODO：考虑在 backend-coding skill 中补充"提交前先 git add + git commit，避免 git checkout . 清空未追踪文件"红线

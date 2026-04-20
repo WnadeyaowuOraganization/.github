@@ -52,9 +52,9 @@
         "claude-sonnet-4-6": "glm-5.1",
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
-      "_note": "智谱清言coding plan",
+      "_note": "智谱清言coding plan [1313公平使用封锁暂停]",
       "context_window": 204800,
-      "enabled": true
+      "enabled": false
     },
     {
       "name": "zhipu_max_2",
@@ -68,7 +68,7 @@
         "claude-sonnet-4-6": "glm-5.1",
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
-      "_note": "智谱清言coding plan",
+      "_note": "智谱清言coding plan [1313公平使用封锁暂停]",
       "context_window": 204800,
       "enabled": false
     },
@@ -84,7 +84,7 @@
         "claude-sonnet-4-6": "glm-5.1",
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
-      "_note": "智谱清言coding plan",
+      "_note": "智谱清言coding plan [401认证失败暂停]",
       "context_window": 204800,
       "enabled": false
     },
@@ -116,9 +116,9 @@
         "claude-sonnet-4-6": "kimi-k2.5",
         "claude-haiku-4-5-20251001": "kimi-k2.5"
       },
-      "_note": "火山coding plan",
+      "_note": "火山coding plan [ark.cn-beijing.volces.com EC2不可达禁用]",
       "context_window": 262144,
-      "enabled": true
+      "enabled": false
     }
   ],
   "fallback": {

@@ -359,5 +359,5 @@ Week 4 (5/10-5/16):
 | kimi3  | #3651 | bidding | 招投标-C 投标立项与进度管理 | 进行中 |
 | kimi6  | #3380 | plm | ~~BOM创建与版本管理API (EBOM/MBOM/超级BOM)~~ | ~~Done(PR#3985 admin-merged)~~ |
 | kimi19 | #3654 | bidding | 招投标-Dashboard 投标总览仪表盘 | 进行中 |
-| kimi1  | #3381 | plm | PLM BOM版本对比与回滚API | 进行中 |
+| kimi1  | #3381 | plm | ~~PLM BOM版本对比与回滚API~~ | ~~Done(PR#3987 admin-merged)~~ |
 | kimi4  | #3383 | plm | PLM BOM成本Roll-up API | 进行中 |

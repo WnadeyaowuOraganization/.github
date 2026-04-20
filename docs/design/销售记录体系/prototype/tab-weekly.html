@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>项目周报 · 销售记录中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:9999px; font-size:12px; }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display:none; }
+  details[open] .caret { transform: rotate(90deg); }
+  .caret { transition: transform 0.15s; display:inline-block; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- [需求说明卡 SPEC-CARD v4.1] -->
+<section class="mb-6 border-2 border-dashed border-gray-400 bg-white rounded-lg p-5 text-sm">
+  <div class="flex items-start justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <span class="inline-flex items-center justify-center w-6 h-6 rounded bg-gray-800 text-white text-xs font-bold">i</span>
+      <h2 class="text-base font-bold text-gray-900">需求说明卡 · 项目周报 Tab</h2>
+      <span class="chip bg-gray-100 text-gray-600">SPEC-CARD v4.1</span>
+    </div>
+    <a href="../详细设计.md" class="text-xs text-gray-500 hover:text-gray-900 underline">设计文档 §2.3 项目周报 ↗</a>
+  </div>
+  <dl class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-700">
+    <div class="flex gap-2"><dt class="font-semibold text-gray-500 min-w-[72px]">页面目的</dt><dd>自动汇总本周项目动态，管理层一页看全员周活动，无需商务额外写周报</dd></div>
+    <div class="flex gap-2"><dt class="font-semibold text-gray-500 min-w-[72px]">主要用户</dt><dd>吴耀（商务总监）、商务主管</dd></div>
+    <div class="flex gap-2 md:col-span-2"><dt class="font-semibold text-gray-500 min-w-[72px]">核心功能</dt><dd>周次切换 / 商务-项目两级聚合 / 异常高亮 / 一键 Nudge / 导出 PDF / 导出 Excel</dd></div>
+    <div class="flex gap-2 md:col-span-2"><dt class="font-semibold text-gray-500 min-w-[72px]">关键操作</dt><dd>周次切换 · 商务卡片展开 · 项目展开 · 催更新 · 批量 Nudge · 导出</dd></div>
+    <div class="flex gap-2 md:col-span-2"><dt class="font-semibold text-gray-500 min-w-[72px]">验收要点</dt><dd>默认定位到本周 · 数据由活动流自动聚合 · 异常按规则标记（&gt;7 天未跟进 / 本周零活动）· 导出文件可下载</dd></div>
+  </dl>
+</section>
+
+<!-- [顶部周次选择栏] -->
+<section class="bg-white rounded-lg shadow-sm p-4 mb-5 flex items-center justify-between flex-wrap gap-3">
+  <div class="flex items-center gap-3">
+    <button onclick="switchWeek(-1)" class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50">← 上一周</button>
+    <div class="flex items-center gap-2 px-4 py-1.5 bg-gray-100 rounded border border-gray-200">
+      <span class="text-sm font-semibold text-gray-900">2026-W17</span>
+      <span class="text-xs text-gray-500">4/20 – 4/26</span>
+      <span class="chip bg-gray-800 text-white text-[10px]">本周</span>
+    </div>
+    <button disabled class="px-3 py-1.5 border border-gray-200 rounded text-sm text-gray-300 cursor-not-allowed">下一周 →</button>
+    <span class="text-xs text-gray-400 ml-2">数据更新于 2026-04-26 18:00</span>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50">📄 导出 PDF</button>
+    <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50">📊 导出 Excel</button>
+    <button class="px-3 py-1.5 bg-gray-800 text-white rounded text-sm hover:bg-gray-900">✉️ 一键发送给商务主管</button>
+    <button id="batchNudgeBtn" disabled class="px-3 py-1.5 bg-gray-300 text-gray-500 rounded text-sm cursor-not-allowed">⚡ 批量 Nudge (0)</button>
+  </div>
+</section>
+
+<!-- [周报概要 KPI 卡片区] -->
+<section class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
+  <div class="bg-white rounded-lg p-4 border border-gray-200">
+    <div class="text-xs text-gray-500 mb-1">本周活动总数</div>
+    <div class="text-2xl font-bold text-gray-900">1,247</div>
+    <div class="text-xs text-gray-400 mt-1">较上周 <span class="text-gray-700">+12%</span></div>
+  </div>
+  <div class="bg-white rounded-lg p-4 border border-gray-200">
+    <div class="text-xs text-gray-500 mb-1">跟进项目数</div>
+    <div class="text-2xl font-bold text-gray-900">87</div>
+    <div class="text-xs text-gray-400 mt-1">覆盖 8 位商务</div>
+  </div>
+  <div class="bg-white rounded-lg p-4 border border-gray-200">
+    <div class="text-xs text-gray-500 mb-1">新增商机数</div>
+    <div class="text-2xl font-bold text-gray-900">12</div>
+    <div class="text-xs text-gray-400 mt-1">较上周 <span class="text-gray-700">+3</span></div>
+  </div>
+  <div class="bg-white rounded-lg p-4 border border-gray-200">
+    <div class="text-xs text-gray-500 mb-1">签约项目数</div>
+    <div class="text-2xl font-bold text-gray-900">3</div>
+    <div class="text-xs text-gray-400 mt-1">金额合计 ¥ 480 万</div>
+  </div>
+</section>
+
+<!-- [商务-项目两级聚合主列表] -->
+<section class="space-y-3">
+
+  <!-- ========== 商务 1: 张伟 ========== -->
+  <details open class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">张</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">张伟</span>
+            <span class="chip bg-gray-100 text-gray-600">华东大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 28</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 8</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 2</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">本周高产周，重点推进浦发银行POC，客户反馈积极</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <!-- 项目行 1.1 -->
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">浦发银行智能客服POC</a>
+          <span class="chip bg-gray-200 text-gray-700">POC中</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 5</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">客户反馈准确率达标，等待业务方验收</span>
+          <span class="text-xs text-gray-400 w-20 text-right">2小时前</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+        <div class="ml-6 my-2 pl-4 border-l-2 border-gray-200 space-y-2">
+          <div class="text-xs"><span class="text-gray-400">04-26 16:30</span> <span class="chip bg-gray-100 text-gray-600">📞 电话</span> 与王科长确认下周验收时间</div>
+          <div class="text-xs"><span class="text-gray-400">04-25 10:15</span> <span class="chip bg-gray-100 text-gray-600">🏢 拜访</span> 现场演示模型效果，客户满意</div>
+          <div class="text-xs"><span class="text-gray-400">04-24 14:00</span> <span class="chip bg-gray-100 text-gray-600">📧 邮件</span> 发送测试报告 v2</div>
+          <div class="text-xs"><span class="text-gray-400">04-22 09:45</span> <span class="chip bg-gray-100 text-gray-600">💬 微信</span> 协调技术对接人</div>
+          <div class="text-xs"><span class="text-gray-400">04-21 17:20</span> <span class="chip bg-gray-100 text-gray-600">📝 备注</span> 更新项目阶段为 POC 验证</div>
+        </div>
+      </details>
+      <!-- 项目行 1.2 -->
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">招商银行风控系统</a>
+          <span class="chip bg-gray-200 text-gray-700">方案设计</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 7</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">已提交 SOW 初稿，等待客户反馈</span>
+          <span class="text-xs text-gray-400 w-20 text-right">昨天</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+        <div class="ml-6 my-2 pl-4 border-l-2 border-gray-200 space-y-2">
+          <div class="text-xs"><span class="text-gray-400">04-25 11:00</span> <span class="chip bg-gray-100 text-gray-600">📧 邮件</span> 发送 SOW v1 初稿</div>
+          <div class="text-xs"><span class="text-gray-400">04-23 15:30</span> <span class="chip bg-gray-100 text-gray-600">🏢 拜访</span> 与信息科技部对齐技术栈</div>
+        </div>
+      </details>
+      <!-- 项目行 1.3 异常 -->
+      <details class="rounded bg-orange-50/60 border border-orange-200">
+        <summary class="py-2 px-2 flex items-center gap-3 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">宁波银行数据中台 <span class="chip bg-orange-100 text-orange-700 ml-1">⚠️ 10 天未跟进</span></a>
+          <span class="chip bg-gray-200 text-gray-700">需求沟通</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 0</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">上次沟通已 10 天，需尽快跟进</span>
+          <span class="text-xs text-gray-400 w-20 text-right">04-16</span>
+          <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="nudge-check" onchange="updateBatch()"/>选中</label>
+          <button class="text-xs px-2 py-1 bg-orange-600 text-white rounded hover:bg-orange-700">催更新</button>
+        </summary>
+        <div class="ml-6 my-2 pl-4 border-l-2 border-orange-200 space-y-2">
+          <div class="text-xs text-gray-500 italic">本周无活动记录</div>
+        </div>
+      </details>
+      <!-- 项目行 1.4 -->
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">交通银行票据OCR</a>
+          <span class="chip bg-gray-200 text-gray-700">合同谈判</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 4</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">法务已反馈合同修订意见</span>
+          <span class="text-xs text-gray-400 w-20 text-right">今天</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+        <div class="ml-6 my-2 pl-4 border-l-2 border-gray-200 space-y-2">
+          <div class="text-xs"><span class="text-gray-400">04-26 11:00</span> <span class="chip bg-gray-100 text-gray-600">📧 邮件</span> 法务返回合同修订意见</div>
+          <div class="text-xs"><span class="text-gray-400">04-24 16:00</span> <span class="chip bg-gray-100 text-gray-600">📞 电话</span> 与采购经理沟通付款条款</div>
+        </div>
+      </details>
+      <!-- 项目行 1.5 -->
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">上汽集团知识库</a>
+          <span class="chip bg-gray-200 text-gray-700">已签约</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 6</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">进入实施阶段，本周启动会已召开</span>
+          <span class="text-xs text-gray-400 w-20 text-right">3小时前</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+        <div class="ml-6 my-2 pl-4 border-l-2 border-gray-200 space-y-2">
+          <div class="text-xs"><span class="text-gray-400">04-26 15:00</span> <span class="chip bg-gray-100 text-gray-600">🏢 拜访</span> 项目启动会</div>
+          <div class="text-xs"><span class="text-gray-400">04-23 10:00</span> <span class="chip bg-gray-100 text-gray-600">📝 备注</span> 更新阶段为已签约</div>
+        </div>
+      </details>
+      <!-- 项目行 1.6 -->
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">华东电力语音质检</a>
+          <span class="chip bg-gray-200 text-gray-700">商机</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 3</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">新增商机，已完成初步需求调研</span>
+          <span class="text-xs text-gray-400 w-20 text-right">昨天</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+    </div>
+  </details>
+
+  <!-- ========== 商务 2: 李娜 ========== -->
+  <details class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">李</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">李娜</span>
+            <span class="chip bg-gray-100 text-gray-600">华北大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 22</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 6</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 1</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">工行项目签约，本周重点推进项目交付准备</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">工商银行智能外呼</a>
+          <span class="chip bg-gray-200 text-gray-700">已签约</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 8</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">本周签约，¥180 万</span>
+          <span class="text-xs text-gray-400 w-20 text-right">今天</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">中信银行对公授信</a>
+          <span class="chip bg-gray-200 text-gray-700">POC中</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 5</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">POC 环境部署完成</span>
+          <span class="text-xs text-gray-400 w-20 text-right">昨天</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">华夏银行文档智能审核</a>
+          <span class="chip bg-gray-200 text-gray-700">方案设计</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 4</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">方案 v2 已提交客户</span>
+          <span class="text-xs text-gray-400 w-20 text-right">2天前</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">北京银行合规检查</a>
+          <span class="chip bg-gray-200 text-gray-700">需求沟通</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 3</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">需求梳理会议已完成</span>
+          <span class="text-xs text-gray-400 w-20 text-right">3天前</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">光大银行坐席助手</a>
+          <span class="chip bg-gray-200 text-gray-700">商机</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 2</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">新增商机，已约下周拜访</span>
+          <span class="text-xs text-gray-400 w-20 text-right">昨天</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+    </div>
+  </details>
+
+  <!-- ========== 商务 3: 王磊 (本周零活动异常) ========== -->
+  <details class="bg-white rounded-lg border-2 border-orange-300">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">王</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">王磊</span>
+            <span class="chip bg-gray-100 text-gray-600">华南大区</span>
+            <span class="chip bg-orange-100 text-orange-700">⚠️ 本周零活动</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 5</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 0</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">本周无任何活动记录，建议主管关注</div>
+        </div>
+      </div>
+      <button class="text-xs px-3 py-1.5 bg-orange-600 text-white rounded hover:bg-orange-700">催整商务</button>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <details class="rounded bg-orange-50/60 border border-orange-200">
+        <summary class="py-2 px-2 flex items-center gap-3 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">平安银行智能核保 <span class="chip bg-orange-100 text-orange-700 ml-1">⚠️ 12 天未跟进</span></a>
+          <span class="chip bg-gray-200 text-gray-700">POC中</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 0</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">上次活动 04-14，客户已多次催促</span>
+          <span class="text-xs text-gray-400 w-20 text-right">04-14</span>
+          <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="nudge-check" onchange="updateBatch()"/>选中</label>
+          <button class="text-xs px-2 py-1 bg-orange-600 text-white rounded hover:bg-orange-700">催更新</button>
+        </summary>
+      </details>
+      <details class="rounded bg-orange-50/60 border border-orange-200">
+        <summary class="py-2 px-2 flex items-center gap-3 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">广发证券投顾助手 <span class="chip bg-orange-100 text-orange-700 ml-1">⚠️ 9 天未跟进</span></a>
+          <span class="chip bg-gray-200 text-gray-700">方案设计</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 0</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">本周零活动</span>
+          <span class="text-xs text-gray-400 w-20 text-right">04-17</span>
+          <label class="flex items-center gap-1 text-xs"><input type="checkbox" class="nudge-check" onchange="updateBatch()"/>选中</label>
+          <button class="text-xs px-2 py-1 bg-orange-600 text-white rounded hover:bg-orange-700">催更新</button>
+        </summary>
+      </details>
+      <details class="rounded">
+        <summary class="py-2 px-2 flex items-center gap-3 hover:bg-gray-50 rounded">
+          <span class="caret text-gray-300 text-xs">▶</span>
+          <a href="#" class="text-sm font-medium text-gray-900 hover:underline flex-1">深圳地铁客服机器人</a>
+          <span class="chip bg-gray-200 text-gray-700">需求沟通</span>
+          <span class="text-xs text-gray-500 w-14 text-right">活动 0</span>
+          <span class="text-xs text-gray-500 flex-1 truncate">客户侧内部评审中</span>
+          <span class="text-xs text-gray-400 w-20 text-right">04-20</span>
+          <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:bg-gray-100">催更新</button>
+        </summary>
+      </details>
+    </div>
+  </details>
+
+  <!-- ========== 商务 4: 陈静 ========== -->
+  <details class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">陈</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">陈静</span>
+            <span class="chip bg-gray-100 text-gray-600">华东大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 31</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 7</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 3</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">本周活动最多，新增 3 条商机线索</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <div class="py-2 px-2 text-xs text-gray-400 italic">展开查看 7 个项目…</div>
+    </div>
+  </details>
+
+  <!-- ========== 商务 5: 刘强 ========== -->
+  <details class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">刘</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">刘强</span>
+            <span class="chip bg-gray-100 text-gray-600">华北大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 19</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 6</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 2</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">汽车行业线索活跃，重点跟进一汽大众项目</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <div class="py-2 px-2 text-xs text-gray-400 italic">展开查看 6 个项目…</div>
+    </div>
+  </details>
+
+  <!-- ========== 商务 6: 赵敏 ========== -->
+  <details class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">赵</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">赵敏</span>
+            <span class="chip bg-gray-100 text-gray-600">西部大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 15</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 5</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 1</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">成都银行项目进入合同谈判阶段</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <div class="py-2 px-2 text-xs text-gray-400 italic">展开查看 5 个项目…</div>
+    </div>
+  </details>
+
+  <!-- ========== 商务 7: 孙浩 ========== -->
+  <details class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">孙</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">孙浩</span>
+            <span class="chip bg-gray-100 text-gray-600">华南大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 24</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 6</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 1</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">保险行业持续深耕，太平洋保险项目进展顺利</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <div class="py-2 px-2 text-xs text-gray-400 italic">展开查看 6 个项目…</div>
+    </div>
+  </details>
+
+  <!-- ========== 商务 8: 周婷 ========== -->
+  <details class="bg-white rounded-lg border border-gray-200">
+    <summary class="p-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex items-center gap-3 flex-1">
+        <span class="caret text-gray-400">▶</span>
+        <div class="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600 font-semibold">周</div>
+        <div class="flex-1">
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="font-semibold text-gray-900">周婷</span>
+            <span class="chip bg-gray-100 text-gray-600">华东大区</span>
+            <span class="chip bg-gray-100 text-gray-700">活动 18</span>
+            <span class="chip bg-gray-100 text-gray-700">项目 4</span>
+            <span class="chip bg-gray-100 text-gray-700">新商机 2</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">新入职第 3 周，已独立跟进 4 个项目</div>
+        </div>
+      </div>
+    </summary>
+    <div class="border-t border-gray-100 px-4 py-2 space-y-1">
+      <div class="py-2 px-2 text-xs text-gray-400 italic">展开查看 4 个项目…</div>
+    </div>
+  </details>
+
+</section>
+
+<!-- [底部说明] -->
+<footer class="mt-6 text-xs text-gray-400 text-center">
+  周报数据由系统每日凌晨自动聚合 · 异常规则：本周零活动 · 单项目 &gt; 7 天未跟进 · 更多规则见设计文档 §2.3.4
+</footer>
+
+<script>
+  // [交互：周次切换占位]
+  function switchWeek(delta) {
+    alert('周次切换：' + (delta < 0 ? '上一周' : '下一周') + '（原型占位）');
+  }
+
+  // [交互：批量 Nudge 勾选计数]
+  function updateBatch() {
+    const checked = document.querySelectorAll('.nudge-check:checked').length;
+    const btn = document.getElementById('batchNudgeBtn');
+    btn.textContent = '⚡ 批量 Nudge (' + checked + ')';
+    if (checked > 0) {
+      btn.disabled = false;
+      btn.className = 'px-3 py-1.5 bg-orange-600 text-white rounded text-sm hover:bg-orange-700';
+    } else {
+      btn.disabled = true;
+      btn.className = 'px-3 py-1.5 bg-gray-300 text-gray-500 rounded text-sm cursor-not-allowed';
+    }
+  }
+</script>
+
+</body>
+</html>

@@ -299,7 +299,46 @@
   .list-view-table tr:hover td { background: #fafafa; }
 </style>
 </head>
-<body>
+<body><!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<!-- 此块由 wande-prototype skill 强制要求，所有原型HTML必须包含 -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商务工作台</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">商务人员日常CRM统一入口，替代明道云驾驶舱+过会管理+销售数据三合一，核心原则：透明度大于惩罚、正向激励替代罚单、自动记录替代手写日报。</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">商务专员（个人视角），商务经理（团队视角）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">超期商机异常Banner（14天无活动触发） / 5个KPI状态卡片（异常/待更新/本月新商机/有效总数/今日汇总） / 商机看板（6阶段Kanban+列表双视图） / 待处理收件箱（矿场分配/Nudge/审批/客户回复4来源） / 我的协同追踪（设计单/报价审批/合同审批/投标审批） / 今日活动自动汇总（替代手写日报） / 智能过会议程（仅异常+需决策项） / 我的业绩（月度/年度进度条+预计提成） / 待办清单 / 最近跟进记录 / 右下角快捷操作FAB（6个入口）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">点击异常Banner跳转超期商机筛选 / KPI卡片点击下钻对应列表 / 看板/列表视图切换 / [接受]矿场分配自动创建商机 / 协同催办三种方式（Web/企微/电话） / [确认今日汇总]一键确认日报 / FAB展开新建商机/下设计单/提交报价/申请投标/新建合同/写跟进</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">12个区域全部可见 / 商机看板6阶段分列+异常商机红框三角警告 / 收件箱4来源[接受]后商机出现在看板 / FAB选商机后自动继承客户/负责人/部门/等级 / 智能过会仅显示异常/需决策项而非全部商机</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">crm-商务工作台 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
 
 <!-- [顶部导航栏：万德平台全局导航] -->
 <header class="topnav">

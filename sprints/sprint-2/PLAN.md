@@ -199,7 +199,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #3394 | plm | PLM[17/20] 零件主数据管理页面 | 进行中 |
 | kimi4  | #3383 | plm | PLM[6/20] BOM成本Roll-up API + 企微推送 | 进行中 |
 | kimi6  | #3384 | plm | PLM[7/20] 零件服务与供应商集成API | 进行中 |
-| kimi19 | #3388 | plm | PLM[11/20] 超级BOM规则引擎 | 进行中 |
+| kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 待merge)~~ |
 | kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
 | kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
 | kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
@@ -385,5 +385,5 @@ Week 4 (5/10-5/16):
 | kimi4  | #3383 | plm | PLM BOM成本Roll-up API | 进行中 |
 | kimi6  | #3384 | plm | PLM BOM Where-Used反查API | 进行中 |
 | kimi1  | #3385 | plm | PLM ECO变更申请与影响评估API | 进行中 |
-| kimi19 | #3388 | plm | PLM[11/20] 超级BOM规则引擎 | 进行中 |
+| kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 待merge)~~ |
 | kimi3  | #3394 | plm | PLM[17/20] 零件主数据管理页面 | 进行中 |

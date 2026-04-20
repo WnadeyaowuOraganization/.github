@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>转化漏斗看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Roboto,sans-serif;}
+    .panel{background:#fff;border:1px solid #e8e8e8;border-radius:6px;}
+    .panel-title{font-size:14px;font-weight:600;color:#333;padding:12px 16px;border-bottom:1px solid #f0f0f0;display:flex;align-items:center;justify-content:space-between;}
+    .area-tag{display:inline-block;font-size:11px;color:#999;background:#f5f5f5;border:1px dashed #d9d9d9;padding:1px 6px;border-radius:3px;margin-left:8px;font-weight:400;}
+    .filter-bar{padding:12px 16px;display:flex;flex-wrap:wrap;gap:16px;align-items:center;}
+    .filter-bar label{font-size:12px;color:#999;margin-right:6px;}
+    .filter-bar select,.filter-bar input{height:30px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;background:#fff;}
+    .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s;}
+    .btn:hover{border-color:#1890ff;color:#1890ff;}
+    .btn-primary{background:#1890ff;color:#fff;border-color:#1890ff;}
+    .btn-primary:hover{background:#40a9ff;}
+    .btn-sm{padding:3px 10px;font-size:12px;}
+
+    /* 漏斗 */
+    .funnel-wrap{display:flex;gap:16px;padding:20px 16px;}
+    .funnel-chart{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;}
+    .funnel-stage{width:100%;position:relative;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:14px;letter-spacing:1px;cursor:pointer;transition:.2s;}
+    .funnel-stage:hover{filter:brightness(1.08);}
+    .funnel-stage.selected{outline:2px solid #faad14;outline-offset:2px;}
+    .funnel-stage-inner{height:56px;display:flex;align-items:center;justify-content:center;width:100%;}
+    .funnel-meta{width:240px;display:flex;flex-direction:column;gap:2px;padding:20px 0;}
+    .meta-row{height:58px;display:flex;flex-direction:column;justify-content:center;padding:4px 8px;font-size:12px;color:#333;border-left:2px solid #f0f0f0;}
+    .meta-row .num{font-size:15px;font-weight:700;color:#333;}
+    .meta-row .conv{font-size:12px;color:#666;}
+    .meta-row .conv.warn{color:#f5222d;font-weight:600;}
+
+    /* 阶段停留时长条形图 */
+    .bar-row{display:grid;grid-template-columns:140px 1fr 100px;align-items:center;gap:12px;padding:8px 16px;font-size:13px;}
+    .bar-label{color:#666;}
+    .bar-track{background:#f5f5f5;height:20px;border-radius:3px;overflow:hidden;position:relative;}
+    .bar-fill{height:100%;background:#1890ff;border-radius:3px;transition:width .3s;}
+    .bar-fill.warn{background:#f5222d;}
+    .bar-value{font-size:13px;color:#333;font-weight:600;text-align:right;}
+    .bar-value .benchmark{font-size:11px;color:#999;font-weight:400;}
+
+    /* 下钻表 */
+    table{width:100%;border-collapse:collapse;background:#fff;font-size:13px;}
+    thead{background:#fafafa;}
+    th{padding:10px 12px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap;}
+    td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#333;}
+    tr:hover td{background:#fafafa;}
+    .tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap;}
+    .tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f;}
+    .tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff;}
+    .tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;}
+    .tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e;}
+    .tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591;}
+
+    .link{color:#1890ff;cursor:pointer;}
+    .link:hover{text-decoration:underline;}
+
+    /* 总体转化率 footer */
+    .overall-conv{padding:12px 16px;background:#fafafa;border-top:1px solid #f0f0f0;display:flex;align-items:center;justify-content:center;gap:10px;font-size:14px;color:#333;}
+    .overall-conv .big-num{font-size:22px;font-weight:700;color:#1890ff;}
+
+    .stage-label{color:#fff;font-weight:600;text-shadow:0 1px 2px rgba(0,0,0,.12);}
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">转化漏斗看板</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">从线索到签约5阶段漏斗，让吴耀和商务主管一眼看清楚卡在哪个阶段、转化率异常在哪</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（全局）、商务主管（团队）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5阶段漏斗图 / 阶段转化率 / 阶段停留时长 / 按维度切片 / 异常阶段标红</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切换时间范围 / 选择维度（来源/区域/业务员）/ 点击阶段下钻项目列表 / 导出报表</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">漏斗5阶段数据与项目实际状态一致 / 转化率计算正确 / 点击阶段可下钻</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">全球项目矿场 详细设计.md §2.7</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- 1. 顶部筛选栏 -->
+<div class="panel" style="margin:16px;">
+  <div class="panel-title">
+    <span>筛选条件 <span class="area-tag">区域：筛选</span></span>
+    <div class="flex gap-2">
+      <button class="btn btn-sm">重置</button>
+      <button class="btn btn-primary btn-sm">📥 导出报表</button>
+    </div>
+  </div>
+  <div class="filter-bar">
+    <div>
+      <label>时间范围</label>
+      <select>
+        <option>本月</option>
+        <option>上季</option>
+        <option selected>本季</option>
+        <option>本年</option>
+        <option>自定义日期…</option>
+      </select>
+    </div>
+    <div>
+      <label>维度切片</label>
+      <select>
+        <option selected>全公司</option>
+        <option>按来源渠道</option>
+        <option>按区域</option>
+        <option>按业务员</option>
+        <option>按品类</option>
+      </select>
+    </div>
+    <div style="flex:1;min-width:0;"></div>
+    <div>
+      <span style="color:#999;font-size:12px">仅统计已入矿场且非垃圾桶的项目</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 漏斗图主区 -->
+<div class="panel" style="margin:16px;">
+  <div class="panel-title">
+    <span>5阶段转化漏斗 <span class="area-tag">区域：5阶段漏斗</span></span>
+    <span style="font-size:12px;color:#999;font-weight:400;">点击某一阶段 → 下方显示该阶段项目列表</span>
+  </div>
+  <div class="funnel-wrap">
+    <!-- 漏斗梯形区 -->
+    <div class="funnel-chart" id="funnelChart">
+      <!-- 阶段1 -->
+      <div class="funnel-stage" data-stage="early" onclick="selectStage(this,'早期')" style="width:100%;">
+        <div class="funnel-stage-inner" style="background:linear-gradient(90deg,#e6f7ff,#bae7ff);clip-path:polygon(0 0,100% 0,96% 100%,4% 100%);">
+          <span style="color:#0050b3;">早期（线索发现）</span>
+        </div>
+      </div>
+      <!-- 阶段2 -->
+      <div class="funnel-stage" data-stage="invest" onclick="selectStage(this,'投资')" style="width:82%;">
+        <div class="funnel-stage-inner" style="background:linear-gradient(90deg,#bae7ff,#91d5ff);clip-path:polygon(0 0,100% 0,94% 100%,6% 100%);">
+          <span style="color:#0050b3;">投资（已立项跟进）</span>
+        </div>
+      </div>
+      <!-- 阶段3 -->
+      <div class="funnel-stage selected" data-stage="negotiate" onclick="selectStage(this,'谈判')" style="width:62%;">
+        <div class="funnel-stage-inner" style="background:linear-gradient(90deg,#69c0ff,#40a9ff);clip-path:polygon(0 0,100% 0,92% 100%,8% 100%);">
+          <span class="stage-label">谈判（方案/报价中）</span>
+        </div>
+      </div>
+      <!-- 阶段4 -->
+      <div class="funnel-stage" data-stage="confirm" onclick="selectStage(this,'确认')" style="width:42%;">
+        <div class="funnel-stage-inner" style="background:linear-gradient(90deg,#40a9ff,#1890ff);clip-path:polygon(0 0,100% 0,88% 100%,12% 100%);">
+          <span class="stage-label">确认（客户决策期）</span>
+        </div>
+      </div>
+      <!-- 阶段5 -->
+      <div class="funnel-stage" data-stage="sign" onclick="selectStage(this,'签约')" style="width:24%;">
+        <div class="funnel-stage-inner" style="background:linear-gradient(90deg,#1890ff,#096dd9);clip-path:polygon(0 0,100% 0,80% 100%,20% 100%);">
+          <span class="stage-label">签约（中标成交）</span>
+        </div>
+      </div>
+    </div>
+    <!-- 右侧数据柱 -->
+    <div class="funnel-meta">
+      <div class="meta-row">
+        <div class="num">1,247 个</div>
+        <div>金额 ¥8.2亿</div>
+        <div class="conv">转化率 —</div>
+      </div>
+      <div class="meta-row">
+        <div class="num">652 个</div>
+        <div>金额 ¥5.8亿</div>
+        <div class="conv">转化率 52.3%</div>
+      </div>
+      <div class="meta-row">
+        <div class="num">218 个</div>
+        <div>金额 ¥2.4亿</div>
+        <div class="conv warn">转化率 33.4% ⚠️</div>
+      </div>
+      <div class="meta-row">
+        <div class="num">89 个</div>
+        <div>金额 ¥1.1亿</div>
+        <div class="conv">转化率 40.8%</div>
+      </div>
+      <div class="meta-row">
+        <div class="num">32 个</div>
+        <div>金额 ¥4,560万</div>
+        <div class="conv">转化率 36.0%</div>
+      </div>
+    </div>
+  </div>
+  <div class="overall-conv">
+    <span>总体转化率（早期 → 签约）：</span>
+    <span class="big-num">2.57%</span>
+    <span style="color:#999;font-size:12px;">（32 / 1,247 ，行业基准 3.5%，偏低）</span>
+  </div>
+</div>
+
+<!-- 3. 阶段停留时长分析 -->
+<div class="panel" style="margin:16px;">
+  <div class="panel-title">
+    <span>阶段停留时长分析 <span class="area-tag">区域：停留时长分析</span></span>
+    <span style="font-size:12px;color:#999;font-weight:400;">颜色越长 = 停留越久；红色表示超过行业基准</span>
+  </div>
+  <div style="padding:12px 0;">
+    <div class="bar-row">
+      <div class="bar-label">早期 → 投资</div>
+      <div class="bar-track"><div class="bar-fill" style="width:30%;"></div></div>
+      <div class="bar-value">18 天 <div class="benchmark">基准 20 天</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">投资 → 谈判</div>
+      <div class="bar-track"><div class="bar-fill" style="width:60%;"></div></div>
+      <div class="bar-value">45 天 <div class="benchmark">基准 35 天</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">谈判 → 确认 ⚠️</div>
+      <div class="bar-track"><div class="bar-fill warn" style="width:85%;"></div></div>
+      <div class="bar-value" style="color:#f5222d;">62 天 <div class="benchmark">基准 40 天</div></div>
+    </div>
+    <div class="bar-row">
+      <div class="bar-label">确认 → 签约</div>
+      <div class="bar-track"><div class="bar-fill" style="width:40%;"></div></div>
+      <div class="bar-value">28 天 <div class="benchmark">基准 30 天</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 阶段下钻表 -->
+<div class="panel" style="margin:16px;">
+  <div class="panel-title">
+    <span id="drill-title">选中阶段：<span style="color:#1890ff;">谈判（方案/报价中）</span> — 项目列表 <span class="area-tag">区域：选中阶段项目列表</span></span>
+    <div class="flex gap-2">
+      <button class="btn btn-sm">仅看我负责</button>
+      <button class="btn btn-sm">📥 导出本阶段</button>
+    </div>
+  </div>
+  <div style="overflow-x:auto;">
+  <table>
+    <thead>
+      <tr>
+        <th>项目名</th>
+        <th>客户</th>
+        <th>金额</th>
+        <th>停留天数</th>
+        <th>负责人</th>
+        <th>可赢性</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="link">马来西亚沙巴文体中心幕墙</span></td>
+        <td>MY-Sabah Construction</td>
+        <td>¥3,280万</td>
+        <td style="color:#f5222d;font-weight:600;">78 天 ⚠️</td>
+        <td>李明</td>
+        <td><span class="tag tag-green">高 · 85分</span></td>
+        <td><span class="link">查看详情</span></td>
+      </tr>
+      <tr>
+        <td><span class="link">印尼雅加达商务酒店铝板</span></td>
+        <td>PT Jakarta Hotel Group</td>
+        <td>¥1,860万</td>
+        <td style="color:#f5222d;font-weight:600;">65 天 ⚠️</td>
+        <td>张伟</td>
+        <td><span class="tag tag-gold">中 · 68分</span></td>
+        <td><span class="link">查看详情</span></td>
+      </tr>
+      <tr>
+        <td><span class="link">迪拜湾住宅综合体石材</span></td>
+        <td>Dubai Bay Development</td>
+        <td>¥5,420万</td>
+        <td>42 天</td>
+        <td>王芳</td>
+        <td><span class="tag tag-green">高 · 79分</span></td>
+        <td><span class="link">查看详情</span></td>
+      </tr>
+      <tr>
+        <td><span class="link">越南河内科技园区幕墙二期</span></td>
+        <td>Hanoi Tech Park Co.</td>
+        <td>¥2,150万</td>
+        <td>58 天 ⚠️</td>
+        <td>李明</td>
+        <td><span class="tag tag-gold">中 · 62分</span></td>
+        <td><span class="link">查看详情</span></td>
+      </tr>
+      <tr>
+        <td><span class="link">沙特利雅得地铁站装饰铝板</span></td>
+        <td>Saudi Metro Authority</td>
+        <td>¥7,800万</td>
+        <td>35 天</td>
+        <td>陈浩</td>
+        <td><span class="tag tag-green">高 · 88分</span></td>
+        <td><span class="link">查看详情</span></td>
+      </tr>
+      <tr>
+        <td><span class="link">泰国曼谷医院外立面幕墙</span></td>
+        <td>BKK Medical Group</td>
+        <td>¥1,240万</td>
+        <td>48 天</td>
+        <td>赵磊</td>
+        <td><span class="tag tag-red">低 · 45分</span></td>
+        <td><span class="link">查看详情</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+  <div style="padding:10px 16px;font-size:12px;color:#999;border-top:1px solid #f0f0f0;display:flex;justify-content:space-between;">
+    <span>共 218 个项目，显示前 6 条</span>
+    <span><a class="link">查看全部 218 条 →</a></span>
+  </div>
+</div>
+
+<!-- 5. 底部数据来源说明 -->
+<div class="text-xs text-gray-500 mt-6" style="margin:16px;">
+  数据来源：mine_project（矿场主表）+ mine_status_log（状态流转日志）｜ 每2小时自动刷新
+</div>
+
+<script>
+  function selectStage(el, name){
+    document.querySelectorAll('.funnel-stage').forEach(s=>s.classList.remove('selected'));
+    el.classList.add('selected');
+    document.getElementById('drill-title').innerHTML =
+      '选中阶段：<span style="color:#1890ff;">'+name+'</span> — 项目列表 <span class="area-tag">区域：选中阶段项目列表</span>';
+  }
+</script>
+</body>
+</html>

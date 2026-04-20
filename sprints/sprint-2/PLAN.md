@@ -163,8 +163,7 @@ Week 4 (5/10-5/16):
 
 | 建议kimi | Issue | 优先 | 模块 | 内容 | 备注 |
 |---------|-------|------|------|------|------|
-| kimi1  | #3378 | P1 | plm/backend | PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机 | 前置#3377✅Done(PR#3977)，GitHub OPEN确认 |
-| kimi6  | #2204 | P2 | brand/backend | 品牌中心数据库建表 — brand_contents/publish_logs/metrics/accounts | 无依赖，GitHub OPEN确认 |
+（已清空，kimi1/#3378 + kimi6/#2204 已派出）
 
 > ⚠️ #3651（招投标-C）blocked-by #3161（OPEN），#3654（仪表盘）连带阻塞，暂不派。
 > ⚠️ #2204完成后可接#2203（内容CRUD API），品牌中心可连续跟进。
@@ -356,3 +355,5 @@ Week 4 (5/10-5/16):
 | kimi4  | #3652 | fullstack | 招投标-D 投标文件编制工作台 | 进行中 |
 | kimi1  | #3377 | backend | ~~PLM子系统数据库初始化 — 7张核心表建表+索引~~ | ~~Done(PR#3977 admin-merged)~~ |
 | kimi3  | #3653 | fullstack | 招投标-E 报价决策与保证金台账 | 进行中 |
+| kimi1  | #3378 | backend | PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机 | 进行中 |
+| kimi6  | #2204 | backend | 品牌中心数据库建表 | 进行中 |

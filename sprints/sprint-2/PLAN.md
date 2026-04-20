@@ -163,11 +163,11 @@ Week 4 (5/10-5/16):
 
 | 建议kimi | Issue | 优先 | 模块 | 内容 | 备注 |
 |---------|-------|------|------|------|------|
-| kimi4  | #3180 | P1 | project360/backend | ~~文档对内/对外分类~~ | ~~已完成(PR#3967)，不需重派~~ |
+| kimi3  | #2195 | P1 | brand/backend | 品牌中心多平台数据采集 — 抖音/B站/小红书/YouTube/微信/LinkedIn | 无依赖，GitHub OPEN确认 |
+| kimi4  | #3652 | P1 | bidding/fullstack | 招投标-D 投标文件编制工作台 | 前置#3648✅Done+#3649✅Done，有原型，GitHub OPEN确认 |
 
-> 研发经理已派发 kimi1/#2086；#3180 发现已 Done，已通知排程经理补充 kimi4 替换 Issue。
-
-> ⚠️ #3651（招投标-C 立项进度）blocked-by 审批引擎#3161（仍OPEN），暂不派。
+> ⚠️ #3651（招投标-C）blocked-by 审批引擎#3161（OPEN），暂不派；#3654（仪表盘）depends-on #3651，连带阻塞。
+> ⚠️ 本批建议已逐一通过 GitHub API 验证 state=OPEN 且无已merged PR，避免重复推已完成 issue。
 > ⚠️ 研发经理须等排程经理建议后再指派，不得自行从看板读取issue派发。
 
 ## 当前运行

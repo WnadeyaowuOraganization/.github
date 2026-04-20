@@ -213,6 +213,8 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 
 > **MUST NOT**: 禁止直接用 `mvn spring-boot:run`（`-Dspring-boot.run.profiles=test` 会连到公共库 `wande-ai` 而非隔离库 `wande-ai-kimiN`，导致数据污染且 Controller 404）。
 
+> **⛔ MUST NOT — 禁止 `-Dmaven.test.skip=true`**：该 flag 会同时跳过测试**编译**和运行，将编译错误隐藏到后续环节。**任何编译错误（含非本 Issue 模块的历史错误）必须立即修复，不允许用任何 skip 参数绕过。** 允许用 `-DskipTests`（只跳过运行，仍编译测试类），但凡编译失败一律修代码。
+
 ```bash
 # 1. 编译 wande-ai 模块（新增 Controller 后必须先 install，否则启动时用旧 jar）
 #    MUST NOT: 去掉 -q，让编译错误可见（-q 会静默吞掉 ERROR 日志）

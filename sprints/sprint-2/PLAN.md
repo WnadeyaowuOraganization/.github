@@ -194,7 +194,7 @@ Week 4 (5/10-5/16):
 | kimi6  | #3189 | finance | ~~甲方表单填写辅助(项目数据关联填充+回款资料模板生成+导出)~~ | ~~Done(PR#3936 admin-merged)~~ |
 | kimi19 | #3188 | finance | ~~企业信息库(万德常用信息维护+一键填充到回款表单)~~ | ~~Done(PR#3934 admin-merged)~~ |
 | kimi3  | #3183 | project360 | ~~项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作~~ | ~~Done(PR#3940 admin-merged)~~ |
-| kimi1  | #3385 | plm | PLM[8/20] ECO变更申请与影响评估API | 进行中 |
+| kimi1  | #3385 | plm | ~~PLM[8/20] ECO变更申请与影响评估API~~ | ~~Done(PR#3993 admin-merged)~~ |
 | kimi3  | #3651 | bidding | ~~招投标-C 投标立项与进度管理~~ | ~~Done(PR#3988 admin-merged)~~ |
 | kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 admin-merged)~~ |
 | kimi4  | #3383 | plm | ~~PLM[6/20] BOM成本Roll-up API + 企微推送~~ | ~~Done(PR#3991 admin-merged)~~ |
@@ -384,6 +384,6 @@ Week 4 (5/10-5/16):
 | kimi1  | #3381 | plm | ~~PLM BOM版本对比与回滚API~~ | ~~Done(PR#3987 admin-merged)~~ |
 | kimi4  | #3383 | plm | ~~PLM BOM成本Roll-up API~~ | ~~Done(PR#3991 admin-merged)~~ |
 | kimi6  | #3384 | plm | ~~PLM BOM Where-Used反查API~~ | ~~Done(PR#3992 admin-merged)~~ |
-| kimi1  | #3385 | plm | PLM ECO变更申请与影响评估API | 进行中 |
+| kimi1  | #3385 | plm | ~~PLM ECO变更申请与影响评估API~~ | ~~Done(PR#3993 admin-merged)~~ |
 | kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 admin-merged)~~ |
 | kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 admin-merged)~~ |

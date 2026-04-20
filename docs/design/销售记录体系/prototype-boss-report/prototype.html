@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>万德AI平台 — 老板周报 低保真原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .wf-card { background: #fff; border: 1px solid #d1d5db; border-radius: 6px; }
+  .wf-dashed { border: 1px dashed #9ca3af; }
+  .ring-gauge {
+    background: conic-gradient(#4b5563 0% 78%, #e5e7eb 78% 100%);
+    border-radius: 50%;
+  }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- ===== SPEC-CARD (v4.1 需求说明卡) ===== -->
+<section id="spec-card" class="max-w-[1400px] mx-auto mt-4 px-6">
+  <div class="border border-gray-400 bg-white rounded-md p-4 text-xs text-gray-700">
+    <div class="flex items-center justify-between mb-2">
+      <div class="font-semibold text-sm text-gray-900">📋 需求说明卡 SPEC-CARD（v4.1）</div>
+      <a href="../详细设计.md" class="text-blue-500 hover:underline">§3 老板周报 →</a>
+    </div>
+    <table class="w-full border-collapse">
+      <tbody class="align-top">
+        <tr class="border-t border-gray-200">
+          <td class="py-1 pr-4 text-gray-500 w-28">页面目的</td>
+          <td class="py-1">每周五自动生成的老板周报 + 历史周报查看，吴耀5分钟掌握全员动态 + 管道健康</td>
+        </tr>
+        <tr class="border-t border-gray-200">
+          <td class="py-1 pr-4 text-gray-500">主要用户</td>
+          <td class="py-1">吴耀（销售老板）</td>
+        </tr>
+        <tr class="border-t border-gray-200">
+          <td class="py-1 pr-4 text-gray-500">核心功能</td>
+          <td class="py-1">5个Section（概要 / 预警 / 商务摘要 / 管道健康 / AI建议） · 周次切换 · 异常预警 · AI建议 · 一键处理</td>
+        </tr>
+        <tr class="border-t border-gray-200">
+          <td class="py-1 pr-4 text-gray-500">关键操作</td>
+          <td class="py-1">周次切换 · 立即处理异常 · 重发企微 · 导出PDF · 打印</td>
+        </tr>
+        <tr class="border-t border-gray-200">
+          <td class="py-1 pr-4 text-gray-500">验收要点</td>
+          <td class="py-1">每周五16:00自动生成 · 企微推送成功率100% · 历史可追溯</td>
+        </tr>
+        <tr class="border-t border-gray-200">
+          <td class="py-1 pr-4 text-gray-500">设计文档</td>
+          <td class="py-1"><a href="../详细设计.md" class="text-blue-500 hover:underline">../详细设计.md §3 老板周报</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<div class="flex min-h-screen max-w-[1400px] mx-auto mt-4">
+
+  <!-- ===== 侧边栏 ===== -->
+  <aside class="w-56 bg-white border border-gray-300 rounded-md mr-4 flex-shrink-0 text-sm">
+    <div class="p-4 border-b border-gray-200">
+      <div class="flex items-center gap-2">
+        <div class="w-7 h-7 rounded bg-gray-800 text-white flex items-center justify-center text-xs font-bold">万</div>
+        <div class="font-semibold text-gray-900">万德AI平台</div>
+      </div>
+    </div>
+    <nav class="p-2 space-y-1">
+      <div class="px-3 py-2 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">🏠 首页</div>
+      <div class="px-3 py-2 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">👥 客户管理</div>
+      <div class="px-3 py-2 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">💼 商机管理</div>
+      <div class="px-3 py-2 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">📋 项目管理</div>
+      <div class="px-3 py-2 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">📞 活动记录</div>
+
+      <!-- 业务运营中心 展开 -->
+      <div class="mt-2">
+        <div class="px-3 py-2 font-semibold text-gray-800 bg-gray-100 rounded flex items-center justify-between cursor-pointer">
+          <span>📊 业务运营中心</span>
+          <span class="text-xs">▾</span>
+        </div>
+        <div class="ml-3 mt-1 space-y-1 border-l border-gray-200 pl-2">
+          <div class="px-3 py-1.5 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">业务概览</div>
+          <div class="px-3 py-1.5 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">管道分析</div>
+          <div class="px-3 py-1.5 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">销售漏斗</div>
+          <!-- 高亮：老板周报 -->
+          <div class="px-3 py-1.5 bg-blue-500 text-white rounded cursor-pointer font-medium">老板周报</div>
+          <div class="px-3 py-1.5 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">Nudge中心</div>
+          <div class="px-3 py-1.5 text-gray-600 hover:bg-gray-50 rounded cursor-pointer">异常监控</div>
+        </div>
+      </div>
+
+      <div class="px-3 py-2 text-gray-600 hover:bg-gray-50 rounded cursor-pointer mt-2">⚙️ 系统设置</div>
+    </nav>
+  </aside>
+
+  <!-- ===== 主体内容 ===== -->
+  <main class="flex-1 pb-10">
+
+    <!-- 面包屑 -->
+    <div class="text-xs text-gray-500 mb-3">
+      <span class="hover:text-gray-800 cursor-pointer">首页</span>
+      <span class="mx-1">›</span>
+      <span class="hover:text-gray-800 cursor-pointer">业务运营中心</span>
+      <span class="mx-1">›</span>
+      <span class="text-gray-800 font-medium">老板周报</span>
+    </div>
+
+    <!-- 页面标题 -->
+    <div class="flex items-end justify-between mb-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">老板周报</h1>
+        <p class="text-sm text-gray-500 mt-1">每周五16:00自动生成 · 企微推送至吴耀 · 支持历史查看</p>
+      </div>
+      <div class="text-xs text-gray-500">读者：吴耀（销售老板）</div>
+    </div>
+
+    <!-- ===== 顶部周次选择栏 ===== -->
+    <div class="wf-card px-5 py-4 mb-5 flex items-center justify-between flex-wrap gap-3">
+      <div class="flex items-center gap-3">
+        <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50">← 上一周</button>
+        <div class="px-4 py-1.5 border border-gray-400 rounded bg-white text-sm font-semibold text-gray-900 flex items-center gap-2 cursor-pointer hover:bg-gray-50">
+          2026-W17 (4/20 - 4/26 本周)
+          <span class="text-xs text-gray-500">▾</span>
+        </div>
+        <button class="px-3 py-1.5 border border-gray-200 rounded text-sm text-gray-400 cursor-not-allowed">下一周 →</button>
+
+        <!-- 推送状态 -->
+        <div class="ml-4 flex items-center gap-2 text-xs">
+          <span class="w-2 h-2 rounded-full bg-green-500 inline-block"></span>
+          <span class="text-gray-600">📨 已于 <span class="font-medium text-gray-800">4-26 16:00</span> 推送给吴耀</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">重新发送企微</button>
+        <button class="px-3 py-1.5 border border-gray-300 text-sm text-gray-700 rounded hover:bg-gray-50">导出PDF</button>
+        <button class="px-3 py-1.5 border border-gray-300 text-sm text-gray-700 rounded hover:bg-gray-50">🖨 打印</button>
+      </div>
+    </div>
+
+    <!-- 历史周次下拉（示意态） -->
+    <div class="wf-card px-5 py-3 mb-5 text-xs text-gray-500 wf-dashed bg-gray-50">
+      <span class="font-medium text-gray-600">【历史周次下拉示意】</span>
+      W17 (本周) · W16 (4/13-4/19) · W15 (4/6-4/12) · W14 (3/30-4/5) · W13 (3/23-3/29) · 更多历史归档…
+    </div>
+
+    <!-- ===== [Section 1: 本周概要] ===== -->
+    <!-- [Section 1: 本周概要] -->
+    <section class="mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-1 h-5 bg-gray-800"></div>
+        <h2 class="text-lg font-bold text-gray-900">① 本周概要</h2>
+        <span class="text-xs text-gray-500">Weekly Summary</span>
+      </div>
+
+      <!-- 4个KPI大卡 -->
+      <div class="grid grid-cols-4 gap-4 mb-4">
+        <div class="wf-card p-4">
+          <div class="text-xs text-gray-500 mb-1">本周活动总数</div>
+          <div class="text-3xl font-bold text-gray-900">1,247</div>
+          <div class="text-xs text-gray-600 mt-2">环比 <span class="text-gray-800 font-medium">↑ +12%</span></div>
+        </div>
+        <div class="wf-card p-4">
+          <div class="text-xs text-gray-500 mb-1">新增商机</div>
+          <div class="text-3xl font-bold text-gray-900">47</div>
+          <div class="text-xs text-gray-600 mt-2">环比 <span class="text-gray-800 font-medium">↑ +8%</span></div>
+        </div>
+        <div class="wf-card p-4">
+          <div class="text-xs text-gray-500 mb-1">签约项目</div>
+          <div class="text-3xl font-bold text-gray-900">3</div>
+          <div class="text-xs text-gray-600 mt-2">金额 <span class="text-gray-800 font-medium">¥1,240万</span></div>
+        </div>
+        <div class="wf-card p-4">
+          <div class="text-xs text-gray-500 mb-1">在跟管道值</div>
+          <div class="text-3xl font-bold text-gray-900">¥4.8亿</div>
+          <div class="text-xs text-gray-600 mt-2">覆盖Q2目标 <span class="text-gray-800 font-medium">156%</span></div>
+        </div>
+      </div>
+
+      <!-- 一句话总结 -->
+      <div class="wf-card p-4 bg-gray-100 border-l-4 border-gray-700">
+        <div class="text-xs text-gray-500 mb-1">🧭 本周一句话总结</div>
+        <div class="text-sm text-gray-900 font-medium leading-relaxed">
+          本周销售活动量稳步上升，深圳团队表现突出。需关注 <span class="underline decoration-dashed">3个超期未跟进项目</span>。
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== [Section 2: 异常预警] ===== -->
+    <!-- [Section 2: 异常预警] -->
+    <section class="mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-1 h-5 bg-gray-800"></div>
+        <h2 class="text-lg font-bold text-gray-900">② 异常预警</h2>
+        <span class="text-xs text-gray-500">需关注 · 4类问题</span>
+        <span class="ml-auto text-xs text-gray-500">灰阶 wireframe，emoji 区分等级</span>
+      </div>
+
+      <div class="space-y-3">
+        <!-- 🔴 本周零活动商务 -->
+        <div class="wf-card p-4 bg-gray-200 border-gray-400">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3 flex-1">
+              <div class="text-2xl leading-none">🔴</div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs px-1.5 py-0.5 bg-gray-800 text-white rounded">高</span>
+                  <span class="text-sm font-semibold text-gray-900">[本周零活动商务]</span>
+                </div>
+                <div class="text-sm text-gray-800">王五 / 钱六 本周无任何活动记录（拜访、通话、邮件均为0）</div>
+                <div class="text-xs text-gray-500 mt-1">建议立即沟通，排查人员或动力问题</div>
+              </div>
+            </div>
+            <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">立即处理 →</button>
+          </div>
+        </div>
+
+        <!-- 🟠 超过7天未跟进 -->
+        <div class="wf-card p-4 bg-gray-150 border-gray-400" style="background:#eef0f2;">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3 flex-1">
+              <div class="text-2xl leading-none">🟠</div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs px-1.5 py-0.5 bg-gray-700 text-white rounded">中高</span>
+                  <span class="text-sm font-semibold text-gray-900">[超过7天未跟进的活跃项目]</span>
+                </div>
+                <div class="text-sm text-gray-800">5个项目超7天无跟进，含 <span class="font-semibold">「沙特XX项目」¥800万</span>、「北京XX乐园」¥320万 等</div>
+                <div class="text-xs text-gray-500 mt-1">一键批量 Nudge 对应商务补充进展</div>
+              </div>
+            </div>
+            <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">批量 Nudge →</button>
+          </div>
+        </div>
+
+        <!-- 🟡 Nudge未响应 -->
+        <div class="wf-card p-4 bg-gray-100 border-gray-400">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3 flex-1">
+              <div class="text-2xl leading-none">🟡</div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs px-1.5 py-0.5 bg-gray-600 text-white rounded">中</span>
+                  <span class="text-sm font-semibold text-gray-900">[Nudge 未响应]</span>
+                </div>
+                <div class="text-sm text-gray-800">3个项目 Nudge 已发出超 24 小时未响应，需主管介入</div>
+                <div class="text-xs text-gray-500 mt-1">查看明细：张三2条 / 李四1条</div>
+              </div>
+            </div>
+            <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">查看明细 →</button>
+          </div>
+        </div>
+
+        <!-- 🔴 本周新增丢标 -->
+        <div class="wf-card p-4 bg-gray-200 border-gray-400">
+          <div class="flex items-start justify-between gap-4">
+            <div class="flex items-start gap-3 flex-1">
+              <div class="text-2xl leading-none">🔴</div>
+              <div>
+                <div class="flex items-center gap-2 mb-1">
+                  <span class="text-xs px-1.5 py-0.5 bg-gray-800 text-white rounded">高</span>
+                  <span class="text-sm font-semibold text-gray-900">[本周新增丢标]</span>
+                </div>
+                <div class="text-sm text-gray-800">2个项目：<span class="font-semibold">「上海XX乐园」¥600万</span>（失败原因：价格过高）、「成都XX商场」¥180万（竞品中标）</div>
+                <div class="text-xs text-gray-500 mt-1">建议组织复盘，校准定价策略</div>
+              </div>
+            </div>
+            <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">复盘 →</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== [Section 3: 各商务一句话摘要] ===== -->
+    <!-- [Section 3: 各商务一句话摘要] -->
+    <section class="mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-1 h-5 bg-gray-800"></div>
+        <h2 class="text-lg font-bold text-gray-900">③ 各商务一句话摘要</h2>
+        <span class="text-xs text-gray-500">Team Snapshot · 7人</span>
+      </div>
+
+      <div class="grid grid-cols-3 gap-3">
+        <!-- 卡片1 -->
+        <div class="wf-card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-700">张</div>
+            <div class="font-semibold text-gray-900 text-sm">张三</div>
+            <span class="ml-auto text-xs text-gray-500">深圳</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">本周拜访6家客户，签约1单（深圳XX，<span class="font-medium">¥420万</span>），新增2个商机</div>
+        </div>
+        <!-- 卡片2 -->
+        <div class="wf-card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-700">李</div>
+            <div class="font-semibold text-gray-900 text-sm">李四</div>
+            <span class="ml-auto text-xs text-gray-500">上海</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">本周以方案设计为主，跟进3个项目进入投标阶段</div>
+        </div>
+        <!-- 卡片3（异常） -->
+        <div class="wf-card p-4 bg-gray-200">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-xs text-white">王</div>
+            <div class="font-semibold text-gray-900 text-sm">王五</div>
+            <span class="ml-auto text-xs">⚠️</span>
+          </div>
+          <div class="text-xs text-gray-800 leading-relaxed font-medium">本周零活动，需关注 · 已连续2周无拜访记录</div>
+        </div>
+        <!-- 卡片4 -->
+        <div class="wf-card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-700">赵</div>
+            <div class="font-semibold text-gray-900 text-sm">赵六</div>
+            <span class="ml-auto text-xs text-gray-500">北京</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">推进沙特XX项目到谈判阶段，预计下周提交最终报价</div>
+        </div>
+        <!-- 卡片5（异常） -->
+        <div class="wf-card p-4 bg-gray-200">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-400 flex items-center justify-center text-xs text-white">钱</div>
+            <div class="font-semibold text-gray-900 text-sm">钱六</div>
+            <span class="ml-auto text-xs">⚠️</span>
+          </div>
+          <div class="text-xs text-gray-800 leading-relaxed font-medium">本周零活动 · 系统内无任何更新</div>
+        </div>
+        <!-- 卡片6 -->
+        <div class="wf-card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-700">孙</div>
+            <div class="font-semibold text-gray-900 text-sm">孙七</div>
+            <span class="ml-auto text-xs text-gray-500">广州</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">完成4次客户回访，推进「广州XX乐园」到确认阶段，<span class="font-medium">¥680万</span></div>
+        </div>
+        <!-- 卡片7 -->
+        <div class="wf-card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-700">周</div>
+            <div class="font-semibold text-gray-900 text-sm">周八</div>
+            <span class="ml-auto text-xs text-gray-500">成都</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">签约2单（合计<span class="font-medium">¥820万</span>），新增1个超大型商机</div>
+        </div>
+        <!-- 卡片8 -->
+        <div class="wf-card p-4">
+          <div class="flex items-center gap-2 mb-2">
+            <div class="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center text-xs text-gray-700">吴</div>
+            <div class="font-semibold text-gray-900 text-sm">吴九</div>
+            <span class="ml-auto text-xs text-gray-500">武汉</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">本周新开拓3家潜在客户，完成首次方案沟通</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== [Section 4: 管道健康度] ===== -->
+    <!-- [Section 4: 管道健康度] -->
+    <section class="mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-1 h-5 bg-gray-800"></div>
+        <h2 class="text-lg font-bold text-gray-900">④ 管道健康度</h2>
+        <span class="text-xs text-gray-500">Pipeline Health</span>
+      </div>
+
+      <div class="grid grid-cols-12 gap-4">
+        <!-- 圆环仪表盘 -->
+        <div class="wf-card p-5 col-span-4 flex flex-col items-center justify-center">
+          <div class="text-xs text-gray-500 mb-3">管道覆盖率</div>
+          <div class="relative w-36 h-36">
+            <div class="ring-gauge w-36 h-36"></div>
+            <div class="absolute inset-4 bg-white rounded-full flex flex-col items-center justify-center">
+              <div class="text-3xl font-bold text-gray-900">156%</div>
+              <div class="text-xs text-gray-500">/ Q2目标</div>
+            </div>
+          </div>
+          <div class="text-xs text-gray-600 mt-3">加权管道值 <span class="font-semibold text-gray-900">¥3.2亿</span></div>
+        </div>
+
+        <!-- 阶段分布堆叠条形图 -->
+        <div class="wf-card p-5 col-span-8">
+          <div class="flex items-center justify-between mb-3">
+            <div class="text-sm font-semibold text-gray-900">阶段分布（按金额）</div>
+            <div class="text-xs text-gray-500">在跟管道 ¥4.8亿 · 128个项目</div>
+          </div>
+          <!-- 堆叠条 -->
+          <div class="flex h-10 rounded overflow-hidden border border-gray-300 mb-2">
+            <div class="bg-gray-200 flex items-center justify-center text-xs text-gray-700" style="width:28%">早期 28%</div>
+            <div class="bg-gray-300 flex items-center justify-center text-xs text-gray-700" style="width:22%">投资 22%</div>
+            <div class="bg-gray-400 flex items-center justify-center text-xs text-white" style="width:20%">谈判 20%</div>
+            <div class="bg-gray-600 flex items-center justify-center text-xs text-white" style="width:18%">确认 18%</div>
+            <div class="bg-gray-800 flex items-center justify-center text-xs text-white" style="width:12%">签约 12%</div>
+          </div>
+          <!-- 金额标注 -->
+          <div class="grid grid-cols-5 text-xs text-gray-600 mt-3 gap-2">
+            <div><div class="font-semibold text-gray-900">¥1.34亿</div><div class="text-gray-500">早期 42个</div></div>
+            <div><div class="font-semibold text-gray-900">¥1.06亿</div><div class="text-gray-500">投资 31个</div></div>
+            <div><div class="font-semibold text-gray-900">¥0.96亿</div><div class="text-gray-500">谈判 24个</div></div>
+            <div><div class="font-semibold text-gray-900">¥0.86亿</div><div class="text-gray-500">确认 19个</div></div>
+            <div><div class="font-semibold text-gray-900">¥0.58亿</div><div class="text-gray-500">签约 12个</div></div>
+          </div>
+
+          <!-- 阶段流转健康度 -->
+          <div class="border-t border-gray-200 mt-4 pt-3 grid grid-cols-3 gap-4 text-xs">
+            <div>
+              <div class="text-gray-500 mb-1">本周阶段推进</div>
+              <div class="text-xl font-bold text-gray-900">↑ 14 <span class="text-xs text-gray-500 font-normal">个项目</span></div>
+            </div>
+            <div>
+              <div class="text-gray-500 mb-1">本周阶段退回</div>
+              <div class="text-xl font-bold text-gray-900">↓ 5 <span class="text-xs text-gray-500 font-normal">个项目</span></div>
+            </div>
+            <div>
+              <div class="text-gray-500 mb-1">流转健康度</div>
+              <div class="text-xl font-bold text-gray-900">2.8 <span class="text-xs text-gray-500 font-normal">推进/退回比</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== [Section 5: 推荐行动] ===== -->
+    <!-- [Section 5: 推荐行动] -->
+    <section class="mb-6">
+      <div class="flex items-center gap-2 mb-3">
+        <div class="w-1 h-5 bg-gray-800"></div>
+        <h2 class="text-lg font-bold text-gray-900">⑤ 推荐行动</h2>
+        <span class="text-xs text-gray-500">AI建议 · 来源：本地 Qwen 模型</span>
+        <span class="ml-auto text-xs text-gray-500 wf-dashed px-2 py-0.5 rounded">🤖 AI生成占位</span>
+      </div>
+
+      <div class="space-y-3">
+        <div class="wf-card p-4 flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm flex-shrink-0">1</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-gray-900 mb-1">与王五进行一对一沟通</div>
+            <div class="text-xs text-gray-600 mb-2"><span class="font-medium">理由：</span>王五连续2周无活动记录，历史同期月均活动15+，可能存在人员或动力问题</div>
+            <div class="text-xs text-gray-700"><span class="font-medium">建议动作：</span>本周内安排30分钟1:1会议，排查原因</div>
+          </div>
+          <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">采纳</button>
+        </div>
+
+        <div class="wf-card p-4 flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm flex-shrink-0">2</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-gray-900 mb-1">推进「沙特XX项目」¥800万 决策</div>
+            <div class="text-xs text-gray-600 mb-2"><span class="font-medium">理由：</span>项目已停留谈判阶段18天，超本阶段平均时长（10天），客户决策人最近未积极回应</div>
+            <div class="text-xs text-gray-700"><span class="font-medium">建议动作：</span>赵六本周主动约见客户高层，推动报价闭环</div>
+          </div>
+          <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">采纳</button>
+        </div>
+
+        <div class="wf-card p-4 flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm flex-shrink-0">3</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-gray-900 mb-1">组织「上海XX乐园」丢标复盘</div>
+            <div class="text-xs text-gray-600 mb-2"><span class="font-medium">理由：</span>本月连续2个项目因「价格过高」丢标，可能存在定价策略偏离市场</div>
+            <div class="text-xs text-gray-700"><span class="font-medium">建议动作：</span>召集上海团队+产品部，本周五前输出竞品价格对标报告</div>
+          </div>
+          <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">采纳</button>
+        </div>
+
+        <div class="wf-card p-4 flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm flex-shrink-0">4</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-gray-900 mb-1">加大早期商机培育投入</div>
+            <div class="text-xs text-gray-600 mb-2"><span class="font-medium">理由：</span>早期阶段占比28%偏低，历史健康区间为35-40%，未来2个季度管道可能出现断档</div>
+            <div class="text-xs text-gray-700"><span class="font-medium">建议动作：</span>策划一场5月行业展会，目标新增40+早期商机</div>
+          </div>
+          <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">采纳</button>
+        </div>
+
+        <div class="wf-card p-4 flex items-start gap-3">
+          <div class="w-8 h-8 rounded-full bg-gray-800 text-white flex items-center justify-center text-sm flex-shrink-0">5</div>
+          <div class="flex-1">
+            <div class="text-sm font-semibold text-gray-900 mb-1">表扬深圳团队本周表现</div>
+            <div class="text-xs text-gray-600 mb-2"><span class="font-medium">理由：</span>张三签约1单¥420万，周八签约2单合计¥820万，贡献本周签约额100%</div>
+            <div class="text-xs text-gray-700"><span class="font-medium">建议动作：</span>在下周全员周会公开表扬，分享成交打法</div>
+          </div>
+          <button class="px-3 py-1.5 bg-blue-500 text-white text-xs rounded hover:bg-blue-600 flex-shrink-0">采纳</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== 原型说明 ===== -->
+    <section class="mt-10">
+      <div class="wf-card p-5">
+        <h3 class="text-base font-bold text-gray-900 mb-3">📝 原型说明</h3>
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="bg-gray-100 text-gray-700">
+              <th class="border border-gray-300 px-3 py-2 text-left w-10">#</th>
+              <th class="border border-gray-300 px-3 py-2 text-left w-40">Section</th>
+              <th class="border border-gray-300 px-3 py-2 text-left">功能描述</th>
+              <th class="border border-gray-300 px-3 py-2 text-left w-48">关键交互 / 数据来源</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700 align-top">
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">1</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">本周概要</td>
+              <td class="border border-gray-300 px-3 py-2">4个核心KPI（活动总数 / 新增商机 / 签约项目 / 在跟管道值）+ AI生成一句话总结，吴耀10秒内把握本周整体态势</td>
+              <td class="border border-gray-300 px-3 py-2">数据源：活动记录库、商机库、项目库；总结由 Qwen 生成</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">2</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">异常预警</td>
+              <td class="border border-gray-300 px-3 py-2">4类预警（零活动 / 超7天未跟进 / Nudge未响应 / 新增丢标），灰阶+emoji区分等级，每条支持"立即处理/批量Nudge/查看明细/复盘"操作</td>
+              <td class="border border-gray-300 px-3 py-2">规则引擎自动扫描，结果推送 Nudge 中心</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">3</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">各商务一句话摘要</td>
+              <td class="border border-gray-300 px-3 py-2">6-8个商务卡片网格，每人一句话状态，异常成员自动高亮；点击进入商务详情页</td>
+              <td class="border border-gray-300 px-3 py-2">Qwen 基于个人活动 + 项目汇总生成</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">4</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">管道健康度</td>
+              <td class="border border-gray-300 px-3 py-2">圆环覆盖率仪表盘 + 5阶段堆叠条形图 + 阶段流转推进/退回健康度</td>
+              <td class="border border-gray-300 px-3 py-2">管道库实时聚合；灰阶单色梯度可视化</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">5</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">推荐行动</td>
+              <td class="border border-gray-300 px-3 py-2">AI 生成 3-5 条建议（标题 + 理由 + 动作），支持「采纳」一键落地到 Nudge 或日程</td>
+              <td class="border border-gray-300 px-3 py-2">本地 Qwen 模型综合分析，含异常 + 管道 + 历史对比</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="mt-4 text-xs text-gray-500 space-y-1">
+          <div>· <span class="font-medium">页面定位：</span>吴耀每周五下午查看，企微推送富文本卡片→点此查看完整周报；同时支持历史周报查看</div>
+          <div>· <span class="font-medium">自动生成：</span>每周五16:00 触发定时任务，生成本周数据 + AI摘要 + 异常扫描 + 建议</div>
+          <div>· <span class="font-medium">推送通道：</span>企微机器人推送富文本摘要卡片，底部附本页深链接</div>
+          <div>· <span class="font-medium">存档规则：</span>所有周次永久保留，顶部下拉查看历史</div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+</body>
+</html>

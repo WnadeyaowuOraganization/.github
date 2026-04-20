@@ -1,0 +1,893 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>三视角分组 · 销售记录中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .hidden-view { display: none; }
+  .chip { display:inline-flex; align-items:center; padding:2px 8px; border-radius:9999px; font-size:11px; line-height:16px; }
+  details > summary { list-style: none; cursor: pointer; }
+  details > summary::-webkit-details-marker { display: none; }
+  details[open] .caret { transform: rotate(180deg); }
+  .caret { transition: transform .15s ease; }
+  .dot { width:6px; height:6px; border-radius:9999px; display:inline-block; }
+  .avatar { width:32px; height:32px; border-radius:9999px; background:#e5e7eb; color:#4b5563; display:inline-flex; align-items:center; justify-content:center; font-size:12px; font-weight:600; }
+  .avatar-sm { width:20px; height:20px; border-radius:9999px; background:#e5e7eb; color:#4b5563; display:inline-flex; align-items:center; justify-content:center; font-size:10px; font-weight:600; border:2px solid #fff; }
+  .stack > * + * { margin-left: -6px; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- [SPEC-CARD] 需求说明卡 v4.1 -->
+<section class="mb-6 border-l-4 border-gray-400 bg-white rounded-md shadow-sm">
+  <details open>
+    <summary class="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+      <div class="flex items-center gap-2">
+        <span class="chip bg-gray-100 text-gray-700 font-mono">SPEC</span>
+        <span class="text-sm font-semibold text-gray-800">需求说明卡 · 三视角分组</span>
+        <span class="text-xs text-gray-400">v4.1</span>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="../详细设计.md" class="text-xs text-gray-500 hover:text-gray-800 underline">§2.2 三视角分组 ↗</a>
+        <span class="caret text-gray-400 text-xs">▼</span>
+      </div>
+    </summary>
+    <div class="px-4 py-3 grid grid-cols-2 gap-x-6 gap-y-2 text-xs text-gray-700">
+      <div><span class="text-gray-400">页面目的：</span>一个Tab内三种分组视角切换，按商务/项目/客户聚合销售记录</div>
+      <div><span class="text-gray-400">主要用户：</span>吴耀，商务主管</div>
+      <div class="col-span-2"><span class="text-gray-400">核心功能：</span>三视角切换 / 卡片网格 / 项目列表 / 客户卡片 / 异常高亮</div>
+      <div class="col-span-2"><span class="text-gray-400">关键操作：</span>视角切换 / 卡片展开 / 行内Nudge / 跳转详情</div>
+      <div class="col-span-2"><span class="text-gray-400">验收要点：</span>三视角同数据源 / 切换无延迟 / 异常按规则标记</div>
+    </div>
+  </details>
+</section>
+
+<!-- [顶部分组切换栏] -->
+<section class="mb-5 bg-white border border-gray-200 rounded-lg p-3 flex items-center justify-between flex-wrap gap-3">
+  <!-- 左：分组方式切换 -->
+  <div class="flex items-center gap-2">
+    <span class="text-xs text-gray-400 mr-1">分组方式</span>
+    <div class="inline-flex bg-gray-100 rounded-md p-0.5" role="tablist">
+      <button data-view="view-a" onclick="switchView('view-a', this)"
+              class="view-btn px-4 py-1.5 text-sm rounded transition">按商务</button>
+      <button data-view="view-b" onclick="switchView('view-b', this)"
+              class="view-btn px-4 py-1.5 text-sm rounded transition">按项目</button>
+      <button data-view="view-c" onclick="switchView('view-c', this)"
+              class="view-btn px-4 py-1.5 text-sm rounded transition">按客户</button>
+    </div>
+  </div>
+  <!-- 右：时间范围 + 排序 -->
+  <div class="flex items-center gap-2 text-sm">
+    <div class="inline-flex bg-gray-50 border border-gray-200 rounded-md text-xs">
+      <button class="px-2.5 py-1 text-gray-500 hover:text-gray-800">今日</button>
+      <button class="px-2.5 py-1 bg-white border-x border-gray-200 text-gray-800 font-medium">本周</button>
+      <button class="px-2.5 py-1 text-gray-500 hover:text-gray-800">本月</button>
+      <button class="px-2.5 py-1 text-gray-500 hover:text-gray-800">季度</button>
+    </div>
+    <select class="border border-gray-200 rounded-md px-2 py-1 text-xs text-gray-700 bg-white">
+      <option>活跃度 ↓</option>
+      <option>记录数 ↓</option>
+      <option>最后活动时间 ↓</option>
+    </select>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- [视图A：按商务] -->
+<!-- ============================================================= -->
+<section id="view-a" class="grouped-view">
+  <div class="mb-3 flex items-center justify-between">
+    <div class="text-xs text-gray-500">共 <span class="text-gray-800 font-semibold">8</span> 位商务 · 本周活跃 <span class="text-gray-800 font-semibold">6</span> 位 · <span class="text-amber-600">异常 2 位</span></div>
+    <div class="text-xs text-gray-400">数据范围：本周（周一 00:00 起）</div>
+  </div>
+
+  <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+
+    <!-- 卡片：张三 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="avatar">张</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">张三</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-green-500" title="本周活跃"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">华东大区 · 最后活动 2h 前</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-400 hover:text-gray-700">详情 ↗</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+        <div><div class="text-lg font-semibold text-gray-800">12</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">5</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">2</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <details class="mt-3 border-t border-gray-100 pt-2">
+        <summary class="flex items-center justify-between text-xs text-gray-500 hover:text-gray-800">
+          <span>查看记录</span><span class="caret">▼</span>
+        </summary>
+        <ul class="mt-2 space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 14:30</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">拜访</span>深圳XX文旅 · 推进合同条款</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 10:12</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">电话</span>杭州XX乐园 · 二期方案沟通</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 16:45</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">微信</span>南京XX文创 · 报价确认</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 09:30</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">拜访</span>上海XX集团 · 需求调研</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-19 15:20</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">会议</span>内部周会 · 项目进度同步</span></li>
+          <li class="text-center text-gray-400 pt-1">… 还有 7 条</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- 卡片：李四 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="avatar">李</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">李四</span>
+              <span class="chip bg-gray-200 text-gray-700">主管</span>
+              <span class="dot bg-green-500"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">华南大区 · 最后活动 5h 前</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-400 hover:text-gray-700">详情 ↗</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+        <div><div class="text-lg font-semibold text-gray-800">9</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">7</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">1</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-amber-600">1</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <details class="mt-3 border-t border-gray-100 pt-2">
+        <summary class="flex items-center justify-between text-xs text-gray-500 hover:text-gray-800">
+          <span>查看记录</span><span class="caret">▼</span>
+        </summary>
+        <ul class="mt-2 space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 11:00</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">拜访</span>广州XX商旅 · 合作初谈</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 14:30</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">会议</span>大区周会</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-19 10:00</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">电话</span>东莞XX文化 · 方案讨论</span></li>
+          <li class="text-center text-gray-400 pt-1">… 还有 6 条</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- 卡片：王五 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="avatar">王</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">王五</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-green-500"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">华北大区 · 最后活动 1d 前</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-400 hover:text-gray-700">详情 ↗</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+        <div><div class="text-lg font-semibold text-gray-800">7</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">4</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">0</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <details class="mt-3 border-t border-gray-100 pt-2">
+        <summary class="flex items-center justify-between text-xs text-gray-500 hover:text-gray-800">
+          <span>查看记录</span><span class="caret">▼</span>
+        </summary>
+        <ul class="mt-2 space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 16:00</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">拜访</span>北京XX文旅 · 样板方案</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 09:15</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">微信</span>天津XX乐园 · 进度跟进</span></li>
+          <li class="text-center text-gray-400 pt-1">… 还有 5 条</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- 卡片：赵六 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="avatar">赵</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">赵六</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-green-500"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">国贸部 · 最后活动 3h 前</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-400 hover:text-gray-700">详情 ↗</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+        <div><div class="text-lg font-semibold text-gray-800">15</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">3</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">1</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <details class="mt-3 border-t border-gray-100 pt-2">
+        <summary class="flex items-center justify-between text-xs text-gray-500 hover:text-gray-800">
+          <span>查看记录</span><span class="caret">▼</span>
+        </summary>
+        <ul class="mt-2 space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 13:00</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">邮件</span>沙特XX旅游集团 · Proposal V3</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 21:30</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">电话</span>迪拜XX文化 · 时差会议</span></li>
+          <li class="text-center text-gray-400 pt-1">… 还有 13 条</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- 卡片：孙七 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="avatar">孙</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">孙七</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-green-500"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">华东大区 · 最后活动 6h 前</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-400 hover:text-gray-700">详情 ↗</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+        <div><div class="text-lg font-semibold text-gray-800">6</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">3</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">0</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-amber-600">1</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <details class="mt-3 border-t border-gray-100 pt-2">
+        <summary class="flex items-center justify-between text-xs text-gray-500 hover:text-gray-800">
+          <span>查看记录</span><span class="caret">▼</span>
+        </summary>
+        <ul class="mt-2 space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 09:00</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">拜访</span>苏州XX文旅 · 需求复盘</span></li>
+          <li class="text-center text-gray-400 pt-1">… 还有 5 条</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- 卡片：周八（活跃） -->
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="flex items-start justify-between">
+        <div class="flex items-center gap-3">
+          <div class="avatar">周</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">周八</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-green-500"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">经销部 · 最后活动 1h 前</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-400 hover:text-gray-700">详情 ↗</button>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center">
+        <div><div class="text-lg font-semibold text-gray-800">10</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">6</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-800">3</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <details class="mt-3 border-t border-gray-100 pt-2">
+        <summary class="flex items-center justify-between text-xs text-gray-500 hover:text-gray-800">
+          <span>查看记录</span><span class="caret">▼</span>
+        </summary>
+        <ul class="mt-2 space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 15:30</span><span class="flex-1"><span class="chip bg-gray-100 text-gray-600 mr-1">拜访</span>成都XX经销商 · 季度压货</span></li>
+          <li class="text-center text-gray-400 pt-1">… 还有 9 条</li>
+        </ul>
+      </details>
+    </div>
+
+    <!-- 异常卡片：吴九（零活动） -->
+    <div class="bg-gray-50 border border-gray-300 border-dashed rounded-lg p-4 relative">
+      <div class="absolute top-2 right-2 chip bg-amber-50 text-amber-700 border border-amber-200">⚠️ 本周零活动</div>
+      <div class="flex items-start justify-between opacity-75">
+        <div class="flex items-center gap-3">
+          <div class="avatar bg-gray-200">吴</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-700">吴九</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-gray-300"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">华东大区 · 最后活动 9 天前</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center opacity-75">
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">4</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-amber-600">4</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <div class="mt-3 border-t border-gray-200 pt-2 flex items-center justify-between">
+        <span class="text-xs text-amber-700">建议 Nudge：催促本周记录</span>
+        <button class="text-xs px-2.5 py-1 bg-white border border-gray-300 rounded hover:bg-gray-100">发送 Nudge →</button>
+      </div>
+    </div>
+
+    <!-- 异常卡片：郑十（零活动） -->
+    <div class="bg-gray-50 border border-gray-300 border-dashed rounded-lg p-4 relative">
+      <div class="absolute top-2 right-2 chip bg-amber-50 text-amber-700 border border-amber-200">⚠️ 本周零活动</div>
+      <div class="flex items-start justify-between opacity-75">
+        <div class="flex items-center gap-3">
+          <div class="avatar bg-gray-200">郑</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-700">郑十</span>
+              <span class="chip bg-gray-100 text-gray-600">销售</span>
+              <span class="dot bg-gray-300"></span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">华南大区 · 最后活动 12 天前</div>
+          </div>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-2 mt-4 text-center opacity-75">
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">本周记录</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">2</div><div class="text-[11px] text-gray-400">跟进项目</div></div>
+        <div><div class="text-lg font-semibold text-gray-400">0</div><div class="text-[11px] text-gray-400">新增商机</div></div>
+        <div><div class="text-lg font-semibold text-amber-600">2</div><div class="text-[11px] text-gray-400">异常</div></div>
+      </div>
+      <div class="mt-3 border-t border-gray-200 pt-2 flex items-center justify-between">
+        <span class="text-xs text-amber-700">建议 Nudge：催促本周记录</span>
+        <button class="text-xs px-2.5 py-1 bg-white border border-gray-300 rounded hover:bg-gray-100">发送 Nudge →</button>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- [视图B：按项目] -->
+<!-- ============================================================= -->
+<section id="view-b" class="grouped-view hidden-view">
+  <!-- 搜索框 -->
+  <div class="mb-3 flex items-center justify-between gap-3">
+    <div class="relative flex-1 max-w-md">
+      <input type="text" placeholder="🔍 搜索项目名 / 客户名"
+             class="w-full border border-gray-200 rounded-md px-3 py-2 text-sm bg-white focus:outline-none focus:border-gray-400" />
+    </div>
+    <div class="text-xs text-gray-500">共 <span class="text-gray-800 font-semibold">10</span> 个在跟项目 · <span class="text-amber-600">异常 3 个</span></div>
+  </div>
+
+  <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+    <!-- 表头 -->
+    <div class="grid grid-cols-12 gap-2 px-4 py-2.5 bg-gray-50 border-b border-gray-200 text-[11px] text-gray-400 uppercase tracking-wide">
+      <div class="col-span-3">项目 / 客户</div>
+      <div class="col-span-2">阶段</div>
+      <div class="col-span-2 text-right">金额（万元）</div>
+      <div class="col-span-1 text-center">活动</div>
+      <div class="col-span-2">最后活动</div>
+      <div class="col-span-2">跟进商务</div>
+    </div>
+
+    <!-- 行 1 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">深圳欢乐谷VR升级</div><div class="text-xs text-gray-400">深圳XX文旅</div></div>
+        <div class="col-span-2"><span class="chip bg-blue-50 text-blue-700 border border-blue-100">方案沟通</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 280</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">14</div>
+        <div class="col-span-2 text-xs text-gray-500">2h 前</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">张</span><span class="avatar-sm">李</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+        <div class="text-[11px] text-gray-400 mb-2">迷你时间线（含销售记录 + 周报 @本项目 + 系统自动）</div>
+        <ul class="space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 14:30</span><span class="chip bg-gray-100 text-gray-600">拜访</span><span>张三：客户侧IT负责人确认硬件规格</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 18:00</span><span class="chip bg-purple-50 text-purple-700">周报@</span><span>李四周报：本项目预计Q4签约</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 10:00</span><span class="chip bg-gray-100 text-gray-600">电话</span><span>张三：甲方要求调整付款节点</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-19 09:00</span><span class="chip bg-gray-50 text-gray-500">系统</span><span>阶段由「需求调研」→「方案沟通」</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-18 15:20</span><span class="chip bg-gray-100 text-gray-600">微信</span><span>张三：发送报价单 V2</span></li>
+        </ul>
+        <div class="mt-2 text-right"><button class="text-xs text-gray-500 hover:text-gray-800 underline">查看全部 14 条 →</button></div>
+      </div>
+    </details>
+
+    <!-- 行 2 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">杭州乐园二期AR项目</div><div class="text-xs text-gray-400">杭州XX乐园</div></div>
+        <div class="col-span-2"><span class="chip bg-amber-50 text-amber-700 border border-amber-100">商务谈判</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 520</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">9</div>
+        <div class="col-span-2 text-xs text-gray-500">昨天</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">张</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+        <ul class="space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 16:00</span><span class="chip bg-gray-100 text-gray-600">会议</span><span>张三：合同条款第3轮评审</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-19 11:00</span><span class="chip bg-gray-100 text-gray-600">邮件</span><span>张三：发送最终商务条款</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 行 3 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">沙特NEOM文旅互动区</div><div class="text-xs text-gray-400">沙特XX旅游集团</div></div>
+        <div class="col-span-2"><span class="chip bg-indigo-50 text-indigo-700 border border-indigo-100">Proposal</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 1,820</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">22</div>
+        <div class="col-span-2 text-xs text-gray-500">3h 前</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">赵</span><span class="avatar-sm">周</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+        <ul class="space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 13:00</span><span class="chip bg-gray-100 text-gray-600">邮件</span><span>赵六：Proposal V3 发送至甲方董事会</span></li>
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-20 21:30</span><span class="chip bg-gray-100 text-gray-600">电话</span><span>赵六：时差会议，澄清技术交付边界</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 行 4 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">北京环球影城夜游</div><div class="text-xs text-gray-400">北京XX文旅</div></div>
+        <div class="col-span-2"><span class="chip bg-gray-100 text-gray-600">需求调研</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 150</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">4</div>
+        <div class="col-span-2 text-xs text-gray-500">2 天前</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">王</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+        <ul class="space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-19 10:00</span><span class="chip bg-gray-100 text-gray-600">拜访</span><span>王五：现场勘测，记录场地尺寸</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 行 5 异常 -->
+    <details class="border-b border-gray-100 bg-amber-50/40">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-amber-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800 flex items-center gap-1">南京XX文创体验馆 <span class="chip bg-amber-100 text-amber-700">⚠️ 异常</span></div><div class="text-xs text-gray-400">南京XX文创</div></div>
+        <div class="col-span-2"><span class="chip bg-amber-50 text-amber-700 border border-amber-100">商务谈判</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 380</div>
+        <div class="col-span-1 text-center text-sm text-gray-500">0</div>
+        <div class="col-span-2 text-xs text-amber-700 font-medium">9 天未跟进</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">张</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-white border-t border-amber-200">
+        <div class="text-xs text-amber-700 mb-2">⚠️ 规则触发：项目处于「商务谈判」阶段且 &gt;7 天无活动</div>
+        <div class="flex items-center gap-2">
+          <button class="text-xs px-2.5 py-1 bg-amber-600 text-white rounded hover:bg-amber-700">Nudge 张三 →</button>
+          <button class="text-xs px-2.5 py-1 bg-white border border-gray-300 rounded hover:bg-gray-50">查看项目详情</button>
+        </div>
+      </div>
+    </details>
+
+    <!-- 行 6 异常 -->
+    <details class="border-b border-gray-100 bg-amber-50/40">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-amber-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800 flex items-center gap-1">上海XX集团VR党建 <span class="chip bg-amber-100 text-amber-700">⚠️ 异常</span></div><div class="text-xs text-gray-400">上海XX集团</div></div>
+        <div class="col-span-2"><span class="chip bg-blue-50 text-blue-700 border border-blue-100">方案沟通</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 95</div>
+        <div class="col-span-1 text-center text-sm text-gray-500">1</div>
+        <div class="col-span-2 text-xs text-amber-700 font-medium">12 天未跟进</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">吴</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-white border-t border-amber-200">
+        <div class="text-xs text-amber-700 mb-2">⚠️ 规则触发：&gt;7 天无活动 · 跟进商务本周零活动</div>
+        <button class="text-xs px-2.5 py-1 bg-amber-600 text-white rounded hover:bg-amber-700">Nudge 吴九 →</button>
+      </div>
+    </details>
+
+    <!-- 行 7 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">广州塔沉浸式光影秀</div><div class="text-xs text-gray-400">广州XX商旅</div></div>
+        <div class="col-span-2"><span class="chip bg-green-50 text-green-700 border border-green-100">合同签订</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 640</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">6</div>
+        <div class="col-span-2 text-xs text-gray-500">5h 前</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">李</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100">
+        <ul class="space-y-1.5 text-xs text-gray-600">
+          <li class="flex items-start gap-2"><span class="text-gray-300">10-21 11:00</span><span class="chip bg-gray-100 text-gray-600">拜访</span><span>李四：合同盖章前最终确认</span></li>
+        </ul>
+      </div>
+    </details>
+
+    <!-- 行 8 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">成都春熙路快闪体验</div><div class="text-xs text-gray-400">成都XX经销商</div></div>
+        <div class="col-span-2"><span class="chip bg-gray-100 text-gray-600">需求调研</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 75</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">3</div>
+        <div class="col-span-2 text-xs text-gray-500">1h 前</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">周</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100"><div class="text-xs text-gray-500">展开记录…</div></div>
+    </details>
+
+    <!-- 行 9 -->
+    <details class="border-b border-gray-100">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-gray-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800">苏州博物馆数字展</div><div class="text-xs text-gray-400">苏州XX文旅</div></div>
+        <div class="col-span-2"><span class="chip bg-blue-50 text-blue-700 border border-blue-100">方案沟通</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 210</div>
+        <div class="col-span-1 text-center text-sm text-gray-700">5</div>
+        <div class="col-span-2 text-xs text-gray-500">6h 前</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">孙</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-gray-50 border-t border-gray-100"><div class="text-xs text-gray-500">展开记录…</div></div>
+    </details>
+
+    <!-- 行 10 异常 -->
+    <details class="bg-amber-50/40">
+      <summary class="grid grid-cols-12 gap-2 px-4 py-3 hover:bg-amber-50 items-center">
+        <div class="col-span-3"><div class="text-sm font-medium text-gray-800 flex items-center gap-1">迪拜EXPO延展项目 <span class="chip bg-amber-100 text-amber-700">⚠️ 异常</span></div><div class="text-xs text-gray-400">迪拜XX文化</div></div>
+        <div class="col-span-2"><span class="chip bg-indigo-50 text-indigo-700 border border-indigo-100">Proposal</span></div>
+        <div class="col-span-2 text-right text-sm text-gray-800 font-mono">¥ 960</div>
+        <div class="col-span-1 text-center text-sm text-gray-500">0</div>
+        <div class="col-span-2 text-xs text-amber-700 font-medium">8 天未跟进</div>
+        <div class="col-span-2 flex items-center gap-1">
+          <div class="flex stack"><span class="avatar-sm">赵</span></div>
+          <span class="caret text-gray-400 text-xs ml-auto">▼</span>
+        </div>
+      </summary>
+      <div class="px-4 py-3 bg-white border-t border-amber-200">
+        <div class="text-xs text-amber-700 mb-2">⚠️ 规则触发：Proposal 阶段 &gt;7 天无活动</div>
+        <button class="text-xs px-2.5 py-1 bg-amber-600 text-white rounded hover:bg-amber-700">Nudge 赵六 →</button>
+      </div>
+    </details>
+  </div>
+</section>
+
+<!-- ============================================================= -->
+<!-- [视图C：按客户] -->
+<!-- ============================================================= -->
+<section id="view-c" class="grouped-view hidden-view">
+  <div class="mb-3 flex items-center justify-between">
+    <div class="text-xs text-gray-500">共 <span class="text-gray-800 font-semibold">6</span> 个在跟客户 · 累计签约 <span class="text-gray-800 font-semibold">¥ 4,280 万</span></div>
+    <div class="text-xs text-gray-400">适用于经销/国贸场景</div>
+  </div>
+
+  <div class="space-y-4">
+
+    <!-- 客户卡片：深圳XX文旅 -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-white border border-gray-200 flex items-center justify-center text-gray-500 text-xs">LOGO</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">深圳XX文旅集团</span>
+              <span class="chip bg-blue-50 text-blue-700 border border-blue-100">直销</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">累计签约 ¥ 1,240 万 · 在跟项目 <span class="text-gray-700 font-medium">3</span> 个 · 合作 2 年</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-gray-800">客户详情 →</button>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <!-- 项目1 -->
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-blue-50 text-blue-700 border border-blue-100">方案沟通</span>
+              <span class="text-sm text-gray-800">深圳欢乐谷VR升级</span>
+              <span class="text-xs text-gray-400">14 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 280 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100">
+            <ul class="space-y-1.5 text-xs text-gray-600">
+              <li class="flex items-start gap-2"><span class="text-gray-300">10-21 14:30</span><span class="chip bg-gray-100 text-gray-600">拜访</span><span>张三：硬件规格确认</span></li>
+              <li class="flex items-start gap-2"><span class="text-gray-300">10-20 10:00</span><span class="chip bg-gray-100 text-gray-600">电话</span><span>张三：付款节点调整</span></li>
+              <li class="text-gray-400 text-[11px]">… 还有 12 条</li>
+            </ul>
+          </div>
+        </details>
+        <!-- 项目2 -->
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-gray-100 text-gray-600">需求调研</span>
+              <span class="text-sm text-gray-800">欢乐谷东部新园区方案</span>
+              <span class="text-xs text-gray-400">6 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 120 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+        <!-- 项目3 -->
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-green-50 text-green-700 border border-green-100">已签约</span>
+              <span class="text-sm text-gray-800">深圳湾公园互动装置</span>
+              <span class="text-xs text-gray-400">32 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 840 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 客户卡片：杭州XX乐园 -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-white border border-gray-200 flex items-center justify-center text-gray-500 text-xs">LOGO</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">杭州XX乐园</span>
+              <span class="chip bg-blue-50 text-blue-700 border border-blue-100">直销</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">累计签约 ¥ 680 万 · 在跟项目 <span class="text-gray-700 font-medium">1</span> 个 · 合作 3 年</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-gray-800">客户详情 →</button>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-amber-50 text-amber-700 border border-amber-100">商务谈判</span>
+              <span class="text-sm text-gray-800">杭州乐园二期AR项目</span>
+              <span class="text-xs text-gray-400">9 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 520 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 客户卡片：沙特XX旅游集团（国贸） -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-white border border-gray-200 flex items-center justify-center text-gray-500 text-xs">LOGO</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">沙特XX旅游集团</span>
+              <span class="chip bg-purple-50 text-purple-700 border border-purple-100">国贸</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">累计签约 ¥ 1,680 万 · 在跟项目 <span class="text-gray-700 font-medium">2</span> 个 · 合作 1.5 年</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-gray-800">客户详情 →</button>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-indigo-50 text-indigo-700 border border-indigo-100">Proposal</span>
+              <span class="text-sm text-gray-800">沙特NEOM文旅互动区</span>
+              <span class="text-xs text-gray-400">22 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 1,820 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-gray-100 text-gray-600">需求调研</span>
+              <span class="text-sm text-gray-800">利雅得机场免税区体验</span>
+              <span class="text-xs text-gray-400">4 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 420 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 客户卡片：成都XX经销商 -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-white border border-gray-200 flex items-center justify-center text-gray-500 text-xs">LOGO</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">成都XX经销商</span>
+              <span class="chip bg-amber-50 text-amber-700 border border-amber-100">经销</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">累计签约 ¥ 420 万 · 在跟项目 <span class="text-gray-700 font-medium">2</span> 个 · 合作 4 年</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-gray-800">客户详情 →</button>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-gray-100 text-gray-600">需求调研</span>
+              <span class="text-sm text-gray-800">成都春熙路快闪体验</span>
+              <span class="text-xs text-gray-400">3 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 75 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-gray-50">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-blue-50 text-blue-700 border border-blue-100">方案沟通</span>
+              <span class="text-sm text-gray-800">成都太古里沉浸展区</span>
+              <span class="text-xs text-gray-400">8 条记录</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 180 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-gray-50 border-t border-gray-100 text-xs text-gray-500">展开记录…</div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 客户卡片：迪拜XX文化（国贸） -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-white border border-gray-200 flex items-center justify-center text-gray-500 text-xs">LOGO</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">迪拜XX文化</span>
+              <span class="chip bg-purple-50 text-purple-700 border border-purple-100">国贸</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">累计签约 ¥ 260 万 · 在跟项目 <span class="text-gray-700 font-medium">1</span> 个 · 合作 8 个月</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-gray-800">客户详情 →</button>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-amber-50 bg-amber-50/40">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-indigo-50 text-indigo-700 border border-indigo-100">Proposal</span>
+              <span class="text-sm text-gray-800">迪拜EXPO延展项目</span>
+              <span class="chip bg-amber-100 text-amber-700">⚠️ 8 天未跟进</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 960 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-white border-t border-amber-200 text-xs text-amber-700">
+            ⚠️ 规则触发：Proposal 阶段 &gt;7 天无活动 · <button class="underline hover:text-amber-800">Nudge 赵六 →</button>
+          </div>
+        </details>
+      </div>
+    </div>
+
+    <!-- 客户卡片：南京XX文创 -->
+    <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-5 py-3 bg-gray-50 border-b border-gray-200 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-white border border-gray-200 flex items-center justify-center text-gray-500 text-xs">LOGO</div>
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-semibold text-gray-800">南京XX文创</span>
+              <span class="chip bg-blue-50 text-blue-700 border border-blue-100">直销</span>
+            </div>
+            <div class="text-xs text-gray-400 mt-0.5">累计签约 ¥ 0 · 在跟项目 <span class="text-gray-700 font-medium">1</span> 个 · 新客户</div>
+          </div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-gray-800">客户详情 →</button>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <details>
+          <summary class="px-5 py-3 flex items-center justify-between hover:bg-amber-50 bg-amber-50/40">
+            <div class="flex items-center gap-3">
+              <span class="chip bg-amber-50 text-amber-700 border border-amber-100">商务谈判</span>
+              <span class="text-sm text-gray-800">南京XX文创体验馆</span>
+              <span class="chip bg-amber-100 text-amber-700">⚠️ 9 天未跟进</span>
+            </div>
+            <div class="flex items-center gap-3">
+              <span class="text-sm text-gray-700 font-mono">¥ 380 万</span>
+              <span class="caret text-gray-400 text-xs">▼</span>
+            </div>
+          </summary>
+          <div class="px-5 py-2.5 bg-white border-t border-amber-200 text-xs text-amber-700">
+            ⚠️ 规则触发：&gt;7 天无活动 · <button class="underline hover:text-amber-800">Nudge 张三 →</button>
+          </div>
+        </details>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- [JS 切换逻辑] -->
+<script>
+  function switchView(id, btn) {
+    // 切换视图显示
+    document.querySelectorAll('.grouped-view').forEach(v => {
+      v.classList.toggle('hidden-view', v.id !== id);
+    });
+    // 切换按钮激活状态（用 inline style 规避 Tailwind CDN 类顺序冲突）
+    document.querySelectorAll('.view-btn').forEach(b => {
+      if (b === btn) {
+        b.style.background = '#1f2937';
+        b.style.color = '#ffffff';
+      } else {
+        b.style.background = '';
+        b.style.color = '#4b5563';
+      }
+    });
+  }
+  // 初始化
+  document.addEventListener('DOMContentLoaded', () => {
+    const first = document.querySelector('.view-btn[data-view="view-a"]');
+    if (first) {
+      first.style.background = '#1f2937';
+      first.style.color = '#ffffff';
+    }
+    document.querySelectorAll('.view-btn').forEach(b => {
+      if (b.dataset.view !== 'view-a') b.style.color = '#4b5563';
+    });
+  });
+</script>
+
+</body>
+</html>

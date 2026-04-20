@@ -327,8 +327,9 @@ Week 4 (5/10-5/16):
 | kimi4  | #1873 | backend | ~~分级超时升级机制(48h→72h→5天)~~ | ~~Done(PR#3954 admin-merged)~~ |
 | kimi19 | #2473 | finance | ~~律师催收数据库+API — 律师信息+催收案件+进展记录~~ | ~~Done(PR#3957 admin-merged)~~ |
 | kimi4  | #1684 | backend | ~~绩效异常检测+提成试算API+企微智能推送~~ | ~~Done(PR#3958 admin-merged)~~ |
-| kimi6  | #2358 | finance | 商机详情页获客成本Tab — 关联报销+费用汇总 | 进行中 |
+| kimi6  | #2358 | finance | ~~商机详情页获客成本Tab — 关联报销+费用汇总~~ | ~~Done(PR#3959 admin-merged)~~ |
 | kimi1  | #1996 | finance | 回款周报API — 商务填写+财务评估+管理层审阅全流程 | 进行中 |
 | kimi3  | #2002 | finance | 项目全链路资金闭环报告API — 从获客到净利润一张表 | 进行中 |
 | kimi4  | #2008 | finance | 报价成本模型API — BOM+运费+安装+管理费→建议售价 | 进行中 |
 | kimi19 | #1685 | backend | 项目费用关联API+财务报表导出功能 | 进行中 |
+| kimi6  | #2105 | backend | 质保成本核算API — 6维度成本+外包结算+客户计费 | 进行中 |

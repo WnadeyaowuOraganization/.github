@@ -92,6 +92,12 @@ tr:hover{background:#fafafa}
     .tab-item-main.active { color: #1890ff; border-bottom-color: #1890ff; }
     .tab-item-main:hover { color: #333; }
     .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 300px); }
+    /* 一级分组切换 */
+    .group-switcher { display:inline-flex; background:#f0f0f0; border-radius:6px; padding:3px; margin:12px 0 0; }
+    .group-item { padding:6px 20px; border-radius:4px; cursor:pointer; font-size:13px; color:#666; transition:.2s; user-select:none; }
+    .group-item.active { background:#fff; color:#1890ff; font-weight:600; box-shadow:0 1px 3px rgba(0,0,0,0.08); }
+    .group-item:hover:not(.active) { color:#333; }
+    .group-desc { display:inline-block; margin-left:12px; font-size:12px; color:#999; }
   </style>
 </head>
 <body><!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
@@ -108,23 +114,23 @@ tr:hover{background:#fafafa}
     <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
       <tr>
         <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
-        <td style="padding:4px 0;color:#333;">全球招投标项目线索发现与分配系统的主入口框架，吴耀通过6个Tab视角掌控项目全周期，解决线索采集后无人跟进、分配不透明、真实性无法判断的核心痛点</td>
+        <td style="padding:4px 0;color:#333;">全球招投标项目线索发现与分配系统的主入口框架。v2.0 在原有6Tab执行视图基础上新增4个数据洞察Tab（漏斗/ROI/热力图/复盘），支持可赢性评分徽章、6状态枚举筛选、项目关系标记、结构化反馈表单，服务吴耀+商务主管+业务员三角色</td>
       </tr>
       <tr>
         <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
-        <td style="padding:4px 0;color:#333;">吴耀（分配决策）, 商务人员（跟进执行）</td>
+        <td style="padding:4px 0;color:#333;">吴耀（分配决策/全局洞察）, 商务主管（团队管理/复盘）, 业务员（执行跟进）</td>
       </tr>
       <tr>
         <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
-        <td style="padding:4px 0;color:#333;">全部项目 / 前期金矿 / 当前可投 / 待我确认 / 休眠无效 / 垃圾桶 六个Tab视图</td>
+        <td style="padding:4px 0;color:#333;">执行组6Tab（全部/前期金矿/当前可投/待我确认/休眠无效/垃圾桶）+ 洞察组4Tab（转化漏斗/ROI看板/区域品类热力图/复盘洞察）+ 可赢性评分+6状态枚举+关系标记+结构化反馈</td>
       </tr>
       <tr>
         <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
-        <td style="padding:4px 0;color:#333;">Tab切换筛选项目阶段 / 查看KPI卡片 / 进入项目详情抽屉</td>
+        <td style="padding:4px 0;color:#333;">一级分组执行/洞察切换 / 二级Tab切换 / 状态下拉筛选 / 拖拽状态流转 / 查看可赢性雷达图 / 填写结构化反馈 / 打开项目详情抽屉</td>
       </tr>
       <tr>
         <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
-        <td style="padding:4px 0;color:#333;">6个Tab切换正常 / KPI卡片（总项目数/A级/B级/数据更新状态）正确展示 / 面包屑：首页&gt;商务部&gt;全球项目矿场</td>
+        <td style="padding:4px 0;color:#333;">执行/洞察一级分组切换正常 / 10个Tab全部可用 / 可赢性徽章在所有执行Tab展示 / 6状态枚举筛选器工作 / 漏斗5阶段数据正确 / H5手机页延后Sprint 3</td>
       </tr>
     </table>
     <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
@@ -167,7 +173,16 @@ tr:hover{background:#fafafa}
     </div>
   </div>
 
-  <!-- [Tab栏] -->
+  <!-- [一级分组切换] 执行视图 / 洞察视图 -->
+  <div>
+    <div class="group-switcher" id="groupSwitcher">
+      <div class="group-item active" data-group="execute">矿场执行</div>
+      <div class="group-item" data-group="insight">矿场洞察</div>
+    </div>
+    <span class="group-desc" id="groupDesc">按项目阶段分Tab查看及操作</span>
+  </div>
+
+  <!-- [二级Tab栏] -->
   <div class="tab-bar-main" id="tabBar"></div>
 
   <!-- [Tab内容 — iframe加载] -->
@@ -184,35 +199,75 @@ tr:hover{background:#fafafa}
       <th style="padding:8px;border:1px solid #d9d9d9">功能描述</th>
     </tr></thead>
     <tbody>
-      <tr><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">01-all.html</td><td class="p-2 border border-gray-300">全部视图</td></tr>
-        <tr><td class="p-2 border border-gray-300">前期金矿</td><td class="p-2 border border-gray-300">02-early.html</td><td class="p-2 border border-gray-300">前期金矿视图</td></tr>
-        <tr><td class="p-2 border border-gray-300">当前可投</td><td class="p-2 border border-gray-300">03-invest.html</td><td class="p-2 border border-gray-300">当前可投视图</td></tr>
-        <tr><td class="p-2 border border-gray-300">待我确认</td><td class="p-2 border border-gray-300">04-confirm.html</td><td class="p-2 border border-gray-300">待我确认视图</td></tr>
-        <tr><td class="p-2 border border-gray-300">休眠/无效</td><td class="p-2 border border-gray-300">05-dormant.html</td><td class="p-2 border border-gray-300">休眠/无效视图</td></tr>
-        <tr><td class="p-2 border border-gray-300">垃圾桶</td><td class="p-2 border border-gray-300">06-trash.html</td><td class="p-2 border border-gray-300">垃圾桶视图</td></tr>
+      <tr style="background:#fafafa"><td colspan="3" style="padding:6px 8px;border:1px solid #d9d9d9;font-weight:600;color:#666">执行组（项目阶段操作）</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">全部</td><td style="padding:6px 8px;border:1px solid #d9d9d9">01-all.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">全项目汇总表，全字段展示+可赢性徽章+状态筛选</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">前期金矿</td><td style="padding:6px 8px;border:1px solid #d9d9d9">02-early.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">尚未开始招标但举报、策划中的项目</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">当前可投</td><td style="padding:6px 8px;border:1px solid #d9d9d9">03-invest.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">已发标可投的项目，推荐Go/No-Go判断</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">待我确认</td><td style="padding:6px 8px;border:1px solid #d9d9d9">04-confirm.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">商务派单后待吴耀确认的项目队列</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">休眠/无效</td><td style="padding:6px 8px;border:1px solid #d9d9d9">05-dormant.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">长期无进展和标记无效的项目，带反馈原因统计</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">垃圾桶</td><td style="padding:6px 8px;border:1px solid #d9d9d9">06-trash.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">删除项目恢复/永久清除</td></tr>
+      <tr style="background:#fafafa"><td colspan="3" style="padding:6px 8px;border:1px solid #d9d9d9;font-weight:600;color:#666">洞察组（数据分析视角）</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">转化漏斗</td><td style="padding:6px 8px;border:1px solid #d9d9d9">07-funnel.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">5阶段漏斗（早期→投资→谈判→确认→签约）+阶段转化率</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">ROI看板</td><td style="padding:6px 8px;border:1px solid #d9d9d9">08-roi.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">按来源渠道的获客成本+中标率+ROI排行</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">区域品类热力图</td><td style="padding:6px 8px;border:1px solid #d9d9d9">09-heatmap.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">二维热力图（区域×品类）发现空白市场</td></tr>
+      <tr><td style="padding:6px 8px;border:1px solid #d9d9d9">复盘洞察</td><td style="padding:6px 8px;border:1px solid #d9d9d9">10-review.html</td><td style="padding:6px 8px;border:1px solid #d9d9d9">失败原因 Top10 + 胜率趋势 + 改进建议</td></tr>
     </tbody>
   </table>
 </div>
 
 <script>
-  const tabs = [
-    { key: 'all', label: '全部', src: '01-all.html' },
-      { key: 'early', label: '前期金矿', src: '02-early.html' },
-      { key: 'invest', label: '当前可投', src: '03-invest.html' },
-      { key: 'confirm', label: '待我确认', src: '04-confirm.html' },
-      { key: 'dormant', label: '休眠/无效', src: '05-dormant.html' },
-      { key: 'trash', label: '垃圾桶', src: '06-trash.html' }
-  ];
+  // 一级分组→二级Tab映射
+  const tabGroups = {
+    execute: {
+      desc: '按项目阶段分Tab查看及操作',
+      tabs: [
+        { key: 'all',     label: '全部',      src: '01-all.html' },
+        { key: 'early',   label: '前期金矿',  src: '02-early.html' },
+        { key: 'invest',  label: '当前可投',  src: '03-invest.html' },
+        { key: 'confirm', label: '待我确认',  src: '04-confirm.html' },
+        { key: 'dormant', label: '休眠/无效',  src: '05-dormant.html' },
+        { key: 'trash',   label: '垃圾桶',    src: '06-trash.html' }
+      ]
+    },
+    insight: {
+      desc: '全局数据洞察，服务吴耀+商务主管的决策与复盘',
+      tabs: [
+        { key: 'funnel',  label: '转化漏斗',      src: '07-funnel.html' },
+        { key: 'roi',     label: 'ROI看板',        src: '08-roi.html' },
+        { key: 'heatmap', label: '区域品类热力图', src: '09-heatmap.html' },
+        { key: 'review',  label: '复盘洞察',      src: '10-review.html' }
+      ]
+    }
+  };
+
+  const groupSwitcher = document.getElementById('groupSwitcher');
+  const groupDesc = document.getElementById('groupDesc');
   const tabBar = document.getElementById('tabBar');
   const tabFrame = document.getElementById('tabFrame');
-  let activeKey = tabs[0].key;
+  let activeGroup = 'execute';
+  let activeKey = tabGroups[activeGroup].tabs[0].key;
 
   function renderTabs() {
+    const tabs = tabGroups[activeGroup].tabs;
     tabBar.innerHTML = tabs.map(t =>
       `<div class="tab-item-main ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
     ).join('');
+    groupDesc.textContent = tabGroups[activeGroup].desc;
+    // 更新一级分组高亮
+    [...groupSwitcher.children].forEach(g => g.classList.toggle('active', g.dataset.group === activeGroup));
   }
 
+  // 一级分组切换
+  groupSwitcher.addEventListener('click', (e) => {
+    const item = e.target.closest('.group-item');
+    if (!item || item.dataset.group === activeGroup) return;
+    activeGroup = item.dataset.group;
+    activeKey = tabGroups[activeGroup].tabs[0].key;
+    tabFrame.src = tabGroups[activeGroup].tabs[0].src;
+    renderTabs();
+  });
+
+  // 二级Tab切换
   tabBar.addEventListener('click', (e) => {
     const item = e.target.closest('.tab-item-main');
     if (!item) return;

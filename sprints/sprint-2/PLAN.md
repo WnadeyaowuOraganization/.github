@@ -357,7 +357,7 @@ Week 4 (5/10-5/16):
 | kimi6  | #2203 | backend | ~~品牌中心内容CRUD API + 状态流转 + S3文件上传~~ | ~~Done(PR#3982 admin-merged)~~ |
 | kimi1  | #3379 | backend | ~~PLM零件编码自动生成引擎 — 四段式编码+唯一性校验~~ | ~~Done(PR#3983 admin-merged)~~ |
 | kimi3  | #3651 | bidding | 招投标-C 投标立项与进度管理 | 进行中 |
-| kimi6  | #3380 | plm | BOM创建与版本管理API (EBOM/MBOM/超级BOM) | 进行中 |
+| kimi6  | #3380 | plm | ~~BOM创建与版本管理API (EBOM/MBOM/超级BOM)~~ | ~~Done(PR#3985 admin-merged)~~ |
 | kimi19 | #3654 | bidding | 招投标-Dashboard 投标总览仪表盘 | 进行中 |
 | kimi1  | #3381 | plm | PLM BOM版本对比与回滚API | 进行中 |
 | kimi4  | #3383 | plm | PLM BOM成本Roll-up API | 进行中 |

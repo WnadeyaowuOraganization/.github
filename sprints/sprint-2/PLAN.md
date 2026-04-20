@@ -163,9 +163,9 @@ Week 4 (5/10-5/16):
 
 | 建议kimi | Issue | 优先 | 模块 | 内容 | 备注 |
 |---------|-------|------|------|------|------|
-| kimi1  | #2366 | P1 | approval/frontend | 审批中心前端 — 我的待办/已办/发起 | 前置#2026 CLOSED |
-| kimi3  | #2468 | P1 | execution/backend | 图纸管理API — 上传/版本控制/审批/下发工厂 | status:ready，无强前置 |
-| kimi6  | #1875 | P1 | mine | 赢/输复盘模板+系统化采集（矿场主线） | status:ready，有原型，展示明道云数据 |
+| kimi1  | #2366 | P1 | approval/frontend | ~~审批中心前端~~ | ~~已完成(PR#3966)，不需重派~~ |
+
+> 研发经理已派发 kimi3/#2468、kimi6/#1875；#2366 发现已 Done，已通知排程经理补充替换 Issue。
 
 > ⚠️ 研发经理须等排程经理建议后再指派，不得自行从看板读取issue派发。
 
@@ -347,3 +347,6 @@ Week 4 (5/10-5/16):
 | kimi3  | #3656 | backend | ~~法规文件预置模板 — TSG 71-2023 七阶段38项法定文件种子数据~~ | ~~Done(PR#3971 admin-merged)~~ |
 | kimi19 | #1685 | backend | ~~项目费用关联API+财务报表导出功能~~ | ~~Done(PR#3970 admin-merged)~~ |
 | kimi19 | #3650 | fullstack | 招投标-B 检测报告管理 | 进行中 |
+| kimi4  | #3181 | backend | ~~阶段文档注册表 — 每阶段必备文档清单模板+完成度计算~~ | ~~Done(PR#3974 admin-merged)~~ |
+| kimi3  | #2468 | backend | 图纸管理API — 上传/版本控制/审批/下发工厂 | 进行中 |
+| kimi6  | #1875 | mine | 赢/输复盘模板+系统化采集（矿场主线） | 进行中 |

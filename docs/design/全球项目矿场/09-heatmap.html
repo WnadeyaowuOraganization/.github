@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>区域 × 品类 热力图</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Roboto,sans-serif}
+    .tag{display:inline-block;padding:3px 10px;border-radius:3px;font-size:12px;font-weight:500;white-space:nowrap;cursor:pointer;transition:.15s;user-select:none}
+    .tag-off{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+    .tag-on{background:#e6f7ff;color:#1890ff;border:1px solid #1890ff}
+    .seg{display:inline-flex;border:1px solid #d9d9d9;border-radius:4px;overflow:hidden;background:#fff}
+    .seg-item{padding:6px 14px;font-size:13px;cursor:pointer;color:#666;border-right:1px solid #e8e8e8;transition:.15s;white-space:nowrap}
+    .seg-item:last-child{border-right:0}
+    .seg-item:hover{color:#1890ff;background:#f5faff}
+    .seg-item.active{background:#1890ff;color:#fff}
+    .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s}
+    .btn:hover{border-color:#1890ff;color:#1890ff}
+    .btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+    .btn-primary:hover{background:#40a9ff}
+
+    /* 热力图网格 */
+    .heat-grid{display:grid;grid-template-columns:110px repeat(12,1fr);gap:3px;min-width:1100px}
+    .heat-head{background:#fafafa;padding:10px 4px;text-align:center;font-size:12px;color:#595959;font-weight:600;border:1px solid #e8e8e8;border-radius:3px}
+    .heat-row-label{background:#fafafa;padding:10px 12px;font-size:13px;color:#333;font-weight:600;border:1px solid #e8e8e8;border-radius:3px;display:flex;align-items:center}
+    .heat-cell{border:1px solid #e8e8e8;border-radius:3px;padding:8px 4px;text-align:center;cursor:pointer;transition:.15s;position:relative;min-height:62px;display:flex;flex-direction:column;justify-content:center;align-items:center}
+    .heat-cell:hover{transform:scale(1.06);box-shadow:0 2px 8px rgba(24,144,255,.3);z-index:5}
+    .heat-cell .num{font-size:15px;font-weight:700;line-height:1.1}
+    .heat-cell .amt{font-size:11px;opacity:.85;margin-top:2px;line-height:1.1}
+    .heat-empty{border:1px dashed #d9d9d9;background:#fafafa;color:#bfbfbf}
+    .heat-empty .num{font-size:16px;font-weight:400;color:#bfbfbf}
+    .heat-empty .amt{font-size:10px;color:#bfbfbf}
+    .heat-empty:hover{border-color:#1890ff;color:#1890ff}
+
+    /* Tooltip */
+    .heat-cell .tip{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);background:#262626;color:#fff;padding:8px 10px;border-radius:4px;font-size:12px;white-space:nowrap;display:none;z-index:50;box-shadow:0 2px 8px rgba(0,0,0,.2);line-height:1.5;font-weight:400}
+    .heat-cell .tip::after{content:'';position:absolute;top:100%;left:50%;transform:translateX(-50%);border:5px solid transparent;border-top-color:#262626}
+    .heat-cell:hover .tip{display:block}
+
+    /* 颜色阶梯（蓝色） */
+    .c-0{background:#ffffff;color:#bfbfbf}
+    .c-1{background:#e6f7ff;color:#333;border-color:#bae7ff}
+    .c-2{background:#bae7ff;color:#003a8c;border-color:#91d5ff}
+    .c-3{background:#69c0ff;color:#fff;border-color:#40a9ff}
+    .c-4{background:#1890ff;color:#fff;border-color:#096dd9}
+    .c-5{background:#003a8c;color:#fff;border-color:#001d66}
+
+    .legend-box{width:22px;height:14px;display:inline-block;border-radius:2px;border:1px solid rgba(0,0,0,.06);vertical-align:middle}
+    .card{background:#fff;border:1px solid #e8e8e8;border-radius:6px}
+    .mini-table{width:100%;border-collapse:collapse;font-size:13px}
+    .mini-table th{background:#fafafa;padding:8px 10px;text-align:left;font-size:12px;color:#666;font-weight:600;border-bottom:1px solid #e8e8e8}
+    .mini-table td{padding:8px 10px;border-bottom:1px solid #f0f0f0;color:#333}
+    .mini-table tr:last-child td{border-bottom:0}
+    .rank-1{color:#fa8c16;font-weight:700}
+    .rank-2{color:#1890ff;font-weight:700}
+    .rank-3{color:#722ed1;font-weight:700}
+    .bar-wrap{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-top:4px}
+    .bar-fill{height:100%;background:linear-gradient(90deg,#1890ff,#69c0ff);border-radius:3px}
+
+    /* 空白市场卡片 */
+    .opp-card{background:linear-gradient(90deg,#f6ffed 0%,#ffffff 100%);border:1px solid #b7eb8f;border-radius:6px;padding:14px 16px;display:flex;gap:14px;align-items:flex-start;transition:.2s;cursor:pointer}
+    .opp-card:hover{border-color:#52c41a;box-shadow:0 2px 8px rgba(82,196,26,.15)}
+    .opp-icon{font-size:22px;line-height:1}
+    .opp-title{font-size:14px;font-weight:600;color:#237804;margin-bottom:4px}
+    .opp-desc{font-size:12.5px;color:#555;line-height:1.6}
+    .opp-tag{display:inline-block;background:#fff;border:1px solid #b7eb8f;color:#389e0d;font-size:11px;padding:1px 6px;border-radius:3px;margin-right:4px}
+
+    /* 下钻弹窗 */
+    .modal-mask{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,.35);z-index:200;display:none;align-items:center;justify-content:center}
+    .modal-mask.open{display:flex}
+    .modal{background:#fff;border-radius:8px;width:720px;max-height:80vh;overflow:hidden;display:flex;flex-direction:column;box-shadow:0 12px 40px rgba(0,0,0,.2)}
+    .modal-head{padding:14px 20px;border-bottom:1px solid #e8e8e8;display:flex;justify-content:space-between;align-items:center}
+    .modal-body{padding:16px 20px;overflow-y:auto}
+    .modal-close{cursor:pointer;font-size:20px;color:#999;line-height:1}
+    .modal-close:hover{color:#333}
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">区域 × 品类 热力图</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">二维热力图展现各区域各品类的项目数/金额，发现已覆盖市场和空白市场，指导业务员布点</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">吴耀（战略规划）, 商务主管（区域分工）, 业务员（发现机会）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">区域×品类二维热力图 / 空白市场识别 / 竞品密度对比 / 点击格子下钻项目</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">切换指标（项目数/金额/中标率）/ 切换时间 / 点击格子查看详情 / 勾选品类筛选</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">格子颜色深浅反映数值 / 点击格子弹窗显示该区域该品类的项目列表</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">全球项目矿场 详细设计.md §2.9</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- 页面标题 -->
+<div class="flex justify-between items-center mb-4">
+  <div>
+    <h1 class="text-xl font-semibold text-gray-800">区域 × 品类 热力图</h1>
+    <p class="text-xs text-gray-500 mt-1">从二维视角发现已覆盖市场和空白市场，指导布点决策</p>
+  </div>
+  <div class="flex gap-2">
+    <button class="btn">⬇ 导出图片</button>
+    <button class="btn">⬇ 导出明细CSV</button>
+  </div>
+</div>
+
+<!-- 1. 筛选栏 -->
+<div class="card p-4 mb-4">
+  <div class="grid grid-cols-12 gap-4 items-start">
+    <!-- 指标切换 -->
+    <div class="col-span-4">
+      <div class="text-xs text-gray-500 mb-2">📊 指标</div>
+      <div class="seg">
+        <div class="seg-item active">项目数</div>
+        <div class="seg-item">中标金额</div>
+        <div class="seg-item">中标率</div>
+        <div class="seg-item">平均客单价</div>
+      </div>
+    </div>
+    <!-- 时间 -->
+    <div class="col-span-3">
+      <div class="text-xs text-gray-500 mb-2">🕒 时间</div>
+      <div class="seg">
+        <div class="seg-item">近一季</div>
+        <div class="seg-item">近半年</div>
+        <div class="seg-item active">近一年</div>
+      </div>
+    </div>
+    <!-- 区域粒度 -->
+    <div class="col-span-3">
+      <div class="text-xs text-gray-500 mb-2">🗺️ 区域粒度</div>
+      <div class="seg">
+        <div class="seg-item active">国家级</div>
+        <div class="seg-item">省级</div>
+        <div class="seg-item">城市级</div>
+      </div>
+    </div>
+    <!-- 快捷操作 -->
+    <div class="col-span-2 text-right">
+      <div class="text-xs text-gray-500 mb-2">&nbsp;</div>
+      <button class="btn btn-sm" style="padding:6px 12px;font-size:12px">🔄 重置</button>
+    </div>
+  </div>
+  <!-- 品类多选 -->
+  <div class="mt-4 pt-3 border-t border-gray-100">
+    <div class="text-xs text-gray-500 mb-2">🏷️ 品类（多选，取消勾选将在热力图中隐藏该行）</div>
+    <div class="flex gap-2 flex-wrap">
+      <span class="tag tag-on">✓ 室内乐园</span>
+      <span class="tag tag-on">✓ 户外乐园</span>
+      <span class="tag tag-on">✓ 水上乐园</span>
+      <span class="tag tag-on">✓ 无动力设备</span>
+      <span class="tag tag-on">✓ VR设备</span>
+      <span class="tag tag-on">✓ 儿童餐厅</span>
+      <span class="tag tag-on">✓ 蹦床公园</span>
+      <span class="tag tag-on">✓ IP主题乐园</span>
+      <span class="tag tag-off" style="cursor:pointer">+ 更多</span>
+    </div>
+  </div>
+</div>
+
+<!-- 2. 热力图主区 -->
+<div class="card p-4 mb-4">
+  <div class="flex justify-between items-center mb-3">
+    <div>
+      <div class="text-sm font-semibold text-gray-800">区域 × 品类 热力图 <span class="text-xs text-gray-400 font-normal">（当前指标：项目数 · 时间：近一年 · 区域粒度：国家级）</span></div>
+    </div>
+    <!-- 图例 -->
+    <div class="flex items-center gap-2 text-xs text-gray-500">
+      <span>少</span>
+      <span class="legend-box c-0"></span>
+      <span class="legend-box c-1"></span>
+      <span class="legend-box c-2"></span>
+      <span class="legend-box c-3"></span>
+      <span class="legend-box c-4"></span>
+      <span class="legend-box c-5"></span>
+      <span>多</span>
+      <span class="mx-2 text-gray-300">|</span>
+      <span class="legend-box" style="border:1px dashed #d9d9d9;background:#fafafa"></span>
+      <span>空白市场</span>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <div class="heat-grid">
+      <!-- 表头行 -->
+      <div class="heat-head" style="background:transparent;border:0"></div>
+      <div class="heat-head">华东</div>
+      <div class="heat-head">华南</div>
+      <div class="heat-head">华北</div>
+      <div class="heat-head">华中</div>
+      <div class="heat-head">西南</div>
+      <div class="heat-head">西北</div>
+      <div class="heat-head">东北</div>
+      <div class="heat-head">港澳台</div>
+      <div class="heat-head">东南亚</div>
+      <div class="heat-head">中东</div>
+      <div class="heat-head">欧美</div>
+      <div class="heat-head">非洲</div>
+
+      <!-- 室内乐园 -->
+      <div class="heat-row-label">室内乐园</div>
+      <div class="heat-cell c-5" onclick="openDrill('室内乐园','华东',148)"><div class="num">148</div><div class="amt">¥2.4亿</div><div class="tip">室内乐园 · 华东<br>148 个项目 | ¥2.4亿<br>平均客单价 ¥162万 · 中标率 38%</div></div>
+      <div class="heat-cell c-4" onclick="openDrill('室内乐园','华南',96)"><div class="num">96</div><div class="amt">¥1.6亿</div><div class="tip">室内乐园 · 华南<br>96 个项目 | ¥1.6亿</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('室内乐园','华北',72)"><div class="num">72</div><div class="amt">¥1.1亿</div><div class="tip">室内乐园 · 华北<br>72 个项目 | ¥1.1亿</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('室内乐园','华中',58)"><div class="num">58</div><div class="amt">¥8,700万</div><div class="tip">室内乐园 · 华中<br>58 个项目 | ¥8,700万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('室内乐园','西南',42)"><div class="num">42</div><div class="amt">¥6,300万</div><div class="tip">室内乐园 · 西南<br>42 个项目 | ¥6,300万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('室内乐园','西北',18)"><div class="num">18</div><div class="amt">¥2,400万</div><div class="tip">室内乐园 · 西北<br>18 个项目 | ¥2,400万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('室内乐园','东北',31)"><div class="num">31</div><div class="amt">¥4,200万</div><div class="tip">室内乐园 · 东北<br>31 个项目 | ¥4,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('室内乐园','港澳台',12)"><div class="num">12</div><div class="amt">¥2,800万</div><div class="tip">室内乐园 · 港澳台<br>12 个项目 | ¥2,800万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('室内乐园','东南亚',38)"><div class="num">38</div><div class="amt">¥5,400万</div><div class="tip">室内乐园 · 东南亚<br>38 个项目 | ¥5,400万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('室内乐园','中东',9)"><div class="num">9</div><div class="amt">¥3,200万</div><div class="tip">室内乐园 · 中东<br>9 个项目 | ¥3,200万 · 单价高</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('室内乐园','欧美',6)"><div class="num">6</div><div class="amt">¥1,800万</div><div class="tip">室内乐园 · 欧美<br>6 个项目 | ¥1,800万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('室内乐园','非洲',3)"><div class="num">3</div><div class="amt">¥420万</div><div class="tip">室内乐园 · 非洲<br>3 个项目 | ¥420万</div></div>
+
+      <!-- 户外乐园 -->
+      <div class="heat-row-label">户外乐园</div>
+      <div class="heat-cell c-3" onclick="openDrill('户外乐园','华东',64)"><div class="num">64</div><div class="amt">¥1.3亿</div><div class="tip">户外乐园 · 华东<br>64 个项目 | ¥1.3亿</div></div>
+      <div class="heat-cell c-4" onclick="openDrill('户外乐园','华南',82)"><div class="num">82</div><div class="amt">¥1.7亿</div><div class="tip">户外乐园 · 华南<br>82 个项目 | ¥1.7亿</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('户外乐园','华北',38)"><div class="num">38</div><div class="amt">¥7,200万</div><div class="tip">户外乐园 · 华北<br>38 个项目 | ¥7,200万</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('户外乐园','华中',52)"><div class="num">52</div><div class="amt">¥9,100万</div><div class="tip">户外乐园 · 华中<br>52 个项目 | ¥9,100万</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('户外乐园','西南',48)"><div class="num">48</div><div class="amt">¥6,800万</div><div class="tip">户外乐园 · 西南<br>48 个项目 | ¥6,800万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('户外乐园','西北',15)"><div class="num">15</div><div class="amt">¥2,100万</div><div class="tip">户外乐园 · 西北<br>15 个项目 | ¥2,100万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('户外乐园','东北',26)"><div class="num">26</div><div class="amt">¥3,600万</div><div class="tip">户外乐园 · 东北<br>26 个项目 | ¥3,600万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('户外乐园','港澳台',8)"><div class="num">8</div><div class="amt">¥1,900万</div><div class="tip">户外乐园 · 港澳台<br>8 个项目 | ¥1,900万</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('户外乐园','东南亚',56)"><div class="num">56</div><div class="amt">¥9,800万</div><div class="tip">户外乐园 · 东南亚<br>56 个项目 | ¥9,800万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('户外乐园','中东',22)"><div class="num">22</div><div class="amt">¥7,400万</div><div class="tip">户外乐园 · 中东<br>22 个项目 | ¥7,400万 · 单价高</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('户外乐园','欧美',11)"><div class="num">11</div><div class="amt">¥3,200万</div><div class="tip">户外乐园 · 欧美<br>11 个项目 | ¥3,200万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('户外乐园','非洲',19)"><div class="num">19</div><div class="amt">¥2,800万</div><div class="tip">户外乐园 · 非洲<br>19 个项目 | ¥2,800万</div></div>
+
+      <!-- 水上乐园 -->
+      <div class="heat-row-label">水上乐园</div>
+      <div class="heat-cell c-3" onclick="openDrill('水上乐园','华东',54)"><div class="num">54</div><div class="amt">¥1.2亿</div><div class="tip">水上乐园 · 华东<br>54 个项目 | ¥1.2亿</div></div>
+      <div class="heat-cell c-5" onclick="openDrill('水上乐园','华南',87)"><div class="num">87</div><div class="amt">¥1.8亿</div><div class="tip">水上乐园 · 华南<br>87 个项目 | ¥1.8亿 · 气候匹配</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('水上乐园','华北',14)"><div class="num">14</div><div class="amt">¥2,800万</div><div class="tip">水上乐园 · 华北<br>14 个项目 | ¥2,800万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('水上乐园','华中',34)"><div class="num">34</div><div class="amt">¥6,200万</div><div class="tip">水上乐园 · 华中<br>34 个项目 | ¥6,200万</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('水上乐园','西南',46)"><div class="num">46</div><div class="amt">¥7,800万</div><div class="tip">水上乐园 · 西南<br>46 个项目 | ¥7,800万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('水上乐园','西北',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">水上乐园 · 西北<br>空白市场（气候不匹配）</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('水上乐园','东北',9)"><div class="num">9</div><div class="amt">¥1,600万</div><div class="tip">水上乐园 · 东北<br>9 个项目 | ¥1,600万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('水上乐园','港澳台',7)"><div class="num">7</div><div class="amt">¥1,800万</div><div class="tip">水上乐园 · 港澳台<br>7 个项目 | ¥1,800万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('水上乐园','东南亚',29)"><div class="num">29</div><div class="amt">¥6,400万</div><div class="tip">水上乐园 · 东南亚<br>29 个项目 | ¥6,400万 · 高潜空白</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('水上乐园','中东',18)"><div class="num">18</div><div class="amt">¥8,200万</div><div class="tip">水上乐园 · 中东<br>18 个项目 | ¥8,200万 · 单价高</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('水上乐园','欧美',5)"><div class="num">5</div><div class="amt">¥1,200万</div><div class="tip">水上乐园 · 欧美<br>5 个项目 | ¥1,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('水上乐园','非洲',4)"><div class="num">4</div><div class="amt">¥680万</div><div class="tip">水上乐园 · 非洲<br>4 个项目 | ¥680万</div></div>
+
+      <!-- 无动力设备 -->
+      <div class="heat-row-label">无动力设备</div>
+      <div class="heat-cell c-4" onclick="openDrill('无动力设备','华东',112)"><div class="num">112</div><div class="amt">¥1.4亿</div><div class="tip">无动力设备 · 华东<br>112 个项目 | ¥1.4亿</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('无动力设备','华南',78)"><div class="num">78</div><div class="amt">¥9,200万</div><div class="tip">无动力设备 · 华南<br>78 个项目 | ¥9,200万</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('无动力设备','华北',64)"><div class="num">64</div><div class="amt">¥7,800万</div><div class="tip">无动力设备 · 华北<br>64 个项目 | ¥7,800万</div></div>
+      <div class="heat-cell c-4" onclick="openDrill('无动力设备','华中',88)"><div class="num">88</div><div class="amt">¥1.0亿</div><div class="tip">无动力设备 · 华中<br>88 个项目 | ¥1.0亿</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('无动力设备','西南',62)"><div class="num">62</div><div class="amt">¥7,200万</div><div class="tip">无动力设备 · 西南<br>62 个项目 | ¥7,200万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('无动力设备','西北',28)"><div class="num">28</div><div class="amt">¥3,400万</div><div class="tip">无动力设备 · 西北<br>28 个项目 | ¥3,400万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('无动力设备','东北',34)"><div class="num">34</div><div class="amt">¥4,100万</div><div class="tip">无动力设备 · 东北<br>34 个项目 | ¥4,100万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('无动力设备','港澳台',6)"><div class="num">6</div><div class="amt">¥920万</div><div class="tip">无动力设备 · 港澳台<br>6 个项目 | ¥920万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('无动力设备','东南亚',42)"><div class="num">42</div><div class="amt">¥5,600万</div><div class="tip">无动力设备 · 东南亚<br>42 个项目 | ¥5,600万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('无动力设备','中东',14)"><div class="num">14</div><div class="amt">¥4,200万</div><div class="tip">无动力设备 · 中东<br>14 个项目 | ¥4,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('无动力设备','欧美',8)"><div class="num">8</div><div class="amt">¥2,100万</div><div class="tip">无动力设备 · 欧美<br>8 个项目 | ¥2,100万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('无动力设备','非洲',11)"><div class="num">11</div><div class="amt">¥1,400万</div><div class="tip">无动力设备 · 非洲<br>11 个项目 | ¥1,400万</div></div>
+
+      <!-- VR设备 -->
+      <div class="heat-row-label">VR设备</div>
+      <div class="heat-cell c-2" onclick="openDrill('VR设备','华东',32)"><div class="num">32</div><div class="amt">¥4,800万</div><div class="tip">VR设备 · 华东<br>32 个项目 | ¥4,800万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('VR设备','华南',28)"><div class="num">28</div><div class="amt">¥4,200万</div><div class="tip">VR设备 · 华南<br>28 个项目 | ¥4,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','华北',14)"><div class="num">14</div><div class="amt">¥2,100万</div><div class="tip">VR设备 · 华北<br>14 个项目 | ¥2,100万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','华中',18)"><div class="num">18</div><div class="amt">¥2,600万</div><div class="tip">VR设备 · 华中<br>18 个项目 | ¥2,600万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','西南',9)"><div class="num">9</div><div class="amt">¥1,200万</div><div class="tip">VR设备 · 西南<br>9 个项目 | ¥1,200万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('VR设备','西北',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">VR设备 · 西北<br>⚠️ 空白市场 - 高潜机会<br>建议优先布点</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','东北',5)"><div class="num">5</div><div class="amt">¥680万</div><div class="tip">VR设备 · 东北<br>5 个项目 | ¥680万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','港澳台',4)"><div class="num">4</div><div class="amt">¥820万</div><div class="tip">VR设备 · 港澳台<br>4 个项目 | ¥820万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','东南亚',7)"><div class="num">7</div><div class="amt">¥980万</div><div class="tip">VR设备 · 东南亚<br>7 个项目 | ¥980万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('VR设备','中东',6)"><div class="num">6</div><div class="amt">¥2,400万</div><div class="tip">VR设备 · 中东<br>6 个项目 | ¥2,400万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('VR设备','欧美',16)"><div class="num">16</div><div class="amt">¥4,800万</div><div class="tip">VR设备 · 欧美<br>16 个项目 | ¥4,800万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('VR设备','非洲',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">VR设备 · 非洲<br>空白市场</div></div>
+
+      <!-- 儿童餐厅 -->
+      <div class="heat-row-label">儿童餐厅</div>
+      <div class="heat-cell c-3" onclick="openDrill('儿童餐厅','华东',68)"><div class="num">68</div><div class="amt">¥5,400万</div><div class="tip">儿童餐厅 · 华东<br>68 个项目 | ¥5,400万</div></div>
+      <div class="heat-cell c-3" onclick="openDrill('儿童餐厅','华南',58)"><div class="num">58</div><div class="amt">¥4,600万</div><div class="tip">儿童餐厅 · 华南<br>58 个项目 | ¥4,600万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('儿童餐厅','华北',42)"><div class="num">42</div><div class="amt">¥3,400万</div><div class="tip">儿童餐厅 · 华北<br>42 个项目 | ¥3,400万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('儿童餐厅','华中',36)"><div class="num">36</div><div class="amt">¥2,800万</div><div class="tip">儿童餐厅 · 华中<br>36 个项目 | ¥2,800万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('儿童餐厅','西南',24)"><div class="num">24</div><div class="amt">¥1,900万</div><div class="tip">儿童餐厅 · 西南<br>24 个项目 | ¥1,900万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('儿童餐厅','西北',8)"><div class="num">8</div><div class="amt">¥620万</div><div class="tip">儿童餐厅 · 西北<br>8 个项目 | ¥620万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('儿童餐厅','东北',15)"><div class="num">15</div><div class="amt">¥1,200万</div><div class="tip">儿童餐厅 · 东北<br>15 个项目 | ¥1,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('儿童餐厅','港澳台',11)"><div class="num">11</div><div class="amt">¥1,400万</div><div class="tip">儿童餐厅 · 港澳台<br>11 个项目 | ¥1,400万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('儿童餐厅','东南亚',13)"><div class="num">13</div><div class="amt">¥1,600万</div><div class="tip">儿童餐厅 · 东南亚<br>13 个项目 | ¥1,600万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('儿童餐厅','中东',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">儿童餐厅 · 中东<br>空白市场</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('儿童餐厅','欧美',7)"><div class="num">7</div><div class="amt">¥1,800万</div><div class="tip">儿童餐厅 · 欧美<br>7 个项目 | ¥1,800万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('儿童餐厅','非洲',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">儿童餐厅 · 非洲<br>空白市场</div></div>
+
+      <!-- 蹦床公园 -->
+      <div class="heat-row-label">蹦床公园</div>
+      <div class="heat-cell c-3" onclick="openDrill('蹦床公园','华东',52)"><div class="num">52</div><div class="amt">¥4,200万</div><div class="tip">蹦床公园 · 华东<br>52 个项目 | ¥4,200万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('蹦床公园','华南',38)"><div class="num">38</div><div class="amt">¥3,100万</div><div class="tip">蹦床公园 · 华南<br>38 个项目 | ¥3,100万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('蹦床公园','华北',32)"><div class="num">32</div><div class="amt">¥2,600万</div><div class="tip">蹦床公园 · 华北<br>32 个项目 | ¥2,600万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('蹦床公园','华中',26)"><div class="num">26</div><div class="amt">¥2,100万</div><div class="tip">蹦床公园 · 华中<br>26 个项目 | ¥2,100万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('蹦床公园','西南',18)"><div class="num">18</div><div class="amt">¥1,500万</div><div class="tip">蹦床公园 · 西南<br>18 个项目 | ¥1,500万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('蹦床公园','西北',6)"><div class="num">6</div><div class="amt">¥520万</div><div class="tip">蹦床公园 · 西北<br>6 个项目 | ¥520万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('蹦床公园','东北',11)"><div class="num">11</div><div class="amt">¥920万</div><div class="tip">蹦床公园 · 东北<br>11 个项目 | ¥920万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('蹦床公园','港澳台',4)"><div class="num">4</div><div class="amt">¥540万</div><div class="tip">蹦床公园 · 港澳台<br>4 个项目 | ¥540万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('蹦床公园','东南亚',9)"><div class="num">9</div><div class="amt">¥1,200万</div><div class="tip">蹦床公园 · 东南亚<br>9 个项目 | ¥1,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('蹦床公园','中东',3)"><div class="num">3</div><div class="amt">¥980万</div><div class="tip">蹦床公园 · 中东<br>3 个项目 | ¥980万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('蹦床公园','欧美',22)"><div class="num">22</div><div class="amt">¥6,200万</div><div class="tip">蹦床公园 · 欧美<br>22 个项目 | ¥6,200万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('蹦床公园','非洲',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">蹦床公园 · 非洲<br>空白市场</div></div>
+
+      <!-- IP主题乐园 -->
+      <div class="heat-row-label">IP主题乐园</div>
+      <div class="heat-cell c-2" onclick="openDrill('IP主题乐园','华东',24)"><div class="num">24</div><div class="amt">¥9,600万</div><div class="tip">IP主题乐园 · 华东<br>24 个项目 | ¥9,600万</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('IP主题乐园','华南',19)"><div class="num">19</div><div class="amt">¥7,800万</div><div class="tip">IP主题乐园 · 华南<br>19 个项目 | ¥7,800万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','华北',13)"><div class="num">13</div><div class="amt">¥5,400万</div><div class="tip">IP主题乐园 · 华北<br>13 个项目 | ¥5,400万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','华中',2)"><div class="num">2</div><div class="amt">¥1,200万</div><div class="tip">IP主题乐园 · 华中<br>2 个项目 | ¥1,200万 · 可加码</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','西南',6)"><div class="num">6</div><div class="amt">¥2,800万</div><div class="tip">IP主题乐园 · 西南<br>6 个项目 | ¥2,800万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('IP主题乐园','西北',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">IP主题乐园 · 西北<br>空白市场</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','东北',4)"><div class="num">4</div><div class="amt">¥1,800万</div><div class="tip">IP主题乐园 · 东北<br>4 个项目 | ¥1,800万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','港澳台',3)"><div class="num">3</div><div class="amt">¥1,600万</div><div class="tip">IP主题乐园 · 港澳台<br>3 个项目 | ¥1,600万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','东南亚',8)"><div class="num">8</div><div class="amt">¥3,200万</div><div class="tip">IP主题乐园 · 东南亚<br>8 个项目 | ¥3,200万</div></div>
+      <div class="heat-cell c-1" onclick="openDrill('IP主题乐园','中东',3)"><div class="num">3</div><div class="amt">¥6,200万</div><div class="tip">IP主题乐园 · 中东<br>3 个项目 | ¥6,200万 · 单价极高</div></div>
+      <div class="heat-cell c-2" onclick="openDrill('IP主题乐园','欧美',12)"><div class="num">12</div><div class="amt">¥5,400万</div><div class="tip">IP主题乐园 · 欧美<br>12 个项目 | ¥5,400万</div></div>
+      <div class="heat-cell c-0 heat-empty" onclick="openDrill('IP主题乐园','非洲',0)"><div class="num">—</div><div class="amt">空白</div><div class="tip">IP主题乐园 · 非洲<br>空白市场</div></div>
+
+    </div>
+  </div>
+</div>
+
+<!-- 3. 空白市场提示区 -->
+<div class="card p-4 mb-4">
+  <div class="flex justify-between items-center mb-3">
+    <div class="text-sm font-semibold text-gray-800">🎯 高潜空白市场 <span class="text-xs text-gray-400 font-normal">（综合人口/消费/气候匹配度自动识别，按潜力排序）</span></div>
+    <a class="text-xs text-blue-500 cursor-pointer hover:underline">查看全部 12 个 →</a>
+  </div>
+  <div class="grid grid-cols-1 gap-2">
+    <div class="opp-card">
+      <div class="opp-icon">🎯</div>
+      <div class="flex-1">
+        <div class="opp-title">VR设备 × 西北地区</div>
+        <div class="opp-desc">
+          <span class="opp-tag">空白</span>
+          <span class="opp-tag">人口+12.4%</span>
+          <span class="opp-tag">消费升级</span>
+          品类完全空白，西安/兰州人口/消费增长显著，万达/华侨城已布点同品类类似场景，建议优先派 3-5 名业务员试点布局
+        </div>
+      </div>
+      <button class="btn btn-primary" style="padding:4px 12px;font-size:12px">分配业务员</button>
+    </div>
+    <div class="opp-card">
+      <div class="opp-icon">🎯</div>
+      <div class="flex-1">
+        <div class="opp-title">水上乐园 × 东南亚</div>
+        <div class="opp-desc">
+          <span class="opp-tag">低密度</span>
+          <span class="opp-tag">气候匹配</span>
+          <span class="opp-tag">客单¥220万</span>
+          现有 29 个项目但竞品少（仅 Pico/同美），泰国/印尼/越南气候匹配度高，建议加大投入抢占先发
+        </div>
+      </div>
+      <button class="btn btn-primary" style="padding:4px 12px;font-size:12px">分配业务员</button>
+    </div>
+    <div class="opp-card">
+      <div class="opp-icon">🎯</div>
+      <div class="flex-1">
+        <div class="opp-title">IP主题乐园 × 华中</div>
+        <div class="opp-desc">
+          <span class="opp-tag">已验证</span>
+          <span class="opp-tag">样本2个</span>
+          <span class="opp-tag">ROI+18%</span>
+          已有 2 个项目验证商业模式可行（武汉、长沙），城市群消费水平足够支撑，可加码扩展至郑州/合肥
+        </div>
+      </div>
+      <button class="btn btn-primary" style="padding:4px 12px;font-size:12px">分配业务员</button>
+    </div>
+    <div class="opp-card">
+      <div class="opp-icon">🎯</div>
+      <div class="flex-1">
+        <div class="opp-title">儿童餐厅 × 中东</div>
+        <div class="opp-desc">
+          <span class="opp-tag">空白</span>
+          <span class="opp-tag">高消费</span>
+          品类空白，迪拜/利雅得家庭消费能力极高，但需考虑本地化菜单与宗教合规，建议先走合资模式
+        </div>
+      </div>
+      <button class="btn btn-primary" style="padding:4px 12px;font-size:12px">分配业务员</button>
+    </div>
+    <div class="opp-card">
+      <div class="opp-icon">🎯</div>
+      <div class="flex-1">
+        <div class="opp-title">IP主题乐园 × 东南亚</div>
+        <div class="opp-desc">
+          <span class="opp-tag">低密度</span>
+          <span class="opp-tag">单价¥400万</span>
+          当前 8 个项目但平均单价 ¥400万，本地IP认可度高（如哆啦A梦/吉卜力），建议引入联名合作
+        </div>
+      </div>
+      <button class="btn btn-primary" style="padding:4px 12px;font-size:12px">分配业务员</button>
+    </div>
+  </div>
+</div>
+
+<!-- 4. 分布 Top 榜 -->
+<div class="grid grid-cols-2 gap-4 mb-4">
+  <div class="card p-4">
+    <div class="flex justify-between items-center mb-3">
+      <div class="text-sm font-semibold text-gray-800">🏆 品类 TOP 5</div>
+      <div class="text-xs text-gray-400">按项目数排序</div>
+    </div>
+    <table class="mini-table">
+      <thead><tr><th style="width:40px">#</th><th>品类</th><th style="text-align:right">项目数</th><th style="text-align:right">占比</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-1">1</span></td>
+          <td>无动力设备
+            <div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">547</td>
+          <td style="text-align:right;color:#666">19.8%</td>
+        </tr>
+        <tr>
+          <td><span class="rank-2">2</span></td>
+          <td>室内乐园
+            <div class="bar-wrap"><div class="bar-fill" style="width:96%"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">533</td>
+          <td style="text-align:right;color:#666">19.3%</td>
+        </tr>
+        <tr>
+          <td><span class="rank-3">3</span></td>
+          <td>户外乐园
+            <div class="bar-wrap"><div class="bar-fill" style="width:82%"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">442</td>
+          <td style="text-align:right;color:#666">16.0%</td>
+        </tr>
+        <tr>
+          <td style="color:#999">4</td>
+          <td>水上乐园
+            <div class="bar-wrap"><div class="bar-fill" style="width:57%;opacity:.7"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">307</td>
+          <td style="text-align:right;color:#666">11.1%</td>
+        </tr>
+        <tr>
+          <td style="color:#999">5</td>
+          <td>儿童餐厅
+            <div class="bar-wrap"><div class="bar-fill" style="width:52%;opacity:.6"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">282</td>
+          <td style="text-align:right;color:#666">10.2%</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card p-4">
+    <div class="flex justify-between items-center mb-3">
+      <div class="text-sm font-semibold text-gray-800">🗺️ 区域 TOP 5</div>
+      <div class="text-xs text-gray-400">按项目数排序</div>
+    </div>
+    <table class="mini-table">
+      <thead><tr><th style="width:40px">#</th><th>区域</th><th style="text-align:right">项目数</th><th style="text-align:right">金额</th></tr></thead>
+      <tbody>
+        <tr>
+          <td><span class="rank-1">1</span></td>
+          <td>华东
+            <div class="bar-wrap"><div class="bar-fill" style="width:100%"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">602</td>
+          <td style="text-align:right;color:#1890ff;font-weight:600">¥10.4亿</td>
+        </tr>
+        <tr>
+          <td><span class="rank-2">2</span></td>
+          <td>华南
+            <div class="bar-wrap"><div class="bar-fill" style="width:80%"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">486</td>
+          <td style="text-align:right;color:#1890ff;font-weight:600">¥9.2亿</td>
+        </tr>
+        <tr>
+          <td><span class="rank-3">3</span></td>
+          <td>华中
+            <div class="bar-wrap"><div class="bar-fill" style="width:51%"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">308</td>
+          <td style="text-align:right;color:#1890ff;font-weight:600">¥5.1亿</td>
+        </tr>
+        <tr>
+          <td style="color:#999">4</td>
+          <td>华北
+            <div class="bar-wrap"><div class="bar-fill" style="width:48%;opacity:.7"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">289</td>
+          <td style="text-align:right;color:#1890ff;font-weight:600">¥4.7亿</td>
+        </tr>
+        <tr>
+          <td style="color:#999">5</td>
+          <td>西南
+            <div class="bar-wrap"><div class="bar-fill" style="width:43%;opacity:.6"></div></div>
+          </td>
+          <td style="text-align:right;font-weight:600">255</td>
+          <td style="text-align:right;color:#1890ff;font-weight:600">¥3.9亿</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 5. 数据口径 -->
+<div class="text-xs text-gray-400 text-center py-3 border-t border-gray-200 mt-6">
+  数据来源：<code class="bg-gray-100 px-1 rounded text-gray-600">mine_project.region</code> + <code class="bg-gray-100 px-1 rounded text-gray-600">mine_project.category</code>
+  ｜ 热力图统计口径：已入矿场（非垃圾桶/休眠）的项目
+  ｜ 数据更新：每日 06:00 全量刷新
+  ｜ 样本：近一年共 2,763 个项目
+</div>
+
+<!-- 下钻弹窗 -->
+<div class="modal-mask" id="drillModal" onclick="if(event.target===this)closeDrill()">
+  <div class="modal">
+    <div class="modal-head">
+      <div>
+        <div class="text-sm font-semibold text-gray-800" id="drill-title">项目明细</div>
+        <div class="text-xs text-gray-500 mt-1" id="drill-meta">—</div>
+      </div>
+      <div class="modal-close" onclick="closeDrill()">✕</div>
+    </div>
+    <div class="modal-body">
+      <table class="mini-table">
+        <thead><tr><th>项目名</th><th>甲方</th><th>规模</th><th>状态</th><th>中标金额</th></tr></thead>
+        <tbody id="drill-list">
+          <tr><td>上海静安 乐高探索中心</td><td>乐高集团(上海)</td><td>3,200㎡</td><td><span class="tag tag-on" style="cursor:default">已中标</span></td><td style="color:#1890ff;font-weight:600">¥1,860万</td></tr>
+          <tr><td>苏州姑苏 爱乐游亲子乐园</td><td>爱乐游文旅集团</td><td>1,800㎡</td><td><span class="tag tag-on" style="cursor:default">已中标</span></td><td style="color:#1890ff;font-weight:600">¥920万</td></tr>
+          <tr><td>杭州萧山 奥特曼主题馆</td><td>圆谷(中国)授权方</td><td>2,400㎡</td><td><span class="tag tag-on" style="cursor:default">已中标</span></td><td style="color:#1890ff;font-weight:600">¥1,420万</td></tr>
+          <tr><td>南京江宁 悠游堂室内乐园</td><td>悠游堂(南京)儿童娱乐</td><td>2,100㎡</td><td><span class="tag" style="cursor:default;background:#fff7e6;color:#fa8c16;border:1px solid #ffd591">进行中</span></td><td style="color:#999">—</td></tr>
+          <tr><td>合肥蜀山 万达宝贝王</td><td>万达商管集团</td><td>4,200㎡</td><td><span class="tag tag-on" style="cursor:default">已中标</span></td><td style="color:#1890ff;font-weight:600">¥2,240万</td></tr>
+          <tr><td>无锡锡山 哈尼宝贝亲子中心</td><td>哈尼宝贝(无锡)</td><td>1,500㎡</td><td><span class="tag" style="cursor:default;background:#fff7e6;color:#fa8c16;border:1px solid #ffd591">进行中</span></td><td style="color:#999">—</td></tr>
+          <tr><td>宁波鄞州 伽罗文旅室内乐园</td><td>伽罗文旅</td><td>2,800㎡</td><td><span class="tag tag-on" style="cursor:default">已中标</span></td><td style="color:#1890ff;font-weight:600">¥1,680万</td></tr>
+          <tr><td colspan="5" style="text-align:center;color:#999;padding:16px">查看全部 <span id="drill-count">148</span> 个项目 →</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  function openDrill(cat, region, count){
+    document.getElementById('drill-title').textContent = cat + ' × ' + region + ' — 项目明细';
+    document.getElementById('drill-meta').textContent = (count>0 ? ('共 ' + count + ' 个项目 · 指标：项目数 · 时间：近一年') : '⚠️ 该区域该品类为空白市场，暂无项目。建议 → 分配业务员试点');
+    document.getElementById('drill-count').textContent = count;
+    document.getElementById('drillModal').classList.add('open');
+  }
+  function closeDrill(){ document.getElementById('drillModal').classList.remove('open'); }
+
+  // Tag 勾选交互
+  document.querySelectorAll('.tag').forEach(function(t){
+    t.addEventListener('click', function(){
+      if(this.classList.contains('tag-on')){
+        this.classList.remove('tag-on'); this.classList.add('tag-off');
+        this.textContent = this.textContent.replace('✓','+').trim();
+      } else if(this.textContent.indexOf('+ 更多') === -1){
+        this.classList.remove('tag-off'); this.classList.add('tag-on');
+        this.textContent = this.textContent.replace('+','✓').trim();
+      }
+    });
+  });
+
+  // Seg 切换
+  document.querySelectorAll('.seg').forEach(function(seg){
+    seg.querySelectorAll('.seg-item').forEach(function(item){
+      item.addEventListener('click', function(){
+        seg.querySelectorAll('.seg-item').forEach(function(i){i.classList.remove('active')});
+        this.classList.add('active');
+      });
+    });
+  });
+</script>
+
+</body>
+</html>

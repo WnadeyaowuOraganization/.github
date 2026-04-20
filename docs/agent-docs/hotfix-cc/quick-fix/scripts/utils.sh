@@ -42,6 +42,51 @@ function init-gh-token() {
 }
 
 # ============================================================================
+# dev 分支同步 — push 前必须调用，避免冲突和重复构建
+# ============================================================================
+
+function sync-dev() {
+  cd "$QF_DIR"
+
+  # 确保 remote URL 使用最新 token
+  if [ -n "$GH_TOKEN" ]; then
+    git remote set-url origin "https://x-access-token:${GH_TOKEN}@github.com/${REPO}.git" 2>/dev/null
+  fi
+
+  git fetch origin dev -q
+  local behind=$(git rev-list HEAD..origin/dev --count 2>/dev/null || echo 0)
+
+  if [ "$behind" -gt 0 ]; then
+    echo -e "${YELLOW}⚠️  dev 分支落后 $behind 个commit，正在同步...${NC}"
+    local has_changes=0
+    git diff --quiet 2>/dev/null || has_changes=1
+
+    if [ "$has_changes" -eq 1 ]; then
+      git stash -q 2>/dev/null
+    fi
+
+    if ! git rebase origin/dev -q 2>/dev/null; then
+      echo -e "${RED}❌ rebase 冲突，中止 rebase 并恢复${NC}"
+      git rebase --abort 2>/dev/null
+      if [ "$has_changes" -eq 1 ]; then
+        git stash pop -q 2>/dev/null || true
+      fi
+      echo -e "${RED}请手动解决冲突后再 push${NC}"
+      return 1
+    fi
+
+    if [ "$has_changes" -eq 1 ]; then
+      git stash pop -q 2>/dev/null || true
+    fi
+
+    echo -e "${GREEN}✅ 已同步到最新 dev (合入 $behind 个commit)${NC}"
+  else
+    echo -e "${GREEN}✅ dev 已是最新${NC}"
+  fi
+  return 0
+}
+
+# ============================================================================
 # 【优化1】本地验证 Gate — 强制 backend compile 和 frontend build
 # ============================================================================
 
@@ -659,7 +704,7 @@ HELP_EOF
 # 导出所有函数
 # ============================================================================
 
-export -f init-gh-token
+export -f init-gh-token sync-dev
 export -f verify-backend verify-frontend verify-local
 export -f wait-ci-complete
 export -f rollback-backend rollback-frontend health-check rollback-complete

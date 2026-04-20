@@ -247,14 +247,21 @@ mysql -h 127.0.0.1 -u root -p<password> <db_name> < backend/ruoyi-modules/wande-
 
 ### 4.1 提交代码
 
+> **push 前必须 sync-dev**：其他人可能已经push了新代码到dev，不同步会导致冲突或覆盖。
+
 ```bash
+source /data/home/ubuntu/projects/.github/docs/agent-docs/hotfix-cc/quick-fix/scripts/utils.sh
 cd /data/home/ubuntu/projects/wande-play-quick-fix
 
-# 必须逐文件 add，禁止 git add .（防止带入临时文件）
+# 1. 同步最新 dev（必做，检测远端新提交并 rebase）
+sync-dev || exit 1
+
+# 2. 必须逐文件 add，禁止 git add .（防止带入临时文件）
 git add backend/ruoyi-modules/wande-ai/src/main/java/...
 git add frontend/apps/web-antd/src/views/...
 # ... 只添加改动文件
 
+# 3. commit + push
 git commit -m "fix: <一句话描述> (quick-fix #${ISSUE_NUM})"
 git push origin dev
 ```
@@ -399,8 +406,8 @@ gh issue close $ISSUE_NUM --repo WnadeyaowuOraganization/wande-play
 4. create-issue-{frontend|api|data} 创建
 5. 读代码 → 定位根因
 6. 最小改动 + verify-local 强制验证通过    ← 【优化1】强制 gate
-7. git add <逐文件> && git commit && git push
-8. wait-ci-complete 等待 CI                 ← 【优化3】指数退避轮询
+7. sync-dev && git add <逐文件> && commit && push  ← push前必须同步
+8. tail -f 启动日志 + wait-ci-complete      ← 主动监听 + 轮询
 9. take-screenshot 记录 after
 10. comment-issue-fixed && close-issue-fixed ← 【优化6】自动评论
 ```

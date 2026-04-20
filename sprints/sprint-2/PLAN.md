@@ -332,9 +332,11 @@ Week 4 (5/10-5/16):
 | kimi1  | #1702 | backend | ~~设备台账API — 设备管理+二维码+维修履历~~ | ~~Done(PR#3964 admin-merged)~~ |
 | kimi3  | #2002 | finance | ~~项目全链路资金闭环报告API — 从获客到净利润一张表~~ | ~~Done(PR#3960 admin-merged)~~ |
 | kimi3  | #2014 | backend | ~~数据范围控制引擎 — sys_data_scope+全部/本部门/本人+AOP~~ | ~~Done(PR#3962 admin-merged)~~ |
-| kimi3  | #2510 | backend | AI合同关键信息提取引擎 — 回款条件+质保期+特殊条款+我方准备 | 进行中 |
+| kimi3  | #2510 | backend | ~~AI合同关键信息提取引擎 — 回款条件+质保期+特殊条款+我方准备~~ | ~~Done(PR#3968 admin-merged)~~ |
 | kimi4  | #2008 | finance | ~~报价成本模型API — BOM+运费+安装+管理费→建议售价~~ | ~~Done(PR#3963 admin-merged)~~ |
-| kimi1  | #3180 | backend | 文档对内/对外分类 — doc_visibility字段+分类标签体系 | 进行中 |
-| kimi4  | #2366 | frontend | 审批中心页面 — 待办/已办/发起三Tab+审批操作 | 进行中 |
+| kimi1  | #3180 | backend | ~~文档对内/对外分类 — doc_visibility字段+分类标签体系~~ | ~~Done(PR#3967 admin-merged)~~ |
+| kimi4  | #2366 | frontend | ~~审批中心页面 — 待办/已办/发起三Tab+审批操作~~ | ~~Done(PR#3966 admin-merged)~~ |
 | kimi19 | #1685 | backend | 项目费用关联API+财务报表导出功能 | 进行中 |
-| kimi6  | #2105 | backend | 质保成本核算API — 6维度成本+外包结算+客户计费 | 进行中 |
+| kimi6  | #2105 | backend | ~~质保成本核算API — 6维度成本+外包结算+客户计费~~ | ~~Done(PR#3965 admin-merged)~~ |
+| kimi4  | #3181 | backend | 阶段文档注册表 — 每阶段必备文档清单模板+完成度计算 | 进行中 |
+| kimi6  | #3149 | frontend | 审批进度追踪器组件 — 流程地图+步骤高亮+卡点提示+预估耗时 | 进行中 |

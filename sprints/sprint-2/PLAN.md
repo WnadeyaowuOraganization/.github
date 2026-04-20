@@ -346,7 +346,7 @@ Week 4 (5/10-5/16):
 | kimi1  | #3182 | backend | ~~文档自动归集 — 审批/合同/设计附件自动入项目文档库~~ | ~~Done(PR#3973 admin-merged)~~ |
 | kimi3  | #3656 | backend | ~~法规文件预置模板 — TSG 71-2023 七阶段38项法定文件种子数据~~ | ~~Done(PR#3971 admin-merged)~~ |
 | kimi19 | #1685 | backend | ~~项目费用关联API+财务报表导出功能~~ | ~~Done(PR#3970 admin-merged)~~ |
-| kimi19 | #3650 | fullstack | 招投标-B 检测报告管理 | 进行中 |
+| kimi19 | #3650 | fullstack | ~~招投标-B 检测报告管理~~ | ~~Done(PR#3981 admin-merged)~~ |
 | kimi4  | #3181 | backend | ~~阶段文档注册表 — 每阶段必备文档清单模板+完成度计算~~ | ~~Done(PR#3974 admin-merged)~~ |
 | kimi3  | #2468 | backend | ~~图纸管理API — 上传/版本控制/审批/下发工厂~~ | ~~Done(PR#3904 已于04-19完成)~~ |
 | kimi6  | #1875 | mine | ~~赢/输复盘模板+系统化采集（矿场主线）~~ | ~~Done(PR#3976 admin-merged)~~ |
@@ -354,7 +354,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #2195 | backend | ~~品牌中心多平台数据采集~~ | ~~Done(PR#3975 admin-merged)~~ |
 | kimi4  | #3652 | fullstack | 招投标-D 投标文件编制工作台 | 进行中 |
 | kimi1  | #3377 | backend | ~~PLM子系统数据库初始化 — 7张核心表建表+索引~~ | ~~Done(PR#3977 admin-merged)~~ |
-| kimi3  | #3653 | fullstack | 招投标-E 报价决策与保证金台账 | 进行中 |
+| kimi3  | #3653 | fullstack | ~~招投标-E 报价决策与保证金台账~~ | ~~Done(PR#3980 admin-merged)~~ |
 | kimi1  | #3378 | backend | ~~PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机~~ | ~~Done(PR#3979 admin-merged)~~ |
 | kimi6  | #2204 | backend | ~~品牌中心数据库建表~~ | ~~Done(PR#3978 admin-merged)~~ |
 | kimi6  | #2203 | backend | 品牌中心内容CRUD API + 状态流转 + S3文件上传 | 进行中 |

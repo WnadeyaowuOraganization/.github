@@ -163,8 +163,7 @@ Week 4 (5/10-5/16):
 
 | 建议kimi | Issue | 优先 | 模块 | 内容 | 备注 |
 |---------|-------|------|------|------|------|
-| kimi3  | #2195 | P1 | brand/backend | 品牌中心多平台数据采集 — 抖音/B站/小红书/YouTube/微信/LinkedIn | 无依赖，GitHub OPEN确认 |
-| kimi4  | #3652 | P1 | bidding/fullstack | 招投标-D 投标文件编制工作台 | 前置#3648✅Done+#3649✅Done，有原型，GitHub OPEN确认 |
+（已清空，kimi3/#2195 + kimi4/#3652 已派出）
 
 > ⚠️ #3651（招投标-C）blocked-by 审批引擎#3161（OPEN），暂不派；#3654（仪表盘）depends-on #3651，连带阻塞。
 > ⚠️ 本批建议已逐一通过 GitHub API 验证 state=OPEN 且无已merged PR，避免重复推已完成 issue。
@@ -351,4 +350,6 @@ Week 4 (5/10-5/16):
 | kimi4  | #3181 | backend | ~~阶段文档注册表 — 每阶段必备文档清单模板+完成度计算~~ | ~~Done(PR#3974 admin-merged)~~ |
 | kimi3  | #2468 | backend | ~~图纸管理API — 上传/版本控制/审批/下发工厂~~ | ~~Done(PR#3904 已于04-19完成)~~ |
 | kimi6  | #1875 | mine | 赢/输复盘模板+系统化采集（矿场主线） | 进行中 |
-| kimi1  | #2086 | backend | 变更影响联动API — BOM差异自动计算+成本影响+工期更新 | 进行中 |
+| kimi1  | #2086 | backend | ~~变更影响联动API — BOM差异自动计算+成本影响+工期更新~~ | ~~Done(历史PR#2781/#3356已merged，E2E历史遗留无需修复)~~ |
+| kimi3  | #2195 | backend | 品牌中心多平台数据采集 | 进行中 |
+| kimi4  | #3652 | fullstack | 招投标-D 投标文件编制工作台 | 进行中 |

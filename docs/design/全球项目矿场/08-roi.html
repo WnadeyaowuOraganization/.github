@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>来源 ROI 看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tag { display:inline-block; padding:2px 8px; border-radius:3px; font-size:11px; font-weight:500; white-space:nowrap; }
+    .tag-green { background:#f6ffed; color:#52c41a; border:1px solid #b7eb8f; }
+    .tag-yellow { background:#fffbe6; color:#d48806; border:1px solid #ffe58f; }
+    .tag-red { background:#fff1f0; color:#f5222d; border:1px solid #ffa39e; }
+    .tag-blue { background:#e6f7ff; color:#1890ff; border:1px solid #91d5ff; }
+    table.roi-table { width:100%; border-collapse:collapse; background:#fff; font-size:13px; }
+    table.roi-table thead { background:#fafafa; }
+    table.roi-table th { padding:10px 12px; text-align:left; font-weight:600; color:#333; border-bottom:1px solid #e8e8e8; white-space:nowrap; font-size:12px; }
+    table.roi-table td { padding:10px 12px; border-bottom:1px solid #f0f0f0; color:#333; }
+    table.roi-table tr:hover { background:#fafafa; }
+    .num { font-variant-numeric: tabular-nums; }
+    .link-btn { color:#1890ff; font-size:12px; cursor:pointer; }
+    .link-btn:hover { text-decoration:underline; }
+    select, input { border:1px solid #d9d9d9; border-radius:4px; height:32px; padding:0 8px; font-size:13px; background:#fff; }
+    .btn { display:inline-flex; align-items:center; gap:4px; height:32px; padding:0 14px; border-radius:4px; font-size:13px; cursor:pointer; border:1px solid #d9d9d9; background:#fff; color:#333; }
+    .btn:hover { border-color:#1890ff; color:#1890ff; }
+    .btn-primary { background:#1890ff; color:#fff; border-color:#1890ff; }
+    .btn-primary:hover { background:#40a9ff; color:#fff; }
+
+    /* Chart */
+    .chart-wrap { position:relative; height:260px; padding: 20px 40px 30px 50px; }
+    .chart-grid { position:absolute; left:50px; right:40px; top:20px; bottom:30px; border-left:1px solid #e8e8e8; border-bottom:1px solid #e8e8e8; }
+    .chart-grid .gridline { position:absolute; left:0; right:0; border-top:1px dashed #f0f0f0; font-size:11px; color:#999; }
+    .chart-grid .gridline span { position:absolute; left:-44px; top:-8px; }
+    .chart-grid .gridline.right span { left:auto; right:-36px; }
+    .bars { position:absolute; left:0; right:0; bottom:0; top:0; display:flex; align-items:flex-end; justify-content:space-around; padding:0 12px; }
+    .bar-group { display:flex; flex-direction:column; align-items:center; gap:4px; flex:1; height:100%; justify-content:flex-end; }
+    .bar { width:70%; max-width:38px; background:#d9d9d9; border-radius:2px 2px 0 0; position:relative; }
+    .bar:hover { background:#bfbfbf; }
+    .bar-label { font-size:11px; color:#999; margin-top:4px; }
+    .line-svg { position:absolute; left:0; right:0; top:0; bottom:0; pointer-events:none; }
+    .legend { display:flex; gap:16px; font-size:12px; color:#666; justify-content:center; margin-top:8px; }
+    .legend-sw { display:inline-block; width:14px; height:8px; vertical-align:middle; margin-right:4px; border-radius:1px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">来源 ROI 看板</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">按来源渠道追踪获客成本、中标率、ROI，让吴耀优化线索投放预算，识别高效渠道与低效投入</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">吴耀（预算决策）, 商务主管</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">来源渠道ROI排行 / 获客成本趋势 / 中标率对比 / 渠道健康度评分</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">切换时间范围 / 点击渠道下钻项目 / 导出ROI报表</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">每个来源的线索数、投入、中标金额正确计算 / ROI = (中标金额-投入)/投入 / 健康度标签规则正确</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">全球项目矿场 详细设计.md §2.8</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- 页面标题 -->
+<div class="flex items-center justify-between mb-4">
+  <div>
+    <h1 class="text-xl font-semibold text-gray-800">来源 ROI 看板</h1>
+    <p class="text-xs text-gray-500 mt-1">按来源渠道量化获客成本与中标产出，辅助预算决策</p>
+  </div>
+  <div class="flex gap-2">
+    <button class="btn">📊 对比模式</button>
+    <button class="btn btn-primary">⬇ 导出ROI报表</button>
+  </div>
+</div>
+
+<!-- 1. 顶部筛选 [区域：筛选] -->
+<div class="bg-white border border-gray-200 rounded p-4 mb-4">
+  <div class="grid grid-cols-5 gap-3 items-end">
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">时间范围</label>
+      <select class="w-full">
+        <option>本季</option>
+        <option selected>本年</option>
+        <option>自定义</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">币种</label>
+      <select class="w-full">
+        <option selected>人民币（¥）</option>
+        <option>美元（$）</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">来源类别</label>
+      <select class="w-full">
+        <option selected>全部</option>
+        <option>招采网</option>
+        <option>展会</option>
+        <option>转介绍</option>
+        <option>营销广告</option>
+        <option>主动拜访</option>
+        <option>其他</option>
+      </select>
+    </div>
+    <div>
+      <label class="block text-xs text-gray-500 mb-1">对比基准</label>
+      <select class="w-full">
+        <option>上季度</option>
+        <option selected>去年同期</option>
+      </select>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn btn-primary flex-1">🔍 应用</button>
+      <button class="btn">重置</button>
+    </div>
+  </div>
+</div>
+
+<!-- 2. KPI 汇总卡片区 [区域：KPI] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-2">总投入</div>
+    <div class="text-2xl font-bold text-gray-800 num">¥286 <span class="text-base font-normal text-gray-500">万</span></div>
+    <div class="text-xs text-gray-400 mt-2">较去年同期 <span class="text-red-500">↑ 12.4%</span></div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-2">总中标金额</div>
+    <div class="text-2xl font-bold text-blue-600 num">¥4,560 <span class="text-base font-normal text-gray-500">万</span></div>
+    <div class="text-xs text-gray-400 mt-2">较去年同期 <span class="text-green-500">↑ 28.6%</span></div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-2">整体 ROI</div>
+    <div class="text-2xl font-bold text-blue-600 num">1,494%</div>
+    <div class="text-xs text-gray-400 mt-2">较去年同期 <span class="text-green-500">↑ 204pp</span></div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-2">平均单客成本</div>
+    <div class="text-2xl font-bold text-gray-800 num">¥2,289</div>
+    <div class="text-xs text-gray-400 mt-2">较去年同期 <span class="text-red-500">↑ 8.2%</span></div>
+  </div>
+</div>
+
+<!-- 3. 渠道ROI排行表 [区域：主表格] -->
+<div class="bg-white border border-gray-200 rounded mb-4">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+    <div>
+      <span class="font-semibold text-gray-800">渠道 ROI 排行</span>
+      <span class="text-xs text-gray-400 ml-2">按ROI降序 · 共6个来源渠道</span>
+    </div>
+    <div class="text-xs text-gray-400">
+      <span class="tag tag-green">🟢 优秀 ROI≥1000%</span>
+      <span class="tag tag-yellow">🟡 良好 100%~1000%</span>
+      <span class="tag tag-red">🔴 低效 ROI&lt;100%</span>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+  <table class="roi-table">
+    <thead>
+      <tr>
+        <th>来源渠道</th>
+        <th class="text-right">线索数</th>
+        <th class="text-right">投入 (¥)</th>
+        <th class="text-right">中标数</th>
+        <th class="text-right">中标金额 (¥)</th>
+        <th class="text-right">获客成本 (¥/单)</th>
+        <th class="text-right">中标率</th>
+        <th class="text-right">ROI</th>
+        <th>健康度</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="font-medium">客户转介绍</span></td>
+        <td class="text-right num">42</td>
+        <td class="text-right num">5,000</td>
+        <td class="text-right num">8</td>
+        <td class="text-right num font-semibold text-blue-600">680 万</td>
+        <td class="text-right num">119</td>
+        <td class="text-right num">19.0%</td>
+        <td class="text-right num font-semibold text-blue-600">135,900%</td>
+        <td><span class="tag tag-green">🟢 优秀</span></td>
+        <td><span class="link-btn">查看项目 →</span></td>
+      </tr>
+      <tr>
+        <td><span class="font-medium">招采网爬虫</span></td>
+        <td class="text-right num">6,820</td>
+        <td class="text-right num">68,000</td>
+        <td class="text-right num">12</td>
+        <td class="text-right num font-semibold text-blue-600">1,850 万</td>
+        <td class="text-right num">10</td>
+        <td class="text-right num">0.18%</td>
+        <td class="text-right num font-semibold text-blue-600">27,103%</td>
+        <td><span class="tag tag-green">🟢 优秀</span></td>
+        <td><span class="link-btn">查看项目 →</span></td>
+      </tr>
+      <tr>
+        <td><span class="font-medium">展会获客</span></td>
+        <td class="text-right num">156</td>
+        <td class="text-right num">420,000</td>
+        <td class="text-right num">6</td>
+        <td class="text-right num font-semibold text-blue-600">1,240 万</td>
+        <td class="text-right num">2,692</td>
+        <td class="text-right num">3.85%</td>
+        <td class="text-right num font-semibold">2,852%</td>
+        <td><span class="tag tag-yellow">🟡 良好</span></td>
+        <td><span class="link-btn">查看项目 →</span></td>
+      </tr>
+      <tr>
+        <td><span class="font-medium">上门拜访</span></td>
+        <td class="text-right num">38</td>
+        <td class="text-right num">680,000</td>
+        <td class="text-right num">2</td>
+        <td class="text-right num font-semibold text-blue-600">270 万</td>
+        <td class="text-right num">17,895</td>
+        <td class="text-right num">5.26%</td>
+        <td class="text-right num font-semibold">297%</td>
+        <td><span class="tag tag-yellow">🟡 良好</span></td>
+        <td><span class="link-btn">查看项目 →</span></td>
+      </tr>
+      <tr>
+        <td><span class="font-medium">百度SEM</span></td>
+        <td class="text-right num">892</td>
+        <td class="text-right num">1,580,000</td>
+        <td class="text-right num">4</td>
+        <td class="text-right num font-semibold text-blue-600">520 万</td>
+        <td class="text-right num">1,771</td>
+        <td class="text-right num">0.45%</td>
+        <td class="text-right num font-semibold">229%</td>
+        <td><span class="tag tag-yellow">🟡 良好</span></td>
+        <td><span class="link-btn">查看项目 →</span></td>
+      </tr>
+      <tr>
+        <td><span class="font-medium">LinkedIn营销</span></td>
+        <td class="text-right num">125</td>
+        <td class="text-right num">95,000</td>
+        <td class="text-right num">0</td>
+        <td class="text-right num text-gray-400">0</td>
+        <td class="text-right num">760</td>
+        <td class="text-right num text-gray-400">0%</td>
+        <td class="text-right num font-semibold text-red-500">-100%</td>
+        <td><span class="tag tag-red">🔴 低效</span></td>
+        <td><span class="link-btn">查看项目 →</span></td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+</div>
+
+<!-- 4. 获客成本趋势图 [区域：趋势] -->
+<div class="bg-white border border-gray-200 rounded mb-4">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+    <span class="font-semibold text-gray-800">近6个月获客成本趋势</span>
+    <div class="flex gap-3 items-center text-xs text-gray-500">
+      <span><span class="legend-sw" style="background:#d9d9d9;"></span>平均获客成本 (¥)</span>
+      <span><span class="legend-sw" style="background:#1890ff;"></span>整体中标率 (%)</span>
+      <select class="text-xs h-7">
+        <option>全部渠道汇总</option>
+        <option>仅付费渠道</option>
+      </select>
+    </div>
+  </div>
+  <div class="chart-wrap">
+    <!-- Y轴左刻度 (成本) -->
+    <div class="chart-grid">
+      <div class="gridline" style="top:0%;"><span>¥3,000</span></div>
+      <div class="gridline" style="top:25%;"><span>¥2,250</span></div>
+      <div class="gridline" style="top:50%;"><span>¥1,500</span></div>
+      <div class="gridline" style="top:75%;"><span>¥750</span></div>
+      <div class="gridline" style="top:100%;border:none;"><span>¥0</span></div>
+      <!-- Y轴右刻度 (中标率) -->
+      <div class="gridline right" style="top:0%;border:none;"><span>4%</span></div>
+      <div class="gridline right" style="top:25%;border:none;"><span>3%</span></div>
+      <div class="gridline right" style="top:50%;border:none;"><span>2%</span></div>
+      <div class="gridline right" style="top:75%;border:none;"><span>1%</span></div>
+      <div class="gridline right" style="top:100%;border:none;"><span>0%</span></div>
+
+      <!-- 柱状图 -->
+      <div class="bars">
+        <div class="bar-group"><div class="bar" style="height:48%;" title="5月 ¥1,450"></div><div class="bar-label">5月</div></div>
+        <div class="bar-group"><div class="bar" style="height:54%;" title="6月 ¥1,620"></div><div class="bar-label">6月</div></div>
+        <div class="bar-group"><div class="bar" style="height:62%;" title="7月 ¥1,860"></div><div class="bar-label">7月</div></div>
+        <div class="bar-group"><div class="bar" style="height:58%;" title="8月 ¥1,740"></div><div class="bar-label">8月</div></div>
+        <div class="bar-group"><div class="bar" style="height:68%;" title="9月 ¥2,050"></div><div class="bar-label">9月</div></div>
+        <div class="bar-group"><div class="bar" style="height:76%;" title="10月 ¥2,289"></div><div class="bar-label">10月</div></div>
+      </div>
+
+      <!-- 折线图 (SVG) -->
+      <svg class="line-svg" viewBox="0 0 600 240" preserveAspectRatio="none">
+        <!-- 中标率折线：对应数据 2.1, 2.8, 3.2, 2.5, 1.9, 2.4 (% over 4% scale) -->
+        <polyline
+          points="50,114 150,72 250,48 350,90 450,126 550,96"
+          fill="none" stroke="#1890ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <circle cx="50" cy="114" r="4" fill="#fff" stroke="#1890ff" stroke-width="2"/>
+        <circle cx="150" cy="72" r="4" fill="#fff" stroke="#1890ff" stroke-width="2"/>
+        <circle cx="250" cy="48" r="4" fill="#fff" stroke="#1890ff" stroke-width="2"/>
+        <circle cx="350" cy="90" r="4" fill="#fff" stroke="#1890ff" stroke-width="2"/>
+        <circle cx="450" cy="126" r="4" fill="#fff" stroke="#1890ff" stroke-width="2"/>
+        <circle cx="550" cy="96" r="4" fill="#fff" stroke="#1890ff" stroke-width="2"/>
+      </svg>
+    </div>
+  </div>
+  <div class="px-4 pb-3 text-xs text-gray-400">
+    提示：柱形表示当月平均获客成本（¥），折线表示整体中标率（%）。近3个月获客成本持续上升，需关注投放效率。
+  </div>
+</div>
+
+<!-- 5. 异常提醒区 [区域：告警] -->
+<div class="rounded p-4 mb-4" style="background:#fffbe6;border:1px solid #ffe58f;">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">异常提醒</span>
+      <span class="text-sm font-semibold" style="color:#ad6800;">渠道健康度告警 · 3 条</span>
+    </div>
+    <span class="link-btn">查看全部 →</span>
+  </div>
+  <ul class="space-y-2 text-sm" style="color:#5c4400;">
+    <li class="flex items-start gap-2">
+      <span>⚠️</span>
+      <div>
+        <span class="font-medium">LinkedIn营销</span>
+        连续 3 个月零中标（投入¥95,000 / 中标金额¥0），建议<span class="font-semibold text-red-600">暂停投放</span>或调整投放素材。
+      </div>
+    </li>
+    <li class="flex items-start gap-2">
+      <span>⚠️</span>
+      <div>
+        <span class="font-medium">百度SEM</span>
+        获客成本较上月上升 <span class="font-semibold text-red-600">38%</span>（¥1,282 → ¥1,771），建议复盘关键词出价与落地页转化。
+      </div>
+    </li>
+    <li class="flex items-start gap-2">
+      <span>✅</span>
+      <div>
+        <span class="font-medium">客户转介绍</span>
+        是 ROI 最高渠道（135,900%），建议建立<span class="font-semibold" style="color:#389e0d;">老客户推荐激励机制</span>，扩大优质来源。
+      </div>
+    </li>
+  </ul>
+</div>
+
+<!-- 6. 底部数据来源说明 -->
+<div class="text-center text-xs text-gray-400 mt-4 pb-4">
+  数据来源：<code class="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">mine_project.lead_source</code>
+  +
+  <code class="bg-gray-100 px-1.5 py-0.5 rounded text-gray-600">mine_project_cost_log</code>
+  · 最后更新：2024-10-31 08:00
+</div>
+
+</body>
+</html>

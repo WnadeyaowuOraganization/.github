@@ -163,9 +163,11 @@ Week 4 (5/10-5/16):
 
 | 建议kimi | Issue | 优先 | 模块 | 内容 | 备注 |
 |---------|-------|------|------|------|------|
-（已清空，kimi1/#3377 + kimi3/#3653 已派出）
+| kimi1  | #3378 | P1 | plm/backend | PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机 | 前置#3377✅Done(PR#3977)，GitHub OPEN确认 |
+| kimi6  | #2204 | P2 | brand/backend | 品牌中心数据库建表 — brand_contents/publish_logs/metrics/accounts | 无依赖，GitHub OPEN确认 |
 
-> ⚠️ #3651（招投标-C）blocked-by 审批引擎#3161（OPEN），暂不派；#3654（仪表盘）depends-on #3651，连带阻塞。
+> ⚠️ #3651（招投标-C）blocked-by #3161（OPEN），#3654（仪表盘）连带阻塞，暂不派。
+> ⚠️ #2204完成后可接#2203（内容CRUD API），品牌中心可连续跟进。
 > ⚠️ 研发经理须等排程经理建议后再指派，不得自行从看板读取issue派发。
 
 ## 当前运行

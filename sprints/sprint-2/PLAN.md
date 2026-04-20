@@ -170,7 +170,7 @@ Week 4 (5/10-5/16):
 | #3390 | P1 | backend | PLM[13/20] D3参数化→PLM BOM桥接 — D3输出自动创建EBOM | ⏳ 等#3389 |
 | #3391 | P1 | backend | PLM[14/20] 产品配置器后端API — 超级BOM规则过滤+输出EBOM+报价 | ⏳ 等#3388+#3389 |
 | #3393 | P1 | backend | PLM[16/20] 供应商价格联动 — 报价变动→Part Master+BOM成本重算 | ⏳ 等#3392 |
-| #3394 | P1 | frontend | PLM[17/20] 零件主数据管理页面（配对后端#3378已Done） | 🚀 kimi3 进行中 |
+| #3394 | P1 | frontend | PLM[17/20] 零件主数据管理页面（配对后端#3378已Done） | ~~🚀 kimi3 Done(PR#3990 待merge)~~ |
 | #3395 | P1 | frontend | PLM[18/20] BOM管理与版本对比页面（配对后端#3380/#3381已Done） | ✅ 可立即启动 |
 | #3396 | P1 | frontend | PLM[19/20] ECO变更管理页面（配对后端需#3385+#3386） | ⏳ 等#3385+#3386 |
 | #3397 | P1 | frontend | PLM[20/20] 产品配置器+报价页面（配对后端需#3391） | ⏳ 等#3391 |
@@ -196,7 +196,7 @@ Week 4 (5/10-5/16):
 | kimi3  | #3183 | project360 | ~~项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作~~ | ~~Done(PR#3940 admin-merged)~~ |
 | kimi1  | #3385 | plm | PLM[8/20] ECO变更申请与影响评估API | 进行中 |
 | kimi3  | #3651 | bidding | ~~招投标-C 投标立项与进度管理~~ | ~~Done(PR#3988 admin-merged)~~ |
-| kimi3  | #3394 | plm | PLM[17/20] 零件主数据管理页面 | 进行中 |
+| kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 待merge)~~ |
 | kimi4  | #3383 | plm | PLM[6/20] BOM成本Roll-up API + 企微推送 | 进行中 |
 | kimi6  | #3384 | plm | PLM[7/20] 零件服务与供应商集成API | 进行中 |
 | kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 待merge)~~ |
@@ -386,4 +386,4 @@ Week 4 (5/10-5/16):
 | kimi6  | #3384 | plm | PLM BOM Where-Used反查API | 进行中 |
 | kimi1  | #3385 | plm | PLM ECO变更申请与影响评估API | 进行中 |
 | kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 待merge)~~ |
-| kimi3  | #3394 | plm | PLM[17/20] 零件主数据管理页面 | 进行中 |
+| kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 待merge)~~ |

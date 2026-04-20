@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>万德AI平台 — 销售记录中心 低保真原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .tab-active { color: #2563eb; border-bottom: 2px solid #2563eb; font-weight: 600; }
+  .tab-inactive { color: #6b7280; border-bottom: 2px solid transparent; }
+  .tab-inactive:hover { color: #374151; }
+  .sidebar-item-active { background-color: #eff6ff; color: #2563eb; border-left: 3px solid #2563eb; }
+  iframe { width: 100%; border: none; display: block; }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- =================== SPEC-CARD (v4.1 需求说明卡) =================== -->
+<div class="bg-yellow-50 border-l-4 border-yellow-400 p-5 m-4 rounded shadow-sm text-sm">
+  <div class="flex items-center mb-3">
+    <span class="text-lg mr-2">📋</span>
+    <h2 class="text-base font-bold text-yellow-900">需求说明卡 · 销售记录中心</h2>
+    <span class="ml-3 text-xs text-yellow-700 bg-yellow-100 px-2 py-0.5 rounded">SPEC-CARD v4.1</span>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-2 text-gray-800">
+    <div><span class="font-semibold text-yellow-900">页面目的：</span>销售记录的统一入口，吴耀+商务主管查看全员销售活动+周报+Nudge闭环，商务可手动补录</div>
+    <div><span class="font-semibold text-yellow-900">主要用户：</span>吴耀（超管）、商务主管（团队管理）、业务员（补录+查看自己的）</div>
+    <div><span class="font-semibold text-yellow-900">核心功能：</span>4视角切换 / 7类记录筛选 / 手动补录 / Nudge全闭环 / 项目周报</div>
+    <div><span class="font-semibold text-yellow-900">关键操作：</span>Tab切换 / 加一条记录 / 催更新 / 标记重要 / 添加批注 / 导出周报</div>
+    <div class="md:col-span-2"><span class="font-semibold text-yellow-900">验收要点：</span>4Tab均可访问 / 记录数据按筛选刷新 / Nudge按钮全入口可用</div>
+    <div class="md:col-span-2">
+      <span class="font-semibold text-yellow-900">设计文档：</span>
+      <a href="./详细设计.md" class="text-blue-600 hover:underline">销售记录中心详细设计</a>
+    </div>
+  </div>
+</div>
+
+<!-- =================== 主体布局 =================== -->
+<div class="flex min-h-screen">
+
+  <!-- ========== 左侧侧边栏 ========== -->
+  <aside class="w-56 bg-white border-r border-gray-300 flex-shrink-0">
+    <!-- Logo -->
+    <div class="h-14 flex items-center px-4 border-b border-gray-200">
+      <div class="w-8 h-8 bg-blue-500 rounded flex items-center justify-center text-white text-sm font-bold">万</div>
+      <span class="ml-2 font-semibold text-gray-800 text-sm">万德AI平台</span>
+    </div>
+
+    <!-- 菜单 -->
+    <nav class="py-3 text-sm">
+      <!-- 首页 -->
+      <a href="#" class="flex items-center px-4 py-2.5 text-gray-600 hover:bg-gray-50">
+        <span class="w-5 text-center mr-3">🏠</span>
+        <span>首页</span>
+      </a>
+
+      <!-- 业务运营中心（展开） -->
+      <div>
+        <a href="#" class="flex items-center px-4 py-2.5 text-gray-800 bg-gray-50 font-medium">
+          <span class="w-5 text-center mr-3">📊</span>
+          <span>业务运营中心</span>
+          <span class="ml-auto text-xs">▾</span>
+        </a>
+        <div class="bg-gray-50">
+          <a href="#" class="flex items-center pl-12 pr-4 py-2 text-gray-600 hover:text-gray-800">项目管理</a>
+          <a href="#" class="flex items-center pl-12 pr-4 py-2 text-gray-600 hover:text-gray-800">客户管理</a>
+          <a href="#" class="sidebar-item-active flex items-center pl-12 pr-4 py-2 font-medium">销售记录中心</a>
+          <a href="#" class="flex items-center pl-12 pr-4 py-2 text-gray-600 hover:text-gray-800">商务团队</a>
+        </div>
+      </div>
+
+      <!-- 其他菜单（折叠图标） -->
+      <a href="#" class="flex items-center px-4 py-2.5 text-gray-600 hover:bg-gray-50">
+        <span class="w-5 text-center mr-3">💼</span>
+        <span>合同中心</span>
+      </a>
+      <a href="#" class="flex items-center px-4 py-2.5 text-gray-600 hover:bg-gray-50">
+        <span class="w-5 text-center mr-3">📈</span>
+        <span>数据分析</span>
+      </a>
+      <a href="#" class="flex items-center px-4 py-2.5 text-gray-600 hover:bg-gray-50">
+        <span class="w-5 text-center mr-3">⚙️</span>
+        <span>系统设置</span>
+      </a>
+    </nav>
+  </aside>
+
+  <!-- ========== 右侧内容区 ========== -->
+  <main class="flex-1 flex flex-col min-w-0">
+
+    <!-- 顶部导航栏 -->
+    <header class="h-14 bg-white border-b border-gray-300 flex items-center justify-between px-6 flex-shrink-0">
+      <!-- 面包屑 -->
+      <nav class="text-sm text-gray-600">
+        <a href="#" class="hover:text-blue-500">首页</a>
+        <span class="mx-2 text-gray-400">/</span>
+        <a href="#" class="hover:text-blue-500">业务运营中心</a>
+        <span class="mx-2 text-gray-400">/</span>
+        <span class="text-gray-800 font-medium">销售记录中心</span>
+      </nav>
+
+      <!-- 右侧操作区 -->
+      <div class="flex items-center gap-3">
+        <span class="text-xs text-gray-500">🕐 数据更新于 T-5min</span>
+        <button onclick="openAddModal()" class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded shadow-sm">
+          + 加一条记录
+        </button>
+        <div class="w-8 h-8 bg-gray-200 rounded-full flex items-center justify-center text-xs text-gray-600">吴</div>
+      </div>
+    </header>
+
+    <!-- 页面标题 -->
+    <div class="px-6 pt-5 pb-3 bg-white border-b border-gray-200">
+      <h1 class="text-xl font-semibold text-gray-800">销售记录中心</h1>
+      <p class="text-xs text-gray-500 mt-1">统一查看全员销售活动 · 周报 · Nudge闭环 · 支持手动补录</p>
+    </div>
+
+    <!-- ============ 顶部KPI卡片 ============ -->
+    <section class="px-6 py-4 bg-white border-b border-gray-200">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="border border-gray-300 rounded p-4 bg-white">
+          <div class="text-xs text-gray-500 mb-1">本周记录总数</div>
+          <div class="text-2xl font-semibold text-gray-800">1,247</div>
+          <div class="text-xs text-green-600 mt-1">↑ 12% vs 上周</div>
+        </div>
+        <div class="border border-gray-300 rounded p-4 bg-white">
+          <div class="text-xs text-gray-500 mb-1">活跃商务数</div>
+          <div class="text-2xl font-semibold text-gray-800">18 <span class="text-sm text-gray-400">/ 25</span></div>
+          <div class="text-xs text-gray-500 mt-1">活跃率 72%</div>
+        </div>
+        <div class="border border-gray-300 rounded p-4 bg-white">
+          <div class="text-xs text-gray-500 mb-1">待响应 Nudge</div>
+          <div class="text-2xl font-semibold text-orange-600">8</div>
+          <div class="text-xs text-gray-500 mt-1">其中超时 2 条</div>
+        </div>
+        <div class="border border-gray-300 rounded p-4 bg-white">
+          <div class="text-xs text-gray-500 mb-1">异常项目</div>
+          <div class="text-2xl font-semibold text-red-600">14</div>
+          <div class="text-xs text-gray-500 mt-1">&gt;7天未跟进</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Tab栏 ============ -->
+    <nav class="bg-white border-b border-gray-300 px-6 flex items-center gap-6 text-sm flex-shrink-0">
+      <button id="tab-btn-0" onclick="switchTab(0)" class="tab-active py-3 transition">时间线视角</button>
+      <button id="tab-btn-1" onclick="switchTab(1)" class="tab-inactive py-3 transition">三视角分组</button>
+      <button id="tab-btn-2" onclick="switchTab(2)" class="tab-inactive py-3 transition">项目周报</button>
+      <button id="tab-btn-3" onclick="switchTab(3)" class="tab-inactive py-3 transition">Nudge管理</button>
+    </nav>
+
+    <!-- ============ iframe 内容区 ============ -->
+    <section class="flex-1 bg-gray-50 p-4">
+      <div class="bg-white border border-gray-300 rounded shadow-sm">
+        <iframe id="tab-frame" src="tab-timeline.html" onload="resizeIframe(this)"></iframe>
+      </div>
+    </section>
+
+    <!-- ============ 底部原型说明 ============ -->
+    <section class="px-6 py-6 bg-white border-t border-gray-300">
+      <h3 class="text-base font-semibold text-gray-800 mb-3">📐 原型说明</h3>
+      <div class="overflow-x-auto">
+        <table class="w-full text-sm border border-gray-300">
+          <thead class="bg-gray-100">
+            <tr class="text-left text-gray-700">
+              <th class="border border-gray-300 px-3 py-2 w-16">序号</th>
+              <th class="border border-gray-300 px-3 py-2 w-40">Tab中文名</th>
+              <th class="border border-gray-300 px-3 py-2 w-56">文件名</th>
+              <th class="border border-gray-300 px-3 py-2">功能描述</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">1</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">时间线视角</td>
+              <td class="border border-gray-300 px-3 py-2 font-mono text-xs">tab-timeline.html</td>
+              <td class="border border-gray-300 px-3 py-2">全部记录按时间倒序展示，支持记录类型7枚举筛选（电话/会议/微信/邮件/拜访/合同/其他）+ 商务/项目/客户多维筛选</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="border border-gray-300 px-3 py-2">2</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">三视角分组</td>
+              <td class="border border-gray-300 px-3 py-2 font-mono text-xs">tab-grouped.html</td>
+              <td class="border border-gray-300 px-3 py-2">顶部下拉切换「按商务 / 按项目 / 按客户」三种分组方式，每组呈现一个汇总卡片</td>
+            </tr>
+            <tr>
+              <td class="border border-gray-300 px-3 py-2">3</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">项目周报</td>
+              <td class="border border-gray-300 px-3 py-2 font-mono text-xs">tab-weekly.html</td>
+              <td class="border border-gray-300 px-3 py-2">本周 / 历史周次切换，按「商务 → 项目」两级聚合本周所有活动，支持导出周报</td>
+            </tr>
+            <tr class="bg-gray-50">
+              <td class="border border-gray-300 px-3 py-2">4</td>
+              <td class="border border-gray-300 px-3 py-2 font-medium">Nudge管理</td>
+              <td class="border border-gray-300 px-3 py-2 font-mono text-xs">tab-nudge.html</td>
+              <td class="border border-gray-300 px-3 py-2">已发 Nudge 列表，显示状态（待响应/已响应/超时）+ 发起时间 + 被催商务 + 项目</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="text-xs text-gray-500 mt-3">※ 低保真wireframe原型，仅用于交互流程演示，视觉稿以UI设计为准。</p>
+    </section>
+
+  </main>
+</div>
+
+<!-- =================== 加一条记录 模态框 =================== -->
+<div id="add-modal" class="hidden fixed inset-0 bg-black bg-opacity-40 z-50 flex items-center justify-center">
+  <div class="bg-white rounded shadow-lg w-full max-w-xl">
+    <div class="flex items-center justify-between px-5 py-3 border-b border-gray-300">
+      <h3 class="text-base font-semibold text-gray-800">+ 加一条销售记录</h3>
+      <button onclick="closeAddModal()" class="text-gray-400 hover:text-gray-700 text-lg">×</button>
+    </div>
+    <div class="p-5 space-y-4 text-sm">
+      <div>
+        <label class="block text-gray-700 mb-1">记录类型 <span class="text-red-500">*</span></label>
+        <select class="w-full border border-gray-300 rounded px-3 py-1.5 bg-white">
+          <option>📞 电话</option>
+          <option>🤝 会议</option>
+          <option>💬 微信</option>
+          <option>📧 邮件</option>
+          <option>🚶 拜访</option>
+          <option>📄 合同</option>
+          <option>📌 其他</option>
+        </select>
+      </div>
+      <div class="grid grid-cols-3 gap-3">
+        <div>
+          <label class="block text-gray-700 mb-1">关联项目</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-1.5 bg-white">
+            <option>选择项目…</option>
+            <option>万德AI平台建设</option>
+            <option>XX集团数字化</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 mb-1">关联客户</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-1.5 bg-white">
+            <option>选择客户…</option>
+            <option>XX集团</option>
+            <option>YY科技</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-gray-700 mb-1">关联商务</label>
+          <select class="w-full border border-gray-300 rounded px-3 py-1.5 bg-white">
+            <option>当前用户</option>
+            <option>张三</option>
+            <option>李四</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="block text-gray-700 mb-1">记录内容 <span class="text-red-500">*</span></label>
+        <textarea rows="4" placeholder="描述本次沟通的关键信息、客户反馈、下一步动作..." class="w-full border border-gray-300 rounded px-3 py-2"></textarea>
+      </div>
+      <div>
+        <label class="block text-gray-700 mb-1">附件</label>
+        <div class="border border-dashed border-gray-300 rounded px-3 py-4 text-center text-gray-500 text-xs bg-gray-50">
+          📎 点击或拖拽上传文件（支持 pdf/png/jpg/docx，单文件&lt;20MB）
+        </div>
+      </div>
+    </div>
+    <div class="flex items-center justify-end gap-2 px-5 py-3 border-t border-gray-300 bg-gray-50">
+      <button onclick="closeAddModal()" class="px-4 py-1.5 text-sm text-gray-700 border border-gray-300 rounded hover:bg-gray-100">取消</button>
+      <button onclick="closeAddModal()" class="px-4 py-1.5 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">保存记录</button>
+    </div>
+  </div>
+</div>
+
+<!-- =================== JS =================== -->
+<script>
+  const tabs = [
+    { name: '时间线视角', file: 'tab-timeline.html' },
+    { name: '三视角分组', file: 'tab-grouped.html' },
+    { name: '项目周报',   file: 'tab-weekly.html' },
+    { name: 'Nudge管理',  file: 'tab-nudge.html' },
+  ];
+
+  function switchTab(i) {
+    for (let k = 0; k < tabs.length; k++) {
+      const btn = document.getElementById('tab-btn-' + k);
+      btn.classList.remove('tab-active', 'tab-inactive');
+      btn.classList.add(k === i ? 'tab-active' : 'tab-inactive');
+    }
+    document.getElementById('tab-frame').src = tabs[i].file;
+  }
+
+  function resizeIframe(iframe) {
+    try {
+      const h = iframe.contentWindow.document.body.scrollHeight;
+      iframe.style.height = Math.max(h + 20, 600) + 'px';
+    } catch (e) {
+      iframe.style.height = '800px';
+    }
+  }
+
+  // 自适应：监听iframe内容变化
+  window.addEventListener('message', (e) => {
+    if (e.data && e.data.type === 'resize' && typeof e.data.height === 'number') {
+      document.getElementById('tab-frame').style.height = (e.data.height + 20) + 'px';
+    }
+  });
+
+  function openAddModal()  { document.getElementById('add-modal').classList.remove('hidden'); }
+  function closeAddModal() { document.getElementById('add-modal').classList.add('hidden'); }
+</script>
+
+</body>
+</html>

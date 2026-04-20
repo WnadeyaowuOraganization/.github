@@ -352,5 +352,5 @@ Week 4 (5/10-5/16):
 | kimi1  | #2086 | backend | ~~变更影响联动API — BOM差异自动计算+成本影响+工期更新~~ | ~~Done(历史PR#2781/#3356已merged，E2E历史遗留无需修复)~~ |
 | kimi3  | #2195 | backend | ~~品牌中心多平台数据采集~~ | ~~Done(PR#3975 admin-merged)~~ |
 | kimi4  | #3652 | fullstack | 招投标-D 投标文件编制工作台 | 进行中 |
-| kimi1  | #3377 | backend | PLM子系统数据库初始化 — 7张核心表建表+索引 | 进行中 |
+| kimi1  | #3377 | backend | ~~PLM子系统数据库初始化 — 7张核心表建表+索引~~ | ~~Done(PR#3977 admin-merged)~~ |
 | kimi3  | #3653 | fullstack | 招投标-E 报价决策与保证金台账 | 进行中 |

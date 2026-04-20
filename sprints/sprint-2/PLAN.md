@@ -158,7 +158,7 @@ Week 4 (5/10-5/16):
 ## 指派建议（最近20个）
 
 > 更新于 2026-04-20（PLM剩余12个Issue按优先级+依赖顺序完整列出）
-> 当前运行5/5：kimi1/#3385 + kimi3/#3651 + kimi4/#3383 + kimi6/#3384 + kimi19/#3388
+> 当前运行5/5：kimi1/#3385 + kimi3/#3394 + kimi4/#3383 + kimi6/#3384 + kimi19/#3388
 > 排序规则：P0>P1；后端必须排在配对前端之前；依赖未完成排末尾
 
 | Issue | 优先 | 模块 | 内容 | 启动 |
@@ -192,7 +192,13 @@ Week 4 (5/10-5/16):
 | kimi3  | #3191 | finance | ~~甲方资料需求模板库(按甲方积累特殊资料要求+新项目自动继承)~~ | ~~Done(PR#3935 admin-merged)~~ |
 | kimi6  | #3189 | finance | ~~甲方表单填写辅助(项目数据关联填充+回款资料模板生成+导出)~~ | ~~Done(PR#3936 admin-merged)~~ |
 | kimi19 | #3188 | finance | ~~企业信息库(万德常用信息维护+一键填充到回款表单)~~ | ~~Done(PR#3934 admin-merged)~~ |
-| kimi3  | #3183 | project360 | 项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作 | 进行中 |
+| kimi3  | #3183 | project360 | ~~项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作~~ | ~~Done(PR#3940 admin-merged)~~ |
+| kimi1  | #3385 | plm | PLM[8/20] ECO变更申请与影响评估API | 进行中 |
+| kimi3  | #3651 | bidding | ~~招投标-C 投标立项与进度管理~~ | ~~Done(PR#3988 admin-merged)~~ |
+| kimi3  | #3394 | plm | PLM[17/20] 零件主数据管理页面 | 进行中 |
+| kimi4  | #3383 | plm | PLM[6/20] BOM成本Roll-up API + 企微推送 | 进行中 |
+| kimi6  | #3384 | plm | PLM[7/20] 零件服务与供应商集成API | 进行中 |
+| kimi19 | #3388 | plm | PLM[11/20] 超级BOM规则引擎 | 进行中 |
 | kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
 | kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
 | kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |

@@ -318,9 +318,17 @@ Week 4 (5/10-5/16):
 | kimi6  | #1719 | finance | ~~绩效仪表盘+三级Tab+ECharts趋势分析~~ | ~~Done(PR#3953 admin-merged)~~ |
 | kimi1  | #2006 | finance | ~~应收账款管理API(账龄分析+催收提醒+企微，核心框架)~~ | ~~Done(PR#3951 admin-merged)~~ |
 | kimi19 | #1754 | frontend | ~~代理商工作台数据打通(关联项目+中标方标签，Mock模式)~~ | ~~Done(PR#3949 admin-merged)~~ |
-| kimi1  | #2356 | finance | 经营分析看板页面 — 收入成本趋势+毛利率排行+现金流图表 | 进行中 |
-| kimi3  | #2000 | finance | 财务预警引擎 — 应收逾期+应付到期+毛利异常+现金流预警 | 进行中 |
+| kimi1  | #2356 | finance | ~~经营分析看板页面(收入成本趋势+毛利率排行+现金流图表)~~ | ~~Done(PR#3955 admin-merged)~~ |
+| kimi3  | #2000 | finance | ~~财务预警引擎(应收逾期+应付到期+毛利异常+现金流预警)~~ | ~~Done(PR#3956 admin-merged)~~ |
+| kimi19 | #2473 | finance | ~~律师催收数据库+API(律师信息+催收案件+进展记录)~~ | ~~Done(PR#3957 admin-merged)~~ |
+| kimi4  | #1684 | backend | ~~绩效异常检测+提成试算API+企微智能推送~~ | ~~Done(PR#3958 admin-merged)~~ |
+| kimi1  | #2356 | finance | ~~经营分析看板页面 — 收入成本趋势+毛利率排行+现金流图表~~ | ~~Done(PR#3955 admin-merged)~~ |
+| kimi3  | #2000 | finance | ~~财务预警引擎 — 应收逾期+应付到期+毛利异常+现金流预警~~ | ~~Done(PR#3956 admin-merged)~~ |
 | kimi4  | #1873 | backend | ~~分级超时升级机制(48h→72h→5天)~~ | ~~Done(PR#3954 admin-merged)~~ |
-| kimi19 | #2473 | finance | 律师催收数据库+API — 律师信息+催收案件+进展记录 | 进行中 |
-| kimi4  | #1684 | backend | 绩效异常检测+提成试算API+企微智能推送 | 进行中 |
+| kimi19 | #2473 | finance | ~~律师催收数据库+API — 律师信息+催收案件+进展记录~~ | ~~Done(PR#3957 admin-merged)~~ |
+| kimi4  | #1684 | backend | ~~绩效异常检测+提成试算API+企微智能推送~~ | ~~Done(PR#3958 admin-merged)~~ |
 | kimi6  | #2358 | finance | 商机详情页获客成本Tab — 关联报销+费用汇总 | 进行中 |
+| kimi1  | #1996 | finance | 回款周报API — 商务填写+财务评估+管理层审阅全流程 | 进行中 |
+| kimi3  | #2002 | finance | 项目全链路资金闭环报告API — 从获客到净利润一张表 | 进行中 |
+| kimi4  | #2008 | finance | 报价成本模型API — BOM+运费+安装+管理费→建议售价 | 进行中 |
+| kimi19 | #1685 | backend | 项目费用关联API+财务报表导出功能 | 进行中 |

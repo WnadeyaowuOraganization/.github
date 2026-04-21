@@ -271,7 +271,7 @@ $(git rev-parse --show-toplevel)/
 - **新表必须用 `wdpp_` 前缀**（如 `wdpp_tender_project`）
 - 新表必须包含 `create_time` / `update_time`（与 BaseEntity 一致）
 - 老表（`created_at`）需增量 SQL 或 `@TableField("created_at")` 映射
-- **增量 SQL 使用 Flyway**：`backend/ruoyi-admin/src/main/resources/db/migration/V<N>__<desc>.sql`
+- **增量 SQL 使用 Flyway**：先执行 `TS=$(date +%Y%m%d%H%M%S)` 获取精确到秒的时间戳，文件名 `V${TS}__<desc>.sql`，放在 `backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/` 或 `backend/ruoyi-admin/src/main/resources/db/migration/`。**禁止** `date +%Y%m%d` 后手动补 `000000`（多CC并发时必冲突）
 
 ## 认证机制
 

@@ -190,9 +190,11 @@ ISSUE_NUM=$(gh issue create --repo WnadeyaowuOraganization/wande-play --title "[
 **数据库规范**：
 
 ```sql
--- Flyway 增量迁移文件命名
--- V{yyyyMMddHHmmss}__{snake_case_desc}.sql
+-- Flyway 增量迁移文件命名（时间戳必须精确到秒，禁止手动补0）
+-- 先执行: TS=$(date +%Y%m%d%H%M%S)
+-- 文件名: V${TS}__{snake_case_desc}.sql
 -- 文件放在: backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/
+-- ⛔ 禁止: date +%Y%m%d 然后手动补 000000（会导致多CC冲突）
 
 -- 禁止在 quick-fix 中 DROP TABLE / TRUNCATE
 -- 只允许: ALTER TABLE ADD COLUMN、UPDATE、INSERT（配置数据）

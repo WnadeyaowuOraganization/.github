@@ -17,7 +17,7 @@ v4 核心改进（相比v2）：
 优先级链: 智谱直连Key(priority=1) → 中转站Key(priority=2) → 本地vLLM保底(priority=3)
 降级规则: 只有 QUOTA_EXHAUSTED/BALANCE_EXHAUSTED 才触发降级，RATE_LIMIT 只换同优先级Key
 
-部署: systemd token-pool-proxy.service
+部署: sudo systemctl restart token-pool-proxy.service
 配置: keys.json (同目录)
 """
 
@@ -453,8 +453,16 @@ def classify_zhipu_provider(status_code, resp_body):
     if code == "1304":
         return ErrorType.QUOTA_EXHAUSTED, code, None, message
 
+    # 公平使用策略限速 (1313) — 临时限制，需手动解除，冷却24h避免持续打
+    if code == "1313":
+        # 24小时后重试（用户需前往智谱控制台申请解除）
+        from datetime import datetime, timedelta, timezone
+        _cst = timezone(timedelta(hours=8))
+        until_iso = (datetime.now(_cst) + timedelta(hours=24)).isoformat()
+        return ErrorType.QUOTA_EXHAUSTED, code, until_iso, message
+
     # 不可恢复
-    if code in ("1309", "1311", "1313"):
+    if code in ("1309", "1311"):
         return ErrorType.UNRECOVERABLE, code, None, message
 
     # 认证错误

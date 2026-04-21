@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 询盘工作台 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Tab栏样式 */
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    /* iframe容器 */
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); display: block; }
+    /* 侧边栏图标按钮 */
+    .side-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #888; cursor: pointer; font-size: 18px; }
+    .side-icon.active { background: #e6f4ff; color: #1890ff; }
+    .side-icon:hover { background: #f5f5f5; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">询盘工作台 · 主框架</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">业务员查看询盘全貌、拖拽推进阶段、三类角色切换聚焦关注对象</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">业务员, 商务主管, 老板, 国贸专员</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">看板/表格/时间线 3 视角 / 三线统一 / 角色切换 / 批量操作</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">视角切换 / 新建询盘 / 拖拽阶段 / 筛选业务线</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">3 视角切换流畅 / 5 阶段拖拽更新 DB / 角色切换改变数据权限</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">询盘报价体系详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] 64px 折叠图标列 -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center py-3 gap-2">
+    <div class="w-8 h-8 bg-blue-500 text-white rounded flex items-center justify-center text-xs font-bold mb-2">万</div>
+    <div class="side-icon" title="首页">🏠</div>
+    <div class="side-icon" title="超管">⚙️</div>
+    <div class="side-icon active" title="商务部">💼</div>
+    <div class="side-icon" title="项目中心">📂</div>
+    <div class="side-icon" title="PLM">🔧</div>
+    <div class="side-icon" title="审批">✔️</div>
+    <div class="side-icon" title="资源中心">📚</div>
+    <div class="side-icon" title="系统">🛠️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col min-w-0">
+
+    <!-- [顶部栏: 面包屑 + 角色/筛选/新建] -->
+    <div class="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200">
+      <!-- [面包屑] -->
+      <div class="text-sm text-gray-500">
+        <span class="hover:text-gray-700 cursor-pointer">首页</span>
+        <span class="mx-2">&gt;</span>
+        <span class="hover:text-gray-700 cursor-pointer">商务部</span>
+        <span class="mx-2">&gt;</span>
+        <span class="text-gray-800 font-medium">询盘工作台</span>
+      </div>
+
+      <!-- [右上角功能区] -->
+      <div class="flex items-center gap-3">
+        <!-- 角色切换 -->
+        <div class="flex items-center gap-1">
+          <span class="text-xs text-gray-500">角色</span>
+          <select class="border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+            <option>业务员（默认）</option>
+            <option>商务主管</option>
+            <option>国贸专员</option>
+          </select>
+        </div>
+
+        <!-- 业务线多选筛选 -->
+        <div class="flex items-center gap-1 border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+          <span class="text-xs text-gray-500 mr-1">业务线</span>
+          <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 直销</label>
+          <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 经销</label>
+          <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 国贸</label>
+        </div>
+
+        <!-- 新建询盘按钮 -->
+        <button class="bg-blue-500 hover:bg-blue-600 text-white px-3 py-1.5 rounded text-sm font-medium shadow-sm">
+          + 新建询盘
+        </button>
+      </div>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1">
+      <iframe id="tabFrame" class="tab-content-frame" src="inquiry-tab-kanban.html"></iframe>
+    </div>
+
+    <!-- [原型说明] -->
+    <div class="p-6 bg-white border-t border-gray-300 mt-4">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 border border-gray-300 w-32">Tab页</th>
+            <th class="p-2 border border-gray-300 w-56">文件名</th>
+            <th class="p-2 border border-gray-300">功能描述</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 text-gray-700">看板视图（默认）</td>
+            <td class="p-2 border border-gray-300 text-gray-600 font-mono text-xs">inquiry-tab-kanban.html</td>
+            <td class="p-2 border border-gray-300 text-gray-600">5 阶段看板 + 4KPI + 卡片拖拽切换阶段，业务员日常工作主界面</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 text-gray-700">表格视图</td>
+            <td class="p-2 border border-gray-300 text-gray-600 font-mono text-xs">inquiry-tab-table.html</td>
+            <td class="p-2 border border-gray-300 text-gray-600">多维筛选 + 批量分配/改阶段/导出，管理型视角</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 text-gray-700">时间线视图</td>
+            <td class="p-2 border border-gray-300 text-gray-600 font-mono text-xs">inquiry-tab-timeline.html</td>
+            <td class="p-2 border border-gray-300 text-gray-600">按日期分组展示最近 7 天询盘动态，快速感知活跃度和异常</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<script>
+  // Tab配置（按顺序）
+  const tabs = [
+    { key: 'kanban',   label: '看板视图',   src: 'inquiry-tab-kanban.html' },
+    { key: 'table',    label: '表格视图',   src: 'inquiry-tab-table.html' },
+    { key: 'timeline', label: '时间线视图', src: 'inquiry-tab-timeline.html' }
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  // iframe自动高度适配
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = (h + 20) + 'px';
+    } catch(e) { /* 跨域时忽略 */ }
+  });
+
+  renderTabs();
+</script>
+</body>
+</html>

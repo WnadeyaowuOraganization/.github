@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>时间线视图</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .timeline-axis { position: relative; padding-left: 24px; }
+    .timeline-axis::before {
+      content: ""; position: absolute; left: 8px; top: 0; bottom: 0;
+      width: 2px; background: #e5e7eb;
+    }
+    .timeline-dot {
+      position: absolute; left: 0; width: 18px; height: 18px;
+      border-radius: 9999px; background: #fff; border: 2px solid #d1d5db;
+      display: flex; align-items: center; justify-content: center; font-size: 10px;
+    }
+    .ev-new      { border-color: #9ca3af; }
+    .ev-quote    { border-color: #60a5fa; }
+    .ev-stage    { border-color: #22c55e; }
+    .ev-overdue  { border-color: #f87171; }
+    .ev-reply    { border-color: #a78bfa; }
+    .biz-tag-direct { background: #f3f4f6; color: #4b5563; }
+    .biz-tag-dealer { background: #fef9c3; color: #854d0e; }
+    .biz-tag-intl   { background: #ede9fe; color: #5b21b6; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">询盘工作台 · 时间线视图</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">按时间回溯 7 天询盘动态，快速感知活跃度和异常</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">业务员, 商务主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">日期分组 / 5 类事件图标 / 跟进人归因 / 聚合 7 天</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">滚动查看 / 点击事件进入详情</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">时间倒序正确 / 5 类事件全部显示 / 点击可跳转</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">询盘报价体系详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部说明+图例] -->
+<div class="bg-white border border-gray-200 rounded p-3 mb-4 flex items-center justify-between flex-wrap gap-2">
+  <div class="text-sm text-gray-600">默认聚合最近 <span class="font-semibold text-gray-800">7 天</span> 询盘活动，按日期倒序</div>
+  <div class="flex items-center gap-3 text-xs text-gray-500">
+    <span>🆕 新询盘</span>
+    <span>📝 报价更新</span>
+    <span>✅ 阶段推进</span>
+    <span>⚠️ 超期</span>
+    <span>💬 客户回复</span>
+  </div>
+</div>
+
+<!-- [分组: 今天] -->
+<div class="mb-6">
+  <div class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span>今天</span>
+    <span class="text-xs text-gray-400 font-normal">2026-05-12 · 周二</span>
+  </div>
+  <div class="timeline-axis space-y-3">
+
+    <div class="relative">
+      <div class="timeline-dot ev-new">🆕</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">14:32</div>
+          <span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">深圳华强游乐</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260512-001</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">新询盘：大型组合滑梯方案询价，金额预估 ¥580,000</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：李经理</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-quote">📝</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">11:05</div>
+          <span class="biz-tag-intl text-xs px-2 py-0.5 rounded">国贸</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">John · Australia Park Co.</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260506-009</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">报价 V3 发送，USD 85,000（较 V2 调整运费条款）</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：Linda</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-reply">💬</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">09:48</div>
+          <span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">上海浦东文旅公司</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260509-012</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">客户回复：希望增加 2 组秋千组合，本周五前给到 V2 报价</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：陈经理</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- [分组: 昨天] -->
+<div class="mb-6">
+  <div class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span>昨天</span>
+    <span class="text-xs text-gray-400 font-normal">2026-05-11 · 周一</span>
+  </div>
+  <div class="timeline-axis space-y-3">
+
+    <div class="relative">
+      <div class="timeline-dot ev-stage">✅</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">17:20</div>
+          <span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">广州天河游乐场</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260503-002</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">阶段推进：报价中 → 赢单（合同金额 ¥1,250,000）</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：黄经理</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-overdue">⚠️</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">15:00</div>
+          <span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">杭州萧山文体局</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260507-003</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">超期提醒：待跟进阶段已 5 天无动作，建议立即电话回访</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：赵经理</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-new">🆕</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">10:15</div>
+          <span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">郑州飞跃经销 · 李总</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260511-018</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">新询盘：小区无动力乐园包方案，预算 ¥220,000</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：王业务</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- [分组: 本周早些] -->
+<div class="mb-6">
+  <div class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span>本周早些</span>
+    <span class="text-xs text-gray-400 font-normal">2026-05-09 ~ 2026-05-10</span>
+  </div>
+  <div class="timeline-axis space-y-3">
+
+    <div class="relative">
+      <div class="timeline-dot ev-quote">📝</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">05-10 16:40</div>
+          <span class="biz-tag-intl text-xs px-2 py-0.5 rounded">国贸</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">Ahmed · UAE Dubai Mall</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260510-005</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">报价 V1 发送 USD 45,000，含 CIF Jebel Ali 条款</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：Susan</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-reply">💬</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">05-10 11:25</div>
+          <span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">成都乐趣经销 · 王总</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260508-021</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">客户回复：规格中的蹦床面积需要加大到 500m²，请重新核价</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：刘业务</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-stage">✅</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">05-09 14:08</div>
+          <span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">上海浦东文旅公司</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260509-012</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">阶段推进：新询盘 → 报价中（分配给陈经理）</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：陈经理</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- [分组: 上周] -->
+<div class="mb-6">
+  <div class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span>上周</span>
+    <span class="text-xs text-gray-400 font-normal">2026-05-05 ~ 2026-05-08</span>
+  </div>
+  <div class="timeline-axis space-y-3">
+
+    <div class="relative">
+      <div class="timeline-dot ev-overdue">⚠️</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">05-08 09:00</div>
+          <span class="biz-tag-intl text-xs px-2 py-0.5 rounded">国贸</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">Maria · Russia Moscow</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260505-008</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">超期提醒：待跟进阶段已 3 天无动作</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：Jason</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-stage">✅</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">05-06 17:30</div>
+          <span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">武汉乐游经销 · 赵总</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260506-017</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">阶段推进：报价中 → 待跟进（等客户内部走流程）</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：孙业务</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="timeline-dot ev-new">🆕</div>
+      <div class="bg-white border border-gray-200 rounded p-3 ml-2">
+        <div class="flex items-center justify-between">
+          <div class="text-xs text-gray-500">05-05 10:12</div>
+          <span class="biz-tag-intl text-xs px-2 py-0.5 rounded">国贸</span>
+        </div>
+        <div class="text-sm text-gray-800 mt-1">
+          <span class="font-medium">Maria · Russia Moscow</span>
+          <span class="text-gray-500 ml-2 font-mono text-xs">INQ-20260505-008</span>
+        </div>
+        <div class="text-xs text-gray-600 mt-1">新询盘：Indoor soft play set，预算 USD 32,000</div>
+        <div class="text-xs text-gray-400 mt-2">跟进人：Jason</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="text-center text-xs text-gray-400 py-4">— 已显示最近 7 天全部动态 —</div>
+
+</body>
+</html>

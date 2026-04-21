@@ -19,7 +19,11 @@
 
 | 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
 |------|------|-------|------|--------|------|------|
-| | | | | | | |
+| 2026-04-22 | kimi1 | #3386 | backend | medium | In Progress | PLM ECO审批流集成 |
+| 2026-04-22 | kimi2 | #3389 | backend | medium | In Progress | PLM EBOM解析API |
+| 2026-04-22 | kimi3 | #3392 | backend | medium | In Progress | PLM 版本化定价引擎API |
+| 2026-04-22 | kimi4 | #3631 | backend | high | In Progress | pipeline↔后端表对齐 |
+| 2026-04-22 | kimi5 | #1692 | backend | medium | In Progress | 项目成本跟踪API |
 
 ---
 

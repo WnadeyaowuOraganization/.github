@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 订单跟踪看板 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background:#f5f5f5; }
+    /* 侧边栏 */
+    .sidebar { width:64px; background:#1f2937; position:fixed; left:0; top:0; bottom:0; display:flex; flex-direction:column; align-items:center; padding-top:16px; z-index:50; }
+    .sidebar-item { width:100%; padding:12px 0; color:#9ca3af; text-align:center; cursor:pointer; font-size:11px; }
+    .sidebar-item:hover { color:#e5e7eb; background:rgba(255,255,255,0.06); }
+    .sidebar-item.active { color:#fff; background:rgba(255,255,255,0.12); }
+    .sidebar-item .icon { font-size:20px; display:block; margin-bottom:2px; }
+
+    /* 主容器 */
+    .main { margin-left:64px; padding:16px; }
+
+    /* 面包屑 */
+    .breadcrumb { font-size:13px; color:#666; margin-bottom:12px; }
+    .breadcrumb a { color:#1890ff; text-decoration:none; }
+
+    /* 工具条 */
+    .toolbar { display:flex; align-items:center; gap:12px; background:#fff; padding:10px 14px; border-radius:6px; border:1px solid #e5e7eb; margin-bottom:12px; flex-wrap:wrap; }
+    .toolbar label { font-size:12px; color:#666; margin-right:6px; }
+    .toolbar select, .toolbar input { font-size:12px; padding:4px 8px; border:1px solid #d9d9d9; border-radius:4px; background:#fff; }
+
+    /* 按钮 */
+    .btn { padding:5px 12px; border:1px solid #d9d9d9; border-radius:4px; background:#fff; cursor:pointer; font-size:12px; color:#333; }
+    .btn-primary { background:#1890ff; color:#fff; border-color:#1890ff; }
+    .btn-sm { padding:2px 8px; font-size:11px; }
+    .btn-disabled { background:#f5f5f5; color:#bfbfbf; border-color:#d9d9d9; cursor:not-allowed; }
+
+    /* KPI 卡 */
+    .kpi-row { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; margin-bottom:16px; }
+    .kpi-card { background:#fff; border:1px solid #e5e7eb; border-radius:6px; padding:14px 16px; }
+    .kpi-label { font-size:12px; color:#8c8c8c; margin-bottom:6px; }
+    .kpi-value { font-size:22px; font-weight:700; color:#262626; }
+    .kpi-value.danger { color:#f5222d; }
+    .kpi-sub { font-size:11px; color:#bfbfbf; margin-top:2px; }
+
+    /* 看板 */
+    .board { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+    .column { background:#fafafa; border:1px solid #e5e7eb; border-radius:6px; padding:10px; min-width:240px; }
+    .col-header { display:flex; justify-content:space-between; align-items:center; padding:8px 10px; border-radius:4px; font-size:13px; font-weight:600; margin-bottom:10px; }
+    .col-1 { background:#f5f5f5; color:#595959; }
+    .col-2 { background:#fffbe6; color:#ad6800; }
+    .col-3 { background:#e6f7ff; color:#0050b3; }
+    .col-4 { background:#f6ffed; color:#389e0d; }
+    .col-5 { background:#d9f7be; color:#237804; }
+    .col-count { background:rgba(0,0,0,0.06); padding:2px 8px; border-radius:10px; font-size:11px; }
+
+    /* 卡片 */
+    .card { background:#fff; border:1px solid #e8e8e8; border-left:3px solid #d9d9d9; border-radius:4px; padding:10px; margin-bottom:10px; font-size:12px; cursor:pointer; transition:box-shadow 0.15s; position:relative; }
+    .card:hover { box-shadow:0 2px 8px rgba(0,0,0,0.08); }
+    .card.line-zhixiao { border-left-color:#8c8c8c; }
+    .card.line-jingxiao { border-left-color:#faad14; }
+    .card.line-guomao { border-left-color:#9254de; }
+    .card-head { display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:6px; }
+    .card-no { font-weight:600; color:#333; font-size:12px; }
+    .card-customer { color:#595959; margin-bottom:4px; }
+    .card-amt { color:#262626; font-weight:600; margin-bottom:6px; }
+    .card-meta { display:flex; justify-content:space-between; align-items:center; font-size:11px; color:#8c8c8c; }
+    .card-next { background:#f0f0f0; padding:4px 6px; border-radius:3px; font-size:11px; color:#595959; margin:6px 0; }
+    .card-actions { display:flex; justify-content:space-between; padding-top:6px; margin-top:6px; border-top:1px dashed #f0f0f0; font-size:11px; color:#1890ff; }
+    .card-actions span { cursor:pointer; }
+
+    /* Tag */
+    .tag { display:inline-block; padding:1px 6px; border-radius:3px; font-size:10px; font-weight:500; }
+    .tag-zhixiao { background:#e5e7eb; color:#374151; }
+    .tag-jingxiao { background:#fef3c7; color:#92400e; }
+    .tag-guomao { background:#ede9fe; color:#5b21b6; }
+    .tag-overdue { color:#f5222d; font-weight:600; }
+    .tag-doc { display:inline-block; width:22px; height:22px; line-height:20px; text-align:center; border:1px solid #d9d9d9; border-radius:3px; font-size:10px; color:#8c8c8c; margin-right:2px; background:#fff; }
+    .tag-doc.done { background:#52c41a; color:#fff; border-color:#52c41a; }
+    .tag-doc.wait { background:#fff; color:#bfbfbf; }
+
+    /* 进度条 */
+    .progress { background:#f0f0f0; height:6px; border-radius:3px; overflow:hidden; margin:4px 0; }
+    .progress-bar { height:100%; background:#1890ff; }
+    .progress-bar.green { background:#52c41a; }
+    .progress-bar.orange { background:#faad14; }
+
+    /* 头像 */
+    .avatar { display:inline-block; width:20px; height:20px; background:#1890ff; color:#fff; font-size:10px; text-align:center; line-height:20px; border-radius:50%; margin-right:4px; }
+
+    /* 抽屉 */
+    .drawer-mask { position:fixed; inset:0; background:rgba(0,0,0,0.35); z-index:90; display:none; }
+    .drawer-mask.show { display:block; }
+    .drawer { position:fixed; top:0; right:0; bottom:0; width:600px; background:#fff; z-index:100; transform:translateX(100%); transition:transform 0.25s ease; display:flex; flex-direction:column; box-shadow:-4px 0 16px rgba(0,0,0,0.08); }
+    .drawer.show { transform:translateX(0); }
+    .drawer-head { padding:14px 20px; border-bottom:1px solid #e8e8e8; display:flex; justify-content:space-between; align-items:center; }
+    .drawer-title { font-size:15px; font-weight:600; color:#262626; }
+    .drawer-close { cursor:pointer; color:#8c8c8c; font-size:18px; }
+    .drawer-body { flex:1; overflow-y:auto; padding:16px 20px; }
+    .section { border-bottom:1px solid #f0f0f0; padding:12px 0; }
+    .section:last-child { border-bottom:none; }
+    .section-title { font-size:13px; font-weight:600; color:#262626; margin-bottom:10px; display:flex; align-items:center; gap:6px; }
+    .section-title .num { background:#1890ff; color:#fff; width:18px; height:18px; line-height:18px; text-align:center; border-radius:50%; font-size:11px; }
+    .kv-row { display:flex; font-size:12px; padding:3px 0; }
+    .kv-key { width:100px; color:#8c8c8c; }
+    .kv-val { color:#262626; flex:1; }
+    .doc-row { display:grid; grid-template-columns:120px 1fr auto; gap:8px; align-items:center; padding:8px 0; border-bottom:1px dashed #f0f0f0; font-size:12px; }
+    .doc-row:last-child { border-bottom:none; }
+    .doc-name { color:#262626; font-weight:500; }
+    .doc-status { color:#8c8c8c; font-size:11px; }
+    .doc-btns { display:flex; gap:4px; }
+
+    /* 空状态 */
+    .empty-state { text-align:center; color:#bfbfbf; font-size:12px; padding:20px 10px; background:#fff; border:1px dashed #e5e7eb; border-radius:4px; }
+
+    /* 底部说明 */
+    .footer-tip { margin-top:14px; background:#fff; border:1px solid #e5e7eb; border-radius:6px; padding:10px 14px; font-size:12px; color:#595959; }
+  </style>
+</head>
+<body class="bg-gray-50"><!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<!-- 此块由 wande-prototype skill 强制要求，所有原型HTML必须包含 -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">订单跟踪看板 (v4.1)</span>
+      <span style="color:#ad6800;font-size:11px;">路由: /wande/crm/order-tracking · Issue #3105 / #3106 / #3107</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">三线统一订单跟踪看板+国贸专用单证/发货/汇率详情抽屉，让业务员/主管/国贸专员在同一看板上掌握直销/经销/国贸订单的 PI 确认→收定金→排产→发货→结清全流程</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">业务员, 商务主管, 国贸专员</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">5 阶段看板（PI 确认/收定金/排产/发货/结清） / 5 KPI 卡（总订单/在途金额/本月发货/超期/平均周期） / 业务线色条（直销灰/经销黄/国贸紫） / 国贸子步骤（锁汇/CIF/船名 ETA） / 单证进度（CI/PL/BL/CO/FormE） / 抽屉详情 5 Section</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">拖拽卡片跨阶段流转（受限需上层审批）/ 点击卡片打开 600px 右侧抽屉 / 下载/上传/生成单证 / 归档结清订单 / 角色与业务线筛选</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">国贸卡片显示 🌐+PI 号+单证进度图标 / 抽屉完整展示 5 类单证（CI/PL/BL/CO/FormE） / 角色切换过滤正确 / 超期订单红色高亮 / 结清后显示汇率损益</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">询盘报价体系详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [侧边栏] -->
+<div class="sidebar">
+  <div class="sidebar-item"><span class="icon">🏠</span>首页</div>
+  <div class="sidebar-item"><span class="icon">🔍</span>挖掘</div>
+  <div class="sidebar-item"><span class="icon">📊</span>PLM</div>
+  <div class="sidebar-item active"><span class="icon">🛒</span>商务</div>
+  <div class="sidebar-item"><span class="icon">🏭</span>生产</div>
+  <div class="sidebar-item"><span class="icon">📦</span>物流</div>
+  <div class="sidebar-item"><span class="icon">💰</span>财务</div>
+</div>
+
+<div class="main">
+  <!-- [面包屑] -->
+  <div class="breadcrumb">
+    <a href="#">首页</a> <span style="color:#bfbfbf">/</span>
+    <a href="#">商务部</a> <span style="color:#bfbfbf">/</span>
+    <span style="color:#262626">订单跟踪</span>
+  </div>
+
+  <!-- [工具条] -->
+  <div class="toolbar">
+    <div>
+      <label>角色</label>
+      <select>
+        <option>业务员（默认）</option>
+        <option>商务主管</option>
+        <option>国贸专员</option>
+      </select>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;padding:0 8px;border-left:1px solid #f0f0f0;">
+      <label>业务线</label>
+      <label style="font-size:12px;color:#333"><input type="checkbox" checked style="vertical-align:middle"> 直销</label>
+      <label style="font-size:12px;color:#333"><input type="checkbox" checked style="vertical-align:middle"> 经销</label>
+      <label style="font-size:12px;color:#333"><input type="checkbox" checked style="vertical-align:middle"> 国贸</label>
+    </div>
+    <div>
+      <label>时间范围</label>
+      <input type="text" value="2026-01-21 ~ 2026-04-21（最近 90 天）" style="width:240px">
+    </div>
+    <div style="flex:1"></div>
+    <button class="btn btn-disabled" title="从 PI 确认自动生成，不支持手动新建">+ 新建订单</button>
+  </div>
+
+  <!-- [KPI 条] -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">总订单</div>
+      <div class="kpi-value">86</div>
+      <div class="kpi-sub">近 90 天</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">在途金额</div>
+      <div class="kpi-value">¥12,500 <span style="font-size:13px;color:#8c8c8c;font-weight:500">万</span></div>
+      <div class="kpi-sub">未结清合计</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">本月发货数</div>
+      <div class="kpi-value">19</div>
+      <div class="kpi-sub">环比 +12%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">超期订单</div>
+      <div class="kpi-value danger">3</div>
+      <div class="kpi-sub" style="color:#f5222d">需立即跟进</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">平均周期</div>
+      <div class="kpi-value">42 <span style="font-size:13px;color:#8c8c8c;font-weight:500">天</span></div>
+      <div class="kpi-sub">PI→结清</div>
+    </div>
+  </div>
+
+  <!-- [看板] -->
+  <div class="board">
+
+    <!-- 列 1: PI 确认中 -->
+    <div class="column">
+      <div class="col-header col-1">
+        <span>① PI 确认中</span>
+        <span class="col-count">14</span>
+      </div>
+
+      <!-- 普通订单卡 -->
+      <div class="card line-zhixiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260421-001</div>
+            <span class="tag tag-zhixiao">直销</span>
+          </div>
+        </div>
+        <div class="card-customer">北京轨道交通集团</div>
+        <div class="card-amt">¥850,000</div>
+        <div class="card-next">👉 等客户确认 PI</div>
+        <div class="card-meta">
+          <div><span class="avatar">王</span>王磊</div>
+          <div>停留 <span>2 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <!-- 国贸订单卡 -->
+      <div class="card line-guomao" onclick="showDrawer(true)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260421-002</div>
+            <span class="tag tag-guomao">国贸</span>
+          </div>
+          <div style="text-align:right;font-size:10px;color:#5b21b6">
+            <div>🌐</div>
+            <div style="margin-top:2px">PI20260421-001</div>
+          </div>
+        </div>
+        <div class="card-customer">LA Metro Rail Co.</div>
+        <div class="card-amt">USD 118,440</div>
+        <div class="card-next">👉 等客户确认 PI（已发 2 次）</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#9254de">陈</span>陈小姐</div>
+          <div>停留 <span>4 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <!-- 经销订单卡 -->
+      <div class="card line-jingxiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260420-015</div>
+            <span class="tag tag-jingxiao">经销</span>
+          </div>
+        </div>
+        <div class="card-customer">华东经销商-上海盛达</div>
+        <div class="card-amt">¥320,000</div>
+        <div class="card-next">👉 等客户确认 PI</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#faad14">李</span>李芳</div>
+          <div>停留 <span class="tag-overdue">8 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <div style="text-align:center;font-size:11px;color:#bfbfbf;padding:4px;">还有 11 张卡片 ...</div>
+    </div>
+
+    <!-- 列 2: 收定金中 -->
+    <div class="column">
+      <div class="col-header col-2">
+        <span>② 收定金中</span>
+        <span class="col-count">23</span>
+      </div>
+
+      <!-- 普通（30%进度） -->
+      <div class="card line-zhixiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260418-008</div>
+            <span class="tag tag-zhixiao">直销</span>
+          </div>
+        </div>
+        <div class="card-customer">广州地铁集团</div>
+        <div class="card-amt">¥1,250,000</div>
+        <div style="font-size:11px;color:#595959;">已收 30%</div>
+        <div class="progress"><div class="progress-bar" style="width:30%"></div></div>
+        <div class="card-next">👉 催款剩余 70% 尾款</div>
+        <div class="card-meta">
+          <div><span class="avatar">张</span>张伟</div>
+          <div>停留 <span>5 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <!-- 国贸（锁汇中） -->
+      <div class="card line-guomao" onclick="showDrawer(true)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260417-003</div>
+            <span class="tag tag-guomao">国贸</span>
+          </div>
+          <div style="text-align:right;font-size:10px;color:#5b21b6">
+            <div>🌐</div>
+            <div style="margin-top:2px">PI20260417-003</div>
+          </div>
+        </div>
+        <div class="card-customer">Frankfurt U-Bahn GmbH</div>
+        <div class="card-amt">USD 256,000</div>
+        <div style="font-size:11px;color:#595959;">已收 50% · <span style="color:#9254de;font-weight:600">🔒 锁汇中</span></div>
+        <div class="progress"><div class="progress-bar" style="width:50%;background:#9254de"></div></div>
+        <div class="card-next">👉 等财务完成锁汇操作</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#9254de">陈</span>陈小姐</div>
+          <div>停留 <span>3 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <!-- 另一张 -->
+      <div class="card line-zhixiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260415-022</div>
+            <span class="tag tag-zhixiao">直销</span>
+          </div>
+        </div>
+        <div class="card-customer">深圳地铁</div>
+        <div class="card-amt">¥680,000</div>
+        <div style="font-size:11px;color:#595959;">已收 30%</div>
+        <div class="progress"><div class="progress-bar" style="width:30%"></div></div>
+        <div class="card-next">👉 等大额尾款</div>
+        <div class="card-meta">
+          <div><span class="avatar">王</span>王磊</div>
+          <div>停留 <span class="tag-overdue">11 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <div style="text-align:center;font-size:11px;color:#bfbfbf;padding:4px;">还有 20 张卡片 ...</div>
+    </div>
+
+    <!-- 列 3: 排产中 -->
+    <div class="column">
+      <div class="col-header col-3">
+        <span>③ 排产中</span>
+        <span class="col-count">19</span>
+      </div>
+
+      <div class="card line-zhixiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260410-005</div>
+            <span class="tag tag-zhixiao">直销</span>
+          </div>
+        </div>
+        <div class="card-customer">武汉地铁</div>
+        <div class="card-amt">¥920,000</div>
+        <div style="font-size:11px;color:#595959;">🏭 苏州二厂 · 预计完工 2026-05-08</div>
+        <div class="progress"><div class="progress-bar" style="width:65%"></div></div>
+        <div style="font-size:11px;color:#8c8c8c;">生产进度 65%</div>
+        <div class="card-next">👉 车间质检中</div>
+        <div class="card-meta">
+          <div><span class="avatar">张</span>张伟</div>
+          <div>停留 <span>8 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <div class="card line-guomao" onclick="showDrawer(true)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260408-007</div>
+            <span class="tag tag-guomao">国贸</span>
+          </div>
+          <div style="text-align:right;font-size:10px;color:#5b21b6">
+            <div>🌐</div>
+            <div style="margin-top:2px">PI20260408-007</div>
+          </div>
+        </div>
+        <div class="card-customer">Sydney Metro Pty Ltd.</div>
+        <div class="card-amt">USD 89,200</div>
+        <div style="font-size:11px;color:#595959;">🏭 宁波一厂 · 预计完工 2026-05-12</div>
+        <div class="progress"><div class="progress-bar" style="width:45%"></div></div>
+        <div style="font-size:11px;color:#8c8c8c;">生产进度 45%</div>
+        <div class="card-next">👉 CKD 包装规划</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#9254de">陈</span>陈小姐</div>
+          <div>停留 <span>12 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <div class="card line-jingxiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260405-012</div>
+            <span class="tag tag-jingxiao">经销</span>
+          </div>
+        </div>
+        <div class="card-customer">西南经销商-成都铭达</div>
+        <div class="card-amt">¥410,000</div>
+        <div style="font-size:11px;color:#595959;">🏭 苏州一厂 · 预计完工 2026-04-28</div>
+        <div class="progress"><div class="progress-bar green" style="width:90%"></div></div>
+        <div style="font-size:11px;color:#8c8c8c;">生产进度 90%</div>
+        <div class="card-next">👉 即将完工</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#faad14">李</span>李芳</div>
+          <div>停留 <span>15 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <div style="text-align:center;font-size:11px;color:#bfbfbf;padding:4px;">还有 16 张卡片 ...</div>
+    </div>
+
+    <!-- 列 4: 发货中 -->
+    <div class="column">
+      <div class="col-header col-4">
+        <span>④ 发货中</span>
+        <span class="col-count">21</span>
+      </div>
+
+      <!-- 普通：物流单号+承运商 -->
+      <div class="card line-zhixiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260401-018</div>
+            <span class="tag tag-zhixiao">直销</span>
+          </div>
+        </div>
+        <div class="card-customer">南京地铁</div>
+        <div class="card-amt">¥540,000</div>
+        <div style="font-size:11px;color:#595959;">🚚 德邦物流 · SF202604019088</div>
+        <div class="card-next">👉 已签收确认中</div>
+        <div class="card-meta">
+          <div><span class="avatar">王</span>王磊</div>
+          <div>停留 <span>3 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <!-- 国贸 #3106：海运 CIF + 船名 ETA -->
+      <div class="card line-guomao" onclick="showDrawer(true)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260328-011</div>
+            <span class="tag tag-guomao">国贸</span>
+          </div>
+          <div style="text-align:right;font-size:10px;color:#5b21b6">
+            <div>🌐 🚢</div>
+            <div style="margin-top:2px">PI20260328-011</div>
+          </div>
+        </div>
+        <div class="card-customer">LA Metro Rail Co.</div>
+        <div class="card-amt">USD 118,440</div>
+        <div style="font-size:11px;color:#595959;">
+          🚢 海运 CIF · 深圳 → 洛杉矶<br>
+          船名 <b>MSC XINGANG</b> · ETA 2026-05-15
+        </div>
+        <!-- 国贸 #3107：单证进度小图标条 -->
+        <div style="margin-top:6px;padding-top:6px;border-top:1px dashed #e8e8e8;">
+          <div style="font-size:10px;color:#8c8c8c;margin-bottom:3px;">🛃 单证进度 4/5</div>
+          <span class="tag-doc done" title="商业发票">CI</span>
+          <span class="tag-doc done" title="装箱单">PL</span>
+          <span class="tag-doc done" title="提单">BL</span>
+          <span class="tag-doc done" title="原产地证">CO</span>
+          <span class="tag-doc wait" title="FormE">FE</span>
+        </div>
+        <div class="card-next" style="margin-top:6px">👉 等 FormE 证办结</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#9254de">陈</span>陈小姐</div>
+          <div>停留 <span>6 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <!-- 国贸超期 -->
+      <div class="card line-guomao" onclick="showDrawer(true)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260320-004</div>
+            <span class="tag tag-guomao">国贸</span>
+          </div>
+          <div style="text-align:right;font-size:10px;color:#5b21b6">
+            <div>🌐 🚢</div>
+            <div style="margin-top:2px">PI20260320-004</div>
+          </div>
+        </div>
+        <div class="card-customer">Frankfurt U-Bahn GmbH</div>
+        <div class="card-amt">USD 256,000</div>
+        <div style="font-size:11px;color:#595959;">
+          🚢 海运 CIF · 宁波 → 汉堡<br>
+          船名 <b>COSCO EUROPE</b> · ETA 2026-05-22
+        </div>
+        <div style="margin-top:6px;padding-top:6px;border-top:1px dashed #e8e8e8;">
+          <div style="font-size:10px;color:#8c8c8c;margin-bottom:3px;">🛃 单证进度 2/5</div>
+          <span class="tag-doc done">CI</span>
+          <span class="tag-doc done">PL</span>
+          <span class="tag-doc wait">BL</span>
+          <span class="tag-doc wait">CO</span>
+          <span class="tag-doc wait">FE</span>
+        </div>
+        <div class="card-next" style="margin-top:6px">👉 BL 提单待船公司签发</div>
+        <div class="card-meta">
+          <div><span class="avatar" style="background:#9254de">陈</span>陈小姐</div>
+          <div>停留 <span class="tag-overdue">18 天</span></div>
+        </div>
+        <div class="card-actions"><span>📞 沟通</span><span>📎 附件</span><span>🔗 详情</span></div>
+      </div>
+
+      <div style="text-align:center;font-size:11px;color:#bfbfbf;padding:4px;">还有 18 张卡片 ...</div>
+    </div>
+
+    <!-- 列 5: 结清 -->
+    <div class="column">
+      <div class="col-header col-5">
+        <span>⑤ 结清</span>
+        <span class="col-count">9</span>
+      </div>
+
+      <div class="card line-zhixiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260215-003</div>
+            <span class="tag tag-zhixiao">直销</span>
+          </div>
+          <span style="color:#52c41a;font-size:16px">✓</span>
+        </div>
+        <div class="card-customer">杭州地铁</div>
+        <div class="card-amt">¥1,100,000</div>
+        <div style="font-size:11px;color:#52c41a;">✓ 完成于 2026-04-15</div>
+        <div class="card-meta" style="margin-top:6px">
+          <div><span class="avatar">张</span>张伟</div>
+          <button class="btn btn-sm" onclick="event.stopPropagation()">归档</button>
+        </div>
+      </div>
+
+      <div class="card line-guomao" onclick="showDrawer(true)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260210-009</div>
+            <span class="tag tag-guomao">国贸</span>
+          </div>
+          <span style="color:#52c41a;font-size:16px">✓</span>
+        </div>
+        <div class="card-customer">Singapore MRT Ltd.</div>
+        <div class="card-amt">USD 72,500</div>
+        <div style="font-size:11px;color:#52c41a;">✓ 完成于 2026-04-10</div>
+        <div style="font-size:10px;color:#5b21b6;margin-top:3px;">🔒 锁汇 7.20 / 实收 7.18 · 损益 -¥1,450</div>
+        <div class="card-meta" style="margin-top:6px">
+          <div><span class="avatar" style="background:#9254de">陈</span>陈小姐</div>
+          <button class="btn btn-sm" onclick="event.stopPropagation()">归档</button>
+        </div>
+      </div>
+
+      <div class="card line-jingxiao" onclick="showDrawer(false)">
+        <div class="card-head">
+          <div>
+            <div class="card-no">ORD20260205-021</div>
+            <span class="tag tag-jingxiao">经销</span>
+          </div>
+          <span style="color:#52c41a;font-size:16px">✓</span>
+        </div>
+        <div class="card-customer">华北经销商-天津联合</div>
+        <div class="card-amt">¥280,000</div>
+        <div style="font-size:11px;color:#52c41a;">✓ 完成于 2026-04-03</div>
+        <div class="card-meta" style="margin-top:6px">
+          <div><span class="avatar" style="background:#faad14">李</span>李芳</div>
+          <button class="btn btn-sm" onclick="event.stopPropagation()">归档</button>
+        </div>
+      </div>
+
+      <div style="text-align:center;font-size:11px;color:#bfbfbf;padding:4px;">还有 6 张卡片 ...</div>
+    </div>
+
+  </div>
+
+  <!-- [底部说明] -->
+  <div class="footer-tip">
+    🔗 <b>PI 确认 → 锁汇生效 → 生产排期 → 出厂发货 → 收款结清</b> 全流程自动流转。拖拽卡片需上层审批。
+    <span style="color:#bfbfbf;margin-left:12px;">关联 Issue：#3105 看板 · #3106 发货管理 · #3107 出口单证</span>
+  </div>
+</div>
+
+<!-- [国贸专用详情抽屉] -->
+<div class="drawer-mask" id="drawerMask" onclick="hideDrawer()"></div>
+<div class="drawer" id="drawer">
+  <div class="drawer-head">
+    <div>
+      <div class="drawer-title">
+        <span id="drawerIcon" style="color:#9254de;margin-right:4px;">🌐</span>
+        ORD20260328-011 · LA Metro Rail Co.
+        <span class="tag tag-guomao" id="drawerTag" style="margin-left:6px;">国贸</span>
+      </div>
+      <div style="font-size:11px;color:#8c8c8c;margin-top:2px;">阶段：发货中 · 停留 6 天</div>
+    </div>
+    <div class="drawer-close" onclick="hideDrawer()">✕</div>
+  </div>
+  <div class="drawer-body">
+    <!-- Section 1 基础信息 -->
+    <div class="section">
+      <div class="section-title"><span class="num">1</span>基础信息</div>
+      <div class="kv-row"><div class="kv-key">客户</div><div class="kv-val">LA Metro Rail Co. (美国)</div></div>
+      <div class="kv-row"><div class="kv-key">业务员</div><div class="kv-val">陈小姐</div></div>
+      <div class="kv-row"><div class="kv-key">业务线</div><div class="kv-val"><span class="tag tag-guomao">国贸</span></div></div>
+      <div class="kv-row"><div class="kv-key">订单金额</div><div class="kv-val"><b>USD 118,440</b> ≈ ¥852,768</div></div>
+      <div class="kv-row"><div class="kv-key">币种</div><div class="kv-val">USD（美元）</div></div>
+      <div class="kv-row" id="drawerHedgeRow"><div class="kv-key">锁汇状态</div><div class="kv-val">🔒 已锁汇 7.20 · 锁定日期 2026-03-28</div></div>
+    </div>
+
+    <!-- Section 2 PI 信息 -->
+    <div class="section">
+      <div class="section-title"><span class="num">2</span>PI 信息</div>
+      <div class="kv-row"><div class="kv-key">PI 号</div><div class="kv-val"><b>PI20260328-011</b></div></div>
+      <div class="kv-row"><div class="kv-key">确认状态</div><div class="kv-val"><span style="color:#52c41a">✓ 客户已确认（2026-03-30）</span></div></div>
+      <div class="kv-row"><div class="kv-key">关联报价</div><div class="kv-val"><a href="#" style="color:#1890ff">Q20260320-LA-005</a></div></div>
+      <div class="kv-row"><div class="kv-key">PI 文件</div><div class="kv-val"><button class="btn btn-sm">↓ 下载 PI.pdf</button></div></div>
+    </div>
+
+    <!-- Section 3 发货信息 -->
+    <div class="section">
+      <div class="section-title"><span class="num">3</span>发货信息 <span style="font-size:10px;color:#bfbfbf;font-weight:400;">(#3106)</span></div>
+      <div class="kv-row"><div class="kv-key">装箱单</div><div class="kv-val">PL-20260410-LA（32 箱/18m³）</div></div>
+      <div class="kv-row"><div class="kv-key">运输方式</div><div class="kv-val">🚢 海运 CIF · 深圳 → 洛杉矶</div></div>
+      <div class="kv-row"><div class="kv-key">船名/航次</div><div class="kv-val"><b>MSC XINGANG</b> / V.2604E</div></div>
+      <div class="kv-row"><div class="kv-key">运单号</div><div class="kv-val">MSCU7823456</div></div>
+      <div class="kv-row"><div class="kv-key">ETD / ETA</div><div class="kv-val">2026-04-15 / <b style="color:#faad14">2026-05-15</b></div></div>
+    </div>
+
+    <!-- Section 4 出口单证 -->
+    <div class="section">
+      <div class="section-title"><span class="num">4</span>出口单证 <span style="font-size:10px;color:#bfbfbf;font-weight:400;">(#3107)</span></div>
+      <div class="doc-row">
+        <div><b>CI</b> 商业发票<div class="doc-status">✓ 已生成</div></div>
+        <div style="font-size:11px;color:#8c8c8c">CI-20260410-LA.pdf · 陈小姐 04-10</div>
+        <div class="doc-btns">
+          <button class="btn btn-sm">↓ 下载</button>
+          <button class="btn btn-sm">↑ 上传</button>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div><b>PL</b> 装箱单<div class="doc-status">✓ 已生成</div></div>
+        <div style="font-size:11px;color:#8c8c8c">PL-20260410-LA.pdf · 陈小姐 04-10</div>
+        <div class="doc-btns">
+          <button class="btn btn-sm">↓ 下载</button>
+          <button class="btn btn-sm">↑ 上传</button>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div><b>BL</b> 提单<div class="doc-status">✓ 已签发</div></div>
+        <div style="font-size:11px;color:#8c8c8c">MSCU7823456.pdf · 船公司 04-15</div>
+        <div class="doc-btns">
+          <button class="btn btn-sm">↓ 下载</button>
+          <button class="btn btn-sm">↑ 上传</button>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div><b>CO</b> 原产地证<div class="doc-status">✓ 已办理</div></div>
+        <div style="font-size:11px;color:#8c8c8c">CO-20260411-LA.pdf · 贸促会 04-12</div>
+        <div class="doc-btns">
+          <button class="btn btn-sm">↓ 下载</button>
+          <button class="btn btn-sm">↑ 上传</button>
+        </div>
+      </div>
+      <div class="doc-row">
+        <div><b>FormE</b> 原产地证<div class="doc-status" style="color:#faad14">⏳ 办理中</div></div>
+        <div style="font-size:11px;color:#8c8c8c">—</div>
+        <div class="doc-btns">
+          <button class="btn btn-sm btn-primary">+ 生成</button>
+          <button class="btn btn-sm">↑ 上传</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 5 汇率记录（结清后显示） -->
+    <div class="section" style="opacity:0.55;background:#fafafa;margin:0 -20px;padding:12px 20px;border-top:1px dashed #e8e8e8;">
+      <div class="section-title"><span class="num" style="background:#bfbfbf">5</span>汇率记录 <span style="font-size:10px;color:#bfbfbf;font-weight:400;">(订单结清后显示)</span></div>
+      <div class="kv-row"><div class="kv-key">锁汇值</div><div class="kv-val">7.20</div></div>
+      <div class="kv-row"><div class="kv-key">实收汇率</div><div class="kv-val">—（待结清）</div></div>
+      <div class="kv-row"><div class="kv-key">汇率损益</div><div class="kv-val">—（待结清）</div></div>
+    </div>
+
+    <!-- 操作区 -->
+    <div style="padding:16px 0;display:flex;gap:8px;">
+      <button class="btn btn-primary">推进到下一阶段</button>
+      <button class="btn">提交变更审批</button>
+      <button class="btn" style="margin-left:auto">关闭</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function showDrawer(isGuomao) {
+    document.getElementById('drawerMask').classList.add('show');
+    document.getElementById('drawer').classList.add('show');
+    // 普通订单也可打开抽屉，但仅显示基础信息（此处示意不做字段差异）
+    if (isGuomao === false) {
+      document.getElementById('drawerIcon').style.display = 'none';
+      document.getElementById('drawerTag').className = 'tag tag-zhixiao';
+      document.getElementById('drawerTag').textContent = '直销';
+    } else {
+      document.getElementById('drawerIcon').style.display = 'inline';
+      document.getElementById('drawerTag').className = 'tag tag-guomao';
+      document.getElementById('drawerTag').textContent = '国贸';
+    }
+  }
+  function hideDrawer() {
+    document.getElementById('drawerMask').classList.remove('show');
+    document.getElementById('drawer').classList.remove('show');
+  }
+</script>
+</body>
+</html>

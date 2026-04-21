@@ -15,15 +15,39 @@
 | C_frozen（缺原型冻结） | 165 | 保持Plan，needs-prototype标签 |
 | **合计** | **326** | |
 
+## 指派建议（下一批）
+
+> 排程经理维护，研发经理按此顺序指派。每轮巡检更新。
+
+| 序号 | kimi | Issue | 优先级 | 模块 | effort | 说明 |
+|------|------|-------|--------|------|--------|------|
+| 1 | kimi1 | #3386 | P0 | backend/PLM | medium | ✅ 已派 — ECO审批流集成 |
+| 2 | kimi2 | #3389 | P1 | backend/PLM | medium | ✅ 已派 — EBOM解析API |
+| 3 | kimi3 | #3392 | P1 | backend/PLM | medium | 版本化定价引擎API（前置#3383 Done，解锁#3393） |
+| 4 | kimi4 | #1692 | P1 | backend | medium | 项目成本跟踪API（解锁#1830利润预警） |
+| 5 | kimi5 | #2113 | P1 | backend | medium | 合同审批流程（解锁#1752/#2023） |
+
+### 备选（5个CC满后，有CC释放时按序补入）
+
+| 序号 | Issue | 优先级 | 模块 | effort | 说明 |
+|------|-------|--------|------|--------|------|
+| 6 | #2097 | P1 | backend | medium | 验收检查项模板管理 |
+| 7 | #1991 | P1 | project | medium | 经验卡片API（解锁#1992/#2350） |
+| 8 | #1896 | P1 | crm | medium | 客户情报增强 |
+| 9 | #3193 | P1 | backend | medium | 项目主计划数据模型（有原型） |
+| 10 | #1672 | P1 | biz | medium | 投标文档生成API |
+| 11 | #2028 | P1 | backend | medium | 矿场增量同步推送 |
+| 12 | #1874 | P1 | backend | medium | 跟进提醒+自动升降级 |
+| 13 | #1523 | P2 | bidding | medium | 区域品类矩阵统计API（有原型） |
+| 14 | #2404 | P2 | bidding | medium | 复盘评分迭代（有原型） |
+| 15 | #3108 | P2 | backend | medium | 合同国贸+经销字段扩展（有原型） |
+
 ## 指派历史
 
 | 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
 |------|------|-------|------|--------|------|------|
-| 2026-04-22 | kimi1 | #3386 | backend | medium | In Progress | PLM ECO审批流集成 |
-| 2026-04-22 | kimi2 | #3389 | backend | medium | In Progress | PLM EBOM解析API |
-| 2026-04-22 | kimi3 | #3392 | backend | medium | In Progress | PLM 版本化定价引擎API |
-| 2026-04-22 | kimi4 | #3631 | backend | high | In Progress | pipeline↔后端表对齐 |
-| 2026-04-22 | kimi5 | #1692 | backend | medium | In Progress | 项目成本跟踪API |
+| 04-22 | kimi1 | #3386 | PLM | medium | In Progress | ECO审批流集成 |
+| 04-22 | kimi2 | #3389 | PLM | medium | In Progress | EBOM解析API |
 
 ---
 
@@ -220,3 +244,23 @@
 | #3994 | P2 | project | [Master][矿场] 全球项目矿场 — 10Tab架构（执行6+洞察4） | A_weak | | Todo |
 | #4004 | P2 | project | [Master][业务运营] 销售记录体系 — 记录中心多Tab(4Tab)+老板周报单页 | A_weak | | Todo |
 
+---
+
+# 以下表格内容由排程经理每次排程后维护，研发经理领取后删除
+
+## 指派建议（最近20个）
+| 目录 | Issue | 优先 | 模块 | 内容 | 原型/设计参考 | effort |
+|------|-------|------|------|------|--------------|--------|
+
+---
+
+# 以下表格内容由研发经理维护。指派后新增行，CC完成后在内容列加删除线。
+## 指派历史（完成后划线）
+
+| 日期 | 指派目录 | Issue | 模块 | effort | 看板状态 | 备注 |
+|------|------|-------|------|--------|------|------|
+| 2026-04-22 | kimi1 | #3386 | backend | medium | In Progress | PLM ECO审批流集成 |
+| 2026-04-22 | kimi2 | #3389 | backend | medium | In Progress | PLM EBOM解析API |
+| 2026-04-22 | kimi3 | #3392 | backend | medium | In Progress | PLM 版本化定价引擎API |
+| 2026-04-22 | kimi4 | #3631 | backend | high | In Progress | pipeline↔后端表对齐 |
+| 2026-04-22 | kimi5 | #1692 | backend | medium | In Progress | 项目成本跟踪API |

@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-21 10:10 by 吴耀（D90 线索/商机架构统一）
+> ⏰ 最后更新：2026-04-21 22:35 by 吴耀（D91 明道云迁移路径确认 + 3个改造Issue）
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
 ---
@@ -590,6 +590,7 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D88 | 04-14 | ✅ | 新建 `docs/workflow/skill-update.md` 巡检频繁问题跟踪 | **背景**：单轮 loop 只盯当轮火情易错过规律，需累积机制。**规则**：研发经理每轮 /loop 巡检，同类问题 ≥2 次即登记为"频繁"，按日期倒序追加一条（症状/频次/根因/已处置/建议改进/状态）。累积到 5 条或某条 ≥3 次 → 批量落地为 skill/红线/CI 改动。**首批登记**：(a) CC 反复硬编码 menu_id 写 Flyway 修 parent_id NULL（kimi8×2 + kimi1×1，观察中）；(b) T12 模板矛盾（已根除）。commit 2c40f93 | 研发经理 |
 | D89 | 04-17 | ✅ | 后端先于前端派发约束（新规） | 同一页面功能，后端 Issue 必须先 merged 前端才可派发，防止前端以 mock 数据交付。规则已同步到 scheduler-guide / assign-guide / frontend-coding SKILL。D85a 衍生注意项：skill 化后规约更新不广播给活跃 CC，关键规则变更后需主动 tmux send-keys 通知。 | 排程经理 |
 | D90 | 04-21 | ✅ | 线索/商机架构统一：四入口归并 + 独立leads池 + 询盘直建商机 + 矿场手动转换 | **核心架构**：四个获客入口（外展获客#36→走leads / 官网表单→走leads / 客户询盘#39→直建opportunity / 项目矿场#7→手动转opportunity）统一到「线索池+商机池」双表模型。**四条决策**：①新建独立`crm_leads`表承载外展+官网早期信号；②询盘已过Opportunity Gate前3项，直建商机不回退leads；③矿场转商机手动确认，系统只做readiness提示（确认痛点/识别拥护者/预算时间/下一步/预估金额）；④评分≥75自动升级（外展/LinkedIn/企微三通道），官网≥60+首次回访。**三类商机**：direct(直销-矿场) / dealer(经销-询盘+外展) / international(国贸-询盘+LinkedIn)。**交付**：原型 + 详细设计378行 + Master Issue #4013 + 3子Issue(#4014 leads池+评分引擎P0 / #4015 矿场readiness整改P1 / #4016 架构蓝图+数据字典P2)，归属Sprint-3商战情报。**参考**：Salesforce/HubSpot/Prospeo 2026最佳实践 | 吴耀 |
+| D91 | 04-21 | ✅ | 明道云数据→D90四入口架构迁移路径确认 + 3个改造Issue新建 | **背景**：基于m7i真实数据表结构扫描（ubuntu@54.234.200.59，SSH直连）确认明道云历史数据完整支持D90架构。**源数据量**：线索sjcj 8,895条 / 互联网线索hlwxs 66,932条（10份副本） / 商机xsfx 6,355条（主5313+副本1042） / 客户kehu 29,366条 / 销售记录gjjl 651,070条 / 用户124 / 部门65。**新平台现状**：sys_user/sys_dept已完成；crm_customer已迁24,838行（85%）；wdpp_project_mine已迁10,194行（15%）；crm_opportunity 0行；crm_activity_log 216行测试数据；crm_leads表不存在。**3条铁律**：①每张已有表单独改造Issue说明字段来源+验收；②所有迁移Issue带字段级SQL验收断言；③每个迁移Issue由单一CC负责（研发经理CC排程顺序控制，禁止多CC并行抢写同表）。**新建Issue**：#4017 crm_activity_log 65万条分批迁（P1/L） / #4018 crm_opportunity 6355行全量+biz_line三类判定+stage 50→6映射（P0/L） / #4019 crm_customer 补齐4528行+字段对齐（P1/M）。**依赖链**：#4014 crm_leads → #4019 crm_customer → #4018 crm_opportunity → #4017 crm_activity_log + #4015 矿场补迁。**交付**：`.github/docs/mdy-migration/migration-guide.md`（429行完整指导） + #4014/#4015/#4016原评论补验收标准 + 3个新整改Issue。**业务判定规则**：business_type三类（direct/dealer/international）按商机业务类型→信息来源→客户业务类型三层优先级；stage 50→6映射（NEW/NEGOTIATION/BIDDING/CONTRACTED/CLOSED_WON/CLOSED_LOST，含43个isdel历史值）；source 48→8枚举合并。**user-undefined处理**：65,866条无归属记录建`sys_user.id=-1`虚拟账号承接 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

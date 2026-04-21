@@ -69,7 +69,8 @@
 | 04-22 | kimi2 | #3389 | PLM | medium | In Progress | EBOM解析API |
 | 04-22 | kimi3 | #3392 | PLM | medium | In Progress | 版本化定价引擎API |
 | 04-22 | kimi4 | #3631 | bidding | high | In Progress | pipeline表对齐 |
-| 04-22 | kimi5 | #1692 | backend | medium | In Progress | 项目成本跟踪API（⚠️可能卡住） |
+| 04-22 | kimi5 | ~~#1692~~ | backend | medium | ~~Done~~ | ~~项目成本跟踪API~~ — PR #3844 已于04-19 merged，误派 |
+| 04-22 | kimi5 | #2113 | backend | medium | In Progress | 合同审批流程 |
 
 ---
 

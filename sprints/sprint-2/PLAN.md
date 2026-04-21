@@ -35,8 +35,8 @@
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 |
 |------|-------|--------|------|--------|------|
-| 6 | #2296 | P1 | wechat | medium | EXEMPT — Cockpit安全审计页面 |
-| 7 | #2298 | P1 | cockpit | medium | A档 — AI对话监控面板 |
+| 6 | ~~#2296~~ | P1 | wechat | medium | ✅ 已派 — Cockpit安全审计页面 |
+| 7 | ~~#2298~~ | P1 | cockpit | medium | ✅ 已派 — AI对话监控面板 |
 | 8 | #2925 | P1 | backend | medium | A档 — 字段级数据完整度计算引擎 |
 | 9 | #2926 | P1 | backend | medium | A档 — 数据质量KPI API |
 | 10 | #2944 | P1 | backend | medium | A档 — 7天滚动基线异常检测 |
@@ -71,6 +71,8 @@
 | 04-22 | kimi4 | #3631 | bidding | high | In Progress | pipeline表对齐 |
 | 04-22 | kimi5 | ~~#1692~~ | backend | medium | ~~Done~~ | ~~项目成本跟踪API~~ — PR #3844 已于04-19 merged，误派 |
 | 04-22 | kimi5 | #2113 | backend | medium | In Progress | 合同审批流程 |
+| 04-22 | kimi1 | #2296 | wechat | medium | In Progress | Cockpit安全审计页面 |
+| 04-22 | kimi5 | #2298 | cockpit | medium | In Progress | AI对话监控面板 |
 
 ---
 

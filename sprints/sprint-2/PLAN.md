@@ -42,7 +42,7 @@
 | 10 | ~~#2944~~ | P1 | backend | medium | ✅ 已派 — 7天滚动基线异常检测 |
 | 11 | ~~#4033~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-基本信息Tab |
 | 12 | ~~#4034~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-跟进记录Tab |
-| 13 | #4035 | P1 | crm | medium | A档 — CRM商机详情-设计单Tab |
+| 13 | ~~#4035~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-设计单Tab |
 | 14 | #4036 | P1 | crm | medium | A档 — CRM商机详情-报价Tab |
 | 15 | #4037 | P1 | crm | medium | A档 — CRM商机详情-合同Tab |
 | 16 | #4038 | P1 | crm | medium | A档 — CRM商机详情-回款Tab |
@@ -78,6 +78,7 @@
 | 04-22 | kimi2 | #2944 | backend | medium | In Progress | 7天滚动基线异常检测 |
 | 04-22 | kimi4 | #4033 | crm | medium | In Progress | CRM商机详情-基本信息Tab |
 | 04-22 | kimi1 | #4034 | crm | medium | In Progress | CRM商机详情-跟进记录Tab |
+| 04-22 | kimi2 | #4035 | crm | medium | In Progress | CRM商机详情-设计单Tab |
 
 ---
 

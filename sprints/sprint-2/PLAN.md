@@ -27,22 +27,39 @@
 | 4 | kimi4 | #3631 | P1 | bidding | high | ✅ 已派 — pipeline表对齐 |
 | 5 | kimi5 | #1692 | P1 | backend | medium | ✅ 已派（⚠️可能卡住）— 项目成本跟踪API |
 
-**5/5 并发已满。** 有CC释放时按以下顺序补入：
+**5/5 并发已满。** 有CC释放时按以下顺序补入（Sprint-1优先 > Sprint-2 > NoSprint）：
 
-### 备选队列
+### 备选队列（按Perplexity Sprint优先级排序）
+
+**Sprint-1 P1（最高优先）：**
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 |
 |------|-------|--------|------|--------|------|
-| 6 | #2113 | P1 | backend | medium | 合同审批流程（解锁#1752/#2023） |
-| 7 | #2097 | P1 | backend | medium | 验收检查项模板管理 |
-| 8 | #1991 | P1 | project | medium | 经验卡片API（解锁#1992/#2350） |
-| 9 | #1896 | P1 | crm | medium | 客户情报增强 |
-| 10 | #3193 | P1 | backend | medium | 项目主计划数据模型（有原型） |
-| 11 | #1672 | P1 | biz | medium | 投标文档生成API |
-| 12 | #2028 | P1 | backend | medium | 矿场增量同步推送 |
-| 13 | #1874 | P1 | backend | medium | 跟进提醒+自动升降级 |
-| 14 | #1523 | P2 | bidding | medium | 区域品类矩阵统计API（有原型） |
-| 15 | #2404 | P2 | bidding | medium | 复盘评分迭代（有原型） |
+| 6 | #2296 | P1 | wechat | medium | EXEMPT — Cockpit安全审计页面 |
+| 7 | #2298 | P1 | cockpit | medium | A档 — AI对话监控面板 |
+| 8 | #2925 | P1 | backend | medium | A档 — 字段级数据完整度计算引擎 |
+| 9 | #2926 | P1 | backend | medium | A档 — 数据质量KPI API |
+| 10 | #2944 | P1 | backend | medium | A档 — 7天滚动基线异常检测 |
+| 11 | #4033 | P1 | crm | medium | A档 — CRM商机详情-基本信息Tab |
+| 12 | #4034 | P1 | crm | medium | A档 — CRM商机详情-跟进记录Tab |
+| 13 | #4035 | P1 | crm | medium | A档 — CRM商机详情-设计单Tab |
+| 14 | #4036 | P1 | crm | medium | A档 — CRM商机详情-报价Tab |
+| 15 | #4037 | P1 | crm | medium | A档 — CRM商机详情-合同Tab |
+| 16 | #4038 | P1 | crm | medium | A档 — CRM商机详情-回款Tab |
+| 17 | #4039 | P1 | crm | medium | A档 — CRM商机详情-投标HZTab |
+| 18 | #4040 | P1 | crm | medium | A档 — CRM商机详情-资料Tab |
+| 19 | #4042 | P1 | crm | medium | A档 — CRM商机详情-流程监控Tab |
+| 20 | #4044 | P1 | crm | medium | A档 — CRM商机详情-变更日志Tab |
+
+**Sprint-1 其他 + Sprint-2（续）：**
+
+| 序号 | Issue | 优先级 | 模块 | effort | 说明 |
+|------|-------|--------|------|--------|------|
+| 21 | #2849 | P1 | cockpit | medium | A档 — Agent效率看板前端 |
+| 22 | #2851 | P1 | cockpit | medium | A档 — 验收队列前端 |
+| 23 | #1920 | — | d3 | medium | EXEMPT — wande-gh-plugins仓库重构 |
+| 24 | #1921 | — | d3 | medium | EXEMPT — D3Plugin.gha SDK降级 |
+| 25 | #3648 | P0 | bidding | low | Sprint-2 A_weak — 招投标DB建表 |
 
 ## 指派历史
 

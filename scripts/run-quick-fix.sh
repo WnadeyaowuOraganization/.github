@@ -71,12 +71,12 @@ mkdir -p "$SKILLS_DIR"
 find "$SKILLS_DIR" -maxdepth 1 -type l -exec rm -f {} \; 2>/dev/null || true
 
 # 1. 首位加载 quick-fix（前缀 000- 保证字母序最先）
-HOTFIX_SKILL_SRC="${GITHUB_DIR}/docs/agent-docs/quick-fix"
-if [ -f "${HOTFIX_SKILL_SRC}/SKILL.md" ]; then
-  ln -sfn "$HOTFIX_SKILL_SRC" "$SKILLS_DIR/000-quick-fix"
+QUICKFIX_SKILL_SRC="${GITHUB_DIR}/docs/agent-docs/quick-fix"
+if [ -f "${QUICKFIX_SKILL_SRC}/SKILL.md" ]; then
+  ln -sfn "$QUICKFIX_SKILL_SRC" "$SKILLS_DIR/000-quick-fix"
   echo "✅ 首位 skill: 000-quick-fix → quick-fix"
 else
-  echo "❌ quick-fix SKILL.md 不存在: ${HOTFIX_SKILL_SRC}/SKILL.md"
+  echo "❌ quick-fix SKILL.md 不存在: ${QUICKFIX_SKILL_SRC}/SKILL.md"
   exit 1
 fi
 

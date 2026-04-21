@@ -1,0 +1,54 @@
+1775994198161|4|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT version()|SELECT version()
+1775994198173|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198173|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT CURRENT_USER|SELECT CURRENT_USER
+1775994198174|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';
+1775994198174|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT current_schema|SELECT current_schema
+1775994198174|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198175|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT current_schema|SELECT current_schema
+1775994198175|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198176|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT current_user|SELECT current_user
+1775994198186|1|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT COUNT(*) FROM pg_namespace WHERE nspname=?|SELECT COUNT(*) FROM pg_namespace WHERE nspname='public'
+1775994198187|0|commit|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified||
+1775994198187|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198188|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT EXISTS (   SELECT 1   FROM   pg_catalog.pg_class c   JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace   WHERE  n.nspname = ?   AND    c.relname = ?   AND    c.relkind = 'r' )|SELECT EXISTS (   SELECT 1   FROM   pg_catalog.pg_class c   JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace   WHERE  n.nspname = 'public'   AND    c.relname = 'flyway_schema_history'   AND    c.relkind = 'r' )
+1775994198190|0|statement|connection 1|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198190|0|statement|connection 1|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT CURRENT_USER|SELECT CURRENT_USER
+1775994198191|0|statement|connection 1|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';
+1775994198193|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198197|2|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT pg_try_advisory_xact_lock(77433833903597)|SELECT pg_try_advisory_xact_lock(77433833903597)
+1775994198212|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198213|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT EXISTS (   SELECT 1   FROM   pg_catalog.pg_class c   JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace   WHERE  n.nspname = ?   AND    c.relname = ?   AND    c.relkind = 'r' )|SELECT EXISTS (   SELECT 1   FROM   pg_catalog.pg_class c   JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace   WHERE  n.nspname = 'public'   AND    c.relname = 'flyway_schema_history'   AND    c.relkind = 'r' )
+1775994198219|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|/*NO LOAD BALANCE*/ SELECT "installed_rank","version","description","type","script","checksum","installed_on","installed_by","execution_time","success" FROM "public"."flyway_schema_history" WHERE "installed_rank" > ? ORDER BY "installed_rank"|/*NO LOAD BALANCE*/ SELECT "installed_rank","version","description","type","script","checksum","installed_on","installed_by","execution_time","success" FROM "public"."flyway_schema_history" WHERE "installed_rank" > -1 ORDER BY "installed_rank"
+1775994198224|0|commit|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified||
+1775994198228|0|statement|connection 1|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198229|0|statement|connection 1|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT set_config('search_path', ?, false)|SELECT set_config('search_path', '"$user", public', false)
+1775994198230|0|commit|connection 1|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified||
+1775994198234|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198235|0|statement|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT set_config('search_path', ?, false)|SELECT set_config('search_path', '"$user", public', false)
+1775994198236|0|commit|connection 0|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified||
+1775994198254|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT version()|SELECT version()
+1775994198256|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198257|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT CURRENT_USER|SELECT CURRENT_USER
+1775994198258|1|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';
+1775994198258|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT current_schema|SELECT current_schema
+1775994198259|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198259|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT current_schema|SELECT current_schema
+1775994198259|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198260|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT current_user|SELECT current_user
+1775994198262|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT COUNT(*) FROM pg_namespace WHERE nspname=?|SELECT COUNT(*) FROM pg_namespace WHERE nspname='public'
+1775994198263|0|commit|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified||
+1775994198264|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198265|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT EXISTS (   SELECT 1   FROM   pg_catalog.pg_class c   JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace   WHERE  n.nspname = ?   AND    c.relname = ?   AND    c.relkind = 'r' )|SELECT EXISTS (   SELECT 1   FROM   pg_catalog.pg_class c   JOIN   pg_catalog.pg_namespace n ON n.oid = c.relnamespace   WHERE  n.nspname = 'public'   AND    c.relname = 'flyway_schema_history'   AND    c.relkind = 'r' )
+1775994198266|0|statement|connection 3|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SHOW search_path|SHOW search_path
+1775994198267|0|statement|connection 3|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT CURRENT_USER|SELECT CURRENT_USER
+1775994198268|0|statement|connection 3|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';|SELECT rolname FROM pg_roles WHERE rolname ILIKE 'rds_superuser';
+1775994198268|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198269|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT pg_try_advisory_xact_lock(77433833903597)|SELECT pg_try_advisory_xact_lock(77433833903597)
+1775994198281|0|rollback|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified||
+1775994198282|0|statement|connection 3|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198282|0|statement|connection 3|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT set_config('search_path', ?, false)|SELECT set_config('search_path', '"$user", public', false)
+1775994198283|0|commit|connection 3|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified||
+1775994198284|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SET ROLE 'wande'|SET ROLE 'wande'
+1775994198285|0|statement|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified|SELECT set_config('search_path', ?, false)|SELECT set_config('search_path', '"$user", public', false)
+1775994198285|0|commit|connection 2|url jdbc:postgresql://localhost:5433/wande_ai?stringtype=unspecified||
+1775994205038|4|statement|connection 4|url jdbc:postgresql://localhost:5433/ruoyi_ai?stringtype=unspecified|SELECT  id,category,model_name,model_describe,model_price,model_type,model_show,system_prompt,api_host,api_key,priority,provider_name,remark,create_dept,create_by,create_time,update_by,update_time  FROM chat_model      WHERE  (model_name = ?)|SELECT  id,category,model_name,model_describe,model_price,model_type,model_show,system_prompt,api_host,api_key,priority,provider_name,remark,create_dept,create_by,create_time,update_by,update_time  FROM chat_model      WHERE  (model_name = 'suno')

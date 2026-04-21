@@ -1,0 +1,82 @@
+name: quick-fix
+version: "1.1"
+description: Full-stack engineer skill for rapid fixes to main test environment with automated validation, deployment, and rollback.
+
+category: "devops"
+tags:
+  - quick-fix
+  - frontend
+  - backend
+  - ci-cd
+  - rollback
+
+author: "Claude Code"
+created: "2026-04-21"
+updated: "2026-04-21"
+
+requirements:
+  - git
+  - gh (GitHub CLI)
+  - mvn (Maven)
+  - pnpm
+  - chromium (Playwright)
+  - curl
+  - bash 4+
+
+environment:
+  work_dir: "/data/home/ubuntu/projects/wande-play-quick-fix"
+  e2e_dir: "/data/home/ubuntu/projects/wande-play-e2e-top"
+  backend_port: 6040
+  frontend_url: "http://localhost:8080"
+  backend_url: "http://localhost:6040"
+  github_repo: "WnadeyaowuOraganization/wande-play"
+  github_branch: "dev"
+
+workflow:
+  - phase: "初始化"
+    steps:
+      - "加载 utils.sh 工具库"
+      - "初始化 GH_TOKEN"
+  - phase: "问题复现"
+    steps:
+      - "追问甲方需求（不猜测）"
+      - "复现问题 + before 截图"
+      - "按类型创建 Issue"
+  - phase: "代码修复"
+    steps:
+      - "读相关代码定位根因"
+      - "最小改动原则修改"
+      - "强制本地验证（verify-local）"
+  - phase: "提交部署"
+    steps:
+      - "逐文件 git add（禁止 add .）"
+      - "git commit && git push origin dev"
+      - "自动轮询等待 CI（wait-ci-complete）"
+  - phase: "验证回滚"
+    steps:
+      - "CI 失败自动回滚（rollback-complete）"
+      - "after 截图 + 更新 Issue + 关闭"
+
+optimizations:
+  - "【优化1】强制本地验证 gate（mvn + pnpm 失败即停）"
+  - "【优化2】自动回滚（后端 + 前端 + 健康检查）"
+  - "【优化3】CI 轮询函数化（指数退避，10分钟超时）"
+  - "【优化4】GH Token 一次初始化（整流程复用）"
+  - "【优化5】截图脚本模板化（参数化 URL/账号/等待）"
+  - "【优化6】Issue 模板按类型分化（frontend/api/data）"
+
+hardlines:
+  - "禁止不创建 Issue 就推代码"
+  - "禁止不复现问题就动代码"
+  - "禁止 git add ."
+  - "禁止验证失败就推送"
+  - "禁止推送后不观察 CI"
+  - "禁止 CI 失败后独自多次尝试"
+  - "禁止 Issue 没有 before/after 截图就关闭"
+  - "禁止影响主环境超过 10 分钟不汇报"
+
+time_estimate:
+  minimal_fix: "5-8 分钟"
+  typical_fix: "10-15 分钟"
+  complex_fix: "20-30 分钟"
+  with_rollback: "+5 分钟"

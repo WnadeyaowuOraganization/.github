@@ -1,0 +1,29 @@
+2026-04-20 09:55:55 [background-preinit] INFO  o.h.validator.internal.util.Version - HV000001: Hibernate Validator 8.0.3.Final
+2026-04-20 09:56:00 [main] INFO  io.undertow.servlet - Initializing Spring embedded WebApplicationContext
+2026-04-20 09:56:01 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource detect P6SPY plugin and enabled it
+2026-04-20 09:56:01 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Starting...
+2026-04-20 09:56:01 [main] INFO  com.zaxxer.hikari.pool.HikariPool - master - Added connection com.mysql.cj.jdbc.ConnectionImpl@7f070f66
+2026-04-20 09:56:01 [main] INFO  com.zaxxer.hikari.HikariDataSource - master - Start completed.
+2026-04-20 09:56:01 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource - add a datasource named [master] success
+2026-04-20 09:56:01 [main] INFO  c.b.d.d.DynamicRoutingDataSource - dynamic-datasource initial loaded [1] datasource,primary datasource named [master]
+2026-04-20 09:56:05 [main] INFO  org.redisson.Version - Redisson 3.51.0
+2026-04-20 09:56:05 [redisson-netty-1-6] INFO  o.r.connection.ConnectionsHolder - 1 connections initialized for localhost/127.0.0.1:6379
+2026-04-20 09:56:05 [redisson-netty-1-4] INFO  o.r.connection.ConnectionsHolder - 8 connections initialized for localhost/127.0.0.1:6379
+2026-04-20 09:56:12 [main] INFO  c.b.m.e.s.MybatisPlusApplicationContextAware - Register ApplicationContext instances org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext@6b04acb2
+2026-04-20 09:56:14 [main] INFO  o.d.w.p.modes.sb.config.BeanConfig - 【warm-flow】，加载完成
+2026-04-20 09:56:15 [main] INFO  io.undertow - starting server: Undertow - 2.3.20.Final
+2026-04-20 09:56:15 [main] INFO  org.xnio - XNIO version 3.8.16.Final
+2026-04-20 09:56:15 [main] INFO  org.xnio.nio - XNIO NIO Implementation Version 3.8.16.Final
+2026-04-20 09:56:15 [main] INFO  org.jboss.threads - JBoss Threads version 3.7.0.Final
+2026-04-20 09:56:16 [main] INFO  o.f.c.i.r.ResourceNameValidator - 1 SQL migrations were detected but not run because they did not follow the filename convention.
+2026-04-20 09:56:16 [main] INFO  o.f.c.i.r.ResourceNameValidator - Set 'validateMigrationNaming' to true to fail fast and see a list of the invalid file names.
+2026-04-20 09:56:16 [main] INFO  org.flywaydb.core.FlywayExecutor - Database: jdbc:mysql://127.0.0.1:3306/wande-ai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true (MySQL 8.0)
+2026-04-20 09:56:16 [main] INFO  o.f.core.internal.command.DbRepair - Successfully repaired schema history table `wande-ai`.`flyway_schema_history` (execution time 00:00.103s).
+2026-04-20 09:56:16 [main] INFO  o.f.core.internal.command.DbRepair - Manual cleanup of the remaining effects of the failed migration may still be required.
+2026-04-20 09:56:16 [main] INFO  o.f.c.i.r.ResourceNameValidator - 1 SQL migrations were detected but not run because they did not follow the filename convention.
+2026-04-20 09:56:16 [main] INFO  o.f.c.i.r.ResourceNameValidator - Set 'validateMigrationNaming' to true to fail fast and see a list of the invalid file names.
+2026-04-20 09:56:16 [main] INFO  o.f.c.i.r.ResourceNameValidator - 1 SQL migrations were detected but not run because they did not follow the filename convention.
+2026-04-20 09:56:16 [main] INFO  o.f.c.i.r.ResourceNameValidator - Set 'validateMigrationNaming' to true to fail fast and see a list of the invalid file names.
+2026-04-20 09:56:16 [main] INFO  o.f.core.internal.command.DbMigrate - Current version of schema `wande-ai`: 20260416200100
+2026-04-20 09:56:16 [main] INFO  o.f.core.internal.command.DbMigrate - Migrating schema `wande-ai` to version "20260416110000.2284 - create policy dict" [out of order]
+2026-04-20 09:56:47 [XNIO-1 task-2] INFO  io.undertow.servlet - Initializing Spring DispatcherServlet 'dispatcherServlet'

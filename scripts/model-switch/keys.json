@@ -46,15 +46,15 @@
       "provider": "zhipu",
       "priority": 2,
       "api_url": "https://open.bigmodel.cn/api/anthropic",
-      "api_key": "7f2058319676e54c67dff8d85c8a2a06.mGLpkq8qBjpNjG2C",
+      "api_key": "3432cd07118f4267a0a41bd63f2f10f1.3MjdUZnhZFJdyIcJ",
       "model_map": {
         "claude-opus-4-6": "glm-5.1",
         "claude-sonnet-4-6": "glm-5.1",
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
-      "_note": "智谱清言coding plan [1313公平使用封锁暂停]",
+      "_note": "智谱清言coding plan",
       "context_window": 204800,
-      "enabled": false
+      "enabled": true
     },
     {
       "name": "zhipu_max_2",
@@ -69,22 +69,6 @@
         "claude-haiku-4-5-20251001": "glm-5.1"
       },
       "_note": "智谱清言coding plan [1313公平使用封锁暂停]",
-      "context_window": 204800,
-      "enabled": false
-    },
-    {
-      "name": "zhipu_max_3",
-      "type": "anthropic_compat",
-      "provider": "zhipu",
-      "priority": 2,
-      "api_url": "https://open.bigmodel.cn/api/anthropic",
-      "api_key": "6c587006e0d541e183a1d1e64b984350.rEB8d5uUV4DkZhtA",
-      "model_map": {
-        "claude-opus-4-6": "glm-5.1",
-        "claude-sonnet-4-6": "glm-5.1",
-        "claude-haiku-4-5-20251001": "glm-5.1"
-      },
-      "_note": "智谱清言coding plan [401认证失败暂停]",
       "context_window": 204800,
       "enabled": false
     },

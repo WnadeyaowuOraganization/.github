@@ -1,1 +1,16 @@
-{}
+{
+  "kimi1": {
+    "cooldown_until": "2026-04-21T19:43:13.603198+08:00",
+    "marked_at": "2026-04-21T14:43:13.603198+08:00",
+    "error_type": "balance_exhausted",
+    "error_code": "permission_error",
+    "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
+  },
+  "kimi2": {
+    "cooldown_until": "2026-04-21T19:43:14.429129+08:00",
+    "marked_at": "2026-04-21T14:43:14.429129+08:00",
+    "error_type": "balance_exhausted",
+    "error_code": "permission_error",
+    "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
+  }
+}

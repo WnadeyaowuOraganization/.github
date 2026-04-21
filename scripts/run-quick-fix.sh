@@ -73,8 +73,8 @@ find "$SKILLS_DIR" -maxdepth 1 -type l -exec rm -f {} \; 2>/dev/null || true
 # 1. 首位加载 quick-fix（前缀 000- 保证字母序最先）
 QUICKFIX_SKILL_SRC="${GITHUB_DIR}/docs/agent-docs/quick-fix"
 if [ -f "${QUICKFIX_SKILL_SRC}/SKILL.md" ]; then
-  ln -sfn "$QUICKFIX_SKILL_SRC" "$SKILLS_DIR/000-quick-fix"
-  echo "✅ 首位 skill: 000-quick-fix → quick-fix"
+  ln -sfn "$QUICKFIX_SKILL_SRC" "$SKILLS_DIR/quick-fix"
+  echo "✅ 首位 skill: quick-fix → quick-fix"
 else
   echo "❌ quick-fix SKILL.md 不存在: ${QUICKFIX_SKILL_SRC}/SKILL.md"
   exit 1
@@ -126,7 +126,7 @@ INIT_PROMPT='你是 Quick Fix CC Dispatcher，运行在 tmux session "quick-fix"
    Agent({
      description: "修复: <一句话>",
      isolation: "worktree",
-     prompt: "你是quick-fix修复工程师。工作目录: /data/home/ubuntu/projects/wande-play-quick-fix (dev分支)。\n\n问题: <甲方描述+自动上下文>\n\n请按 000-quick-fix skill 流程修复：定位根因→最小改动→verify-local→sync-dev→push dev→监听CI日志。\n\nDB连接: mysql -u root -proot -h 127.0.0.1 wande-ai\nMaven仓库: -Dmaven.repo.local=/home/ubuntu/.m2/repository"
+     prompt: "你是quick-fix修复工程师。工作目录: /data/home/ubuntu/projects/wande-play-quick-fix (dev分支)。\n\n问题: <甲方描述+自动上下文>\n\n请按 quick-fix skill 流程修复：定位根因→最小改动→verify-local→sync-dev→push dev→监听CI日志。\n\nDB连接: mysql -u root -proot -h 127.0.0.1 wande-ai\nMaven仓库: -Dmaven.repo.local=/home/ubuntu/.m2/repository"
    })
    ```
 3. subagent 在后台执行，你立即回复甲方："已收到，正在修复：<问题摘要>，预计X分钟"
@@ -159,6 +159,6 @@ echo "🚀 Quick Fix CC 已启动"
 echo "   session : $SESSION"
 echo "   model   : $MODEL"
 echo "   workdir : $WORK_DIR"
-echo "   skills  : 000-quick-fix (首位) + ${skill_count} 个普通 skills"
+echo "   skills  : quick-fix (首位) + ${skill_count} 个普通 skills"
 echo ""
 echo "   tmux attach -t $SESSION"

@@ -238,3 +238,50 @@
 - 原始 Issue 清单: `open_issues.json`（750 条）
 - 已分类数据: `issues_classified.json`
 - 无原型引用清单: `issues_no_proto.json`（642 条）
+---
+
+## 执行进度更新（2026-04-21 23:50）
+
+### ✅ 已完成
+
+**A 档（41 个）**：
+- 34 个回填三重引用（18 project→执行管理§2.x / 9 approval / 5 crm / 1 product-portal / 2 ptc）
+- 6 个 REJECT 改分域：4 #2806/2809/2816/2818 去 biz:crm + 加 needs-prototype / 1 #2615 去 biz:cockpit / 1 #1770 保留 biz:rbac + 加 needs-prototype
+- 1 个跳过（#3161 已有引用）
+
+**C 档（41/415 处理）**：
+| biz 域 | 处置数 | 动作 |
+|--------|--------|------|
+| mobile | 3 | close as not planned（已废弃移动端方案） |
+| auth | 3 | close as not planned（重复/过时） |
+| test | 5 | close as not planned（测试基建豁免 needs-prototype，已登记 skill §5.6）|
+| sample | 4 | 加 biz:sample + needs-prototype（等待样品管理原型）|
+| plm | 3 | 改标 biz:budget + 加 needs-prototype |
+| #2118 | 1 | 回填到执行管理原型 |
+| rbac | 11 | 精确分域（3 asset-library + 1 sample + 4 rbac + 2 hr + 1 #1615 wechat）|
+| knowledge | 10 | close as not planned（知识库模块已废弃重构）|
+
+**新建标签**: `needs-prototype` #fbca04 / `biz:budget` #5319e7 / `biz:asset-library` #5319e7 / `biz:wechat` #1d76db
+
+**产出**：
+- wande-prototype skill v5.0→v5.1 新增 §5.6 历史清理 SOP
+- `.github/docs/status.md` 新增 D92 决策
+- `.github/docs/issue-prototype-audit.md`（本文件）
+
+### ⏳ 剩余待处理
+
+**C 档剩余 374 个**（按 biz 域）：
+| biz 域 | Issue 数 | 初步策略 |
+|--------|---------|---------|
+| crm | 57 | 最大域，需区分国贸/直销，有原型可回填多数 |
+| project | 54 | 多数可回填到执行管理/矿场原型 |
+| design-ai | 39 | 设计AI原型未建 → 多数 needs-prototype |
+| d3-parametric | 38 | D3业务线，原型未建 → needs-prototype |
+| approval | 31 | 审批原型已建，多数可回填 §2.x |
+| brand-center | 31 | 原型未建 → needs-prototype |
+| wechat | 18 | 企微集成，分域到具体场景 |
+| budget | 8 | D71预算未建原型 → needs-prototype |
+| uncategorized | 96 | 无法自动分类，需逐个判断 |
+
+**B 档 424 个**：无 biz 标签 Issue，需按标题关键词归域后再分 A/B/C 档。
+

@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-04-19 02:18 by 研发经理（#2028 CI故障诊断+修复）
+> ⏰ 最后更新：2026-04-21 10:10 by 吴耀（D90 线索/商机架构统一）
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
 ---
@@ -589,6 +589,7 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D87 | 04-14 | ✅ | task.md 模板移除 T12 "轮询 merged"（语义矛盾根除） | **问题**：issue-task-md / fix-ci-failure skill 模板最后一步为 `- [ ] T12 轮询 merged` / `T_fix_N_6`，但 quality-gate 门 2 在 PR push 时立即检查 task.md 全勾 → T12 按定义必须在 push 后执行 → 每个 CC PR 必卡门 2。**决策**：两模板同步删行，轮询职责由 cc-report close 的"标准前台轮询模板"单独承担，不进 task.md checkbox。commit 4a2c82f | 研发经理 |
 | D88 | 04-14 | ✅ | 新建 `docs/workflow/skill-update.md` 巡检频繁问题跟踪 | **背景**：单轮 loop 只盯当轮火情易错过规律，需累积机制。**规则**：研发经理每轮 /loop 巡检，同类问题 ≥2 次即登记为"频繁"，按日期倒序追加一条（症状/频次/根因/已处置/建议改进/状态）。累积到 5 条或某条 ≥3 次 → 批量落地为 skill/红线/CI 改动。**首批登记**：(a) CC 反复硬编码 menu_id 写 Flyway 修 parent_id NULL（kimi8×2 + kimi1×1，观察中）；(b) T12 模板矛盾（已根除）。commit 2c40f93 | 研发经理 |
 | D89 | 04-17 | ✅ | 后端先于前端派发约束（新规） | 同一页面功能，后端 Issue 必须先 merged 前端才可派发，防止前端以 mock 数据交付。规则已同步到 scheduler-guide / assign-guide / frontend-coding SKILL。D85a 衍生注意项：skill 化后规约更新不广播给活跃 CC，关键规则变更后需主动 tmux send-keys 通知。 | 排程经理 |
+| D90 | 04-21 | ✅ | 线索/商机架构统一：四入口归并 + 独立leads池 + 询盘直建商机 + 矿场手动转换 | **核心架构**：四个获客入口（外展获客#36→走leads / 官网表单→走leads / 客户询盘#39→直建opportunity / 项目矿场#7→手动转opportunity）统一到「线索池+商机池」双表模型。**四条决策**：①新建独立`crm_leads`表承载外展+官网早期信号；②询盘已过Opportunity Gate前3项，直建商机不回退leads；③矿场转商机手动确认，系统只做readiness提示（确认痛点/识别拥护者/预算时间/下一步/预估金额）；④评分≥75自动升级（外展/LinkedIn/企微三通道），官网≥60+首次回访。**三类商机**：direct(直销-矿场) / dealer(经销-询盘+外展) / international(国贸-询盘+LinkedIn)。**交付**：原型 + 详细设计378行 + Master Issue #4013 + 3子Issue(#4014 leads池+评分引擎P0 / #4015 矿场readiness整改P1 / #4016 架构蓝图+数据字典P2)，归属Sprint-3商战情报。**参考**：Salesforce/HubSpot/Prospeo 2026最佳实践 | 吴耀 |
 > **规则**：🟡=提议待确认 / ✅=已生效 / ❌=已废弃（保留追溯）
 > **决策权**：吴耀有最终决策权
 

@@ -5,7 +5,7 @@ description: Design MySQL tables and write Flyway migration scripts for Wande-Pl
 
 # 建表 + Flyway 迁移
 
-**任何新表 / 改表必须走 Flyway 增量脚本**，严禁直接编辑 baseline `wande-ai-pg.sql` / `test-base-schema.pg.sql`。
+**任何新表 / 改表必须走 Flyway 增量脚本**，严禁直接编辑 baseline `V1__baseline_wande_ai.sql`。
 
 ## 文件位置与命名（MUST：Issue号 + 秒级时间戳，禁止手挑数字）
 

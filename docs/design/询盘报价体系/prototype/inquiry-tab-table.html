@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>表格视图</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .biz-tag-direct { background: #f3f4f6; color: #4b5563; }
+    .biz-tag-dealer { background: #fef9c3; color: #854d0e; }
+    .biz-tag-intl   { background: #ede9fe; color: #5b21b6; }
+    .stage-tag { padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+    .stage-new      { background: #f3f4f6; color: #4b5563; }
+    .stage-quoting  { background: #dbeafe; color: #1e40af; }
+    .stage-follow   { background: #fef3c7; color: #92400e; }
+    .stage-won      { background: #dcfce7; color: #166534; }
+    .stage-lost     { background: #fee2e2; color: #991b1b; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">询盘工作台 · 表格视图</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">全维度筛选+批量操作的管理型视角</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务主管, 老板</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">多维筛选 / 批量分配 / 批量改阶段 / 导出 / 关键词搜索</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">筛选 / 批量选择 / 批量操作 / 导出</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">筛选组合正确 / 批量操作事务一致 / 导出字段齐全</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">询盘报价体系详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部筛选栏] -->
+<div class="bg-white border border-gray-200 rounded p-4 mb-4">
+  <div class="flex flex-wrap items-center gap-3">
+    <!-- 来源渠道 -->
+    <div class="flex items-center gap-1">
+      <span class="text-xs text-gray-500">来源渠道</span>
+      <select class="border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700 w-32">
+        <option>全部</option>
+        <option>官网</option>
+        <option>展会</option>
+        <option>老客户转介</option>
+        <option>投标平台</option>
+      </select>
+    </div>
+
+    <!-- 业务线多选 -->
+    <div class="flex items-center gap-1 border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+      <span class="text-xs text-gray-500 mr-1">业务线</span>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 直销</label>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 经销</label>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 国贸</label>
+    </div>
+
+    <!-- 日期范围 -->
+    <div class="flex items-center gap-1">
+      <span class="text-xs text-gray-500">日期</span>
+      <input type="date" class="border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+      <span class="text-gray-400 text-xs">至</span>
+      <input type="date" class="border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+    </div>
+
+    <!-- 阶段多选 -->
+    <div class="flex items-center gap-1 border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+      <span class="text-xs text-gray-500 mr-1">阶段</span>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 新</label>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 报价</label>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox" checked> 跟进</label>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox"> 赢</label>
+      <label class="flex items-center gap-1 text-xs"><input type="checkbox"> 输/关</label>
+    </div>
+
+    <!-- 关键词 -->
+    <div class="flex items-center gap-1 flex-1 min-w-[200px]">
+      <input type="text" placeholder="搜索客户名/询盘号/主题关键词..." class="w-full border border-gray-300 rounded px-3 py-1 text-sm bg-white text-gray-700">
+    </div>
+
+    <!-- 按钮 -->
+    <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-3 py-1 rounded">查询</button>
+    <button class="border border-gray-300 text-gray-600 text-sm px-3 py-1 rounded hover:bg-gray-50">重置</button>
+
+    <!-- 批量操作 -->
+    <div class="relative ml-auto">
+      <select class="border border-gray-300 rounded px-2 py-1 text-sm bg-white text-gray-700">
+        <option>批量操作 ▾</option>
+        <option>批量分配</option>
+        <option>批量改阶段</option>
+        <option>批量导出</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- [表格主体] -->
+<div class="bg-white border border-gray-200 rounded overflow-hidden">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-200 bg-gray-50">
+    <div class="text-xs text-gray-500">共 <span class="text-gray-800 font-medium">128</span> 条记录 · 已选 <span class="text-blue-600">2</span> 条</div>
+    <div class="text-xs text-gray-400">每页 20 条</div>
+  </div>
+  <table class="w-full text-sm">
+    <thead class="bg-gray-50 text-gray-600">
+      <tr class="border-b border-gray-200">
+        <th class="p-2 w-8"><input type="checkbox"></th>
+        <th class="p-2 text-left font-medium">询盘号</th>
+        <th class="p-2 text-left font-medium">客户</th>
+        <th class="p-2 text-left font-medium">业务线</th>
+        <th class="p-2 text-left font-medium">主题</th>
+        <th class="p-2 text-left font-medium">金额</th>
+        <th class="p-2 text-left font-medium">阶段</th>
+        <th class="p-2 text-left font-medium">跟进人</th>
+        <th class="p-2 text-left font-medium">来源</th>
+        <th class="p-2 text-left font-medium">创建日期</th>
+        <th class="p-2 text-left font-medium">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" checked></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260512-001</td>
+        <td class="p-2">深圳华强游乐</td>
+        <td class="p-2"><span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span></td>
+        <td class="p-2">大型组合滑梯方案询价</td>
+        <td class="p-2">¥580,000</td>
+        <td class="p-2"><span class="stage-tag stage-new">新询盘</span></td>
+        <td class="p-2">李经理</td>
+        <td class="p-2 text-gray-500">官网</td>
+        <td class="p-2 text-gray-500">2026-05-12</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" checked></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260511-018</td>
+        <td class="p-2">郑州飞跃经销</td>
+        <td class="p-2"><span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span></td>
+        <td class="p-2">小区无动力乐园包方案</td>
+        <td class="p-2">¥220,000</td>
+        <td class="p-2"><span class="stage-tag stage-new">新询盘</span></td>
+        <td class="p-2">王业务</td>
+        <td class="p-2 text-gray-500">老客户转介</td>
+        <td class="p-2 text-gray-500">2026-05-11</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260510-005</td>
+        <td class="p-2">Ahmed · UAE Dubai Mall</td>
+        <td class="p-2"><span class="biz-tag-intl text-xs px-2 py-0.5 rounded">国贸</span></td>
+        <td class="p-2">Indoor playground quotation</td>
+        <td class="p-2">USD 45,000</td>
+        <td class="p-2"><span class="stage-tag stage-quoting">报价中</span></td>
+        <td class="p-2">Susan</td>
+        <td class="p-2 text-gray-500">展会</td>
+        <td class="p-2 text-gray-500">2026-05-10</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260509-012</td>
+        <td class="p-2">上海浦东文旅公司</td>
+        <td class="p-2"><span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span></td>
+        <td class="p-2">大型主题乐园定制方案</td>
+        <td class="p-2">¥3,200,000</td>
+        <td class="p-2"><span class="stage-tag stage-quoting">报价中</span></td>
+        <td class="p-2">陈经理</td>
+        <td class="p-2 text-gray-500">投标平台</td>
+        <td class="p-2 text-gray-500">2026-05-09</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260508-021</td>
+        <td class="p-2">成都乐趣经销</td>
+        <td class="p-2"><span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span></td>
+        <td class="p-2">蹦床公园设备包询价</td>
+        <td class="p-2">¥860,000</td>
+        <td class="p-2"><span class="stage-tag stage-quoting">报价中</span></td>
+        <td class="p-2">刘业务</td>
+        <td class="p-2 text-gray-500">老客户转介</td>
+        <td class="p-2 text-gray-500">2026-05-08</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260507-003</td>
+        <td class="p-2">杭州萧山文体局</td>
+        <td class="p-2"><span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span></td>
+        <td class="p-2">社区广场儿童游乐设施</td>
+        <td class="p-2">¥480,000</td>
+        <td class="p-2"><span class="stage-tag stage-follow">待跟进</span></td>
+        <td class="p-2">赵经理</td>
+        <td class="p-2 text-gray-500">投标平台</td>
+        <td class="p-2 text-gray-500">2026-05-07</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260506-017</td>
+        <td class="p-2">武汉乐游经销</td>
+        <td class="p-2"><span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span></td>
+        <td class="p-2">幼儿园整体配套方案</td>
+        <td class="p-2">¥360,000</td>
+        <td class="p-2"><span class="stage-tag stage-follow">待跟进</span></td>
+        <td class="p-2">孙业务</td>
+        <td class="p-2 text-gray-500">展会</td>
+        <td class="p-2 text-gray-500">2026-05-06</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260505-008</td>
+        <td class="p-2">Maria · Russia Moscow</td>
+        <td class="p-2"><span class="biz-tag-intl text-xs px-2 py-0.5 rounded">国贸</span></td>
+        <td class="p-2">Indoor soft play set</td>
+        <td class="p-2">USD 32,000</td>
+        <td class="p-2"><span class="stage-tag stage-follow">待跟进</span></td>
+        <td class="p-2">Jason</td>
+        <td class="p-2 text-gray-500">官网</td>
+        <td class="p-2 text-gray-500">2026-05-05</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260503-002</td>
+        <td class="p-2">广州天河游乐场</td>
+        <td class="p-2"><span class="biz-tag-direct text-xs px-2 py-0.5 rounded">直销</span></td>
+        <td class="p-2">户外大型组合设备</td>
+        <td class="p-2">¥1,250,000</td>
+        <td class="p-2"><span class="stage-tag stage-won">赢单</span></td>
+        <td class="p-2">黄经理</td>
+        <td class="p-2 text-gray-500">老客户转介</td>
+        <td class="p-2 text-gray-500">2026-05-03</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox"></td>
+        <td class="p-2 font-mono text-xs text-gray-500">INQ-20260502-014</td>
+        <td class="p-2">西安动力经销</td>
+        <td class="p-2"><span class="biz-tag-dealer text-xs px-2 py-0.5 rounded">经销</span></td>
+        <td class="p-2">商场淘气堡装修</td>
+        <td class="p-2">¥180,000</td>
+        <td class="p-2"><span class="stage-tag stage-lost">输单</span></td>
+        <td class="p-2">吴业务</td>
+        <td class="p-2 text-gray-500">展会</td>
+        <td class="p-2 text-gray-500">2026-05-02</td>
+        <td class="p-2 text-xs">
+          <a class="text-blue-500 hover:underline mr-2">详情</a>
+          <a class="text-blue-500 hover:underline mr-2">报价</a>
+          <a class="text-blue-500 hover:underline">跟进</a>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- [分页] -->
+  <div class="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-white text-sm text-gray-600">
+    <div class="text-xs text-gray-500">显示 1-10 条 / 共 128 条</div>
+    <div class="flex items-center gap-1">
+      <button class="border border-gray-300 rounded px-2 py-0.5 text-xs hover:bg-gray-50">&lt;</button>
+      <button class="bg-blue-500 text-white rounded px-2 py-0.5 text-xs">1</button>
+      <button class="border border-gray-300 rounded px-2 py-0.5 text-xs hover:bg-gray-50">2</button>
+      <button class="border border-gray-300 rounded px-2 py-0.5 text-xs hover:bg-gray-50">3</button>
+      <span class="text-gray-400 text-xs">...</span>
+      <button class="border border-gray-300 rounded px-2 py-0.5 text-xs hover:bg-gray-50">13</button>
+      <button class="border border-gray-300 rounded px-2 py-0.5 text-xs hover:bg-gray-50">&gt;</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

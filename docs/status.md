@@ -801,3 +801,5 @@ Sprint-8 生态售后     █████████████ 生态闭环
 - ✅ #2028矿场Issue的错误biz:cockpit标签已移除
 - ✅ 对账报告已存档：`.github/docs/code-issue-audit.md`
 - ✅ 4个新biz:标签已创建：biz:acceptance / biz:change / biz:rectification / biz:collab
+
+- 2026-04-22 排程经理完成326个Issue一次性排程：EXEMPT(33)→Todo / A档(128)→按Sprint Todo / C_frozen(165)保持Plan(needs-prototype)

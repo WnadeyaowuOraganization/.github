@@ -1,389 +1,218 @@
-# Sprint-2 排程计划：商务全闭环
+# Sprint-2 排程计划
 
-> 创建日期：2026-04-18 | 状态：待启动
-> 主题：矿场发现→投标→签约→执行→审批→回款（能赚钱）
-> 并发上限：15个CC | 基于 Sprint-1 已交付基座
-> 前置条件：Sprint-1 全部 Done（2026-04-16 完成），明道云历史商机 4,418 条已导入矿场
+> 更新时间：2026-04-22
+> 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
+> 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
+> 并发上限：5个CC
 
-## 排程原则
+## 排程统计
 
-1. **Tier-A 矿场增强最先**：Sprint-1 已交付矿场 v3.0 + CRM，历史数据已导入，增强功能直接可用
-2. **后端先于前端**：数据模型/API 先行，前端配对跟进
-3. **Tier-A 和 Tier-B 可并行**：矿场是"发现项目"，执行管理是"交付项目"，无依赖
-4. **合同回款串行**：数据库→API→前端，有强依赖链
-5. **同模块 Entity/Mapper/Service 的 Issue 串行**：避免 Flyway/Bean 冲突
+| 分类 | 数量 | 状态 |
+|------|------|------|
+| EXEMPT（bug/docs/refactor/test） | 33 | → Todo |
+| A档（完整原型引用） | 113 | → Todo |
+| A_weak（广义原型引用） | 15 | → Todo |
+| C_frozen（缺原型冻结） | 165 | 保持Plan，needs-prototype标签 |
+| **合计** | **326** | |
 
----
+## 指派历史
 
-## Tier-A：矿场增强（最优先，延续 Sprint-1 矿场主线）
-
-> Sprint-1 已交付：矿场 v3.0 页面(#3458) + 3轮缺陷修复 + 省份热力图 + 关键词池 + 竞品网络 + 幼儿园专题 + 转化漏斗API + 赢率评分
-> 明道云历史数据：4,418 条商机 → wdpp_project_mine，含负责人分配记录
-
-| Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
-|-------|------|------|------|------|------|
-| #3631 | P1 | bidding | pipeline↔后端表对齐全景规划（19张表统一接入路径） | ✅ | 无 |
-| #2028 | P1 | backend | 矿场项目信息增量同步推送 — 持续更新业务员信息 | ✅ | 无 |
-| #2243 | P1 | backend | 简报偏好设置页 — 配置关注区域/项目类型/通知时间 | ✅ | 无 |
-| #2238 | P1 | frontend | 作战资料包一页纸展示 — 项目详情页新 Tab | ✅ | #3458 |
-| #1874 | P1 | backend | 前期项目分阶段跟进提醒 + 自动升级/降级 | ✅ | 无 |
-| #1523 | P2 | bidding | 区域品类矩阵统计 API — 省份×产品品类交叉统计 | ✅ | 无 |
-| #2404 | P2 | bidding | 复盘数据驱动评分迭代 — 赢/输/流标→评分模型调整 | ✅ | 无 |
-| #2398 | P2 | mine | 竞品中标记录采集 — 从中标公示识别竞争对手 | ✅ | 无 |
-
-> **并行策略**：#3631/#2028/#2243/#1874 可4CC并行，均无交叉依赖
+| 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
+|------|------|-------|------|--------|------|------|
+| | | | | | | |
 
 ---
 
-## Tier-B：执行管理增强（中标后项目交付，与 Tier-A 并行）
+## 可执行Issue清单（161个，按Sprint分组）
 
-> Sprint-1 已交付：执行管理 v2.0 全部 22 个 Issue（三模式阶段/合同/交付/BOM/变更/回款/文档/售后）
-> Tier-B 是在 v2.0 基础上做增强
+### Sprint-1 (22个)
 
-| Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
-|-------|------|------|------|------|------|
-| #3193 | P1 | backend | 项目主计划数据模型 — project_master_plan + plan_milestone | ✅ | 无 |
-| #1692 | P1 | backend | 项目成本跟踪 API — 自动汇总+手动补充+偏差分析 | ✅ | 无 |
-| #2097 | P1 | backend | 验收检查项模板管理 — 按设备类型+批量导入 | ✅ | 无 |
-| #1830 | P1 | backend | 利润风险预警中心+仪表盘+项目详情预警 | ⏳ | #1692 |
-| #1790 | P1 | frontend | 变更影响分析面板+审批操作+全局变更看板 | ✅ | 无 |
-| #1808 | P1 | frontend | 采购/生产/安装/文档/历史 Tab 页面 | ✅ | 无 |
-| #1728 | P1 | execution | 施工安全管理页面 — 交底/日志/隐患/事故/培训/证书 | ✅ | 无 |
-| #1762 | P1 | execution | 安装管理移动端 — 三种安装模式+电子签名 | ⏳ | H5基座 |
+| Issue | 优先级 | 模块 | 标题 | 类型 | 指派 | 状态 |
+|-------|--------|------|------|------|------|------|
+| #2296 | P1 | wechat | [15/18][P1] Cockpit安全审计页面 — 合规状态+审计日志+敏感词管理 | EXEMPT | | Todo |
+| #2298 | P1 |  | [4/18][P0] Cockpit AI对话监控面板 — 全渠道对话数据可视化 | A | | Todo |
+| #2849 | P1 | cockpit | [开发模式监控-P1][5/7] Agent效率看板前端 — 线路状态矩阵+产能趋势+Me | A | | Todo |
+| #2851 | P1 | cockpit | [开发模式监控-P1][7/7] 验收队列前端 — 我的待办卡片+紧急程度排序+响应时间趋 | A | | Todo |
+| #2925 | P1 |  | [采集管控-P0][L3-1/3] 字段级数据完整度计算引擎 — 关键字段填充率+趋势+阈 | A | | Todo |
+| #2926 | P1 |  | [采集管控-P0][L3-2/3] 数据质量KPI API — 6维度质量指标查询+趋势+ | A | | Todo |
+| #2944 | P1 |  | [采集管控-P0][L4-1/2] 7天滚动基线异常检测 — 数据量/通过率偏离自动告警+ | A | | Todo |
+| #4033 | P1 | crm | [CRM][#4022-1][P1] 基本信息 — 商机完整字段展示+编辑态+AI预填+矿 | A | | Todo |
+| #4034 | P1 | crm | [CRM][#4022-2][P1] 跟进记录 — 时间线日志+新增跟进弹窗+自动记录混排 | A | | Todo |
+| #4035 | P1 | crm | [CRM][#4022-3][P1] 设计单 — D3跨模块联动+下设计单+状态列表 | A | | Todo |
+| #4036 | P1 | crm | [CRM][#4022-4][P1] 报价 — 报价单CRUD+审批流提交+状态流转 | A | | Todo |
+| #4037 | P1 | crm | [CRM][#4022-5][P1] 合同 — Sprint-1基础合同创建+盖章状态+扫 | A | | Todo |
+| #4038 | P1 | crm | [CRM][#4022-6][P1] 回款 — 五节点计划+收款记录+逾期预警 | A | | Todo |
+| #4039 | P1 | crm | [CRM][#4022-7][P1] 投标HZ — 投标申请+标书上传+企微审批触发 | A | | Todo |
+| #4040 | P1 | crm | [CRM][#4022-8][P1] 资料 — S3附件上传下载+分类筛选+presign | A | | Todo |
+| #4042 | P1 | crm | [CRM][#4022-9][P1] 流程监控 — 审批流聚合视图+逾期标红+催办限频 | A | | Todo |
+| #4044 | P1 | crm | [CRM][#4022-10][P1] 变更日志 — AOP自动捕获字段变更+阶段推进标注 | A | | Todo |
+| #1920 | P2 |  | [D3-v2.0][P0] wande-gh-plugins仓库重构 — COMPAS c | EXEMPT | | Todo |
+| #1921 | P2 |  | [D3-v2.0][P0][紧急] D3Plugin.gha SDK版本降级 — 兼容Rh | EXEMPT | | Todo |
+| #4020 | P2 | cockpit | [Master][超管驾驶舱] 平台级控制台 — 多Tab架构 18Tab（4大分组） | A_weak | | Todo |
+| #4021 | P2 | crm | [Master][CRM] 商务中心 — 10页独立架构（仪表盘+客户+商机+询盘+记录+ | A_weak | | Todo |
+| #4022 | P2 | crm | [Master][CRM] 商机详情页 — 多Tab架构 10Tab（左摘要+右侧Tab栏 | A_weak | | Todo |
 
-> **并行策略**：#3193/#1692/#2097/#1790/#1808/#1728 可6CC并行；#1830 等 #1692
+### Sprint-2 (18个)
 
----
+| Issue | 优先级 | 模块 | 标题 | 类型 | 指派 | 状态 |
+|-------|--------|------|------|------|------|------|
+| #3648 | P0 | bidding | [招投标-DB] 数据库建表 — 10张表 Flyway迁移 | A_weak | | Todo |
+| #1832 | P1 |  | [测试基建-P0] Pipeline仓库CI质量门禁+采集脚本测试框架+CLAUDE.md | EXEMPT | | Todo |
+| #1875 | P1 | bidding | [P1][16/38] 赢/输复盘模板 + 系统化采集 | A | | Todo |
+| #3149 | P1 |  | [审批引擎增强] 审批进度追踪器组件 — 流程地图+当前步骤高亮+卡点提示+预估耗时 [1 | A | | Todo |
+| #3150 | P1 |  | [审批引擎增强] 审批流程图渲染API — 模板→实例DAG+节点状态+耗时统计 [2/8 | A | | Todo |
+| #3155 | P1 |  | [审批引擎增强] 流程简化配置页 — 跳过规则/自动审批/路由规则可视化配置 [7/8] | A | | Todo |
+| #3156 | P1 |  | [审批引擎增强] 流程效率分析看板 — 节点耗时/驳回率/瓶颈定位+优化建议 [8/8] | A | | Todo |
+| #3168 | P1 | approval | [流程补齐 2/8] 动态表单渲染器前端 — JSON Schema→Vue3组件自动渲染 | A | | Todo |
+| #3169 | P1 | approval | [流程补齐 3/8] 表单模板管理 — 模板CRUD+分类+启用/停用+审批流绑定 | A | | Todo |
+| #3651 | P1 | bidding | [招投标-C] 投标立项与进度管理 | A_weak | | Todo |
+| #2427 | P2 | bidding | [P2][38/38] 环评/规划许可公示采集 — 六层信号源第四层 | A | | Todo |
+| #2428 | P2 | bidding | [P2][37/38] 人大代表建议/政协提案采集（最早期信号） | A | | Todo |
+| #2429 | P2 | bidding | [P2][34/38] 行业展会参展商名录定期采集 | A | | Todo |
+| #3151 | P2 |  | [审批引擎增强] 新手引导+流程帮助中心 — Tooltip引导+流程说明+常见问题 [3 | A | | Todo |
+| #3174 | P2 | approval | [流程补齐 8/8] 表单模板导入导出+配置向导 — 模板迁移+快速配置 | A | | Todo |
+| #4023 | P2 | approval | [Master][审批体系] 统一审批工作台 — 多Tab架构 8Tab（含动态表单+企微 | A_weak | | Todo |
+| #4024 | P2 | plm | [Master][PLM] 产品技术中心 — 多Tab架构 8Tab（零件+BOM+ECO | A_weak | | Todo |
+| #4041 | P2 | cockpit | [Master][耀总驾驶舱] 个人业务决策驾驶舱 — 多区块架构 8区块 | A_weak | | Todo |
 
-## Tier-C：合同+回款（商务闭环资金链）
+### Sprint-3 (37个)
 
-> Sprint-1 已交付：CRM-07 投标申请 + CRM-08 回款跟踪 + 执行管理 Tab3 合同与交付 + Tab6 回款
-> Tier-C 做合同管理独立模块 + 回款资料管理
+| Issue | 优先级 | 模块 | 标题 | 类型 | 指派 | 状态 |
+|-------|--------|------|------|------|------|------|
+| #4014 | P0 | crm | [CRM][#4013-1][P0] 线索统一池 + 评分引擎 — leads表+评分规则 | A | | Todo |
+| #4018 | P0 | crm | [整改][CRM] crm_opportunity — 明道云 xsfx 主+副本 6,3 | EXEMPT | | Todo |
+| #2198 | P1 |  | [品牌中心] 视频号自动化发布 — social-auto-upload 部署 | EXEMPT | | Todo |
+| #2310 | P1 | design-ai | [设计模块-P1][8/30] 方案文本模块 — 分Section编辑器+AI辅助(独立可 | A | | Todo |
+| #3995 | P1 | project | [整改][矿场] 全球项目矿场 — 按 v2.0 原型调整 | EXEMPT | | Todo |
+| #3996 | P1 | project | [矿场][#3994-1][P1] 转化漏斗Tab — 5阶段漏斗+阶段下钻 | A | | Todo |
+| #3997 | P1 | project | [矿场][#3994-4][P1] 复盘洞察Tab — 失败原因Top10+胜率趋势+AI | A | | Todo |
+| #3998 | P1 | project | [矿场][#3994-2][P1] ROI看板Tab — 来源渠道ROI+获客成本趋势 | A | | Todo |
+| #4005 | P1 |  | [整改][记录中心] 4Tab架构按v1.0原型对齐 | EXEMPT | | Todo |
+| #4006 | P1 |  | [整改][老板周报] 单页按v1.0原型对齐 | EXEMPT | | Todo |
+| #4007 | P1 |  | [整改][项目周报+Nudge] 联动改造 | EXEMPT | | Todo |
+| #4008 | P1 | project | [记录中心][#4004-1][P1] 时间线视角增强 | A | | Todo |
+| #4009 | P1 | project | [记录中心][#4004-2][P1] 三视角分组Tab | A | | Todo |
+| #4010 | P1 | project | [记录中心][#4004-3][P1] 手动补录记录模态 | A | | Todo |
+| #4012 | P1 | project | [老板周报][#4004-5][P1] AI建议Section | A | | Todo |
+| #4015 | P1 | crm | [整改][CRM][#4013-2][P1] 矿场转商机 readiness 检查 — 三 | EXEMPT | | Todo |
+| #4017 | P1 | crm | [整改][CRM] crm_activity_log — 明道云 gjjl 65 万条销售 | EXEMPT | | Todo |
+| #4019 | P1 | crm | [整改][CRM] crm_customer — 按明道云 kehu 补齐 4,528 行 | EXEMPT | | Todo |
+| #2305 | P2 | design-ai | [设计模块-P2][35/35] Three.js漫游录制 — 摄像机路径设定→实时录制→ | A | | Todo |
+| #2307 | P2 | design-ai | [设计模块-P2][16/30] 局部修改模块GUI — 圈选区域+描述修改+Inpain | A | | Todo |
+| #2308 | P2 | design-ai | [设计模块-P2][13/30] 主题方案灵感库 — 20+主题模板+AI变体生成 | A | | Todo |
+| #2309 | P2 | design-ai | [设计模块-P2][12/30] 颜色配置器 — 选产品选色Three.js实时3D预览 | A | | Todo |
+| #3999 | P2 | project | [矿场][#3994-3][P2] 区域品类热力图Tab — 二维矩阵+空白市场识别 | A | | Todo |
+| #4011 | P2 | project | [记录中心][#4004-4][P2] 多实体关联数据模型 | A | | Todo |
+| #4016 | P2 | crm | [CRM][#4013-3][P2] 架构蓝图只读页 + 术语数据字典 — 全平台术语统一 | A_weak | | Todo |
+| #4025 | P2 | cockpit | [整改][超管驾驶舱][#4020-1] 总览仪表盘 — 按新原型对齐 | EXEMPT | | Todo |
+| #4026 | P2 | cockpit | [整改][超管驾驶舱][#4020-2] Claude Office — 按新原型对齐 | EXEMPT | | Todo |
+| #4027 | P2 | cockpit | [整改][超管驾驶舱][#4020-3] Token Pool 管理 — 按新原型对齐 | EXEMPT | | Todo |
+| #4028 | P2 | cockpit | [整改][超管驾驶舱][#4020-5] 定时任务管理 — 按新原型对齐 | EXEMPT | | Todo |
+| #4029 | P2 | cockpit | [整改][超管驾驶舱][#4020-8] GPU 资源监控 — 按新原型对齐 | EXEMPT | | Todo |
+| #4030 | P2 | cockpit | [整改][超管驾驶舱][#4020-9] 外部工具管理 — 按新原型对齐 | EXEMPT | | Todo |
+| #4031 | P2 | cockpit | [整改][超管驾驶舱][#4020-10] 确认中心 — 按新原型对齐 | EXEMPT | | Todo |
+| #4032 | P2 | cockpit | [整改][超管驾驶舱][#4020-11] Issue 看板 — 按新原型对齐 | EXEMPT | | Todo |
+| #4013 | P2 | crm | [Master][CRM] 线索/商机架构统一 — 四入口归并 单页架构 | A_weak | | Todo |
+| #4043 | P2 | project | [Master][执行管理] 项目执行管理 v2.0 — 多Tab架构 列表页+详情页8T | A_weak | | Todo |
+| #4045 | P2 | ptc | [Master][产品门户] 经销商产品展示门户 — 多页架构 目录+详情+备件3页 | A_weak | | Todo |
+| #4046 | P2 | rbac | [Master][权限管理] RBAC角色化侧边栏+角色主页 — 多视图架构 5角色Das | A_weak | | Todo |
 
-| Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
-|-------|------|------|------|------|------|
-| #3108 | P2 | backend | 合同数据表国贸+经销字段扩展 | ✅ | 无 |
-| #2113 | P1 | backend | 合同审批流程 — 待审批列表+审批记录+企微通知 | ✅ | 无 |
-| #1750 | P1 | frontend | AI 条款对比前端 — 左右分栏+差异高亮 | ✅ | 无 |
-| #1752 | P1 | frontend | 合同审批前端 — 待审批列表+审批页面+AI风险报告 | ⏳ | #2113 |
-| #2023 | P1 | approval | 合同管理模块接入审批流 — 盖章/签署自动发起 | ⏳ | #2113 |
-| #1999 | P2 | finance | 阶段凭证数据库 — project_stage_documents | ✅ | 无 |
-| #1998 | P2 | finance | 阶段凭证管理 API — 上传+完整度检查+催收联动 | ⏳ | #1999 |
-| #1997 | P2 | finance | 回款周报数据库+引擎 | ✅ | 无 |
-| #1996 | P2 | finance | 回款周报 API — 商务填写+评估+审阅全流程 | ⏳ | #1997 |
+### Sprint-4 (3个)
 
-> **串行约束**：合同审批 #2113→#1752→#2023；回款凭证 #1999→#1998；回款周报 #1997→#1996
-> **并行窗口**：#3108/#2113/#1750/#1999/#1997 可5CC并行
+| Issue | 优先级 | 模块 | 标题 | 类型 | 指派 | 状态 |
+|-------|--------|------|------|------|------|------|
+| #1714 | P1 | biz-enablement | [商务赋能-P1] Phase4 [11/13]: 经销报价单生成页面 — 批量选品+折扣 | A | | Todo |
+| #2358 | P2 |  | [资金闭环-P0] Phase2 [5/17]: 商机详情页获客成本Tab — 关联报销+ | A | | Todo |
+| #2430 | P2 | intelligence-hub | [P2][33/38] 竞品合同到期预测 → 重新招标机会 | A | | Todo |
 
----
+### Sprint-Backlog (48个)
 
-## Tier-D：项目中心（项目全景+风险台账+经验库）
+| Issue | 优先级 | 模块 | 标题 | 类型 | 指派 | 状态 |
+|-------|--------|------|------|------|------|------|
+| #1468 | P1 | biz-enablement | [商务赋能知识中台][24/28] 安全标准自动合规标注 | A | | Todo |
+| #1469 | P1 | biz-enablement | [商务赋能知识中台][23/28] AI文案增强（材质/标准/案例描述自动生成） | A | | Todo |
+| #1470 | P1 | biz-enablement | [商务赋能知识中台][21/28] Playbook规则引擎（场景化内容推荐） | A | | Todo |
+| #1594 | P1 | budget | [19/32] 借款逾期提醒+工资扣除预警 | A | | Todo |
+| #1599 | P1 | budget | [14/32] 采购比价强制校验 | A | | Todo |
+| #1613 | P1 | wechat | [14/18][P1] 数据安全分级与访问控制 — L1/L2/L3三级防护 | EXEMPT | | Todo |
+| #1614 | P1 | wechat | [13/18][P1] PII自动脱敏服务 — 隐私保护引擎 | EXEMPT | | Todo |
+| #1873 | P1 | bidding | [P1][27/38] 分级超时升级机制（48h→72h→5天） | A | | Todo |
+| #2215 | P1 | biz-enablement | [商务赋能知识中台][22/28] 引导式PPT组装向导 | A | | Todo |
+| #2275 | P1 |  | [错误分析中心-P1][5/6] 驾驶舱首页DORA指标卡片+最近错误滚动条 | A | | Todo |
+| #2437 | P1 | bidding | [P1][22/38] 推荐行动计划按阶段自动生成 | A | | Todo |
+| #2439 | P1 | intelligence-hub | [P1][19/38] T0/T1/T2竞品自动分级 + 升降级机制 | A | | Todo |
+| #2440 | P1 | intelligence-hub | [P1][18/38] 竞品定价数据库 | A | | Todo |
+| #2441 | P1 | intelligence-hub | [P1][17/38] 竞品区域热力图 vs 万德区域热力图 | A | | Todo |
+| #2527 | P1 | project | [项目组织管理-P1] Phase7 [7/18]: 前端 — 版本历史+审批流程面板 | A | | Todo |
+| #2532 | P1 | project | [项目组织管理-P1] Phase12 [12/18]: 前端 — 已读追踪+公告详情 | A | | Todo |
+| #2534 | P1 | project | [项目组织管理-P1] Phase14 [14/18]: 前端 — 任务面板增加快速行动项 | A | | Todo |
+| #2536 | P1 | project | [项目组织管理-P1] Phase16 [16/18]: 前端 — 阶段推进确认弹窗增强（ | A | | Todo |
+| #2617 | P1 |  | [4/4] Issue创建SOP更新 — PageGuide纳入前端Issue模板必填 | EXEMPT | | Todo |
+| #1466 | P2 | biz-enablement | [商务赋能知识中台][27/28] 案例相似度推荐 | A | | Todo |
+| #1498 | P2 |  | [矿场-Phase4][4/17] 经销商项目情报推送 — 覆盖区域内新匹配项目 | A | | Todo |
+| #1573 | P2 | policy | [22/22] 制度智能问答API | A | | Todo |
+| #1870 | P2 | intelligence-hub | [P2][31/38] 客户关系图谱（甲方/设计院/代理机构关系网络） | A | | Todo |
+| #2217 | P2 | biz-enablement | [商务赋能知识中台][18/28] 设备维护档案页面 | A | | Todo |
+| #2218 | P2 | biz-enablement | [商务赋能知识中台][15/28] 标准合规说明导出 | A | | Todo |
+| #2219 | P2 | biz-enablement | [商务赋能知识中台][14/28] 标准库管理页面 | A | | Todo |
+| #2220 | P2 | biz-enablement | [商务赋能知识中台][10/28] 材质参数一键导出 | A | | Todo |
+| #2221 | P2 | biz-enablement | [商务赋能知识中台][9/28] 材质知识库管理页面 | A | | Todo |
+| #2222 | P2 | biz-enablement | [商务赋能知识中台][6/28] 案例搜索（1搜索框+6维筛选） | A | | Todo |
+| #2223 | P2 | biz-enablement | [商务赋能知识中台][5/28] 照片上传+批量导入 | A | | Todo |
+| #2277 | P2 | policy | [21/22] 条款库管理页面 | A | | Todo |
+| #2278 | P2 | policy | [20/22] AI制度起草向导页面 | A | | Todo |
+| #2288 | P2 | budget | [30/32] 成本复盘报告页面 | A | | Todo |
+| #2293 | P2 | budget | [7/32] 保证金台账页面 | A | | Todo |
+| #2319 | P2 | intelligence-hub | [P2][35/38] 商务反馈增加"客户提及竞品"字段 | A | | Todo |
+| #2389 | P2 | biz-enablement | [商务赋能知识中台][28/28] 季度照片采集提醒+任务推送 | A | | Todo |
+| #2390 | P2 | biz-enablement | [商务赋能知识中台][26/28] 照片AI自动标签（CLIP模型） | A | | Todo |
+| #2432 | P2 | intelligence-hub | [P2][29/38] 竞品空白区域发现 | A | | Todo |
+| #2444 | P2 | bidding | [P0][13/38] keyword_pool新增政策类关键词 | A | | Todo |
+| #2445 | P2 | bidding | [P0][12/38] 锁定100个儿童友好城市+50个体育公园重点城市定向监控 | A | | Todo |
+| #2447 | P2 | intelligence-hub | [P0][9/38] 商务作战资源包自动生成（概况卡+干系人+经验+行动建议） | A | | Todo |
+| #2526 | P2 | project | [项目组织管理-P0] Phase6 [6/18]: 前端 — 文档上传+新版本上传弹窗 | A | | Todo |
+| #2537 | P2 | project | [项目组织管理-P2] Phase17 [17/18]: 经验卡片增强 — 关联风险/公告 | A | | Todo |
+| #2539 | P2 | project | [项目组织管理-P2] Phase18 [18/18]: 项目通讯录增强 — 外部干系人+ | EXEMPT | | Todo |
+| #2585 | P2 | tech-debt | refactor: 合并 wande-ai-api 模块到 wande-ai，消除42个重 | EXEMPT | | Todo |
+| #2632 | P2 | h5-mobile | [P0][H5基座 8/8] CLAUDE.md 更新 — H5移动端开发规范 | EXEMPT | | Todo |
+| #2639 | P2 | brand-center | [品牌中心·数字人] [7/7] 文档 — 数字人+声音克隆平台选型对比评估 | EXEMPT | | Todo |
+| #1487 | P3 |  | [矿场-Phase5][5/10] 跨境客户资格评估 — 8维度评估表+评级计算 | A | | Todo |
 
-> feature-registry 标注 Sprint-6，但基础页面可提前到 Sprint-2
-> Sprint-1 已交付部分：#240 项目费用归集
+### NoSprint (33个)
 
-| Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
-|-------|------|------|------|------|------|
-| #2520 | P2 | backend | 项目文档中心数据库 — project_documents | ✅ | 无 |
-| #2523 | P2 | backend | 文档中心 API — CRUD+分类+权限 | ⏳ | #2520 |
-| #2351 | P1 | project | 项目列表健康度灯+阶段切换拦截弹窗 | ✅ | 无 |
-| #2352 | P2 | project | 风险台账 Tab 前端 — 风险列表+录入+处置+附件 | ✅ | 无 |
-| #1627 | P1 | project | 风险台账联动 — 严重整改自动升级为 risk_event | ⏳ | #2352 |
-| #2299 | P1 | project | 整改统计仪表盘 — 闭环率/平均时长/问题分布 | ✅ | 无 |
-| #2300 | P1 | project | AI审查结果展示 — 照片标注叠加层+标准对比 | ✅ | 无 |
-| #1991 | P1 | project | 经验卡片 API — CRUD | ✅ | 无 |
-| #1992 | P1 | project | 经验卡片 Service — AI生成+双审+标签+企微通知 | ⏳ | #1991 |
-| #2350 | P1 | project | 经验库页面 — 卡片列表+详情+审阅+标签云 | ⏳ | #1991 |
+| Issue | 优先级 | 模块 | 标题 | 类型 | 指派 | 状态 |
+|-------|--------|------|------|------|------|------|
+| #3545 | P0 | intelligence-hub | [P0追补][#3118-fix] 前端关系网络 Tab 页面（ECharts 配合单位图 | A | | Todo |
+| #1845 | P1 |  | [设计模块-P1][10/30] 安全合规检测引擎 — 三标融合规则(EN1176+AST | A | | Todo |
+| #2078 | P1 |  | [问题发现-P1] 原因诊断API — AI分析根因+关联Issue | A | | Todo |
+| #2306 | P1 | ptc | [设计模块-P1][31] D3 Web设计工作台 — 电池包拖拽+连接点+Three.j | A | | Todo |
+| #2317 | P1 | ptc | [产品平台][P0] D3 Web技术确认中心前端 — 胡总在线确认参数页面 | A | | Todo |
+| #3377 | P1 | plm | [PLM][1/20][P0] PLM子系统数据库初始化 — 7张核心表建表+索引 | A | | Todo |
+| #3378 | P1 | plm | [PLM][2/20][P0] 零件主数据CRUD API — 新建/编辑/查询/版本状态 | A | | Todo |
+| #3383 | P1 | plm | [PLM][6/20][P0] BOM成本自动Roll-up API — 多层级递归成本汇 | A | | Todo |
+| #3384 | P1 | plm | [PLM][7/20][P0] BOM Where-Used反查API — 零件被哪些BO | A | | Todo |
+| #3385 | P1 | plm | [PLM][8/20][P0] ECO变更申请与影响评估API — A/B/C分级路由 + | A | | Todo |
+| #3386 | P1 | approval | [PLM][9/20][P0] ECO审批流集成 — 复用审批引擎 + A级三人会签 +  | A | | Todo |
+| #3387 | P1 | plm | [PLM][10/20][P0] ECO执行引擎 — 审批通过自动执行零件版本更新+BOM | A | | Todo |
+| #3388 | P1 | plm | [PLM][11/20][P1] 超级BOM规则引擎 — N选1/数量型/参数化三种规则  | A | | Todo |
+| #3389 | P1 | plm | [PLM][12/20][P1] 超级BOM→实例EBOM解析API — 选配结果→具体B | A | | Todo |
+| #3390 | P1 | plm | [PLM][13/20][P1] D3参数化→PLM BOM桥接 — D3输出自动创建EB | A | | Todo |
+| #3391 | P1 | plm | [PLM][14/20][P1] 产品配置器后端API — 销售自助选配 + 超级BOM规 | A | | Todo |
+| #3394 | P1 | plm | [PLM][17/20][P1] 零件主数据管理页面 | A | | Todo |
+| #3395 | P1 | plm | [PLM][18/20][P1] BOM管理与版本对比页面 | A | | Todo |
+| #3396 | P1 | plm | [PLM][19/20][P1] ECO变更管理页面 | A | | Todo |
+| #3397 | P1 | plm | [PLM][20/20][P1] 产品配置器+报价页面 | A | | Todo |
+| #3557 | P1 |  | 🟡 [E2E回归] 前端E2E测试登录会话失效 - 大量页面重定向到登录页 | EXEMPT | | Todo |
+| #3106 | P2 | crm | 发货管理（国贸专用） — 装箱单+报关+海运空运跟踪 | A | | Todo |
+| #3107 | P2 | crm | 出口单据管理 — CI/PL/BL/CO/FormE自动生成+归档 | EXEMPT | | Todo |
+| #3109 | P2 | crm | 客户信用额度管理 — 授信+在途应收+超额预警（经销+国贸通用） | A | | Todo |
+| #3111 | P2 | crm | 汇率管理+利润自动计算 — 报价锁汇+收款汇率+损益（国贸专用） | A | | Todo |
+| #3558 | P2 |  | 🟡 [E2E回归] API请求超时 - 24个测试失败 | EXEMPT | | Todo |
+| #1906 | P2 | ptc | [D3-Web][P0] 技术标准管理中心 — 胡总统一维护+全局生效+变更审核+历史追溯 | A | | Todo |
+| #1923 | P2 |  | [D3-v2.0][P1][Phase4-3/4] AI合规报告自动生成 — EN/GB/ | A | | Todo |
+| #1926 | P2 | ptc | [D3-v2.0][P1][Phase3-3/3] D3成果Web预览 — 3D模型+BO | A | | Todo |
+| #3562 | P2 | tech-debt | [#2239-fix] 详情弹窗追补 | EXEMPT | | Todo |
+| #3886 | P2 |  | [测试] 代码质量 Hook 体系完整路径验证 — pre-commit / pre-pu | EXEMPT | | Todo |
+| #3994 | P2 | project | [Master][矿场] 全球项目矿场 — 10Tab架构（执行6+洞察4） | A_weak | | Todo |
+| #4004 | P2 | project | [Master][业务运营] 销售记录体系 — 记录中心多Tab(4Tab)+老板周报单页 | A_weak | | Todo |
 
-> **并行策略**：#2520/#2351/#2352/#2299/#2300/#1991 可6CC并行
-
----
-
-## Tier-E：CRM增强+商务赋能（Sprint-1 CRM基座上增强）
-
-| Issue | 优先 | 模块 | 内容 | 启动 | 前置 |
-|-------|------|------|------|------|------|
-| #1896 | P1 | crm | 客户情报 Phase1: business_opportunities 增强 | ✅ | 无 |
-| #2258 | P1 | crm | 商机/项目下设计单前端 — 一键弹窗+自动填充 | ✅ | 无 |
-| #3103 | P2 | fullstack | 报价单生成+PDF导出 — 三线差异化模板 | ✅ | 无 |
-| #3105 | P2 | fullstack | 订单跟踪看板 — PI确认到发货全流程可视化 | ✅ | 无 |
-| #1672 | P1 | biz-enablement | 直销投标文档生成 API | ✅ | 无 |
-| #1715 | P1 | biz-enablement | 直销投标文档生成页面 — 选品→预览→导出 | ⏳ | #1672 |
-
----
-
-## 时间线估算
-
-```
-Week 1 (4/19-4/25):
-  Tier-A: #3631+#2028+#2243+#2238 矿场增强4CC并行
-  Tier-B: #3193+#1692+#2097 执行增强3CC并行
-  Tier-C: #3108+#2113+#1999+#1997 合同回款基础4CC并行
-  ≈ 11CC
-
-Week 2 (4/26-5/02):
-  Tier-A: #1874+#1523+#2404+#2398 矿场增强续
-  Tier-B: #1830+#1790+#1808+#1728 执行增强续
-  Tier-C: #1750+#1752+#1998+#1996 合同回款前端
-  Tier-D: #2520+#2351+#2352 项目中心启动
-  ≈ 13CC
-
-Week 3 (5/03-5/09):
-  Tier-C: #2023 合同审批对接
-  Tier-D: #2523+#1627+#2299+#2300+#1991 项目中心核心
-  Tier-E: #1896+#2258+#3103 CRM增强
-  ≈ 10CC
-
-Week 4 (5/10-5/16):
-  Tier-D: #1992+#2350 经验库
-  Tier-E: #3105+#1672+#1715 商务赋能
-  Tier-B: #1762 安装移动端
-  收尾: 全量E2E测试 + 商务部验收
-  ≈ 6CC
-```
-
-## CC分配策略
-
-| 阶段 | 活跃CC数 | 分配 |
-|------|---------|------|
-| Week 1 | 11 | Tier-A(4) + Tier-B(3) + Tier-C(4) |
-| Week 2 | 13 | Tier-A(4) + Tier-B(4) + Tier-C(4) + Tier-D(1) |
-| Week 3 | 10 | Tier-C(1) + Tier-D(5) + Tier-E(3) + 补位(1) |
-| Week 4 | 6 | Tier-D(2) + Tier-E(3) + 收尾(1) |
-
----
-
-# 以下内容由排程经理每次排程后维护
-
-## 指派建议（最近20个）
-
-> 更新于 2026-04-20（PLM剩余12个Issue按优先级+依赖顺序完整列出）
-> 当前运行5/5：kimi1/#3385 + kimi3/#3394 + kimi4/#3383 + kimi6/#3384 + kimi19/#3388
-> 排序规则：P0>P1；后端必须排在配对前端之前；依赖未完成排末尾
-
-| Issue | 优先 | 模块 | 内容 | 启动 |
-|-------|------|------|------|------|
-| #3386 | P0 | backend | PLM[9/20] ECO审批流集成 — 复用审批引擎+A级三人会签 | ⏳ 等kimi1/#3385 |
-| #3387 | P0 | backend | PLM[10/20] ECO执行引擎 — 审批通过→零件版本更新+BOM递增 | ⏳ 等#3386 |
-| #3389 | P1 | backend | PLM[12/20] 超级BOM→实例EBOM解析API — 选配结果→具体BOM | ⏳ 等kimi19/#3388 |
-| #3392 | P1 | backend | PLM[15/20] 版本化定价引擎API — 价格锚定BOM版本+利润红线校验 | ⏳ 等kimi4/#3383 |
-| #3390 | P1 | backend | PLM[13/20] D3参数化→PLM BOM桥接 — D3输出自动创建EBOM | ⏳ 等#3389 |
-| #3391 | P1 | backend | PLM[14/20] 产品配置器后端API — 超级BOM规则过滤+输出EBOM+报价 | ⏳ 等#3388+#3389 |
-| #3393 | P1 | backend | PLM[16/20] 供应商价格联动 — 报价变动→Part Master+BOM成本重算 | ⏳ 等#3392 |
-| #3394 | P1 | frontend | PLM[17/20] 零件主数据管理页面（配对后端#3378已Done） | ~~🚀 kimi3 Done(PR#3990 待merge)~~ |
-| #3395 | P1 | frontend | PLM[18/20] BOM管理与版本对比页面（配对后端#3380/#3381已Done） | ✅ 可立即启动 |
-| #3396 | P1 | frontend | PLM[19/20] ECO变更管理页面（配对后端需#3385+#3386） | ⏳ 等#3385+#3386 |
-| #3397 | P1 | frontend | PLM[20/20] 产品配置器+报价页面（配对后端需#3391） | ⏳ 等#3391 |
-
-> **并行窗口**（槽空时可同时启动无冲突的组合）：
-> - 批次1（当前CC完成后）：#3386 + #3389 + #3392 + #3394 + #3395 可5CC并行
-> - 批次2：#3387 + #3390 + #3391 + #3393 + #3396
-
-> ⚠️ 研发经理须等排程经理建议后再指派，不得自行从看板读取issue派发。
-> ⛔ **暂停派发**：当前批次（#3385/#3394/#3383/#3384/#3388）PR全合并后暂停新Issue指派。老板需要与甲方演示/对齐，环境需保持稳定，CC槽位留作应急热修复。（2026-04-20 排程经理通知）
-
-## 当前运行
-
-| 指派目录 | Issue | 模块 | 内容 | 状态 |
-|---------|-------|------|------|------|
-| kimi1  | #3174 | approval | ~~表单模板导入导出+配置向导(模板迁移+快速配置，流程补齐8/8)~~ | ~~Done(PR#3937 admin-merged)~~ |
-| kimi3  | #3179 | project360 | ~~项目360统一看板页面(8Tab骨架+概览+阶段切换+菜单)~~ | ~~Done(PR#3932 admin-merged)~~ |
-| kimi4  | #3185 | finance | ~~全阶段资料完成度看板(后端3API+前端看板+7列进度条+法规红点)~~ | ~~Done(PR#3933 admin-merged)~~ |
-| kimi4  | #3187 | finance | ~~全阶段文件缺失预警(三级升级推送+企微/站内双通道+阶段门控)~~ | ~~Done(PR#3938 admin-merged)~~ |
-| kimi3  | #3191 | finance | ~~甲方资料需求模板库(按甲方积累特殊资料要求+新项目自动继承)~~ | ~~Done(PR#3935 admin-merged)~~ |
-| kimi6  | #3189 | finance | ~~甲方表单填写辅助(项目数据关联填充+回款资料模板生成+导出)~~ | ~~Done(PR#3936 admin-merged)~~ |
-| kimi19 | #3188 | finance | ~~企业信息库(万德常用信息维护+一键填充到回款表单)~~ | ~~Done(PR#3934 admin-merged)~~ |
-| kimi3  | #3183 | project360 | ~~项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作~~ | ~~Done(PR#3940 admin-merged)~~ |
-| kimi1  | #3385 | plm | ~~PLM[8/20] ECO变更申请与影响评估API~~ | ~~Done(PR#3993 admin-merged)~~ |
-| kimi3  | #3651 | bidding | ~~招投标-C 投标立项与进度管理~~ | ~~Done(PR#3988 admin-merged)~~ |
-| kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 admin-merged)~~ |
-| kimi4  | #3383 | plm | ~~PLM[6/20] BOM成本Roll-up API + 企微推送~~ | ~~Done(PR#3991 admin-merged)~~ |
-| kimi6  | #3384 | plm | ~~PLM[7/20] 零件服务与供应商集成API~~ | ~~Done(PR#3992 admin-merged)~~ |
-| kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 admin-merged)~~ |
-| kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
-| kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
-| kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
-| kimi1  | #1717 | finance | ~~报销申请页面+发票上传+借款管理+审批中心~~ | ~~Done(PR#3946 admin-merged)~~ |
-| kimi4  | #1722 | perf | ~~管理费分摊+绩效考核页面 — 费用录入+打分+结果看板~~ | ~~Done(PR#3943 admin-merged)~~ |
-| kimi6  | #1780 | supply | ~~供应商台账+询价比价+采购跟踪页面(Mock模式骨架)~~ | ~~Done(PR#3942 admin-merged)~~ |
-| kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
-| kimi3  | #2005 | finance | ~~应付账款数据库+后端完整实现~~ | ~~Done(PR#3948 admin-merged)~~ |
-| kimi3  | #2004 | finance | ~~应付账款管理API(付款计划+付款执行+聚合，审批/OCR留桩)~~ | ~~Done(PR#3952 admin-merged)~~ |
-| kimi4  | #2003 | finance | ~~经营分析数据聚合API(6维度收入/成本/毛利/现金流/ROI/总览)~~ | ~~Done(PR#3950 admin-merged)~~ |
-| kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
-| kimi6  | #1719 | finance | ~~绩效仪表盘+三级Tab+ECharts趋势分析~~ | ~~Done(PR#3953 admin-merged)~~ |
-
-## 指派历史（完成后划线）
-
-> 研发经理维护。指派时新增行，完成后在内容列加删除线。
-
-| 指派目录 | Issue | Tier | 模块 | 内容 | 看板状态 |
-|---------|-------|------|------|------|---------|
-| kimi1 | #3631 | Tier-A | bidding | ~~pipeline↔后端表对齐全景规划~~ | ~~Done~~ |
-| kimi2 | #2028 | Tier-A | backend | ~~矿场项目信息增量同步推送~~ | ~~Done~~ |
-| kimi3 | #2243 | Tier-A | backend | ~~简报偏好设置页~~ | ~~Done~~ |
-| kimi4 | #3193 | Tier-B | backend | ~~项目主计划数据模型~~ | ~~Done~~ |
-| kimi5 | #1692 | Tier-B | backend | ~~项目成本跟踪API~~ | ~~Done~~ |
-| kimi6 | #2238 | Tier-A | frontend | ~~作战资料包一页纸展示~~ | ~~Done~~ |
-| kimi7 | #2097 | Tier-B | backend | ~~验收检查项模板管理~~ | ~~Done~~ |
-| kimi8 | #3108 | Tier-C | backend | ~~合同数据表扩展~~ | ~~Done~~ |
-| kimi9 | #2113 | Tier-C | backend | ~~合同审批流程~~ | ~~Done~~ |
-| kimi10 | #1999 | Tier-C | finance | ~~阶段凭证数据库~~ | ~~Done~~ |
-| kimi11 | #1997 | Tier-C | finance | ~~回款周报数据库+引擎~~ | ~~Done~~ |
-| kimi1 | #2258 | Tier-E | frontend | ~~商机/项目下设计单前端~~ | ~~Done~~ |
-| kimi2 | #1874 | Tier-A | backend | ~~前期项目分阶段跟进提醒~~ | ~~Done~~ |
-| kimi3 | #1991 | Tier-D | backend | ~~经验卡片API~~ | ~~Done~~ |
-| kimi2 | #2404 | Tier-A | backend | ~~复盘数据驱动评分迭代~~ | ~~Done~~ |
-| kimi4 | #2299 | Tier-D | backend | ~~整改统计仪表盘~~ | ~~Done~~ |
-| kimi3 | #1992 | Tier-D | backend | ~~经验卡片Service(AI生成+双审+标签)~~ | ~~Done~~ |
-| kimi6 | #2350 | Tier-D | frontend | ~~经验库页面(卡片列表+详情+审阅)~~ | ~~Done~~ |
-| kimi6 | #1808 | Tier-B | frontend | ~~采购/生产/安装/文档/历史 Tab 页面~~ | ~~Done~~ |
-| kimi6 | #1896 | Tier-E | crm | ~~客户情报Phase1: business_opportunities增强~~ | ~~Done~~ |
-| kimi6 | #1672 | Tier-E | biz | ~~直销投标文档生成API~~ | ~~Done~~ |
-| kimi2 | #1750 | Tier-C | frontend | ~~AI条款对比前端(左右分栏+差异高亮)~~ | ~~Done~~ |
-| kimi2 | #1728 | Tier-B | execution | ~~施工安全管理页面(仅建表+契约+菜单，Java+前端追补)~~ | ~~Done(部分)~~ |
-| kimi2 | #1998 | Tier-C | finance | ~~阶段凭证管理API(上传+完整度检查+催收联动)~~ | ~~PR#3870~~ |
-| kimi2 | #1728-后端 | Tier-B | execution | (待拆Issue)施工安全6模块Java实现 | ⏳ 待派 |
-| kimi2 | #1728-前端 | Tier-B | execution | (待拆Issue)施工安全6模块前端页面 | ⏳ 待派 |
-| kimi2 | #2520 | Tier-D | project | ~~项目文档中心数据库(project_documents+versions)~~ | ~~Done(PR#3874)~~ |
-| kimi2 | #2522+#2523 | Tier-D | project | ~~文档中心Service+API(合并实现)~~ | ~~Done(PR#3876)~~ |
-| kimi4 | #1501 | Phase3 | mine | ~~区域市场BI数据模型(area_market_stats表)~~ | ~~Done(PR#3878)~~ |
-| kimi4 | #1752 | Tier-C | frontend | ~~合同审批前端(待审批列表+审批页面)~~ | ~~Done~~ |
-| kimi4 | #2023 | Tier-C | approval | ~~合同管理接入审批流(盖章/签署自动发起)~~ | ~~Done~~ |
-| kimi4 | #1523 | Tier-A | bidding | ~~区域品类矩阵统计API(省份×产品品类交叉)~~ | ~~Done(PR#3871)~~ |
-| kimi4 | #2300 | Tier-D | project | ~~AI审查结果展示(照片标注叠加层+标准对比)~~ | ~~PR#3875~~ |
-| kimi1 | #3105 | Tier-E | fullstack | ~~订单跟踪看板(PI确认→发货全流程)~~ | ~~Done(仅建表)~~ |
-| kimi20 | #3859 | infra | fullstack | ~~CC测试环境一键就绪验证~~ | ~~Done~~ |
-| kimi1 | #1830 | Tier-B | backend | ~~利润风险预警中心+仪表盘+项目详情预警~~ | ~~Done~~ |
-| kimi1 | #2352 | Tier-D | project | ~~风险台账Tab前端(风险列表+录入+处置+附件)~~ | ~~Done(PR#3873)~~ |
-| kimi1 | #1627 | Tier-D | project | ~~风险台账联动(严重整改自动升级risk_event)~~ | ~~Done(PR#3877)~~ |
-| kimi19 | #2351 | Tier-D | project | ~~项目列表健康度灯+阶段切换拦截弹窗~~ | ~~Done~~ |
-| kimi19 | #2398 | Tier-A | mine | ~~竞品中标记录采集(后端+前端)~~ | ~~Done(PR#3884)~~ |
-| kimi3 | #1790 | Tier-B | frontend | ~~变更影响分析面板+审批操作+全局变更看板~~ | ~~Done~~ |
-| kimi3 | #3103 | Tier-E | biz | ~~報價單生成+PDF導出(三線差異化模板)~~ | ~~Done(PR#3879)~~ |
-| kimi6 | #1715 | Tier-E | biz | ~~直销投标文档生成页面(选品→预览→导出)~~ | ~~Done(PR#3881)~~ |
-| kimi6 | #2232 | Phase4 | mine | ~~移动端胜率卡片(竖版卡片+3秒决策)~~ | ~~Done(PR#3885)~~ |
-| kimi19 | #2398 | Tier-A | mine | ~~竞品中标记录采集(后端+前端)~~ | ~~Done(PR#3884)~~ |
-| kimi3  | #1499 | Phase4 | mine | ~~经销商数据模型(dealer表+覆盖区域+绩效指标)~~ | ~~Done(PR#3882)~~ |
-| kimi1  | #1500 | Phase3 | mine | ~~竞品规格份额统计(spec_share_stats表+品牌提及率对比)~~ | ~~Done(PR#3880)~~ |
-| kimi3  | #1499 | Phase4 | mine | ~~经销商数据模型(dealer表+覆盖区域+绩效指标)~~ | ~~Done(PR#3882)~~ |
-| kimi4  | #2397 | Phase3 | mine | ~~区域市场数据定时刷新(每周日聚合+企微通知)~~ | ~~Done(PR#3883)~~ |
-| kimi1  | #2234 | Phase3 | mine | ~~竞品份额变化预警(连续2季度上升触发告警+站内通知)~~ | ~~Done(PR#3890)~~ |
-| kimi4  | #1502 | Phase3 | mine | ~~竞品活跃度统计视图(按竞品×区域×项目类型汇总)~~ | ~~Done(PR#3892)~~ |
-| kimi6  | #2236 | Phase3 | mine | ~~竞品追踪分析页(热力图+趋势+排行榜)~~ | ~~Done(PR#3887)~~ |
-| kimi19 | #2233 | Phase4 | mine | ~~移动端响应式优化(项目列表/详情/跟进页适配手机)~~ | ~~Done(PR#3888)~~ |
-| kimi3  | #2231 | Phase4 | mine | ~~经销商绩效仪表盘(跟进数/成交数/管道金额)~~ | ~~Done(PR#3889)~~ |
-| kimi20 | #3886 | infra  | test | hook体系验证+wdpp_project_mine复合索引 | In Progress |
-| kimi6  | #2103 | warranty | backend | ~~质保到期续保营销+自动推送+CRM商机~~ | ~~Done(PR#3891)~~ |
-| kimi1  | #2102 | warranty | backend | ~~质保售后触发二次商机(维修需求+满意度复购)~~ | ~~Done(PR#3894)~~ |
-| kimi3  | #1892 | crm | backend | ~~客户情报P3经销商信息提交模板+自动校验~~ | ~~Done(PR#3895)~~ |
-| kimi19 | #2327 | crm | frontend | ~~客户情报P4菜单注册+权限配置~~ | ~~Done(PR#3893)~~ |
-| kimi6  | #1891 | crm | backend | ~~客户情报P3后端(BO/VO/Mapper/Service+测试)~~ | ~~Done(PR#3896)~~ |
-| kimi3  | #2027 | approval | ~~审批引擎P0 Phase2 Entity+Service CRUD~~ | ~~Done(PR#3898 admin-merged)~~ |
-| kimi19 | #2328 | crm | ~~客户情报P4商机详情页信息质量面板~~ | ~~Done(PR#3897 admin-merged)~~ |
-| kimi1  | #2329 | crm | ~~客户情报P4客户详情页情报卡Tab~~ | ~~Done(PR#3899 admin-merged)~~ |
-| kimi3  | #3150 | approval | 审批流程图渲染API（#2027+#2026均CLOSED，前置满足） | 已派 |
-| kimi1  | #3149 | approval | 审批进度追踪器组件（frontend，#3150配对） | 已派 |
-| kimi19 | #3167 | approval | 动态表单引擎JSON Schema（B1/8，解锁B2-B8） | 已派 |
-| kimi4  | #2119 | execution | ~~经销模式支持(阶段配置+经销商结算+门户API)~~ | ~~Done(PR#3900 admin-merged)~~ |
-| kimi19 | #3167 | approval | ~~动态表单引擎JSON Schema(B1/8，解锁B2-B8)~~ | ~~Done(PR#3901 admin-merged)~~ |
-| kimi6  | #2468 | execution | ~~图纸管理API(上传/版本控制/审批/下发工厂)~~ | ~~Done(PR#3904 admin-merged)~~ |
-| kimi6  | #2024 | approval | AI预检服务（提交前质量/价格/规则检查，Phase5） | 已派 |
-| kimi6  | #2024 | approval | ~~AI预检服务(提交前质量/价格/规则检查)~~ | ~~Done(PR#3907 admin-merged)~~ |
-| kimi4  | #3169 | approval | ~~表单模板管理(CRUD+分类+启停+审批流绑定，全栈)~~ | ~~Done(PR#3908 admin-merged)~~ |
-| kimi19 | #3170 | form | ~~人事全生命周期表单组(入转调离+考勤+社保6模板)~~ | ~~Done(PR#3909 admin-merged)~~ |
-| kimi1  | #3171 | form | ~~行政服务表单组(资产/车辆/证照/名片/钥匙5模板)~~ | ~~Done(PR#3910 admin-merged)~~ |
-| kimi19 | #2025 | approval | ~~SLA超时检测+企微催办通知~~ | ~~Done(PR#3905 admin-merged)~~ |
-| kimi1  | #3168 | approval | ~~动态表单渲染器前端(JSON Schema→Vue3组件自动渲染)~~ | ~~Done(PR#3906 admin-merged)~~ |
-| kimi19 | #2270 | wecom | ~~H5工作台入口页(企微内嵌H5+JS-SDK初始化)~~ | ~~Done(PR#3914 admin-merged)~~ |
-| kimi1  | #3149 | approval | ~~审批进度追踪器组件(流程地图+步骤高亮+卡点提示)~~ | ~~Done(PR#3902 admin-merged)~~ |
-| kimi3  | #3150 | approval | ~~审批流程图渲染API(模板→实例DAG+节点状态+耗时)~~ | ~~Done(PR#3903 admin-merged)~~ |
-| kimi1  | #3161 | wecom | ~~企微审批贯通SDK封装(4核心API+错误码映射+Token刷新)~~ | ~~Done(PR#3913 admin-merged)~~ |
-| kimi4  | #3173 | form | ~~印章/运营/国贸表单组(用印/仓储/单证6模板，流程补齐7/8)~~ | ~~Done(PR#3912 admin-merged)~~ |
-| kimi6  | #3172 | form | ~~质量管理表单组(质检/不合格/纠正措施/供应商/客诉5模板)~~ | ~~Done(PR#3911 admin-merged)~~ |
-| kimi4  | #3132 | approval | ~~审批抄送功能(wf_cc_record表+Service+Controller+企微通知)~~ | ~~Done(PR#3917 admin-merged)~~ |
-| kimi4  | #3152 | approval | ~~条件跳过引擎(数据模型+规则评估+API+评估框架集成)~~ | ~~Done(PR#3921 admin-merged)~~ |
-| kimi3  | #2365 | approval | ~~SLA规则配置页+审批统计看板(CRUD接口+前端+E2E 4passed)~~ | ~~Done(PR#3922 admin-merged)~~ |
-| kimi4  | #3156 | approval | ~~流程效率分析看板(节点耗时/驳回率/瓶颈+AI建议，13后端+9前端)~~ | ~~Done(PR#3927 admin-merged)~~ |
-| kimi3  | #3151 | approval | 新手引导+流程帮助中心 — Tooltip引导+流程说明+常见问题 | 已派 |
-| kimi19 | #3163 | wecom | ~~企微审批贯通3/6 H5审批发起页(WfTemplateController+initiate.vue+草稿)~~ | ~~Done(PR#3918 admin-merged)~~ |
-| kimi6  | #3164 | wecom | ~~企微审批贯通4/6 审批消息卡片增强(WecomCardBuilder+卡片发送+回调)~~ | ~~Done(PR#3919 admin-merged)~~ |
-| kimi1  | #3162 | wecom | ~~企微审批贯通2/6 审批流程引擎回调处理(Controller+Service+Processor+幂等+重试)~~ | ~~Done(PR#3920 admin-merged)~~ |
-| kimi6  | #3153 | approval | ~~自动审批规则引擎(预审条件+预清除回退+零人工路径)~~ | ~~Done(PR#3926 admin-merged)~~ |
-| kimi19 | #2266 | wecom | ~~H5审批操作页(approval-detail.vue+taskId字段+ProgressNodeVO)~~ | ~~Done(PR#3923 admin-merged)~~ |
-| kimi1  | #3154 | approval | ~~智能路由引擎(并行/串行/条件路由+动态审批人+部门专家匹配)~~ | ~~Done(PR#3924 admin-merged)~~ |
-| kimi19 | #3134 | approval | ~~设计变更分级审批(三级变更模板+自动路由+后端核心T1-T5)~~ | ~~Done(PR#3930 admin-merged)~~ |
-| kimi3  | #3151 | approval | ~~新手引导+流程帮助中心(Tooltip+FAQ+OnboardingGuide+FlowFinder+HelpCenter)~~ | ~~Done(PR#3925 admin-merged)~~ |
-| kimi6  | #3153 | approval | ~~自动审批规则引擎(预审条件+预清除回退+零人工路径+JUnit+Playwright)~~ | ~~Done(PR#3926 admin-merged)~~ |
-| kimi6  | #3155 | approval | ~~流程简化配置页(跳过规则/自动审批/路由可视化+菜单)~~ | ~~Done(PR#3931 admin-merged)~~ |
-| kimi1  | #2016 | approval | ~~企微审批消息卡片(审批结果卡片+H5深度链接配置化)~~ | ~~Done(PR#3928 admin-merged)~~ |
-| kimi3  | #2015 | approval | ~~CRM报价单接入审批流(报价提交自动发起审批+JUnit19tests)~~ | ~~Done(PR#3929 admin-merged)~~ |
-| kimi19 | #3188 | finance | ~~企业信息库(万德常用信息维护+一键填充到回款表单)~~ | ~~Done(PR#3934 admin-merged)~~ |
-| kimi3  | #3191 | finance | ~~甲方资料需求模板库(按甲方积累特殊资料要求+新项目自动继承)~~ | ~~Done(PR#3935 admin-merged)~~ |
-| kimi6  | #3189 | finance | ~~甲方表单填写辅助(项目数据关联填充+回款资料模板生成+导出)~~ | ~~Done(PR#3936 admin-merged)~~ |
-| kimi1  | #3174 | approval | ~~表单模板导入导出+配置向导(模板迁移+快速配置，流程补齐8/8)~~ | ~~Done(PR#3937 admin-merged)~~ |
-| kimi3  | #3183 | project360 | 项目360文档Tab前端(对内/对外分组+阶段进度+批量操作) | 进行中 |
-| kimi19 | #3184 | project360 | ~~文档访问日志+统计(谁看了什么文件·下载追踪)~~ | ~~Done(PR#3941 admin-merged)~~ |
-| kimi19 | #1766 | frontend | ~~代理商工作台前端(五阶段管线+看板+列表，Mock模式)~~ | ~~Done(PR#3945 admin-merged)~~ |
-| kimi6  | #1687 | approval | ~~企微审批通知+消息推送+逾期提醒~~ | ~~Done(PR#3939 admin-merged)~~ |
-| kimi4  | #3187 | finance | ~~全阶段文件缺失预警(三级升级推送+企微/站内双通道+阶段门控)~~ | ~~Done(PR#3938 admin-merged)~~ |
-| kimi1  | #1717 | finance | ~~报销申请页面+发票上传+借款管理+审批中心~~ | ~~Done(PR#3946 admin-merged)~~ |
-| kimi4  | #1722 | perf | ~~管理费分摊+绩效考核页面 — 费用录入+打分+结果看板~~ | ~~Done(PR#3943 admin-merged)~~ |
-| kimi6  | #1780 | supply | ~~供应商台账+询价比价+采购跟踪页面(Mock模式骨架)~~ | ~~Done(PR#3942 admin-merged)~~ |
-| kimi3  | #2148 | supply | ~~供应商台账后端(台账+询价比价+采购跟踪 API)~~ | ~~Done(PR#3944 admin-merged)~~ |
-| kimi3  | #2005 | finance | ~~应付账款数据库+后端完整实现~~ | ~~Done(PR#3948 admin-merged)~~ |
-| kimi4  | #2003 | finance | ~~经营分析数据聚合API(6维度收入/成本/毛利/现金流/ROI/总览)~~ | ~~Done(PR#3950 admin-merged)~~ |
-| kimi6  | #2354 | finance | ~~回款周报前端(商务填报+财务评估+管理层审阅三视图)~~ | ~~Done(PR#3947 admin-merged)~~ |
-| kimi6  | #1719 | finance | ~~绩效仪表盘+三级Tab+ECharts趋势分析~~ | ~~Done(PR#3953 admin-merged)~~ |
-| kimi1  | #2006 | finance | ~~应收账款管理API(账龄分析+催收提醒+企微，核心框架)~~ | ~~Done(PR#3951 admin-merged)~~ |
-| kimi19 | #1754 | frontend | ~~代理商工作台数据打通(关联项目+中标方标签，Mock模式)~~ | ~~Done(PR#3949 admin-merged)~~ |
-| kimi1  | #2356 | finance | ~~经营分析看板页面(收入成本趋势+毛利率排行+现金流图表)~~ | ~~Done(PR#3955 admin-merged)~~ |
-| kimi3  | #2000 | finance | ~~财务预警引擎(应收逾期+应付到期+毛利异常+现金流预警)~~ | ~~Done(PR#3956 admin-merged)~~ |
-| kimi19 | #2473 | finance | ~~律师催收数据库+API(律师信息+催收案件+进展记录)~~ | ~~Done(PR#3957 admin-merged)~~ |
-| kimi4  | #1684 | backend | ~~绩效异常检测+提成试算API+企微智能推送~~ | ~~Done(PR#3958 admin-merged)~~ |
-| kimi1  | #2356 | finance | ~~经营分析看板页面 — 收入成本趋势+毛利率排行+现金流图表~~ | ~~Done(PR#3955 admin-merged)~~ |
-| kimi3  | #2000 | finance | ~~财务预警引擎 — 应收逾期+应付到期+毛利异常+现金流预警~~ | ~~Done(PR#3956 admin-merged)~~ |
-| kimi4  | #1873 | backend | ~~分级超时升级机制(48h→72h→5天)~~ | ~~Done(PR#3954 admin-merged)~~ |
-| kimi19 | #2473 | finance | ~~律师催收数据库+API — 律师信息+催收案件+进展记录~~ | ~~Done(PR#3957 admin-merged)~~ |
-| kimi4  | #1684 | backend | ~~绩效异常检测+提成试算API+企微智能推送~~ | ~~Done(PR#3958 admin-merged)~~ |
-| kimi6  | #2358 | finance | ~~商机详情页获客成本Tab — 关联报销+费用汇总~~ | ~~Done(PR#3959 admin-merged)~~ |
-| kimi1  | #1996 | finance | ~~回款周报API — 商务填写+财务评估+管理层审阅全流程~~ | ~~Done(PR#3961 admin-merged)~~ |
-| kimi1  | #1702 | backend | ~~设备台账API — 设备管理+二维码+维修履历~~ | ~~Done(PR#3964 admin-merged)~~ |
-| kimi3  | #2002 | finance | ~~项目全链路资金闭环报告API — 从获客到净利润一张表~~ | ~~Done(PR#3960 admin-merged)~~ |
-| kimi3  | #2014 | backend | ~~数据范围控制引擎 — sys_data_scope+全部/本部门/本人+AOP~~ | ~~Done(PR#3962 admin-merged)~~ |
-| kimi3  | #2510 | backend | ~~AI合同关键信息提取引擎 — 回款条件+质保期+特殊条款+我方准备~~ | ~~Done(PR#3968 admin-merged)~~ |
-| kimi4  | #2008 | finance | ~~报价成本模型API — BOM+运费+安装+管理费→建议售价~~ | ~~Done(PR#3963 admin-merged)~~ |
-| kimi1  | #3180 | backend | ~~文档对内/对外分类 — doc_visibility字段+分类标签体系~~ | ~~Done(PR#3967 admin-merged)~~ |
-| kimi4  | #2366 | frontend | ~~审批中心页面 — 待办/已办/发起三Tab+审批操作~~ | ~~Done(PR#3966 admin-merged)~~ |
-| kimi19 | #1685 | backend | 项目费用关联API+财务报表导出功能 | 进行中 |
-| kimi6  | #2105 | backend | ~~质保成本核算API — 6维度成本+外包结算+客户计费~~ | ~~Done(PR#3965 admin-merged)~~ |
-| kimi4  | #3181 | backend | ~~阶段文档注册表 — 每阶段必备文档清单模板+完成度计算~~ | ~~Done(PR#3974 admin-merged)~~ |
-| kimi6  | #3149 | frontend | ~~审批进度追踪器组件 — 流程地图+步骤高亮+卡点提示+预估耗时~~ | ~~Done(PR#3902 已于04-19完成)~~ |
-| kimi6  | #3183 | frontend | ~~项目360文档Tab前端 — 对内/对外分组+阶段进度+批量操作~~ | ~~Done(PR#3940 已于04-19完成)~~ |
-| kimi6  | #3648 | backend | ~~招投标-DB 数据库建表 — 10张表 Flyway迁移~~ | ~~Done(PR#3969 admin-merged)~~ |
-| kimi6  | #3649 | fullstack | ~~招投标-A 资质证书管理中心~~ | ~~Done(PR#3972 admin-merged)~~ |
-| kimi1  | #3182 | backend | ~~文档自动归集 — 审批/合同/设计附件自动入项目文档库~~ | ~~Done(PR#3973 admin-merged)~~ |
-| kimi3  | #3656 | backend | ~~法规文件预置模板 — TSG 71-2023 七阶段38项法定文件种子数据~~ | ~~Done(PR#3971 admin-merged)~~ |
-| kimi19 | #1685 | backend | ~~项目费用关联API+财务报表导出功能~~ | ~~Done(PR#3970 admin-merged)~~ |
-| kimi19 | #3650 | fullstack | ~~招投标-B 检测报告管理~~ | ~~Done(PR#3981 admin-merged)~~ |
-| kimi4  | #3181 | backend | ~~阶段文档注册表 — 每阶段必备文档清单模板+完成度计算~~ | ~~Done(PR#3974 admin-merged)~~ |
-| kimi3  | #2468 | backend | ~~图纸管理API — 上传/版本控制/审批/下发工厂~~ | ~~Done(PR#3904 已于04-19完成)~~ |
-| kimi6  | #1875 | mine | ~~赢/输复盘模板+系统化采集（矿场主线）~~ | ~~Done(PR#3976 admin-merged)~~ |
-| kimi1  | #2086 | backend | ~~变更影响联动API — BOM差异自动计算+成本影响+工期更新~~ | ~~Done(历史PR#2781/#3356已merged，E2E历史遗留无需修复)~~ |
-| kimi3  | #2195 | backend | ~~品牌中心多平台数据采集~~ | ~~Done(PR#3975 admin-merged)~~ |
-| kimi4  | #3652 | fullstack | ~~招投标-D 投标文件编制工作台~~ | ~~Done(PR#3984 admin-merged)~~ |
-| kimi1  | #3377 | backend | ~~PLM子系统数据库初始化 — 7张核心表建表+索引~~ | ~~Done(PR#3977 admin-merged)~~ |
-| kimi3  | #3653 | fullstack | ~~招投标-E 报价决策与保证金台账~~ | ~~Done(PR#3980 admin-merged)~~ |
-| kimi1  | #3378 | backend | ~~PLM零件主数据CRUD API — 新建/编辑/查询/版本状态机~~ | ~~Done(PR#3979 admin-merged)~~ |
-| kimi6  | #2204 | backend | ~~品牌中心数据库建表~~ | ~~Done(PR#3978 admin-merged)~~ |
-| kimi6  | #2203 | backend | ~~品牌中心内容CRUD API + 状态流转 + S3文件上传~~ | ~~Done(PR#3982 admin-merged)~~ |
-| kimi1  | #3379 | backend | ~~PLM零件编码自动生成引擎 — 四段式编码+唯一性校验~~ | ~~Done(PR#3983 admin-merged)~~ |
-| kimi3  | #3651 | bidding | ~~招投标-C 投标立项与进度管理~~ | ~~Done(PR#3988 admin-merged)~~ |
-| kimi6  | #3380 | plm | ~~BOM创建与版本管理API (EBOM/MBOM/超级BOM)~~ | ~~Done(PR#3985 admin-merged)~~ |
-| kimi19 | #3654 | bidding | ~~招投标-Dashboard 投标总览仪表盘~~ | ~~Done(PR#3986 admin-merged)~~ |
-| kimi1  | #3381 | plm | ~~PLM BOM版本对比与回滚API~~ | ~~Done(PR#3987 admin-merged)~~ |
-| kimi4  | #3383 | plm | ~~PLM BOM成本Roll-up API~~ | ~~Done(PR#3991 admin-merged)~~ |
-| kimi6  | #3384 | plm | ~~PLM BOM Where-Used反查API~~ | ~~Done(PR#3992 admin-merged)~~ |
-| kimi1  | #3385 | plm | ~~PLM ECO变更申请与影响评估API~~ | ~~Done(PR#3993 admin-merged)~~ |
-| kimi19 | #3388 | plm | ~~PLM[11/20] 超级BOM规则引擎~~ | ~~Done(PR#3989 admin-merged)~~ |
-| kimi3  | #3394 | plm | ~~PLM[17/20] 零件主数据管理页面~~ | ~~Done(PR#3990 admin-merged)~~ |

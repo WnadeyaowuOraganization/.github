@@ -18,7 +18,7 @@ HOME_DIR="${HOME_DIR:-/home/ubuntu}"
 GITHUB_DIR="${HOME_DIR}/projects/.github"
 SCRIPT_DIR="${GITHUB_DIR}/scripts"
 WORK_DIR="/data/home/ubuntu/projects/wande-play-quick-fix"
-SESSION="hotfix-cc"
+SESSION="quick-fix"
 MODEL="claude-sonnet-4-6"
 
 # 解析参数

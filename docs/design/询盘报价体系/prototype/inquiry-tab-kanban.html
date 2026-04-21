@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>看板视图</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .kanban-col { min-width: 260px; width: 260px; }
+    .biz-bar-direct { background: #e5e7eb; }           /* 直销灰 */
+    .biz-bar-dealer { background: #fef9c3; }           /* 经销淡黄 */
+    .biz-bar-intl   { background: #ede9fe; }           /* 国贸淡紫 */
+    .card-dashed { border: 1px dashed #cbd5e1; }
+    .avatar { width: 22px; height: 22px; border-radius: 9999px; background: #e5e7eb; color: #6b7280; font-size: 11px; display: inline-flex; align-items: center; justify-content: center; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">询盘工作台 · 看板视图</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">看板式拖拽推进询盘阶段，业务员日常工作主界面</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">业务员, 商务主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5 阶段看板 / 4KPI 卡 / 卡片拖拽 / 跟进人头像 / 超期红字</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">拖拽切换阶段 / 点击卡片进入报价 / 快捷企微推送</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">KPI 实时 / 卡片可拖拽 / 阶段变更记录 activity_log</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">询盘报价体系详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部汇总条 — 4KPI] -->
+<div class="grid grid-cols-4 gap-4 mb-4">
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">总询盘数</div>
+    <div class="text-3xl font-light text-gray-700">128</div>
+    <div class="text-xs text-gray-400 mt-1">较上周 +12</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">报价中</div>
+    <div class="text-3xl font-light text-gray-700">43</div>
+    <div class="text-xs text-gray-400 mt-1">金额汇总 ¥2,840,000</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">待跟进</div>
+    <div class="text-3xl font-light text-gray-700">19</div>
+    <div class="text-xs text-gray-400 mt-1">其中 5 条超期</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">本月赢单率</div>
+    <div class="text-3xl font-light text-gray-700">32%</div>
+    <div class="text-xs text-gray-400 mt-1">目标 35%</div>
+  </div>
+</div>
+
+<!-- [看板拖拽提示] -->
+<div class="mb-3 text-xs text-gray-500 flex items-center gap-2">
+  <span class="inline-block border border-dashed border-gray-400 px-2 py-0.5 rounded text-gray-500">← 拖拽卡片切换阶段</span>
+  <span class="text-gray-400">拖动卡片到其他列即可推进询盘阶段，系统自动记录 activity_log</span>
+</div>
+
+<!-- [看板主体 — 5 栏水平] -->
+<div class="flex gap-4 overflow-x-auto pb-4">
+
+  <!-- [列1: 新询盘(18)] -->
+  <div class="kanban-col bg-gray-100 rounded p-3">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-700">新询盘 <span class="text-gray-400 font-normal">(18)</span></div>
+      <span class="text-gray-400 text-xs cursor-pointer">+</span>
+    </div>
+    <div class="space-y-3">
+      <!-- 卡片 -->
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-direct mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">张三 · 深圳华强游乐</div>
+        <div class="text-xs text-gray-500 mt-1">大型组合滑梯方案询价</div>
+        <div class="text-sm text-gray-700 mt-2">¥580,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">李</span>李经理</div>
+          <span class="text-gray-500">1天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">致电确认需求</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-dealer mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">郑州飞跃经销 · 李总</div>
+        <div class="text-xs text-gray-500 mt-1">小区无动力乐园包方案</div>
+        <div class="text-sm text-gray-700 mt-2">¥220,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">王</span>王业务</div>
+          <span class="text-gray-500">2天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">发送产品目录</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-intl mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">Ahmed · UAE Dubai Mall</div>
+        <div class="text-xs text-gray-500 mt-1">Indoor playground quotation</div>
+        <div class="text-sm text-gray-700 mt-2">USD 45,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">Su</span>Susan</div>
+          <span class="text-gray-500">1天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">发送英文产品手册</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [列2: 报价中(43)] -->
+  <div class="kanban-col bg-gray-100 rounded p-3">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-700">报价中 <span class="text-gray-400 font-normal">(43)</span></div>
+      <span class="text-gray-400 text-xs cursor-pointer">+</span>
+    </div>
+    <div class="space-y-3">
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-direct mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">上海浦东文旅公司</div>
+        <div class="text-xs text-gray-500 mt-1">大型主题乐园定制方案</div>
+        <div class="text-sm text-gray-700 mt-2">¥3,200,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">陈</span>陈经理</div>
+          <span class="text-gray-500">3天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">等客户确认报价V2</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-dealer mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">成都乐趣经销 · 王总</div>
+        <div class="text-xs text-gray-500 mt-1">蹦床公园设备包询价</div>
+        <div class="text-sm text-gray-700 mt-2">¥860,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">刘</span>刘业务</div>
+          <span class="text-gray-500">5天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">修改规格后重发报价</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-intl mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">John · Australia Park Co.</div>
+        <div class="text-xs text-gray-500 mt-1">Outdoor combo slide quote</div>
+        <div class="text-sm text-gray-700 mt-2">USD 85,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">Li</span>Linda</div>
+          <span class="text-gray-500">4天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">等客户回复 V3 报价</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [列3: 待跟进(19)] -->
+  <div class="kanban-col bg-gray-100 rounded p-3">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-700">待跟进 <span class="text-gray-400 font-normal">(19)</span></div>
+      <span class="text-gray-400 text-xs cursor-pointer">+</span>
+    </div>
+    <div class="space-y-3">
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-direct mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">杭州萧山文体局</div>
+        <div class="text-xs text-gray-500 mt-1">社区广场儿童游乐设施</div>
+        <div class="text-sm text-gray-700 mt-2">¥480,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">赵</span>赵经理</div>
+          <span class="text-red-500 font-medium">超期5天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">电话回访客户决策进度</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-dealer mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">武汉乐游经销 · 赵总</div>
+        <div class="text-xs text-gray-500 mt-1">幼儿园整体配套方案</div>
+        <div class="text-sm text-gray-700 mt-2">¥360,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">孙</span>孙业务</div>
+          <span class="text-gray-500">7天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">推送样板间案例视频</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-intl mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">Maria · Russia Moscow</div>
+        <div class="text-xs text-gray-500 mt-1">Indoor soft play set</div>
+        <div class="text-sm text-gray-700 mt-2">USD 32,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">Ja</span>Jason</div>
+          <span class="text-red-500 font-medium">超期3天</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">邮件确认付款方式</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [列4: 赢单(12)] -->
+  <div class="kanban-col bg-gray-100 rounded p-3">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-700">赢单 <span class="text-gray-400 font-normal">(12)</span></div>
+      <span class="text-gray-400 text-xs cursor-pointer">+</span>
+    </div>
+    <div class="space-y-3">
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-direct mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">广州天河游乐场</div>
+        <div class="text-xs text-gray-500 mt-1">户外大型组合设备</div>
+        <div class="text-sm text-gray-700 mt-2">¥1,250,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">黄</span>黄经理</div>
+          <span class="text-green-600">已签约</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">转生产 · 排期跟进</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-intl mb-2"></div>
+        <div class="text-sm font-medium text-gray-800">Carlos · Mexico Cancun</div>
+        <div class="text-xs text-gray-500 mt-1">Water park components</div>
+        <div class="text-sm text-gray-700 mt-2">USD 128,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">Em</span>Emily</div>
+          <span class="text-green-600">PI已签</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">下一步：<span class="text-gray-700">等 30% 定金到账</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [列5: 输单/关闭(36)] -->
+  <div class="kanban-col bg-gray-100 rounded p-3">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-700">输单/关闭 <span class="text-gray-400 font-normal">(36)</span></div>
+      <span class="text-gray-400 text-xs cursor-pointer">+</span>
+    </div>
+    <div class="space-y-3">
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed opacity-75 hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-dealer mb-2"></div>
+        <div class="text-sm font-medium text-gray-700">西安动力经销 · 钱总</div>
+        <div class="text-xs text-gray-500 mt-1">商场淘气堡装修</div>
+        <div class="text-sm text-gray-700 mt-2">¥180,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">吴</span>吴业务</div>
+          <span class="text-gray-500">已输单</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">输单原因：<span class="text-gray-700">价格高于竞品</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+      <div class="bg-white rounded border border-gray-200 p-3 shadow-sm card-dashed opacity-75 hover:shadow-md cursor-grab">
+        <div class="h-1 rounded biz-bar-direct mb-2"></div>
+        <div class="text-sm font-medium text-gray-700">南京鼓楼房地产</div>
+        <div class="text-xs text-gray-500 mt-1">小区中庭设施</div>
+        <div class="text-sm text-gray-700 mt-2">¥95,000</div>
+        <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+          <div class="flex items-center gap-1"><span class="avatar">周</span>周经理</div>
+          <span class="text-gray-500">关闭</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-2">输单原因：<span class="text-gray-700">项目预算被砍</span></div>
+        <div class="flex items-center gap-2 mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+          <button class="hover:text-gray-700">📝报价</button>
+          <button class="hover:text-gray-700">💬企微</button>
+          <button class="hover:text-gray-700">📎附件</button>
+        </div>
+      </div>
+
+      <!-- [空栏提示示例: 栏目底部] -->
+      <div class="border border-dashed border-gray-300 rounded p-4 text-center text-xs text-gray-400">
+        暂无更多
+        <div class="mt-1 text-gray-500 cursor-pointer">+ 添加</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

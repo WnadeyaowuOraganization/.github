@@ -94,11 +94,11 @@
 | 04-22 | kimi4 | #4044 | crm | medium | **Done** | CRM商机详情-变更日志Tab — PR #4068 merged |
 | 04-22 | kimi4 | #2851 | cockpit | medium | In Progress | 验收队列前端 |
 | 04-22 | kimi5 | #2298 | cockpit | medium | **Done** | AI对话监控面板 — PR #4069 merged |
-| 04-22 | kimi1 | #3150 | approval | **max** | In Progress | 审批流程图渲染API（Token Pool耗尽，切max）|
-| 04-22 | kimi5 | #3169 | approval | **max** | In Progress | 表单模板管理（Token Pool耗尽，切max）|
-| 04-22 | kimi2 | #2849 | cockpit | **max** | In Progress | Agent效率看板前端（Token Pool耗尽，切max重启）|
-| 04-22 | kimi3 | #3648 | bidding | **max** | In Progress | 招投标DB建表（Token Pool耗尽，切max重启）|
-| 04-22 | kimi4 | #2851 | cockpit | **max** | In Progress | 验收队列前端（Token Pool耗尽，切max重启）|
+| 04-22 | kimi1 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 补充PR #4072 merged |
+| 04-22 | kimi5 | #3169 | approval | **max** | In Progress | 表单模板管理 |
+| 04-22 | kimi2 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板前端 — PR #4074 merged |
+| 04-22 | kimi3 | ~~#3648~~ | bidding | **max** | ~~Done~~ | 招投标DB建表 — 补充PR #4073 merged |
+| 04-22 | kimi4 | #2851 | cockpit | **max** | In Progress | 验收队列前端 |
 
 ---
 

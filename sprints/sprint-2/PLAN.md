@@ -44,7 +44,7 @@
 | 12 | ~~#4034~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-跟进记录Tab |
 | 13 | ~~#4035~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-设计单Tab |
 | 14 | ~~#4036~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-报价Tab |
-| 15 | #4037 | P1 | crm | medium | A档 — CRM商机详情-合同Tab |
+| ~~15~~ | ~~#4037~~ | P1 | crm | medium | A档 — CRM商机详情-合同Tab |
 | 16 | #4038 | P1 | crm | medium | A档 — CRM商机详情-回款Tab |
 | 17 | #4039 | P1 | crm | medium | A档 — CRM商机详情-投标HZTab |
 | 18 | #4040 | P1 | crm | medium | A档 — CRM商机详情-资料Tab |
@@ -80,6 +80,8 @@
 | 04-22 | kimi1 | #4034 | crm | medium | In Progress | CRM商机详情-跟进记录Tab |
 | 04-22 | kimi2 | #4035 | crm | medium | In Progress | CRM商机详情-设计单Tab |
 | 04-22 | kimi3 | #4036 | crm | medium | In Progress | CRM商机详情-报价Tab |
+| 04-22 | kimi1 | #4034 | crm | medium | **Done** | CRM商机详情-跟进记录Tab — PR #4056 merged |
+| 04-22 | kimi1 | #4037 | crm | medium | In Progress | CRM商机详情-合同Tab |
 
 ---
 
@@ -275,3 +277,4 @@
 | #3886 | P2 |  | [测试] 代码质量 Hook 体系完整路径验证 — pre-commit / pre-pu | EXEMPT | | Todo |
 | #3994 | P2 | project | [Master][矿场] 全球项目矿场 — 10Tab架构（执行6+洞察4） | A_weak | | Todo |
 | #4004 | P2 | project | [Master][业务运营] 销售记录体系 — 记录中心多Tab(4Tab)+老板周报单页 | A_weak | | Todo |
+

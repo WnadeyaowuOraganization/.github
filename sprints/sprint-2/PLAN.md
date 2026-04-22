@@ -82,7 +82,7 @@
 | 04-22 | kimi3 | #4036 | crm | medium | In Progress | CRM商机详情-报价Tab |
 | 04-22 | kimi1 | #4034 | crm | medium | **Done** | CRM商机详情-跟进记录Tab — PR #4056 merged |
 | 04-22 | kimi1 | #4037 | crm | medium | **Done** | CRM商机详情-合同Tab — PR #4064 merged |
-| 04-22 | kimi1 | #4042 | crm | medium | In Progress | CRM商机详情-流程监控Tab |
+| 04-22 | kimi1 | #4042 | crm | medium | **Done** | CRM商机详情-流程监控Tab — PR #4071 merged |
 | 04-22 | kimi2 | #4035 | crm | medium | **Done** | CRM商机详情-设计单Tab — PR #4057 merged |
 | 04-22 | kimi2 | #4038 | crm | medium | **Done** | CRM商机详情-回款Tab — PR #4067 merged |
 | 04-22 | kimi2 | #2849 | cockpit | medium | In Progress | Agent效率看板前端 |

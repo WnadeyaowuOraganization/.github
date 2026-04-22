@@ -44,12 +44,12 @@
 | 12 | ~~#4034~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-跟进记录Tab |
 | 13 | ~~#4035~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-设计单Tab |
 | 14 | ~~#4036~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-报价Tab |
-| ~~15~~ | ~~#4037~~ | P1 | crm | medium | A档 — CRM商机详情-合同Tab |
-| 16 | #4038 | P1 | crm | medium | A档 — CRM商机详情-回款Tab |
-| 17 | #4039 | P1 | crm | medium | A档 — CRM商机详情-投标HZTab |
-| 18 | #4040 | P1 | crm | medium | A档 — CRM商机详情-资料Tab |
-| 19 | #4042 | P1 | crm | medium | A档 — CRM商机详情-流程监控Tab |
-| 20 | #4044 | P1 | crm | medium | A档 — CRM商机详情-变更日志Tab |
+| ~~15~~ | ~~#4037~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-合同Tab |
+| ~~16~~ | ~~#4038~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-回款Tab |
+| ~~17~~ | ~~#4039~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-投标HZTab |
+| ~~18~~ | ~~#4040~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-资料Tab |
+| ~~19~~ | ~~#4042~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-流程监控Tab |
+| ~~20~~ | ~~#4044~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-变更日志Tab |
 
 **Sprint-1 其他 + Sprint-2（续）：**
 
@@ -81,11 +81,13 @@
 | 04-22 | kimi2 | #4035 | crm | medium | In Progress | CRM商机详情-设计单Tab |
 | 04-22 | kimi3 | #4036 | crm | medium | In Progress | CRM商机详情-报价Tab |
 | 04-22 | kimi1 | #4034 | crm | medium | **Done** | CRM商机详情-跟进记录Tab — PR #4056 merged |
-| 04-22 | kimi1 | #4037 | crm | medium | In Progress | CRM商机详情-合同Tab |
+| 04-22 | kimi1 | #4037 | crm | medium | **Done** | CRM商机详情-合同Tab — PR #4064 merged |
+| 04-22 | kimi1 | #4042 | crm | medium | In Progress | CRM商机详情-流程监控Tab |
 | 04-22 | kimi2 | #4035 | crm | medium | **Done** | CRM商机详情-设计单Tab — PR #4057 merged |
 | 04-22 | kimi2 | #4038 | crm | medium | In Progress | CRM商机详情-回款Tab |
 | 04-22 | kimi3 | #4036 | crm | medium | **Done** | CRM商机详情-报价Tab — PR #4058 merged |
-| 04-22 | kimi3 | #4039 | crm | medium | In Progress | CRM商机详情-投标HZTab |
+| 04-22 | kimi3 | #4039 | crm | medium | **Done** | CRM商机详情-投标HZTab — PR #4066 merged |
+| 04-22 | kimi3 | #4040 | crm | medium | In Progress | CRM商机详情-资料Tab |
 | 04-22 | kimi4 | #4033 | crm | medium | **Done** | CRM商机详情-基本信息Tab — PR #4062 merged |
 | 04-22 | kimi4 | #4044 | crm | medium | In Progress | CRM商机详情-变更日志Tab |
 

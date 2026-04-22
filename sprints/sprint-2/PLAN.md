@@ -110,12 +110,13 @@
 | 04-22 | kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR #4078 merged |
 | 04-22 | kimi2 | ~~#4024~~ | plm | **max** | ~~Done~~ | PLM产品技术中心 — PR #4083 merged |
 | 04-22 | kimi1 | ~~#4023~~ | approval | **max** | ~~Done~~ | 统一审批工作台 — PR #4082 merged |
-| 04-22 | kimi5 | #3151 | approval | **max** | In Progress | 新手引导+流程帮助中心 — PR #4081 submitted |
+| 04-22 | kimi5 | ~~#3151~~ | approval | **max** | ~~Done~~ | 新手引导+流程帮助中心 — PR #4081 merged |
 | 04-22 | kimi3 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR #4084 merged |
 | 04-22 | kimi4 | #4041 | cockpit | **max** | In Progress | 耀总驾驶舱 — PR #4085 submitted |
 | 04-22 | kimi2 | #3189 | finance | **max** | In Progress | 甲方表单填写辅助 |
-| 04-22 | kimi1 | #3184 | project360 | **max** | In Progress | 文档访问日志+统计 |
+| 04-22 | kimi1 | #3184 | project360 | **max** | In Progress | 文档访问日志+统计 — PR #4086 submitted |
 | 04-22 | kimi3 | #3185 | project360 | **max** | In Progress | 全阶段资料完成度看板 |
+| 04-22 | kimi5 | #4014 | crm | **max** | In Progress | CRM线索统一池+评分引擎 |
 
 ---
 

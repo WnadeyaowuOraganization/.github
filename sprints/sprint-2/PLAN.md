@@ -65,17 +65,17 @@
 
 | 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
 |------|------|-------|------|--------|------|------|
-| 04-22 | kimi1 | #3386 | PLM | medium | In Progress | ECO审批流集成 |
-| 04-22 | kimi2 | #3389 | PLM | medium | In Progress | EBOM解析API |
-| 04-22 | kimi3 | #3392 | PLM | medium | In Progress | 版本化定价引擎API |
-| 04-22 | kimi4 | #3631 | bidding | high | In Progress | pipeline表对齐 |
+| 04-22 | kimi1 | ~~#3386~~ | PLM | medium | ~~Done~~ | ECO审批流集成 — CLOSED/COMPLETED |
+| 04-22 | kimi2 | ~~#3389~~ | PLM | medium | ~~Done~~ | EBOM解析API — CLOSED/COMPLETED |
+| 04-22 | kimi3 | ~~#3392~~ | PLM | medium | ~~Done~~ | 版本化定价引擎API — CLOSED/COMPLETED |
+| 04-22 | kimi4 | ~~#3631~~ | bidding | high | ~~Done~~ | pipeline表对齐 — CLOSED/COMPLETED |
 | 04-22 | kimi5 | ~~#1692~~ | backend | medium | ~~Done~~ | ~~项目成本跟踪API~~ — PR #3844 已于04-19 merged，误派 |
-| 04-22 | kimi5 | #2113 | backend | medium | In Progress | 合同审批流程 |
-| 04-22 | kimi1 | #2296 | wechat | medium | In Progress | Cockpit安全审计页面 |
+| 04-22 | kimi5 | ~~#2113~~ | backend | medium | ~~Done~~ | 合同审批流程 — CLOSED/COMPLETED |
+| 04-22 | kimi1 | ~~#2296~~ | wechat | medium | ~~Done~~ | Cockpit安全审计页面 — CLOSED/COMPLETED |
 | 04-22 | kimi5 | #2298 | cockpit | medium | In Progress | AI对话监控面板 |
-| 04-22 | kimi2 | #2925 | backend | medium | In Progress | 字段级数据完整度计算引擎 |
-| 04-22 | kimi3 | #2926 | backend | medium | In Progress | 数据质量KPI API |
-| 04-22 | kimi2 | #2944 | backend | medium | In Progress | 7天滚动基线异常检测 |
+| 04-22 | kimi2 | ~~#2925~~ | backend | medium | ~~Done~~ | 字段级数据完整度计算引擎 — CLOSED/COMPLETED |
+| 04-22 | kimi3 | ~~#2926~~ | backend | medium | ~~Done~~ | 数据质量KPI API — CLOSED/COMPLETED |
+| 04-22 | kimi2 | ~~#2944~~ | backend | medium | ~~Done~~ | 7天滚动基线异常检测 — CLOSED/COMPLETED |
 | 04-22 | kimi4 | #4033 | crm | medium | In Progress | CRM商机详情-基本信息Tab |
 | 04-22 | kimi1 | #4034 | crm | medium | In Progress | CRM商机详情-跟进记录Tab |
 | 04-22 | kimi2 | #4035 | crm | medium | In Progress | CRM商机详情-设计单Tab |

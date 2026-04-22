@@ -127,7 +127,8 @@
 | 04-22 | kimi4 | ~~#4009~~ | project | **max** | ~~Done~~ | 记录中心三视角分组Tab — PR #4098 merged |
 | 04-22 | kimi4 | ~~#2851~~ | cockpit | **max** | ~~Done~~ | 验收队列E2E修复 — PR #4101 merged |
 | 04-22 | kimi4 | ~~#2926~~ | backend | **max** | ~~Done~~ | 数据质量KPI API — PR #4053 已于04-21 merged |
-| 04-22 | kimi4 | #2944 | backend | **max** | In Progress | 7天滚动基线异常检测 |
+| 04-22 | kimi4 | ~~#2944~~ | backend | **max** | ~~Done~~ | 7天滚动基线异常检测 — PR #4055 已于04-21 merged |
+| 04-22 | kimi4 | #3149 | approval | **max** | In Progress | 审批进度追踪器组件 |
 | 04-22 | kimi2 | #4012 | project | **max** | In Progress | 老板周报AI建议Section |
 | 04-22 | kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
 | 04-22 | kimi1 | #2925 | backend | **max** | In Progress | 字段级数据完整度计算引擎 |

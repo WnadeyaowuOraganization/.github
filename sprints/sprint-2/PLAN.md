@@ -86,6 +86,8 @@
 | 04-22 | kimi2 | #4038 | crm | medium | In Progress | CRM商机详情-回款Tab |
 | 04-22 | kimi3 | #4036 | crm | medium | **Done** | CRM商机详情-报价Tab — PR #4058 merged |
 | 04-22 | kimi3 | #4039 | crm | medium | In Progress | CRM商机详情-投标HZTab |
+| 04-22 | kimi4 | #4033 | crm | medium | **Done** | CRM商机详情-基本信息Tab — PR #4062 merged |
+| 04-22 | kimi4 | #4044 | crm | medium | In Progress | CRM商机详情-变更日志Tab |
 
 ---
 

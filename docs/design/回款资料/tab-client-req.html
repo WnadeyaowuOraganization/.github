@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>甲方资料需求模板库 — 回款资料 Tab3</title>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Roboto,sans-serif;background:#f5f5f5;margin:0;padding:16px 24px;color:#333}
+    /* KPI */
+    .kpi-row{display:flex;gap:12px;margin-bottom:12px}
+    .kpi-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;flex:1}
+    .kpi-num{font-size:28px;font-weight:700;color:#333}
+    .kpi-label{font-size:13px;color:#999;margin-bottom:4px}
+    .kpi-sub{font-size:11px;color:#bbb;margin-top:4px}
+    /* 三栏布局 */
+    .main-layout{display:grid;grid-template-columns:280px 1fr 320px;gap:12px;margin-bottom:12px}
+    .panel{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:12px}
+    .panel-title{font-size:13px;font-weight:600;color:#333;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #f0f0f0}
+    /* 搜索 */
+    .search-input{width:100%;box-sizing:border-box;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:13px;margin-bottom:10px}
+    /* 树形导航 */
+    .tree-group{margin-bottom:6px}
+    .tree-group-header{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;cursor:pointer;font-size:13px;font-weight:600;color:#333;background:#fafafa;border-radius:4px;user-select:none}
+    .tree-group-header:hover{background:#f0f0f0}
+    .tree-arrow{font-size:10px;color:#999;margin-right:4px;display:inline-block;width:10px}
+    .tree-children{padding:4px 0 4px 18px}
+    .tree-item{display:flex;justify-content:space-between;align-items:center;padding:5px 8px;font-size:13px;color:#555;cursor:pointer;border-radius:3px;margin-bottom:2px}
+    .tree-item:hover{background:#f0f7ff;color:#1890ff}
+    .tree-item.active{background:#e6f7ff;color:#1890ff;font-weight:600}
+    .tree-badge{background:#f0f0f0;color:#666;font-size:11px;padding:1px 6px;border-radius:8px;font-weight:500}
+    .tree-item.active .tree-badge{background:#1890ff;color:#fff}
+    /* 甲方信息卡 */
+    .client-info-card{background:#fafafa;border:1px solid #e8e8e8;border-radius:6px;padding:12px 16px;margin-bottom:12px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+    .info-item .info-label{font-size:11px;color:#999;margin-bottom:3px}
+    .info-item .info-value{font-size:14px;font-weight:600;color:#333}
+    .info-item .info-value.big{font-size:16px;color:#1890ff}
+    /* 工具栏 */
+    .toolbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+    .toolbar-left{font-size:13px;color:#666}
+    .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s}
+    .btn:hover{border-color:#1890ff;color:#1890ff}
+    .btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+    .btn-primary:hover{background:#40a9ff}
+    .btn-sm{padding:3px 8px;font-size:12px}
+    .btn-link{background:none;border:none;color:#1890ff;cursor:pointer;padding:0 4px;font-size:12px}
+    .btn-link:hover{text-decoration:underline}
+    .btn-link.danger{color:#f5222d}
+    /* 表格 */
+    table{width:100%;border-collapse:collapse;background:#fff;font-size:12.5px}
+    thead{background:#fafafa}
+    th{padding:8px 10px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap;font-size:12px}
+    td{padding:9px 10px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:top}
+    tr:hover{background:#fafafa}
+    .required-yes{color:#f5222d;font-weight:600;font-size:14px}
+    .required-no{color:#bbb;font-size:14px}
+    /* 标签 */
+    .tag{display:inline-block;padding:1px 7px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap;margin-right:3px;margin-bottom:2px}
+    .tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+    .tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+    .tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+    .tag-purple{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7}
+    .tag-cyan{background:#e6fffb;color:#13c2c2;border:1px solid #87e8de}
+    .tag-gray{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+    .tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e}
+    .tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f}
+    .link{color:#1890ff;cursor:pointer}
+    .link:hover{text-decoration:underline}
+    /* 右侧知识库 */
+    .kb-category{margin-bottom:14px}
+    .kb-cat-header{font-size:12px;font-weight:600;color:#666;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center}
+    .kb-cat-count{color:#999;font-weight:normal;font-size:11px}
+    .kb-item{display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:#fafafa;border:1px solid #f0f0f0;border-radius:4px;margin-bottom:4px;font-size:12px}
+    .kb-item-name{color:#333;flex:1;margin-right:6px}
+    .kb-add{background:#fff;border:1px solid #91d5ff;color:#1890ff;padding:2px 8px;border-radius:3px;font-size:11px;cursor:pointer;white-space:nowrap}
+    .kb-add:hover{background:#1890ff;color:#fff}
+    .kb-add.added{background:#f6ffed;border-color:#b7eb8f;color:#52c41a}
+    /* 底部继承预览面板 */
+    .inherit-panel{background:#fff;border:1px solid #e8e8e8;border-radius:6px;margin-bottom:12px}
+    .inherit-header{padding:12px 16px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;user-select:none;border-bottom:1px solid #f0f0f0}
+    .inherit-header:hover{background:#fafafa}
+    .inherit-title{font-size:14px;font-weight:600;color:#333;display:flex;align-items:center;gap:8px}
+    .inherit-arrow{color:#999;font-size:12px}
+    .inherit-body{padding:16px;display:block}
+    .inherit-body.collapsed{display:none}
+    .inherit-desc{font-size:13px;color:#666;margin-bottom:12px;background:#e6f7ff;border:1px solid #91d5ff;padding:10px 12px;border-radius:4px}
+    .inherit-desc b{color:#1890ff}
+    .inherit-tags{margin-bottom:12px;line-height:2}
+    .inherit-tag{display:inline-block;padding:4px 10px;background:#f0f7ff;border:1px solid #91d5ff;color:#1890ff;border-radius:4px;font-size:12px;margin-right:6px;margin-bottom:6px}
+    .inherit-tag .num{background:#1890ff;color:#fff;border-radius:10px;padding:0 5px;font-size:10px;margin-right:4px}
+    /* 树分隔 */
+    .tree-divider{height:1px;background:#f0f0f0;margin:4px 0}
+  </style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">甲方资料需求模板库</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">按甲方积累特殊资料要求 → 新项目自动继承 → 防止遗漏导致回款延迟</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务人员, 项目经理, 财务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">甲方资料需求建档 / 行业知识库参考 / 新项目自动继承 / 历史项目来源追溯</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">添加资料要求 / 从知识库一键复制 / 预览继承效果 / 编辑适用阶段</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">甲方首次录入后新项目 100% 继承 / 支持多阶段标注 / 知识库按行业检索</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">回款资料·详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ========== KPI 统计条 ========== -->
+<div class="kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-label">已建档甲方数</div>
+    <div class="kpi-num">48</div>
+    <div class="kpi-sub">覆盖 5 大类行业</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">累计特殊资料要求数</div>
+    <div class="kpi-num">186</div>
+    <div class="kpi-sub">平均 3.9 项/甲方</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">平均每个甲方要求数</div>
+    <div class="kpi-num">3.9</div>
+    <div class="kpi-sub">最高 12 项（深圳市教育局）</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">本月新增要求数</div>
+    <div class="kpi-num">12</div>
+    <div class="kpi-sub">较上月 +3</div>
+  </div>
+</div>
+
+<!-- ========== 主三栏布局 ========== -->
+<div class="main-layout">
+
+  <!-- ===== 左侧：甲方树形导航 ===== -->
+  <div class="panel">
+    <div class="panel-title">甲方分组</div>
+    <input type="text" class="search-input" placeholder="🔍 搜索甲方名称...">
+
+    <!-- 政府类 -->
+    <div class="tree-group">
+      <div class="tree-group-header">
+        <span><span class="tree-arrow">▼</span>📁 政府类</span>
+        <span class="tree-badge">14</span>
+      </div>
+      <div class="tree-children">
+        <div class="tree-item active">
+          <span>深圳市教育局</span>
+          <span class="tree-badge">12</span>
+        </div>
+        <div class="tree-item">
+          <span>广州白云区政府</span>
+          <span class="tree-badge">8</span>
+        </div>
+        <div class="tree-item">
+          <span>北京经济技术开发区</span>
+          <span class="tree-badge">6</span>
+        </div>
+        <div class="tree-item">
+          <span>上海浦东新区教育局</span>
+          <span class="tree-badge">9</span>
+        </div>
+        <div class="tree-item">
+          <span>杭州钱塘新区管委会</span>
+          <span class="tree-badge">5</span>
+        </div>
+        <div class="tree-item">
+          <span>成都高新区教育局</span>
+          <span class="tree-badge">7</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 学校/事业单位 -->
+    <div class="tree-group">
+      <div class="tree-group-header">
+        <span><span class="tree-arrow">▼</span>📁 学校/事业单位</span>
+        <span class="tree-badge">15</span>
+      </div>
+      <div class="tree-children">
+        <div class="tree-item">
+          <span>北京海淀区外国语学校</span>
+          <span class="tree-badge">5</span>
+        </div>
+        <div class="tree-item">
+          <span>清华大学基建处</span>
+          <span class="tree-badge">7</span>
+        </div>
+        <div class="tree-item">
+          <span>上海交通大学</span>
+          <span class="tree-badge">6</span>
+        </div>
+        <div class="tree-item">
+          <span>深圳大学附属中学</span>
+          <span class="tree-badge">4</span>
+        </div>
+        <div class="tree-item">
+          <span>广州市第六中学</span>
+          <span class="tree-badge">3</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 地产开发商 -->
+    <div class="tree-group">
+      <div class="tree-group-header">
+        <span><span class="tree-arrow">▼</span>📁 地产开发商</span>
+        <span class="tree-badge">10</span>
+      </div>
+      <div class="tree-children">
+        <div class="tree-item">
+          <span>万科地产</span>
+          <span class="tree-badge">4</span>
+        </div>
+        <div class="tree-item">
+          <span>保利集团</span>
+          <span class="tree-badge">5</span>
+        </div>
+        <div class="tree-item">
+          <span>华润置地</span>
+          <span class="tree-badge">3</span>
+        </div>
+        <div class="tree-item">
+          <span>龙湖地产</span>
+          <span class="tree-badge">4</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 工业园区 -->
+    <div class="tree-group">
+      <div class="tree-group-header">
+        <span><span class="tree-arrow">▶</span>📁 工业园区</span>
+        <span class="tree-badge">5</span>
+      </div>
+    </div>
+
+    <!-- 其他 -->
+    <div class="tree-group">
+      <div class="tree-group-header">
+        <span><span class="tree-arrow">▶</span>📁 其他</span>
+        <span class="tree-badge">4</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 中间：选中甲方的资料要求列表 ===== -->
+  <div class="panel">
+    <!-- 甲方信息卡 -->
+    <div class="client-info-card">
+      <div class="info-item">
+        <div class="info-label">甲方名称</div>
+        <div class="info-value big">深圳市教育局</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">甲方类型</div>
+        <div class="info-value"><span class="tag tag-blue">政府类</span></div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">合作项目数</div>
+        <div class="info-value">7 个历史项目</div>
+      </div>
+      <div class="info-item">
+        <div class="info-label">首次合作日期</div>
+        <div class="info-value">2023-03</div>
+      </div>
+    </div>
+
+    <!-- 工具栏 -->
+    <div class="toolbar">
+      <div class="toolbar-left">资料要求清单（共 <b style="color:#1890ff">12</b> 项，必需 <b style="color:#f5222d">8</b> 项）</div>
+      <div>
+        <button class="btn btn-sm">📋 从其他甲方复制</button>
+        <button class="btn btn-primary btn-sm">+ 添加资料要求</button>
+      </div>
+    </div>
+
+    <!-- 表格 -->
+    <table>
+      <thead>
+        <tr>
+          <th style="width:160px">资料名称</th>
+          <th>描述</th>
+          <th style="width:60px;text-align:center">必需</th>
+          <th style="width:180px">适用阶段</th>
+          <th style="width:130px">首次来源项目</th>
+          <th style="width:90px">创建时间</th>
+          <th style="width:70px;text-align:center">适用项目</th>
+          <th style="width:90px">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><b>特种设备使用登记证</b></td>
+          <td>体感游戏设备作为特种设备，需市监局登记</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-purple">验收</span></td>
+          <td><span class="link">深圳湾实验学校</span></td>
+          <td>2023-03-18</td>
+          <td style="text-align:center"><b>7</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>安全检测报告（第三方）</b></td>
+          <td>CMA 认证机构出具的安全性能检测报告</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-purple">验收</span><span class="tag tag-cyan">售后</span></td>
+          <td><span class="link">深圳湾实验学校</span></td>
+          <td>2023-03-18</td>
+          <td style="text-align:center"><b>7</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>工程款支付申请审批表</b></td>
+          <td>财政局专用格式，需领导签章</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-gold">回款</span></td>
+          <td><span class="link">深圳湾实验学校</span></td>
+          <td>2023-04-05</td>
+          <td style="text-align:center"><b>7</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>廉洁承诺书</b></td>
+          <td>供方承诺不向甲方人员行贿</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-blue">合同</span></td>
+          <td><span class="link">南山外国语小学</span></td>
+          <td>2023-06-12</td>
+          <td style="text-align:center"><b>6</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>安装人员培训证书</b></td>
+          <td>高空作业证、电工证等特种作业证书</td>
+          <td style="text-align:center"><span class="required-no">⚫</span></td>
+          <td><span class="tag tag-orange">安装</span></td>
+          <td><span class="link">福田区第二小学</span></td>
+          <td>2023-08-22</td>
+          <td style="text-align:center"><b>5</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>消防验收意见书</b></td>
+          <td>设备安装后消防部门出具的验收意见</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-purple">验收</span></td>
+          <td><span class="link">深圳湾实验学校</span></td>
+          <td>2023-04-15</td>
+          <td style="text-align:center"><b>7</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>设备生产厂家授权书</b></td>
+          <td>原厂授权销售/安装的正式文件</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-red">投标</span><span class="tag tag-blue">合同</span></td>
+          <td><span class="link">南山外国语小学</span></td>
+          <td>2023-05-20</td>
+          <td style="text-align:center"><b>6</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>售后服务承诺函</b></td>
+          <td>明确 3 年免费保修 + 48 小时响应</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-blue">合同</span><span class="tag tag-cyan">售后</span></td>
+          <td><span class="link">福田区第二小学</span></td>
+          <td>2023-08-10</td>
+          <td style="text-align:center"><b>5</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>施工组织设计方案</b></td>
+          <td>盖章版施工方案 + 安全应急预案</td>
+          <td style="text-align:center"><span class="required-no">⚫</span></td>
+          <td><span class="tag tag-green">设计</span><span class="tag tag-orange">安装</span></td>
+          <td><span class="link">罗湖翠园中学</span></td>
+          <td>2024-01-15</td>
+          <td style="text-align:center"><b>4</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>体游设备厂家 ISO9001 证书</b></td>
+          <td>生产质量体系认证</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-red">投标</span></td>
+          <td><span class="link">深圳湾实验学校</span></td>
+          <td>2023-03-18</td>
+          <td style="text-align:center"><b>7</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>设备出厂合格证 & 装箱单</b></td>
+          <td>每台设备的唯一编号凭证</td>
+          <td style="text-align:center"><span class="required-no">⚫</span></td>
+          <td><span class="tag tag-magenta" style="background:#fff0f6;color:#eb2f96;border:1px solid #ffadd2">生产</span><span class="tag tag-orange">安装</span></td>
+          <td><span class="link">南山外国语小学</span></td>
+          <td>2023-06-01</td>
+          <td style="text-align:center"><b>6</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+        <tr>
+          <td><b>第三方审计报告（结算）</b></td>
+          <td>教育局指定审计单位出具的工程结算审计</td>
+          <td style="text-align:center"><span class="required-yes">✅</span></td>
+          <td><span class="tag tag-gold">回款</span></td>
+          <td><span class="link">福田区第二小学</span></td>
+          <td>2023-09-10</td>
+          <td style="text-align:center"><b>5</b></td>
+          <td><button class="btn-link">编辑</button><button class="btn-link danger">删除</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ===== 右侧：行业知识库 ===== -->
+  <div class="panel">
+    <div class="panel-title">行业常见要求（参考）</div>
+    <input type="text" class="search-input" placeholder="🔍 按行业/甲方类型搜索">
+
+    <!-- 政府类 -->
+    <div class="kb-category">
+      <div class="kb-cat-header">
+        <span><span class="tag tag-blue" style="margin-right:4px">政府类</span>常见要求</span>
+        <span class="kb-cat-count">9 项</span>
+      </div>
+      <div class="kb-item"><span class="kb-item-name">廉洁承诺书</span><button class="kb-add added">✓ 已加</button></div>
+      <div class="kb-item"><span class="kb-item-name">特种设备使用登记证</span><button class="kb-add added">✓ 已加</button></div>
+      <div class="kb-item"><span class="kb-item-name">安全检测报告（第三方）</span><button class="kb-add added">✓ 已加</button></div>
+      <div class="kb-item"><span class="kb-item-name">政府采购合同备案</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">财政支付凭证格式表</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">国有资产入账清单</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">第三方审计报告</span><button class="kb-add added">✓ 已加</button></div>
+      <div class="kb-item"><span class="kb-item-name">纪委备案材料</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">消防验收意见书</span><button class="kb-add added">✓ 已加</button></div>
+    </div>
+
+    <!-- 学校类 -->
+    <div class="kb-category">
+      <div class="kb-cat-header">
+        <span><span class="tag tag-green" style="margin-right:4px">学校类</span>常见要求</span>
+        <span class="kb-cat-count">7 项</span>
+      </div>
+      <div class="kb-item"><span class="kb-item-name">无犯罪记录证明（安装人员）</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">校园安全责任书</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">设备环保检测报告</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">儿童用品安全认证</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">教学使用说明</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">防疫消毒记录</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">教师培训签到表</span><button class="kb-add">+ 加入</button></div>
+    </div>
+
+    <!-- 地产类 -->
+    <div class="kb-category">
+      <div class="kb-cat-header">
+        <span><span class="tag tag-orange" style="margin-right:4px">地产类</span>常见要求</span>
+        <span class="kb-cat-count">6 项</span>
+      </div>
+      <div class="kb-item"><span class="kb-item-name">进场施工申请</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">甲方指定分包协议</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">工人意外险保单</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">BIM 建模交付文件</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">物业对接清单</span><button class="kb-add">+ 加入</button></div>
+      <div class="kb-item"><span class="kb-item-name">保修金缴纳凭证</span><button class="kb-add">+ 加入</button></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========== 底部：新项目自动继承预览面板 ========== -->
+<div class="inherit-panel">
+  <div class="inherit-header" onclick="(function(el){var b=el.parentElement.querySelector('.inherit-body');var a=el.querySelector('.inherit-arrow');if(b.classList.contains('collapsed')){b.classList.remove('collapsed');a.textContent='▼';}else{b.classList.add('collapsed');a.textContent='▶';}})(this)">
+    <div class="inherit-title">
+      <span style="background:#52c41a;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600">自动继承</span>
+      新项目自动继承测试
+      <span style="font-size:12px;color:#999;font-weight:normal">— 预览该甲方新项目将自动带上的资料要求</span>
+    </div>
+    <span class="inherit-arrow">▼</span>
+  </div>
+  <div class="inherit-body">
+    <div class="inherit-desc">
+      💡 如果我为 <b>【深圳市教育局】</b> 创建新项目，系统将自动继承以下 <b>8 项</b> 必需资料要求（可选项需手动勾选）：
+    </div>
+    <div class="inherit-tags">
+      <span class="inherit-tag"><span class="num">1</span>特种设备使用登记证</span>
+      <span class="inherit-tag"><span class="num">2</span>安全检测报告（第三方）</span>
+      <span class="inherit-tag"><span class="num">3</span>工程款支付申请审批表</span>
+      <span class="inherit-tag"><span class="num">4</span>廉洁承诺书</span>
+      <span class="inherit-tag"><span class="num">5</span>消防验收意见书</span>
+      <span class="inherit-tag"><span class="num">6</span>设备生产厂家授权书</span>
+      <span class="inherit-tag"><span class="num">7</span>售后服务承诺函</span>
+      <span class="inherit-tag"><span class="num">8</span>体游设备厂家 ISO9001 证书</span>
+    </div>
+    <div style="padding-top:12px;border-top:1px dashed #f0f0f0;display:flex;justify-content:space-between;align-items:center">
+      <div style="font-size:12px;color:#999">
+        💬 可选项（4 项）：安装人员培训证书 / 施工组织设计方案 / 设备出厂合格证 / 第三方审计报告 — 由项目经理按需勾选
+      </div>
+      <button class="btn btn-primary">在新建项目时应用这些要求 →</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

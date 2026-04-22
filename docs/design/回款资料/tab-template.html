@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>甲方表单填写辅助 — 回款资料 Tab 2</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f5f5;margin:0;padding:16px 24px;color:#333}
+
+/* KPI 卡 */
+.kpi-row{display:flex;gap:12px;margin-bottom:12px}
+.kpi-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px 18px;flex:1}
+.kpi-num{font-size:24px;font-weight:700;color:#333}
+.kpi-label{font-size:12px;color:#999;margin-bottom:4px}
+.kpi-sub{font-size:11px;color:#8c8c8c;margin-top:2px}
+
+/* 通用按钮 */
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s}
+.btn:hover{border-color:#1890ff;color:#1890ff}
+.btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+.btn-primary:hover{background:#40a9ff}
+.btn-sm{padding:3px 8px;font-size:12px}
+.btn-link{background:none;border:none;color:#1890ff;cursor:pointer;font-size:12px;padding:0 4px}
+.btn-link:hover{text-decoration:underline}
+.btn-danger{color:#f5222d}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;border-radius:6px;font-size:13px}
+thead{background:#fafafa}
+th{padding:10px 12px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap;font-size:12.5px}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:top;font-size:12.5px}
+tr:hover{background:#fafafa}
+
+/* 标签 */
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap}
+.tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f}
+.tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+.tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+.tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+.tag-purple{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7}
+.tag-gray{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+.tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e}
+
+/* 布局：上半部分 双列 */
+.upper-layout{display:grid;grid-template-columns:360px 1fr;gap:12px;margin-bottom:12px}
+
+/* 左侧模板管理面板 */
+.panel{background:#fff;border:1px solid #e8e8e8;border-radius:6px}
+.panel-header{padding:12px 14px;border-bottom:1px solid #e8e8e8;display:flex;justify-content:space-between;align-items:center}
+.panel-title{font-size:14px;font-weight:600;color:#333}
+.panel-body{padding:12px 14px}
+
+/* 分类筛选 */
+.filter-chips{display:flex;flex-wrap:wrap;gap:6px;padding:10px 14px;border-bottom:1px solid #f0f0f0;background:#fafafa}
+.chip{padding:4px 10px;border-radius:12px;font-size:12px;background:#fff;border:1px solid #e8e8e8;color:#666;cursor:pointer;transition:.2s}
+.chip:hover{border-color:#1890ff;color:#1890ff}
+.chip.active{background:#1890ff;color:#fff;border-color:#1890ff}
+
+/* 模板卡片列表 */
+.template-list{max-height:560px;overflow-y:auto;padding:10px 12px}
+.template-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:10px 12px;margin-bottom:8px;cursor:pointer;transition:.15s}
+.template-card:hover{border-color:#1890ff;box-shadow:0 1px 4px rgba(24,144,255,.12)}
+.template-card.selected{border-color:#1890ff;background:#f0f7ff}
+.template-name{font-size:13px;font-weight:600;color:#333;margin-bottom:4px;display:flex;justify-content:space-between;align-items:center;gap:6px}
+.template-meta{font-size:11.5px;color:#8c8c8c;line-height:1.7}
+.template-meta .sep{color:#d9d9d9;margin:0 4px}
+.template-actions{margin-top:6px;padding-top:6px;border-top:1px dashed #f0f0f0;font-size:11.5px}
+
+/* 右侧 映射配置面板 */
+.mapping-table{width:100%;border-collapse:collapse;font-size:12.5px}
+.mapping-table th{background:#fafafa;padding:8px 10px;font-size:12px;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;text-align:left}
+.mapping-table td{padding:7px 10px;border-bottom:1px solid #f5f5f5;color:#333;vertical-align:middle}
+.mapping-table tr:hover td{background:#fafafa}
+.placeholder-code{font-family:'Courier New',monospace;background:#f5f5f5;padding:2px 6px;border-radius:3px;font-size:11.5px;color:#c41d7f;border:1px solid #eee}
+.mini-select{height:26px;border:1px solid #d9d9d9;border-radius:3px;padding:0 6px;font-size:12px;background:#fff;min-width:110px}
+.mini-input{height:26px;border:1px solid #d9d9d9;border-radius:3px;padding:0 6px;font-size:12px;width:100%;box-sizing:border-box}
+.preview-val{color:#666;font-size:12px;font-style:italic}
+.preview-val.empty{color:#bbb}
+
+.panel-footer{padding:10px 14px;border-top:1px solid #e8e8e8;background:#fafafa;display:flex;justify-content:space-between;align-items:center;border-radius:0 0 6px 6px}
+
+/* 下半部分 一键填充 */
+.fill-layout{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px}
+
+/* 步骤条 */
+.stepper{display:flex;align-items:center;padding:14px;background:#fafafa;border-bottom:1px solid #e8e8e8}
+.step{display:flex;align-items:center;gap:6px;font-size:12px;color:#999}
+.step-num{width:22px;height:22px;border-radius:50%;background:#fff;border:1px solid #d9d9d9;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:600}
+.step.active{color:#1890ff;font-weight:600}
+.step.active .step-num{background:#1890ff;color:#fff;border-color:#1890ff}
+.step.done{color:#52c41a}
+.step.done .step-num{background:#52c41a;color:#fff;border-color:#52c41a}
+.step-arrow{color:#d9d9d9;margin:0 10px;font-size:12px}
+
+/* 选项目卡 */
+.project-info-card{background:#f0f7ff;border:1px solid #91d5ff;border-radius:6px;padding:10px 12px;margin-top:10px;font-size:12.5px}
+.project-info-card .info-row{display:flex;justify-content:space-between;padding:2px 0}
+.project-info-card .k{color:#999}
+.project-info-card .v{color:#333;font-weight:500}
+
+/* 文档预览 */
+.doc-preview{background:#fff;border:1px solid #d9d9d9;border-radius:4px;padding:12px 14px;font-size:11px;line-height:1.7;color:#555;max-height:260px;overflow-y:auto;font-family:'SimSun','宋体',serif}
+.doc-preview h5{text-align:center;font-size:13px;font-weight:700;margin:0 0 10px;color:#333;font-family:-apple-system,sans-serif}
+.doc-preview .field-filled{background:#fffbe6;color:#d48806;padding:0 3px;border-bottom:1px dotted #faad14}
+.doc-preview .field-blank{background:#fff1f0;color:#f5222d;padding:0 3px;border-bottom:1px dotted #f5222d}
+.doc-preview p{margin:6px 0}
+
+/* 字段补齐面板 */
+.field-section{padding:10px 0;border-bottom:1px dashed #f0f0f0}
+.field-section:last-child{border-bottom:none}
+.field-section-title{font-size:12px;font-weight:600;color:#666;margin-bottom:8px;display:flex;align-items:center;gap:6px}
+.field-row{display:flex;align-items:center;gap:8px;padding:4px 0;font-size:12px}
+.field-label{width:100px;color:#666;flex-shrink:0}
+.field-value{flex:1;color:#333}
+.field-value.locked{color:#8c8c8c;background:#fafafa;padding:4px 8px;border-radius:3px;border:1px solid #f0f0f0;font-size:12px}
+.field-value input,.field-value textarea{width:100%;border:1px solid #d9d9d9;border-radius:3px;padding:4px 8px;font-size:12px;box-sizing:border-box;font-family:inherit}
+.field-value input:focus,.field-value textarea:focus{outline:none;border-color:#1890ff}
+
+/* 导出按钮组 */
+.export-bar{padding:12px 14px;border-top:1px solid #e8e8e8;background:#fafafa;display:flex;gap:8px;justify-content:flex-end;border-radius:0 0 6px 6px}
+
+/* 两列内嵌 */
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:12px 14px}
+
+/* 搜索项目下拉 */
+.search-select{position:relative}
+.search-select input{width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 28px 0 8px;font-size:13px;box-sizing:border-box}
+.search-select::after{content:'🔍';position:absolute;right:8px;top:50%;transform:translateY(-50%);font-size:12px;color:#999}
+
+/* 文件图标 */
+.file-icon{display:inline-block;width:14px;text-align:center;margin-right:4px}
+.file-word{color:#2b579a}
+.file-excel{color:#217346}
+.file-pdf{color:#d93025}
+
+/* 头部 */
+.page-subtitle{font-size:12px;color:#8c8c8c;margin:0 0 12px 0}
+
+/* 待映射高亮 */
+.row-unmapped{background:#fffbe6}
+.row-unmapped:hover td{background:#fff7cc !important}
+
+/* 覆盖率条 */
+.coverage-bar{height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;margin-top:4px}
+.coverage-fill{height:100%;background:#52c41a;border-radius:3px}
+</style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">甲方表单填写辅助</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">上传甲方 Word/Excel 模板配置占位符→一键用项目数据填充→替代手动填表</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务人员、财务、项目经理</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">模板库管理 / 字段映射配置 / 一键填充 / 多格式导出 / 生成历史</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传模板 / 配置占位符映射 / 选模板+项目一键生成 / 手动补充字段 / 导出 Word/Excel/PDF</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">占位符识别准确率&gt;95% / 项目数据拉取完整 / 填充后 Word 格式不变形</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">回款资料·详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- KPI 概览 -->
+<div class="kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-label">模板库总数</div>
+    <div class="kpi-num">20</div>
+    <div class="kpi-sub">本月新增 3</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">本月生成文档</div>
+    <div class="kpi-num">148</div>
+    <div class="kpi-sub">较上月 ↑23%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">节省填表时间</div>
+    <div class="kpi-num">86<span style="font-size:14px;color:#999;font-weight:400;"> 小时</span></div>
+    <div class="kpi-sub">本月累计</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">平均占位符识别率</div>
+    <div class="kpi-num" style="color:#52c41a;">96.8%</div>
+    <div class="kpi-sub">最近 30 天</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">待完善映射模板</div>
+    <div class="kpi-num" style="color:#fa8c16;">3</div>
+    <div class="kpi-sub">字段配置未完成</div>
+  </div>
+</div>
+
+<!-- 上半部分：模板管理 + 字段映射 -->
+<div class="upper-layout">
+
+  <!-- 左侧：模板库 -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">模板库</span>
+      <button class="btn btn-primary btn-sm">+ 上传模板</button>
+    </div>
+    <div class="filter-chips">
+      <span class="chip active">全部 (20)</span>
+      <span class="chip">回款申请 (8)</span>
+      <span class="chip">验收表单 (5)</span>
+      <span class="chip">进度报告 (4)</span>
+      <span class="chip">定制表格 (3)</span>
+    </div>
+    <div class="template-list">
+
+      <div class="template-card selected">
+        <div class="template-name">
+          <span><span class="file-icon file-word">📄</span>甲方验收单-通用版</span>
+          <span class="tag tag-blue">验收</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#52c41a;">15/15</b><span class="sep">|</span>使用 42 次<br>
+          最近使用：2026-04-18 14:22
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-name">
+          <span><span class="file-icon file-excel">📊</span>回款申请表-深圳湾</span>
+          <span class="tag tag-gold">回款</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#52c41a;">12/12</b><span class="sep">|</span>使用 28 次<br>
+          最近使用：2026-04-17 10:35
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-name">
+          <span><span class="file-icon file-word">📄</span>月度进度确认表</span>
+          <span class="tag tag-green">进度</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#fa8c16;">8/10</b><span class="sep">|</span>使用 19 次<br>
+          最近使用：2026-04-15 16:08
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-name">
+          <span><span class="file-icon file-excel">📊</span>预付款申请-央企版</span>
+          <span class="tag tag-gold">回款</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#52c41a;">14/14</b><span class="sep">|</span>使用 16 次<br>
+          最近使用：2026-04-12 09:45
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-name">
+          <span><span class="file-icon file-word">📄</span>竣工验收备案表</span>
+          <span class="tag tag-blue">验收</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#fa8c16;">10/13</b><span class="sep">|</span>使用 11 次<br>
+          最近使用：2026-04-09 11:20
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-name">
+          <span><span class="file-icon file-word">📄</span>质保金申请表-教育局</span>
+          <span class="tag tag-purple">定制</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#52c41a;">9/9</b><span class="sep">|</span>使用 7 次<br>
+          最近使用：2026-04-05 15:50
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+      <div class="template-card">
+        <div class="template-name">
+          <span><span class="file-icon file-excel">📊</span>阶段进度报告-医院</span>
+          <span class="tag tag-green">进度</span>
+        </div>
+        <div class="template-meta">
+          已配置字段 <b style="color:#fa8c16;">6/11</b><span class="sep">|</span>使用 4 次<br>
+          最近使用：2026-03-28 10:12
+        </div>
+        <div class="template-actions">
+          <button class="btn-link">编辑映射</button>
+          <button class="btn-link">复制</button>
+          <button class="btn-link btn-danger">删除</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 右侧：字段映射配置 -->
+  <div class="panel">
+    <div class="panel-header">
+      <span class="panel-title">字段映射配置 — 甲方验收单-通用版</span>
+      <div>
+        <span class="tag tag-blue" style="margin-right:8px;">Word · .docx</span>
+        <span style="font-size:12px;color:#8c8c8c;">识别到 15 个占位符</span>
+      </div>
+    </div>
+    <div style="padding:10px 14px;background:#fafafa;border-bottom:1px solid #e8e8e8;font-size:12px;color:#666;">
+      映射覆盖率 <b style="color:#52c41a;">80%</b> · 已映射 12 / 待映射 3
+      <div class="coverage-bar" style="max-width:300px;"><div class="coverage-fill" style="width:80%;"></div></div>
+    </div>
+
+    <div style="max-height:520px;overflow-y:auto;">
+    <table class="mapping-table">
+      <thead>
+        <tr>
+          <th style="width:160px;">模板占位符</th>
+          <th style="width:130px;">字段来源</th>
+          <th style="width:160px;">字段名</th>
+          <th>预览值</th>
+          <th style="width:80px;">状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="placeholder-code">{{company_name}}</span></td>
+          <td><select class="mini-select"><option>企业信息库</option><option>项目信息</option><option>合同信息</option><option>手动</option></select></td>
+          <td>公司全称</td>
+          <td class="preview-val">深圳万德智造科技有限公司</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{credit_code}}</span></td>
+          <td><select class="mini-select"><option>企业信息库</option><option>项目信息</option><option>合同信息</option><option>手动</option></select></td>
+          <td>统一社会信用代码</td>
+          <td class="preview-val">91440300MA5XXXXX5B</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{project_name}}</span></td>
+          <td><select class="mini-select"><option>项目信息</option><option>企业信息库</option><option>合同信息</option><option>手动</option></select></td>
+          <td>项目名称</td>
+          <td class="preview-val">深圳湾学校体游项目</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{contract_no}}</span></td>
+          <td><select class="mini-select"><option>合同信息</option><option>项目信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>合同编号</td>
+          <td class="preview-val">WD-2025-SZW-0238</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{contract_amount}}</span></td>
+          <td><select class="mini-select"><option>合同信息</option><option>项目信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>合同金额（含税）</td>
+          <td class="preview-val">¥ 3,286,500.00</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{contract_date}}</span></td>
+          <td><select class="mini-select"><option>合同信息</option><option>项目信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>合同签署日期</td>
+          <td class="preview-val">2025-08-15</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{party_a_name}}</span></td>
+          <td><select class="mini-select"><option>合同信息</option><option>项目信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>甲方单位</td>
+          <td class="preview-val">深圳市南山区教育局</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{party_a_contact}}</span></td>
+          <td><select class="mini-select"><option>项目信息</option><option>合同信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>甲方联系人</td>
+          <td class="preview-val">李建国 13800138000</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{project_manager}}</span></td>
+          <td><select class="mini-select"><option>项目信息</option><option>合同信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>项目经理</td>
+          <td class="preview-val">王志强</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{start_date}}</span></td>
+          <td><select class="mini-select"><option>项目信息</option><option>合同信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>项目开工日期</td>
+          <td class="preview-val">2025-09-01</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{completion_date}}</span></td>
+          <td><select class="mini-select"><option>项目信息</option><option>合同信息</option><option>企业信息库</option><option>手动</option></select></td>
+          <td>计划完工日期</td>
+          <td class="preview-val">2026-03-30</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr>
+          <td><span class="placeholder-code">{{bank_account}}</span></td>
+          <td><select class="mini-select"><option>企业信息库</option><option>合同信息</option><option>项目信息</option><option>手动</option></select></td>
+          <td>收款银行账号</td>
+          <td class="preview-val">6222 0202 0020 0020 022</td>
+          <td><span class="tag tag-green">✅ 已映射</span></td>
+        </tr>
+        <tr class="row-unmapped">
+          <td><span class="placeholder-code">{{acceptance_date}}</span></td>
+          <td><select class="mini-select"><option>手动</option><option>项目信息</option><option>合同信息</option><option>企业信息库</option></select></td>
+          <td><input class="mini-input" placeholder="待填写字段名…"></td>
+          <td class="preview-val empty">（生成时手动填写）</td>
+          <td><span class="tag tag-orange">⚠️ 待映射</span></td>
+        </tr>
+        <tr class="row-unmapped">
+          <td><span class="placeholder-code">{{inspector_name}}</span></td>
+          <td><select class="mini-select"><option>手动</option><option>项目信息</option><option>合同信息</option><option>企业信息库</option></select></td>
+          <td><input class="mini-input" placeholder="待填写字段名…"></td>
+          <td class="preview-val empty">（生成时手动填写）</td>
+          <td><span class="tag tag-orange">⚠️ 待映射</span></td>
+        </tr>
+        <tr class="row-unmapped">
+          <td><span class="placeholder-code">{{remark}}</span></td>
+          <td><select class="mini-select"><option>手动</option><option>项目信息</option><option>合同信息</option><option>企业信息库</option></select></td>
+          <td><input class="mini-input" placeholder="待填写字段名…"></td>
+          <td class="preview-val empty">（生成时手动填写）</td>
+          <td><span class="tag tag-orange">⚠️ 待映射</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+
+    <div class="panel-footer">
+      <span style="font-size:12px;color:#8c8c8c;">💡 提示：把常用字段映射到字段库，减少每次手动填写</span>
+      <div>
+        <button class="btn btn-sm">测试填充</button>
+        <button class="btn btn-sm btn-primary">保存映射</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 下半部分：一键填充 -->
+<div class="panel" style="margin-bottom:12px;">
+  <div class="panel-header">
+    <span class="panel-title">🚀 一键生成</span>
+    <span style="font-size:12px;color:#8c8c8c;">选模板 + 选项目 → 自动拉取数据 → 预览补齐 → 导出</span>
+  </div>
+
+  <!-- 步骤条 -->
+  <div class="stepper">
+    <div class="step done"><span class="step-num">1</span>选模板</div>
+    <span class="step-arrow">→</span>
+    <div class="step done"><span class="step-num">2</span>选项目</div>
+    <span class="step-arrow">→</span>
+    <div class="step active"><span class="step-num">3</span>预览</div>
+    <span class="step-arrow">→</span>
+    <div class="step"><span class="step-num">4</span>手动补齐</div>
+    <span class="step-arrow">→</span>
+    <div class="step"><span class="step-num">5</span>导出</div>
+  </div>
+
+  <!-- 选项目 + 项目信息 -->
+  <div class="two-col" style="border-bottom:1px solid #e8e8e8;background:#fafafa;">
+    <div>
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600;">① 当前模板</div>
+      <div style="background:#fff;border:1px solid #d9d9d9;border-radius:4px;padding:8px 12px;font-size:13px;">
+        <span class="file-icon file-word">📄</span>甲方验收单-通用版
+        <span class="tag tag-blue" style="margin-left:6px;">验收</span>
+        <span style="color:#8c8c8c;font-size:12px;margin-left:8px;">15 个字段 · 已映射 12</span>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600;">② 选择项目</div>
+      <div class="search-select">
+        <input value="深圳湾学校体游项目" placeholder="搜索项目名称 / 合同号…">
+      </div>
+      <div class="project-info-card">
+        <div class="info-row"><span class="k">甲方单位</span><span class="v">深圳市南山区教育局</span></div>
+        <div class="info-row"><span class="k">合同号</span><span class="v">WD-2025-SZW-0238</span></div>
+        <div class="info-row"><span class="k">合同金额</span><span class="v">¥ 3,286,500.00</span></div>
+        <div class="info-row"><span class="k">项目经理</span><span class="v">王志强</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 预览 + 字段补齐 -->
+  <div class="two-col">
+    <!-- 左侧：文档预览 -->
+    <div>
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600;display:flex;justify-content:space-between;">
+        <span>③ 文档预览（甲方验收单-通用版）</span>
+        <button class="btn-link">🔍 放大查看</button>
+      </div>
+      <div class="doc-preview">
+        <h5>项目验收确认单</h5>
+        <p>甲方单位：<span class="field-filled">深圳市南山区教育局</span></p>
+        <p>乙方单位：<span class="field-filled">深圳万德智造科技有限公司</span>（统一社会信用代码：<span class="field-filled">91440300MA5XXXXX5B</span>）</p>
+        <p>项目名称：<span class="field-filled">深圳湾学校体游项目</span></p>
+        <p>合同编号：<span class="field-filled">WD-2025-SZW-0238</span>　合同金额：<span class="field-filled">¥ 3,286,500.00</span></p>
+        <p>合同签订日期：<span class="field-filled">2025-08-15</span>　计划完工：<span class="field-filled">2026-03-30</span></p>
+        <p>项目经理：<span class="field-filled">王志强</span>　甲方联系人：<span class="field-filled">李建国 13800138000</span></p>
+        <p style="margin-top:10px;">现经甲乙双方验收，项目达到合同约定技术要求，同意通过验收。</p>
+        <p>验收日期：<span class="field-blank">【待填写】</span></p>
+        <p>现场验收人（甲方）：<span class="field-blank">【待填写】</span></p>
+        <p>备注：<span class="field-blank">【待填写】</span></p>
+        <p style="margin-top:16px;text-align:right;">甲方（盖章）：_____________</p>
+        <p style="text-align:right;">乙方（盖章）：_____________</p>
+      </div>
+      <div style="font-size:11px;color:#8c8c8c;margin-top:6px;">
+        <span style="background:#fffbe6;padding:1px 6px;border-radius:2px;color:#d48806;">● 已自动填充</span>
+        <span style="background:#fff1f0;padding:1px 6px;border-radius:2px;color:#f5222d;margin-left:6px;">● 待手动填写</span>
+      </div>
+    </div>
+
+    <!-- 右侧：字段补齐 -->
+    <div>
+      <div style="font-size:12px;color:#666;margin-bottom:6px;font-weight:600;">④ 字段补齐</div>
+
+      <div class="field-section">
+        <div class="field-section-title">
+          <span class="tag tag-green">✅ 自动填充 12 项</span>
+          <span style="color:#8c8c8c;font-weight:400;font-size:11px;">（灰色不可改，来自数据库）</span>
+        </div>
+        <div class="field-row"><div class="field-label">公司名称</div><div class="field-value locked">深圳万德智造科技有限公司</div></div>
+        <div class="field-row"><div class="field-label">信用代码</div><div class="field-value locked">91440300MA5XXXXX5B</div></div>
+        <div class="field-row"><div class="field-label">项目名称</div><div class="field-value locked">深圳湾学校体游项目</div></div>
+        <div class="field-row"><div class="field-label">合同号</div><div class="field-value locked">WD-2025-SZW-0238</div></div>
+        <div class="field-row"><div class="field-label">合同金额</div><div class="field-value locked">¥ 3,286,500.00</div></div>
+        <div class="field-row"><div class="field-label">合同签署日</div><div class="field-value locked">2025-08-15</div></div>
+        <div class="field-row"><div class="field-label">甲方单位</div><div class="field-value locked">深圳市南山区教育局</div></div>
+        <div class="field-row"><div class="field-label">甲方联系人</div><div class="field-value locked">李建国 13800138000</div></div>
+        <div class="field-row"><div class="field-label">项目经理</div><div class="field-value locked">王志强</div></div>
+        <div class="field-row"><div class="field-label">开工日期</div><div class="field-value locked">2025-09-01</div></div>
+        <div class="field-row"><div class="field-label">计划完工</div><div class="field-value locked">2026-03-30</div></div>
+        <div class="field-row"><div class="field-label">收款账号</div><div class="field-value locked">6222 0202 0020 0020 022</div></div>
+      </div>
+
+      <div class="field-section">
+        <div class="field-section-title">
+          <span class="tag tag-orange">✏️ 手动补充 3 项</span>
+          <span style="color:#f5222d;font-weight:400;font-size:11px;">（必填）</span>
+        </div>
+        <div class="field-row"><div class="field-label">验收日期 <span style="color:#f5222d;">*</span></div><div class="field-value"><input type="date" value="2026-04-20"></div></div>
+        <div class="field-row"><div class="field-label">现场验收人 <span style="color:#f5222d;">*</span></div><div class="field-value"><input type="text" placeholder="请输入甲方现场验收人员姓名"></div></div>
+        <div class="field-row" style="align-items:flex-start;"><div class="field-label" style="padding-top:6px;">备注</div><div class="field-value"><textarea rows="2" placeholder="填写验收过程中的特殊说明…"></textarea></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 导出 -->
+  <div class="export-bar">
+    <button class="btn btn-sm">保存为草稿</button>
+    <button class="btn btn-sm">重新拉取数据</button>
+    <button class="btn btn-sm btn-primary"><span class="file-icon file-word">📄</span>生成 Word</button>
+    <button class="btn btn-sm btn-primary"><span class="file-icon file-excel">📊</span>生成 Excel</button>
+    <button class="btn btn-sm btn-primary"><span class="file-icon file-pdf">📕</span>生成 PDF</button>
+  </div>
+</div>
+
+<!-- 底部：最近生成历史 -->
+<div class="panel">
+  <div class="panel-header">
+    <span class="panel-title">最近生成历史</span>
+    <div>
+      <button class="btn btn-sm">筛选</button>
+      <button class="btn btn-sm">导出清单</button>
+    </div>
+  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:280px;">文件名</th>
+        <th>使用模板</th>
+        <th>项目</th>
+        <th style="width:80px;">生成人</th>
+        <th style="width:140px;">生成时间</th>
+        <th style="width:80px;">格式</th>
+        <th style="width:180px;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="file-icon file-word">📄</span>项目验收确认单-深圳湾学校-20260420.docx</td>
+        <td>甲方验收单-通用版</td>
+        <td>深圳湾学校体游项目</td>
+        <td>王志强</td>
+        <td>2026-04-20 15:42</td>
+        <td><span class="tag tag-blue">Word</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="file-icon file-excel">📊</span>回款申请表-龙华智慧楼宇-20260420.xlsx</td>
+        <td>回款申请表-深圳湾</td>
+        <td>龙华智慧楼宇改造</td>
+        <td>李娜</td>
+        <td>2026-04-20 11:18</td>
+        <td><span class="tag tag-green">Excel</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="file-icon file-word">📄</span>月度进度确认表-福田医院-202604.docx</td>
+        <td>月度进度确认表</td>
+        <td>福田人民医院智慧医疗</td>
+        <td>陈浩</td>
+        <td>2026-04-19 16:05</td>
+        <td><span class="tag tag-blue">Word</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="file-icon file-pdf">📕</span>预付款申请-宝安体育馆-20260418.pdf</td>
+        <td>预付款申请-央企版</td>
+        <td>宝安体育馆智慧场馆</td>
+        <td>王志强</td>
+        <td>2026-04-18 14:22</td>
+        <td><span class="tag tag-red">PDF</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="file-icon file-word">📄</span>竣工验收备案表-南山小学-20260417.docx</td>
+        <td>竣工验收备案表</td>
+        <td>南山实验小学扩建项目</td>
+        <td>刘敏</td>
+        <td>2026-04-17 10:35</td>
+        <td><span class="tag tag-blue">Word</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="file-icon file-word">📄</span>质保金申请表-罗湖教育局-20260415.docx</td>
+        <td>质保金申请表-教育局</td>
+        <td>罗湖外语学校信息化</td>
+        <td>李娜</td>
+        <td>2026-04-15 16:08</td>
+        <td><span class="tag tag-blue">Word</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="file-icon file-excel">📊</span>阶段进度报告-市三医院-202604.xlsx</td>
+        <td>阶段进度报告-医院</td>
+        <td>市第三人民医院扩建</td>
+        <td>陈浩</td>
+        <td>2026-04-12 09:45</td>
+        <td><span class="tag tag-green">Excel</span></td>
+        <td>
+          <button class="btn-link">下载</button>
+          <button class="btn-link">重新生成</button>
+          <button class="btn-link">预览</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#fafafa;border-top:1px solid #e8e8e8;font-size:12px;color:#666;border-radius:0 0 6px 6px;">
+    <span>共 148 条记录</span>
+    <div>
+      <button class="btn btn-sm">‹ 上一页</button>
+      <button class="btn btn-sm btn-primary">1</button>
+      <button class="btn btn-sm">2</button>
+      <button class="btn btn-sm">3</button>
+      <button class="btn btn-sm">…</button>
+      <button class="btn btn-sm">21</button>
+      <button class="btn btn-sm">下一页 ›</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -127,7 +127,8 @@
 | 04-22 | kimi4 | ~~#4009~~ | project | **max** | ~~Done~~ | 记录中心三视角分组Tab — PR #4098 merged |
 | 04-22 | kimi4 | #2851 | cockpit | **max** | In Progress | 验收队列前端 |
 | 04-22 | kimi2 | #4012 | project | **max** | In Progress | 老板周报AI建议Section |
-| 04-22 | kimi1 | #2849 | cockpit | **max** | In Progress | Agent效率看板前端 |
+| 04-22 | kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
+| 04-22 | kimi1 | #2925 | backend | **max** | In Progress | 字段级数据完整度计算引擎 |
 
 ---
 

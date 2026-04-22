@@ -105,7 +105,15 @@
 | 04-22 | kimi1 | #3168 | approval | **max** | In Progress | 动态表单渲染器前端 |
 | 04-22 | kimi5 | #3151 | approval | **max** | In Progress | 新手引导+流程帮助中心 |
 | 04-22 | kimi2 | ~~#3149~~ | approval | **max** | ~~Done~~ | 审批进度追踪器组件 — PR #4077 merged |
-| 04-22 | kimi2 | #3174 | approval | **max** | In Progress | 表单模板导入导出+配置向导 |
+| 04-22 | kimi2 | ~~#3174~~ | approval | **max** | ~~Done~~ | 表单模板导入导出+配置向导 — PR #4080 merged |
+| 04-22 | kimi4 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — PR #4079 merged |
+| 04-22 | kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR #4078 merged |
+| 04-22 | kimi2 | ~~#4024~~ | plm | **max** | ~~Done~~ | PLM产品技术中心 — PR #4083 merged |
+| 04-22 | kimi1 | #4023 | approval | **max** | In Progress | 统一审批工作台 — PR #4082 submitted |
+| 04-22 | kimi5 | #3151 | approval | **max** | In Progress | 新手引导+流程帮助中心 — PR #4081 submitted |
+| 04-22 | kimi3 | #3155 | approval | **max** | In Progress | 流程简化配置页 — PR #4084 submitted |
+| 04-22 | kimi4 | #4041 | cockpit | **max** | In Progress | 耀总驾驶舱 |
+| 04-22 | kimi2 | #3189 | finance | **max** | In Progress | 甲方表单填写辅助 |
 
 ---
 

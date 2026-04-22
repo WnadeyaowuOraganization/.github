@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>多源意图信号流</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .signal-row { display: grid; grid-template-columns: 80px 40px 1fr 80px 100px; gap: 12px; align-items: center; padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; }
+    .signal-row:hover { background: #fafafa; }
+    .src-badge { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .src-web { background: #e6f7ff; color: #1890ff; }
+    .src-mail { background: #fff7e6; color: #fa8c16; }
+    .src-linkedin { background: #e6f4ff; color: #0077b5; }
+    .src-wework { background: #f6ffed; color: #52c41a; }
+    .src-expo { background: #fff0f6; color: #eb2f96; }
+    .src-download { background: #f9f0ff; color: #722ed1; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab2 · 多源意图信号流</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">汇聚官网/邮件/LinkedIn/企微/展会/内容下载6类渠道的客户行为信号，按时间线展示，辅助识别高意向时刻</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务人员（追踪客户行为），市场运营（评估渠道效果）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">6源信号采集 / 时间线展示 / LinkedIn富化 / 评分加成计算 / 多维过滤</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">按来源/评分/时间窗过滤 / 点击信号查看上下文 / 一键创建跟进任务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">6来源均有数据接入 / 信号按时间倒序 / 评分加成规则可配置 / LinkedIn富化成功率≥70%</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase4 客户雷达 · 详细设计.md §2.2</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [KPI 卡片] -->
+<div class="grid grid-cols-6 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="text-xs text-gray-500 mb-1">🌐 官网访问</div>
+    <div class="text-xl font-bold text-gray-800">1,284</div>
+    <div class="text-xs text-green-600">↑ 12% vs 昨日</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="text-xs text-gray-500 mb-1">📧 邮件互动</div>
+    <div class="text-xl font-bold text-gray-800">342</div>
+    <div class="text-xs text-green-600">↑ 8%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="text-xs text-gray-500 mb-1">💼 LinkedIn</div>
+    <div class="text-xl font-bold text-gray-800">98</div>
+    <div class="text-xs text-gray-400">Issue #2814</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="text-xs text-gray-500 mb-1">💬 企微扫码</div>
+    <div class="text-xl font-bold text-gray-800">56</div>
+    <div class="text-xs text-red-600">↓ 3%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="text-xs text-gray-500 mb-1">🎪 展会扫描</div>
+    <div class="text-xl font-bold text-gray-800">124</div>
+    <div class="text-xs text-green-600">深圳文旅展</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="text-xs text-gray-500 mb-1">📥 内容下载</div>
+    <div class="text-xl font-bold text-gray-800">78</div>
+    <div class="text-xs text-gray-400">白皮书/案例</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-4 gap-4">
+  <!-- [左侧·信号时间线 span-3] -->
+  <div class="col-span-3 bg-white border border-gray-300 rounded">
+    <div class="flex items-center justify-between p-4 border-b border-gray-200">
+      <h2 class="text-base font-bold text-gray-800">📡 实时意图信号流 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2708 多源采集管线 · 最近50条</span></h2>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">自动刷新</span>
+        <span class="w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+      </div>
+    </div>
+
+    <!-- 信号行表头 -->
+    <div class="signal-row bg-gray-50 text-xs text-gray-600 font-medium" style="padding:8px 12px;">
+      <div>时间</div><div>来源</div><div>客户·行为</div><div class="text-center">评分+</div><div class="text-center">操作</div>
+    </div>
+
+    <!-- 信号条目 -->
+    <div class="signal-row"><div class="text-xs text-gray-500">2分钟前</div><div class="src-badge src-web">🌐</div><div><span class="font-medium">北京欢乐谷二期</span> · 下载《大型过山车技术白皮书》</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+15</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">5分钟前</div><div class="src-badge src-linkedin">💼</div><div><span class="font-medium">上海迪士尼采购部 · 张总监</span> · 查看万德LinkedIn主页</div><div class="text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold text-xs">+10</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">8分钟前</div><div class="src-badge src-mail">📧</div><div><span class="font-medium">成都大运会主办方</span> · 回复报价邮件，询问交付周期</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+20</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">12分钟前</div><div class="src-badge src-wework">💬</div><div><span class="font-medium">郑州方特 · 李经理</span> · 扫码添加商务周八企微</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+18</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">15分钟前</div><div class="src-badge src-web">🌐</div><div><span class="font-medium">深圳前海管理局</span> · 浏览产品中心/水上乐园设备页（停留6分钟）</div><div class="text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold text-xs">+12</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">22分钟前</div><div class="src-badge src-download">📥</div><div><span class="font-medium">重庆万达文旅</span> · 下载《2025文旅设备投资蓝皮书》</div><div class="text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold text-xs">+10</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">30分钟前</div><div class="src-badge src-expo">🎪</div><div><span class="font-medium">乌鲁木齐冰雪集团 · 王主任</span> · 深圳文旅展扫码留资</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+15</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">45分钟前</div><div class="src-badge src-linkedin">💼</div><div><span class="font-medium">金茂集团文旅事业部</span> · 关注万德LinkedIn公司主页（富化：发现Key Person陈总监）</div><div class="text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold text-xs">+12</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">1小时前</div><div class="src-badge src-mail">📧</div><div><span class="font-medium">北京欢乐谷二期</span> · 打开《产品通讯 #45》邮件，点击3个链接</div><div class="text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-bold text-xs">+8</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">1小时前</div><div class="src-badge src-web">🌐</div><div><span class="font-medium">【匿名线索】</span> · IP 219.143.x.x · 北京 · 浏览解决方案页8分钟</div><div class="text-center"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold text-xs">+5</span></div><div class="text-center text-xs text-purple-600">暗漏斗</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">1.5小时前</div><div class="src-badge src-download">📥</div><div><span class="font-medium">长沙华谊兄弟文旅城</span> · 下载《主题乐园项目白皮书》</div><div class="text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold text-xs">+10</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">2小时前</div><div class="src-badge src-web">🌐</div><div><span class="font-medium">上海迪士尼三期扩建</span> · 访问客户案例/华侨城页面</div><div class="text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-bold text-xs">+8</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">2小时前</div><div class="src-badge src-linkedin">💼</div><div><span class="font-medium">同济建筑设计院 · 刘总</span> · 添加万德销售总监为LinkedIn联系人</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+15</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">3小时前</div><div class="src-badge src-expo">🎪</div><div><span class="font-medium">深圳前海管理局 · 赵处长</span> · 深圳文旅展名片交换</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+15</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">3小时前</div><div class="src-badge src-mail">📧</div><div><span class="font-medium">西安丝路文旅小镇</span> · 退订产品通讯邮件</div><div class="text-center"><span class="bg-gray-100 text-gray-500 px-2 py-0.5 rounded font-bold text-xs">-5</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">4小时前</div><div class="src-badge src-web">🌐</div><div><span class="font-medium">【匿名线索】</span> · Cookie: abc123 · 深圳 · 连续3天访问官网</div><div class="text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded font-bold text-xs">+8</span></div><div class="text-center text-xs text-purple-600">暗漏斗</div></div>
+    <div class="signal-row"><div class="text-xs text-gray-500">5小时前</div><div class="src-badge src-wework">💬</div><div><span class="font-medium">重庆万达文旅 · 钱经理</span> · 企微咨询"摩天轮定制方案"</div><div class="text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold text-xs">+20</span></div><div class="text-center text-xs text-blue-600">跟进</div></div>
+
+    <div class="p-3 text-center text-xs text-gray-400 border-t border-gray-100">⬇ 下拉加载更多（共显示 17 / 50 条）</div>
+  </div>
+
+  <!-- [右侧·过滤面板] -->
+  <div class="col-span-1 space-y-4">
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h3 class="text-sm font-bold text-gray-700 mb-3">🔍 过滤条件</h3>
+
+      <div class="mb-4">
+        <div class="text-xs text-gray-600 font-medium mb-2">信号类型</div>
+        <div class="space-y-1.5 text-xs">
+          <label class="flex items-center gap-2"><input type="checkbox" checked><span>🌐 官网访问 (1284)</span></label>
+          <label class="flex items-center gap-2"><input type="checkbox" checked><span>📧 邮件互动 (342)</span></label>
+          <label class="flex items-center gap-2"><input type="checkbox" checked><span>💼 LinkedIn (98)</span></label>
+          <label class="flex items-center gap-2"><input type="checkbox" checked><span>💬 企微扫码 (56)</span></label>
+          <label class="flex items-center gap-2"><input type="checkbox" checked><span>🎪 展会扫描 (124)</span></label>
+          <label class="flex items-center gap-2"><input type="checkbox" checked><span>📥 内容下载 (78)</span></label>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="text-xs text-gray-600 font-medium mb-2">评分区间</div>
+        <div class="space-y-1.5 text-xs">
+          <label class="flex items-center gap-2"><input type="radio" name="score" checked><span>全部</span></label>
+          <label class="flex items-center gap-2"><input type="radio" name="score"><span>高分 (+15 以上)</span></label>
+          <label class="flex items-center gap-2"><input type="radio" name="score"><span>中分 (+8 ~ +15)</span></label>
+          <label class="flex items-center gap-2"><input type="radio" name="score"><span>低分 (< +8)</span></label>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="text-xs text-gray-600 font-medium mb-2">时间窗口</div>
+        <select class="w-full text-xs border border-gray-300 rounded px-2 py-1">
+          <option>最近1小时</option><option>最近24小时</option><option selected>最近7天</option><option>最近30天</option><option>自定义</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <div class="text-xs text-gray-600 font-medium mb-2">客户标签</div>
+        <div class="flex flex-wrap gap-1">
+          <span class="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded">ICP高分</span>
+          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">匿名</span>
+          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">已识别</span>
+          <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">已分配</span>
+        </div>
+      </div>
+
+      <button class="w-full text-xs bg-blue-500 text-white py-2 rounded">应用过滤</button>
+      <button class="w-full text-xs text-gray-500 mt-2">重置</button>
+    </div>
+
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h3 class="text-sm font-bold text-gray-700 mb-2">💡 评分规则</h3>
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>📧 邮件回复 = +20</div>
+        <div>💬 企微咨询 = +20</div>
+        <div>💼 LinkedIn联系 = +15</div>
+        <div>🌐 下载白皮书 = +15</div>
+        <div>🎪 展会留资 = +15</div>
+        <div>🌐 访问产品页 = +10</div>
+        <div>📥 内容下载 = +10</div>
+        <div>📧 邮件打开 = +8</div>
+        <div>📧 退订邮件 = -5</div>
+        <div class="text-blue-600 mt-2 cursor-pointer">配置规则 →</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

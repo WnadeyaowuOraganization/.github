@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台·Phase5 竞品情报 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; align-items: center; padding-top: 16px; gap: 8px; }
+    .sidebar-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #999; cursor: pointer; }
+    .sidebar-icon:hover { background: #f3f4f6; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; transition: all 0.2s; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .breadcrumb { padding: 12px 24px; font-size: 13px; color: #999; background: #fff; }
+    .breadcrumb strong { color: #333; }
+  </style>
+</head>
+<body class="bg-gray-50">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台·Phase5 竞品情报</span>
+      <span style="background:#52c41a;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">🟢 后端 80% 已实现</span>
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">前端需按本原型重构</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">对标 Contify + Crayon 打造游乐行业竞品全息监控中台，覆盖 50 家全球竞品的动态战斗卡、源监控、产品线变化、财务经营、AI 洞察六大场景，服务销售作战与战略决策</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角）, 销售总监, 商务经理, 产品经理, 战略分析师</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">竞品全景金字塔 / 动态战斗卡+KIQ+Deal Tips / 大规模源监控+G7e采集 / 产品对比矩阵+CAD库 / 财务+中标+投标人名单+关键词池 / AI 自动评分+信号链+空白区域发现</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">Tab 切换 / 竞品选择联动战斗卡 / KIQ 提问 / 监控源健康度查看 / 空白区域钻取</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">6 个 Tab 全部可切换 / 覆盖 27 个 Issue 功能点 / 代码现状 badge 清晰显示 / 3 秒内渲染完成 / 面包屑正确</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase5 竞品情报 详细设计.md</a>
+      &nbsp;|&nbsp; 关联 Issue: Phase 系列 #2716-#2725 + 散落 #2447/#2449/#2451/#2454/#2448/#2434/#2438-2442/#2319/#2430/#2432/#1870/#2044/#2493/#2494/#2495/#2371/#2496
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] -->
+  <aside class="sidebar flex-shrink-0">
+    <div class="sidebar-icon" title="首页">🏠</div>
+    <div class="sidebar-icon" title="CRM商务中心">💼</div>
+    <div class="sidebar-icon" title="项目中心">📁</div>
+    <div class="sidebar-icon active" title="商战情报中台">🎯</div>
+    <div class="sidebar-icon" title="审批中心">✅</div>
+    <div class="sidebar-icon" title="设置">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col">
+    <!-- [面包屑] -->
+    <div class="breadcrumb">
+      首页 &gt; 商战情报中台 &gt; <strong>Phase5 · 竞品情报</strong>
+      <span style="float:right;color:#999;">
+        对标 <span style="color:#1890ff">Contify</span> + <span style="color:#1890ff">Crayon</span> · 覆盖 50 家全球竞品
+      </span>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-overview.html"></iframe>
+    </div>
+  </main>
+</div>
+
+<!-- [原型说明] -->
+<div class="p-6 bg-white border-t border-gray-300 mt-4">
+  <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 — 6 Tab 架构 / 覆盖 27 个 Issue</h3>
+  <table class="w-full text-sm text-left border-collapse">
+    <thead><tr class="bg-gray-100">
+      <th class="p-2 border border-gray-300 w-24">Tab</th>
+      <th class="p-2 border border-gray-300 w-44">文件名</th>
+      <th class="p-2 border border-gray-300">功能描述</th>
+      <th class="p-2 border border-gray-300 w-72">覆盖 Issue</th>
+      <th class="p-2 border border-gray-300 w-28">代码现状</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="p-2 border border-gray-300">全景概览</td><td class="p-2 border border-gray-300">tab-overview.html</td><td class="p-2 border border-gray-300">50 家竞品 T0/T1/T2/T3 金字塔分级 + 知识图谱统计 + 近 30 天动态时间线</td><td class="p-2 border border-gray-300 text-xs">#2716 知识图谱 / #2432 / #1870 / #2319 / #2493</td><td class="p-2 border border-gray-300"><span class="text-green-600">🟢 部分复用</span></td></tr>
+      <tr><td class="p-2 border border-gray-300">战斗卡+KIQ</td><td class="p-2 border border-gray-300">tab-battlecard.html</td><td class="p-2 border border-gray-300">动态战斗卡引擎（优势/劣势/应对话术/定价/近期项目）+ KIQ 自动应答 + Deal Tips</td><td class="p-2 border border-gray-300 text-xs">#2717 事实卡 / #2718 战斗卡 / #2723 KIQ / #2725 Deal Tips / #2447 / #2449</td><td class="p-2 border border-gray-300"><span class="text-yellow-600">🟡 需重构</span></td></tr>
+      <tr><td class="p-2 border border-gray-300">源监控</td><td class="p-2 border border-gray-300">tab-monitor.html</td><td class="p-2 border border-gray-300">监控源清单（官网/LinkedIn/新闻/行业媒体/招投标/展会）+ G7e Browser Agent + vLLM 管线健康度 + 动态条数趋势</td><td class="p-2 border border-gray-300 text-xs">#2719 源监控 / #2494 / #2495 / #2438 / #2439</td><td class="p-2 border border-gray-300"><span class="text-green-600">🟢 后端已建</span></td></tr>
+      <tr><td class="p-2 border border-gray-300">产品矩阵+CAD</td><td class="p-2 border border-gray-300">tab-products.html</td><td class="p-2 border border-gray-300">50 款产品对比矩阵（材质/尺寸/承重/认证/价格）+ 产品线变化检测（新增/停产/改款）+ CAD 资源库</td><td class="p-2 border border-gray-300 text-xs">#2722 产品线变化 / #2430 / #2434 / #2440 / #2441 / #2496</td><td class="p-2 border border-gray-300"><span class="text-yellow-600">🟡 需新建</span></td></tr>
+      <tr><td class="p-2 border border-gray-300">财务+中标+关键词</td><td class="p-2 border border-gray-300">tab-financial.html</td><td class="p-2 border border-gray-300">竞品财务（营收/员工/融资）+ 中标记录 Top20 + 投标人名单提取 + 关键词池管理</td><td class="p-2 border border-gray-300 text-xs">#2721 财务追踪 / #2448 / #2451 / #2454 / #2442 / #2044</td><td class="p-2 border border-gray-300"><span class="text-green-600">🟢 表已建</span></td></tr>
+      <tr><td class="p-2 border border-gray-300">AI 洞察</td><td class="p-2 border border-gray-300">tab-insights.html</td><td class="p-2 border border-gray-300">T0/T1/T2 自动分级 + 信号链串联 + 区域热力对比 + 空白区域+Lookalike + 合同到期预测</td><td class="p-2 border border-gray-300 text-xs">#2720 AI评分 / #2724 对比仪表盘 / #2371 / #2434</td><td class="p-2 border border-gray-300"><span class="text-red-600">🔴 需新建</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mt-3 text-xs text-gray-500">
+    后端代码现状：<span class="text-green-600 font-semibold">competitor/ 包完整（8 Service + 7 表）</span> ·
+    pipeline/competitors 采集管线已接入 ·
+    前端 resource/competitor/{analysis, bid-record} 已实现基础版本，本原型承担 UI 升级与新模块（KIQ、Deal Tips、产品矩阵、AI 洞察）补齐
+  </div>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'overview',   label: '① 竞品全景',    src: 'tab-overview.html' },
+    { key: 'battlecard', label: '② 战斗卡 + KIQ', src: 'tab-battlecard.html' },
+    { key: 'monitor',    label: '③ 源监控',       src: 'tab-monitor.html' },
+    { key: 'products',   label: '④ 产品矩阵 + CAD', src: 'tab-products.html' },
+    { key: 'financial',  label: '⑤ 财务 + 中标 + 关键词', src: 'tab-financial.html' },
+    { key: 'insights',   label: '⑥ AI 洞察',      src: 'tab-insights.html' }
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = h + 'px';
+    } catch(e) {}
+  });
+  renderTabs();
+</script>
+</body>
+</html>

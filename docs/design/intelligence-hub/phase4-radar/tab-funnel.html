@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>购买阶段预测+暗漏斗</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    /* 漏斗阶段梯形 */
+    .funnel-stage { padding: 14px 20px; margin: 0 auto; color: #fff; font-weight: 600; text-align: center; position: relative; border-radius: 4px; }
+    .stage-1 { background: #e6f7ff; color: #0958d9; width: 95%; }
+    .stage-2 { background: #bae0ff; color: #003eb3; width: 80%; }
+    .stage-3 { background: #69b1ff; width: 65%; }
+    .stage-4 { background: #1677ff; width: 50%; }
+    .stage-5 { background: #003eb3; width: 35%; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · 购买阶段预测+暗漏斗</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">基于多源信号预测客户所处购买阶段（认知→决策），并识别匿名访客对应的真实客户（暗漏斗），降低线索流失</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务总监（漏斗宏观分析），商务人员（确认暗漏斗匹配）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5阶段漏斗图 / 暗漏斗识别（IP/Cookie→客户匹配）/ 阶段迁移预测 / 模型准确率看板</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击阶段下钻客户列表 / 人工确认匿名→客户映射 / 查看模型解释</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">漏斗阶段总客户数=248 / 暗漏斗匹配置信度≥0.7才展示 / 模型准确率看板实时刷新</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase4 客户雷达 · 详细设计.md §2.3</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部KPI] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">在库客户总数</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">248</div>
+    <div class="text-xs text-gray-400 mt-1">包含已识别+匿名候选</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">暗漏斗匿名信号</div>
+    <div class="text-2xl font-bold text-purple-600 mt-1">86</div>
+    <div class="text-xs text-gray-400 mt-1">待识别 / 匹配中 / 已确认</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">模型 v2.3 准确率</div>
+    <div class="text-2xl font-bold text-blue-600 mt-1">68%</div>
+    <div class="text-xs text-green-600 mt-1">↑ 4% vs v2.2（64%）</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">本月晋升到"决策"</div>
+    <div class="text-2xl font-bold text-red-600 mt-1">12</div>
+    <div class="text-xs text-gray-400 mt-1">预计转化率 42%</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-3 gap-4">
+  <!-- [左·购买阶段漏斗图 span-2] -->
+  <div class="col-span-2 bg-white border border-gray-300 rounded p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h2 class="text-base font-bold text-gray-800">🎯 购买阶段漏斗 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2709 购买阶段预测</span></h2>
+      <div class="flex items-center gap-2 text-xs">
+        <select class="border border-gray-300 rounded px-2 py-1">
+          <option>全部行业</option><option>主题乐园</option><option>冰雪度假</option><option>水上乐园</option>
+        </select>
+        <select class="border border-gray-300 rounded px-2 py-1">
+          <option>最近30天</option><option>最近90天</option><option>本年度</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="space-y-2">
+      <div class="funnel-stage stage-1">
+        <div class="flex items-center justify-between">
+          <span>① 认知 Awareness</span>
+          <span class="text-xs">86 客户 · 转化率 60% →</span>
+        </div>
+      </div>
+      <div class="text-center text-xs text-gray-400">↓ 52 转入</div>
+      <div class="funnel-stage stage-2">
+        <div class="flex items-center justify-between">
+          <span>② 兴趣 Interest</span>
+          <span class="text-xs">52 客户 · 转化率 54% →</span>
+        </div>
+      </div>
+      <div class="text-center text-xs text-gray-400">↓ 28 转入</div>
+      <div class="funnel-stage stage-3">
+        <div class="flex items-center justify-between">
+          <span>③ 考虑 Consideration</span>
+          <span class="text-xs">28 客户 · 转化率 46% →</span>
+        </div>
+      </div>
+      <div class="text-center text-xs text-gray-400">↓ 13 转入</div>
+      <div class="funnel-stage stage-4">
+        <div class="flex items-center justify-between">
+          <span>④ 评估 Evaluation</span>
+          <span class="text-xs">13 客户 · 转化率 92% →</span>
+        </div>
+      </div>
+      <div class="text-center text-xs text-gray-400">↓ 12 转入</div>
+      <div class="funnel-stage stage-5">
+        <div class="flex items-center justify-between">
+          <span>⑤ 决策 Decision</span>
+          <span class="text-xs">12 客户 · 预计成单 5 个</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded text-xs text-gray-600">
+      <div class="font-medium mb-1">📊 阶段迁移说明</div>
+      <div>模型基于过去180天客户行为轨迹，结合ICP分 + 信号累计评分 + 手动标记 预测所处阶段。准确率指「预测阶段与商务人工判定吻合」比例。</div>
+    </div>
+  </div>
+
+  <!-- [右·模型准确率看板] -->
+  <div class="col-span-1 bg-white border border-gray-300 rounded p-5">
+    <h2 class="text-base font-bold text-gray-800 mb-4">🎓 模型准确率</h2>
+
+    <div class="text-center py-4">
+      <div class="text-5xl font-bold text-blue-600">68<span class="text-xl">%</span></div>
+      <div class="text-xs text-gray-500 mt-2">购买阶段预测 · v2.3</div>
+    </div>
+
+    <div class="space-y-3 mt-4">
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span>认知 → 兴趣</span><span class="text-blue-600 font-bold">82%</span></div>
+        <div class="h-1.5 bg-gray-200 rounded-full"><div class="h-1.5 bg-blue-500 rounded-full" style="width:82%"></div></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span>兴趣 → 考虑</span><span class="text-blue-600 font-bold">71%</span></div>
+        <div class="h-1.5 bg-gray-200 rounded-full"><div class="h-1.5 bg-blue-500 rounded-full" style="width:71%"></div></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span>考虑 → 评估</span><span class="text-blue-600 font-bold">58%</span></div>
+        <div class="h-1.5 bg-gray-200 rounded-full"><div class="h-1.5 bg-blue-500 rounded-full" style="width:58%"></div></div>
+      </div>
+      <div>
+        <div class="flex justify-between text-xs mb-1"><span>评估 → 决策</span><span class="text-blue-600 font-bold">62%</span></div>
+        <div class="h-1.5 bg-gray-200 rounded-full"><div class="h-1.5 bg-blue-500 rounded-full" style="width:62%"></div></div>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500">
+      <div class="mb-2 font-medium text-gray-700">版本对比</div>
+      <table class="w-full">
+        <tr><td>v2.3 (当前)</td><td class="text-right text-green-600 font-bold">68%</td></tr>
+        <tr><td>v2.2</td><td class="text-right">64%</td></tr>
+        <tr><td>v2.1</td><td class="text-right">59%</td></tr>
+        <tr><td>v2.0 baseline</td><td class="text-right">52%</td></tr>
+      </table>
+    </div>
+
+    <button class="w-full mt-4 text-xs border border-gray-300 rounded py-2 text-gray-600">模型解释 (SHAP) →</button>
+  </div>
+</div>
+
+<!-- [暗漏斗识别区] -->
+<div class="bg-white border border-gray-300 rounded p-5 mt-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🕵️ 暗漏斗识别 · 匿名线索关联 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2710</span></h2>
+    <div class="flex items-center gap-2 text-xs">
+      <span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded">待匹配 32</span>
+      <span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">匹配中 18</span>
+      <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded">已确认 36</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 漏斗流程可视化 -->
+    <div class="col-span-3 flex items-center gap-2 mb-2 text-xs">
+      <div class="flex-1 bg-purple-100 text-purple-700 p-3 rounded text-center">① 匿名信号捕获<br><span class="text-2xl font-bold mt-1 block">86</span>IP/Cookie/UTM</div>
+      <div class="text-gray-400">→</div>
+      <div class="flex-1 bg-yellow-100 text-yellow-700 p-3 rounded text-center">② 自动匹配算法<br><span class="text-2xl font-bold mt-1 block">54</span>置信度 ≥ 0.7</div>
+      <div class="text-gray-400">→</div>
+      <div class="flex-1 bg-blue-100 text-blue-700 p-3 rounded text-center">③ 人工确认<br><span class="text-2xl font-bold mt-1 block">36</span>关联到已识别客户</div>
+      <div class="text-gray-400">→</div>
+      <div class="flex-1 bg-green-100 text-green-700 p-3 rounded text-center">④ 归并到客户档案<br><span class="text-2xl font-bold mt-1 block">+42%</span>信号归因提升</div>
+    </div>
+  </div>
+
+  <table class="w-full text-xs border-collapse mt-4">
+    <thead>
+      <tr class="bg-gray-50 text-gray-700">
+        <th class="p-2 border border-gray-200 text-left w-24">匿名标识</th>
+        <th class="p-2 border border-gray-200 text-left w-20">来源IP</th>
+        <th class="p-2 border border-gray-200 text-left w-20">地域</th>
+        <th class="p-2 border border-gray-200 text-left">行为摘要</th>
+        <th class="p-2 border border-gray-200 text-left w-48">匹配候选客户 (置信度)</th>
+        <th class="p-2 border border-gray-200 text-center w-20">状态</th>
+        <th class="p-2 border border-gray-200 text-center w-32">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr>
+        <td class="p-2 border border-gray-200 font-mono text-xs">anon_4821</td>
+        <td class="p-2 border border-gray-200 font-mono text-xs">219.143.x.x</td>
+        <td class="p-2 border border-gray-200">北京</td>
+        <td class="p-2 border border-gray-200">连续3天访问官网 · 下载白皮书 · 邮箱后缀@happyvalley.cn</td>
+        <td class="p-2 border border-gray-200"><span class="text-green-600 font-medium">北京欢乐谷二期</span> (0.92)</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">待确认</span></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-green-600">✓ 确认</button> / <button class="text-xs text-red-500">✗ 否决</button></td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-mono text-xs">anon_4820</td>
+        <td class="p-2 border border-gray-200 font-mono text-xs">202.96.x.x</td>
+        <td class="p-2 border border-gray-200">上海</td>
+        <td class="p-2 border border-gray-200">访问产品页 · LinkedIn广告点击 · 公司域名匹配</td>
+        <td class="p-2 border border-gray-200"><span class="text-green-600 font-medium">上海迪士尼</span> (0.88)</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">待确认</span></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-green-600">✓ 确认</button> / <button class="text-xs text-red-500">✗ 否决</button></td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-mono text-xs">anon_4819</td>
+        <td class="p-2 border border-gray-200 font-mono text-xs">183.232.x.x</td>
+        <td class="p-2 border border-gray-200">深圳</td>
+        <td class="p-2 border border-gray-200">连续访问"前海文旅"关键词页 · UTM=expo-shenzhen</td>
+        <td class="p-2 border border-gray-200"><span class="text-green-600 font-medium">深圳前海管理局</span> (0.85)</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">待确认</span></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-green-600">✓ 确认</button> / <button class="text-xs text-red-500">✗ 否决</button></td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-mono text-xs">anon_4818</td>
+        <td class="p-2 border border-gray-200 font-mono text-xs">125.64.x.x</td>
+        <td class="p-2 border border-gray-200">成都</td>
+        <td class="p-2 border border-gray-200">下载"体育赛事场馆方案" · 邮箱无线索</td>
+        <td class="p-2 border border-gray-200"><span class="text-yellow-600 font-medium">成都大运会主办方</span> (0.76) / 成都华侨城 (0.62)</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded">匹配中</span></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-600">手动归并</button></td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-mono text-xs">anon_4817</td>
+        <td class="p-2 border border-gray-200 font-mono text-xs">61.135.x.x</td>
+        <td class="p-2 border border-gray-200">郑州</td>
+        <td class="p-2 border border-gray-200">单次访问官网首页 · 无其他信号</td>
+        <td class="p-2 border border-gray-200 text-gray-400">无候选 (置信度均 < 0.5)</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-600 px-2 py-0.5 rounded">待观察</span></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-gray-500">忽略</button></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="mt-3 text-xs text-gray-500 flex items-center justify-between">
+    <span>显示 1-5 / 共 32 条待确认</span>
+    <button class="text-blue-600">批量确认高置信度 (&ge;0.9) →</button>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>战斗卡 + KIQ</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .comp-select { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; padding: 10px; cursor: pointer; transition: all .15s; }
+    .comp-select:hover { border-color: #1890ff; }
+    .comp-select.active { border-color: #1890ff; background: #e6f7ff; }
+    .section-title { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; display: flex; align-items: center; gap: 6px; }
+    .badge-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; padding: 2px 6px; font-size: 11px; border-radius: 3px; }
+    .badge-red { background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; padding: 2px 6px; font-size: 11px; border-radius: 3px; }
+    .badge-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; padding: 2px 6px; font-size: 11px; border-radius: 3px; }
+    .kiq-msg-user { background: #e6f7ff; border-left: 3px solid #1890ff; padding: 10px 12px; margin-bottom: 8px; border-radius: 4px; }
+    .kiq-msg-ai { background: #f6ffed; border-left: 3px solid #52c41a; padding: 10px 12px; margin-bottom: 8px; border-radius: 4px; }
+    .fact-row { display: grid; grid-template-columns: 120px 1fr 80px; gap: 8px; padding: 6px 0; border-bottom: 1px dashed #f0f0f0; font-size: 12.5px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;"><span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span><span style="font-weight:600;color:#ad6800;">Tab2 · 动态战斗卡 + KIQ + Deal Tips</span></div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">销售临场作战核心武器：选中竞品即生成动态战斗卡（事实卡+优劣势+应对话术+定价+近期项目），KIQ 支持自然语言提问，Deal Tips 针对进行中投标推送话术建议</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">销售, 商务经理, 投标经理</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">左栏 T1/T2 竞品快选 / 中栏动态战斗卡（事实卡+优劣势+应对话术+定价+近期项目） / 右栏 KIQ 对话 + Deal Tips 进行中投标推荐</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击竞品切换战斗卡 / KIQ 输入问题 / Deal Tips 点击「应用到话术库」</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">战斗卡 6 个 section 全非空 / KIQ 至少 1 组问答 / Deal Tips ≥ 2 条</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase5 竞品情报 详细设计.md §2.2</a></div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="grid gap-4" style="grid-template-columns: 220px 1fr 340px;">
+
+  <!-- [左栏：竞品快选] -->
+  <aside class="bg-white border border-gray-300 rounded p-3 h-fit sticky top-0">
+    <h3 class="text-sm font-bold text-gray-700 mb-3">🎯 选择对手</h3>
+    <input type="text" placeholder="搜索..." class="w-full px-2 py-1 border border-gray-300 rounded text-xs mb-3">
+    <div class="text-[11px] text-gray-500 font-semibold mb-1">T1 核心 (6)</div>
+    <div class="comp-select active mb-1"><div class="text-sm font-semibold">🇩🇰 KOMPAN</div><div class="text-[11px] text-gray-500">$4亿 · 欧洲/APAC</div></div>
+    <div class="comp-select mb-1"><div class="text-sm">🇺🇸 PlayCore</div><div class="text-[11px] text-gray-500">$10亿 · 北美</div></div>
+    <div class="comp-select mb-1"><div class="text-sm">🇺🇸 LSI Industries</div><div class="text-[11px] text-gray-500">$5亿</div></div>
+    <div class="comp-select mb-1"><div class="text-sm">🇺🇸 PlayPower</div><div class="text-[11px] text-gray-500">$3亿</div></div>
+    <div class="comp-select mb-1"><div class="text-sm">🇸🇪 HAGS</div><div class="text-[11px] text-gray-500">$8000万</div></div>
+    <div class="comp-select mb-3"><div class="text-sm">🇫🇷 Proludic</div><div class="text-[11px] text-gray-500">$6000万</div></div>
+    <div class="text-[11px] text-gray-500 font-semibold mb-1">T2 重点 (14)</div>
+    <div class="comp-select mb-1"><div class="text-sm">🇫🇮 Lappset</div></div>
+    <div class="comp-select mb-1"><div class="text-sm">🇩🇪 Berliner</div></div>
+    <div class="comp-select mb-1"><div class="text-sm">🇺🇸 Playworld</div></div>
+    <button class="text-xs text-blue-500 mt-2">显示全部 ▼</button>
+  </aside>
+
+  <!-- [中栏：动态战斗卡 — KOMPAN] -->
+  <div>
+    <!-- 头部 -->
+    <div class="bg-white border border-gray-300 rounded p-5 mb-4">
+      <div class="flex items-start justify-between">
+        <div>
+          <div class="flex items-center gap-3">
+            <div class="w-14 h-14 bg-gray-100 rounded border border-gray-300 flex items-center justify-center text-xl font-bold text-gray-500">KP</div>
+            <div>
+              <h2 class="text-2xl font-bold text-gray-800">KOMPAN A/S <span class="badge-red ml-2">T1 核心对手</span></h2>
+              <div class="text-sm text-gray-500 mt-1">丹麦 · 1970 成立 · 约 1,800 员工 · 全球 40+ 国家 · <a href="https://www.kompan.com" class="text-blue-500">www.kompan.com</a></div>
+            </div>
+          </div>
+        </div>
+        <div class="text-right">
+          <div class="text-xs text-gray-400">战斗卡版本 v3.2 · 2026-04-19 自动更新</div>
+          <button class="mt-2 px-3 py-1 border border-blue-500 text-blue-500 rounded text-sm">导出 PPT</button>
+          <button class="mt-2 px-3 py-1 bg-blue-500 text-white rounded text-sm">📋 复制话术</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 事实卡 -->
+    <div class="bg-white border border-gray-300 rounded p-5 mb-4">
+      <h3 class="section-title">📇 事实卡 (Fact Card) <span class="badge-blue">Issue #2717</span></h3>
+      <div class="grid grid-cols-2 gap-x-6">
+        <div>
+          <div class="fact-row"><span class="text-gray-500">年营收</span><span class="text-gray-800 font-semibold">$4 亿 USD</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">员工规模</span><span class="text-gray-800">1,800 人</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">成立时间</span><span class="text-gray-800">1970</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">总部</span><span class="text-gray-800">丹麦 Odense</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">CEO</span><span class="text-gray-800">Connie Astrup-Larsen</span><span class="badge-green text-center">已验证</span></div>
+        </div>
+        <div>
+          <div class="fact-row"><span class="text-gray-500">目标市场</span><span class="text-gray-800">学校/公园/社区/商业</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">主打产品</span><span class="text-gray-800">Corocord 绳网、Moments、Fitness</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">APAC 代理</span><span class="text-gray-800">深圳康朴游乐</span><span class="badge-blue text-center">待确认</span></div>
+          <div class="fact-row"><span class="text-gray-500">近期 APAC 项目</span><span class="text-gray-800">12 个 (近 12 个月)</span><span class="badge-green text-center">已验证</span></div>
+          <div class="fact-row"><span class="text-gray-500">与万德重合度</span><span class="text-gray-800">⭐⭐⭐⭐ 高</span><span class="badge-red text-center">AI 评估</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 优劣势 -->
+    <div class="grid grid-cols-2 gap-4 mb-4">
+      <div class="bg-white border border-gray-300 rounded p-5">
+        <h3 class="section-title">✅ 竞品优势 (Strengths)</h3>
+        <ul class="text-sm text-gray-700 space-y-2">
+          <li>• <b>品牌溢价</b>：欧美客户认可度高，政府项目屡屡中标</li>
+          <li>• <b>绳网技术壁垒</b>：Corocord 系列为行业标杆</li>
+          <li>• <b>认证齐全</b>：EN1176/ASTM/CE/GS 全球通用</li>
+          <li>• <b>可持续材料</b>：塑料再生 95% 宣传效应强</li>
+          <li>• <b>数字孪生工具</b>：CAD/3D 模型对外开放</li>
+        </ul>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-5">
+        <h3 class="section-title">❌ 竞品劣势 (Weaknesses)</h3>
+        <ul class="text-sm text-gray-700 space-y-2">
+          <li>• <b>价格高昂</b>：单套组合滑梯 ¥80-150 万（万德同等 ¥40-60 万）</li>
+          <li>• <b>交期长</b>：欧洲制造 + 海运，平均 90-120 天</li>
+          <li>• <b>本地服务弱</b>：APAC 仅代理维护，非原厂售后</li>
+          <li>• <b>定制响应慢</b>：定制方案要求 ≥ 300 万起</li>
+          <li>• <b>中国本土化差</b>：安装手册无中文版</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- 应对话术 -->
+    <div class="bg-white border border-gray-300 rounded p-5 mb-4">
+      <h3 class="section-title">💬 应对话术 (Battle Scripts) <span class="badge-blue">Issue #2718</span></h3>
+      <div class="space-y-3">
+        <div class="border-l-4 border-blue-400 pl-3 py-1">
+          <div class="text-xs text-gray-500">客户说："KOMPAN 质量更好"</div>
+          <div class="text-sm text-gray-800 mt-1">"万德采用 Q235B 镀锌钢管+ISO9001+GB/T27689，通过 SGS 认证，同等结构强度下寿命 ≥15 年。不是质量差距，而是品牌溢价差距。"</div>
+        </div>
+        <div class="border-l-4 border-blue-400 pl-3 py-1">
+          <div class="text-xs text-gray-500">客户说："我们只认可国际品牌"</div>
+          <div class="text-sm text-gray-800 mt-1">"KOMPAN 在中国是代理销售模式，售后响应 72h+，万德本地工厂 4h 响应，配件供应周期缩短 80%。项目运维成本 5 年累计差 ¥30 万+。"</div>
+        </div>
+        <div class="border-l-4 border-blue-400 pl-3 py-1">
+          <div class="text-xs text-gray-500">客户说："KOMPAN 的绳网更安全"</div>
+          <div class="text-sm text-gray-800 mt-1">"万德绳网采用荷兰 Kees 原厂尼龙+Polysteel，与 KOMPAN 同供应链。差异在结构设计，我们通过 GB 和 EN1176 双重认证。"</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 定价对比 + 近期项目 -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-white border border-gray-300 rounded p-5">
+        <h3 class="section-title">💰 定价对比 (典型项目)</h3>
+        <table class="w-full text-sm">
+          <thead><tr class="text-xs text-gray-500 border-b"><th class="text-left py-1">品类</th><th class="text-right">KOMPAN</th><th class="text-right">万德</th><th class="text-right">差距</th></tr></thead>
+          <tbody>
+            <tr class="border-b"><td class="py-1">组合滑梯 (8x6m)</td><td class="text-right">¥ 120万</td><td class="text-right text-blue-600">¥ 55万</td><td class="text-right text-red-500">-54%</td></tr>
+            <tr class="border-b"><td class="py-1">绳网攀爬塔</td><td class="text-right">¥ 45万</td><td class="text-right text-blue-600">¥ 22万</td><td class="text-right text-red-500">-51%</td></tr>
+            <tr class="border-b"><td class="py-1">水游乐系统</td><td class="text-right">¥ 180万</td><td class="text-right text-blue-600">¥ 90万</td><td class="text-right text-red-500">-50%</td></tr>
+            <tr><td class="py-1">健身器材</td><td class="text-right">¥ 8万/件</td><td class="text-right text-blue-600">¥ 3万/件</td><td class="text-right text-red-500">-62%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-5">
+        <h3 class="section-title">🎯 近期项目 (近 12 月 APAC)</h3>
+        <ul class="text-sm text-gray-700 space-y-2">
+          <li>• <b>深圳罗湖区儿童公园</b> · ￥380万 · 2026-04 中标</li>
+          <li>• <b>上海国际学校</b> · ￥220万 · 2026-03 中标</li>
+          <li>• <b>新加坡滨海湾花园</b> · S$500K · 2026-02 中标</li>
+          <li>• <b>东京表参道地标</b> · ¥3500万日元 · 2026-01</li>
+          <li>• <b>首尔江南区公园</b> · W6亿韩元 · 2025-12</li>
+        </ul>
+        <div class="mt-2 text-xs text-gray-400">→ 完整列表见 Tab5 中标记录</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右栏：KIQ + Deal Tips] -->
+  <aside>
+    <!-- KIQ -->
+    <div class="bg-white border border-gray-300 rounded p-4 mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-gray-700">🔍 KIQ 智能问答 <span class="badge-blue text-[10px]">#2723</span></h3>
+      </div>
+      <div class="text-[11px] text-gray-500 mb-2">Key Intelligence Questions · AI 聚合回答</div>
+      <div class="kiq-msg-user"><div class="text-[11px] text-gray-500 mb-1">我 · 刚刚</div><div class="text-sm">KOMPAN 比万德贵多少？</div></div>
+      <div class="kiq-msg-ai">
+        <div class="text-[11px] text-gray-500 mb-1">🤖 AI · 基于近 12 月 18 个同场项目</div>
+        <div class="text-sm">KOMPAN 价格是万德的 <b>2.0-2.3 倍</b>。差异主要由：品牌溢价 40% + 关税运费 20% + 代理加价 15%。在政府项目中差距尤甚。建议应对策略：突出本地服务与交期优势。</div>
+        <div class="mt-1 text-[11px] text-gray-500">来源：中标记录表 · 置信度 92%</div>
+      </div>
+      <div class="kiq-msg-user"><div class="text-[11px] text-gray-500 mb-1">我 · 3 分钟前</div><div class="text-sm">HAGS 最近有什么新产品？</div></div>
+      <div class="kiq-msg-ai">
+        <div class="text-[11px] text-gray-500 mb-1">🤖 AI · 源自 HAGS 官网 2026-04 更新</div>
+        <div class="text-sm">HAGS 2026 目录新增 <b>UniMini 系列</b>（幼儿组合）、<b>Aerial Rope Pro</b>（高空绳网）。UniMini 定位 3-6 岁，对标万德「小树林」系列。</div>
+      </div>
+
+      <div class="mt-3 border-t border-gray-200 pt-3">
+        <input type="text" placeholder="问点什么... 例：Proludic 在东南亚有几个代理？" class="w-full px-2 py-2 border border-gray-300 rounded text-xs">
+        <div class="text-[11px] text-gray-400 mt-1">💡 推荐问法：同场竞争、价格对比、近期动态、产品对比</div>
+      </div>
+    </div>
+
+    <!-- Deal Tips -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-gray-700">💡 Deal Tips (进行中) <span class="badge-blue text-[10px]">#2725</span></h3>
+      </div>
+      <div class="text-[11px] text-gray-500 mb-3">系统检测到以下进行中投标可能遇到 KOMPAN</div>
+
+      <div class="border border-orange-300 bg-orange-50 rounded p-3 mb-2">
+        <div class="flex items-start justify-between">
+          <div class="text-sm font-semibold text-gray-800">深圳南山区幼儿园项目</div>
+          <span class="badge-red text-[10px]">⚠️ 高</span>
+        </div>
+        <div class="text-[11px] text-gray-500 mt-1">投标截止：还有 5 天 · 预算 ¥800 万</div>
+        <div class="text-xs text-gray-700 mt-2">
+          💬 建议话术：<br/>
+          "客户此前对接过 KOMPAN 报价 ¥1200 万，注意强调本地化交付优势（45 天 vs 120 天）和全周期维护成本。"
+        </div>
+        <button class="mt-2 text-xs text-blue-500">应用到话术库 →</button>
+      </div>
+
+      <div class="border border-yellow-300 bg-yellow-50 rounded p-3 mb-2">
+        <div class="flex items-start justify-between">
+          <div class="text-sm font-semibold text-gray-800">新加坡 SAFRA 社区中心</div>
+          <span class="badge-red text-[10px]">⚠️ 中</span>
+        </div>
+        <div class="text-[11px] text-gray-500 mt-1">投标截止：还有 12 天 · S$2M</div>
+        <div class="text-xs text-gray-700 mt-2">
+          💬 同场预测：Proludic / Lappset / KOMPAN
+        </div>
+      </div>
+
+      <div class="border border-gray-200 bg-gray-50 rounded p-3">
+        <div class="text-sm font-semibold text-gray-800">上海浦东某学校改扩建</div>
+        <div class="text-[11px] text-gray-500 mt-1">投标截止：还有 20 天 · ¥1500 万</div>
+        <div class="text-xs text-gray-700 mt-2">
+          💬 KOMPAN 近 3 年同区域中标 5 次，AI 预测出现概率 78%
+        </div>
+      </div>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

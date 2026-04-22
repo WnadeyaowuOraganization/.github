@@ -1,0 +1,1148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台 Phase 7 分发 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; background: #f5f6f8; color: #1f2328; }
+    .anchor-nav { position: sticky; top: 0; z-index: 50; background: rgba(255,255,255,0.96); backdrop-filter: blur(8px); border-bottom: 1px solid #e5e7eb; }
+    .anchor-nav a { display: inline-flex; align-items: center; gap: 4px; padding: 12px 14px; font-size: 13px; color: #525866; border-bottom: 2px solid transparent; white-space: nowrap; transition: all 0.15s; }
+    .anchor-nav a:hover { color: #1890ff; border-bottom-color: #91caff; }
+    .section { scroll-margin-top: 60px; padding: 32px 32px 16px 32px; }
+    .section-title { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .section-title .no { width: 32px; height: 32px; border-radius: 8px; background: linear-gradient(135deg,#1890ff,#36cfc9); color: #fff; font-weight: 700; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+    .section-title h2 { font-size: 20px; font-weight: 700; color: #1f2328; }
+    .section-title .issue-tag { background: #fff0f6; color: #c41d7f; border: 1px solid #ffadd2; border-radius: 4px; padding: 2px 8px; font-size: 11px; font-family: monospace; }
+    .card { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; box-shadow: 0 1px 2px rgba(0,0,0,0.02); }
+    .card-head { padding: 14px 18px; border-bottom: 1px solid #f0f0f0; font-weight: 600; font-size: 14px; display: flex; align-items: center; justify-content: space-between; }
+    .card-body { padding: 16px 18px; }
+    .pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; font-weight: 500; }
+    .pill-blue { background: #e6f4ff; color: #0958d9; }
+    .pill-green { background: #f6ffed; color: #389e0d; }
+    .pill-orange { background: #fff7e6; color: #d46b08; }
+    .pill-red { background: #fff1f0; color: #cf1322; }
+    .pill-gray { background: #f5f5f5; color: #595959; }
+    .pill-purple { background: #f9f0ff; color: #722ed1; }
+    .kpi { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 14px 16px; }
+    .kpi .label { font-size: 12px; color: #8c8c8c; }
+    .kpi .value { font-size: 22px; font-weight: 700; margin-top: 4px; color: #1f2328; }
+    .kpi .delta { font-size: 11px; margin-top: 2px; color: #52c41a; }
+    table.data { width: 100%; font-size: 13px; border-collapse: collapse; }
+    table.data th { background: #fafafa; padding: 10px 12px; text-align: left; font-weight: 600; color: #595959; border-bottom: 1px solid #e5e7eb; font-size: 12px; }
+    table.data td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; color: #262626; }
+    table.data tr:hover td { background: #fafcff; }
+    /* 手机壳 */
+    .phone-shell { width: 375px; height: 720px; border: 14px solid #1f2328; border-radius: 38px; background: #000; padding: 0; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; }
+    .phone-shell::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 120px; height: 22px; background: #1f2328; border-radius: 12px; z-index: 10; }
+    .phone-screen { width: 100%; height: 100%; background: #f5f6f8; overflow-y: auto; border-radius: 24px; }
+    .phone-status { height: 30px; background: #fff; display: flex; align-items: center; justify-content: space-between; padding: 0 20px 0 28px; font-size: 11px; font-weight: 600; padding-top: 8px; }
+    /* 小程序壳 */
+    .miniapp-shell { width: 375px; height: 720px; border: 14px solid #1f2328; border-radius: 38px; background: #000; padding: 0; position: relative; box-shadow: 0 10px 40px rgba(0,0,0,0.15); overflow: hidden; }
+    .miniapp-shell::before { content: ''; position: absolute; top: 8px; left: 50%; transform: translateX(-50%); width: 120px; height: 22px; background: #1f2328; border-radius: 12px; z-index: 10; }
+    .miniapp-capsule { position: absolute; top: 10px; right: 14px; width: 88px; height: 28px; border-radius: 14px; background: rgba(0,0,0,0.12); display: flex; align-items: center; justify-content: space-around; font-size: 14px; color: #fff; z-index: 11; }
+    /* WeChat push card */
+    .wx-bubble { background: #fff; border-radius: 8px; padding: 12px 14px; max-width: 280px; font-size: 13px; line-height: 1.5; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+    .wx-bg { background: #ededed; padding: 16px; border-radius: 10px; }
+    /* Funnel */
+    .funnel-row { display: flex; align-items: center; gap: 12px; margin-bottom: 8px; }
+    .funnel-bar { height: 40px; background: linear-gradient(90deg,#1890ff,#69b1ff); border-radius: 4px; color: #fff; display: flex; align-items: center; padding: 0 12px; font-size: 13px; font-weight: 600; }
+    /* Simple radar placeholder */
+    .radar-mini { width: 140px; height: 140px; border-radius: 50%; background: radial-gradient(circle at center, #e6f4ff 0%, #fff 70%); border: 1px dashed #91caff; position: relative; }
+    .radar-mini::before, .radar-mini::after { content:''; position:absolute; inset:0; border:1px dashed #bae0ff; border-radius:50%; }
+    .radar-mini::before { margin:20px; }
+    .radar-mini::after { margin:45px; }
+    /* sync status */
+    .sync-flow { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+    .sync-node { padding: 8px 12px; border-radius: 8px; background: #fff; border: 1px solid #e5e7eb; min-width: 90px; text-align: center; }
+    .sync-arrow { color: #1890ff; font-size: 18px; }
+    /* dragger zone */
+    .drag-field { padding: 6px 10px; background: #e6f4ff; border: 1px dashed #91caff; border-radius: 4px; font-size: 12px; color: #0958d9; cursor: grab; display: inline-flex; align-items: center; gap: 4px; }
+    .drop-zone { min-height: 160px; background: repeating-linear-gradient(45deg,#fafafa,#fafafa 6px,#fff 6px,#fff 12px); border: 2px dashed #d9d9d9; border-radius: 8px; padding: 12px; }
+    .preview-doc { border: 1px solid #e5e7eb; background: #fff; border-radius: 6px; padding: 14px; font-size: 12px; line-height: 1.7; color: #262626; min-height: 200px; }
+    .preview-doc h4 { font-weight: 700; font-size: 14px; border-bottom: 2px solid #1890ff; padding-bottom: 6px; margin-bottom: 8px; }
+    /* tab bar for miniapp */
+    .mp-tabbar { display: flex; background: #fff; border-top: 1px solid #e5e7eb; position: sticky; bottom: 0; }
+    .mp-tabbar .tab { flex: 1; text-align: center; padding: 8px 0 6px; font-size: 10px; color: #8c8c8c; }
+    .mp-tabbar .tab.active { color: #1890ff; }
+    .mp-tabbar .tab .ic { font-size: 18px; display: block; margin-bottom: 2px; }
+  </style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台 · Phase 7 分发</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">让情报主动触达（企微 / 邮件 / H5 / 小程序），用 ROI 埋点量化情报价值</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">销售总监（订阅+ROI）/ 区域经理（移动端随时看）/ 商务主管（报告导出）/ 吴耀（全局 ROI）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">企微 Bot 推送 / 企微交互指令 / 邮件订阅定时报告 / H5 自适应 / 小程序快览 / 自定义报告导出 / CRM 双向同步 / ROI 埋点分析</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">8 个锚点跳转 / 配置 Bot 推送 / 查看指令列表 / 编辑邮件模板 / 查看 H5 和小程序 / 拖拽字段导出报告 / 配置 CRM 字段映射 / 看 ROI 漏斗</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">8 个区域齐全 / 需求说明卡 / 顶部 8 锚点 / H5 与小程序用手机壳呈现 / 对应 8 个 Issue (#2736-#2743)</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 对应 Issue：#2736 / #2737 / #2738 / #2739 / #2740 / #2741 / #2742 / #2743
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [页面头部] -->
+<header class="px-8 pt-4 pb-2">
+  <div class="flex items-center gap-3 mb-2">
+    <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-blue-500 to-teal-400 flex items-center justify-center text-white text-lg font-bold">7</div>
+    <div>
+      <div class="text-xs text-gray-500">商战情报中台 · Phase 7</div>
+      <h1 class="text-xl font-bold text-gray-800">分发层 — 多端触达 + ROI 埋点</h1>
+    </div>
+    <div class="ml-auto flex gap-2 text-xs">
+      <span class="pill pill-blue">8 个子 Issue</span>
+      <span class="pill pill-green">低保真原型 v1.0</span>
+    </div>
+  </div>
+</header>
+
+<!-- [顶部 8 锚点] -->
+<nav class="anchor-nav">
+  <div class="px-8 flex overflow-x-auto">
+    <a href="#s1">① 企微 Bot</a>
+    <a href="#s2">② 交互指令</a>
+    <a href="#s3">③ 邮件订阅</a>
+    <a href="#s4">④ H5 自适应</a>
+    <a href="#s5">⑤ 小程序快览</a>
+    <a href="#s6">⑥ 报告导出</a>
+    <a href="#s7">⑦ CRM 同步</a>
+    <a href="#s8">⑧ ROI 埋点</a>
+  </div>
+</nav>
+
+<!-- ========== Section 1: 企微 Bot 集成 ========== -->
+<section id="s1" class="section">
+  <div class="section-title">
+    <span class="no">1</span>
+    <h2>企微 Bot 集成</h2>
+    <span class="issue-tag">#2736</span>
+    <span class="text-xs text-gray-500">Bot 配置 + 推送消息样式预览</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- Bot 配置卡 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>🤖 Bot 配置</span>
+        <span class="pill pill-green">运行中</span>
+      </div>
+      <div class="card-body space-y-3 text-sm">
+        <div class="flex items-center gap-3">
+          <div class="w-12 h-12 rounded-lg bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xl">🎯</div>
+          <div>
+            <div class="font-semibold">万德情报小助手</div>
+            <div class="text-xs text-gray-500">WeWork Bot · ID: wd_intel_bot_001</div>
+          </div>
+        </div>
+        <div class="border-t pt-3 space-y-2 text-xs">
+          <div class="flex justify-between"><span class="text-gray-500">Webhook</span><span class="font-mono text-gray-700">qyapi.weixin.qq.com/...</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">权限范围</span><span><span class="pill pill-blue">读取客户</span> <span class="pill pill-blue">推送消息</span></span></div>
+          <div class="flex justify-between"><span class="text-gray-500">推送频次</span><span>实时 + 日报 9:00</span></div>
+          <div class="flex justify-between"><span class="text-gray-500">@everyone</span><span class="pill pill-orange">高分客户触发</span></div>
+        </div>
+        <button class="w-full py-2 mt-2 border border-blue-500 text-blue-500 rounded text-xs hover:bg-blue-50">编辑 Bot 配置</button>
+      </div>
+    </div>
+
+    <!-- 订阅者 / 群组 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>👥 订阅群组 / 订阅者</span>
+        <span class="text-xs text-gray-500">共 207 人</span>
+      </div>
+      <div class="card-body space-y-2 text-sm">
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div>
+            <div class="font-semibold text-sm">万德销售总群</div>
+            <div class="text-xs text-gray-500">吴耀、商务主管、销售总监 + 区域经理 6 人</div>
+          </div>
+          <span class="pill pill-blue">127 人</span>
+        </div>
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div>
+            <div class="font-semibold text-sm">华东区域群</div>
+            <div class="text-xs text-gray-500">上海 / 江苏 / 浙江销售</div>
+          </div>
+          <span class="pill pill-green">38 人</span>
+        </div>
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div>
+            <div class="font-semibold text-sm">华南区域群</div>
+            <div class="text-xs text-gray-500">广东 / 福建 / 海南销售</div>
+          </div>
+          <span class="pill pill-green">42 人</span>
+        </div>
+        <div class="text-xs text-gray-400 pt-2 border-t">支持按客户分级 / 行业 / 区域定向推送</div>
+      </div>
+    </div>
+
+    <!-- 推送消息样式预览 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>💬 推送消息样式预览</span>
+        <span class="pill pill-gray">3 种模板</span>
+      </div>
+      <div class="card-body wx-bg space-y-3">
+        <!-- 文本卡 -->
+        <div class="wx-bubble">
+          <div class="text-xs text-gray-400 mb-1">📄 文本卡</div>
+          <strong>【高分客户提醒】</strong><br>
+          <span class="text-gray-600">北京欢乐谷 客户分 87 分 (+12)，新增信号：二期 3.2 亿预算已批。@销售总监</span>
+        </div>
+        <!-- 富文本 -->
+        <div class="wx-bubble">
+          <div class="text-xs text-gray-400 mb-1">✨ 富文本卡</div>
+          <div class="font-semibold text-blue-600 mb-1">📊 周一晨会情报简报</div>
+          <div class="text-gray-600 text-xs">• 5 个高分客户本周有动作<br>• 2 个竞品出现新招标<br>• 项目矿 3 条新线索</div>
+          <div class="text-xs text-blue-500 mt-1 underline">查看完整报告 →</div>
+        </div>
+        <!-- 图文卡 -->
+        <div class="wx-bubble p-0 overflow-hidden" style="padding:0;">
+          <div class="h-20 bg-gradient-to-r from-blue-400 to-teal-400 flex items-center justify-center text-white text-xs">[情报封面图]</div>
+          <div class="p-2">
+            <div class="text-xs text-gray-400">🖼️ 图文卡</div>
+            <div class="font-semibold text-sm">华东文旅行业竞品周报</div>
+            <div class="text-xs text-gray-500 mt-0.5">华强方特本周中标 2 个，详见...</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 2: 企微交互指令 ========== -->
+<section id="s2" class="section">
+  <div class="section-title">
+    <span class="no">2</span>
+    <h2>企微交互式查询指令</h2>
+    <span class="issue-tag">#2737</span>
+    <span class="text-xs text-gray-500">指令列表 + 交互示例 + Top 10 使用频次</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 指令列表 -->
+    <div class="card col-span-5">
+      <div class="card-head">
+        <span>⌨️ 指令列表</span>
+        <span class="text-xs text-gray-500">@情报 前缀触发</span>
+      </div>
+      <div class="card-body">
+        <table class="data">
+          <thead><tr><th>指令</th><th>功能</th><th>返回</th></tr></thead>
+          <tbody>
+            <tr><td class="font-mono text-xs">@情报 查 [客户名]</td><td>客户画像</td><td>MEDDIC 雷达 + 最近信号</td></tr>
+            <tr><td class="font-mono text-xs">@情报 矿 [关键词]</td><td>项目矿搜索</td><td>Top 5 线索卡</td></tr>
+            <tr><td class="font-mono text-xs">@情报 竞 [竞品名]</td><td>竞品动态</td><td>最近 7 天 5 条信号</td></tr>
+            <tr><td class="font-mono text-xs">@情报 今日</td><td>今日简报</td><td>高分客户 / 新信号</td></tr>
+            <tr><td class="font-mono text-xs">@情报 订阅 [行业]</td><td>订阅行业</td><td>订阅确认</td></tr>
+            <tr><td class="font-mono text-xs">@情报 榜</td><td>客户分排行</td><td>Top 10 客户</td></tr>
+            <tr><td class="font-mono text-xs">@情报 帮助</td><td>指令帮助</td><td>指令清单</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 交互示例 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>💡 交互示例</span>
+        <span class="pill pill-blue">@情报 查 北京欢乐谷</span>
+      </div>
+      <div class="card-body wx-bg space-y-2">
+        <div class="wx-bubble" style="background:#95ec69;max-width:220px;margin-left:auto;">
+          @情报 查 北京欢乐谷
+        </div>
+        <div class="wx-bubble">
+          <div class="font-semibold text-sm mb-1">🎯 北京欢乐谷 · MEDDIC 87 分</div>
+          <div class="flex gap-2 items-center">
+            <div class="radar-mini scale-75 -ml-3"></div>
+            <div class="text-xs text-gray-600 leading-relaxed">
+              M 经济: ★★★★☆<br>
+              E 决策人: ★★★★★<br>
+              D 决策: ★★★★☆<br>
+              I 指标: ★★★☆☆<br>
+              C 冠军: ★★★★☆<br>
+              C 痛点: ★★★★★
+            </div>
+          </div>
+          <div class="border-t mt-2 pt-2 text-xs">
+            <div class="font-semibold mb-1">🔔 最近信号 (3)</div>
+            <div>• 2026-04-20 二期预算 3.2 亿批复</div>
+            <div>• 2026-04-18 项目总换岗 (林总 ← 王总)</div>
+            <div>• 2026-04-15 招标公示 - 游乐设备</div>
+          </div>
+          <div class="text-xs text-blue-500 mt-2 underline">🔗 查看详细画像</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Top 10 使用频次 -->
+    <div class="card col-span-3">
+      <div class="card-head">
+        <span>📊 指令 Top 10</span>
+        <span class="text-xs text-gray-500">近 30 天</span>
+      </div>
+      <div class="card-body text-xs space-y-2">
+        <div><div class="flex justify-between"><span>@情报 查 [客户]</span><span class="font-semibold">1,247</span></div><div class="w-full h-1 bg-blue-500 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 今日</span><span class="font-semibold">892</span></div><div class="w-4/5 h-1 bg-blue-400 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 竞 [竞品]</span><span class="font-semibold">634</span></div><div class="w-3/5 h-1 bg-blue-400 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 矿</span><span class="font-semibold">521</span></div><div class="w-2/5 h-1 bg-blue-300 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 榜</span><span class="font-semibold">387</span></div><div class="w-1/3 h-1 bg-blue-300 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 订阅</span><span class="font-semibold">245</span></div><div class="w-1/4 h-1 bg-blue-300 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 帮助</span><span class="font-semibold">198</span></div><div class="w-1/5 h-1 bg-blue-200 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 推送设置</span><span class="font-semibold">156</span></div><div class="w-1/6 h-1 bg-blue-200 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 雷达 [客户]</span><span class="font-semibold">142</span></div><div class="w-1/6 h-1 bg-blue-200 rounded mt-1"></div></div>
+        <div><div class="flex justify-between"><span>@情报 报告</span><span class="font-semibold">98</span></div><div class="w-1/12 h-1 bg-blue-200 rounded mt-1"></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 3: 邮件订阅 + 定时报告 ========== -->
+<section id="s3" class="section">
+  <div class="section-title">
+    <span class="no">3</span>
+    <h2>邮件订阅与定时报告</h2>
+    <span class="issue-tag">#2738</span>
+    <span class="text-xs text-gray-500">订阅模板 + 订阅者管理 + 邮件预览</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 订阅模板列表 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>📧 订阅模板</span>
+        <button class="text-xs text-blue-500">+ 新建模板</button>
+      </div>
+      <div class="card-body space-y-3 text-sm">
+        <div class="p-3 border border-blue-200 bg-blue-50 rounded">
+          <div class="flex justify-between items-center">
+            <div class="font-semibold">周一晨会简报</div>
+            <span class="pill pill-blue">每周一 08:30</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1">高分客户 + 新信号 + 竞品动态汇总</div>
+          <div class="text-xs text-gray-400 mt-1">订阅 48 人 · 打开率 78%</div>
+        </div>
+        <div class="p-3 border rounded">
+          <div class="flex justify-between items-center">
+            <div class="font-semibold">高分客户日报</div>
+            <span class="pill pill-green">每日 09:00</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1">客户分 ≥ 80 的客户近 24h 变化</div>
+          <div class="text-xs text-gray-400 mt-1">订阅 23 人 · 打开率 91%</div>
+        </div>
+        <div class="p-3 border rounded">
+          <div class="flex justify-between items-center">
+            <div class="font-semibold">竞品动态周报</div>
+            <span class="pill pill-orange">每周五 17:00</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1">竞品中标 / 新品 / 人事 / 舆情</div>
+          <div class="text-xs text-gray-400 mt-1">订阅 62 人 · 打开率 64%</div>
+        </div>
+        <div class="p-3 border rounded">
+          <div class="flex justify-between items-center">
+            <div class="font-semibold">月度情报深度报告</div>
+            <span class="pill pill-purple">每月 1 日</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1">行业全景 + 赢单复盘 + 趋势预测</div>
+          <div class="text-xs text-gray-400 mt-1">订阅 15 人 · 打开率 87%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 订阅者管理 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>👤 订阅者管理</span>
+        <span class="text-xs text-gray-500">9 位订阅者</span>
+      </div>
+      <div class="card-body">
+        <table class="data">
+          <thead><tr><th>姓名</th><th>角色</th><th>订阅</th></tr></thead>
+          <tbody>
+            <tr><td>吴耀</td><td><span class="pill pill-red">总裁</span></td><td class="text-xs">全部 4 个</td></tr>
+            <tr><td>张志强</td><td><span class="pill pill-orange">商务主管</span></td><td class="text-xs">晨会/日报/月报</td></tr>
+            <tr><td>李明</td><td><span class="pill pill-blue">销售总监</span></td><td class="text-xs">全部 4 个</td></tr>
+            <tr><td>王华</td><td><span class="pill pill-green">区域经理·华东</span></td><td class="text-xs">晨会/日报</td></tr>
+            <tr><td>赵敏</td><td><span class="pill pill-green">区域经理·华南</span></td><td class="text-xs">晨会/竞品</td></tr>
+            <tr><td>陈志</td><td><span class="pill pill-green">区域经理·华北</span></td><td class="text-xs">晨会/日报</td></tr>
+            <tr><td>林芳</td><td><span class="pill pill-green">区域经理·华中</span></td><td class="text-xs">晨会/日报</td></tr>
+            <tr><td>刘强</td><td><span class="pill pill-green">区域经理·西南</span></td><td class="text-xs">晨会/竞品</td></tr>
+            <tr><td>孙丽</td><td><span class="pill pill-green">区域经理·西北</span></td><td class="text-xs">晨会</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- 邮件预览 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>📩 邮件预览</span>
+        <span class="pill pill-blue">周一晨会简报</span>
+      </div>
+      <div class="card-body">
+        <div class="border border-gray-200 rounded text-xs">
+          <div class="bg-gray-50 p-2 border-b text-gray-600">
+            <div><span class="text-gray-400">发件人：</span>万德情报 &lt;intel@wande.ai&gt;</div>
+            <div><span class="text-gray-400">主题：</span><strong>【周一晨会】2026-04-27 情报简报</strong></div>
+          </div>
+          <div class="p-3 space-y-2">
+            <div class="h-16 bg-gradient-to-r from-blue-500 to-teal-400 rounded flex items-center justify-center text-white font-semibold">万德商战情报 · 周一晨会简报</div>
+            <div class="font-semibold">📊 本周关键数据</div>
+            <div class="grid grid-cols-3 gap-1">
+              <div class="bg-blue-50 p-1.5 rounded text-center"><div class="text-[10px] text-gray-500">高分客户</div><div class="font-bold text-blue-600">8</div></div>
+              <div class="bg-green-50 p-1.5 rounded text-center"><div class="text-[10px] text-gray-500">新信号</div><div class="font-bold text-green-600">23</div></div>
+              <div class="bg-orange-50 p-1.5 rounded text-center"><div class="text-[10px] text-gray-500">竞品动作</div><div class="font-bold text-orange-600">5</div></div>
+            </div>
+            <div class="font-semibold mt-2">🎯 Top 3 客户</div>
+            <div class="text-gray-600">• 北京欢乐谷 87 分 (+12)</div>
+            <div class="text-gray-600">• 上海迪士尼 82 分 (+5)</div>
+            <div class="text-gray-600">• 长沙方特 79 分 (+8)</div>
+            <div class="font-semibold mt-2">⚔️ 竞品动态</div>
+            <div class="text-gray-600">• 华强方特中标苏州项目 2.1 亿</div>
+            <div class="bg-blue-500 text-white text-center py-2 rounded mt-2">查看完整报告 →</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 4: H5 自适应 ========== -->
+<section id="s4" class="section">
+  <div class="section-title">
+    <span class="no">4</span>
+    <h2>移动端 H5 自适应</h2>
+    <span class="issue-tag">#2739</span>
+    <span class="text-xs text-gray-500">375px 手机壳 · 情报中台首页 H5</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 手机壳 H5 -->
+    <div class="col-span-4 flex justify-center">
+      <div class="phone-shell">
+        <div class="phone-screen">
+          <div class="phone-status"><span>9:41</span><span>●●● 📶 100%</span></div>
+          <!-- H5 内容 -->
+          <div class="bg-gradient-to-b from-blue-500 to-blue-600 text-white px-4 py-3">
+            <div class="text-xs opacity-80">欢迎回来，李总</div>
+            <div class="font-bold text-lg">万德商战情报</div>
+            <div class="mt-2 bg-white/20 backdrop-blur rounded-lg p-2 flex items-center gap-2 text-xs">
+              <span>🔍</span><span class="opacity-80">搜索客户、项目、竞品...</span>
+            </div>
+          </div>
+          <!-- KPI -->
+          <div class="px-4 -mt-4">
+            <div class="bg-white rounded-lg p-3 shadow grid grid-cols-3 gap-2 text-center">
+              <div><div class="text-[10px] text-gray-500">今日信号</div><div class="text-lg font-bold text-blue-500">23</div></div>
+              <div class="border-l border-r"><div class="text-[10px] text-gray-500">高分客户</div><div class="text-lg font-bold text-green-500">8</div></div>
+              <div><div class="text-[10px] text-gray-500">竞品动作</div><div class="text-lg font-bold text-orange-500">5</div></div>
+            </div>
+          </div>
+          <!-- 九宫格 -->
+          <div class="px-4 mt-3">
+            <div class="grid grid-cols-4 gap-2 text-center text-[10px]">
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">🎯</div>客户画像</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">⛏️</div>项目矿</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">⚔️</div>竞品</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">📡</div>雷达</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">🏭</div>行业</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">📊</div>融合</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">📈</div>ROI</div>
+              <div class="bg-white rounded-lg py-2"><div class="text-xl">⚙️</div>设置</div>
+            </div>
+          </div>
+          <!-- 今日推送 -->
+          <div class="px-4 mt-3">
+            <div class="font-semibold text-sm mb-2">🔥 今日重要情报</div>
+            <div class="bg-white rounded-lg p-3 mb-2 shadow-sm">
+              <div class="flex justify-between items-center mb-1">
+                <div class="font-semibold text-sm">北京欢乐谷</div>
+                <span class="pill pill-red">87 分</span>
+              </div>
+              <div class="text-xs text-gray-500">二期 3.2 亿预算已批复</div>
+              <div class="text-[10px] text-gray-400 mt-1">2h 前 · 高优先级</div>
+            </div>
+            <div class="bg-white rounded-lg p-3 mb-2 shadow-sm">
+              <div class="flex justify-between items-center mb-1">
+                <div class="font-semibold text-sm">华强方特中标</div>
+                <span class="pill pill-orange">竞品</span>
+              </div>
+              <div class="text-xs text-gray-500">苏州乐园项目 2.1 亿</div>
+              <div class="text-[10px] text-gray-400 mt-1">4h 前</div>
+            </div>
+          </div>
+          <div style="height:30px;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 说明卡 -->
+    <div class="col-span-8 space-y-4">
+      <div class="card">
+        <div class="card-head"><span>📱 H5 自适应关键点</span></div>
+        <div class="card-body grid grid-cols-2 gap-3 text-sm">
+          <div class="p-3 bg-blue-50 rounded">
+            <div class="font-semibold mb-1">📐 断点适配</div>
+            <div class="text-xs text-gray-600">375 / 414 / 768 (pad) 三档断点，rem 布局，vw 辅助单位</div>
+          </div>
+          <div class="p-3 bg-green-50 rounded">
+            <div class="font-semibold mb-1">👆 触控优化</div>
+            <div class="text-xs text-gray-600">按钮最小 44×44 pt，长按菜单，下拉刷新，无限滚动</div>
+          </div>
+          <div class="p-3 bg-orange-50 rounded">
+            <div class="font-semibold mb-1">🔐 企微免登</div>
+            <div class="text-xs text-gray-600">嵌入企微侧边栏，OAuth 静默登录，共享 Session</div>
+          </div>
+          <div class="p-3 bg-purple-50 rounded">
+            <div class="font-semibold mb-1">⚡ 性能</div>
+            <div class="text-xs text-gray-600">首屏 &lt; 1.5s，骨架屏，图片懒加载，PWA 离线缓存</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>📊 H5 覆盖页面</span><span class="pill pill-blue">6 个核心页</span></div>
+        <div class="card-body grid grid-cols-3 gap-2 text-xs">
+          <div class="p-2 border rounded flex justify-between"><span>首页 Dashboard</span><span class="pill pill-green">✓</span></div>
+          <div class="p-2 border rounded flex justify-between"><span>客户画像详情</span><span class="pill pill-green">✓</span></div>
+          <div class="p-2 border rounded flex justify-between"><span>项目矿搜索</span><span class="pill pill-green">✓</span></div>
+          <div class="p-2 border rounded flex justify-between"><span>竞品动态流</span><span class="pill pill-green">✓</span></div>
+          <div class="p-2 border rounded flex justify-between"><span>雷达预警列表</span><span class="pill pill-green">✓</span></div>
+          <div class="p-2 border rounded flex justify-between"><span>个人订阅设置</span><span class="pill pill-green">✓</span></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>📈 H5 访问统计 (近 30 天)</span></div>
+        <div class="card-body grid grid-cols-4 gap-3">
+          <div class="kpi"><div class="label">日均 UV</div><div class="value">187</div><div class="delta">+23%</div></div>
+          <div class="kpi"><div class="label">日均 PV</div><div class="value">2,456</div><div class="delta">+31%</div></div>
+          <div class="kpi"><div class="label">平均停留</div><div class="value">4'32"</div><div class="delta">+18%</div></div>
+          <div class="kpi"><div class="label">7日留存</div><div class="value">68%</div><div class="delta">+5%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 5: 小程序情报快览 ========== -->
+<section id="s5" class="section">
+  <div class="section-title">
+    <span class="no">5</span>
+    <h2>移动端情报快览小程序</h2>
+    <span class="issue-tag">#2740</span>
+    <span class="text-xs text-gray-500">5 Tab · 今日 / 客户 / 项目 / 竞品 / 我的</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 小程序壳 -->
+    <div class="col-span-4 flex justify-center">
+      <div class="miniapp-shell">
+        <div class="miniapp-capsule">
+          <span>···</span><span>○</span>
+        </div>
+        <div class="phone-screen flex flex-col">
+          <div class="phone-status"><span>9:41</span><span>●●● 📶 100%</span></div>
+          <!-- 顶部标题 -->
+          <div class="bg-white px-4 py-3 border-b text-center font-semibold text-sm">
+            万德情报快览
+          </div>
+          <!-- 内容 (今日 Tab) -->
+          <div class="flex-1 overflow-y-auto bg-gray-50 px-3 py-3 space-y-2">
+            <div class="text-xs text-gray-500">📅 2026-04-27 星期一</div>
+
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div class="font-semibold text-sm">🔥 今日重要</div>
+                <span class="pill pill-red">3</span>
+              </div>
+              <div class="mt-2 space-y-1 text-xs">
+                <div class="flex justify-between"><span>北京欢乐谷 预算批复</span><span class="text-red-500">87 分</span></div>
+                <div class="flex justify-between"><span>上海迪士尼 人事变动</span><span class="text-orange-500">82 分</span></div>
+                <div class="flex justify-between"><span>长沙方特 招标发布</span><span class="text-orange-500">79 分</span></div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div class="font-semibold text-sm">⚔️ 竞品动态</div>
+                <span class="pill pill-orange">5</span>
+              </div>
+              <div class="mt-2 space-y-1 text-xs">
+                <div>• 华强方特 中标苏州 2.1 亿</div>
+                <div>• 海昌海洋 入场青岛项目</div>
+                <div>• 环球影城 新品发布会</div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-3 shadow-sm">
+              <div class="flex justify-between items-center">
+                <div class="font-semibold text-sm">⛏️ 项目矿新增</div>
+                <span class="pill pill-blue">8</span>
+              </div>
+              <div class="mt-2 space-y-1 text-xs">
+                <div>• 重庆欢乐谷三期 / 6.8 亿</div>
+                <div>• 苏州游乐园 / 3.5 亿</div>
+                <div>• 成都主题乐园 / 4.2 亿</div>
+              </div>
+            </div>
+
+            <div class="bg-white rounded-lg p-3 shadow-sm text-center text-xs text-gray-400">
+              — 已加载全部 —
+            </div>
+          </div>
+          <!-- Tab bar -->
+          <div class="mp-tabbar">
+            <div class="tab active"><span class="ic">📅</span>今日</div>
+            <div class="tab"><span class="ic">🎯</span>客户</div>
+            <div class="tab"><span class="ic">⛏️</span>项目</div>
+            <div class="tab"><span class="ic">⚔️</span>竞品</div>
+            <div class="tab"><span class="ic">👤</span>我的</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 5 Tab 说明 -->
+    <div class="col-span-8 space-y-3">
+      <div class="card">
+        <div class="card-head"><span>📱 5 个 Tab 页结构</span></div>
+        <div class="card-body grid grid-cols-5 gap-2 text-xs">
+          <div class="p-3 border border-blue-200 bg-blue-50 rounded">
+            <div class="text-lg">📅</div>
+            <div class="font-semibold mt-1">今日</div>
+            <div class="text-gray-500 mt-1 text-[11px]">今日重要 / 竞品动态 / 项目矿新增 / 消息时间线</div>
+          </div>
+          <div class="p-3 border rounded">
+            <div class="text-lg">🎯</div>
+            <div class="font-semibold mt-1">客户</div>
+            <div class="text-gray-500 mt-1 text-[11px]">我的客户列表 / 客户分排序 / MEDDIC 快查 / 最近信号</div>
+          </div>
+          <div class="p-3 border rounded">
+            <div class="text-lg">⛏️</div>
+            <div class="font-semibold mt-1">项目</div>
+            <div class="text-gray-500 mt-1 text-[11px]">项目矿搜索 / 地区筛选 / 金额排序 / 收藏项目</div>
+          </div>
+          <div class="p-3 border rounded">
+            <div class="text-lg">⚔️</div>
+            <div class="font-semibold mt-1">竞品</div>
+            <div class="text-gray-500 mt-1 text-[11px]">竞品动态流 / 中标情报 / 对比雷达 / 差距分析</div>
+          </div>
+          <div class="p-3 border rounded">
+            <div class="text-lg">👤</div>
+            <div class="font-semibold mt-1">我的</div>
+            <div class="text-gray-500 mt-1 text-[11px]">订阅管理 / 推送偏好 / 消息历史 / 设置</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>⚙️ 小程序技术</span></div>
+        <div class="card-body grid grid-cols-4 gap-3 text-xs">
+          <div class="p-3 bg-green-50 rounded">
+            <div class="font-semibold">框架</div>
+            <div class="text-gray-600 mt-1">企业微信小程序 / Taro 3.x 跨端</div>
+          </div>
+          <div class="p-3 bg-blue-50 rounded">
+            <div class="font-semibold">登录</div>
+            <div class="text-gray-600 mt-1">企微免登 · 静默授权</div>
+          </div>
+          <div class="p-3 bg-orange-50 rounded">
+            <div class="font-semibold">推送</div>
+            <div class="text-gray-600 mt-1">订阅消息 + 模板消息</div>
+          </div>
+          <div class="p-3 bg-purple-50 rounded">
+            <div class="font-semibold">离线</div>
+            <div class="text-gray-600 mt-1">Storage 缓存客户列表 & 最近查询</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head"><span>📊 小程序 DAU / MAU</span></div>
+        <div class="card-body grid grid-cols-4 gap-3">
+          <div class="kpi"><div class="label">DAU</div><div class="value">142</div><div class="delta">+18%</div></div>
+          <div class="kpi"><div class="label">MAU</div><div class="value">356</div><div class="delta">+24%</div></div>
+          <div class="kpi"><div class="label">人均打开</div><div class="value">6.3 次/日</div><div class="delta">+12%</div></div>
+          <div class="kpi"><div class="label">推送点击率</div><div class="value">42%</div><div class="delta">+8%</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 6: 自定义报告导出 ========== -->
+<section id="s6" class="section">
+  <div class="section-title">
+    <span class="no">6</span>
+    <h2>自定义报告模板与导出</h2>
+    <span class="issue-tag">#2741</span>
+    <span class="text-xs text-gray-500">拖拽字段设计器 + 多格式导出</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 字段库 -->
+    <div class="card col-span-3">
+      <div class="card-head"><span>🗂️ 字段库</span><span class="text-xs text-gray-500">拖拽添加</span></div>
+      <div class="card-body space-y-3 text-xs">
+        <div>
+          <div class="font-semibold text-gray-500 mb-1">客户字段</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="drag-field">≡ 客户名称</span>
+            <span class="drag-field">≡ MEDDIC 分</span>
+            <span class="drag-field">≡ 行业</span>
+            <span class="drag-field">≡ 区域</span>
+            <span class="drag-field">≡ 联系人</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold text-gray-500 mb-1">信号字段</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="drag-field">≡ 信号源</span>
+            <span class="drag-field">≡ 信号类型</span>
+            <span class="drag-field">≡ 触发时间</span>
+            <span class="drag-field">≡ 置信度</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold text-gray-500 mb-1">竞品字段</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="drag-field">≡ 竞品名</span>
+            <span class="drag-field">≡ 中标金额</span>
+            <span class="drag-field">≡ 地区</span>
+          </div>
+        </div>
+        <div>
+          <div class="font-semibold text-gray-500 mb-1">图表组件</div>
+          <div class="flex flex-wrap gap-1.5">
+            <span class="drag-field">≡ 📊 柱图</span>
+            <span class="drag-field">≡ 📈 折线</span>
+            <span class="drag-field">≡ 🎯 雷达</span>
+            <span class="drag-field">≡ 📉 漏斗</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模板设计器 -->
+    <div class="card col-span-6">
+      <div class="card-head">
+        <span>🎨 模板设计器</span>
+        <span class="pill pill-blue">周报模板 - 草稿</span>
+      </div>
+      <div class="card-body space-y-3">
+        <div class="drop-zone">
+          <div class="text-xs text-gray-400 mb-2">📄 页面区域 1：封面</div>
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="drag-field">≡ 报告标题</span>
+            <span class="drag-field">≡ 日期范围</span>
+            <span class="drag-field">≡ Logo</span>
+          </div>
+        </div>
+        <div class="drop-zone">
+          <div class="text-xs text-gray-400 mb-2">📊 页面区域 2：核心数据</div>
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="drag-field">≡ 客户名称</span>
+            <span class="drag-field">≡ MEDDIC 分</span>
+            <span class="drag-field">≡ 🎯 雷达</span>
+            <span class="drag-field">≡ 📊 柱图</span>
+          </div>
+        </div>
+        <div class="drop-zone">
+          <div class="text-xs text-gray-400 mb-2">⚔️ 页面区域 3：竞品分析</div>
+          <div class="flex gap-1.5 flex-wrap">
+            <span class="drag-field">≡ 竞品名</span>
+            <span class="drag-field">≡ 中标金额</span>
+            <span class="drag-field">≡ 📈 折线</span>
+          </div>
+        </div>
+        <div class="flex justify-between pt-2">
+          <button class="text-xs px-3 py-1.5 border rounded">预览</button>
+          <div class="space-x-1">
+            <button class="text-xs px-3 py-1.5 border rounded">保存草稿</button>
+            <button class="text-xs px-3 py-1.5 bg-blue-500 text-white rounded">发布模板</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 导出 -->
+    <div class="card col-span-3">
+      <div class="card-head"><span>📤 导出格式</span></div>
+      <div class="card-body space-y-2">
+        <button class="w-full p-3 border-2 border-red-200 bg-red-50 rounded flex items-center gap-2 text-sm hover:border-red-400">
+          <span class="text-2xl">📄</span>
+          <div class="text-left">
+            <div class="font-semibold">PDF</div>
+            <div class="text-[11px] text-gray-500">打印友好 / 带目录</div>
+          </div>
+        </button>
+        <button class="w-full p-3 border-2 border-blue-200 bg-blue-50 rounded flex items-center gap-2 text-sm hover:border-blue-400">
+          <span class="text-2xl">📝</span>
+          <div class="text-left">
+            <div class="font-semibold">DOCX</div>
+            <div class="text-[11px] text-gray-500">可编辑 Word 文档</div>
+          </div>
+        </button>
+        <button class="w-full p-3 border-2 border-orange-200 bg-orange-50 rounded flex items-center gap-2 text-sm hover:border-orange-400">
+          <span class="text-2xl">📊</span>
+          <div class="text-left">
+            <div class="font-semibold">PPT</div>
+            <div class="text-[11px] text-gray-500">汇报幻灯 / 图表</div>
+          </div>
+        </button>
+        <button class="w-full p-3 border-2 border-green-200 bg-green-50 rounded flex items-center gap-2 text-sm hover:border-green-400">
+          <span class="text-2xl">📗</span>
+          <div class="text-left">
+            <div class="font-semibold">Excel</div>
+            <div class="text-[11px] text-gray-500">原始数据 / 可透视</div>
+          </div>
+        </button>
+        <div class="text-[11px] text-gray-400 pt-2 border-t mt-2">
+          支持水印 / 密级 / 定时导出<br>
+          近 30 天导出 247 次
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 预览文档 -->
+  <div class="mt-4 grid grid-cols-3 gap-4">
+    <div class="preview-doc">
+      <h4>华东文旅周报 · 2026W17</h4>
+      <div class="flex gap-2 my-2 text-[10px]">
+        <span class="pill pill-blue">PDF</span>
+        <span class="pill pill-gray">14 页</span>
+        <span class="pill pill-gray">3.2 MB</span>
+      </div>
+      <div class="text-gray-500">1. 本周高分客户 (5 个)<br>2. 竞品动态 (华强方特)<br>3. 项目矿新增 (8 条)<br>4. 下周预测</div>
+    </div>
+    <div class="preview-doc">
+      <h4>北京欢乐谷客户画像</h4>
+      <div class="flex gap-2 my-2 text-[10px]">
+        <span class="pill pill-blue">PDF</span>
+        <span class="pill pill-gray">8 页</span>
+        <span class="pill pill-gray">2.1 MB</span>
+      </div>
+      <div class="text-gray-500">1. MEDDIC 雷达<br>2. 组织架构图<br>3. 决策链分析<br>4. 竞对入场情况<br>5. 攻单建议</div>
+    </div>
+    <div class="preview-doc">
+      <h4>月度情报深度报告 · 2026/04</h4>
+      <div class="flex gap-2 my-2 text-[10px]">
+        <span class="pill pill-orange">PPT</span>
+        <span class="pill pill-gray">28 页</span>
+        <span class="pill pill-gray">5.6 MB</span>
+      </div>
+      <div class="text-gray-500">1. 行业全景<br>2. 赢单复盘 (3 个)<br>3. 丢单分析 (2 个)<br>4. ROI 测算<br>5. 下月指引</div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 7: CRM 双向同步 ========== -->
+<section id="s7" class="section">
+  <div class="section-title">
+    <span class="no">7</span>
+    <h2>CRM 双向数据同步</h2>
+    <span class="issue-tag">#2742</span>
+    <span class="text-xs text-gray-500">同步状态看板 + 字段映射配置</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 同步状态看板 -->
+    <div class="card col-span-8">
+      <div class="card-head">
+        <span>🔄 同步状态看板</span>
+        <span class="pill pill-green">运行中</span>
+      </div>
+      <div class="card-body space-y-4">
+        <!-- CRM → 情报 -->
+        <div class="p-3 bg-gradient-to-r from-blue-50 to-transparent border-l-4 border-blue-500 rounded">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-semibold text-sm">⬅️ CRM → 情报中台</div>
+            <span class="text-xs text-gray-500">最后同步：2 分钟前</span>
+          </div>
+          <div class="sync-flow mb-2">
+            <div class="sync-node">🏢 Salesforce CRM<div class="text-[10px] text-gray-400">客户/商机/联系人</div></div>
+            <span class="sync-arrow">→</span>
+            <div class="sync-node">🔁 同步引擎<div class="text-[10px] text-gray-400">每 5 分钟</div></div>
+            <span class="sync-arrow">→</span>
+            <div class="sync-node">💡 情报中台<div class="text-[10px] text-gray-400">画像库</div></div>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-xs">
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">今日同步</div><div class="font-bold text-blue-600">1,247 条</div></div>
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">成功率</div><div class="font-bold text-green-600">99.8%</div></div>
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">失败</div><div class="font-bold text-red-500">2 条</div></div>
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">延迟</div><div class="font-bold">&lt;30s</div></div>
+          </div>
+        </div>
+
+        <!-- 情报 → CRM -->
+        <div class="p-3 bg-gradient-to-r from-green-50 to-transparent border-l-4 border-green-500 rounded">
+          <div class="flex items-center justify-between mb-2">
+            <div class="font-semibold text-sm">➡️ 情报中台 → CRM</div>
+            <span class="text-xs text-gray-500">最后同步：5 分钟前</span>
+          </div>
+          <div class="sync-flow mb-2">
+            <div class="sync-node">💡 情报中台<div class="text-[10px] text-gray-400">客户分/信号/竞对</div></div>
+            <span class="sync-arrow">→</span>
+            <div class="sync-node">🔁 同步引擎<div class="text-[10px] text-gray-400">实时 + 日度</div></div>
+            <span class="sync-arrow">→</span>
+            <div class="sync-node">🏢 CRM 自定义字段<div class="text-[10px] text-gray-400">回写</div></div>
+          </div>
+          <div class="grid grid-cols-4 gap-2 text-xs">
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">今日回写</div><div class="font-bold text-green-600">823 条</div></div>
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">成功率</div><div class="font-bold text-green-600">99.5%</div></div>
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">冲突</div><div class="font-bold text-orange-500">3 条</div></div>
+            <div class="p-2 bg-white rounded text-center"><div class="text-gray-500">触发规则</div><div class="font-bold">12 条</div></div>
+          </div>
+        </div>
+
+        <!-- 最近事件 -->
+        <div>
+          <div class="font-semibold text-sm mb-2">📋 最近同步事件</div>
+          <table class="data">
+            <thead><tr><th>时间</th><th>方向</th><th>实体</th><th>操作</th><th>状态</th></tr></thead>
+            <tbody>
+              <tr><td class="text-xs">09:42:15</td><td><span class="pill pill-green">→ CRM</span></td><td>北京欢乐谷</td><td>回写客户分 87 / +3 信号</td><td><span class="pill pill-green">成功</span></td></tr>
+              <tr><td class="text-xs">09:41:02</td><td><span class="pill pill-blue">← CRM</span></td><td>上海迪士尼</td><td>拉取新联系人</td><td><span class="pill pill-green">成功</span></td></tr>
+              <tr><td class="text-xs">09:38:46</td><td><span class="pill pill-green">→ CRM</span></td><td>长沙方特</td><td>写入 Deal 信号</td><td><span class="pill pill-orange">重试 1</span></td></tr>
+              <tr><td class="text-xs">09:35:20</td><td><span class="pill pill-blue">← CRM</span></td><td>苏州乐园</td><td>创建新商机</td><td><span class="pill pill-green">成功</span></td></tr>
+              <tr><td class="text-xs">09:32:11</td><td><span class="pill pill-green">→ CRM</span></td><td>成都欢乐谷</td><td>字段冲突 - 金额</td><td><span class="pill pill-red">冲突</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- 字段映射 -->
+    <div class="card col-span-4">
+      <div class="card-head">
+        <span>🔗 字段映射配置</span>
+        <button class="text-xs text-blue-500">+ 新增映射</button>
+      </div>
+      <div class="card-body">
+        <table class="data">
+          <thead><tr><th>CRM 字段</th><th>方向</th><th>情报字段</th></tr></thead>
+          <tbody>
+            <tr>
+              <td class="text-xs font-mono">Account.Name</td>
+              <td class="text-center text-blue-500">⇄</td>
+              <td class="text-xs font-mono">customer.name</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Account.Industry</td>
+              <td class="text-center text-blue-500">←</td>
+              <td class="text-xs font-mono">customer.industry</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Account.MEDDIC__c</td>
+              <td class="text-center text-green-500">→</td>
+              <td class="text-xs font-mono">customer.score</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Opportunity.Amount</td>
+              <td class="text-center text-blue-500">⇄</td>
+              <td class="text-xs font-mono">deal.amount</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Opportunity.Stage</td>
+              <td class="text-center text-blue-500">⇄</td>
+              <td class="text-xs font-mono">deal.stage</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Opp.Signals__c</td>
+              <td class="text-center text-green-500">→</td>
+              <td class="text-xs font-mono">deal.signals[]</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Contact.FullName</td>
+              <td class="text-center text-blue-500">⇄</td>
+              <td class="text-xs font-mono">contact.name</td>
+            </tr>
+            <tr>
+              <td class="text-xs font-mono">Contact.Role__c</td>
+              <td class="text-center text-blue-500">⇄</td>
+              <td class="text-xs font-mono">contact.meddic_role</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-3 p-2 bg-gray-50 rounded text-[11px] text-gray-500">
+          <div><span class="text-green-500">→</span> 情报回写 CRM（5 个字段）</div>
+          <div><span class="text-blue-500">←</span> CRM 拉取（1 个字段）</div>
+          <div><span class="text-blue-500">⇄</span> 双向同步（冲突走最后写入胜出 LWW）</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== Section 8: ROI 埋点分析 ========== -->
+<section id="s8" class="section">
+  <div class="section-title">
+    <span class="no">8</span>
+    <h2>情报使用数据埋点与 ROI 分析</h2>
+    <span class="issue-tag">#2743</span>
+    <span class="text-xs text-gray-500">使用漏斗 + ROI 测算</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4 mb-4">
+    <div class="kpi col-span-3"><div class="label">本月情报推送</div><div class="value">3,847 条</div><div class="delta">+28%</div></div>
+    <div class="kpi col-span-3"><div class="label">驱动赢单</div><div class="value">23 个</div><div class="delta">+8 个 vs 上月</div></div>
+    <div class="kpi col-span-3"><div class="label">情报触发金额</div><div class="value">¥ 1.47 亿</div><div class="delta">+35%</div></div>
+    <div class="kpi col-span-3"><div class="label">ROI 测算</div><div class="value">18.4×</div><div class="delta">情报成本 800 万 / 增量 1.47 亿</div></div>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4">
+    <!-- 使用漏斗 -->
+    <div class="card col-span-7">
+      <div class="card-head"><span>📉 情报使用漏斗</span><span class="text-xs text-gray-500">近 30 天</span></div>
+      <div class="card-body space-y-3">
+        <div class="funnel-row">
+          <div class="funnel-bar" style="width:100%;">① 推送 &nbsp; 12,847 条 &nbsp; (100%)</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-bar" style="width:82%;background:linear-gradient(90deg,#36cfc9,#5cdbd3);">② 打开 &nbsp; 10,534 条 &nbsp; (82.0%)</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-bar" style="width:54%;background:linear-gradient(90deg,#13c2c2,#36cfc9);">③ 深读点击 &nbsp; 6,937 条 &nbsp; (54.0%)</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-bar" style="width:21%;background:linear-gradient(90deg,#faad14,#ffc53d);">④ 决策采纳 &nbsp; 2,698 条 &nbsp; (21.0%)</div>
+        </div>
+        <div class="funnel-row">
+          <div class="funnel-bar" style="width:7%;background:linear-gradient(90deg,#f5222d,#ff7875);min-width:140px;">⑤ 赢单 &nbsp; 23 笔 &nbsp; (0.18%)</div>
+        </div>
+
+        <div class="mt-4 p-3 bg-blue-50 rounded text-xs">
+          <div class="font-semibold mb-1">📌 漏斗洞察</div>
+          <div class="text-gray-600">• 推送→打开转化 82% 健康（行业基准 65%）</div>
+          <div class="text-gray-600">• 深读→采纳转化 38.9% 偏低，建议补充「推荐行动」</div>
+          <div class="text-gray-600">• 采纳→赢单转化 0.85%，关联高分客户占 87%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ROI 测算 -->
+    <div class="card col-span-5">
+      <div class="card-head"><span>💰 ROI 测算明细</span></div>
+      <div class="card-body">
+        <table class="data">
+          <thead><tr><th>维度</th><th>数值</th><th>说明</th></tr></thead>
+          <tbody>
+            <tr><td class="font-semibold">情报系统月成本</td><td>¥ 80 万</td><td class="text-xs text-gray-500">平台 + 数据 + 人力</td></tr>
+            <tr><td class="font-semibold">情报驱动赢单</td><td>23 个</td><td class="text-xs text-gray-500">至少 1 条情报被采纳</td></tr>
+            <tr><td class="font-semibold">赢单总金额</td><td class="text-green-600 font-bold">¥ 1.47 亿</td><td class="text-xs text-gray-500">合同金额</td></tr>
+            <tr><td class="font-semibold">预估增量</td><td class="text-green-600 font-bold">¥ 1,472 万</td><td class="text-xs text-gray-500">增量率 10% 估算</td></tr>
+            <tr><td class="font-semibold">ROI</td><td class="text-red-500 font-bold text-lg">18.4×</td><td class="text-xs text-gray-500">增量 / 成本</td></tr>
+            <tr><td class="font-semibold">平均赢单周期</td><td>34 天</td><td class="text-xs text-gray-500">相比无情报 -12 天</td></tr>
+            <tr><td class="font-semibold">高分客户赢率</td><td>47%</td><td class="text-xs text-gray-500">相比全量 18%</td></tr>
+          </tbody>
+        </table>
+
+        <div class="mt-3 p-2 bg-green-50 rounded text-xs">
+          <div class="font-semibold text-green-700">✅ 每投入 ¥1 情报成本，产出 ¥18.4 赢单增量</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 按角色 ROI -->
+    <div class="card col-span-12">
+      <div class="card-head"><span>👥 按角色 / 按渠道 ROI 拆分</span></div>
+      <div class="card-body grid grid-cols-2 gap-4">
+        <div>
+          <div class="font-semibold text-sm mb-2">按角色</div>
+          <table class="data">
+            <thead><tr><th>角色</th><th>推送</th><th>采纳率</th><th>赢单</th><th>ROI</th></tr></thead>
+            <tbody>
+              <tr><td>销售总监</td><td>523</td><td>48%</td><td>8</td><td class="text-red-500 font-bold">24.7×</td></tr>
+              <tr><td>区域经理</td><td>2,847</td><td>32%</td><td>12</td><td class="text-red-500 font-bold">19.3×</td></tr>
+              <tr><td>商务主管</td><td>412</td><td>41%</td><td>3</td><td class="text-orange-500 font-bold">12.8×</td></tr>
+              <tr><td>售前顾问</td><td>65</td><td>22%</td><td>0</td><td class="text-gray-500">—</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div>
+          <div class="font-semibold text-sm mb-2">按渠道</div>
+          <table class="data">
+            <thead><tr><th>渠道</th><th>推送</th><th>打开率</th><th>采纳率</th><th>贡献赢单</th></tr></thead>
+            <tbody>
+              <tr><td>🤖 企微 Bot</td><td>7,234</td><td>89%</td><td>24%</td><td>14 个</td></tr>
+              <tr><td>📧 邮件</td><td>3,412</td><td>72%</td><td>18%</td><td>5 个</td></tr>
+              <tr><td>📱 H5</td><td>1,523</td><td>68%</td><td>15%</td><td>3 个</td></tr>
+              <tr><td>👨‍💻 小程序</td><td>678</td><td>85%</td><td>28%</td><td>1 个</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- [底部说明] -->
+<footer class="px-8 py-6 mt-6 bg-white border-t">
+  <div class="text-xs text-gray-600">
+    <div class="font-semibold text-sm text-gray-800 mb-2">📋 Phase 7 分发 — 原型说明</div>
+    <table class="w-full border-collapse">
+      <thead><tr class="bg-gray-50">
+        <th class="p-2 border text-left font-semibold">#</th>
+        <th class="p-2 border text-left font-semibold">子 Issue</th>
+        <th class="p-2 border text-left font-semibold">标题</th>
+        <th class="p-2 border text-left font-semibold">对应区域</th>
+      </tr></thead>
+      <tbody>
+        <tr><td class="p-2 border">1</td><td class="p-2 border font-mono">#2736</td><td class="p-2 border">企业微信 Bot 集成</td><td class="p-2 border">Section ① 企微 Bot</td></tr>
+        <tr><td class="p-2 border">2</td><td class="p-2 border font-mono">#2737</td><td class="p-2 border">企微交互式查询指令</td><td class="p-2 border">Section ② 交互指令</td></tr>
+        <tr><td class="p-2 border">3</td><td class="p-2 border font-mono">#2738</td><td class="p-2 border">邮件订阅与定时报告</td><td class="p-2 border">Section ③ 邮件订阅</td></tr>
+        <tr><td class="p-2 border">4</td><td class="p-2 border font-mono">#2739</td><td class="p-2 border">移动端 H5 自适应</td><td class="p-2 border">Section ④ H5 (手机壳)</td></tr>
+        <tr><td class="p-2 border">5</td><td class="p-2 border font-mono">#2740</td><td class="p-2 border">移动端情报快览小程序</td><td class="p-2 border">Section ⑤ 小程序 (小程序壳)</td></tr>
+        <tr><td class="p-2 border">6</td><td class="p-2 border font-mono">#2741</td><td class="p-2 border">自定义报告模板与导出</td><td class="p-2 border">Section ⑥ 报告导出</td></tr>
+        <tr><td class="p-2 border">7</td><td class="p-2 border font-mono">#2742</td><td class="p-2 border">CRM 双向数据同步</td><td class="p-2 border">Section ⑦ CRM 同步</td></tr>
+        <tr><td class="p-2 border">8</td><td class="p-2 border font-mono">#2743</td><td class="p-2 border">情报使用数据埋点与 ROI 分析</td><td class="p-2 border">Section ⑧ ROI 埋点</td></tr>
+      </tbody>
+    </table>
+    <div class="mt-3 text-gray-500">低保真原型 v1.0 · 万德AI平台 · 商战情报中台 · Phase 7 分发 · 2026</div>
+  </div>
+</footer>
+
+<script>
+  // 锚点点击高亮
+  document.querySelectorAll('.anchor-nav a').forEach(a => {
+    a.addEventListener('click', function() {
+      document.querySelectorAll('.anchor-nav a').forEach(x => x.style.color = '#525866');
+      this.style.color = '#1890ff';
+    });
+  });
+</script>
+
+</body>
+</html>

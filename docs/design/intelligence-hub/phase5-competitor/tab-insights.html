@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 洞察</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .score-card { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; padding: 14px; }
+    .heatmap-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 2px; }
+    .heat-cell { aspect-ratio: 1; border-radius: 2px; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #fff; font-weight: 600; }
+    .heat-0 { background: #f0f0f0; color: #999; }
+    .heat-1 { background: #bae7ff; }
+    .heat-2 { background: #69c0ff; }
+    .heat-3 { background: #1890ff; }
+    .heat-4 { background: #096dd9; }
+    .signal-chain { display: flex; align-items: center; gap: 6px; padding: 10px 0; border-bottom: 1px dashed #f0f0f0; }
+    .signal-node { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; padding: 6px 10px; font-size: 11.5px; flex: 1; }
+    .signal-arrow { color: #1890ff; font-size: 14px; }
+    .rank-up { color: #52c41a; font-weight: 600; }
+    .rank-down { color: #ff4d4f; font-weight: 600; }
+    .blank-cell { background: #fff; border: 1px dashed #ffa940; border-radius: 4px; padding: 10px; }
+    th, td { font-size: 12.5px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;"><span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span><span style="font-weight:600;color:#ad6800;">Tab6 · AI 洞察 (评分/信号链/热力/空白/合同到期)</span></div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">AI 维度的战略洞察：T0/T1/T2 自动分级 + 升降级、信号链自动串联、区域热力对比（竞品 vs 万德）、空白区域发现 + Lookalike、竞品合同到期预测</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">管理层, 战略分析师, 销售总监</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">AI 威胁度评分卡 / 升降级表 / 信号链关联 / 区域热力对比 / 空白区域 + Lookalike / 合同到期预测表</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击评分查看权重 / 空白区域钻取 / 生成 Lookalike 搜索 / 合同到期跳 CRM 商机</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">评分卡 ≥ 6 家 / 信号链 ≥ 3 组 / 热力图 2 张 / 空白区域 ≥ 4 条 / 到期表 ≥ 5 条</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase5 竞品情报 详细设计.md §2.6</a></div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [AI 威胁度评分] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">🤖 AI 威胁度评分 + 自动分级 <span class="text-xs text-gray-500 font-normal ml-2">每周一自动评分 · 6 维度加权</span></h3>
+    <div class="text-xs text-gray-500">权重：营收 20% · 海外占比 20% · 项目重叠 25% · 产品相似度 15% · 价格竞争力 10% · 媒体热度 10%</div>
+  </div>
+  <div class="grid grid-cols-3 gap-3 mb-4">
+    <div class="score-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold">🇩🇰 KOMPAN</span><span class="rank-up">T1 (持平)</span></div>
+      <div class="mt-2 flex items-end gap-2"><div class="text-3xl font-bold text-red-600">92</div><div class="text-xs text-gray-500 pb-1">/ 100</div></div>
+      <div class="text-xs text-gray-500 mt-1">项目重叠 28/30 · 价格劣势 -54%</div>
+    </div>
+    <div class="score-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold">🇺🇸 PlayCore</span><span class="rank-up">T1 ↑</span></div>
+      <div class="mt-2 flex items-end gap-2"><div class="text-3xl font-bold text-red-600">88</div><div class="text-xs text-gray-500 pb-1">/ 100</div></div>
+      <div class="text-xs text-gray-500 mt-1">营收第一 · APAC 刚刚起步</div>
+    </div>
+    <div class="score-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold">🇺🇸 PlayPower</span><span class="rank-up">T1 ↑ (从 T2)</span></div>
+      <div class="mt-2 flex items-end gap-2"><div class="text-3xl font-bold text-orange-500">78</div><div class="text-xs text-gray-500 pb-1">/ 100</div></div>
+      <div class="text-xs text-gray-500 mt-1">4 月设立中国代表处</div>
+    </div>
+    <div class="score-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold">🇺🇸 LSI Industries</span><span>T1 持平</span></div>
+      <div class="mt-2 flex items-end gap-2"><div class="text-3xl font-bold text-orange-500">75</div><div class="text-xs text-gray-500 pb-1">/ 100</div></div>
+      <div class="text-xs text-gray-500 mt-1">运动场+照明组合优势</div>
+    </div>
+    <div class="score-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold">🇸🇪 HAGS</span><span class="rank-up">T1 ↑</span></div>
+      <div class="mt-2 flex items-end gap-2"><div class="text-3xl font-bold text-orange-500">72</div><div class="text-xs text-gray-500 pb-1">/ 100</div></div>
+      <div class="text-xs text-gray-500 mt-1">APAC 总裁新任命</div>
+    </div>
+    <div class="score-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold">🇫🇷 Proludic</span><span class="rank-down">T1 ↓</span></div>
+      <div class="mt-2 flex items-end gap-2"><div class="text-3xl font-bold text-orange-500">68</div><div class="text-xs text-gray-500 pb-1">/ 100</div></div>
+      <div class="text-xs text-gray-500 mt-1">APAC 活跃度下降</div>
+    </div>
+  </div>
+
+  <!-- 升降级 -->
+  <div class="bg-gray-50 rounded p-3">
+    <div class="text-xs font-bold text-gray-700 mb-2">📈 近 30 天升降级</div>
+    <div class="grid grid-cols-2 gap-2 text-xs">
+      <div class="flex justify-between p-2 bg-white rounded border border-gray-200"><span>PlayPower: T2 → T1</span><span class="rank-up">↑ 升级</span></div>
+      <div class="flex justify-between p-2 bg-white rounded border border-gray-200"><span>HAGS: T1 → T1 (评分↑8)</span><span class="rank-up">↑ 评分上升</span></div>
+      <div class="flex justify-between p-2 bg-white rounded border border-gray-200"><span>Lappset: T2 → T3</span><span class="rank-down">↓ 降级</span></div>
+      <div class="flex justify-between p-2 bg-white rounded border border-gray-200"><span>Berliner: T3 → T2</span><span class="rank-up">↑ 升级</span></div>
+    </div>
+  </div>
+  <div class="mt-2 text-xs text-gray-500">关联 Issue: #2720 #2493</div>
+</div>
+
+<!-- [信号链关联] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">🔗 信号链自动串联 <span class="text-xs text-gray-500 font-normal ml-2">同项目不同阶段的动态自动聚合</span></h3>
+  </div>
+  <div>
+    <div class="signal-chain">
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-01-15 · LinkedIn</div>
+        <div class="font-semibold">KOMPAN 任命新 APAC BD 经理</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-02-28 · 政采网</div>
+        <div class="font-semibold">深圳罗湖公园招标文件发布</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-03-10 · 官网新闻</div>
+        <div class="font-semibold">KOMPAN 亚太展会推介罗湖方案</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node" style="border-color:#ff7875;background:#fff1f0;">
+        <div class="text-[10px] text-red-500">2026-04-20 · 政采公告</div>
+        <div class="font-semibold">✓ KOMPAN 中标 ¥380 万</div>
+      </div>
+    </div>
+    <div class="signal-chain">
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-02-01 · Google 新闻</div>
+        <div class="font-semibold">PlayCore 收购 Cloudburst 水游乐</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-03-15 · 官网</div>
+        <div class="font-semibold">Cloudburst 2.0 新系列发布</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-04-05 · LinkedIn</div>
+        <div class="font-semibold">APAC 销售团队扩招水游乐产品经理</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node" style="border-color:#faad14;background:#fffbe6;">
+        <div class="text-[10px] text-orange-500">预测 · Q2 2026</div>
+        <div class="font-semibold">⚡ 可能进入 APAC 水游乐市场</div>
+      </div>
+    </div>
+    <div class="signal-chain">
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-03-05 · LinkedIn</div>
+        <div class="font-semibold">HAGS 任命 Lars Nilsson 为 APAC 总裁</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-04-02 · 官网</div>
+        <div class="font-semibold">2026 新品目录增 UniMini 幼儿系列</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node">
+        <div class="text-[10px] text-gray-400">2026-04-15 · 行业媒体</div>
+        <div class="font-semibold">参展 ChildrenPlay China 2026</div>
+      </div>
+      <div class="signal-arrow">→</div>
+      <div class="signal-node" style="border-color:#faad14;background:#fffbe6;">
+        <div class="text-[10px] text-orange-500">预测 · Q3 2026</div>
+        <div class="font-semibold">⚡ 中国幼教市场重点进攻</div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-3 text-xs text-gray-500">关联 Issue: #2720 #2724</div>
+</div>
+
+<!-- [区域热力图对比] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <h3 class="text-base font-bold text-gray-700 mb-3">🗺️ 区域热力图对比 <span class="text-xs text-gray-500 font-normal">（T1 6 家聚合 vs 万德）</span></h3>
+  <div class="grid grid-cols-2 gap-4">
+    <div>
+      <div class="text-sm font-semibold text-gray-700 mb-2">T1 竞品项目分布（近 12 月）</div>
+      <div class="heatmap-grid">
+        <div class="heat-cell heat-4">38</div><div class="heat-cell heat-4">35</div><div class="heat-cell heat-3">22</div><div class="heat-cell heat-2">12</div><div class="heat-cell heat-2">10</div><div class="heat-cell heat-1">5</div><div class="heat-cell heat-1">4</div><div class="heat-cell heat-0">1</div><div class="heat-cell heat-2">11</div><div class="heat-cell heat-3">18</div><div class="heat-cell heat-1">6</div><div class="heat-cell heat-0">0</div>
+        <div class="heat-cell heat-3">25</div><div class="heat-cell heat-3">20</div><div class="heat-cell heat-4">40</div><div class="heat-cell heat-3">18</div><div class="heat-cell heat-2">8</div><div class="heat-cell heat-2">9</div><div class="heat-cell heat-1">4</div><div class="heat-cell heat-0">2</div><div class="heat-cell heat-1">3</div><div class="heat-cell heat-1">5</div><div class="heat-cell heat-0">1</div><div class="heat-cell heat-0">0</div>
+        <div class="heat-cell heat-1">6</div><div class="heat-cell heat-2">10</div><div class="heat-cell heat-2">14</div><div class="heat-cell heat-3">19</div><div class="heat-cell heat-3">22</div><div class="heat-cell heat-2">12</div><div class="heat-cell heat-1">5</div><div class="heat-cell heat-0">1</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div>
+      </div>
+      <div class="text-[10px] text-gray-500 mt-2 flex justify-between"><span>← 北美 / 欧洲</span><span>APAC / 中东 →</span></div>
+      <div class="text-xs text-gray-500 mt-1">热点：北美东海岸、欧洲中部、东南亚</div>
+    </div>
+    <div>
+      <div class="text-sm font-semibold text-gray-700 mb-2">万德项目分布（近 12 月）</div>
+      <div class="heatmap-grid">
+        <div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">1</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-4">52</div><div class="heat-cell heat-4">48</div><div class="heat-cell heat-3">22</div><div class="heat-cell heat-1">3</div>
+        <div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">1</div><div class="heat-cell heat-1">3</div><div class="heat-cell heat-0">2</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-1">4</div><div class="heat-cell heat-4">45</div><div class="heat-cell heat-3">28</div><div class="heat-cell heat-2">10</div><div class="heat-cell heat-0">1</div>
+        <div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">1</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-0">0</div><div class="heat-cell heat-2">15</div><div class="heat-cell heat-1">6</div><div class="heat-cell heat-0">2</div><div class="heat-cell heat-0">0</div>
+      </div>
+      <div class="text-[10px] text-gray-500 mt-2 flex justify-between"><span>← 北美 / 欧洲</span><span>APAC / 中东 →</span></div>
+      <div class="text-xs text-gray-500 mt-1">热点：华南、华东、东南亚刚起步</div>
+    </div>
+  </div>
+  <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded text-xs text-gray-700">
+    💡 <b>AI 洞察：</b>竞品集中的北美/欧洲万德基本空白；万德强势的华南/华东竞品渗透度低但 KOMPAN 正在发力；中东是双方共同空白，但竞品已有 Proludic/KOMPAN 布局，万德应加快 BD。
+  </div>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+
+  <!-- [空白区域] -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-base font-bold text-gray-700 mb-3">🌱 空白区域 + Lookalike 发现</h3>
+    <div class="space-y-2">
+      <div class="blank-cell">
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">印尼雅加达 Jabodetabek</div>
+            <div class="text-xs text-gray-500 mt-1">竞品项目 0 · 人口 3200 万 · 公园投资近 3 年 +23%</div>
+          </div>
+          <button class="px-2 py-1 bg-blue-500 text-white rounded text-xs">生成 Lookalike</button>
+        </div>
+        <div class="text-xs text-blue-600 mt-2">💡 类比万德在新加坡的成功（3 个项目 S$1.5M），潜在规模 ￥2000 万+</div>
+      </div>
+      <div class="blank-cell">
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">墨西哥城 CDMX</div>
+            <div class="text-xs text-gray-500 mt-1">竞品仅 1 个 · 人口 2200 万 · 公共空间改造预算 $5 亿</div>
+          </div>
+          <button class="px-2 py-1 bg-blue-500 text-white rounded text-xs">生成 Lookalike</button>
+        </div>
+        <div class="text-xs text-blue-600 mt-2">💡 类比 KOMPAN 在里约热内卢模式，预计 18 个月可突破</div>
+      </div>
+      <div class="blank-cell">
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">越南胡志明市</div>
+            <div class="text-xs text-gray-500 mt-1">竞品项目 2 · 本土品牌稀缺 · 经济增速 6.5%</div>
+          </div>
+          <button class="px-2 py-1 bg-blue-500 text-white rounded text-xs">生成 Lookalike</button>
+        </div>
+        <div class="text-xs text-blue-600 mt-2">💡 类比万德华南模式，本地制造+经销网络搭建</div>
+      </div>
+      <div class="blank-cell">
+        <div class="flex justify-between items-start">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">沙特利雅得 NEOM 项目</div>
+            <div class="text-xs text-gray-500 mt-1">竞品未进入 · 2030 愿景 · 公共设施预算 $5000亿</div>
+          </div>
+          <button class="px-2 py-1 bg-blue-500 text-white rounded text-xs">生成 Lookalike</button>
+        </div>
+        <div class="text-xs text-blue-600 mt-2">💡 全行业空白，先发优势明显</div>
+      </div>
+    </div>
+    <div class="mt-3 text-xs text-gray-500">关联 Issue: #2371 · 一键生成后注入 Phase3 矿场搜索</div>
+  </div>
+
+  <!-- [合同到期预测] -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-base font-bold text-gray-700 mb-3">⏰ 竞品合同到期预测 <span class="text-xs text-gray-500 font-normal">（翻盘商机窗口）</span></h3>
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-100 text-xs text-gray-600"><th class="p-2 text-left border border-gray-300">预计到期</th><th class="p-2 text-left border border-gray-300">原供应商</th><th class="p-2 text-left border border-gray-300">项目</th><th class="p-2 text-right border border-gray-300">原金额</th><th class="p-2 text-left border border-gray-300">操作</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-2 border border-gray-300 text-red-500">2026-06</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">上海世博后滩公园维保</td><td class="p-2 border border-gray-300 text-right">￥80 万/年</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">建档跟进</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300 text-red-500">2026-07</td><td class="p-2 border border-gray-300">Playworld</td><td class="p-2 border border-gray-300">美国 San Diego 海滩公园</td><td class="p-2 border border-gray-300 text-right">$200K/年</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">建档跟进</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300 text-orange-500">2026-09</td><td class="p-2 border border-gray-300">Lappset</td><td class="p-2 border border-gray-300">Helsinki 港口公园（3 年原约到期）</td><td class="p-2 border border-gray-300 text-right">€450K</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">建档跟进</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300 text-orange-500">2026-11</td><td class="p-2 border border-gray-300">HAGS</td><td class="p-2 border border-gray-300">深圳某社区公园维保</td><td class="p-2 border border-gray-300 text-right">￥40 万/年</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">建档跟进</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300">2027-02</td><td class="p-2 border border-gray-300">Proludic</td><td class="p-2 border border-gray-300">Dubai Creek Park 一期</td><td class="p-2 border border-gray-300 text-right">AED 2M</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">建档跟进</td></tr>
+        <tr><td class="p-2 border border-gray-300">2027-05</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">北京朝阳公园扩建合同</td><td class="p-2 border border-gray-300 text-right">￥300 万</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">建档跟进</td></tr>
+      </tbody>
+    </table>
+    <div class="mt-2 text-xs text-gray-500">💡 建档跟进 = 自动推送到 Phase3 矿场+CRM 商机池 · 关联 Issue: #2724 #2434</div>
+  </div>
+
+</div>
+
+</body>
+</html>

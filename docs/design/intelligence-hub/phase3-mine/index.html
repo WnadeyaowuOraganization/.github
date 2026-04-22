@@ -1,0 +1,971 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台·Phase 3 项目矿场升级（TenderStrike）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', 'Segoe UI', sans-serif; background: #f5f6f8; color: #333; }
+
+    /* ======== 基础布局 ======== */
+    .breadcrumb { padding: 10px 24px; font-size: 13px; color: #999; background: #fff; border-bottom: 1px solid #f0f0f0; display: flex; align-items: center; justify-content: space-between; }
+    .breadcrumb strong { color: #333; }
+    .back-btn { font-size: 12px; color: #1890ff; cursor: pointer; padding: 4px 10px; border: 1px solid #1890ff; border-radius: 4px; background: #fff; }
+    .back-btn:hover { background: #e6f7ff; }
+
+    /* ======== antd 风格 Tab ======== */
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 24px; position: sticky; top: 0; z-index: 20; }
+    .tab-item { padding: 12px 22px; cursor: pointer; color: #666; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; transition: all 0.2s; font-weight: 500; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+    .tab-item:hover { color: #1890ff; }
+    .tab-panel { display: none; padding: 20px 24px; }
+    .tab-panel.active { display: block; }
+
+    /* ======== KPI 条 ======== */
+    .kpi-bar { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; padding: 16px 24px; background: #fff; border-bottom: 1px solid #f0f0f0; }
+    .kpi-card { padding: 16px 18px; border: 1px solid #f0f0f0; border-radius: 8px; background: linear-gradient(180deg, #ffffff 0%, #fafbfc 100%); position: relative; overflow: hidden; }
+    .kpi-card::before { content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px; }
+    .kpi-card.blue::before { background: #1890ff; }
+    .kpi-card.green::before { background: #52c41a; }
+    .kpi-card.orange::before { background: #fa8c16; }
+    .kpi-card.red::before { background: #f5222d; }
+    .kpi-label { font-size: 12.5px; color: #8c8c8c; margin-bottom: 6px; }
+    .kpi-value { font-size: 26px; font-weight: 700; color: #262626; line-height: 1.1; }
+    .kpi-sub { font-size: 11.5px; color: #8c8c8c; margin-top: 4px; }
+    .kpi-trend.up { color: #52c41a; }
+    .kpi-trend.down { color: #f5222d; }
+
+    /* ======== 热力条 ======== */
+    .heat-bar { position: relative; width: 120px; height: 14px; background: #f0f2f5; border-radius: 7px; overflow: hidden; }
+    .heat-bar-fill { height: 100%; border-radius: 7px; transition: all 0.3s; }
+    .heat-green { background: linear-gradient(90deg, #52c41a, #73d13d); }
+    .heat-blue  { background: linear-gradient(90deg, #1890ff, #40a9ff); }
+    .heat-orange{ background: linear-gradient(90deg, #fa8c16, #ffa940); }
+    .heat-red   { background: linear-gradient(90deg, #f5222d, #ff4d4f); }
+
+    /* ======== 表格 ======== */
+    table.data-table { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff; }
+    table.data-table thead th { background: #fafafa; color: #595959; font-weight: 600; padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; font-size: 12.5px; }
+    table.data-table tbody td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; }
+    table.data-table tbody tr:hover { background: #fafbff; cursor: pointer; }
+    table.data-table tbody tr.selected { background: #e6f7ff; }
+
+    /* ======== Tag ======== */
+    .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11.5px; line-height: 18px; border: 1px solid; }
+    .tag-blue  { color: #1890ff; background: #e6f7ff; border-color: #91d5ff; }
+    .tag-green { color: #389e0d; background: #f6ffed; border-color: #b7eb8f; }
+    .tag-orange{ color: #d46b08; background: #fff7e6; border-color: #ffd591; }
+    .tag-red   { color: #cf1322; background: #fff1f0; border-color: #ffa39e; }
+    .tag-purple{ color: #531dab; background: #f9f0ff; border-color: #d3adf7; }
+    .tag-gray  { color: #595959; background: #fafafa; border-color: #d9d9d9; }
+
+    /* ======== 抽屉 ======== */
+    .drawer-mask { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 50; display: none; }
+    .drawer-mask.open { display: block; }
+    .drawer { position: fixed; top: 0; right: 0; bottom: 0; width: 560px; background: #fff; z-index: 51; box-shadow: -4px 0 16px rgba(0,0,0,0.08); transform: translateX(100%); transition: transform 0.3s; display: flex; flex-direction: column; }
+    .drawer.open { transform: translateX(0); }
+    .drawer-header { padding: 14px 20px; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; align-items: center; }
+    .drawer-body { flex: 1; overflow-y: auto; padding: 16px 20px; }
+    .drawer-close { cursor: pointer; font-size: 18px; color: #999; }
+    .drawer-close:hover { color: #333; }
+
+    /* ======== 决策卡片 ======== */
+    .decision-card { background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; position: relative; transition: all 0.2s; }
+    .decision-card:hover { box-shadow: 0 4px 14px rgba(0,0,0,0.06); border-color: #d9d9d9; }
+    .countdown { font-family: 'Courier New', monospace; font-weight: 700; font-size: 14px; }
+    .countdown.urgent { color: #f5222d; }
+    .countdown.warn   { color: #fa8c16; }
+    .countdown.normal { color: #1890ff; }
+
+    /* ======== 6维度雷达（CSS简化） ======== */
+    .dim-item { margin-bottom: 10px; }
+    .dim-label { display: flex; justify-content: space-between; font-size: 12px; color: #595959; margin-bottom: 4px; }
+    .dim-bar { width: 100%; height: 8px; background: #f5f5f5; border-radius: 4px; overflow: hidden; }
+    .dim-fill { height: 100%; background: linear-gradient(90deg, #1890ff, #40a9ff); }
+
+    /* ======== 时间线 ======== */
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before { content: ''; position: absolute; left: 7px; top: 4px; bottom: 4px; width: 2px; background: #f0f0f0; }
+    .timeline-item { position: relative; padding: 6px 0 14px; }
+    .timeline-item::before { content: ''; position: absolute; left: -21px; top: 10px; width: 10px; height: 10px; border-radius: 50%; background: #1890ff; border: 2px solid #fff; box-shadow: 0 0 0 2px #91d5ff; }
+    .timeline-item.ok::before { background: #52c41a; box-shadow: 0 0 0 2px #b7eb8f; }
+    .timeline-item.no::before { background: #f5222d; box-shadow: 0 0 0 2px #ffa39e; }
+
+    /* ======== 热力图格 ======== */
+    .heatmap-grid { display: grid; grid-template-columns: 120px repeat(5, 1fr); gap: 4px; font-size: 12px; }
+    .heatmap-grid .hm-head { font-weight: 600; color: #595959; padding: 6px 8px; text-align: center; }
+    .heatmap-grid .hm-label { padding: 6px 8px; color: #595959; }
+    .heatmap-grid .hm-cell { padding: 8px; text-align: center; color: #fff; font-weight: 600; border-radius: 4px; }
+
+    /* ======== 按钮 ======== */
+    .btn { padding: 6px 14px; border-radius: 4px; font-size: 13px; cursor: pointer; border: 1px solid; display: inline-flex; align-items: center; gap: 5px; transition: all 0.15s; }
+    .btn-primary { background: #1890ff; border-color: #1890ff; color: #fff; }
+    .btn-primary:hover { background: #40a9ff; }
+    .btn-danger { background: #fff; border-color: #f5222d; color: #f5222d; }
+    .btn-danger:hover { background: #fff1f0; }
+    .btn-success { background: #52c41a; border-color: #52c41a; color: #fff; }
+    .btn-success:hover { background: #73d13d; }
+    .btn-default { background: #fff; border-color: #d9d9d9; color: #595959; }
+    .btn-default:hover { border-color: #1890ff; color: #1890ff; }
+
+    /* ======== 徽标 ======== */
+    .code-badge { display: inline-block; font-size: 11px; padding: 2px 6px; border-radius: 3px; background: #fff7e6; color: #d46b08; border: 1px solid #ffd591; margin-left: 6px; }
+
+    /* ======== 下拉 / 输入 ======== */
+    .input, .select { padding: 5px 10px; border: 1px solid #d9d9d9; border-radius: 4px; font-size: 13px; background: #fff; }
+    .input:focus, .select:focus { border-color: #1890ff; outline: none; box-shadow: 0 0 0 2px rgba(24,144,255,0.15); }
+
+    /* ======== 卡片容器 ======== */
+    .panel { background: #fff; border: 1px solid #f0f0f0; border-radius: 8px; padding: 16px; }
+    .panel-title { font-size: 14px; font-weight: 600; color: #262626; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between; }
+
+    /* ======== PDF 预览占位 ======== */
+    .pdf-preview { background: linear-gradient(135deg, #fafafa, #f0f2f5); border: 1px dashed #bfbfbf; border-radius: 6px; aspect-ratio: 210/297; display: flex; flex-direction: column; padding: 18px; font-size: 11px; color: #595959; overflow: hidden; }
+    .pdf-preview .pdf-mark { font-size: 9px; color: #bfbfbf; letter-spacing: 2px; text-align: center; margin-bottom: 10px; }
+    .pdf-preview h4 { font-size: 13px; font-weight: 700; color: #262626; margin-bottom: 6px; }
+    .pdf-preview p { line-height: 1.5; margin-bottom: 6px; color: #595959; }
+
+    /* ======== 水平滚动柱状 ======== */
+    .bar-row { display: grid; grid-template-columns: 130px 1fr 60px 60px; gap: 8px; align-items: center; padding: 6px 0; font-size: 12.5px; border-bottom: 1px dashed #f0f0f0; }
+    .bar-row:last-child { border-bottom: none; }
+    .bar-track { height: 14px; background: #f5f5f5; border-radius: 7px; overflow: hidden; }
+    .bar-fill { height: 100%; background: linear-gradient(90deg, #9254de, #b37feb); }
+  </style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:14px 16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台·Phase 3 — 项目矿场升级（TenderStrike 智能投标决策中心）</span>
+      <span style="background:#722ed1;color:#fff;padding:1px 7px;border-radius:3px;font-size:10.5px;font-weight:600;">🟡 代码现状：WinProbabilityCalculator.java + win_rate_prediction pipeline 已就绪，UI 看板待建</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:90px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">对标 TenderStrike，给矿场项目叠加中标概率引擎 + Go/NoGo 决策 + 竞争格局 + 利润预测，把盲目投标变成可量化决策。本页是现有「项目矿场」的情报升级层，不替代基础矿场功能。</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">商务总监 · 投标经理 · 大区商务 · 策略分析 · 管理层</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">4 Tab — 中标概率看板（#2696 #2704） / Go-NoGo 决策面板（#2699） / 胜率模式 + 竞争格局（#2702 #2703） / 利润预测 + 作战资源包（#2705 #2447）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🧩 关联 Issue</td>
+        <td style="padding:4px 0;color:#333;">
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2696 概率评分引擎</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2697 企业画像·资质匹配</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2698 AI 标书深度解析</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2699 Go/No-Go 决策面板</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2702 胜率模式挖掘</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2703 竞争格局前置</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2704 概率可视化看板</span>
+          <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2705 利润预测模型</span>
+          <span class="code-badge">关联 #2433 时间窗口</span>
+          <span class="code-badge">关联 #2447 作战资源包</span>
+          <span class="code-badge">关联 #2448 分频复验</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">项目概率下钻 · 6维度分解 · 一键 Go/NoGo · 竞争格局切换 · 利润预测输入 · 作战包一键生成 PDF</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">4 Tab 全部可切换 · 顶部 KPI 4 项可见 · Tab1 列表 20 条 + 抽屉下钻 · Tab2 4 待决策卡 + 时间线 · Tab3 胜率热力图 + Top10 竞品 · Tab4 利润表单 + 作战包 PDF 预览</td>
+      </tr>
+    </table>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- 面包屑 -->
+<div class="breadcrumb">
+  <div>
+    首页 &gt; 商战情报中台 &gt; <strong>Phase 3 · 项目矿场升级</strong>
+    <span class="tag tag-purple" style="margin-left:10px;">TenderStrike 智能投标决策中心</span>
+  </div>
+  <button class="back-btn" onclick="history.length>1?history.back():null">← 返回情报中台</button>
+</div>
+
+<!-- KPI 带 -->
+<div class="kpi-bar">
+  <div class="kpi-card blue">
+    <div class="kpi-label">监控中项目</div>
+    <div class="kpi-value">186</div>
+    <div class="kpi-sub">较上周 <span class="kpi-trend up">+12 ↑</span> · 覆盖 23 省市</div>
+  </div>
+  <div class="kpi-card green">
+    <div class="kpi-label">高概率项目 <span style="color:#52c41a;">(≥70%)</span></div>
+    <div class="kpi-value">27</div>
+    <div class="kpi-sub">含 8 个 ≥85% 强推 · 总金额 ¥3.8亿</div>
+  </div>
+  <div class="kpi-card orange">
+    <div class="kpi-label">本周新进</div>
+    <div class="kpi-value">34</div>
+    <div class="kpi-sub">待概率评估 11 · AI 解析进行中 6</div>
+  </div>
+  <div class="kpi-card red">
+    <div class="kpi-label">待 Go/No-Go 决策</div>
+    <div class="kpi-value">12</div>
+    <div class="kpi-sub"><span class="kpi-trend down">3 项 48h 内截止</span></div>
+  </div>
+</div>
+
+<!-- Tab bar -->
+<div class="tab-bar" id="tabBar">
+  <div class="tab-item active" data-tab="1">📊 中标概率看板 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2696 #2704</span></div>
+  <div class="tab-item" data-tab="2">🎯 Go / No-Go 决策面板 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2699</span></div>
+  <div class="tab-item" data-tab="3">📈 胜率模式 + 竞争格局 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2702 #2703</span></div>
+  <div class="tab-item" data-tab="4">💰 利润预测 + 作战资源包 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2705 #2447</span></div>
+</div>
+
+<!-- ============ Tab 1: 中标概率看板 ============ -->
+<div class="tab-panel active" id="panel-1">
+  <!-- 筛选条 -->
+  <div class="panel" style="margin-bottom:16px;display:flex;gap:10px;flex-wrap:wrap;align-items:center;">
+    <span style="font-size:13px;color:#8c8c8c;">筛选：</span>
+    <select class="select">
+      <option>全部区域</option><option>华东</option><option>华北</option><option>华西</option><option>华南</option>
+    </select>
+    <select class="select">
+      <option>全部客户类型</option><option>政府采购</option><option>国企</option><option>民营文旅</option><option>地产商</option>
+    </select>
+    <select class="select">
+      <option>概率区间 (全部)</option><option>≥ 85% 强推</option><option>70%-85% 优选</option><option>50%-70% 谨慎</option><option>&lt; 50% 观望</option>
+    </select>
+    <select class="select">
+      <option>金额区间</option><option>&lt; 500 万</option><option>500w - 2000w</option><option>2000w - 5000w</option><option>&gt; 5000 万</option>
+    </select>
+    <input type="text" class="input" placeholder="🔍 项目名称 / 业主" style="width:220px;">
+    <div style="flex:1"></div>
+    <select class="select">
+      <option>排序：概率 高→低</option><option>排序：金额 高→低</option><option>排序：截止日期 近→远</option><option>排序：更新时间</option>
+    </select>
+    <button class="btn btn-default">📤 导出 Excel</button>
+    <button class="btn btn-primary">🔄 重算概率（#2448 分频复验）</button>
+  </div>
+
+  <div class="panel" style="padding:0;overflow:hidden;">
+    <div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #f0f0f0;">
+      <div class="panel-title" style="margin:0;">监控项目清单 <span style="font-weight:400;color:#8c8c8c;font-size:12px;">共 20 条 · 点击行查看 6 维度概率分解</span></div>
+      <div style="font-size:11.5px;color:#8c8c8c;">最新刷新 14:32 · 模型版本 v2.3</div>
+    </div>
+    <table class="data-table" id="projectTable">
+      <thead>
+        <tr>
+          <th style="width:42px;"></th>
+          <th>项目名称</th>
+          <th style="width:110px;">业主 / 区域</th>
+          <th style="width:100px;">预算</th>
+          <th style="width:180px;">中标概率</th>
+          <th style="width:100px;">截止</th>
+          <th style="width:90px;">竞品数</th>
+          <th style="width:80px;">阶段</th>
+          <th style="width:70px;">操作</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- ============ Tab 2: Go / No-Go 决策面板 ============ -->
+<div class="tab-panel" id="panel-2">
+  <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px;">
+    <!-- 左：4 个待决策大卡 -->
+    <div>
+      <div class="panel-title" style="padding:0 4px;">🎯 待决策项目 <span style="font-weight:400;color:#8c8c8c;font-size:12px;">(倒计时紧急度排序 · AI 已预审 4/4)</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;">
+        <!-- 决策卡 1 -->
+        <div class="decision-card" style="border-left:4px solid #f5222d;">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#262626;">成都大运会主题乐园二期</div>
+              <div style="font-size:11.5px;color:#8c8c8c;margin-top:2px;">成都文旅投 · 华西 · ¥4,800w</div>
+            </div>
+            <div class="countdown urgent">⏱ 23:14:50</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="tag tag-green">✅ AI 推荐：GO</span>
+            <span style="font-size:12px;color:#595959;">概率 <b style="color:#52c41a;">84%</b></span>
+            <span class="tag tag-blue" style="margin-left:auto;">6维度匹配高</span>
+          </div>
+          <div style="background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.5;color:#389e0d;">
+            <b>🤖 AI 决策理由：</b> 资质匹配 95% / 历史在川胜率 71% / 同场 KOMPAN 报价偏高 5%-8% / 业主陈总监关键人强关系 · <b>建议 GO</b>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-success" style="flex:1;justify-content:center;">✅ GO — 立项投标</button>
+            <button class="btn btn-danger" style="flex:1;justify-content:center;">✗ No-Go</button>
+            <button class="btn btn-default">📄 详情</button>
+          </div>
+        </div>
+
+        <!-- 决策卡 2 -->
+        <div class="decision-card" style="border-left:4px solid #fa8c16;">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#262626;">乌鲁木齐冰雪主题公园</div>
+              <div style="font-size:11.5px;color:#8c8c8c;margin-top:2px;">乌市文旅集团 · 西北 · ¥3,200w</div>
+            </div>
+            <div class="countdown warn">⏱ 2天 08:20</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="tag tag-orange">⚠️ AI 推荐：谨慎 GO</span>
+            <span style="font-size:12px;color:#595959;">概率 <b style="color:#fa8c16;">62%</b></span>
+            <span class="tag tag-red" style="margin-left:auto;">CE 证书缺</span>
+          </div>
+          <div style="background:#fff7e6;border:1px solid #ffd591;border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.5;color:#d46b08;">
+            <b>🤖 AI 决策理由：</b> 业主倾向本地 HAGS 代理 / CE 证书需补 / 运输成本高 8% / 但政府背景强 · <b>建议 GO，需配合特批方案</b>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-success" style="flex:1;justify-content:center;">✅ GO</button>
+            <button class="btn btn-danger" style="flex:1;justify-content:center;">✗ No-Go</button>
+            <button class="btn btn-default">📄 详情</button>
+          </div>
+        </div>
+
+        <!-- 决策卡 3 -->
+        <div class="decision-card" style="border-left:4px solid #1890ff;">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#262626;">太原儿童乐园（公建民营）</div>
+              <div style="font-size:11.5px;color:#8c8c8c;margin-top:2px;">太原市教育局 · 华北 · ¥1,600w</div>
+            </div>
+            <div class="countdown normal">⏱ 5天 12:05</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="tag tag-green">✅ AI 推荐：GO</span>
+            <span style="font-size:12px;color:#595959;">概率 <b style="color:#52c41a;">78%</b></span>
+            <span class="tag tag-blue" style="margin-left:auto;">利润率 31%</span>
+          </div>
+          <div style="background:#e6f7ff;border:1px solid #91d5ff;border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.5;color:#0958d9;">
+            <b>🤖 AI 决策理由：</b> 规模小但利润率高 / 历史同类胜率 82% / 竞品仅 Proludic+本地厂 · 推荐 GO
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-success" style="flex:1;justify-content:center;">✅ GO</button>
+            <button class="btn btn-danger" style="flex:1;justify-content:center;">✗ No-Go</button>
+            <button class="btn btn-default">📄 详情</button>
+          </div>
+        </div>
+
+        <!-- 决策卡 4 -->
+        <div class="decision-card" style="border-left:4px solid #bfbfbf;">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div>
+              <div style="font-size:14px;font-weight:600;color:#262626;">深圳前海游乐场扩建</div>
+              <div style="font-size:11.5px;color:#8c8c8c;margin-top:2px;">前海投控 · 华南 · ¥6,500w</div>
+            </div>
+            <div class="countdown normal">⏱ 7天 03:40</div>
+          </div>
+          <div style="display:flex;gap:6px;align-items:center;">
+            <span class="tag tag-red">❌ AI 推荐：No-Go</span>
+            <span style="font-size:12px;color:#595959;">概率 <b style="color:#f5222d;">31%</b></span>
+            <span class="tag tag-orange" style="margin-left:auto;">LSI 主场</span>
+          </div>
+          <div style="background:#fff1f0;border:1px solid #ffa39e;border-radius:6px;padding:8px 10px;font-size:12px;line-height:1.5;color:#cf1322;">
+            <b>🤖 AI 决策理由：</b> LSI 在前海项目中标率 67% / 业主明确偏好北美品牌 / 技术参数超出我方 EN1176 范围 · <b>建议 No-Go，节约投标成本 ¥18w</b>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-success" style="flex:1;justify-content:center;">✅ GO</button>
+            <button class="btn btn-danger" style="flex:1;justify-content:center;">✗ No-Go</button>
+            <button class="btn btn-default">📄 详情</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 决策统计 -->
+      <div class="panel" style="margin-top:16px;">
+        <div class="panel-title">📊 本月决策统计 <span style="font-weight:400;color:#8c8c8c;font-size:12px;">AI 建议采纳率 78%</span></div>
+        <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;font-size:12.5px;">
+          <div style="text-align:center;padding:10px;background:#f6ffed;border-radius:6px;">
+            <div style="font-size:22px;font-weight:700;color:#389e0d;">23</div>
+            <div style="color:#595959;">GO 决策</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#fff1f0;border-radius:6px;">
+            <div style="font-size:22px;font-weight:700;color:#cf1322;">9</div>
+            <div style="color:#595959;">No-Go 决策</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#e6f7ff;border-radius:6px;">
+            <div style="font-size:22px;font-weight:700;color:#0958d9;">11</div>
+            <div style="color:#595959;">已中标 (GO / 中标率 48%)</div>
+          </div>
+          <div style="text-align:center;padding:10px;background:#fff7e6;border-radius:6px;">
+            <div style="font-size:22px;font-weight:700;color:#d46b08;">¥162w</div>
+            <div style="color:#595959;">避免的投标成本 (No-Go)</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：决策历史时间线 -->
+    <div class="panel">
+      <div class="panel-title">🕐 决策历史时间线 <span style="font-weight:400;color:#8c8c8c;font-size:12px;">近 14 天</span></div>
+      <div class="timeline">
+        <div class="timeline-item ok">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-22 11:20 · 张经理</div>
+          <div style="font-size:13px;font-weight:600;">重庆万达主题乐园 <span class="tag tag-green" style="margin-left:4px;">GO</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 概率 81% · 采纳 · 已进入立项</div>
+        </div>
+        <div class="timeline-item no">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-21 16:45 · 李总监</div>
+          <div style="font-size:13px;font-weight:600;">青岛海上乐园 <span class="tag tag-red" style="margin-left:4px;">No-Go</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 概率 28% · 采纳 · 节约成本 ¥22w</div>
+        </div>
+        <div class="timeline-item ok">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-21 10:08 · 王经理</div>
+          <div style="font-size:13px;font-weight:600;">郑州方特乐园二期 <span class="tag tag-green" style="margin-left:4px;">GO</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 概率 75% · 采纳 · 已提交标书</div>
+        </div>
+        <div class="timeline-item">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-20 15:30 · 陈总监</div>
+          <div style="font-size:13px;font-weight:600;">厦门鼓浪屿亲子公园 <span class="tag tag-orange" style="margin-left:4px;">人工复议</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 建议 No-Go (32%) · 人工改为 GO · 理由：战略客户</div>
+        </div>
+        <div class="timeline-item ok">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-19 09:14 · 张经理</div>
+          <div style="font-size:13px;font-weight:600;">西安大唐不夜城扩建 <span class="tag tag-green" style="margin-left:4px;">GO</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 概率 88% · 采纳 · <b style="color:#52c41a;">✓ 已中标 ¥5,200w</b></div>
+        </div>
+        <div class="timeline-item no">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-17 14:22 · 李总监</div>
+          <div style="font-size:13px;font-weight:600;">广州南沙游乐场 <span class="tag tag-red" style="margin-left:4px;">No-Go</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 概率 34% · 采纳 · LSI 主场</div>
+        </div>
+        <div class="timeline-item ok">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-15 11:02 · 王经理</div>
+          <div style="font-size:13px;font-weight:600;">杭州萧山亚运遗址公园 <span class="tag tag-green" style="margin-left:4px;">GO</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">AI 概率 79% · <b style="color:#52c41a;">✓ 已中标 ¥2,800w</b></div>
+        </div>
+        <div class="timeline-item">
+          <div style="font-size:12px;color:#8c8c8c;">2026-04-12 · 系统</div>
+          <div style="font-size:13px;font-weight:600;">昆明西山文旅小镇 <span class="tag tag-gray" style="margin-left:4px;">跳过</span></div>
+          <div style="font-size:12px;color:#595959;margin-top:2px;">截止时间已过未决策 (流程警告)</div>
+        </div>
+      </div>
+      <button class="btn btn-default" style="width:100%;justify-content:center;margin-top:8px;">查看全部决策历史 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Tab 3: 胜率模式 + 竞争格局 ============ -->
+<div class="tab-panel" id="panel-3">
+  <!-- 上：胜率模式图谱 -->
+  <div class="panel" style="margin-bottom:16px;">
+    <div class="panel-title">
+      <span>📈 胜率模式图谱 <span style="font-weight:400;color:#8c8c8c;font-size:12px;">(按 客户类型 × 项目规模 × 区域 三维挖掘 · 源：win_rate_prediction pipeline)</span></span>
+      <div style="display:flex;gap:8px;">
+        <select class="select"><option>维度切换：客户类型 × 项目规模</option><option>维度：区域 × 规模</option><option>维度：区域 × 客户</option></select>
+      </div>
+    </div>
+
+    <div class="heatmap-grid" style="margin-top:10px;">
+      <div class="hm-label"></div>
+      <div class="hm-head">&lt; 500w</div>
+      <div class="hm-head">500w-2000w</div>
+      <div class="hm-head">2000w-5000w</div>
+      <div class="hm-head">5000w-1亿</div>
+      <div class="hm-head">&gt; 1亿</div>
+
+      <div class="hm-label">🏛 政府采购</div>
+      <div class="hm-cell" style="background:#73d13d;">78%</div>
+      <div class="hm-cell" style="background:#52c41a;">71%</div>
+      <div class="hm-cell" style="background:#ffa940;">58%</div>
+      <div class="hm-cell" style="background:#ff7a45;">42%</div>
+      <div class="hm-cell" style="background:#ff4d4f;">28%</div>
+
+      <div class="hm-label">🏢 国企文旅</div>
+      <div class="hm-cell" style="background:#52c41a;">72%</div>
+      <div class="hm-cell" style="background:#73d13d;">80%</div>
+      <div class="hm-cell" style="background:#52c41a;">67%</div>
+      <div class="hm-cell" style="background:#ffa940;">55%</div>
+      <div class="hm-cell" style="background:#ff7a45;">38%</div>
+
+      <div class="hm-label">🎢 民营文旅</div>
+      <div class="hm-cell" style="background:#ffa940;">54%</div>
+      <div class="hm-cell" style="background:#ffa940;">49%</div>
+      <div class="hm-cell" style="background:#ffa940;">52%</div>
+      <div class="hm-cell" style="background:#ff7a45;">41%</div>
+      <div class="hm-cell" style="background:#ff4d4f;">31%</div>
+
+      <div class="hm-label">🏗 地产商</div>
+      <div class="hm-cell" style="background:#ff7a45;">38%</div>
+      <div class="hm-cell" style="background:#ff7a45;">44%</div>
+      <div class="hm-cell" style="background:#ff4d4f;">29%</div>
+      <div class="hm-cell" style="background:#ff4d4f;">22%</div>
+      <div class="hm-cell" style="background:#cf1322;">15%</div>
+
+      <div class="hm-label">🏫 教育系统</div>
+      <div class="hm-cell" style="background:#389e0d;">85%</div>
+      <div class="hm-cell" style="background:#73d13d;">76%</div>
+      <div class="hm-cell" style="background:#52c41a;">64%</div>
+      <div class="hm-cell" style="background:#bfbfbf;">样本少</div>
+      <div class="hm-cell" style="background:#bfbfbf;">—</div>
+    </div>
+
+    <div style="margin-top:14px;display:grid;grid-template-columns:repeat(3,1fr);gap:10px;font-size:12.5px;">
+      <div style="padding:10px 12px;background:#f6ffed;border:1px solid #b7eb8f;border-radius:6px;">
+        <div style="color:#389e0d;font-weight:600;">🎯 最高胜率区间</div>
+        <div style="color:#595959;margin-top:3px;">教育系统 × &lt;500w = <b>85%</b> (基于 47 个历史样本)</div>
+      </div>
+      <div style="padding:10px 12px;background:#fff7e6;border:1px solid #ffd591;border-radius:6px;">
+        <div style="color:#d46b08;font-weight:600;">⚡ 隐藏黄金象限</div>
+        <div style="color:#595959;margin-top:3px;">国企文旅 × 500w-2000w = <b>80%</b> (样本 62 个，建议增配资源)</div>
+      </div>
+      <div style="padding:10px 12px;background:#fff1f0;border:1px solid #ffa39e;border-radius:6px;">
+        <div style="color:#cf1322;font-weight:600;">⚠️ 陷阱象限</div>
+        <div style="color:#595959;margin-top:3px;">地产商 × &gt;1亿 = <b>15%</b> (历史 8 中 1，不建议投入)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 下：竞争格局 -->
+  <div style="display:grid;grid-template-columns:1.3fr 1fr;gap:16px;">
+    <div class="panel">
+      <div class="panel-title">🥊 历史同场竞品出现频次 Top 10 <span style="font-weight:400;color:#8c8c8c;font-size:12px;">(近 24 个月 · 155 场同台)</span></div>
+      <div>
+        <div class="bar-row" style="font-weight:600;color:#8c8c8c;background:#fafafa;padding:8px 10px;border-radius:4px;">
+          <span>竞品</span><span>出现频次</span><span style="text-align:right;">场次</span><span style="text-align:right;">我方赢率</span>
+        </div>
+        <div class="bar-row"><span>🇩🇰 KOMPAN</span><div class="bar-track"><div class="bar-fill" style="width:92%;"></div></div><span style="text-align:right;">98</span><span style="text-align:right;color:#fa8c16;font-weight:600;">45%</span></div>
+        <div class="bar-row"><span>🇺🇸 LSI</span><div class="bar-track"><div class="bar-fill" style="width:78%;background:linear-gradient(90deg,#ff4d4f,#ff7875);"></div></div><span style="text-align:right;">82</span><span style="text-align:right;color:#f5222d;font-weight:600;">32%</span></div>
+        <div class="bar-row"><span>🇺🇸 PlayCore</span><div class="bar-track"><div class="bar-fill" style="width:65%;"></div></div><span style="text-align:right;">69</span><span style="text-align:right;color:#52c41a;font-weight:600;">58%</span></div>
+        <div class="bar-row"><span>🇸🇪 HAGS</span><div class="bar-track"><div class="bar-fill" style="width:52%;"></div></div><span style="text-align:right;">55</span><span style="text-align:right;color:#52c41a;font-weight:600;">62%</span></div>
+        <div class="bar-row"><span>🇫🇷 Proludic</span><div class="bar-track"><div class="bar-fill" style="width:44%;"></div></div><span style="text-align:right;">47</span><span style="text-align:right;color:#52c41a;font-weight:600;">66%</span></div>
+        <div class="bar-row"><span>🇫🇮 Lappset</span><div class="bar-track"><div class="bar-fill" style="width:31%;"></div></div><span style="text-align:right;">33</span><span style="text-align:right;color:#52c41a;font-weight:600;">71%</span></div>
+        <div class="bar-row"><span>🇨🇳 康乐宝</span><div class="bar-track"><div class="bar-fill" style="width:28%;"></div></div><span style="text-align:right;">30</span><span style="text-align:right;color:#fa8c16;font-weight:600;">54%</span></div>
+        <div class="bar-row"><span>🇨🇳 诺贝尔</span><div class="bar-track"><div class="bar-fill" style="width:24%;"></div></div><span style="text-align:right;">26</span><span style="text-align:right;color:#52c41a;font-weight:600;">65%</span></div>
+        <div class="bar-row"><span>🇨🇳 金色童年</span><div class="bar-track"><div class="bar-fill" style="width:19%;"></div></div><span style="text-align:right;">20</span><span style="text-align:right;color:#52c41a;font-weight:600;">70%</span></div>
+        <div class="bar-row"><span>🇩🇪 Eibe</span><div class="bar-track"><div class="bar-fill" style="width:15%;"></div></div><span style="text-align:right;">16</span><span style="text-align:right;color:#fa8c16;font-weight:600;">50%</span></div>
+      </div>
+    </div>
+
+    <!-- 竞争格局前置评估（当前监控项目） -->
+    <div class="panel">
+      <div class="panel-title">🎯 当前监控项目 · 竞争格局前置评估 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2703</span></div>
+      <select class="select" style="width:100%;margin-bottom:12px;">
+        <option>选择项目 · 成都大运会主题乐园二期 (当前)</option>
+        <option>乌鲁木齐冰雪主题公园</option>
+        <option>深圳前海游乐场扩建</option>
+      </select>
+
+      <div style="font-size:12.5px;color:#262626;font-weight:600;margin-bottom:8px;">🔎 预测同场竞品 (置信度 83%)</div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;">
+        <span class="tag tag-red">KOMPAN (极高)</span>
+        <span class="tag tag-red">LSI (高)</span>
+        <span class="tag tag-orange">PlayCore (中)</span>
+        <span class="tag tag-orange">康乐宝 (中)</span>
+        <span class="tag tag-blue">HAGS (低)</span>
+      </div>
+
+      <div style="font-size:12.5px;color:#262626;font-weight:600;margin-bottom:8px;">⚖️ 竞争态势评分</div>
+      <div style="padding:10px 12px;background:#fff7e6;border:1px solid #ffd591;border-radius:6px;font-size:12.5px;color:#595959;line-height:1.7;">
+        <div>🟠 <b>竞争烈度：中高</b> (5 家参与)</div>
+        <div>🟢 <b>我方优势：</b>EN1176 + GB19272 双认证 · 川渝交付经验 · 业主关键人熟</div>
+        <div>🔴 <b>风险点：</b>KOMPAN 报价空间大 15% · LSI 北美品牌偏好</div>
+        <div>🎯 <b>建议策略：</b>突出本土化运维 + 质保延长至 10 年</div>
+      </div>
+
+      <div style="margin-top:12px;font-size:12.5px;color:#262626;font-weight:600;margin-bottom:6px;">💡 同场历史交锋 (近 3 年)</div>
+      <table style="width:100%;font-size:11.5px;">
+        <tr style="color:#8c8c8c;border-bottom:1px solid #f0f0f0;"><td style="padding:4px 0;">项目</td><td>竞品</td><td style="text-align:right;">结果</td></tr>
+        <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:6px 0;">西安大唐不夜城</td><td>KOMPAN + LSI</td><td style="text-align:right;"><span class="tag tag-green">✓ 中</span></td></tr>
+        <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:6px 0;">杭州萧山亚运公园</td><td>KOMPAN + HAGS</td><td style="text-align:right;"><span class="tag tag-green">✓ 中</span></td></tr>
+        <tr style="border-bottom:1px solid #f5f5f5;"><td style="padding:6px 0;">长沙世界之窗</td><td>LSI + PlayCore</td><td style="text-align:right;"><span class="tag tag-red">✗ 败</span></td></tr>
+        <tr><td style="padding:6px 0;">南京江北新区</td><td>KOMPAN + 康乐宝</td><td style="text-align:right;"><span class="tag tag-green">✓ 中</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Tab 4: 利润预测 + 作战资源包 ============ -->
+<div class="tab-panel" id="panel-4">
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+
+    <!-- 左：利润预测表单 -->
+    <div class="panel">
+      <div class="panel-title">💰 投标利润预测模型 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2705</span></div>
+      <div style="font-size:12px;color:#8c8c8c;margin-bottom:14px;">输入项目参数，基于历史同类项目回归模型输出毛利率、回款周期、风险点。</div>
+
+      <div style="display:grid;grid-template-columns:110px 1fr;gap:10px 12px;font-size:13px;align-items:center;">
+        <label style="color:#595959;">项目名称</label>
+        <input class="input" value="乌鲁木齐冰雪主题公园">
+
+        <label style="color:#595959;">预算金额</label>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input class="input" value="3,200" style="flex:1;">
+          <span style="color:#8c8c8c;">万元</span>
+        </div>
+
+        <label style="color:#595959;">项目规模</label>
+        <select class="select"><option>中型 (2000w-5000w)</option><option>小型 (&lt;500w)</option><option>中小 (500w-2000w)</option><option>大型 (5000w-1亿)</option><option>超大 (&gt;1亿)</option></select>
+
+        <label style="color:#595959;">客户类型</label>
+        <select class="select"><option>国企文旅</option><option>政府采购</option><option>民营文旅</option><option>地产商</option><option>教育系统</option></select>
+
+        <label style="color:#595959;">区域</label>
+        <select class="select"><option>西北</option><option>华东</option><option>华北</option><option>华南</option><option>华西</option></select>
+
+        <label style="color:#595959;">付款方式</label>
+        <select class="select"><option>3-5-2 进度款</option><option>4-4-2</option><option>到货付款</option><option>质保金 10%</option></select>
+
+        <label style="color:#595959;">是否跨境</label>
+        <select class="select"><option>否</option><option>是（含运输+关税）</option></select>
+
+        <label style="color:#595959;">履约周期</label>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <input class="input" value="180" style="flex:1;">
+          <span style="color:#8c8c8c;">天</span>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="margin-top:14px;width:100%;justify-content:center;">🚀 运行预测 (WinProbabilityCalculator + Profit Model)</button>
+
+      <!-- 预测结果 -->
+      <div style="margin-top:16px;padding:14px;background:linear-gradient(135deg,#f6ffed,#e6f7ff);border-radius:8px;">
+        <div style="font-size:12.5px;color:#595959;font-weight:600;margin-bottom:10px;">🎯 预测结果 <span style="font-weight:400;color:#8c8c8c;">(置信度 81% · 基于 47 个相似历史项目)</span></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;">
+          <div style="padding:10px;background:#fff;border-radius:6px;text-align:center;">
+            <div style="font-size:11.5px;color:#8c8c8c;">预测毛利率</div>
+            <div style="font-size:22px;font-weight:700;color:#52c41a;">24.3%</div>
+            <div style="font-size:11px;color:#8c8c8c;">区间 20.1% - 28.5%</div>
+          </div>
+          <div style="padding:10px;background:#fff;border-radius:6px;text-align:center;">
+            <div style="font-size:11.5px;color:#8c8c8c;">预期回款周期</div>
+            <div style="font-size:22px;font-weight:700;color:#1890ff;">218 天</div>
+            <div style="font-size:11px;color:#8c8c8c;">较基准 +42 天</div>
+          </div>
+          <div style="padding:10px;background:#fff;border-radius:6px;text-align:center;">
+            <div style="font-size:11.5px;color:#8c8c8c;">预期净收益</div>
+            <div style="font-size:22px;font-weight:700;color:#d46b08;">¥488w</div>
+            <div style="font-size:11px;color:#8c8c8c;">扣除资金占用后</div>
+          </div>
+        </div>
+
+        <div style="margin-top:12px;font-size:12px;color:#595959;line-height:1.7;">
+          <div style="font-weight:600;color:#cf1322;margin-bottom:4px;">⚠️ 识别风险点 (3)</div>
+          <div>• <b>运输成本偏高</b>：乌鲁木齐物流系数 1.18，毛利率下拉 4.2pp</div>
+          <div>• <b>回款风险</b>：同类项目 30% 出现尾款延期 &gt; 3 个月</div>
+          <div>• <b>履约季节性</b>：冬季土建受限，实际工期建议预留 +30 天</div>
+        </div>
+
+        <div style="margin-top:10px;font-size:12px;color:#595959;line-height:1.7;">
+          <div style="font-weight:600;color:#389e0d;margin-bottom:4px;">✅ 优化建议 (2)</div>
+          <div>• 申请预付款 40%，可提升净收益至 ¥520w</div>
+          <div>• 延长质保期换取 5% 加分，综合胜率 +12%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：作战资源包生成器 -->
+    <div class="panel">
+      <div class="panel-title">🎒 作战资源包生成器 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2447</span></div>
+      <div style="font-size:12px;color:#8c8c8c;margin-bottom:14px;">一键生成商务/投标经理专属作战包 PDF · 含项目概况卡 + 干系人画像 + 经验复用 + 行动建议。</div>
+
+      <div style="display:grid;grid-template-columns:110px 1fr;gap:10px 12px;font-size:13px;align-items:center;">
+        <label style="color:#595959;">选择项目</label>
+        <select class="select">
+          <option>成都大运会主题乐园二期</option>
+          <option>乌鲁木齐冰雪主题公园</option>
+          <option>太原儿童乐园（公建民营）</option>
+          <option>深圳前海游乐场扩建</option>
+        </select>
+
+        <label style="color:#595959;">包含模块</label>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;">
+          <label><input type="checkbox" checked> 项目概况卡</label>
+          <label><input type="checkbox" checked> 干系人画像</label>
+          <label><input type="checkbox" checked> 经验复用库</label>
+          <label><input type="checkbox" checked> 行动建议</label>
+          <label><input type="checkbox"> 竞品情报卡</label>
+          <label><input type="checkbox"> 财务敏感度</label>
+        </div>
+
+        <label style="color:#595959;">模板样式</label>
+        <select class="select"><option>商务汇报版（彩色，16页）</option><option>投标经理速览版（精简，6页）</option><option>管理层速览版（2页）</option></select>
+
+        <label style="color:#595959;">交付方式</label>
+        <div style="display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;">
+          <label><input type="checkbox" checked> PDF</label>
+          <label><input type="checkbox"> 企业微信推送</label>
+          <label><input type="checkbox"> 邮件</label>
+        </div>
+      </div>
+
+      <button class="btn btn-primary" style="margin-top:14px;width:100%;justify-content:center;">📦 一键生成作战包 PDF</button>
+
+      <!-- PDF 预览 -->
+      <div style="margin-top:16px;">
+        <div style="font-size:12.5px;color:#595959;font-weight:600;margin-bottom:6px;">📄 PDF 预览（缩略图）</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+          <div class="pdf-preview">
+            <div class="pdf-mark">— PAGE 1 · 项目概况卡 —</div>
+            <h4>🏟 成都大运会主题乐园二期</h4>
+            <p style="color:#8c8c8c;font-size:10px;">业主：成都文旅投 · 预算：¥4,800w · 截止：2026-04-23</p>
+            <div style="background:#e6f7ff;padding:6px;border-radius:4px;font-size:10px;color:#0958d9;margin:4px 0;"><b>中标概率 84%</b> · AI 推荐 GO</div>
+            <p style="font-size:10px;"><b>✅ 优势</b><br>• EN1176 + GB19272 双认证<br>• 川渝 7 个中标经验<br>• 业主关键人强关系</p>
+            <p style="font-size:10px;"><b>⚠️ 风险</b><br>• KOMPAN 报价空间大 5-8%</p>
+            <div style="margin-top:auto;border-top:1px dashed #d9d9d9;padding-top:6px;font-size:9px;color:#bfbfbf;">万德 AI · 2026-04-22 生成</div>
+          </div>
+          <div class="pdf-preview">
+            <div class="pdf-mark">— PAGE 2 · 干系人画像 —</div>
+            <h4>👥 关键干系人 3 位</h4>
+            <div style="background:#fafafa;padding:6px;border-radius:4px;margin:3px 0;font-size:10px;">
+              <b>陈总监</b> · 项目负责人<br>
+              <span style="color:#8c8c8c;">偏好：本土化运维 · 联系 8 次</span>
+            </div>
+            <div style="background:#fafafa;padding:6px;border-radius:4px;margin:3px 0;font-size:10px;">
+              <b>周处长</b> · 采购审批<br>
+              <span style="color:#8c8c8c;">偏好：性价比 · 联系 3 次</span>
+            </div>
+            <div style="background:#fafafa;padding:6px;border-radius:4px;margin:3px 0;font-size:10px;">
+              <b>李工</b> · 技术评审<br>
+              <span style="color:#8c8c8c;">偏好：EN1176 标准 · 联系 5 次</span>
+            </div>
+            <p style="font-size:10px;margin-top:6px;"><b>🎯 接触策略</b><br>• 本周拜访陈总监 + 李工</p>
+          </div>
+          <div class="pdf-preview">
+            <div class="pdf-mark">— PAGE 3 · 经验复用 —</div>
+            <h4>📚 同类项目经验 (Top 3)</h4>
+            <div style="font-size:10px;line-height:1.4;">
+              <p><b>西安大唐不夜城</b> ¥5,200w<br><span style="color:#52c41a;">✓ 中标 · 2025-10</span></p>
+              <p><b>杭州萧山亚运公园</b> ¥2,800w<br><span style="color:#52c41a;">✓ 中标 · 2025-06</span></p>
+              <p><b>重庆武隆天坑乐园</b> ¥3,800w<br><span style="color:#52c41a;">✓ 中标 · 2024-11</span></p>
+            </div>
+            <p style="font-size:10px;margin-top:6px;"><b>🔑 共性成功因素</b><br>• 本地化交付方案<br>• 关键人前置接触<br>• EN1176 认证背书</p>
+          </div>
+          <div class="pdf-preview">
+            <div class="pdf-mark">— PAGE 4 · 行动建议 —</div>
+            <h4>🎯 5 个行动项</h4>
+            <div style="font-size:10px;line-height:1.5;">
+              <p>1. ⏱ 48h 内提交 Go 立项</p>
+              <p>2. 📞 本周拜访陈总监 + 李工</p>
+              <p>3. 📋 报价锚定 ¥4,450w (毛利 26%)</p>
+              <p>4. 📑 标书突出 3 个本土案例</p>
+              <p>5. 🛡 质保延长至 10 年</p>
+            </div>
+            <div style="margin-top:6px;padding:4px 6px;background:#fff7e6;border-radius:4px;font-size:10px;color:#d46b08;">
+              <b>📆 截止倒计时 23h</b> · 建议立即行动
+            </div>
+            <div style="margin-top:auto;border-top:1px dashed #d9d9d9;padding-top:6px;font-size:9px;color:#bfbfbf;">共 4 页 · 机密 · 仅限商务团队</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;text-align:center;font-size:11.5px;color:#8c8c8c;">
+          已生成 1,248 份作战包 · 平均提升中标率 <b style="color:#52c41a;">14%</b>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部 关联 Issue 列表 -->
+  <div class="panel" style="margin-top:16px;">
+    <div class="panel-title">🔗 关联模块入口</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;font-size:12.5px;">
+      <div style="padding:12px;background:#fafafa;border:1px solid #f0f0f0;border-radius:6px;">
+        <div style="font-weight:600;color:#262626;">⏱ 项目链条时间窗口预测 <span class="code-badge">#2433</span></div>
+        <div style="color:#8c8c8c;margin-top:4px;">预测从发现到中标的关键时间节点</div>
+        <button class="btn btn-default" style="margin-top:8px;">进入 →</button>
+      </div>
+      <div style="padding:12px;background:#fafafa;border:1px solid #f0f0f0;border-radius:6px;">
+        <div style="font-weight:600;color:#262626;">🎒 作战资源包管理 <span class="code-badge">#2447</span></div>
+        <div style="color:#8c8c8c;margin-top:4px;">历史作战包库存 · 模板编辑 · 分发记录</div>
+        <button class="btn btn-default" style="margin-top:8px;">进入 →</button>
+      </div>
+      <div style="padding:12px;background:#fafafa;border:1px solid #f0f0f0;border-radius:6px;">
+        <div style="font-weight:600;color:#262626;">🔁 分频次复验 <span class="code-badge">#2448</span></div>
+        <div style="color:#8c8c8c;margin-top:4px;">高频项目日更 · 普通项目周更 · 手动触发</div>
+        <button class="btn btn-default" style="margin-top:8px;">进入 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 抽屉（6维度分解） ============ -->
+<div class="drawer-mask" id="drawerMask"></div>
+<div class="drawer" id="probDrawer">
+  <div class="drawer-header">
+    <div>
+      <div style="font-size:15px;font-weight:600;color:#262626;" id="drawerTitle">项目概率分解</div>
+      <div style="font-size:11.5px;color:#8c8c8c;margin-top:2px;" id="drawerSubtitle">概率 6 维度分解</div>
+    </div>
+    <span class="drawer-close" onclick="closeDrawer()">✕</span>
+  </div>
+  <div class="drawer-body" id="drawerBody">
+    <!-- 动态注入 -->
+  </div>
+</div>
+
+<script>
+// ========== Tab 切换 ==========
+document.querySelectorAll('.tab-item').forEach(t => {
+  t.addEventListener('click', () => {
+    document.querySelectorAll('.tab-item').forEach(x => x.classList.remove('active'));
+    document.querySelectorAll('.tab-panel').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.getElementById('panel-' + t.dataset.tab).classList.add('active');
+  });
+});
+
+// ========== 假数据：20 条项目 ==========
+const projects = [
+  { id: 1, name: '成都大运会主题乐园二期', owner: '成都文旅投', region: '华西', budget: 4800, prob: 84, due: '04-23', comp: 5, stage: '发标' },
+  { id: 2, name: '乌鲁木齐冰雪主题公园', owner: '乌市文旅集团', region: '西北', budget: 3200, prob: 62, due: '04-25', comp: 4, stage: '发标' },
+  { id: 3, name: '太原儿童乐园（公建民营）', owner: '太原教育局', region: '华北', budget: 1600, prob: 78, due: '04-28', comp: 3, stage: '意向' },
+  { id: 4, name: '深圳前海游乐场扩建', owner: '前海投控', region: '华南', budget: 6500, prob: 31, due: '04-30', comp: 6, stage: '发标' },
+  { id: 5, name: '重庆万达主题乐园', owner: '万达文旅', region: '华西', budget: 8800, prob: 81, due: '05-02', comp: 5, stage: '立项' },
+  { id: 6, name: '郑州方特乐园二期', owner: '华强方特', region: '华中', budget: 5400, prob: 75, due: '05-05', comp: 4, stage: '立项' },
+  { id: 7, name: '青岛海上亲子公园', owner: '青岛文旅', region: '华东', budget: 2200, prob: 58, due: '05-07', comp: 5, stage: '发标' },
+  { id: 8, name: '西安大明宫遗址乐园', owner: '西安曲江', region: '华西', budget: 4100, prob: 72, due: '05-10', comp: 4, stage: '意向' },
+  { id: 9, name: '厦门鼓浪屿亲子公园', owner: '厦门旅发', region: '华东', budget: 1850, prob: 46, due: '05-12', comp: 3, stage: '意向' },
+  { id: 10, name: '昆明西山文旅小镇', owner: '昆明文旅', region: '华西', budget: 2800, prob: 68, due: '05-14', comp: 4, stage: '发标' },
+  { id: 11, name: '长沙世界之窗扩建', owner: '华侨城', region: '华中', budget: 7200, prob: 39, due: '05-16', comp: 6, stage: '发标' },
+  { id: 12, name: '哈尔滨冰雪大世界配套', owner: '哈尔滨文旅', region: '东北', budget: 3600, prob: 65, due: '05-18', comp: 3, stage: '立项' },
+  { id: 13, name: '南京江北新区公园', owner: '江北投', region: '华东', budget: 2400, prob: 79, due: '05-20', comp: 3, stage: '意向' },
+  { id: 14, name: '武汉光谷生态乐园', owner: '光谷产业', region: '华中', budget: 5200, prob: 70, due: '05-22', comp: 5, stage: '发标' },
+  { id: 15, name: '宁波鄞州亲子乐园', owner: '鄞州教育局', region: '华东', budget: 1100, prob: 86, due: '05-25', comp: 2, stage: '意向' },
+  { id: 16, name: '苏州金鸡湖游乐场', owner: '苏州园林', region: '华东', budget: 3900, prob: 53, due: '05-27', comp: 5, stage: '发标' },
+  { id: 17, name: '天津海河乐园', owner: '天津文旅', region: '华北', budget: 4600, prob: 48, due: '05-30', comp: 5, stage: '发标' },
+  { id: 18, name: '合肥滨湖儿童公园', owner: '合肥市政', region: '华东', budget: 1900, prob: 82, due: '06-02', comp: 3, stage: '意向' },
+  { id: 19, name: '广州南沙滨海乐园', owner: '南沙新区', region: '华南', budget: 6800, prob: 34, due: '06-05', comp: 6, stage: '发标' },
+  { id: 20, name: '沈阳棋盘山文旅', owner: '沈阳文旅', region: '东北', budget: 2700, prob: 71, due: '06-08', comp: 4, stage: '立项' }
+];
+
+function heatClass(p) {
+  if (p >= 75) return 'heat-green';
+  if (p >= 60) return 'heat-blue';
+  if (p >= 45) return 'heat-orange';
+  return 'heat-red';
+}
+function probColor(p) {
+  if (p >= 75) return '#52c41a';
+  if (p >= 60) return '#1890ff';
+  if (p >= 45) return '#fa8c16';
+  return '#f5222d';
+}
+function stageTag(s) {
+  const map = { '意向': 'tag-blue', '发标': 'tag-orange', '立项': 'tag-purple' };
+  return `<span class="tag ${map[s] || 'tag-gray'}">${s}</span>`;
+}
+
+// ========== 渲染项目表 ==========
+const tbody = document.querySelector('#projectTable tbody');
+tbody.innerHTML = projects.map(p => `
+  <tr data-id="${p.id}">
+    <td><input type="checkbox"></td>
+    <td>
+      <div style="font-weight:500;color:#262626;">${p.name}</div>
+      <div style="font-size:11px;color:#bfbfbf;margin-top:2px;">#PROJ-${String(1000 + p.id)}</div>
+    </td>
+    <td>
+      <div>${p.owner}</div>
+      <div style="font-size:11px;color:#8c8c8c;">${p.region}</div>
+    </td>
+    <td>¥${p.budget.toLocaleString()}w</td>
+    <td>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="heat-bar"><div class="heat-bar-fill ${heatClass(p.prob)}" style="width:${p.prob}%;"></div></div>
+        <span style="font-weight:700;color:${probColor(p.prob)};font-size:13px;min-width:36px;">${p.prob}%</span>
+      </div>
+    </td>
+    <td><span style="color:${p.prob>=70?'#52c41a':'#f5222d'};font-size:12px;">${p.due}</span></td>
+    <td><span style="background:#fafafa;padding:2px 8px;border-radius:10px;font-size:11.5px;color:#595959;">${p.comp} 家</span></td>
+    <td>${stageTag(p.stage)}</td>
+    <td><button class="btn btn-default" style="padding:3px 10px;font-size:11.5px;">下钻</button></td>
+  </tr>
+`).join('');
+
+// ========== 抽屉 ==========
+const mask = document.getElementById('drawerMask');
+const drawer = document.getElementById('probDrawer');
+function openDrawer(p) {
+  document.getElementById('drawerTitle').textContent = p.name;
+  document.getElementById('drawerSubtitle').textContent = `${p.owner} · ${p.region} · ¥${p.budget}w · 截止 ${p.due}`;
+
+  // 根据总概率回推 6 维度（伪）
+  const base = p.prob;
+  const dims = [
+    { label: '资质匹配', v: Math.min(100, base + 8), note: '建设部甲级 · ISO9001 · EN1176 · CE · GB19272 全匹配' },
+    { label: '历史胜率', v: Math.max(20, base - 5), note: `近 24 月同类 ${Math.floor(base*0.5)} 中 ${Math.floor(base*0.35)}，在 ${p.region} 强势` },
+    { label: '竞争格局', v: Math.max(15, 100 - p.comp * 12), note: `同场预测 ${p.comp} 家：KOMPAN / LSI / PlayCore / HAGS 等` },
+    { label: '关键人关系', v: Math.min(95, base + 4), note: '业主陈总监已接触 8 次，关系评级 A' },
+    { label: '区域优势', v: Math.max(30, base - 2), note: `${p.region} 历史交付 ${Math.floor(base/10)} 个项目，运维网络覆盖` },
+    { label: '价格空间', v: Math.max(25, base - 12), note: '基于利润模型预测毛利率 24-27%，报价弹性中' }
+  ];
+
+  document.getElementById('drawerBody').innerHTML = `
+    <div style="padding:14px;background:linear-gradient(135deg,${probColor(p.prob)}22,#ffffff);border-radius:8px;margin-bottom:16px;display:flex;align-items:center;gap:14px;">
+      <div style="width:80px;height:80px;border-radius:50%;background:#fff;border:4px solid ${probColor(p.prob)};display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:800;color:${probColor(p.prob)};">${p.prob}%</div>
+      <div style="flex:1;">
+        <div style="font-size:13px;color:#595959;">综合中标概率</div>
+        <div style="font-size:12px;color:#8c8c8c;margin-top:3px;">模型版本 v2.3 · 置信度 82% · 最近更新 14:32</div>
+        <div style="margin-top:6px;">
+          ${p.prob >= 70 ? '<span class="tag tag-green">✅ 强推 GO</span>' : p.prob >= 50 ? '<span class="tag tag-orange">⚠️ 谨慎</span>' : '<span class="tag tag-red">❌ 建议 No-Go</span>'}
+          <span class="tag tag-blue">${p.stage}</span>
+          <span class="tag tag-gray">竞品 ${p.comp} 家</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:600;margin-bottom:10px;color:#262626;">📊 6 维度分解 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2696</span></div>
+    ${dims.map(d => `
+      <div class="dim-item">
+        <div class="dim-label"><span>${d.label}</span><span style="font-weight:600;color:${probColor(d.v)};">${d.v}</span></div>
+        <div class="dim-bar"><div class="dim-fill" style="width:${d.v}%;background:linear-gradient(90deg,${probColor(d.v)},${probColor(d.v)}cc);"></div></div>
+        <div style="font-size:11.5px;color:#8c8c8c;margin-top:3px;">${d.note}</div>
+      </div>
+    `).join('')}
+
+    <div style="margin-top:16px;padding:12px;background:#fafafa;border-radius:6px;font-size:12.5px;">
+      <div style="font-weight:600;color:#262626;margin-bottom:6px;">🧾 AI 标书深度解析 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2698</span></div>
+      <div style="color:#595959;line-height:1.7;">
+        • 需求字段 142 项已提取 (置信度 91%)<br>
+        • 评分权重：技术 55% / 商务 30% / 报价 15%<br>
+        • 硬门槛：EN1176 / CE / 5 个同类案例（已满足 3/3）<br>
+        • 暗坑识别：需提供 10 年质保书（可满足）
+      </div>
+    </div>
+
+    <div style="margin-top:12px;padding:12px;background:#f6ffed;border-radius:6px;font-size:12.5px;">
+      <div style="font-weight:600;color:#389e0d;margin-bottom:6px;">🏆 企业能力画像·匹配度 <span class="code-badge" style="background:#e6f7ff;border-color:#91d5ff;color:#1890ff">#2697</span></div>
+      <div style="color:#595959;line-height:1.7;">
+        • 资质：5/5 全匹配 (建设部甲级、ISO9001、EN1176、CE、GB19272)<br>
+        • 案例：3 个 ${p.region} 项目 (¥2,800w - ¥5,200w)<br>
+        • 产能：现有产线满足交付周期
+      </div>
+    </div>
+
+    <div style="margin-top:14px;display:flex;gap:8px;">
+      <button class="btn btn-primary" style="flex:1;justify-content:center;">🎯 进入 Go/No-Go 决策</button>
+      <button class="btn btn-default">🎒 生成作战包</button>
+    </div>
+  `;
+  mask.classList.add('open');
+  drawer.classList.add('open');
+}
+function closeDrawer() {
+  mask.classList.remove('open');
+  drawer.classList.remove('open');
+}
+mask.addEventListener('click', closeDrawer);
+
+tbody.addEventListener('click', (e) => {
+  const tr = e.target.closest('tr');
+  if (!tr) return;
+  if (e.target.tagName === 'INPUT') return;
+  document.querySelectorAll('#projectTable tbody tr').forEach(x => x.classList.remove('selected'));
+  tr.classList.add('selected');
+  const p = projects.find(x => x.id === parseInt(tr.dataset.id));
+  if (p) openDrawer(p);
+});
+</script>
+</body>
+</html>

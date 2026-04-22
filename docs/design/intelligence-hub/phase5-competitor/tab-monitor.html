@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>源监控</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .health-green { background: #52c41a; }
+    .health-orange { background: #faad14; }
+    .health-red { background: #ff4d4f; }
+    .health-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
+    .pipeline-box { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; padding: 12px; }
+    .pipeline-arrow { color: #d9d9d9; font-size: 22px; display: flex; align-items: center; }
+    .trend-bar { height: 60px; display: flex; align-items: flex-end; gap: 3px; }
+    .trend-bar > div { background: #1890ff; opacity: .8; flex: 1; border-radius: 2px 2px 0 0; min-height: 2px; }
+    th, td { font-size: 12.5px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;"><span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span><span style="font-weight:600;color:#ad6800;">Tab3 · 大规模源监控</span></div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">全景掌握竞品情报的数据采集管线：监控源清单、G7e Browser Agent + vLLM 采集管线的健康度、每周动态条数趋势，支持新增/暂停源、调整采集频率</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管）, 数据运维</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">监控源清单 (官网/LinkedIn/Google新闻/行业媒体/招投标/展会) / G7e→vLLM→知识图谱管线健康灯 / 近 12 周动态条数趋势 / 采集失败告警</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新增源 / 调整频率 / 查看失败日志 / 手动触发采集</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">源清单 ≥ 20 条 / 4 节点管线状态灯可见 / 趋势图近 12 周非空 / 告警表 ≥ 1 条</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase5 竞品情报 详细设计.md §2.3</a></div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [采集管线状态] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">🏭 采集管线健康度（G7e + vLLM + 知识图谱）</h3>
+    <div class="text-xs text-gray-500">最后心跳：2 min 前 · <a href="#" class="text-blue-500">查看 Grafana</a></div>
+  </div>
+  <div class="flex items-center gap-2">
+    <div class="pipeline-box flex-1 text-center">
+      <div class="text-xs text-gray-500">① 源采集</div>
+      <div class="text-lg font-bold text-gray-800 mt-1">G7e Browser Agent</div>
+      <div class="mt-2"><span class="health-dot health-green"></span> <span class="text-xs text-green-600">运行中</span></div>
+      <div class="text-[11px] text-gray-400 mt-1">32 源 · 今日 1,247 次请求</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-box flex-1 text-center">
+      <div class="text-xs text-gray-500">② 内容解析</div>
+      <div class="text-lg font-bold text-gray-800 mt-1">vLLM 抽取服务</div>
+      <div class="mt-2"><span class="health-dot health-green"></span> <span class="text-xs text-green-600">运行中</span></div>
+      <div class="text-[11px] text-gray-400 mt-1">Qwen2.5-14B · 平均延迟 850ms</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-box flex-1 text-center">
+      <div class="text-xs text-gray-500">③ 实体抽取</div>
+      <div class="text-lg font-bold text-gray-800 mt-1">NLP Pipeline</div>
+      <div class="mt-2"><span class="health-dot health-orange"></span> <span class="text-xs text-orange-600">降速</span></div>
+      <div class="text-[11px] text-gray-400 mt-1">队列积压 127 条</div>
+    </div>
+    <div class="pipeline-arrow">→</div>
+    <div class="pipeline-box flex-1 text-center">
+      <div class="text-xs text-gray-500">④ 入库&索引</div>
+      <div class="text-lg font-bold text-gray-800 mt-1">KG 写入</div>
+      <div class="mt-2"><span class="health-dot health-green"></span> <span class="text-xs text-green-600">运行中</span></div>
+      <div class="text-[11px] text-gray-400 mt-1">今日入库 284 条新增</div>
+    </div>
+  </div>
+  <div class="mt-3 text-xs text-gray-500 text-right">关联 Issue: #2719 #2494 #2495</div>
+</div>
+
+<!-- [源清单表] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">📡 监控源清单 <span class="text-xs text-gray-500 font-normal ml-2">32 条 · 6 类型</span></h3>
+    <div class="flex gap-2">
+      <select class="text-xs border border-gray-300 rounded px-2 py-1"><option>全部类型</option><option>官网</option><option>LinkedIn</option><option>新闻</option><option>行业媒体</option><option>招投标</option><option>展会</option></select>
+      <button class="px-3 py-1 bg-blue-500 text-white rounded text-xs">+ 新增源</button>
+    </div>
+  </div>
+  <table class="w-full border-collapse">
+    <thead><tr class="bg-gray-100 text-left text-xs text-gray-600"><th class="p-2 border border-gray-300">类型</th><th class="p-2 border border-gray-300">源名称 / URL</th><th class="p-2 border border-gray-300">关联竞品</th><th class="p-2 border border-gray-300">采集频率</th><th class="p-2 border border-gray-300">最近采集</th><th class="p-2 border border-gray-300">状态</th><th class="p-2 border border-gray-300">今日条数</th><th class="p-2 border border-gray-300">操作</th></tr></thead>
+    <tbody>
+      <tr class="border-b"><td class="p-2 border border-gray-300">官网</td><td class="p-2 border border-gray-300">kompan.com/news</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">每 2h</td><td class="p-2 border border-gray-300">8 分钟前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">3</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">官网</td><td class="p-2 border border-gray-300">playcore.com/press</td><td class="p-2 border border-gray-300">PlayCore</td><td class="p-2 border border-gray-300">每 4h</td><td class="p-2 border border-gray-300">1 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">1</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">LinkedIn</td><td class="p-2 border border-gray-300">KOMPAN Company Page</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">每 6h</td><td class="p-2 border border-gray-300">45 分钟前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">5</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">LinkedIn</td><td class="p-2 border border-gray-300">HAGS Company Page</td><td class="p-2 border border-gray-300">HAGS</td><td class="p-2 border border-gray-300">每 6h</td><td class="p-2 border border-gray-300">15 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-red"></span> 失败 (3次)</td><td class="p-2 border border-gray-300">0</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看日志</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">Google 新闻</td><td class="p-2 border border-gray-300">"KOMPAN" "中标"</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">每日</td><td class="p-2 border border-gray-300">3 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">2</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">Google 新闻</td><td class="p-2 border border-gray-300">"PlayCore" acquisition</td><td class="p-2 border border-gray-300">PlayCore</td><td class="p-2 border border-gray-300">每日</td><td class="p-2 border border-gray-300">3 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">0</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">行业媒体</td><td class="p-2 border border-gray-300">Playground Magazine RSS</td><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">每日</td><td class="p-2 border border-gray-300">6 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">4</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">行业媒体</td><td class="p-2 border border-gray-300">WorldLeisure.org/news</td><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">每日</td><td class="p-2 border border-gray-300">6 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">1</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">招投标</td><td class="p-2 border border-gray-300">中国政府采购网</td><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">每 4h</td><td class="p-2 border border-gray-300">1 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">38</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">招投标</td><td class="p-2 border border-gray-300">SAM.gov (美国联邦)</td><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">每日</td><td class="p-2 border border-gray-300">8 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-orange"></span> 慢速</td><td class="p-2 border border-gray-300">12</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">招投标</td><td class="p-2 border border-gray-300">TED (欧盟招标)</td><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">每日</td><td class="p-2 border border-gray-300">10 小时前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">7</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">展会</td><td class="p-2 border border-gray-300">IAAPA Expo 官方</td><td class="p-2 border border-gray-300">全部</td><td class="p-2 border border-gray-300">周</td><td class="p-2 border border-gray-300">2 天前</td><td class="p-2 border border-gray-300"><span class="health-dot health-green"></span> 正常</td><td class="p-2 border border-gray-300">0</td><td class="p-2 border border-gray-300 text-blue-500 text-xs">查看/暂停</td></tr>
+      <tr><td class="p-2 border border-gray-300 text-gray-400 italic" colspan="8">...共 32 条，点击 <a href="#" class="text-blue-500">展开全部</a></td></tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+  <!-- 趋势图 -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-sm font-bold text-gray-700 mb-3">📈 近 12 周新动态条数</h3>
+    <div class="trend-bar">
+      <div style="height:45%"></div><div style="height:52%"></div><div style="height:38%"></div><div style="height:60%"></div>
+      <div style="height:65%"></div><div style="height:50%"></div><div style="height:72%"></div><div style="height:68%"></div>
+      <div style="height:80%"></div><div style="height:75%"></div><div style="height:88%"></div><div style="height:95%"></div>
+    </div>
+    <div class="flex justify-between text-[10px] text-gray-400 mt-1">
+      <span>W1</span><span>W2</span><span>W3</span><span>W4</span><span>W5</span><span>W6</span><span>W7</span><span>W8</span><span>W9</span><span>W10</span><span>W11</span><span>W12</span>
+    </div>
+    <div class="mt-3 grid grid-cols-3 gap-2 text-xs text-center">
+      <div><div class="text-gray-500">本周</div><div class="text-lg font-bold text-gray-800">128</div></div>
+      <div><div class="text-gray-500">上周</div><div class="text-lg font-bold text-gray-800">115</div></div>
+      <div><div class="text-gray-500">环比</div><div class="text-lg font-bold text-green-600">+11%</div></div>
+    </div>
+  </div>
+
+  <!-- 告警 -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-sm font-bold text-gray-700 mb-3">⚠️ 采集失败 / 告警</h3>
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-100 text-xs text-gray-600"><th class="p-2 text-left">源</th><th class="p-2 text-left">原因</th><th class="p-2 text-left">时间</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-2">LinkedIn / HAGS</td><td class="p-2 text-red-600">403 限流</td><td class="p-2 text-gray-500">15h 前</td></tr>
+        <tr class="border-b"><td class="p-2">kompan.com/dealers</td><td class="p-2 text-orange-600">解析器失效</td><td class="p-2 text-gray-500">2 天前</td></tr>
+        <tr class="border-b"><td class="p-2">Playground Mag</td><td class="p-2 text-orange-600">RSS 超时</td><td class="p-2 text-gray-500">3 天前</td></tr>
+        <tr><td class="p-2">Proludic/news</td><td class="p-2 text-red-600">证书过期</td><td class="p-2 text-gray-500">5 天前</td></tr>
+      </tbody>
+    </table>
+    <div class="mt-3 text-right"><button class="text-xs text-blue-500">查看全部告警 →</button></div>
+  </div>
+</div>
+
+</body>
+</html>

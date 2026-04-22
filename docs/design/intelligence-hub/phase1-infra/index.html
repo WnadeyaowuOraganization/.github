@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台 Phase 1 基础设施 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .wf-card { background:#fff; border:1px solid #d9d9d9; border-radius:4px; }
+    .wf-label { background:#f0f0f0; color:#666; padding:2px 8px; font-size:11px; border-radius:2px; display:inline-block; }
+    .wf-btn { background:#1890ff; color:#fff; padding:4px 12px; font-size:12px; border-radius:3px; cursor:pointer; }
+    .wf-btn-default { background:#fff; color:#333; border:1px solid #d9d9d9; padding:4px 12px; font-size:12px; border-radius:3px; cursor:pointer; }
+    .wf-anchor-bar { position:sticky; top:0; z-index:10; background:#fff; border-bottom:1px solid #d9d9d9; }
+    .wf-anchor { padding:10px 14px; font-size:12px; color:#666; border-bottom:2px solid transparent; white-space:nowrap; cursor:pointer; }
+    .wf-anchor:hover { color:#1890ff; }
+    .wf-anchor.active { color:#1890ff; border-bottom-color:#1890ff; }
+    .wf-region-title { font-size:15px; font-weight:600; color:#333; }
+    .wf-region-num { background:#1890ff; color:#fff; width:24px; height:24px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-size:12px; margin-right:8px; }
+    .wf-dashed { border:1px dashed #bfbfbf; }
+    .wf-table th { background:#fafafa; font-weight:500; color:#555; padding:8px; border-bottom:1px solid #d9d9d9; font-size:12px; text-align:left; }
+    .wf-table td { padding:8px; border-bottom:1px solid #f0f0f0; font-size:12px; color:#333; }
+    .wf-dot-green { width:8px; height:8px; border-radius:50%; background:#52c41a; display:inline-block; }
+    .wf-dot-yellow { width:8px; height:8px; border-radius:50%; background:#faad14; display:inline-block; }
+    .wf-dot-red { width:8px; height:8px; border-radius:50%; background:#f5222d; display:inline-block; }
+    .wf-tag { background:#f0f0f0; color:#555; padding:1px 8px; font-size:11px; border-radius:10px; display:inline-block; margin:2px; }
+    .wf-entity-box { border:1px solid #1890ff; background:#e6f7ff; padding:10px; border-radius:4px; text-align:center; }
+  </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Phase 1 基础设施</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">搭建情报中台数据基座：实体模型+采集+去重+权限+质量+检索，支撑其他 6 Phase</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角）, 情报中台运维, 数据开发</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">实体模型 / 标签分类 / 知识图谱 / 采集引擎 / 去重合并 / 权限隔离 / 质量评分 / 全文检索 / 管理后台</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">注册采集源 / 审核重复对 / 配置角色权限 / 查看质量趋势 / 全文+语义搜索</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">10 个功能区域全部渲染 / 8 大实体模型可视化 / 采集源健康度实时监控 / 去重准确率 ≥95%</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase 1 基础设施详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [面包屑+返回按钮] -->
+<div class="px-6 py-3 text-xs text-gray-500 flex items-center justify-between bg-white border-b border-gray-200">
+  <div>首页 &gt; 资源中心 &gt; 商战情报中台 &gt; <span class="text-gray-700 font-semibold">Phase 1 基础设施</span></div>
+  <a href="../index.html" class="text-blue-500 hover:underline">← 返回总览</a>
+</div>
+
+<!-- [锚点导航栏] -->
+<div class="wf-anchor-bar overflow-x-auto">
+  <div class="flex min-w-max px-4">
+    <a class="wf-anchor active" href="#region-1">①实体模型</a>
+    <a class="wf-anchor" href="#region-2">②标签分类</a>
+    <a class="wf-anchor" href="#region-3">③知识图谱</a>
+    <a class="wf-anchor" href="#region-4">④采集源</a>
+    <a class="wf-anchor" href="#region-5">⑤采集引擎</a>
+    <a class="wf-anchor" href="#region-6">⑥去重合并</a>
+    <a class="wf-anchor" href="#region-7">⑦权限隔离</a>
+    <a class="wf-anchor" href="#region-8">⑧质量评分</a>
+    <a class="wf-anchor" href="#region-9">⑨全文检索</a>
+    <a class="wf-anchor" href="#region-10">⑩管理后台</a>
+  </div>
+</div>
+
+<div class="p-6 space-y-6 max-w-[1400px] mx-auto">
+
+<!-- [区域1-实体模型总览] -->
+<section id="region-1" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">1</span>实体模型总览 — 8 大核心实体</div>
+    <span class="wf-label">Issue #2674</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">统一实体模型设计 · 所有情报数据的骨架，字段规范、ID 策略、关联关系</div>
+
+  <div class="grid grid-cols-4 gap-3 mb-4">
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Project 项目</div><div class="text-xs text-gray-600 mt-1">42 字段 · 1,284 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Customer 客户</div><div class="text-xs text-gray-600 mt-1">38 字段 · 3,421 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Competitor 竞品</div><div class="text-xs text-gray-600 mt-1">26 字段 · 186 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Product 产品</div><div class="text-xs text-gray-600 mt-1">31 字段 · 542 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Policy 政策</div><div class="text-xs text-gray-600 mt-1">18 字段 · 267 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Report 研报</div><div class="text-xs text-gray-600 mt-1">22 字段 · 891 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Event 事件</div><div class="text-xs text-gray-600 mt-1">15 字段 · 2,148 条</div></div>
+    <div class="wf-entity-box"><div class="font-bold text-sm text-blue-700">Signal 信号</div><div class="text-xs text-gray-600 mt-1">12 字段 · 5,632 条</div></div>
+  </div>
+
+  <div class="wf-dashed p-4 bg-gray-50 rounded text-center text-xs text-gray-500">
+    [ER 图占位] — Project ⇄ Customer ⇄ Project Manager · Competitor ⇄ Product · Event → Signal → Report<br>
+    （实际渲染时用 mermaid.js 或 antv-x6 画关系图）
+  </div>
+
+  <div class="flex gap-2 mt-3">
+    <span class="wf-btn">查看字段定义</span>
+    <span class="wf-btn-default">导出 JSON Schema</span>
+    <span class="wf-btn-default">版本历史</span>
+  </div>
+</section>
+
+<!-- [区域2-标签分类法] -->
+<section id="region-2" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">2</span>标签分类法 — 多级标签树</div>
+    <span class="wf-label">Issue #2675</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">情报标签体系 · 行业/产品/区域/阶段/信号类型 五大主轴，共 5 级深度、482 个标签</div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 左树 -->
+    <div class="col-span-1 wf-dashed p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-2">[左：标签树]</div>
+      <div class="text-xs space-y-1 font-mono">
+        <div>▼ 行业 <span class="text-gray-400">(84)</span></div>
+        <div class="pl-4">▼ 文旅游乐 <span class="text-gray-400">(42)</span></div>
+        <div class="pl-8">▼ 室内乐园 <span class="text-gray-400">(18)</span></div>
+        <div class="pl-12">· 蹦床公园</div>
+        <div class="pl-12">· 儿童乐园</div>
+        <div class="pl-12">· VR 体验馆</div>
+        <div class="pl-8">▶ 主题公园 <span class="text-gray-400">(14)</span></div>
+        <div class="pl-8">▶ 水上乐园 <span class="text-gray-400">(10)</span></div>
+        <div class="pl-4">▶ 商业综合体 <span class="text-gray-400">(22)</span></div>
+        <div class="pl-4">▶ 教育培训 <span class="text-gray-400">(20)</span></div>
+        <div>▶ 产品 <span class="text-gray-400">(126)</span></div>
+        <div>▶ 区域 <span class="text-gray-400">(98)</span></div>
+        <div>▶ 项目阶段 <span class="text-gray-400">(42)</span></div>
+        <div>▶ 信号类型 <span class="text-gray-400">(132)</span></div>
+      </div>
+    </div>
+
+    <!-- 右表 -->
+    <div class="col-span-2 wf-dashed p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-2">[右：标签详情表 · 当前选中「蹦床公园」]</div>
+      <table class="wf-table w-full">
+        <thead><tr><th>字段</th><th>值</th></tr></thead>
+        <tbody>
+          <tr><td>标签ID</td><td>IND-TOUR-INDOOR-TRAMP-001</td></tr>
+          <tr><td>标签名</td><td>蹦床公园</td></tr>
+          <tr><td>层级</td><td>4 级（行业 &gt; 文旅游乐 &gt; 室内乐园 &gt; 蹦床公园）</td></tr>
+          <tr><td>同义词</td><td>trampoline park / 蹦床乐园 / Sky Zone 类</td></tr>
+          <tr><td>关联实体</td><td>1,284 条 Project · 216 条 Customer · 48 条 Product</td></tr>
+          <tr><td>维护人</td><td>张三（商务部）</td></tr>
+          <tr><td>最后更新</td><td>2026-04-18 14:23</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- [区域3-知识图谱存储] -->
+<section id="region-3" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">3</span>知识图谱存储层 — Neo4j + Postgres 混合架构</div>
+    <span class="wf-label">Issue #2676</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">实体知识图谱存储 · Neo4j 存关系图，Postgres 存结构化字段，双写保一致</div>
+
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <div class="wf-dashed p-4 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-2">[架构图占位]</div>
+      <div class="text-center text-sm space-y-2">
+        <div class="wf-entity-box bg-purple-50 border-purple-300">Neo4j Graph<br><span class="text-xs text-gray-500">关系/路径查询</span></div>
+        <div class="text-gray-400 text-xs">↕ 双写同步 · Kafka CDC</div>
+        <div class="wf-entity-box bg-green-50 border-green-300">Postgres 14<br><span class="text-xs text-gray-500">结构化字段/事务</span></div>
+      </div>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500 mb-2">[图谱统计]</div>
+      <table class="wf-table w-full">
+        <tbody>
+          <tr><td>节点总数</td><td class="font-semibold">14,371</td></tr>
+          <tr><td>边（关系）总数</td><td class="font-semibold">48,206</td></tr>
+          <tr><td>节点类型</td><td>8 种（对应 8 大实体）</td></tr>
+          <tr><td>关系类型</td><td>23 种（supplies / competes / located_in…）</td></tr>
+          <tr><td>平均度</td><td>6.7</td></tr>
+          <tr><td>最大连通子图</td><td>12,843 节点（占 89%）</td></tr>
+          <tr><td>存储占用</td><td>Neo4j 2.4GB · PG 8.7GB</td></tr>
+          <tr><td>P95 查询延迟</td><td>Neo4j 48ms · PG 12ms</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- [区域4-采集源注册] -->
+<section id="region-4" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">4</span>采集源注册与健康度管理</div>
+    <span class="wf-label">Issue #2678</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">30 个采集源 · 实时健康度监控 · 异常自动告警</div>
+
+  <div class="flex gap-2 mb-3">
+    <span class="wf-btn">+ 新增采集源</span>
+    <span class="wf-btn-default">批量启用</span>
+    <span class="wf-btn-default">导出报表</span>
+    <input type="text" placeholder="搜索源名" class="border border-gray-300 rounded px-2 py-1 text-xs ml-auto" style="width:180px">
+  </div>
+
+  <table class="wf-table w-full">
+    <thead><tr>
+      <th>源名</th><th>类型</th><th>频率</th><th>最后成功</th><th>成功率</th><th>吞吐/日</th><th>健康度</th><th>操作</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>IAAPA 行业协会官网</td><td>Web 爬虫</td><td>每日 02:00</td><td>2026-04-21 02:14</td><td>98.6%</td><td>142 条</td><td><span class="wf-dot-green"></span> 正常</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>中招标公共服务平台</td><td>API 轮询</td><td>每小时</td><td>2026-04-21 11:02</td><td>99.2%</td><td>384 条</td><td><span class="wf-dot-green"></span> 正常</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>万达商管招商系统</td><td>合作方推送</td><td>实时</td><td>2026-04-21 10:58</td><td>100%</td><td>68 条</td><td><span class="wf-dot-green"></span> 正常</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>36氪文旅垂类</td><td>RSS</td><td>每 30 分钟</td><td>2026-04-21 10:42</td><td>94.3%</td><td>32 条</td><td><span class="wf-dot-yellow"></span> 抖动</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>国家发改委政策库</td><td>Web 爬虫</td><td>每日 08:00</td><td>2026-04-21 08:06</td><td>96.8%</td><td>8 条</td><td><span class="wf-dot-green"></span> 正常</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>天眼查企业数据</td><td>API 调用</td><td>按需</td><td>2026-04-21 10:14</td><td>99.8%</td><td>216 条</td><td><span class="wf-dot-green"></span> 正常</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>小红书文旅话题</td><td>Web 爬虫</td><td>每 2 小时</td><td>2026-04-20 22:30</td><td>72.4%</td><td>—</td><td><span class="wf-dot-red"></span> 异常</td><td class="text-blue-500 cursor-pointer">排障</td></tr>
+      <tr><td>竞品公众号采集</td><td>微信 MP</td><td>每 4 小时</td><td>2026-04-21 08:14</td><td>88.6%</td><td>24 条</td><td><span class="wf-dot-yellow"></span> 抖动</td><td class="text-blue-500 cursor-pointer">配置</td></tr>
+      <tr><td>...（共 30 个源）</td><td colspan="7" class="text-gray-400 text-center">[省略 22 行假数据]</td></tr>
+    </tbody>
+  </table>
+  <div class="flex justify-between items-center mt-3 text-xs text-gray-500">
+    <div>共 30 个源 · 正常 <span class="text-green-600 font-semibold">24</span> · 抖动 <span class="text-yellow-600 font-semibold">4</span> · 异常 <span class="text-red-600 font-semibold">2</span></div>
+    <div>分页：1 / 2 ‹ ›</div>
+  </div>
+</section>
+
+<!-- [区域5-采集引擎扩展] -->
+<section id="region-5" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">5</span>采集引擎扩展 — industry_intelligence 管线</div>
+    <span class="wf-label">Issue #2677</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">共享采集引擎新增情报管线 · 支持 industry / policy / tender / competitor 4 类</div>
+
+  <div class="grid grid-cols-4 gap-3 mb-4">
+    <div class="wf-dashed p-3 bg-gray-50">
+      <div class="font-semibold text-sm text-gray-700">industry_intelligence</div>
+      <div class="text-xs text-gray-500 mt-2">行业动态管线</div>
+      <div class="text-xs mt-2">今日吞吐: <span class="font-semibold">384 条</span></div>
+      <div class="text-xs">成功率: <span class="text-green-600">97.2%</span></div>
+      <div class="text-xs">P95 延迟: 2.4s</div>
+      <div class="text-xs mt-1 text-green-600">● 运行中</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50">
+      <div class="font-semibold text-sm text-gray-700">policy_watch</div>
+      <div class="text-xs text-gray-500 mt-2">政策监测管线</div>
+      <div class="text-xs mt-2">今日吞吐: <span class="font-semibold">42 条</span></div>
+      <div class="text-xs">成功率: <span class="text-green-600">99.1%</span></div>
+      <div class="text-xs">P95 延迟: 1.8s</div>
+      <div class="text-xs mt-1 text-green-600">● 运行中</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50">
+      <div class="font-semibold text-sm text-gray-700">tender_radar</div>
+      <div class="text-xs text-gray-500 mt-2">招投标雷达管线</div>
+      <div class="text-xs mt-2">今日吞吐: <span class="font-semibold">186 条</span></div>
+      <div class="text-xs">成功率: <span class="text-yellow-600">88.4%</span></div>
+      <div class="text-xs">P95 延迟: 4.2s</div>
+      <div class="text-xs mt-1 text-yellow-600">● 降级运行</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50">
+      <div class="font-semibold text-sm text-gray-700">competitor_intel</div>
+      <div class="text-xs text-gray-500 mt-2">竞品情报管线</div>
+      <div class="text-xs mt-2">今日吞吐: <span class="font-semibold">58 条</span></div>
+      <div class="text-xs">成功率: <span class="text-green-600">95.6%</span></div>
+      <div class="text-xs">P95 延迟: 3.1s</div>
+      <div class="text-xs mt-1 text-green-600">● 运行中</div>
+    </div>
+  </div>
+
+  <div class="wf-dashed p-3 bg-gray-50">
+    <div class="text-xs text-gray-500 mb-2">[吞吐监控图占位 · 近 24 小时每小时管线处理量]</div>
+    <div class="flex items-end gap-1 h-20">
+      <div class="bg-blue-300 flex-1" style="height:40%"></div>
+      <div class="bg-blue-300 flex-1" style="height:28%"></div>
+      <div class="bg-blue-300 flex-1" style="height:22%"></div>
+      <div class="bg-blue-300 flex-1" style="height:18%"></div>
+      <div class="bg-blue-300 flex-1" style="height:15%"></div>
+      <div class="bg-blue-300 flex-1" style="height:24%"></div>
+      <div class="bg-blue-300 flex-1" style="height:45%"></div>
+      <div class="bg-blue-400 flex-1" style="height:68%"></div>
+      <div class="bg-blue-400 flex-1" style="height:82%"></div>
+      <div class="bg-blue-400 flex-1" style="height:78%"></div>
+      <div class="bg-blue-400 flex-1" style="height:86%"></div>
+      <div class="bg-blue-400 flex-1" style="height:92%"></div>
+      <div class="bg-blue-400 flex-1" style="height:88%"></div>
+      <div class="bg-blue-400 flex-1" style="height:84%"></div>
+      <div class="bg-blue-400 flex-1" style="height:76%"></div>
+      <div class="bg-blue-400 flex-1" style="height:72%"></div>
+      <div class="bg-blue-400 flex-1" style="height:68%"></div>
+      <div class="bg-blue-400 flex-1" style="height:56%"></div>
+      <div class="bg-blue-300 flex-1" style="height:48%"></div>
+      <div class="bg-blue-300 flex-1" style="height:42%"></div>
+      <div class="bg-blue-300 flex-1" style="height:38%"></div>
+      <div class="bg-blue-300 flex-1" style="height:32%"></div>
+      <div class="bg-blue-300 flex-1" style="height:26%"></div>
+      <div class="bg-blue-300 flex-1" style="height:22%"></div>
+    </div>
+    <div class="text-xs text-gray-400 mt-1 flex justify-between"><span>00:00</span><span>12:00</span><span>24:00</span></div>
+  </div>
+</section>
+
+<!-- [区域6-去重合并引擎] -->
+<section id="region-6" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">6</span>去重合并引擎</div>
+    <span class="wf-label">Issue #2679</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">基于 SimHash + 实体名归一化 · 自动合并 + 人工仲裁队列</div>
+
+  <div class="grid grid-cols-3 gap-4 mb-4">
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-2xl font-bold text-gray-700">96.4%</div>
+      <div class="text-xs text-gray-500 mt-1">去重准确率（近 7 天）</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-2xl font-bold text-gray-700">1,248</div>
+      <div class="text-xs text-gray-500 mt-1">今日检出重复对</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-2xl font-bold text-yellow-600">42</div>
+      <div class="text-xs text-gray-500 mt-1">待人工仲裁</div>
+    </div>
+  </div>
+
+  <div class="text-xs text-gray-500 mb-2">[人工仲裁队列]</div>
+  <table class="wf-table w-full">
+    <thead><tr>
+      <th>重复组</th><th>实体 A</th><th>实体 B</th><th>相似度</th><th>检出时间</th><th>操作</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td>DUP-20260421-001</td>
+        <td>深圳万达广场儿童乐园项目</td>
+        <td>深圳龙岗万达儿童乐园</td>
+        <td><span class="text-yellow-600 font-semibold">87%</span></td>
+        <td>2026-04-21 09:14</td>
+        <td><span class="wf-btn mr-1">合并</span><span class="wf-btn-default">保留</span></td>
+      </tr>
+      <tr>
+        <td>DUP-20260421-002</td>
+        <td>上海世博儿童天地（张三跟进）</td>
+        <td>上海世博园儿童天地（李四跟进）</td>
+        <td><span class="text-red-600 font-semibold">94%</span></td>
+        <td>2026-04-21 10:42</td>
+        <td><span class="wf-btn mr-1">合并</span><span class="wf-btn-default">保留</span></td>
+      </tr>
+      <tr>
+        <td>DUP-20260421-003</td>
+        <td>成都IFS蹦床公园</td>
+        <td>成都国际金融中心蹦床馆</td>
+        <td><span class="text-yellow-600 font-semibold">82%</span></td>
+        <td>2026-04-21 11:08</td>
+        <td><span class="wf-btn mr-1">合并</span><span class="wf-btn-default">保留</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- [区域7-权限与隔离] -->
+<section id="region-7" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">7</span>权限与数据隔离模型</div>
+    <span class="wf-label">Issue #2681</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">角色 × 实体权限矩阵 · 行级隔离（按大区/团队）</div>
+
+  <div class="text-xs text-gray-500 mb-2">[角色 × 实体 权限矩阵]</div>
+  <table class="wf-table w-full">
+    <thead><tr>
+      <th>角色 \ 实体</th><th>Project</th><th>Customer</th><th>Competitor</th><th>Product</th><th>Policy</th><th>Report</th><th>Event</th><th>Signal</th>
+    </tr></thead>
+    <tbody>
+      <tr>
+        <td class="font-semibold">超级管理员</td>
+        <td>R/W/D</td><td>R/W/D</td><td>R/W/D</td><td>R/W/D</td><td>R/W/D</td><td>R/W/D</td><td>R/W/D</td><td>R/W/D</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">商务总监</td>
+        <td>R/W</td><td>R/W</td><td>R</td><td>R</td><td>R</td><td>R/W</td><td>R/W</td><td>R</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">销售经理（大区）</td>
+        <td>R/W <span class="text-gray-400">(本区)</span></td><td>R/W <span class="text-gray-400">(本区)</span></td><td>R</td><td>R</td><td>R</td><td>R</td><td>R/W</td><td>R</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">销售人员</td>
+        <td>R/W <span class="text-gray-400">(本人)</span></td><td>R/W <span class="text-gray-400">(本人)</span></td><td>R</td><td>R</td><td>R</td><td>R</td><td>R</td><td>R</td>
+      </tr>
+      <tr>
+        <td class="font-semibold">经销商</td>
+        <td>R <span class="text-gray-400">(授权)</span></td><td>—</td><td>—</td><td>R</td><td>R</td><td>R <span class="text-gray-400">(公开)</span></td><td>—</td><td>—</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="text-xs text-gray-400 mt-2">R=读 · W=写 · D=删除 · 括号内为行级过滤条件</div>
+
+  <div class="flex gap-2 mt-3">
+    <span class="wf-btn">编辑矩阵</span>
+    <span class="wf-btn-default">导出配置</span>
+    <span class="wf-btn-default">审计日志</span>
+  </div>
+</section>
+
+<!-- [区域8-质量评分框架] -->
+<section id="region-8" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">8</span>质量评分框架 — 5 维度评估</div>
+    <span class="wf-label">Issue #2683</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">准确性 / 时效性 / 完整度 / 可信度 / 覆盖度 · 综合质量得分 82.4 分</div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <div class="wf-dashed p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-2">[5 维度雷达图占位]</div>
+      <div class="text-center py-6">
+        <div class="inline-block relative" style="width:200px;height:200px;">
+          <div class="absolute inset-0 border-2 border-gray-300 rounded-full"></div>
+          <div class="absolute inset-6 border border-gray-300 rounded-full"></div>
+          <div class="absolute inset-12 border border-gray-300 rounded-full"></div>
+          <div class="absolute inset-0 flex items-center justify-center text-xs text-gray-500">雷达图</div>
+        </div>
+      </div>
+      <table class="wf-table w-full mt-3">
+        <tbody>
+          <tr><td>准确性 Accuracy</td><td class="text-right font-semibold">86</td></tr>
+          <tr><td>时效性 Freshness</td><td class="text-right font-semibold">92</td></tr>
+          <tr><td>完整度 Completeness</td><td class="text-right font-semibold">78</td></tr>
+          <tr><td>可信度 Credibility</td><td class="text-right font-semibold">84</td></tr>
+          <tr><td>覆盖度 Coverage</td><td class="text-right font-semibold">72</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-2">[质量趋势折线图 · 近 30 天]</div>
+      <div class="flex items-end gap-1 h-40">
+        <div class="bg-blue-300 flex-1" style="height:72%"></div>
+        <div class="bg-blue-300 flex-1" style="height:75%"></div>
+        <div class="bg-blue-300 flex-1" style="height:68%"></div>
+        <div class="bg-blue-300 flex-1" style="height:74%"></div>
+        <div class="bg-blue-300 flex-1" style="height:78%"></div>
+        <div class="bg-blue-300 flex-1" style="height:76%"></div>
+        <div class="bg-blue-300 flex-1" style="height:80%"></div>
+        <div class="bg-blue-400 flex-1" style="height:82%"></div>
+        <div class="bg-blue-400 flex-1" style="height:79%"></div>
+        <div class="bg-blue-400 flex-1" style="height:83%"></div>
+        <div class="bg-blue-400 flex-1" style="height:85%"></div>
+        <div class="bg-blue-400 flex-1" style="height:84%"></div>
+        <div class="bg-blue-400 flex-1" style="height:81%"></div>
+        <div class="bg-blue-400 flex-1" style="height:86%"></div>
+        <div class="bg-blue-400 flex-1" style="height:88%"></div>
+        <div class="bg-blue-400 flex-1" style="height:85%"></div>
+        <div class="bg-blue-400 flex-1" style="height:87%"></div>
+        <div class="bg-blue-400 flex-1" style="height:82%"></div>
+      </div>
+      <div class="text-xs text-gray-400 mt-1 flex justify-between"><span>03-22</span><span>04-07</span><span>04-21</span></div>
+      <div class="mt-3 text-xs">
+        <div>当前综合得分: <span class="font-semibold text-lg text-blue-600">82.4</span> / 100</div>
+        <div class="text-green-600">↑ 较上周 +2.1 分</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- [区域9-全文检索搜索] -->
+<section id="region-9" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">9</span>全文检索与语义搜索引擎</div>
+    <span class="wf-label">Issue #2685</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">Elasticsearch 全文索引 + 向量嵌入（BGE-M3）语义搜索 · 混合排序</div>
+
+  <!-- 搜索框 -->
+  <div class="flex gap-2 mb-3">
+    <input type="text" value="深圳 蹦床公园 2026 新建" class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm">
+    <span class="wf-btn">搜索</span>
+    <span class="wf-btn-default">语义开关 ✓</span>
+  </div>
+
+  <!-- 过滤器 -->
+  <div class="flex gap-2 mb-3 flex-wrap">
+    <span class="wf-tag">实体类型: 全部</span>
+    <span class="wf-tag">时间: 近 3 个月</span>
+    <span class="wf-tag">区域: 华南</span>
+    <span class="wf-tag">来源: 全部</span>
+    <span class="wf-tag">+ 高级过滤</span>
+  </div>
+
+  <!-- 结果列表 -->
+  <div class="space-y-2 text-xs">
+    <div class="wf-dashed p-3 bg-white">
+      <div class="flex justify-between"><div class="font-semibold text-sm">深圳宝安万达<span class="bg-yellow-200">蹦床公园</span>项目招标公告</div><span class="text-gray-400">Project · 2026-04-18</span></div>
+      <div class="text-gray-600 mt-1">项目位于<span class="bg-yellow-200">深圳</span>宝安中心区，拟建 <span class="bg-yellow-200">蹦床公园</span> 约 3,200 平方米，预算 ￥800,000，<span class="bg-yellow-200">2026</span> 年 Q3 开工…</div>
+      <div class="mt-1 text-gray-400">相关度 <span class="text-blue-600">0.94</span> · 来源：中招标公共服务平台 · <span class="wf-tag">语义匹配</span></div>
+    </div>
+    <div class="wf-dashed p-3 bg-white">
+      <div class="flex justify-between"><div class="font-semibold text-sm">深圳龙岗区<span class="bg-yellow-200">新建</span>亲子游乐综合体</div><span class="text-gray-400">Event · 2026-04-15</span></div>
+      <div class="text-gray-600 mt-1">龙岗区文旅局规划在 <span class="bg-yellow-200">2026</span> 年<span class="bg-yellow-200">新建</span> 3 座亲子游乐综合体，包含<span class="bg-yellow-200">蹦床</span>、攀岩等业态…</div>
+      <div class="mt-1 text-gray-400">相关度 <span class="text-blue-600">0.87</span> · 来源：36氪文旅垂类</div>
+    </div>
+    <div class="wf-dashed p-3 bg-white">
+      <div class="flex justify-between"><div class="font-semibold text-sm">Sky Zone 华南区扩张计划</div><span class="text-gray-400">Competitor · 2026-04-10</span></div>
+      <div class="text-gray-600 mt-1">Sky Zone 宣布 <span class="bg-yellow-200">2026</span> 年将在<span class="bg-yellow-200">深圳</span>、广州、东莞<span class="bg-yellow-200">新建</span> 5 座<span class="bg-yellow-200">蹦床公园</span>旗舰店…</div>
+      <div class="mt-1 text-gray-400">相关度 <span class="text-blue-600">0.81</span> · 来源：竞品公众号采集 · <span class="wf-tag">语义匹配</span></div>
+    </div>
+  </div>
+  <div class="text-xs text-gray-400 mt-3 text-center">共检出 186 条结果 · 第 1 页 / 共 19 页</div>
+</section>
+
+<!-- [区域10-管理后台首页] -->
+<section id="region-10" class="wf-card p-5">
+  <div class="flex items-center justify-between mb-3">
+    <div class="wf-region-title"><span class="wf-region-num">10</span>情报中台管理后台首页 — 基础设施健康看板</div>
+    <span class="wf-label">Issue #2684</span>
+  </div>
+  <div class="text-xs text-gray-500 mb-4">总入口 · Vue 3 + Pinia 前端框架 · 聚合 9 大模块健康度</div>
+
+  <div class="grid grid-cols-4 gap-3 mb-4">
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-xs text-gray-500">实体总量</div>
+      <div class="text-xl font-bold text-gray-700 mt-1">14,371</div>
+      <div class="text-xs text-green-600 mt-1">↑ 今日 +286</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-xs text-gray-500">采集源在线率</div>
+      <div class="text-xl font-bold text-gray-700 mt-1">93.3%</div>
+      <div class="text-xs text-gray-500 mt-1">28 / 30 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-xs text-gray-500">综合质量分</div>
+      <div class="text-xl font-bold text-gray-700 mt-1">82.4</div>
+      <div class="text-xs text-green-600 mt-1">↑ 较上周 +2.1</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 text-center">
+      <div class="text-xs text-gray-500">待仲裁重复对</div>
+      <div class="text-xl font-bold text-yellow-600 mt-1">42</div>
+      <div class="text-xs text-gray-500 mt-1">需人工处理</div>
+    </div>
+  </div>
+
+  <div class="text-xs text-gray-500 mb-2">[9 大模块健康度矩阵]</div>
+  <div class="grid grid-cols-3 gap-3">
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">实体模型</div><div class="text-xs text-gray-500">#2674</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">标签分类</div><div class="text-xs text-gray-500">#2675</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">知识图谱</div><div class="text-xs text-gray-500">#2676</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">采集引擎</div><div class="text-xs text-gray-500">#2677</div></div>
+      <div><span class="wf-dot-yellow"></span> 抖动</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">采集源注册</div><div class="text-xs text-gray-500">#2678</div></div>
+      <div><span class="wf-dot-yellow"></span> 2 异常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">去重合并</div><div class="text-xs text-gray-500">#2679</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">权限隔离</div><div class="text-xs text-gray-500">#2681</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">质量评分</div><div class="text-xs text-gray-500">#2683</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+    <div class="wf-dashed p-3 bg-gray-50 flex justify-between items-center">
+      <div><div class="font-semibold text-sm">全文检索</div><div class="text-xs text-gray-500">#2685</div></div>
+      <div><span class="wf-dot-green"></span> 正常</div>
+    </div>
+  </div>
+</section>
+
+<!-- [原型说明] -->
+<section class="wf-card p-5 mt-6">
+  <h3 class="text-sm font-bold text-gray-700 mb-3">原型说明 — 10 个功能区域与 Issue 映射</h3>
+  <table class="wf-table w-full">
+    <thead><tr>
+      <th>#</th><th>功能区域</th><th>对应 Issue</th><th>核心组件</th>
+    </tr></thead>
+    <tbody>
+      <tr><td>1</td><td>实体模型总览</td><td>#2674 统一实体模型设计</td><td>实体卡片网格 + ER 图</td></tr>
+      <tr><td>2</td><td>标签分类法</td><td>#2675 情报标签体系与分类法</td><td>左树右表</td></tr>
+      <tr><td>3</td><td>知识图谱存储</td><td>#2676 实体知识图谱存储层</td><td>架构图 + 统计表</td></tr>
+      <tr><td>4</td><td>采集源注册</td><td>#2678 采集源注册与健康度管理</td><td>表格 + 健康灯</td></tr>
+      <tr><td>5</td><td>采集引擎扩展</td><td>#2677 共享采集引擎扩展·industry_intelligence 管线</td><td>管线卡片 + 吞吐柱图</td></tr>
+      <tr><td>6</td><td>去重合并引擎</td><td>#2679 情报去重与合并引擎</td><td>KPI 卡 + 仲裁队列</td></tr>
+      <tr><td>7</td><td>权限与隔离</td><td>#2681 情报权限与数据隔离模型</td><td>角色×实体矩阵</td></tr>
+      <tr><td>8</td><td>质量评分框架</td><td>#2683 情报质量评分框架</td><td>雷达图 + 趋势图</td></tr>
+      <tr><td>9</td><td>全文检索搜索</td><td>#2685 全文检索与语义搜索引擎</td><td>搜索框 + 结果列表</td></tr>
+      <tr><td>10</td><td>管理后台首页</td><td>#2684 情报中台管理后台前端框架</td><td>KPI + 模块健康矩阵</td></tr>
+    </tbody>
+  </table>
+</section>
+
+</div>
+
+<script>
+  // 锚点导航高亮
+  const anchors = document.querySelectorAll('.wf-anchor');
+  const sections = document.querySelectorAll('section[id^="region-"]');
+  anchors.forEach(a => a.addEventListener('click', () => {
+    anchors.forEach(x => x.classList.remove('active'));
+    a.classList.add('active');
+  }));
+  window.addEventListener('scroll', () => {
+    let current = sections[0].id;
+    sections.forEach(s => {
+      if (s.getBoundingClientRect().top < 120) current = s.id;
+    });
+    anchors.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>财务 + 中标 + 关键词</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .rev-card { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; padding: 14px; }
+    .rev-bars { height: 40px; display: flex; align-items: flex-end; gap: 2px; }
+    .rev-bars > div { background: #1890ff; opacity: .85; flex: 1; min-height: 3px; border-radius: 2px 2px 0 0; }
+    .keyword-chip { display: inline-block; padding: 3px 10px; margin: 3px; background: #fff; border: 1px solid #d9d9d9; border-radius: 12px; font-size: 12px; color: #333; cursor: pointer; }
+    .keyword-chip:hover { border-color: #1890ff; color: #1890ff; }
+    .keyword-chip.hot { background: #fff1f0; border-color: #ff7875; color: #cf1322; }
+    .keyword-chip.new { background: #f6ffed; border-color: #95de64; color: #389e0d; }
+    th, td { font-size: 12.5px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;"><span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span><span style="font-weight:600;color:#ad6800;">Tab5 · 财务 + 中标 + 关键词池</span></div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">四合一经营情报：竞品财务（营收/员工/融资）+ 中标记录 Top20 + 同场投标人提取 + 关键词池（NLP 自动扩展矿场搜索）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">管理层, 战略分析师, 商务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">财务卡片（T1 6 家）+ 营收趋势 / 中标 Top20 表 / 投标人名单抽取 / 关键词池管理+扩展</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">查看财报明细 / 按竞品/区域/金额筛选中标 / 添加关键词到矿场 / 拉黑关键词</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">T1 6 家财务卡完整 / 中标 ≥ 10 条 / 关键词池 ≥ 20 条 / 投标人表 ≥ 6 条</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase5 竞品情报 详细设计.md §2.5</a></div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [财务卡片组] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">💰 T1 竞品财务经营数据 <span class="text-xs text-gray-500 font-normal ml-2">来源：SEC 10-K/Q · 企查查 · LinkedIn</span></h3>
+    <button class="text-xs text-blue-500">展开 T2 (14 家) →</button>
+  </div>
+  <div class="grid grid-cols-3 gap-3">
+    <div class="rev-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold text-gray-800">🇩🇰 KOMPAN</span><span class="text-xs text-green-600">+8% YoY</span></div>
+      <div class="text-2xl font-bold text-gray-800 mt-2">$4.2 亿</div>
+      <div class="text-xs text-gray-500">2025 营收 · 1,800 员工</div>
+      <div class="rev-bars mt-2">
+        <div style="height:40%"></div><div style="height:48%"></div><div style="height:55%"></div><div style="height:62%"></div><div style="height:70%"></div><div style="height:82%"></div><div style="height:90%"></div>
+      </div>
+      <div class="text-[10px] text-gray-400 flex justify-between mt-1"><span>2019</span><span>2025</span></div>
+      <div class="mt-2 text-xs text-gray-500">融资：未上市，Nordic Capital 持股 70%</div>
+    </div>
+    <div class="rev-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold text-gray-800">🇺🇸 PlayCore</span><span class="text-xs text-green-600">+15% YoY</span></div>
+      <div class="text-2xl font-bold text-gray-800 mt-2">$10 亿</div>
+      <div class="text-xs text-gray-500">2025 营收 · 3,200 员工</div>
+      <div class="rev-bars mt-2">
+        <div style="height:30%"></div><div style="height:38%"></div><div style="height:48%"></div><div style="height:58%"></div><div style="height:70%"></div><div style="height:85%"></div><div style="height:100%"></div>
+      </div>
+      <div class="text-[10px] text-gray-400 flex justify-between mt-1"><span>2019</span><span>2025</span></div>
+      <div class="mt-2 text-xs text-gray-500">融资：Court Square Capital 控股</div>
+    </div>
+    <div class="rev-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold text-gray-800">🇺🇸 LSI Industries</span><span class="text-xs text-green-600">+12% YoY (Q1)</span></div>
+      <div class="text-2xl font-bold text-gray-800 mt-2">$5.1 亿</div>
+      <div class="text-xs text-gray-500">2025 营收 · 1,400 员工 · NASDAQ:LYTS</div>
+      <div class="rev-bars mt-2">
+        <div style="height:55%"></div><div style="height:58%"></div><div style="height:60%"></div><div style="height:65%"></div><div style="height:72%"></div><div style="height:80%"></div><div style="height:88%"></div>
+      </div>
+      <div class="text-[10px] text-gray-400 flex justify-between mt-1"><span>2019</span><span>2025</span></div>
+      <div class="mt-2 text-xs text-gray-500">融资：上市公司，市值 $5.3 亿</div>
+    </div>
+    <div class="rev-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold text-gray-800">🇺🇸 PlayPower</span><span class="text-xs text-green-600">+5% YoY</span></div>
+      <div class="text-2xl font-bold text-gray-800 mt-2">$3 亿</div>
+      <div class="text-xs text-gray-500">2025 营收 · 1,100 员工</div>
+      <div class="rev-bars mt-2">
+        <div style="height:60%"></div><div style="height:62%"></div><div style="height:65%"></div><div style="height:68%"></div><div style="height:72%"></div><div style="height:75%"></div><div style="height:80%"></div>
+      </div>
+      <div class="text-[10px] text-gray-400 flex justify-between mt-1"><span>2019</span><span>2025</span></div>
+      <div class="mt-2 text-xs text-gray-500">融资：Littlejohn &amp; Co. 私募</div>
+    </div>
+    <div class="rev-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold text-gray-800">🇸🇪 HAGS</span><span class="text-xs text-gray-500">+3% YoY</span></div>
+      <div class="text-2xl font-bold text-gray-800 mt-2">$8000 万</div>
+      <div class="text-xs text-gray-500">2025 营收 · 380 员工</div>
+      <div class="rev-bars mt-2">
+        <div style="height:70%"></div><div style="height:72%"></div><div style="height:70%"></div><div style="height:74%"></div><div style="height:78%"></div><div style="height:80%"></div><div style="height:82%"></div>
+      </div>
+      <div class="text-[10px] text-gray-400 flex justify-between mt-1"><span>2019</span><span>2025</span></div>
+      <div class="mt-2 text-xs text-gray-500">融资：Aktiebolaget 家族控股</div>
+    </div>
+    <div class="rev-card">
+      <div class="flex items-center justify-between"><span class="text-sm font-bold text-gray-800">🇫🇷 Proludic</span><span class="text-xs text-orange-500">+2% YoY</span></div>
+      <div class="text-2xl font-bold text-gray-800 mt-2">$6000 万</div>
+      <div class="text-xs text-gray-500">2025 营收 · 260 员工</div>
+      <div class="rev-bars mt-2">
+        <div style="height:72%"></div><div style="height:73%"></div><div style="height:70%"></div><div style="height:72%"></div><div style="height:74%"></div><div style="height:75%"></div><div style="height:76%"></div>
+      </div>
+      <div class="text-[10px] text-gray-400 flex justify-between mt-1"><span>2019</span><span>2025</span></div>
+      <div class="mt-2 text-xs text-gray-500">融资：家族企业，未公开</div>
+    </div>
+  </div>
+  <div class="mt-3 text-xs text-gray-500">关联 Issue: #2721 #2448</div>
+</div>
+
+<!-- [中标记录] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">🏆 竞品中标记录 Top 20 <span class="text-xs text-gray-500 font-normal ml-2">近 12 个月 · 可见万德同场</span></h3>
+    <div class="flex gap-2 text-xs">
+      <select class="border border-gray-300 rounded px-2 py-1"><option>按竞品</option><option>按区域</option><option>按金额</option></select>
+      <select class="border border-gray-300 rounded px-2 py-1"><option>全部区域</option><option>APAC</option><option>北美</option><option>欧洲</option></select>
+      <button class="px-2 py-1 bg-blue-500 text-white rounded">导出</button>
+    </div>
+  </div>
+  <table class="w-full">
+    <thead><tr class="bg-gray-100 text-xs text-gray-600"><th class="p-2 text-left border border-gray-300">中标日期</th><th class="p-2 text-left border border-gray-300">竞品</th><th class="p-2 text-left border border-gray-300">项目名称</th><th class="p-2 text-left border border-gray-300">区域</th><th class="p-2 text-right border border-gray-300">金额</th><th class="p-2 text-left border border-gray-300">业主</th><th class="p-2 text-left border border-gray-300">同场 (投标人名单)</th><th class="p-2 text-left border border-gray-300">来源</th></tr></thead>
+    <tbody>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-04-20</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">深圳罗湖区儿童公园</td><td class="p-2 border border-gray-300">APAC/中国</td><td class="p-2 border border-gray-300 text-right">￥380 万</td><td class="p-2 border border-gray-300">罗湖区住建局</td><td class="p-2 border border-gray-300 text-[11px]">万德 / 奥飞 / 康朴</td><td class="p-2 border border-gray-300">政采网</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-04-15</td><td class="p-2 border border-gray-300">PlayCore</td><td class="p-2 border border-gray-300">Texas School District 14</td><td class="p-2 border border-gray-300">北美</td><td class="p-2 border border-gray-300 text-right">$1.2M</td><td class="p-2 border border-gray-300">Houston ISD</td><td class="p-2 border border-gray-300 text-[11px]">Playworld / Landscape</td><td class="p-2 border border-gray-300">SAM.gov</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-04-10</td><td class="p-2 border border-gray-300">Lappset</td><td class="p-2 border border-gray-300">Helsinki 港口公园</td><td class="p-2 border border-gray-300">欧洲</td><td class="p-2 border border-gray-300 text-right">€450K</td><td class="p-2 border border-gray-300">Helsinki 市政</td><td class="p-2 border border-gray-300 text-[11px]">KOMPAN / HAGS</td><td class="p-2 border border-gray-300">TED</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-04-08</td><td class="p-2 border border-gray-300">HAGS</td><td class="p-2 border border-gray-300">Stockholm 学校扩建</td><td class="p-2 border border-gray-300">欧洲</td><td class="p-2 border border-gray-300 text-right">SEK 5M</td><td class="p-2 border border-gray-300">Stockholm kommun</td><td class="p-2 border border-gray-300 text-[11px]">Lappset / KOMPAN</td><td class="p-2 border border-gray-300">TED</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-04-05</td><td class="p-2 border border-gray-300">Proludic</td><td class="p-2 border border-gray-300">Dubai Creek Park 扩建</td><td class="p-2 border border-gray-300">中东</td><td class="p-2 border border-gray-300 text-right">AED 3M</td><td class="p-2 border border-gray-300">Dubai Municipality</td><td class="p-2 border border-gray-300 text-[11px]">KOMPAN / Moduplay</td><td class="p-2 border border-gray-300">官网发布</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-04-02</td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">新加坡滨海湾儿童乐园</td><td class="p-2 border border-gray-300">APAC/新加坡</td><td class="p-2 border border-gray-300 text-right">S$500K</td><td class="p-2 border border-gray-300">NParks</td><td class="p-2 border border-gray-300 text-[11px]">HAGS / Moduplay / <b class="text-blue-600">万德</b></td><td class="p-2 border border-gray-300">GeBIZ</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-03-28</td><td class="p-2 border border-gray-300">PlayPower</td><td class="p-2 border border-gray-300">California City Park Renovation</td><td class="p-2 border border-gray-300">北美</td><td class="p-2 border border-gray-300 text-right">$850K</td><td class="p-2 border border-gray-300">Sacramento</td><td class="p-2 border border-gray-300 text-[11px]">PlayCore / Playworld</td><td class="p-2 border border-gray-300">SAM.gov</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-03-25</td><td class="p-2 border border-gray-300">Berliner</td><td class="p-2 border border-gray-300">München 公园改造</td><td class="p-2 border border-gray-300">欧洲</td><td class="p-2 border border-gray-300 text-right">€320K</td><td class="p-2 border border-gray-300">München 市政</td><td class="p-2 border border-gray-300 text-[11px]">KOMPAN / SIK-Holz</td><td class="p-2 border border-gray-300">TED</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-03-20</td><td class="p-2 border border-gray-300">Playworld</td><td class="p-2 border border-gray-300">Florida 社区中心</td><td class="p-2 border border-gray-300">北美</td><td class="p-2 border border-gray-300 text-right">$620K</td><td class="p-2 border border-gray-300">Miami-Dade County</td><td class="p-2 border border-gray-300 text-[11px]">PlayCore / Landscape</td><td class="p-2 border border-gray-300">SAM.gov</td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300">2026-03-15</td><td class="p-2 border border-gray-300">HAGS</td><td class="p-2 border border-gray-300">北京朝阳区某小学</td><td class="p-2 border border-gray-300">APAC/中国</td><td class="p-2 border border-gray-300 text-right">￥280 万</td><td class="p-2 border border-gray-300">朝阳区教育局</td><td class="p-2 border border-gray-300 text-[11px]"><b class="text-blue-600">万德</b> / 康力源</td><td class="p-2 border border-gray-300">政采网</td></tr>
+      <tr><td class="p-2 border border-gray-300 text-gray-400 italic" colspan="8">... 共 247 条中标记录 · <a href="#" class="text-blue-500">查看全部</a></td></tr>
+    </tbody>
+  </table>
+  <div class="mt-2 text-xs text-gray-500">关联 Issue: #2451 #2454 #2448 #2044</div>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+
+  <!-- [投标人名单提取] -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-base font-bold text-gray-700 mb-3">👥 投标人名单池 <span class="text-xs text-gray-500 font-normal ml-2">从中标公告抽取的同场竞技者</span></h3>
+    <table class="w-full text-sm">
+      <thead><tr class="bg-gray-100 text-xs text-gray-600"><th class="p-2 text-left border border-gray-300">投标人</th><th class="p-2 text-left border border-gray-300">类型</th><th class="p-2 text-right border border-gray-300">近 12 月同场次数</th><th class="p-2 text-right border border-gray-300">同场万德次数</th></tr></thead>
+      <tbody>
+        <tr class="border-b"><td class="p-2 border border-gray-300">深圳市康朴游乐 (KOMPAN 代理)</td><td class="p-2 border border-gray-300">代理</td><td class="p-2 text-right border border-gray-300">18</td><td class="p-2 text-right border border-gray-300 text-red-500 font-semibold">12</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300">广州奥飞游乐</td><td class="p-2 border border-gray-300">国内</td><td class="p-2 text-right border border-gray-300">25</td><td class="p-2 text-right border border-gray-300 text-red-500 font-semibold">22</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300">北京康力源健康科技</td><td class="p-2 border border-gray-300">国内</td><td class="p-2 text-right border border-gray-300">15</td><td class="p-2 text-right border border-gray-300 text-orange-500 font-semibold">8</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300">Moduplay (Australia)</td><td class="p-2 border border-gray-300">海外</td><td class="p-2 text-right border border-gray-300">8</td><td class="p-2 text-right border border-gray-300">2</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300">Landscape Structures</td><td class="p-2 border border-gray-300">海外</td><td class="p-2 text-right border border-gray-300">12</td><td class="p-2 text-right border border-gray-300">0</td></tr>
+        <tr class="border-b"><td class="p-2 border border-gray-300">Playworld Inc.</td><td class="p-2 border border-gray-300">海外</td><td class="p-2 text-right border border-gray-300">9</td><td class="p-2 text-right border border-gray-300">1</td></tr>
+        <tr><td class="p-2 border border-gray-300">西安三乐游乐</td><td class="p-2 border border-gray-300">国内</td><td class="p-2 text-right border border-gray-300">7</td><td class="p-2 text-right border border-gray-300 text-orange-500">5</td></tr>
+      </tbody>
+    </table>
+    <div class="mt-2 text-xs text-gray-500">关联 Issue: #2451 #2449 · 💡 高同场次数 = 该投标人可能与万德争夺同品类项目</div>
+  </div>
+
+  <!-- [关键词池] -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-base font-bold text-gray-700 mb-3">🔑 关键词池 <span class="text-xs text-gray-500 font-normal ml-2">从中标标题/要求 NLP 提取</span></h3>
+    <div class="mb-3">
+      <div class="text-xs text-gray-500 mb-2">🔥 高频词（近 30 天 · 点击加入矿场搜索）</div>
+      <div>
+        <span class="keyword-chip hot">儿童水喷头</span>
+        <span class="keyword-chip hot">绳网攀爬塔</span>
+        <span class="keyword-chip hot">不锈钢滑梯</span>
+        <span class="keyword-chip hot">户外健身路径</span>
+        <span class="keyword-chip hot">幼儿园乐园</span>
+        <span class="keyword-chip">组合滑梯</span>
+        <span class="keyword-chip">弹跳床</span>
+        <span class="keyword-chip">攀岩墙</span>
+        <span class="keyword-chip">主题乐园</span>
+        <span class="keyword-chip">水上滑梯</span>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="text-xs text-gray-500 mb-2">🆕 新发现词（算法自动提取）</div>
+      <div>
+        <span class="keyword-chip new">无障碍游乐</span>
+        <span class="keyword-chip new">感统训练</span>
+        <span class="keyword-chip new">智能互动滑梯</span>
+        <span class="keyword-chip new">雾森系统</span>
+        <span class="keyword-chip new">可持续塑料</span>
+        <span class="keyword-chip new">智慧公园</span>
+      </div>
+    </div>
+    <div class="mb-3">
+      <div class="text-xs text-gray-500 mb-2">🚫 黑名单（不进入矿场搜索）</div>
+      <div>
+        <span class="keyword-chip" style="opacity:.5;text-decoration:line-through">儿童玩具</span>
+        <span class="keyword-chip" style="opacity:.5;text-decoration:line-through">乐高</span>
+        <span class="keyword-chip" style="opacity:.5;text-decoration:line-through">游戏机</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2 mt-3 pt-3 border-t border-gray-200">
+      <input type="text" placeholder="手动添加关键词..." class="flex-1 px-2 py-1 border border-gray-300 rounded text-xs">
+      <button class="px-3 py-1 bg-blue-500 text-white rounded text-xs">添加</button>
+    </div>
+    <div class="mt-2 text-xs text-gray-500">关联 Issue: #2442 #2044 · 矿场同步：每次修改自动扩展 Phase3 搜索池</div>
+  </div>
+
+</div>
+
+</body>
+</html>

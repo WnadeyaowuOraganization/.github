@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ICP画像+评分</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .heat-0 { background: #f5f5f5; color: #999; }
+    .heat-1 { background: #e6f4ff; color: #1890ff; }
+    .heat-2 { background: #bae0ff; color: #0958d9; }
+    .heat-3 { background: #69b1ff; color: #fff; }
+    .heat-4 { background: #1677ff; color: #fff; }
+    .heat-5 { background: #003eb3; color: #fff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab1 · ICP画像+评分</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">定义万德理想客户画像（ICP）并自动为矿场客户打分，让商务优先跟进高分客户，对标6sense的ICP Fit Score</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务总监（配置ICP模型），商务人员（查看Top客户）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5维度ICP模型配置 / 客户×维度评分热图 / Top20 ICP客户列表 / 下一步建议</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">拖动权重滑块 / 保存ICP模型 / 点击客户下钻评分明细 / 一键分配商务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">ICP权重合计100% / 热图色阶正确 / Top20列表按综合分降序 / 评分引擎T+1批量重算</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase4 客户雷达 · 详细设计.md §2.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [ICP模型配置] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🎯 ICP 理想客户画像模型 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2706 · #2443</span></h2>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-500">当前模型：v2.3 · 2026-04-15 更新</span>
+      <button class="px-3 py-1 text-xs border border-gray-300 rounded">历史版本</button>
+      <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded">保存模型</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-5 gap-4">
+    <!-- 维度1 行业 -->
+    <div class="border border-gray-200 rounded p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium text-gray-700">🏭 目标行业</span>
+        <span class="text-xs text-blue-600 font-bold">权重 30%</span>
+      </div>
+      <input type="range" min="0" max="100" value="30" class="w-full mb-2">
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>✓ 主题乐园 / 文旅综合体</div>
+        <div>✓ 冰雪度假区</div>
+        <div>✓ 水上乐园</div>
+        <div class="text-gray-400">✗ 纯住宅地产</div>
+      </div>
+    </div>
+
+    <!-- 维度2 规模 -->
+    <div class="border border-gray-200 rounded p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium text-gray-700">📊 项目规模</span>
+        <span class="text-xs text-blue-600 font-bold">权重 25%</span>
+      </div>
+      <input type="range" min="0" max="100" value="25" class="w-full mb-2">
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>✓ 投资额 ≥ 5000万</div>
+        <div>✓ 占地 ≥ 30亩</div>
+        <div>✓ 设备采购 ≥ 20台</div>
+      </div>
+    </div>
+
+    <!-- 维度3 地域 -->
+    <div class="border border-gray-200 rounded p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium text-gray-700">📍 地域分布</span>
+        <span class="text-xs text-blue-600 font-bold">权重 15%</span>
+      </div>
+      <input type="range" min="0" max="100" value="15" class="w-full mb-2">
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>✓ 一线 / 新一线城市</div>
+        <div>✓ 核心文旅省会</div>
+        <div>△ 三四线（酌情）</div>
+      </div>
+    </div>
+
+    <!-- 维度4 采购模式 -->
+    <div class="border border-gray-200 rounded p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium text-gray-700">📝 采购模式</span>
+        <span class="text-xs text-blue-600 font-bold">权重 15%</span>
+      </div>
+      <input type="range" min="0" max="100" value="15" class="w-full mb-2">
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>✓ 公开招标</div>
+        <div>✓ 邀请招标</div>
+        <div>△ 设计院指定</div>
+      </div>
+    </div>
+
+    <!-- 维度5 决策链 -->
+    <div class="border border-gray-200 rounded p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-medium text-gray-700">👥 决策链</span>
+        <span class="text-xs text-blue-600 font-bold">权重 15%</span>
+      </div>
+      <input type="range" min="0" max="100" value="15" class="w-full mb-2">
+      <div class="text-xs text-gray-500 space-y-1">
+        <div>✓ 决策人 ≤ 3层</div>
+        <div>✓ 已识别Key Person</div>
+        <div>△ 有历史合作</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-4 text-xs text-gray-500 flex items-center gap-2">
+    <span>⚠️ 当前权重合计：</span>
+    <span class="text-green-600 font-bold">100%</span>
+    <span class="ml-4">保存后由评分引擎（Issue #2707）T+1 批量重算所有矿场客户评分</span>
+  </div>
+</div>
+
+<!-- [评分矩阵热图] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🔥 ICP 评分矩阵热图 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2707 自动评分引擎</span></h2>
+    <div class="flex items-center gap-2 text-xs text-gray-500">
+      <span>色阶：</span>
+      <span class="heat-0 px-2 py-0.5 rounded">0-20</span>
+      <span class="heat-1 px-2 py-0.5 rounded">20-40</span>
+      <span class="heat-2 px-2 py-0.5 rounded">40-60</span>
+      <span class="heat-3 px-2 py-0.5 rounded">60-75</span>
+      <span class="heat-4 px-2 py-0.5 rounded">75-90</span>
+      <span class="heat-5 px-2 py-0.5 rounded">90+</span>
+    </div>
+  </div>
+
+  <table class="w-full text-xs border-collapse">
+    <thead>
+      <tr class="bg-gray-50">
+        <th class="p-2 border border-gray-200 text-left font-medium text-gray-700 w-48">客户名称</th>
+        <th class="p-2 border border-gray-200 text-center">🏭 行业 (30%)</th>
+        <th class="p-2 border border-gray-200 text-center">📊 规模 (25%)</th>
+        <th class="p-2 border border-gray-200 text-center">📍 地域 (15%)</th>
+        <th class="p-2 border border-gray-200 text-center">📝 采购 (15%)</th>
+        <th class="p-2 border border-gray-200 text-center">👥 决策链 (15%)</th>
+        <th class="p-2 border border-gray-200 text-center bg-blue-50 font-bold">综合分</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td class="p-2 border border-gray-200 font-medium">北京欢乐谷二期</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">95</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">92</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">98</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">88</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">85</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">93</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">上海迪士尼三期扩建</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">98</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">95</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">95</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">55</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">72</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">87</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">成都大运会主题乐园</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">88</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">85</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">82</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">92</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">80</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">86</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">深圳前海文旅综合体</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">85</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">90</td><td class="heat-5 p-2 border border-gray-200 text-center font-bold">95</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">70</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">75</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">84</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">乌鲁木齐冰雪集团</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">82</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">75</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">58</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">85</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">72</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">75</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">郑州方特扩建</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">85</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">72</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">68</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">80</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">70</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">74</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">重庆万达文旅</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">75</td><td class="heat-4 p-2 border border-gray-200 text-center font-bold">82</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">70</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">72</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">68</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">74</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">金茂集团文旅事业部</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">72</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">70</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">75</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">58</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">65</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">68</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">长沙华谊兄弟文旅城</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">70</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">55</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">52</td><td class="heat-3 p-2 border border-gray-200 text-center font-bold">65</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">58</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">60</td></tr>
+      <tr><td class="p-2 border border-gray-200 font-medium">西安丝路文旅小镇</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">58</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">50</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">48</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">55</td><td class="heat-1 p-2 border border-gray-200 text-center font-bold">38</td><td class="heat-2 p-2 border border-gray-200 text-center font-bold">51</td></tr>
+    </tbody>
+  </table>
+  <div class="text-xs text-gray-400 mt-2">显示评分最高的 10 家客户，矿场共 248 家在库客户</div>
+</div>
+
+<!-- [Top 20 ICP 客户列表] -->
+<div class="bg-white border border-gray-300 rounded p-5">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🏆 Top 20 ICP 客户（按综合分排序） <span class="text-xs text-gray-400 font-normal ml-2">支持一键分配商务</span></h2>
+    <div class="flex items-center gap-2">
+      <select class="text-xs border border-gray-300 rounded px-2 py-1">
+        <option>按综合分降序</option><option>按最近信号时间</option><option>按购买阶段</option>
+      </select>
+      <button class="px-3 py-1 text-xs border border-gray-300 rounded">导出Excel</button>
+      <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded">批量分配</button>
+    </div>
+  </div>
+
+  <table class="w-full text-xs border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-gray-700">
+        <th class="p-2 border border-gray-200 text-left w-8">#</th>
+        <th class="p-2 border border-gray-200 text-left">客户名称</th>
+        <th class="p-2 border border-gray-200 text-center w-16">ICP分</th>
+        <th class="p-2 border border-gray-200 text-center w-24">购买阶段</th>
+        <th class="p-2 border border-gray-200 text-left w-52">最近信号</th>
+        <th class="p-2 border border-gray-200 text-left">下一步建议</th>
+        <th class="p-2 border border-gray-200 text-center w-20">负责人</th>
+        <th class="p-2 border border-gray-200 text-center w-20">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr><td class="p-2 border border-gray-200">1</td><td class="p-2 border border-gray-200 font-medium">北京欢乐谷二期</td><td class="p-2 border border-gray-200 text-center"><span class="heat-5 px-2 py-0.5 rounded font-bold">93</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded">考虑</span></td><td class="p-2 border border-gray-200">官网下载技术白皮书 · 2h前</td><td class="p-2 border border-gray-200">安排技术演示 + 送样品案例</td><td class="p-2 border border-gray-200 text-center">张三</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">2</td><td class="p-2 border border-gray-200 font-medium">上海迪士尼三期扩建</td><td class="p-2 border border-gray-200 text-center"><span class="heat-4 px-2 py-0.5 rounded font-bold">87</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded">评估</span></td><td class="p-2 border border-gray-200">LinkedIn查看产品页 · 1d前</td><td class="p-2 border border-gray-200">高管拜访 + 定制方案</td><td class="p-2 border border-gray-200 text-center">李四</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">3</td><td class="p-2 border border-gray-200 font-medium">成都大运会主题乐园</td><td class="p-2 border border-gray-200 text-center"><span class="heat-4 px-2 py-0.5 rounded font-bold">86</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded">决策</span></td><td class="p-2 border border-gray-200">邮件回复询价 · 3h前</td><td class="p-2 border border-gray-200">报价 + 合同谈判</td><td class="p-2 border border-gray-200 text-center">王五</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">4</td><td class="p-2 border border-gray-200 font-medium">深圳前海文旅综合体</td><td class="p-2 border border-gray-200 text-center"><span class="heat-4 px-2 py-0.5 rounded font-bold">84</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">兴趣</span></td><td class="p-2 border border-gray-200">展会扫码 · 深圳文旅展 · 2d前</td><td class="p-2 border border-gray-200">首次拜访 + 需求调研</td><td class="p-2 border border-gray-200 text-center">赵六</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">5</td><td class="p-2 border border-gray-200 font-medium">乌鲁木齐冰雪集团</td><td class="p-2 border border-gray-200 text-center"><span class="heat-3 px-2 py-0.5 rounded font-bold">75</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded">考虑</span></td><td class="p-2 border border-gray-200">企微扫码添加 · 5h前</td><td class="p-2 border border-gray-200">发送冰雪设备案例</td><td class="p-2 border border-gray-200 text-center">孙七</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">6</td><td class="p-2 border border-gray-200 font-medium">郑州方特扩建</td><td class="p-2 border border-gray-200 text-center"><span class="heat-3 px-2 py-0.5 rounded font-bold">74</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">兴趣</span></td><td class="p-2 border border-gray-200">官网访问产品页3次 · 1d前</td><td class="p-2 border border-gray-200">发送行业报告 + 电话邀约</td><td class="p-2 border border-gray-200 text-center">周八</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">7</td><td class="p-2 border border-gray-200 font-medium">重庆万达文旅</td><td class="p-2 border border-gray-200 text-center"><span class="heat-3 px-2 py-0.5 rounded font-bold">74</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">兴趣</span></td><td class="p-2 border border-gray-200">邮件打开 · 产品通讯 · 12h前</td><td class="p-2 border border-gray-200">二次触达 + 邀请在线Demo</td><td class="p-2 border border-gray-200 text-center">吴九</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">8</td><td class="p-2 border border-gray-200 font-medium">金茂集团文旅事业部</td><td class="p-2 border border-gray-200 text-center"><span class="heat-3 px-2 py-0.5 rounded font-bold">68</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded">认知</span></td><td class="p-2 border border-gray-200">LinkedIn关注公司主页 · 2d前</td><td class="p-2 border border-gray-200">市场培育 + 内容分享</td><td class="p-2 border border-gray-200 text-center">郑十</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">9</td><td class="p-2 border border-gray-200 font-medium">长沙华谊兄弟文旅城</td><td class="p-2 border border-gray-200 text-center"><span class="heat-2 px-2 py-0.5 rounded font-bold">60</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded">认知</span></td><td class="p-2 border border-gray-200">内容下载：行业蓝皮书 · 4d前</td><td class="p-2 border border-gray-200">纳入培育池，每月触达</td><td class="p-2 border border-gray-200 text-center">未分配</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+      <tr><td class="p-2 border border-gray-200">10</td><td class="p-2 border border-gray-200 font-medium">西安丝路文旅小镇</td><td class="p-2 border border-gray-200 text-center"><span class="heat-2 px-2 py-0.5 rounded font-bold">51</span></td><td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded">认知</span></td><td class="p-2 border border-gray-200">官网访问首页 · 6d前</td><td class="p-2 border border-gray-200">评分偏低，继续观察</td><td class="p-2 border border-gray-200 text-center">未分配</td><td class="p-2 border border-gray-200 text-center text-blue-600">详情</td></tr>
+    </tbody>
+  </table>
+
+  <div class="mt-3 flex items-center justify-between text-xs text-gray-500">
+    <span>显示 1-10 / 共 20 条</span>
+    <div class="flex items-center gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded">上一页</button>
+      <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">下一页</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

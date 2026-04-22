@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>产品矩阵 + CAD</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .matrix-cell { padding: 6px 8px; border: 1px solid #e5e7eb; font-size: 12px; background: #fff; }
+    .matrix-cell.highlight { background: #e6f7ff; }
+    .cad-card { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; overflow: hidden; }
+    .cad-thumb { background: #f5f5f5; height: 110px; display: flex; align-items: center; justify-content: center; color: #bfbfbf; font-size: 12px; border-bottom: 1px solid #d9d9d9; }
+    .diff-badge-add { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; padding: 1px 6px; font-size: 11px; border-radius: 3px; }
+    .diff-badge-remove { background: #fff1f0; color: #cf1322; border: 1px solid #ffa39e; padding: 1px 6px; font-size: 11px; border-radius: 3px; }
+    .diff-badge-change { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; padding: 1px 6px; font-size: 11px; border-radius: 3px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;"><span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span><span style="font-weight:600;color:#ad6800;">Tab4 · 产品对比矩阵 + CAD 库</span></div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">产品侧情报：50 款竞品产品对比矩阵（横 = 产品 / 纵 = 材质/尺寸/承重/认证/价格），产品线变化检测（新增/停产/改款），CAD 资源库可下载</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">产品经理, 技术中心, 销售</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">产品对比矩阵（可筛选竞品/品类） / 产品线变化 diff 表 / CAD 资源库卡片 / 下载占位</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切换对比维度 / 勾选产品 / 下载 CAD / 查看 diff 详情</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">矩阵 ≥ 6 产品 5 维度 / 变化 diff ≥ 5 条 / CAD 卡片 ≥ 6 款</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase5 竞品情报 详细设计.md §2.4</a></div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [产品对比矩阵] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">📊 竞品产品对比矩阵</h3>
+    <div class="flex items-center gap-2 text-xs">
+      <select class="border border-gray-300 rounded px-2 py-1"><option>品类：组合滑梯</option><option>绳网攀爬</option><option>水游乐</option><option>健身器材</option></select>
+      <select class="border border-gray-300 rounded px-2 py-1"><option>仅对比 T1</option><option>T1+T2</option><option>全部</option></select>
+      <button class="px-2 py-1 bg-blue-500 text-white rounded">导出 Excel</button>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr>
+          <th class="matrix-cell bg-gray-100 font-bold">对比维度</th>
+          <th class="matrix-cell bg-blue-50 font-bold text-blue-700">万德 WD-S8612</th>
+          <th class="matrix-cell bg-gray-50 font-bold">KOMPAN Moments</th>
+          <th class="matrix-cell bg-gray-50 font-bold">PlayCore Cloudburst</th>
+          <th class="matrix-cell bg-gray-50 font-bold">HAGS UniPlay</th>
+          <th class="matrix-cell bg-gray-50 font-bold">Proludic Corocord</th>
+          <th class="matrix-cell bg-gray-50 font-bold">Lappset Vario</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">主材质</td><td class="matrix-cell highlight">Q235B 镀锌钢</td><td class="matrix-cell">阳极氧化铝</td><td class="matrix-cell">HDPE 塑料</td><td class="matrix-cell">不锈钢+HPL</td><td class="matrix-cell">阳极氧化铝</td><td class="matrix-cell">胶合木+钢</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">尺寸 (L×W×H)</td><td class="matrix-cell highlight">8×6×4m</td><td class="matrix-cell">7.8×5.5×4.2m</td><td class="matrix-cell">8.5×6×3.8m</td><td class="matrix-cell">7.5×5.8×4m</td><td class="matrix-cell">8×5.5×4.5m</td><td class="matrix-cell">7×6×4m</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">单位承重</td><td class="matrix-cell highlight">≤150kg/点</td><td class="matrix-cell">≤120kg/点</td><td class="matrix-cell">≤135kg/点</td><td class="matrix-cell">≤130kg/点</td><td class="matrix-cell">≤125kg/点</td><td class="matrix-cell">≤140kg/点</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">同时容纳</td><td class="matrix-cell highlight">25 人</td><td class="matrix-cell">20 人</td><td class="matrix-cell">28 人</td><td class="matrix-cell">22 人</td><td class="matrix-cell">24 人</td><td class="matrix-cell">20 人</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">认证</td><td class="matrix-cell highlight">GB/EN1176/SGS</td><td class="matrix-cell">EN1176/ASTM/CE/GS</td><td class="matrix-cell">ASTM/IPEMA</td><td class="matrix-cell">EN1176/TÜV</td><td class="matrix-cell">EN1176/NF</td><td class="matrix-cell">EN1176/KCMA</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">防腐处理</td><td class="matrix-cell highlight">热镀锌+静电喷涂</td><td class="matrix-cell">阳极氧化 25μm</td><td class="matrix-cell">UV 防护树脂</td><td class="matrix-cell">201 不锈钢</td><td class="matrix-cell">阳极氧化 20μm</td><td class="matrix-cell">防腐胶合木</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">保修期</td><td class="matrix-cell highlight">10 年结构 / 3 年涂层</td><td class="matrix-cell">10 年结构 / 5 年整机</td><td class="matrix-cell">15 年结构</td><td class="matrix-cell">10 年整机</td><td class="matrix-cell">10 年结构 / 3 年整机</td><td class="matrix-cell">5 年整机</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">典型价格 (APAC)</td><td class="matrix-cell highlight text-blue-700 font-bold">¥55 万</td><td class="matrix-cell text-red-500">¥120 万</td><td class="matrix-cell text-red-500">¥95 万</td><td class="matrix-cell text-red-500">¥85 万</td><td class="matrix-cell text-red-500">¥80 万</td><td class="matrix-cell text-red-500">¥75 万</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">交期</td><td class="matrix-cell highlight">45 天</td><td class="matrix-cell">120 天</td><td class="matrix-cell">90 天</td><td class="matrix-cell">100 天</td><td class="matrix-cell">110 天</td><td class="matrix-cell">100 天</td></tr>
+        <tr><td class="matrix-cell bg-gray-50 font-semibold">中国本地服务</td><td class="matrix-cell highlight">✅ 原厂 4h</td><td class="matrix-cell">代理 72h</td><td class="matrix-cell">代理 96h</td><td class="matrix-cell">代理 72h</td><td class="matrix-cell">无</td><td class="matrix-cell">代理 72h</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="mt-2 text-xs text-gray-500">💡 蓝色高亮 = 万德对标参考 / 红色 = 价格劣势维度 · 关联 Issue: #2722 #2430 #2440</div>
+</div>
+
+<!-- [产品线变化检测] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">🔍 产品线变化检测 <span class="text-xs text-gray-500 font-normal ml-2">近 30 天自动 diff</span></h3>
+    <div class="flex gap-2">
+      <select class="text-xs border border-gray-300 rounded px-2 py-1"><option>全部竞品</option><option>KOMPAN</option><option>PlayCore</option></select>
+      <select class="text-xs border border-gray-300 rounded px-2 py-1"><option>变化类型：全部</option><option>新增</option><option>停产</option><option>改款</option></select>
+    </div>
+  </div>
+  <table class="w-full text-sm">
+    <thead><tr class="bg-gray-100 text-xs text-gray-600"><th class="p-2 text-left border border-gray-300 w-28">变化类型</th><th class="p-2 text-left border border-gray-300">竞品</th><th class="p-2 text-left border border-gray-300">产品</th><th class="p-2 text-left border border-gray-300">变化点</th><th class="p-2 text-left border border-gray-300">来源</th><th class="p-2 text-left border border-gray-300">发现日期</th><th class="p-2 text-left border border-gray-300 w-20">影响</th></tr></thead>
+    <tbody>
+      <tr class="border-b"><td class="p-2 border border-gray-300"><span class="diff-badge-add">🆕 新增</span></td><td class="p-2 border border-gray-300">PlayCore</td><td class="p-2 border border-gray-300">Cloudburst 2.0 儿童水喷头</td><td class="p-2 border border-gray-300">新系列，7 款 SKU，IPEMA 认证</td><td class="p-2 border border-gray-300">官网新闻稿</td><td class="p-2 border border-gray-300">2026-04-19</td><td class="p-2 border border-gray-300"><span class="text-red-500">⚠️ 高</span></td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300"><span class="diff-badge-add">🆕 新增</span></td><td class="p-2 border border-gray-300">HAGS</td><td class="p-2 border border-gray-300">UniMini 幼儿系列 (3-6 岁)</td><td class="p-2 border border-gray-300">新系列对标万德「小树林」</td><td class="p-2 border border-gray-300">官网 2026 目录</td><td class="p-2 border border-gray-300">2026-04-15</td><td class="p-2 border border-gray-300"><span class="text-red-500">⚠️ 高</span></td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300"><span class="diff-badge-change">🔄 改款</span></td><td class="p-2 border border-gray-300">KOMPAN</td><td class="p-2 border border-gray-300">Corocord 绳网攀爬</td><td class="p-2 border border-gray-300">绳网材质升级 Polysteel 2nd gen</td><td class="p-2 border border-gray-300">官网产品页</td><td class="p-2 border border-gray-300">2026-04-10</td><td class="p-2 border border-gray-300"><span class="text-orange-500">⚠️ 中</span></td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300"><span class="diff-badge-change">🔄 改款</span></td><td class="p-2 border border-gray-300">Proludic</td><td class="p-2 border border-gray-300">Kanopé 球型结构</td><td class="p-2 border border-gray-300">底座改款，新增抗震模块</td><td class="p-2 border border-gray-300">行业媒体</td><td class="p-2 border border-gray-300">2026-04-05</td><td class="p-2 border border-gray-300"><span class="text-gray-500">中</span></td></tr>
+      <tr class="border-b"><td class="p-2 border border-gray-300"><span class="diff-badge-remove">🛑 停产</span></td><td class="p-2 border border-gray-300">Lappset</td><td class="p-2 border border-gray-300">Sami 系列 (全部)</td><td class="p-2 border border-gray-300">官方公告 2026 Q2 停止供应</td><td class="p-2 border border-gray-300">官网公告</td><td class="p-2 border border-gray-300">2026-04-03</td><td class="p-2 border border-gray-300"><span class="text-blue-500">机会</span></td></tr>
+      <tr><td class="p-2 border border-gray-300"><span class="diff-badge-add">🆕 新增</span></td><td class="p-2 border border-gray-300">Berliner</td><td class="p-2 border border-gray-300">SkyWalker 高空绳网</td><td class="p-2 border border-gray-300">新产品 H=8m，欧洲限定</td><td class="p-2 border border-gray-300">LinkedIn</td><td class="p-2 border border-gray-300">2026-03-28</td><td class="p-2 border border-gray-300"><span class="text-gray-500">低</span></td></tr>
+    </tbody>
+  </table>
+  <div class="mt-2 text-xs text-gray-500">💡 高影响变化自动推送至商务/产品 IM 群 · 关联 Issue: #2722 #2496</div>
+</div>
+
+<!-- [CAD 资源库] -->
+<div class="bg-white border border-gray-300 rounded p-5">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-700">📁 竞品 CAD / 3D 资源库 <span class="text-xs text-gray-500 font-normal ml-2">已采集 247 份 · 覆盖 38 家竞品</span></h3>
+    <div class="flex gap-2 text-xs">
+      <input type="text" placeholder="🔍 搜索产品型号" class="px-2 py-1 border border-gray-300 rounded w-48">
+      <select class="border border-gray-300 rounded px-2 py-1"><option>格式：全部</option><option>DWG</option><option>STEP</option><option>3DS</option><option>PDF 图纸</option></select>
+    </div>
+  </div>
+  <div class="grid grid-cols-4 gap-3">
+    <div class="cad-card">
+      <div class="cad-thumb">[ DWG · KOMPAN 01 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">Corocord COR30530</div>
+        <div class="text-gray-500 mt-1">KOMPAN · 绳网攀爬</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">DWG · 2.4MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ STEP · PlayCore 02 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">Cloudburst WP-120</div>
+        <div class="text-gray-500 mt-1">PlayCore · 水喷头</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">STEP · 5.1MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ 3DS · HAGS 03 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">UniPlay UP-880 主机</div>
+        <div class="text-gray-500 mt-1">HAGS · 组合滑梯</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">3DS · 8.2MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ PDF · Proludic 04 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">Kanopé K-450 图纸</div>
+        <div class="text-gray-500 mt-1">Proludic · 球型结构</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">PDF · 1.8MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ DWG · Lappset 05 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">Vario V-310</div>
+        <div class="text-gray-500 mt-1">Lappset · 组合滑梯</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">DWG · 3.2MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ STEP · Berliner 06 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">SkyWalker SW-8m</div>
+        <div class="text-gray-500 mt-1">Berliner · 绳网</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">STEP · 6.7MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ DWG · Playworld 07 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">PlayDesigner PB-200</div>
+        <div class="text-gray-500 mt-1">Playworld · 弹跳</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">DWG · 1.5MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+    <div class="cad-card">
+      <div class="cad-thumb">[ PDF · LSI 08 ]</div>
+      <div class="p-2 text-xs">
+        <div class="font-semibold text-gray-800 truncate">LSI Courts 全套图纸</div>
+        <div class="text-gray-500 mt-1">LSI · 运动场</div>
+        <div class="flex justify-between mt-2"><span class="text-gray-400">PDF · 12MB</span><a href="#" class="text-blue-500">下载</a></div>
+      </div>
+    </div>
+  </div>
+  <div class="mt-3 text-center">
+    <button class="text-xs text-blue-500">查看全部 247 份 →</button>
+  </div>
+  <div class="mt-2 text-xs text-gray-500">⚠️ 竞品 CAD 仅供对标研究，不得用于商业复制 · 关联 Issue: #2434 #2441</div>
+</div>
+
+</body>
+</html>

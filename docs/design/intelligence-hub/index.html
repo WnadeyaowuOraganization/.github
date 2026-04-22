@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .phase-card { transition: all 0.2s; }
+    .phase-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .sidebar-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; font-size: 18px; margin: 6px auto; color: #666; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+    .sidebar-icon:hover { background: #f0f0f0; }
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    .signal-row:hover { background: #fafafa; }
+    .copilot-dock { box-shadow: 0 -4px 16px rgba(0,0,0,0.06); }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台 — 顶层总览 Hub</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">整合 7 大情报能力，给吴耀和商务团队提供「一个入口看懂所有外部信号」的战略指挥中心</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角）、商务主管、销售总监</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">7 Phase 模块导航 / KPI 健康度 / 今日必看清单 / 实时信号流 / Copilot 对话</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击 Phase 卡片下钻 / 点击信号查看上下文 / Copilot 自然语言问答</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">7 个 Phase 入口可点击 / KPI 在 3 秒内加载 / 信号流实时刷新</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 pt-3 flex flex-col">
+    <div class="sidebar-icon" title="首页">🏠</div>
+    <div class="sidebar-icon" title="超管驾驶舱">📊</div>
+    <div class="sidebar-icon" title="CRM商务">💼</div>
+    <div class="sidebar-icon" title="项目中心">🏗️</div>
+    <div class="sidebar-icon" title="D3设计">🎨</div>
+    <div class="sidebar-icon" title="审批体系">📝</div>
+    <div class="sidebar-icon active" title="资源中心">📚</div>
+    <div class="sidebar-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col pb-24">
+
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      <span class="hover:text-blue-500 cursor-pointer">首页</span>
+      <span class="mx-2">&gt;</span>
+      <span class="hover:text-blue-500 cursor-pointer">资源中心</span>
+      <span class="mx-2">&gt;</span>
+      <span class="text-gray-700 font-medium">商战情报中台</span>
+    </div>
+
+    <!-- [页面标题区] -->
+    <div class="px-6 py-5 bg-white border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            🛰️ 商战情报中台
+            <span class="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded font-normal">7 Phase 整合</span>
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">对标 TenderStrike + 6sense + Contify/Crayon + Vertical IQ — 一个入口看懂所有外部信号</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="flex items-center gap-1 text-xs text-gray-500">
+            <span class="inline-block w-2 h-2 rounded-full bg-green-500 pulse-dot"></span>
+            实时采集中
+          </span>
+          <button class="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50">⚙️ 订阅设置</button>
+          <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">📤 导出情报简报</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [KPI 统计带] -->
+    <div class="px-6 py-5">
+      <div class="grid grid-cols-6 gap-4">
+        <!-- KPI 1 监控项目 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">📊 监控项目数</div>
+          <div class="text-3xl font-bold text-gray-800">1,247</div>
+          <div class="text-xs text-green-600 mt-1">今日新增 +28</div>
+        </div>
+        <!-- KPI 2 高分客户 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">👥 高分客户数</div>
+          <div class="text-3xl font-bold text-gray-800">86</div>
+          <div class="text-xs text-green-600 mt-1">本周新增 +12</div>
+        </div>
+        <!-- KPI 3 竞品动态 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">🏢 竞品动态</div>
+          <div class="text-3xl font-bold text-gray-800">34</div>
+          <div class="text-xs text-gray-500 mt-1">本周累计</div>
+        </div>
+        <!-- KPI 4 行业政策 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">📋 行业政策</div>
+          <div class="text-3xl font-bold text-gray-800">9</div>
+          <div class="text-xs text-gray-500 mt-1">本月新发布</div>
+        </div>
+        <!-- KPI 5 情报质量分 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">⭐ 情报质量分</div>
+          <div class="text-3xl font-bold text-gray-800">87<span class="text-base text-gray-400 font-normal">/100</span></div>
+          <div class="text-xs text-green-600 mt-1">↑ 较上月 +3</div>
+        </div>
+        <!-- KPI 6 AI 命中率 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">🎯 AI 推荐命中率</div>
+          <div class="text-3xl font-bold text-gray-800">72<span class="text-base text-gray-400 font-normal">%</span></div>
+          <div class="text-xs text-green-600 mt-1">↑ 较上月 +5%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [今日必看清单] -->
+    <div class="px-6 pb-5">
+      <div class="bg-white rounded-lg border border-gray-200">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-bold text-gray-800">⚡ 今日必看 · AI 推荐 Top 10</h2>
+            <span class="text-xs text-gray-400">跨 Phase 智能聚合 · 按优先级降序</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <button class="text-xs text-gray-500 hover:text-blue-500">🔄 刷新</button>
+            <button class="text-xs text-gray-500 hover:text-blue-500">查看全部 →</button>
+          </div>
+        </div>
+        <div class="divide-y divide-gray-100">
+
+          <!-- 条目 1 -->
+          <a href="phase3-mine/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-red-50 text-red-600 whitespace-nowrap">🔥 P0 招标</span>
+            <span class="flex-1 text-sm text-gray-700">成都大运会主题乐园二期 EPC 招标发布 — 中标概率 <b class="text-red-600">68%</b></span>
+            <span class="text-xs text-gray-400">Phase 3</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 2 -->
+          <a href="phase4-radar/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-orange-50 text-orange-600 whitespace-nowrap">⚡ 高意图</span>
+            <span class="flex-1 text-sm text-gray-700">上海迪士尼扩建项目 ICP 评分 <b class="text-orange-600">92</b></span>
+            <span class="text-xs text-gray-400">Phase 4</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 3 -->
+          <a href="phase5-competitor/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-600 whitespace-nowrap">🎯 竞品</span>
+            <span class="flex-1 text-sm text-gray-700">KOMPAN 中标深圳前海游乐场 <b class="text-gray-800">¥1,800 万</b></span>
+            <span class="text-xs text-gray-400">Phase 5</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 4 -->
+          <a href="phase2-industry/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-blue-50 text-blue-600 whitespace-nowrap">📜 政策</span>
+            <span class="flex-1 text-sm text-gray-700">广东省游乐设施安全新规 2026 版征求意见</span>
+            <span class="text-xs text-gray-400">Phase 2</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 5 -->
+          <a href="phase4-radar/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-red-50 text-red-600 whitespace-nowrap">📉 流失预警</span>
+            <span class="flex-1 text-sm text-gray-700">客户「北京欢乐谷」30 天无活动，流失风险 <b class="text-red-600">75%</b></span>
+            <span class="text-xs text-gray-400">Phase 4</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 6 -->
+          <a href="phase5-competitor/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-purple-50 text-purple-600 whitespace-nowrap">🆕 新竞品发现</span>
+            <span class="flex-1 text-sm text-gray-700">同场投标发现新竞争对手「LSI Industries 华东」</span>
+            <span class="text-xs text-gray-400">Phase 5</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 7 -->
+          <a href="phase6-fusion/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-indigo-50 text-indigo-600 whitespace-nowrap">🔗 三角关联</span>
+            <span class="flex-1 text-sm text-gray-700">发现「金茂集团」同时与 PlayCore + 万德接触</span>
+            <span class="text-xs text-gray-400">Phase 6</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 8 -->
+          <a href="phase2-industry/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-green-50 text-green-600 whitespace-nowrap">📈 趋势</span>
+            <span class="flex-1 text-sm text-gray-700">无动力主题乐园招标量同比 <b class="text-green-600">+45%</b></span>
+            <span class="text-xs text-gray-400">Phase 2</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 9 -->
+          <a href="phase3-mine/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-yellow-50 text-yellow-700 whitespace-nowrap">💰 利润预测</span>
+            <span class="flex-1 text-sm text-gray-700">乌鲁木齐冰雪项目预测毛利率 <b class="text-yellow-700">34%</b></span>
+            <span class="text-xs text-gray-400">Phase 3</span>
+            <span class="text-gray-400">→</span>
+          </a>
+          <!-- 条目 10 -->
+          <a href="phase3-mine/index.html" class="flex items-center gap-3 px-4 py-3 hover:bg-gray-50 signal-row cursor-pointer">
+            <span class="text-xs font-semibold px-2 py-0.5 rounded bg-red-50 text-red-600 whitespace-nowrap">⏰ Go/No-Go</span>
+            <span class="flex-1 text-sm text-gray-700">太原儿童主题乐园 <b class="text-red-600">48 小时</b>内需决策</span>
+            <span class="text-xs text-gray-400">Phase 3</span>
+            <span class="text-gray-400">→</span>
+          </a>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- [7 大 Phase 模块卡片] -->
+    <div class="px-6 pb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-bold text-gray-800">🗂️ 7 大情报模块</h2>
+        <span class="text-xs text-gray-400">点击卡片进入模块详情</span>
+      </div>
+      <div class="grid grid-cols-4 gap-4">
+
+        <!-- Phase 1 -->
+        <a href="phase1-infra/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">🏗️</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 1 基础设施</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">10 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>知识图谱</span><span class="font-semibold text-gray-800">0 张</span></div>
+            <div class="flex justify-between"><span>数据源</span><span class="font-semibold text-gray-800">0</span></div>
+            <div class="flex justify-between"><span>去重覆盖</span><span class="font-semibold text-gray-800">0%</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-red-500"></span><span class="text-red-500">规划中</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- Phase 2 -->
+        <a href="phase2-industry/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">📚</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 2 行业信息</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">10 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>政策库</span><span class="font-semibold text-gray-800">142 条</span></div>
+            <div class="flex justify-between"><span>行业报告</span><span class="font-semibold text-gray-800">28 份</span></div>
+            <div class="flex justify-between"><span>AI 摘要覆盖</span><span class="font-semibold text-gray-800">65%</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500"></span><span class="text-yellow-600">部分已建</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- Phase 3 -->
+        <a href="phase3-mine/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">⛏️</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 3 项目矿场升级</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">8 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>监控项目</span><span class="font-semibold text-gray-800">1,247</span></div>
+            <div class="flex justify-between"><span>高分机会</span><span class="font-semibold text-gray-800">86</span></div>
+            <div class="flex justify-between"><span>中标概率模型</span><span class="font-semibold text-gray-800">v2.3</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500"></span><span class="text-yellow-600">部分已建</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- Phase 4 -->
+        <a href="phase4-radar/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">🎯</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 4 客户雷达</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">10 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>ICP 客户</span><span class="font-semibold text-gray-800">342</span></div>
+            <div class="flex justify-between"><span>意图信号/日</span><span class="font-semibold text-gray-800">87</span></div>
+            <div class="flex justify-between"><span>暗漏斗识别</span><span class="font-semibold text-gray-800">19</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500"></span><span class="text-yellow-600">部分已建</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- Phase 5 -->
+        <a href="phase5-competitor/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">⚔️</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 5 竞品情报</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">10+17 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>监控竞品</span><span class="font-semibold text-gray-800">50 家</span></div>
+            <div class="flex justify-between"><span>动态/周</span><span class="font-semibold text-gray-800">34</span></div>
+            <div class="flex justify-between"><span>战斗卡</span><span class="font-semibold text-gray-800">47 张</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-green-500"></span><span class="text-green-600">已建</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- Phase 6 -->
+        <a href="phase6-fusion/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">🔗</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 6 联动层</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">9 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>事件吞吐</span><span class="font-semibold text-gray-800">0/日</span></div>
+            <div class="flex justify-between"><span>三角关联</span><span class="font-semibold text-gray-800">0</span></div>
+            <div class="flex justify-between"><span>AI 洞察/日</span><span class="font-semibold text-gray-800">0</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-red-500"></span><span class="text-red-500">规划中</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- Phase 7 -->
+        <a href="phase7-distribution/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-4 block">
+          <div class="flex items-start justify-between mb-3">
+            <div>
+              <div class="text-2xl">📢</div>
+              <div class="text-sm font-bold text-gray-800 mt-1">Phase 7 分发</div>
+            </div>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-500">8 Issue</span>
+          </div>
+          <div class="space-y-1.5 mb-3 text-xs text-gray-600 border-t border-gray-100 pt-2">
+            <div class="flex justify-between"><span>企微订阅</span><span class="font-semibold text-gray-800">0</span></div>
+            <div class="flex justify-between"><span>邮件/日</span><span class="font-semibold text-gray-800">0</span></div>
+            <div class="flex justify-between"><span>移动端用户</span><span class="font-semibold text-gray-800">0</span></div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-red-500"></span><span class="text-red-500">规划中</span></span>
+            <span class="text-xs text-blue-500 font-medium">进入模块 →</span>
+          </div>
+        </a>
+
+        <!-- 第 8 格 使用指南 -->
+        <a href="#" class="phase-card bg-gray-50 rounded-lg border border-dashed border-gray-300 p-4 block flex flex-col justify-center items-center text-center">
+          <div class="text-3xl mb-2">📖</div>
+          <div class="text-sm font-bold text-gray-700 mb-1">使用指南</div>
+          <div class="text-xs text-gray-500 mb-3">操作手册 · 新手教程 · 视频教程</div>
+          <div class="flex gap-2">
+            <span class="text-xs text-blue-500 hover:underline">手册</span>
+            <span class="text-gray-300">·</span>
+            <span class="text-xs text-blue-500 hover:underline">教程</span>
+            <span class="text-gray-300">·</span>
+            <span class="text-xs text-blue-500 hover:underline">视频</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- [实时信号流] -->
+    <div class="px-6 pb-5">
+      <div class="bg-white rounded-lg border border-gray-200">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+          <div class="flex items-center gap-2">
+            <h2 class="text-base font-bold text-gray-800">📡 实时信号流</h2>
+            <span class="flex items-center gap-1 text-xs text-gray-400">
+              <span class="inline-block w-1.5 h-1.5 rounded-full bg-green-500 pulse-dot"></span>
+              最近 20 条 · 跨 7 Phase
+            </span>
+          </div>
+          <div class="flex items-center gap-3 text-xs">
+            <label class="text-gray-500"><input type="checkbox" checked class="mr-1">自动刷新</label>
+            <select class="border border-gray-300 rounded px-2 py-0.5 text-gray-600">
+              <option>全部 Phase</option>
+              <option>Phase 2 行业</option>
+              <option>Phase 3 项目</option>
+              <option>Phase 4 客户</option>
+              <option>Phase 5 竞品</option>
+              <option>Phase 6 联动</option>
+            </select>
+          </div>
+        </div>
+        <div class="divide-y divide-gray-100 max-h-96 overflow-y-auto">
+
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">15:42</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-medium w-20 text-center">Phase 3</span>
+            <span class="flex-1 text-sm text-gray-700">中标公告发布：云南野象谷儿童水上乐园 → 新增监控</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">15:30</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-purple-50 text-purple-600 font-medium w-20 text-center">Phase 5</span>
+            <span class="flex-1 text-sm text-gray-700">KOMPAN 发布新产品线 Explorers Dome → 战斗卡更新</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">14:55</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-medium w-20 text-center">Phase 2</span>
+            <span class="flex-1 text-sm text-gray-700">国标 GB 19272-2026 第 3 号修订单发布</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">14:20</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-medium w-20 text-center">Phase 4</span>
+            <span class="flex-1 text-sm text-gray-700">客户"北京欢乐谷"官网访问峰值 → 意图信号 +25</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">13:45</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 font-medium w-20 text-center">Phase 6</span>
+            <span class="flex-1 text-sm text-gray-700">AI 洞察：华东区域 3 个客户同时关注"智能游乐"关键词</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">13:12</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-medium w-20 text-center">Phase 3</span>
+            <span class="flex-1 text-sm text-gray-700">西安曲江文旅招标预公告 — 主题乐园 EPC 总包 约 ¥3,200 万</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">12:48</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-purple-50 text-purple-600 font-medium w-20 text-center">Phase 5</span>
+            <span class="flex-1 text-sm text-gray-700">PlayCore 任命新中国区总经理 张明（原 Landscape Structures）</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">12:20</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-medium w-20 text-center">Phase 4</span>
+            <span class="flex-1 text-sm text-gray-700">新 ICP 客户识别：杭州宋城演艺旗下子公司 匹配度 88%</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">11:55</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-medium w-20 text-center">Phase 2</span>
+            <span class="flex-1 text-sm text-gray-700">文旅部《"十四五"乡村旅游示范》新增 24 个入选项目</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">11:30</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 font-medium w-20 text-center">Phase 6</span>
+            <span class="flex-1 text-sm text-gray-700">三角关联告警：融创文旅同时出现在招标/竞品/客户三条线</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">11:08</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-medium w-20 text-center">Phase 3</span>
+            <span class="flex-1 text-sm text-gray-700">郑州方特东方神画扩建 Go/No-Go 评估报告已生成</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">10:42</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-purple-50 text-purple-600 font-medium w-20 text-center">Phase 5</span>
+            <span class="flex-1 text-sm text-gray-700">Little Tikes Commercial 中国代理商年会视频流出 → 解析中</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">10:15</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-medium w-20 text-center">Phase 4</span>
+            <span class="flex-1 text-sm text-gray-700">客户"广州长隆"下载白皮书 → 意图信号 +15，推荐销售跟进</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">09:55</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-medium w-20 text-center">Phase 2</span>
+            <span class="flex-1 text-sm text-gray-700">浙江省印发《游乐设施电气安全技术规范》地方标准 DB33/T</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">09:38</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-medium w-20 text-center">Phase 7</span>
+            <span class="flex-1 text-sm text-gray-700">每日情报简报已推送至企微群"万德商务作战室"（收到 32 人）</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">09:20</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-indigo-50 text-indigo-600 font-medium w-20 text-center">Phase 6</span>
+            <span class="flex-1 text-sm text-gray-700">AI 洞察：过去 7 天"碳中和"主题乐园关键词搜索量 +120%</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">08:55</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-medium w-20 text-center">Phase 3</span>
+            <span class="flex-1 text-sm text-gray-700">重庆两江新区儿童公园改造招标 — 首次纳入监控池</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">08:40</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-medium w-20 text-center">Phase 1</span>
+            <span class="flex-1 text-sm text-gray-700">数据管线健康检查：ETL 作业全部成功 · 去重命中 1,284 条</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">08:22</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-medium w-20 text-center">Phase 4</span>
+            <span class="flex-1 text-sm text-gray-700">暗漏斗识别：华东区 5 家客户官网来源 UTM 指向展会落地页</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+          <div class="flex items-center gap-3 px-4 py-2.5 signal-row">
+            <span class="text-xs text-gray-400 font-mono w-12">08:05</span>
+            <span class="text-xs px-1.5 py-0.5 rounded bg-purple-50 text-purple-600 font-medium w-20 text-center">Phase 5</span>
+            <span class="flex-1 text-sm text-gray-700">Landscape Structures 官网新增 3 个中国案例页 → 去重入库</span>
+            <span class="text-gray-300 cursor-pointer hover:text-blue-500">→</span>
+          </div>
+
+        </div>
+        <div class="px-4 py-2 border-t border-gray-200 text-center">
+          <a href="#" class="text-xs text-blue-500 hover:underline">查看全部信号流 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- [原型说明表] -->
+    <div class="px-6 pb-8">
+      <div class="bg-white rounded-lg border border-gray-200 p-4">
+        <h3 class="text-base font-bold text-gray-700 mb-3">📑 原型说明 · 7 Phase 子原型清单</h3>
+        <table class="w-full text-sm text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="p-2 border border-gray-200 w-24">Phase</th>
+              <th class="p-2 border border-gray-200 w-56">文件路径</th>
+              <th class="p-2 border border-gray-200 w-20">Issue 数</th>
+              <th class="p-2 border border-gray-200 w-24">状态</th>
+              <th class="p-2 border border-gray-200">核心功能</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">🏗️ Phase 1</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase1-infra/index.html</td>
+              <td class="p-2 border border-gray-200">10</td>
+              <td class="p-2 border border-gray-200"><span class="text-red-500">🔴 规划中</span></td>
+              <td class="p-2 border border-gray-200">基础设施：知识图谱 / 数据源接入 / 去重清洗 / 统一实体库</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">📚 Phase 2</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase2-industry/index.html</td>
+              <td class="p-2 border border-gray-200">10</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 部分已建</span></td>
+              <td class="p-2 border border-gray-200">行业信息：政策库 / 行业报告 / 标准规范 / AI 摘要 / 趋势洞察</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">⛏️ Phase 3</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase3-mine/index.html</td>
+              <td class="p-2 border border-gray-200">8</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 部分已建</span></td>
+              <td class="p-2 border border-gray-200">项目矿场升级：招标监控 / 中标概率模型 / 利润预测 / Go/No-Go</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">🎯 Phase 4</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase4-radar/index.html</td>
+              <td class="p-2 border border-gray-200">10</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 部分已建</span></td>
+              <td class="p-2 border border-gray-200">客户雷达：ICP 画像 / 意图信号 / 暗漏斗识别 / 流失预警</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">⚔️ Phase 5</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase5-competitor/index.html</td>
+              <td class="p-2 border border-gray-200">10 + 17 散落</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 已建</span></td>
+              <td class="p-2 border border-gray-200">竞品情报：50 家竞品监控 / 战斗卡 / 中标分析 / 人事异动</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">🔗 Phase 6</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase6-fusion/index.html</td>
+              <td class="p-2 border border-gray-200">9</td>
+              <td class="p-2 border border-gray-200"><span class="text-red-500">🔴 规划中</span></td>
+              <td class="p-2 border border-gray-200">联动层：事件总线 / 三角关联 / AI 跨域洞察 / 情报聚合</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">📢 Phase 7</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">phase7-distribution/index.html</td>
+              <td class="p-2 border border-gray-200">8</td>
+              <td class="p-2 border border-gray-200"><span class="text-red-500">🔴 规划中</span></td>
+              <td class="p-2 border border-gray-200">分发：企微订阅 / 邮件简报 / 移动端推送 / 角色化情报流</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-3 text-xs text-gray-500 border-t border-gray-100 pt-2">
+          💡 本页为 <b>总览 Hub</b>，7 Phase 子原型为独立多文件原型，通过卡片"进入模块"或原型说明表路径跳转进入。
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- [情报 Copilot 对话框 — 底部常驻] -->
+<div class="copilot-dock fixed bottom-0 left-16 right-0 bg-white border-t border-gray-300 px-6 py-3 z-50">
+  <div class="flex items-center gap-3 max-w-5xl mx-auto">
+    <div class="flex items-center gap-2 text-sm font-semibold text-gray-700 whitespace-nowrap">
+      <span class="inline-flex items-center justify-center w-7 h-7 rounded-full bg-blue-50 text-blue-500">🤖</span>
+      <span>情报 Copilot</span>
+    </div>
+    <input
+      type="text"
+      placeholder="向情报 Copilot 提问，例如：帮我分析华南区域竞争格局"
+      class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded focus:outline-none focus:border-blue-400"
+    >
+    <button class="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 whitespace-nowrap">🔍 提问</button>
+    <button class="px-3 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50 whitespace-nowrap">⏸️ 历史</button>
+  </div>
+  <div class="flex items-center gap-2 mt-2 max-w-5xl mx-auto text-xs text-gray-500">
+    <span>💡 试试问：</span>
+    <button class="px-2 py-0.5 border border-gray-200 rounded hover:bg-gray-50">本周有哪些高概率中标的项目？</button>
+    <button class="px-2 py-0.5 border border-gray-200 rounded hover:bg-gray-50">KOMPAN 最近动态汇总</button>
+    <button class="px-2 py-0.5 border border-gray-200 rounded hover:bg-gray-50">流失风险最高的 5 个客户</button>
+  </div>
+</div>
+
+</body>
+</html>

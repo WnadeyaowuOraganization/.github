@@ -1,0 +1,1251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台·Phase 2 行业信息 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .section-card { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; }
+    .region-dashed { border: 1px dashed #bfbfbf; border-radius: 4px; background: #fafafa; }
+    .region-label { display: inline-block; background: #595959; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 2px; margin-bottom: 8px; font-weight: 500; }
+    .ant-btn { background: #1890ff; color: #fff; padding: 5px 14px; border-radius: 4px; font-size: 13px; border: 1px solid #1890ff; cursor: pointer; display: inline-flex; align-items: center; gap: 4px; }
+    .ant-btn:hover { background: #40a9ff; }
+    .ant-btn-ghost { background: #fff; color: #333; border: 1px solid #d9d9d9; padding: 5px 14px; border-radius: 4px; font-size: 13px; cursor: pointer; }
+    .ant-btn-ghost:hover { color: #1890ff; border-color: #1890ff; }
+    .ant-tag { display: inline-block; padding: 1px 7px; border-radius: 2px; font-size: 11px; border: 1px solid; line-height: 18px; }
+    .tag-red { color: #cf1322; border-color: #ffa39e; background: #fff1f0; }
+    .tag-orange { color: #d46b08; border-color: #ffd591; background: #fff7e6; }
+    .tag-green { color: #389e0d; border-color: #b7eb8f; background: #f6ffed; }
+    .tag-blue { color: #1890ff; border-color: #91d5ff; background: #e6f7ff; }
+    .tag-purple { color: #531dab; border-color: #d3adf7; background: #f9f0ff; }
+    .tag-gray { color: #595959; border-color: #d9d9d9; background: #fafafa; }
+    table.ant-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }
+    table.ant-table th { background: #fafafa; text-align: left; padding: 10px 12px; border-bottom: 1px solid #e8e8e8; font-weight: 600; color: #595959; white-space: nowrap; }
+    table.ant-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; color: #333; }
+    table.ant-table tr:hover td { background: #fafafa; }
+    .anchor-nav { position: sticky; top: 0; background: #fff; border-bottom: 1px solid #e8e8e8; z-index: 30; padding: 10px 24px; display: flex; gap: 4px; overflow-x: auto; }
+    .anchor-nav a { font-size: 12.5px; color: #595959; padding: 5px 10px; border-radius: 4px; white-space: nowrap; text-decoration: none; }
+    .anchor-nav a:hover { background: #f0f5ff; color: #1890ff; }
+    .chart-placeholder { height: 180px; background: repeating-linear-gradient(45deg, #fafafa, #fafafa 6px, #f0f0f0 6px, #f0f0f0 12px); border: 1px dashed #d9d9d9; border-radius: 4px; display: flex; align-items: center; justify-content: center; color: #999; font-size: 13px; }
+    .kpi-up { color: #cf1322; font-weight: 600; }
+    .kpi-down { color: #389e0d; font-weight: 600; }
+    .calendar-cell { min-height: 70px; border: 1px solid #f0f0f0; padding: 4px 6px; font-size: 11.5px; background: #fff; }
+    .calendar-cell.today { background: #e6f7ff; border-color: #91d5ff; }
+    .event-pill { display: block; background: #fff7e6; color: #d46b08; font-size: 10.5px; padding: 1px 5px; border-radius: 2px; margin-top: 3px; border: 1px solid #ffd591; }
+    .event-pill.blue { background: #e6f7ff; color: #1890ff; border-color: #91d5ff; }
+    .event-pill.purple { background: #f9f0ff; color: #531dab; border-color: #d3adf7; }
+    .chat-bubble { max-width: 78%; padding: 10px 14px; border-radius: 8px; font-size: 13px; line-height: 1.6; }
+    .chat-user { background: #1890ff; color: #fff; margin-left: auto; border-bottom-right-radius: 2px; }
+    .chat-ai { background: #fafafa; color: #333; border: 1px solid #f0f0f0; border-bottom-left-radius: 2px; }
+    details > summary { cursor: pointer; list-style: none; }
+    details > summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台·Phase 2 行业信息</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">对标 Vertical IQ，整合政策/趋势/产品/案例/报告/展会/AI问答，让商务团队 5 分钟摸透行业动态</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务团队（客户拜访前预习行业）/ 产品经理（趋势分析）/ 吴耀（战略决策）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">行业档案模板 / 政策采集 / 政策影响评估 / 市场趋势仪表盘 / 产品数据库 / 竞品对比矩阵 / 案例库 / 报告AI摘要 / 展会日历 / AI问答助手</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">一键生成行业档案 / 订阅政策推送 / 下钻趋势图表 / 对比竞品参数 / 询问AI助手</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">10 区域全覆盖 / 政策列表自动更新 / 竞品矩阵支持横向对比 / AI 问答返回可溯源</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase 2 行业信息 · 详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部工具栏 — 面包屑+返回] -->
+<div class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+  <div class="text-sm text-gray-500">
+    <a href="../index.html" class="hover:text-blue-500">首页</a>
+    <span class="mx-1">&gt;</span>
+    <a href="../index.html" class="hover:text-blue-500">商战情报中台</a>
+    <span class="mx-1">&gt;</span>
+    <span class="text-gray-700 font-medium">Phase 2 · 行业信息</span>
+  </div>
+  <div class="flex items-center gap-2">
+    <a href="../index.html" class="ant-btn-ghost">← 返回情报中台首页</a>
+    <button class="ant-btn">📥 订阅全部更新</button>
+  </div>
+</div>
+
+<!-- [页面标题区] -->
+<div class="bg-gradient-to-r from-gray-100 to-gray-50 px-6 py-6 border-b border-gray-200">
+  <div class="max-w-[1280px] mx-auto">
+    <div class="flex items-center gap-2 mb-2">
+      <span class="ant-tag tag-blue">Phase 2</span>
+      <span class="ant-tag tag-purple">对标 Vertical IQ</span>
+      <span class="ant-tag tag-gray">10 区域 · 10 子 Issue</span>
+    </div>
+    <h1 class="text-2xl font-bold text-gray-800">游乐行业深度信息中心</h1>
+    <p class="text-sm text-gray-500 mt-2">整合政策法规、市场趋势、产品数据库、标杆案例、行业报告、展会日历与 AI 问答，一站式掌握游乐设施行业动态。</p>
+    <div class="flex items-center gap-6 mt-4 text-sm">
+      <div><span class="text-gray-500">市场规模</span> <span class="font-bold text-gray-800 ml-1">¥1247 亿</span> <span class="kpi-up">↑ 8.3%</span></div>
+      <div><span class="text-gray-500">在库政策</span> <span class="font-bold text-gray-800 ml-1">342 条</span></div>
+      <div><span class="text-gray-500">标杆案例</span> <span class="font-bold text-gray-800 ml-1">186 个</span></div>
+      <div><span class="text-gray-500">行业报告</span> <span class="font-bold text-gray-800 ml-1">58 份</span></div>
+      <div><span class="text-gray-500">更新时间</span> <span class="font-bold text-gray-800 ml-1">2026-04-21 09:00</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- [顶部锚点导航 — 10 区域] -->
+<nav class="anchor-nav">
+  <a href="#sec-1">① 行业档案</a>
+  <a href="#sec-2">② 政策采集</a>
+  <a href="#sec-3">③ 政策影响</a>
+  <a href="#sec-4">④ 市场趋势</a>
+  <a href="#sec-5">⑤ 万德产品档案</a>
+  <a href="#sec-6">⑥ 竞品对比矩阵</a>
+  <a href="#sec-7">⑦ 标杆案例库</a>
+  <a href="#sec-8">⑧ 报告 AI 摘要</a>
+  <a href="#sec-9">⑨ 展会日历</a>
+  <a href="#sec-10">⑩ AI 问答助手</a>
+</nav>
+
+<main class="max-w-[1280px] mx-auto px-6 py-6 space-y-6">
+
+  <!-- ========================================================== -->
+  <!-- [区域1] 行业档案 7 章节模板引擎（Issue #2686） -->
+  <!-- ========================================================== -->
+  <section id="sec-1" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 1] 行业档案模板</span>
+        <h2 class="text-lg font-bold text-gray-800">① 行业档案 · 7 章节模板引擎 <span class="text-xs text-gray-400 ml-2">Issue #2686</span></h2>
+        <p class="text-xs text-gray-500 mt-1">标准化行业档案结构，一键生成游乐设施行业全景报告。</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="ant-btn-ghost">🔧 编辑模板</button>
+        <button class="ant-btn">⚡ 一键生成行业档案</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-7 gap-3">
+      <!-- 7个章节卡片 -->
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.1</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">行业概况</div>
+        <div class="text-xs text-gray-500 mb-2">定义、范围、分类</div>
+        <div class="text-xs text-gray-400">📝 12 段落 · 已生成</div>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.2</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">市场规模</div>
+        <div class="text-xs text-gray-500 mb-2">总量、增速、结构</div>
+        <div class="text-xs text-gray-400">📊 8 图表 · 已生成</div>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.3</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">需求驱动</div>
+        <div class="text-xs text-gray-500 mb-2">政策、人口、消费</div>
+        <div class="text-xs text-gray-400">🔍 6 驱动因素</div>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.4</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">竞争格局</div>
+        <div class="text-xs text-gray-500 mb-2">头部玩家、市占率</div>
+        <div class="text-xs text-gray-400">🏢 18 家厂商</div>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.5</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">价值链分析</div>
+        <div class="text-xs text-gray-500 mb-2">上中下游、利润分布</div>
+        <div class="text-xs text-gray-400">🔗 3 环节拆解</div>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.6</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">趋势预测</div>
+        <div class="text-xs text-gray-500 mb-2">技术、需求、出海</div>
+        <div class="text-xs text-gray-400">🎯 5 年展望</div>
+      </div>
+      <div class="bg-white border border-gray-300 rounded p-3 hover:border-blue-400 cursor-pointer">
+        <div class="text-xs text-blue-500 font-bold mb-1">CH.7</div>
+        <div class="text-sm font-semibold text-gray-800 mb-1">政策法规</div>
+        <div class="text-xs text-gray-500 mb-2">国标、地方、国际</div>
+        <div class="text-xs text-gray-400">📜 28 条法规</div>
+      </div>
+    </div>
+
+    <div class="mt-4 bg-white border border-gray-200 rounded p-4">
+      <div class="text-sm font-semibold text-gray-700 mb-2">🗂️ 档案概览 · 游乐设施行业 2026</div>
+      <div class="grid grid-cols-4 gap-4 text-sm">
+        <div>
+          <div class="text-xs text-gray-500">市场规模（2026E）</div>
+          <div class="text-xl font-bold text-gray-800 mt-1">¥1247 亿</div>
+          <div class="text-xs text-gray-400">较 2025 年 <span class="kpi-up">+8.3%</span></div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">CAGR（2023-2028）</div>
+          <div class="text-xl font-bold text-gray-800 mt-1">11.2%</div>
+          <div class="text-xs text-gray-400">高于全球 7.8%</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">头部集中度 CR5</div>
+          <div class="text-xl font-bold text-gray-800 mt-1">38.7%</div>
+          <div class="text-xs text-gray-400">分散度较高</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">出海占比</div>
+          <div class="text-xl font-bold text-gray-800 mt-1">22.5%</div>
+          <div class="text-xs text-gray-400">东南亚 + 中东为主</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域2] 政策法规自动采集（Issue #2687） -->
+  <!-- ========================================================== -->
+  <section id="sec-2" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 2] 政策法规自动采集</span>
+        <h2 class="text-lg font-bold text-gray-800">② 政策法规 · 自动采集与分类 <span class="text-xs text-gray-400 ml-2">Issue #2687</span></h2>
+        <p class="text-xs text-gray-500 mt-1">多源聚合+AI分类，覆盖从国务院到地方政府的全链路政策更新。</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="ant-btn-ghost">⚙️ 来源管理</button>
+        <button class="ant-btn">🔔 订阅推送</button>
+      </div>
+    </div>
+
+    <!-- 来源列表 -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-500 mb-2">📡 采集来源（4 类 · 23 个站点）</div>
+      <div class="flex flex-wrap gap-2">
+        <span class="ant-tag tag-blue">国务院 · 3 站点</span>
+        <span class="ant-tag tag-blue">住建部 · 2 站点</span>
+        <span class="ant-tag tag-blue">国标委（SAC）· 4 站点</span>
+        <span class="ant-tag tag-blue">市场监管总局 · 2 站点</span>
+        <span class="ant-tag tag-blue">文化和旅游部 · 3 站点</span>
+        <span class="ant-tag tag-blue">地方政府 · 9 站点（京/沪/粤/浙/苏...）</span>
+      </div>
+      <div class="text-xs text-gray-400 mt-2">🕐 采集频率：每日 06:00 / 18:00 · 最近一次 2026-04-21 06:04 · 本次新增 7 条</div>
+    </div>
+
+    <!-- 最新 10 条政策 -->
+    <div class="bg-white rounded border border-gray-200 overflow-hidden">
+      <table class="ant-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">#</th>
+            <th>政策/法规名称</th>
+            <th style="width:100px;">来源</th>
+            <th style="width:90px;">发布日期</th>
+            <th style="width:90px;">类型</th>
+            <th style="width:100px;">影响等级</th>
+            <th style="width:80px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><a href="#" class="text-blue-500 hover:underline">GB 19272-2026《健身器材 室外健身器材的安全 通用要求》修订版</a> <span class="ant-tag tag-red ml-2">新</span></td>
+            <td>国标委</td>
+            <td>2026-04-18</td>
+            <td><span class="ant-tag tag-purple">国标</span></td>
+            <td><span class="ant-tag tag-red">高</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><a href="#" class="text-blue-500 hover:underline">EN 1176:2025 欧洲游乐场设备安全标准修订（中文译本发布）</a></td>
+            <td>国标委</td>
+            <td>2026-04-15</td>
+            <td><span class="ant-tag tag-purple">国际</span></td>
+            <td><span class="ant-tag tag-red">高</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><a href="#" class="text-blue-500 hover:underline">文旅部《2026 年旅游基础设施项目支持目录》发布</a></td>
+            <td>文旅部</td>
+            <td>2026-04-12</td>
+            <td><span class="ant-tag tag-blue">通知</span></td>
+            <td><span class="ant-tag tag-orange">中</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><a href="#" class="text-blue-500 hover:underline">住建部《城市社区嵌入式服务设施建设导则》</a></td>
+            <td>住建部</td>
+            <td>2026-04-08</td>
+            <td><span class="ant-tag tag-blue">导则</span></td>
+            <td><span class="ant-tag tag-orange">中</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><a href="#" class="text-blue-500 hover:underline">GB/T 34272-2026《小型游乐设施安全规范》征求意见稿</a></td>
+            <td>国标委</td>
+            <td>2026-04-05</td>
+            <td><span class="ant-tag tag-purple">国标</span></td>
+            <td><span class="ant-tag tag-orange">中</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><a href="#" class="text-blue-500 hover:underline">北京市《"一刻钟便民生活圈"儿童活动空间配建标准》</a></td>
+            <td>北京市住建委</td>
+            <td>2026-04-01</td>
+            <td><span class="ant-tag tag-gray">地方</span></td>
+            <td><span class="ant-tag tag-orange">中</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td><a href="#" class="text-blue-500 hover:underline">国务院《关于促进服务消费高质量发展的意见》（第十条涉及文旅）</a></td>
+            <td>国务院</td>
+            <td>2026-03-28</td>
+            <td><span class="ant-tag tag-blue">意见</span></td>
+            <td><span class="ant-tag tag-red">高</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>8</td>
+            <td><a href="#" class="text-blue-500 hover:underline">市场监管总局《儿童游乐设施认证管理办法》（2026修订）</a></td>
+            <td>市场监管总局</td>
+            <td>2026-03-25</td>
+            <td><span class="ant-tag tag-blue">办法</span></td>
+            <td><span class="ant-tag tag-red">高</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>9</td>
+            <td><a href="#" class="text-blue-500 hover:underline">浙江省《美丽城镇公共空间建设导则》</a></td>
+            <td>浙江省住建厅</td>
+            <td>2026-03-20</td>
+            <td><span class="ant-tag tag-gray">地方</span></td>
+            <td><span class="ant-tag tag-green">低</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td><a href="#" class="text-blue-500 hover:underline">广东省《农文旅融合发展三年行动方案》</a></td>
+            <td>广东省文旅厅</td>
+            <td>2026-03-15</td>
+            <td><span class="ant-tag tag-gray">地方</span></td>
+            <td><span class="ant-tag tag-orange">中</span></td>
+            <td><a href="#sec-3" class="text-blue-500 text-xs">查看评估</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-right mt-3"><a href="#" class="text-blue-500 text-sm">查看全部 342 条政策 →</a></div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域3] 政策影响评估与预警（Issue #2688） -->
+  <!-- ========================================================== -->
+  <section id="sec-3" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 3] 政策影响评估</span>
+        <h2 class="text-lg font-bold text-gray-800">③ 政策影响评估与预警 <span class="text-xs text-gray-400 ml-2">Issue #2688</span></h2>
+        <p class="text-xs text-gray-500 mt-1">AI 对每条政策自动打分，识别受影响模块、紧急度并给出行动建议。</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="ant-btn-ghost">📊 评估模型配置</button>
+        <button class="ant-btn">📧 推送预警到企微</button>
+      </div>
+    </div>
+
+    <!-- 预警汇总 -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="bg-white border border-red-200 rounded p-3">
+        <div class="text-xs text-gray-500">🔴 高紧急度</div>
+        <div class="text-2xl font-bold text-red-600 mt-1">4</div>
+        <div class="text-xs text-gray-400 mt-1">30 天内需响应</div>
+      </div>
+      <div class="bg-white border border-orange-200 rounded p-3">
+        <div class="text-xs text-gray-500">🟠 中紧急度</div>
+        <div class="text-2xl font-bold text-orange-600 mt-1">11</div>
+        <div class="text-xs text-gray-400 mt-1">90 天内关注</div>
+      </div>
+      <div class="bg-white border border-green-200 rounded p-3">
+        <div class="text-xs text-gray-500">🟢 低紧急度</div>
+        <div class="text-2xl font-bold text-green-600 mt-1">23</div>
+        <div class="text-xs text-gray-400 mt-1">长期关注</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">📩 本周已推送</div>
+        <div class="text-2xl font-bold text-gray-800 mt-1">6</div>
+        <div class="text-xs text-gray-400 mt-1">覆盖 18 人</div>
+      </div>
+    </div>
+
+    <!-- 预警列表 -->
+    <div class="space-y-3">
+      <!-- 预警卡 1 -->
+      <div class="bg-white border-l-4 border-red-500 border border-gray-200 rounded p-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">GB 19272-2026 修订版对万德产品线影响评估</div>
+            <div class="text-xs text-gray-400 mt-1">政策发布 2026-04-18 · 评估时间 2026-04-18 22:14 · AI 置信度 94%</div>
+          </div>
+          <div class="flex gap-2">
+            <span class="ant-tag tag-red">🔴 紧急度：高</span>
+            <span class="ant-tag tag-red">影响分 8.7/10</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mt-3 text-sm">
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-xs text-gray-500 mb-1">📦 受影响模块</div>
+            <div>不锈钢滑梯 / 攀爬架</div>
+            <div class="text-xs text-gray-400 mt-1">3 条产品线 · 占营收 42%</div>
+          </div>
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-xs text-gray-500 mb-1">⏰ 行动窗口</div>
+            <div>2026-10-31 前完成改造</div>
+            <div class="text-xs text-gray-400 mt-1">还剩 193 天</div>
+          </div>
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-xs text-gray-500 mb-1">💰 合规成本估算</div>
+            <div>¥280-420 万</div>
+            <div class="text-xs text-gray-400 mt-1">含检测+模具+资料</div>
+          </div>
+        </div>
+        <div class="mt-3 bg-red-50 border border-red-200 rounded p-3 text-sm text-gray-700">
+          <div class="font-semibold text-red-700 mb-1">💡 AI 行动建议</div>
+          <ol class="list-decimal ml-5 space-y-1 text-xs">
+            <li>研发部 2 周内对标新国标 7.2/7.5/8.1 章节，输出现有产品差异清单</li>
+            <li>质量部启动第三方检测（SGS/TÜV）送样流程，预计 6 周出结果</li>
+            <li>销售部在新国标生效前优先清理老款库存，新接订单锁定新国标版型</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 预警卡 2 -->
+      <div class="bg-white border-l-4 border-orange-500 border border-gray-200 rounded p-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">文旅部《2026 年旅游基础设施项目支持目录》机会识别</div>
+            <div class="text-xs text-gray-400 mt-1">政策发布 2026-04-12 · 评估时间 2026-04-13 09:21 · AI 置信度 87%</div>
+          </div>
+          <div class="flex gap-2">
+            <span class="ant-tag tag-orange">🟠 紧急度：中</span>
+            <span class="ant-tag tag-green">机会分 7.4/10</span>
+          </div>
+        </div>
+        <div class="grid grid-cols-3 gap-3 mt-3 text-sm">
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-xs text-gray-500 mb-1">🎯 机会点</div>
+            <div>第 4 类：家庭亲子景区配套</div>
+            <div class="text-xs text-gray-400 mt-1">专项补贴最高 30%</div>
+          </div>
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-xs text-gray-500 mb-1">📍 重点地区</div>
+            <div>川/黔/滇/桂 4 省</div>
+            <div class="text-xs text-gray-400 mt-1">配额占全国 38%</div>
+          </div>
+          <div class="bg-gray-50 p-3 rounded">
+            <div class="text-xs text-gray-500 mb-1">📈 潜在订单</div>
+            <div>¥6,800 万 - ¥1.2 亿</div>
+            <div class="text-xs text-gray-400 mt-1">按历史中标率测算</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 预警卡 3 -->
+      <div class="bg-white border-l-4 border-red-500 border border-gray-200 rounded p-4">
+        <div class="flex justify-between items-start mb-2">
+          <div>
+            <div class="text-sm font-semibold text-gray-800">EN 1176:2025 修订 · 出海业务合规影响</div>
+            <div class="text-xs text-gray-400 mt-1">政策发布 2026-04-15 · 评估时间 2026-04-16 08:45 · AI 置信度 91%</div>
+          </div>
+          <div class="flex gap-2">
+            <span class="ant-tag tag-red">🔴 紧急度：高</span>
+            <span class="ant-tag tag-orange">影响分 7.9/10</span>
+          </div>
+        </div>
+        <div class="mt-3 text-xs text-gray-600">涉及欧盟+部分中东国家市场，出海业务占比 22.5%。需在 2027-01 前取得新版认证。建议 Q2 内启动欧盟 CE 更新送检。</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域4] 市场趋势仪表盘（Issue #2689） -->
+  <!-- ========================================================== -->
+  <section id="sec-4" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 4] 市场趋势仪表盘</span>
+        <h2 class="text-lg font-bold text-gray-800">④ 市场趋势仪表盘 <span class="text-xs text-gray-400 ml-2">Issue #2689</span></h2>
+        <p class="text-xs text-gray-500 mt-1">来自招投标数据、海关、统计局的行业实时趋势。</p>
+      </div>
+      <div class="flex gap-2">
+        <select class="ant-btn-ghost"><option>时间范围：近12个月</option><option>近24个月</option></select>
+        <button class="ant-btn-ghost">📥 导出报告</button>
+      </div>
+    </div>
+
+    <!-- 4个KPI -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">行业招标量</div>
+        <div class="text-xl font-bold text-gray-800 mt-1">3,842 <span class="text-sm text-gray-400">个</span></div>
+        <div class="text-xs mt-1">同比 <span class="kpi-up">↑ 12.4%</span> · 环比 <span class="kpi-up">↑ 3.8%</span></div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">行业中标金额</div>
+        <div class="text-xl font-bold text-gray-800 mt-1">¥238 <span class="text-sm text-gray-400">亿</span></div>
+        <div class="text-xs mt-1">同比 <span class="kpi-up">↑ 9.7%</span> · 环比 <span class="kpi-down">↓ 1.2%</span></div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">新建游乐项目</div>
+        <div class="text-xl font-bold text-gray-800 mt-1">1,256 <span class="text-sm text-gray-400">个</span></div>
+        <div class="text-xs mt-1">同比 <span class="kpi-up">↑ 18.3%</span> · 环比 <span class="kpi-up">↑ 5.1%</span></div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">出口金额（海关）</div>
+        <div class="text-xl font-bold text-gray-800 mt-1">$6.8 <span class="text-sm text-gray-400">亿</span></div>
+        <div class="text-xs mt-1">同比 <span class="kpi-up">↑ 22.1%</span> · 环比 <span class="kpi-up">↑ 7.4%</span></div>
+      </div>
+    </div>
+
+    <!-- 4个图表 -->
+    <div class="grid grid-cols-2 gap-4">
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="text-sm font-semibold text-gray-700 mb-2">📊 图表 1 · 招标量月度趋势</div>
+        <div class="chart-placeholder">柱状图 · 2025-05 至 2026-04 月度招标数量</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="text-sm font-semibold text-gray-700 mb-2">💰 图表 2 · 中标金额结构</div>
+        <div class="chart-placeholder">堆叠柱状图 · 按产品线（组合/不锈钢/无动力/水上/定制）</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="text-sm font-semibold text-gray-700 mb-2">🏗️ 图表 3 · 新建项目类型分布</div>
+        <div class="chart-placeholder">饼图 · 社区/学校/景区/商业/公园</div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="text-sm font-semibold text-gray-700 mb-2">🗺️ 图表 4 · 地域分布热力图</div>
+        <div class="chart-placeholder">中国地图 · 按省份项目数</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域5] 万德产品档案（Issue #2690） -->
+  <!-- ========================================================== -->
+  <section id="sec-5" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 5] 万德产品档案</span>
+        <h2 class="text-lg font-bold text-gray-800">⑤ 产品数据库 · 万德产品结构化档案 <span class="text-xs text-gray-400 ml-2">Issue #2690</span></h2>
+        <p class="text-xs text-gray-500 mt-1">6 大产品线 · 全参数结构化存储，支持商务快速检索报价。</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="ant-btn-ghost">🔍 产品搜索</button>
+        <button class="ant-btn">＋ 新增产品</button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded border border-gray-200 overflow-hidden">
+      <table class="ant-table">
+        <thead>
+          <tr>
+            <th style="width:60px;">#</th>
+            <th>产品线</th>
+            <th style="width:80px;">SKU 数</th>
+            <th>代表型号</th>
+            <th style="width:120px;">价格区间</th>
+            <th style="width:90px;">认证</th>
+            <th style="width:100px;">近12月销量</th>
+            <th style="width:90px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td><strong>组合滑梯</strong> <div class="text-xs text-gray-400">Combined Slides</div></td>
+            <td>128</td>
+            <td>WD-CS-A36 · WD-CS-B22 · WD-CS-Super18</td>
+            <td>¥3.8W - ¥48W</td>
+            <td><span class="ant-tag tag-blue">GB</span> <span class="ant-tag tag-purple">CE</span></td>
+            <td>1,842 套</td>
+            <td><button class="ant-btn-ghost text-xs">查看 128</button></td>
+          </tr>
+          <tr>
+            <td>2</td>
+            <td><strong>不锈钢滑梯</strong> <div class="text-xs text-gray-400">Stainless Steel</div></td>
+            <td>64</td>
+            <td>WD-SS-Spiral · WD-SS-Tube · WD-SS-Wave</td>
+            <td>¥8.6W - ¥128W</td>
+            <td><span class="ant-tag tag-blue">GB</span> <span class="ant-tag tag-purple">CE</span></td>
+            <td>586 套</td>
+            <td><button class="ant-btn-ghost text-xs">查看 64</button></td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td><strong>无动力游乐</strong> <div class="text-xs text-gray-400">Non-powered</div></td>
+            <td>186</td>
+            <td>WD-NP-Adventure · WD-NP-NetClimb · WD-NP-Trampoline</td>
+            <td>¥1.2W - ¥86W</td>
+            <td><span class="ant-tag tag-blue">GB</span> <span class="ant-tag tag-purple">CE</span> <span class="ant-tag tag-green">EN</span></td>
+            <td>2,148 套</td>
+            <td><button class="ant-btn-ghost text-xs">查看 186</button></td>
+          </tr>
+          <tr>
+            <td>4</td>
+            <td><strong>攀爬架</strong> <div class="text-xs text-gray-400">Climbing Frames</div></td>
+            <td>92</td>
+            <td>WD-CL-Rock · WD-CL-Net · WD-CL-Tower</td>
+            <td>¥2.4W - ¥36W</td>
+            <td><span class="ant-tag tag-blue">GB</span> <span class="ant-tag tag-purple">CE</span></td>
+            <td>964 套</td>
+            <td><button class="ant-btn-ghost text-xs">查看 92</button></td>
+          </tr>
+          <tr>
+            <td>5</td>
+            <td><strong>水上游乐</strong> <div class="text-xs text-gray-400">Water Play</div></td>
+            <td>54</td>
+            <td>WD-WP-Splash · WD-WP-Slide · WD-WP-Jungle</td>
+            <td>¥6.8W - ¥186W</td>
+            <td><span class="ant-tag tag-blue">GB</span> <span class="ant-tag tag-purple">CE</span></td>
+            <td>312 套</td>
+            <td><button class="ant-btn-ghost text-xs">查看 54</button></td>
+          </tr>
+          <tr>
+            <td>6</td>
+            <td><strong>定制项目</strong> <div class="text-xs text-gray-400">Custom</div></td>
+            <td>—</td>
+            <td>按项目定制（IP 主题/异形结构/超大规模）</td>
+            <td>¥80W - ¥3,600W</td>
+            <td>按需</td>
+            <td>86 项目</td>
+            <td><button class="ant-btn-ghost text-xs">查看案例</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mt-3 text-xs text-gray-500">💡 共 524 个 SKU · 支持按材质/年龄段/面积/认证/价格区间筛选</div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域6] 竞品产品对比矩阵（Issue #2691） -->
+  <!-- ========================================================== -->
+  <section id="sec-6" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 6] 竞品对比矩阵</span>
+        <h2 class="text-lg font-bold text-gray-800">⑥ 竞品产品对比矩阵 <span class="text-xs text-gray-400 ml-2">Issue #2691</span></h2>
+        <p class="text-xs text-gray-500 mt-1">横向对比 50 个同类产品 × 6 家竞品厂商（含万德），参数一目了然。</p>
+      </div>
+      <div class="flex gap-2">
+        <select class="ant-btn-ghost"><option>产品类别：组合滑梯</option><option>不锈钢滑梯</option><option>无动力</option></select>
+        <button class="ant-btn-ghost">📊 导出对比表</button>
+      </div>
+    </div>
+
+    <div class="bg-white rounded border border-gray-200 overflow-x-auto">
+      <table class="ant-table" style="min-width:900px;">
+        <thead>
+          <tr>
+            <th style="position:sticky;left:0;background:#fafafa;z-index:1;min-width:220px;">产品 / 竞品厂商</th>
+            <th style="text-align:center;"><div class="font-bold text-blue-600">万德 WANDE</div><div class="text-xs text-gray-400">中国·常州</div></th>
+            <th style="text-align:center;"><div class="font-bold">KOMPAN</div><div class="text-xs text-gray-400">丹麦</div></th>
+            <th style="text-align:center;"><div class="font-bold">LSI Industries</div><div class="text-xs text-gray-400">美国</div></th>
+            <th style="text-align:center;"><div class="font-bold">PlayCore</div><div class="text-xs text-gray-400">美国</div></th>
+            <th style="text-align:center;"><div class="font-bold">PlayPower</div><div class="text-xs text-gray-400">美国</div></th>
+            <th style="text-align:center;"><div class="font-bold">HAGS</div><div class="text-xs text-gray-400">瑞典</div></th>
+            <th style="text-align:center;"><div class="font-bold">Proludic</div><div class="text-xs text-gray-400">法国</div></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;z-index:1;"><strong>中型组合滑梯·6-12岁</strong><div class="text-xs text-gray-400">代表产品对比</div></td>
+            <td style="text-align:center;">WD-CS-A36<br><span class="text-xs text-gray-500">¥12.8W</span></td>
+            <td style="text-align:center;">Galaxy GXY922<br><span class="text-xs text-gray-500">€18,400</span></td>
+            <td style="text-align:center;">Spark S-120<br><span class="text-xs text-gray-500">$22,800</span></td>
+            <td style="text-align:center;">SkyTower X6<br><span class="text-xs text-gray-500">$24,500</span></td>
+            <td style="text-align:center;">AeroPlay AP-7<br><span class="text-xs text-gray-500">$19,900</span></td>
+            <td style="text-align:center;">UniPlay HS-66<br><span class="text-xs text-gray-500">€21,200</span></td>
+            <td style="text-align:center;">Origin Pro<br><span class="text-xs text-gray-500">€19,800</span></td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">占地面积</td>
+            <td style="text-align:center;">86 m²</td>
+            <td style="text-align:center;">92 m²</td>
+            <td style="text-align:center;">78 m²</td>
+            <td style="text-align:center;">95 m²</td>
+            <td style="text-align:center;">82 m²</td>
+            <td style="text-align:center;">88 m²</td>
+            <td style="text-align:center;">84 m²</td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">安全缓冲层</td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">EPDM</span></td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">EPDM</span></td>
+            <td style="text-align:center;"><span class="ant-tag tag-orange">橡胶垫</span></td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">EPDM</span></td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">EPDM</span></td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">EPDM</span></td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">EPDM</span></td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">认证</td>
+            <td style="text-align:center;">GB + CE + EN</td>
+            <td style="text-align:center;">EN + TÜV</td>
+            <td style="text-align:center;">ASTM</td>
+            <td style="text-align:center;">ASTM + CPSC</td>
+            <td style="text-align:center;">ASTM</td>
+            <td style="text-align:center;">EN + TÜV</td>
+            <td style="text-align:center;">EN + NF</td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">立柱材质</td>
+            <td style="text-align:center;">不锈钢 304</td>
+            <td style="text-align:center;">铝合金</td>
+            <td style="text-align:center;">镀锌钢</td>
+            <td style="text-align:center;">铝合金</td>
+            <td style="text-align:center;">镀锌钢</td>
+            <td style="text-align:center;">不锈钢</td>
+            <td style="text-align:center;">铝合金</td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">质保年限</td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">10年</span></td>
+            <td style="text-align:center;">15年</td>
+            <td style="text-align:center;">10年</td>
+            <td style="text-align:center;">10年</td>
+            <td style="text-align:center;">8年</td>
+            <td style="text-align:center;">12年</td>
+            <td style="text-align:center;">10年</td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">交期（国内）</td>
+            <td style="text-align:center;"><span class="ant-tag tag-green">30天</span></td>
+            <td style="text-align:center;">90天</td>
+            <td style="text-align:center;">75天</td>
+            <td style="text-align:center;">75天</td>
+            <td style="text-align:center;">80天</td>
+            <td style="text-align:center;">85天</td>
+            <td style="text-align:center;">80天</td>
+          </tr>
+          <tr>
+            <td style="position:sticky;left:0;background:#fff;">主题定制能力</td>
+            <td style="text-align:center;">★★★★★</td>
+            <td style="text-align:center;">★★★★</td>
+            <td style="text-align:center;">★★★</td>
+            <td style="text-align:center;">★★★★</td>
+            <td style="text-align:center;">★★★</td>
+            <td style="text-align:center;">★★★★</td>
+            <td style="text-align:center;">★★★★</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="mt-3 text-xs text-gray-500">💡 完整矩阵含 50 个产品 × 7 厂商 × 18 个参数维度，点击产品名展开详细规格 · <a href="#" class="text-blue-500">查看完整矩阵 →</a></div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域7] 行业案例库（Issue #2692） -->
+  <!-- ========================================================== -->
+  <section id="sec-7" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 7] 标杆案例库</span>
+        <h2 class="text-lg font-bold text-gray-800">⑦ 行业案例库 · 标杆项目收录 <span class="text-xs text-gray-400 ml-2">Issue #2692</span></h2>
+        <p class="text-xs text-gray-500 mt-1">行业全量标杆项目（万德+竞品），可学习可复用的设计与商务经验。</p>
+      </div>
+      <div class="flex gap-2">
+        <select class="ant-btn-ghost"><option>场景：全部</option><option>社区</option><option>景区</option><option>商业综合体</option></select>
+        <button class="ant-btn">＋ 收录新案例</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <!-- 案例卡 1 -->
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        <div class="h-32 bg-gradient-to-br from-blue-100 to-blue-50 flex items-center justify-center text-4xl">🎡</div>
+        <div class="p-3">
+          <div class="flex gap-1 mb-2"><span class="ant-tag tag-green">万德案例</span><span class="ant-tag tag-gray">景区</span></div>
+          <div class="text-sm font-semibold text-gray-800 mb-1">深圳欢乐港湾·儿童探索主题乐园</div>
+          <div class="text-xs text-gray-500 mb-2">甲方：招商蛇口 · 2025-09 交付</div>
+          <div class="text-xs space-y-1 text-gray-600">
+            <div>📏 规模：<strong>8,600 m²</strong> · 186 个游乐点位</div>
+            <div>💰 合同额：<strong>¥3,840 万</strong></div>
+            <div>📊 日均客流：<strong>12,000+</strong></div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+            🎯 <strong>复用价值</strong>：海洋主题 IP 落地 / 动线设计 / 儿童分区标准
+          </div>
+        </div>
+      </div>
+
+      <!-- 案例卡 2 -->
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        <div class="h-32 bg-gradient-to-br from-green-100 to-green-50 flex items-center justify-center text-4xl">🏫</div>
+        <div class="p-3">
+          <div class="flex gap-1 mb-2"><span class="ant-tag tag-green">万德案例</span><span class="ant-tag tag-gray">社区</span></div>
+          <div class="text-sm font-semibold text-gray-800 mb-1">上海前滩·鹿鸣公园亲子无动力乐园</div>
+          <div class="text-xs text-gray-500 mb-2">甲方：上海前滩开发 · 2025-06 交付</div>
+          <div class="text-xs space-y-1 text-gray-600">
+            <div>📏 规模：<strong>3,200 m²</strong></div>
+            <div>💰 合同额：<strong>¥1,260 万</strong></div>
+            <div>🏆 获奖：<strong>2025 年度儿童友好设施金奖</strong></div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+            🎯 <strong>复用价值</strong>：社区自然派场景 / 低维护低成本 / 被动式设计
+          </div>
+        </div>
+      </div>
+
+      <!-- 案例卡 3 -->
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        <div class="h-32 bg-gradient-to-br from-purple-100 to-purple-50 flex items-center justify-center text-4xl">🎢</div>
+        <div class="p-3">
+          <div class="flex gap-1 mb-2"><span class="ant-tag tag-blue">竞品案例</span><span class="ant-tag tag-gray">商业综合体</span></div>
+          <div class="text-sm font-semibold text-gray-800 mb-1">Mall of Emirates · KOMPAN 室内探险岛</div>
+          <div class="text-xs text-gray-500 mb-2">厂商：KOMPAN · 2024-12 开业</div>
+          <div class="text-xs space-y-1 text-gray-600">
+            <div>📏 规模：<strong>1,800 m²</strong></div>
+            <div>💰 合同额：<strong>约 €2.8M（估）</strong></div>
+            <div>📈 年收费人次：<strong>46 万</strong></div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+            🎯 <strong>复用价值</strong>：付费+免费混合模式 / 品牌联名定价 / 沙漠 IP 融合
+          </div>
+        </div>
+      </div>
+
+      <!-- 案例卡 4 -->
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        <div class="h-32 bg-gradient-to-br from-orange-100 to-orange-50 flex items-center justify-center text-4xl">🏙️</div>
+        <div class="p-3">
+          <div class="flex gap-1 mb-2"><span class="ant-tag tag-green">万德案例</span><span class="ant-tag tag-gray">文旅</span></div>
+          <div class="text-sm font-semibold text-gray-800 mb-1">成都融创文旅城·巴蜀萌宠乐园</div>
+          <div class="text-xs text-gray-500 mb-2">甲方：融创文旅集团 · 2025-12 交付</div>
+          <div class="text-xs space-y-1 text-gray-600">
+            <div>📏 规模：<strong>6,400 m²</strong></div>
+            <div>💰 合同额：<strong>¥2,680 万</strong></div>
+            <div>🎨 IP：<strong>熊猫 + 川剧变脸</strong>主题</div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+            🎯 <strong>复用价值</strong>：地方 IP 定制化 / 文旅场景融合 / 大客流抗疲劳设计
+          </div>
+        </div>
+      </div>
+
+      <!-- 案例卡 5 -->
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        <div class="h-32 bg-gradient-to-br from-yellow-100 to-yellow-50 flex items-center justify-center text-4xl">🏗️</div>
+        <div class="p-3">
+          <div class="flex gap-1 mb-2"><span class="ant-tag tag-blue">竞品案例</span><span class="ant-tag tag-gray">学校</span></div>
+          <div class="text-sm font-semibold text-gray-800 mb-1">NYC PS 101 · PlayCore 校园改造</div>
+          <div class="text-xs text-gray-500 mb-2">厂商：PlayCore · 2025-03 交付</div>
+          <div class="text-xs space-y-1 text-gray-600">
+            <div>📏 规模：<strong>1,200 m²</strong></div>
+            <div>💰 合同额：<strong>约 $820K</strong></div>
+            <div>🎓 受益学生：<strong>960 人</strong></div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+            🎯 <strong>复用价值</strong>：无障碍友好 / PBL 教学结合 / ESSA 联邦补贴获取
+          </div>
+        </div>
+      </div>
+
+      <!-- 案例卡 6 -->
+      <div class="bg-white border border-gray-200 rounded overflow-hidden">
+        <div class="h-32 bg-gradient-to-br from-pink-100 to-pink-50 flex items-center justify-center text-4xl">💧</div>
+        <div class="p-3">
+          <div class="flex gap-1 mb-2"><span class="ant-tag tag-green">万德案例</span><span class="ant-tag tag-gray">水上</span></div>
+          <div class="text-sm font-semibold text-gray-800 mb-1">武汉欢乐谷·玛雅海滩水乐园翻新</div>
+          <div class="text-xs text-gray-500 mb-2">甲方：华侨城 · 2025-05 交付</div>
+          <div class="text-xs space-y-1 text-gray-600">
+            <div>📏 规模：<strong>4,800 m²</strong> · 水上互动区</div>
+            <div>💰 合同额：<strong>¥1,980 万</strong></div>
+            <div>💦 水循环节能率：<strong>↑ 32%</strong></div>
+          </div>
+          <div class="mt-2 pt-2 border-t border-gray-100 text-xs text-gray-500">
+            🎯 <strong>复用价值</strong>：翻新替代新建模式 / 节水系统 / 华侨城集团切入路径
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="text-right mt-3"><a href="#" class="text-blue-500 text-sm">查看全部 186 个标杆案例 →</a></div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域8] 行业报告 AI 摘要（Issue #2693） -->
+  <!-- ========================================================== -->
+  <section id="sec-8" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 8] 行业报告 AI 摘要</span>
+        <h2 class="text-lg font-bold text-gray-800">⑧ 行业报告 · AI 摘要与入库 <span class="text-xs text-gray-400 ml-2">Issue #2693</span></h2>
+        <p class="text-xs text-gray-500 mt-1">一键对长篇行业报告抽取 3 句话关键洞察，节省 90% 阅读时间。</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="ant-btn-ghost">📂 报告库（58 份）</button>
+        <button class="ant-btn">＋ 上传报告</button>
+      </div>
+    </div>
+
+    <div class="space-y-3">
+      <!-- 报告卡 1 -->
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="ant-tag tag-red">重磅</span>
+              <span class="ant-tag tag-gray">Frost &amp; Sullivan</span>
+              <span class="text-xs text-gray-400">2026-04</span>
+            </div>
+            <div class="text-sm font-semibold text-gray-800">《2026 全球游乐设施市场展望：亚太崛起与北美分化》</div>
+            <div class="text-xs text-gray-400 mt-1">📄 128 页 · 英文 · AI 摘要生成于 2026-04-19 15:20</div>
+          </div>
+          <button class="ant-btn-ghost text-xs">📥 下载 PDF</button>
+        </div>
+        <div class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm text-gray-700">
+          <div class="font-semibold text-blue-700 mb-1">🤖 AI 关键洞察（3 句话）</div>
+          <ol class="list-decimal ml-5 space-y-1">
+            <li>全球市场规模 2026 年达 $82B，亚太增速 11.4% 持续领跑，中国贡献 64% 增量。</li>
+            <li>北美市场呈现分化：公共补贴项目（学校/社区）稳步增长，商业主题乐园投资放缓。</li>
+            <li>可持续材料（再生塑料/FSC 认证木材）将在 2028 年前成为欧盟/北美采购硬性门槛。</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 报告卡 2 -->
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="ant-tag tag-gray">艾瑞咨询</span>
+              <span class="text-xs text-gray-400">2026-03</span>
+            </div>
+            <div class="text-sm font-semibold text-gray-800">《中国户外亲子消费趋势白皮书 2026》</div>
+            <div class="text-xs text-gray-400 mt-1">📄 86 页 · 中文 · AI 摘要生成于 2026-03-28 10:05</div>
+          </div>
+          <button class="ant-btn-ghost text-xs">📥 下载 PDF</button>
+        </div>
+        <div class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm text-gray-700">
+          <div class="font-semibold text-blue-700 mb-1">🤖 AI 关键洞察（3 句话）</div>
+          <ol class="list-decimal ml-5 space-y-1">
+            <li>中国亲子户外消费 2025 年达 ¥4,200 亿，近郊短途游占 58%，带动社区游乐设施升级。</li>
+            <li>家长付费意愿从"便宜就行"转向"安全+教育+拍照出片"，均价提升 37%。</li>
+            <li>Z 世代父母更看重品牌与 ESG，有机会用国标+环保认证建立差异化。</li>
+          </ol>
+        </div>
+      </div>
+
+      <!-- 报告卡 3 -->
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="flex justify-between items-start">
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <span class="ant-tag tag-gray">IAAPA</span>
+              <span class="text-xs text-gray-400">2026-02</span>
+            </div>
+            <div class="text-sm font-semibold text-gray-800">《IAAPA Global Theme & Amusement Park Outlook 2026》</div>
+            <div class="text-xs text-gray-400 mt-1">📄 224 页 · 英文 · AI 摘要生成于 2026-02-18 09:30</div>
+          </div>
+          <button class="ant-btn-ghost text-xs">📥 下载 PDF</button>
+        </div>
+        <div class="mt-3 bg-blue-50 border-l-4 border-blue-400 p-3 rounded-r text-sm text-gray-700">
+          <div class="font-semibold text-blue-700 mb-1">🤖 AI 关键洞察（3 句话）</div>
+          <ol class="list-decimal ml-5 space-y-1">
+            <li>中东/东南亚新建乐园数量创历史新高，沙特 NEOM + 越南富国岛为增长双引擎。</li>
+            <li>AR/互动式游乐设备年增 42%，"物理+数字"混合体验成为新投资热点。</li>
+            <li>员工成本上涨迫使乐园加大"无人值守"游乐区投入，利好无动力/智能设备供应商。</li>
+          </ol>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域9] 展会与会议日历（Issue #2694） -->
+  <!-- ========================================================== -->
+  <section id="sec-9" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 9] 展会与会议日历</span>
+        <h2 class="text-lg font-bold text-gray-800">⑨ 行业展会与会议日历 <span class="text-xs text-gray-400 ml-2">Issue #2694</span></h2>
+        <p class="text-xs text-gray-500 mt-1">全年行业重要展会一览，支持订阅提醒+参展报名。</p>
+      </div>
+      <div class="flex gap-2">
+        <select class="ant-btn-ghost"><option>视图：月历</option><option>列表</option><option>地图</option></select>
+        <button class="ant-btn">🔔 订阅提醒</button>
+      </div>
+    </div>
+
+    <!-- 月历头 -->
+    <div class="bg-white rounded border border-gray-200 overflow-hidden">
+      <div class="flex items-center justify-between px-4 py-3 bg-gray-50 border-b border-gray-200">
+        <button class="text-gray-500 hover:text-blue-500">◀ 2026-04</button>
+        <div class="font-semibold text-gray-700">2026 年 05 月</div>
+        <button class="text-gray-500 hover:text-blue-500">2026-06 ▶</button>
+      </div>
+      <div class="grid grid-cols-7 text-center text-xs font-semibold text-gray-500 bg-gray-50">
+        <div class="py-2">周一</div><div class="py-2">周二</div><div class="py-2">周三</div><div class="py-2">周四</div><div class="py-2">周五</div><div class="py-2">周六</div><div class="py-2">周日</div>
+      </div>
+      <div class="grid grid-cols-7">
+        <!-- Week 1 -->
+        <div class="calendar-cell text-gray-300">27</div>
+        <div class="calendar-cell text-gray-300">28</div>
+        <div class="calendar-cell text-gray-300">29</div>
+        <div class="calendar-cell text-gray-300">30</div>
+        <div class="calendar-cell">1</div>
+        <div class="calendar-cell">2</div>
+        <div class="calendar-cell">3</div>
+        <!-- Week 2 -->
+        <div class="calendar-cell">4</div>
+        <div class="calendar-cell">5</div>
+        <div class="calendar-cell">
+          6
+          <span class="event-pill">🎡 亚洲乐园展（北京）</span>
+        </div>
+        <div class="calendar-cell">
+          7
+          <span class="event-pill">↔ 亚洲乐园展</span>
+        </div>
+        <div class="calendar-cell">
+          8
+          <span class="event-pill">↔ 亚洲乐园展</span>
+        </div>
+        <div class="calendar-cell">9</div>
+        <div class="calendar-cell">10</div>
+        <!-- Week 3 -->
+        <div class="calendar-cell">11</div>
+        <div class="calendar-cell">12</div>
+        <div class="calendar-cell">13</div>
+        <div class="calendar-cell">14</div>
+        <div class="calendar-cell">
+          15
+          <span class="event-pill blue">🌐 IAAPA Asia Summit（新加坡）</span>
+        </div>
+        <div class="calendar-cell">
+          16
+          <span class="event-pill blue">↔ IAAPA Asia</span>
+        </div>
+        <div class="calendar-cell">17</div>
+        <!-- Week 4 -->
+        <div class="calendar-cell">18</div>
+        <div class="calendar-cell">
+          19
+          <span class="event-pill purple">🏢 China Attractions Expo（上海）</span>
+        </div>
+        <div class="calendar-cell">
+          20
+          <span class="event-pill purple">↔ CAE</span>
+        </div>
+        <div class="calendar-cell">
+          21
+          <span class="event-pill purple">↔ CAE</span>
+        </div>
+        <div class="calendar-cell today">
+          22 <span class="text-xs text-blue-500">今天</span>
+        </div>
+        <div class="calendar-cell">23</div>
+        <div class="calendar-cell">24</div>
+        <!-- Week 5 -->
+        <div class="calendar-cell">25</div>
+        <div class="calendar-cell">26</div>
+        <div class="calendar-cell">27</div>
+        <div class="calendar-cell">28</div>
+        <div class="calendar-cell">29</div>
+        <div class="calendar-cell">30</div>
+        <div class="calendar-cell">31</div>
+      </div>
+    </div>
+
+    <!-- 近期重要展会列表 -->
+    <div class="mt-4">
+      <div class="text-sm font-semibold text-gray-700 mb-2">📌 近期重要展会（6 个）</div>
+      <div class="grid grid-cols-2 gap-3">
+        <div class="bg-white border border-gray-200 rounded p-3">
+          <div class="flex justify-between">
+            <div class="font-semibold text-sm text-gray-800">🎡 亚洲乐园及景点博览会 2026</div>
+            <span class="ant-tag tag-red">重点</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">📅 2026-05-06 ~ 05-08 · 📍 北京·国家会议中心</div>
+          <div class="text-xs text-gray-600 mt-1">亚洲最大游乐展 · 预估 1,200+ 展商 · 万德已报名 D32 展位</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded p-3">
+          <div class="flex justify-between">
+            <div class="font-semibold text-sm text-gray-800">🏢 CAE 中国景区博览会</div>
+            <span class="ant-tag tag-red">重点</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">📅 2026-05-19 ~ 05-21 · 📍 上海·新国际博览中心</div>
+          <div class="text-xs text-gray-600 mt-1">景区运营采购季 · 万德主办"无动力乐园大师讲堂"</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded p-3">
+          <div class="flex justify-between">
+            <div class="font-semibold text-sm text-gray-800">🌐 IAAPA Expo Europe 2026</div>
+            <span class="ant-tag tag-orange">出海</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">📅 2026-09-22 ~ 09-25 · 📍 维也纳·Messe Wien</div>
+          <div class="text-xs text-gray-600 mt-1">欧洲最大游乐展 · 万德欧洲分公司主参展</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded p-3">
+          <div class="flex justify-between">
+            <div class="font-semibold text-sm text-gray-800">🧸 Kindtech 幼教装备展</div>
+            <span class="ant-tag tag-blue">通用</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">📅 2026-06-11 ~ 06-13 · 📍 广州·保利世贸博览馆</div>
+          <div class="text-xs text-gray-600 mt-1">幼教采购主阵地 · 万德学前产品线参展</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded p-3">
+          <div class="flex justify-between">
+            <div class="font-semibold text-sm text-gray-800">🌐 IAAPA Expo Orlando 2026</div>
+            <span class="ant-tag tag-orange">出海</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">📅 2026-11-17 ~ 11-21 · 📍 美国·奥兰多</div>
+          <div class="text-xs text-gray-600 mt-1">全球游乐行业旗舰展 · 北美市场开拓关键</div>
+        </div>
+        <div class="bg-white border border-gray-200 rounded p-3">
+          <div class="flex justify-between">
+            <div class="font-semibold text-sm text-gray-800">🏫 CIECEE 中国学前教育博览会</div>
+            <span class="ant-tag tag-blue">通用</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">📅 2026-10-23 ~ 10-25 · 📍 重庆·国际博览中心</div>
+          <div class="text-xs text-gray-600 mt-1">学校体系渠道展 · 攀爬架/无动力重点推介</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================================================== -->
+  <!-- [区域10] AI 问答助手（Issue #2695） -->
+  <!-- ========================================================== -->
+  <section id="sec-10" class="section-card p-6 region-dashed">
+    <div class="flex justify-between items-start mb-4">
+      <div>
+        <span class="region-label">[区域 10] AI 问答助手</span>
+        <h2 class="text-lg font-bold text-gray-800">⑩ 行业信息中心 · AI 问答助手 <span class="text-xs text-gray-400 ml-2">Issue #2695</span></h2>
+        <p class="text-xs text-gray-500 mt-1">基于行业档案+政策+案例+报告的全域 RAG 问答，答案可溯源。</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="ant-btn-ghost">🗂️ 知识库管理</button>
+        <button class="ant-btn-ghost">🕐 历史对话</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <!-- 对话区 -->
+      <div class="col-span-2 bg-white border border-gray-200 rounded overflow-hidden flex flex-col" style="min-height:480px;">
+        <div class="px-4 py-2 border-b border-gray-200 bg-gray-50 text-sm font-semibold text-gray-700 flex items-center justify-between">
+          <div>💬 与 AI 对话</div>
+          <div class="text-xs text-gray-400">📚 知识源：342 政策 + 186 案例 + 58 报告</div>
+        </div>
+        <div class="flex-1 p-4 space-y-3 overflow-y-auto">
+          <!-- 用户提问 -->
+          <div class="flex"><div class="chat-bubble chat-user">游乐设施 2026 年增长预测？重点看中国市场。</div></div>
+          <!-- AI回答 -->
+          <div class="flex"><div class="chat-bubble chat-ai">
+            根据 Frost &amp; Sullivan《2026 全球游乐设施市场展望》和国家统计局数据，综合评估如下：<br><br>
+            <strong>📈 中国游乐设施行业 2026 预测</strong><br>
+            • 市场规模：<strong>¥1,247 亿</strong>（同比 +8.3%）<br>
+            • 细分高增长：<strong>无动力游乐（+18.3%）</strong> 与 <strong>社区配套（+22%）</strong><br>
+            • 出海出口：预计突破 <strong>$6.8 亿</strong>（同比 +22.1%）<br><br>
+            <strong>🔑 三大驱动因素</strong><br>
+            ① 服务消费高质量发展政策（国务院 2026-03-28）<br>
+            ② 一刻钟便民生活圈建设（34 省落地）<br>
+            ③ 亲子户外消费升级（Z 世代父母付费均价 +37%）<br><br>
+            <span class="text-xs text-gray-500">📌 来源：<a href="#" class="text-blue-500">Frost &amp; Sullivan 2026 Outlook</a> · <a href="#" class="text-blue-500">艾瑞 亲子消费白皮书</a> · <a href="#" class="text-blue-500">国务院意见 2026-03-28</a></span>
+          </div></div>
+
+          <!-- 用户提问 2 -->
+          <div class="flex"><div class="chat-bubble chat-user">GB 19272-2026 对我们不锈钢滑梯有什么具体影响？</div></div>
+          <!-- AI回答 2 -->
+          <div class="flex"><div class="chat-bubble chat-ai">
+            根据 2026-04-18 发布的新国标和万德产品档案比对：<br><br>
+            <strong>🔴 主要影响点（3 处）</strong><br>
+            ① <strong>7.2 条</strong> 立柱壁厚从 2.0mm 提至 2.5mm，现 WD-SS-Spiral / Tube 系列需更新<br>
+            ② <strong>7.5 条</strong> 滑道转角最小半径从 R80 改为 R120，影响模具 8 副<br>
+            ③ <strong>8.1 条</strong> 新增 EMC 抗静电测试，需补充 SGS 报告<br><br>
+            <strong>💰 合规成本</strong>：预估 ¥280-420 万（模具+检测+资料）<br>
+            <strong>⏰ 窗口</strong>：2026-10-31 前完成<br><br>
+            <span class="text-xs text-gray-500">📌 来源：<a href="#sec-2" class="text-blue-500">GB 19272-2026 原文</a> · <a href="#sec-3" class="text-blue-500">AI 影响评估报告</a></span>
+          </div></div>
+        </div>
+        <!-- 输入框 -->
+        <div class="border-t border-gray-200 p-3">
+          <div class="flex gap-2">
+            <input type="text" placeholder="询问游乐行业任何问题，如「KOMPAN 最近新品有哪些？」" class="flex-1 px-3 py-2 border border-gray-300 rounded text-sm focus:outline-none focus:border-blue-400">
+            <button class="ant-btn">发送</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 推荐问题 -->
+      <div class="bg-white border border-gray-200 rounded p-4">
+        <div class="text-sm font-semibold text-gray-700 mb-3">💡 推荐问题</div>
+        <div class="space-y-2">
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">游乐设施 2026 年增长预测？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">KOMPAN 和万德的主要差异？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">中东市场如何切入？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">文旅部支持目录怎么申请？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">EPDM 安全垫最新国标要求？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">无动力游乐未来 3 年趋势？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">社区游乐项目典型中标价格？</div>
+          <div class="px-3 py-2 bg-gray-50 rounded text-sm text-gray-700 hover:bg-blue-50 hover:text-blue-600 cursor-pointer">可持续材料替代方案？</div>
+        </div>
+        <div class="mt-4 pt-3 border-t border-gray-100">
+          <div class="text-xs text-gray-500 mb-2">📊 本周高频问题</div>
+          <div class="text-xs text-gray-600 space-y-1">
+            <div>1. EN 1176:2025 修订要点（46 次）</div>
+            <div>2. 沙特 NEOM 项目情报（38 次）</div>
+            <div>3. 武汉欢乐谷翻新案例（29 次）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== 原型说明 ========== -->
+  <section class="section-card p-6">
+    <h3 class="text-base font-bold text-gray-800 mb-3">📋 原型说明</h3>
+    <table class="ant-table">
+      <thead>
+        <tr>
+          <th style="width:60px;">区域</th>
+          <th style="width:200px;">功能模块</th>
+          <th style="width:100px;">对应 Issue</th>
+          <th>功能描述</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>①</td><td>行业档案 7 章节</td><td>#2686</td><td>模板引擎：行业概况/市场规模/需求驱动/竞争格局/价值链/趋势/政策</td></tr>
+        <tr><td>②</td><td>政策法规自动采集</td><td>#2687</td><td>多源聚合（国务院/住建部/国标委/地方）+ AI 分类 + 最新 10 条展示</td></tr>
+        <tr><td>③</td><td>政策影响评估预警</td><td>#2688</td><td>AI 打分（受影响模块/紧急度/行动建议）+ 企微推送</td></tr>
+        <tr><td>④</td><td>市场趋势仪表盘</td><td>#2689</td><td>4 图表（招标量/中标金额/新建项目/地域分布）+ 同比环比</td></tr>
+        <tr><td>⑤</td><td>万德产品档案</td><td>#2690</td><td>6 大产品线（组合滑梯/不锈钢/无动力/攀爬架/水上/定制）</td></tr>
+        <tr><td>⑥</td><td>竞品对比矩阵</td><td>#2691</td><td>50 产品 × 7 厂商（含万德、KOMPAN、LSI 等）× 18 参数维度</td></tr>
+        <tr><td>⑦</td><td>行业案例库</td><td>#2692</td><td>标杆项目卡片墙（项目名/甲方/规模/关键数据/复用价值）</td></tr>
+        <tr><td>⑧</td><td>报告 AI 摘要</td><td>#2693</td><td>报告列表 + 一键 AI 摘要（3 句话关键洞察）</td></tr>
+        <tr><td>⑨</td><td>展会与会议日历</td><td>#2694</td><td>月历视图（IAAPA/CAE/Kindtech 等）+ 近期展会详情</td></tr>
+        <tr><td>⑩</td><td>AI 问答助手</td><td>#2695</td><td>RAG 对话（政策+档案+报告+案例）+ 答案可溯源</td></tr>
+      </tbody>
+    </table>
+    <div class="mt-3 text-xs text-gray-500">💡 10 区域全覆盖 10 子 Issue，对标 Vertical IQ 深度行业信息模式 · 全假数据 · 需求说明卡位于页面顶部（可折叠）</div>
+  </section>
+
+</main>
+
+<!-- [页脚] -->
+<footer class="bg-gray-100 border-t border-gray-200 px-6 py-4 mt-8 text-center text-xs text-gray-500">
+  万德AI平台 · 商战情报中台 · Phase 2 行业信息 低保真原型 · 更新于 2026-04-21
+</footer>
+
+</body>
+</html>

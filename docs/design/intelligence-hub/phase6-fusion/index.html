@@ -1,0 +1,1260 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台·Phase 6 联动层 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .anchor-bar { position: sticky; top: 0; z-index: 40; background: #fff; border-bottom: 1px solid #d9d9d9; }
+    .anchor-item { padding: 10px 14px; font-size: 13px; color: #666; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; }
+    .anchor-item:hover { color: #1890ff; }
+    .anchor-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+    .section { scroll-margin-top: 60px; }
+    .region-label { position: absolute; top: -10px; left: 12px; background: #fff; padding: 0 6px; font-size: 11px; color: #999; }
+    .region-box { position: relative; border: 1px dashed #bfbfbf; border-radius: 4px; padding: 16px; background: #fff; }
+    .kpi-card { border: 1px solid #e5e7eb; background: #fff; border-radius: 6px; padding: 14px; }
+    .section-title { font-size: 18px; font-weight: 600; color: #333; }
+    .section-subtitle { font-size: 12px; color: #999; }
+    .tag-gray { background: #f5f5f5; color: #666; padding: 1px 8px; border-radius: 2px; font-size: 11px; }
+    .tag-blue { background: #e6f7ff; color: #1890ff; padding: 1px 8px; border-radius: 2px; font-size: 11px; }
+    .tag-green { background: #f6ffed; color: #52c41a; padding: 1px 8px; border-radius: 2px; font-size: 11px; }
+    .tag-orange { background: #fff7e6; color: #fa8c16; padding: 1px 8px; border-radius: 2px; font-size: 11px; }
+    .tag-red { background: #fff1f0; color: #f5222d; padding: 1px 8px; border-radius: 2px; font-size: 11px; }
+    .tag-purple { background: #f9f0ff; color: #722ed1; padding: 1px 8px; border-radius: 2px; font-size: 11px; }
+    table { border-collapse: collapse; width: 100%; font-size: 12.5px; }
+    th { background: #fafafa; color: #666; font-weight: 600; text-align: left; padding: 8px 10px; border-bottom: 1px solid #e5e7eb; }
+    td { padding: 8px 10px; border-bottom: 1px solid #f0f0f0; color: #333; }
+    .btn-primary { background: #1890ff; color: #fff; padding: 6px 14px; border-radius: 3px; font-size: 13px; border: none; cursor: pointer; }
+    .btn-default { background: #fff; color: #333; padding: 6px 14px; border-radius: 3px; font-size: 13px; border: 1px solid #d9d9d9; cursor: pointer; }
+    .btn-default:hover { color: #1890ff; border-color: #1890ff; }
+    .pulse-dot { width: 8px; height: 8px; border-radius: 50%; background: #52c41a; display: inline-block; animation: pulse 1.5s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.3; } }
+    .event-row { border-left: 2px solid #1890ff; padding: 8px 12px; margin-bottom: 6px; background: #fafafa; font-size: 12px; }
+    .event-row.event-warn { border-left-color: #fa8c16; }
+    .event-row.event-success { border-left-color: #52c41a; }
+    .event-row.event-red { border-left-color: #f5222d; }
+    .venn-svg { width: 100%; max-width: 460px; height: 340px; }
+    .trend-bar { height: 24px; background: linear-gradient(90deg, #e6f7ff, #1890ff); border-radius: 3px; }
+    .bar-fill { height: 100%; background: #1890ff; border-radius: 3px; }
+    .progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: #1890ff; }
+    .province-cell { padding: 10px; border-radius: 4px; color: #333; font-size: 12px; border: 1px solid #e5e7eb; }
+    .heat-5 { background: #0050b3; color: #fff; }
+    .heat-4 { background: #1890ff; color: #fff; }
+    .heat-3 { background: #69c0ff; color: #333; }
+    .heat-2 { background: #bae7ff; color: #333; }
+    .heat-1 { background: #e6f7ff; color: #333; }
+    .heat-0 { background: #fafafa; color: #999; }
+    .chat-user { background: #1890ff; color: #fff; padding: 10px 14px; border-radius: 8px 8px 2px 8px; max-width: 80%; margin-left: auto; }
+    .chat-ai { background: #f5f5f5; color: #333; padding: 10px 14px; border-radius: 8px 8px 8px 2px; max-width: 80%; }
+    .chat-meta { font-size: 11px; color: #999; margin: 4px 0; }
+    .chip { display: inline-block; padding: 4px 10px; background: #fff; border: 1px solid #d9d9d9; border-radius: 14px; font-size: 12px; color: #333; cursor: pointer; margin: 2px; }
+    .chip:hover { border-color: #1890ff; color: #1890ff; }
+    .sparkline { width: 100%; height: 40px; }
+    .score-pill { display: inline-block; padding: 2px 8px; border-radius: 10px; font-weight: 600; font-size: 12px; }
+    .score-a { background: #f6ffed; color: #52c41a; }
+    .score-b { background: #fffbe6; color: #faad14; }
+    .score-c { background: #fff1f0; color: #f5222d; }
+    .node-dot { width: 10px; height: 10px; border-radius: 50%; background: #1890ff; display: inline-block; vertical-align: middle; margin-right: 6px; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台·Phase 6 联动层</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">情报中台神经中枢：把 Phase 2-5 的孤立信号串联起来，产生跨模块 AI 洞察 + Copilot 对话交互</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角）, 商务总监, 销售主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">事件总线监控 / 三角关联引擎 / AI洞察生成 / 商机综合评分 / 每日必看清单 / 作战方案编排 / Copilot对话 / 区域市场热度 / 趋势预测预警</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">锚点跳转9区域 / 选商机生成作战方案 / Copilot对话提问 / 查看省份热度 / 设置预警阈值</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">9个区域完整渲染 / 锚点滚动定位准确 / 事件流实时刷新占位 / Copilot对话交互流畅 / 需求说明卡正确显示</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase 6 联动层 详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [面包屑] -->
+<div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+  <span>首页</span> &gt; <span>商战情报中台</span> &gt; <span class="text-gray-700">Phase 6 联动层</span>
+</div>
+
+<!-- [页头] -->
+<div class="px-6 py-5 bg-white border-b border-gray-200">
+  <div class="flex items-center justify-between">
+    <div>
+      <div class="flex items-center gap-3">
+        <h1 class="text-2xl font-bold text-gray-800">Phase 6 联动层 · 情报中台神经中枢</h1>
+        <span class="tag-purple">Phase 6</span>
+        <span class="tag-gray">9个子模块</span>
+      </div>
+      <p class="text-sm text-gray-500 mt-2">跨 Phase 事件总线 · 三角关联 · AI 洞察 · Copilot 对话 — 把 Phase 2-5 的孤立信号串联成商战决策闭环</p>
+    </div>
+    <div class="flex gap-2">
+      <button class="btn-default">⏸ 暂停事件总线</button>
+      <button class="btn-primary">⚡ 强制触发联动</button>
+    </div>
+  </div>
+  <!-- 全局状态条 -->
+  <div class="mt-4 grid grid-cols-5 gap-3">
+    <div class="kpi-card">
+      <div class="text-xs text-gray-500">事件吞吐（当前/秒）</div>
+      <div class="text-2xl font-bold text-gray-800 mt-1">42.7 <span class="text-xs font-normal text-gray-400">events/s</span></div>
+      <div class="text-xs text-green-500 mt-1">▲ 12% · 相比昨日同时</div>
+    </div>
+    <div class="kpi-card">
+      <div class="text-xs text-gray-500">活跃三角关联</div>
+      <div class="text-2xl font-bold text-gray-800 mt-1">1,284</div>
+      <div class="text-xs text-gray-400 mt-1">项目×客户×竞品 组合</div>
+    </div>
+    <div class="kpi-card">
+      <div class="text-xs text-gray-500">今日 AI 洞察</div>
+      <div class="text-2xl font-bold text-gray-800 mt-1">37 <span class="text-xs font-normal text-gray-400">条</span></div>
+      <div class="text-xs text-gray-400 mt-1">高置信 12 · 中 18 · 低 7</div>
+    </div>
+    <div class="kpi-card">
+      <div class="text-xs text-gray-500">综合评分 Top 商机</div>
+      <div class="text-2xl font-bold text-gray-800 mt-1">87.5 <span class="text-xs font-normal text-gray-400">/100</span></div>
+      <div class="text-xs text-gray-400 mt-1">深圳万达儿童乐园项目</div>
+    </div>
+    <div class="kpi-card">
+      <div class="text-xs text-gray-500">Copilot 今日会话</div>
+      <div class="text-2xl font-bold text-gray-800 mt-1">156 <span class="text-xs font-normal text-gray-400">次</span></div>
+      <div class="text-xs text-gray-400 mt-1">活跃用户 23 人</div>
+    </div>
+  </div>
+</div>
+
+<!-- [锚点栏] -->
+<div class="anchor-bar">
+  <div class="px-6 flex overflow-x-auto" id="anchorBar">
+    <a href="#sec-1" class="anchor-item active">① 事件总线</a>
+    <a href="#sec-2" class="anchor-item">② 三角关联</a>
+    <a href="#sec-3" class="anchor-item">③ AI 洞察</a>
+    <a href="#sec-4" class="anchor-item">④ 综合评分</a>
+    <a href="#sec-5" class="anchor-item">⑤ 必看清单</a>
+    <a href="#sec-6" class="anchor-item">⑥ 作战方案</a>
+    <a href="#sec-7" class="anchor-item">⑦ Copilot 对话</a>
+    <a href="#sec-8" class="anchor-item">⑧ 区域热度</a>
+    <a href="#sec-9" class="anchor-item">⑨ 趋势预警</a>
+  </div>
+</div>
+
+<!-- ========================= -->
+<!-- [区域1: 事件总线监控] -->
+<!-- ========================= -->
+<section id="sec-1" class="section px-6 py-8">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">① 事件总线监控 <span class="tag-blue ml-2">#2726</span></div>
+      <div class="section-subtitle mt-1">全局事件吞吐监控 · 最新20事件流 · 跨模块触发链路可视化</div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="pulse-dot"></span>
+      <span class="text-xs text-gray-500">事件总线运行中 · 已连接 7 个 Phase 模块</span>
+    </div>
+  </div>
+
+  <div class="region-box">
+    <span class="region-label">[事件吞吐统计]</span>
+    <div class="grid grid-cols-3 gap-4 mb-4">
+      <div class="kpi-card">
+        <div class="text-xs text-gray-500">吞吐量 / 秒</div>
+        <div class="text-xl font-bold mt-1">42.7</div>
+        <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#1890ff" stroke-width="1.5" points="0,30 20,25 40,28 60,18 80,22 100,15 120,20 140,12 160,18 180,10 200,14"/>
+        </svg>
+      </div>
+      <div class="kpi-card">
+        <div class="text-xs text-gray-500">吞吐量 / 分钟</div>
+        <div class="text-xl font-bold mt-1">2,564</div>
+        <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#52c41a" stroke-width="1.5" points="0,25 20,28 40,20 60,22 80,18 100,25 120,15 140,20 160,12 180,18 200,10"/>
+        </svg>
+      </div>
+      <div class="kpi-card">
+        <div class="text-xs text-gray-500">吞吐量 / 天</div>
+        <div class="text-xl font-bold mt-1">3.69M</div>
+        <svg class="sparkline" viewBox="0 0 200 40" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#722ed1" stroke-width="1.5" points="0,35 20,30 40,28 60,22 80,20 100,18 120,15 140,12 160,10 180,8 200,6"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- 事件分类统计 -->
+    <div class="mb-4">
+      <div class="text-sm font-semibold text-gray-700 mb-2">事件类型分布（近 1 小时）</div>
+      <div class="grid grid-cols-7 gap-2 text-xs">
+        <div class="p-2 bg-blue-50 border border-blue-100 rounded text-center"><div class="font-bold text-blue-600">1,245</div><div class="text-gray-600">项目事件</div></div>
+        <div class="p-2 bg-green-50 border border-green-100 rounded text-center"><div class="font-bold text-green-600">892</div><div class="text-gray-600">客户事件</div></div>
+        <div class="p-2 bg-orange-50 border border-orange-100 rounded text-center"><div class="font-bold text-orange-600">567</div><div class="text-gray-600">竞品事件</div></div>
+        <div class="p-2 bg-purple-50 border border-purple-100 rounded text-center"><div class="font-bold text-purple-600">423</div><div class="text-gray-600">行业事件</div></div>
+        <div class="p-2 bg-red-50 border border-red-100 rounded text-center"><div class="font-bold text-red-600">89</div><div class="text-gray-600">预警事件</div></div>
+        <div class="p-2 bg-gray-100 border border-gray-200 rounded text-center"><div class="font-bold text-gray-700">234</div><div class="text-gray-600">洞察事件</div></div>
+        <div class="p-2 bg-yellow-50 border border-yellow-200 rounded text-center"><div class="font-bold text-yellow-600">156</div><div class="text-gray-600">用户操作</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="region-box mt-4">
+    <span class="region-label">[最新事件流 · 实时]</span>
+    <div class="flex justify-between items-center mb-3">
+      <div class="text-sm text-gray-600">显示最近 20 条事件，按时间倒序</div>
+      <div class="flex gap-2 text-xs">
+        <button class="btn-default">全部</button>
+        <button class="btn-default">项目</button>
+        <button class="btn-default">客户</button>
+        <button class="btn-default">竞品</button>
+        <button class="btn-default">预警</button>
+      </div>
+    </div>
+
+    <div class="event-row event-success">
+      <div class="flex justify-between"><span><span class="tag-green">项目中标</span> <strong>深圳万达儿童乐园项目</strong> 中标 ￥2,580 万</span><span class="text-gray-400">刚刚</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：客户雷达更新（万达集团画像刷新）→ 触发：竞品分析（华强方特竞标失败原因）→ 触发：AI洞察生成</div>
+    </div>
+    <div class="event-row event-warn">
+      <div class="flex justify-between"><span><span class="tag-orange">竞品异动</span> 华强方特 发布新产品 <strong>方特梦幻王国 3.0</strong></span><span class="text-gray-400">2 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：竞品情报分析 → 触发：影响客户列表（23 个在谈客户） → 触发：预警推送</div>
+    </div>
+    <div class="event-row">
+      <div class="flex justify-between"><span><span class="tag-blue">客户动态</span> <strong>成都环球影城</strong> 招标公告发布 · 预算 5,000 万</span><span class="text-gray-400">5 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：ICP评分（85/100）→ 触发：历史项目匹配（3 个相似项目） → 触发：每日必看清单更新</div>
+    </div>
+    <div class="event-row event-red">
+      <div class="flex justify-between"><span><span class="tag-red">预警</span> <strong>张三（销售）</strong> 客户跟进断联 7 天 · 金额 ￥850 万</span><span class="text-gray-400">8 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：企微推送 → 触发：主管派工单 → 触发：商机评分降档</div>
+    </div>
+    <div class="event-row">
+      <div class="flex justify-between"><span><span class="tag-purple">AI洞察</span> 检测到 <strong>华东大型游乐设备招标量激增</strong>（+35% MoM）</span><span class="text-gray-400">12 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：趋势预测更新 → 触发：华东销售资源推荐</div>
+    </div>
+    <div class="event-row event-success">
+      <div class="flex justify-between"><span><span class="tag-green">项目</span> <strong>西安大唐不夜城 2 期</strong> 进入投标阶段</span><span class="text-gray-400">18 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：团队匹配（李四+王五）→ 触发：作战方案草案生成</div>
+    </div>
+    <div class="event-row">
+      <div class="flex justify-between"><span><span class="tag-blue">客户</span> <strong>长隆集团</strong> 更新采购负责人（原 赵总 → 新 钱总）</span><span class="text-gray-400">25 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：关键人画像构建 → 触发：在谈项目风险评估</div>
+    </div>
+    <div class="event-row event-warn">
+      <div class="flex justify-between"><span><span class="tag-orange">竞品</span> 金马游乐 降价 15% 主力产品 <strong>摩天轮系列</strong></span><span class="text-gray-400">32 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：价格策略建议 → 触发：在谈 12 个项目定价复核</div>
+    </div>
+    <div class="event-row">
+      <div class="flex justify-between"><span><span class="tag-gray">行业</span> 文旅部发布 <strong>大型游乐设施安全新规</strong></span><span class="text-gray-400">45 分钟前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：合规检查 → 触发：技术团队响应</div>
+    </div>
+    <div class="event-row event-success">
+      <div class="flex justify-between"><span><span class="tag-green">客户</span> <strong>融创文旅</strong> 签约意向书 · 3,200 万</span><span class="text-gray-400">1 小时前</span></div>
+      <div class="text-gray-500 mt-1">↳ 触发：合同风险扫描 → 触发：项目排产预占 → 触发：综合评分 +5</div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button class="btn-default text-xs">展开全部 20 条 →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域2: 三角关联引擎] -->
+<!-- ========================= -->
+<section id="sec-2" class="section px-6 py-8 bg-white border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">② 三角关联引擎 <span class="tag-blue ml-2">#2727</span></div>
+      <div class="section-subtitle mt-1">项目 × 客户 × 竞品 三维交叠关联 · 自动发现隐藏商战模式</div>
+    </div>
+    <div>
+      <button class="btn-default text-xs">重新计算关联</button>
+      <button class="btn-primary text-xs ml-2">导出关联报告</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- Venn 图占位 -->
+    <div class="region-box">
+      <span class="region-label">[Venn 三角关联图]</span>
+      <div class="flex justify-center items-center py-4">
+        <svg class="venn-svg" viewBox="0 0 460 340">
+          <!-- 项目圆 -->
+          <circle cx="170" cy="140" r="110" fill="#1890ff" fill-opacity="0.25" stroke="#1890ff" stroke-width="1.5"/>
+          <!-- 客户圆 -->
+          <circle cx="290" cy="140" r="110" fill="#52c41a" fill-opacity="0.25" stroke="#52c41a" stroke-width="1.5"/>
+          <!-- 竞品圆 -->
+          <circle cx="230" cy="240" r="110" fill="#fa8c16" fill-opacity="0.25" stroke="#fa8c16" stroke-width="1.5"/>
+          <!-- 标签 -->
+          <text x="90" y="80" fill="#1890ff" font-size="14" font-weight="600">项目</text>
+          <text x="80" y="100" fill="#1890ff" font-size="11">3,456 条</text>
+          <text x="340" y="80" fill="#52c41a" font-size="14" font-weight="600">客户</text>
+          <text x="335" y="100" fill="#52c41a" font-size="11">2,189 条</text>
+          <text x="200" y="320" fill="#fa8c16" font-size="14" font-weight="600">竞品</text>
+          <text x="200" y="335" fill="#fa8c16" font-size="11">876 条</text>
+          <!-- 交叠数 -->
+          <text x="220" y="130" fill="#333" font-size="13" font-weight="700">项目∩客户</text>
+          <text x="240" y="148" fill="#333" font-size="11">745</text>
+          <text x="145" y="200" fill="#333" font-size="13" font-weight="700">项目∩竞品</text>
+          <text x="172" y="218" fill="#333" font-size="11">412</text>
+          <text x="275" y="200" fill="#333" font-size="13" font-weight="700">客户∩竞品</text>
+          <text x="310" y="218" fill="#333" font-size="11">298</text>
+          <!-- 中心三交叠 -->
+          <text x="205" y="178" fill="#722ed1" font-size="14" font-weight="700">核心</text>
+          <text x="210" y="195" fill="#722ed1" font-size="16" font-weight="700">1,284</text>
+        </svg>
+      </div>
+      <div class="text-xs text-gray-500 text-center">中心 <span class="text-purple-600 font-bold">1,284</span> 条为三维都命中的核心商战关联</div>
+    </div>
+
+    <!-- 关联明细 -->
+    <div class="region-box">
+      <span class="region-label">[Top 10 核心关联 · 项目×客户×竞品]</span>
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>项目</th>
+            <th>客户</th>
+            <th>主竞品</th>
+            <th>关联强度</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>1</td><td>深圳万达儿童乐园</td><td>万达集团</td><td>华强方特</td><td><span class="score-pill score-a">92</span></td></tr>
+          <tr><td>2</td><td>成都环球影城</td><td>环球影业</td><td>长隆集团</td><td><span class="score-pill score-a">89</span></td></tr>
+          <tr><td>3</td><td>西安大唐不夜城 2 期</td><td>曲江文旅</td><td>方特、金马</td><td><span class="score-pill score-a">85</span></td></tr>
+          <tr><td>4</td><td>融创海世界 · 哈尔滨</td><td>融创文旅</td><td>华强方特</td><td><span class="score-pill score-b">78</span></td></tr>
+          <tr><td>5</td><td>长隆海洋王国 3 期</td><td>长隆集团</td><td>金马游乐</td><td><span class="score-pill score-b">76</span></td></tr>
+          <tr><td>6</td><td>佛山祖庙二期</td><td>佛山文旅</td><td>三迪时空</td><td><span class="score-pill score-b">72</span></td></tr>
+          <tr><td>7</td><td>郑州方特水乐园</td><td>华强方特</td><td>万达、金马</td><td><span class="score-pill score-b">70</span></td></tr>
+          <tr><td>8</td><td>青岛海上嘉年华</td><td>青岛旅游集团</td><td>北京巨龙</td><td><span class="score-pill score-c">65</span></td></tr>
+          <tr><td>9</td><td>厦门灵玲马戏城</td><td>灵玲集团</td><td>华强方特</td><td><span class="score-pill score-c">62</span></td></tr>
+          <tr><td>10</td><td>苏州水上乐园</td><td>苏州文旅</td><td>金马游乐</td><td><span class="score-pill score-c">58</span></td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3 p-2 bg-blue-50 border border-blue-100 rounded text-xs text-blue-700">
+        💡 <strong>关联强度 = 时间重叠度 × 地域接近度 × 采购决策人重合度 × 竞品投标重合度</strong>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域3: AI 洞察生成] -->
+<!-- ========================= -->
+<section id="sec-3" class="section px-6 py-8 border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">③ AI 洞察自动生成 <span class="tag-blue ml-2">#2728</span></div>
+      <div class="section-subtitle mt-1">基于事件流的 AI 深度洞察 · 置信度评估 · 源事件链路追溯</div>
+    </div>
+    <div class="flex gap-2">
+      <span class="tag-gray">今日 37 条</span>
+      <span class="tag-green">高置信 12</span>
+      <span class="tag-orange">中置信 18</span>
+      <span class="tag-red">低置信 7</span>
+    </div>
+  </div>
+
+  <div class="region-box">
+    <span class="region-label">[AI 洞察 Top 10 · 今日]</span>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>AI 洞察内容</th>
+          <th style="width:80px">类型</th>
+          <th style="width:80px">置信度</th>
+          <th style="width:100px">源事件数</th>
+          <th style="width:100px">触发动作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>1</td>
+          <td>
+            <div class="font-semibold">华东区域大型主题乐园项目集中释放，未来 Q2-Q3 有 8-12 个千万级标的</div>
+            <div class="text-xs text-gray-500 mt-1">依据：近 30 天华东招标量 +35% MoM · 上海/杭州/南京 3 省新增 5 个立项</div>
+          </td>
+          <td><span class="tag-purple">市场趋势</span></td>
+          <td><div class="score-pill score-a">95%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">23 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>2</td>
+          <td>
+            <div class="font-semibold">华强方特新产品发布后，我方在水上项目报价竞争力下降 12%</div>
+            <div class="text-xs text-gray-500 mt-1">依据：华强方特 3.0 发布 · 我方近 7 天丢单 2 个均为水上项目</div>
+          </td>
+          <td><span class="tag-orange">竞品预警</span></td>
+          <td><div class="score-pill score-a">92%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">15 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>3</td>
+          <td>
+            <div class="font-semibold">万达集团决策链变化，新总裁倾向 "本土化+国潮" 设计，需调整提案风格</div>
+            <div class="text-xs text-gray-500 mt-1">依据：万达最近 3 个中标项目均含国潮元素 · 新总裁公开发言 2 次提及</div>
+          </td>
+          <td><span class="tag-blue">客户洞察</span></td>
+          <td><div class="score-pill score-a">88%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">12 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>4</td>
+          <td>
+            <div class="font-semibold">长隆项目 3 期有被金马游乐截标风险，建议本周内提交最终方案</div>
+            <div class="text-xs text-gray-500 mt-1">依据：金马 CEO 出现在长隆总部 · 我方最后跟进 5 天前</div>
+          </td>
+          <td><span class="tag-red">紧急预警</span></td>
+          <td><div class="score-pill score-a">85%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">9 个事件</span></td>
+          <td><button class="btn-primary text-xs">立即处理</button></td>
+        </tr>
+        <tr>
+          <td>5</td>
+          <td>
+            <div class="font-semibold">"VR/AR+游乐设备" 成为新采购热点，建议加强该品类研发</div>
+            <div class="text-xs text-gray-500 mt-1">依据：近 60 天招标含 VR/AR 关键词 +120% · 客户问询量激增</div>
+          </td>
+          <td><span class="tag-purple">市场趋势</span></td>
+          <td><div class="score-pill score-b">78%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">28 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>6</td>
+          <td>
+            <div class="font-semibold">深圳万达项目可额外追加 15% 售后维保包，预计 400 万增量</div>
+            <div class="text-xs text-gray-500 mt-1">依据：万达历史项目 85% 会补签维保 · 客户 CFO 明确询问过</div>
+          </td>
+          <td><span class="tag-green">增量机会</span></td>
+          <td><div class="score-pill score-b">72%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">6 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>7</td>
+          <td>
+            <div class="font-semibold">华北区域销售团队效率偏低，建议增派 2 名中级销售</div>
+            <div class="text-xs text-gray-500 mt-1">依据：华北商机转化率 12%（全国均 18%）· 人均商机 45 个（全国均 32）</div>
+          </td>
+          <td><span class="tag-gray">运营建议</span></td>
+          <td><div class="score-pill score-b">68%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">34 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>8</td>
+          <td>
+            <div class="font-semibold">金马游乐主力产品降价后，中小型项目我方竞争力下降</div>
+            <div class="text-xs text-gray-500 mt-1">依据：金马摩天轮降价 15% · 200-500 万标段我方近 7 天丢 3 单</div>
+          </td>
+          <td><span class="tag-orange">竞品预警</span></td>
+          <td><div class="score-pill score-b">65%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">11 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>9</td>
+          <td>
+            <div class="font-semibold">文旅部新安全规范对竞品冲击更大，我方技术储备领先 3-6 个月</div>
+            <div class="text-xs text-gray-500 mt-1">依据：新规 4 项核心条款我方已 100% 合规 · 竞品平均合规率 65%</div>
+          </td>
+          <td><span class="tag-green">机会点</span></td>
+          <td><div class="score-pill score-c">58%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">8 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+        <tr>
+          <td>10</td>
+          <td>
+            <div class="font-semibold">"县域文旅" 正在成为新蓝海，建议储备小型项目解决方案</div>
+            <div class="text-xs text-gray-500 mt-1">依据：县域招标 +80% YoY · 但金额偏小 · 需打包方案降本</div>
+          </td>
+          <td><span class="tag-purple">市场趋势</span></td>
+          <td><div class="score-pill score-c">52%</div></td>
+          <td><span class="text-blue-600 underline cursor-pointer">19 个事件</span></td>
+          <td><button class="btn-default text-xs">查看链路</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域4: 商机综合评分] -->
+<!-- ========================= -->
+<section id="sec-4" class="section px-6 py-8 bg-white border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">④ 商机综合评分 <span class="tag-blue ml-2">#2729</span></div>
+      <div class="section-subtitle mt-1">综合评分 = ICP × 项目概率 × 竞争难度 × 时效性 · Top 20 商机排行</div>
+    </div>
+  </div>
+
+  <!-- 公式解释 -->
+  <div class="region-box mb-4">
+    <span class="region-label">[评分模型公式]</span>
+    <div class="grid grid-cols-5 gap-3 text-xs text-center">
+      <div class="kpi-card">
+        <div class="text-gray-500">综合评分</div>
+        <div class="text-xl font-bold text-purple-600 mt-1">S</div>
+        <div class="text-gray-400 mt-1">0-100 分</div>
+      </div>
+      <div class="kpi-card">
+        <div class="text-gray-500">ICP 匹配度</div>
+        <div class="text-xl font-bold text-blue-600 mt-1">× 0.30</div>
+        <div class="text-gray-400 mt-1">客户画像契合</div>
+      </div>
+      <div class="kpi-card">
+        <div class="text-gray-500">项目概率</div>
+        <div class="text-xl font-bold text-green-600 mt-1">× 0.30</div>
+        <div class="text-gray-400 mt-1">成单可能性</div>
+      </div>
+      <div class="kpi-card">
+        <div class="text-gray-500">竞争难度（逆）</div>
+        <div class="text-xl font-bold text-orange-600 mt-1">× 0.20</div>
+        <div class="text-gray-400 mt-1">竞品少=得分高</div>
+      </div>
+      <div class="kpi-card">
+        <div class="text-gray-500">时效性</div>
+        <div class="text-xl font-bold text-red-600 mt-1">× 0.20</div>
+        <div class="text-gray-400 mt-1">紧迫度</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Top 20 商机 -->
+  <div class="region-box">
+    <span class="region-label">[Top 20 商机综合排行]</span>
+    <table>
+      <thead>
+        <tr>
+          <th style="width:40px">#</th>
+          <th>商机名称</th>
+          <th style="width:90px">金额</th>
+          <th style="width:70px">ICP</th>
+          <th style="width:70px">概率</th>
+          <th style="width:70px">竞争</th>
+          <th style="width:70px">时效</th>
+          <th style="width:90px">综合评分</th>
+          <th style="width:80px">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>1</td><td>深圳万达儿童乐园 · 主设备采购</td><td>￥2,580 万</td><td>95</td><td>88</td><td>82</td><td>90</td><td><span class="score-pill score-a">87.5</span></td><td><button class="btn-primary text-xs">生成方案</button></td></tr>
+        <tr><td>2</td><td>成都环球影城 · 电动游乐包</td><td>￥5,000 万</td><td>92</td><td>75</td><td>78</td><td>95</td><td><span class="score-pill score-a">84.1</span></td><td><button class="btn-primary text-xs">生成方案</button></td></tr>
+        <tr><td>3</td><td>西安大唐不夜城 2 期 · VR设备</td><td>￥1,800 万</td><td>88</td><td>82</td><td>75</td><td>85</td><td><span class="score-pill score-a">82.6</span></td><td><button class="btn-primary text-xs">生成方案</button></td></tr>
+        <tr><td>4</td><td>融创海世界 · 哈尔滨主装备</td><td>￥3,200 万</td><td>85</td><td>78</td><td>70</td><td>80</td><td><span class="score-pill score-a">78.9</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr><td>5</td><td>长隆海洋王国 3 期 · 巡游车队</td><td>￥950 万</td><td>82</td><td>72</td><td>65</td><td>88</td><td><span class="score-pill score-b">76.2</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr><td>6</td><td>佛山祖庙二期 · 沉浸式体验</td><td>￥680 万</td><td>78</td><td>70</td><td>72</td><td>78</td><td><span class="score-pill score-b">74.5</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr><td>7</td><td>郑州方特水乐园 · 水上滑梯</td><td>￥1,200 万</td><td>75</td><td>68</td><td>60</td><td>82</td><td><span class="score-pill score-b">71.8</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr><td>8</td><td>青岛海上嘉年华 · 摩天轮</td><td>￥2,100 万</td><td>72</td><td>65</td><td>68</td><td>75</td><td><span class="score-pill score-b">70.2</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr><td>9</td><td>厦门灵玲马戏城 · 舞台设备</td><td>￥450 万</td><td>70</td><td>62</td><td>70</td><td>72</td><td><span class="score-pill score-b">68.6</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr><td>10</td><td>苏州水上乐园 · 漂流河道</td><td>￥820 万</td><td>68</td><td>60</td><td>65</td><td>70</td><td><span class="score-pill score-b">65.9</span></td><td><button class="btn-default text-xs">生成方案</button></td></tr>
+        <tr class="text-gray-500"><td colspan="9" class="text-center py-2 text-xs">... 显示 11-20 名 <button class="btn-default text-xs ml-2">展开</button></td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域5: 每日必看清单 + 模型解释] -->
+<!-- ========================= -->
+<section id="sec-5" class="section px-6 py-8 border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">⑤ 每日必看清单 · 模型解释 <span class="tag-blue ml-2">#2730</span></div>
+      <div class="section-subtitle mt-1">本页展示"为什么是这 10 条" · 同步 hub 首页必看清单 · 每日晨会使用</div>
+    </div>
+    <div>
+      <button class="btn-default text-xs">刷新清单</button>
+      <button class="btn-primary text-xs ml-2">导出晨会版</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-4">
+    <!-- 清单 -->
+    <div class="region-box">
+      <span class="region-label">[今日必看 Top 10]</span>
+      <div class="space-y-2">
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-blue-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">1. 深圳万达儿童乐园即将开标</div><span class="score-pill score-a">87.5</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：开标 3 天内 · 万达为核心客户 · 已过资审</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-red-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">2. 长隆项目 3 期 有截标风险</div><span class="score-pill score-a">85.0</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：竞品金马活动 · 我方跟进停滞 5 天 · 高置信 AI 洞察</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-green-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">3. 成都环球影城 招标公告发布</div><span class="score-pill score-a">84.1</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：5,000 万大标的 · 历史 3 个相似项目我方中标</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-orange-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">4. 华强方特发布新产品 · 威胁 23 客户</div><span class="score-pill score-a">82.6</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：竞品重大动作 · 影响面广 · 需快速响应</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-blue-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">5. 西安大唐不夜城 2 期 启动投标</div><span class="score-pill score-a">82.6</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：投标阶段 · 曲江文旅为战略客户 · 团队已待命</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-purple-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">6. 万达集团决策链变化</div><span class="score-pill score-a">80.2</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：新总裁偏好国潮 · 需紧急调整提案</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-blue-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">7. 融创哈尔滨海世界推进</div><span class="score-pill score-a">78.9</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：签约意向书已签 · 合同风险已扫描通过</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-red-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">8. 张三客户跟进断联 7 天</div><span class="score-pill score-b">76.8</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：金额 850 万 · 主管已派工单 · 需今日处理</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-green-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">9. 深圳万达可追加维保 400 万</div><span class="score-pill score-b">75.4</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：增量机会 · 万达 CFO 已询问过</div>
+        </div>
+        <div class="p-3 bg-gray-50 rounded border-l-2 border-purple-500">
+          <div class="flex justify-between"><div class="font-semibold text-sm">10. 华东招标量激增 +35%</div><span class="score-pill score-b">72.1</span></div>
+          <div class="text-xs text-gray-500 mt-1">决定因素：市场趋势 · 需调整华东销售配置</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 模型解释 -->
+    <div class="region-box">
+      <span class="region-label">[为什么是这 10 条 — 模型解释]</span>
+      <div class="mb-3 p-3 bg-blue-50 border border-blue-100 rounded text-xs text-blue-700">
+        💡 每日晨会 08:00 自动生成，基于以下 6 个维度筛选 Top 10
+      </div>
+
+      <div class="space-y-3">
+        <div>
+          <div class="text-sm font-semibold text-gray-700">1. 时效紧迫度（权重 25%）</div>
+          <div class="progress-bar mt-1"><div class="progress-fill" style="width:85%;background:#f5222d"></div></div>
+          <div class="text-xs text-gray-500 mt-1">开标/截标 3 天内、紧急预警事件优先</div>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-gray-700">2. 金额规模（权重 20%）</div>
+          <div class="progress-bar mt-1"><div class="progress-fill" style="width:75%;background:#1890ff"></div></div>
+          <div class="text-xs text-gray-500 mt-1">标的金额越大权重越高，千万级项目全部必看</div>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-gray-700">3. 综合评分（权重 20%）</div>
+          <div class="progress-bar mt-1"><div class="progress-fill" style="width:78%;background:#722ed1"></div></div>
+          <div class="text-xs text-gray-500 mt-1">来自区域④的评分 S，≥80 分自动进入</div>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-gray-700">4. AI 洞察置信度（权重 15%）</div>
+          <div class="progress-bar mt-1"><div class="progress-fill" style="width:65%;background:#52c41a"></div></div>
+          <div class="text-xs text-gray-500 mt-1">来自区域③，高置信洞察（≥85%）优先</div>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-gray-700">5. 战略客户归属（权重 10%）</div>
+          <div class="progress-bar mt-1"><div class="progress-fill" style="width:55%;background:#fa8c16"></div></div>
+          <div class="text-xs text-gray-500 mt-1">Top 20 战略客户相关事件必出现</div>
+        </div>
+        <div>
+          <div class="text-sm font-semibold text-gray-700">6. 多样性平衡（权重 10%）</div>
+          <div class="progress-bar mt-1"><div class="progress-fill" style="width:45%;background:#13c2c2"></div></div>
+          <div class="text-xs text-gray-500 mt-1">确保项目/客户/竞品/市场 4 类均有覆盖</div>
+        </div>
+      </div>
+
+      <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
+        <div class="font-semibold text-yellow-800">📊 本次 Top 10 分布</div>
+        <div class="text-gray-600 mt-1">项目类 4 · 客户类 3 · 竞品类 2 · 市场类 1 · 已达成多样性目标</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域6: 作战方案编排] -->
+<!-- ========================= -->
+<section id="sec-6" class="section px-6 py-8 bg-white border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">⑥ 作战方案自动编排 <span class="tag-blue ml-2">#2731</span></div>
+      <div class="section-subtitle mt-1">选择商机 · 一键生成作战方案 · 团队配置 + 时间节点 + 关键动作 + 物料包</div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 商机选择 -->
+    <div class="region-box">
+      <span class="region-label">[1. 选择目标商机]</span>
+      <select class="w-full border border-gray-300 rounded px-3 py-2 text-sm mb-3">
+        <option>深圳万达儿童乐园 · 主设备采购 (87.5 分)</option>
+        <option>成都环球影城 · 电动游乐包 (84.1 分)</option>
+        <option>西安大唐不夜城 2 期 (82.6 分)</option>
+      </select>
+      <div class="p-3 bg-gray-50 rounded text-xs space-y-1">
+        <div><span class="text-gray-500">客户：</span>万达集团</div>
+        <div><span class="text-gray-500">金额：</span>￥2,580 万</div>
+        <div><span class="text-gray-500">开标：</span>2026-05-15（距今 3 天）</div>
+        <div><span class="text-gray-500">主竞品：</span>华强方特、金马游乐</div>
+        <div><span class="text-gray-500">综合评分：</span><span class="score-pill score-a">87.5</span></div>
+      </div>
+      <button class="btn-primary w-full mt-3">⚡ 一键生成作战方案</button>
+    </div>
+
+    <!-- 团队配置 -->
+    <div class="region-box">
+      <span class="region-label">[2. 团队配置 · AI 推荐]</span>
+      <div class="space-y-2 text-sm">
+        <div class="p-2 border border-gray-200 rounded">
+          <div class="flex justify-between"><span><span class="node-dot"></span>销售总监·张三</span><span class="tag-blue">主负责</span></div>
+          <div class="text-xs text-gray-500 mt-1">万达历史成单 8 次 · 关键人熟络度 95%</div>
+        </div>
+        <div class="p-2 border border-gray-200 rounded">
+          <div class="flex justify-between"><span><span class="node-dot"></span>技术经理·李四</span><span class="tag-green">技术</span></div>
+          <div class="text-xs text-gray-500 mt-1">儿童乐园方案 · 设计师 5 年</div>
+        </div>
+        <div class="p-2 border border-gray-200 rounded">
+          <div class="flex justify-between"><span><span class="node-dot"></span>商务经理·王五</span><span class="tag-orange">商务</span></div>
+          <div class="text-xs text-gray-500 mt-1">投标文件 · 合同谈判</div>
+        </div>
+        <div class="p-2 border border-gray-200 rounded">
+          <div class="flex justify-between"><span><span class="node-dot"></span>设计师·赵六</span><span class="tag-purple">创意</span></div>
+          <div class="text-xs text-gray-500 mt-1">国潮风格方案（万达新偏好）</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 时间节点 -->
+    <div class="region-box">
+      <span class="region-label">[3. 关键时间节点]</span>
+      <div class="space-y-2 text-xs">
+        <div class="flex items-start gap-2">
+          <div class="w-1 h-full bg-red-500 rounded" style="min-height:40px"></div>
+          <div>
+            <div class="font-semibold text-red-600">D-3 · 今日</div>
+            <div class="text-gray-700">最终方案评审 + 国潮元素注入</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-2">
+          <div class="w-1 h-full bg-orange-500 rounded" style="min-height:40px"></div>
+          <div>
+            <div class="font-semibold text-orange-600">D-2 · 明日</div>
+            <div class="text-gray-700">投标文件定稿 + 法务审核</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-2">
+          <div class="w-1 h-full bg-blue-500 rounded" style="min-height:40px"></div>
+          <div>
+            <div class="font-semibold text-blue-600">D-1</div>
+            <div class="text-gray-700">客户关键人沟通 + 预埋信息</div>
+          </div>
+        </div>
+        <div class="flex items-start gap-2">
+          <div class="w-1 h-full bg-green-500 rounded" style="min-height:40px"></div>
+          <div>
+            <div class="font-semibold text-green-600">D-Day</div>
+            <div class="text-gray-700">开标 + 现场讲解（张三+李四）</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 关键动作 + 物料包 -->
+  <div class="grid grid-cols-2 gap-4 mt-4">
+    <div class="region-box">
+      <span class="region-label">[4. 关键动作清单]</span>
+      <table>
+        <thead><tr><th style="width:30px">✓</th><th>动作</th><th style="width:80px">负责人</th><th style="width:80px">截止</th></tr></thead>
+        <tbody>
+          <tr><td><input type="checkbox" checked></td><td>重写项目方案中的 3 个国潮元素</td><td>赵六</td><td>今日 18:00</td></tr>
+          <tr><td><input type="checkbox"></td><td>确认客户采购 3 人小组的最新诉求</td><td>张三</td><td>明日 10:00</td></tr>
+          <tr><td><input type="checkbox"></td><td>对比方特 3.0 产品参数，写差异说明</td><td>李四</td><td>明日 15:00</td></tr>
+          <tr><td><input type="checkbox"></td><td>准备 3 档报价方案应对现场谈判</td><td>王五</td><td>明日 18:00</td></tr>
+          <tr><td><input type="checkbox"></td><td>技术答辩 PPT 终版</td><td>李四</td><td>D-1</td></tr>
+          <tr><td><input type="checkbox"></td><td>客户高层简短会谈</td><td>张三</td><td>D-1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="region-box">
+      <span class="region-label">[5. 物料包 · 一键打包]</span>
+      <div class="space-y-2 text-sm">
+        <div class="p-2 border border-gray-200 rounded flex justify-between items-center"><span>📄 标书范本（万达集团定制版）</span><button class="btn-default text-xs">下载</button></div>
+        <div class="p-2 border border-gray-200 rounded flex justify-between items-center"><span>📊 公司资质 + 过往案例（16 个儿童乐园）</span><button class="btn-default text-xs">下载</button></div>
+        <div class="p-2 border border-gray-200 rounded flex justify-between items-center"><span>🎨 国潮风格设计提案 PPT</span><button class="btn-default text-xs">下载</button></div>
+        <div class="p-2 border border-gray-200 rounded flex justify-between items-center"><span>💰 3 档报价方案对比表</span><button class="btn-default text-xs">下载</button></div>
+        <div class="p-2 border border-gray-200 rounded flex justify-between items-center"><span>📋 技术答辩 FAQ（30 个预判问题）</span><button class="btn-default text-xs">下载</button></div>
+        <div class="p-2 border border-gray-200 rounded flex justify-between items-center"><span>🎯 竞品对比说明（vs 方特/金马）</span><button class="btn-default text-xs">下载</button></div>
+      </div>
+      <button class="btn-primary w-full mt-3">📦 打包全部 6 个物料（.zip）</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域7: Copilot 对话] -->
+<!-- ========================= -->
+<section id="sec-7" class="section px-6 py-8 border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">⑦ 情报 Copilot 对话 <span class="tag-blue ml-2">#2732</span></div>
+      <div class="section-subtitle mt-1">自然语言问答 · 跨 Phase 数据融合 · 会话历史 + 预设问题模板</div>
+    </div>
+    <div>
+      <span class="tag-gray">今日 156 次对话</span>
+      <span class="tag-green ml-2">活跃 23 人</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-4 gap-4">
+    <!-- 会话历史 -->
+    <div class="region-box">
+      <span class="region-label">[会话历史]</span>
+      <button class="btn-primary w-full text-sm mb-3">+ 新建对话</button>
+      <div class="space-y-1 text-sm">
+        <div class="p-2 bg-blue-50 rounded cursor-pointer">
+          <div class="font-semibold text-blue-600">万达儿童乐园竞标分析</div>
+          <div class="text-xs text-gray-500">12 轮对话 · 刚刚</div>
+        </div>
+        <div class="p-2 hover:bg-gray-100 rounded cursor-pointer">
+          <div class="font-semibold">华强方特新产品影响</div>
+          <div class="text-xs text-gray-500">8 轮 · 1 小时前</div>
+        </div>
+        <div class="p-2 hover:bg-gray-100 rounded cursor-pointer">
+          <div class="font-semibold">华东招标趋势分析</div>
+          <div class="text-xs text-gray-500">5 轮 · 3 小时前</div>
+        </div>
+        <div class="p-2 hover:bg-gray-100 rounded cursor-pointer">
+          <div class="font-semibold">Q2 商机漏斗健康度</div>
+          <div class="text-xs text-gray-500">15 轮 · 昨日</div>
+        </div>
+        <div class="p-2 hover:bg-gray-100 rounded cursor-pointer">
+          <div class="font-semibold">长隆项目风险评估</div>
+          <div class="text-xs text-gray-500">6 轮 · 2 天前</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 对话主区 -->
+    <div class="col-span-3 region-box" style="min-height:520px;display:flex;flex-direction:column;">
+      <span class="region-label">[对话·万达儿童乐园竞标分析]</span>
+      <!-- 消息列表 -->
+      <div class="flex-1 overflow-y-auto space-y-3 p-2" style="max-height:400px">
+        <div class="flex">
+          <div class="chat-user">深圳万达儿童乐园项目我们有哪些劣势？竞争对手最强是谁？</div>
+        </div>
+        <div class="chat-meta text-right">10:23</div>
+
+        <div class="flex">
+          <div class="chat-ai">
+            <div class="font-semibold mb-1">根据 Phase 2-5 数据综合分析：</div>
+            <div class="text-sm">
+              <strong>劣势（3 项）：</strong>
+              <ul class="list-disc pl-5 mt-1 space-y-1">
+                <li>华强方特 3.0 新发布，儿童区产品线比我方更齐全</li>
+                <li>我方上一次万达合作项目遗留一个售后投诉（未完全闭环）</li>
+                <li>报价策略偏保守，方特预计激进降价 10-15%</li>
+              </ul>
+              <strong class="mt-2 block">最强竞争对手：华强方特</strong>
+              <ul class="list-disc pl-5 mt-1 space-y-1">
+                <li>技术储备对标 ★★★★☆</li>
+                <li>价格策略激进 ★★★★★</li>
+                <li>万达历史合作 2 次（我方 8 次，我方更强）</li>
+              </ul>
+            </div>
+            <div class="mt-2 text-xs text-gray-500">📎 数据源：客户雷达 · 竞品画像 · 历史项目 · 报价分析</div>
+          </div>
+        </div>
+        <div class="chat-meta">10:23</div>
+
+        <div class="flex">
+          <div class="chat-user">那我们应该采取什么策略？</div>
+        </div>
+        <div class="chat-meta text-right">10:24</div>
+
+        <div class="flex">
+          <div class="chat-ai">
+            <div class="font-semibold mb-1">建议策略（按优先级）：</div>
+            <div class="text-sm">
+              <ol class="list-decimal pl-5 space-y-1">
+                <li><strong>差异化致胜</strong> — 放大"国潮设计"偏好，引入赵六设计师（见作战方案区）</li>
+                <li><strong>历史信任背书</strong> — 准备万达历史 8 次合作的案例册</li>
+                <li><strong>报价 3 档准备</strong> — 应对方特激进降价，必要时让利 5-8%</li>
+                <li><strong>售后承诺加码</strong> — 针对上次投诉，主动提升维保等级</li>
+                <li><strong>技术答辩</strong> — 李四准备 30 个预判 FAQ，避免被方特压制</li>
+              </ol>
+            </div>
+            <div class="mt-2 text-xs text-blue-600">💡 已同步至区域⑥作战方案编排，点击"关键动作清单"查看详情</div>
+          </div>
+        </div>
+        <div class="chat-meta">10:24</div>
+      </div>
+
+      <!-- 预设问题模板 -->
+      <div class="mt-3 pt-3 border-t border-gray-200">
+        <div class="text-xs text-gray-500 mb-2">🔖 预设问题模板（5 类）：</div>
+        <div class="flex flex-wrap mb-3">
+          <span class="chip">👤 客户：XX 客户决策链是什么</span>
+          <span class="chip">📋 项目：XX 项目有哪些风险</span>
+          <span class="chip">⚔️ 竞品：XX 竞品最近动作</span>
+          <span class="chip">📈 趋势：XX 区域/品类趋势</span>
+          <span class="chip">🔮 预测：XX 项目我们能赢吗</span>
+        </div>
+        <!-- 输入框 -->
+        <div class="flex gap-2">
+          <input type="text" placeholder="问一个关于客户/项目/竞品/趋势/预测的问题..." class="flex-1 border border-gray-300 rounded px-3 py-2 text-sm">
+          <button class="btn-primary">发送</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域8: 区域市场热度] -->
+<!-- ========================= -->
+<section id="sec-8" class="section px-6 py-8 bg-white border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">⑧ 区域市场热度分析 <span class="tag-blue ml-2">#2733</span></div>
+      <div class="section-subtitle mt-1">中国地图占位 · 各省热度色块 · Top 10 热度省份</div>
+    </div>
+    <div>
+      <select class="border border-gray-300 rounded px-3 py-1 text-xs">
+        <option>近 30 天热度</option>
+        <option>近 90 天热度</option>
+        <option>Q2 季度热度</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 地图占位 (2 列) -->
+    <div class="col-span-2 region-box">
+      <span class="region-label">[中国地图 · 热度分布占位]</span>
+      <div class="flex justify-center items-center bg-gray-50 border border-gray-200 rounded" style="height:400px">
+        <!-- 简化地图占位 - 用多色块示意各省 -->
+        <div class="grid grid-cols-8 gap-1" style="width:90%">
+          <div class="province-cell heat-0 text-center" title="黑龙江">黑龙江<br>📊3</div>
+          <div class="province-cell heat-1 text-center" title="吉林">吉林<br>📊5</div>
+          <div class="province-cell heat-0 text-center" title="辽宁">辽宁<br>📊4</div>
+          <div class="province-cell heat-0 text-center" title="内蒙">内蒙<br>📊2</div>
+          <div class="province-cell heat-1 text-center" title="北京">北京<br>📊8</div>
+          <div class="province-cell heat-2 text-center" title="河北">河北<br>📊10</div>
+          <div class="province-cell heat-1 text-center" title="天津">天津<br>📊7</div>
+          <div class="province-cell heat-2 text-center" title="山东">山东<br>📊12</div>
+
+          <div class="province-cell heat-0 text-center" title="新疆">新疆<br>📊2</div>
+          <div class="province-cell heat-1 text-center" title="甘肃">甘肃<br>📊4</div>
+          <div class="province-cell heat-1 text-center" title="宁夏">宁夏<br>📊3</div>
+          <div class="province-cell heat-2 text-center" title="山西">山西<br>📊9</div>
+          <div class="province-cell heat-3 text-center" title="河南">河南<br>📊18</div>
+          <div class="province-cell heat-4 text-center" title="江苏">江苏<br>📊25</div>
+          <div class="province-cell heat-3 text-center" title="安徽">安徽<br>📊15</div>
+          <div class="province-cell heat-5 text-center" title="上海">上海<br>📊32</div>
+
+          <div class="province-cell heat-1 text-center" title="青海">青海<br>📊2</div>
+          <div class="province-cell heat-3 text-center" title="陕西">陕西<br>📊17</div>
+          <div class="province-cell heat-2 text-center" title="湖北">湖北<br>📊13</div>
+          <div class="province-cell heat-3 text-center" title="重庆">重庆<br>📊16</div>
+          <div class="province-cell heat-4 text-center" title="湖南">湖南<br>📊22</div>
+          <div class="province-cell heat-4 text-center" title="江西">江西<br>📊20</div>
+          <div class="province-cell heat-5 text-center" title="浙江">浙江<br>📊30</div>
+          <div class="province-cell heat-0 text-center"></div>
+
+          <div class="province-cell heat-2 text-center" title="西藏">西藏<br>📊1</div>
+          <div class="province-cell heat-4 text-center" title="四川">四川<br>📊24</div>
+          <div class="province-cell heat-2 text-center" title="贵州">贵州<br>📊11</div>
+          <div class="province-cell heat-2 text-center" title="广西">广西<br>📊14</div>
+          <div class="province-cell heat-5 text-center" title="广东">广东<br>📊35</div>
+          <div class="province-cell heat-3 text-center" title="福建">福建<br>📊19</div>
+          <div class="province-cell heat-1 text-center" title="台湾">台湾<br>📊5</div>
+          <div class="province-cell heat-0 text-center"></div>
+
+          <div class="province-cell heat-0 text-center"></div>
+          <div class="province-cell heat-0 text-center"></div>
+          <div class="province-cell heat-1 text-center" title="云南">云南<br>📊8</div>
+          <div class="province-cell heat-1 text-center" title="海南">海南<br>📊6</div>
+          <div class="province-cell heat-0 text-center"></div>
+          <div class="province-cell heat-0 text-center"></div>
+          <div class="province-cell heat-0 text-center"></div>
+          <div class="province-cell heat-0 text-center"></div>
+        </div>
+      </div>
+      <!-- 热度图例 -->
+      <div class="mt-3 flex items-center justify-center gap-2 text-xs text-gray-600">
+        <span>热度低</span>
+        <span class="w-6 h-4 heat-1 inline-block"></span>
+        <span class="w-6 h-4 heat-2 inline-block"></span>
+        <span class="w-6 h-4 heat-3 inline-block"></span>
+        <span class="w-6 h-4 heat-4 inline-block"></span>
+        <span class="w-6 h-4 heat-5 inline-block"></span>
+        <span>热度高</span>
+        <span class="ml-4 text-gray-400">* 数字为项目数，颜色为综合热度</span>
+      </div>
+    </div>
+
+    <!-- Top 10 省份 -->
+    <div class="region-box">
+      <span class="region-label">[Top 10 热度省份]</span>
+      <table>
+        <thead><tr><th>#</th><th>省份</th><th>项目</th><th>热度</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>广东</td><td>35</td><td><div class="trend-bar" style="width:100%"></div></td></tr>
+          <tr><td>2</td><td>上海</td><td>32</td><td><div class="trend-bar" style="width:92%"></div></td></tr>
+          <tr><td>3</td><td>浙江</td><td>30</td><td><div class="trend-bar" style="width:86%"></div></td></tr>
+          <tr><td>4</td><td>江苏</td><td>25</td><td><div class="trend-bar" style="width:72%"></div></td></tr>
+          <tr><td>5</td><td>四川</td><td>24</td><td><div class="trend-bar" style="width:70%"></div></td></tr>
+          <tr><td>6</td><td>湖南</td><td>22</td><td><div class="trend-bar" style="width:63%"></div></td></tr>
+          <tr><td>7</td><td>江西</td><td>20</td><td><div class="trend-bar" style="width:58%"></div></td></tr>
+          <tr><td>8</td><td>福建</td><td>19</td><td><div class="trend-bar" style="width:55%"></div></td></tr>
+          <tr><td>9</td><td>河南</td><td>18</td><td><div class="trend-bar" style="width:52%"></div></td></tr>
+          <tr><td>10</td><td>陕西</td><td>17</td><td><div class="trend-bar" style="width:49%"></div></td></tr>
+        </tbody>
+      </table>
+      <div class="mt-3 p-2 bg-green-50 border border-green-100 rounded text-xs text-green-700">
+        💡 华东+华南占全国 58% 项目，建议资源倾斜
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [区域9: 趋势预测与预警] -->
+<!-- ========================= -->
+<section id="sec-9" class="section px-6 py-8 border-t border-gray-200">
+  <div class="flex items-baseline justify-between mb-4">
+    <div>
+      <div class="section-title">⑨ 趋势预测与预警系统 <span class="tag-blue ml-2">#2734</span></div>
+      <div class="section-subtitle mt-1">3 条趋势线 · 未来 30 天预测 · 预警阈值可配置</div>
+    </div>
+    <div>
+      <button class="btn-default text-xs">⚙ 预警阈值设置</button>
+      <button class="btn-primary text-xs ml-2">导出趋势报告</button>
+    </div>
+  </div>
+
+  <!-- 3 条趋势线 -->
+  <div class="region-box mb-4">
+    <span class="region-label">[3 条核心趋势线 · 过去 90 天 + 未来 30 天预测]</span>
+    <div class="py-4">
+      <svg viewBox="0 0 1100 280" style="width:100%;height:300px">
+        <!-- 坐标轴 -->
+        <line x1="60" y1="240" x2="1060" y2="240" stroke="#d9d9d9" stroke-width="1"/>
+        <line x1="60" y1="40" x2="60" y2="240" stroke="#d9d9d9" stroke-width="1"/>
+
+        <!-- 预测分割线 -->
+        <line x1="800" y1="40" x2="800" y2="240" stroke="#fa8c16" stroke-width="1" stroke-dasharray="4 3"/>
+        <text x="740" y="32" fill="#fa8c16" font-size="11">↓ 历史 90 天</text>
+        <text x="820" y="32" fill="#fa8c16" font-size="11">↓ 未来 30 天预测</text>
+
+        <!-- 招标量（蓝）实线 -->
+        <polyline fill="none" stroke="#1890ff" stroke-width="2" points="60,180 140,170 220,165 300,150 380,140 460,145 540,130 620,115 700,100 780,85 800,80"/>
+        <!-- 预测段（蓝虚线） -->
+        <polyline fill="none" stroke="#1890ff" stroke-width="2" stroke-dasharray="5 3" points="800,80 860,72 920,65 980,58 1040,50"/>
+        <!-- 置信区间 -->
+        <polygon fill="#1890ff" fill-opacity="0.1" points="800,80 860,65 920,55 980,45 1040,38 1040,62 980,70 920,78 860,80 800,80"/>
+
+        <!-- 中标金额（绿）实线 -->
+        <polyline fill="none" stroke="#52c41a" stroke-width="2" points="60,210 140,200 220,205 300,190 380,180 460,175 540,170 620,160 700,155 780,145 800,142"/>
+        <polyline fill="none" stroke="#52c41a" stroke-width="2" stroke-dasharray="5 3" points="800,142 860,135 920,130 980,122 1040,118"/>
+
+        <!-- 竞品动态（橙）实线 -->
+        <polyline fill="none" stroke="#fa8c16" stroke-width="2" points="60,220 140,215 220,200 300,210 380,195 460,185 540,190 620,170 700,155 780,140 800,135"/>
+        <polyline fill="none" stroke="#fa8c16" stroke-width="2" stroke-dasharray="5 3" points="800,135 860,125 920,118 980,108 1040,100"/>
+
+        <!-- 图例 -->
+        <line x1="80" y1="20" x2="105" y2="20" stroke="#1890ff" stroke-width="2"/>
+        <text x="110" y="24" font-size="11" fill="#333">招标量</text>
+        <line x1="180" y1="20" x2="205" y2="20" stroke="#52c41a" stroke-width="2"/>
+        <text x="210" y="24" font-size="11" fill="#333">中标金额</text>
+        <line x1="300" y1="20" x2="325" y2="20" stroke="#fa8c16" stroke-width="2"/>
+        <text x="330" y="24" font-size="11" fill="#333">竞品动态</text>
+
+        <!-- X 轴标签 -->
+        <text x="60" y="260" font-size="10" fill="#999">T-90</text>
+        <text x="250" y="260" font-size="10" fill="#999">T-60</text>
+        <text x="450" y="260" font-size="10" fill="#999">T-30</text>
+        <text x="650" y="260" font-size="10" fill="#999">T-7</text>
+        <text x="780" y="260" font-size="10" fill="#999">今日</text>
+        <text x="900" y="260" font-size="10" fill="#999">T+15</text>
+        <text x="1020" y="260" font-size="10" fill="#999">T+30</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 招标量预测 -->
+    <div class="region-box">
+      <span class="region-label">[招标量预测]</span>
+      <div class="text-2xl font-bold text-blue-600">1,284 → 1,580</div>
+      <div class="text-xs text-gray-500 mt-1">未来 30 天预测</div>
+      <div class="text-sm text-green-600 mt-2">▲ +23% · 高速增长</div>
+      <div class="text-xs text-gray-500 mt-3">置信度：<span class="font-semibold">85%</span> · 华东区领涨</div>
+      <div class="mt-3 p-2 bg-blue-50 border border-blue-100 rounded text-xs text-blue-700">
+        建议：加强华东销售资源
+      </div>
+    </div>
+
+    <!-- 中标金额预测 -->
+    <div class="region-box">
+      <span class="region-label">[中标金额预测]</span>
+      <div class="text-2xl font-bold text-green-600">￥1.2亿 → ￥1.45亿</div>
+      <div class="text-xs text-gray-500 mt-1">未来 30 天预测</div>
+      <div class="text-sm text-green-600 mt-2">▲ +21% · 稳定增长</div>
+      <div class="text-xs text-gray-500 mt-3">置信度：<span class="font-semibold">78%</span> · 千万级项目驱动</div>
+      <div class="mt-3 p-2 bg-green-50 border border-green-100 rounded text-xs text-green-700">
+        建议：聚焦 Top 5 大标的
+      </div>
+    </div>
+
+    <!-- 竞品动态预测 -->
+    <div class="region-box">
+      <span class="region-label">[竞品动态预警]</span>
+      <div class="text-2xl font-bold text-orange-600">8 → 15</div>
+      <div class="text-xs text-gray-500 mt-1">未来 30 天竞品动作数</div>
+      <div class="text-sm text-red-600 mt-2">▲ +87% · 需高度关注</div>
+      <div class="text-xs text-gray-500 mt-3">置信度：<span class="font-semibold">72%</span> · 方特+金马主导</div>
+      <div class="mt-3 p-2 bg-orange-50 border border-orange-200 rounded text-xs text-orange-700">
+        建议：提前准备应对方案
+      </div>
+    </div>
+  </div>
+
+  <!-- 预警阈值设置 -->
+  <div class="region-box mt-4">
+    <span class="region-label">[预警阈值设置 · 当前配置]</span>
+    <table>
+      <thead><tr><th>预警项</th><th>指标</th><th>当前值</th><th>阈值</th><th>状态</th><th>动作</th></tr></thead>
+      <tbody>
+        <tr>
+          <td>招标量周降幅</td>
+          <td>周环比</td>
+          <td>+12%</td>
+          <td>-15% 时预警</td>
+          <td><span class="tag-green">正常</span></td>
+          <td><button class="btn-default text-xs">编辑</button></td>
+        </tr>
+        <tr>
+          <td>中标率异常</td>
+          <td>月度中标率</td>
+          <td>22.5%</td>
+          <td>低于 18% 预警</td>
+          <td><span class="tag-green">正常</span></td>
+          <td><button class="btn-default text-xs">编辑</button></td>
+        </tr>
+        <tr>
+          <td>竞品密集异动</td>
+          <td>周竞品事件数</td>
+          <td>12</td>
+          <td>超过 10 预警</td>
+          <td><span class="tag-orange">触发</span></td>
+          <td><button class="btn-default text-xs">编辑</button></td>
+        </tr>
+        <tr>
+          <td>客户流失风险</td>
+          <td>Top 20 客户跟进停滞</td>
+          <td>2 个</td>
+          <td>超过 3 个预警</td>
+          <td><span class="tag-green">正常</span></td>
+          <td><button class="btn-default text-xs">编辑</button></td>
+        </tr>
+        <tr>
+          <td>事件总线阻塞</td>
+          <td>事件堆积数</td>
+          <td>120</td>
+          <td>超过 500 预警</td>
+          <td><span class="tag-green">正常</span></td>
+          <td><button class="btn-default text-xs">编辑</button></td>
+        </tr>
+        <tr>
+          <td>综合评分异常</td>
+          <td>Top 10 平均分</td>
+          <td>76.5</td>
+          <td>低于 70 预警</td>
+          <td><span class="tag-green">正常</span></td>
+          <td><button class="btn-default text-xs">编辑</button></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-3 flex gap-2">
+      <button class="btn-default">+ 添加自定义预警</button>
+      <button class="btn-default">📧 邮件推送订阅</button>
+      <button class="btn-default">🔔 企微群推送订阅</button>
+    </div>
+  </div>
+</section>
+
+<!-- ========================= -->
+<!-- [原型说明] -->
+<!-- ========================= -->
+<section class="px-6 py-6 bg-white border-t border-gray-200">
+  <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 — Phase 6 联动层 9 个区域</h3>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:60px">区域</th>
+        <th style="width:180px">功能名</th>
+        <th style="width:90px">子 Issue</th>
+        <th>功能描述</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>① 事件总线</td><td>跨模块事件总线</td><td>#2726</td><td>事件吞吐秒/分/天监控 + 最新 20 事件流 + 跨模块触发链路</td></tr>
+      <tr><td>② 三角关联</td><td>项目-客户-竞品三角关联引擎</td><td>#2727</td><td>Venn 图（项目+客户+竞品 三圆交叠）+ 核心关联 Top 10</td></tr>
+      <tr><td>③ AI 洞察</td><td>AI 洞察自动生成引擎</td><td>#2728</td><td>每日 AI 洞察 Top 10 + 置信度评估 + 源事件链追溯</td></tr>
+      <tr><td>④ 综合评分</td><td>商机评分综合模型</td><td>#2729</td><td>评分公式 = ICP × 项目概率 × 竞争难度 × 时效性 · Top 20 商机</td></tr>
+      <tr><td>⑤ 必看清单</td><td>智能推荐·每日必看清单</td><td>#2730</td><td>Top 10 必看商机 + 6 维度模型解释 + 多样性平衡</td></tr>
+      <tr><td>⑥ 作战方案</td><td>作战方案自动编排</td><td>#2731</td><td>选商机 → 生成团队配置 + 时间节点 + 关键动作 + 物料包</td></tr>
+      <tr><td>⑦ Copilot 对话</td><td>情报 Copilot 对话引擎</td><td>#2732</td><td>自然语言问答 + 会话历史 + 5 类预设问题模板</td></tr>
+      <tr><td>⑧ 区域热度</td><td>区域市场热度分析</td><td>#2733</td><td>中国地图热度色块 + Top 10 热度省份排行</td></tr>
+      <tr><td>⑨ 趋势预警</td><td>趋势预测与预警系统</td><td>#2734</td><td>3 条趋势线 + 未来 30 天预测 + 6 项预警阈值配置</td></tr>
+    </tbody>
+  </table>
+</section>
+
+<script>
+  // 锚点高亮
+  const anchors = document.querySelectorAll('.anchor-item');
+  const sections = document.querySelectorAll('.section');
+
+  window.addEventListener('scroll', () => {
+    let current = '';
+    sections.forEach(section => {
+      const rect = section.getBoundingClientRect();
+      if (rect.top <= 100 && rect.bottom >= 100) {
+        current = section.id;
+      }
+    });
+    anchors.forEach(a => {
+      a.classList.remove('active');
+      if (a.getAttribute('href') === '#' + current) a.classList.add('active');
+    });
+  });
+
+  // 平滑滚动
+  anchors.forEach(a => {
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      const target = document.querySelector(a.getAttribute('href'));
+      if (target) target.scrollIntoView({ behavior: 'smooth' });
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 商战情报中台·Phase 4 客户雷达 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 200px); }
+    .side-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #999; cursor: pointer; font-size: 16px; margin: 4px auto; border-radius: 4px; }
+    .side-icon.active { background: #e6f7ff; color: #1890ff; }
+    .side-icon:hover { background: #f5f5f5; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">商战情报中台·Phase 4 客户雷达</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">对标6sense，建设ICP画像+意图信号+暗漏斗识别的客户雷达中心，把12个散落Issue整合为统一雷达视图，让商务团队第一时间发现高意向客户</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角），商务总监，商务人员，市场运营</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">ICP画像与评分 / 多源意图信号流 / 购买阶段预测+暗漏斗识别 / 关系网络图谱 / ABM编排+流失预警+自动推送</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">配置ICP维度权重 / 下钻查看信号明细 / 确认暗漏斗匿名→客户匹配 / 查看客户关系网 / 调整推送规则阈值</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">5个Tab均能正常切换 / ICP评分矩阵可视化正确 / 意图信号流实时更新 / 关系网络图谱ECharts渲染 / 高分客户推送规则生效</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase4 客户雷达 · 详细设计.md（待生成）</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] -->
+  <aside class="w-12 bg-white border-r border-gray-300 flex-shrink-0 py-2">
+    <div class="side-icon" title="首页">🏠</div>
+    <div class="side-icon" title="CRM">👥</div>
+    <div class="side-icon active" title="商战情报中台">📡</div>
+    <div class="side-icon" title="项目中心">📁</div>
+    <div class="side-icon" title="D3设计">🎨</div>
+    <div class="side-icon" title="审批">✅</div>
+    <div class="side-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 商战情报中台 &gt; <span class="text-gray-700 font-medium">Phase 4 · 客户雷达</span>
+    </div>
+
+    <!-- [页头] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold text-gray-800">客户雷达 <span class="text-xs text-gray-400 font-normal ml-2">Customer Radar · 对标6sense</span></h1>
+        <div class="text-xs text-gray-500 mt-1">ICP + 意图信号 + 暗漏斗识别 · 覆盖 Issue #2706-#2715 / #1870 / #2443 / #2814 / #3545</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">模型 v2.3 · 预测准确率 68%</span>
+        <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">刷新数据</button>
+        <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">导出雷达报告</button>
+      </div>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-icp.html"></iframe>
+    </div>
+  </main>
+</div>
+
+<!-- [原型说明] -->
+<div class="p-6 bg-white border-t border-gray-300 mt-4">
+  <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 · Phase 4 客户雷达 Tab 清单</h3>
+  <table class="w-full text-sm text-left border-collapse">
+    <thead><tr class="bg-gray-100">
+      <th class="p-2 border border-gray-300 w-32">Tab页</th>
+      <th class="p-2 border border-gray-300 w-40">文件名</th>
+      <th class="p-2 border border-gray-300 w-48">对应 Issue</th>
+      <th class="p-2 border border-gray-300">功能描述</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="p-2 border border-gray-300 font-medium">ICP画像+评分</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-icp.html</td><td class="p-2 border border-gray-300 text-xs">#2706 #2707 #2443</td><td class="p-2 border border-gray-300">5维度ICP模型配置、客户×维度评分热图、Top20 ICP客户列表</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">多源意图信号流</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-signals.html</td><td class="p-2 border border-gray-300 text-xs">#2708 #2814</td><td class="p-2 border border-gray-300">官网/邮件/LinkedIn/企微/展会/内容下载6源信号时间线，右侧过滤面板</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">购买阶段预测</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-funnel.html</td><td class="p-2 border border-gray-300 text-xs">#2709 #2710</td><td class="p-2 border border-gray-300">5阶段漏斗图、暗漏斗匿名线索关联、阶段预测准确率看板</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">关系网络图谱</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-network.html</td><td class="p-2 border border-gray-300 text-xs">#2713 #1870 #3545</td><td class="p-2 border border-gray-300">ECharts力导向图：甲方/设计院/代理机构关系网，节点详情抽屉</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">ABM编排+推送</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-abm.html</td><td class="p-2 border border-gray-300 text-xs">#2712 #2714 #2715 #2711</td><td class="p-2 border border-gray-300">ABM目标客户清单、30天无活动流失预警、高分客户推送规则配置</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'icp',     label: 'ICP画像+评分',      src: 'tab-icp.html' },
+    { key: 'signals', label: '意图信号流',        src: 'tab-signals.html' },
+    { key: 'funnel',  label: '购买阶段+暗漏斗',   src: 'tab-funnel.html' },
+    { key: 'network', label: '关系网络图谱',      src: 'tab-network.html' },
+    { key: 'abm',     label: 'ABM编排+推送',      src: 'tab-abm.html' },
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = Math.max(h, 600) + 'px';
+    } catch(e) {}
+  });
+
+  renderTabs();
+</script>
+</body>
+</html>

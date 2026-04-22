@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ABM编排+流失预警+推送</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab5 · ABM编排+流失预警+推送</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">把ABM目标客户的跟进节奏编排到可执行的下一步，对流失预警客户提前干预，并通过推送规则把高分客户自动分配给对应商务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务总监（规则配置+ABM编排），商务人员（看自己的目标单）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">ABM目标客户清单 / 30天无活动流失预警 / 高分客户推送规则 / 分配与认领</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">添加/移除ABM客户 / 编辑下一步任务 / 配置推送阈值与分配规则 / 一键激活流失客户</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">ABM清单≤30家 / 流失模型阈值可配 / 推送规则触发后企微通知商务 / 历史推送记录可追溯</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">Phase4 客户雷达 · 详细设计.md §2.5</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [ABM 目标客户清单] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-base font-bold text-gray-800">🎯 ABM 目标客户清单 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2715 · 本季度重点</span></h2>
+      <div class="text-xs text-gray-500 mt-1">Account-Based Marketing · 按客户逐一编排触达计划</div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-500">共 10 家 / 本季度上限 30</span>
+      <button class="px-3 py-1 text-xs border border-gray-300 rounded">批量编排</button>
+      <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded">+ 添加客户</button>
+    </div>
+  </div>
+
+  <table class="w-full text-xs border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-gray-700">
+        <th class="p-2 border border-gray-200 text-left w-40">目标客户</th>
+        <th class="p-2 border border-gray-200 text-center w-20">ICP分</th>
+        <th class="p-2 border border-gray-200 text-center w-20">阶段</th>
+        <th class="p-2 border border-gray-200 text-left w-40">主要阻力</th>
+        <th class="p-2 border border-gray-200 text-left">下一步任务</th>
+        <th class="p-2 border border-gray-200 text-center w-20">负责人</th>
+        <th class="p-2 border border-gray-200 text-center w-20">Due</th>
+        <th class="p-2 border border-gray-200 text-center w-16">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">北京欢乐谷二期</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">93</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-1 py-0.5 rounded">考虑</span></td>
+        <td class="p-2 border border-gray-200">技术对比中（与金马竞争）</td>
+        <td class="p-2 border border-gray-200">4/25 技术演示 + 现场考察安排</td>
+        <td class="p-2 border border-gray-200 text-center">张三</td>
+        <td class="p-2 border border-gray-200 text-center">4/25</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">上海迪士尼三期扩建</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">87</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-red-100 text-red-700 px-1 py-0.5 rounded">评估</span></td>
+        <td class="p-2 border border-gray-200">需外方总部审批</td>
+        <td class="p-2 border border-gray-200">4/28 高管拜访 + 定制方案提交</td>
+        <td class="p-2 border border-gray-200 text-center">李四</td>
+        <td class="p-2 border border-gray-200 text-center">4/28</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">成都大运会主题乐园</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">86</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-red-100 text-red-700 px-1 py-0.5 rounded">决策</span></td>
+        <td class="p-2 border border-gray-200">价格谈判中</td>
+        <td class="p-2 border border-gray-200">4/22 合同细节确认 + 付款条件</td>
+        <td class="p-2 border border-gray-200 text-center">王五</td>
+        <td class="p-2 border border-gray-200 text-center">4/22</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">深圳前海文旅综合体</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">84</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded">兴趣</span></td>
+        <td class="p-2 border border-gray-200">尚未立项</td>
+        <td class="p-2 border border-gray-200">4/26 首次正式拜访 + 需求调研</td>
+        <td class="p-2 border border-gray-200 text-center">赵六</td>
+        <td class="p-2 border border-gray-200 text-center">4/26</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">乌鲁木齐冰雪集团</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">75</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-1 py-0.5 rounded">考虑</span></td>
+        <td class="p-2 border border-gray-200">预算未定</td>
+        <td class="p-2 border border-gray-200">4/24 发送冰雪设备案例合集</td>
+        <td class="p-2 border border-gray-200 text-center">孙七</td>
+        <td class="p-2 border border-gray-200 text-center">4/24</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">郑州方特扩建</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">74</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded">兴趣</span></td>
+        <td class="p-2 border border-gray-200">内部决策流程长</td>
+        <td class="p-2 border border-gray-200">4/27 邀请到万德总部参观</td>
+        <td class="p-2 border border-gray-200 text-center">周八</td>
+        <td class="p-2 border border-gray-200 text-center">4/27</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">重庆万达文旅</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">74</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-yellow-100 text-yellow-700 px-1 py-0.5 rounded">兴趣</span></td>
+        <td class="p-2 border border-gray-200">万达体系采购复杂</td>
+        <td class="p-2 border border-gray-200">4/23 在线Demo + 技术答疑</td>
+        <td class="p-2 border border-gray-200 text-center">吴九</td>
+        <td class="p-2 border border-gray-200 text-center">4/23</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">金茂集团文旅事业部</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded font-bold">68</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-1 py-0.5 rounded">认知</span></td>
+        <td class="p-2 border border-gray-200">业务线新建，方向不清</td>
+        <td class="p-2 border border-gray-200">5/02 行业沙龙邀约</td>
+        <td class="p-2 border border-gray-200 text-center">郑十</td>
+        <td class="p-2 border border-gray-200 text-center">5/02</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">长沙华谊兄弟文旅城</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">60</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-1 py-0.5 rounded">认知</span></td>
+        <td class="p-2 border border-gray-200">项目资金待定</td>
+        <td class="p-2 border border-gray-200">5/05 每月内容触达</td>
+        <td class="p-2 border border-gray-200 text-center">冯十一</td>
+        <td class="p-2 border border-gray-200 text-center">5/05</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+      <tr>
+        <td class="p-2 border border-gray-200 font-medium">西安丝路文旅小镇</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-2 py-0.5 rounded font-bold">51</span></td>
+        <td class="p-2 border border-gray-200 text-center"><span class="bg-gray-100 text-gray-700 px-1 py-0.5 rounded">认知</span></td>
+        <td class="p-2 border border-gray-200">评分偏低，观察期</td>
+        <td class="p-2 border border-gray-200">5/10 行业报告分享</td>
+        <td class="p-2 border border-gray-200 text-center">陈十二</td>
+        <td class="p-2 border border-gray-200 text-center">5/10</td>
+        <td class="p-2 border border-gray-200 text-center text-blue-600">编辑</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div class="grid grid-cols-2 gap-4">
+  <!-- [流失预警] -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-bold text-gray-800">⚠️ 客户流失预警 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2714</span></h2>
+        <div class="text-xs text-gray-500 mt-1">近30天无任何信号的活跃客户</div>
+      </div>
+      <span class="bg-red-100 text-red-700 text-xs px-2 py-1 rounded font-bold">高风险 8 家</span>
+    </div>
+
+    <table class="w-full text-xs border-collapse">
+      <thead>
+        <tr class="bg-gray-50 text-gray-700">
+          <th class="p-2 border border-gray-200 text-left">客户</th>
+          <th class="p-2 border border-gray-200 text-center w-20">风险评分</th>
+          <th class="p-2 border border-gray-200 text-center w-20">静默天数</th>
+          <th class="p-2 border border-gray-200 text-left w-32">最后活动</th>
+          <th class="p-2 border border-gray-200 text-center w-20">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr><td class="p-2 border border-gray-200 font-medium">厦门海沧乐园</td><td class="p-2 border border-gray-200 text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">92</span></td><td class="p-2 border border-gray-200 text-center">45天</td><td class="p-2 border border-gray-200">报价后无回应</td><td class="p-2 border border-gray-200 text-center text-blue-600">激活</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">合肥欢乐水魔方</td><td class="p-2 border border-gray-200 text-center"><span class="bg-red-100 text-red-700 px-2 py-0.5 rounded font-bold">88</span></td><td class="p-2 border border-gray-200 text-center">38天</td><td class="p-2 border border-gray-200">技术讨论后中止</td><td class="p-2 border border-gray-200 text-center text-blue-600">激活</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">青岛海洋公园</td><td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold">78</span></td><td class="p-2 border border-gray-200 text-center">35天</td><td class="p-2 border border-gray-200">首次洽谈后停滞</td><td class="p-2 border border-gray-200 text-center text-blue-600">激活</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">武汉欢乐谷</td><td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold">72</span></td><td class="p-2 border border-gray-200 text-center">33天</td><td class="p-2 border border-gray-200">资料索取后无互动</td><td class="p-2 border border-gray-200 text-center text-blue-600">激活</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">南京汤山温泉文旅</td><td class="p-2 border border-gray-200 text-center"><span class="bg-orange-100 text-orange-700 px-2 py-0.5 rounded font-bold">68</span></td><td class="p-2 border border-gray-200 text-center">31天</td><td class="p-2 border border-gray-200">展会名片后无跟进</td><td class="p-2 border border-gray-200 text-center text-blue-600">激活</td></tr>
+      </tbody>
+    </table>
+
+    <div class="mt-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs text-gray-700">
+      <div class="font-medium mb-1">📌 模型说明</div>
+      <div>风险评分 = (静默天数权重 40%) + (历史ICP分权重 30%) + (上次信号评分权重 30%)。评分 &ge; 70 触发企微通知商务主管。</div>
+    </div>
+  </div>
+
+  <!-- [高分客户推送规则] -->
+  <div class="bg-white border border-gray-300 rounded p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-bold text-gray-800">📤 高分客户自动推送 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2712</span></h2>
+        <div class="text-xs text-gray-500 mt-1">超过阈值自动分配给对应商务</div>
+      </div>
+      <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded">+ 新建规则</button>
+    </div>
+
+    <div class="space-y-3">
+      <!-- 规则卡片 1 -->
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-800">规则 #1 · 华北高分客户</span>
+            <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">启用</span>
+          </div>
+          <div class="text-xs text-blue-600 cursor-pointer">编辑 · 停用</div>
+        </div>
+        <div class="text-xs text-gray-600 space-y-1">
+          <div>🎯 条件：ICP分 <span class="font-bold text-gray-800">&ge; 80</span> · 地域 = 华北</div>
+          <div>📧 动作：推送给商务主管 <span class="font-bold text-gray-800">张三</span> · 通知方式：企微+邮件</div>
+          <div>📊 本月触发 <span class="font-bold text-blue-600">12</span> 次 · 已转化 <span class="font-bold text-green-600">3</span> 次</div>
+        </div>
+      </div>
+
+      <!-- 规则卡片 2 -->
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-800">规则 #2 · 华东决策阶段</span>
+            <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">启用</span>
+          </div>
+          <div class="text-xs text-blue-600 cursor-pointer">编辑 · 停用</div>
+        </div>
+        <div class="text-xs text-gray-600 space-y-1">
+          <div>🎯 条件：阶段 = 评估 OR 决策 · 地域 = 华东</div>
+          <div>📧 动作：推送给商务总监 <span class="font-bold text-gray-800">李四</span> · 通知方式：企微</div>
+          <div>📊 本月触发 <span class="font-bold text-blue-600">8</span> 次 · 已转化 <span class="font-bold text-green-600">2</span> 次</div>
+        </div>
+      </div>
+
+      <!-- 规则卡片 3 -->
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-800">规则 #3 · 冰雪行业</span>
+            <span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">启用</span>
+          </div>
+          <div class="text-xs text-blue-600 cursor-pointer">编辑 · 停用</div>
+        </div>
+        <div class="text-xs text-gray-600 space-y-1">
+          <div>🎯 条件：行业 = 冰雪度假 · ICP分 &ge; 70</div>
+          <div>📧 动作：推送给冰雪组 <span class="font-bold text-gray-800">孙七</span> · 通知方式：企微</div>
+          <div>📊 本月触发 <span class="font-bold text-blue-600">5</span> 次 · 已转化 <span class="font-bold text-green-600">1</span> 次</div>
+        </div>
+      </div>
+
+      <!-- 规则卡片 4 -->
+      <div class="border border-gray-200 rounded p-3 opacity-60">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center gap-2">
+            <span class="text-sm font-medium text-gray-800">规则 #4 · 竞品比价客户</span>
+            <span class="bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded">停用</span>
+          </div>
+          <div class="text-xs text-blue-600 cursor-pointer">编辑 · 启用</div>
+        </div>
+        <div class="text-xs text-gray-600 space-y-1">
+          <div>🎯 条件：信号含"金马/中山三和" · 近7天活跃</div>
+          <div>📧 动作：推送给竞品情报组 · 通知方式：企微+钉钉</div>
+          <div>📊 规则未启用</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-3 border-t border-gray-200 text-xs text-gray-500">
+      <div class="flex items-center justify-between">
+        <span>💡 推送记录保留90天，可用于分配策略复盘</span>
+        <span class="text-blue-600 cursor-pointer">查看历史记录 →</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

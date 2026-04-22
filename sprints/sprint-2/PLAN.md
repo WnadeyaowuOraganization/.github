@@ -98,7 +98,10 @@
 | 04-22 | kimi5 | #3169 | approval | **max** | In Progress | 表单模板管理 |
 | 04-22 | kimi2 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板前端 — PR #4074 merged |
 | 04-22 | kimi3 | ~~#3648~~ | bidding | **max** | ~~Done~~ | 招投标DB建表 — 补充PR #4073 merged |
-| 04-22 | kimi4 | #2851 | cockpit | **max** | In Progress | 验收队列前端 |
+| 04-22 | kimi4 | ~~#2851~~ | cockpit | **max** | ~~Done~~ | 验收队列前端 — PR #4075 merged |
+| 04-22 | kimi2 | #3149 | approval | **max** | In Progress | 审批进度追踪器组件 |
+| 04-22 | kimi3 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
+| 04-22 | kimi4 | #3156 | approval | **max** | In Progress | 流程效率分析看板 |
 
 ---
 

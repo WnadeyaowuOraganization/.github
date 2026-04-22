@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>全阶段资料完成度看板 — 回款资料</title>
+<style>
+  body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI','PingFang SC','Microsoft YaHei',Roboto,sans-serif;background:#f5f5f5;margin:0;padding:16px 24px;color:#333}
+
+  /* KPI */
+  .kpi-row{display:flex;gap:12px;margin-bottom:12px}
+  .kpi-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px 20px;flex:1;position:relative}
+  .kpi-num{font-size:28px;font-weight:700;color:#333;line-height:1.2}
+  .kpi-num .suffix{font-size:14px;color:#999;font-weight:400;margin-left:4px}
+  .kpi-label{font-size:13px;color:#999;margin-bottom:4px}
+  .kpi-card.warn .kpi-num{color:#faad14}
+  .kpi-card.danger .kpi-num{color:#f5222d}
+  .kpi-card.good .kpi-num{color:#52c41a}
+  .kpi-trend{font-size:11px;color:#999;margin-top:6px}
+
+  /* Progress ring (SVG) */
+  .ring-wrap{display:flex;align-items:center;gap:12px}
+  .ring{width:56px;height:56px;flex-shrink:0}
+  .ring-bg{fill:none;stroke:#f0f0f0;stroke-width:6}
+  .ring-fg{fill:none;stroke:#1890ff;stroke-width:6;stroke-linecap:round;transform:rotate(-90deg);transform-origin:center}
+
+  /* Filter bar */
+  .filter-bar{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px;margin:12px 0;display:grid;grid-template-columns:repeat(5,1fr) auto auto;gap:12px;align-items:end}
+  .filter-bar label{font-size:12px;color:#999;display:block;margin-bottom:4px}
+  .filter-bar input,.filter-bar select{width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:13px;background:#fff;box-sizing:border-box}
+
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s;height:32px;box-sizing:border-box;white-space:nowrap}
+  .btn:hover{border-color:#1890ff;color:#1890ff}
+  .btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+  .btn-primary:hover{background:#40a9ff;color:#fff}
+  .btn-sm{padding:2px 8px;font-size:12px;height:24px}
+
+  /* Toolbar */
+  .toolbar{display:flex;justify-content:space-between;align-items:center;margin:0 0 12px;font-size:13px;color:#666}
+  .toolbar .left{display:flex;align-items:center;gap:12px}
+  .toolbar .right{display:flex;gap:8px}
+
+  /* Table */
+  table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;border-radius:6px;font-size:13px;overflow:hidden}
+  thead{background:#fafafa}
+  th{padding:10px 12px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap;font-size:12.5px}
+  td{padding:12px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:middle}
+  tr:hover{background:#fafafa}
+  tbody tr:last-child td{border-bottom:none}
+  .proj-name{color:#1890ff;font-weight:600;cursor:pointer}
+  .proj-name:hover{text-decoration:underline}
+
+  /* Tags */
+  .tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap;line-height:1.6}
+  .tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f}
+  .tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+  .tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+  .tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e}
+  .tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+  .tag-purple{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7}
+  .tag-cyan{background:#e6fffb;color:#13c2c2;border:1px solid #87e8de}
+  .tag-gray{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+
+  /* 7 stages dots */
+  .stages{display:flex;gap:4px;align-items:center}
+  .stage-dot{width:18px;height:18px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:10px;color:#fff;cursor:help;position:relative}
+  .stage-done{background:#52c41a}
+  .stage-doing{background:#1890ff}
+  .stage-miss{background:#f5222d}
+  .stage-pending{background:#d9d9d9}
+  .stage-label{font-size:10px;color:#bbb;text-align:center;margin-top:2px}
+
+  /* Progress bar */
+  .pbar{display:flex;align-items:center;gap:6px;min-width:120px}
+  .pbar-track{flex:1;height:6px;background:#f0f0f0;border-radius:3px;overflow:hidden;min-width:70px}
+  .pbar-fill{height:100%;border-radius:3px;background:#1890ff;transition:width .3s}
+  .pbar-fill.high{background:#52c41a}
+  .pbar-fill.mid{background:#faad14}
+  .pbar-fill.low{background:#f5222d}
+  .pbar-pct{font-size:12px;font-weight:600;color:#333;min-width:36px;text-align:right}
+
+  .miss-num{color:#f5222d;font-weight:600;cursor:pointer}
+  .miss-num:hover{text-decoration:underline}
+  .miss-num.zero{color:#52c41a;cursor:default}
+
+  .deadline-tag{font-size:11px;font-weight:600;padding:2px 6px;border-radius:3px;display:inline-block}
+  .deadline-red{background:#fff1f0;color:#f5222d}
+  .deadline-orange{background:#fff7e6;color:#fa8c16}
+  .deadline-blue{background:#e6f7ff;color:#1890ff}
+  .deadline-gray{background:#fafafa;color:#8c8c8c}
+
+  /* Action cell */
+  .action-cell{white-space:nowrap}
+  .action-cell a{color:#1890ff;font-size:12px;margin-right:8px;cursor:pointer;text-decoration:none}
+  .action-cell a:hover{text-decoration:underline}
+
+  /* Drawer placeholder (inline placeholder, not floating) */
+  .drawer-placeholder{margin-top:16px;background:#fff;border:1px dashed #d9d9d9;border-radius:6px;padding:20px;color:#999;font-size:13px;text-align:center}
+  .drawer-placeholder .hint{color:#999;margin-bottom:12px}
+  .drawer-placeholder .accordion-preview{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-top:12px;max-width:900px;margin-left:auto;margin-right:auto}
+  .drawer-placeholder .stage-pill{background:#fafafa;border:1px solid #e8e8e8;border-radius:4px;padding:10px 6px;font-size:11px;color:#666}
+  .drawer-placeholder .stage-pill .num{font-size:18px;font-weight:700;color:#1890ff;display:block;margin-bottom:4px}
+
+  /* Alert banner */
+  .alert-banner{margin-top:16px;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;padding:12px 16px;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#ad6800}
+  .alert-banner .alert-text{display:flex;align-items:center;gap:8px}
+  .alert-banner .alert-icon{font-size:16px}
+  .alert-banner .alert-link{color:#1890ff;cursor:pointer;margin:0 6px}
+  .alert-banner .alert-link:hover{text-decoration:underline}
+
+  /* Pagination */
+  .pagination{display:flex;justify-content:space-between;align-items:center;padding:12px 4px;font-size:13px;color:#666}
+  .page-btn{padding:4px 10px;border:1px solid #d9d9d9;border-radius:4px;background:#fff;cursor:pointer;font-size:13px;margin-left:4px}
+  .page-btn.active{background:#1890ff;color:#fff;border-color:#1890ff}
+
+  /* Stage legend */
+  .stage-legend{display:flex;gap:14px;font-size:11px;color:#999;align-items:center}
+  .stage-legend .item{display:flex;align-items:center;gap:4px}
+</style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">全阶段资料完成度看板（Dashboard）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">全项目×全7阶段文件完整度单屏俯瞰，提前暴露法规缺失风险，驱动回款提效</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角）、财务负责人、项目经理、商务负责人</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5 项 KPI 概览 / 多维筛选 / 7 阶段进度跟踪 / 缺失预警 / 一键催收导出</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击项目展开7阶段详情抽屉 / 批量催收 / 生成催收邮件 / 导出资料包</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">200项目列表在2秒内渲染 / 完整度百分比计算准确 / 法规缺失项实时更新</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">回款资料·详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+<!-- 区域 1: KPI 卡片区 -->
+<div class="kpi-row">
+  <div class="kpi-card good">
+    <div class="kpi-label">资料齐全项目数</div>
+    <div class="kpi-num">118<span class="suffix">/ 200</span></div>
+    <div class="kpi-trend">↑ 较上月 +6 个</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">总项目数（在管）</div>
+    <div class="kpi-num">200</div>
+    <div class="kpi-trend">进行中 86 · 验收中 34 · 质保期 52 · 已完成 28</div>
+  </div>
+  <div class="kpi-card danger">
+    <div class="kpi-label">法规缺失预警项目</div>
+    <div class="kpi-num">12</div>
+    <div class="kpi-trend" style="color:#f5222d">⚠ 特种设备登记证 / 安全验收报告</div>
+  </div>
+  <div class="kpi-card warn">
+    <div class="kpi-label">最近 30 天到期资料</div>
+    <div class="kpi-num">28</div>
+    <div class="kpi-trend" style="color:#fa8c16">含保险凭证 9 · 检测报告 7 · 验收单 12</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">平均完整度</div>
+    <div class="ring-wrap">
+      <svg class="ring" viewBox="0 0 64 64">
+        <circle class="ring-bg" cx="32" cy="32" r="26"></circle>
+        <!-- circumference = 2πr ≈ 163.36; fill = 74% = 120.89; dash = fill, 163.36 - fill -->
+        <circle class="ring-fg" cx="32" cy="32" r="26" stroke-dasharray="120.89 163.36"></circle>
+      </svg>
+      <div>
+        <div class="kpi-num" style="font-size:24px">74%</div>
+        <div class="kpi-trend">全体 200 项加权均值</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 区域 2: 筛选栏 -->
+<div class="filter-bar">
+  <div>
+    <label>项目状态</label>
+    <select>
+      <option>全部</option>
+      <option>进行中</option>
+      <option>验收中</option>
+      <option>质保期</option>
+      <option>已完成</option>
+    </select>
+  </div>
+  <div>
+    <label>负责人</label>
+    <select>
+      <option>全部销售经理</option>
+      <option>张伟（华南）</option>
+      <option>李娜（华北）</option>
+      <option>王磊（华东）</option>
+      <option>刘芳（西南）</option>
+      <option>陈强（华中）</option>
+    </select>
+  </div>
+  <div>
+    <label>完成度范围</label>
+    <select>
+      <option>全部</option>
+      <option>&lt; 50%（严重缺失）</option>
+      <option>50 - 80%（部分缺失）</option>
+      <option>80 - 100%（基本齐全）</option>
+    </select>
+  </div>
+  <div>
+    <label>阶段</label>
+    <select>
+      <option>全部阶段</option>
+      <option>1. 投标阶段</option>
+      <option>2. 合同阶段</option>
+      <option>3. 设计阶段</option>
+      <option>4. 生产阶段</option>
+      <option>5. 安装阶段</option>
+      <option>6. 验收阶段</option>
+      <option>7. 售后阶段</option>
+    </select>
+  </div>
+  <div>
+    <label>搜索</label>
+    <input type="text" placeholder="项目名 / 合同号">
+  </div>
+  <button class="btn">📧 批量催收</button>
+  <button class="btn btn-primary">⬇ 导出</button>
+</div>
+
+
+<!-- 工具栏 -->
+<div class="toolbar">
+  <div class="left">
+    <span>共 <strong style="color:#333">200</strong> 个项目，当前展示 <strong style="color:#333">1-10</strong></span>
+    <div class="stage-legend">
+      <span class="item"><span class="stage-dot stage-done">✓</span>已完成</span>
+      <span class="item"><span class="stage-dot stage-doing">·</span>进行中</span>
+      <span class="item"><span class="stage-dot stage-miss">!</span>缺失</span>
+      <span class="item"><span class="stage-dot stage-pending"></span>未开始</span>
+    </div>
+  </div>
+  <div class="right">
+    <button class="btn btn-sm">🗑 清除筛选</button>
+    <button class="btn btn-sm">⚙ 列设置</button>
+  </div>
+</div>
+
+
+<!-- 区域 3: 项目列表 -->
+<table>
+  <thead>
+    <tr>
+      <th style="width:200px">项目名称</th>
+      <th style="width:140px">甲方名称</th>
+      <th style="width:80px">当前阶段</th>
+      <th style="width:190px">7 阶段进度<br><span style="font-weight:400;color:#bbb;font-size:10px">投 · 合 · 设 · 产 · 装 · 验 · 后</span></th>
+      <th style="width:150px">总完整度</th>
+      <th style="width:70px">缺失项</th>
+      <th style="width:90px">负责人</th>
+      <th style="width:130px">最近到期资料</th>
+      <th style="width:180px">操作</th>
+    </tr>
+  </thead>
+  <tbody>
+
+    <!-- 1: 深圳湾学校 95% -->
+    <tr>
+      <td><a class="proj-name">深圳湾学校体游项目</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0821 · ¥486万</div></td>
+      <td>深圳湾实验学校</td>
+      <td><span class="tag tag-cyan">质保期</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done" title="投标完成">✓</span>
+          <span class="stage-dot stage-done" title="合同完成">✓</span>
+          <span class="stage-dot stage-done" title="设计完成">✓</span>
+          <span class="stage-dot stage-done" title="生产完成">✓</span>
+          <span class="stage-dot stage-done" title="安装完成">✓</span>
+          <span class="stage-dot stage-done" title="验收完成">✓</span>
+          <span class="stage-dot stage-doing" title="售后进行中">·</span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill high" style="width:95%"></div></div><span class="pbar-pct">95%</span></div>
+      </td>
+      <td><span class="miss-num">2</span></td>
+      <td>张伟</td>
+      <td><span class="deadline-tag deadline-blue">保险 · 45天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 2: 广州白云机场 62% -->
+    <tr>
+      <td><a class="proj-name">广州白云机场扩建儿童娱乐区</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0612 · ¥1,280万</div></td>
+      <td>广东省机场管理集团</td>
+      <td><span class="tag tag-orange">验收中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-miss" title="缺失安全检测报告">!</span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill mid" style="width:62%"></div></div><span class="pbar-pct">62%</span></div>
+      </td>
+      <td><span class="miss-num">7</span></td>
+      <td>王磊</td>
+      <td><span class="deadline-tag deadline-red">检测报告 · 逾期 3天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 3: 北京亦庄 45% -->
+    <tr>
+      <td><a class="proj-name">北京亦庄工业园职工体育中心</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-1103 · ¥752万</div></td>
+      <td>亦庄经开区管委会</td>
+      <td><span class="tag tag-blue">进行中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-miss" title="设计资料缺失">!</span>
+          <span class="stage-dot stage-doing">·</span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill low" style="width:45%"></div></div><span class="pbar-pct">45%</span></div>
+      </td>
+      <td><span class="miss-num">14</span></td>
+      <td>李娜</td>
+      <td><span class="deadline-tag deadline-red">设计图 · 逾期 12天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 4: 成都天府 88% -->
+    <tr>
+      <td><a class="proj-name">成都天府新区体游中心</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0517 · ¥963万</div></td>
+      <td>天府新区投资集团</td>
+      <td><span class="tag tag-cyan">质保期</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-doing">·</span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill high" style="width:88%"></div></div><span class="pbar-pct">88%</span></div>
+      </td>
+      <td><span class="miss-num">3</span></td>
+      <td>刘芳</td>
+      <td><span class="deadline-tag deadline-orange">年检报告 · 18天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 5: 杭州亚运 100% -->
+    <tr>
+      <td><a class="proj-name">杭州亚运村配套游乐设施</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2023-0305 · ¥2,100万</div></td>
+      <td>杭州亚运村建设指挥部</td>
+      <td><span class="tag tag-green">已完成</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill high" style="width:100%"></div></div><span class="pbar-pct">100%</span></div>
+      </td>
+      <td><span class="miss-num zero">0</span></td>
+      <td>王磊</td>
+      <td><span class="deadline-tag deadline-gray">—</span></td>
+      <td class="action-cell"><a>查看</a><a style="color:#ccc;cursor:not-allowed">催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 6: 武汉光谷 58% -->
+    <tr>
+      <td><a class="proj-name">武汉光谷儿童乐园主题项目</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0902 · ¥1,560万</div></td>
+      <td>武汉东湖高新集团</td>
+      <td><span class="tag tag-blue">进行中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-doing">·</span>
+          <span class="stage-dot stage-miss" title="安装记录缺失">!</span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill mid" style="width:58%"></div></div><span class="pbar-pct">58%</span></div>
+      </td>
+      <td><span class="miss-num">9</span></td>
+      <td>陈强</td>
+      <td><span class="deadline-tag deadline-orange">特种设备证 · 9天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 7: 苏州工业园 79% -->
+    <tr>
+      <td><a class="proj-name">苏州工业园邻里中心游乐区</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0726 · ¥368万</div></td>
+      <td>苏州工业园区邻里中心发展有限公司</td>
+      <td><span class="tag tag-orange">验收中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-doing">·</span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill mid" style="width:79%"></div></div><span class="pbar-pct">79%</span></div>
+      </td>
+      <td><span class="miss-num">5</span></td>
+      <td>王磊</td>
+      <td><span class="deadline-tag deadline-blue">验收单 · 22天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 8: 西安大唐 35% -->
+    <tr>
+      <td><a class="proj-name">西安大唐不夜城景区互动装置</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-1218 · ¥845万</div></td>
+      <td>西安曲江文化产业投资</td>
+      <td><span class="tag tag-blue">进行中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-miss" title="设计资料严重缺失">!</span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill low" style="width:35%"></div></div><span class="pbar-pct">35%</span></div>
+      </td>
+      <td><span class="miss-num">18</span></td>
+      <td>刘芳</td>
+      <td><span class="deadline-tag deadline-red">合同附件 · 逾期 6天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 9: 南京青奥 92% -->
+    <tr>
+      <td><a class="proj-name">南京青奥森林公园体育设施</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2023-1109 · ¥1,090万</div></td>
+      <td>南京青奥城开发公司</td>
+      <td><span class="tag tag-cyan">质保期</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-doing">·</span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill high" style="width:92%"></div></div><span class="pbar-pct">92%</span></div>
+      </td>
+      <td><span class="miss-num">2</span></td>
+      <td>陈强</td>
+      <td><span class="deadline-tag deadline-blue">保险续保 · 38天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 10: 郑州航空港 51% -->
+    <tr>
+      <td><a class="proj-name">郑州航空港区少儿体适能中心</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0815 · ¥522万</div></td>
+      <td>河南航空港实验区管委会</td>
+      <td><span class="tag tag-blue">进行中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-doing">·</span>
+          <span class="stage-dot stage-miss" title="缺特种设备登记证">!</span>
+          <span class="stage-dot stage-pending"></span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill mid" style="width:51%"></div></div><span class="pbar-pct">51%</span></div>
+      </td>
+      <td><span class="miss-num">11</span></td>
+      <td>李娜</td>
+      <td><span class="deadline-tag deadline-orange">设备登记证 · 14天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+    <!-- 11: 厦门鼓浪屿 68% -->
+    <tr>
+      <td><a class="proj-name">厦门鼓浪屿亲子酒店游乐区</a><div style="font-size:11px;color:#999;margin-top:2px">HT-2024-0406 · ¥278万</div></td>
+      <td>厦门建发旅游集团</td>
+      <td><span class="tag tag-orange">验收中</span></td>
+      <td>
+        <div class="stages">
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-done">✓</span>
+          <span class="stage-dot stage-miss" title="缺安全验收报告">!</span>
+          <span class="stage-dot stage-pending"></span>
+        </div>
+      </td>
+      <td>
+        <div class="pbar"><div class="pbar-track"><div class="pbar-fill mid" style="width:68%"></div></div><span class="pbar-pct">68%</span></div>
+      </td>
+      <td><span class="miss-num">6</span></td>
+      <td>张伟</td>
+      <td><span class="deadline-tag deadline-orange">安全验收 · 11天</span></td>
+      <td class="action-cell"><a>查看</a><a>催收</a><a>导出 Word</a></td>
+    </tr>
+
+  </tbody>
+</table>
+
+<!-- 分页 -->
+<div class="pagination">
+  <span>共 200 条 · 每页 10 条</span>
+  <div>
+    <button class="page-btn">上一页</button>
+    <button class="page-btn active">1</button>
+    <button class="page-btn">2</button>
+    <button class="page-btn">3</button>
+    <button class="page-btn">...</button>
+    <button class="page-btn">20</button>
+    <button class="page-btn">下一页</button>
+  </div>
+</div>
+
+
+<!-- 区域 4: 抽屉占位 -->
+<div class="drawer-placeholder">
+  <div class="hint">👉 点击项目名称，将从右侧滑出详情抽屉（7 阶段手风琴）</div>
+  <div style="color:#bbb;font-size:12px">抽屉结构预览：按阶段列出「已上传 / 应收集」资料清单，支持上传、催收、审核</div>
+  <div class="accordion-preview">
+    <div class="stage-pill"><span class="num">5/5</span>1.投标</div>
+    <div class="stage-pill"><span class="num">8/8</span>2.合同</div>
+    <div class="stage-pill"><span class="num">6/7</span>3.设计</div>
+    <div class="stage-pill"><span class="num">9/10</span>4.生产</div>
+    <div class="stage-pill"><span class="num" style="color:#faad14">4/8</span>5.安装</div>
+    <div class="stage-pill"><span class="num" style="color:#f5222d">2/9</span>6.验收</div>
+    <div class="stage-pill"><span class="num" style="color:#ccc">0/6</span>7.售后</div>
+  </div>
+</div>
+
+
+<!-- 区域 5: 法规缺失预警横条 -->
+<div class="alert-banner">
+  <div class="alert-text">
+    <span class="alert-icon">⚠️</span>
+    <span>法规缺失预警：<strong>12</strong> 个项目缺少<a class="alert-link">特种设备使用登记证</a>／<strong>8</strong> 个项目缺少<a class="alert-link">安全验收报告</a>／<strong>5</strong> 个项目缺少<a class="alert-link">消防验收意见书</a> — 请及时补齐以免影响回款</span>
+  </div>
+  <button class="btn btn-primary">✉ 一键生成催收邮件</button>
+</div>
+
+</body>
+</html>

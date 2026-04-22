@@ -132,7 +132,8 @@
 | 04-22 | kimi4 | #3150 | approval | **max** | In Progress | 审批流程图渲染API |
 | 04-22 | kimi2 | #4012 | project | **max** | In Progress | 老板周报AI建议Section |
 | 04-22 | kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
-| 04-22 | kimi1 | #2925 | backend | **max** | In Progress | 字段级数据完整度计算引擎 |
+| 04-22 | kimi1 | ~~#2925~~ | backend | **max** | ~~Done~~ | 字段级数据完整度计算引擎 — PR #4052 已于04-21 merged |
+| 04-22 | kimi1 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
 
 ---
 

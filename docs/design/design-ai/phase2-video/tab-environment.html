@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 环境自动填充 · Issue #1834</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .chip-elem { display: flex; align-items: center; gap: 6px; padding: 6px 10px; border: 1px solid #e5e7eb; border-radius: 4px; font-size: 12px; cursor: pointer; background: #fff; }
+    .chip-elem.on { border-color: #1890ff; background: #e6f7ff; color: #1890ff; }
+    .chip-elem:hover { border-color: #91d5ff; }
+    .seg { display: inline-flex; border: 1px solid #d9d9d9; border-radius: 4px; overflow: hidden; width: 100%; }
+    .seg div { flex: 1; padding: 5px 8px; font-size: 12px; cursor: pointer; color: #666; border-right: 1px solid #d9d9d9; text-align: center; }
+    .seg div:last-child { border-right: none; }
+    .seg div.active { background: #1890ff; color: #fff; }
+    input[type=range] { accent-color: #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · AI 环境自动填充</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">上传白模 / 实景图 → AI 自动补齐 8 类环境元素（树木、建筑、道路、人物等）→ 快速生成完整场景效果图</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">方案设计师（效果图快速补环境）、投标人员（白模效果增强）、品牌（活动场地效果图）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">白模上传 / 8 类元素多选 / 风格·密度·季节·时段配置 / 参考图注入风格 / 左右中线对比 / 4 版本选择 / 局部圈选 refine</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传白模 → 勾选 6 元素 → 写实·中·夏·正午 → 点击 AI 填充 → 对比 → 圈选局部区域 refine → 保存到素材库</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">支持 8 类元素（树/建筑/道路/人/天空/灌木/车辆/设施）/ 4 种风格 / 4 季节 / 4 时段 / 4 版本对比 / 局部圈选可多次叠加</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.3.3 · AI 环境填充</a>
+      ｜ 关联 Issue：#1834
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部 · 白模上传] -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-3 flex items-center gap-3">
+  <div class="text-sm font-bold text-gray-800">📷 输入图：</div>
+  <div style="width:100px;height:60px;background:linear-gradient(135deg,#f0f0f0,#d8d8d8);border:1px solid #d9d9d9;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#999;font-size:10px;">场地白模.jpg</div>
+  <div class="text-xs text-gray-600">
+    <div class="font-medium text-gray-800">场地白模.jpg</div>
+    <div class="text-gray-400">2048×1152 · 4.1MB · 已识别 3 个建筑体量 + 1 处空地</div>
+  </div>
+  <div class="ml-auto flex items-center gap-2">
+    <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">↻ 替换</button>
+    <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">⬆ 上传新图</button>
+  </div>
+</div>
+
+<!-- [三栏主区] -->
+<div class="flex gap-3">
+
+  <!-- ========== [左栏 · 填充配置] ========== -->
+  <aside class="flex-shrink-0 bg-white border border-gray-300 rounded p-3" style="width:260px;">
+    <h3 class="text-sm font-bold text-gray-800 mb-3">⚙️ 填充配置</h3>
+
+    <!-- [元素类型] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">① 元素类型（8 选 6）</div>
+      <div class="grid grid-cols-2 gap-1.5">
+        <div class="chip-elem on">🌳 树木 ✓</div>
+        <div class="chip-elem on">🏠 建筑 ✓</div>
+        <div class="chip-elem on">🛣 道路 ✓</div>
+        <div class="chip-elem on">👥 人物 ✓</div>
+        <div class="chip-elem on">☁ 天空 ✓</div>
+        <div class="chip-elem on">🌿 灌木 ✓</div>
+        <div class="chip-elem">🚗 车辆</div>
+        <div class="chip-elem">🪑 设施</div>
+      </div>
+    </div>
+
+    <!-- [风格] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">② 风格</div>
+      <div class="seg">
+        <div>卡通</div>
+        <div class="active">写实</div>
+        <div>水彩</div>
+        <div>线稿</div>
+      </div>
+    </div>
+
+    <!-- [密度] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">③ 密度</div>
+      <div class="seg">
+        <div>低</div>
+        <div class="active">中</div>
+        <div>高</div>
+      </div>
+    </div>
+
+    <!-- [季节] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">④ 季节</div>
+      <div class="seg">
+        <div>春</div>
+        <div class="active">夏</div>
+        <div>秋</div>
+        <div>冬</div>
+      </div>
+    </div>
+
+    <!-- [时段] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">⑤ 时段</div>
+      <div class="seg">
+        <div>清晨</div>
+        <div class="active">正午</div>
+        <div>黄昏</div>
+        <div>夜晚</div>
+      </div>
+    </div>
+
+    <!-- [参考风格] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">⑥ 参考风格 (拖拽上传 · 最多 3 张)</div>
+      <div class="grid grid-cols-3 gap-1.5">
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#b6e0a2,#dff6fd);border-radius:3px;position:relative;" title="参考1">
+          <div class="absolute top-0.5 right-0.5 text-xs bg-white/70 rounded w-4 h-4 flex items-center justify-center cursor-pointer">×</div>
+        </div>
+        <div style="aspect-ratio:1;background:linear-gradient(135deg,#ffd19a,#a8d8ea);border-radius:3px;position:relative;" title="参考2">
+          <div class="absolute top-0.5 right-0.5 text-xs bg-white/70 rounded w-4 h-4 flex items-center justify-center cursor-pointer">×</div>
+        </div>
+        <div style="aspect-ratio:1;background:#f5f5f5;border:1px dashed #d9d9d9;border-radius:3px;display:flex;align-items:center;justify-content:center;color:#999;font-size:14px;cursor:pointer;">+</div>
+      </div>
+    </div>
+
+    <button class="w-full py-2.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 font-medium">✨ AI 填充环境</button>
+    <div class="text-xs text-gray-400 mt-1.5 text-center">预估耗时 45s · 费用 ¥ 12</div>
+  </aside>
+
+  <!-- ========== [中栏 · 对比预览 + 版本] ========== -->
+  <section class="flex-1 bg-white border border-gray-300 rounded p-3 min-w-0">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-sm font-bold text-gray-800">🖼️ 对比预览</h3>
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <span>← 拖动中线对比 →</span>
+        <button class="px-2 py-0.5 border border-gray-300 rounded hover:bg-gray-50">⤢ 全屏</button>
+      </div>
+    </div>
+
+    <!-- [对比预览 800×500] -->
+    <div style="width:100%;max-width:800px;margin:0 auto;">
+      <div style="width:100%;aspect-ratio:800/500;border-radius:6px;position:relative;overflow:hidden;border:1px solid #e5e7eb;">
+        <!-- 右侧：AI 填充结果（全图） -->
+        <svg viewBox="0 0 800 500" style="position:absolute;inset:0;width:100%;height:100%;display:block;">
+          <defs>
+            <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#87ceeb"/><stop offset="1" stop-color="#e0f4f8"/></linearGradient>
+            <linearGradient id="ground2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c4d698"/><stop offset="1" stop-color="#8ba866"/></linearGradient>
+          </defs>
+          <rect width="800" height="310" fill="url(#sky)"/>
+          <rect y="310" width="800" height="190" fill="url(#ground2)"/>
+          <!-- 云 -->
+          <ellipse cx="150" cy="80" rx="55" ry="16" fill="#fff" opacity="0.8"/>
+          <ellipse cx="600" cy="60" rx="70" ry="18" fill="#fff" opacity="0.7"/>
+          <!-- 远山 -->
+          <polygon points="0,280 150,200 300,250 450,190 600,260 800,220 800,310 0,310" fill="#8a9dab" opacity="0.5"/>
+          <!-- 建筑 -->
+          <g>
+            <rect x="80" y="220" width="100" height="90" fill="#d4b896"/>
+            <polygon points="80,220 130,190 180,220" fill="#a67856"/>
+            <rect x="100" y="250" width="20" height="30" fill="#6a8ab0"/>
+            <rect x="140" y="250" width="20" height="30" fill="#6a8ab0"/>
+
+            <rect x="340" y="200" width="140" height="110" fill="#e0cfa8"/>
+            <polygon points="340,200 410,170 480,200" fill="#b8895e"/>
+            <rect x="360" y="230" width="22" height="28" fill="#6a8ab0"/>
+            <rect x="395" y="230" width="22" height="28" fill="#6a8ab0"/>
+            <rect x="430" y="230" width="22" height="28" fill="#6a8ab0"/>
+
+            <rect x="620" y="230" width="110" height="80" fill="#cfb890"/>
+            <polygon points="620,230 675,205 730,230" fill="#a07550"/>
+            <rect x="640" y="255" width="18" height="26" fill="#6a8ab0"/>
+            <rect x="680" y="255" width="18" height="26" fill="#6a8ab0"/>
+          </g>
+          <!-- 树 -->
+          <g>
+            <ellipse cx="40" cy="290" rx="26" ry="38" fill="#5f8b4c"/><rect x="37" y="305" width="6" height="25" fill="#6b4a2a"/>
+            <ellipse cx="230" cy="295" rx="22" ry="32" fill="#6b9a55"/><rect x="227" y="310" width="6" height="22" fill="#6b4a2a"/>
+            <ellipse cx="280" cy="290" rx="24" ry="34" fill="#7aaa60"/><rect x="277" y="308" width="6" height="22" fill="#6b4a2a"/>
+            <ellipse cx="540" cy="290" rx="28" ry="40" fill="#5f8b4c"/><rect x="537" y="308" width="6" height="25" fill="#6b4a2a"/>
+            <ellipse cx="590" cy="295" rx="24" ry="34" fill="#6b9a55"/><rect x="587" y="310" width="6" height="22" fill="#6b4a2a"/>
+            <ellipse cx="775" cy="300" rx="22" ry="32" fill="#7aaa60"/><rect x="772" y="315" width="6" height="22" fill="#6b4a2a"/>
+          </g>
+          <!-- 灌木 -->
+          <g opacity="0.9">
+            <ellipse cx="120" cy="340" rx="18" ry="8" fill="#7baa5f"/>
+            <ellipse cx="200" cy="360" rx="22" ry="9" fill="#86b56a"/>
+            <ellipse cx="500" cy="360" rx="25" ry="10" fill="#7baa5f"/>
+            <ellipse cx="700" cy="345" rx="20" ry="8" fill="#86b56a"/>
+          </g>
+          <!-- 道路 -->
+          <polygon points="320,500 480,500 440,330 360,330" fill="#b8b0a5"/>
+          <line x1="400" y1="335" x2="400" y2="500" stroke="#fff" stroke-width="2" stroke-dasharray="6,6" opacity="0.7"/>
+          <!-- 人物 -->
+          <g>
+            <circle cx="380" cy="400" r="5" fill="#e8c59e"/><rect x="377" y="405" width="6" height="16" fill="#c94a3e"/><rect x="377" y="421" width="6" height="12" fill="#4a5a8a"/>
+            <circle cx="420" cy="420" r="5" fill="#e8c59e"/><rect x="417" y="425" width="6" height="16" fill="#5a8aca"/><rect x="417" y="441" width="6" height="12" fill="#3a4a6a"/>
+            <circle cx="395" cy="450" r="4" fill="#e8c59e"/><rect x="392" y="454" width="6" height="14" fill="#e8a84a"/>
+          </g>
+          <!-- 太阳 -->
+          <circle cx="680" cy="70" r="30" fill="#ffeaa7" opacity="0.9"/>
+        </svg>
+
+        <!-- 左侧：原始白模（通过 clip-path 遮罩） -->
+        <div style="position:absolute;inset:0;clip-path:inset(0 50% 0 0);background:#f4f4f4;">
+          <svg viewBox="0 0 800 500" style="width:100%;height:100%;display:block;">
+            <rect width="800" height="310" fill="#e8e8e8"/>
+            <rect y="310" width="800" height="190" fill="#c8c8c8"/>
+            <g fill="#b0b0b0" stroke="#909090" stroke-width="1.5">
+              <rect x="80" y="220" width="100" height="90"/>
+              <polygon points="80,220 130,190 180,220"/>
+              <rect x="340" y="200" width="140" height="110"/>
+              <polygon points="340,200 410,170 480,200"/>
+              <rect x="620" y="230" width="110" height="80"/>
+              <polygon points="620,230 675,205 730,230"/>
+            </g>
+            <!-- 网格标记 -->
+            <g stroke="#a0a0a0" stroke-width="0.5" opacity="0.5">
+              <line x1="0" y1="370" x2="800" y2="370"/>
+              <line x1="0" y1="430" x2="800" y2="430"/>
+              <line x1="200" y1="310" x2="200" y2="500"/>
+              <line x1="400" y1="310" x2="400" y2="500"/>
+              <line x1="600" y1="310" x2="600" y2="500"/>
+            </g>
+          </svg>
+        </div>
+
+        <!-- 中线拖拽 -->
+        <div style="position:absolute;top:0;bottom:0;left:50%;width:2px;background:#fff;box-shadow:0 0 8px rgba(0,0,0,0.4);cursor:ew-resize;">
+          <div style="position:absolute;top:50%;left:-14px;transform:translateY(-50%);width:30px;height:30px;background:#fff;border-radius:50%;box-shadow:0 2px 8px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;font-size:14px;color:#1890ff;">⇆</div>
+        </div>
+
+        <!-- 标签 -->
+        <div style="position:absolute;top:8px;left:8px;background:rgba(0,0,0,0.6);color:#fff;padding:3px 10px;border-radius:3px;font-size:11px;">原始白模</div>
+        <div style="position:absolute;top:8px;right:8px;background:rgba(24,144,255,0.85);color:#fff;padding:3px 10px;border-radius:3px;font-size:11px;">AI 填充结果 · v3</div>
+      </div>
+    </div>
+
+    <!-- [4 版本选择] -->
+    <div class="mt-4">
+      <div class="text-xs text-gray-600 mb-2">🔀 版本选择（4 候选）</div>
+      <div class="grid grid-cols-4 gap-2.5">
+        <div class="border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-400">
+          <div style="aspect-ratio:16/10;background:linear-gradient(180deg,#87ceeb 0%,#c4d698 60%,#8ba866 100%);"></div>
+          <div class="p-1.5 text-xs text-gray-600 flex justify-between"><span>v1</span><span class="text-gray-400">树木中等</span></div>
+        </div>
+        <div class="border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-400">
+          <div style="aspect-ratio:16/10;background:linear-gradient(180deg,#b4d9e9 0%,#d4e0a8 60%,#9cb87c 100%);"></div>
+          <div class="p-1.5 text-xs text-gray-600 flex justify-between"><span>v2</span><span class="text-gray-400">建筑多</span></div>
+        </div>
+        <div class="border-2 border-blue-500 rounded overflow-hidden cursor-pointer relative">
+          <div style="aspect-ratio:16/10;background:linear-gradient(180deg,#87ceeb 0%,#c4d698 60%,#8ba866 100%);"></div>
+          <div class="p-1.5 text-xs text-blue-600 flex justify-between items-center"><span class="font-bold">v3 ✓</span><span>当前</span></div>
+          <div class="absolute top-1 right-1 bg-blue-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">✓</div>
+        </div>
+        <div class="border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-400">
+          <div style="aspect-ratio:16/10;background:linear-gradient(180deg,#a8c8e0 0%,#d0dcb0 60%,#a0b880 100%);"></div>
+          <div class="p-1.5 text-xs text-gray-600 flex justify-between"><span>v4</span><span class="text-gray-400">人物多</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== [右栏 · 局部微调] ========== -->
+  <aside class="flex-shrink-0 bg-white border border-gray-300 rounded p-3" style="width:280px;">
+    <h3 class="text-sm font-bold text-gray-800 mb-3">🎯 局部微调</h3>
+
+    <!-- [圈选按钮] -->
+    <button class="w-full py-2 border-2 border-dashed border-blue-400 text-blue-500 text-sm rounded hover:bg-blue-50 mb-3">
+      ✏️ 圈选区域 refine
+    </button>
+    <div class="text-xs text-gray-400 mb-3 text-center">点击预览区拖动框选，即可对该区域局部重绘</div>
+
+    <!-- [已圈区域] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">已圈定区域 (1)</div>
+      <div class="border border-blue-300 bg-blue-50 rounded p-2 flex items-start gap-2">
+        <div style="width:48px;height:36px;background:linear-gradient(135deg,#6b9a55,#3d6028);border-radius:3px;flex-shrink-0;position:relative;">
+          <div style="position:absolute;inset:4px;border:1.5px dashed #fff;border-radius:2px;"></div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-medium text-gray-800">区域 #1 · 左侧林带</div>
+          <div class="text-xs text-gray-500 mt-0.5">树木密度 → <b class="text-blue-600">高</b></div>
+          <div class="text-xs text-gray-400 mt-0.5">320×220 px · 已应用</div>
+        </div>
+        <button class="text-xs text-red-500 hover:underline">✕</button>
+      </div>
+    </div>
+
+    <!-- [调整历史] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">📜 调整历史</div>
+      <div class="space-y-1.5">
+        <div class="flex items-start gap-2 text-xs p-1.5 bg-gray-50 rounded">
+          <span class="text-green-500 mt-0.5">●</span>
+          <div class="flex-1">
+            <div class="text-gray-700">区域 #1 树木密度 低→高</div>
+            <div class="text-gray-400 text-xs">14:32 · v3</div>
+          </div>
+          <button class="text-gray-400 hover:text-gray-600">↩</button>
+        </div>
+        <div class="flex items-start gap-2 text-xs p-1.5 bg-gray-50 rounded">
+          <span class="text-green-500 mt-0.5">●</span>
+          <div class="flex-1">
+            <div class="text-gray-700">全局季节 春→夏</div>
+            <div class="text-gray-400 text-xs">14:25 · v2</div>
+          </div>
+          <button class="text-gray-400 hover:text-gray-600">↩</button>
+        </div>
+        <div class="flex items-start gap-2 text-xs p-1.5 bg-gray-50 rounded">
+          <span class="text-green-500 mt-0.5">●</span>
+          <div class="flex-1">
+            <div class="text-gray-700">初次 AI 填充（6 元素 · 写实）</div>
+            <div class="text-gray-400 text-xs">14:18 · v1</div>
+          </div>
+          <button class="text-gray-400 hover:text-gray-600">↩</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="w-full py-2 bg-green-500 text-white text-sm rounded hover:bg-green-600 mb-2">💾 保存到素材库</button>
+    <div class="grid grid-cols-2 gap-2">
+      <button class="py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">⬇ 下载图</button>
+      <button class="py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">🔗 分享链接</button>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

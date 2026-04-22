@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LoRA 训练台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .field { margin-bottom: 10px; }
+    .field label { display:block; font-size:11.5px; color:#666; margin-bottom:3px; }
+    .field input, .field select { width:100%; padding:5px 8px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px; }
+    .field input:focus, .field select:focus { border-color:#1890ff; outline:none; }
+    .hp-row { display:grid; grid-template-columns: 1fr 1fr; gap:8px; }
+    .queue-item { padding:6px 8px; border:1px solid #f0f0f0; border-radius:3px; font-size:11.5px; margin-bottom:4px; background:#fafafa; }
+    .quick-preset { cursor:pointer; transition:all .15s; }
+    .quick-preset:hover { border-color:#1890ff; background:#e6f7ff; }
+    .quick-preset.active { border-color:#1890ff; background:#e6f7ff; color:#1890ff; }
+    .epoch-tab { padding:4px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:11px; cursor:pointer; background:#fff; }
+    .epoch-tab.active { border-color:#1890ff; background:#1890ff; color:#fff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-4">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab2 · LoRA 训练台</span>
+      <span style="background:#52c41a;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">🟢 Pipeline Ready</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">Kohya-ss LoRA 训练 GUI — 可视化配置超参数 + 实时 Loss/LR 曲线 + 每 Epoch 验证图预览，让设计师无需命令行即可训练风格模型</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（训练万德产品 / 国际渲染风格 LoRA）、AI 工程师（调超参）、训练操作员（任务排队监控）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">训练配置（Base 模型 + 超参数 7 项）/ Loss/LR 双曲线 SVG / 每 Epoch 验证图对比 / 3 个快捷预设（保守 / 均衡 / 激进）/ 任务队列</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">选 Base 模型 + 数据集 → 设超参（或选预设）→ 启动训练 → 实时看 Loss 曲线 → Epoch 末看验证图 → 满意则保存</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">Loss 曲线可见 / 暂停 / 停止 / 保存中间模型 / 验证图 Epoch 5/10/12 可对比 / 队列最多 3 任务 / GPU 利用率显示</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.4.2 · LoRA 训练台</a>
+      ｜ 关联 Issue：#2486 LoRA-A / #2487 LoRA-B / #1680 风格 LoRA
+      ｜ 代码基线：pipeline/pipelines/comfyui_rendering/wdpp_lora_trainer.py · performance_benchmark.py
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [三栏主体 — 左:训练配置 中:曲线监控 右:实时预览] -->
+<div class="grid gap-4" style="grid-template-columns: 320px 1fr 300px;">
+
+  <!-- ============ 左栏：训练配置 ============ -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <h2 class="text-sm font-bold text-gray-800 mb-3">⚙️ 训练配置</h2>
+
+    <div class="field">
+      <label>训练任务名</label>
+      <input type="text" value="LoRA-A_万德产品_v2.3">
+    </div>
+
+    <div class="field">
+      <label>Base 模型</label>
+      <select>
+        <option selected>SDXL 1.0（推荐 · 风格细节强）</option>
+        <option>SD 1.5（轻量 · 兼容广）</option>
+        <option>Flux.1（新模型 · 显存高）</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>数据集</label>
+      <select>
+        <option selected>万德产品风格集（342 张 · 已标注 287）</option>
+        <option>竞品风格集（218 张）</option>
+        <option>国际渲染集（156 张）</option>
+      </select>
+    </div>
+
+    <div class="field">
+      <label>触发词 (Trigger Word)</label>
+      <input type="text" value="wande_product">
+    </div>
+
+    <!-- 超参数折叠区 -->
+    <div class="border border-gray-200 rounded p-3 mt-3 bg-gray-50">
+      <div class="flex items-center justify-between mb-2">
+        <div class="text-xs font-bold text-gray-700">🔧 超参数（Kohya-ss）</div>
+        <span class="text-xs text-blue-500 cursor-pointer">▼ 展开</span>
+      </div>
+
+      <div class="hp-row">
+        <div class="field mb-2">
+          <label>Learning Rate</label>
+          <input type="text" value="1e-4">
+        </div>
+        <div class="field mb-2">
+          <label>Batch Size</label>
+          <input type="text" value="4">
+        </div>
+      </div>
+      <div class="hp-row">
+        <div class="field mb-2">
+          <label>Epochs</label>
+          <input type="text" value="20">
+        </div>
+        <div class="field mb-2">
+          <label>Network Rank</label>
+          <input type="text" value="32">
+        </div>
+      </div>
+      <div class="hp-row">
+        <div class="field mb-2">
+          <label>Network Alpha</label>
+          <input type="text" value="16">
+        </div>
+        <div class="field mb-2">
+          <label>Optimizer</label>
+          <select><option selected>AdamW8bit</option><option>AdamW</option><option>Lion</option></select>
+        </div>
+      </div>
+      <div class="field mb-0">
+        <label>LR Scheduler</label>
+        <select><option selected>Cosine</option><option>Constant</option><option>Linear</option></select>
+      </div>
+    </div>
+
+    <!-- GPU 选择 -->
+    <div class="field mt-3">
+      <label>GPU 资源</label>
+      <select>
+        <option selected>G7e A10G × 1（24GB · 可用）</option>
+        <option>G7e A10G × 2（分布式训练）</option>
+        <option>CPU（仅 debug）</option>
+      </select>
+      <div class="text-xs text-gray-500 mt-1">💾 预估显存占用 18.4GB / 24GB</div>
+    </div>
+
+    <!-- 启动按钮 -->
+    <button class="w-full py-3 bg-blue-500 text-white text-sm font-bold rounded hover:bg-blue-600 mt-3">
+      🚀 启动训练
+    </button>
+
+    <!-- 快捷预设 -->
+    <div class="mt-4">
+      <div class="text-xs text-gray-500 mb-2">⚡ 快捷配置</div>
+      <div class="grid grid-cols-3 gap-2">
+        <div class="quick-preset border border-gray-300 rounded p-2 text-center text-xs">
+          <div class="font-bold">保守</div>
+          <div class="text-gray-500 mt-1">LR 5e-5<br>Epoch 30</div>
+        </div>
+        <div class="quick-preset active border border-gray-300 rounded p-2 text-center text-xs">
+          <div class="font-bold">均衡</div>
+          <div class="text-blue-600 mt-1">LR 1e-4<br>Epoch 20</div>
+        </div>
+        <div class="quick-preset border border-gray-300 rounded p-2 text-center text-xs">
+          <div class="font-bold">激进</div>
+          <div class="text-gray-500 mt-1">LR 3e-4<br>Epoch 10</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ 中栏：曲线监控 ============ -->
+  <div class="space-y-3">
+
+    <!-- 当前训练任务卡 -->
+    <div class="bg-white border-2 border-blue-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <span class="inline-block w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+          <h2 class="text-sm font-bold text-gray-800">LoRA-A_万德产品_v2.3</h2>
+          <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">运行中</span>
+        </div>
+        <div class="text-xs text-gray-500">已用 2h37min · 剩余 1h23min</div>
+      </div>
+
+      <div class="grid grid-cols-4 gap-3 mb-4">
+        <div class="border border-gray-200 rounded p-2 text-center bg-gray-50">
+          <div class="text-xs text-gray-500">Epoch</div>
+          <div class="text-lg font-bold text-blue-600">12 / 20</div>
+        </div>
+        <div class="border border-gray-200 rounded p-2 text-center bg-gray-50">
+          <div class="text-xs text-gray-500">Step</div>
+          <div class="text-lg font-bold text-gray-700">1,032 / 1,720</div>
+        </div>
+        <div class="border border-gray-200 rounded p-2 text-center bg-gray-50">
+          <div class="text-xs text-gray-500">Loss</div>
+          <div class="text-lg font-bold text-green-600">0.214</div>
+        </div>
+        <div class="border border-gray-200 rounded p-2 text-center bg-gray-50">
+          <div class="text-xs text-gray-500">GPU 利用率</div>
+          <div class="text-lg font-bold text-orange-500">87%</div>
+        </div>
+      </div>
+
+      <!-- 进度条 -->
+      <div class="h-2 bg-gray-200 rounded overflow-hidden">
+        <div class="h-full bg-blue-500" style="width:60%;"></div>
+      </div>
+    </div>
+
+    <!-- Loss 曲线 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-bold text-gray-800">📉 Loss 曲线</h3>
+        <div class="text-xs text-gray-500">初始 0.842 → 当前 0.214 · 下降 74.6%</div>
+      </div>
+      <svg viewBox="0 0 600 180" style="width:100%;height:180px;background:#fafafa;border:1px solid #f0f0f0;border-radius:3px;">
+        <!-- 网格线 -->
+        <g stroke="#e8e8e8" stroke-width="1">
+          <line x1="40" y1="20" x2="580" y2="20"/>
+          <line x1="40" y1="60" x2="580" y2="60"/>
+          <line x1="40" y1="100" x2="580" y2="100"/>
+          <line x1="40" y1="140" x2="580" y2="140"/>
+        </g>
+        <!-- Y 轴 标签 -->
+        <g font-size="10" fill="#999" font-family="monospace">
+          <text x="5" y="24">0.9</text>
+          <text x="5" y="64">0.6</text>
+          <text x="5" y="104">0.3</text>
+          <text x="5" y="144">0.1</text>
+        </g>
+        <!-- X 轴 标签 -->
+        <g font-size="10" fill="#999" font-family="monospace">
+          <text x="45" y="165">0</text>
+          <text x="180" y="165">Ep.5</text>
+          <text x="320" y="165">Ep.10</text>
+          <text x="420" y="165">Ep.12</text>
+          <text x="560" y="165">Ep.20</text>
+        </g>
+        <!-- Loss 曲线 -->
+        <path d="M40,30 C80,38 110,55 150,72 C190,85 220,100 260,110 C300,118 340,125 380,130 C400,132 420,133 440,134" stroke="#1890ff" stroke-width="2" fill="none"/>
+        <!-- 当前点 -->
+        <circle cx="440" cy="134" r="4" fill="#1890ff"/>
+        <text x="448" y="128" font-size="10" fill="#1890ff" font-family="monospace">0.214</text>
+        <!-- 预测虚线 -->
+        <path d="M440,134 L560,140" stroke="#1890ff" stroke-width="1.5" fill="none" stroke-dasharray="4,3" opacity="0.4"/>
+      </svg>
+    </div>
+
+    <!-- 学习率曲线 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-bold text-gray-800">📈 学习率曲线 <span class="text-xs text-gray-400 font-normal ml-2">Cosine Scheduler</span></h3>
+        <div class="text-xs text-gray-500">初始 1e-4 → 当前 8e-5</div>
+      </div>
+      <svg viewBox="0 0 600 120" style="width:100%;height:120px;background:#fafafa;border:1px solid #f0f0f0;border-radius:3px;">
+        <g stroke="#e8e8e8" stroke-width="1">
+          <line x1="40" y1="20" x2="580" y2="20"/>
+          <line x1="40" y1="60" x2="580" y2="60"/>
+          <line x1="40" y1="100" x2="580" y2="100"/>
+        </g>
+        <g font-size="10" fill="#999" font-family="monospace">
+          <text x="5" y="24">1e-4</text>
+          <text x="5" y="64">5e-5</text>
+          <text x="5" y="104">0</text>
+        </g>
+        <!-- LR 曲线：Cosine 衰减 -->
+        <path d="M40,20 C120,22 180,30 250,45 C320,60 380,78 440,92 C500,100 540,103 580,105" stroke="#722ed1" stroke-width="2" fill="none"/>
+        <circle cx="440" cy="92" r="3" fill="#722ed1"/>
+        <text x="448" y="88" font-size="10" fill="#722ed1" font-family="monospace">8e-5</text>
+      </svg>
+    </div>
+
+    <!-- 训练日志 -->
+    <div class="bg-gray-900 text-green-400 border border-gray-700 rounded p-3 font-mono text-xs">
+      <div class="flex items-center justify-between mb-2">
+        <div class="text-gray-400">📟 训练日志 (stdout)</div>
+        <div class="flex gap-2">
+          <span class="text-gray-500 hover:text-white cursor-pointer text-xs">📋 复制</span>
+          <span class="text-gray-500 hover:text-white cursor-pointer text-xs">📥 下载</span>
+        </div>
+      </div>
+      <div class="leading-relaxed">
+        <div><span class="text-gray-500">[14:28:42]</span> [Epoch 11/20] ✓ saved intermediate checkpoint → /models/wande_product/ep11.safetensors</div>
+        <div><span class="text-gray-500">[14:31:15]</span> [Epoch 12] step 86/86 loss=0.214 lr=8e-5 <span class="text-blue-300">avg_loss=0.221</span></div>
+        <div><span class="text-gray-500">[14:31:16]</span> [Epoch 12] <span class="text-yellow-400">generating validation images...</span> "wande_product a children's slide"</div>
+      </div>
+    </div>
+
+    <!-- 底部操作 -->
+    <div class="flex items-center gap-2">
+      <button class="flex-1 py-2 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">⏸ 暂停</button>
+      <button class="flex-1 py-2 text-xs border border-red-300 text-red-600 rounded hover:bg-red-50">⏹ 停止</button>
+      <button class="flex-1 py-2 text-xs border border-blue-300 text-blue-600 rounded hover:bg-blue-50">💾 保存中间模型</button>
+    </div>
+
+  </div>
+
+  <!-- ============ 右栏：实时预览 ============ -->
+  <div class="space-y-3">
+
+    <!-- 实时预览标题 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-sm font-bold text-gray-800">🖼 实时预览</h2>
+        <span class="text-xs text-blue-500">每 Epoch 生成 2 张</span>
+      </div>
+
+      <!-- Epoch 切换 -->
+      <div class="flex items-center gap-1 mb-3">
+        <span class="text-xs text-gray-500 mr-1">Epoch:</span>
+        <div class="epoch-tab">5</div>
+        <div class="epoch-tab">10</div>
+        <div class="epoch-tab active">12</div>
+      </div>
+
+      <!-- 验证图 2 张 -->
+      <div class="grid grid-cols-2 gap-2 mb-3">
+        <div class="border border-gray-200 rounded overflow-hidden">
+          <div class="bg-gradient-to-br from-blue-200 to-orange-200 flex items-center justify-center text-gray-600 text-xs" style="width:100%;height:130px;">
+            <div class="text-center">
+              <div class="text-2xl mb-1">🛝</div>
+              <div>验证图 #1</div>
+            </div>
+          </div>
+          <div class="p-1.5 text-xs text-gray-600 bg-gray-50 truncate">Ep.12 · 儿童滑梯</div>
+        </div>
+        <div class="border border-gray-200 rounded overflow-hidden">
+          <div class="bg-gradient-to-br from-green-200 to-yellow-200 flex items-center justify-center text-gray-600 text-xs" style="width:100%;height:130px;">
+            <div class="text-center">
+              <div class="text-2xl mb-1">🎠</div>
+              <div>验证图 #2</div>
+            </div>
+          </div>
+          <div class="p-1.5 text-xs text-gray-600 bg-gray-50 truncate">Ep.12 · 组合游乐</div>
+        </div>
+      </div>
+
+      <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">
+        <div class="mb-1"><b>Prompt:</b></div>
+        <div class="font-mono text-xs bg-gray-50 p-1.5 rounded">wande_product, a children's slide in a park, marine theme, 3D render</div>
+      </div>
+    </div>
+
+    <!-- 历史 Epoch 对比 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h3 class="text-sm font-bold text-gray-800 mb-3">📸 历史 Epoch 对比</h3>
+      <div class="space-y-2">
+        <div class="flex items-center gap-2 p-2 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer">
+          <div class="w-12 h-12 bg-gradient-to-br from-blue-100 to-orange-100 rounded flex items-center justify-center text-xs text-gray-500">E5</div>
+          <div class="flex-1 text-xs">
+            <div class="font-medium text-gray-700">Epoch 5</div>
+            <div class="text-gray-500">Loss 0.412 · 风格初现</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 p-2 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer">
+          <div class="w-12 h-12 bg-gradient-to-br from-blue-200 to-orange-200 rounded flex items-center justify-center text-xs text-gray-500">E10</div>
+          <div class="flex-1 text-xs">
+            <div class="font-medium text-gray-700">Epoch 10</div>
+            <div class="text-gray-500">Loss 0.268 · 接近目标</div>
+          </div>
+        </div>
+        <div class="flex items-center gap-2 p-2 border-2 border-blue-400 rounded bg-blue-50 cursor-pointer">
+          <div class="w-12 h-12 bg-gradient-to-br from-blue-300 to-orange-300 rounded flex items-center justify-center text-xs text-white">E12</div>
+          <div class="flex-1 text-xs">
+            <div class="font-medium text-blue-700">Epoch 12（当前）</div>
+            <div class="text-blue-600">Loss 0.214 · 可用</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 任务队列 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-gray-800">📋 任务队列</h3>
+        <span class="text-xs text-gray-400">3 等待中</span>
+      </div>
+      <div class="queue-item">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-700">LoRA-B_国际渲染_v1.5</span>
+          <span class="text-xs text-gray-500">排队 #1</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-1">SDXL · 156 张 · Epoch 25</div>
+      </div>
+      <div class="queue-item">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-700">童趣卡通风 v1.1</span>
+          <span class="text-xs text-gray-500">排队 #2</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-1">SD1.5 · 89 张 · Epoch 30</div>
+      </div>
+      <div class="queue-item">
+        <div class="flex items-center justify-between">
+          <span class="font-medium text-gray-700">深圳商业综合体 v0.9</span>
+          <span class="text-xs text-gray-500">排队 #3</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-1">SDXL · 67 张 · Epoch 20</div>
+      </div>
+      <button class="w-full py-1.5 text-xs border border-dashed border-gray-400 text-gray-500 rounded hover:bg-gray-50 mt-2">+ 添加到队列</button>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

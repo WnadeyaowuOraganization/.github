@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Three.js 漫游录制 · Issue #2305</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .kf-row { border: 1px solid #e5e7eb; border-radius: 4px; padding: 7px 8px; margin-bottom: 6px; background: #fafafa; font-size: 11.5px; cursor: pointer; }
+    .kf-row.active { border-color: #1890ff; background: #e6f7ff; }
+    .kf-row:hover { border-color: #91d5ff; }
+    .seg { display: inline-flex; border: 1px solid #d9d9d9; border-radius: 4px; overflow: hidden; }
+    .seg div { padding: 4px 10px; font-size: 11.5px; cursor: pointer; color: #666; border-right: 1px solid #d9d9d9; }
+    .seg div:last-child { border-right: none; }
+    .seg div.active { background: #1890ff; color: #fff; }
+    .num-input { width: 48px; border: 1px solid #d9d9d9; border-radius: 3px; padding: 2px 4px; font-size: 11px; text-align: center; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab2 · Three.js 漫游录制</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">加载 3D 场景（.glb）→ 编辑摄像机关键帧路径 → 录制高质量漫游视频，用于方案演示、投标视频和项目汇报</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">方案设计师（3D 场景漫游展示）、投标人员（动态呈现项目方案）、项目经理（进度/效果汇报）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">.glb 场景加载 / 关键帧路径编辑（位置/视角/持续/缓动）/ Canvas 3D 实时预览 / 24·30·60fps 录制 / 4K·1080p·720p / MP4·WEBM·GIF 多格式</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">加载场景 → 调整视角 → 捕获关键帧 K0-K4 → 设置缓动（ease/linear）→ 选 4K/MP4/电影级 → 开始录制 → 导出</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">关键帧可拖拽排序·编辑 / 预览实时响应 / 支持 3 种音频（无/背景音乐下拉）/ 水印可选 / 录制进度条实时更新</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.3.2 · Three.js 漫游录制</a>
+      ｜ 关联 Issue：#2305
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [场景选择顶部条] -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-3 flex items-center gap-3">
+  <span class="text-sm font-bold text-gray-800">🗺️ 当前场景：</span>
+  <div class="flex-1 flex items-center gap-2">
+    <span class="px-2 py-1 bg-blue-50 border border-blue-200 text-blue-700 text-xs rounded">📦 南山V3_完整场景.glb</span>
+    <span class="text-xs text-gray-400">45.2MB · 最近加载 2024-04-22 14:30</span>
+  </div>
+  <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">↻ 重新加载</button>
+  <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">📂 切换场景</button>
+  <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">⬆ 上传 .glb</button>
+</div>
+
+<!-- [三栏主区] -->
+<div class="flex gap-3">
+
+  <!-- ========== [左栏 · 控制面板] ========== -->
+  <aside class="flex-shrink-0 bg-white border border-gray-300 rounded p-3" style="width:260px;">
+    <h3 class="text-sm font-bold text-gray-800 mb-2">🎬 摄像机路径</h3>
+    <div class="text-xs text-gray-500 mb-2">关键帧列表 · 共 5 帧</div>
+
+    <!-- [关键帧列表 K0-K4] -->
+    <div class="mb-3">
+      <!-- K0 -->
+      <div class="kf-row active">
+        <div class="flex justify-between items-center mb-1.5">
+          <b class="text-blue-700">K0 · 起始</b>
+          <span class="text-gray-400">0.0s</span>
+        </div>
+        <div class="grid grid-cols-3 gap-1 mb-1">
+          <span class="text-gray-500">X</span><span class="text-gray-500">Y</span><span class="text-gray-500">Z</span>
+          <input class="num-input" value="-15.2"><input class="num-input" value="8.0"><input class="num-input" value="22.5">
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-600">
+          <span>视角 65°</span><span>·</span><span>持续 2s</span><span>·</span>
+          <select class="text-xs border border-gray-300 rounded bg-white px-1"><option>ease</option><option>linear</option></select>
+        </div>
+      </div>
+      <!-- K1 -->
+      <div class="kf-row">
+        <div class="flex justify-between items-center mb-1.5"><b>K1 · 入口</b><span class="text-gray-400">2.5s</span></div>
+        <div class="grid grid-cols-3 gap-1 mb-1">
+          <span class="text-gray-500">X</span><span class="text-gray-500">Y</span><span class="text-gray-500">Z</span>
+          <input class="num-input" value="-5.0"><input class="num-input" value="6.0"><input class="num-input" value="15.0">
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-600">
+          <span>视角 60°</span><span>·</span><span>持续 2.5s</span><span>·</span>
+          <select class="text-xs border border-gray-300 rounded bg-white px-1"><option>ease</option><option>linear</option></select>
+        </div>
+      </div>
+      <!-- K2 -->
+      <div class="kf-row">
+        <div class="flex justify-between items-center mb-1.5"><b>K2 · 中央广场</b><span class="text-gray-400">5.0s</span></div>
+        <div class="grid grid-cols-3 gap-1 mb-1">
+          <span class="text-gray-500">X</span><span class="text-gray-500">Y</span><span class="text-gray-500">Z</span>
+          <input class="num-input" value="0.0"><input class="num-input" value="4.5"><input class="num-input" value="0.0">
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-600">
+          <span>视角 55°</span><span>·</span><span>持续 3s</span><span>·</span>
+          <select class="text-xs border border-gray-300 rounded bg-white px-1"><option>ease</option><option>linear</option></select>
+        </div>
+      </div>
+      <!-- K3 -->
+      <div class="kf-row">
+        <div class="flex justify-between items-center mb-1.5"><b>K3 · 滑梯特写</b><span class="text-gray-400">8.0s</span></div>
+        <div class="grid grid-cols-3 gap-1 mb-1">
+          <span class="text-gray-500">X</span><span class="text-gray-500">Y</span><span class="text-gray-500">Z</span>
+          <input class="num-input" value="5.5"><input class="num-input" value="3.0"><input class="num-input" value="-3.5">
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-600">
+          <span>视角 45°</span><span>·</span><span>持续 2.5s</span><span>·</span>
+          <select class="text-xs border border-gray-300 rounded bg-white px-1"><option>ease</option><option>linear</option></select>
+        </div>
+      </div>
+      <!-- K4 -->
+      <div class="kf-row">
+        <div class="flex justify-between items-center mb-1.5"><b>K4 · 俯瞰收尾</b><span class="text-gray-400">10.5s</span></div>
+        <div class="grid grid-cols-3 gap-1 mb-1">
+          <span class="text-gray-500">X</span><span class="text-gray-500">Y</span><span class="text-gray-500">Z</span>
+          <input class="num-input" value="12.0"><input class="num-input" value="18.0"><input class="num-input" value="12.0">
+        </div>
+        <div class="flex items-center gap-1.5 text-xs text-gray-600">
+          <span>视角 75°</span><span>·</span><span>持续 1.5s</span><span>·</span>
+          <select class="text-xs border border-gray-300 rounded bg-white px-1"><option>ease</option><option>linear</option></select>
+        </div>
+      </div>
+    </div>
+
+    <!-- [关键帧操作按钮] -->
+    <div class="flex flex-wrap gap-1.5 mb-3">
+      <button class="flex-1 py-1.5 text-xs border border-blue-400 text-blue-500 rounded hover:bg-blue-50">+ 添加关键帧</button>
+      <button class="flex-1 py-1.5 text-xs border border-gray-300 text-gray-600 rounded hover:bg-gray-50">🗑 删除</button>
+    </div>
+    <button class="w-full py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:bg-gray-50 mb-3">📷 在当前视角捕获</button>
+
+    <!-- [总时长 + 帧率] -->
+    <div class="border-t border-gray-200 pt-2.5 text-xs">
+      <div class="flex justify-between mb-2"><span class="text-gray-600">总时长</span><b class="text-gray-800">12s</b></div>
+      <div class="flex items-center justify-between">
+        <span class="text-gray-600">录制帧率</span>
+        <div class="seg">
+          <div>24</div>
+          <div class="active">30</div>
+          <div>60</div>
+        </div>
+      </div>
+    </div>
+  </aside>
+
+  <!-- ========== [中栏 · Canvas 3D 预览] ========== -->
+  <section class="flex-1 bg-white border border-gray-300 rounded p-3 min-w-0">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-sm font-bold text-gray-800">🖥️ Three.js 场景预览</h3>
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <span>👁 视角 K0 · -15.2, 8.0, 22.5</span>
+        <button class="px-2 py-0.5 border border-gray-300 rounded hover:bg-gray-50">⤢ 全屏</button>
+      </div>
+    </div>
+
+    <!-- [Canvas 3D 预览 800×500 SVG模拟] -->
+    <div style="width:100%;max-width:800px;margin:0 auto;">
+      <svg viewBox="0 0 800 500" style="width:100%;aspect-ratio:800/500;background:linear-gradient(180deg,#87ceeb 0%,#b4d9e9 50%,#f0f0dc 100%);border-radius:6px;display:block;">
+        <!-- 网格地面 -->
+        <defs>
+          <linearGradient id="ground" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0" stop-color="#d4e0a8"/>
+            <stop offset="1" stop-color="#9cb87c"/>
+          </linearGradient>
+          <pattern id="grid" width="40" height="20" patternUnits="userSpaceOnUse" patternTransform="skewX(-20)">
+            <rect width="40" height="20" fill="none"/>
+            <path d="M 40 0 L 0 0 0 20" fill="none" stroke="#7a9a5a" stroke-width="0.5" opacity="0.5"/>
+          </pattern>
+        </defs>
+        <!-- 地面 -->
+        <polygon points="0,300 800,300 800,500 0,500" fill="url(#ground)"/>
+        <polygon points="0,300 800,300 800,500 0,500" fill="url(#grid)"/>
+        <!-- 太阳/光照 -->
+        <circle cx="650" cy="80" r="38" fill="#ffeaa7" opacity="0.85"/>
+        <circle cx="650" cy="80" r="55" fill="#ffeaa7" opacity="0.25"/>
+        <!-- 远处云 -->
+        <ellipse cx="180" cy="90" rx="60" ry="18" fill="#fff" opacity="0.7"/>
+        <ellipse cx="420" cy="60" rx="75" ry="20" fill="#fff" opacity="0.6"/>
+        <!-- 远山 -->
+        <polygon points="0,280 120,210 230,260 360,200 500,270 650,230 800,290 800,300 0,300" fill="#8a9dab" opacity="0.55"/>
+        <!-- 树 -->
+        <g>
+          <ellipse cx="120" cy="380" rx="28" ry="40" fill="#5f8b4c"/>
+          <rect x="115" y="395" width="10" height="35" fill="#6b4a2a"/>
+          <ellipse cx="700" cy="370" rx="32" ry="46" fill="#6b9a55"/>
+          <rect x="695" y="390" width="10" height="40" fill="#6b4a2a"/>
+          <ellipse cx="60" cy="430" rx="22" ry="32" fill="#7aaa60"/>
+          <rect x="57" y="440" width="6" height="25" fill="#6b4a2a"/>
+        </g>
+        <!-- 滑梯主体 -->
+        <g>
+          <!-- 平台 -->
+          <polygon points="340,320 460,320 480,340 360,340" fill="#e07a5f"/>
+          <rect x="360" y="340" width="120" height="70" fill="#d66855"/>
+          <!-- 支柱 -->
+          <rect x="365" y="410" width="8" height="40" fill="#7a5a3a"/>
+          <rect x="467" y="410" width="8" height="40" fill="#7a5a3a"/>
+          <!-- 滑道 -->
+          <path d="M 460 360 Q 540 380 560 450" stroke="#4aa3d8" stroke-width="18" fill="none" stroke-linecap="round"/>
+          <path d="M 460 360 Q 540 380 560 450" stroke="#7cc3e8" stroke-width="12" fill="none" stroke-linecap="round"/>
+          <!-- 梯子 -->
+          <line x1="345" y1="345" x2="335" y2="450" stroke="#8a6a44" stroke-width="4"/>
+          <line x1="360" y1="345" x2="350" y2="450" stroke="#8a6a44" stroke-width="4"/>
+          <line x1="340" y1="380" x2="358" y2="380" stroke="#8a6a44" stroke-width="2"/>
+          <line x1="338" y1="410" x2="356" y2="410" stroke="#8a6a44" stroke-width="2"/>
+          <line x1="336" y1="440" x2="354" y2="440" stroke="#8a6a44" stroke-width="2"/>
+          <!-- 屋顶 -->
+          <polygon points="340,320 400,280 460,320" fill="#c94a3e"/>
+          <polygon points="340,320 400,280 480,340" fill="#a63a30" opacity="0.4"/>
+        </g>
+        <!-- 摄像机路径线 -->
+        <g opacity="0.9">
+          <path d="M 80 240 Q 200 200 320 220 Q 420 255 520 225 Q 640 210 720 170" fill="none" stroke="#1890ff" stroke-width="2" stroke-dasharray="5,3"/>
+          <!-- K 点标记 -->
+          <circle cx="80" cy="240" r="8" fill="#1890ff"/><text x="80" y="244" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">0</text>
+          <circle cx="220" cy="208" r="7" fill="#1890ff" opacity="0.8"/><text x="220" y="212" text-anchor="middle" fill="#fff" font-size="9">1</text>
+          <circle cx="380" cy="232" r="7" fill="#1890ff" opacity="0.8"/><text x="380" y="236" text-anchor="middle" fill="#fff" font-size="9">2</text>
+          <circle cx="550" cy="220" r="7" fill="#1890ff" opacity="0.8"/><text x="550" y="224" text-anchor="middle" fill="#fff" font-size="9">3</text>
+          <circle cx="720" cy="170" r="8" fill="#fa541c"/><text x="720" y="174" text-anchor="middle" fill="#fff" font-size="10" font-weight="bold">4</text>
+        </g>
+        <!-- HUD -->
+        <g>
+          <rect x="10" y="10" width="175" height="50" fill="rgba(0,0,0,0.55)" rx="4"/>
+          <text x="20" y="28" fill="#fff" font-size="11" font-family="monospace">FPS  60   Tri  248.3K</text>
+          <text x="20" y="44" fill="#0f0" font-size="11" font-family="monospace">● REC ready | 12.0s</text>
+          <rect x="620" y="10" width="170" height="32" fill="rgba(0,0,0,0.55)" rx="4"/>
+          <text x="630" y="31" fill="#fff" font-size="11" font-family="monospace">Cam: K0 · ease</text>
+        </g>
+        <!-- 操作提示 -->
+        <g>
+          <rect x="310" y="465" width="180" height="24" fill="rgba(0,0,0,0.45)" rx="12"/>
+          <text x="400" y="481" fill="#fff" font-size="11" text-anchor="middle">🖱 左键旋转 · 右键平移 · 滚轮缩放</text>
+        </g>
+      </svg>
+    </div>
+
+    <!-- [时间轴] -->
+    <div class="mt-3 px-2">
+      <div class="flex items-center gap-2 text-xs text-gray-500 mb-1">
+        <button class="w-7 h-7 bg-gray-100 hover:bg-gray-200 rounded flex items-center justify-center">▶</button>
+        <span class="font-mono">00:00 / 00:12</span>
+        <div class="flex-1 relative h-1.5 bg-gray-200 rounded mx-2">
+          <div class="absolute inset-y-0 left-0 w-0 bg-blue-500 rounded"></div>
+          <div class="absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-blue-500 rounded-full border-2 border-white shadow" style="left:0%"></div>
+          <!-- 关键帧标记 -->
+          <div class="absolute -top-0.5 w-0.5 h-2.5 bg-orange-500" style="left:0%"></div>
+          <div class="absolute -top-0.5 w-0.5 h-2.5 bg-orange-500" style="left:20.8%"></div>
+          <div class="absolute -top-0.5 w-0.5 h-2.5 bg-orange-500" style="left:41.6%"></div>
+          <div class="absolute -top-0.5 w-0.5 h-2.5 bg-orange-500" style="left:66.6%"></div>
+          <div class="absolute -top-0.5 w-0.5 h-2.5 bg-orange-500" style="left:87.5%"></div>
+        </div>
+        <button class="text-xs text-gray-500 hover:text-blue-500">⊕ 循环</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== [右栏 · 导出选项] ========== -->
+  <aside class="flex-shrink-0 bg-white border border-gray-300 rounded p-3" style="width:280px;">
+    <h3 class="text-sm font-bold text-gray-800 mb-3">📤 导出选项</h3>
+
+    <!-- [画质] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">画质</div>
+      <div class="seg w-full">
+        <div class="flex-1 text-center">4K</div>
+        <div class="flex-1 text-center active">1080p</div>
+        <div class="flex-1 text-center">720p</div>
+      </div>
+    </div>
+
+    <!-- [格式] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">格式</div>
+      <div class="seg w-full">
+        <div class="flex-1 text-center active">MP4</div>
+        <div class="flex-1 text-center">WEBM</div>
+        <div class="flex-1 text-center">GIF</div>
+      </div>
+    </div>
+
+    <!-- [音频] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">音频</div>
+      <select class="w-full border border-gray-300 rounded px-2 py-1.5 text-xs">
+        <option>无</option>
+        <option selected>🎵 背景音乐 A · 自然轻快</option>
+        <option>🎵 背景音乐 B · 恢弘大气</option>
+        <option>🎵 背景音乐 C · 科技未来</option>
+      </select>
+    </div>
+
+    <!-- [加水印] -->
+    <div class="mb-3">
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" checked class="accent-blue-500">
+        加水印 <span class="px-1.5 py-0.5 bg-gray-100 rounded text-xs text-gray-600">万德 Logo</span>
+      </label>
+      <div class="text-xs text-gray-400 ml-5 mt-0.5">位置：右下角 · 透明度 60%</div>
+    </div>
+
+    <!-- [渲染质量] -->
+    <div class="mb-3">
+      <div class="text-xs text-gray-600 mb-1.5">渲染质量</div>
+      <div class="space-y-1">
+        <label class="flex items-center gap-2 text-xs cursor-pointer p-1.5 border border-gray-200 rounded hover:border-blue-400">
+          <input type="radio" name="quality" class="accent-blue-500">
+          <div>
+            <div class="font-medium">预览 (快)</div>
+            <div class="text-xs text-gray-400">~30s 完成 · 低多边形</div>
+          </div>
+        </label>
+        <label class="flex items-center gap-2 text-xs cursor-pointer p-1.5 border border-gray-200 rounded hover:border-blue-400">
+          <input type="radio" name="quality" class="accent-blue-500">
+          <div>
+            <div class="font-medium">标准</div>
+            <div class="text-xs text-gray-400">~2min · 默认光照</div>
+          </div>
+        </label>
+        <label class="flex items-center gap-2 text-xs cursor-pointer p-1.5 border border-blue-400 bg-blue-50 rounded">
+          <input type="radio" name="quality" checked class="accent-blue-500">
+          <div>
+            <div class="font-medium text-blue-700">电影级 🎬</div>
+            <div class="text-xs text-gray-400">~8min · Ray tracing · AO</div>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <button class="w-full py-2.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 font-medium">● 开始录制</button>
+    <div class="text-xs text-gray-400 mt-2 text-center">预估费用 ¥ 15 · 服务器 GPU 渲染</div>
+  </aside>
+</div>
+
+<!-- ========== [底部 · 录制进度 + 历史] ========== -->
+<div class="mt-4 bg-white border border-gray-300 rounded p-4">
+  <!-- [录制进度] -->
+  <div class="pb-3 border-b border-gray-200">
+    <div class="flex items-center justify-between mb-2">
+      <div class="flex items-center gap-2">
+        <span class="w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
+        <h3 class="text-sm font-bold text-gray-800">正在录制 · 南山V3_漫游_v3</h3>
+        <span class="text-xs text-gray-500">1080p · 30fps · MP4 · 电影级</span>
+      </div>
+      <div class="text-xs text-gray-500">已录制 <b class="text-gray-800">108</b> / <b class="text-gray-800">360</b> 帧 · 预计剩余 5min 12s</div>
+    </div>
+    <div class="w-full h-2.5 bg-gray-200 rounded-full overflow-hidden">
+      <div class="h-full bg-gradient-to-r from-blue-400 to-blue-600" style="width:30%"></div>
+    </div>
+    <div class="flex justify-between text-xs text-gray-400 mt-1">
+      <span>30% · 3.6s / 12.0s</span>
+      <div class="flex gap-2">
+        <button class="hover:text-red-500">⏸ 暂停</button>
+        <button class="hover:text-red-500">✕ 取消</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [历史录制列表] -->
+  <div class="pt-3">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-sm font-bold text-gray-800">📼 历史录制</h3>
+      <button class="text-xs text-blue-500 hover:underline">查看全部 →</button>
+    </div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#87ceeb,#9cb87c);position:relative;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;text-shadow:0 1px 3px rgba(0,0,0,0.5);">▶</div>
+          <div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.65);color:#fff;padding:1px 5px;border-radius:2px;font-size:10px;">00:12</div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">南山V3_漫游_v2</div>
+          <div class="text-xs text-gray-400 flex justify-between mt-0.5"><span>4K · MP4</span><span>84MB</span></div>
+          <div class="text-xs text-gray-400 mt-0.5">2024-04-22 10:15</div>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#c0a9d8,#e8c084);position:relative;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;text-shadow:0 1px 3px rgba(0,0,0,0.5);">▶</div>
+          <div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.65);color:#fff;padding:1px 5px;border-radius:2px;font-size:10px;">00:20</div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">福田中心绿地_漫游_v1</div>
+          <div class="text-xs text-gray-400 flex justify-between mt-0.5"><span>1080p · MP4</span><span>42MB</span></div>
+          <div class="text-xs text-gray-400 mt-0.5">2024-04-21 17:30</div>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#a8d0e6,#f0b8a0);position:relative;">
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:18px;text-shadow:0 1px 3px rgba(0,0,0,0.5);">▶</div>
+          <div style="position:absolute;bottom:4px;right:4px;background:rgba(0,0,0,0.65);color:#fff;padding:1px 5px;border-radius:2px;font-size:10px;">00:08</div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">学校操场_漫游_v1</div>
+          <div class="text-xs text-gray-400 flex justify-between mt-0.5"><span>720p · WEBM</span><span>18MB</span></div>
+          <div class="text-xs text-gray-400 mt-0.5">2024-04-20 09:45</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

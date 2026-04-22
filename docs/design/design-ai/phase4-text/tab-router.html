@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>意图路由 Workbench</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .route-btn { transition: all .2s; }
+    .route-btn:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(24,144,255,.15); }
+    .chip { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 11px; margin-right: 4px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab1 · 意图路由 Workbench</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">一句话输入 → AI 解析意图 → 自动推荐路由到 Phase1-4 合适子系统，减少用户在多个工具间手动跳转的成本</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务人员（描述项目需求）、方案设计师（快速定位工具）、投标人员（意图分发）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">大输入框自然语言输入 / AI 意图解析（意图类型+项目+产品+主题）/ 4 路由推荐按钮 / 历史意图解析记录</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">输入需求 → 点击"解析意图" → 查看识别结果 → 选择推荐路由（图像/视频/LoRA/文本）跳转</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">路由准确率 >90% / 意图解析 3 秒内完成 / 历史记录按时间倒序 / 支持模糊意图（同时推荐多路由）</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.5.1 · 意图路由</a>
+      ｜ 关联 Issue：#1849
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [大输入框区] -->
+<div class="bg-white border border-gray-300 rounded p-6 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🎯 告诉 AI 你想做什么 <span class="text-xs text-gray-400 font-normal ml-2">Issue #1849</span></h2>
+    <span class="text-xs text-gray-500">已支持 127 种意图模式 · 平均准确率 92.4%</span>
+  </div>
+
+  <div class="flex flex-col items-center">
+    <textarea class="border-2 border-blue-300 rounded-lg p-4 text-sm focus:border-blue-500 focus:outline-none" style="width:800px;height:120px;resize:none;"
+      placeholder="输入您的需求，如：'给深圳南山公园项目做一个滑梯主题方案'">给深圳南山公园项目做一个滑梯主题方案</textarea>
+
+    <div class="flex items-center gap-3 mt-4">
+      <button class="px-6 py-2.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 font-medium">🧠 解析意图</button>
+      <button class="px-4 py-2.5 border border-gray-300 text-sm rounded text-gray-700 hover:bg-gray-50">清空</button>
+      <button class="px-4 py-2.5 border border-gray-300 text-sm rounded text-gray-700 hover:bg-gray-50">💡 试试示例</button>
+    </div>
+
+    <div class="text-xs text-gray-400 mt-3 text-center" style="width:800px;">
+      💬 示例：给XX项目配色 / 生成XX招标文本 / 训练XX产品 LoRA / 做个XX主题视频 / 找个童趣主题方案
+    </div>
+  </div>
+</div>
+
+<!-- [意图识别结果卡片] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🔍 识别结果 <span class="text-xs text-green-600 font-normal ml-2">✓ 解析成功 · 耗时 1.2s · 置信度 94%</span></h2>
+    <span class="text-xs text-gray-400">解析时间：2026-04-22 14:32:18</span>
+  </div>
+
+  <!-- 意图要素 -->
+  <div class="grid grid-cols-4 gap-3 mb-5">
+    <div class="border border-gray-200 rounded p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-1">🎯 意图类型</div>
+      <div class="text-sm font-bold text-gray-800">方案设计</div>
+      <div class="text-xs text-blue-600 mt-1">置信度 96%</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-1">📁 项目</div>
+      <div class="text-sm font-bold text-gray-800">深圳南山公园 V3</div>
+      <div class="text-xs text-green-600 mt-1">✓ 匹配项目库</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3 bg-gray-50">
+      <div class="text-xs text-gray-500 mb-1">🎨 产品</div>
+      <div class="text-sm font-bold text-gray-800">滑梯</div>
+      <div class="text-xs text-gray-500 mt-1">匹配产品库 12 款</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3 bg-orange-50 border-orange-200">
+      <div class="text-xs text-orange-600 mb-1">🌈 主题</div>
+      <div class="text-sm font-bold text-orange-800">未指定</div>
+      <div class="text-xs text-orange-600 mt-1">建议："童趣海洋" / "森林探险"</div>
+    </div>
+  </div>
+
+  <!-- 推荐路由 -->
+  <div class="border-t border-gray-200 pt-4">
+    <div class="text-sm font-medium text-gray-700 mb-3">🚀 推荐路由（基于意图自动匹配）</div>
+    <div class="bg-blue-50 border border-blue-200 rounded p-3 mb-3 text-xs text-blue-900">
+      ✨ <strong>多路由组合建议：</strong>Phase1 图像生成（主题变体）→ Phase4 方案文本（章节生成），两步完成完整方案
+    </div>
+
+    <div class="grid grid-cols-4 gap-3">
+      <!-- Phase1 图像 - 高亮 -->
+      <div class="route-btn border-2 border-blue-500 bg-blue-50 rounded p-4 cursor-pointer">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">🖼️</span>
+          <span class="chip bg-blue-500 text-white">⭐ 推荐</span>
+        </div>
+        <div class="text-sm font-bold text-blue-700">Phase1 · 图像生成</div>
+        <div class="text-xs text-blue-600 mt-1">主题变体生成</div>
+        <div class="text-xs text-gray-500 mt-2">→ 生成 4 套滑梯主题效果图</div>
+      </div>
+
+      <!-- Phase2 视频 -->
+      <div class="route-btn border border-gray-200 bg-gray-50 rounded p-4 cursor-pointer">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">🎬</span>
+          <span class="chip bg-gray-200 text-gray-600">次选</span>
+        </div>
+        <div class="text-sm font-bold text-gray-700">Phase2 · 视频生成</div>
+        <div class="text-xs text-gray-500 mt-1">产品展示视频</div>
+        <div class="text-xs text-gray-400 mt-2">→ 可选增强项</div>
+      </div>
+
+      <!-- Phase3 LoRA -->
+      <div class="route-btn border border-gray-200 bg-gray-50 rounded p-4 cursor-pointer">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">🧬</span>
+          <span class="chip bg-gray-200 text-gray-600">暂不相关</span>
+        </div>
+        <div class="text-sm font-bold text-gray-700">Phase3 · LoRA 训练</div>
+        <div class="text-xs text-gray-500 mt-1">定制模型训练</div>
+        <div class="text-xs text-gray-400 mt-2">→ 已有滑梯 LoRA</div>
+      </div>
+
+      <!-- Phase4 文本 - 高亮 -->
+      <div class="route-btn border-2 border-blue-500 bg-blue-50 rounded p-4 cursor-pointer">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-2xl">📝</span>
+          <span class="chip bg-blue-500 text-white">⭐ 推荐</span>
+        </div>
+        <div class="text-sm font-bold text-blue-700">Phase4 · 方案文本</div>
+        <div class="text-xs text-blue-600 mt-1">文本章节生成</div>
+        <div class="text-xs text-gray-500 mt-2">→ 生成 8 章方案文本</div>
+      </div>
+    </div>
+
+    <div class="flex justify-end mt-4 gap-2">
+      <button class="px-4 py-2 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">🔄 重新解析</button>
+      <button class="px-4 py-2 text-sm border border-blue-500 text-blue-600 rounded hover:bg-blue-50">✏️ 手动修正</button>
+      <button class="px-5 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">🚀 执行推荐路由</button>
+    </div>
+  </div>
+</div>
+
+<!-- [历史意图解析记录] -->
+<div class="bg-white border border-gray-300 rounded p-5">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-base font-bold text-gray-800">📋 历史意图解析记录</h2>
+    <div class="flex items-center gap-2">
+      <input class="px-2 py-1 text-xs border border-gray-300 rounded" placeholder="🔍 搜索历史" style="width:180px;">
+      <button class="px-2 py-1 text-xs border border-gray-300 rounded text-gray-700">全部导出</button>
+    </div>
+  </div>
+
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-gray-600 text-xs">
+        <th class="p-2 border border-gray-200 text-left w-40">时间</th>
+        <th class="p-2 border border-gray-200 text-left">输入内容</th>
+        <th class="p-2 border border-gray-200 text-left w-24">意图类型</th>
+        <th class="p-2 border border-gray-200 text-left w-36">执行路由</th>
+        <th class="p-2 border border-gray-200 text-center w-20">置信度</th>
+        <th class="p-2 border border-gray-200 text-center w-20">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-xs text-gray-700">
+      <tr class="hover:bg-blue-50">
+        <td class="p-2 border border-gray-200">2026-04-22 14:32</td>
+        <td class="p-2 border border-gray-200">给深圳南山公园项目做一个滑梯主题方案</td>
+        <td class="p-2 border border-gray-200"><span class="chip bg-blue-100 text-blue-700">方案设计</span></td>
+        <td class="p-2 border border-gray-200">Phase1 + Phase4</td>
+        <td class="p-2 border border-gray-200 text-center text-green-600 font-medium">94%</td>
+        <td class="p-2 border border-gray-200 text-center"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-blue-50">
+        <td class="p-2 border border-gray-200">2026-04-22 11:08</td>
+        <td class="p-2 border border-gray-200">帮我生成浙江丽水中标项目的投标技术文本</td>
+        <td class="p-2 border border-gray-200"><span class="chip bg-purple-100 text-purple-700">招标文本</span></td>
+        <td class="p-2 border border-gray-200">Phase4 招标文本</td>
+        <td class="p-2 border border-gray-200 text-center text-green-600 font-medium">97%</td>
+        <td class="p-2 border border-gray-200 text-center"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-blue-50">
+        <td class="p-2 border border-gray-200">2026-04-21 16:45</td>
+        <td class="p-2 border border-gray-200">训练一个新款蹦床的 LoRA 模型</td>
+        <td class="p-2 border border-gray-200"><span class="chip bg-green-100 text-green-700">LoRA 训练</span></td>
+        <td class="p-2 border border-gray-200">Phase3 LoRA</td>
+        <td class="p-2 border border-gray-200 text-center text-green-600 font-medium">98%</td>
+        <td class="p-2 border border-gray-200 text-center"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-blue-50">
+        <td class="p-2 border border-gray-200">2026-04-21 10:22</td>
+        <td class="p-2 border border-gray-200">做个组合器械 K5 的产品展示视频，30 秒</td>
+        <td class="p-2 border border-gray-200"><span class="chip bg-orange-100 text-orange-700">视频生成</span></td>
+        <td class="p-2 border border-gray-200">Phase2 视频</td>
+        <td class="p-2 border border-gray-200 text-center text-green-600 font-medium">91%</td>
+        <td class="p-2 border border-gray-200 text-center"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-blue-50">
+        <td class="p-2 border border-gray-200">2026-04-20 09:55</td>
+        <td class="p-2 border border-gray-200">给幼儿园滑梯配一套童趣配色</td>
+        <td class="p-2 border border-gray-200"><span class="chip bg-pink-100 text-pink-700">配色方案</span></td>
+        <td class="p-2 border border-gray-200">Phase4 配色器</td>
+        <td class="p-2 border border-gray-200 text-center text-yellow-600 font-medium">82%</td>
+        <td class="p-2 border border-gray-200 text-center"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+    <span>共 347 条记录，显示第 1-5 条</span>
+    <div class="flex gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded">‹ 上一页</button>
+      <button class="px-2 py-1 border border-blue-500 bg-blue-500 text-white rounded">1</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">3</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">下一页 ›</button>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

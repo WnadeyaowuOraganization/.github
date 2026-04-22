@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>招标规范文本生成</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tender-tab { padding: 8px 14px; border: 1px solid #d9d9d9; background: #fff; cursor: pointer; font-size: 12px; color: #666; border-bottom: none; }
+    .tender-tab.active { background: #e6f7ff; color: #1890ff; border-color: #91d5ff; font-weight: 600; }
+    .match-tag { display: inline-block; margin-left: 6px; padding: 1px 6px; border-radius: 3px; font-size: 10px; background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · 招标规范文本生成</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">三标融合（招标文件 + 产品参数 + 企业资质）一键生成符合招标要求的投标技术文本，节省投标人员 80% 写作时间</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">投标人员（主要）、商务总监（审核匹配度）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">招标文件解析 / 产品参数表导入 / 企业资质自动填充 / 10 章节大纲生成 / 招标项匹配度报告</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传招标文件 → 选择产品 → 确认资质 → 一键生成 → 查看每段匹配标注 → 导出 Word/PDF</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">生成全文 30 秒内完成 / 招标项匹配 ≥95% / 产品参数覆盖 100% / 每段可追溯到招标条款 §</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.5.3 · 招标文本</a>
+      ｜ 关联 Issue：#1843
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部 三标融合输入] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">📄 三标融合输入 <span class="text-xs text-gray-400 font-normal ml-2">Issue #1843</span></h2>
+    <span class="text-xs text-green-600">✓ 三源就绪，可以生成</span>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 1. 招标文件上传 -->
+    <div class="border border-gray-200 rounded p-4 bg-blue-50">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-bold text-gray-800">1️⃣ 招标文件</span>
+        <span class="text-xs text-green-600">✓ 已上传</span>
+      </div>
+      <div class="border border-dashed border-blue-300 rounded p-3 bg-white">
+        <div class="flex items-center gap-2">
+          <span class="text-2xl">📄</span>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">深圳南山区招标文件_V1.pdf</div>
+            <div class="text-xs text-gray-500">2.3 MB · 45 页</div>
+          </div>
+          <button class="text-xs text-red-500 hover:underline">删除</button>
+        </div>
+        <div class="mt-2 text-xs text-gray-600">
+          ✓ 已解析 <strong>42 项技术指标</strong>
+          <span class="mx-1">·</span>
+          ✓ 识别 <strong>10 章大纲</strong>
+        </div>
+      </div>
+      <button class="w-full mt-2 px-2 py-1 text-xs border border-blue-300 text-blue-600 rounded hover:bg-blue-100">重新上传</button>
+    </div>
+
+    <!-- 2. 产品参数导入 -->
+    <div class="border border-gray-200 rounded p-4 bg-green-50">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-bold text-gray-800">2️⃣ 产品参数表</span>
+        <span class="text-xs text-green-600">✓ 已选 12 款</span>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-600 mb-2">📦 从万德产品库选择：</div>
+        <div class="space-y-1 text-xs max-h-24 overflow-y-auto">
+          <div class="flex items-center justify-between bg-gray-50 px-2 py-1 rounded"><span>滑梯 V3-标准</span><span class="text-green-600">✓</span></div>
+          <div class="flex items-center justify-between bg-gray-50 px-2 py-1 rounded"><span>滑梯 V3-高端</span><span class="text-green-600">✓</span></div>
+          <div class="flex items-center justify-between bg-gray-50 px-2 py-1 rounded"><span>组合器械 K5</span><span class="text-green-600">✓</span></div>
+          <div class="flex items-center justify-between bg-gray-50 px-2 py-1 rounded"><span>攀爬架 P2</span><span class="text-green-600">✓</span></div>
+          <div class="text-center text-gray-400">... 共 12 款</div>
+        </div>
+      </div>
+      <button class="w-full mt-2 px-2 py-1 text-xs border border-green-300 text-green-700 rounded hover:bg-green-100">修改选择</button>
+    </div>
+
+    <!-- 3. 企业资质 -->
+    <div class="border border-gray-200 rounded p-4 bg-purple-50">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-bold text-gray-800">3️⃣ 企业资质</span>
+        <span class="text-xs text-green-600">✓ 自动填充</span>
+      </div>
+      <div class="bg-white border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-600 mb-2">🏢 万德游乐资质清单：</div>
+        <ul class="space-y-1 text-xs text-gray-700">
+          <li>✓ 体游运营资质 · 一级</li>
+          <li>✓ ISO 9001:2015 质量认证</li>
+          <li>✓ ISO 14001 环境认证</li>
+          <li>✓ EN 1176 欧洲安全认证</li>
+          <li>✓ 30+ 省级以上中标业绩</li>
+          <li class="text-gray-400">... 共 18 项</li>
+        </ul>
+      </div>
+      <button class="w-full mt-2 px-2 py-1 text-xs border border-purple-300 text-purple-700 rounded hover:bg-purple-100">资质管理</button>
+    </div>
+  </div>
+</div>
+
+<!-- [中部 生成按钮 + 章节结构预览] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🚀 生成配置</h2>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-500">目标字数 <strong class="text-gray-700">30,000</strong></span>
+      <span class="text-xs text-gray-400">·</span>
+      <span class="text-xs text-gray-500">预估耗时 <strong class="text-gray-700">28s</strong></span>
+    </div>
+  </div>
+
+  <div class="flex gap-4">
+    <!-- 生成按钮 -->
+    <div class="flex flex-col gap-2" style="width:200px;">
+      <button class="w-full px-4 py-4 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 font-bold shadow">
+        🚀 一键生成<br>投标技术文本
+      </button>
+      <button class="w-full px-3 py-2 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">仅生成大纲</button>
+      <button class="w-full px-3 py-2 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">自定义章节</button>
+      <div class="text-xs text-gray-500 bg-gray-50 p-2 rounded mt-1">
+        💡 模型：WandeTender-GPT v2.1<br>
+        基于近 3 年 856 份中标文件训练
+      </div>
+    </div>
+
+    <!-- 章节大纲预览 -->
+    <div class="flex-1 border border-gray-200 rounded p-3 bg-gray-50">
+      <div class="text-sm font-bold text-gray-800 mb-2">📋 章节结构预览（10 章）</div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第一章 · 技术方案</span>
+          <span class="text-gray-500">约 3,500 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第二章 · 产品配置清单</span>
+          <span class="text-gray-500">约 2,800 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第三章 · 质量保障体系</span>
+          <span class="text-gray-500">约 2,600 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第四章 · 安全生产规范</span>
+          <span class="text-gray-500">约 2,400 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第五章 · 项目组织管理</span>
+          <span class="text-gray-500">约 2,200 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第六章 · 施工进度计划</span>
+          <span class="text-gray-500">约 2,000 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第七章 · 企业资质业绩</span>
+          <span class="text-gray-500">约 4,200 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第八章 · 售后服务承诺</span>
+          <span class="text-gray-500">约 2,800 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第九章 · 报价明细</span>
+          <span class="text-gray-500">约 3,200 字</span>
+        </div>
+        <div class="bg-white px-3 py-2 rounded border border-gray-200 flex items-center justify-between">
+          <span class="text-gray-800">第十章 · 附件材料</span>
+          <span class="text-gray-500">约 4,300 字</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [下部 生成结果] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">📑 生成结果 <span class="text-xs text-green-600 font-normal ml-2">✓ 生成完成 · 耗时 26.8s · 总字数 30,124</span></h2>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700">🔄 重新生成</button>
+      <button class="px-3 py-1.5 text-xs border border-blue-500 text-blue-600 rounded hover:bg-blue-50">📝 进入编辑</button>
+      <button class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded">📥 导出 Word</button>
+      <button class="px-3 py-1.5 text-xs bg-red-500 text-white rounded">📄 导出 PDF</button>
+    </div>
+  </div>
+
+  <!-- 章节 Tab 切换 -->
+  <div class="flex gap-0 mb-0">
+    <div class="tender-tab active">第一章 技术方案</div>
+    <div class="tender-tab">第二章 产品配置</div>
+    <div class="tender-tab">第三章 质量保障</div>
+    <div class="tender-tab">第四章 安全规范</div>
+    <div class="tender-tab">第五章 项目管理</div>
+    <div class="tender-tab">第六章 进度计划</div>
+    <div class="tender-tab">... 更多</div>
+  </div>
+
+  <!-- 内容展示 -->
+  <div class="border border-gray-300 p-5 bg-gray-50 rounded-b text-sm leading-relaxed text-gray-800">
+    <h3 class="text-base font-bold mb-3">第一章 技术方案（3,524 字 · 示例前 800 字）</h3>
+
+    <p class="mb-3">
+      <strong>1.1 项目总体技术路线</strong> <span class="match-tag">✓ 匹配招标要求 §3.2.1</span>
+    </p>
+    <p class="mb-3 pl-3">
+      本项目针对深圳南山区儿童游乐设施采购需求，万德游乐将采用<strong>"安全为本、童趣为魂、文化为脉、科技为翼"</strong>的四维技术路线，为甲方提供全生命周期的高品质产品与服务。所有产品均符合 GB 6675、EN 1176 以及招标文件 §3.2 所列的全部强制性技术标准。
+    </p>
+
+    <p class="mb-3">
+      <strong>1.2 核心产品技术参数</strong> <span class="match-tag">✓ 匹配招标要求 §3.3.1-3.3.12</span>
+    </p>
+    <p class="mb-3 pl-3">
+      本次投标主推产品为万德自主研发的第三代童趣海洋系列滑梯（型号 V3），采用 304 食品级不锈钢滑面、环保 PE 板侧墙、热浸镀锌钢管立柱三层结构。所有金属件焊缝经 100% 探伤检测，表面处理采用德国 RAL 色卡高温静电喷涂（3 次底漆 + 2 次面漆），耐候性达 10 年以上。 <span class="match-tag">✓ 匹配招标要求 §3.3.5 耐候性</span>
+    </p>
+
+    <p class="mb-3">
+      <strong>1.3 安全设计规范</strong> <span class="match-tag">✓ 匹配招标要求 §3.4</span>
+    </p>
+    <p class="mb-3 pl-3">
+      所有产品严格遵循 EN 1176、GB/T 27689 以及招标文件 §3.4 规定的安全间距、跌落高度、防夹缝隙等 42 项技术指标。其中滑梯起滑段斜角 ≤ 40°、滑出段 ≤ 10°，符合儿童人体工程学；边缘圆角半径 ≥ 3mm，无尖锐突起；安全地垫 EPDM 橡胶厚度 ≥ 40mm，冲击吸收值 ≥ 1.2m HIC。 <span class="match-tag">✓ 匹配招标要求 §3.4.2 跌落高度</span>
+    </p>
+
+    <p class="mb-3">
+      <strong>1.4 主题创意设计</strong> <span class="match-tag">✓ 匹配招标要求 §3.5 创意加分项</span>
+    </p>
+    <p class="mb-3 pl-3">
+      本项目以"童趣海洋"为核心主题，将南山公园打造为深圳湾畔的海洋奇幻王国。主滑梯以"巨鲸"为造型意象，周边辅以"章鱼秋千"、"海星攀爬"等互动元素，形成完整的沉浸式主题叙事体验...
+    </p>
+
+    <div class="text-center text-gray-400 text-xs mt-4">— — — 后续内容已隐藏，共 3,524 字，请进入编辑模式查看完整 — — —</div>
+  </div>
+</div>
+
+<!-- [匹配度报告] -->
+<div class="bg-white border border-gray-300 rounded p-5">
+  <h2 class="text-base font-bold text-gray-800 mb-4">📊 匹配度报告</h2>
+
+  <div class="grid grid-cols-4 gap-4 mb-4">
+    <div class="border border-green-200 bg-green-50 rounded p-4 text-center">
+      <div class="text-xs text-gray-600 mb-1">招标项匹配</div>
+      <div class="text-2xl font-bold text-green-600">98%</div>
+      <div class="text-xs text-gray-500 mt-1">41/42 项已覆盖</div>
+    </div>
+    <div class="border border-green-200 bg-green-50 rounded p-4 text-center">
+      <div class="text-xs text-gray-600 mb-1">产品参数覆盖</div>
+      <div class="text-2xl font-bold text-green-600">100%</div>
+      <div class="text-xs text-gray-500 mt-1">12/12 款产品</div>
+    </div>
+    <div class="border border-green-200 bg-green-50 rounded p-4 text-center">
+      <div class="text-xs text-gray-600 mb-1">资质完备度</div>
+      <div class="text-2xl font-bold text-green-600">完备</div>
+      <div class="text-xs text-gray-500 mt-1">18/18 项资质</div>
+    </div>
+    <div class="border border-blue-200 bg-blue-50 rounded p-4 text-center">
+      <div class="text-xs text-gray-600 mb-1">预估中标概率</div>
+      <div class="text-2xl font-bold text-blue-600">85%</div>
+      <div class="text-xs text-gray-500 mt-1">高于同类方案 12%</div>
+    </div>
+  </div>
+
+  <!-- 未覆盖提醒 -->
+  <div class="border border-orange-200 bg-orange-50 rounded p-3 text-xs text-orange-800">
+    <strong>⚠️ 1 项未完全覆盖：</strong> 招标文件 §3.2.8 "智能监控系统" 未在当前产品库中匹配到对应方案，建议：
+    <ol class="ml-4 mt-1 list-decimal">
+      <li>补充万德 IoT 监控套件（建议添加到产品库）</li>
+      <li>或在第一章 §1.6 段落手动补充技术说明</li>
+    </ol>
+    <button class="mt-2 px-3 py-1 bg-orange-500 text-white rounded text-xs">一键修复 →</button>
+  </div>
+</div>
+
+</body>
+</html>

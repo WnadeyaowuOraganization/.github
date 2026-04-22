@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — AI 内容生成中台·Phase 2 视频生成工坊 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 200px); }
+    .side-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #999; cursor: pointer; font-size: 16px; margin: 4px auto; border-radius: 4px; }
+    .side-icon.active { background: #e6f7ff; color: #1890ff; }
+    .side-icon:hover { background: #f5f5f5; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">AI 内容生成中台·Phase 2 视频生成工坊</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">Phase 2 · 视频生成工坊 — 投标视频 / 方案演示 / 效果图动态化的视频生成中心，对标 Runway Gen-3 + Luma Dream Machine + Kling 的四合一视频工坊</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">投标人员（投标视频拼接），方案设计师（方案动态演示 / 3D 漫游录制），品牌 / 商务（活动宣传视频、效果图动态化）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">AI 图生视频（Runway/Luma/Kling）/ Three.js 漫游录制（关键帧路径）/ AI 环境自动填充（白模补环境）/ 环境模板库（12+ 场景模板）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传效果图 → 选摄像机运动 → 导出 MP4 / 设定关键帧路径 → 录制漫游 / 白模一键补环境 → 4 版本对比 / 模板卡套用到项目</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">视频生成 2min 内完成 / 漫游路径可编辑关键帧 / 环境填充 8 类元素（树/建筑/道路/人/天空/灌木等）/ 模板库支持 AI 共创 / 4 Tab 正常切换</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.3 · 视频生成工坊</a>
+      ｜ 关联 Issue：#1635 AI 图生视频 / #2305 Three.js 漫游录制 / #1834 AI 环境填充 / #1835 环境模板库
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] -->
+  <aside class="w-12 bg-white border-r border-gray-300 flex-shrink-0 py-2">
+    <div class="side-icon" title="首页">🏠</div>
+    <div class="side-icon" title="CRM">👥</div>
+    <div class="side-icon" title="商战情报">📡</div>
+    <div class="side-icon" title="项目中心">📁</div>
+    <div class="side-icon active" title="AI 内容生成中台">🎨</div>
+    <div class="side-icon" title="审批">✅</div>
+    <div class="side-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 支持中心 &gt; AI 内容生成中台 &gt; <span class="text-gray-700 font-medium">Phase2 视频生成工坊</span>
+    </div>
+
+    <!-- [页头] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold text-gray-800">Phase 2 · 视频生成工坊 <span class="text-xs text-gray-400 font-normal ml-2">对标 Runway Gen-3 + Luma · 投标视频+3D 漫游+环境填充</span></h1>
+        <div class="text-xs text-gray-500 mt-1">AI 图生视频 + Three.js 漫游 + AI 环境填充 + 环境模板库 · 覆盖 Issue #1635 / #2305 / #1834 / #1835</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">Runway Gen-3 · 生成成功率 94%</span>
+        <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">视频素材库</button>
+        <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">新建视频任务</button>
+      </div>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-i2v.html"></iframe>
+    </div>
+  </main>
+</div>
+
+<!-- [原型说明] -->
+<div class="p-6 bg-white border-t border-gray-300 mt-4">
+  <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 · Phase 2 视频生成工坊 Tab 清单</h3>
+  <table class="w-full text-sm text-left border-collapse">
+    <thead><tr class="bg-gray-100">
+      <th class="p-2 border border-gray-300 w-40">Tab页</th>
+      <th class="p-2 border border-gray-300 w-52">文件名</th>
+      <th class="p-2 border border-gray-300 w-28">对应 Issue</th>
+      <th class="p-2 border border-gray-300">功能描述</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="p-2 border border-gray-300 font-medium">AI 图生视频</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-i2v.html</td><td class="p-2 border border-gray-300 text-xs">#1635</td><td class="p-2 border border-gray-300">上传效果图 → 6 种摄像机运动（zoom/pan/tilt/orbit 等）+ 时长/画质/Motion 强度 → Runway/Luma/Kling 生成 MP4 + 历史记录 + 拼接成投标视频</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">Three.js 漫游录制</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-roaming.html</td><td class="p-2 border border-gray-300 text-xs">#2305</td><td class="p-2 border border-gray-300">加载 .glb 场景 → 关键帧路径编辑（K0-K4 位置/视角/缓动）→ Canvas 3D 预览 → 24/30/60 fps 录制 → 4K/1080p/720p MP4/WEBM/GIF 导出</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">AI 环境填充</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-environment.html</td><td class="p-2 border border-gray-300 text-xs">#1834</td><td class="p-2 border border-gray-300">上传白模 → 8 类元素多选（树木/建筑/道路/人物/天空/灌木...）+ 风格/密度/季节/时段 → AI 填充 + 中线对比 + 4 版本选择 + 局部圈选 refine</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">环境模板库</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-templates.html</td><td class="p-2 border border-gray-300 text-xs">#1835</td><td class="p-2 border border-gray-300">10 类场景分类 + 12 模板卡（城市公园/社区/学校/商业综合体/主题乐园...）+ 下载量/评分 + 套用到项目 + AI 共创新模板</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'i2v',         label: 'AI 图生视频',          src: 'tab-i2v.html' },
+    { key: 'roaming',     label: 'Three.js 漫游录制',    src: 'tab-roaming.html' },
+    { key: 'environment', label: 'AI 环境填充',          src: 'tab-environment.html' },
+    { key: 'templates',   label: '环境模板库',           src: 'tab-templates.html' },
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = Math.max(h, 600) + 'px';
+    } catch(e) {}
+  });
+
+  renderTabs();
+</script>
+</body>
+</html>

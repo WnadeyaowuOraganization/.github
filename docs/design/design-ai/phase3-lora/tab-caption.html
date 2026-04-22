@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Caption 自动标注</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tag-chip { display:inline-block; padding:3px 10px; margin:3px; border-radius:12px; background:#f0f5ff; color:#2f54eb; font-size:12px; border:1px solid #d6e4ff; }
+    .tag-chip.hot { background:#fff1f0; color:#cf1322; border-color:#ffccc7; }
+    .ds-item { cursor:pointer; }
+    .ds-item.active { background:#e6f7ff; border-left:3px solid #1890ff; }
+    .slider-container { -webkit-appearance:none; appearance:none; height:4px; background:#d9d9d9; border-radius:2px; outline:none; }
+    .slider-container::-webkit-slider-thumb { -webkit-appearance:none; appearance:none; width:16px; height:16px; background:#1890ff; border-radius:50%; cursor:pointer; }
+  </style>
+</head>
+<body class="bg-gray-50 p-4">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab1 · Caption 自动标注</span>
+      <span style="background:#52c41a;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">🟢 Pipeline Ready</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">为 LoRA 训练数据集批量生成高质量 Caption（图片描述）— 使用 Qwen3.5-VL 视觉模型，支持人工审核修订，确保训练文本-图对齐质量</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">数据工程师（批量跑标注任务）、设计师（审核修订 Caption 精度）、训练操作员（确保数据集可用前的最后一道关）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">3 个数据集切换 / 图片浏览 + AI+人工双栏 Caption / 批量标注进度条 / 并发数 + 模型选择 + 模板 / 质量统计 + Tag 云</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">选数据集 → 启动批量标注 → 逐张审核 AI Caption → 必要时人工修订 → 标记已审核 → 数据集进入训练可用状态</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">Caption 80%+ 无需修改可用率 / 平均 token 数 60-80 / 并发 1-8 可调 / 三模板切换 / 审核状态持久化</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.4.1 · Caption 自动标注</a>
+      ｜ 关联 Issue：#2456
+      ｜ 代码基线：pipeline/pipelines/comfyui_rendering/wdpp_lora_data_preprocessor.py
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [三栏主体 — 左:数据集 中:图片+Caption 右:批量控制] -->
+<div class="grid gap-4" style="grid-template-columns: 260px 1fr 320px;">
+
+  <!-- ============ 左栏：数据集 ============ -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-bold text-gray-800">📂 数据集</h2>
+      <span class="text-xs text-gray-400">3 个</span>
+    </div>
+
+    <div class="border border-gray-200 rounded mb-3 overflow-hidden">
+      <div class="ds-item active p-3 border-b border-gray-100">
+        <div class="flex items-center justify-between">
+          <span class="text-sm font-medium text-gray-800">万德产品风格集</span>
+          <span class="text-xs bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded">当前</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-1">342 张 · 2026-04 更新</div>
+      </div>
+      <div class="ds-item p-3 border-b border-gray-100 hover:bg-gray-50">
+        <div class="text-sm text-gray-800">竞品风格集</div>
+        <div class="text-xs text-gray-500 mt-1">218 张 · 2026-03 更新</div>
+      </div>
+      <div class="ds-item p-3 hover:bg-gray-50">
+        <div class="text-sm text-gray-800">国际渲染集</div>
+        <div class="text-xs text-gray-500 mt-1">156 张 · 2026-04 更新</div>
+      </div>
+    </div>
+
+    <button class="w-full px-3 py-2 text-sm border border-dashed border-gray-400 text-gray-600 rounded hover:bg-gray-50 hover:border-blue-400 hover:text-blue-500 mb-3">
+      ⬆ 上传新图（zip / 文件夹）
+    </button>
+
+    <!-- 统计徽章 -->
+    <div class="border border-gray-200 rounded p-3 bg-gray-50">
+      <div class="text-xs font-bold text-gray-700 mb-2">📊 当前数据集统计</div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs text-gray-600">已标注</span>
+        <span class="text-sm font-bold text-green-600">287</span>
+      </div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs text-gray-600">未标注</span>
+        <span class="text-sm font-bold text-orange-500">55</span>
+      </div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs text-gray-600">已审核</span>
+        <span class="text-sm font-bold text-blue-600">243</span>
+      </div>
+      <div class="mt-2">
+        <div class="text-xs text-gray-500 mb-1">标注进度 287/342</div>
+        <div class="h-1.5 bg-gray-200 rounded overflow-hidden">
+          <div class="h-full bg-green-500" style="width:83.9%;"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 数据集管理 -->
+    <div class="mt-3 pt-3 border-t border-gray-200">
+      <div class="text-xs text-gray-500 mb-2">数据集管理</div>
+      <button class="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-50 rounded">📤 导出 captions.txt</button>
+      <button class="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-50 rounded">🔄 同步到 OSS</button>
+      <button class="w-full text-left px-2 py-1.5 text-xs text-gray-700 hover:bg-gray-50 rounded">🗑 清空未审核</button>
+    </div>
+  </div>
+
+  <!-- ============ 中栏：图片 + Caption ============ -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-bold text-gray-800">🖼 当前图片 <span class="text-xs text-gray-400 font-normal ml-2">第 288 / 342 张</span></h2>
+      <div class="flex items-center gap-2">
+        <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">待审核</span>
+        <span class="text-xs text-gray-500">WD-L-2024-088.jpg</span>
+      </div>
+    </div>
+
+    <!-- 图片占位 -->
+    <div class="border border-gray-200 rounded overflow-hidden bg-gray-100 mx-auto" style="width:600px;height:400px;">
+      <div class="w-full h-full flex flex-col items-center justify-center text-gray-500">
+        <div class="text-5xl mb-2">🖼</div>
+        <div class="text-sm font-medium">WD-L-2024-088.jpg</div>
+        <div class="text-xs mt-1">万德滑梯 V3 · 童趣海洋主题</div>
+        <div class="text-xs text-gray-400 mt-4">1920 × 1080 · 2.1MB · RGB</div>
+      </div>
+    </div>
+
+    <!-- 双栏 Caption -->
+    <div class="grid grid-cols-2 gap-3 mt-4">
+      <div class="border border-gray-200 rounded p-3 bg-gradient-to-br from-blue-50 to-white">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-bold text-blue-700">🤖 AI 生成（Qwen3.5-VL）</div>
+          <span class="text-xs text-gray-400">置信度 89%</span>
+        </div>
+        <div class="text-xs text-gray-700 leading-relaxed" style="min-height:110px;">
+          A children's slide in a Chinese park, marine theme, blue and orange colors, 3D render, bright sunlight, modern playground equipment, high detail, commercial photography style, wide angle view, clean composition.
+        </div>
+        <div class="mt-2 pt-2 border-t border-blue-100 text-xs text-gray-500">
+          68 tokens · 生成耗时 1.8s
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-3 bg-gradient-to-br from-green-50 to-white">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-bold text-green-700">✍️ 人工修订（可编辑）</div>
+          <span class="text-xs text-gray-400">未保存</span>
+        </div>
+        <textarea class="w-full text-xs text-gray-700 leading-relaxed border border-gray-200 rounded p-2 focus:outline-none focus:border-green-400" style="min-height:110px;resize:none;">wande_product, a children's slide in a Chinese park, marine theme with dolphin decoration, blue and orange colors, 3D render, bright sunlight, modern playground equipment.</textarea>
+        <div class="mt-2 pt-2 border-t border-green-100 text-xs text-gray-500">
+          已添加触发词 wande_product · 精简至 42 tokens
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部操作 -->
+    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">◀ 上一张</button>
+        <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">下一张 ▶</button>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 text-xs border border-blue-300 text-blue-600 rounded hover:bg-blue-50">🔄 AI 重新生成</button>
+        <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">💾 保存</button>
+        <button class="px-3 py-1.5 text-xs bg-green-500 text-white rounded hover:bg-green-600">✓ 标记已审核</button>
+      </div>
+    </div>
+
+    <!-- 批量进度条 -->
+    <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded">
+      <div class="flex items-center justify-between mb-2">
+        <div class="text-xs font-bold text-blue-700">⚡ 批量标注进行中...</div>
+        <div class="text-xs text-gray-600">287 / 342 · ETA 8min</div>
+      </div>
+      <div class="h-2 bg-white rounded overflow-hidden">
+        <div class="h-full bg-blue-500" style="width:83.9%;"></div>
+      </div>
+      <div class="text-xs text-gray-500 mt-1">并发 4 · 平均 1.8s/张 · 已用 14min</div>
+    </div>
+  </div>
+
+  <!-- ============ 右栏：批量控制 ============ -->
+  <div class="space-y-3">
+
+    <!-- 批量标注控制 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h2 class="text-sm font-bold text-gray-800 mb-3">⚙️ 批量标注控制</h2>
+
+      <div class="mb-3">
+        <div class="flex items-center justify-between mb-1">
+          <label class="text-xs text-gray-600">并发数</label>
+          <span class="text-xs font-bold text-blue-600">4</span>
+        </div>
+        <input type="range" min="1" max="8" value="4" class="slider-container w-full">
+        <div class="flex justify-between text-xs text-gray-400 mt-1">
+          <span>1</span><span>4</span><span>8</span>
+        </div>
+      </div>
+
+      <div class="mb-3">
+        <label class="text-xs text-gray-600 block mb-1">视觉模型</label>
+        <select class="w-full text-sm border border-gray-300 rounded px-2 py-1.5">
+          <option selected>Qwen3.5-VL（推荐 · 中英双语）</option>
+          <option>CLIP（快速 · 短描述）</option>
+          <option>BLIP2（通用 · 细节丰富）</option>
+        </select>
+      </div>
+
+      <div class="mb-4">
+        <label class="text-xs text-gray-600 block mb-1">提示模板</label>
+        <select class="w-full text-sm border border-gray-300 rounded px-2 py-1.5">
+          <option selected>儿童游乐产品专用</option>
+          <option>通用</option>
+          <option>国际化英文（出口方案）</option>
+          <option>＋ 自定义模板</option>
+        </select>
+        <div class="text-xs text-gray-400 mt-1">已预设触发词：wande_product</div>
+      </div>
+
+      <button class="w-full py-2.5 bg-blue-500 text-white text-sm font-bold rounded hover:bg-blue-600">
+        🚀 启动批量标注
+      </button>
+
+      <div class="mt-2 flex items-center gap-2">
+        <button class="flex-1 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">⏸ 暂停</button>
+        <button class="flex-1 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">⏹ 停止</button>
+      </div>
+    </div>
+
+    <!-- 质量统计 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h2 class="text-sm font-bold text-gray-800 mb-3">📈 质量统计</h2>
+      <div class="grid grid-cols-2 gap-2">
+        <div class="border border-gray-200 rounded p-2 text-center">
+          <div class="text-xs text-gray-500">平均 token</div>
+          <div class="text-lg font-bold text-blue-600">68</div>
+        </div>
+        <div class="border border-gray-200 rounded p-2 text-center">
+          <div class="text-xs text-gray-500">通过率</div>
+          <div class="text-lg font-bold text-green-600">93%</div>
+        </div>
+        <div class="border border-gray-200 rounded p-2 text-center">
+          <div class="text-xs text-gray-500">需修订</div>
+          <div class="text-lg font-bold text-orange-500">7%</div>
+        </div>
+        <div class="border border-gray-200 rounded p-2 text-center">
+          <div class="text-xs text-gray-500">空标率</div>
+          <div class="text-lg font-bold text-gray-500">0.3%</div>
+        </div>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+        💡 通过率 = 无需人工修改即可入训练集的比例（基于 243 张已审核）
+      </div>
+    </div>
+
+    <!-- Tag 云 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h2 class="text-sm font-bold text-gray-800 mb-3">🏷 高频 Tag 云</h2>
+      <div>
+        <span class="tag-chip hot">outdoor (287)</span>
+        <span class="tag-chip hot">children (265)</span>
+        <span class="tag-chip hot">slide (198)</span>
+        <span class="tag-chip">park (176)</span>
+        <span class="tag-chip">colorful (154)</span>
+        <span class="tag-chip">3D render (142)</span>
+        <span class="tag-chip">playground (128)</span>
+        <span class="tag-chip">marine theme (89)</span>
+        <span class="tag-chip">blue (82)</span>
+        <span class="tag-chip">orange (71)</span>
+        <span class="tag-chip">sunlight (64)</span>
+        <span class="tag-chip">modern (58)</span>
+        <span class="tag-chip">safety (42)</span>
+        <span class="tag-chip">wande_product (287)</span>
+      </div>
+      <div class="mt-3 pt-3 border-t border-gray-100 text-xs text-gray-500">
+        点击标签可筛选数据集图片
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

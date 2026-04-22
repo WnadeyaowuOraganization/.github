@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>素材库联动</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .toggle { position:relative; display:inline-block; width:36px; height:20px; }
+  .toggle input { opacity:0; width:0; height:0; }
+  .toggle .slider-btn { position:absolute; cursor:pointer; inset:0; background:#d1d5db; border-radius:20px; transition:.2s; }
+  .toggle .slider-btn:before { position:absolute; content:""; height:16px; width:16px; left:2px; bottom:2px; background:#fff; border-radius:50%; transition:.2s; }
+  .toggle input:checked + .slider-btn { background:#16a34a; }
+  .toggle input:checked + .slider-btn:before { transform:translateX(16px); }
+  .tag-cloud span { display:inline-block; margin:3px; padding:4px 10px; border-radius:999px; background:#eff6ff; color:#1d4ed8; border:1px solid #dbeafe; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- SPEC-CARD -->
+<div style="margin-bottom:16px;padding:14px 18px;border:1px dashed #2563eb;background:#eff6ff;border-radius:8px;font-size:12px;color:#1e3a8a;line-height:1.8;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1d4ed8;">📋 SPEC-CARD · 素材库联动</div>
+  <div><b>PAGE_TITLE：</b>素材库自动入库与联动</div>
+  <div><b>PURPOSE：</b>生成图一键/自动入素材库 · Qwen-VL 自动打 AI 标签 · 关联项目/商机 · 跳转统一素材库</div>
+  <div><b>USERS：</b>设计师、品牌、投标运营、素材管理员</div>
+  <div><b>FEATURES：</b>自动入库开关 / AI 标签 / 关联项目 / 关联商机 / 最近入库网格 / 标签词云 / 跳转</div>
+  <div><b>ACTIONS：</b>开关配置 / 查看最近入库 / 跳转 /wande/asset-library</div>
+  <div><b>ACCEPTANCE：</b>入库延迟 <5s / AI 标签准确率 >85% / 月入库 >200 张</div>
+  <div><b>RELATED_ISSUES：</b>#1939 素材库集成 / #2045 方案配图自动生成</div>
+</div>
+
+<!-- [顶部状态徽章] -->
+<div class="flex items-center gap-3 mb-4 flex-wrap">
+  <div class="px-3 py-2 rounded-lg bg-green-50 border border-green-200 text-green-800 text-xs flex items-center gap-2">
+    <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+    <span>自动入库：<b>✅ 开启</b></span>
+  </div>
+  <div class="px-3 py-2 rounded-lg bg-blue-50 border border-blue-200 text-blue-800 text-xs">
+    本月已入库 <b class="text-base">247</b> 张
+  </div>
+  <div class="px-3 py-2 rounded-lg bg-purple-50 border border-purple-200 text-purple-800 text-xs">
+    AI 标签覆盖率 <b>98.4%</b>
+  </div>
+  <div class="px-3 py-2 rounded-lg bg-orange-50 border border-orange-200 text-orange-800 text-xs">
+    关联项目 <b>18</b> 个
+  </div>
+  <div class="ml-auto">
+    <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-2 rounded font-medium">
+      🔗 跳转统一素材库 →
+    </button>
+  </div>
+</div>
+
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左上 · 入库配置卡] -->
+  <div class="col-span-5 bg-white rounded-lg border border-gray-200 p-5">
+    <div class="text-sm font-semibold text-gray-800 mb-4 flex items-center gap-2">
+      ⚙️ 入库配置
+    </div>
+
+    <div class="space-y-4">
+      <!-- 自动入库 -->
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+        <div>
+          <div class="text-sm font-medium text-gray-800">自动入库</div>
+          <div class="text-[11px] text-gray-500 mt-0.5">所有"已选"生成图自动送入素材库</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" checked><span class="slider-btn"></span>
+        </label>
+      </div>
+
+      <!-- AI 标签生成 -->
+      <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+        <div>
+          <div class="text-sm font-medium text-gray-800">AI 标签生成</div>
+          <div class="text-[11px] text-gray-500 mt-0.5">模型 <span class="font-mono bg-purple-50 text-purple-700 px-1.5 py-0.5 rounded">Qwen3.5-VL</span> · 自动识别场景/物件/风格</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" checked><span class="slider-btn"></span>
+        </label>
+      </div>
+
+      <!-- 关联项目 -->
+      <div class="pb-3 border-b border-gray-100">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <div class="text-sm font-medium text-gray-800">关联项目</div>
+            <div class="text-[11px] text-gray-500 mt-0.5">从 Prompt 自动识别或手动指定</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox" checked><span class="slider-btn"></span>
+          </label>
+        </div>
+        <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5 mt-2">
+          <option>🤖 自动识别（当前：深圳南山公园项目）</option>
+          <option>✋ 手动指定</option>
+        </select>
+      </div>
+
+      <!-- 关联商机 -->
+      <div class="pb-3 border-b border-gray-100">
+        <div class="flex items-center justify-between mb-2">
+          <div>
+            <div class="text-sm font-medium text-gray-800">关联商机（可选）</div>
+            <div class="text-[11px] text-gray-500 mt-0.5">与 CRM 商机绑定，方便方案复用</div>
+          </div>
+          <label class="toggle">
+            <input type="checkbox"><span class="slider-btn"></span>
+          </label>
+        </div>
+        <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5 mt-2" disabled>
+          <option>— 未关联 —</option>
+          <option>OPP-2025-0421 南山街道办 · 公园改造</option>
+        </select>
+      </div>
+
+      <!-- 水印与版权 -->
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-sm font-medium text-gray-800">添加 AI 生成水印</div>
+          <div class="text-[11px] text-gray-500 mt-0.5">右下角不可见水印（EXIF 标记）</div>
+        </div>
+        <label class="toggle">
+          <input type="checkbox" checked><span class="slider-btn"></span>
+        </label>
+      </div>
+    </div>
+
+    <div class="mt-5 pt-4 border-t border-gray-100 bg-gray-50 -mx-5 -mb-5 px-5 py-3 rounded-b-lg flex items-center justify-between">
+      <div class="text-[11px] text-gray-500">最后更新 2 分钟前</div>
+      <button class="text-xs text-blue-600 hover:underline font-medium">保存配置</button>
+    </div>
+  </div>
+
+  <!-- [右上 · 标签统计 词云] -->
+  <div class="col-span-7 bg-white rounded-lg border border-gray-200 p-5">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">🏷️ 本月 AI 标签统计 · 词云</div>
+      <div class="flex gap-1.5 text-[11px]">
+        <button class="px-2 py-1 border border-gray-300 rounded bg-gray-50 text-gray-700">本月</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">本季</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">今年</button>
+      </div>
+    </div>
+
+    <div class="tag-cloud text-center leading-loose py-4">
+      <span style="font-size:22px; background:#dbeafe; color:#1e40af; font-weight:700;">滑梯 128</span>
+      <span style="font-size:19px; background:#fef3c7; color:#92400e; font-weight:700;">公园 95</span>
+      <span style="font-size:17px; background:#fce7f3; color:#9f1239;">童趣 82</span>
+      <span style="font-size:15px; background:#dcfce7; color:#166534;">深圳 54</span>
+      <span style="font-size:14px;">海洋主题 48</span>
+      <span style="font-size:13px;">3D 渲染 42</span>
+      <span style="font-size:13px;">卡通 38</span>
+      <span style="font-size:12px;">草地 34</span>
+      <span style="font-size:12px;">夏日 31</span>
+      <span style="font-size:12px;">阳光 28</span>
+      <span style="font-size:12px;">蓝天 26</span>
+      <span style="font-size:11px;">小孩 24</span>
+      <span style="font-size:11px;">波浪 22</span>
+      <span style="font-size:11px;">广角 19</span>
+      <span style="font-size:11px;">黄昏 17</span>
+      <span style="font-size:11px;">绿植 15</span>
+      <span style="font-size:11px;">南山 14</span>
+      <span style="font-size:11px;">游乐设施 12</span>
+      <span style="font-size:10px;">电影感 10</span>
+      <span style="font-size:10px;">柔光 9</span>
+      <span style="font-size:10px;">彩色 8</span>
+    </div>
+
+    <!-- 标签统计小表 -->
+    <div class="mt-3 pt-3 border-t border-gray-100 grid grid-cols-4 gap-2 text-center">
+      <div>
+        <div class="text-xl font-bold text-gray-900">247</div>
+        <div class="text-[10px] text-gray-500">本月入库</div>
+      </div>
+      <div>
+        <div class="text-xl font-bold text-gray-900">384</div>
+        <div class="text-[10px] text-gray-500">唯一标签</div>
+      </div>
+      <div>
+        <div class="text-xl font-bold text-gray-900">1,842</div>
+        <div class="text-[10px] text-gray-500">总标签数</div>
+      </div>
+      <div>
+        <div class="text-xl font-bold text-gray-900">7.5</div>
+        <div class="text-[10px] text-gray-500">平均标签/图</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [下方 · 最近入库网格] -->
+  <div class="col-span-12 bg-white rounded-lg border border-gray-200 p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div class="text-sm font-semibold text-gray-800">📦 最近入库 <span class="text-xs text-gray-400 font-normal">· 来自 Phase1 生成自动入库</span></div>
+      <div class="flex items-center gap-2">
+        <input type="text" placeholder="🔍 搜索标签/项目..." class="text-xs border border-gray-300 rounded px-3 py-1.5 w-56">
+        <button class="text-xs text-blue-600 hover:underline">查看全部 247 张 →</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-6 gap-3">
+      <!-- 卡片 × 6 -->
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+        <div class="bg-gradient-to-br from-sky-100 to-blue-200 flex items-center justify-center text-3xl" style="aspect-ratio:4/3;">🌊</div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">海洋滑梯 · 候选#3</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">刚刚 · 文生图</div>
+          <div class="mt-1 flex flex-wrap gap-1">
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">滑梯</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">海洋</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">+5</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+        <div class="bg-gradient-to-br from-orange-100 to-amber-200 flex items-center justify-center text-3xl" style="aspect-ratio:4/3;">🏖️</div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">黄昏公园 · i2i</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">12 分钟前 · 图生图</div>
+          <div class="mt-1 flex flex-wrap gap-1">
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">公园</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">黄昏</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">+4</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+        <div class="bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center text-3xl" style="aspect-ratio:4/3;">🌳</div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">草地改碎石路 · Inpaint</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">35 分钟前 · 局部重绘</div>
+          <div class="mt-1 flex flex-wrap gap-1">
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">草地</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">碎石</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">+3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+        <div class="bg-gradient-to-br from-purple-100 to-pink-200 flex items-center justify-center text-3xl" style="aspect-ratio:4/3;">🎪</div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">童趣乐园 · 候选#1</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">1 小时前 · 文生图</div>
+          <div class="mt-1 flex flex-wrap gap-1">
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">童趣</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">彩色</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">+6</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+        <div class="bg-gradient-to-br from-red-100 to-orange-200 flex items-center justify-center text-3xl" style="aspect-ratio:4/3;">🎢</div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">过山车主题 · 候选#2</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">2 小时前 · 文生图</div>
+          <div class="mt-1 flex flex-wrap gap-1">
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">过山车</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">刺激</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">+3</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded-lg overflow-hidden hover:shadow-md transition">
+        <div class="bg-gradient-to-br from-yellow-100 to-lime-200 flex items-center justify-center text-3xl" style="aspect-ratio:4/3;">🏞️</div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-800 truncate">南山公园全景</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">3 小时前 · 图生图</div>
+          <div class="mt-1 flex flex-wrap gap-1">
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">南山</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded">全景</span>
+            <span class="text-[9px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">+4</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [底部 · 跳转大按钮] -->
+  <div class="col-span-12 bg-gradient-to-r from-blue-50 to-indigo-50 border border-blue-200 rounded-lg p-5 flex items-center justify-between">
+    <div>
+      <div class="text-base font-semibold text-gray-900">🔗 跳转统一素材库管理中心</div>
+      <div class="text-xs text-gray-600 mt-1">路径 <span class="font-mono bg-white px-1.5 py-0.5 rounded border border-gray-200">/wande/asset-library</span> · 查看全部 247 张 · 支持批量下载/打包/分享</div>
+    </div>
+    <button class="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-5 py-2.5 rounded-lg flex items-center gap-2">
+      打开素材库 →
+    </button>
+  </div>
+
+</div>
+
+</body>
+</html>

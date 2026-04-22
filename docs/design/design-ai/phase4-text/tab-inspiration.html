@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>主题方案灵感库</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .theme-card { width: 220px; height: 300px; border: 1px solid #d9d9d9; border-radius: 8px; background: #fff; overflow: hidden; transition: all .2s; display: flex; flex-direction: column; }
+    .theme-card:hover { box-shadow: 0 6px 16px rgba(24,144,255,.15); transform: translateY(-3px); border-color: #91d5ff; }
+    .theme-thumb { width: 100%; height: 130px; display: flex; align-items: center; justify-content: center; font-size: 40px; }
+    .filter-chip { padding: 4px 12px; border-radius: 14px; border: 1px solid #d9d9d9; font-size: 12px; cursor: pointer; background: #fff; }
+    .filter-chip.active { background: #1890ff; color: #fff; border-color: #1890ff; }
+    .filter-chip:hover { border-color: #1890ff; }
+    .mini-tag { display: inline-block; padding: 1px 6px; font-size: 10px; border-radius: 3px; margin-right: 3px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab4 · 主题方案灵感库</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">沉淀 20+ 主题方案模板（童趣/自然/运动/科技/文化/历史），设计师一键套用 + AI 变体生成 + 共创新主题</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">方案设计师（快速找参考）、商务人员（甲方展示）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">主题类型/产品/热度筛选 / 20 个主题卡 4×5 网格 / AI 变体生成 / AI 主题共创</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">筛选主题 → 预览 → 查看变体 → "套用到项目 →" → 输入关键词 AI 共创新主题</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">20 主题齐全 / 变体可一键生成 / 套用后自动填充到方案文本 / AI 共创 3 候选</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.5.4 · 灵感库</a>
+      ｜ 关联 Issue：#2308
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部筛选] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-base font-bold text-gray-800">🎨 主题灵感库 <span class="text-xs text-gray-400 font-normal ml-2">Issue #2308 · 共 20 个主题 · 累计使用 4,256 次</span></h2>
+    <div class="flex items-center gap-2">
+      <input class="px-2 py-1 text-xs border border-gray-300 rounded" placeholder="🔍 搜索主题名称" style="width:180px;">
+      <button class="px-3 py-1 text-xs bg-blue-500 text-white rounded">＋ 上传主题</button>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs text-gray-500 w-16">主题类型：</span>
+    <div class="flex gap-2 flex-wrap">
+      <span class="filter-chip active">全部 20</span>
+      <span class="filter-chip">童趣 5</span>
+      <span class="filter-chip">自然 4</span>
+      <span class="filter-chip">运动 3</span>
+      <span class="filter-chip">科技 3</span>
+      <span class="filter-chip">文化 3</span>
+      <span class="filter-chip">历史 2</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3 mb-2">
+    <span class="text-xs text-gray-500 w-16">适用产品：</span>
+    <div class="flex gap-2 flex-wrap">
+      <span class="filter-chip active">全部</span>
+      <span class="filter-chip">滑梯</span>
+      <span class="filter-chip">攀爬</span>
+      <span class="filter-chip">组合</span>
+      <span class="filter-chip">蹦床</span>
+      <span class="filter-chip">秋千</span>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-3">
+    <span class="text-xs text-gray-500 w-16">排序：</span>
+    <div class="flex gap-2">
+      <span class="filter-chip active">🔥 热度</span>
+      <span class="filter-chip">🆕 最新</span>
+      <span class="filter-chip">⭐ 收藏</span>
+      <span class="filter-chip">🏆 中标率</span>
+    </div>
+  </div>
+</div>
+
+<!-- [20 个主题卡 4×5 网格] -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="grid grid-cols-4 gap-4" style="justify-items:center;">
+
+    <!-- 主题 1 童趣海洋 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#a6d8ff,#4a90d9);">🐋</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">童趣海洋</span>
+          <span class="text-xs text-red-500">🔥 热门</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">滑梯</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">12 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>324</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 2 森林探险 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#a8e6a3,#5ba858);">🌲</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">森林探险</span>
+          <span class="text-xs text-red-500">🔥 热门</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-green-100 text-green-700">自然</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">攀爬</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">10 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>298</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 3 太空宇航 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#2c3e68,#0d1b4a);color:#ffd700;">🚀</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">太空宇航</span>
+          <span class="text-xs text-red-500">🔥 热门</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-indigo-100 text-indigo-700">科技</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">15 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>276</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 4 武侠江湖 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#8b4513,#3e2010);color:#ffd700;">⚔️</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">武侠江湖</span>
+          <span class="text-xs text-orange-500">✨ 推荐</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-amber-100 text-amber-700">文化</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">攀爬</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">8 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>215</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 5 海底世界 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#4fc3f7,#0d47a1);">🐠</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">海底世界</span>
+          <span class="text-xs text-red-500">🔥 热门</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">滑梯</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">14 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>263</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 6 恐龙乐园 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#ffccbc,#bf360c);">🦖</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">恐龙乐园</span>
+          <span class="text-xs text-red-500">🔥 热门</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">11 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>241</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 7 童话城堡 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#f8bbd0,#ad1457);">🏰</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">童话城堡</span>
+          <span class="text-xs text-orange-500">✨ 推荐</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">9 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>198</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 8 丛林部落 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#d7ccc8,#4e342e);">🌴</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">丛林部落</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-green-100 text-green-700">自然</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">攀爬</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">7 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>172</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 9 机器人工厂 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#cfd8dc,#37474f);">🤖</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">机器人工厂</span>
+          <span class="text-xs text-orange-500">✨ 推荐</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-indigo-100 text-indigo-700">科技</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">10 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>186</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 10 奥运冠军 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#ffe082,#ff6f00);">🏅</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">奥运冠军</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-red-100 text-red-700">运动</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">6 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>153</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 11 极地冰雪 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#e1f5fe,#01579b);">❄️</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">极地冰雪</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-green-100 text-green-700">自然</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">滑梯</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">8 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>147</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 12 三国演义 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#b71c1c,#3e2723);color:#ffd700;">🎭</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">三国演义</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-purple-100 text-purple-700">历史</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">5 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>128</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 13 马戏团 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#ff8a65,#c62828);">🎪</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">欢乐马戏团</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">蹦床</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">7 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>135</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 14 蒸汽朋克 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#a1887f,#3e2723);color:#ffc107;">⚙️</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">蒸汽朋克</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-indigo-100 text-indigo-700">科技</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">攀爬</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">6 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>112</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 15 丝路古韵 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#fff3e0,#e65100);">🐫</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">丝路古韵</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-amber-100 text-amber-700">文化</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">5 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>98</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 16 乡野田园 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#c5e1a5,#33691e);">🌾</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">乡野田园</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-green-100 text-green-700">自然</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">秋千</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">4 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>87</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 17 超级英雄 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#1565c0,#b71c1c);">🦸</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">超级英雄</span>
+          <span class="text-xs text-orange-500">✨ 推荐</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-red-100 text-red-700">运动</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">攀爬</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">9 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>165</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 18 糖果星球 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#f48fb1,#ce93d8);">🍭</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">糖果星球</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">滑梯</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">6 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>119</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 19 竞技赛场 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#81c784,#1b5e20);">⚽</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">竞技赛场</span>
+          <span class="text-xs text-gray-400">普通</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-red-100 text-red-700">运动</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">5 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>92</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+    <!-- 主题 20 国潮文创 -->
+    <div class="theme-card">
+      <div class="theme-thumb" style="background:linear-gradient(135deg,#ef9a9a,#880e4f);color:#ffd700;">🏮</div>
+      <div class="p-3 flex-1 flex flex-col">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-bold text-gray-800">国潮文创</span>
+          <span class="text-xs text-red-500">🔥 热门</span>
+        </div>
+        <div class="mb-1">
+          <span class="mini-tag bg-amber-100 text-amber-700">文化</span>
+          <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">🎨 AI 变体 <strong class="text-blue-600">13 个</strong></div>
+        <div class="text-xs text-gray-500 mb-2">📊 使用量 <strong>258</strong> 次</div>
+        <button class="mt-auto w-full px-2 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">套用到项目 →</button>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="text-center text-xs text-gray-500 mt-4">显示 1-20 / 共 20 个主题</div>
+</div>
+
+<!-- [底部 AI 主题共创] -->
+<div class="bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-dashed border-blue-300 rounded-lg p-6">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-bold text-gray-800">🎨 AI 主题共创 <span class="text-xs text-gray-500 font-normal ml-2">输入关键词，让 AI 帮你创造全新主题</span></h2>
+    <span class="text-xs px-2 py-0.5 bg-purple-100 text-purple-700 rounded">🧪 Beta</span>
+  </div>
+
+  <div class="flex items-center gap-3 mb-4">
+    <input class="flex-1 px-3 py-2 text-sm border border-gray-300 rounded" placeholder="输入关键词，如：雪山 / 熊猫 / 古风 / 未来科技..." value="雪山 + 萌宠">
+    <button class="px-5 py-2 bg-purple-500 text-white text-sm rounded hover:bg-purple-600">✨ AI 生成 3 个候选</button>
+  </div>
+
+  <!-- 生成的 3 个候选（demo 1 个） -->
+  <div class="grid grid-cols-3 gap-3">
+    <!-- 候选 1 -->
+    <div class="bg-white border border-purple-200 rounded-lg p-4">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-bold text-purple-800">候选 1 · 雪域萌宠</span>
+        <span class="text-xs text-purple-600">⭐ AI 推荐</span>
+      </div>
+      <div class="w-full h-28 rounded mb-3 flex items-center justify-center text-4xl" style="background:linear-gradient(135deg,#e1f5fe,#4fc3f7);">🐼❄️</div>
+      <div class="text-xs text-gray-600 mb-2">
+        雪山背景，以熊猫、雪豹、北极狐为核心角色，打造一个充满童趣又富有生态教育意义的雪域萌宠王国。主色调冰蓝白 + 亮橘色点缀。
+      </div>
+      <div class="flex gap-1 mb-3">
+        <span class="mini-tag bg-blue-100 text-blue-700">童趣</span>
+        <span class="mini-tag bg-green-100 text-green-700">自然</span>
+        <span class="mini-tag bg-gray-100 text-gray-600">组合</span>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 px-2 py-1.5 text-xs border border-purple-300 text-purple-600 rounded hover:bg-purple-50">🎨 生成变体</button>
+        <button class="flex-1 px-2 py-1.5 text-xs bg-purple-500 text-white rounded hover:bg-purple-600">💾 加入库</button>
+      </div>
+    </div>
+
+    <!-- 候选 2 （占位） -->
+    <div class="bg-white border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+      <div class="text-3xl mb-2 opacity-30">🎨</div>
+      <div class="text-xs text-gray-400">候选 2<br>AI 生成中...</div>
+      <div class="w-16 h-1 bg-purple-100 rounded mt-3 overflow-hidden"><div class="h-full bg-purple-400 animate-pulse" style="width:60%;"></div></div>
+    </div>
+
+    <!-- 候选 3 （占位） -->
+    <div class="bg-white border border-dashed border-gray-300 rounded-lg p-4 flex flex-col items-center justify-center text-center">
+      <div class="text-3xl mb-2 opacity-30">🎨</div>
+      <div class="text-xs text-gray-400">候选 3<br>排队中...</div>
+      <div class="w-16 h-1 bg-gray-100 rounded mt-3"></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

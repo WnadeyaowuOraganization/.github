@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI 图生视频 · Issue #1635</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .radio-row { display: flex; align-items: center; padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 4px; margin-bottom: 6px; cursor: pointer; font-size: 12.5px; }
+    .radio-row.active { border-color: #1890ff; background: #e6f7ff; color: #1890ff; }
+    .radio-row:hover { border-color: #91d5ff; }
+    .seg { display: inline-flex; border: 1px solid #d9d9d9; border-radius: 4px; overflow: hidden; }
+    .seg div { padding: 5px 12px; font-size: 12px; cursor: pointer; color: #666; border-right: 1px solid #d9d9d9; }
+    .seg div:last-child { border-right: none; }
+    .seg div.active { background: #1890ff; color: #fff; }
+    input[type=range] { accent-color: #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab1 · AI 图生视频（Image to Video）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">上传静态效果图 → 选择摄像机运动 → AI 生成 3~15 秒动态视频 MP4，用于投标视频拼接和方案动态展示</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">投标人员（将效果图转为投标视频片段）、方案设计师（动态化静态图）、品牌（活动宣传视频）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">效果图上传 / 6 种摄像机运动 / 时长·画质·Motion 强度可调 / 三大模型切换（Runway/Luma/Kling）/ 3 备选视频 / 历史生成 / 一键拼接投标视频</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传图 → 选运动（环绕 360° 推荐）→ 5s / 1080p → Motion 60 → 生成视频 → 预览 → 导出 MP4 / 继续延长 5s / 拼接</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">视频 2min 内生成完成 / 支持 720p/1080p/4K / 3 备选 seed 可切换 / 历史可重新生成·拼接·删除 / 费用实时预估</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.3.1 · AI 图生视频</a>
+      ｜ 关联 Issue：#1635
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [三栏布局] 左：参数 ｜ 中：预览 ｜ 右：历史 -->
+<div class="flex gap-4">
+
+  <!-- ========== [左栏 · 参数配置] ========== -->
+  <aside class="w-80 flex-shrink-0 bg-white border border-gray-300 rounded p-4">
+    <h3 class="text-sm font-bold text-gray-800 mb-3">⚙️ 视频参数配置</h3>
+
+    <!-- [上传效果图] -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-600 mb-1.5">① 上传效果图</div>
+      <div class="border border-dashed border-gray-300 rounded p-2 bg-gray-50 flex items-center gap-2">
+        <div style="width:90px;height:60px;background:linear-gradient(135deg,#a8d8ea,#dff6fd 60%,#b6e0a2);border-radius:3px;display:flex;align-items:center;justify-content:center;color:#5a8a5a;font-size:10px;">深圳南山V3</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-700 truncate">深圳南山V3.jpg</div>
+          <div class="text-xs text-gray-400">1920×1080 · 2.3MB</div>
+          <button class="text-xs text-blue-500 mt-1 hover:underline">↻ 替换</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [摄像机运动] -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-600 mb-1.5">② 摄像机运动</div>
+      <div class="radio-row">⊙ 静态 zoom in</div>
+      <div class="radio-row">⊙ 静态 zoom out</div>
+      <div class="radio-row">⊙ 左→右 平移 (Pan)</div>
+      <div class="radio-row">⊙ 上→下 倾斜 (Tilt)</div>
+      <div class="radio-row active">● 环绕 360° Orbit <span class="ml-auto text-xs bg-blue-500 text-white px-1.5 rounded">推荐</span></div>
+      <div class="radio-row">⊙ 推入+倾斜（电影级）</div>
+    </div>
+
+    <!-- [时长] -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-600 mb-1.5">③ 时长</div>
+      <div class="seg">
+        <div>3s</div>
+        <div class="active">5s</div>
+        <div>10s</div>
+        <div>15s</div>
+      </div>
+    </div>
+
+    <!-- [画质] -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-600 mb-1.5">④ 画质</div>
+      <div class="seg">
+        <div>720p</div>
+        <div class="active">1080p</div>
+        <div>4K</div>
+      </div>
+    </div>
+
+    <!-- [Motion 强度] -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-600 mb-1.5 flex justify-between">
+        <span>⑤ Motion 强度</span>
+        <span class="text-blue-500 font-medium">60</span>
+      </div>
+      <input type="range" min="0" max="100" value="60" class="w-full">
+      <div class="flex justify-between text-xs text-gray-400"><span>静</span><span>中</span><span>强烈</span></div>
+    </div>
+
+    <!-- [模型选择] -->
+    <div class="mb-4">
+      <div class="text-xs text-gray-600 mb-1.5">⑥ 使用模型</div>
+      <select class="w-full border border-gray-300 rounded px-2 py-1.5 text-xs">
+        <option selected>Runway Gen-3 （推荐｜生成质量 ★★★★★）</option>
+        <option>Luma Dream Machine （镜头流畅度 ★★★★★）</option>
+        <option>Kling 自建 （国产·中文优化）</option>
+      </select>
+    </div>
+
+    <!-- [费用预估] -->
+    <div class="p-2.5 bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded mb-3 text-xs flex items-center justify-between">
+      <span class="text-amber-800">💰 本次费用预估</span>
+      <span class="text-amber-900 font-bold text-base">¥ 28</span>
+    </div>
+
+    <button class="w-full py-2.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 font-medium">🎬 生成视频</button>
+  </aside>
+
+  <!-- ========== [中栏 · 视频预览] ========== -->
+  <section class="flex-1 bg-white border border-gray-300 rounded p-4 min-w-0">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-gray-800">🎥 视频预览</h3>
+      <span class="text-xs text-orange-500">🟠 生成中 · 预计剩余 47s</span>
+    </div>
+
+    <!-- [主预览区] 1024×576 -->
+    <div style="width:100%;max-width:1024px;margin:0 auto;">
+      <div style="width:100%;aspect-ratio:16/9;background:linear-gradient(135deg,#e5e7eb 0%,#cbd5e1 100%);border-radius:6px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden;">
+        <!-- 场景占位 -->
+        <div style="position:absolute;inset:0;background:linear-gradient(180deg,#a8d8ea 0%,#dff6fd 55%,#b6e0a2 100%);"></div>
+        <svg style="position:absolute;bottom:20%;left:50%;transform:translateX(-50%);" width="200" height="80" viewBox="0 0 200 80">
+          <polygon points="30,60 100,20 170,60" fill="#8fbc8f" opacity="0.7"/>
+          <polygon points="60,60 100,35 140,60" fill="#a0d0a0" opacity="0.8"/>
+        </svg>
+        <!-- 进度条覆盖 -->
+        <div style="position:absolute;inset:0;background:rgba(0,0,0,0.35);display:flex;flex-direction:column;align-items:center;justify-content:center;color:#fff;">
+          <div style="font-size:48px;font-weight:700;">62%</div>
+          <div style="font-size:13px;margin-top:4px;">Runway Gen-3 · 环绕 360° · 5s · 1080p</div>
+          <div style="margin-top:12px;width:70%;height:6px;background:rgba(255,255,255,0.25);border-radius:3px;overflow:hidden;">
+            <div style="width:62%;height:100%;background:#1890ff;"></div>
+          </div>
+          <div style="font-size:11px;margin-top:6px;opacity:0.8;">第 93 / 150 帧 · Motion 强度 60</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [控制条] -->
+    <div class="flex items-center justify-center gap-3 mt-4">
+      <button class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700" title="播放">▶</button>
+      <button class="w-10 h-10 flex items-center justify-center bg-gray-100 hover:bg-gray-200 rounded-full text-gray-700" title="暂停">⏸</button>
+      <button class="px-4 py-2 border border-gray-300 text-sm rounded text-gray-700 hover:bg-gray-50">⬇ 导出 MP4</button>
+      <button class="px-4 py-2 border border-blue-400 text-sm rounded text-blue-500 hover:bg-blue-50">➕ 继续延长 5s</button>
+    </div>
+
+    <!-- [3 备选视频] -->
+    <div class="mt-5">
+      <div class="text-xs text-gray-600 mb-2">🔀 同 prompt 不同 seed 备选（点击切换到主预览）</div>
+      <div class="grid grid-cols-3 gap-3">
+        <div class="border border-blue-400 rounded overflow-hidden cursor-pointer" title="当前选中">
+          <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#a8d8ea,#b6e0a2);position:relative;">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶ Seed #01 （当前）</div>
+          </div>
+          <div class="p-1.5 text-xs flex justify-between text-gray-600"><span>Seed 8421</span><span class="text-blue-500">✓ 主预览</span></div>
+        </div>
+        <div class="border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-400">
+          <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#b4c7d8,#d4e5b6);position:relative;">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶ Seed #02</div>
+          </div>
+          <div class="p-1.5 text-xs flex justify-between text-gray-600"><span>Seed 3792</span><span>切换</span></div>
+        </div>
+        <div class="border border-gray-300 rounded overflow-hidden cursor-pointer hover:border-blue-400">
+          <div style="aspect-ratio:16/9;background:linear-gradient(135deg,#c8d8e8,#e8d8a8);position:relative;">
+            <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:11px;text-shadow:0 1px 2px rgba(0,0,0,0.5);">▶ Seed #03</div>
+          </div>
+          <div class="p-1.5 text-xs flex justify-between text-gray-600"><span>Seed 5510</span><span>切换</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== [右栏 · 历史生成] ========== -->
+  <aside class="w-72 flex-shrink-0 bg-white border border-gray-300 rounded p-4 flex flex-col">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-gray-800">📜 历史生成</h3>
+      <span class="text-xs text-gray-400">共 6 条</span>
+    </div>
+
+    <div class="flex-1 space-y-2 overflow-auto">
+      <!-- 历史条目 × 6 -->
+      <div class="border border-gray-200 rounded p-2 hover:border-blue-300 hover:bg-blue-50">
+        <div class="flex gap-2">
+          <div style="width:64px;height:40px;background:linear-gradient(135deg,#a8d8ea,#b6e0a2);border-radius:3px;flex-shrink-0;"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">南山V3_环绕_v5</div>
+            <div class="text-xs text-gray-400">5s · 1080p · <span class="text-green-600">✅ 完成</span></div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-1.5 text-xs">
+          <button class="text-blue-500 hover:underline">重新生成</button>
+          <button class="text-blue-500 hover:underline">拼接</button>
+          <button class="text-red-500 hover:underline ml-auto">删除</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 hover:border-blue-300 hover:bg-blue-50">
+        <div class="flex gap-2">
+          <div style="width:64px;height:40px;background:linear-gradient(135deg,#c8d8e8,#e8d8a8);border-radius:3px;flex-shrink-0;"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">南山V3_推入_v4</div>
+            <div class="text-xs text-gray-400">10s · 4K · <span class="text-green-600">✅ 完成</span></div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-1.5 text-xs">
+          <button class="text-blue-500 hover:underline">重新生成</button>
+          <button class="text-blue-500 hover:underline">拼接</button>
+          <button class="text-red-500 hover:underline ml-auto">删除</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 hover:border-blue-300 hover:bg-blue-50">
+        <div class="flex gap-2">
+          <div style="width:64px;height:40px;background:linear-gradient(135deg,#b4c7d8,#d4e5b6);border-radius:3px;flex-shrink-0;"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">福田中心绿地_pan</div>
+            <div class="text-xs text-gray-400">5s · 1080p · <span class="text-green-600">✅ 完成</span></div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-1.5 text-xs">
+          <button class="text-blue-500 hover:underline">重新生成</button>
+          <button class="text-blue-500 hover:underline">拼接</button>
+          <button class="text-red-500 hover:underline ml-auto">删除</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 hover:border-blue-300 hover:bg-blue-50">
+        <div class="flex gap-2">
+          <div style="width:64px;height:40px;background:linear-gradient(135deg,#e0c8a8,#b8a4d4);border-radius:3px;flex-shrink-0;"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">宝安学校操场_tilt</div>
+            <div class="text-xs text-gray-400">15s · 1080p · <span class="text-green-600">✅ 完成</span></div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-1.5 text-xs">
+          <button class="text-blue-500 hover:underline">重新生成</button>
+          <button class="text-blue-500 hover:underline">拼接</button>
+          <button class="text-red-500 hover:underline ml-auto">删除</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 hover:border-blue-300 hover:bg-blue-50">
+        <div class="flex gap-2">
+          <div style="width:64px;height:40px;background:linear-gradient(135deg,#f0b8a0,#a8d0e8);border-radius:3px;flex-shrink-0;"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">龙岗文体中心_orbit</div>
+            <div class="text-xs text-gray-400">5s · 4K · <span class="text-gray-500">⏸ 草稿</span></div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-1.5 text-xs">
+          <button class="text-blue-500 hover:underline">重新生成</button>
+          <button class="text-blue-500 hover:underline">拼接</button>
+          <button class="text-red-500 hover:underline ml-auto">删除</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 hover:border-blue-300 hover:bg-blue-50">
+        <div class="flex gap-2">
+          <div style="width:64px;height:40px;background:linear-gradient(135deg,#a0d4b0,#e0e0a0);border-radius:3px;flex-shrink-0;"></div>
+          <div class="flex-1 min-w-0">
+            <div class="text-xs font-medium text-gray-800 truncate">光明农业公园_zoom_in</div>
+            <div class="text-xs text-gray-400">3s · 720p · <span class="text-red-500">❌ 失败</span></div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-1.5 text-xs">
+          <button class="text-blue-500 hover:underline">重新生成</button>
+          <button class="text-gray-400">拼接</button>
+          <button class="text-red-500 hover:underline ml-auto">删除</button>
+        </div>
+      </div>
+    </div>
+
+    <button class="mt-3 w-full py-2 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-sm rounded hover:opacity-90 font-medium">🎬 拼接成投标视频</button>
+    <div class="text-xs text-gray-400 mt-1.5 text-center">已勾选 3 段 · 总时长 20s</div>
+  </aside>
+
+</div>
+
+</body>
+</html>

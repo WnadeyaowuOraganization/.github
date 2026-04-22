@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Phase 1 · 图像生成工坊 — 万德 AI 内容生成中台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .tab-btn.active { background: #2563eb; color: #fff; }
+  .tab-btn.active .tab-icon { color: #fff; }
+  iframe { width: 100%; border: 0; background: #f9fafb; }
+</style>
+</head>
+<body class="bg-gray-100">
+
+<!-- SPEC-CARD -->
+<div style="margin:16px;padding:16px 20px;border:1px dashed #2563eb;background:#eff6ff;border-radius:8px;font-size:12px;color:#1e3a8a;line-height:1.8;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:6px;color:#1d4ed8;">📋 SPEC-CARD · 页面规格</div>
+  <div><b>PAGE_TITLE：</b>Phase 1 · 图像生成工坊</div>
+  <div><b>PURPOSE：</b>投标效果图 / 产品渲染 / 品牌素材的 AI 图像生产中心 — 对标 Adobe Firefly Image Workspace</div>
+  <div><b>USERS：</b>设计师（主）、投标（效果图）、品牌（素材）、产品（白模贴图）</div>
+  <div><b>FEATURES：</b>文生图 Workbench / 图生图 Workbench / Inpainting 局部修改 / 素材库联动 / 生成历史</div>
+  <div><b>ACTIONS：</b>Prompt 输入→多尺寸生成 / 参考图→风格迁移 / 圈选→局部重绘 / 一键入库 / 复用历史</div>
+  <div><b>ACCEPTANCE：</b>单图生成 30s 内 / 4 张候选 / 入素材库自动打 AI 标签 / 历史可复用 prompt</div>
+  <div><b>DESIGN_DOC：</b><a href="../详细设计.md" style="color:#2563eb;text-decoration:underline;">AI 内容生成中台详细设计 §2.2</a></div>
+  <div><b>RELATED_ISSUES：</b>#2313 图生图独立 GUI / #2307 Inpainting / #2166 AI 图生图 API / #1682 图像生成 API / #1939 素材库集成 / #2045 方案配图自动生成 / #1788 AI 生成工作台</div>
+</div>
+
+<div class="flex min-h-screen">
+
+  <!-- [侧边栏] -->
+  <aside class="w-56 bg-gray-900 text-gray-200 flex flex-col">
+    <div class="px-5 py-4 border-b border-gray-800">
+      <div class="text-base font-bold text-white">万德 AI 平台</div>
+      <div class="text-[11px] text-gray-400 mt-0.5">WANDE AI Suite</div>
+    </div>
+    <nav class="flex-1 px-3 py-4 text-sm space-y-0.5">
+      <div class="px-3 py-1.5 text-[11px] text-gray-500 uppercase tracking-wider">工作台</div>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-300">🏠 首页</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-300">📥 支持中心</a>
+      <div class="px-3 py-1.5 mt-3 text-[11px] text-gray-500 uppercase tracking-wider">AI 内容生成中台</div>
+      <a class="block px-3 py-2 rounded bg-blue-600 text-white font-medium">🎨 Phase 1 · 图像工坊</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">🎬 Phase 2 · 视频工坊</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">🧠 Phase 3 · 模型仓库</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">📝 Phase 4 · 文案工坊</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">🔊 Phase 5 · 音频工坊</a>
+      <div class="px-3 py-1.5 mt-3 text-[11px] text-gray-500 uppercase tracking-wider">关联系统</div>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">🖼️ 素材库</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">📊 方案中心</a>
+      <a class="block px-3 py-2 rounded hover:bg-gray-800 text-gray-400">💼 CRM 商机</a>
+    </nav>
+    <div class="px-4 py-3 border-t border-gray-800 text-xs text-gray-500">
+      <div>v2.3.0 · 原型阶段</div>
+    </div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col min-w-0">
+
+    <!-- [顶部栏: 面包屑 + 用户] -->
+    <header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+      <nav class="text-xs text-gray-500 flex items-center gap-1.5">
+        <span>首页</span>
+        <span class="text-gray-300">›</span>
+        <span>支持中心</span>
+        <span class="text-gray-300">›</span>
+        <span>AI 内容生成中台</span>
+        <span class="text-gray-300">›</span>
+        <span class="text-gray-900 font-medium">Phase 1 图像生成工坊</span>
+      </nav>
+      <div class="flex items-center gap-3 text-xs">
+        <span class="px-2 py-1 rounded bg-green-50 text-green-700">🟢 GPU 集群正常</span>
+        <span class="px-2 py-1 rounded bg-gray-100 text-gray-600">本月用量 ¥3,284 / ¥10,000</span>
+        <div class="w-7 h-7 rounded-full bg-blue-500 text-white flex items-center justify-center text-xs font-bold">赵</div>
+      </div>
+    </header>
+
+    <!-- [标题区] -->
+    <section class="bg-white px-6 py-5 border-b border-gray-200">
+      <div class="flex items-end justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-900">Phase 1 · 图像生成工坊</h1>
+          <p class="text-sm text-gray-500 mt-1">对标 Adobe Firefly · 文生图 + 图生图 + Inpainting 三合一 AI 图像生产中心</p>
+        </div>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="px-2 py-1 rounded bg-blue-50 text-blue-700 border border-blue-200">SD-XL 1.0</span>
+          <span class="px-2 py-1 rounded bg-purple-50 text-purple-700 border border-purple-200">Flux.1-dev</span>
+          <span class="px-2 py-1 rounded bg-orange-50 text-orange-700 border border-orange-200">LoRA × 12</span>
+        </div>
+      </div>
+      <!-- 指标条 -->
+      <div class="grid grid-cols-5 gap-4 mt-5">
+        <div class="border border-gray-200 rounded-lg px-4 py-3 bg-gray-50">
+          <div class="text-xs text-gray-500">本月生成</div>
+          <div class="text-xl font-bold text-gray-900 mt-0.5">3,847 <span class="text-xs font-normal text-gray-400">张</span></div>
+        </div>
+        <div class="border border-gray-200 rounded-lg px-4 py-3 bg-gray-50">
+          <div class="text-xs text-gray-500">入库素材</div>
+          <div class="text-xl font-bold text-gray-900 mt-0.5">247 <span class="text-xs font-normal text-green-600">↑ 32%</span></div>
+        </div>
+        <div class="border border-gray-200 rounded-lg px-4 py-3 bg-gray-50">
+          <div class="text-xs text-gray-500">平均生成时长</div>
+          <div class="text-xl font-bold text-gray-900 mt-0.5">18.4s</div>
+        </div>
+        <div class="border border-gray-200 rounded-lg px-4 py-3 bg-gray-50">
+          <div class="text-xs text-gray-500">Inpaint 使用率</div>
+          <div class="text-xl font-bold text-gray-900 mt-0.5">38.2%</div>
+        </div>
+        <div class="border border-gray-200 rounded-lg px-4 py-3 bg-gray-50">
+          <div class="text-xs text-gray-500">活跃 LoRA</div>
+          <div class="text-xl font-bold text-gray-900 mt-0.5">12 <span class="text-xs font-normal text-gray-400">个</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- [Tab 栏] -->
+    <nav class="bg-white border-b border-gray-200 px-6 flex items-center gap-1">
+      <button data-tab="t2i" class="tab-btn active flex items-center gap-1.5 px-4 py-3 text-sm font-medium rounded-t-lg transition text-gray-700 hover:bg-gray-50">
+        <span class="tab-icon">🎨</span> 文生图 Workbench
+      </button>
+      <button data-tab="i2i" class="tab-btn flex items-center gap-1.5 px-4 py-3 text-sm font-medium rounded-t-lg transition text-gray-700 hover:bg-gray-50">
+        <span class="tab-icon">🖼️</span> 图生图 Workbench
+      </button>
+      <button data-tab="inpaint" class="tab-btn flex items-center gap-1.5 px-4 py-3 text-sm font-medium rounded-t-lg transition text-gray-700 hover:bg-gray-50">
+        <span class="tab-icon">🖌️</span> Inpainting 局部修改
+      </button>
+      <button data-tab="assets" class="tab-btn flex items-center gap-1.5 px-4 py-3 text-sm font-medium rounded-t-lg transition text-gray-700 hover:bg-gray-50">
+        <span class="tab-icon">📦</span> 素材库联动
+      </button>
+      <button data-tab="history" class="tab-btn flex items-center gap-1.5 px-4 py-3 text-sm font-medium rounded-t-lg transition text-gray-700 hover:bg-gray-50">
+        <span class="tab-icon">📜</span> 生成历史
+      </button>
+      <div class="ml-auto text-xs text-gray-400 pr-2">Workbench · 对标 Firefly</div>
+    </nav>
+
+    <!-- [Tab 内容 iframe 容器] -->
+    <section class="flex-1 bg-gray-50">
+      <iframe id="tab-frame" src="tab-t2i.html" style="height: calc(100vh - 40px); min-height: 900px;"></iframe>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  const frame = document.getElementById('tab-frame');
+  const map = { t2i: 'tab-t2i.html', i2i: 'tab-i2i.html', inpaint: 'tab-inpaint.html', assets: 'tab-assets.html', history: 'tab-history.html' };
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      frame.src = map[btn.dataset.tab];
+    });
+  });
+</script>
+</body>
+</html>

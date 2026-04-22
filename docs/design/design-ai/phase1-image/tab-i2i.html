@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>图生图 Workbench</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .pill { display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid #e5e7eb; font-size:11px; color:#4b5563; cursor:pointer; background:#fff; }
+  .pill.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+  .slider { width:100%; accent-color:#2563eb; }
+  .compare-divider { position:absolute; top:0; bottom:0; left:50%; width:2px; background:#2563eb; cursor:ew-resize; }
+  .compare-divider::after { content:'⇄'; position:absolute; top:50%; left:50%; transform:translate(-50%,-50%); width:28px; height:28px; border-radius:50%; background:#2563eb; color:#fff; display:flex; align-items:center; justify-content:center; font-size:12px; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- SPEC-CARD -->
+<div style="margin-bottom:16px;padding:14px 18px;border:1px dashed #2563eb;background:#eff6ff;border-radius:8px;font-size:12px;color:#1e3a8a;line-height:1.8;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1d4ed8;">📋 SPEC-CARD · 图生图 Workbench</div>
+  <div><b>PAGE_TITLE：</b>Image-to-Image Workbench</div>
+  <div><b>PURPOSE：</b>上传参考图 → 风格迁移 / 色调保持 / 构图复用 → 生成新图（方案初稿优化、白模贴图）</div>
+  <div><b>USERS：</b>设计师（方案迭代）、产品（白模贴图）、投标（参考图扩展）</div>
+  <div><b>FEATURES：</b>原图上传 / 变化强度 / 风格预设 / LoRA / 保持构图色调人物 / 对比预览 / 历史输入图复用</div>
+  <div><b>ACTIONS：</b>上传→设强度→生成 4 张 / 中线滑块对比 / 快捷复用历史输入图</div>
+  <div><b>ACCEPTANCE：</b>变化强度精细可调 / 对比滑块直观 / 复用效率高</div>
+  <div><b>RELATED_ISSUES：</b>#2313 图生图独立 GUI / #2166 AI 图生图 API</div>
+</div>
+
+<div class="grid gap-4" style="grid-template-columns: 280px 1fr 260px;">
+
+  <!-- [左侧 · 上传 + 控制] -->
+  <aside class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex items-center justify-between">
+        <span>原图 <span class="text-red-500">*</span></span>
+        <button class="text-[11px] text-blue-600 hover:underline">重新上传</button>
+      </div>
+      <!-- 已上传原图预览 -->
+      <div class="border border-gray-200 rounded-lg bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center" style="width:100%; height:200px;">
+        <div class="text-center text-gray-400 text-xs">
+          <div class="text-4xl mb-1">🖼️</div>
+          <div class="font-medium text-gray-600">方案初稿.png</div>
+          <div class="text-[10px] mt-1">280 × 200 · 2.4 MB</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">Prompt</div>
+      <textarea rows="4" class="w-full text-xs border border-gray-300 rounded p-2 resize-none">保持原构图，将色调调整为黄昏暖色，加入蓝紫渐变天空，提升电影感</textarea>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>变化强度 Denoise</span><span class="font-mono text-gray-700">0.55</span>
+      </div>
+      <input type="range" min="0.1" max="1.0" step="0.05" value="0.55" class="slider">
+      <div class="flex justify-between text-[10px] text-gray-400 mt-0.5">
+        <span>0.1 接近原图</span><span>1.0 完全重绘</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">风格迁移</div>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="pill">写实</span>
+        <span class="pill">卡通</span>
+        <span class="pill active">水彩</span>
+        <span class="pill">3D 渲染</span>
+        <span class="pill">线稿</span>
+        <span class="pill">油画</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex items-center gap-1">
+        <span class="text-green-500">🟢</span> LoRA
+      </div>
+      <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+        <option>wande_product_v2.3</option>
+        <option>playground_style_v1.2</option>
+        <option>shenzhen_city_v1.0</option>
+      </select>
+    </div>
+
+    <div class="space-y-1.5 pt-1 border-t border-gray-100">
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" checked class="accent-blue-600"> 保持构图
+      </label>
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" checked class="accent-blue-600"> 保持色调
+      </label>
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" class="accent-blue-600"> 保持人物
+      </label>
+    </div>
+
+    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded text-sm flex items-center justify-center gap-2">
+      ✨ 生成
+    </button>
+    <div class="text-[11px] text-center text-gray-500">预估 ¥6 · 约 20s</div>
+  </aside>
+
+  <!-- [中间 · 对比预览] -->
+  <section class="bg-white rounded-lg border border-gray-200 p-4 flex flex-col">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">对比预览 <span class="text-xs text-gray-400 font-normal">· 拖动中线滑块左右对比</span></div>
+      <div class="flex gap-1.5 text-[11px]">
+        <button class="px-2 py-1 border border-gray-300 rounded bg-gray-50 text-gray-700">并排</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">叠加</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">差异</button>
+      </div>
+    </div>
+
+    <!-- 并排对比大区 -->
+    <div class="grid grid-cols-2 gap-0 relative border border-gray-200 rounded-lg overflow-hidden" style="height:400px;">
+      <!-- 原图 -->
+      <div class="bg-gradient-to-br from-slate-100 via-gray-100 to-zinc-200 flex items-center justify-center relative">
+        <span class="absolute top-2 left-2 bg-gray-700 text-white text-[10px] px-1.5 py-0.5 rounded">原图</span>
+        <div class="text-center text-gray-400 text-xs">
+          <div class="text-4xl mb-1">🏞️</div>
+          <div>方案初稿 · 日间冷色</div>
+          <div class="text-[10px] mt-1 font-mono">1024 × 1024</div>
+        </div>
+      </div>
+      <!-- 结果 -->
+      <div class="bg-gradient-to-br from-orange-100 via-amber-100 to-purple-200 flex items-center justify-center relative">
+        <span class="absolute top-2 right-2 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded">生成结果</span>
+        <div class="text-center text-gray-500 text-xs">
+          <div class="text-4xl mb-1">🌅</div>
+          <div>黄昏暖调 · 电影感</div>
+          <div class="text-[10px] mt-1 font-mono">1024 × 1024</div>
+        </div>
+      </div>
+      <div class="compare-divider"></div>
+    </div>
+
+    <!-- 4 张候选小图 -->
+    <div class="mt-4">
+      <div class="text-xs font-semibold text-gray-700 mb-2">候选结果（点击切换预览）</div>
+      <div class="grid grid-cols-4 gap-2">
+        <div class="border-2 border-blue-500 rounded bg-gradient-to-br from-orange-100 to-purple-200 flex items-center justify-center text-xs text-gray-500" style="aspect-ratio:1/1;">
+          <div class="text-center">
+            <div class="text-xl">🌅</div>
+            <div class="text-[10px]">#1 当前</div>
+          </div>
+        </div>
+        <div class="border border-gray-200 rounded bg-gradient-to-br from-pink-100 to-orange-200 flex items-center justify-center text-xs text-gray-400" style="aspect-ratio:1/1;">
+          <div class="text-center">
+            <div class="text-xl">🌄</div>
+            <div class="text-[10px]">#2</div>
+          </div>
+        </div>
+        <div class="border border-gray-200 rounded bg-gradient-to-br from-purple-100 to-indigo-200 flex items-center justify-center text-xs text-gray-400" style="aspect-ratio:1/1;">
+          <div class="text-center">
+            <div class="text-xl">🌆</div>
+            <div class="text-[10px]">#3</div>
+          </div>
+        </div>
+        <div class="border border-gray-200 rounded bg-gradient-to-br from-yellow-100 to-red-200 flex items-center justify-center text-xs text-gray-400" style="aspect-ratio:1/1;">
+          <div class="text-center">
+            <div class="text-xl">🔆</div>
+            <div class="text-[10px]">#4</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [底部 · 动作栏] -->
+    <div class="mt-4 flex items-center justify-between border-t border-gray-100 pt-3">
+      <div class="text-[11px] text-gray-500">种子 <span class="font-mono text-gray-700">524781</span> · Denoise <span class="font-mono text-gray-700">0.55</span> · 用时 19.2s</div>
+      <div class="flex gap-1.5">
+        <button class="px-3 py-1.5 text-xs border border-gray-300 rounded hover:bg-gray-50">⭐ 收藏</button>
+        <button class="px-3 py-1.5 text-xs border border-gray-300 rounded hover:bg-gray-50">🎯 送 Inpaint</button>
+        <button class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-700">📦 入素材库</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- [右侧 · 历史输入图] -->
+  <aside class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">📚 历史输入图</div>
+      <button class="text-[11px] text-blue-600 hover:underline">查看全部</button>
+    </div>
+
+    <div class="space-y-2">
+      <!-- 历史项 × 5 -->
+      <div class="border border-blue-200 bg-blue-50 rounded p-2 flex gap-2 cursor-pointer">
+        <div class="w-14 h-14 rounded bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-xl flex-shrink-0">🖼️</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 truncate">方案初稿.png</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">刚刚</div>
+          <button class="text-[10px] text-blue-600 mt-1 hover:underline">✓ 当前使用</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 flex gap-2 cursor-pointer hover:bg-gray-50">
+        <div class="w-14 h-14 rounded bg-gradient-to-br from-green-100 to-emerald-200 flex items-center justify-center text-xl flex-shrink-0">🌳</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 truncate">南山公园白模.jpg</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">2 小时前</div>
+          <button class="text-[10px] text-blue-600 mt-1 hover:underline">→ 复用</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 flex gap-2 cursor-pointer hover:bg-gray-50">
+        <div class="w-14 h-14 rounded bg-gradient-to-br from-orange-100 to-yellow-200 flex items-center justify-center text-xl flex-shrink-0">🏖️</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 truncate">海边滑梯参考.jpg</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">昨天</div>
+          <button class="text-[10px] text-blue-600 mt-1 hover:underline">→ 复用</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 flex gap-2 cursor-pointer hover:bg-gray-50">
+        <div class="w-14 h-14 rounded bg-gradient-to-br from-purple-100 to-pink-200 flex items-center justify-center text-xl flex-shrink-0">🎪</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 truncate">童趣乐园草图.png</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">3 天前</div>
+          <button class="text-[10px] text-blue-600 mt-1 hover:underline">→ 复用</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded p-2 flex gap-2 cursor-pointer hover:bg-gray-50">
+        <div class="w-14 h-14 rounded bg-gradient-to-br from-blue-100 to-cyan-200 flex items-center justify-center text-xl flex-shrink-0">🌊</div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs font-semibold text-gray-800 truncate">海洋主题 moodboard.jpg</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">5 天前</div>
+          <button class="text-[10px] text-blue-600 mt-1 hover:underline">→ 复用</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 pt-3 border-t border-gray-100">
+      <button class="w-full border border-dashed border-gray-300 rounded py-2 text-xs text-gray-500 hover:bg-gray-50">
+        📎 从素材库选择
+      </button>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

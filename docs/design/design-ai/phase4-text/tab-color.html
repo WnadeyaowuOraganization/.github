@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>颜色配置器 · Three.js 3D 预览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .color-swatch { width: 48px; height: 48px; border-radius: 6px; cursor: grab; border: 2px solid #fff; box-shadow: 0 0 0 1px #d9d9d9, 0 2px 4px rgba(0,0,0,.1); }
+    .color-swatch:active { cursor: grabbing; }
+    .view-btn { padding: 4px 8px; font-size: 11px; border: 1px solid rgba(255,255,255,.3); background: rgba(0,0,0,.5); color: #fff; border-radius: 3px; cursor: pointer; }
+    .view-btn.active { background: #1890ff; border-color: #1890ff; }
+    .quality-btn { padding: 4px 8px; font-size: 11px; border: 1px solid rgba(255,255,255,.3); background: rgba(0,0,0,.5); color: #fff; border-radius: 3px; cursor: pointer; }
+    .quality-btn.active { background: #52c41a; border-color: #52c41a; }
+    .product-chip { padding: 6px 10px; font-size: 12px; border: 1px solid #d9d9d9; background: #fff; border-radius: 4px; cursor: pointer; text-align: center; }
+    .product-chip.active { border-color: #1890ff; background: #e6f7ff; color: #1890ff; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab5 · 颜色配置器 + Three.js 3D 预览</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">为万德产品提供可视化配色方案生成 + 实时 3D 预览（Three.js），设计师用 RAL 标准色拖拽配色，甲方所见即所得</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">方案设计师（主要）、商务人员（甲方沟通展示）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">产品 3D 模型选择 / 5 色色板拖拽（RAL 编号）/ AI 配色推荐 3 套 / 3D 实时预览 + 多视角 / 配色方案库</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">选产品 → 拖拽色板 → 点击"应用到 3D"→ 3D 视角切换 → 保存方案</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">3D 实时更新 &lt;300ms / 支持 4 视角（正/45°/鸟瞰/儿童视角）/ RAL 色卡准确 / AI 推荐 3 套不同风格</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.5.5 · 颜色配置器</a>
+      ｜ 关联 Issue：#2309
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [三栏布局] -->
+<div class="flex gap-3">
+
+  <!-- 左 320 产品选择 + 配色面板 -->
+  <aside class="bg-white border border-gray-300 rounded p-4 flex-shrink-0" style="width:320px;">
+
+    <!-- 产品选择 -->
+    <div class="mb-4">
+      <h3 class="text-sm font-bold text-gray-800 mb-2">🎨 产品选择</h3>
+      <div class="grid grid-cols-3 gap-2 mb-2">
+        <div class="product-chip active">滑梯 V3</div>
+        <div class="product-chip">组合器械 K5</div>
+        <div class="product-chip">秋千 S2</div>
+      </div>
+      <div class="text-xs text-gray-500">✓ 已加载：滑梯 V3 三维模型（12 个可配色面）</div>
+    </div>
+
+    <!-- 配色方案 -->
+    <div class="mb-4">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-bold text-gray-800">🎨 配色方案</h3>
+        <button class="text-xs text-blue-500 hover:underline">🎲 随机</button>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">5 色板 · 可拖拽到 3D 模型 · 点击色块改 RAL</div>
+
+      <!-- 5 色色板 -->
+      <div class="space-y-3">
+        <!-- 主色 -->
+        <div class="flex items-center gap-3">
+          <div class="color-swatch" style="background:#CC0605;"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-gray-800">🎯 主色</span>
+              <span class="text-gray-500 font-mono">#CC0605</span>
+            </div>
+            <div class="text-xs text-gray-500">RAL 3020 · 交通红 · 涂覆 45%</div>
+          </div>
+        </div>
+
+        <!-- 辅色 1 -->
+        <div class="flex items-center gap-3">
+          <div class="color-swatch" style="background:#2271B3;"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-gray-800">🎨 辅色 1</span>
+              <span class="text-gray-500 font-mono">#2271B3</span>
+            </div>
+            <div class="text-xs text-gray-500">RAL 5015 · 天蓝色 · 涂覆 25%</div>
+          </div>
+        </div>
+
+        <!-- 辅色 2 -->
+        <div class="flex items-center gap-3">
+          <div class="color-swatch" style="background:#E8A33D;"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-gray-800">🎨 辅色 2</span>
+              <span class="text-gray-500 font-mono">#E8A33D</span>
+            </div>
+            <div class="text-xs text-gray-500">RAL 1023 · 交通黄 · 涂覆 15%</div>
+          </div>
+        </div>
+
+        <!-- 点缀 -->
+        <div class="flex items-center gap-3">
+          <div class="color-swatch" style="background:#D7D7D7;"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-gray-800">✨ 点缀</span>
+              <span class="text-gray-500 font-mono">#D7D7D7</span>
+            </div>
+            <div class="text-xs text-gray-500">RAL 7035 · 浅灰 · 涂覆 10%</div>
+          </div>
+        </div>
+
+        <!-- 安全警示 -->
+        <div class="flex items-center gap-3">
+          <div class="color-swatch" style="background:#F1F1F1;"></div>
+          <div class="flex-1">
+            <div class="flex items-center justify-between text-xs">
+              <span class="font-medium text-gray-800">⚠️ 安全警示</span>
+              <span class="text-gray-500 font-mono">#F1F1F1</span>
+            </div>
+            <div class="text-xs text-gray-500">RAL 9010 · 纯白 · 涂覆 5%</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI 推荐方案 -->
+    <div class="border-t border-gray-200 pt-3 mb-3">
+      <h3 class="text-sm font-bold text-gray-800 mb-2">🤖 AI 推荐配色</h3>
+      <div class="space-y-2">
+        <button class="w-full px-3 py-2 border border-gray-200 rounded hover:bg-blue-50 text-left flex items-center gap-2">
+          <div class="flex gap-0.5">
+            <div class="w-4 h-4 rounded" style="background:#FF6B9D;"></div>
+            <div class="w-4 h-4 rounded" style="background:#FFC93C;"></div>
+            <div class="w-4 h-4 rounded" style="background:#6BCB77;"></div>
+          </div>
+          <div class="flex-1">
+            <div class="text-xs font-medium text-gray-800">童趣配色</div>
+            <div class="text-[10px] text-gray-500">高饱和 · 适合 3-6 岁</div>
+          </div>
+        </button>
+        <button class="w-full px-3 py-2 border border-gray-200 rounded hover:bg-blue-50 text-left flex items-center gap-2">
+          <div class="flex gap-0.5">
+            <div class="w-4 h-4 rounded" style="background:#386641;"></div>
+            <div class="w-4 h-4 rounded" style="background:#6A994E;"></div>
+            <div class="w-4 h-4 rounded" style="background:#A7C957;"></div>
+          </div>
+          <div class="flex-1">
+            <div class="text-xs font-medium text-gray-800">森林配色</div>
+            <div class="text-[10px] text-gray-500">自然系 · 低饱和</div>
+          </div>
+        </button>
+        <button class="w-full px-3 py-2 border border-gray-200 rounded hover:bg-blue-50 text-left flex items-center gap-2">
+          <div class="flex gap-0.5">
+            <div class="w-4 h-4 rounded" style="background:#1B4965;"></div>
+            <div class="w-4 h-4 rounded" style="background:#62B6CB;"></div>
+            <div class="w-4 h-4 rounded" style="background:#BEE9E8;"></div>
+          </div>
+          <div class="flex-1">
+            <div class="text-xs font-medium text-gray-800">海洋配色</div>
+            <div class="text-[10px] text-gray-500">冷色调 · 沉稳</div>
+          </div>
+        </button>
+      </div>
+    </div>
+
+    <!-- 应用到 3D -->
+    <button class="w-full px-4 py-2.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 font-medium">
+      🚀 应用到 3D 预览
+    </button>
+    <div class="text-xs text-gray-400 text-center mt-2">✓ 自动同步到方案文本 §3.2 色彩方案</div>
+
+  </aside>
+
+  <!-- 中：3D 预览 Canvas -->
+  <div class="flex-1 bg-white border border-gray-300 rounded p-3" style="min-width:0;">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-sm font-bold text-gray-800">🎬 Three.js 3D 实时预览 <span class="text-xs text-gray-400 font-normal ml-2">滑梯 V3 · 12 个可配色面</span></h3>
+      <div class="text-xs text-gray-500">🔄 渲染于 16ms · 60 FPS</div>
+    </div>
+
+    <!-- 3D 画布容器 -->
+    <div class="relative rounded overflow-hidden" style="width:900px;height:550px;background:linear-gradient(180deg,#e8f4fd 0%,#f5f5f5 70%,#d4d4d4 100%);">
+
+      <!-- 右上 视角切换 -->
+      <div class="absolute top-3 right-3 flex flex-col gap-1 z-10">
+        <span class="text-[10px] text-white bg-black bg-opacity-50 px-1.5 py-0.5 rounded">📷 视角</span>
+        <button class="view-btn active">正视图</button>
+        <button class="view-btn">45°</button>
+        <button class="view-btn">鸟瞰</button>
+        <button class="view-btn">儿童视角</button>
+      </div>
+
+      <!-- 右下 渲染质量 -->
+      <div class="absolute bottom-3 right-3 flex flex-col gap-1 z-10">
+        <span class="text-[10px] text-white bg-black bg-opacity-50 px-1.5 py-0.5 rounded">⚙️ 质量</span>
+        <button class="quality-btn">低</button>
+        <button class="quality-btn active">中</button>
+        <button class="quality-btn">高</button>
+      </div>
+
+      <!-- 左下 状态栏 -->
+      <div class="absolute bottom-3 left-3 bg-black bg-opacity-50 text-white text-[10px] px-2 py-1 rounded z-10">
+        📐 尺寸 5.2 × 3.8 × 2.4 m · 🔺 顶点 14,820 · 🎨 材质 5 种
+      </div>
+
+      <!-- 左上 标题 -->
+      <div class="absolute top-3 left-3 bg-black bg-opacity-50 text-white text-[11px] px-2 py-1 rounded z-10">
+        🎨 配色方案：童趣海洋 · 当前未保存
+      </div>
+
+      <!-- SVG 滑梯模拟 3D -->
+      <svg width="900" height="550" viewBox="0 0 900 550" style="display:block;">
+        <!-- 地面阴影 -->
+        <ellipse cx="450" cy="480" rx="280" ry="30" fill="rgba(0,0,0,0.15)"/>
+
+        <!-- 立柱（辅色1 天蓝） -->
+        <rect x="280" y="220" width="22" height="240" fill="#2271B3" stroke="#1a5680" stroke-width="1"/>
+        <rect x="600" y="220" width="22" height="240" fill="#2271B3" stroke="#1a5680" stroke-width="1"/>
+
+        <!-- 平台底盘（点缀 浅灰） -->
+        <polygon points="260,220 640,220 670,250 230,250" fill="#D7D7D7" stroke="#888" stroke-width="1"/>
+        <rect x="260" y="250" width="380" height="12" fill="#a8a8a8"/>
+
+        <!-- 围栏（辅色2 黄） -->
+        <rect x="260" y="170" width="380" height="8" fill="#E8A33D"/>
+        <rect x="260" y="180" width="6" height="42" fill="#E8A33D"/>
+        <rect x="320" y="180" width="6" height="42" fill="#E8A33D"/>
+        <rect x="380" y="180" width="6" height="42" fill="#E8A33D"/>
+        <rect x="440" y="180" width="6" height="42" fill="#E8A33D"/>
+        <rect x="500" y="180" width="6" height="42" fill="#E8A33D"/>
+        <rect x="560" y="180" width="6" height="42" fill="#E8A33D"/>
+        <rect x="620" y="180" width="6" height="42" fill="#E8A33D"/>
+
+        <!-- 顶棚（主色 红） -->
+        <polygon points="230,170 450,100 670,170 670,195 230,195" fill="#CC0605" stroke="#8a0403" stroke-width="1.5"/>
+        <polygon points="450,100 670,170 450,120" fill="#A30504"/>
+
+        <!-- 主滑道（主色红） -->
+        <path d="M 640,240 Q 700,280 720,380 L 790,450 L 760,465 L 680,395 Q 650,310 620,260 Z" fill="#CC0605" stroke="#8a0403" stroke-width="1.5"/>
+        <path d="M 640,240 Q 700,280 720,380 L 790,450" stroke="#8a0403" stroke-width="2" fill="none"/>
+
+        <!-- 副滑道（辅色1 蓝） -->
+        <path d="M 260,240 Q 210,300 180,400 L 130,450 L 160,465 L 220,410 Q 260,320 280,260 Z" fill="#2271B3" stroke="#1a5680" stroke-width="1.5"/>
+
+        <!-- 梯子踏板（白色） -->
+        <rect x="300" y="270" width="60" height="6" fill="#F1F1F1"/>
+        <rect x="300" y="310" width="60" height="6" fill="#F1F1F1"/>
+        <rect x="300" y="350" width="60" height="6" fill="#F1F1F1"/>
+        <rect x="300" y="390" width="60" height="6" fill="#F1F1F1"/>
+        <rect x="300" y="430" width="60" height="6" fill="#F1F1F1"/>
+
+        <!-- 安全警示条（白） -->
+        <rect x="260" y="258" width="380" height="3" fill="#F1F1F1"/>
+
+        <!-- 装饰鲸鱼图案（点缀白） -->
+        <ellipse cx="450" cy="180" rx="28" ry="16" fill="#F1F1F1" opacity="0.9"/>
+        <circle cx="440" cy="176" r="2" fill="#333"/>
+        <path d="M 478,180 L 488,170 L 488,190 Z" fill="#F1F1F1"/>
+
+        <!-- 地面安全地垫（浅灰） -->
+        <ellipse cx="450" cy="490" rx="320" ry="18" fill="#D7D7D7" stroke="#a8a8a8" stroke-width="1" opacity="0.7"/>
+
+        <!-- 小人尺寸参照（儿童视角提示） -->
+        <g transform="translate(80,400)" opacity="0.5">
+          <circle cx="10" cy="8" r="6" fill="#333"/>
+          <rect x="6" y="14" width="8" height="20" fill="#333"/>
+          <rect x="2" y="34" width="5" height="18" fill="#333"/>
+          <rect x="13" y="34" width="5" height="18" fill="#333"/>
+          <text x="25" y="30" font-size="10" fill="#666">1.2m</text>
+        </g>
+
+        <!-- 坐标轴提示 -->
+        <g transform="translate(840,510)" opacity="0.6">
+          <line x1="0" y1="0" x2="20" y2="0" stroke="#ff0000" stroke-width="1.5"/>
+          <text x="22" y="3" font-size="9" fill="#ff0000">X</text>
+          <line x1="0" y1="0" x2="0" y2="-20" stroke="#00aa00" stroke-width="1.5"/>
+          <text x="-3" y="-22" font-size="9" fill="#00aa00">Y</text>
+          <line x1="0" y1="0" x2="-14" y2="14" stroke="#0000ff" stroke-width="1.5"/>
+          <text x="-24" y="18" font-size="9" fill="#0000ff">Z</text>
+        </g>
+      </svg>
+
+    </div>
+
+    <!-- 底部操作 -->
+    <div class="flex items-center justify-between mt-3 px-1">
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <span>🖱️ 左键拖拽旋转</span>
+        <span>·</span>
+        <span>🖱️ 右键平移</span>
+        <span>·</span>
+        <span>⇅ 滚轮缩放</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-700">📸 截图</button>
+        <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-700">🎬 360° 视频</button>
+        <button class="px-3 py-1 text-xs bg-green-500 text-white rounded">💾 保存方案</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 右：方案库 -->
+  <aside class="bg-white border border-gray-300 rounded p-3 flex-shrink-0" style="width:260px;">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-gray-800">💼 已保存方案</h3>
+      <span class="text-xs text-gray-400">5 个</span>
+    </div>
+
+    <div class="space-y-2">
+      <!-- 方案 1 当前 -->
+      <div class="border-2 border-blue-500 bg-blue-50 rounded p-2">
+        <div class="flex items-center gap-2 mb-1">
+          <div class="flex gap-0.5">
+            <div class="w-5 h-5 rounded" style="background:#CC0605;"></div>
+            <div class="w-5 h-5 rounded" style="background:#2271B3;"></div>
+            <div class="w-5 h-5 rounded" style="background:#E8A33D;"></div>
+            <div class="w-5 h-5 rounded" style="background:#D7D7D7;"></div>
+            <div class="w-5 h-5 rounded" style="background:#F1F1F1;"></div>
+          </div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold text-blue-700">童趣海洋 · 当前</span>
+          <span class="text-[10px] text-gray-500">✓</span>
+        </div>
+        <div class="text-[10px] text-gray-500 mt-0.5">4-22 14:32 · 使用 12 次</div>
+      </div>
+
+      <!-- 方案 2 -->
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer">
+        <div class="flex gap-0.5 mb-1">
+          <div class="w-5 h-5 rounded" style="background:#386641;"></div>
+          <div class="w-5 h-5 rounded" style="background:#6A994E;"></div>
+          <div class="w-5 h-5 rounded" style="background:#A7C957;"></div>
+          <div class="w-5 h-5 rounded" style="background:#F2E8CF;"></div>
+          <div class="w-5 h-5 rounded" style="background:#BC4749;"></div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-800">森林探险</span>
+          <button class="text-[10px] text-blue-500 hover:underline">应用</button>
+        </div>
+        <div class="text-[10px] text-gray-500 mt-0.5">4-18 09:15 · 使用 8 次</div>
+      </div>
+
+      <!-- 方案 3 -->
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer">
+        <div class="flex gap-0.5 mb-1">
+          <div class="w-5 h-5 rounded" style="background:#1B4965;"></div>
+          <div class="w-5 h-5 rounded" style="background:#62B6CB;"></div>
+          <div class="w-5 h-5 rounded" style="background:#BEE9E8;"></div>
+          <div class="w-5 h-5 rounded" style="background:#FFFFFF;"></div>
+          <div class="w-5 h-5 rounded" style="background:#FFC93C;"></div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-800">深海蓝调</span>
+          <button class="text-[10px] text-blue-500 hover:underline">应用</button>
+        </div>
+        <div class="text-[10px] text-gray-500 mt-0.5">4-15 16:40 · 使用 5 次</div>
+      </div>
+
+      <!-- 方案 4 -->
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer">
+        <div class="flex gap-0.5 mb-1">
+          <div class="w-5 h-5 rounded" style="background:#FF6B9D;"></div>
+          <div class="w-5 h-5 rounded" style="background:#FFC93C;"></div>
+          <div class="w-5 h-5 rounded" style="background:#6BCB77;"></div>
+          <div class="w-5 h-5 rounded" style="background:#4D96FF;"></div>
+          <div class="w-5 h-5 rounded" style="background:#FFFFFF;"></div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-800">糖果乐园</span>
+          <button class="text-[10px] text-blue-500 hover:underline">应用</button>
+        </div>
+        <div class="text-[10px] text-gray-500 mt-0.5">4-10 11:28 · 使用 3 次</div>
+      </div>
+
+      <!-- 方案 5 -->
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer">
+        <div class="flex gap-0.5 mb-1">
+          <div class="w-5 h-5 rounded" style="background:#8B4513;"></div>
+          <div class="w-5 h-5 rounded" style="background:#CD853F;"></div>
+          <div class="w-5 h-5 rounded" style="background:#DEB887;"></div>
+          <div class="w-5 h-5 rounded" style="background:#2F4F4F;"></div>
+          <div class="w-5 h-5 rounded" style="background:#FFD700;"></div>
+        </div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-medium text-gray-800">国潮风</span>
+          <button class="text-[10px] text-blue-500 hover:underline">应用</button>
+        </div>
+        <div class="text-[10px] text-gray-500 mt-0.5">4-05 14:12 · 使用 7 次</div>
+      </div>
+    </div>
+
+    <button class="w-full mt-3 px-2 py-1.5 text-xs border border-dashed border-gray-300 text-gray-600 rounded hover:bg-gray-50">＋ 新建空白方案</button>
+
+    <div class="mt-3 pt-3 border-t border-gray-200 text-xs text-gray-500 text-center">
+      💡 支持导入 <strong>阿斯顿·马丁</strong>、<strong>福特</strong> 等品牌 RAL 色卡
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

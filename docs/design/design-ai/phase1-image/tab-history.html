@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>生成历史</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .subtab { padding:6px 14px; border-radius:6px; font-size:12px; color:#4b5563; cursor:pointer; }
+  .subtab.active { background:#2563eb; color:#fff; font-weight:600; }
+  .style-pill { display:inline-block; padding:2px 8px; border-radius:999px; font-size:10px; border:1px solid transparent; }
+  .type-pill { display:inline-block; padding:2px 8px; border-radius:4px; font-size:10px; font-weight:600; }
+  table { border-collapse:separate; border-spacing:0; }
+  th, td { border-bottom:1px solid #f3f4f6; }
+  tr:hover td { background:#fafbfc; }
+  .op-btn { display:inline-flex; align-items:center; gap:3px; padding:3px 8px; border:1px solid #e5e7eb; border-radius:4px; background:#fff; color:#4b5563; font-size:11px; cursor:pointer; }
+  .op-btn:hover { background:#eff6ff; color:#2563eb; border-color:#93c5fd; }
+  .op-btn.danger:hover { background:#fef2f2; color:#dc2626; border-color:#fca5a5; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- SPEC-CARD -->
+<div style="margin-bottom:16px;padding:14px 18px;border:1px dashed #2563eb;background:#eff6ff;border-radius:8px;font-size:12px;color:#1e3a8a;line-height:1.8;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1d4ed8;">📋 SPEC-CARD · 生成历史</div>
+  <div><b>PAGE_TITLE：</b>生成历史记录中心</div>
+  <div><b>PURPOSE：</b>统一视图查询文生图/图生图/Inpaint 全部生成记录 · 支持复用 prompt / 送 Inpaint / 送素材库</div>
+  <div><b>USERS：</b>设计师（复用已有 Prompt 快速迭代）、管理者（费用审计）</div>
+  <div><b>FEATURES：</b>类型筛选 / 日期范围 / 关键词搜索 / LoRA 筛选 / 表格 12 行 / 多操作</div>
+  <div><b>ACTIONS：</b>复用 prompt / 送 Inpaint / 送素材库 / 删除 / 导出 CSV</div>
+  <div><b>ACCEPTANCE：</b>检索 <1s / 支持半年内 5000+ 条 / 一键复用 Prompt 到 Tab</div>
+  <div><b>RELATED_ISSUES：</b>#1788 AI 生成工作台 · 历史追溯</div>
+</div>
+
+<!-- [顶部筛选区] -->
+<div class="bg-white rounded-lg border border-gray-200 p-4 mb-4">
+  <!-- 类型 tabs -->
+  <div class="flex items-center gap-1 mb-4 pb-3 border-b border-gray-100">
+    <div class="text-xs font-semibold text-gray-700 mr-3">类型：</div>
+    <button class="subtab active">全部 <span class="ml-1 opacity-80">3,847</span></button>
+    <button class="subtab">文生图 <span class="ml-1 opacity-60">2,412</span></button>
+    <button class="subtab">图生图 <span class="ml-1 opacity-60">986</span></button>
+    <button class="subtab">Inpaint <span class="ml-1 opacity-60">449</span></button>
+    <div class="ml-auto text-xs text-gray-500">共计费用 ¥3,284.50</div>
+  </div>
+
+  <!-- 筛选条件 -->
+  <div class="grid grid-cols-4 gap-3">
+    <div>
+      <label class="text-[11px] text-gray-500 mb-1 block">📅 日期范围</label>
+      <input type="text" value="2025-10-01 至 2025-11-15" class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+    </div>
+    <div>
+      <label class="text-[11px] text-gray-500 mb-1 block">🔍 关键词（Prompt / 标签）</label>
+      <input type="text" placeholder="例如：滑梯 公园..." class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+    </div>
+    <div>
+      <label class="text-[11px] text-gray-500 mb-1 block">🧠 LoRA 模型</label>
+      <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+        <option>全部</option>
+        <option>wande_product_v2.3</option>
+        <option>playground_style_v1.2</option>
+        <option>shenzhen_city_v1.0</option>
+        <option>kids_cartoon_v3.1</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-[11px] text-gray-500 mb-1 block">🎨 风格</label>
+      <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+        <option>全部</option>
+        <option>写实</option>
+        <option>卡通</option>
+        <option>水彩</option>
+        <option>3D 渲染</option>
+        <option>线稿</option>
+        <option>油画</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="mt-3 pt-3 border-t border-gray-100 flex items-center justify-between">
+    <div class="flex items-center gap-2 text-[11px] text-gray-600">
+      当前筛选：<span class="px-2 py-0.5 bg-blue-50 text-blue-700 rounded">近 45 天</span>
+      <span class="text-gray-400">·</span>
+      <span>显示 <b class="text-gray-800">1-12</b> / 共 <b class="text-gray-800">3,847</b> 条</span>
+    </div>
+    <div class="flex gap-2">
+      <button class="text-xs px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50">重置</button>
+      <button class="text-xs px-3 py-1.5 border border-gray-300 rounded hover:bg-gray-50">📥 导出 CSV</button>
+      <button class="text-xs px-3 py-1.5 bg-blue-600 text-white rounded hover:bg-blue-700">应用筛选</button>
+    </div>
+  </div>
+</div>
+
+<!-- [历史表格] -->
+<div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+  <table class="w-full text-xs">
+    <thead class="bg-gray-50 text-gray-600">
+      <tr>
+        <th class="text-left px-3 py-2.5 font-semibold w-14">#</th>
+        <th class="text-left px-3 py-2.5 font-semibold w-20">类型</th>
+        <th class="text-left px-3 py-2.5 font-semibold w-20">缩略图</th>
+        <th class="text-left px-3 py-2.5 font-semibold">Prompt</th>
+        <th class="text-left px-3 py-2.5 font-semibold w-20">风格</th>
+        <th class="text-left px-3 py-2.5 font-semibold w-36">LoRA</th>
+        <th class="text-left px-3 py-2.5 font-semibold w-24">尺寸</th>
+        <th class="text-left px-3 py-2.5 font-semibold w-36">生成时间</th>
+        <th class="text-right px-3 py-2.5 font-semibold w-20">费用</th>
+        <th class="text-center px-3 py-2.5 font-semibold w-72">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <!-- 12 行 -->
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3847</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dbeafe;color:#1e40af;">文生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-sky-100 to-blue-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌊</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs" title="深圳南山公园滑梯，童趣海洋主题...">深圳南山公园滑梯，童趣海洋主题，阳光明媚，小孩嬉戏...</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#fef3c7;color:#92400e;">3D 渲染</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">wande_product_v2.3</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">刚刚 · 22s</td>
+        <td class="px-3 py-2 text-right font-medium">¥8.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3846</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dcfce7;color:#14532d;">图生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-orange-100 to-amber-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌅</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">保持原构图，色调调整为黄昏暖色，蓝紫渐变天空...</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#e0e7ff;color:#3730a3;">水彩</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">wande_product_v2.3</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1024×1024</td>
+        <td class="px-3 py-2 text-gray-500">12 分钟前 · 19s</td>
+        <td class="px-3 py-2 text-right font-medium">¥6.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3845</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#fce7f3;color:#9f1239;">Inpaint</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-stone-200 to-gray-400 flex items-center justify-center text-lg" style="width:60px;height:60px;">🪨</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">把这块草地改成碎石路，保留自然光影，风格一致</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#fef3c7;color:#92400e;">3D 渲染</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">wande_product_v2.3</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">35 分钟前 · 12s</td>
+        <td class="px-3 py-2 text-right font-medium">¥3.50</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3844</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dbeafe;color:#1e40af;">文生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-purple-100 to-pink-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🎪</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">童趣主题游乐场，彩色波浪滑梯，卡通风格，阳光氛围</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#fee2e2;color:#991b1b;">卡通</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">kids_cartoon_v3.1</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1:1 1024²</td>
+        <td class="px-3 py-2 text-gray-500">1 小时前 · 24s</td>
+        <td class="px-3 py-2 text-right font-medium">¥8.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3843</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dbeafe;color:#1e40af;">文生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-red-100 to-orange-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🎢</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">大型过山车主题公园，刺激氛围，傍晚时分，电影感灯光</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#dcfce7;color:#166534;">写实</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">playground_style_v1.2</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">2 小时前 · 26s</td>
+        <td class="px-3 py-2 text-right font-medium">¥8.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3842</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dcfce7;color:#14532d;">图生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-green-100 to-emerald-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌳</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">南山公园白模转渲染图，添加真实植被，阳光照射</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#fef3c7;color:#92400e;">3D 渲染</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">shenzhen_city_v1.0</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">2048×1152</td>
+        <td class="px-3 py-2 text-gray-500">3 小时前 · 32s</td>
+        <td class="px-3 py-2 text-right font-medium">¥10.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3841</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#fce7f3;color:#9f1239;">Inpaint</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-indigo-100 to-blue-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🏢</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">替换背景建筑为现代高层玻璃幕墙，保留前景滑梯</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#dcfce7;color:#166534;">写实</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">shenzhen_city_v1.0</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">5 小时前 · 14s</td>
+        <td class="px-3 py-2 text-right font-medium">¥3.50</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3840</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dbeafe;color:#1e40af;">文生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-yellow-100 to-lime-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌻</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">夏日向日葵田，童趣滑梯点缀，温暖色调，俯视广角</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#fde68a;color:#78350f;">油画</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">playground_style_v1.2</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">昨天 18:42 · 21s</td>
+        <td class="px-3 py-2 text-right font-medium">¥8.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3839</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dcfce7;color:#14532d;">图生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-teal-100 to-cyan-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌊</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">海洋主题乐园白模上色，波浪元素强化，儿童视角</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#e0e7ff;color:#3730a3;">水彩</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">kids_cartoon_v3.1</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1024×1024</td>
+        <td class="px-3 py-2 text-gray-500">昨天 15:10 · 18s</td>
+        <td class="px-3 py-2 text-right font-medium">¥6.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3838</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dbeafe;color:#1e40af;">文生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-gray-200 to-slate-400 flex items-center justify-center text-lg" style="width:60px;height:60px;">✏️</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">公园滑梯概念草图，黑白线稿，细节丰富，施工图风格</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#f3f4f6;color:#374151;">线稿</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded text-gray-400">（未使用）</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">昨天 11:25 · 16s</td>
+        <td class="px-3 py-2 text-right font-medium">¥6.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3837</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#fce7f3;color:#9f1239;">Inpaint</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-pink-100 to-rose-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌸</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">把枯树替换为樱花盛开的树，保留构图和光照</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#dcfce7;color:#166534;">写实</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">wande_product_v2.3</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">前天 · 13s</td>
+        <td class="px-3 py-2 text-right font-medium">¥3.50</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+      <tr>
+        <td class="px-3 py-2 text-gray-400 font-mono">#3836</td>
+        <td class="px-3 py-2"><span class="type-pill" style="background:#dbeafe;color:#1e40af;">文生图</span></td>
+        <td class="px-3 py-2"><div class="rounded bg-gradient-to-br from-blue-100 to-indigo-300 flex items-center justify-center text-lg" style="width:60px;height:60px;">🌃</div></td>
+        <td class="px-3 py-2"><div class="truncate max-w-xs">夜景公园灯光秀，LED 滑梯发光，霓虹氛围</div></td>
+        <td class="px-3 py-2"><span class="style-pill" style="background:#fef3c7;color:#92400e;">3D 渲染</span></td>
+        <td class="px-3 py-2"><span class="font-mono text-[11px] bg-gray-100 px-1.5 py-0.5 rounded">shenzhen_city_v1.0</span></td>
+        <td class="px-3 py-2 font-mono text-[11px]">1920×1080</td>
+        <td class="px-3 py-2 text-gray-500">前天 · 28s</td>
+        <td class="px-3 py-2 text-right font-medium">¥8.00</td>
+        <td class="px-3 py-2"><div class="flex gap-1 justify-center"><button class="op-btn">🔁 复用</button><button class="op-btn">🎯 Inpaint</button><button class="op-btn">📦 入库</button><button class="op-btn danger">🗑</button></div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- [表格底部 · 分页] -->
+  <div class="px-4 py-3 border-t border-gray-200 bg-gray-50 flex items-center justify-between text-xs">
+    <div class="text-gray-500">显示第 <b class="text-gray-800">1-12</b> 条，共 <b class="text-gray-800">3,847</b> 条</div>
+    <div class="flex items-center gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded bg-white hover:bg-gray-100 text-gray-400" disabled>« 首页</button>
+      <button class="px-2 py-1 border border-gray-300 rounded bg-white hover:bg-gray-100 text-gray-400" disabled>‹ 上页</button>
+      <button class="px-2.5 py-1 border border-blue-500 bg-blue-600 text-white rounded">1</button>
+      <button class="px-2.5 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">2</button>
+      <button class="px-2.5 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">3</button>
+      <span class="px-1 text-gray-400">…</span>
+      <button class="px-2.5 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">321</button>
+      <button class="px-2 py-1 border border-gray-300 rounded bg-white hover:bg-gray-100">下页 ›</button>
+      <button class="px-2 py-1 border border-gray-300 rounded bg-white hover:bg-gray-100">末页 »</button>
+      <select class="ml-2 border border-gray-300 rounded px-2 py-1">
+        <option>12 / 页</option>
+        <option>24 / 页</option>
+        <option>48 / 页</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

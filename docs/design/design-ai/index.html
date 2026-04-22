@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>万德AI平台 — AI 内容生成中台 · Design-AI Hub</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .wireframe-card { background: white; border: 1px solid #d1d5db; }
+  .dashed-box { border: 1px dashed #9ca3af; }
+  .phase-badge-red { background:#fee2e2; color:#991b1b; border:1px solid #fca5a5; }
+  .phase-badge-yellow { background:#fef3c7; color:#92400e; border:1px solid #fcd34d; }
+  .phase-badge-green { background:#d1fae5; color:#065f46; border:1px solid #6ee7b7; }
+</style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+<!-- ============ 顶部导航占位 ============ -->
+<div class="border-b border-gray-300 bg-white">
+  <div class="max-w-7xl mx-auto px-6 py-3 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <div class="w-8 h-8 bg-gray-200 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-500">LOGO</div>
+      <span class="text-sm font-semibold text-gray-700">万德游乐 · 内部平台</span>
+    </div>
+    <div class="flex items-center gap-3 text-xs text-gray-500">
+      <span>消息</span><span>帮助</span><span>设计师 · 张伟</span>
+    </div>
+  </div>
+</div>
+
+<!-- ============ 面包屑 ============ -->
+<div class="max-w-7xl mx-auto px-6 pt-4 text-xs text-gray-500">
+  <a href="#" class="hover:text-blue-500">首页</a>
+  <span class="mx-1">&gt;</span>
+  <a href="#" class="hover:text-blue-500">支持中心</a>
+  <span class="mx-1">&gt;</span>
+  <span class="text-gray-700">AI 内容生成中台</span>
+</div>
+
+<!-- ============ 标题区 ============ -->
+<header class="max-w-7xl mx-auto px-6 pt-3 pb-6">
+  <h1 class="text-3xl font-bold text-gray-900 tracking-tight">AI 内容生成中台 · Design-AI Hub</h1>
+  <p class="mt-2 text-sm text-gray-600">对标 Adobe Firefly + Runway + ComfyUI · 图像 / 视频 / LoRA / 文本 四合一 AI 创意工厂</p>
+</header>
+
+<!-- ============ SPEC-CARD ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-6">
+  <div style="border:2px solid #1e40af; background:#eff6ff; border-radius:8px; padding:20px 24px; font-size:13px; line-height:1.8;">
+    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; padding-bottom:10px; border-bottom:1px dashed #93c5fd;">
+      <span style="font-weight:700; color:#1e3a8a; font-size:14px;">📋 SPEC-CARD · 页面规格卡</span>
+      <a href="./详细设计.md" style="color:#1d4ed8; text-decoration:underline; font-size:12px;">📄 AI 内容生成中台详细设计 →</a>
+    </div>
+    <div style="display:grid; grid-template-columns:110px 1fr; gap:8px 16px; color:#1e3a8a;">
+      <div style="font-weight:600;">PAGE_TITLE</div><div>AI 内容生成中台 · Hub 总览</div>
+      <div style="font-weight:600;">PURPOSE</div><div>万德游乐 AI 创意生产中枢 — 投标效果图 / 视频 / 方案文本 / 品牌素材全链路 AI 化，自建 LoRA 模型避免依赖外部 API</div>
+      <div style="font-weight:600;">USERS</div><div>设计师（主）、投标（效果图+投标视频+招标文本）、商务（方案文本）、品牌（素材）、管理层（监控+成本）</div>
+      <div style="font-weight:600;">FEATURES</div><div>Phase1 图像工坊 / Phase2 视频工坊 / Phase3 LoRA 工坊 / Phase4 方案文本工坊 / 跨 Phase 素材流转</div>
+      <div style="font-weight:600;">ACTIONS</div><div>意图路由 → 自动分发 / LoRA → 渲染 → 素材入库 / 跨 Phase 资产复用 / 成本+质量双监控</div>
+      <div style="font-weight:600;">ACCEPTANCE</div><div>Hub 页 3s 渲染 / 4 Phase 入口可跳转 / KPI 数据来自真实 API / 数据流图清晰</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 6 KPI 卡片 ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-8">
+  <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span class="w-1 h-4 bg-blue-500"></span>核心 KPI · 本月数据
+  </h2>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="wireframe-card rounded p-4">
+      <div class="text-xs text-gray-500">本月图像生成数</div>
+      <div class="text-2xl font-bold text-gray-900 mt-1">12,480 <span class="text-sm font-normal text-gray-500">张</span></div>
+      <div class="text-xs text-green-600 mt-1">↗ 24% 同比</div>
+    </div>
+    <div class="wireframe-card rounded p-4">
+      <div class="text-xs text-gray-500">本月视频生成数</div>
+      <div class="text-2xl font-bold text-gray-900 mt-1">342 <span class="text-sm font-normal text-gray-500">条</span></div>
+      <div class="text-xs text-green-600 mt-1">↗ 45% 同比</div>
+    </div>
+    <div class="wireframe-card rounded p-4">
+      <div class="text-xs text-gray-500">LoRA 模型库</div>
+      <div class="text-2xl font-bold text-gray-900 mt-1">23 <span class="text-sm font-normal text-gray-500">个</span></div>
+      <div class="text-xs text-gray-500 mt-1">生产 9 · 测试 14</div>
+    </div>
+    <div class="wireframe-card rounded p-4">
+      <div class="text-xs text-gray-500">本月 AI 成本</div>
+      <div class="text-2xl font-bold text-gray-900 mt-1">¥18,340</div>
+      <div class="text-xs text-green-600 mt-1">↘ 12%（自建 LoRA 效果）</div>
+    </div>
+    <div class="wireframe-card rounded p-4">
+      <div class="text-xs text-gray-500">活跃设计师</div>
+      <div class="text-2xl font-bold text-gray-900 mt-1">18 <span class="text-sm font-normal text-gray-500">/ 20</span></div>
+      <div class="text-xs text-gray-500 mt-1">活跃率 90%</div>
+    </div>
+    <div class="wireframe-card rounded p-4">
+      <div class="text-xs text-gray-500">素材自动入库率</div>
+      <div class="text-2xl font-bold text-gray-900 mt-1">92%</div>
+      <div class="text-xs text-gray-500 mt-1">本月 11,481 / 12,480 张</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 四 Phase 架构网格 ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-8">
+  <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span class="w-1 h-4 bg-blue-500"></span>四大 Phase 架构 · 对标 Adobe Firefly + Runway + ComfyUI
+  </h2>
+  <div class="grid grid-cols-2 gap-4">
+
+    <!-- Phase1 图像生成工坊 -->
+    <div class="wireframe-card rounded p-5" style="min-height:360px;">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <div class="text-xs text-gray-500">Phase 1</div>
+          <h3 class="text-lg font-bold text-gray-900">图像生成工坊</h3>
+          <div class="text-xs text-gray-500 mt-0.5">对标 Adobe Firefly</div>
+        </div>
+        <span class="phase-badge-red text-xs px-2 py-0.5 rounded">🔴 待开发</span>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">子模块</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">文生图</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">图生图</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">Inpainting</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">素材库联动</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">生成历史</span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">关联 Issue（7 个）</div>
+        <div class="text-xs text-gray-500 font-mono">#2313 · #2307 · #2166 · #1682 · #1939 · #2045 · #1788</div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">代码现状</div>
+        <div class="text-xs text-gray-600 leading-relaxed">
+          🟡 Pipeline 3 个 collector 已建<br>
+          🔴 后端 Controller/Service/Entity 新建<br>
+          🔴 前端 Vue 页面新建
+        </div>
+      </div>
+      <a href="phase1-image/index.html" class="mt-4 inline-block w-full text-center bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 rounded">进入 Phase1 →</a>
+    </div>
+
+    <!-- Phase2 视频生成工坊 -->
+    <div class="wireframe-card rounded p-5" style="min-height:360px;">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <div class="text-xs text-gray-500">Phase 2</div>
+          <h3 class="text-lg font-bold text-gray-900">视频生成工坊</h3>
+          <div class="text-xs text-gray-500 mt-0.5">对标 Runway Gen-3 + Luma</div>
+        </div>
+        <span class="phase-badge-red text-xs px-2 py-0.5 rounded">🔴 待开发</span>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">子模块</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">AI 图生视频</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">Three.js 漫游</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">AI 环境填充</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">环境模板库</span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">关联 Issue（4 个）</div>
+        <div class="text-xs text-gray-500 font-mono">#1635 · #2305 · #1834 · #1835</div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">代码现状</div>
+        <div class="text-xs text-gray-600 leading-relaxed">
+          🔴 全新建 — Three.js 引擎 + AI 视频服务<br>
+          🔴 后端+前端+Pipeline 均待搭建
+        </div>
+      </div>
+      <a href="phase2-video/index.html" class="mt-4 inline-block w-full text-center bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 rounded">进入 Phase2 →</a>
+    </div>
+
+    <!-- Phase3 LoRA 训练工坊 -->
+    <div class="wireframe-card rounded p-5" style="min-height:360px; border-color:#6ee7b7; border-width:2px;">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <div class="text-xs text-gray-500">Phase 3</div>
+          <h3 class="text-lg font-bold text-gray-900">LoRA 训练工坊</h3>
+          <div class="text-xs text-gray-500 mt-0.5">对标 ComfyUI + Kohya + Civitai</div>
+        </div>
+        <span class="phase-badge-green text-xs px-2 py-0.5 rounded">🟢 Pipeline 80% 完备</span>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">子模块</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">Caption 标注</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">LoRA 训练</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">模型仓库</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">批量渲染引擎</span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">关联 Issue（5 个）</div>
+        <div class="text-xs text-gray-500 font-mono">#2456 · #2487 · #2486 · #2489 · #1680</div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">代码现状</div>
+        <div class="text-xs text-gray-600 leading-relaxed font-mono" style="font-size:11px;">
+          🟢 <b>pipeline/pipelines/comfyui_rendering/</b> 16 文件<br>
+          wdpp_lora_trainer.py · comfyui_cli.py<br>
+          render_task_service.py · data_preprocess.py<br>
+          model_downloader.py · perf_benchmark.py ...
+        </div>
+      </div>
+      <a href="phase3-lora/index.html" class="mt-4 inline-block w-full text-center bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 rounded">进入 Phase3 →</a>
+    </div>
+
+    <!-- Phase4 方案文本工坊 -->
+    <div class="wireframe-card rounded p-5" style="min-height:360px;">
+      <div class="flex items-start justify-between mb-2">
+        <div>
+          <div class="text-xs text-gray-500">Phase 4</div>
+          <h3 class="text-lg font-bold text-gray-900">方案文本工坊</h3>
+          <div class="text-xs text-gray-500 mt-0.5">对标 Writer + Copy.ai + Jasper</div>
+        </div>
+        <span class="phase-badge-red text-xs px-2 py-0.5 rounded">🔴 待开发</span>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">子模块</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">意图路由</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">方案文本编辑器</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">招标文本生成</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">灵感库</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">配色器</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-100 border border-gray-300 rounded">需求引导</span>
+        </div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">关联 Issue（7 个）</div>
+        <div class="text-xs text-gray-500 font-mono">#1849 · #2310 · #1843 · #2308 · #2309 · #2312 · #1794</div>
+      </div>
+      <div class="mt-3">
+        <div class="text-xs text-gray-600 font-semibold mb-1">代码现状</div>
+        <div class="text-xs text-gray-600 leading-relaxed">
+          🔴 全新建 — LLM 意图路由 + 文本编辑器<br>
+          🔴 后端+前端+Pipeline 均待搭建
+        </div>
+      </div>
+      <a href="phase4-text/index.html" class="mt-4 inline-block w-full text-center bg-blue-500 hover:bg-blue-600 text-white text-sm py-2 rounded">进入 Phase4 →</a>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 跨 Phase 数据流 SVG ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-8">
+  <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span class="w-1 h-4 bg-blue-500"></span>跨 Phase 数据流 · 从数据源到投标产出
+  </h2>
+  <div class="wireframe-card rounded p-4">
+    <svg viewBox="0 0 800 360" width="100%" height="360" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#3b82f6"/>
+        </marker>
+        <marker id="arrGray" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+          <path d="M0,0 L10,5 L0,10 z" fill="#6b7280"/>
+        </marker>
+      </defs>
+
+      <!-- 三列分区标题 -->
+      <text x="90" y="20" font-size="11" font-weight="700" fill="#374151">① 数据输入源</text>
+      <text x="370" y="20" font-size="11" font-weight="700" fill="#374151">② 四 Phase 流水线</text>
+      <text x="670" y="20" font-size="11" font-weight="700" fill="#374151">③ 输出去向</text>
+
+      <!-- 左：数据源 4 个 -->
+      <g font-size="10" fill="#374151">
+        <rect x="10" y="35" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="20" y="52" font-weight="600">万德产品库</text>
+        <text x="20" y="66" fill="#6b7280">BOM + 参数 + 3D 模型</text>
+
+        <rect x="10" y="90" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="20" y="107" font-weight="600">历史图纸 & 方案</text>
+        <text x="20" y="121" fill="#6b7280">past_projects/*.pdf</text>
+
+        <rect x="10" y="145" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="20" y="162" font-weight="600">竞品渲染图</text>
+        <text x="20" y="176" fill="#6b7280">collector 自动抓取</text>
+
+        <rect x="10" y="200" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="20" y="217" font-weight="600">招标文件</text>
+        <text x="20" y="231" fill="#6b7280">OCR + 需求解析</text>
+      </g>
+
+      <!-- 中：4 Phase 盒 -->
+      <!-- Phase3 训练 -->
+      <rect x="230" y="35" width="170" height="50" fill="#d1fae5" stroke="#059669" stroke-width="1.5" rx="4"/>
+      <text x="240" y="54" font-size="11" font-weight="700" fill="#065f46">Phase3 · LoRA 训练</text>
+      <text x="240" y="70" font-size="10" fill="#065f46">生成定制化模型</text>
+      <text x="240" y="82" font-size="9" fill="#065f46" font-family="monospace">wdpp_lora_trainer.py</text>
+
+      <!-- Phase1 图像 -->
+      <rect x="230" y="100" width="170" height="50" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="4"/>
+      <text x="240" y="119" font-size="11" font-weight="700" fill="#991b1b">Phase1 · 图像生成</text>
+      <text x="240" y="135" font-size="10" fill="#991b1b">文生图 / 图生图 / Inpaint</text>
+      <text x="240" y="147" font-size="9" fill="#991b1b" font-family="monospace">design_ai/image_service</text>
+
+      <!-- Phase2 视频 -->
+      <rect x="230" y="165" width="170" height="50" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="4"/>
+      <text x="240" y="184" font-size="11" font-weight="700" fill="#991b1b">Phase2 · 视频生成</text>
+      <text x="240" y="200" font-size="10" fill="#991b1b">AI 图生视频 + Three.js</text>
+      <text x="240" y="212" font-size="9" fill="#991b1b" font-family="monospace">design_ai/video_service</text>
+
+      <!-- Phase4 文本 -->
+      <rect x="230" y="230" width="170" height="50" fill="#fee2e2" stroke="#dc2626" stroke-width="1.5" rx="4"/>
+      <text x="240" y="249" font-size="11" font-weight="700" fill="#991b1b">Phase4 · 方案文本</text>
+      <text x="240" y="265" font-size="10" fill="#991b1b">方案/招标 LLM 生成</text>
+      <text x="240" y="277" font-size="9" fill="#991b1b" font-family="monospace">design_ai/text_service</text>
+
+      <!-- 素材库中心 -->
+      <rect x="420" y="140" width="140" height="50" fill="#dbeafe" stroke="#1d4ed8" stroke-width="1.5" rx="4"/>
+      <text x="430" y="159" font-size="11" font-weight="700" fill="#1e3a8a">素材库（中心）</text>
+      <text x="430" y="175" font-size="10" fill="#1e3a8a">MinIO + MySQL</text>
+      <text x="430" y="187" font-size="9" fill="#1e3a8a" font-family="monospace">asset_service</text>
+
+      <!-- 右：输出 4 个 -->
+      <g font-size="10" fill="#374151">
+        <rect x="620" y="35" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="630" y="52" font-weight="600">投标方案 PPT/PDF</text>
+        <text x="630" y="66" fill="#6b7280">自动合版</text>
+
+        <rect x="620" y="90" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="630" y="107" font-weight="600">客户展示视频</text>
+        <text x="630" y="121" fill="#6b7280">MP4 + 在线链接</text>
+
+        <rect x="620" y="145" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="630" y="162" font-weight="600">品牌素材库</text>
+        <text x="630" y="176" fill="#6b7280">官网 / 公众号</text>
+
+        <rect x="620" y="200" width="170" height="40" fill="#f9fafb" stroke="#9ca3af"/>
+        <text x="630" y="217" font-weight="600">CRM 商机附件</text>
+        <text x="630" y="231" fill="#6b7280">/crm/opportunity</text>
+      </g>
+
+      <!-- 输入→Phase3 箭头 -->
+      <line x1="180" y1="55" x2="228" y2="60" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrGray)"/>
+      <line x1="180" y1="110" x2="228" y2="70" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrGray)"/>
+      <line x1="180" y1="165" x2="228" y2="75" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrGray)"/>
+      <line x1="180" y1="220" x2="228" y2="255" stroke="#6b7280" stroke-width="1.2" marker-end="url(#arrGray)"/>
+
+      <!-- Phase3 → Phase1 模型箭头 -->
+      <path d="M 315 85 Q 315 95 315 100" stroke="#3b82f6" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text x="320" y="95" font-size="9" fill="#1d4ed8">模型 .safetensors</text>
+
+      <!-- Phase1 → Phase2 效果图箭头 -->
+      <path d="M 315 150 Q 315 158 315 165" stroke="#3b82f6" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <text x="320" y="160" font-size="9" fill="#1d4ed8">效果图 seed</text>
+
+      <!-- Phase1/2/3 → 素材库 -->
+      <path d="M 400 125 Q 420 140 420 155" stroke="#3b82f6" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+      <path d="M 400 190 Q 420 180 420 175" stroke="#3b82f6" stroke-width="1.5" fill="none" marker-end="url(#arr)"/>
+
+      <!-- Phase4 独立通道 → 输出 -->
+      <path d="M 400 255 Q 510 255 615 50" stroke="#3b82f6" stroke-width="1.5" fill="none" stroke-dasharray="3,3" marker-end="url(#arr)"/>
+      <text x="440" y="300" font-size="9" fill="#1d4ed8">Phase4 独立通道 · /api/text/generate</text>
+
+      <!-- 素材库 → 右侧输出 -->
+      <line x1="560" y1="155" x2="618" y2="55" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="560" y1="165" x2="618" y2="110" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="560" y1="175" x2="618" y2="165" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr)"/>
+      <line x1="560" y1="185" x2="618" y2="220" stroke="#3b82f6" stroke-width="1.5" marker-end="url(#arr)"/>
+
+      <!-- 图例 -->
+      <g transform="translate(10, 320)" font-size="10" fill="#6b7280">
+        <line x1="0" y1="5" x2="30" y2="5" stroke="#3b82f6" stroke-width="1.5"/>
+        <text x="36" y="8">数据/模型流</text>
+        <line x1="130" y1="5" x2="160" y2="5" stroke="#3b82f6" stroke-width="1.5" stroke-dasharray="3,3"/>
+        <text x="166" y="8">独立通道</text>
+        <line x1="240" y1="5" x2="270" y2="5" stroke="#6b7280" stroke-width="1.2"/>
+        <text x="276" y="8">数据源输入</text>
+        <text x="380" y="8" font-family="monospace">API/路径 见各箭头标注</text>
+      </g>
+    </svg>
+  </div>
+</section>
+
+<!-- ============ 今日工作流 3 列 ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-8">
+  <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span class="w-1 h-4 bg-blue-500"></span>今日工作流
+  </h2>
+  <div class="grid grid-cols-3 gap-4">
+
+    <!-- 进行中任务 -->
+    <div class="wireframe-card rounded p-4">
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">🔄 进行中任务</h3>
+      <ul class="space-y-3 text-xs">
+        <li class="border-l-2 border-yellow-400 pl-2">
+          <div class="font-semibold text-gray-800">LoRA-B 国际渲染训练中</div>
+          <div class="text-gray-500 mt-0.5">Phase3 · Epoch 12/20</div>
+          <div class="h-1.5 bg-gray-200 rounded mt-1.5"><div class="h-1.5 bg-yellow-400 rounded" style="width:60%"></div></div>
+        </li>
+        <li class="border-l-2 border-yellow-400 pl-2">
+          <div class="font-semibold text-gray-800">南山 V3 批量渲染</div>
+          <div class="text-gray-500 mt-0.5">Phase3 · 56/90</div>
+          <div class="h-1.5 bg-gray-200 rounded mt-1.5"><div class="h-1.5 bg-yellow-400 rounded" style="width:62%"></div></div>
+        </li>
+        <li class="border-l-2 border-yellow-400 pl-2">
+          <div class="font-semibold text-gray-800">方案灵感库生成中</div>
+          <div class="text-gray-500 mt-0.5">Phase4 · 3/20</div>
+          <div class="h-1.5 bg-gray-200 rounded mt-1.5"><div class="h-1.5 bg-yellow-400 rounded" style="width:15%"></div></div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 等待审核 -->
+    <div class="wireframe-card rounded p-4">
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">👁 等待审核</h3>
+      <ul class="space-y-2 text-xs">
+        <li class="flex items-start justify-between border-b border-dashed border-gray-200 pb-2">
+          <div>
+            <div class="font-semibold text-gray-800">Phase1 图生图 4 张</div>
+            <div class="text-gray-500 mt-0.5">待设计师审核</div>
+          </div>
+          <button class="text-xs text-blue-500 hover:underline">审核</button>
+        </li>
+        <li class="flex items-start justify-between border-b border-dashed border-gray-200 pb-2">
+          <div>
+            <div class="font-semibold text-gray-800">Phase2 南山 V3 漫游视频</div>
+            <div class="text-gray-500 mt-0.5">待吴耀审核</div>
+          </div>
+          <button class="text-xs text-blue-500 hover:underline">审核</button>
+        </li>
+        <li class="flex items-start justify-between">
+          <div>
+            <div class="font-semibold text-gray-800">Phase4 招标文本</div>
+            <div class="text-gray-500 mt-0.5">待投标审核</div>
+          </div>
+          <button class="text-xs text-blue-500 hover:underline">审核</button>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 最近产出 -->
+    <div class="wireframe-card rounded p-4">
+      <h3 class="text-sm font-semibold text-gray-900 mb-3">🖼 最近产出</h3>
+      <div class="grid grid-cols-5 gap-1.5">
+        <a href="phase1-image/history.html" class="aspect-square bg-gray-100 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-400 hover:bg-gray-200">IMG1</a>
+        <a href="phase1-image/history.html" class="aspect-square bg-gray-100 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-400 hover:bg-gray-200">IMG2</a>
+        <a href="phase2-video/history.html" class="aspect-square bg-gray-100 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-400 hover:bg-gray-200">VID1</a>
+        <a href="phase1-image/history.html" class="aspect-square bg-gray-100 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-400 hover:bg-gray-200">IMG3</a>
+        <a href="phase1-image/history.html" class="aspect-square bg-gray-100 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-400 hover:bg-gray-200">IMG4</a>
+      </div>
+      <div class="mt-3 text-xs text-gray-500">点击缩略图跳转对应 Phase 历史页</div>
+      <ul class="mt-3 space-y-1 text-xs text-gray-600">
+        <li>• 10:32 · 南山 V3 效果图 4 张（Phase1）</li>
+        <li>• 09:48 · 江南漫游视频 1 条（Phase2）</li>
+        <li>• 09:10 · 新中式配色方案（Phase4）</li>
+      </ul>
+    </div>
+
+  </div>
+</section>
+
+<!-- ============ 代码资产表 ============ -->
+<section class="max-w-7xl mx-auto px-6 pb-8">
+  <h2 class="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+    <span class="w-1 h-4 bg-blue-500"></span>代码资产现状 · 按 Phase 统计
+  </h2>
+  <div class="wireframe-card rounded overflow-hidden">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 border-b border-gray-300">
+        <tr class="text-left text-xs text-gray-600">
+          <th class="px-4 py-2 font-semibold">Phase</th>
+          <th class="px-4 py-2 font-semibold">关键代码路径</th>
+          <th class="px-4 py-2 font-semibold">状态</th>
+          <th class="px-4 py-2 font-semibold text-center">Issue</th>
+          <th class="px-4 py-2 font-semibold">备注</th>
+        </tr>
+      </thead>
+      <tbody class="text-xs">
+        <tr class="border-b border-gray-200">
+          <td class="px-4 py-2 font-semibold">Phase1</td>
+          <td class="px-4 py-2 font-mono text-gray-600">backend/ruoyi-modules/wande-ai/src/main/java/org/ruoyi/wande/designai/*</td>
+          <td class="px-4 py-2"><span class="phase-badge-red px-2 py-0.5 rounded">🔴</span></td>
+          <td class="px-4 py-2 text-center">7</td>
+          <td class="px-4 py-2 text-gray-600">待新建 Controller+Service+Entity</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="px-4 py-2 font-semibold">Phase1</td>
+          <td class="px-4 py-2 font-mono text-gray-600">frontend/src/views/wande/design-ai/image/*</td>
+          <td class="px-4 py-2"><span class="phase-badge-red px-2 py-0.5 rounded">🔴</span></td>
+          <td class="px-4 py-2 text-center">7</td>
+          <td class="px-4 py-2 text-gray-600">Vue 页面待新建</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="px-4 py-2 font-semibold">Phase1</td>
+          <td class="px-4 py-2 font-mono text-gray-600">pipeline/pipelines/design_ai/</td>
+          <td class="px-4 py-2"><span class="phase-badge-yellow px-2 py-0.5 rounded">🟡</span></td>
+          <td class="px-4 py-2 text-center">-</td>
+          <td class="px-4 py-2 text-gray-600">3 collector 已建</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="px-4 py-2 font-semibold">Phase2</td>
+          <td class="px-4 py-2 font-mono text-gray-600">backend/.../designai/video/* + frontend/.../video/*</td>
+          <td class="px-4 py-2"><span class="phase-badge-red px-2 py-0.5 rounded">🔴</span></td>
+          <td class="px-4 py-2 text-center">4</td>
+          <td class="px-4 py-2 text-gray-600">待新建</td>
+        </tr>
+        <tr class="border-b border-gray-200 bg-green-50">
+          <td class="px-4 py-2 font-bold">Phase3</td>
+          <td class="px-4 py-2 font-mono text-gray-700 font-bold">pipeline/pipelines/comfyui_rendering/</td>
+          <td class="px-4 py-2"><span class="phase-badge-green px-2 py-0.5 rounded font-bold">🟢</span></td>
+          <td class="px-4 py-2 text-center font-bold">5</td>
+          <td class="px-4 py-2 text-gray-700 font-semibold">16 文件已备：LoRA 训练器 + ComfyUI CLI + 渲染服务 + 数据预处理 + 模型下载 + 性能基准 + 竞品爬虫...</td>
+        </tr>
+        <tr class="border-b border-gray-200">
+          <td class="px-4 py-2 font-semibold">Phase3</td>
+          <td class="px-4 py-2 font-mono text-gray-600">frontend/.../lora/*</td>
+          <td class="px-4 py-2"><span class="phase-badge-red px-2 py-0.5 rounded">🔴</span></td>
+          <td class="px-4 py-2 text-center">5</td>
+          <td class="px-4 py-2 text-gray-600">前端 GUI 待新建</td>
+        </tr>
+        <tr>
+          <td class="px-4 py-2 font-semibold">Phase4</td>
+          <td class="px-4 py-2 font-mono text-gray-600">backend/.../designai/text/* + frontend/.../text/*</td>
+          <td class="px-4 py-2"><span class="phase-badge-red px-2 py-0.5 rounded">🔴</span></td>
+          <td class="px-4 py-2 text-center">7</td>
+          <td class="px-4 py-2 text-gray-600">待新建</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="mt-3 text-xs text-gray-500">
+    <span class="phase-badge-green px-1.5 py-0.5 rounded mr-1">🟢</span>Pipeline 完备
+    <span class="phase-badge-yellow px-1.5 py-0.5 rounded mx-1">🟡</span>部分完成
+    <span class="phase-badge-red px-1.5 py-0.5 rounded mx-1">🔴</span>待开发
+  </div>
+</section>
+
+<!-- ============ 底部 all-in-one 链接 ============ -->
+<footer class="max-w-7xl mx-auto px-6 pb-10">
+  <div class="wireframe-card rounded p-5 flex items-center justify-between" style="background:#f9fafb;">
+    <div>
+      <div class="text-sm font-semibold text-gray-900">查看平台全景 all-in-one</div>
+      <div class="text-xs text-gray-500 mt-1">AI 内容生成中台在万德平台的全景位置 · 与 CRM / ERP / PLM 等模块关系</div>
+    </div>
+    <a href="/docs/design/all-in-one/prototype.html" class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-2 rounded">进入平台全景 →</a>
+  </div>
+  <div class="mt-4 text-center text-xs text-gray-400">
+    万德游乐 · AI 内容生成中台 · Design-AI Hub · v1.0 原型
+  </div>
+</footer>
+
+</body>
+</html>

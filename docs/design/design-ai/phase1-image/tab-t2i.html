@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>文生图 Workbench</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .pill { display:inline-block; padding:4px 10px; border-radius:999px; border:1px solid #e5e7eb; font-size:11px; color:#4b5563; cursor:pointer; background:#fff; }
+  .pill.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+  .card-preview { position:relative; overflow:hidden; }
+  .card-preview:hover .toolbar { opacity:1; }
+  .toolbar { position:absolute; top:6px; right:6px; display:flex; gap:4px; opacity:0; transition:opacity .15s; }
+  .toolbar button { background:rgba(0,0,0,0.65); color:#fff; padding:4px 8px; border-radius:4px; font-size:11px; }
+  .slider { width:100%; accent-color:#2563eb; }
+  input[type="text"], input[type="number"], textarea, select { background:#fff; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- SPEC-CARD -->
+<div style="margin-bottom:16px;padding:14px 18px;border:1px dashed #2563eb;background:#eff6ff;border-radius:8px;font-size:12px;color:#1e3a8a;line-height:1.8;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1d4ed8;">📋 SPEC-CARD · 文生图 Workbench</div>
+  <div><b>PAGE_TITLE：</b>Text-to-Image Workbench（对标 Adobe Firefly Generate）</div>
+  <div><b>PURPOSE：</b>从 Prompt 直接生成 4 张候选图，支持 LoRA / 风格预设 / ControlNet / 尺寸自定义</div>
+  <div><b>USERS：</b>设计师（投标效果图）、品牌（素材）、产品（白模贴图）</div>
+  <div><b>FEATURES：</b>Prompt+Negative / 风格预设 / LoRA / 尺寸与数量 / 采样器+步数+CFG / 费用预估 / AI 提示词增强</div>
+  <div><b>ACTIONS：</b>输入 Prompt→生成 4 张 / 收藏/放大/导出/编辑 / 送 Inpaint / 一键入素材库</div>
+  <div><b>ACCEPTANCE：</b>单图 30s 内 / 4 张候选 / 支持 SD-XL + Flux / LoRA 动态加载 / 费用实时预估</div>
+  <div><b>RELATED_ISSUES：</b>#1682 图像生成 API / #1788 AI 生成工作台 / #2045 方案配图自动生成</div>
+</div>
+
+<div class="grid gap-4" style="grid-template-columns: 260px 1fr 280px;">
+
+  <!-- [左侧 · 控制面板] -->
+  <aside class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex items-center justify-between">
+        <span>Prompt <span class="text-red-500">*</span></span>
+        <span class="text-[10px] text-gray-400">128/500</span>
+      </div>
+      <textarea rows="6" class="w-full text-xs border border-gray-300 rounded p-2 resize-none" placeholder="描述你想生成的画面...">深圳南山公园滑梯，童趣海洋主题，阳光明媚，小孩嬉戏，彩色波浪造型，近景，高清电影感，柔和光线</textarea>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">Negative Prompt</div>
+      <textarea rows="3" class="w-full text-xs border border-gray-300 rounded p-2 resize-none" placeholder="不希望出现的元素...">低质量, 模糊, 扭曲, 多余手指, 水印, 文字</textarea>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">风格预设</div>
+      <div class="flex flex-wrap gap-1.5">
+        <span class="pill">写实</span>
+        <span class="pill">卡通</span>
+        <span class="pill">水彩</span>
+        <span class="pill active">3D 渲染</span>
+        <span class="pill">线稿</span>
+        <span class="pill">油画</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex items-center gap-1">
+        <span class="text-green-500">🟢</span> 使用 LoRA
+        <span class="text-[10px] text-gray-400 font-normal ml-auto">来自 Phase3 模型仓库</span>
+      </div>
+      <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+        <option>wande_product_v2.3 · 万德产品风格</option>
+        <option>playground_style_v1.2 · 游乐场风格</option>
+        <option>shenzhen_city_v1.0 · 深圳城市风格</option>
+        <option>kids_cartoon_v3.1 · 童趣卡通</option>
+      </select>
+      <div class="mt-1.5 flex items-center gap-2 text-[11px]">
+        <span class="text-gray-500">权重</span>
+        <input type="range" min="0" max="1" step="0.05" value="0.75" class="slider flex-1">
+        <span class="text-gray-700 font-mono w-8">0.75</span>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">尺寸</div>
+      <div class="flex flex-wrap gap-1.5 mb-1.5">
+        <span class="pill">1:1</span>
+        <span class="pill active">16:9</span>
+        <span class="pill">9:16</span>
+        <span class="pill">4:3</span>
+        <span class="pill">自定义</span>
+      </div>
+      <div class="text-[11px] text-gray-500">当前：<span class="font-mono text-gray-700">1920 × 1080</span></div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>生成数量</span><span class="font-mono text-gray-700">4</span>
+      </div>
+      <input type="range" min="1" max="8" value="4" class="slider">
+      <div class="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>1</span><span>8</span></div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">随机种子 Seed</div>
+      <div class="flex gap-1">
+        <input type="text" value="378912" class="flex-1 text-xs font-mono border border-gray-300 rounded px-2 py-1.5">
+        <button class="px-2 border border-gray-300 rounded hover:bg-gray-50" title="随机">🎲</button>
+      </div>
+    </div>
+
+    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded text-sm flex items-center justify-center gap-2 shadow-sm">
+      ✨ 生成图像
+    </button>
+  </aside>
+
+  <!-- [中间 · 图像预览] -->
+  <section class="bg-white rounded-lg border border-gray-200 p-4 flex flex-col">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">生成结果 <span class="text-xs text-gray-400 font-normal">· 4 张候选 · 1920×1080 · 用时 22.4s</span></div>
+      <div class="flex gap-1.5 text-[11px]">
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">全部导出</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">重新生成</button>
+      </div>
+    </div>
+
+    <!-- 2x2 预览网格 -->
+    <div class="grid grid-cols-2 gap-3 flex-1">
+      <!-- 图 1 -->
+      <div class="card-preview border border-gray-200 rounded-lg bg-gradient-to-br from-sky-100 via-blue-50 to-cyan-100 flex items-center justify-center" style="aspect-ratio:16/9;">
+        <div class="text-center text-gray-400 text-xs">
+          <div class="text-3xl mb-1">🌊</div>
+          <div>候选 #1 · 海洋主题滑梯</div>
+          <div class="text-[10px] mt-1 font-mono text-gray-500">seed: 378912</div>
+        </div>
+        <div class="toolbar">
+          <button>⭐</button><button>🔍</button><button>📤</button><button>✏️</button><button>🎯</button>
+        </div>
+      </div>
+      <!-- 图 2 -->
+      <div class="card-preview border border-gray-200 rounded-lg bg-gradient-to-br from-orange-100 via-yellow-50 to-red-100 flex items-center justify-center" style="aspect-ratio:16/9;">
+        <div class="text-center text-gray-400 text-xs">
+          <div class="text-3xl mb-1">🎢</div>
+          <div>候选 #2 · 暖色调视角</div>
+          <div class="text-[10px] mt-1 font-mono text-gray-500">seed: 378913</div>
+        </div>
+        <div class="toolbar">
+          <button>⭐</button><button>🔍</button><button>📤</button><button>✏️</button><button>🎯</button>
+        </div>
+      </div>
+      <!-- 图 3 -->
+      <div class="card-preview border-2 border-blue-500 rounded-lg bg-gradient-to-br from-green-100 via-emerald-50 to-teal-100 flex items-center justify-center relative" style="aspect-ratio:16/9;">
+        <span class="absolute top-2 left-2 bg-blue-600 text-white text-[10px] px-1.5 py-0.5 rounded">已选</span>
+        <div class="text-center text-gray-400 text-xs">
+          <div class="text-3xl mb-1">🏖️</div>
+          <div>候选 #3 · 阳光草地视角</div>
+          <div class="text-[10px] mt-1 font-mono text-gray-500">seed: 378914 ⭐</div>
+        </div>
+        <div class="toolbar" style="opacity:1;">
+          <button>⭐</button><button>🔍</button><button>📤</button><button>✏️</button><button>🎯</button>
+        </div>
+      </div>
+      <!-- 图 4 -->
+      <div class="card-preview border border-gray-200 rounded-lg bg-gradient-to-br from-purple-100 via-pink-50 to-rose-100 flex items-center justify-center" style="aspect-ratio:16/9;">
+        <div class="text-center text-gray-400 text-xs">
+          <div class="text-3xl mb-1">🎠</div>
+          <div>候选 #4 · 童趣梦幻色</div>
+          <div class="text-[10px] mt-1 font-mono text-gray-500">seed: 378915</div>
+        </div>
+        <div class="toolbar">
+          <button>⭐</button><button>🔍</button><button>📤</button><button>✏️</button><button>🎯</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [底部 · 入库动作] -->
+    <div class="mt-3 flex items-center justify-between bg-blue-50 border border-blue-100 rounded-lg px-4 py-2.5">
+      <div class="text-xs text-blue-800">
+        <b>已选 1 张</b> · 将自动打标签「滑梯 / 公园 / 童趣 / 3D渲染」送入素材库
+      </div>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white text-xs px-4 py-1.5 rounded font-medium">
+        📦 一键送素材库
+      </button>
+    </div>
+  </section>
+
+  <!-- [右侧 · 高级选项] -->
+  <aside class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+    <div class="text-sm font-semibold text-gray-800 border-b border-gray-200 pb-2">⚙️ 高级参数</div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">采样器 Sampler</div>
+      <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5">
+        <option>Euler</option>
+        <option>Euler a</option>
+        <option selected>DPM++ 2M Karras</option>
+        <option>DDIM</option>
+        <option>UniPC</option>
+      </select>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>采样步数 Steps</span><span class="font-mono text-gray-700">30</span>
+      </div>
+      <input type="range" min="20" max="80" value="30" class="slider">
+      <div class="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>20</span><span>80</span></div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>CFG Scale</span><span class="font-mono text-gray-700">7.5</span>
+      </div>
+      <input type="range" min="1" max="15" step="0.5" value="7.5" class="slider">
+      <div class="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>1</span><span>15</span></div>
+      <div class="text-[10px] text-gray-500 mt-1">值越高越贴近 Prompt，建议 7–9</div>
+    </div>
+
+    <div class="border-t border-gray-200 pt-3">
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">参考图 ControlNet <span class="text-gray-400 font-normal">(可选)</span></div>
+      <div class="border-2 border-dashed border-gray-300 rounded p-3 text-center text-xs text-gray-400 hover:bg-gray-50 cursor-pointer">
+        📎 拖拽或点击上传
+      </div>
+      <select class="w-full text-xs border border-gray-300 rounded px-2 py-1.5 mt-2">
+        <option>Canny · 边缘检测</option>
+        <option>Depth · 深度图</option>
+        <option>Pose · 姿态控制</option>
+        <option>Scribble · 涂鸦</option>
+      </select>
+    </div>
+
+    <div class="border-t border-gray-200 pt-3 bg-orange-50 -mx-4 -mb-4 px-4 pb-4 rounded-b-lg">
+      <div class="text-xs font-semibold text-orange-800 mb-1.5">💰 费用预估</div>
+      <div class="text-2xl font-bold text-orange-600">¥8.00 <span class="text-xs font-normal text-gray-500">/ 本次生成</span></div>
+      <div class="text-[11px] text-gray-600 mt-1">4 张 × ¥2.00（SD-XL + LoRA）</div>
+    </div>
+
+    <div class="border-t border-gray-200 pt-3">
+      <button class="w-full border border-purple-300 bg-purple-50 hover:bg-purple-100 text-purple-700 text-xs py-2 rounded font-medium flex items-center justify-center gap-1">
+        🪄 AI 提示词增强
+      </button>
+      <div class="text-[11px] font-semibold text-gray-600 mt-3 mb-1.5">💡 AI 优化建议</div>
+      <ul class="space-y-1.5 text-[11px]">
+        <li class="border border-gray-200 rounded px-2 py-1.5 text-gray-700 hover:bg-gray-50 cursor-pointer">
+          + 补充「广角镜头，f/2.8 光圈」增强景深
+        </li>
+        <li class="border border-gray-200 rounded px-2 py-1.5 text-gray-700 hover:bg-gray-50 cursor-pointer">
+          + 加入「cinematic lighting, golden hour」提升氛围
+        </li>
+        <li class="border border-gray-200 rounded px-2 py-1.5 text-gray-700 hover:bg-gray-50 cursor-pointer">
+          + Negative 补充「cartoon, anime」避免画风偏移
+        </li>
+      </ul>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

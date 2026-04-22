@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — AI 内容生成中台·Phase 4 方案文本工坊 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 200px); }
+    .side-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #999; cursor: pointer; font-size: 16px; margin: 4px auto; border-radius: 4px; }
+    .side-icon.active { background: #e6f7ff; color: #1890ff; }
+    .side-icon:hover { background: #f5f5f5; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">AI 内容生成中台·Phase 4 方案文本工坊</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">投标/方案/创意的文本生产中心 — 意图路由 + 方案章节 + 招标文本 + 灵感库 + 配色 + 需求引导，对标 Writer + Copy.ai + Jasper 的六合一文本枢纽</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">投标人员（技术文本 / 招标规范文本），方案设计师（产品/创意/文化/安全/材料章节），商务人员（需求引导 / 主题灵感库）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">意图路由 Workbench / 方案文本 Section 编辑器 / 招标规范文本生成（三标融合）/ 主题方案灵感库 / 颜色配置器（3D预览）/ 需求引导 GUI</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">输入一句话自动分发到合适子系统 / 分章节 AI 辅助写作 / 三标融合一键生成投标文本 / 主题卡一键套用到项目 / 配色 3D 实时预览 / 结构化问卷收集需求</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">意图路由准确率 >90% / 文本生成 30s 内完成 / 灵感库变体可一键预览 / 配色器 3D 实时更新 / 6 个 Tab 正常切换 / 招标匹配度报告可导出</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.5 · 方案文本工坊</a>
+      ｜ 关联 Issue：#1849 意图路由 / #2310 方案文本 / #1843 招标文本 / #2308 灵感库 / #2309 颜色配置器 / #2312 需求引导 / #1794 导航入口
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] -->
+  <aside class="w-12 bg-white border-r border-gray-300 flex-shrink-0 py-2">
+    <div class="side-icon" title="首页">🏠</div>
+    <div class="side-icon" title="CRM">👥</div>
+    <div class="side-icon" title="商战情报">📡</div>
+    <div class="side-icon" title="项目中心">📁</div>
+    <div class="side-icon active" title="AI 内容生成中台">🎨</div>
+    <div class="side-icon" title="审批">✅</div>
+    <div class="side-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 支持中心 &gt; AI 内容生成中台 &gt; <span class="text-gray-700 font-medium">Phase4 方案文本工坊</span>
+    </div>
+
+    <!-- [页头] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold text-gray-800">Phase 4 · 方案文本工坊 <span class="text-xs text-gray-400 font-normal ml-2">对标 Writer + Copy.ai · 六合一文本枢纽</span></h1>
+        <div class="text-xs text-gray-500 mt-1">意图路由 + 方案章节 + 招标文本 + 灵感库 + 配色 + 需求引导 · 覆盖 Issue #1849 / #2310 / #1843 / #2308 / #2309 / #2312 / #1794</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">LLM v3.1 · 文本生成准确率 92%</span>
+        <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">文本模板库</button>
+        <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">新建方案</button>
+      </div>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-router.html"></iframe>
+    </div>
+  </main>
+</div>
+
+<!-- [原型说明] -->
+<div class="p-6 bg-white border-t border-gray-300 mt-4">
+  <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 · Phase 4 方案文本工坊 Tab 清单</h3>
+  <table class="w-full text-sm text-left border-collapse">
+    <thead><tr class="bg-gray-100">
+      <th class="p-2 border border-gray-300 w-36">Tab页</th>
+      <th class="p-2 border border-gray-300 w-48">文件名</th>
+      <th class="p-2 border border-gray-300 w-32">对应 Issue</th>
+      <th class="p-2 border border-gray-300">功能描述</th>
+    </tr></thead>
+    <tbody>
+      <tr><td class="p-2 border border-gray-300 font-medium">意图路由 Workbench</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-router.html</td><td class="p-2 border border-gray-300 text-xs">#1849</td><td class="p-2 border border-gray-300">一句话输入 → AI 解析意图（项目/产品/主题）→ 自动推荐路由到 Phase1-4 合适子系统</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">方案文本编辑器</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-proposal.html</td><td class="p-2 border border-gray-300 text-xs">#2310</td><td class="p-2 border border-gray-300">8 章节 Section 目录 + 富文本编辑区 + AI 助手（续写/优化/翻译/参考案例）</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">招标文本生成</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-tender.html</td><td class="p-2 border border-gray-300 text-xs">#1843</td><td class="p-2 border border-gray-300">招标文件 + 产品参数 + 企业资质三标融合，一键生成 10 章投标技术文本 + 匹配度报告</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">主题灵感库</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-inspiration.html</td><td class="p-2 border border-gray-300 text-xs">#2308</td><td class="p-2 border border-gray-300">20 个主题卡网格（童趣/自然/科技/文化...）+ AI 变体 + AI 主题共创</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">颜色配置器</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-color.html</td><td class="p-2 border border-gray-300 text-xs">#2309</td><td class="p-2 border border-gray-300">5 色色板（RAL 编号）+ Three.js 3D 实时预览 + AI 配色推荐 + 方案库</td></tr>
+      <tr><td class="p-2 border border-gray-300 font-medium">需求引导 GUI</td><td class="p-2 border border-gray-300 font-mono text-xs">tab-guided.html</td><td class="p-2 border border-gray-300 text-xs">#2312</td><td class="p-2 border border-gray-300">5 步引导问卷：项目类型/年龄/主题/场地/预算/特殊要求 → 输出结构化需求</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'router',      label: '意图路由 Workbench', src: 'tab-router.html' },
+    { key: 'proposal',    label: '方案文本编辑器',     src: 'tab-proposal.html' },
+    { key: 'tender',      label: '招标文本生成',       src: 'tab-tender.html' },
+    { key: 'inspiration', label: '主题灵感库',         src: 'tab-inspiration.html' },
+    { key: 'color',       label: '颜色配置器',         src: 'tab-color.html' },
+    { key: 'guided',      label: '需求引导',           src: 'tab-guided.html' },
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = Math.max(h, 600) + 'px';
+    } catch(e) {}
+  });
+
+  renderTabs();
+</script>
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Inpainting 局部修改</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .tool-btn { display:flex; flex-direction:column; align-items:center; gap:2px; padding:8px 4px; border:1px solid #e5e7eb; border-radius:6px; background:#fff; cursor:pointer; font-size:10px; color:#4b5563; }
+  .tool-btn.active { background:#2563eb; color:#fff; border-color:#2563eb; }
+  .tool-btn .ic { font-size:16px; }
+  .slider { width:100%; accent-color:#2563eb; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- SPEC-CARD -->
+<div style="margin-bottom:16px;padding:14px 18px;border:1px dashed #2563eb;background:#eff6ff;border-radius:8px;font-size:12px;color:#1e3a8a;line-height:1.8;">
+  <div style="font-weight:700;font-size:13px;margin-bottom:4px;color:#1d4ed8;">📋 SPEC-CARD · Inpainting 局部修改</div>
+  <div><b>PAGE_TITLE：</b>Inpainting 局部重绘工作台</div>
+  <div><b>PURPOSE：</b>上传/选择图 → 画笔圈选区域 → 描述修改 → 只重绘选区（物件替换、场景改造、细节优化）</div>
+  <div><b>USERS：</b>设计师（方案局部微调）、投标（换 logo/换物件）、品牌（水印消除）</div>
+  <div><b>FEATURES：</b>画笔/橡皮/套索/矩形 工具 / 画笔大小 / 修改描述 / 蒙版覆盖层 / 4 张候选 / 对比切换 / 迭代</div>
+  <div><b>ACTIONS：</b>选图→选区→描述→重绘 / 撤销重做 / 保存或迭代</div>
+  <div><b>ACCEPTANCE：</b>蒙版精确可擦 / 选区内重绘选区外保留 / 迭代记录不超 5 次</div>
+  <div><b>RELATED_ISSUES：</b>#2307 局部修改 Inpainting</div>
+</div>
+
+<!-- [顶部 · 图源选择] -->
+<div class="bg-white rounded-lg border border-gray-200 p-3 mb-4 flex items-center gap-3">
+  <div class="text-xs font-semibold text-gray-700">图源：</div>
+  <button class="text-xs px-3 py-1.5 rounded border border-gray-300 bg-gray-50 text-gray-700 hover:bg-gray-100">📎 上传原图</button>
+  <button class="text-xs px-3 py-1.5 rounded border border-blue-300 bg-blue-50 text-blue-700">📜 从历史选择 ▾</button>
+  <button class="text-xs px-3 py-1.5 rounded border border-gray-300 hover:bg-gray-50">🖼️ 从素材库</button>
+  <div class="mx-2 w-px h-4 bg-gray-200"></div>
+  <div class="text-xs text-gray-500">当前：<span class="text-gray-800 font-medium">南山公园草地区域.png</span> · 1920 × 1080</div>
+  <div class="ml-auto text-[11px] text-gray-500">
+    本次迭代 <span class="text-blue-600 font-bold">第 2 次</span> / 5
+  </div>
+</div>
+
+<div class="grid gap-4" style="grid-template-columns: 240px 1fr 240px;">
+
+  <!-- [左侧 · 工具栏+Prompt] -->
+  <aside class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-2">🖌️ 工具栏</div>
+      <div class="grid grid-cols-4 gap-1.5">
+        <button class="tool-btn active"><span class="ic">🖌️</span>画笔大</button>
+        <button class="tool-btn"><span class="ic">🖊️</span>画笔中</button>
+        <button class="tool-btn"><span class="ic">✏️</span>画笔小</button>
+        <button class="tool-btn"><span class="ic">🧽</span>橡皮</button>
+        <button class="tool-btn"><span class="ic">⚡</span>套索</button>
+        <button class="tool-btn"><span class="ic">▭</span>矩形</button>
+        <button class="tool-btn"><span class="ic">⊕</span>加选</button>
+        <button class="tool-btn"><span class="ic">⊖</span>减选</button>
+      </div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>画笔大小</span><span class="font-mono text-gray-700">30 px</span>
+      </div>
+      <input type="range" min="5" max="100" value="30" class="slider">
+      <div class="flex justify-between text-[10px] text-gray-400 mt-0.5"><span>5</span><span>100</span></div>
+    </div>
+
+    <div>
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>蒙版羽化</span><span class="font-mono text-gray-700">8 px</span>
+      </div>
+      <input type="range" min="0" max="30" value="8" class="slider">
+    </div>
+
+    <div class="border-t border-gray-100 pt-3">
+      <div class="text-xs font-semibold text-gray-700 mb-1.5">修改描述 <span class="text-red-500">*</span></div>
+      <textarea rows="5" class="w-full text-xs border border-gray-300 rounded p-2 resize-none">把这块草地改成碎石路，保留自然光影，和原图风格一致</textarea>
+    </div>
+
+    <div class="space-y-1.5">
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" checked class="accent-blue-600"> 引用原图 prompt（同风格保持）
+      </label>
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" checked class="accent-blue-600"> 边缘平滑融合
+      </label>
+      <label class="flex items-center gap-2 text-xs text-gray-700 cursor-pointer">
+        <input type="checkbox" class="accent-blue-600"> 仅重绘选区（锁其他）
+      </label>
+    </div>
+
+    <div class="border-t border-gray-100 pt-3">
+      <div class="text-xs font-semibold text-gray-700 mb-1.5 flex justify-between">
+        <span>降噪强度</span><span class="font-mono text-gray-700">0.8</span>
+      </div>
+      <input type="range" min="0" max="1" step="0.05" value="0.8" class="slider">
+    </div>
+
+    <button class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2.5 rounded text-sm flex items-center justify-center gap-2">
+      🎨 重绘选区
+    </button>
+    <div class="text-[11px] text-center text-gray-500">预估 ¥3.5 · 约 12s</div>
+  </aside>
+
+  <!-- [中间 · 大画布] -->
+  <section class="bg-white rounded-lg border border-gray-200 p-4 flex flex-col">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">🖌️ 蒙版画布 <span class="text-xs text-gray-400 font-normal">· 用画笔圈出要修改的区域</span></div>
+      <div class="flex gap-1.5">
+        <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50" title="撤销">↶ 撤销</button>
+        <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50" title="重做">↷ 重做</button>
+        <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">清除蒙版</button>
+        <div class="mx-1 w-px bg-gray-200"></div>
+        <button class="px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">🔍 缩放 100%</button>
+      </div>
+    </div>
+
+    <!-- 画布本体 -->
+    <div class="relative rounded-lg overflow-hidden border border-gray-200 bg-gradient-to-br from-green-200 via-emerald-100 to-lime-200" style="height:500px;">
+      <!-- 原图底层 -->
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class="text-center text-gray-500 text-xs">
+          <div class="text-5xl mb-2">🏞️</div>
+          <div class="text-sm font-medium text-gray-600">南山公园草地区域.png</div>
+          <div class="text-[10px] mt-1">1920 × 1080 · 原图</div>
+        </div>
+      </div>
+
+      <!-- 半透明红色蒙版 -->
+      <svg class="absolute inset-0 w-full h-full pointer-events-none" viewBox="0 0 800 500" preserveAspectRatio="none">
+        <!-- 模拟用户画的草地区域蒙版 -->
+        <path d="M 180 280 Q 260 240, 350 260 Q 450 270, 520 290 Q 580 310, 600 360 Q 590 420, 530 440 Q 430 450, 330 440 Q 220 430, 180 380 Q 160 330, 180 280 Z"
+              fill="rgba(239, 68, 68, 0.4)" stroke="#dc2626" stroke-width="2" stroke-dasharray="6,3"/>
+        <text x="380" y="360" text-anchor="middle" fill="#991b1b" font-size="13" font-weight="700">选区 · 待重绘</text>
+      </svg>
+
+      <!-- 画笔光标示意 -->
+      <div class="absolute pointer-events-none border-2 border-red-400 rounded-full" style="width:30px; height:30px; left:520px; top:420px;"></div>
+
+      <!-- 画布右上工具提示 -->
+      <div class="absolute top-3 left-3 bg-white/90 backdrop-blur rounded px-2 py-1 text-[11px] text-gray-600 border border-gray-200">
+        工具：🖌️ 画笔大 · 30px · 选区面积 <span class="font-mono text-gray-800">14.2%</span>
+      </div>
+    </div>
+
+    <!-- 画布底部状态条 -->
+    <div class="mt-3 flex items-center justify-between text-[11px] text-gray-500 border-t border-gray-100 pt-2">
+      <div>坐标 X:<span class="font-mono text-gray-700">520</span> Y:<span class="font-mono text-gray-700">420</span></div>
+      <div>蒙版已绘制 <span class="text-blue-600 font-bold">1 处</span> · 像素 <span class="font-mono text-gray-700">48,320 px²</span></div>
+      <div>空格拖动 · [/] 调笔刷 · ⌘Z 撤销</div>
+    </div>
+  </section>
+
+  <!-- [右侧 · 结果 + 对比] -->
+  <aside class="bg-white rounded-lg border border-gray-200 p-4 space-y-4">
+    <div class="flex items-center justify-between">
+      <div class="text-sm font-semibold text-gray-800">🎯 生成结果</div>
+      <div class="flex text-[10px] border border-gray-300 rounded overflow-hidden">
+        <button class="px-2 py-1 bg-blue-600 text-white">结果</button>
+        <button class="px-2 py-1 hover:bg-gray-50 text-gray-600">原图</button>
+        <button class="px-2 py-1 hover:bg-gray-50 text-gray-600">对比</button>
+      </div>
+    </div>
+
+    <!-- 4 张结果缩略 -->
+    <div class="grid grid-cols-2 gap-2">
+      <div class="border-2 border-blue-500 rounded bg-gradient-to-br from-stone-200 to-gray-300 flex items-center justify-center relative" style="aspect-ratio:1/1;">
+        <span class="absolute top-1 left-1 bg-blue-600 text-white text-[9px] px-1.5 py-0.5 rounded">当前</span>
+        <div class="text-center text-gray-500">
+          <div class="text-2xl">🪨</div>
+          <div class="text-[10px]">#1 碎石</div>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded bg-gradient-to-br from-amber-100 to-stone-300 flex items-center justify-center" style="aspect-ratio:1/1;">
+        <div class="text-center text-gray-400">
+          <div class="text-2xl">🟤</div>
+          <div class="text-[10px]">#2 土路</div>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded bg-gradient-to-br from-gray-200 to-slate-300 flex items-center justify-center" style="aspect-ratio:1/1;">
+        <div class="text-center text-gray-400">
+          <div class="text-2xl">⬜</div>
+          <div class="text-[10px]">#3 砖路</div>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded bg-gradient-to-br from-zinc-200 to-stone-400 flex items-center justify-center" style="aspect-ratio:1/1;">
+        <div class="text-center text-gray-400">
+          <div class="text-2xl">🟫</div>
+          <div class="text-[10px]">#4 混合</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 迭代历史 -->
+    <div class="border-t border-gray-100 pt-3">
+      <div class="text-xs font-semibold text-gray-700 mb-2">🔁 迭代历史</div>
+      <div class="space-y-1.5">
+        <div class="flex items-center justify-between text-[11px] bg-blue-50 border border-blue-200 rounded px-2 py-1.5">
+          <span class="font-semibold text-blue-800">第 2 次 · 碎石路</span>
+          <span class="text-gray-500">刚刚</span>
+        </div>
+        <div class="flex items-center justify-between text-[11px] border border-gray-200 rounded px-2 py-1.5">
+          <span class="text-gray-600">第 1 次 · 水泥路</span>
+          <span class="text-gray-400">3 分钟前</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 动作 -->
+    <div class="space-y-2 border-t border-gray-100 pt-3">
+      <button class="w-full bg-green-600 hover:bg-green-700 text-white font-semibold text-xs py-2 rounded flex items-center justify-center gap-1">
+        ✓ 满意 · 保存结果
+      </button>
+      <button class="w-full border border-orange-300 bg-orange-50 hover:bg-orange-100 text-orange-700 text-xs py-2 rounded flex items-center justify-center gap-1">
+        🔄 不满意 · 重新生成
+      </button>
+      <button class="w-full border border-gray-300 hover:bg-gray-50 text-gray-700 text-xs py-2 rounded">
+        📦 送素材库
+      </button>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

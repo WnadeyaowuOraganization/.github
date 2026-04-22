@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>模型仓库</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .model-card { transition: all .2s; }
+    .model-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.08); }
+    .filter-btn { padding:4px 12px; border:1px solid #d9d9d9; border-radius:4px; font-size:12px; cursor:pointer; background:#fff; color:#666; }
+    .filter-btn:hover { border-color:#1890ff; color:#1890ff; }
+    .filter-btn.active { background:#1890ff; color:#fff; border-color:#1890ff; }
+    .trigger-code { font-family: 'SF Mono', Consolas, monospace; background:#f5f5f5; color:#666; padding:2px 6px; border-radius:3px; font-size:11px; }
+    .preview-placeholder {
+      height: 200px; display:flex; align-items:center; justify-content:center;
+      color: rgba(255,255,255,0.85); font-size:13px; font-weight:500; text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-4">
+
+<!-- ========== [需求说明块 SPEC-CARD] ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · 模型仓库（Civitai 风格）</span>
+      <span style="background:#52c41a;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">🟢 Pipeline Ready</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">自建 LoRA / Checkpoint / Embedding / ControlNet 模型库 — Civitai 风格卡片 + 触发词 + 一键切换到 Phase1/2，形成万德专属模型资产</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（找风格 LoRA 加载到生成器）、投标人员（查询可用模型）、管理层（盘点模型资产 / 版本演进）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">类型 / 状态 / Base / 排序 4 维筛选 / 3×3 模型卡网格 / 触发词一键复制 / 加载到 Phase1 Phase2 / 克隆训练 / 下载量 + 评分</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">筛选需要的模型 → 查看预览图 + 触发词 → 点"加载到 Phase1" → 直接在图像生成器中使用 / 或克隆数据集重训</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">模型支持一键切换到 Phase1/2 / 生产 / 测试 / 归档 3 级状态 / 筛选 1s 响应 / 详情页显示完整训练参数 / 支持版本克隆</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">AI 内容生成中台详细设计 §2.4.3 · 模型仓库</a>
+      ｜ 关联 Issue：#1680 风格 LoRA
+      ｜ 代码基线：pipeline/pipelines/comfyui_rendering/model_downloader.py · render_db_manager.py · lora_init_db.py
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部筛选 + 搜索] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-bold text-gray-800">🗂 模型仓库 <span class="text-xs text-gray-400 font-normal ml-2">共 9 个 LoRA · 总容量 21.7GB · 本月新增 3</span></h2>
+    <div class="flex items-center gap-2">
+      <input type="text" placeholder="🔍 搜索模型名 / 触发词..." class="px-3 py-1.5 text-sm border border-gray-300 rounded" style="width:280px;">
+      <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">📥 从 HuggingFace 导入</button>
+      <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">+ 上传模型</button>
+    </div>
+  </div>
+
+  <div class="grid gap-3" style="grid-template-columns: 1fr 1fr 1fr 1fr;">
+    <div>
+      <div class="text-xs text-gray-500 mb-1.5">类型</div>
+      <div class="flex flex-wrap gap-1.5">
+        <div class="filter-btn active">LoRA</div>
+        <div class="filter-btn">Checkpoint</div>
+        <div class="filter-btn">Embedding</div>
+        <div class="filter-btn">ControlNet</div>
+      </div>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500 mb-1.5">状态</div>
+      <div class="flex flex-wrap gap-1.5">
+        <div class="filter-btn active">全部</div>
+        <div class="filter-btn">🟢 生产可用</div>
+        <div class="filter-btn">🟡 训练中</div>
+        <div class="filter-btn">⚪ 已归档</div>
+      </div>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500 mb-1.5">Base 模型</div>
+      <div class="flex flex-wrap gap-1.5">
+        <div class="filter-btn active">全部</div>
+        <div class="filter-btn">SDXL</div>
+        <div class="filter-btn">SD1.5</div>
+        <div class="filter-btn">Flux</div>
+      </div>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500 mb-1.5">排序</div>
+      <div class="flex flex-wrap gap-1.5">
+        <div class="filter-btn active">最新</div>
+        <div class="filter-btn">下载量</div>
+        <div class="filter-btn">评分</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [模型卡 3×3 网格] -->
+<div class="grid gap-4" style="grid-template-columns: repeat(3, 1fr);">
+
+  <!-- 1. wande_product_v2.3 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #4a90e2 0%, #f5a623 100%);">
+      🛝 wande_product 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">wande_product_v2.3</div>
+        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">🟢 生产</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">主万德产品风格 · 当前主力</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 342张 · Epoch 20 · 2.3GB</div>
+      <div class="mb-2"><span class="trigger-code">wande_product</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 1,234</span>
+        <span>★ 4.8 (56)</span>
+        <span>2026-04-15</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. premium_render_v1.5 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #2c3e50 0%, #fd746c 100%);">
+      🌇 international_render 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">premium_render_v1.5</div>
+        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">🟢 生产</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">国际渲染美学 · 出口方案用</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 156张 · Epoch 25 · 2.4GB</div>
+      <div class="mb-2"><span class="trigger-code">premium_render</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 892</span>
+        <span>★ 4.9 (38)</span>
+        <span>2026-04-08</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. 童趣卡通风 v1.0 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%);">
+      🎨 cartoon_style 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">童趣卡通风 v1.0</div>
+        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">🟢 生产</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">儿童友好 · 卡通插画风格</div>
+      <div class="text-xs text-gray-600 mb-2">SD1.5 · 128张 · Epoch 30 · 1.2GB</div>
+      <div class="mb-2"><span class="trigger-code">cartoon_style</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 567</span>
+        <span>★ 4.6 (24)</span>
+        <span>2026-03-22</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. 水彩风 v1.2 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); color:#333; text-shadow:none;">
+      🎨 watercolor 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">水彩风 v1.2</div>
+        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">🟢 生产</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">手绘水彩 · 文化项目推荐</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 98张 · Epoch 35 · 2.1GB</div>
+      <div class="mb-2"><span class="trigger-code">watercolor_wd</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 412</span>
+        <span>★ 4.7 (19)</span>
+        <span>2026-03-14</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. 深圳商业综合体 v0.8 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+      🏙 sz_commercial 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">深圳商业综合体 v0.8</div>
+        <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">🟡 测试</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">深圳都市 · 商业空间风格</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 67张 · Epoch 15 · 2.2GB</div>
+      <div class="mb-2"><span class="trigger-code">sz_commercial</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 89</span>
+        <span>★ 4.2 (8)</span>
+        <span>2026-04-18</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. 竞品A风格镜像 v0.5 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #434343 0%, #8e2de2 100%);">
+      🪞 competitor_a 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">竞品A风格镜像 v0.5</div>
+        <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">🟡 测试</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">对标学习 · 仅内部研究用</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 218张 · Epoch 10 · 2.3GB</div>
+      <div class="mb-2"><span class="trigger-code">competitor_a_style</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 45</span>
+        <span>★ 3.8 (5)</span>
+        <span>2026-04-20</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. 万德安全标识 v1.0 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);">
+      ⚠️ safety_sign 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">万德安全标识 v1.0</div>
+        <span class="text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded">🟢 生产</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">标准安全标识生成专用</div>
+      <div class="text-xs text-gray-600 mb-2">SD1.5 · 42张 · Epoch 40 · 0.8GB</div>
+      <div class="mb-2"><span class="trigger-code">wd_safety_sign</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 278</span>
+        <span>★ 4.5 (14)</span>
+        <span>2026-02-28</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. wande_product_v2.0 (归档) -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden opacity-70">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #bdc3c7 0%, #2c3e50 100%);">
+      🛝 wande_product (旧)
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">wande_product_v2.0</div>
+        <span class="text-xs bg-gray-200 text-gray-600 px-2 py-0.5 rounded">⚪ 归档</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">旧版 · 已由 v2.3 替代</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 287张 · Epoch 18 · 2.3GB</div>
+      <div class="mb-2"><span class="trigger-code">wande_product</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 2,103</span>
+        <span>★ 4.5 (89)</span>
+        <span>2025-12-10</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-gray-400 text-white rounded">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 9. 夜景照明 v0.3 -->
+  <div class="model-card bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="preview-placeholder" style="background: linear-gradient(135deg, #141e30 0%, #243b55 50%, #f7b733 100%);">
+      🌃 night_lighting 示例
+    </div>
+    <div class="p-3">
+      <div class="flex items-center justify-between mb-1">
+        <div class="text-sm font-bold text-gray-800">夜景照明 v0.3</div>
+        <span class="text-xs bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">🟡 测试</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">夜景 + LED 照明效果</div>
+      <div class="text-xs text-gray-600 mb-2">SDXL · 54张 · Epoch 12 · 2.2GB</div>
+      <div class="mb-2"><span class="trigger-code">night_lit_wd</span></div>
+      <div class="flex items-center justify-between text-xs text-gray-500 mb-3">
+        <span>⬇ 31</span>
+        <span>★ 4.0 (4)</span>
+        <span>2026-04-21</span>
+      </div>
+      <div class="flex items-center gap-1.5">
+        <button class="flex-1 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">加载到 Phase1</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">详情</button>
+        <button class="px-2 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50" title="克隆训练">🔁</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- [底部统计] -->
+<div class="mt-4 bg-white border border-gray-300 rounded p-4">
+  <div class="grid grid-cols-5 gap-4">
+    <div class="text-center">
+      <div class="text-xs text-gray-500 mb-1">总模型数</div>
+      <div class="text-xl font-bold text-blue-600">9</div>
+    </div>
+    <div class="text-center">
+      <div class="text-xs text-gray-500 mb-1">🟢 生产可用</div>
+      <div class="text-xl font-bold text-green-600">5</div>
+    </div>
+    <div class="text-center">
+      <div class="text-xs text-gray-500 mb-1">🟡 测试中</div>
+      <div class="text-xl font-bold text-yellow-500">3</div>
+    </div>
+    <div class="text-center">
+      <div class="text-xs text-gray-500 mb-1">⚪ 已归档</div>
+      <div class="text-xl font-bold text-gray-500">1</div>
+    </div>
+    <div class="text-center">
+      <div class="text-xs text-gray-500 mb-1">本月总下载</div>
+      <div class="text-xl font-bold text-purple-600">6,651</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

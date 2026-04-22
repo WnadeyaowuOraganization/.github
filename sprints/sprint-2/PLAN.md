@@ -123,17 +123,22 @@
 | 04-22 | kimi3 | ~~#3998~~ | project | **max** | ~~Done~~ | 矿场ROI看板Tab — PR #4092 merged |
 | 04-22 | kimi5 | ~~#4014~~ | crm | **max** | ~~Done~~ | CRM线索统一池+评分引擎 — PR #4090 merged |
 | 04-22 | kimi5 | #4010 | project | **max** | In Progress | 手动补录记录模态 |
-| 04-22 | kimi3 | #4015 | crm | **max** | In Progress | 矿场转商机 readiness检查 |
+| 04-22 | kimi3 | ~~#4015~~ | crm | **max** | ~~Done~~ | 矿场转商机 readiness检查 — PR #4102 merged |
 | 04-22 | kimi4 | ~~#4009~~ | project | **max** | ~~Done~~ | 记录中心三视角分组Tab — PR #4098 merged |
 | 04-22 | kimi4 | ~~#2851~~ | cockpit | **max** | ~~Done~~ | 验收队列E2E修复 — PR #4101 merged |
 | 04-22 | kimi4 | ~~#2926~~ | backend | **max** | ~~Done~~ | 数据质量KPI API — PR #4053 已于04-21 merged |
 | 04-22 | kimi4 | ~~#2944~~ | backend | **max** | ~~Done~~ | 7天滚动基线异常检测 — PR #4055 已于04-21 merged |
 | 04-22 | kimi4 | ~~#3149~~ | approval | **max** | ~~Done~~ | 审批进度追踪器组件 — PR#3902+PR#4077 已merged |
-| 04-22 | kimi4 | #3150 | approval | **max** | In Progress | 审批流程图渲染API |
+| 04-22 | kimi4 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 已于04-21 merged |
 | 04-22 | kimi2 | #4012 | project | **max** | In Progress | 老板周报AI建议Section |
 | 04-22 | kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
 | 04-22 | kimi1 | ~~#2925~~ | backend | **max** | ~~Done~~ | 字段级数据完整度计算引擎 — PR #4052 已于04-21 merged |
-| 04-22 | kimi1 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
+| 04-22 | kimi1 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR#3931+#4084 已merged |
+| 04-22 | kimi1 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — 已merged |
+| 04-22 | kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR#4078 merged |
+| 04-23 | kimi1 | #2078 | backend | **max** | In Progress | 原因诊断API |
+| 04-23 | kimi3 | #3545 | intelligence-hub | **max** | In Progress | 前端关系网络Tab |
+| 04-23 | kimi4 | #1875 | bidding | **max** | In Progress | 赢/输复盘模板 |
 
 ---
 

@@ -124,7 +124,8 @@
 | 04-22 | kimi5 | ~~#4014~~ | crm | **max** | ~~Done~~ | CRM线索统一池+评分引擎 — PR #4090 merged |
 | 04-22 | kimi5 | #4010 | project | **max** | In Progress | 手动补录记录模态 |
 | 04-22 | kimi3 | #4015 | crm | **max** | In Progress | 矿场转商机 readiness检查 |
-| 04-22 | kimi4 | ~~#4009~~ | project | **max** | In Progress | 记录中心三视角分组Tab — PR #4098 rebase后CI运行中 |
+| 04-22 | kimi4 | ~~#4009~~ | project | **max** | ~~Done~~ | 记录中心三视角分组Tab — PR #4098 merged |
+| 04-22 | kimi4 | #2851 | cockpit | **max** | In Progress | 验收队列前端 |
 | 04-22 | kimi2 | #4012 | project | **max** | In Progress | 老板周报AI建议Section |
 | 04-22 | kimi1 | #2849 | cockpit | **max** | In Progress | Agent效率看板前端 |
 

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 品牌中心 Phase 2 内容生产 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; display:flex; align-items:center; gap:6px; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+    .tab-item:hover { color: #333; }
+    .tab-item .badge { background:#f0f0f0; color:#666; font-size:11px; padding:1px 6px; border-radius:10px; }
+    .tab-item.active .badge { background:#e6f4ff; color:#1890ff; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 200px); display:block; }
+    .sidebar-icon { width:40px; height:40px; display:flex; align-items:center; justify-content:center; color:#999; cursor:pointer; border-radius:4px; margin: 4px 8px; font-size:18px; }
+    .sidebar-icon:hover { background:#f0f0f0; color:#333; }
+    .sidebar-icon.active { background:#e6f4ff; color:#1890ff; }
+    .phase-chip { display:inline-flex; align-items:center; gap:4px; padding:2px 8px; border-radius:10px; font-size:11px; font-weight:600; background:#f9f0ff; color:#722ed1; border:1px solid #d3adf7; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">品牌中心 Phase 2 · 内容生产（5 Tab · 16 Issue）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">将品牌内容生产从「人工逐条产出」升级为「AI 批量生成 + 自动化分发 + 标准化审批」，覆盖数字人视频、视频裂变、日历化内容、SEO 文章四条产线，并以统一审批工作流兜底。</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌总监（吴总视角）、品牌运营、内容编辑、SEO 专员、审批人（组长/总监）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">AI 数字人视频 / 视频裂变多平台分发 / 内容日历自动化 / SEO 文章管线 / 统一审批工作流</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">克隆分身→脚本→生成视频 / 源视频→AI 文案→7 平台裂变 / 选日期→AI 选题→发布 / 关键词→AI 大纲→文章→排名追踪 / 审批通过驳回评论</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">5 个 Tab 可切换无白屏 / 各 Tab 核心数据拉取正确 / 所有操作按钮触发预期抽屉或弹窗 / 审批流节点图正确渲染</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 Phase 2 详细设计.md</a>
+      　|　🎯 对标：HeyGen · Synthesia · Opus Clip · Contently · Planable · SurferSEO · Hootsuite
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] 万德平台标准侧边栏（折叠） -->
+  <aside class="w-14 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col">
+    <div class="h-14 flex items-center justify-center border-b border-gray-200 font-bold text-[#1890ff] text-sm">万德</div>
+    <div class="sidebar-icon" title="首页">🏠</div>
+    <div class="sidebar-icon" title="超管驾驶舱">📊</div>
+    <div class="sidebar-icon" title="CRM">👥</div>
+    <div class="sidebar-icon" title="项目中心">🏗️</div>
+    <div class="sidebar-icon active" title="品牌中心">🎨</div>
+    <div class="sidebar-icon" title="审批体系">📝</div>
+    <div class="sidebar-icon" title="PLM">🧩</div>
+    <div class="sidebar-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col min-w-0">
+    <!-- [顶部面包屑+返回Hub] -->
+    <div class="px-6 py-3 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div class="text-sm text-gray-500">
+        <a href="../../all-in-one/prototype.html" class="hover:text-[#1890ff]">首页</a>
+        <span class="mx-1">&gt;</span>
+        <a href="../index.html" class="hover:text-[#1890ff]">品牌中心 Hub</a>
+        <span class="mx-1">&gt;</span>
+        <span class="text-gray-700 font-medium">Phase 2 · 内容生产</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="phase-chip">● Phase 2 · 内容生产</span>
+        <a href="../index.html" class="text-xs text-[#1890ff] hover:underline">← 返回品牌中心 Hub</a>
+      </div>
+    </div>
+
+    <!-- [Tab 栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab 内容 — iframe 加载] -->
+    <div class="flex-1 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-avatar.html"></iframe>
+    </div>
+
+    <!-- [原型说明] -->
+    <div class="p-6 bg-white border-t border-gray-300">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明 — Phase 2 · 内容生产 Tab 清单</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead><tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300 w-36">Tab 页</th>
+          <th class="p-2 border border-gray-300 w-48">文件名</th>
+          <th class="p-2 border border-gray-300 w-56">对应 Issue</th>
+          <th class="p-2 border border-gray-300 w-56">对标产品</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+        </tr></thead>
+        <tbody class="text-gray-700">
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">① AI 数字人</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-avatar.html</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">#2633 – #2639（7 个）</td>
+            <td class="p-2 border border-gray-300">HeyGen + Synthesia</td>
+            <td class="p-2 border border-gray-300">数字分身画廊 + 脚本→分身→声音→背景 AI 视频生产队列</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">② 视频裂变</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-video.html</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">#2640 – #2642（3 个）</td>
+            <td class="p-2 border border-gray-300">Opus Clip</td>
+            <td class="p-2 border border-gray-300">源视频→ffmpeg 分镜→3 版 AI 文案→7 平台分发队列</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">③ 内容日历</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-calendar.html</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">#2653 – #2657（5 个）</td>
+            <td class="p-2 border border-gray-300">Contently + Planable</td>
+            <td class="p-2 border border-gray-300">月度日历 + 节日节气 + 历史同期 + AI 选题 + 海报模板库</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">④ SEO 管线</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-seo.html</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">#2647 – #2648（2 个）</td>
+            <td class="p-2 border border-gray-300">Contently SEO + SurferSEO</td>
+            <td class="p-2 border border-gray-300">关键词池 → AI 大纲/初稿 → 人工编辑 → 发布 → 排名追踪</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">⑤ 审批工作流</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-approval.html</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">#1453 · #1778 · #2146（3 个）</td>
+            <td class="p-2 border border-gray-300">Hootsuite Approval</td>
+            <td class="p-2 border border-gray-300">待审队列 + 审批路径节点图 + 评论版本历史 + KPI</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="mt-3 text-xs text-gray-500">
+        代码现状：所有 Tab 均为 🔴 <b>需新建</b>（backend 的 brand/ 子包目前只有 Content + Metrics 骨架，无 Avatar/Video/SEO/Approval 模块）
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'avatar',   label: 'AI 数字人',   icon: '🧑‍💼', src: 'tab-avatar.html',   issues: 7 },
+    { key: 'video',    label: '视频裂变',    icon: '🎬',   src: 'tab-video.html',    issues: 3 },
+    { key: 'calendar', label: '内容日历',    icon: '📅',   src: 'tab-calendar.html', issues: 5 },
+    { key: 'seo',      label: 'SEO 管线',    icon: '🔍',   src: 'tab-seo.html',      issues: 2 },
+    { key: 'approval', label: '审批工作流',  icon: '✅',   src: 'tab-approval.html', issues: 3 },
+  ];
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">
+        <span>${t.icon}</span><span>${t.label}</span><span class="badge">${t.issues}</span>
+      </div>`
+    ).join('');
+  }
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = Math.max(h, 800) + 'px';
+    } catch(e) {}
+  });
+  renderTabs();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 品牌中心 Hub 总览 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .phase-card { transition: all 0.2s; }
+    .phase-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .sidebar-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 6px; cursor: pointer; font-size: 18px; margin: 6px auto; color: #666; }
+    .sidebar-icon.active { background: #f0ebff; color: #722ed1; }
+    .sidebar-icon:hover { background: #f0f0f0; }
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.4;} }
+    .signal-row:hover { background: #fafafa; }
+    .flow-node { fill: #fff; stroke: #d9d9d9; stroke-width: 1.5; }
+    .flow-node-phase1 { fill: #f9f0ff; stroke: #722ed1; }
+    .flow-node-phase2 { fill: #e6f7ff; stroke: #1890ff; }
+    .flow-node-phase3 { fill: #f6ffed; stroke: #52c41a; }
+    .flow-node-phase4 { fill: #fff7e6; stroke: #fa8c16; }
+    .flow-text { font-size: 12px; fill: #333; font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', sans-serif; }
+    .flow-text-small { font-size: 10px; fill: #999; }
+    .flow-arrow { stroke: #bfbfbf; stroke-width: 1.5; fill: none; marker-end: url(#arrowhead); }
+    .flow-arrow-feedback { stroke: #722ed1; stroke-width: 1.5; fill: none; stroke-dasharray: 4,3; marker-end: url(#arrowhead-purple); }
+    .brand-badge { background: #f0ebff; color: #722ed1; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">万德品牌中心 Hub 总览</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">整合内容生产→渠道分发→品牌度量全链路 4 Phase 能力，给品牌经理和吴耀提供「一个入口管理万德游乐全球品牌资产」的指挥中心</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管视角）、品牌经理、内容编辑、审批官、普通员工（代言分享）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">4 Phase 模块导航 / KPI 品牌健康度 / 今日工作流摘要 / 跨 Phase 数据流图 / 代码资产现状</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击 Phase 卡片下钻 / 审批队列一键处理 / 舆情告警查看上下文 / 员工代言 H5 分享</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">4 Phase 入口可跳转子原型 / 6 KPI 卡片 3 秒内加载 / 今日工作流 3 列数据正确 / 数据流 SVG 图正常渲染</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0 pt-3 flex flex-col">
+    <div class="sidebar-icon" title="首页">🏠</div>
+    <div class="sidebar-icon" title="超管驾驶舱">📊</div>
+    <div class="sidebar-icon" title="CRM商务">💼</div>
+    <div class="sidebar-icon" title="项目中心">🏗️</div>
+    <div class="sidebar-icon" title="D3设计">🎨</div>
+    <div class="sidebar-icon" title="审批体系">📝</div>
+    <div class="sidebar-icon active" title="品牌中心">🎭</div>
+    <div class="sidebar-icon" title="资源中心">📚</div>
+    <div class="sidebar-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col">
+
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      <span class="hover:text-blue-500 cursor-pointer">首页</span>
+      <span class="mx-2">&gt;</span>
+      <span class="hover:text-blue-500 cursor-pointer">营销体系</span>
+      <span class="mx-2">&gt;</span>
+      <span class="text-gray-700 font-medium">品牌中心</span>
+    </div>
+
+    <!-- [页面标题区] -->
+    <div class="px-6 py-5 bg-white border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <h1 class="text-2xl font-bold text-gray-800 flex items-center gap-2">
+            🎭 万德品牌中心 · Brand Command Center
+            <span class="text-xs brand-badge px-2 py-1 rounded font-normal">4 Phase 全链路</span>
+          </h1>
+          <p class="text-sm text-gray-500 mt-1">内容生产 → 渠道分发 → 品牌度量 · 对标 Hootsuite + Sprout Social + Contently</p>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="flex items-center gap-1 text-xs text-gray-500">
+            <span class="inline-block w-2 h-2 rounded-full bg-green-500 pulse-dot"></span>
+            7 平台实时同步中
+          </span>
+          <button class="px-3 py-1.5 text-sm border border-gray-300 rounded hover:bg-gray-50">⚙️ 品牌设置</button>
+          <button class="px-3 py-1.5 text-sm text-white rounded hover:opacity-90" style="background:#722ed1;">✨ 一键创作</button>
+          <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">📊 品牌月报</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [KPI 横条] -->
+    <div class="px-6 py-5">
+      <div class="grid grid-cols-6 gap-4">
+        <!-- KPI 1 本月内容产出 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">✍️ 本月内容产出</div>
+          <div class="text-3xl font-bold text-gray-800">187</div>
+          <div class="text-xs text-green-600 mt-1">较上月 +34%</div>
+        </div>
+        <!-- KPI 2 已发布 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">📤 已发布</div>
+          <div class="text-3xl font-bold text-gray-800">142</div>
+          <div class="text-xs text-gray-500 mt-1">覆盖 7 平台</div>
+        </div>
+        <!-- KPI 3 待审批 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">⏳ 待审批</div>
+          <div class="text-3xl font-bold text-gray-800">23</div>
+          <div class="text-xs text-orange-500 mt-1">⚠️ 8 条超 24h</div>
+        </div>
+        <!-- KPI 4 LinkedIn 曝光 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">💼 LinkedIn 曝光</div>
+          <div class="text-3xl font-bold text-gray-800">48.2<span class="text-base text-gray-400 font-normal">k</span></div>
+          <div class="text-xs text-green-600 mt-1">本月累计</div>
+        </div>
+        <!-- KPI 5 舆情告警 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">🚨 舆情告警</div>
+          <div class="text-3xl font-bold text-gray-800">4</div>
+          <div class="text-xs text-red-500 mt-1">⚠️ 1 条 P0</div>
+        </div>
+        <!-- KPI 6 品牌声量 -->
+        <div class="bg-white rounded-lg border border-gray-200 p-4">
+          <div class="text-xs text-gray-500 mb-1">📣 品牌声量指数</div>
+          <div class="text-3xl font-bold text-gray-800">76<span class="text-base text-gray-400 font-normal">/100</span></div>
+          <div class="text-xs text-green-600 mt-1">↑ 较上月 +8</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [4 Phase 大卡片网格 2x2] -->
+    <div class="px-6 pb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-bold text-gray-800">🗂️ 4 Phase 品牌能力矩阵</h2>
+        <span class="text-xs text-gray-400">点击卡片进入 Phase 子原型</span>
+      </div>
+      <div class="grid grid-cols-2 gap-5">
+
+        <!-- Phase 1 基础设施 -->
+        <a href="./phase1-infra/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-5 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background:#f0ebff;">🏗️</div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-1.5 py-0.5 rounded brand-badge font-semibold">Phase 1</span>
+                  <span class="text-xs text-gray-400">基础设施层</span>
+                </div>
+                <div class="text-base font-bold text-gray-800 mt-0.5">账号 · 权限 · 案例库</div>
+                <div class="text-xs text-gray-500 mt-0.5">对标 Hootsuite Account Center + Brandfolder</div>
+              </div>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-500 whitespace-nowrap">5 Issue</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mb-3 border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🔑</span><span>7平台 OAuth</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>👥</span><span>4级 RBAC</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🏞️</span><span>案例瀑布流</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🎨</span><span>品牌 VI 库</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>📁</span><span>素材资产</span></div>
+          </div>
+          <div class="flex items-center justify-between border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500"></span><span class="text-yellow-600">🟡 部分已建</span></span>
+              <span class="text-xs text-gray-400">已有 BrandAccountController</span>
+            </div>
+            <span class="text-xs font-medium" style="color:#722ed1;">进入 Phase →</span>
+          </div>
+        </a>
+
+        <!-- Phase 2 内容生产 -->
+        <a href="./phase2-content/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-5 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background:#e6f7ff;">✍️</div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold">Phase 2</span>
+                  <span class="text-xs text-gray-400">内容生产层 · 主战场</span>
+                </div>
+                <div class="text-base font-bold text-gray-800 mt-0.5">AI 数字人 · 内容自动化 · 审批流</div>
+                <div class="text-xs text-gray-500 mt-0.5">对标 Contently + Hootsuite Compose + HeyGen</div>
+              </div>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded bg-blue-50 text-blue-600 whitespace-nowrap font-semibold">16 Issue</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mb-3 border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🤖</span><span>数字人+声克</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🎬</span><span>视频裂变</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>📅</span><span>节日日历</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🖼️</span><span>AI 海报</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>📝</span><span>文章初稿</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🔍</span><span>SEO 关键词</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>✅</span><span>多级审批</span></div>
+          </div>
+          <div class="flex items-center justify-between border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-red-500"></span><span class="text-red-500">🔴 需新建</span></span>
+              <span class="text-xs text-gray-400">本月交付 12 条</span>
+            </div>
+            <span class="text-xs font-medium text-blue-500">进入 Phase →</span>
+          </div>
+        </a>
+
+        <!-- Phase 3 渠道分发 -->
+        <a href="./phase3-distribute/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-5 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background:#f6ffed;">📢</div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-semibold">Phase 3</span>
+                  <span class="text-xs text-gray-400">渠道分发层</span>
+                </div>
+                <div class="text-base font-bold text-gray-800 mt-0.5">员工代言 · LinkedIn 投放</div>
+                <div class="text-xs text-gray-500 mt-0.5">对标 EveryoneSocial + LinkedIn Ads Manager</div>
+              </div>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-500 whitespace-nowrap">3 Issue</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mb-3 border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🎁</span><span>内容池</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>📱</span><span>H5 一键分享</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>💼</span><span>LinkedIn 投放</span></div>
+          </div>
+          <div class="flex items-center justify-between border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-red-500"></span><span class="text-red-500">🔴 规划中</span></span>
+              <span class="text-xs text-gray-400">员工候选 86 人</span>
+            </div>
+            <span class="text-xs font-medium text-blue-500">进入 Phase →</span>
+          </div>
+        </a>
+
+        <!-- Phase 4 品牌度量 -->
+        <a href="./phase4-metrics/index.html" class="phase-card bg-white rounded-lg border border-gray-200 p-5 block">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-lg flex items-center justify-center text-2xl" style="background:#fff7e6;">📊</div>
+              <div>
+                <div class="flex items-center gap-2">
+                  <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-semibold">Phase 4</span>
+                  <span class="text-xs text-gray-400">品牌度量层</span>
+                </div>
+                <div class="text-base font-bold text-gray-800 mt-0.5">舆情监控 · 品牌健康度</div>
+                <div class="text-xs text-gray-500 mt-0.5">对标 Brandwatch + Sprout Listening</div>
+              </div>
+            </div>
+            <span class="text-xs px-2 py-0.5 rounded bg-yellow-50 text-yellow-700 whitespace-nowrap font-semibold">2+ Issue</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2 mb-3 border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>📡</span><span>舆情采集</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>😊</span><span>情感分析</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>🚨</span><span>告警推送</span></div>
+            <div class="flex items-center gap-1.5 text-xs text-gray-600"><span>📈</span><span>健康度看板</span></div>
+          </div>
+          <div class="flex items-center justify-between border-t border-gray-100 pt-3">
+            <div class="flex items-center gap-3">
+              <span class="flex items-center gap-1 text-xs"><span class="inline-block w-2 h-2 rounded-full bg-yellow-500"></span><span class="text-yellow-600">🟡 部分已建</span></span>
+              <span class="text-xs text-gray-400">4 Collector 就绪</span>
+            </div>
+            <span class="text-xs font-medium text-blue-500">进入 Phase →</span>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <!-- [跨 Phase 数据流图 SVG] -->
+    <div class="px-6 pb-5">
+      <div class="bg-white rounded-lg border border-gray-200 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h2 class="text-base font-bold text-gray-800">🔄 跨 Phase 数据流 · 品牌内容生命周期</h2>
+          <span class="text-xs text-gray-400">内容生产 → 审批 → 多渠道分发 → 度量 → 回流选题</span>
+        </div>
+        <svg viewBox="0 0 1180 260" class="w-full" style="max-height:260px;">
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#bfbfbf"/>
+            </marker>
+            <marker id="arrowhead-purple" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
+              <path d="M0,0 L0,6 L9,3 z" fill="#722ed1"/>
+            </marker>
+          </defs>
+
+          <!-- Phase 1 基础设施 (基座) -->
+          <rect x="20" y="200" width="1140" height="40" rx="6" class="flow-node flow-node-phase1"/>
+          <text x="590" y="224" text-anchor="middle" class="flow-text" font-weight="600" fill="#722ed1">🏗️ Phase 1 基础设施 · 账号 OAuth · 权限 RBAC · 案例库 · 素材资产（全局底座）</text>
+
+          <!-- 节点 1: 选题/素材 -->
+          <rect x="20" y="40" width="150" height="70" rx="8" class="flow-node flow-node-phase2"/>
+          <text x="95" y="62" text-anchor="middle" class="flow-text" font-weight="600">📅 节日日历</text>
+          <text x="95" y="80" text-anchor="middle" class="flow-text">+ SEO 关键词</text>
+          <text x="95" y="98" text-anchor="middle" class="flow-text-small">选题 / 素材输入</text>
+
+          <!-- 节点 2: AI 生产 -->
+          <rect x="210" y="40" width="160" height="70" rx="8" class="flow-node flow-node-phase2"/>
+          <text x="290" y="62" text-anchor="middle" class="flow-text" font-weight="600">🤖 AI 创作</text>
+          <text x="290" y="80" text-anchor="middle" class="flow-text">数字人 · 文章 · 海报</text>
+          <text x="290" y="98" text-anchor="middle" class="flow-text-small">Phase 2 · 生产</text>
+
+          <!-- 节点 3: 审批 -->
+          <rect x="410" y="40" width="140" height="70" rx="8" class="flow-node flow-node-phase2"/>
+          <text x="480" y="62" text-anchor="middle" class="flow-text" font-weight="600">✅ 多级审批</text>
+          <text x="480" y="80" text-anchor="middle" class="flow-text">编辑→主管→品牌官</text>
+          <text x="480" y="98" text-anchor="middle" class="flow-text-small">Phase 2 · 门禁</text>
+
+          <!-- 节点 4: 分发 -->
+          <rect x="590" y="40" width="160" height="70" rx="8" class="flow-node flow-node-phase3"/>
+          <text x="670" y="62" text-anchor="middle" class="flow-text" font-weight="600">📢 多渠道分发</text>
+          <text x="670" y="80" text-anchor="middle" class="flow-text">7 平台定时 · LinkedIn Ads</text>
+          <text x="670" y="98" text-anchor="middle" class="flow-text-small">Phase 3 · 渠道</text>
+
+          <!-- 节点 5: 员工代言 -->
+          <rect x="590" y="130" width="160" height="55" rx="8" class="flow-node flow-node-phase3"/>
+          <text x="670" y="150" text-anchor="middle" class="flow-text" font-weight="600">👥 员工代言 H5</text>
+          <text x="670" y="168" text-anchor="middle" class="flow-text-small">Phase 3 · 内容池</text>
+
+          <!-- 节点 6: 采集 -->
+          <rect x="790" y="40" width="150" height="70" rx="8" class="flow-node flow-node-phase4"/>
+          <text x="865" y="62" text-anchor="middle" class="flow-text" font-weight="600">📡 舆情采集</text>
+          <text x="865" y="80" text-anchor="middle" class="flow-text">4 Collector 情感</text>
+          <text x="865" y="98" text-anchor="middle" class="flow-text-small">Phase 4 · 度量</text>
+
+          <!-- 节点 7: 看板+告警 -->
+          <rect x="980" y="40" width="160" height="70" rx="8" class="flow-node flow-node-phase4"/>
+          <text x="1060" y="62" text-anchor="middle" class="flow-text" font-weight="600">📈 品牌健康度</text>
+          <text x="1060" y="80" text-anchor="middle" class="flow-text">看板 + 🚨 告警</text>
+          <text x="1060" y="98" text-anchor="middle" class="flow-text-small">Phase 4 · 洞察</text>
+
+          <!-- 主流箭头 -->
+          <path d="M170 75 L210 75" class="flow-arrow"/>
+          <path d="M370 75 L410 75" class="flow-arrow"/>
+          <path d="M550 75 L590 75" class="flow-arrow"/>
+          <path d="M750 75 L790 75" class="flow-arrow"/>
+          <path d="M940 75 L980 75" class="flow-arrow"/>
+
+          <!-- 审批后分支到员工代言 -->
+          <path d="M480 110 L480 155 L590 155" class="flow-arrow"/>
+          <!-- 员工代言回流到采集 -->
+          <path d="M750 155 L865 155 L865 110" class="flow-arrow"/>
+
+          <!-- 回流选题（虚线）: 度量 -> 选题 -->
+          <path d="M1060 110 L1060 25 L95 25 L95 40" class="flow-arrow-feedback"/>
+          <text x="580" y="18" text-anchor="middle" class="flow-text-small" fill="#722ed1" font-weight="600">↶ AI 洞察回流选题（Phase 4 → Phase 2 闭环）</text>
+        </svg>
+        <div class="mt-3 text-xs text-gray-500 border-t border-gray-100 pt-2">
+          💡 <b>闭环设计</b>：Phase 4 舆情情感 + 曝光数据 → 作为下一周期 Phase 2 选题与文案优化依据；Phase 1 作为全链路底座，为所有 Phase 提供账号/权限/素材。
+        </div>
+      </div>
+    </div>
+
+    <!-- [今日工作流摘要面板 3 列] -->
+    <div class="px-6 pb-5">
+      <div class="flex items-center justify-between mb-3">
+        <h2 class="text-base font-bold text-gray-800">⚡ 今日工作流摘要</h2>
+        <span class="text-xs text-gray-400">跨 Phase 智能聚合 · 按优先级降序</span>
+      </div>
+      <div class="grid grid-cols-3 gap-4">
+
+        <!-- 列 1: 待审批内容队列 -->
+        <div class="bg-white rounded-lg border border-gray-200">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-gray-800">⏳ 待审批队列</span>
+              <span class="text-xs text-gray-400">23 条</span>
+            </div>
+            <a href="./phase2-content/index.html" class="text-xs text-blue-500 hover:underline">全部 →</a>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-red-50 text-red-600 font-semibold whitespace-nowrap">🔥 P0</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">春节营销日历 2026 · 主视觉海报</div>
+                  <div class="text-xs text-gray-400 mt-0.5">品牌经理 李婷 · 已等 <b class="text-red-500">36 小时</b></div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-semibold whitespace-nowrap">⚡ P1</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">游乐设备安全白皮书 · 第 3 章</div>
+                  <div class="text-xs text-gray-400 mt-0.5">内容编辑 王伟 · 等 12 小时</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-semibold whitespace-nowrap">⚡ P1</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">张经理数字分身 v2 · 招商视频</div>
+                  <div class="text-xs text-gray-400 mt-0.5">品牌官审批 · 等 8 小时</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold whitespace-nowrap">📝 P2</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">全球儿童户外游乐趋势 · 长文</div>
+                  <div class="text-xs text-gray-400 mt-0.5">主管复审 · 等 4 小时</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold whitespace-nowrap">📝 P2</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">深圳万德游乐案例合集 · 小红书</div>
+                  <div class="text-xs text-gray-400 mt-0.5">编辑复审 · 等 2 小时</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 列 2: 今日定时发布 -->
+        <div class="bg-white rounded-lg border border-gray-200">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-gray-800">📤 今日定时发布</span>
+              <span class="text-xs text-gray-400">12 条</span>
+            </div>
+            <a href="./phase3-distribute/index.html" class="text-xs text-blue-500 hover:underline">全部 →</a>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-mono font-semibold whitespace-nowrap">10:00</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">微信公众号 · 春节营销启动</div>
+                  <div class="text-xs text-gray-400 mt-0.5">📢 公众号 · 已预审 ✓</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-mono font-semibold whitespace-nowrap">12:30</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">视频号 · 张经理数字分身 v1</div>
+                  <div class="text-xs text-gray-400 mt-0.5">🎬 视频号 · 已预审 ✓</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-mono font-semibold whitespace-nowrap">14:00</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">LinkedIn · 全球儿童户外趋势</div>
+                  <div class="text-xs text-gray-400 mt-0.5">💼 LinkedIn · Thought Leader Ad</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-mono font-semibold whitespace-nowrap">15:30</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">小红书 · 深圳万德游乐 Vlog</div>
+                  <div class="text-xs text-gray-400 mt-0.5">📱 小红书 · 内容池素材 ✓</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-gray-100 text-gray-600 font-mono font-semibold whitespace-nowrap">18:00</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">抖音 · 游乐设备安全动画</div>
+                  <div class="text-xs text-gray-400 mt-0.5">🎥 抖音 · 视频裂变 3 版本</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 列 3: 舆情告警 -->
+        <div class="bg-white rounded-lg border border-gray-200">
+          <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+            <div class="flex items-center gap-2">
+              <span class="text-sm font-bold text-gray-800">🚨 舆情告警</span>
+              <span class="text-xs text-red-500 font-semibold">4 条</span>
+            </div>
+            <a href="./phase4-metrics/index.html" class="text-xs text-blue-500 hover:underline">全部 →</a>
+          </div>
+          <div class="divide-y divide-gray-100">
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-red-50 text-red-600 font-semibold whitespace-nowrap">😡 P0 负面</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">某网友投诉"万德设备噪音大"</div>
+                  <div class="text-xs text-gray-400 mt-0.5">媒X · 32 赞 · 08:42</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-semibold whitespace-nowrap">⚠️ P1</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">KOMPAN 对比视频传播度 +120%</div>
+                  <div class="text-xs text-gray-400 mt-0.5">视频号 · 竞品动态 · 07:15</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-orange-50 text-orange-600 font-semibold whitespace-nowrap">⚠️ P1</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">LinkedIn 海外用户负面评论 2 条</div>
+                  <div class="text-xs text-gray-400 mt-0.5">LinkedIn · 中性偏负 · 昨 23:30</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-green-50 text-green-600 font-semibold whitespace-nowrap">😊 好评</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">公众号"深圳万德游乐"10w+ 阅读</div>
+                  <div class="text-xs text-gray-400 mt-0.5">公众号 · 正面爆款 · 06:20</div>
+                </div>
+              </div>
+            </div>
+            <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+              <div class="flex items-start gap-2">
+                <span class="text-xs px-1.5 py-0.5 rounded bg-blue-50 text-blue-600 font-semibold whitespace-nowrap">📈 声量</span>
+                <div class="flex-1 min-w-0">
+                  <div class="text-sm text-gray-800 truncate">"无动力游乐"关键词热度 +45%</div>
+                  <div class="text-xs text-gray-400 mt-0.5">跨平台 · 趋势洞察</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- [代码资产现状表] -->
+    <div class="px-6 pb-5">
+      <div class="bg-white rounded-lg border border-gray-200 p-4">
+        <div class="flex items-center justify-between mb-3">
+          <h3 class="text-base font-bold text-gray-700">🟡 代码资产现状 · backend/src/main/java/.../brand/</h3>
+          <span class="text-xs text-gray-400">Step 3.5 扫描结果 · 8 个已有类，可复用/改造</span>
+        </div>
+        <table class="w-full text-sm text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="p-2 border border-gray-200 w-24">层级</th>
+              <th class="p-2 border border-gray-200 w-72">类名</th>
+              <th class="p-2 border border-gray-200 w-24">状态</th>
+              <th class="p-2 border border-gray-200 w-28">归属 Phase</th>
+              <th class="p-2 border border-gray-200">功能说明</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Controller</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandAccountController.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 改造</span></td>
+              <td class="p-2 border border-gray-200">Phase 1</td>
+              <td class="p-2 border border-gray-200">7 平台 OAuth 账号绑定 API · 需扩充 LinkedIn 端点</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Controller</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandMetricsController.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">品牌健康度看板查询 · 4 Collector 指标聚合</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Service</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandAccountService.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 改造</span></td>
+              <td class="p-2 border border-gray-200">Phase 1</td>
+              <td class="p-2 border border-gray-200">账号绑定/解绑业务逻辑 · 需加 4 级 RBAC 校验</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Service</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandMetricsAggregationService.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">跨平台曝光/互动/情感指标聚合</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Collector</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">MediaXCollector.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">媒X 平台数据采集 · 已对接 OAuth API</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Collector</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">WechatOfficialCollector.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">微信公众号阅读/分享/点赞采集</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Collector</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">WechatVideoCollector.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">视频号播放/转发/评论采集</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Collector</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">LinkedInCollector.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">LinkedIn 曝光/CTR/互动采集</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Mapper</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandAccountMapper.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 1</td>
+              <td class="p-2 border border-gray-200">brand_account 表 CRUD</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Mapper</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandMetricsMapper.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 4</td>
+              <td class="p-2 border border-gray-200">brand_metrics_daily 每日指标入库</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">Entity</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">BrandAccount.java / BrandMetrics.java</td>
+              <td class="p-2 border border-gray-200"><span class="text-green-600">🟢 复用</span></td>
+              <td class="p-2 border border-gray-200">Phase 1 / 4</td>
+              <td class="p-2 border border-gray-200">账号实体 + 指标实体 · 字段完整</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">—</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs text-gray-400">（Phase 2 内容生产 / Phase 3 分发 · 暂无代码）</td>
+              <td class="p-2 border border-gray-200"><span class="text-red-500">🔴 新建</span></td>
+              <td class="p-2 border border-gray-200">Phase 2 / 3</td>
+              <td class="p-2 border border-gray-200">19 Issue 需从零开发：AI 数字人 / 视频裂变 / 审批流 / 员工代言 / LinkedIn Ads</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-3 text-xs text-gray-500 border-t border-gray-100 pt-2">
+          💡 <b>资产判断</b>：Phase 1/4 有相当基础（🟢 8 个类可复用 + 🟡 2 个改造），Phase 2/3 需新建。总计 <b>26 Issue</b>，其中 ~30% 对接已有 API、~70% 新建。
+        </div>
+      </div>
+    </div>
+
+    <!-- [底部 原型文件导航索引] -->
+    <div class="px-6 pb-8">
+      <div class="bg-white rounded-lg border border-gray-200 p-4">
+        <h3 class="text-base font-bold text-gray-700 mb-3">📑 原型说明 · 4 Phase 子原型文件索引</h3>
+        <table class="w-full text-sm text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="p-2 border border-gray-200 w-28">Phase</th>
+              <th class="p-2 border border-gray-200 w-56">文件路径</th>
+              <th class="p-2 border border-gray-200 w-20">Issue 数</th>
+              <th class="p-2 border border-gray-200 w-28">代码现状</th>
+              <th class="p-2 border border-gray-200">核心功能</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">🏗️ Phase 1</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">./phase1-infra/index.html</td>
+              <td class="p-2 border border-gray-200">5</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 部分已建</span></td>
+              <td class="p-2 border border-gray-200">基础设施：7 平台 OAuth 账号绑定 / 4 级角色权限（超管/品牌经理/编辑/审批官/员工）/ 项目案例库瀑布流 / 品牌 VI 库 / 素材资产</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">✍️ Phase 2</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">./phase2-content/index.html</td>
+              <td class="p-2 border border-gray-200">16</td>
+              <td class="p-2 border border-gray-200"><span class="text-red-500">🔴 需新建</span></td>
+              <td class="p-2 border border-gray-200">内容生产：AI 数字人+声音克隆 / 视频裂变 / 节日日历+AI 海报+文章初稿 / SEO 关键词管线 / 多级审批工作流</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">📢 Phase 3</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">./phase3-distribute/index.html</td>
+              <td class="p-2 border border-gray-200">3</td>
+              <td class="p-2 border border-gray-200"><span class="text-red-500">🔴 规划中</span></td>
+              <td class="p-2 border border-gray-200">渠道分发：员工代言内容池 + H5 一键分享 / LinkedIn Thought Leader Ads 自动投放</td>
+            </tr>
+            <tr>
+              <td class="p-2 border border-gray-200 font-semibold">📊 Phase 4</td>
+              <td class="p-2 border border-gray-200 font-mono text-xs">./phase4-metrics/index.html</td>
+              <td class="p-2 border border-gray-200">2+</td>
+              <td class="p-2 border border-gray-200"><span class="text-yellow-600">🟡 部分已建</span></td>
+              <td class="p-2 border border-gray-200">品牌度量：舆情监控（采集+情感分析+告警）/ 品牌健康度看板（媒X/公众号/视频号/LinkedIn 4 Collector 已就绪）</td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="mt-3 text-xs text-gray-500 border-t border-gray-100 pt-2">
+          💡 本页为 <b>总览 Hub</b>，4 Phase 子原型为独立多文件原型，通过卡片"进入 Phase"或导航表路径跳转。姊妹篇：<a href="../prototype-intelligence-hub/index.html" class="text-blue-500 hover:underline">商战情报中台 Hub</a> · 两者共用账号/权限底座，情报驱动品牌选题。
+        </div>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+</body>
+</html>

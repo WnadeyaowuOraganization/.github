@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>员工代言 Employee Advocacy</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .phone-frame {
+      width: 320px; height: 640px; border: 8px solid #333; border-radius: 32px;
+      background: #fff; overflow: hidden; position: relative; margin: 0 auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+    }
+    .phone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 120px; height: 20px; background: #333; border-radius: 0 0 14px 14px; z-index: 10;
+    }
+    .phone-screen { width: 100%; height: 100%; overflow-y: auto; padding-top: 24px; background: linear-gradient(180deg, #f0f7ff 0%, #fff 30%); }
+    .content-card { transition: all 0.2s; }
+    .content-card:hover { border-color: #1890ff; box-shadow: 0 2px 8px rgba(24,144,255,0.15); }
+    .rank-badge { width: 24px; height: 24px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; }
+    .rank-1 { background: #fadb14; color: #fff; }
+    .rank-2 { background: #bfbfbf; color: #fff; }
+    .rank-3 { background: #d48806; color: #fff; }
+    .rank-other { background: #f0f0f0; color: #666; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 1 · 员工代言 Employee Advocacy</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">把品牌内容推送到员工池，员工一键分享到朋友圈/企微/H5，用社交关系链放大品牌曝光</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌运营（派发内容/发起任务）, 全体员工（领取分享/赚积分）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">内容池展示 / 员工分享排行榜 / H5 分享页预览 / 代言任务发布 / 积分奖励体系</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">立即分享 / 领取任务 / 查看个人 H5 名片 / 下钻个人分享明细</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">分享数据实时回流 / 积分自动结算 / H5 页含员工个人介绍+公司品牌信息 / 排行榜按月重置</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心详细设计.md §Phase3.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部 KPI 区] -->
+<!-- [KPI-BAR] 员工代言总览指标 -->
+<div class="grid grid-cols-4 gap-4 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">总参与员工</div>
+    <div class="text-2xl font-semibold text-gray-800">186 <span class="text-xs text-gray-400 font-normal">/ 全员 248</span></div>
+    <div class="text-xs text-green-600 mt-1">↑ 75% 参与率</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">本月分享总量</div>
+    <div class="text-2xl font-semibold text-gray-800">1,248 <span class="text-xs text-gray-400 font-normal">次</span></div>
+    <div class="text-xs text-green-600 mt-1">↑ 32% vs 上月</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">总曝光</div>
+    <div class="text-2xl font-semibold text-gray-800">86,420 <span class="text-xs text-gray-400 font-normal">次</span></div>
+    <div class="text-xs text-green-600 mt-1">↑ 45% vs 上月</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">平均每员工曝光</div>
+    <div class="text-2xl font-semibold text-gray-800">465 <span class="text-xs text-gray-400 font-normal">次</span></div>
+    <div class="text-xs text-gray-500 mt-1">目标 500/月</div>
+  </div>
+</div>
+
+<!-- [任务栏] 品牌方发起的代言任务 -->
+<!-- [CAMPAIGN-BAR] 代言任务列表 -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-2">
+      <span class="text-sm font-semibold text-gray-800">🎯 代言任务</span>
+      <span class="text-xs text-gray-500">品牌方发起，员工领取后获得额外积分</span>
+    </div>
+    <button class="text-xs bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">+ 发起新任务</button>
+  </div>
+  <div class="grid grid-cols-3 gap-4">
+    <div class="border border-blue-200 bg-blue-50 rounded p-3">
+      <div class="flex items-start justify-between">
+        <div class="text-sm font-semibold text-gray-800">🏆 米兰展参展预热</div>
+        <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">进行中</span>
+      </div>
+      <div class="text-xs text-gray-600 mt-2 leading-relaxed">分享米兰展产品亮点到朋友圈/LinkedIn，累计3次可领奖励</div>
+      <div class="flex justify-between text-xs mt-3 pt-2 border-t border-blue-200">
+        <span class="text-gray-500">奖励：<span class="text-orange-600 font-semibold">200 积分</span></span>
+        <span class="text-gray-500">参与：<span class="text-blue-600 font-semibold">48 / 100</span></span>
+      </div>
+      <div class="text-xs text-gray-400 mt-1">截止 2026-05-15</div>
+    </div>
+    <div class="border border-blue-200 bg-blue-50 rounded p-3">
+      <div class="flex items-start justify-between">
+        <div class="text-sm font-semibold text-gray-800">📣 D3 设计工具发布</div>
+        <span class="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded">进行中</span>
+      </div>
+      <div class="text-xs text-gray-600 mt-2 leading-relaxed">分享 D3 参数化设计工具介绍视频，覆盖行业 KOL/同行</div>
+      <div class="flex justify-between text-xs mt-3 pt-2 border-t border-blue-200">
+        <span class="text-gray-500">奖励：<span class="text-orange-600 font-semibold">150 积分</span></span>
+        <span class="text-gray-500">参与：<span class="text-blue-600 font-semibold">32 / 80</span></span>
+      </div>
+      <div class="text-xs text-gray-400 mt-1">截止 2026-05-10</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3">
+      <div class="flex items-start justify-between">
+        <div class="text-sm font-semibold text-gray-800">🌍 海外案例合集</div>
+        <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">待开始</span>
+      </div>
+      <div class="text-xs text-gray-600 mt-2 leading-relaxed">领取后可分享沙特/中东/东南亚 TOP 5 项目案例</div>
+      <div class="flex justify-between text-xs mt-3 pt-2 border-t border-gray-200">
+        <span class="text-gray-500">奖励：<span class="text-orange-600 font-semibold">300 积分</span></span>
+        <span class="text-gray-500">参与：<span class="text-gray-400 font-semibold">0 / 50</span></span>
+      </div>
+      <div class="text-xs text-gray-400 mt-1">开始 2026-05-01</div>
+    </div>
+  </div>
+</div>
+
+<!-- [三栏主体] -->
+<div class="grid gap-4" style="grid-template-columns: 30% 40% 30%;">
+
+  <!-- [内容池 - 左 30%] -->
+  <!-- [CONTENT-POOL] 品牌内容池 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">📦 内容池</div>
+      <div class="flex items-center gap-1 text-xs">
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>全部类型</option>
+          <option>产品介绍</option>
+          <option>案例故事</option>
+          <option>行业洞察</option>
+        </select>
+      </div>
+    </div>
+    <div class="text-xs text-gray-500 mb-3">品牌方推送 · 共 24 条可分享</div>
+
+    <div class="space-y-3">
+      <!-- 内容卡 1 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-blue-100 to-blue-200 flex items-center justify-center text-gray-500 text-xs">[产品主图占位]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">万德 D3 参数化设计工具正式发布</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded">易</span>
+              <span class="text-orange-600">+50 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 2 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-gray-500 text-xs">[案例视频缩略图]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">沙特利雅得 5000m² 乐园交付实录</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded">中</span>
+              <span class="text-orange-600">+80 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 3 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-purple-100 to-purple-200 flex items-center justify-center text-gray-500 text-xs">[行业白皮书封面]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">2026 室内乐园行业趋势白皮书</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-red-100 text-red-700 px-1.5 py-0.5 rounded">难</span>
+              <span class="text-orange-600">+120 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 4 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-green-100 to-green-200 flex items-center justify-center text-gray-500 text-xs">[企业荣誉 H5]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">EN1176 欧洲安全认证通过</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded">易</span>
+              <span class="text-orange-600">+50 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 5 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-teal-100 to-teal-200 flex items-center justify-center text-gray-500 text-xs">[CEO 访谈视频]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">吴总专访：AI 重塑游乐设备制造</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded">中</span>
+              <span class="text-orange-600">+80 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 6 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-pink-100 to-pink-200 flex items-center justify-center text-gray-500 text-xs">[米兰展邀请函]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">米兰展 Hall 7 · 展位 C23 邀请函</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded">易</span>
+              <span class="text-orange-600">+60 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 7 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-indigo-100 to-indigo-200 flex items-center justify-center text-gray-500 text-xs">[客户证言长图]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">东南亚 Top 5 乐园集团选择万德</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded">中</span>
+              <span class="text-orange-600">+80 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- 内容卡 8 -->
+      <div class="content-card border border-gray-200 rounded overflow-hidden">
+        <div class="h-24 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center text-gray-500 text-xs">[工厂参观视频]</div>
+        <div class="p-2.5">
+          <div class="text-sm font-medium text-gray-800 leading-snug">深圳总厂 360° VR 参观</div>
+          <div class="flex items-center justify-between mt-2 text-xs">
+            <div class="flex gap-1.5">
+              <span class="bg-green-100 text-green-700 px-1.5 py-0.5 rounded">易</span>
+              <span class="text-orange-600">+50 积分</span>
+            </div>
+            <button class="bg-blue-500 text-white px-2.5 py-1 rounded text-xs hover:bg-blue-600">立即分享</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="text-center mt-3">
+      <button class="text-xs text-blue-500 hover:underline">查看全部 24 条 →</button>
+    </div>
+  </div>
+
+  <!-- [员工分享看板 - 中 40%] -->
+  <!-- [LEADERBOARD] 员工分享排行榜 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">🏆 员工分享看板</div>
+      <div class="flex items-center gap-2 text-xs">
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>本月</option>
+          <option>本季度</option>
+          <option>本年</option>
+        </select>
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>全部部门</option>
+          <option>商务部</option>
+          <option>项目中心</option>
+          <option>设计院</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="w-full text-xs border-collapse">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-200 text-gray-600">
+          <th class="p-2 text-center w-10">排名</th>
+          <th class="p-2 text-left">员工</th>
+          <th class="p-2 text-left">部门</th>
+          <th class="p-2 text-right">分享数</th>
+          <th class="p-2 text-right">曝光</th>
+          <th class="p-2 text-right">点击</th>
+          <th class="p-2 text-right">积分</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-1">1</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-orange-200 flex items-center justify-center text-xs font-semibold text-orange-700">张</div>
+              <span class="font-medium text-gray-800">张伟</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">商务部</td>
+          <td class="p-2 text-right font-medium">48</td>
+          <td class="p-2 text-right">3,248</td>
+          <td class="p-2 text-right">186</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">2,480</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-2">2</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-blue-200 flex items-center justify-center text-xs font-semibold text-blue-700">李</div>
+              <span class="font-medium text-gray-800">李娜</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">商务部</td>
+          <td class="p-2 text-right font-medium">42</td>
+          <td class="p-2 text-right">2,860</td>
+          <td class="p-2 text-right">162</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">2,160</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-3">3</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-green-200 flex items-center justify-center text-xs font-semibold text-green-700">王</div>
+              <span class="font-medium text-gray-800">王芳</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">设计院</td>
+          <td class="p-2 text-right font-medium">38</td>
+          <td class="p-2 text-right">2,420</td>
+          <td class="p-2 text-right">145</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">1,920</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">4</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-purple-200 flex items-center justify-center text-xs font-semibold text-purple-700">陈</div>
+              <span class="font-medium text-gray-800">陈浩</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">项目中心</td>
+          <td class="p-2 text-right font-medium">35</td>
+          <td class="p-2 text-right">2,180</td>
+          <td class="p-2 text-right">128</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">1,760</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">5</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-pink-200 flex items-center justify-center text-xs font-semibold text-pink-700">刘</div>
+              <span class="font-medium text-gray-800">刘婷</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">商务部</td>
+          <td class="p-2 text-right font-medium">32</td>
+          <td class="p-2 text-right">1,920</td>
+          <td class="p-2 text-right">108</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">1,580</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">6</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-yellow-200 flex items-center justify-center text-xs font-semibold text-yellow-700">赵</div>
+              <span class="font-medium text-gray-800">赵强</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">安装售后</td>
+          <td class="p-2 text-right font-medium">28</td>
+          <td class="p-2 text-right">1,680</td>
+          <td class="p-2 text-right">92</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">1,420</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">7</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-teal-200 flex items-center justify-center text-xs font-semibold text-teal-700">孙</div>
+              <span class="font-medium text-gray-800">孙丽</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">PLM 中心</td>
+          <td class="p-2 text-right font-medium">25</td>
+          <td class="p-2 text-right">1,450</td>
+          <td class="p-2 text-right">78</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">1,280</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">8</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-red-200 flex items-center justify-center text-xs font-semibold text-red-700">周</div>
+              <span class="font-medium text-gray-800">周杰</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">项目中心</td>
+          <td class="p-2 text-right font-medium">22</td>
+          <td class="p-2 text-right">1,280</td>
+          <td class="p-2 text-right">65</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">1,120</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">9</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-indigo-200 flex items-center justify-center text-xs font-semibold text-indigo-700">吴</div>
+              <span class="font-medium text-gray-800">吴敏</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">综合管理</td>
+          <td class="p-2 text-right font-medium">20</td>
+          <td class="p-2 text-right">1,120</td>
+          <td class="p-2 text-right">58</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">980</td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 text-center"><span class="rank-badge rank-other">10</span></td>
+          <td class="p-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-full bg-gray-200 flex items-center justify-center text-xs font-semibold text-gray-700">郑</div>
+              <span class="font-medium text-gray-800">郑涛</span>
+            </div>
+          </td>
+          <td class="p-2 text-gray-600">设计院</td>
+          <td class="p-2 text-right font-medium">18</td>
+          <td class="p-2 text-right">980</td>
+          <td class="p-2 text-right">52</td>
+          <td class="p-2 text-right text-orange-600 font-semibold">860</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+      <span>Top 10 显示中 · 共 186 人</span>
+      <button class="text-blue-500 hover:underline">查看完整排行榜 →</button>
+    </div>
+
+    <!-- 月度奖励说明 -->
+    <div class="mt-3 p-2.5 bg-orange-50 border border-orange-200 rounded text-xs text-gray-700">
+      <span class="font-semibold text-orange-700">🎁 本月奖励：</span>
+      Top 1 → 京东卡 ¥500｜Top 2-3 → 京东卡 ¥300｜Top 4-10 → 京东卡 ¥100｜积分可在积分商城兑换
+    </div>
+  </div>
+
+  <!-- [H5 分享页预览 - 右 30%] -->
+  <!-- [H5-PREVIEW] H5 分享页预览 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">📱 H5 分享页预览</div>
+      <button class="text-xs text-blue-500 hover:underline">编辑我的 H5 →</button>
+    </div>
+    <div class="text-xs text-gray-500 mb-3">员工分享时的 H5 名片效果（375px）</div>
+
+    <!-- 手机壳框架 -->
+    <div class="phone-frame">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+        <!-- 顶部 banner -->
+        <div class="h-28 bg-gradient-to-br from-blue-500 to-blue-700 relative">
+          <div class="absolute inset-0 flex items-center justify-center text-white text-xs opacity-50">[公司品牌 Banner]</div>
+          <div class="absolute top-2 left-2 text-white text-xs bg-black bg-opacity-30 px-2 py-0.5 rounded">万德游乐</div>
+        </div>
+
+        <!-- 员工头像+介绍 -->
+        <div class="px-4 -mt-8 relative">
+          <div class="w-16 h-16 rounded-full bg-orange-200 border-4 border-white flex items-center justify-center text-xl font-bold text-orange-700 shadow-md">张</div>
+          <div class="mt-2">
+            <div class="text-base font-bold text-gray-800">张伟</div>
+            <div class="text-xs text-gray-600">万德游乐 · 商务部 · 海外业务总监</div>
+            <div class="text-xs text-gray-500 mt-1 leading-snug">深耕游乐行业 8 年，服务过沙特/迪拜/东南亚 30+ 项目，欢迎交流</div>
+          </div>
+        </div>
+
+        <!-- 分享内容卡 -->
+        <div class="mx-4 mt-4 border border-gray-200 rounded-lg overflow-hidden">
+          <div class="h-20 bg-gradient-to-br from-orange-100 to-orange-200 flex items-center justify-center text-gray-500 text-xs">[分享内容封面]</div>
+          <div class="p-2.5">
+            <div class="text-xs font-semibold text-gray-800 leading-snug">沙特利雅得 5000m² 乐园交付实录</div>
+            <div class="text-xs text-gray-500 mt-1">万德游乐官方 · 2 天前</div>
+          </div>
+        </div>
+
+        <!-- 公司品牌信息 -->
+        <div class="mx-4 mt-3 p-2.5 bg-gray-50 border border-gray-200 rounded">
+          <div class="text-xs font-semibold text-gray-700">关于万德游乐</div>
+          <div class="text-xs text-gray-600 mt-1 leading-snug">全球领先的室内游乐设备整体方案提供商，EN1176 认证，服务 40+ 国家</div>
+          <div class="flex gap-3 mt-2 text-xs">
+            <span class="text-gray-500">🏆 20 年历史</span>
+            <span class="text-gray-500">🌍 40+ 国家</span>
+          </div>
+        </div>
+
+        <!-- 操作按钮 -->
+        <div class="mx-4 mt-3 space-y-2">
+          <button class="w-full bg-blue-500 text-white text-xs py-2 rounded font-medium">📞 联系我了解更多</button>
+          <button class="w-full border border-blue-500 text-blue-500 text-xs py-2 rounded font-medium">🔗 访问官网</button>
+        </div>
+
+        <!-- 二维码 -->
+        <div class="mx-4 mt-4 mb-4 p-3 bg-gray-50 border border-gray-200 rounded flex items-center gap-3">
+          <div class="w-16 h-16 bg-white border border-gray-300 flex items-center justify-center text-xs text-gray-400" style="background-image: linear-gradient(45deg, #000 25%, transparent 25%), linear-gradient(-45deg, #000 25%, transparent 25%), linear-gradient(45deg, transparent 75%, #000 75%), linear-gradient(-45deg, transparent 75%, #000 75%); background-size: 6px 6px;">
+          </div>
+          <div class="flex-1 text-xs text-gray-600 leading-snug">扫码添加张伟企微<br/>获取一手行业资讯</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 预览操作 -->
+    <div class="mt-3 flex items-center justify-around text-xs text-gray-600">
+      <button class="flex flex-col items-center gap-1 hover:text-blue-500">
+        <span class="text-lg">💬</span>
+        <span>企微</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 hover:text-blue-500">
+        <span class="text-lg">🌐</span>
+        <span>朋友圈</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 hover:text-blue-500">
+        <span class="text-lg">📧</span>
+        <span>邮件</span>
+      </button>
+      <button class="flex flex-col items-center gap-1 hover:text-blue-500">
+        <span class="text-lg">🔗</span>
+        <span>复制链接</span>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<!-- [底部说明] -->
+<div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded text-xs text-gray-700 leading-relaxed">
+  <strong class="text-blue-700">💡 产品对标：</strong>
+  本模块参考 <a href="https://www.sociabble.com/" target="_blank" class="text-blue-500 underline">Sociabble</a> 和 <a href="https://sproutsocial.com/bambu/" target="_blank" class="text-blue-500 underline">Bambu by Sprout Social</a> 的员工代言范式。
+  核心机制：内容池集中派发 + 一键分享多渠道 + 分享效果追踪 + 积分激励。
+  <strong>代码现状：</strong><span class="text-red-600 font-semibold">🔴 新建</span> · 对应后端 Issue #2643 + 前端 Issue #2644
+</div>
+
+</body>
+</html>

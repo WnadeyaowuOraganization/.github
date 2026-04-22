@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>角色权限</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .region-label { position: absolute; top: -10px; left: 12px; background: #f5f5f5; padding: 0 8px; font-size: 11px; color: #999; }
+    .region-box { position: relative; border: 1px dashed #bfbfbf; border-radius: 4px; }
+    .perm-list { border: 1px dashed #d9d9d9; border-radius: 4px; padding: 8px 10px; background: #fafafa; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 2 · 角色权限（4 级 RBAC 角色体系）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">为品牌中心建立管理员/编辑/审批/只读 4 级角色体系，通过用户权限矩阵分配权限，所有角色变更可审计追溯</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌中心管理员、吴耀（超管分配权限）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">4 级角色卡片展示 / 用户权限矩阵 / 角色权限编辑 / 审计日志 / 批量调整</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击角色卡查看详情 / 编辑角色权限清单 / 矩阵勾选分配 / 查看变更历史</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">角色权限保存后接口层生效 / 矩阵勾选可持久化 / 审计日志完整记录操作前后对比 / 权限互斥规则正确</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 · 详细设计.md §2.2 RBAC</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [区域1: 4 级角色卡片] -->
+<div class="region-box bg-white p-5 mb-4">
+  <span class="region-label">[4 级角色卡片]</span>
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-semibold text-gray-800">角色体系</h3>
+    <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">+ 新建自定义角色</button>
+  </div>
+
+  <div class="grid grid-cols-4 gap-3">
+    <!-- 管理员 -->
+    <div class="border border-gray-300 rounded-lg p-4 bg-white hover:shadow transition">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-red-50 rounded flex items-center justify-center text-red-500">👑</div>
+          <div>
+            <div class="font-semibold text-sm text-gray-800">管理员</div>
+            <div class="text-xs text-gray-400">Admin</div>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 bg-red-50 text-red-500 text-xs rounded border border-red-200">L4</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">用户数：<span class="text-gray-800 font-medium">2 人</span></div>
+      <div class="perm-list text-xs text-gray-600 space-y-1 mb-3">
+        <div>✓ 账号 OAuth 绑定/解绑</div>
+        <div>✓ 角色权限分配</div>
+        <div>✓ 品牌内容审批</div>
+        <div>✓ 案例库管理（增删改）</div>
+        <div>✓ 发布到所有平台</div>
+        <div>✓ 数据看板全量</div>
+        <div>✓ 审计日志查看</div>
+        <div>✓ 平台配置变更</div>
+      </div>
+      <button class="w-full px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">编辑角色</button>
+    </div>
+
+    <!-- 编辑 -->
+    <div class="border border-gray-300 rounded-lg p-4 bg-white hover:shadow transition">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-blue-50 rounded flex items-center justify-center text-blue-500">✏️</div>
+          <div>
+            <div class="font-semibold text-sm text-gray-800">编辑</div>
+            <div class="text-xs text-gray-400">Editor</div>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 bg-blue-50 text-blue-500 text-xs rounded border border-blue-200">L3</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">用户数：<span class="text-gray-800 font-medium">5 人</span></div>
+      <div class="perm-list text-xs text-gray-600 space-y-1 mb-3">
+        <div>✓ 内容创作与编辑</div>
+        <div>✓ 素材库读写</div>
+        <div>✓ 案例库查看</div>
+        <div>✓ 提交审批</div>
+        <div>✓ 草稿保存</div>
+        <div class="text-gray-400">✗ 账号绑定</div>
+        <div class="text-gray-400">✗ 角色分配</div>
+      </div>
+      <button class="w-full px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">编辑角色</button>
+    </div>
+
+    <!-- 审批 -->
+    <div class="border border-gray-300 rounded-lg p-4 bg-white hover:shadow transition">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-green-50 rounded flex items-center justify-center text-green-500">✅</div>
+          <div>
+            <div class="font-semibold text-sm text-gray-800">审批</div>
+            <div class="text-xs text-gray-400">Approver</div>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 bg-green-50 text-green-500 text-xs rounded border border-green-200">L2</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">用户数：<span class="text-gray-800 font-medium">3 人</span></div>
+      <div class="perm-list text-xs text-gray-600 space-y-1 mb-3">
+        <div>✓ 审批队列查看</div>
+        <div>✓ 通过/驳回操作</div>
+        <div>✓ 添加审批意见</div>
+        <div>✓ 发布到平台</div>
+        <div>✓ 内容预览</div>
+        <div class="text-gray-400">✗ 内容编辑</div>
+        <div class="text-gray-400">✗ 账号绑定</div>
+      </div>
+      <button class="w-full px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">编辑角色</button>
+    </div>
+
+    <!-- 只读 -->
+    <div class="border border-gray-300 rounded-lg p-4 bg-white hover:shadow transition">
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="w-8 h-8 bg-gray-100 rounded flex items-center justify-center text-gray-500">👁️</div>
+          <div>
+            <div class="font-semibold text-sm text-gray-800">只读</div>
+            <div class="text-xs text-gray-400">Viewer</div>
+          </div>
+        </div>
+        <span class="px-2 py-0.5 bg-gray-50 text-gray-500 text-xs rounded border border-gray-200">L1</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">用户数：<span class="text-gray-800 font-medium">12 人</span></div>
+      <div class="perm-list text-xs text-gray-600 space-y-1 mb-3">
+        <div>✓ 数据看板查看</div>
+        <div>✓ 内容列表浏览</div>
+        <div>✓ 案例库浏览</div>
+        <div>✓ 报表导出</div>
+        <div>✓ 搜索功能</div>
+        <div class="text-gray-400">✗ 任何写操作</div>
+        <div class="text-gray-400">✗ 审批操作</div>
+      </div>
+      <button class="w-full px-2 py-1 text-xs border border-gray-300 rounded hover:bg-gray-50">编辑角色</button>
+    </div>
+  </div>
+</div>
+
+<!-- [区域2: 用户权限矩阵] -->
+<div class="region-box bg-white p-5 mb-4">
+  <span class="region-label">[用户权限矩阵 User × Role Matrix]</span>
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-base font-semibold text-gray-800">用户权限矩阵</h3>
+    <div class="flex gap-2">
+      <input type="text" placeholder="搜索用户" class="border border-gray-300 rounded px-3 py-1 text-sm w-48">
+      <select class="border border-gray-300 rounded px-3 py-1 text-sm">
+        <option>全部部门</option>
+        <option>品牌中心</option>
+        <option>商务部</option>
+        <option>项目中心</option>
+      </select>
+      <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">保存变更</button>
+    </div>
+  </div>
+
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-gray-600 text-xs">
+        <th class="p-2 border border-gray-200 text-left font-medium w-48">用户</th>
+        <th class="p-2 border border-gray-200 text-left font-medium">部门 / 职位</th>
+        <th class="p-2 border border-gray-200 text-center font-medium w-20">👑 管理员</th>
+        <th class="p-2 border border-gray-200 text-center font-medium w-20">✏️ 编辑</th>
+        <th class="p-2 border border-gray-200 text-center font-medium w-20">✅ 审批</th>
+        <th class="p-2 border border-gray-200 text-center font-medium w-20">👁️ 只读</th>
+        <th class="p-2 border border-gray-200 text-center font-medium w-28">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">吴耀</div>
+              <div class="text-xs text-gray-400">wuyao@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">超管 / CEO</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">张三</div>
+              <div class="text-xs text-gray-400">zhangsan@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">品牌中心 / 总监</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">李四</div>
+              <div class="text-xs text-gray-400">lisi@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">品牌中心 / 内容经理</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">王五</div>
+              <div class="text-xs text-gray-400">wangwu@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">品牌中心 / 文案</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">赵六</div>
+              <div class="text-xs text-gray-400">zhaoliu@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">品牌中心 / 设计师</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">陈七</div>
+              <div class="text-xs text-gray-400">chenqi@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">商务部 / 总监</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">周八</div>
+              <div class="text-xs text-gray-400">zhouba@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">项目中心 / 项目经理</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200">
+          <div class="flex items-center gap-2">
+            <div class="w-7 h-7 bg-gray-300 rounded-full"></div>
+            <div>
+              <div class="font-medium text-gray-800">孙九</div>
+              <div class="text-xs text-gray-400">sunjiu@wande.com</div>
+            </div>
+          </div>
+        </td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-500">综合管理 / 行政</td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><input type="checkbox" checked class="accent-blue-500"></td>
+        <td class="p-2 border border-gray-200 text-center"><button class="text-xs text-blue-500 hover:underline">详情</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+    <span>共 22 名用户 · 当前显示 8 名</span>
+    <div class="flex gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded">上一页</button>
+      <button class="px-2 py-1 border border-blue-500 bg-blue-50 text-blue-500 rounded">1</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">3</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">下一页</button>
+    </div>
+  </div>
+</div>
+
+<!-- [区域3: 角色审计日志] -->
+<div class="region-box bg-white p-5">
+  <span class="region-label">[角色变更审计日志]</span>
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-base font-semibold text-gray-800">角色审计日志</h3>
+    <button class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">导出全部</button>
+  </div>
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-gray-600 text-xs">
+        <th class="p-2 border border-gray-200 text-left font-medium">时间</th>
+        <th class="p-2 border border-gray-200 text-left font-medium">操作人</th>
+        <th class="p-2 border border-gray-200 text-left font-medium">目标用户</th>
+        <th class="p-2 border border-gray-200 text-left font-medium">操作</th>
+        <th class="p-2 border border-gray-200 text-left font-medium">变更前 → 变更后</th>
+        <th class="p-2 border border-gray-200 text-left font-medium">IP</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 text-gray-500 text-xs">2026-04-22 09:05</td>
+        <td class="p-2 border border-gray-200">吴耀</td>
+        <td class="p-2 border border-gray-200">李四</td>
+        <td class="p-2 border border-gray-200"><span class="text-blue-500">授权审批</span></td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-600">编辑 → 编辑 + 审批</td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-400 font-mono">10.0.1.22</td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 text-gray-500 text-xs">2026-04-20 14:30</td>
+        <td class="p-2 border border-gray-200">张三</td>
+        <td class="p-2 border border-gray-200">赵六</td>
+        <td class="p-2 border border-gray-200"><span class="text-green-600">新增角色</span></td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-600">无 → 编辑</td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-400 font-mono">10.0.1.35</td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 text-gray-500 text-xs">2026-04-18 11:12</td>
+        <td class="p-2 border border-gray-200">吴耀</td>
+        <td class="p-2 border border-gray-200">陈七</td>
+        <td class="p-2 border border-gray-200"><span class="text-blue-500">角色调整</span></td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-600">只读 → 审批</td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-400 font-mono">10.0.1.22</td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 text-gray-500 text-xs">2026-04-15 16:45</td>
+        <td class="p-2 border border-gray-200">张三</td>
+        <td class="p-2 border border-gray-200">管理员角色</td>
+        <td class="p-2 border border-gray-200"><span class="text-orange-500">权限变更</span></td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-600">添加「案例库管理」权限</td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-400 font-mono">10.0.1.35</td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 text-gray-500 text-xs">2026-04-10 09:22</td>
+        <td class="p-2 border border-gray-200">吴耀</td>
+        <td class="p-2 border border-gray-200">孙九</td>
+        <td class="p-2 border border-gray-200"><span class="text-red-500">移除角色</span></td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-600">编辑 → 只读</td>
+        <td class="p-2 border border-gray-200 text-xs text-gray-400 font-mono">10.0.1.22</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

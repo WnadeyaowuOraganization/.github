@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>品牌健康度看板</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sentiment-pos { color: #52c41a; }
+    .sentiment-neg { color: #ff4d4f; }
+    .sentiment-neu { color: #666; }
+    .sentiment-bg-pos { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+    .sentiment-bg-neg { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+    .sentiment-bg-neu { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+    .chart-placeholder { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 8px, #f0f0f0 8px, #f0f0f0 16px); }
+    .kpi-card { transition: all 0.2s; }
+    .kpi-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 1 · 品牌健康度看板</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">一屏看清品牌健康状况：声量/情感/曝光/互动/告警 + 4 Collector 采集健康度</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌负责人, 市场主管, 吴耀</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">6 KPI 快照 / 4 Collector 健康卡 / 趋势图 / 声量饼图 / 关键词云 / 明细表</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">Collector 立即同步 / 查看采集日志 / KPI 下钻 / 明细跳转原文</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">6 KPI 数据实时 / 4 Collector 状态准确 / 趋势图覆盖30天 / 明细15条可点击</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 — 详细设计.md §2.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ============================================================ -->
+<!-- [区域A · KPI 横条] 6 张 KPI 卡片                               -->
+<!-- 🟡 数据来源：复用 BrandMetricsEntity 聚合                      -->
+<!-- 已有代码：BrandMetricsCollectorServiceImpl.aggregate()         -->
+<!-- 路径：backend/src/main/java/.../brand/service/impl/BrandMetricsCollectorServiceImpl.java -->
+<!-- ============================================================ -->
+<div class="mb-4">
+  <div class="flex items-center justify-between mb-2">
+    <h2 class="text-base font-semibold text-gray-800">[区域A] 品牌 KPI 快照 <span class="text-xs text-gray-500 ml-2">· 过去 7 天</span></h2>
+    <div class="flex items-center gap-2 text-xs">
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>过去 7 天</option><option>过去 30 天</option><option>本季度</option><option>自定义</option>
+      </select>
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white text-gray-700 hover:bg-gray-50">🔄 刷新</button>
+    </div>
+  </div>
+  <div class="grid grid-cols-6 gap-3">
+    <div class="kpi-card bg-white border border-gray-300 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">总声量</div>
+      <div class="text-2xl font-bold text-gray-800">12,487</div>
+      <div class="text-xs mt-1 sentiment-pos">▲ 18.3% vs 上周</div>
+    </div>
+    <div class="kpi-card bg-white border border-gray-300 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">正面占比</div>
+      <div class="text-2xl font-bold sentiment-pos">64.2%</div>
+      <div class="text-xs mt-1 sentiment-pos">▲ 3.1pp vs 上周</div>
+    </div>
+    <div class="kpi-card bg-white border border-gray-300 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">负面占比</div>
+      <div class="text-2xl font-bold sentiment-neg">8.7%</div>
+      <div class="text-xs mt-1 sentiment-neg">▲ 1.4pp vs 上周</div>
+    </div>
+    <div class="kpi-card bg-white border border-gray-300 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">品牌曝光</div>
+      <div class="text-2xl font-bold text-gray-800">3.24M</div>
+      <div class="text-xs mt-1 sentiment-pos">▲ 22.5% vs 上周</div>
+    </div>
+    <div class="kpi-card bg-white border border-gray-300 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">互动数</div>
+      <div class="text-2xl font-bold text-gray-800">48,216</div>
+      <div class="text-xs mt-1 sentiment-pos">▲ 11.8% vs 上周</div>
+    </div>
+    <div class="kpi-card bg-white border border-gray-300 rounded p-3 border-red-300">
+      <div class="text-xs text-gray-500 mb-1">舆情告警待处理</div>
+      <div class="text-2xl font-bold sentiment-neg">7</div>
+      <div class="text-xs mt-1 text-blue-500 cursor-pointer">立即查看 →</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- [区域B · 4 Collector 健康状态] 2x2 网格                        -->
+<!-- 🟡 已有代码：4 个 Collector 类                                 -->
+<!-- · MediaXCollector.java                                        -->
+<!-- · WechatOfficialAccountCollector.java                         -->
+<!-- · WechatVideoCollector.java                                   -->
+<!-- · LinkedInCollector.java                                      -->
+<!-- 路径：backend/src/main/java/.../brand/collector/              -->
+<!-- Cron 调度：BrandMetricsCollectorJob.java                      -->
+<!-- ============================================================ -->
+<div class="mb-4">
+  <h2 class="text-base font-semibold text-gray-800 mb-2">[区域B] 4 Collector 健康状态 <span class="text-xs text-gray-500 ml-2">🟡 复用已有 Collector</span></h2>
+  <div class="grid grid-cols-2 gap-3">
+
+    <!-- Collector Card 1: 媒X -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-gray-100 border border-gray-300 rounded flex items-center justify-center text-lg font-bold text-gray-600">媒X</div>
+          <div>
+            <div class="font-semibold text-gray-800">媒X (MediaX)</div>
+            <div class="text-xs text-gray-500">MediaXCollector.java</div>
+          </div>
+        </div>
+        <span class="sentiment-bg-pos px-2 py-0.5 rounded text-xs">● 正常</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-sm mb-3">
+        <div>
+          <div class="text-xs text-gray-500">最近采集</div>
+          <div class="text-gray-800 font-medium">12 分钟前</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">本期采集量</div>
+          <div class="text-gray-800 font-medium">4,215 条</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">错误数</div>
+          <div class="text-gray-800 font-medium">0</div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">立即同步</button>
+        <button class="flex-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded text-xs hover:bg-gray-50">查看日志</button>
+      </div>
+    </div>
+
+    <!-- Collector Card 2: 公众号 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-green-50 border border-green-200 rounded flex items-center justify-center text-lg font-bold text-green-600">公</div>
+          <div>
+            <div class="font-semibold text-gray-800">微信公众号</div>
+            <div class="text-xs text-gray-500">WechatOfficialAccountCollector.java</div>
+          </div>
+        </div>
+        <span class="sentiment-bg-pos px-2 py-0.5 rounded text-xs">● 正常</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-sm mb-3">
+        <div>
+          <div class="text-xs text-gray-500">最近采集</div>
+          <div class="text-gray-800 font-medium">38 分钟前</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">本期采集量</div>
+          <div class="text-gray-800 font-medium">1,842 条</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">错误数</div>
+          <div class="text-gray-800 font-medium">0</div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">立即同步</button>
+        <button class="flex-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded text-xs hover:bg-gray-50">查看日志</button>
+      </div>
+    </div>
+
+    <!-- Collector Card 3: 视频号 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-red-50 border border-red-200 rounded flex items-center justify-center text-lg font-bold text-red-600">视</div>
+          <div>
+            <div class="font-semibold text-gray-800">微信视频号</div>
+            <div class="text-xs text-gray-500">WechatVideoCollector.java</div>
+          </div>
+        </div>
+        <span class="sentiment-bg-neg px-2 py-0.5 rounded text-xs">● 异常</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-sm mb-3">
+        <div>
+          <div class="text-xs text-gray-500">最近采集</div>
+          <div class="text-gray-800 font-medium">3 小时前</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">本期采集量</div>
+          <div class="text-gray-800 font-medium">3,104 条</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">错误数</div>
+          <div class="sentiment-neg font-medium">12</div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">立即同步</button>
+        <button class="flex-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded text-xs hover:bg-gray-50">查看日志</button>
+      </div>
+    </div>
+
+    <!-- Collector Card 4: LinkedIn -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-start justify-between mb-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 bg-blue-50 border border-blue-200 rounded flex items-center justify-center text-sm font-bold text-blue-600">in</div>
+          <div>
+            <div class="font-semibold text-gray-800">LinkedIn</div>
+            <div class="text-xs text-gray-500">LinkedInCollector.java</div>
+          </div>
+        </div>
+        <span class="sentiment-bg-neu px-2 py-0.5 rounded text-xs" style="background:#fffbe6;color:#faad14;border-color:#ffe58f;">● 降级</span>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-sm mb-3">
+        <div>
+          <div class="text-xs text-gray-500">最近采集</div>
+          <div class="text-gray-800 font-medium">1 小时前</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">本期采集量</div>
+          <div class="text-gray-800 font-medium">3,326 条</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">错误数</div>
+          <div class="text-orange-500 font-medium">3</div>
+        </div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">立即同步</button>
+        <button class="flex-1 px-3 py-1.5 border border-gray-300 text-gray-700 rounded text-xs hover:bg-gray-50">查看日志</button>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- [区域C · 多渠道趋势折线图]                                     -->
+<!-- 🟡 数据源：BrandMetricsEntity 按日聚合                         -->
+<!-- 已有代码：BrandMetricsEntity.java + Repository 日聚合查询      -->
+<!-- ============================================================ -->
+<div class="grid grid-cols-3 gap-3 mb-4">
+  <div class="col-span-2 bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-semibold text-gray-800">[区域C] 多渠道声量趋势（过去 30 天）</h3>
+      <div class="flex gap-3 text-xs">
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-gray-500"></span>媒X</span>
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-green-500"></span>公众号</span>
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-red-500"></span>视频号</span>
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-blue-500"></span>LinkedIn</span>
+      </div>
+    </div>
+    <div class="chart-placeholder border border-dashed border-gray-400 rounded h-64 flex items-center justify-center">
+      <div class="text-center">
+        <div class="text-gray-500 text-sm mb-2">📈 4 条折线：媒X / 公众号 / 视频号 / LinkedIn</div>
+        <div class="text-xs text-gray-400">X 轴: 过去 30 天 · Y 轴: 日声量</div>
+        <div class="text-xs text-gray-400 mt-1">（实际渲染使用 ECharts line chart）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [区域D · 声量饼图 + 关键词云] -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <h3 class="text-sm font-semibold text-gray-800 mb-3">[区域D] 品牌声量分布</h3>
+    <div class="chart-placeholder border border-dashed border-gray-400 rounded h-28 flex items-center justify-center mb-3">
+      <div class="text-center text-xs text-gray-500">
+        <div>🥧 平台声量饼图</div>
+        <div class="text-gray-400 mt-0.5">媒X 35% / 公众号 20% / 视频号 28% / LinkedIn 17%</div>
+      </div>
+    </div>
+    <h3 class="text-sm font-semibold text-gray-800 mb-2 mt-4">Top 关键词云</h3>
+    <div class="chart-placeholder border border-dashed border-gray-400 rounded h-28 flex items-center justify-center">
+      <div class="text-center text-xs text-gray-600 leading-6">
+        <span style="font-size:18px;font-weight:600;color:#1890ff;">万德</span>
+        <span style="font-size:14px;color:#52c41a;">游乐</span>
+        <span style="font-size:16px;color:#333;">主题乐园</span><br>
+        <span style="font-size:12px;color:#666;">设计</span>
+        <span style="font-size:15px;color:#1890ff;">D3</span>
+        <span style="font-size:13px;color:#faad14;">深圳</span>
+        <span style="font-size:11px;color:#999;">合作</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- [区域E · 最近采集明细表]                                       -->
+<!-- 🟡 数据源：BrandMetricsEntity + ContentEntity                 -->
+<!-- 已有代码：BrandMetricsRepository.findLatest15()               -->
+<!-- ============================================================ -->
+<div class="bg-white border border-gray-300 rounded p-4">
+  <div class="flex items-center justify-between mb-3">
+    <h3 class="text-sm font-semibold text-gray-800">[区域E] 最近采集明细 <span class="text-xs text-gray-500 ml-2">最近 15 条</span></h3>
+    <div class="flex gap-2 text-xs">
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white">
+        <option>全部平台</option><option>媒X</option><option>公众号</option><option>视频号</option><option>LinkedIn</option>
+      </select>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white">
+        <option>全部情感</option><option>正面</option><option>中性</option><option>负面</option>
+      </select>
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">导出 CSV</button>
+    </div>
+  </div>
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-xs text-gray-600 border-b border-gray-300">
+        <th class="p-2 text-left w-20">平台</th>
+        <th class="p-2 text-left">标题 / 内容摘要</th>
+        <th class="p-2 text-center w-20">情感</th>
+        <th class="p-2 text-center w-28">互动</th>
+        <th class="p-2 text-left w-36">采集时间</th>
+        <th class="p-2 text-center w-20">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700" id="detailRows"></tbody>
+  </table>
+</div>
+
+<script>
+  const platforms = ['媒X', '公众号', '视频号', 'LinkedIn'];
+  const titles = [
+    '万德游乐深圳主题乐园项目签约仪式圆满举行',
+    '【深度】国产主题乐园设计商如何突围海外市场',
+    '万德D3参数化设计系统：从建模到施工只要3天',
+    '行业观察｜中国游乐设备出海：万德的硬核实力',
+    'Guangzhou Park Grand Opening — powered by Wande',
+    '网友吐槽：某万德设备体验不佳，客服响应慢',
+    'Wande Amusement wins "Best Overseas Project 2026"',
+    '万德游乐亮相IAAPA Expo 广州站 展台人流如潮',
+    '万德新一代过山车技术参数解析',
+    '客户投诉：设备安装延期，影响开业',
+    '万德助力中东某乐园开业 获当地媒体好评',
+    'D3系统上线新功能：一键生成BOM',
+    '万德吴耀受邀主题演讲《游乐设备智能化趋势》',
+    '业界首款全AI设计的过山车，万德官宣',
+    '深圳万德喜获"国家高新技术企业"认定'
+  ];
+  const sentiments = [
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '负面', cls: 'sentiment-bg-neg' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '中性', cls: 'sentiment-bg-neu' },
+    { label: '负面', cls: 'sentiment-bg-neg' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '中性', cls: 'sentiment-bg-neu' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' },
+    { label: '正面', cls: 'sentiment-bg-pos' }
+  ];
+  const interactions = ['1.2k', '8.4k', '3.2k', '5.1k', '2.8k', '642', '9.3k', '4.7k', '1.1k', '823', '2.6k', '1.5k', '6.2k', '11.8k', '3.4k'];
+  const times = [
+    '12 分钟前', '18 分钟前', '25 分钟前', '32 分钟前', '48 分钟前',
+    '1 小时前', '1 小时前', '2 小时前', '2 小时前', '3 小时前',
+    '3 小时前', '4 小时前', '5 小时前', '6 小时前', '7 小时前'
+  ];
+
+  const tbody = document.getElementById('detailRows');
+  tbody.innerHTML = titles.map((t, i) => {
+    const p = platforms[i % 4];
+    const s = sentiments[i];
+    return `<tr class="border-b border-gray-100 hover:bg-gray-50">
+      <td class="p-2 text-xs text-gray-600">${p}</td>
+      <td class="p-2"><a href="#" class="text-blue-500 hover:underline">${t}</a></td>
+      <td class="p-2 text-center"><span class="${s.cls} px-2 py-0.5 rounded text-xs">${s.label}</span></td>
+      <td class="p-2 text-center text-gray-700">${interactions[i]}</td>
+      <td class="p-2 text-xs text-gray-500">${times[i]}</td>
+      <td class="p-2 text-center"><a href="#" class="text-blue-500 hover:underline text-xs">查看原文</a></td>
+    </tr>`;
+  }).join('');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>舆情监控</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sentiment-bg-pos { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+    .sentiment-bg-neg { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+    .sentiment-bg-neu { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+    .alert-red { border-left: 4px solid #ff4d4f; background: #fff1f0; }
+    .alert-yellow { border-left: 4px solid #faad14; background: #fffbe6; }
+    .alert-item { transition: all 0.15s; cursor: pointer; }
+    .alert-item:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .alert-item.selected { outline: 2px solid #1890ff; outline-offset: -2px; }
+    .chart-placeholder { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 8px, #f0f0f0 8px, #f0f0f0 16px); }
+    .drawer-mask { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 40; display: none; }
+    .drawer-mask.open { display: block; }
+    .drawer { position: fixed; top: 0; right: 0; height: 100%; width: 720px; background: #fff; z-index: 50; transform: translateX(100%); transition: transform 0.25s; box-shadow: -4px 0 16px rgba(0,0,0,0.12); overflow-y: auto; }
+    .drawer.open { transform: translateX(0); }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 2 · 舆情监控</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">实时监控全网品牌负面舆情，快速响应与处置，形成舆情闭环（对应 Issue #2645 #2646）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌公关主管, 市场负责人, 吴耀</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">多维筛选 / 红黄告警列表 / 提及详情 + 情感评分 / 同主题关联 / 周报抽屉预览</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">查看上下文 / 标记已处理 / 转给公关 / 标记误报 / 生成周报</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">告警列表实时刷新 / 选中可查看原文 / 处置状态持久化 / 周报抽屉可预览</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 — 详细设计.md §2.2</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ============================================================ -->
+<!-- [区域A · 舆情筛选栏]                                          -->
+<!-- 对应 Issue #2645：舆情监控筛选能力                             -->
+<!-- ============================================================ -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-3">
+  <div class="flex items-center gap-3 flex-wrap">
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">时间段</span>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>过去 24 小时</option><option>过去 7 天</option><option>过去 30 天</option><option>自定义</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">情感</span>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>全部</option><option>负面（优先）</option><option>正面</option><option>中性</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">平台</span>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>全部</option><option>媒X</option><option>微信公众号</option><option>微信视频号</option><option>LinkedIn</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">关键词</span>
+      <input type="text" placeholder="输入关键词..." class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700 w-40" />
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">严重度</span>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>全部</option><option>高（红色）</option><option>中（黄色）</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">处理状态</span>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>全部</option><option>待处理</option><option>已处理</option><option>已忽略</option>
+      </select>
+    </div>
+    <button class="px-3 py-1 bg-blue-500 text-white rounded text-xs hover:bg-blue-600 ml-auto">🔍 搜索</button>
+    <button class="px-3 py-1 border border-gray-300 bg-white text-gray-700 rounded text-xs hover:bg-gray-50">重置</button>
+    <button id="btnReport" class="px-3 py-1 border border-blue-500 text-blue-500 rounded text-xs hover:bg-blue-50">📄 生成周报</button>
+  </div>
+  <!-- 统计指标行 -->
+  <div class="flex items-center gap-6 mt-3 pt-3 border-t border-dashed border-gray-200 text-xs">
+    <span class="text-gray-600">命中：<span class="text-gray-800 font-semibold">1,842 条</span></span>
+    <span class="text-gray-600">其中负面：<span class="font-semibold" style="color:#ff4d4f;">163 条</span></span>
+    <span class="text-gray-600">红色告警：<span class="font-semibold" style="color:#ff4d4f;">4</span></span>
+    <span class="text-gray-600">黄色告警：<span class="font-semibold" style="color:#faad14;">11</span></span>
+    <span class="text-gray-600">待处理：<span class="text-gray-800 font-semibold">7</span></span>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- [主区域 · 左40% 告警列表 + 右60% 提及详情]                    -->
+<!-- 对应 Issue #2646：提及详情与处置能力                           -->
+<!-- ============================================================ -->
+<div class="grid grid-cols-10 gap-3">
+
+  <!-- [区域B · 告警列表 左40%] -->
+  <div class="col-span-4 bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="px-3 py-2 bg-gray-50 border-b border-gray-300 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-800">[区域B] 告警列表</span>
+      <span class="text-xs text-gray-500">15 条 · 按严重度+时间排序</span>
+    </div>
+    <div class="overflow-y-auto" style="max-height:780px;" id="alertList"></div>
+  </div>
+
+  <!-- [区域C · 提及详情 右60%] -->
+  <div class="col-span-6 bg-white border border-gray-300 rounded overflow-hidden" id="detailPanel">
+    <div class="px-3 py-2 bg-gray-50 border-b border-gray-300 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-800">[区域C] 提及详情</span>
+      <span class="text-xs text-gray-500" id="detailMeta">选中左侧告警查看详情</span>
+    </div>
+    <div class="p-4" id="detailBody">
+      <!-- 详情内容由 JS 注入 -->
+    </div>
+  </div>
+</div>
+
+<!-- [周报抽屉] -->
+<div class="drawer-mask" id="drawerMask"></div>
+<div class="drawer" id="reportDrawer">
+  <div class="px-5 py-3 border-b border-gray-300 flex items-center justify-between bg-gray-50">
+    <div>
+      <div class="text-base font-semibold text-gray-800">舆情周报预览</div>
+      <div class="text-xs text-gray-500">2026-04-15 ~ 2026-04-22</div>
+    </div>
+    <button id="drawerClose" class="text-gray-500 hover:text-gray-800 text-xl leading-none">×</button>
+  </div>
+  <div class="p-5 text-sm text-gray-700">
+    <h3 class="text-base font-semibold text-gray-800 mb-2">一、总览</h3>
+    <ul class="list-disc pl-5 mb-4 space-y-1">
+      <li>本周总声量 <b>12,487</b> 条，环比 <span style="color:#52c41a;">+18.3%</span></li>
+      <li>负面声量 <b>163</b> 条，占比 <span style="color:#ff4d4f;">8.7%</span>（较上周 +1.4pp）</li>
+      <li>新增红色告警 <b>4</b> 条，黄色告警 <b>11</b> 条</li>
+      <li>已处置 <b>8</b> 条，待处理 <b>7</b> 条</li>
+    </ul>
+    <h3 class="text-base font-semibold text-gray-800 mb-2">二、重点负面事件</h3>
+    <ol class="list-decimal pl-5 mb-4 space-y-2">
+      <li><b style="color:#ff4d4f;">[红]</b> 视频号用户投诉：深圳项目设备安装延期（互动 642，情感 -0.82）</li>
+      <li><b style="color:#ff4d4f;">[红]</b> 媒X 博主点评某设备体验不佳，客服响应慢（互动 1.3k，情感 -0.71）</li>
+      <li><b style="color:#faad14;">[黄]</b> LinkedIn 海外客户对售后反馈周期长</li>
+    </ol>
+    <h3 class="text-base font-semibold text-gray-800 mb-2">三、正面亮点</h3>
+    <ul class="list-disc pl-5 mb-4 space-y-1">
+      <li>万德斩获 IAAPA "Best Overseas Project 2026" — LinkedIn 9.3k 互动</li>
+      <li>D3 参数化设计系统报道在公众号多平台转发</li>
+    </ul>
+    <h3 class="text-base font-semibold text-gray-800 mb-2">四、AI 行动建议</h3>
+    <div class="bg-blue-50 border border-blue-200 rounded p-3 text-xs text-gray-700 leading-6">
+      1. 针对深圳项目延期舆情，建议 48 小时内由项目经理发官方回应<br>
+      2. 视频号负面事件集中在「售后响应」主题，建议公关部门输出售后SOP对外发布<br>
+      3. 海外 LinkedIn 正面声量上升，可加大海外内容投放预算
+    </div>
+    <div class="mt-5 flex gap-2">
+      <button class="px-4 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">导出 PDF</button>
+      <button class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded text-sm hover:bg-gray-50">导出 PPTX</button>
+      <button class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded text-sm hover:bg-gray-50">发送企微</button>
+      <button class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded text-sm hover:bg-gray-50">定时订阅</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // [假数据] 15 条告警
+  const alerts = [
+    { id:1, level:'red', platform:'微信视频号', title:'用户投诉：深圳项目设备安装延期，影响开业', score:-0.82, time:'8 分钟前', handled:false },
+    { id:2, level:'red', platform:'媒X', title:'博主长文点评某万德设备体验不佳，客服响应慢', score:-0.71, time:'32 分钟前', handled:false },
+    { id:3, level:'red', platform:'媒X', title:'疑似竞品水军刷评：万德售价虚高', score:-0.68, time:'1 小时前', handled:false },
+    { id:4, level:'red', platform:'LinkedIn', title:'Overseas client complains about long after-sales cycle', score:-0.64, time:'2 小时前', handled:false },
+    { id:5, level:'yellow', platform:'微信公众号', title:'业内自媒体质疑万德 D3 设计效率宣传', score:-0.45, time:'2 小时前', handled:false },
+    { id:6, level:'yellow', platform:'媒X', title:'评论区负面舆论：价格太贵', score:-0.41, time:'3 小时前', handled:false },
+    { id:7, level:'yellow', platform:'微信视频号', title:'视频下方差评集中于"安装施工质量"', score:-0.39, time:'4 小时前', handled:false },
+    { id:8, level:'yellow', platform:'微信公众号', title:'对比测评文章中万德部分得分偏低', score:-0.37, time:'5 小时前', handled:true },
+    { id:9, level:'yellow', platform:'LinkedIn', title:'Competitor post mentions Wande pricing concerns', score:-0.35, time:'6 小时前', handled:true },
+    { id:10, level:'yellow', platform:'媒X', title:'网友转发质疑某设备安全认证问题', score:-0.33, time:'7 小时前', handled:false },
+    { id:11, level:'yellow', platform:'微信视频号', title:'用户反映儿童乐园某设备异响', score:-0.31, time:'8 小时前', handled:true },
+    { id:12, level:'yellow', platform:'微信公众号', title:'行业号提及万德海外项目工期争议', score:-0.29, time:'10 小时前', handled:true },
+    { id:13, level:'yellow', platform:'媒X', title:'个人账号转发负面旧闻', score:-0.27, time:'12 小时前', handled:true },
+    { id:14, level:'yellow', platform:'LinkedIn', title:'Former employee post with mixed sentiment', score:-0.24, time:'14 小时前', handled:true },
+    { id:15, level:'yellow', platform:'微信视频号', title:'评论区抱怨售后响应周期', score:-0.21, time:'16 小时前', handled:true }
+  ];
+
+  const alertList = document.getElementById('alertList');
+  let selectedId = 1;
+
+  function renderAlerts() {
+    alertList.innerHTML = alerts.map(a => {
+      const bg = a.level === 'red' ? 'alert-red' : 'alert-yellow';
+      const levelText = a.level === 'red' ? '红' : '黄';
+      const levelColor = a.level === 'red' ? '#ff4d4f' : '#faad14';
+      const selectedCls = a.id === selectedId ? 'selected' : '';
+      const handledBadge = a.handled
+        ? '<span class="sentiment-bg-neu px-1.5 py-0.5 rounded text-xs" style="font-size:10px;">已处理</span>'
+        : '<span class="sentiment-bg-neg px-1.5 py-0.5 rounded text-xs" style="font-size:10px;">待处理</span>';
+      return `<div class="alert-item ${bg} ${selectedCls} p-3 border-b border-gray-200" data-id="${a.id}">
+        <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center gap-2">
+            <span style="background:${levelColor};color:#fff;padding:2px 6px;border-radius:3px;font-size:10px;font-weight:600;">${levelText}</span>
+            <span class="text-xs text-gray-600">${a.platform}</span>
+            ${handledBadge}
+          </div>
+          <span class="text-xs text-gray-500">${a.time}</span>
+        </div>
+        <div class="text-sm text-gray-800 leading-snug mb-1.5 line-clamp-2">${a.title}</div>
+        <div class="flex items-center justify-between">
+          <span class="text-xs" style="color:#ff4d4f;">情感分值 ${a.score.toFixed(2)}</span>
+          <div class="flex gap-1">
+            <button class="text-xs text-blue-500 hover:underline">查看上下文</button>
+            ${!a.handled ? '<button class="text-xs text-gray-600 hover:underline">标记已处理</button>' : ''}
+          </div>
+        </div>
+      </div>`;
+    }).join('');
+
+    alertList.querySelectorAll('.alert-item').forEach(el => {
+      el.addEventListener('click', () => {
+        selectedId = parseInt(el.dataset.id);
+        renderAlerts();
+        renderDetail();
+      });
+    });
+  }
+
+  function renderDetail() {
+    const a = alerts.find(x => x.id === selectedId);
+    if (!a) return;
+    document.getElementById('detailMeta').textContent = `${a.platform} · ${a.time}`;
+    const fakeContent = {
+      1: '【用户原文】昨天去深圳万德新开业的项目踩雷了，说好4月15号开业，今天去现场居然还在安装设备，门口拉着警戒线，工作人员说"再等两周"。孩子哭得一塌糊涂……万德你这项目管理真的不行，承诺了开业时间就要守信用！#万德游乐 #深圳主题乐园',
+      2: '关注万德好几年了，必须吐槽下售后。我们乐园今年2月买的一套大摆锤，安装调试后电机异响，联系售后排队等了5天才派工程师。客服态度倒是客气，就是响应太慢。对比同行动辄24小时上门……',
+      3: '刚看到几个账号在刷万德"售价虚高"的评论，发帖时间集中在半小时内，账号注册时间都是新号，疑似竞品水军操作。',
+      4: 'We purchased a set of rides from Wande last year. Product quality is solid, but after-sales support cycle is 3x longer than local vendors. Hope they can improve.',
+      5: 'D3参数化设计系统宣传说3天出设计，我们实际使用下来一个中型乐园至少7天，且需要大量人工后处理。厂商宣传需要降温。'
+    };
+    const content = fakeContent[a.id] || fakeContent[2];
+    const html = `
+      <div class="mb-4 p-3 bg-gray-50 border border-gray-200 rounded">
+        <div class="text-xs text-gray-500 mb-2">📎 完整原文</div>
+        <div class="text-sm text-gray-800 leading-relaxed">${content}</div>
+        <div class="flex items-center gap-3 mt-3 pt-2 border-t border-gray-200 text-xs">
+          <a href="#" class="text-blue-500 hover:underline">🔗 跳转原文</a>
+          <span class="text-gray-500">互动数：642</span>
+          <span class="text-gray-500">账号粉丝：8.2w</span>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-3 gap-2 mb-4">
+        <div class="border border-gray-200 rounded p-3">
+          <div class="text-xs text-gray-500 mb-1">情感得分</div>
+          <div class="text-xl font-bold" style="color:#ff4d4f;">${a.score.toFixed(2)}</div>
+          <div class="text-xs text-gray-500 mt-0.5">范围 -1 ~ 1</div>
+        </div>
+        <div class="border border-gray-200 rounded p-3">
+          <div class="text-xs text-gray-500 mb-1">传播指数</div>
+          <div class="text-xl font-bold text-gray-800">78</div>
+          <div class="text-xs" style="color:#faad14;">中等传播</div>
+        </div>
+        <div class="border border-gray-200 rounded p-3">
+          <div class="text-xs text-gray-500 mb-1">同主题条数</div>
+          <div class="text-xl font-bold text-gray-800">14</div>
+          <div class="text-xs text-blue-500">查看全部 →</div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="text-xs text-gray-500 mb-2">🏷️ 情感分析 · 关键词权重</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="sentiment-bg-neg px-2 py-0.5 rounded text-xs">延期 (权重 0.84)</span>
+          <span class="sentiment-bg-neg px-2 py-0.5 rounded text-xs">投诉 (0.71)</span>
+          <span class="sentiment-bg-neg px-2 py-0.5 rounded text-xs">售后慢 (0.63)</span>
+          <span class="sentiment-bg-neu px-2 py-0.5 rounded text-xs">万德 (0.00)</span>
+          <span class="sentiment-bg-neu px-2 py-0.5 rounded text-xs">深圳 (0.00)</span>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <div class="text-xs text-gray-500 mb-2">🔗 同主题关联提及（14 条）</div>
+        <table class="w-full text-xs border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-600 border-b border-gray-200">
+              <th class="p-2 text-left">平台</th>
+              <th class="p-2 text-left">标题</th>
+              <th class="p-2 text-center">情感</th>
+              <th class="p-2 text-left">时间</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-100"><td class="p-2">媒X</td><td class="p-2"><a href="#" class="text-blue-500 hover:underline">万德深圳项目工期问题跟踪</a></td><td class="p-2 text-center"><span class="sentiment-bg-neg px-1.5 py-0.5 rounded">负面</span></td><td class="p-2">3 小时前</td></tr>
+            <tr class="border-b border-gray-100"><td class="p-2">微信视频号</td><td class="p-2"><a href="#" class="text-blue-500 hover:underline">现场视频：深圳乐园仍在施工</a></td><td class="p-2 text-center"><span class="sentiment-bg-neg px-1.5 py-0.5 rounded">负面</span></td><td class="p-2">5 小时前</td></tr>
+            <tr class="border-b border-gray-100"><td class="p-2">微信公众号</td><td class="p-2"><a href="#" class="text-blue-500 hover:underline">乐园延期开业 顾客怎么维权</a></td><td class="p-2 text-center"><span class="sentiment-bg-neu px-1.5 py-0.5 rounded">中性</span></td><td class="p-2">6 小时前</td></tr>
+            <tr class="border-b border-gray-100"><td class="p-2">媒X</td><td class="p-2"><a href="#" class="text-blue-500 hover:underline">万德：将加班加点赶工（官方回应）</a></td><td class="p-2 text-center"><span class="sentiment-bg-pos px-1.5 py-0.5 rounded">正面</span></td><td class="p-2">8 小时前</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="flex items-center gap-2 pt-3 border-t border-gray-200">
+        <button class="px-4 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">📤 转给公关</button>
+        <button class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded text-sm hover:bg-gray-50">⚠️ 标记误报</button>
+        <button class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded text-sm hover:bg-gray-50">✓ 标记已处理</button>
+        <button class="px-4 py-2 border border-gray-300 bg-white text-gray-700 rounded text-sm hover:bg-gray-50">📌 加入监控词表</button>
+        <div class="ml-auto text-xs text-gray-500">处置人：<span class="text-gray-800">张三</span></div>
+      </div>
+    `;
+    document.getElementById('detailBody').innerHTML = html;
+  }
+
+  renderAlerts();
+  renderDetail();
+
+  // 抽屉交互
+  const mask = document.getElementById('drawerMask');
+  const drawer = document.getElementById('reportDrawer');
+  document.getElementById('btnReport').addEventListener('click', () => {
+    mask.classList.add('open');
+    drawer.classList.add('open');
+  });
+  const closeDrawer = () => {
+    mask.classList.remove('open');
+    drawer.classList.remove('open');
+  };
+  document.getElementById('drawerClose').addEventListener('click', closeDrawer);
+  mask.addEventListener('click', closeDrawer);
+</script>
+
+</body>
+</html>

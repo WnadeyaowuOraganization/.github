@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>项目案例库</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .region-label { position: absolute; top: -10px; left: 12px; background: #f5f5f5; padding: 0 8px; font-size: 11px; color: #999; }
+    .region-box { position: relative; border: 1px dashed #bfbfbf; border-radius: 4px; }
+    .cover-placeholder {
+      background: repeating-linear-gradient(45deg, #e8e8e8, #e8e8e8 10px, #f0f0f0 10px, #f0f0f0 20px);
+      height: 140px;
+      display: flex; align-items: center; justify-content: center;
+      color: #bbb; font-size: 11px;
+    }
+    /* toggle switch */
+    .toggle { position: relative; display: inline-block; width: 34px; height: 18px; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .slider { position: absolute; cursor: pointer; inset: 0; background-color: #d9d9d9; border-radius: 18px; transition: .3s; }
+    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 2px; bottom: 2px; background: white; border-radius: 50%; transition: .3s; }
+    .toggle input:checked + .slider { background-color: #1890ff; }
+    .toggle input:checked + .slider:before { transform: translateX(16px); }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 3 · 项目案例库（品牌内容素材底座）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">集中管理万德游乐全球项目案例，关联 BOM、财务、视频素材，为品牌内容生产提供标准化可引用的素材库</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌编辑、内容运营、销售（引用案例做提案）、吴耀</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">案例瀑布流卡片 / 多维筛选 / 推荐开关 / 详情抽屉 / BOM+财务+视频关联</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">筛选（年份/地区/产品线/推荐）/ 搜索 / 查看详情抽屉 / 推荐开关切换</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">筛选组合准确 / 抽屉数据完整（封面+描述+BOM+财务+视频）/ 推荐开关持久化 / 瀑布流加载流畅</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 · 详细设计.md §2.3 案例库</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [区域1: 筛选栏] -->
+<div class="region-box bg-white p-4 mb-4">
+  <span class="region-label">[筛选栏]</span>
+  <div class="flex items-center gap-3 flex-wrap">
+    <div class="flex items-center gap-2">
+      <label class="text-sm text-gray-600">年份：</label>
+      <select class="border border-gray-300 rounded px-3 py-1 text-sm bg-white">
+        <option>全部</option>
+        <option>2026</option>
+        <option>2025</option>
+        <option>2024</option>
+        <option>2023</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-sm text-gray-600">地区：</label>
+      <select class="border border-gray-300 rounded px-3 py-1 text-sm bg-white">
+        <option>全部</option>
+        <option>中国大陆</option>
+        <option>东南亚</option>
+        <option>中东</option>
+        <option>欧洲</option>
+        <option>北美</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-sm text-gray-600">产品线：</label>
+      <select class="border border-gray-300 rounded px-3 py-1 text-sm bg-white">
+        <option>全部</option>
+        <option>儿童乐园</option>
+        <option>水上乐园</option>
+        <option>主题公园</option>
+        <option>商场游艺</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-sm text-gray-600">推荐：</label>
+      <select class="border border-gray-300 rounded px-3 py-1 text-sm bg-white">
+        <option>全部</option>
+        <option>仅推荐</option>
+        <option>未推荐</option>
+      </select>
+    </div>
+    <div class="flex-1 min-w-[200px]">
+      <input type="text" placeholder="🔍 搜索案例标题 / 客户 / 标签" class="w-full border border-gray-300 rounded px-3 py-1 text-sm">
+    </div>
+    <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">筛选</button>
+    <button class="px-3 py-1 text-sm border border-gray-300 rounded hover:bg-gray-50">重置</button>
+    <div class="ml-auto flex gap-2">
+      <button class="px-3 py-1 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">+ 新增案例</button>
+    </div>
+  </div>
+</div>
+
+<!-- [主内容区: 左 70% 瀑布流 + 右 30% 详情抽屉] -->
+<div class="flex gap-4">
+
+  <!-- [区域2: 瀑布流卡片网格 5 列 × 3 行] -->
+  <div class="region-box bg-white p-5 flex-1" style="width: 70%;">
+    <span class="region-label">[瀑布流案例网格 5 列 × 3 行]</span>
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm text-gray-600">共 <span class="font-semibold text-gray-800">128</span> 个案例 · 已筛选显示 <span class="font-semibold">15</span> 个</div>
+      <div class="flex items-center gap-2 text-xs">
+        <button class="px-2 py-1 border border-blue-500 bg-blue-50 text-blue-500 rounded">瀑布流</button>
+        <button class="px-2 py-1 border border-gray-300 rounded hover:bg-gray-50">列表视图</button>
+        <span class="text-gray-400">排序：</span>
+        <select class="border border-gray-300 rounded px-2 py-1">
+          <option>最新</option>
+          <option>推荐优先</option>
+          <option>引用最多</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-5 gap-3">
+      <!-- Row 1 -->
+      <!-- Card 1 推荐 -->
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder relative">
+          <span>封面占位</span>
+          <span class="absolute top-1 right-1 px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+        </div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">上海迪士尼扩建儿童区</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：上海迪士尼</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2025</span><span>·</span><span>中国大陆</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">儿童乐园</span>
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">定制</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2 推荐 -->
+      <div class="border border-blue-400 rounded-lg overflow-hidden bg-blue-50/20 hover:shadow transition ring-2 ring-blue-100">
+        <div class="cover-placeholder relative">
+          <span>封面占位</span>
+          <span class="absolute top-1 right-1 px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+          <span class="absolute top-1 left-1 px-1.5 py-0.5 bg-blue-500 text-white text-[10px] rounded">当前选中</span>
+        </div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">迪拜哈利法水乐园</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Emaar 地产</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2024</span><span>·</span><span>中东</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">水上乐园</span>
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">旗舰</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline font-medium">查看详情</button>
+            <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">深圳华侨城欢乐谷</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：华侨城集团</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2025</span><span>·</span><span>中国大陆</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">主题公园</span>
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">扩建</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 4 推荐 -->
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder relative">
+          <span>封面占位</span>
+          <span class="absolute top-1 right-1 px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+        </div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">雅加达 SeaWorld 升级</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Taman Impian</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2024</span><span>·</span><span>东南亚</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">水上乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 5 -->
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">广州长隆儿童城</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：长隆集团</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2023</span><span>·</span><span>中国大陆</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">儿童乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2 -->
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">吉隆坡云顶高原乐园</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Genting 集团</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2025</span><span>·</span><span>东南亚</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">主题公园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder relative">
+          <span>封面占位</span>
+          <span class="absolute top-1 right-1 px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+        </div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">曼谷 Siam 水乐园翻新</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Siam Park City</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2024</span><span>·</span><span>东南亚</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">水上乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">北京环球影城配套</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：首寰文旅</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2023</span><span>·</span><span>中国大陆</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">主题公园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">沙特 Riyadh Season</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：GEA 沙特</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2025</span><span>·</span><span>中东</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">主题公园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder relative">
+          <span>封面占位</span>
+          <span class="absolute top-1 right-1 px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+        </div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">成都融创乐园儿童区</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：融创文旅</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2024</span><span>·</span><span>中国大陆</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">儿童乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3 -->
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">越南芽庄珍珠岛</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Vinpearl</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2023</span><span>·</span><span>东南亚</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">水上乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">杭州万象城商场游艺</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：华润置地</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2025</span><span>·</span><span>中国大陆</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">商场游艺</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">墨尔本动物园配套</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Melbourne Zoo</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2024</span><span>·</span><span>澳洲</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">儿童乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder relative">
+          <span>封面占位</span>
+          <span class="absolute top-1 right-1 px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+        </div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">阿布扎比 Yas 岛扩建</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Miral 集团</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2026</span><span>·</span><span>中东</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">主题公园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-300 rounded-lg overflow-hidden bg-white hover:shadow transition">
+        <div class="cover-placeholder"><span>封面占位</span></div>
+        <div class="p-2">
+          <div class="text-sm font-semibold text-gray-800 truncate">马尼拉海洋公园</div>
+          <div class="text-xs text-gray-500 mt-0.5 truncate">客户：Ocean Park 菲律宾</div>
+          <div class="flex items-center gap-1 mt-1 text-[10px] text-gray-400">
+            <span>2023</span><span>·</span><span>东南亚</span>
+          </div>
+          <div class="flex flex-wrap gap-1 mt-2">
+            <span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 text-[10px] rounded">水上乐园</span>
+          </div>
+          <div class="flex items-center justify-between mt-2 pt-2 border-t border-gray-100">
+            <button class="text-xs text-blue-500 hover:underline">查看详情</button>
+            <label class="toggle"><input type="checkbox"><span class="slider"></span></label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center justify-center mt-4">
+      <button class="px-4 py-2 text-sm border border-gray-300 rounded hover:bg-gray-50">加载更多 (还有 113 个)</button>
+    </div>
+  </div>
+
+  <!-- [区域3: 案例详情抽屉] -->
+  <aside class="region-box bg-white flex-shrink-0" style="width: 30%;">
+    <span class="region-label">[案例详情抽屉 右侧 30%]</span>
+    <div class="border-b border-gray-200 p-4 flex items-center justify-between bg-gray-50">
+      <div class="flex items-center gap-2">
+        <span class="px-1.5 py-0.5 bg-yellow-400 text-white text-[10px] rounded">⭐ 推荐</span>
+        <h3 class="text-base font-semibold text-gray-800">迪拜哈利法水乐园</h3>
+      </div>
+      <button class="text-gray-400 hover:text-gray-600">✕</button>
+    </div>
+
+    <div class="p-4 space-y-4">
+      <!-- 大图 -->
+      <div class="cover-placeholder" style="height: 180px; border-radius: 4px;">
+        <span>案例大图占位 · 16:9</span>
+      </div>
+
+      <!-- 基础信息 -->
+      <div class="text-xs space-y-1.5">
+        <div class="flex"><span class="text-gray-500 w-20">客户</span><span class="text-gray-800">Emaar 地产</span></div>
+        <div class="flex"><span class="text-gray-500 w-20">年份</span><span class="text-gray-800">2024</span></div>
+        <div class="flex"><span class="text-gray-500 w-20">地区</span><span class="text-gray-800">阿联酋迪拜</span></div>
+        <div class="flex"><span class="text-gray-500 w-20">产品线</span><span class="text-gray-800">水上乐园 / 旗舰项目</span></div>
+        <div class="flex"><span class="text-gray-500 w-20">项目周期</span><span class="text-gray-800">14 个月</span></div>
+        <div class="flex"><span class="text-gray-500 w-20">交付状态</span><span class="text-green-600">✓ 已交付</span></div>
+      </div>
+
+      <!-- 描述 -->
+      <div>
+        <div class="text-xs font-semibold text-gray-700 mb-1.5">项目描述</div>
+        <div class="text-xs text-gray-600 leading-relaxed bg-gray-50 p-2 rounded">
+          位于迪拜地标哈利法塔旁，占地 3.2 万平方米的大型水上乐园。由万德提供全套定制化水滑梯、波浪池、儿童戏水区 BOM 设计与交付，含 12 组大型滑道、1 座 5000 平米造浪池。
+        </div>
+      </div>
+
+      <!-- BOM 清单 -->
+      <div>
+        <div class="text-xs font-semibold text-gray-700 mb-1.5 flex items-center justify-between">
+          <span>BOM 清单（关联）</span>
+          <button class="text-[10px] text-blue-500">查看全部</button>
+        </div>
+        <table class="w-full text-[11px] border-collapse">
+          <thead>
+            <tr class="bg-gray-50 text-gray-500">
+              <th class="p-1.5 border border-gray-200 text-left">品类</th>
+              <th class="p-1.5 border border-gray-200 text-center">数量</th>
+              <th class="p-1.5 border border-gray-200 text-right">金额</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr><td class="p-1.5 border border-gray-200">大型水滑梯</td><td class="p-1.5 border border-gray-200 text-center">12 组</td><td class="p-1.5 border border-gray-200 text-right">$ 4.2M</td></tr>
+            <tr><td class="p-1.5 border border-gray-200">造浪池系统</td><td class="p-1.5 border border-gray-200 text-center">1 套</td><td class="p-1.5 border border-gray-200 text-right">$ 2.8M</td></tr>
+            <tr><td class="p-1.5 border border-gray-200">儿童戏水区</td><td class="p-1.5 border border-gray-200 text-center">8 组</td><td class="p-1.5 border border-gray-200 text-right">$ 1.5M</td></tr>
+            <tr><td class="p-1.5 border border-gray-200">水处理系统</td><td class="p-1.5 border border-gray-200 text-center">1 套</td><td class="p-1.5 border border-gray-200 text-right">$ 0.8M</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 财务数据 -->
+      <div>
+        <div class="text-xs font-semibold text-gray-700 mb-1.5">财务数据</div>
+        <div class="grid grid-cols-3 gap-2">
+          <div class="bg-gray-50 p-2 rounded">
+            <div class="text-[10px] text-gray-500">合同额</div>
+            <div class="text-sm font-semibold text-gray-800">$ 9.3M</div>
+          </div>
+          <div class="bg-gray-50 p-2 rounded">
+            <div class="text-[10px] text-gray-500">毛利率</div>
+            <div class="text-sm font-semibold text-gray-800">32%</div>
+          </div>
+          <div class="bg-gray-50 p-2 rounded">
+            <div class="text-[10px] text-gray-500">回款进度</div>
+            <div class="text-sm font-semibold text-green-600">100%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 相关视频 -->
+      <div>
+        <div class="text-xs font-semibold text-gray-700 mb-1.5">相关视频素材（3）</div>
+        <div class="space-y-1.5">
+          <div class="flex items-center gap-2 p-1.5 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer">
+            <div class="w-16 h-10 bg-gray-300 rounded flex items-center justify-center text-gray-500 text-xs">▶</div>
+            <div class="flex-1">
+              <div class="text-xs text-gray-800 truncate">开业宣传片 · 2分30秒</div>
+              <div class="text-[10px] text-gray-400">4K · 8.2MB</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 p-1.5 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer">
+            <div class="w-16 h-10 bg-gray-300 rounded flex items-center justify-center text-gray-500 text-xs">▶</div>
+            <div class="flex-1">
+              <div class="text-xs text-gray-800 truncate">施工纪实 · 5分18秒</div>
+              <div class="text-[10px] text-gray-400">1080P · 15MB</div>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 p-1.5 border border-gray-200 rounded hover:bg-gray-50 cursor-pointer">
+            <div class="w-16 h-10 bg-gray-300 rounded flex items-center justify-center text-gray-500 text-xs">▶</div>
+            <div class="flex-1">
+              <div class="text-xs text-gray-800 truncate">客户访谈 · 3分45秒</div>
+              <div class="text-[10px] text-gray-400">1080P · 12MB</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 操作按钮 -->
+      <div class="flex gap-2 pt-2 border-t border-gray-200">
+        <button class="flex-1 px-3 py-2 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">引用到内容</button>
+        <button class="flex-1 px-3 py-2 text-xs border border-gray-300 rounded hover:bg-gray-50">编辑</button>
+        <button class="px-3 py-2 text-xs border border-gray-300 rounded hover:bg-gray-50">⋯</button>
+      </div>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

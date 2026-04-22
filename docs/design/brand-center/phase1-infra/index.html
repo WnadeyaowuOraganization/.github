@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 品牌中心 Phase 1 基础设施 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 500; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .sidebar-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin: 8px auto; border-radius: 4px; cursor: pointer; color: #666; font-size: 18px; }
+    .sidebar-icon:hover { background: #f0f0f0; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">品牌中心 Phase 1 — 基础设施（OAuth + 角色权限 + 案例库）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">搭建品牌中心运作所需的三项核心底座：海外/国内 7 平台 OAuth 账号绑定、4 级角色权限体系、项目案例素材库，为后续内容生产与分发提供数据与权限基础</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌中心管理员、内容编辑、审批人、吴耀（超管视角）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">OAuth 账号绑定 / 4 级角色权限管理 / 用户权限矩阵 / 项目案例库 CRUD / 案例详情抽屉</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">绑定/解绑社交账号 / 设置默认发布账号 / 编辑角色权限 / 筛选推荐案例 / 查看案例详情</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">7 平台 OAuth 回调可用 / 角色权限矩阵保存生效 / 案例库筛选与推荐开关正常 / 权限审计日志可追溯</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 · 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] 折叠状态，只显示图标 -->
+  <aside class="w-14 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center py-3">
+    <div class="text-blue-500 font-bold text-xl mb-3">万</div>
+    <div class="sidebar-icon" title="驾驶舱">📊</div>
+    <div class="sidebar-icon" title="CRM">👥</div>
+    <div class="sidebar-icon" title="项目">📁</div>
+    <div class="sidebar-icon active" title="品牌中心">🎨</div>
+    <div class="sidebar-icon" title="PLM">🔧</div>
+    <div class="sidebar-icon" title="审批">✅</div>
+    <div class="sidebar-icon" title="资源">📚</div>
+    <div class="sidebar-icon" title="系统">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col">
+    <!-- [顶部栏 含返回Hub按钮 + 面包屑] -->
+    <div class="px-6 py-3 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="../index.html" class="text-blue-500 text-sm hover:underline flex items-center gap-1">← 返回 Hub 总览</a>
+        <span class="text-gray-300">|</span>
+        <div class="text-sm text-gray-500">
+          首页 &gt; <span class="text-gray-700">品牌中心</span> &gt; <span class="text-gray-900 font-medium">Phase 1 基础设施</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <span class="text-gray-400">Phase 1/4</span>
+        <span class="px-2 py-0.5 bg-red-50 text-red-500 text-xs rounded border border-red-200">代码现状 🔴 全部待新建</span>
+      </div>
+    </div>
+
+    <!-- [页面标题] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200">
+      <h1 class="text-xl font-semibold text-gray-800">品牌中心 · Phase 1 基础设施</h1>
+      <p class="text-sm text-gray-500 mt-1">对标 Sprout Social Account Manager + Hootsuite Teams & Permissions + Contently Content Library，为品牌运营提供账号、权限、素材三大底座</p>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-oauth.html"></iframe>
+    </div>
+
+    <!-- [原型说明] -->
+    <div class="p-6 bg-white border-t border-gray-300">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead><tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300 w-40">Tab 页</th>
+          <th class="p-2 border border-gray-300 w-40">文件名</th>
+          <th class="p-2 border border-gray-300 w-40">对应 Issue</th>
+          <th class="p-2 border border-gray-300 w-24">代码现状</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">账号管理 OAuth</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-oauth.html</td>
+            <td class="p-2 border border-gray-300 text-xs">#1776 前端 / #2145 后端</td>
+            <td class="p-2 border border-gray-300 text-red-500">🔴 需新建</td>
+            <td class="p-2 border border-gray-300">LinkedIn / X / Facebook / YouTube / 微信公众号 / 视频号 / 抖音 7 平台 OAuth 绑定，含默认账号、过期时间、绑定历史日志</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">角色权限</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-rbac.html</td>
+            <td class="p-2 border border-gray-300 text-xs">#2201</td>
+            <td class="p-2 border border-gray-300 text-red-500">🔴 需新建</td>
+            <td class="p-2 border border-gray-300">管理员/编辑/审批/只读 4 级角色卡片、用户×角色权限矩阵、角色变更审计日志</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">项目案例库</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-cases.html</td>
+            <td class="p-2 border border-gray-300 text-xs">#1704 后端 / #1727 前端</td>
+            <td class="p-2 border border-gray-300 text-red-500">🔴 需新建</td>
+            <td class="p-2 border border-gray-300">案例瀑布流 5×3、筛选栏、推荐开关、案例详情抽屉（BOM / 财务 / 相关视频）</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="mt-4 p-3 bg-gray-50 border border-gray-200 rounded text-xs text-gray-600">
+        <strong class="text-gray-800">代码现状说明</strong>：brand/ 子包目前仅有基础 CRUD 骨架，OAuth 多平台适配、RBAC 角色矩阵、案例库 BOM 关联均未实现，三个 Tab 均需新建 Controller + Service + Vue 组件。
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Tab配置（按顺序）
+  const tabs = [
+    { key: 'oauth', label: '账号管理 OAuth', src: 'tab-oauth.html' },
+    { key: 'rbac',  label: '角色权限',       src: 'tab-rbac.html' },
+    { key: 'cases', label: '项目案例库',     src: 'tab-cases.html' }
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = (h + 20) + 'px';
+    } catch(e) {}
+  });
+
+  renderTabs();
+</script>
+
+</body>
+</html>

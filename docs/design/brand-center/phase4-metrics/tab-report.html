@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>品牌周报/月报</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sentiment-bg-pos { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+    .sentiment-bg-neg { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+    .sentiment-bg-neu { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+    .chart-placeholder { background: repeating-linear-gradient(45deg, #fafafa, #fafafa 8px, #f0f0f0 8px, #f0f0f0 16px); }
+    /* A4 纸预览 */
+    .a4-paper {
+      background: #fff;
+      width: 794px;
+      min-height: 1123px;
+      margin: 0 auto;
+      padding: 48px 56px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.12);
+      border: 1px solid #e5e5e5;
+      font-size: 13px;
+      color: #333;
+      line-height: 1.7;
+    }
+    .a4-header { border-bottom: 2px solid #1890ff; padding-bottom: 12px; margin-bottom: 20px; }
+    .a4-section-title { font-size: 15px; font-weight: 600; color: #1890ff; border-left: 3px solid #1890ff; padding-left: 8px; margin: 20px 0 10px; }
+    .template-card { cursor: pointer; transition: all 0.15s; }
+    .template-card.selected { border-color: #1890ff; background: #e6f7ff; }
+    .template-card:hover { box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .history-item { cursor: pointer; transition: all 0.15s; }
+    .history-item:hover { background: #f5f5f5; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 3 · 品牌周报/月报</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">自动生成周报/月报/季报，AI 产出行动建议，一键导出 PDF/PPTX 或发送企微，形成品牌决策闭环</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌负责人, 市场总监, 吴耀（超管查看）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">模板选择 / A4 预览 / KPI 汇总 / 趋势图 / Top 内容 / 负面告警 / AI 行动建议 / 多格式导出</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">选模板 / 预览 / 导出 PDF/PPTX / 发送企微 / 定时订阅 / 查看历史报告</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">4 种模板可切换 / A4 预览格式正确 / PDF&PPTX 导出成功 / 企微推送可达 / 历史报告可下载</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 — 详细设计.md §2.3</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ============================================================ -->
+<!-- [区域A · 报告模板选择 + 参数 + 导出操作]                       -->
+<!-- ============================================================ -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-3">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-semibold text-gray-800">[区域A] 报告模板与参数</h2>
+    <span class="text-xs text-gray-500">选择模板 → 选择时间范围 → 预览 → 导出</span>
+  </div>
+
+  <!-- 模板选择 -->
+  <div class="grid grid-cols-4 gap-3 mb-4">
+    <div class="template-card selected bg-white border-2 border-gray-300 rounded p-3" data-tpl="weekly">
+      <div class="text-2xl mb-1">📅</div>
+      <div class="font-semibold text-sm text-gray-800">周报</div>
+      <div class="text-xs text-gray-500 mt-0.5">每周一自动生成，覆盖上周数据</div>
+    </div>
+    <div class="template-card bg-white border-2 border-gray-300 rounded p-3" data-tpl="monthly">
+      <div class="text-2xl mb-1">📆</div>
+      <div class="font-semibold text-sm text-gray-800">月报</div>
+      <div class="text-xs text-gray-500 mt-0.5">每月 1 日生成，月度汇总+环比</div>
+    </div>
+    <div class="template-card bg-white border-2 border-gray-300 rounded p-3" data-tpl="quarterly">
+      <div class="text-2xl mb-1">📊</div>
+      <div class="font-semibold text-sm text-gray-800">季报</div>
+      <div class="text-xs text-gray-500 mt-0.5">季度复盘 + 同期对比 + 趋势</div>
+    </div>
+    <div class="template-card bg-white border-2 border-gray-300 rounded p-3" data-tpl="custom">
+      <div class="text-2xl mb-1">⚙️</div>
+      <div class="font-semibold text-sm text-gray-800">自定义</div>
+      <div class="text-xs text-gray-500 mt-0.5">自选时间范围和模块</div>
+    </div>
+  </div>
+
+  <!-- 参数行 -->
+  <div class="flex items-center gap-3 flex-wrap pt-3 border-t border-dashed border-gray-200">
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">时间范围</span>
+      <input type="text" value="2026-04-15 ~ 2026-04-22" class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700 w-48" />
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">平台范围</span>
+      <select class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-700">
+        <option>全部 4 平台</option><option>仅国内（3平台）</option><option>仅海外（LinkedIn）</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-1 text-xs">
+      <span class="text-gray-600">包含模块</span>
+      <label class="inline-flex items-center gap-1"><input type="checkbox" checked> KPI</label>
+      <label class="inline-flex items-center gap-1"><input type="checkbox" checked> 趋势图</label>
+      <label class="inline-flex items-center gap-1"><input type="checkbox" checked> Top 内容</label>
+      <label class="inline-flex items-center gap-1"><input type="checkbox" checked> 负面告警</label>
+      <label class="inline-flex items-center gap-1"><input type="checkbox" checked> AI 建议</label>
+    </div>
+
+    <div class="ml-auto flex items-center gap-2">
+      <button class="px-3 py-1.5 border border-gray-300 bg-white text-gray-700 rounded text-xs hover:bg-gray-50">🔄 重新生成</button>
+      <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-xs hover:bg-blue-600">📄 导出 PDF</button>
+      <button class="px-3 py-1.5 border border-blue-500 text-blue-500 rounded text-xs hover:bg-blue-50">📊 导出 PPTX</button>
+      <button class="px-3 py-1.5 border border-green-500 text-green-500 rounded text-xs hover:bg-green-50" style="border-color:#52c41a;color:#52c41a;">💬 发送企微</button>
+      <button class="px-3 py-1.5 border border-gray-300 bg-white text-gray-700 rounded text-xs hover:bg-gray-50">⏰ 定时订阅</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- [主区域 · 左70% A4 预览 + 右30% 历史报告]                     -->
+<!-- ============================================================ -->
+<div class="grid grid-cols-10 gap-3">
+
+  <!-- [区域B · A4 纸预览] -->
+  <div class="col-span-7">
+    <div class="flex items-center justify-between mb-2">
+      <h2 class="text-sm font-semibold text-gray-800">[区域B] A4 纸样式预览</h2>
+      <div class="text-xs text-gray-500">缩放 <button class="px-1 border border-gray-300 rounded">−</button> 100% <button class="px-1 border border-gray-300 rounded">+</button></div>
+    </div>
+
+    <div class="bg-gray-200 p-6 rounded border border-gray-300" style="max-height:1400px;overflow-y:auto;">
+      <div class="a4-paper">
+
+        <!-- 报告 Header -->
+        <div class="a4-header">
+          <div class="flex items-center justify-between">
+            <div>
+              <div class="text-xs text-gray-500">WANDE BRAND REPORT</div>
+              <div class="text-2xl font-bold text-gray-800 mt-1">万德品牌舆情周报</div>
+              <div class="text-sm text-gray-600 mt-1">2026 年第 16 周 · 2026-04-15 ~ 2026-04-22</div>
+            </div>
+            <div class="text-right text-xs text-gray-500">
+              <div>报告编号：WBR-2026-W16</div>
+              <div>生成时间：2026-04-22 08:00</div>
+              <div>分发对象：吴耀 / 品牌组 / 公关组</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 一、KPI 汇总表 -->
+        <div class="a4-section-title">一、核心 KPI 汇总</div>
+        <table class="w-full border-collapse text-xs mt-2">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="border border-gray-300 p-2 text-left">指标</th>
+              <th class="border border-gray-300 p-2 text-right">本期</th>
+              <th class="border border-gray-300 p-2 text-right">上期</th>
+              <th class="border border-gray-300 p-2 text-right">环比</th>
+              <th class="border border-gray-300 p-2 text-left">备注</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="border border-gray-300 p-2">总声量</td><td class="border border-gray-300 p-2 text-right">12,487</td><td class="border border-gray-300 p-2 text-right">10,552</td><td class="border border-gray-300 p-2 text-right" style="color:#52c41a;">+18.3%</td><td class="border border-gray-300 p-2 text-gray-500">海外 LinkedIn 增幅明显</td></tr>
+            <tr><td class="border border-gray-300 p-2">正面占比</td><td class="border border-gray-300 p-2 text-right" style="color:#52c41a;">64.2%</td><td class="border border-gray-300 p-2 text-right">61.1%</td><td class="border border-gray-300 p-2 text-right" style="color:#52c41a;">+3.1pp</td><td class="border border-gray-300 p-2 text-gray-500">IAAPA 获奖带动</td></tr>
+            <tr><td class="border border-gray-300 p-2">负面占比</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">8.7%</td><td class="border border-gray-300 p-2 text-right">7.3%</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">+1.4pp</td><td class="border border-gray-300 p-2 text-gray-500">深圳项目延期事件</td></tr>
+            <tr><td class="border border-gray-300 p-2">品牌曝光</td><td class="border border-gray-300 p-2 text-right">3.24M</td><td class="border border-gray-300 p-2 text-right">2.65M</td><td class="border border-gray-300 p-2 text-right" style="color:#52c41a;">+22.5%</td><td class="border border-gray-300 p-2 text-gray-500">—</td></tr>
+            <tr><td class="border border-gray-300 p-2">互动数</td><td class="border border-gray-300 p-2 text-right">48,216</td><td class="border border-gray-300 p-2 text-right">43,135</td><td class="border border-gray-300 p-2 text-right" style="color:#52c41a;">+11.8%</td><td class="border border-gray-300 p-2 text-gray-500">—</td></tr>
+            <tr><td class="border border-gray-300 p-2">红色告警</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">4</td><td class="border border-gray-300 p-2 text-right">2</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">+2</td><td class="border border-gray-300 p-2 text-gray-500">需关注</td></tr>
+          </tbody>
+        </table>
+
+        <!-- 二、趋势图 -->
+        <div class="a4-section-title">二、多渠道声量趋势</div>
+        <div class="chart-placeholder border border-dashed border-gray-400 rounded h-48 flex items-center justify-center mt-2">
+          <div class="text-center text-xs text-gray-500">
+            <div>📈 4 条折线：媒X / 公众号 / 视频号 / LinkedIn</div>
+            <div class="text-gray-400 mt-0.5">最近 7 天日声量走势</div>
+          </div>
+        </div>
+
+        <!-- 三、Top 内容 -->
+        <div class="a4-section-title">三、Top 5 正面内容</div>
+        <ol class="list-decimal pl-5 text-xs mt-2 space-y-1">
+          <li><b>[LinkedIn]</b> Wande Amusement wins "Best Overseas Project 2026" — 互动 9.3k <span class="sentiment-bg-pos px-1.5 py-0.5 rounded ml-1">+0.89</span></li>
+          <li><b>[公众号]</b> 万德D3参数化设计系统：从建模到施工只要3天 — 互动 8.4k <span class="sentiment-bg-pos px-1.5 py-0.5 rounded ml-1">+0.82</span></li>
+          <li><b>[媒X]</b> 万德游乐深圳主题乐园项目签约仪式圆满举行 — 互动 6.2k <span class="sentiment-bg-pos px-1.5 py-0.5 rounded ml-1">+0.76</span></li>
+          <li><b>[视频号]</b> 万德亮相 IAAPA Expo 广州站，展台人流如潮 — 互动 5.1k <span class="sentiment-bg-pos px-1.5 py-0.5 rounded ml-1">+0.71</span></li>
+          <li><b>[公众号]</b> 业界首款全AI设计的过山车，万德官宣 — 互动 4.7k <span class="sentiment-bg-pos px-1.5 py-0.5 rounded ml-1">+0.68</span></li>
+        </ol>
+
+        <!-- 四、负面告警 -->
+        <div class="a4-section-title">四、重点负面事件</div>
+        <table class="w-full border-collapse text-xs mt-2">
+          <thead>
+            <tr class="bg-gray-50">
+              <th class="border border-gray-300 p-2 text-left w-14">严重度</th>
+              <th class="border border-gray-300 p-2 text-left w-20">平台</th>
+              <th class="border border-gray-300 p-2 text-left">事件摘要</th>
+              <th class="border border-gray-300 p-2 text-right w-16">情感</th>
+              <th class="border border-gray-300 p-2 text-left w-20">处置状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="border border-gray-300 p-2"><span style="background:#ff4d4f;color:#fff;padding:1px 6px;border-radius:3px;">红</span></td><td class="border border-gray-300 p-2">视频号</td><td class="border border-gray-300 p-2">深圳项目设备安装延期，用户投诉</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">-0.82</td><td class="border border-gray-300 p-2 text-gray-600">处理中</td></tr>
+            <tr><td class="border border-gray-300 p-2"><span style="background:#ff4d4f;color:#fff;padding:1px 6px;border-radius:3px;">红</span></td><td class="border border-gray-300 p-2">媒X</td><td class="border border-gray-300 p-2">博主点评某设备体验不佳，客服响应慢</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">-0.71</td><td class="border border-gray-300 p-2 text-gray-600">已回应</td></tr>
+            <tr><td class="border border-gray-300 p-2"><span style="background:#ff4d4f;color:#fff;padding:1px 6px;border-radius:3px;">红</span></td><td class="border border-gray-300 p-2">媒X</td><td class="border border-gray-300 p-2">疑似竞品水军刷评：价格虚高</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">-0.68</td><td class="border border-gray-300 p-2 text-gray-600">已标记</td></tr>
+            <tr><td class="border border-gray-300 p-2"><span style="background:#faad14;color:#fff;padding:1px 6px;border-radius:3px;">黄</span></td><td class="border border-gray-300 p-2">公众号</td><td class="border border-gray-300 p-2">业内自媒体质疑 D3 效率宣传</td><td class="border border-gray-300 p-2 text-right" style="color:#ff4d4f;">-0.45</td><td class="border border-gray-300 p-2 text-gray-600">观察中</td></tr>
+          </tbody>
+        </table>
+
+        <!-- 五、AI 行动建议 -->
+        <div class="a4-section-title">五、AI 行动建议 <span class="text-xs text-gray-500 font-normal">· 由 DeepSeek-R1 生成</span></div>
+        <div style="background:#e6f7ff;border:1px solid #91d5ff;border-left:3px solid #1890ff;padding:12px 14px;border-radius:4px;margin-top:8px;font-size:12px;line-height:1.8;color:#333;">
+          <b>1. 紧急响应：</b>深圳项目延期舆情传播指数达 78，建议 48 小时内由项目经理发布官方进度说明，控制传播扩散。<br>
+          <b>2. SOP 建设：</b>视频号负面集中在"售后响应速度"，建议公关部联合售后部输出《售后响应 24h SOP》并对外发布，正向扭转认知。<br>
+          <b>3. 加大投入：</b>海外 LinkedIn 正面声量环比 +22.5%，IAAPA 获奖带动品牌势能，建议将海外内容投放预算上调 30%。<br>
+          <b>4. 水军核查：</b>媒X 疑似竞品水军评论，建议联系平台申诉+保留证据，必要时法务介入。<br>
+          <b>5. 正面传播：</b>D3 参数化设计系统话题热度高，可策划技术专题栏目，连续 4 周输出深度内容。
+        </div>
+
+        <!-- Footer -->
+        <div style="margin-top:30px;padding-top:12px;border-top:1px dashed #d9d9d9;font-size:11px;color:#999;text-align:center;">
+          本报告由万德 AI 平台 · 品牌中心 Phase4 自动生成 · BrandMetricsCollectorJob + DeepSeek-R1
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- [区域C · 历史报告列表 右30%] -->
+  <div class="col-span-3">
+    <div class="bg-white border border-gray-300 rounded overflow-hidden">
+      <div class="px-3 py-2 bg-gray-50 border-b border-gray-300 flex items-center justify-between">
+        <span class="text-sm font-semibold text-gray-800">[区域C] 历史报告</span>
+        <a href="#" class="text-xs text-blue-500 hover:underline">查看全部 →</a>
+      </div>
+      <div id="historyList"></div>
+
+      <!-- 订阅配置入口 -->
+      <div class="p-3 border-t border-gray-200 bg-gray-50">
+        <div class="text-xs font-semibold text-gray-700 mb-2">⏰ 订阅配置</div>
+        <div class="text-xs text-gray-600 space-y-1.5">
+          <div class="flex items-center justify-between">
+            <span>周报 · 每周一 09:00</span>
+            <span class="sentiment-bg-pos px-1.5 py-0.5 rounded" style="font-size:10px;">启用</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>月报 · 每月 1 日 09:00</span>
+            <span class="sentiment-bg-pos px-1.5 py-0.5 rounded" style="font-size:10px;">启用</span>
+          </div>
+          <div class="flex items-center justify-between">
+            <span>季报 · 季末 +1 日</span>
+            <span class="sentiment-bg-neu px-1.5 py-0.5 rounded" style="font-size:10px;">停用</span>
+          </div>
+        </div>
+        <button class="w-full mt-3 px-3 py-1.5 border border-gray-300 bg-white text-gray-700 rounded text-xs hover:bg-gray-50">⚙️ 管理订阅</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // 模板切换
+  document.querySelectorAll('.template-card').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.template-card').forEach(c => c.classList.remove('selected'));
+      el.classList.add('selected');
+    });
+  });
+
+  // 历史报告列表
+  const history = [
+    { title: '2026 W15 品牌周报', date: '2026-04-15', size: '2.1 MB', type: '周报', status: 'sent' },
+    { title: '2026 W14 品牌周报', date: '2026-04-08', size: '1.9 MB', type: '周报', status: 'sent' },
+    { title: '2026 年 3 月品牌月报', date: '2026-04-01', size: '4.3 MB', type: '月报', status: 'sent' },
+    { title: '2026 W13 品牌周报', date: '2026-04-01', size: '2.0 MB', type: '周报', status: 'sent' },
+    { title: '2026 Q1 品牌季报', date: '2026-04-03', size: '8.7 MB', type: '季报', status: 'sent' }
+  ];
+  document.getElementById('historyList').innerHTML = history.map(h => `
+    <div class="history-item p-3 border-b border-gray-100">
+      <div class="flex items-start justify-between mb-1">
+        <div class="flex-1 min-w-0">
+          <div class="text-sm font-medium text-gray-800 truncate">${h.title}</div>
+          <div class="text-xs text-gray-500 mt-0.5">${h.date} · ${h.size} · ${h.type}</div>
+        </div>
+        <span class="sentiment-bg-pos px-1.5 py-0.5 rounded text-xs ml-2" style="font-size:10px;">已发送</span>
+      </div>
+      <div class="flex gap-2 mt-2">
+        <button class="text-xs text-blue-500 hover:underline">预览</button>
+        <button class="text-xs text-blue-500 hover:underline">下载PDF</button>
+        <button class="text-xs text-blue-500 hover:underline">下载PPTX</button>
+        <button class="text-xs text-gray-500 hover:underline ml-auto">⋯</button>
+      </div>
+    </div>
+  `).join('');
+</script>
+
+</body>
+</html>

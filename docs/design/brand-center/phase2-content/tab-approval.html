@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>审批工作流</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .queue-item { cursor:pointer; transition: background 0.15s; }
+    .queue-item:hover { background: #f5f5f5; }
+    .queue-item.active { background: #e6f4ff; border-left: 4px solid #1890ff; }
+    .approval-node { display:flex; align-items:center; gap:8px; }
+    .node-circle { width:36px; height:36px; border-radius:50%; background:#fff; border:2px solid #d9d9d9; display:flex; align-items:center; justify-content:center; font-size:14px; flex-shrink:0; position:relative; }
+    .approval-node.done .node-circle { background:#f6ffed; border-color:#52c41a; color:#52c41a; }
+    .approval-node.active .node-circle { background:#e6f4ff; border-color:#1890ff; color:#1890ff; box-shadow:0 0 0 3px rgba(24,144,255,0.2); }
+    .approval-arrow { color:#d9d9d9; font-size:16px; flex-shrink:0; }
+    .approval-arrow.done { color:#52c41a; }
+    .chip { display:inline-block; padding:1px 6px; border-radius:10px; font-size:10px; font-weight:600; }
+    .chip-video { background:#e6f4ff; color:#1890ff; }
+    .chip-poster { background:#f9f0ff; color:#722ed1; }
+    .chip-article { background:#fff7e6; color:#d46b08; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 5 · 审批工作流（对标 Hootsuite Approval · Issue #1453 · #1778 · #2146）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">把分散在各 Tab（视频/海报/文章）的审批流，统一到一个工作流页面——待审队列+路径图+评论+版本，杜绝飞书群里散审</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">组长、品牌总监、超管（吴总）、内容作者（看反馈）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">待审批队列 / 审批路径节点图 / 评论区 / 历史版本 / KPI 统计卡</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">通过 / 驳回 / 评论 / 查看历史版本 / KPI 下钻</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">队列 8 行 / 路径图 4 节点链式 / 评论区 3 条 / 历史版本 3 版 / KPI 4 卡 / 🔴 全新建</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 Phase 2 详细设计.md §2.5 审批工作流</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [页面标题] -->
+<div class="bg-white border border-gray-300 rounded-md p-4 mb-4 flex items-center justify-between">
+  <div>
+    <h1 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      ✅ 审批工作流
+      <span class="text-xs font-normal px-2 py-0.5 rounded bg-purple-50 text-[#722ed1] border border-purple-200">对标 Hootsuite Approval</span>
+      <span class="text-xs font-normal px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-200">🔴 全新建</span>
+    </h1>
+    <div class="text-xs text-gray-500 mt-1">Issue #1453 统一审批引擎 · #1778 路径配置 · #2146 审批看板</div>
+  </div>
+  <div class="flex gap-2">
+    <button class="px-3 py-1.5 text-sm border border-gray-300 rounded">⚙️ 审批路径配置</button>
+    <button class="px-3 py-1.5 text-sm bg-[#1890ff] text-white rounded">📤 转交他人</button>
+  </div>
+</div>
+
+<!-- [KPI 卡 4 个] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="flex items-center justify-between">
+      <span class="text-xs text-gray-500">今日待审</span>
+      <span class="text-lg">⏳</span>
+    </div>
+    <div class="text-2xl font-bold text-orange-600 mt-1">18</div>
+    <div class="text-[11px] text-gray-500 mt-0.5">其中超时 3 · 紧急 5</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="flex items-center justify-between">
+      <span class="text-xs text-gray-500">平均响应时长</span>
+      <span class="text-lg">⚡</span>
+    </div>
+    <div class="text-2xl font-bold text-[#1890ff] mt-1">2.4h</div>
+    <div class="text-[11px] text-green-600 mt-0.5">↓ 较上周 -0.6h</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="flex items-center justify-between">
+      <span class="text-xs text-gray-500">驳回率</span>
+      <span class="text-lg">❌</span>
+    </div>
+    <div class="text-2xl font-bold text-red-500 mt-1">12%</div>
+    <div class="text-[11px] text-red-500 mt-0.5">↑ 较上周 +3%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="flex items-center justify-between">
+      <span class="text-xs text-gray-500">本月吞吐量</span>
+      <span class="text-lg">📊</span>
+    </div>
+    <div class="text-2xl font-bold text-[#722ed1] mt-1">342</div>
+    <div class="text-[11px] text-green-600 mt-0.5">↑ MoM +24%</div>
+  </div>
+</div>
+
+<!-- [主体：左队列 + 右抽屉] -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左：待审批队列] -->
+  <div class="col-span-7 bg-white border border-gray-300 rounded-md overflow-hidden">
+    <div class="p-3 border-b border-gray-200 flex items-center justify-between">
+      <h2 class="text-sm font-bold text-gray-700">📥 待审批队列</h2>
+      <div class="flex gap-2 text-xs">
+        <select class="border border-gray-300 rounded px-2 py-1"><option>全部类型</option><option>视频</option><option>海报</option><option>文章</option></select>
+        <select class="border border-gray-300 rounded px-2 py-1"><option>全部优先级</option></select>
+        <button class="px-2 py-1 bg-green-50 text-green-700 border border-green-200 rounded">批量通过</button>
+      </div>
+    </div>
+
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="bg-gray-50 text-xs text-gray-600">
+          <th class="p-2 text-left border-b border-gray-200 w-14">缩略</th>
+          <th class="p-2 text-left border-b border-gray-200">内容标题</th>
+          <th class="p-2 text-left border-b border-gray-200 w-16">类型</th>
+          <th class="p-2 text-left border-b border-gray-200 w-20">作者</th>
+          <th class="p-2 text-left border-b border-gray-200 w-28">计划发布</th>
+          <th class="p-2 text-left border-b border-gray-200 w-32">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-xs">
+        <tr class="queue-item active border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-blue-200 to-purple-200 rounded flex items-center justify-center text-lg">🎬</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">梦幻城堡产品介绍</div><div class="text-[10px] text-gray-500">45s · 抖音+视频号</div></td>
+          <td class="p-2"><span class="chip chip-video">视频</span></td>
+          <td class="p-2 text-gray-700">张三</td>
+          <td class="p-2 text-gray-700">今天 18:00 <span class="text-red-500 ml-1">🔥</span></td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-orange-200 to-yellow-200 rounded flex items-center justify-center text-lg">🎨</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">读书日海报·文艺版</div><div class="text-[10px] text-gray-500">1080×1350 · 小红书</div></td>
+          <td class="p-2"><span class="chip chip-poster">海报</span></td>
+          <td class="p-2 text-gray-700">李四</td>
+          <td class="p-2 text-gray-700">明天 10:00</td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-yellow-200 to-red-200 rounded flex items-center justify-center text-lg">📝</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">儿童无动力乐园 · SEO 长文</div><div class="text-[10px] text-gray-500">3,280 字 · 官网+公众号</div></td>
+          <td class="p-2"><span class="chip chip-article">文章</span></td>
+          <td class="p-2 text-gray-700">王五</td>
+          <td class="p-2 text-gray-700">4/25 09:00</td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-green-200 to-blue-200 rounded flex items-center justify-center text-lg">🎬</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">EN1176 标准讲解 · Leo</div><div class="text-[10px] text-gray-500">2:08 · B 站+知乎</div></td>
+          <td class="p-2"><span class="chip chip-video">视频</span></td>
+          <td class="p-2 text-gray-700">赵六</td>
+          <td class="p-2 text-gray-700">4/24 14:00</td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-pink-200 to-purple-200 rounded flex items-center justify-center text-lg">🎨</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">春季促销海报</div><div class="text-[10px] text-gray-500">1920×1080 · 官网首屏</div></td>
+          <td class="p-2"><span class="chip chip-poster">海报</span></td>
+          <td class="p-2 text-gray-700">张三</td>
+          <td class="p-2 text-gray-700">4/26 00:00 <span class="text-orange-500 ml-1">⚠️</span></td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-purple-200 to-blue-200 rounded flex items-center justify-center text-lg">📝</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">吴总专访 · 品牌理念</div><div class="text-[10px] text-gray-500">2,100 字 · 公众号头条</div></td>
+          <td class="p-2"><span class="chip chip-article">文章</span></td>
+          <td class="p-2 text-gray-700">李四</td>
+          <td class="p-2 text-gray-700">4/27 10:00</td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item border-b border-gray-100">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-gray-200 to-blue-200 rounded flex items-center justify-center text-lg">🎬</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">安装周期 FAQ · 艾米</div><div class="text-[10px] text-gray-500">1:12 · 小红书</div></td>
+          <td class="p-2"><span class="chip chip-video">视频</span></td>
+          <td class="p-2 text-gray-700">王五</td>
+          <td class="p-2 text-gray-700">4/28 08:30</td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+        <tr class="queue-item">
+          <td class="p-2"><div class="w-10 h-10 bg-gradient-to-br from-red-200 to-orange-200 rounded flex items-center justify-center text-lg">🎨</div></td>
+          <td class="p-2"><div class="font-semibold text-gray-800">广州展会邀请函</div><div class="text-[10px] text-gray-500">1080×1920 · 朋友圈</div></td>
+          <td class="p-2"><span class="chip chip-poster">海报</span></td>
+          <td class="p-2 text-gray-700">赵六</td>
+          <td class="p-2 text-gray-700">4/29 12:00</td>
+          <td class="p-2 flex gap-1">
+            <button class="px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">通过</button>
+            <button class="px-2 py-0.5 bg-red-50 text-red-700 border border-red-200 rounded">驳回</button>
+            <button class="px-2 py-0.5 border border-gray-300 rounded">💬</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- [右：审批详情抽屉] -->
+  <aside class="col-span-5 bg-white border border-gray-300 rounded-md p-4 self-start">
+    <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
+      <div>
+        <div class="text-sm font-bold text-gray-800">审批详情 · 梦幻城堡产品介绍</div>
+        <div class="text-[11px] text-gray-500">提交于 2026-04-22 10:15 · 2 小时前</div>
+      </div>
+      <span class="chip chip-video">视频</span>
+    </div>
+
+    <!-- 内容预览 -->
+    <div class="mb-4">
+      <div class="text-xs font-semibold text-gray-600 mb-1.5">🎞️ 内容预览</div>
+      <div class="aspect-video bg-gradient-to-br from-blue-200 to-purple-300 rounded flex items-center justify-center text-4xl text-white relative">
+        ▶️
+        <span class="absolute bottom-2 right-2 bg-black/60 text-white text-xs px-1.5 py-0.5 rounded">00:45</span>
+      </div>
+      <div class="text-[11px] text-gray-500 mt-1.5">分身：张经理 v2 · 背景：展厅实景 · 平台：抖音+视频号</div>
+    </div>
+
+    <!-- 审批路径节点图 -->
+    <div class="mb-4">
+      <div class="text-xs font-semibold text-gray-600 mb-2">🔗 审批路径</div>
+      <div class="flex items-center justify-between">
+        <div class="approval-node done flex-col text-center" style="display:flex;flex-direction:column;align-items:center;">
+          <div class="node-circle">✍️</div>
+          <div class="text-[10px] font-semibold text-green-700 mt-1">作者</div>
+          <div class="text-[9px] text-gray-500">张三</div>
+        </div>
+        <div class="flex-1 h-0.5 bg-green-500 mx-1"></div>
+        <div class="approval-node done flex-col text-center" style="display:flex;flex-direction:column;align-items:center;">
+          <div class="node-circle">👤</div>
+          <div class="text-[10px] font-semibold text-green-700 mt-1">组长</div>
+          <div class="text-[9px] text-gray-500">李组长 ✓</div>
+        </div>
+        <div class="flex-1 h-0.5 bg-[#1890ff] mx-1"></div>
+        <div class="approval-node active flex-col text-center" style="display:flex;flex-direction:column;align-items:center;">
+          <div class="node-circle">👔</div>
+          <div class="text-[10px] font-semibold text-[#1890ff] mt-1">品牌总监</div>
+          <div class="text-[9px] text-gray-500">待审批</div>
+        </div>
+        <div class="flex-1 h-0.5 bg-gray-300 mx-1"></div>
+        <div class="approval-node flex-col text-center" style="display:flex;flex-direction:column;align-items:center;">
+          <div class="node-circle text-gray-400">🚀</div>
+          <div class="text-[10px] font-semibold text-gray-400 mt-1">发布</div>
+          <div class="text-[9px] text-gray-400">待推进</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 评论区 -->
+    <div class="mb-4">
+      <div class="text-xs font-semibold text-gray-600 mb-2">💬 评论（3）</div>
+      <div class="space-y-2 text-xs">
+        <div class="bg-gray-50 rounded p-2">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-800">李组长</span>
+            <span class="text-[10px] text-gray-400">1 小时前</span>
+          </div>
+          <div class="text-gray-700 mt-1">整体 OK，通过 ✓。建议总监同意后直接发。</div>
+        </div>
+        <div class="bg-gray-50 rounded p-2">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-800">张三（作者）</span>
+            <span class="text-[10px] text-gray-400">1.5 小时前</span>
+          </div>
+          <div class="text-gray-700 mt-1">已按建议修改第 3 段语速和 BGM 音量，麻烦总监确认 🙏</div>
+        </div>
+        <div class="bg-gray-50 rounded p-2">
+          <div class="flex justify-between">
+            <span class="font-semibold text-gray-800">吴总（品牌总监）</span>
+            <span class="text-[10px] text-gray-400">2 小时前</span>
+          </div>
+          <div class="text-gray-700 mt-1">第 3 段「双认证」一定要口播出来，这是我们的关键卖点。其它 OK。</div>
+        </div>
+      </div>
+      <div class="mt-2 flex gap-2">
+        <input type="text" placeholder="输入评论..." class="flex-1 border border-gray-300 rounded px-2 py-1.5 text-xs">
+        <button class="px-3 py-1.5 bg-[#1890ff] text-white text-xs rounded">发送</button>
+      </div>
+    </div>
+
+    <!-- 历史版本 -->
+    <div class="mb-4">
+      <div class="text-xs font-semibold text-gray-600 mb-2">📚 历史版本（3）</div>
+      <div class="space-y-1.5 text-xs">
+        <div class="flex items-center justify-between p-2 border border-[#1890ff] bg-blue-50 rounded">
+          <div>
+            <div class="font-semibold text-gray-800">v3 · 当前版本</div>
+            <div class="text-[10px] text-gray-500">修改 BGM 音量 + 第 3 段语速</div>
+          </div>
+          <span class="text-[10px] text-[#1890ff]">● 当前</span>
+        </div>
+        <div class="flex items-center justify-between p-2 border border-gray-200 rounded hover:bg-gray-50">
+          <div>
+            <div class="font-semibold text-gray-700">v2</div>
+            <div class="text-[10px] text-gray-500">加入「双认证」口播 · 1.5 小时前</div>
+          </div>
+          <button class="text-[10px] text-[#1890ff]">查看 · 对比</button>
+        </div>
+        <div class="flex items-center justify-between p-2 border border-gray-200 rounded hover:bg-gray-50">
+          <div>
+            <div class="font-semibold text-gray-700">v1 · 初版</div>
+            <div class="text-[10px] text-gray-500">初始生成 · 4 小时前</div>
+          </div>
+          <button class="text-[10px] text-[#1890ff]">查看 · 对比</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div class="flex gap-2 pt-3 border-t border-gray-200">
+      <button class="flex-1 py-2 bg-green-500 text-white rounded text-sm font-semibold hover:bg-green-600">✓ 通过</button>
+      <button class="flex-1 py-2 bg-red-500 text-white rounded text-sm font-semibold hover:bg-red-600">✗ 驳回</button>
+      <button class="px-3 py-2 border border-gray-300 rounded text-sm hover:border-[#1890ff]">💬</button>
+      <button class="px-3 py-2 border border-gray-300 rounded text-sm hover:border-[#1890ff]">📤</button>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SEO 管线</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .pipeline-node { display:flex; align-items:center; }
+    .pipeline-node .node { width:42px; height:42px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:18px; background:#fff; border:2px solid #d9d9d9; position:relative; z-index:1; }
+    .pipeline-node.done .node { background:#f6ffed; border-color:#52c41a; color:#52c41a; }
+    .pipeline-node.active .node { background:#e6f4ff; border-color:#1890ff; color:#1890ff; box-shadow:0 0 0 4px rgba(24,144,255,0.15); }
+    .pipeline-line { flex:1; height:2px; background:#d9d9d9; }
+    .pipeline-line.done { background:#52c41a; }
+    .difficulty-bar { height:6px; background:#f0f0f0; border-radius:3px; overflow:hidden; }
+    .difficulty-fill { height:100%; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 4 · SEO 管线（对标 Contently SEO + SurferSEO · Issue #2647-#2648）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">以关键词驱动 SEO 文章批量生产——从关键词池 → AI 大纲 → AI 初稿 → 人工编辑 → 发布 → 排名追踪，替代零散的 Google Doc 写稿</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">SEO 专员、内容编辑、外贸运营（中英文 SEO）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">关键词池 / AI 大纲生成 / AI 初稿 / 人工编辑 / 发布 / 排名追踪折线图</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">导入关键词 / 点击「生成文章」启动流水线 / 每阶段查看产出并推进 / 查看 Top 20 排名</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">关键词池 8 行 / 流水线 5 节点状态清晰 / 折线图占位 / 排名 Top 20 列表 / 🔴 全新建</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 Phase 2 详细设计.md §2.4 SEO 管线</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [页面标题] -->
+<div class="bg-white border border-gray-300 rounded-md p-4 mb-4 flex items-center justify-between">
+  <div>
+    <h1 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      🔍 SEO 管线
+      <span class="text-xs font-normal px-2 py-0.5 rounded bg-purple-50 text-[#722ed1] border border-purple-200">对标 Contently SEO + SurferSEO</span>
+      <span class="text-xs font-normal px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-200">🔴 全新建</span>
+    </h1>
+    <div class="text-xs text-gray-500 mt-1">Issue #2647 关键词池+流水线 · #2648 排名追踪看板</div>
+  </div>
+  <div class="flex gap-2">
+    <button class="px-3 py-1.5 text-sm border border-gray-300 rounded hover:border-[#1890ff]">📥 导入关键词</button>
+    <button class="px-3 py-1.5 text-sm bg-[#1890ff] text-white rounded">➕ 新增关键词</button>
+  </div>
+</div>
+
+<!-- [KPI 卡] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="text-xs text-gray-500">关键词池</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">156</div>
+    <div class="text-[11px] text-green-600 mt-0.5">↑ 本月 +24</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="text-xs text-gray-500">已产出文章</div>
+    <div class="text-2xl font-bold text-[#1890ff] mt-1">42</div>
+    <div class="text-[11px] text-gray-500 mt-0.5">覆盖率 27%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="text-xs text-gray-500">Top 10 关键词</div>
+    <div class="text-2xl font-bold text-green-600 mt-1">18</div>
+    <div class="text-[11px] text-green-600 mt-0.5">↑ 上月 +5</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded-md p-3">
+    <div class="text-xs text-gray-500">月度有机流量</div>
+    <div class="text-2xl font-bold text-[#722ed1] mt-1">12.8k</div>
+    <div class="text-[11px] text-green-600 mt-0.5">↑ MoM +18%</div>
+  </div>
+</div>
+
+<!-- [关键词池表格] -->
+<div class="bg-white border border-gray-300 rounded-md p-4 mb-4">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-bold text-gray-700">🔑 关键词池</h2>
+    <div class="flex gap-2 text-xs">
+      <select class="border border-gray-300 rounded px-2 py-1"><option>全部分类</option><option>产品词</option><option>行业词</option><option>长尾词</option></select>
+      <input type="text" placeholder="搜索关键词..." class="border border-gray-300 rounded px-2 py-1 text-xs w-48">
+    </div>
+  </div>
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-gray-50 text-xs text-gray-600">
+        <th class="p-2 text-left border-b border-gray-200">关键词</th>
+        <th class="p-2 text-right border-b border-gray-200 w-24">月搜索量</th>
+        <th class="p-2 text-left border-b border-gray-200 w-32">难度</th>
+        <th class="p-2 text-center border-b border-gray-200 w-24">当前排名</th>
+        <th class="p-2 text-center border-b border-gray-200 w-24">目标排名</th>
+        <th class="p-2 text-center border-b border-gray-200 w-24">文章数</th>
+        <th class="p-2 text-center border-b border-gray-200 w-32">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-xs">
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">儿童无动力乐园</td>
+        <td class="p-2 text-right text-gray-700">8,900</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-red-500" style="width:78%"></div></div><span class="text-gray-600">78</span></div></td>
+        <td class="p-2 text-center"><span class="text-green-600 font-bold">#3</span></td>
+        <td class="p-2 text-center text-gray-600">#1</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-blue-50 text-[#1890ff] rounded">6</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">户外游乐设备厂家</td>
+        <td class="p-2 text-right text-gray-700">5,400</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-orange-500" style="width:62%"></div></div><span class="text-gray-600">62</span></div></td>
+        <td class="p-2 text-center"><span class="text-[#1890ff] font-bold">#8</span></td>
+        <td class="p-2 text-center text-gray-600">#3</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-blue-50 text-[#1890ff] rounded">4</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">EN1176 游乐设备标准</td>
+        <td class="p-2 text-right text-gray-700">1,800</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-yellow-500" style="width:45%"></div></div><span class="text-gray-600">45</span></div></td>
+        <td class="p-2 text-center"><span class="text-green-600 font-bold">#2</span></td>
+        <td class="p-2 text-center text-gray-600">#1</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-blue-50 text-[#1890ff] rounded">3</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">不锈钢滑梯定制</td>
+        <td class="p-2 text-right text-gray-700">3,200</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-orange-500" style="width:58%"></div></div><span class="text-gray-600">58</span></div></td>
+        <td class="p-2 text-center"><span class="text-orange-600 font-bold">#15</span></td>
+        <td class="p-2 text-center text-gray-600">#5</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-yellow-50 text-yellow-700 rounded">1</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">幼儿园户外游乐场设计</td>
+        <td class="p-2 text-right text-gray-700">2,100</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-yellow-500" style="width:48%"></div></div><span class="text-gray-600">48</span></div></td>
+        <td class="p-2 text-center"><span class="text-[#1890ff] font-bold">#7</span></td>
+        <td class="p-2 text-center text-gray-600">#3</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-blue-50 text-[#1890ff] rounded">5</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">商用游乐设备价格</td>
+        <td class="p-2 text-right text-gray-700">6,700</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-red-500" style="width:72%"></div></div><span class="text-gray-600">72</span></div></td>
+        <td class="p-2 text-center"><span class="text-gray-600 font-bold">#24</span></td>
+        <td class="p-2 text-center text-gray-600">#10</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">0</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">outdoor playground equipment</td>
+        <td class="p-2 text-right text-gray-700">12,300</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-red-500" style="width:85%"></div></div><span class="text-gray-600">85</span></div></td>
+        <td class="p-2 text-center"><span class="text-gray-600 font-bold">#42</span></td>
+        <td class="p-2 text-center text-gray-600">#20</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-yellow-50 text-yellow-700 rounded">2</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 font-medium text-gray-800">kindergarten playground supplier</td>
+        <td class="p-2 text-right text-gray-700">2,800</td>
+        <td class="p-2"><div class="flex items-center gap-2"><div class="difficulty-bar flex-1"><div class="difficulty-fill bg-orange-500" style="width:55%"></div></div><span class="text-gray-600">55</span></div></td>
+        <td class="p-2 text-center"><span class="text-orange-600 font-bold">#18</span></td>
+        <td class="p-2 text-center text-gray-600">#5</td>
+        <td class="p-2 text-center"><span class="px-1.5 py-0.5 bg-yellow-50 text-yellow-700 rounded">1</span></td>
+        <td class="p-2 text-center"><button class="text-xs px-2 py-0.5 bg-[#1890ff] text-white rounded">生成文章</button></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="mt-2 flex items-center justify-between text-xs text-gray-500">
+    <span>共 156 条 · 当前 1-8</span>
+    <span>← 1 2 3 ... 20 →</span>
+  </div>
+</div>
+
+<!-- [文章生产流水线] -->
+<div class="bg-white border border-gray-300 rounded-md p-4 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-sm font-bold text-gray-700">⚙️ 文章生产流水线</h2>
+    <div class="text-xs text-gray-500">当前处理：「儿童无动力乐园」文章 #042</div>
+  </div>
+
+  <!-- 5 节点流水线 -->
+  <div class="flex items-center px-6 py-4 bg-gray-50 rounded">
+    <div class="pipeline-node done flex-col text-center" style="display:flex;flex-direction:column;align-items:center;min-width:90px;">
+      <div class="node">🔑</div>
+      <div class="text-xs font-semibold text-green-700 mt-2">关键词</div>
+      <div class="text-[10px] text-gray-500">已选择</div>
+    </div>
+    <div class="pipeline-line done"></div>
+    <div class="pipeline-node done flex-col text-center" style="display:flex;flex-direction:column;align-items:center;min-width:90px;">
+      <div class="node">📋</div>
+      <div class="text-xs font-semibold text-green-700 mt-2">AI 大纲</div>
+      <div class="text-[10px] text-gray-500">12 个章节</div>
+    </div>
+    <div class="pipeline-line done"></div>
+    <div class="pipeline-node done flex-col text-center" style="display:flex;flex-direction:column;align-items:center;min-width:90px;">
+      <div class="node">📝</div>
+      <div class="text-xs font-semibold text-green-700 mt-2">AI 初稿</div>
+      <div class="text-[10px] text-gray-500">3,280 字</div>
+    </div>
+    <div class="pipeline-line"></div>
+    <div class="pipeline-node active flex-col text-center" style="display:flex;flex-direction:column;align-items:center;min-width:90px;">
+      <div class="node">✏️</div>
+      <div class="text-xs font-semibold text-[#1890ff] mt-2">人工编辑</div>
+      <div class="text-[10px] text-gray-500">张三编辑中</div>
+    </div>
+    <div class="pipeline-line"></div>
+    <div class="pipeline-node flex-col text-center" style="display:flex;flex-direction:column;align-items:center;min-width:90px;">
+      <div class="node text-gray-400">🚀</div>
+      <div class="text-xs font-semibold text-gray-400 mt-2">发布</div>
+      <div class="text-[10px] text-gray-400">待推进</div>
+    </div>
+    <div class="pipeline-line"></div>
+    <div class="pipeline-node flex-col text-center" style="display:flex;flex-direction:column;align-items:center;min-width:90px;">
+      <div class="node text-gray-400">📊</div>
+      <div class="text-xs font-semibold text-gray-400 mt-2">排名追踪</div>
+      <div class="text-[10px] text-gray-400">未启动</div>
+    </div>
+  </div>
+
+  <!-- 当前节点详情 -->
+  <div class="mt-4 grid grid-cols-3 gap-3 text-xs">
+    <div class="border border-gray-200 rounded p-3 bg-green-50">
+      <div class="font-semibold text-green-700 mb-1">✅ AI 大纲产出</div>
+      <div class="text-gray-600 leading-relaxed">1. 什么是无动力乐园<br>2. 核心组件：滑梯/攀爬/平衡<br>3. 安全标准 EN1176...（共 12 项）</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3 bg-green-50">
+      <div class="font-semibold text-green-700 mb-1">✅ AI 初稿 · 3,280 字</div>
+      <div class="text-gray-600 leading-relaxed">"儿童无动力乐园作为近 5 年户外游乐的新趋势，以其零能耗、亲自然、激发儿童本能运动..."</div>
+    </div>
+    <div class="border-2 border-[#1890ff] rounded p-3 bg-blue-50">
+      <div class="font-semibold text-[#1890ff] mb-1">✏️ 当前：人工编辑中</div>
+      <div class="text-gray-600 leading-relaxed">编辑：张三 · 进度 48%<br>待优化：第 3/7/11 段 · SEO 关键词密度 2.8%</div>
+      <button class="mt-2 w-full py-1 bg-[#1890ff] text-white rounded text-[11px]">打开编辑器 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- [排名追踪看板] -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [折线图占位] -->
+  <div class="col-span-7 bg-white border border-gray-300 rounded-md p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h2 class="text-sm font-bold text-gray-700">📈 排名趋势（近 90 天）</h2>
+      <div class="flex gap-2 text-xs">
+        <button class="px-2 py-0.5 bg-blue-50 text-[#1890ff] rounded">30 天</button>
+        <button class="px-2 py-0.5 bg-[#1890ff] text-white rounded">90 天</button>
+        <button class="px-2 py-0.5 bg-gray-100 text-gray-600 rounded">1 年</button>
+      </div>
+    </div>
+    <!-- 折线图占位 SVG -->
+    <div class="relative h-64 bg-gradient-to-b from-blue-50/30 to-transparent rounded border border-gray-100">
+      <svg viewBox="0 0 600 240" class="w-full h-full" preserveAspectRatio="none">
+        <!-- 网格 -->
+        <g stroke="#f0f0f0" stroke-width="1">
+          <line x1="0" y1="48" x2="600" y2="48"/>
+          <line x1="0" y1="96" x2="600" y2="96"/>
+          <line x1="0" y1="144" x2="600" y2="144"/>
+          <line x1="0" y1="192" x2="600" y2="192"/>
+        </g>
+        <!-- 关键词 A 折线 -->
+        <polyline points="20,180 80,165 140,150 200,130 260,110 320,95 380,75 440,62 500,48 560,35"
+                  fill="none" stroke="#1890ff" stroke-width="2.5"/>
+        <!-- 关键词 B 折线 -->
+        <polyline points="20,210 80,200 140,190 200,180 260,170 320,160 380,145 440,130 500,115 560,95"
+                  fill="none" stroke="#722ed1" stroke-width="2.5"/>
+        <!-- 关键词 C 折线 -->
+        <polyline points="20,150 80,155 140,148 200,142 260,138 320,132 380,125 440,118 500,108 560,98"
+                  fill="none" stroke="#52c41a" stroke-width="2.5"/>
+        <!-- 数据点 A -->
+        <g fill="#1890ff">
+          <circle cx="20" cy="180" r="3"/><circle cx="200" cy="130" r="3"/><circle cx="380" cy="75" r="3"/><circle cx="560" cy="35" r="4"/>
+        </g>
+      </svg>
+      <div class="absolute top-2 right-2 bg-white/90 border border-gray-200 rounded p-2 text-[10px]">
+        <div class="flex items-center gap-1 mb-1"><span class="w-3 h-0.5 bg-[#1890ff]"></span> 儿童无动力乐园 #3</div>
+        <div class="flex items-center gap-1 mb-1"><span class="w-3 h-0.5 bg-[#722ed1]"></span> 户外游乐设备厂家 #8</div>
+        <div class="flex items-center gap-1"><span class="w-3 h-0.5 bg-green-500"></span> EN1176 标准 #2</div>
+      </div>
+      <div class="absolute bottom-1 left-2 text-[10px] text-gray-400">1 月 26 日</div>
+      <div class="absolute bottom-1 right-2 text-[10px] text-gray-400">4 月 22 日</div>
+    </div>
+  </div>
+
+  <!-- [Top 20 列表] -->
+  <div class="col-span-5 bg-white border border-gray-300 rounded-md p-4">
+    <h2 class="text-sm font-bold text-gray-700 mb-3">🏆 关键词排名 Top 20</h2>
+    <div class="space-y-1.5 text-xs max-h-64 overflow-y-auto">
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#1 · 梦幻城堡儿童乐园</span><span class="text-green-600 font-semibold">▲ 2</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#2 · EN1176 游乐设备标准</span><span class="text-gray-500">— 0</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#3 · 儿童无动力乐园</span><span class="text-green-600 font-semibold">▲ 5</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#4 · 304 不锈钢滑梯</span><span class="text-green-600 font-semibold">▲ 1</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#5 · 社区游乐场设计</span><span class="text-red-500 font-semibold">▼ 2</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#6 · 幼儿园滑梯定制</span><span class="text-green-600 font-semibold">▲ 3</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#7 · 幼儿园户外设计</span><span class="text-gray-500">— 0</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#8 · 户外游乐设备厂家</span><span class="text-green-600 font-semibold">▲ 4</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#9 · 儿童攀爬架</span><span class="text-green-600 font-semibold">▲ 2</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#10 · 游乐设备 GB19272</span><span class="text-gray-500">— 0</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#12 · 无动力游乐 PPT</span><span class="text-green-600 font-semibold">▲ 6</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#15 · 不锈钢滑梯定制</span><span class="text-red-500 font-semibold">▼ 3</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#17 · 儿童乐园加盟</span><span class="text-green-600 font-semibold">▲ 8</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#18 · kindergarten supplier</span><span class="text-green-600 font-semibold">▲ 4</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#19 · 游乐场厂家排名</span><span class="text-green-600 font-semibold">▲ 2</span></div>
+      <div class="flex items-center justify-between p-1.5 border-b border-gray-100"><span class="text-gray-700">#20 · 公园游乐设备</span><span class="text-red-500 font-semibold">▼ 1</span></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

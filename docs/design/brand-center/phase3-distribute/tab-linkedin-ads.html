@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LinkedIn 思想领导力 Ads</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    :root {
+      --linkedin-blue: #0A66C2;
+      --linkedin-blue-light: #e8f0fa;
+    }
+    .li-blue { color: #0A66C2; }
+    .bg-li-blue { background: #0A66C2; }
+    .bg-li-light { background: #e8f0fa; }
+    .border-li-blue { border-color: #0A66C2; }
+    .li-icon { display: inline-flex; align-items: center; justify-content: center; width: 20px; height: 20px; background: #0A66C2; color: #fff; font-weight: 700; font-size: 11px; border-radius: 3px; }
+    .status-active { background: #e6f4ea; color: #137333; }
+    .status-paused { background: #fef7e0; color: #996300; }
+    .status-draft { background: #f1f3f4; color: #5f6368; }
+    .status-ended { background: #fce8e6; color: #c5221f; }
+    .chart-line { stroke: #0A66C2; stroke-width: 2; fill: none; }
+    .chart-area { fill: rgba(10, 102, 194, 0.08); }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 2 · LinkedIn 思想领导力 Ads</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">用高管个人 LinkedIn 账号做 Thought Leader Ads，比公司账号广告获得更高信任+更高 CTR</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌运营（投放计划主）, 高管代言人（账号授权）, CMO（预算审批+效果审查）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">Thought Leader 账号池 / 投放计划管理 / 目标人群定位 / 预算实时监控 / Lead 收集</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">设为代言人 / 新建投放计划向导 / 暂停/恢复投放 / 下钻 Lead 详情</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">LinkedIn Marketing API 集成成功 / 账号 OAuth 授权 / CTR/CPC/Lead 分钟级刷新 / 预算超支告警</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心详细设计.md §Phase3.2</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部操作栏] -->
+<!-- [TOP-ACTION-BAR] 页面顶部操作栏 -->
+<div class="flex items-center justify-between mb-4">
+  <div class="flex items-center gap-3">
+    <div class="li-icon">in</div>
+    <div>
+      <div class="text-base font-semibold text-gray-800">LinkedIn Thought Leadership Ads</div>
+      <div class="text-xs text-gray-500">用高管个人账号做品牌广告 · API 集成 <span style="color:#0A66C2;">LinkedIn Marketing Developer Platform</span></div>
+    </div>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="text-xs border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50">📊 导出报表</button>
+    <button class="text-xs text-white px-4 py-1.5 rounded font-medium" style="background:#0A66C2;" onmouseover="this.style.background='#084d94'" onmouseout="this.style.background='#0A66C2'">+ 新建投放计划</button>
+  </div>
+</div>
+
+<!-- [三栏主体] -->
+<div class="grid gap-4" style="grid-template-columns: 30% 45% 25%;">
+
+  <!-- [Thought Leader 账号池 - 左 30%] -->
+  <!-- [ACCOUNT-POOL] 高管代言账号池 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">👔 Thought Leader 账号池</div>
+      <button class="text-xs hover:underline" style="color:#0A66C2;">+ 添加</button>
+    </div>
+    <div class="text-xs text-gray-500 mb-3">已授权 6 个高管 LinkedIn 账号</div>
+
+    <div class="space-y-2.5">
+      <!-- 账号 1 - 已设为代言人 -->
+      <div class="border rounded p-3" style="border-color:#0A66C2; background:#e8f0fa;">
+        <div class="flex items-start gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-orange-200 flex items-center justify-center text-sm font-bold text-orange-700 flex-shrink-0">吴</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="text-sm font-semibold text-gray-800 truncate">Wu Yao</span>
+              <span class="text-xs px-1.5 py-0.5 rounded text-white" style="background:#0A66C2;">代言中</span>
+            </div>
+            <div class="text-xs text-gray-600 truncate">CEO · Wande Amusement Group</div>
+            <div class="flex gap-3 mt-1.5 text-xs">
+              <span class="text-gray-700"><span class="font-semibold">12.8k</span> <span class="text-gray-400">粉丝</span></span>
+              <span class="text-green-600">↑ 286 <span class="text-gray-400">本月</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-2.5">
+          <button class="flex-1 text-xs border rounded py-1 hover:bg-white" style="border-color:#0A66C2; color:#0A66C2;">查看详情</button>
+          <button class="flex-1 text-xs bg-white border border-gray-300 text-gray-600 rounded py-1 hover:bg-gray-50">取消代言</button>
+        </div>
+      </div>
+
+      <!-- 账号 2 - 已设为代言人 -->
+      <div class="border rounded p-3" style="border-color:#0A66C2; background:#e8f0fa;">
+        <div class="flex items-start gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-blue-200 flex items-center justify-center text-sm font-bold text-blue-700 flex-shrink-0">陈</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-1.5">
+              <span class="text-sm font-semibold text-gray-800 truncate">Chen Yi</span>
+              <span class="text-xs px-1.5 py-0.5 rounded text-white" style="background:#0A66C2;">代言中</span>
+            </div>
+            <div class="text-xs text-gray-600 truncate">CMO · Wande Amusement Group</div>
+            <div class="flex gap-3 mt-1.5 text-xs">
+              <span class="text-gray-700"><span class="font-semibold">8.4k</span> <span class="text-gray-400">粉丝</span></span>
+              <span class="text-green-600">↑ 156 <span class="text-gray-400">本月</span></span>
+            </div>
+          </div>
+        </div>
+        <div class="flex gap-1.5 mt-2.5">
+          <button class="flex-1 text-xs border rounded py-1 hover:bg-white" style="border-color:#0A66C2; color:#0A66C2;">查看详情</button>
+          <button class="flex-1 text-xs bg-white border border-gray-300 text-gray-600 rounded py-1 hover:bg-gray-50">取消代言</button>
+        </div>
+      </div>
+
+      <!-- 账号 3 -->
+      <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+        <div class="flex items-start gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-green-200 flex items-center justify-center text-sm font-bold text-green-700 flex-shrink-0">林</div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold text-gray-800 truncate">Lin Hua</div>
+            <div class="text-xs text-gray-600 truncate">VP Global Sales · Wande</div>
+            <div class="flex gap-3 mt-1.5 text-xs">
+              <span class="text-gray-700"><span class="font-semibold">6.2k</span> <span class="text-gray-400">粉丝</span></span>
+              <span class="text-green-600">↑ 98 <span class="text-gray-400">本月</span></span>
+            </div>
+          </div>
+        </div>
+        <button class="w-full text-xs text-white rounded py-1.5 mt-2.5 font-medium" style="background:#0A66C2;">设为代言人</button>
+      </div>
+
+      <!-- 账号 4 -->
+      <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+        <div class="flex items-start gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-purple-200 flex items-center justify-center text-sm font-bold text-purple-700 flex-shrink-0">黄</div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold text-gray-800 truncate">Huang Wei</div>
+            <div class="text-xs text-gray-600 truncate">Chief Designer · Wande D3</div>
+            <div class="flex gap-3 mt-1.5 text-xs">
+              <span class="text-gray-700"><span class="font-semibold">5.8k</span> <span class="text-gray-400">粉丝</span></span>
+              <span class="text-green-600">↑ 124 <span class="text-gray-400">本月</span></span>
+            </div>
+          </div>
+        </div>
+        <button class="w-full text-xs text-white rounded py-1.5 mt-2.5 font-medium" style="background:#0A66C2;">设为代言人</button>
+      </div>
+
+      <!-- 账号 5 -->
+      <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+        <div class="flex items-start gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-pink-200 flex items-center justify-center text-sm font-bold text-pink-700 flex-shrink-0">徐</div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold text-gray-800 truncate">Xu Jing</div>
+            <div class="text-xs text-gray-600 truncate">Director MENA · Wande</div>
+            <div class="flex gap-3 mt-1.5 text-xs">
+              <span class="text-gray-700"><span class="font-semibold">4.6k</span> <span class="text-gray-400">粉丝</span></span>
+              <span class="text-green-600">↑ 72 <span class="text-gray-400">本月</span></span>
+            </div>
+          </div>
+        </div>
+        <button class="w-full text-xs text-white rounded py-1.5 mt-2.5 font-medium" style="background:#0A66C2;">设为代言人</button>
+      </div>
+
+      <!-- 账号 6 -->
+      <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+        <div class="flex items-start gap-2.5">
+          <div class="w-10 h-10 rounded-full bg-yellow-200 flex items-center justify-center text-sm font-bold text-yellow-700 flex-shrink-0">钱</div>
+          <div class="flex-1 min-w-0">
+            <div class="text-sm font-semibold text-gray-800 truncate">Qian Long</div>
+            <div class="text-xs text-gray-600 truncate">Head of APAC · Wande</div>
+            <div class="flex gap-3 mt-1.5 text-xs">
+              <span class="text-gray-700"><span class="font-semibold">3.9k</span> <span class="text-gray-400">粉丝</span></span>
+              <span class="text-green-600">↑ 48 <span class="text-gray-400">本月</span></span>
+            </div>
+          </div>
+        </div>
+        <button class="w-full text-xs text-white rounded py-1.5 mt-2.5 font-medium" style="background:#0A66C2;">设为代言人</button>
+      </div>
+    </div>
+
+    <!-- 账号池说明 -->
+    <div class="mt-3 p-2.5 bg-gray-50 border border-gray-200 rounded text-xs text-gray-600 leading-snug">
+      <span class="font-semibold text-gray-700">📘 机制：</span>
+      高管授权 LinkedIn 个人账号后，品牌方可用其身份投放 Thought Leader Ads。根据 LinkedIn 官方数据，Thought Leader Ads 比 Company Page Ads CTR 高 <span class="font-semibold" style="color:#0A66C2;">2.3×</span>。
+    </div>
+  </div>
+
+  <!-- [Ads 投放计划 - 中 45%] -->
+  <!-- [CAMPAIGN-TABLE] Ads 投放计划表 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-semibold text-gray-800">📊 投放计划</div>
+      <div class="flex items-center gap-2 text-xs">
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>全部状态</option>
+          <option>进行中</option>
+          <option>已暂停</option>
+          <option>草稿</option>
+          <option>已结束</option>
+        </select>
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>全部代言人</option>
+          <option>Wu Yao (CEO)</option>
+          <option>Chen Yi (CMO)</option>
+        </select>
+      </div>
+    </div>
+
+    <table class="w-full text-xs border-collapse">
+      <thead>
+        <tr class="bg-gray-50 border-b border-gray-200 text-gray-600">
+          <th class="p-2 text-left">计划名 / 代言人</th>
+          <th class="p-2 text-left">内容 + 目标人群</th>
+          <th class="p-2 text-right w-20">预算 / 花费</th>
+          <th class="p-2 text-right w-16">CTR</th>
+          <th class="p-2 text-center w-20">状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 行 1 -->
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 align-top">
+            <div class="font-semibold text-gray-800">沙特 IAAPA 预热</div>
+            <div class="flex items-center gap-1 text-gray-500 mt-0.5">
+              <span class="li-icon" style="width:14px;height:14px;font-size:8px;">in</span>
+              <span>Wu Yao (CEO)</span>
+            </div>
+          </td>
+          <td class="p-2 align-top">
+            <div class="text-gray-700 truncate" style="max-width:220px;">"AI 如何重塑 MENA 游乐设备制造"</div>
+            <div class="text-gray-500 mt-0.5">🌍 MENA · 💼 VP+ · 🏢 Amusement/Hospitality</div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-medium text-gray-800">$5,000</div>
+            <div class="text-gray-500">$3,240</div>
+            <div class="w-full bg-gray-200 rounded h-1 mt-1"><div class="h-1 rounded" style="width:65%;background:#0A66C2;"></div></div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-semibold" style="color:#0A66C2;">4.8%</div>
+            <div class="text-green-600 text-xs">↑ 优秀</div>
+          </td>
+          <td class="p-2 text-center align-top">
+            <span class="status-active px-2 py-0.5 rounded text-xs">● 进行中</span>
+          </td>
+        </tr>
+
+        <!-- 行 2 -->
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 align-top">
+            <div class="font-semibold text-gray-800">D3 工具全球首发</div>
+            <div class="flex items-center gap-1 text-gray-500 mt-0.5">
+              <span class="li-icon" style="width:14px;height:14px;font-size:8px;">in</span>
+              <span>Chen Yi (CMO)</span>
+            </div>
+          </td>
+          <td class="p-2 align-top">
+            <div class="text-gray-700 truncate" style="max-width:220px;">"参数化设计如何让工期缩短 40%"</div>
+            <div class="text-gray-500 mt-0.5">🌍 全球 · 💼 Designer/Architect · 🏢 Entertainment</div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-medium text-gray-800">$8,000</div>
+            <div class="text-gray-500">$6,120</div>
+            <div class="w-full bg-gray-200 rounded h-1 mt-1"><div class="h-1 rounded" style="width:77%;background:#0A66C2;"></div></div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-semibold" style="color:#0A66C2;">3.6%</div>
+            <div class="text-green-600 text-xs">↑ 良好</div>
+          </td>
+          <td class="p-2 text-center align-top">
+            <span class="status-active px-2 py-0.5 rounded text-xs">● 进行中</span>
+          </td>
+        </tr>
+
+        <!-- 行 3 -->
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 align-top">
+            <div class="font-semibold text-gray-800">东南亚大型乐园案例</div>
+            <div class="flex items-center gap-1 text-gray-500 mt-0.5">
+              <span class="li-icon" style="width:14px;height:14px;font-size:8px;">in</span>
+              <span>Wu Yao (CEO)</span>
+            </div>
+          </td>
+          <td class="p-2 align-top">
+            <div class="text-gray-700 truncate" style="max-width:220px;">"一个 10000m² 室内乐园的 180 天"</div>
+            <div class="text-gray-500 mt-0.5">🌍 APAC · 💼 C-level · 🏢 Real Estate/Retail</div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-medium text-gray-800">$3,000</div>
+            <div class="text-gray-500">$2,880</div>
+            <div class="w-full bg-gray-200 rounded h-1 mt-1"><div class="h-1 rounded" style="width:96%;background:#fa8c16;"></div></div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-semibold" style="color:#0A66C2;">5.2%</div>
+            <div class="text-green-600 text-xs">↑ 优秀</div>
+          </td>
+          <td class="p-2 text-center align-top">
+            <span class="status-active px-2 py-0.5 rounded text-xs">● 进行中</span>
+          </td>
+        </tr>
+
+        <!-- 行 4 -->
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 align-top">
+            <div class="font-semibold text-gray-800">EN1176 认证传播</div>
+            <div class="flex items-center gap-1 text-gray-500 mt-0.5">
+              <span class="li-icon" style="width:14px;height:14px;font-size:8px;">in</span>
+              <span>Chen Yi (CMO)</span>
+            </div>
+          </td>
+          <td class="p-2 align-top">
+            <div class="text-gray-700 truncate" style="max-width:220px;">"中国厂商如何拿到欧洲安全认证"</div>
+            <div class="text-gray-500 mt-0.5">🌍 EU · 💼 Procurement · 🏢 Amusement</div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-medium text-gray-800">$2,500</div>
+            <div class="text-gray-500">$860</div>
+            <div class="w-full bg-gray-200 rounded h-1 mt-1"><div class="h-1 rounded" style="width:34%;background:#bfbfbf;"></div></div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-semibold text-gray-600">2.1%</div>
+            <div class="text-gray-500 text-xs">中等</div>
+          </td>
+          <td class="p-2 text-center align-top">
+            <span class="status-paused px-2 py-0.5 rounded text-xs">⏸ 已暂停</span>
+          </td>
+        </tr>
+
+        <!-- 行 5 -->
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 align-top">
+            <div class="font-semibold text-gray-800">米兰展展前预热</div>
+            <div class="flex items-center gap-1 text-gray-500 mt-0.5">
+              <span class="li-icon" style="width:14px;height:14px;font-size:8px;">in</span>
+              <span>Wu Yao (CEO)</span>
+            </div>
+          </td>
+          <td class="p-2 align-top">
+            <div class="text-gray-700 truncate" style="max-width:220px;">"米兰展 Hall 7 · C23 · 来看 D3"</div>
+            <div class="text-gray-500 mt-0.5">🌍 EU/US · 💼 All · 🏢 Amusement</div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-medium text-gray-800">$4,000</div>
+            <div class="text-gray-500">$0</div>
+            <div class="w-full bg-gray-200 rounded h-1 mt-1"><div class="h-1 rounded" style="width:0%;background:#0A66C2;"></div></div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-semibold text-gray-400">—</div>
+            <div class="text-gray-400 text-xs">未投放</div>
+          </td>
+          <td class="p-2 text-center align-top">
+            <span class="status-draft px-2 py-0.5 rounded text-xs">📝 草稿</span>
+          </td>
+        </tr>
+
+        <!-- 行 6 -->
+        <tr class="border-b border-gray-100 hover:bg-blue-50">
+          <td class="p-2 align-top">
+            <div class="font-semibold text-gray-800">Q1 CEO 洞察合集</div>
+            <div class="flex items-center gap-1 text-gray-500 mt-0.5">
+              <span class="li-icon" style="width:14px;height:14px;font-size:8px;">in</span>
+              <span>Wu Yao (CEO)</span>
+            </div>
+          </td>
+          <td class="p-2 align-top">
+            <div class="text-gray-700 truncate" style="max-width:220px;">"2026 Q1 游乐设备行业 5 大趋势"</div>
+            <div class="text-gray-500 mt-0.5">🌍 全球 · 💼 C-level · 🏢 Entertainment</div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-medium text-gray-800">$6,000</div>
+            <div class="text-gray-500">$6,000</div>
+            <div class="w-full bg-gray-200 rounded h-1 mt-1"><div class="h-1 rounded" style="width:100%;background:#52c41a;"></div></div>
+          </td>
+          <td class="p-2 text-right align-top">
+            <div class="font-semibold" style="color:#0A66C2;">4.2%</div>
+            <div class="text-green-600 text-xs">↑ 良好</div>
+          </td>
+          <td class="p-2 text-center align-top">
+            <span class="status-ended px-2 py-0.5 rounded text-xs">✓ 已结束</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="flex items-center justify-between mt-3 text-xs text-gray-500">
+      <span>共 6 个计划 · 2 个进行中 · 1 个暂停 · 1 个草稿 · 1 个已结束</span>
+      <div class="flex items-center gap-2">
+        <span>每页 10 条</span>
+        <button class="border border-gray-300 rounded px-2 py-0.5">&lt;</button>
+        <span>1/1</span>
+        <button class="border border-gray-300 rounded px-2 py-0.5">&gt;</button>
+      </div>
+    </div>
+
+    <!-- 行操作说明 -->
+    <div class="mt-3 p-2.5 bg-gray-50 border border-gray-200 rounded text-xs text-gray-600">
+      <span class="font-semibold text-gray-700">💡 操作：</span>
+      点击行展开详情（编辑创意/调整预算/查看 Lead）· 右键菜单（复制/暂停/结束/导出）· 预算用完 95% 自动告警
+    </div>
+  </div>
+
+  <!-- [效果监控 - 右 25%] -->
+  <!-- [MONITOR-PANEL] 效果监控面板 -->
+  <div class="space-y-3">
+
+    <!-- 实时数据卡 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="text-sm font-semibold text-gray-800 mb-3">📈 本月实时数据</div>
+
+      <div class="space-y-3">
+        <div>
+          <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+            <span>本月预算</span>
+            <span class="text-gray-400">4月</span>
+          </div>
+          <div class="text-xl font-bold text-gray-800">$28,500</div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between text-xs text-gray-500 mb-1">
+            <span>已花费</span>
+            <span class="text-green-600">59%</span>
+          </div>
+          <div class="text-xl font-bold" style="color:#0A66C2;">$16,860</div>
+          <div class="w-full bg-gray-200 rounded h-1.5 mt-1"><div class="h-1.5 rounded" style="width:59%;background:#0A66C2;"></div></div>
+        </div>
+
+        <div class="grid grid-cols-2 gap-2 pt-2 border-t border-gray-100">
+          <div>
+            <div class="text-xs text-gray-500">平均 CPC</div>
+            <div class="text-base font-semibold text-gray-800">$4.28</div>
+            <div class="text-xs text-green-600">↓ 12% vs 上月</div>
+          </div>
+          <div>
+            <div class="text-xs text-gray-500">Lead 数</div>
+            <div class="text-base font-semibold" style="color:#0A66C2;">248</div>
+            <div class="text-xs text-green-600">↑ 32% vs 上月</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 折线图占位 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-gray-800">近 30 天趋势</div>
+        <div class="flex items-center gap-1 text-xs text-gray-500">
+          <span class="inline-block w-2 h-2 rounded-full" style="background:#0A66C2;"></span>
+          <span>CTR%</span>
+        </div>
+      </div>
+      <!-- SVG 折线图 -->
+      <svg viewBox="0 0 300 100" class="w-full" style="height:100px;">
+        <!-- 网格 -->
+        <line x1="0" y1="25" x2="300" y2="25" stroke="#f0f0f0" stroke-width="1"/>
+        <line x1="0" y1="50" x2="300" y2="50" stroke="#f0f0f0" stroke-width="1"/>
+        <line x1="0" y1="75" x2="300" y2="75" stroke="#f0f0f0" stroke-width="1"/>
+        <!-- 面积 -->
+        <path class="chart-area" d="M0,80 L20,72 L40,68 L60,60 L80,65 L100,55 L120,48 L140,52 L160,42 L180,38 L200,45 L220,35 L240,30 L260,28 L280,22 L300,20 L300,100 L0,100 Z"/>
+        <!-- 折线 -->
+        <path class="chart-line" d="M0,80 L20,72 L40,68 L60,60 L80,65 L100,55 L120,48 L140,52 L160,42 L180,38 L200,45 L220,35 L240,30 L260,28 L280,22 L300,20"/>
+        <!-- 数据点 -->
+        <circle cx="300" cy="20" r="3" fill="#0A66C2"/>
+      </svg>
+      <div class="flex justify-between text-xs text-gray-400 mt-1">
+        <span>3/23</span><span>4/06</span><span>4/22</span>
+      </div>
+      <div class="mt-2 text-xs text-gray-600">当前 CTR <span class="font-semibold" style="color:#0A66C2;">4.8%</span> · 峰值 <span class="font-semibold">5.2%</span> · 均值 3.9%</div>
+    </div>
+
+    <!-- Lead 列表 -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div class="text-sm font-semibold text-gray-800">🔥 最新 Lead</div>
+        <button class="text-xs hover:underline" style="color:#0A66C2;">查看全部 →</button>
+      </div>
+
+      <div class="space-y-2.5">
+        <div class="pb-2.5 border-b border-gray-100">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <div class="w-7 h-7 rounded-full bg-blue-200 flex items-center justify-center text-xs font-bold text-blue-700 flex-shrink-0">M</div>
+              <div class="min-w-0">
+                <div class="text-xs font-semibold text-gray-800 truncate">Mohammed Al-Rashid</div>
+                <div class="text-xs text-gray-500 truncate">VP · Riyadh Entertainment</div>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400 flex-shrink-0">3 min</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1 pl-9">来自 <span style="color:#0A66C2;">沙特 IAAPA 预热</span></div>
+        </div>
+
+        <div class="pb-2.5 border-b border-gray-100">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <div class="w-7 h-7 rounded-full bg-green-200 flex items-center justify-center text-xs font-bold text-green-700 flex-shrink-0">S</div>
+              <div class="min-w-0">
+                <div class="text-xs font-semibold text-gray-800 truncate">Sarah Chen</div>
+                <div class="text-xs text-gray-500 truncate">Design Director · KL Parks</div>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400 flex-shrink-0">28 min</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1 pl-9">来自 <span style="color:#0A66C2;">D3 工具全球首发</span></div>
+        </div>
+
+        <div class="pb-2.5 border-b border-gray-100">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <div class="w-7 h-7 rounded-full bg-purple-200 flex items-center justify-center text-xs font-bold text-purple-700 flex-shrink-0">R</div>
+              <div class="min-w-0">
+                <div class="text-xs font-semibold text-gray-800 truncate">Raj Patel</div>
+                <div class="text-xs text-gray-500 truncate">CEO · Mumbai Entertainment</div>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400 flex-shrink-0">2 hr</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1 pl-9">来自 <span style="color:#0A66C2;">东南亚大型乐园案例</span></div>
+        </div>
+
+        <div class="pb-2.5 border-b border-gray-100">
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <div class="w-7 h-7 rounded-full bg-orange-200 flex items-center justify-center text-xs font-bold text-orange-700 flex-shrink-0">L</div>
+              <div class="min-w-0">
+                <div class="text-xs font-semibold text-gray-800 truncate">Luca Rossi</div>
+                <div class="text-xs text-gray-500 truncate">Procurement · Milano Fun</div>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400 flex-shrink-0">5 hr</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1 pl-9">来自 <span style="color:#0A66C2;">EN1176 认证传播</span></div>
+        </div>
+
+        <div>
+          <div class="flex items-start justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0 flex-1">
+              <div class="w-7 h-7 rounded-full bg-pink-200 flex items-center justify-center text-xs font-bold text-pink-700 flex-shrink-0">A</div>
+              <div class="min-w-0">
+                <div class="text-xs font-semibold text-gray-800 truncate">Ahmed Hassan</div>
+                <div class="text-xs text-gray-500 truncate">COO · Dubai Leisure</div>
+              </div>
+            </div>
+            <span class="text-xs text-gray-400 flex-shrink-0">1 day</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1 pl-9">来自 <span style="color:#0A66C2;">沙特 IAAPA 预热</span></div>
+        </div>
+      </div>
+
+      <div class="mt-3 p-2 rounded text-xs text-center" style="background:#e8f0fa;color:#0A66C2;">
+        🔔 Lead 自动同步到 CRM 询盘池
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- [底部说明 + 对标信息] -->
+<div class="mt-4 p-3 border rounded text-xs text-gray-700 leading-relaxed" style="background:#e8f0fa;border-color:#0A66C2;">
+  <strong style="color:#0A66C2;">💡 产品对标：</strong>
+  本模块对标 <a href="https://business.linkedin.com/marketing-solutions/ads" target="_blank" class="underline" style="color:#0A66C2;">LinkedIn Campaign Manager</a> 的 Thought Leader Ads 能力（2023 年 LinkedIn 推出的新广告品类）。
+  集成 <a href="https://learn.microsoft.com/en-us/linkedin/marketing/" target="_blank" class="underline" style="color:#0A66C2;">LinkedIn Marketing Developer Platform API</a>：账号 OAuth 授权 + Campaign 创建 + 实时效果回传。
+  <strong>代码现状：</strong><span class="text-red-600 font-semibold">🔴 新建（需 LinkedIn Marketing API 集成）</span> · 对应 Issue #2649
+</div>
+
+</body>
+</html>

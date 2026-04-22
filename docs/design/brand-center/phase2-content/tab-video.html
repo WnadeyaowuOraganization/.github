@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>视频裂变工作台</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .pack-item { transition: all 0.15s; }
+    .pack-item:hover { background: #f5f5f5; }
+    .pack-item.active { background: #e6f4ff; border-left-color: #1890ff; }
+    .platform-chip { display:inline-flex; align-items:center; gap:4px; padding:3px 8px; border-radius:12px; font-size:11px; border:1px solid #d9d9d9; background:#fff; cursor:pointer; }
+    .platform-chip.checked { background:#e6f4ff; border-color:#1890ff; color:#1890ff; }
+    .copy-card { transition:all 0.15s; }
+    .copy-card:hover { border-color:#722ed1; }
+    .copy-card.selected { border-color:#722ed1; background:#f9f0ff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 2 · 视频裂变工作台（对标 Opus Clip · Issue #2640-#2642）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">一条长视频 → ffmpeg 自动切分镜 → AI 生成 3 版文案 → 一键分发 7 大平台，从 1 条生产 7 条触达</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌运营、视频剪辑师、多平台内容分发人员</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">素材包管理 / ffmpeg 分镜切片 / AI 三版文案 / 7 平台勾选 / 裂变队列 / 审批一键通过</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传素材包 / 选源视频 / 生成 AI 文案 / 勾选目标平台 / 生成裂变队列 / 审批一键通过</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">左侧素材列表 + 右侧分镜网格 / 3 版文案卡片可选 / 7 平台 chip 勾选 / 审批队列 6 行 / 🔴 全新建</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 Phase 2 详细设计.md §2.2 视频裂变</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [页面标题] -->
+<div class="bg-white border border-gray-300 rounded-md p-4 mb-4 flex items-center justify-between">
+  <div>
+    <h1 class="text-lg font-bold text-gray-800 flex items-center gap-2">
+      🎬 视频裂变工作台
+      <span class="text-xs font-normal px-2 py-0.5 rounded bg-purple-50 text-[#722ed1] border border-purple-200">对标 Opus Clip</span>
+      <span class="text-xs font-normal px-2 py-0.5 rounded bg-red-50 text-red-600 border border-red-200">🔴 全新建</span>
+    </h1>
+    <div class="text-xs text-gray-500 mt-1">Issue #2640 素材包 · #2641 AI 文案 · #2642 多平台分发</div>
+  </div>
+  <button class="px-3 py-1.5 text-sm bg-[#1890ff] text-white rounded">📤 上传新素材包</button>
+</div>
+
+<!-- [素材包管理：左列表 + 右详情] -->
+<div class="bg-white border border-gray-300 rounded-md mb-4 overflow-hidden">
+  <div class="border-b border-gray-200 p-3">
+    <h2 class="text-sm font-bold text-gray-700">📦 素材包管理</h2>
+  </div>
+  <div class="grid grid-cols-12">
+
+    <!-- [左：素材包列表] -->
+    <div class="col-span-3 border-r border-gray-200">
+      <div class="p-2 border-b border-gray-100 text-xs text-gray-500">共 8 个素材包</div>
+      <div class="pack-item active border-l-4 border-transparent p-3 cursor-pointer">
+        <div class="text-sm font-semibold text-gray-800 truncate">梦幻城堡产品发布会</div>
+        <div class="text-xs text-gray-500 mt-0.5">时长 12:35 · 12 个分镜</div>
+        <div class="text-[10px] text-[#1890ff] mt-1">2026-04-20</div>
+      </div>
+      <div class="pack-item border-l-4 border-transparent p-3 cursor-pointer">
+        <div class="text-sm font-semibold text-gray-800 truncate">工厂车间实拍</div>
+        <div class="text-xs text-gray-500 mt-0.5">时长 08:22 · 8 个分镜</div>
+        <div class="text-[10px] text-gray-400 mt-1">2026-04-18</div>
+      </div>
+      <div class="pack-item border-l-4 border-transparent p-3 cursor-pointer">
+        <div class="text-sm font-semibold text-gray-800 truncate">广州展会 Vlog</div>
+        <div class="text-xs text-gray-500 mt-0.5">时长 15:08 · 16 个分镜</div>
+        <div class="text-[10px] text-gray-400 mt-1">2026-04-15</div>
+      </div>
+      <div class="pack-item border-l-4 border-transparent p-3 cursor-pointer">
+        <div class="text-sm font-semibold text-gray-800 truncate">客户现场访谈·深圳万德</div>
+        <div class="text-xs text-gray-500 mt-0.5">时长 06:45 · 6 个分镜</div>
+        <div class="text-[10px] text-gray-400 mt-1">2026-04-12</div>
+      </div>
+      <div class="pack-item border-l-4 border-transparent p-3 cursor-pointer">
+        <div class="text-sm font-semibold text-gray-800 truncate">EN1176 安装实录</div>
+        <div class="text-xs text-gray-500 mt-0.5">时长 10:20 · 10 个分镜</div>
+        <div class="text-[10px] text-gray-400 mt-1">2026-04-10</div>
+      </div>
+      <div class="pack-item border-l-4 border-transparent p-3 cursor-pointer">
+        <div class="text-sm font-semibold text-gray-800 truncate">吴总专访·品牌理念</div>
+        <div class="text-xs text-gray-500 mt-0.5">时长 18:33 · 20 个分镜</div>
+        <div class="text-[10px] text-gray-400 mt-1">2026-04-08</div>
+      </div>
+    </div>
+
+    <!-- [右：素材详情] -->
+    <div class="col-span-9 p-4">
+      <!-- 原视频播放器 -->
+      <div class="mb-3">
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-semibold text-gray-700">🎞️ 原视频：梦幻城堡产品发布会</h3>
+          <div class="text-xs text-gray-500">1920x1080 · MP4 · 256MB · 12:35</div>
+        </div>
+        <div class="aspect-video bg-gradient-to-br from-gray-800 to-gray-600 rounded flex items-center justify-center text-5xl text-white relative">
+          ▶️
+          <div class="absolute bottom-0 left-0 right-0 bg-black/40 px-3 py-2 text-xs text-white flex justify-between">
+            <span>00:00 / 12:35</span>
+            <span>🔊 🔄 ⛶</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- ffmpeg 分镜切片网格 -->
+      <div>
+        <div class="flex items-center justify-between mb-2">
+          <h3 class="text-sm font-semibold text-gray-700">✂️ ffmpeg 自动分镜（12 个切片）</h3>
+          <div class="flex gap-2">
+            <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:border-[#1890ff]">🔄 重新切分</button>
+            <button class="text-xs px-2 py-1 border border-gray-300 rounded hover:border-[#1890ff]">⬇️ 批量下载</button>
+          </div>
+        </div>
+        <div class="grid grid-cols-6 gap-2">
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-purple-200 to-blue-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">00:42</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 01 · 开场</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-pink-200 to-orange-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">01:05</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 02 · 产品特写</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-green-200 to-yellow-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">00:55</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 03 · 亮点</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-blue-200 to-gray-300 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">01:20</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 04 · 访谈</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-yellow-200 to-red-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">00:38</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 05 · B-Roll</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-gray-200 to-purple-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">01:12</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 06 · 演示</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-green-200 to-blue-300 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">00:48</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 07 · 细节</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-pink-200 to-purple-300 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">01:30</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 08 · 客户</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-orange-200 to-red-300 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">00:55</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 09 · 数据</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-blue-200 to-green-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">00:42</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 10 · 认证</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-gray-200 to-yellow-200 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">01:15</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 11 · 场景</div>
+          </div>
+          <div class="border border-gray-200 rounded overflow-hidden hover:border-[#1890ff] cursor-pointer">
+            <div class="aspect-video bg-gradient-to-br from-purple-300 to-blue-300 flex items-center justify-center text-xl relative">
+              🎬<span class="absolute bottom-0.5 right-0.5 bg-black/60 text-white text-[9px] px-1 rounded">01:08</span>
+            </div>
+            <div class="text-[10px] text-center p-1 text-gray-600">分镜 12 · 收尾</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [裂变工作台] -->
+<div class="bg-white border border-gray-300 rounded-md p-4 mb-4">
+  <h2 class="text-sm font-bold text-gray-700 mb-3">🚀 裂变工作台 · 从分镜生产多平台内容</h2>
+
+  <!-- Step 1 选源视频 -->
+  <div class="mb-4">
+    <div class="text-xs font-semibold text-gray-600 mb-2">Step 1 · 选择源视频/分镜</div>
+    <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded p-2.5">
+      <div class="w-20 aspect-video bg-gradient-to-br from-pink-200 to-orange-200 rounded flex items-center justify-center text-xl">🎬</div>
+      <div class="flex-1">
+        <div class="text-sm font-semibold text-gray-800">分镜 02 · 产品特写 · 01:05</div>
+        <div class="text-xs text-gray-500">来自「梦幻城堡产品发布会」素材包</div>
+      </div>
+      <button class="text-xs text-[#1890ff]">🔄 切换</button>
+    </div>
+  </div>
+
+  <!-- Step 2 AI 文案三版 -->
+  <div class="mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <div class="text-xs font-semibold text-gray-600">Step 2 · AI 自动生成 3 版文案（选 1 用）</div>
+      <button class="text-xs px-2 py-0.5 bg-purple-50 text-[#722ed1] border border-purple-200 rounded">✨ 重新生成</button>
+    </div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="copy-card selected border-2 rounded p-3 cursor-pointer">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-bold text-[#722ed1]">版本 A · 爆款钩子</span>
+          <span class="text-[10px] text-[#722ed1]">● 已选</span>
+        </div>
+        <div class="text-xs text-gray-700 leading-relaxed">"3 岁的孩子玩了 20 分钟不肯走！妈妈们都收藏的儿童乐园组合，承重 500kg，EN1176 认证..."</div>
+        <div class="mt-2 flex gap-1 flex-wrap">
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">#亲子</span>
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">#儿童乐园</span>
+        </div>
+      </div>
+      <div class="copy-card border-2 border-gray-200 rounded p-3 cursor-pointer">
+        <div class="text-xs font-bold text-gray-700 mb-2">版本 B · 专业解读</div>
+        <div class="text-xs text-gray-700 leading-relaxed">"梦幻城堡采用 304 食品级不锈钢，通过 EN1176/GB19272 双认证，适合 3-12 岁儿童全天候使用..."</div>
+        <div class="mt-2 flex gap-1 flex-wrap">
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">#B端</span>
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">#采购</span>
+        </div>
+      </div>
+      <div class="copy-card border-2 border-gray-200 rounded p-3 cursor-pointer">
+        <div class="text-xs font-bold text-gray-700 mb-2">版本 C · 情感故事</div>
+        <div class="text-xs text-gray-700 leading-relaxed">"在城市的喧嚣里，为孩子留一片纯真的乐园。梦幻城堡，用 10 年工艺，守护 3-12 岁的每一个笑声..."</div>
+        <div class="mt-2 flex gap-1 flex-wrap">
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">#小红书</span>
+          <span class="text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">#生活方式</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 3 选择平台 -->
+  <div class="mb-4">
+    <div class="text-xs font-semibold text-gray-600 mb-2">Step 3 · 选择目标平台（7 个）</div>
+    <div class="flex flex-wrap gap-2">
+      <label class="platform-chip checked"><input type="checkbox" checked class="accent-[#1890ff]"> 🎵 抖音</label>
+      <label class="platform-chip checked"><input type="checkbox" checked class="accent-[#1890ff]"> 📺 视频号</label>
+      <label class="platform-chip checked"><input type="checkbox" checked class="accent-[#1890ff]"> 📕 小红书</label>
+      <label class="platform-chip"><input type="checkbox" class="accent-[#1890ff]"> 📹 B 站</label>
+      <label class="platform-chip checked"><input type="checkbox" checked class="accent-[#1890ff]"> 💡 知乎</label>
+      <label class="platform-chip"><input type="checkbox" class="accent-[#1890ff]"> 📱 快手</label>
+      <label class="platform-chip"><input type="checkbox" class="accent-[#1890ff]"> 🌐 公众号</label>
+    </div>
+    <div class="text-[11px] text-gray-500 mt-2">💡 已选 4 个平台，各平台将按对应尺寸（16:9 / 9:16 / 1:1）自动适配</div>
+  </div>
+
+  <div class="pt-3 border-t border-gray-100 flex justify-end gap-2">
+    <button class="px-3 py-1.5 text-sm border border-gray-300 rounded">💾 存草稿</button>
+    <button class="px-4 py-1.5 text-sm bg-gradient-to-r from-[#1890ff] to-[#722ed1] text-white rounded font-semibold">🚀 生成裂变队列</button>
+  </div>
+</div>
+
+<!-- [审批队列表格] -->
+<div class="bg-white border border-gray-300 rounded-md p-4">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-sm font-bold text-gray-700">📋 裂变审批队列</h2>
+    <button class="text-xs px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded">✅ 批量一键通过</button>
+  </div>
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-gray-50 text-xs text-gray-600">
+        <th class="p-2 text-left border-b border-gray-200"><input type="checkbox" class="accent-[#1890ff]"></th>
+        <th class="p-2 text-left border-b border-gray-200">素材包</th>
+        <th class="p-2 text-left border-b border-gray-200 w-16">分镜</th>
+        <th class="p-2 text-left border-b border-gray-200 w-32">文案方案</th>
+        <th class="p-2 text-left border-b border-gray-200">目标平台</th>
+        <th class="p-2 text-left border-b border-gray-200 w-24">发起人</th>
+        <th class="p-2 text-left border-b border-gray-200 w-28">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-xs">
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" class="accent-[#1890ff]"></td>
+        <td class="p-2 font-medium text-gray-800">梦幻城堡产品发布会</td>
+        <td class="p-2 text-gray-600">12</td>
+        <td class="p-2"><span class="px-1.5 py-0.5 bg-purple-50 text-[#722ed1] rounded">版本 A · 爆款</span></td>
+        <td class="p-2"><span class="text-gray-600">抖音 · 视频号 · 小红书 · 知乎</span></td>
+        <td class="p-2 text-gray-600">张三</td>
+        <td class="p-2 flex gap-1">
+          <button class="text-xs px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">一键通过</button>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded">详情</button>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" class="accent-[#1890ff]"></td>
+        <td class="p-2 font-medium text-gray-800">工厂车间实拍</td>
+        <td class="p-2 text-gray-600">8</td>
+        <td class="p-2"><span class="px-1.5 py-0.5 bg-purple-50 text-[#722ed1] rounded">版本 B · 专业</span></td>
+        <td class="p-2"><span class="text-gray-600">B 站 · 知乎 · 公众号</span></td>
+        <td class="p-2 text-gray-600">李四</td>
+        <td class="p-2 flex gap-1">
+          <button class="text-xs px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">一键通过</button>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded">详情</button>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" class="accent-[#1890ff]"></td>
+        <td class="p-2 font-medium text-gray-800">广州展会 Vlog</td>
+        <td class="p-2 text-gray-600">16</td>
+        <td class="p-2"><span class="px-1.5 py-0.5 bg-purple-50 text-[#722ed1] rounded">版本 C · 情感</span></td>
+        <td class="p-2"><span class="text-gray-600">小红书 · 视频号</span></td>
+        <td class="p-2 text-gray-600">王五</td>
+        <td class="p-2 flex gap-1">
+          <button class="text-xs px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">一键通过</button>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded">详情</button>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" class="accent-[#1890ff]"></td>
+        <td class="p-2 font-medium text-gray-800">客户现场访谈·深圳万德</td>
+        <td class="p-2 text-gray-600">6</td>
+        <td class="p-2"><span class="px-1.5 py-0.5 bg-purple-50 text-[#722ed1] rounded">版本 B · 专业</span></td>
+        <td class="p-2"><span class="text-gray-600">视频号 · B 站 · 公众号</span></td>
+        <td class="p-2 text-gray-600">赵六</td>
+        <td class="p-2 flex gap-1">
+          <button class="text-xs px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">一键通过</button>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded">详情</button>
+        </td>
+      </tr>
+      <tr class="border-b border-gray-100 hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" class="accent-[#1890ff]"></td>
+        <td class="p-2 font-medium text-gray-800">EN1176 安装实录</td>
+        <td class="p-2 text-gray-600">10</td>
+        <td class="p-2"><span class="px-1.5 py-0.5 bg-purple-50 text-[#722ed1] rounded">版本 B · 专业</span></td>
+        <td class="p-2"><span class="text-gray-600">知乎 · B 站</span></td>
+        <td class="p-2 text-gray-600">张三</td>
+        <td class="p-2 flex gap-1">
+          <button class="text-xs px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">一键通过</button>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded">详情</button>
+        </td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2"><input type="checkbox" class="accent-[#1890ff]"></td>
+        <td class="p-2 font-medium text-gray-800">吴总专访·品牌理念</td>
+        <td class="p-2 text-gray-600">20</td>
+        <td class="p-2"><span class="px-1.5 py-0.5 bg-purple-50 text-[#722ed1] rounded">版本 C · 情感</span></td>
+        <td class="p-2"><span class="text-gray-600">视频号 · 公众号 · 小红书</span></td>
+        <td class="p-2 text-gray-600">吴耀</td>
+        <td class="p-2 flex gap-1">
+          <button class="text-xs px-2 py-0.5 bg-green-50 text-green-700 border border-green-200 rounded">一键通过</button>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded">详情</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>

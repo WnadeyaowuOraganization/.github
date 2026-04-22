@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 品牌中心 Phase4 品牌度量 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 200px); display: block; }
+    .sidebar-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #666; cursor: pointer; border-radius: 4px; font-size: 18px; }
+    .sidebar-icon:hover { background: #f0f0f0; color: #1890ff; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">品牌中心 Phase4 品牌度量</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">品牌中心 Phase4 — 度量层，将 4 Collector 采集的原始数据转化为品牌健康度看板、舆情告警与周/月报告，驱动品牌决策闭环</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">品牌负责人, 市场/公关主管, 吴耀（超管视角）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">品牌健康度看板 / 舆情监控告警 / 周月季报生成 / 多格式导出</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">Collector 手动同步 / 舆情告警处置 / 周报预览导出 / 定时订阅</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">KPI 实时拉取正确 / 4 Collector 健康状态可见 / 告警可追溯原文 / 报告能导出 PDF/PPTX</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">品牌中心 — 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] 万德平台侧边栏折叠状态 -->
+  <aside class="w-14 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center py-3 gap-1">
+    <div class="sidebar-icon" title="首页">🏠</div>
+    <div class="sidebar-icon" title="CRM">👥</div>
+    <div class="sidebar-icon" title="项目">📋</div>
+    <div class="sidebar-icon active" title="品牌中心">📣</div>
+    <div class="sidebar-icon" title="审批">✅</div>
+    <div class="sidebar-icon" title="设置">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col">
+    <!-- [顶栏：面包屑+返回Hub] -->
+    <div class="flex items-center justify-between px-6 py-3 bg-white border-b border-gray-200">
+      <div class="text-sm text-gray-500">
+        <span class="hover:text-blue-500 cursor-pointer">首页</span>
+        <span class="mx-2">&gt;</span>
+        <span class="hover:text-blue-500 cursor-pointer">品牌中心</span>
+        <span class="mx-2">&gt;</span>
+        <span class="text-gray-800 font-medium">Phase4 品牌度量</span>
+      </div>
+      <a href="../index.html" class="text-sm text-blue-500 hover:text-blue-700 flex items-center gap-1">
+        <span>←</span>
+        <span>返回 Hub 总览</span>
+      </a>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-white">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-dashboard.html"></iframe>
+    </div>
+
+    <!-- [原型说明] -->
+    <div class="p-6 bg-white border-t border-gray-300">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead>
+          <tr class="bg-gray-100">
+            <th class="p-2 border border-gray-300 w-32">Tab 页</th>
+            <th class="p-2 border border-gray-300 w-44">文件名</th>
+            <th class="p-2 border border-gray-300">功能描述</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">品牌健康度看板</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-dashboard.html</td>
+            <td class="p-2 border border-gray-300 text-gray-600">6 KPI 卡 + 4 Collector 健康状态 + 多渠道趋势 + 声量饼图 + 明细表格（🟡 复用已有 Collector / Service / Entity）</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">舆情监控</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-sentiment.html</td>
+            <td class="p-2 border border-gray-300 text-gray-600">筛选栏 + 告警列表 + 提及详情 + 周报抽屉（对应 Issue #2645 #2646）</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">品牌周报/月报</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-report.html</td>
+            <td class="p-2 border border-gray-300 text-gray-600">模板选择 + A4 预览 + AI 行动建议 + 多格式导出（PDF/PPTX/企微）+ 历史报告</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Tab 配置
+  const tabs = [
+    { key: 'dashboard', label: '品牌健康度看板', src: 'tab-dashboard.html' },
+    { key: 'sentiment', label: '舆情监控', src: 'tab-sentiment.html' },
+    { key: 'report', label: '品牌周报/月报', src: 'tab-report.html' }
+  ];
+
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = h + 'px';
+    } catch (e) { /* 跨域忽略 */ }
+  });
+
+  renderTabs();
+</script>
+</body>
+</html>

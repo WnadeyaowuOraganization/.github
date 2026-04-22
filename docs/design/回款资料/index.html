@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 回款资料管理 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e5e7eb; display: flex; flex-direction: column; align-items: center; padding-top: 16px; gap: 8px; }
+    .sidebar-icon { width: 36px; height: 36px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 18px; color: #999; cursor: pointer; }
+    .sidebar-icon:hover { background: #f3f4f6; }
+    .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; transition: all 0.2s; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 120px); }
+    .breadcrumb { padding: 12px 24px; font-size: 13px; color: #999; background: #fff; }
+    .breadcrumb strong { color: #333; }
+  </style>
+</head>
+<body class="bg-gray-50"><!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<!-- 此块由 wande-prototype skill 强制要求，所有原型HTML必须包含 -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">回款资料管理总览</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">体游行业全过程资料管理主入口，覆盖从投标报名到交付验收的5阶段资料Checklist，降低因资料缺失/延误导致的回款风险。含全阶段看板、甲方表单填写辅助、甲方资料需求模板库3个Tab</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">商务人员（资料上传/催收）, 项目经理（过程资料把控）, 财务（回款触发点追踪）, 吴耀（逾期风险总览）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">全阶段资料完成度看板(5个KPI) / 甲方表单填写辅助(我司资质信息库+一键填充) / 甲方资料需求模板库(按地区行业分类)</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">Tab切换 / 按阶段筛选资料 / 批量上传 / 一键填充甲方表单字段 / 下载资料需求模板 / 触发催收提醒</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">3个Tab全部可见可切换 / 默认显示「全阶段看板」 / 5个KPI卡片数据正确 / 面包屑显示「商务中心 &gt; 回款资料管理」 / 3秒内渲染完成</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">回款资料管理 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <div class="flex min-h-screen">
+    <!-- [侧边栏] -->
+    <aside class="sidebar flex-shrink-0">
+      <div class="sidebar-icon" title="首页">🏠</div>
+      <div class="sidebar-icon active" title="商务中心">💼</div>
+      <div class="sidebar-icon" title="招投标管理">📋</div>
+      <div class="sidebar-icon" title="项目中心">📁</div>
+      <div class="sidebar-icon" title="审批中心">✅</div>
+      <div class="sidebar-icon" title="设置">⚙️</div>
+    </aside>
+
+    <!-- [主内容区] -->
+    <main class="flex-1 flex flex-col">
+      <!-- [面包屑] -->
+      <div class="breadcrumb">
+        首页 &gt; 商务中心 &gt; <strong>回款资料管理</strong>
+      </div>
+
+      <!-- [Tab栏] -->
+      <div class="tab-bar" id="tabBar"></div>
+
+      <!-- [Tab内容 — iframe加载] -->
+      <div class="flex-1">
+        <iframe id="tabFrame" class="tab-content-frame" src="tab-dashboard.html"></iframe>
+      </div>
+    </main>
+  </div>
+
+  <!-- [原型说明] -->
+  <div class="p-6 bg-white border-t border-gray-300 mt-4">
+    <h3 class="text-base font-bold text-gray-700 mb-3">📋 回款资料管理 — 原型说明</h3>
+    <table class="w-full text-sm text-left border-collapse">
+      <thead><tr class="bg-gray-100">
+        <th class="p-2 border border-gray-300">Tab页</th>
+        <th class="p-2 border border-gray-300">文件名</th>
+        <th class="p-2 border border-gray-300">对应Issue</th>
+        <th class="p-2 border border-gray-300">功能描述</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="p-2 border border-gray-300">全阶段资料看板</td>
+          <td class="p-2 border border-gray-300">tab-dashboard.html</td>
+          <td class="p-2 border border-gray-300">#3185</td>
+          <td class="p-2 border border-gray-300">5个KPI + 5阶段完成度矩阵 + 逾期资料Top10 + 催收触发</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">甲方表单填写辅助</td>
+          <td class="p-2 border border-gray-300">tab-template.html</td>
+          <td class="p-2 border border-gray-300">#3189</td>
+          <td class="p-2 border border-gray-300">我司资质信息库 + 表单字段映射 + 一键填充 + 多语言支持</td>
+        </tr>
+        <tr>
+          <td class="p-2 border border-gray-300">甲方资料需求模板库</td>
+          <td class="p-2 border border-gray-300">tab-client-req.html</td>
+          <td class="p-2 border border-gray-300">#3191</td>
+          <td class="p-2 border border-gray-300">按地区/行业/项目类型分类的甲方需求资料清单模板</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h4 class="text-sm font-bold text-gray-600 mt-4 mb-2">数据流</h4>
+    <div class="text-xs text-gray-500 bg-gray-50 p-3 rounded font-mono">
+      投标阶段资料 → 签约阶段资料 → 生产阶段资料 → 安装验收资料 → 质保期资料 → 5个回款触发点
+      <br>
+      甲方提出资料需求 → 查模板库(匹配行业) → 匹配我司资质库 → 一键填充表单 → 生成PDF/扫描件
+    </div>
+  </div>
+
+  <script>
+    const tabs = [
+      { key: 'dashboard',   label: '📊 全阶段资料看板',     src: 'tab-dashboard.html' },
+      { key: 'template',    label: '📝 甲方表单填写辅助',   src: 'tab-template.html' },
+      { key: 'client-req',  label: '📚 甲方资料需求模板库', src: 'tab-client-req.html' },
+    ];
+
+    const tabBar = document.getElementById('tabBar');
+    const tabFrame = document.getElementById('tabFrame');
+    let activeKey = tabs[0].key;
+
+    function renderTabs() {
+      tabBar.innerHTML = tabs.map(t =>
+        `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+      ).join('');
+    }
+
+    tabBar.addEventListener('click', (e) => {
+      const item = e.target.closest('.tab-item');
+      if (!item) return;
+      activeKey = item.dataset.key;
+      tabFrame.src = item.dataset.src;
+      renderTabs();
+    });
+
+    tabFrame.addEventListener('load', () => {
+      try {
+        const h = tabFrame.contentDocument.documentElement.scrollHeight;
+        tabFrame.style.height = Math.max(h, 600) + 'px';
+      } catch(e) {}
+    });
+
+    renderTabs();
+  </script>
+</body>
+</html>

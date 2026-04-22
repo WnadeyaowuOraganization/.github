@@ -117,7 +117,7 @@
 | 04-22 | kimi2 | #4008 | project | **max** | In Progress | 记录中心时间线视角增强 |
 | 04-22 | kimi4 | #3996 | project | **max** | In Progress | 矿场转化漏斗Tab |
 | 04-22 | kimi1 | ~~#3184~~ | project360 | **max** | ~~Done~~ | 文档访问日志+统计 — PR #4086 merged |
-| 04-22 | kimi3 | #3185 | project360 | **max** | In Progress | 全阶段资料完成度看板 — PR #4087 submitted |
+| 04-22 | kimi3 | ~~#3185~~ | project360 | **max** | ~~Done~~ | 全阶段资料完成度看板 — PR #4087 merged |
 | 04-22 | kimi1 | #3997 | project | **max** | In Progress | 矿场复盘洞察Tab |
 | 04-22 | kimi3 | #3998 | project | **max** | In Progress | 矿场ROI看板Tab |
 | 04-22 | kimi5 | #4014 | crm | **max** | In Progress | CRM线索统一池+评分引擎 |

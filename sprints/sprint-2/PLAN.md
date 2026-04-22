@@ -102,6 +102,7 @@
 | 04-22 | kimi2 | #3149 | approval | **max** | In Progress | 审批进度追踪器组件 |
 | 04-22 | kimi3 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
 | 04-22 | kimi4 | #3156 | approval | **max** | In Progress | 流程效率分析看板 |
+| 04-22 | kimi1 | #3168 | approval | **max** | In Progress | 动态表单渲染器前端 |
 
 ---
 

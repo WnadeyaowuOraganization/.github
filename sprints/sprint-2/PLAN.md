@@ -95,7 +95,7 @@
 | 04-22 | kimi4 | #2851 | cockpit | medium | In Progress | 验收队列前端 |
 | 04-22 | kimi5 | #2298 | cockpit | medium | **Done** | AI对话监控面板 — PR #4069 merged |
 | 04-22 | kimi1 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 补充PR #4072 merged |
-| 04-22 | kimi5 | #3169 | approval | **max** | In Progress | 表单模板管理 |
+| 04-22 | kimi5 | ~~#3169~~ | approval | **max** | ~~Done~~ | 表单模板管理 — PR #4076 merged |
 | 04-22 | kimi2 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板前端 — PR #4074 merged |
 | 04-22 | kimi3 | ~~#3648~~ | bidding | **max** | ~~Done~~ | 招投标DB建表 — 补充PR #4073 merged |
 | 04-22 | kimi4 | ~~#2851~~ | cockpit | **max** | ~~Done~~ | 验收队列前端 — PR #4075 merged |
@@ -103,6 +103,9 @@
 | 04-22 | kimi3 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
 | 04-22 | kimi4 | #3156 | approval | **max** | In Progress | 流程效率分析看板 |
 | 04-22 | kimi1 | #3168 | approval | **max** | In Progress | 动态表单渲染器前端 |
+| 04-22 | kimi5 | #3151 | approval | **max** | In Progress | 新手引导+流程帮助中心 |
+| 04-22 | kimi2 | ~~#3149~~ | approval | **max** | ~~Done~~ | 审批进度追踪器组件 — PR #4077 merged |
+| 04-22 | kimi2 | #3174 | approval | **max** | In Progress | 表单模板导入导出+配置向导 |
 
 ---
 

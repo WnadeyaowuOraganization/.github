@@ -114,7 +114,7 @@
 | 04-22 | kimi3 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR #4084 merged |
 | 04-22 | kimi4 | ~~#4041~~ | cockpit | **max** | ~~Done~~ | 耀总驾驶舱 — PR #4085 merged |
 | 04-22 | kimi2 | ~~#3189~~ | finance | **max** | ~~Done~~ | 甲方表单填写辅助 — PR #4088 merged |
-| 04-22 | kimi2 | #4008 | project | **max** | In Progress | 记录中心时间线视角增强 |
+| 04-22 | kimi2 | ~~#4008~~ | project | **max** | ~~Done~~ | 记录中心时间线视角增强 — PR #4096 merged |
 | 04-22 | kimi4 | ~~#3996~~ | project | **max** | ~~Done~~ | 矿场转化漏斗Tab — PR #4089 merged |
 | 04-22 | kimi4 | #4009 | project | **max** | In Progress | 记录中心三视角分组Tab |
 | 04-22 | kimi1 | ~~#3184~~ | project360 | **max** | ~~Done~~ | 文档访问日志+统计 — PR #4086 merged |
@@ -124,6 +124,8 @@
 | 04-22 | kimi5 | ~~#4014~~ | crm | **max** | ~~Done~~ | CRM线索统一池+评分引擎 — PR #4090 merged |
 | 04-22 | kimi5 | #4010 | project | **max** | In Progress | 手动补录记录模态 |
 | 04-22 | kimi3 | #4015 | crm | **max** | In Progress | 矿场转商机 readiness检查 |
+| 04-22 | kimi4 | #4009 | project | **max** | In Progress | 记录中心三视角分组Tab — PR #4098 submitted |
+| 04-22 | kimi2 | #4012 | project | **max** | In Progress | 老板周报AI建议Section |
 
 ---
 

@@ -55,11 +55,11 @@
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 |
 |------|-------|--------|------|--------|------|
-| 21 | #2849 | P1 | cockpit | medium | A档 — Agent效率看板前端 |
-| 22 | #2851 | P1 | cockpit | medium | A档 — 验收队列前端 |
-| 23 | #1920 | — | d3 | medium | EXEMPT — wande-gh-plugins仓库重构 |
-| 24 | #1921 | — | d3 | medium | EXEMPT — D3Plugin.gha SDK降级 |
-| 25 | #3648 | P0 | bidding | low | Sprint-2 A_weak — 招投标DB建表 |
+| ~~21~~ | ~~#2849~~ | P1 | cockpit | medium | ✅ 已派 — Agent效率看板前端 |
+| ~~22~~ | ~~#2851~~ | P1 | cockpit | medium | ✅ 已派 — 验收队列前端 |
+| 23 | #1920 | — | d3 | medium | EXEMPT — wande-gh-plugins仓库重构（跳过）|
+| 24 | #1921 | — | d3 | medium | EXEMPT — D3Plugin.gha SDK降级（跳过）|
+| ~~25~~ | ~~#3648~~ | P0 | bidding | low | ✅ 已派 — 招投标DB建表 |
 
 ## 指派历史
 
@@ -88,9 +88,12 @@
 | 04-22 | kimi2 | #2849 | cockpit | medium | In Progress | Agent效率看板前端 |
 | 04-22 | kimi3 | #4036 | crm | medium | **Done** | CRM商机详情-报价Tab — PR #4058 merged |
 | 04-22 | kimi3 | #4039 | crm | medium | **Done** | CRM商机详情-投标HZTab — PR #4066 merged |
-| 04-22 | kimi3 | #4040 | crm | medium | In Progress | CRM商机详情-资料Tab |
+| 04-22 | kimi3 | #4040 | crm | medium | **Done** | CRM商机详情-资料Tab — PR #4070 merged |
+| 04-22 | kimi3 | #3648 | bidding | low | In Progress | 招投标DB建表 |
 | 04-22 | kimi4 | #4033 | crm | medium | **Done** | CRM商机详情-基本信息Tab — PR #4062 merged |
-| 04-22 | kimi4 | #4044 | crm | medium | In Progress | CRM商机详情-变更日志Tab |
+| 04-22 | kimi4 | #4044 | crm | medium | **Done** | CRM商机详情-变更日志Tab — PR #4068 merged |
+| 04-22 | kimi4 | #2851 | cockpit | medium | In Progress | 验收队列前端 |
+| 04-22 | kimi5 | #2298 | cockpit | medium | **Done** | AI对话监控面板 — PR #4069 merged |
 
 ---
 

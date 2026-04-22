@@ -94,6 +94,8 @@
 | 04-22 | kimi4 | #4044 | crm | medium | **Done** | CRM商机详情-变更日志Tab — PR #4068 merged |
 | 04-22 | kimi4 | #2851 | cockpit | medium | In Progress | 验收队列前端 |
 | 04-22 | kimi5 | #2298 | cockpit | medium | **Done** | AI对话监控面板 — PR #4069 merged |
+| 04-22 | kimi1 | #3150 | approval | medium | In Progress | 审批流程图渲染API |
+| 04-22 | kimi5 | #3169 | approval | medium | In Progress | 表单模板管理 |
 
 ---
 

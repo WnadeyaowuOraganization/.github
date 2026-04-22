@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>跨境市场准入 - 招投标管理 Tab G</title>
+<style>
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,'PingFang SC','Microsoft YaHei',sans-serif;background:#f5f5f5;margin:0;padding:16px 24px;color:#333;font-size:13px}
+
+/* ===== 需求说明卡 v5.1 ===== */
+.spec-card{background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;margin-bottom:16px;overflow:hidden}
+.spec-head{padding:10px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;user-select:none}
+.spec-head-left{display:flex;align-items:center;gap:8px;font-weight:600;color:#874d00;font-size:13px}
+.spec-head-right{display:flex;align-items:center;gap:12px;font-size:12px;color:#ad6800}
+.spec-body{padding:12px 20px 16px;border-top:1px solid #ffe58f;display:none;font-size:13px;line-height:1.9;color:#613400}
+.spec-card.open .spec-body{display:block}
+.spec-body ul{margin:4px 0 0;padding-left:22px}
+.spec-body .row{margin:4px 0}
+.spec-body .row b{color:#874d00;min-width:78px;display:inline-block}
+.spec-body a{color:#1890ff;text-decoration:none}
+.spec-body a:hover{text-decoration:underline}
+
+/* ===== KPI ===== */
+.kpi-row{display:flex;gap:12px;margin-bottom:12px}
+.kpi-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px 18px;flex:1;position:relative}
+.kpi-num{font-size:26px;font-weight:700;color:#333;line-height:1.2}
+.kpi-label{font-size:12px;color:#999;margin-bottom:4px}
+.kpi-sub{font-size:11px;color:#999;margin-top:4px}
+.kpi-sub .warn{color:#fa8c16;font-weight:600}
+.kpi-sub .ok{color:#52c41a;font-weight:600}
+.kpi-sub .err{color:#f5222d;font-weight:600}
+
+/* ===== 子 Tab 胶囊 ===== */
+.sub-tab-bar{display:inline-flex;background:#e8e8e8;border-radius:8px;padding:4px;margin:8px 0 16px;gap:2px}
+.sub-tab{padding:8px 18px;border-radius:6px;cursor:pointer;font-size:13px;color:#555;transition:.2s;user-select:none;white-space:nowrap}
+.sub-tab:hover:not(.active){color:#333;background:#f0f0f0}
+.sub-tab.active{background:#fff;color:#1890ff;font-weight:600;box-shadow:0 1px 3px rgba(0,0,0,0.1)}
+
+.panel{display:none}
+.panel.active{display:block}
+
+/* ===== 通用组件 ===== */
+.btn{display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:4px;font-size:13px;cursor:pointer;border:1px solid #d9d9d9;background:#fff;color:#333;transition:.2s}
+.btn:hover{border-color:#1890ff;color:#1890ff}
+.btn-primary{background:#1890ff;color:#fff;border-color:#1890ff}
+.btn-primary:hover{background:#40a9ff;color:#fff}
+.btn-sm{padding:3px 10px;font-size:12px}
+
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;white-space:nowrap}
+.tag-gold{background:#fff7e6;color:#d48806;border:1px solid #ffe58f}
+.tag-blue{background:#e6f7ff;color:#1890ff;border:1px solid #91d5ff}
+.tag-green{background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f}
+.tag-red{background:#fff1f0;color:#f5222d;border:1px solid #ffa39e}
+.tag-orange{background:#fff7e6;color:#fa8c16;border:1px solid #ffd591}
+.tag-purple{background:#f9f0ff;color:#722ed1;border:1px solid #d3adf7}
+.tag-cyan{background:#e6fffb;color:#13c2c2;border:1px solid #87e8de}
+.tag-gray{background:#fafafa;color:#8c8c8c;border:1px solid #d9d9d9}
+
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid #e8e8e8;border-radius:6px;font-size:13px;overflow:hidden}
+thead{background:#fafafa}
+th{padding:10px 12px;text-align:left;font-weight:600;color:#333;border-bottom:1px solid #e8e8e8;white-space:nowrap}
+td{padding:10px 12px;border-bottom:1px solid #f0f0f0;color:#333;vertical-align:top}
+tr:hover{background:#fafafa}
+tr:last-child td{border-bottom:none}
+
+.filter-bar{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px;margin:12px 0;display:grid;grid-template-columns:repeat(5,1fr) auto;gap:12px;align-items:end}
+.filter-bar label{font-size:12px;color:#999;display:block;margin-bottom:4px}
+.filter-bar input,.filter-bar select{width:100%;height:30px;border:1px solid #d9d9d9;border-radius:4px;padding:0 8px;font-size:12px;box-sizing:border-box}
+
+.toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0}
+
+.section-title{font-size:14px;font-weight:600;color:#333;margin:4px 0 10px;display:flex;align-items:center;gap:8px}
+.section-title .hint{font-size:12px;font-weight:400;color:#999}
+
+/* ===== 子区块 1：联盟卡片 ===== */
+.alliance-layout{display:grid;grid-template-columns:1fr 320px;gap:16px}
+.alliance-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.alliance-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px;position:relative;transition:.2s}
+.alliance-card:hover{border-color:#1890ff;box-shadow:0 2px 8px rgba(24,144,255,.08)}
+.alliance-card.warn{border-color:#ffa39e;background:#fff8f7}
+.alliance-name{font-size:14px;font-weight:600;color:#333;margin-bottom:2px}
+.alliance-region{font-size:11px;color:#999;margin-bottom:8px}
+.alliance-meta{font-size:12px;color:#666;line-height:1.9}
+.alliance-meta .k{color:#999;display:inline-block;min-width:64px}
+.alliance-actions{margin-top:10px;display:flex;gap:6px}
+
+.timeline-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px;height:fit-content}
+.timeline-card h4{margin:0 0 12px;font-size:13px;color:#333;display:flex;align-items:center;gap:6px}
+.timeline-item{border-left:2px solid #ffa39e;padding:8px 0 10px 12px;margin-bottom:8px;position:relative}
+.timeline-item:before{content:'📅';position:absolute;left:-12px;top:8px;background:#fff;font-size:12px}
+.timeline-item .t-name{font-size:13px;font-weight:600;color:#333}
+.timeline-item .t-date{font-size:11px;color:#f5222d;margin:3px 0}
+.timeline-item .t-note{font-size:11px;color:#666;margin-bottom:6px}
+
+/* ===== 子区块 2：资格评估向导 ===== */
+.wizard-layout{display:grid;grid-template-columns:1fr 280px;gap:16px}
+.stepper{display:flex;background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px 12px;margin-bottom:12px;overflow-x:auto}
+.step{flex:1;min-width:110px;display:flex;flex-direction:column;align-items:center;position:relative;padding:0 4px}
+.step:not(:last-child):after{content:'';position:absolute;top:14px;right:-50%;width:100%;height:2px;background:#e8e8e8;z-index:0}
+.step.done:not(:last-child):after{background:#52c41a}
+.step-dot{width:28px;height:28px;border-radius:50%;background:#f0f0f0;color:#999;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;position:relative;z-index:1;border:2px solid #f0f0f0}
+.step.done .step-dot{background:#52c41a;color:#fff;border-color:#52c41a}
+.step.active .step-dot{background:#1890ff;color:#fff;border-color:#1890ff;box-shadow:0 0 0 4px rgba(24,144,255,.15)}
+.step-label{font-size:11px;color:#999;margin-top:6px;text-align:center;line-height:1.4}
+.step.done .step-label{color:#52c41a}
+.step.active .step-label{color:#1890ff;font-weight:600}
+
+.wizard-panel{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:18px}
+.wizard-panel h3{margin:0 0 4px;font-size:15px;color:#333}
+.wizard-panel .sub{font-size:12px;color:#999;margin-bottom:14px}
+.wizard-panel .meta-row{display:flex;gap:18px;margin-bottom:12px;padding:10px 12px;background:#fafafa;border-radius:4px;font-size:12px}
+.wizard-panel .meta-row .k{color:#999;margin-right:4px}
+
+.cert-list{list-style:none;margin:0;padding:0}
+.cert-item{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px solid #f0f0f0;border-radius:4px;margin-bottom:6px;font-size:13px}
+.cert-item:hover{background:#fafafa}
+.cert-item .name{color:#333}
+.cert-item .desc{font-size:11px;color:#999;margin-left:6px}
+.wizard-actions{display:flex;gap:8px;margin-top:14px;padding-top:14px;border-top:1px solid #f0f0f0}
+
+.summary-card{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:16px;height:fit-content}
+.summary-card h4{margin:0 0 12px;font-size:13px;color:#333}
+.readiness{text-align:center;margin-bottom:14px}
+.readiness-num{font-size:36px;font-weight:700;color:#fa8c16;line-height:1}
+.readiness-label{font-size:11px;color:#999;margin-top:4px}
+.progress{height:8px;background:#f0f0f0;border-radius:4px;overflow:hidden;margin-top:8px}
+.progress-fill{height:100%;background:#fa8c16;border-radius:4px}
+.summary-row{display:flex;justify-content:space-between;padding:8px 0;font-size:12px;border-bottom:1px dashed #f0f0f0}
+.summary-row:last-child{border-bottom:none}
+.summary-row .k{color:#999}
+.summary-row .v{color:#333;font-weight:600}
+
+/* ===== 子区块 3：Wiki 风格 ===== */
+.region-tabs{display:flex;gap:0;border-bottom:1px solid #e8e8e8;margin-bottom:12px}
+.region-tab{padding:10px 18px;cursor:pointer;font-size:13px;color:#666;border-bottom:2px solid transparent;transition:.2s}
+.region-tab:hover{color:#1890ff}
+.region-tab.active{color:#1890ff;border-bottom-color:#1890ff;font-weight:600}
+
+.wiki-layout{display:grid;grid-template-columns:220px 1fr 240px;gap:16px}
+.wiki-toc{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:12px;height:fit-content}
+.wiki-toc h4{margin:0 0 10px;font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.5px}
+.toc-item{padding:8px 10px;font-size:13px;color:#555;border-radius:4px;cursor:pointer;margin-bottom:2px;transition:.2s}
+.toc-item:hover{background:#f0f0f0;color:#1890ff}
+.toc-item.active{background:#e6f7ff;color:#1890ff;font-weight:600}
+
+.wiki-content{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:20px 24px}
+.wiki-content h2{margin:0 0 6px;font-size:18px;color:#333}
+.wiki-breadcrumb{font-size:12px;color:#999;margin-bottom:16px}
+.wiki-para{background:#fafafa;border-left:3px solid #1890ff;padding:12px 16px;margin-bottom:12px;border-radius:0 4px 4px 0;font-size:13px;line-height:1.8;color:#444}
+.wiki-para strong{color:#333}
+.wiki-footer{margin-top:16px;padding-top:12px;border-top:1px solid #f0f0f0;display:flex;gap:8px}
+
+.wiki-side{background:#fff;border:1px solid #e8e8e8;border-radius:6px;padding:14px;height:fit-content}
+.wiki-side h4{margin:0 0 8px;font-size:12px;color:#999;text-transform:uppercase;letter-spacing:0.5px}
+.wiki-search{width:100%;height:32px;border:1px solid #d9d9d9;border-radius:4px;padding:0 10px;font-size:12px;box-sizing:border-box;margin-bottom:14px}
+.wiki-side-list{list-style:none;margin:0 0 14px;padding:0;font-size:12px}
+.wiki-side-list li{padding:5px 0;color:#555;cursor:pointer;display:flex;align-items:center;gap:6px}
+.wiki-side-list li:hover{color:#1890ff}
+.wiki-side-list li .dot{color:#999}
+
+/* ===== 子区块 4：国际项目 ===== */
+.intl-toolbar{display:flex;justify-content:space-between;align-items:center;margin:12px 0}
+.toggle-switch{display:inline-flex;align-items:center;gap:8px;font-size:13px;color:#333;cursor:pointer;user-select:none}
+.toggle{width:36px;height:20px;background:#d9d9d9;border-radius:10px;position:relative;transition:.2s}
+.toggle:before{content:'';position:absolute;width:16px;height:16px;background:#fff;border-radius:50%;top:2px;left:2px;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.toggle-switch.on .toggle{background:#1890ff}
+.toggle-switch.on .toggle:before{left:18px}
+
+.flag{font-size:14px;margin-right:4px}
+.cert-stack .tag{margin-right:3px}
+</style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div class="spec-card open" id="specCard">
+  <div class="spec-head" onclick="document.getElementById('specCard').classList.toggle('open')">
+    <div class="spec-head-left">
+      <span>📋</span>
+      <span>需求说明卡 · 跨境市场准入（International Market Access）</span>
+    </div>
+    <div class="spec-head-right">
+      <span>Tab G · 招投标管理</span>
+      <span>关联 Issues：#1486 / #1488 / #2226 / #2227</span>
+      <span style="color:#999">▼</span>
+    </div>
+  </div>
+  <div class="spec-body">
+    <div class="row"><b>页面目的：</b>统管跨境市场准入资格、法规、流程与项目数据，支持北美/欧洲/中东/东南亚拓展</div>
+    <div class="row"><b>主要用户：</b>吴耀（超管视角）、国际贸易负责人、投标经理</div>
+    <div class="row"><b>核心功能：</b>采购联盟资格追踪 / 8 步跨境资格评估 / 4 区域市场知识库 / 国际项目统一列表</div>
+    <div class="row"><b>关键操作：</b>联盟到期续期 / 填写资格评估向导 / 查询市场流程 Wiki / 筛选国际项目</div>
+    <div class="row"><b>验收要点：</b>联盟到期 60 天自动预警 / 评估向导 15 分钟完成 / 4 区域 Wiki 覆盖完整 / 国内外项目统一列表</div>
+    <div class="row" style="margin-top:8px;padding-top:8px;border-top:1px dashed #ffe58f">
+      <b>设计文档：</b><a href="../详细设计.md" target="_blank">招投标管理·详细设计</a>
+      &nbsp;&nbsp;<b style="margin-left:12px">对应小节：</b>§2.28 采购联盟资格 / §2.29 跨境资格评估向导 / §2.30 市场流程知识库 / §2.31 国际项目数据
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ============== KPI 概览条 ============== -->
+<div class="kpi-row">
+  <div class="kpi-card">
+    <div class="kpi-label">已进入市场数</div>
+    <div class="kpi-num">4</div>
+    <div class="kpi-sub">🇺🇸 北美 · 🇪🇺 欧洲 · 🌍 中东 · 🌏 东南亚</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">有效采购联盟资格</div>
+    <div class="kpi-num">6</div>
+    <div class="kpi-sub"><span class="warn">⚠ 2 项 60 天内到期</span></div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">国际项目总数</div>
+    <div class="kpi-num">18</div>
+    <div class="kpi-sub"><span class="ok">中标 7</span> · 跟进 8 · 失标 3</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">资格评估待完成</div>
+    <div class="kpi-num">3</div>
+    <div class="kpi-sub"><span class="err">3 项评估未完成</span></div>
+  </div>
+</div>
+
+<!-- ============== 子 Tab 胶囊切换条 ============== -->
+<div class="sub-tab-bar">
+  <div class="sub-tab active" data-panel="panel-alliance">🌐 采购联盟资格</div>
+  <div class="sub-tab" data-panel="panel-wizard">🧭 跨境资格评估向导</div>
+  <div class="sub-tab" data-panel="panel-wiki">📚 市场流程知识库</div>
+  <div class="sub-tab" data-panel="panel-projects">🗂️ 国际项目数据</div>
+</div>
+
+<!-- ========================================================= -->
+<!-- 子区块 1：采购联盟资格 （§2.28 / #1486）                   -->
+<!-- ========================================================= -->
+<div class="panel active" id="panel-alliance">
+  <div class="section-title">
+    🌐 采购联盟资格 <span class="hint">（§2.28 · Issue #1486 · 6 项有效 / 1 申请中 / 1 已过期 / 1 准备中）</span>
+  </div>
+
+  <div class="alliance-layout">
+    <div>
+      <div class="alliance-grid">
+
+        <!-- Sourcewell -->
+        <div class="alliance-card warn">
+          <div class="alliance-name">Sourcewell</div>
+          <div class="alliance-region">🇺🇸 北美 · 政府/学校公开合作联盟</div>
+          <div class="alliance-meta">
+            <div><span class="k">状态</span><span class="tag tag-green">✅ 有效</span></div>
+            <div><span class="k">合同期</span>2024-01 ~ 2026-12</div>
+            <div><span class="k">到期</span><span class="tag tag-red">⚠ 90 天预警</span></div>
+            <div><span class="k">覆盖产品</span>室外游乐 / 地垫</div>
+            <div><span class="k">类别</span>Cooperative Purchasing</div>
+          </div>
+          <div class="alliance-actions">
+            <button class="btn btn-sm btn-primary">续期准备</button>
+            <button class="btn btn-sm">查看详情</button>
+          </div>
+        </div>
+
+        <!-- NASPO -->
+        <div class="alliance-card">
+          <div class="alliance-name">NASPO ValuePoint</div>
+          <div class="alliance-region">🇺🇸 北美 · 州政府采购</div>
+          <div class="alliance-meta">
+            <div><span class="k">状态</span><span class="tag tag-green">✅ 有效</span></div>
+            <div><span class="k">合同期</span>2025-06 ~ 2028-05</div>
+            <div><span class="k">到期</span>剩 2 年 11 月</div>
+            <div><span class="k">覆盖产品</span>全品类</div>
+            <div><span class="k">类别</span>State Contract</div>
+          </div>
+          <div class="alliance-actions">
+            <button class="btn btn-sm">查看详情</button>
+          </div>
+        </div>
+
+        <!-- OMNIA -->
+        <div class="alliance-card">
+          <div class="alliance-name">OMNIA Partners</div>
+          <div class="alliance-region">🇺🇸 北美 · 公共机构联盟</div>
+          <div class="alliance-meta">
+            <div><span class="k">状态</span><span class="tag tag-blue">📝 申请中</span></div>
+            <div><span class="k">进度</span>60% · 资料审核阶段</div>
+            <div><span class="k">预计下证</span>2026-Q1</div>
+            <div><span class="k">负责人</span>王宏伟</div>
+            <div><span class="k">类别</span>Cooperative Purchasing</div>
+          </div>
+          <div class="alliance-actions">
+            <button class="btn btn-sm btn-primary">查看进度</button>
+          </div>
+        </div>
+
+        <!-- BuyBoard -->
+        <div class="alliance-card">
+          <div class="alliance-name">BuyBoard</div>
+          <div class="alliance-region">🇺🇸 德州 · 学区采购</div>
+          <div class="alliance-meta">
+            <div><span class="k">状态</span><span class="tag tag-green">✅ 有效</span></div>
+            <div><span class="k">合同期</span>2024-09 ~ 2027-08</div>
+            <div><span class="k">到期</span>剩 2 年 2 月</div>
+            <div><span class="k">覆盖产品</span>室外游乐</div>
+            <div><span class="k">类别</span>School District</div>
+          </div>
+          <div class="alliance-actions">
+            <button class="btn btn-sm">查看详情</button>
+          </div>
+        </div>
+
+        <!-- IPA -->
+        <div class="alliance-card warn">
+          <div class="alliance-name">IPA (Informing Policy Association)</div>
+          <div class="alliance-region">🌐 国际政策联盟</div>
+          <div class="alliance-meta">
+            <div><span class="k">状态</span><span class="tag tag-red">❌ 已过期</span></div>
+            <div><span class="k">合同期</span>2022-03 ~ 2025-02</div>
+            <div><span class="k">过期已</span><span style="color:#f5222d">8 个月</span></div>
+            <div><span class="k">覆盖产品</span>全品类</div>
+            <div><span class="k">类别</span>Cross-border Policy</div>
+          </div>
+          <div class="alliance-actions">
+            <button class="btn btn-sm btn-primary">重新申请</button>
+            <button class="btn btn-sm">归档</button>
+          </div>
+        </div>
+
+        <!-- CCP -->
+        <div class="alliance-card">
+          <div class="alliance-name">CCP (Crown Commercial Service)</div>
+          <div class="alliance-region">🇬🇧 英国政府采购</div>
+          <div class="alliance-meta">
+            <div><span class="k">状态</span><span class="tag tag-orange">🔶 准备申请</span></div>
+            <div><span class="k">进度</span>0% · 尚未提交</div>
+            <div><span class="k">准入门槛</span>EN 1176 + ISO 9001</div>
+            <div><span class="k">预计周期</span>6 ~ 9 个月</div>
+            <div><span class="k">类别</span>UK Government Framework</div>
+          </div>
+          <div class="alliance-actions">
+            <button class="btn btn-sm btn-primary">启动申请</button>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="toolbar">
+        <div>
+          <button class="btn btn-primary">+ 新增联盟资格</button>
+          <button class="btn">批量导出 CSV</button>
+          <button class="btn">导入合同附件</button>
+        </div>
+        <div style="font-size:12px;color:#999">共 6 条 · 最后更新 2025-10-18</div>
+      </div>
+    </div>
+
+    <div class="timeline-card">
+      <h4>⏰ 到期预警（&lt; 60 天）</h4>
+
+      <div class="timeline-item">
+        <div class="t-name">Sourcewell</div>
+        <div class="t-date">2026-12-31 · 剩 72 天</div>
+        <div class="t-note">续期需提交财报、保险证明、产品目录更新</div>
+        <button class="btn btn-sm btn-primary">启动续期流程</button>
+      </div>
+
+      <div class="timeline-item">
+        <div class="t-name">IPA（已过期）</div>
+        <div class="t-date">2025-02-28 · 逾期 8 个月</div>
+        <div class="t-note">需重新提交全套申请资料</div>
+        <button class="btn btn-sm btn-primary">重新申请</button>
+      </div>
+
+      <div style="margin-top:16px;padding-top:12px;border-top:1px dashed #f0f0f0;font-size:12px;color:#999">
+        💡 系统将在到期前 90/60/30 天各发送一次预警邮件
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- 子区块 2：跨境资格评估向导（§2.29 / #2227）                 -->
+<!-- ========================================================= -->
+<div class="panel" id="panel-wizard">
+  <div class="section-title">
+    🧭 跨境资格评估向导 <span class="hint">（§2.29 · Issue #2227 · 8 步流程 · 预计 15 分钟完成）</span>
+  </div>
+
+  <!-- 8 步步骤条 -->
+  <div class="stepper">
+    <div class="step done"><div class="step-dot">✓</div><div class="step-label">1. 目标市场选择</div></div>
+    <div class="step done"><div class="step-dot">✓</div><div class="step-label">2. 产品合规矩阵</div></div>
+    <div class="step active"><div class="step-dot">3</div><div class="step-label">3. 证书检查清单</div></div>
+    <div class="step"><div class="step-dot">4</div><div class="step-label">4. 资金测算</div></div>
+    <div class="step"><div class="step-dot">5</div><div class="step-label">5. 物流方案</div></div>
+    <div class="step"><div class="step-dot">6</div><div class="step-label">6. 本地代理人</div></div>
+    <div class="step"><div class="step-dot">7</div><div class="step-label">7. 法规风险评估</div></div>
+    <div class="step"><div class="step-dot">8</div><div class="step-label">8. 最终决策建议</div></div>
+  </div>
+
+  <div class="wizard-layout">
+    <!-- 左：当前步骤内容 -->
+    <div class="wizard-panel">
+      <h3>第 3 步 · 证书检查清单</h3>
+      <div class="sub">根据目标市场和产品类别，核对必需证书的持有情况</div>
+
+      <div class="meta-row">
+        <div><span class="k">🎯 目标市场：</span><span class="tag tag-blue">🇺🇸 北美（USA）</span></div>
+        <div><span class="k">📦 产品类别：</span>室外游乐设备</div>
+        <div><span class="k">🏢 适用机构：</span>K-12 学校 / 市政公园</div>
+      </div>
+
+      <ul class="cert-list">
+        <li class="cert-item">
+          <div>
+            <span class="name">ASTM F1487</span>
+            <span class="desc">· 美国公共游乐设备安全标准</span>
+          </div>
+          <span class="tag tag-green">✅ 已持有</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">CPSC 合规</span>
+            <span class="desc">· 美国消费者产品安全委员会</span>
+          </div>
+          <span class="tag tag-green">✅ 已持有</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">IPEMA 认证</span>
+            <span class="desc">· 独立第三方设备/地垫认证</span>
+          </div>
+          <span class="tag tag-orange">⚠ 部分产品缺失</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">ADA 无障碍合规</span>
+            <span class="desc">· 美国残障人士法案</span>
+          </div>
+          <span class="tag tag-red">❌ 未持有</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">ISO 9001</span>
+            <span class="desc">· 质量管理体系</span>
+          </div>
+          <span class="tag tag-green">✅ 已持有</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">ISO 14001</span>
+            <span class="desc">· 环境管理体系</span>
+          </div>
+          <span class="tag tag-green">✅ 已持有</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">Prop 65</span>
+            <span class="desc">· 加州化学物质警告法案</span>
+          </div>
+          <span class="tag tag-red">❌ 未持有</span>
+        </li>
+        <li class="cert-item">
+          <div>
+            <span class="name">州级注册（如 TDLR 德州）</span>
+            <span class="desc">· 各州独立注册</span>
+          </div>
+          <span class="tag tag-orange">⚠ 部分州缺失</span>
+        </li>
+      </ul>
+
+      <div class="wizard-actions">
+        <button class="btn">← 上一步</button>
+        <button class="btn">保存草稿</button>
+        <button class="btn">生成缺失清单报告</button>
+        <button class="btn btn-primary" style="margin-left:auto">下一步 →</button>
+      </div>
+    </div>
+
+    <!-- 右：摘要卡片 -->
+    <div class="summary-card">
+      <h4>📊 评估摘要</h4>
+
+      <div class="readiness">
+        <div class="readiness-num">62%</div>
+        <div class="readiness-label">整体就绪度</div>
+        <div class="progress"><div class="progress-fill" style="width:62%"></div></div>
+      </div>
+
+      <div class="summary-row"><span class="k">预计完成</span><span class="v">12 分钟</span></div>
+      <div class="summary-row"><span class="k">已完成步骤</span><span class="v">2 / 8</span></div>
+      <div class="summary-row"><span class="k">关键阻塞项</span><span class="v" style="color:#f5222d">3 个</span></div>
+      <div class="summary-row"><span class="k">预估额外成本</span><span class="v">¥85,000</span></div>
+      <div style="font-size:11px;color:#999;margin-top:4px;line-height:1.7">
+        认证费 ~¥50,000<br>
+        翻译/法律 ~¥20,000<br>
+        注册/年费 ~¥15,000
+      </div>
+
+      <div style="margin-top:14px;padding-top:12px;border-top:1px dashed #f0f0f0">
+        <div style="font-size:12px;color:#999;margin-bottom:6px">🚧 阻塞项</div>
+        <div style="font-size:12px;line-height:1.9;color:#444">
+          <div>• ADA 无障碍合规缺失</div>
+          <div>• Prop 65 加州法规</div>
+          <div>• 部分州级注册</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- 子区块 3：市场流程知识库（§2.30 / #2226）                   -->
+<!-- ========================================================= -->
+<div class="panel" id="panel-wiki">
+  <div class="section-title">
+    📚 市场流程知识库 <span class="hint">（§2.30 · Issue #2226 · 4 区域 Wiki · 30 秒找到目标信息）</span>
+  </div>
+
+  <div class="region-tabs">
+    <div class="region-tab active">🇺🇸 北美</div>
+    <div class="region-tab">🇪🇺 欧洲</div>
+    <div class="region-tab">🌍 中东</div>
+    <div class="region-tab">🌏 东南亚</div>
+  </div>
+
+  <div class="wiki-layout">
+    <!-- 左：目录 -->
+    <div class="wiki-toc">
+      <h4>📑 目录 · 北美</h4>
+      <div class="toc-item active">1. 采购流程概览</div>
+      <div class="toc-item">2. 合规要求（EN/ASTM/ADA）</div>
+      <div class="toc-item">3. 时间节点（节假日/学校采购季）</div>
+      <div class="toc-item">4. 文化惯例</div>
+      <div class="toc-item">5. 付款条件</div>
+      <div class="toc-item">6. 本地代理要求</div>
+      <div class="toc-item">7. 常见陷阱</div>
+    </div>
+
+    <!-- 中：内容 -->
+    <div class="wiki-content">
+      <div class="wiki-breadcrumb">🇺🇸 北美（美国 + 加拿大） / 采购流程概览</div>
+      <h2>1. 采购流程概览</h2>
+
+      <div class="wiki-para">
+        <strong>主要采购模式：</strong>北美公共采购以 <strong>公开招标（Public Bidding）</strong>、<strong>RFP（Request for Proposal）</strong> 和 <strong>ITB（Invitation to Bid）</strong> 为主要流程。RFP 侧重综合方案（含设计/创新/服务），ITB 侧重价格比拼。联邦项目受 FAR（Federal Acquisition Regulation）约束，州/市项目各有本地规定，小额采购（通常 &lt; USD 50,000）可简化程序。
+      </div>
+
+      <div class="wiki-para">
+        <strong>体游核心渠道 - Cooperative Purchasing：</strong>对于游乐设备，<strong>联盟采购（Cooperative Purchasing）</strong>是最主要的进入渠道，Sourcewell、NASPO、OMNIA Partners、BuyBoard 等联盟已经通过公开竞标选定供应商，下游公立学校、公园、市政府无需再走完整招标流程即可直接采购。取得联盟资格 = 一次招标、多年复用。
+      </div>
+
+      <div class="wiki-para">
+        <strong>关键时间节点：</strong>美国联邦财年为 <strong>7 月 1 日 - 6 月 30 日</strong>（部分州/市财年不同）。学校采购高峰在 <strong>Q2（4-6 月）</strong>，此时预算敲定并集中招标以便暑期施工、秋季开学前完工。市政公园项目多在春季（3-5 月）启动，夏末冬初完工。避开感恩节（11 月末）、圣诞（12 月下旬）、独立日（7 月 4 日周）等节假日提交报价。
+      </div>
+
+      <div class="wiki-footer">
+        <button class="btn btn-sm">✏️ 编辑</button>
+        <button class="btn btn-sm">🕐 历史版本</button>
+        <button class="btn btn-sm">📎 相关模板</button>
+        <button class="btn btn-sm">⭐ 收藏</button>
+        <span style="margin-left:auto;font-size:11px;color:#999;align-self:center">最后更新：2025-09-28 · 吴耀</span>
+      </div>
+    </div>
+
+    <!-- 右：搜索/最近 -->
+    <div class="wiki-side">
+      <h4>🔍 快速搜索</h4>
+      <input type="text" class="wiki-search" placeholder="30 秒找到目标信息…">
+
+      <h4>🕐 最近查看</h4>
+      <ul class="wiki-side-list">
+        <li><span class="dot">›</span>Sourcewell 续期准备清单</li>
+        <li><span class="dot">›</span>EN 1176 与 ASTM F1487 对比</li>
+        <li><span class="dot">›</span>中东项目清真合规要求</li>
+        <li><span class="dot">›</span>德州 TDLR 注册流程</li>
+      </ul>
+
+      <h4>⭐ 收藏</h4>
+      <ul class="wiki-side-list">
+        <li><span class="dot">›</span>美国学校采购季日历</li>
+        <li><span class="dot">›</span>欧盟 CE 认证路径图</li>
+        <li><span class="dot">›</span>Dubai 市政采购流程</li>
+      </ul>
+
+      <div style="margin-top:12px;padding:10px;background:#e6f7ff;border-radius:4px;font-size:11px;color:#1890ff;line-height:1.7">
+        💡 Tip：输入 #标签 可筛选分类；输入 @人名 可查看该人编辑过的条目
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========================================================= -->
+<!-- 子区块 4：国际项目数据（§2.31 / #1488）                     -->
+<!-- ========================================================= -->
+<div class="panel" id="panel-projects">
+  <div class="section-title">
+    🗂️ 国际项目数据 <span class="hint">（§2.31 · Issue #1488 · 跨境特有字段：区域/币种/认证/语言）</span>
+  </div>
+
+  <!-- KPI -->
+  <div class="kpi-row">
+    <div class="kpi-card">
+      <div class="kpi-label">国际项目总数</div>
+      <div class="kpi-num">18</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">中标</div>
+      <div class="kpi-num" style="color:#52c41a">7</div>
+      <div class="kpi-sub">中标率 39%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">跟进中</div>
+      <div class="kpi-num" style="color:#1890ff">8</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">已失标</div>
+      <div class="kpi-num" style="color:#8c8c8c">3</div>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <div>
+      <label>区域</label>
+      <select><option>全部</option><option>🇺🇸 北美</option><option>🇪🇺 欧洲</option><option>🌍 中东</option><option>🌏 东南亚</option></select>
+    </div>
+    <div>
+      <label>币种</label>
+      <select><option>全部</option><option>USD</option><option>EUR</option><option>CNY</option><option>AED</option><option>SGD</option></select>
+    </div>
+    <div>
+      <label>项目语言</label>
+      <select><option>全部</option><option>EN 英</option><option>FR 法</option><option>AR 阿</option><option>ES 西</option><option>ZH 中</option></select>
+    </div>
+    <div>
+      <label>合规要求</label>
+      <select><option>全部</option><option>EN 1176 欧盟</option><option>ASTM F1487 美国</option><option>AS 4685 澳洲</option><option>SS 457 新加坡</option></select>
+    </div>
+    <div>
+      <label>搜索</label>
+      <input type="text" placeholder="项目名/甲方…">
+    </div>
+    <button class="btn btn-primary">筛选</button>
+  </div>
+
+  <div class="intl-toolbar">
+    <div>
+      <button class="btn btn-primary">+ 新增国际项目</button>
+      <button class="btn">批量导出</button>
+      <button class="btn">币种汇总</button>
+    </div>
+    <div class="toggle-switch" onclick="this.classList.toggle('on')">
+      <div class="toggle"></div>
+      <span>🔄 合并国内/国际项目统一列表</span>
+    </div>
+  </div>
+
+  <!-- 项目表格 -->
+  <table>
+    <thead>
+      <tr>
+        <th>项目名称</th>
+        <th>甲方</th>
+        <th>区域</th>
+        <th>币种/金额</th>
+        <th>所需认证</th>
+        <th>语言</th>
+        <th>状态</th>
+        <th>负责人</th>
+        <th>操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Stanford University Playground Upgrade</strong></td>
+        <td>Stanford University</td>
+        <td><span class="flag">🇺🇸</span>北美</td>
+        <td>USD $158,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">ASTM</span><span class="tag tag-blue">IPEMA</span><span class="tag tag-blue">ADA</span></td>
+        <td><span class="tag tag-gray">EN</span></td>
+        <td><span class="tag tag-orange">进行中</span></td>
+        <td>王宏伟</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">本地化</a></td>
+      </tr>
+      <tr>
+        <td><strong>Berlin Kindergarten Expansion</strong></td>
+        <td>Stadt Berlin / Bezirksamt Mitte</td>
+        <td><span class="flag">🇪🇺</span>欧洲</td>
+        <td>EUR €92,500</td>
+        <td class="cert-stack"><span class="tag tag-blue">EN 1176</span><span class="tag tag-blue">CE</span></td>
+        <td><span class="tag tag-gray">DE/EN</span></td>
+        <td><span class="tag tag-green">中标</span></td>
+        <td>Lisa Schmidt</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">归档</a></td>
+      </tr>
+      <tr>
+        <td><strong>Dubai Expo Kids Zone</strong></td>
+        <td>Dubai Municipality</td>
+        <td><span class="flag">🇦🇪</span>中东</td>
+        <td>AED د.إ 680,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">EN 1176</span><span class="tag tag-blue">Dubai Muni.</span></td>
+        <td><span class="tag tag-gray">AR/EN</span></td>
+        <td><span class="tag tag-orange">投标中</span></td>
+        <td>Omar Al-Farsi</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">本地化</a></td>
+      </tr>
+      <tr>
+        <td><strong>Singapore HDB Estate Playground</strong></td>
+        <td>Housing &amp; Development Board</td>
+        <td><span class="flag">🇸🇬</span>东南亚</td>
+        <td>SGD S$215,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">SS 457</span><span class="tag tag-blue">EN 1176</span></td>
+        <td><span class="tag tag-gray">EN</span></td>
+        <td><span class="tag tag-blue">跟进</span></td>
+        <td>陈志强</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">本地化</a></td>
+      </tr>
+      <tr>
+        <td><strong>Paris École Maternelle Rénovation</strong></td>
+        <td>Mairie de Paris 15e</td>
+        <td><span class="flag">🇪🇺</span>欧洲</td>
+        <td>EUR €124,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">EN 1176</span><span class="tag tag-blue">NF</span></td>
+        <td><span class="tag tag-gray">FR</span></td>
+        <td><span class="tag tag-orange">投标中</span></td>
+        <td>Marie Dubois</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">本地化</a></td>
+      </tr>
+      <tr>
+        <td><strong>Riyadh Royal Park Kids Area</strong></td>
+        <td>Royal Commission for Riyadh City</td>
+        <td><span class="flag">🇸🇦</span>中东</td>
+        <td>SAR ﷼1,250,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">SASO</span><span class="tag tag-blue">EN 1176</span></td>
+        <td><span class="tag tag-gray">AR/EN</span></td>
+        <td><span class="tag tag-green">中标</span></td>
+        <td>Omar Al-Farsi</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">归档</a></td>
+      </tr>
+      <tr>
+        <td><strong>Toronto District School Board Play Area</strong></td>
+        <td>TDSB</td>
+        <td><span class="flag">🇨🇦</span>北美</td>
+        <td>CAD C$185,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">CSA Z614</span><span class="tag tag-blue">ASTM</span></td>
+        <td><span class="tag tag-gray">EN/FR</span></td>
+        <td><span class="tag tag-blue">跟进</span></td>
+        <td>王宏伟</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">本地化</a></td>
+      </tr>
+      <tr>
+        <td><strong>Hanoi International School Playground</strong></td>
+        <td>Hanoi International School</td>
+        <td><span class="flag">🇻🇳</span>东南亚</td>
+        <td>USD $68,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">EN 1176</span><span class="tag tag-blue">ASTM</span></td>
+        <td><span class="tag tag-gray">VI/EN</span></td>
+        <td><span class="tag tag-gray">失标</span></td>
+        <td>陈志强</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">归档</a></td>
+      </tr>
+      <tr>
+        <td><strong>Abu Dhabi Corniche Family Park</strong></td>
+        <td>Abu Dhabi Municipality</td>
+        <td><span class="flag">🇦🇪</span>中东</td>
+        <td>AED د.إ 420,000</td>
+        <td class="cert-stack"><span class="tag tag-blue">EN 1176</span><span class="tag tag-blue">ECAS</span></td>
+        <td><span class="tag tag-gray">AR/EN</span></td>
+        <td><span class="tag tag-green">中标</span></td>
+        <td>Omar Al-Farsi</td>
+        <td><a style="color:#1890ff;font-size:12px;cursor:pointer">详情</a> · <a style="color:#1890ff;font-size:12px;cursor:pointer">归档</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;font-size:12px;color:#999">
+    <div>共 18 条 · 当前显示 9 条</div>
+    <div>
+      <button class="btn btn-sm">上一页</button>
+      <button class="btn btn-sm" style="background:#1890ff;color:#fff;border-color:#1890ff">1</button>
+      <button class="btn btn-sm">2</button>
+      <button class="btn btn-sm">下一页</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// 子 Tab 胶囊切换
+document.querySelectorAll('.sub-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.sub-tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    tab.classList.add('active');
+    document.getElementById(tab.dataset.panel).classList.add('active');
+  });
+});
+
+// 区域 Tab 切换（Wiki 内部）
+document.querySelectorAll('.region-tab').forEach(tab => {
+  tab.addEventListener('click', () => {
+    document.querySelectorAll('.region-tab').forEach(t => t.classList.remove('active'));
+    tab.classList.add('active');
+  });
+});
+
+// Wiki 目录切换
+document.querySelectorAll('.toc-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.toc-item').forEach(t => t.classList.remove('active'));
+    item.classList.add('active');
+  });
+});
+</script>
+
+</body>
+</html>

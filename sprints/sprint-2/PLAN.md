@@ -140,7 +140,8 @@
 | 04-23 | kimi3 | #3545 | intelligence-hub | **max** | In Progress | 前端关系网络Tab |
 | 04-23 | kimi4 | ~~#1875~~ | bidding | **max** | ~~Done~~ | 赢/输复盘模板 — PR#3976 已于04-20 merged |
 | 04-23 | kimi4 | ~~#3174~~ | approval | **max** | ~~Done~~ | 表单模板导入导出+配置向导 — PR#3937+#4080 已merged |
-| 04-23 | kimi4 | #3377 | plm | **max** | In Progress | PLM子系统数据库初始化 |
+| 04-23 | kimi4 | ~~#3377~~ | plm | **max** | ~~Done~~ | PLM子系统数据库初始化 — 已merged/CLOSED |
+| 04-23 | kimi4 | #3378 | plm | **max** | In Progress | 零件主数据CRUD API |
 
 ---
 

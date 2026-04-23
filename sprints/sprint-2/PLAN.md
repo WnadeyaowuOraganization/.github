@@ -133,8 +133,8 @@
 | 04-23 | kimi3 | ~~#3545~~ | intelligence-hub | **max** | ~~Done~~ | 前端关系网络Tab — PR #4104 merged |
 | 04-23 | kimi1 | ~~#3386~~ | plm | **max** | ~~Done~~ | ECO审批流集成 — PR#4051 已于04-21 merged |
 | 04-23 | kimi1 | ~~#3651~~ | bidding | **max** | ~~Done~~ | 投标立项与进度管理 — PR#4112 merged |
-| 04-23 | kimi1 | #2317 | ptc | **max** | In Progress | D3 Web技术确认中心前端 — PR#4117 submitted(code review✅)|
-| 04-23 | kimi1 | #4020 | cockpit | **max** | In Progress | Master超管驾驶舱18Tab（新派）|
+| 04-23 | kimi1 | ~~#2317~~ | ptc | **max** | ~~Done~~ | D3 Web技术确认中心前端 — PR#4117 submitted(code review✅ pending CI)|
+| 04-23 | kimi1 | #4020 | cockpit | **high** | In Progress | Master超管驾驶舱18Tab（新派，降为high）|
 | 04-23 | kimi3 | ~~#3389~~ | plm | **max** | ~~Done~~ | EBOM解析API — PR#4107 merged |
 | 04-23 | kimi5 | ~~#3392~~ | plm | **max** | ~~Done~~ | 版本化定价引擎API — PR已于04-21 merged(CLOSED) |
 | 04-23 | kimi3 | ~~#3390~~ | plm | **max** | ~~Done~~ | D3参数化→PLM BOM桥接 — PR#4111 merged（@SaCheckPermission已修复）|
@@ -151,7 +151,7 @@
 | 04-23 | kimi2 | ~~#4033~~ | crm | **max** | ~~Done~~ | CRM商机详情-基本信息Tab — PR#4062 已于04-22 merged |
 | 04-23 | kimi2 | ~~#3387~~ | plm | **max** | ~~Done~~ | ECO执行引擎 — PR#4109 merged（@SaCheckPermission已修复）|
 | 04-23 | kimi2 | ~~#3396~~ | plm | **max** | ~~Done~~ | PLM ECO变更管理页面 — PR#4114 merged |
-| 04-23 | kimi2 | #4021 | crm | **max** | In Progress | Master CRM商务中心（新派）|
+| 04-23 | kimi2 | #4021 | crm | **high** | In Progress | Master CRM商务中心（新派，降为high）|
 | 04-23 | kimi4 | ~~#4034~~ | crm | **max** | ~~Done~~ | CRM商机详情-跟进记录Tab — PR#4056+PR#4108 merged（N+1已知技术债，单商机场景可控）|
 | 04-23 | kimi4 | ~~#3394~~ | plm | **max** | ~~Done~~ | PLM零件主数据管理页面 — PR#3990 已于04-20 merged |
 | 04-23 | kimi4 | ~~#3395~~ | plm | **max** | ~~Done~~ | PLM BOM管理与版本对比页面 — PR#4116 merged |

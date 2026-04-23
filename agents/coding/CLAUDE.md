@@ -79,7 +79,7 @@ bash ~/projects/.github/scripts/cc-test-env.sh start kimi<N>
 bash ~/projects/.github/scripts/cc-test-env.sh restart-backend kimi<N>
 ```
 
-## 通讯录
+## 通讯录 + 消息格式（强制）
 
 | 角色 | tmux 会话 |
 |------|----------|
@@ -87,8 +87,18 @@ bash ~/projects/.github/scripts/cc-test-env.sh restart-backend kimi<N>
 | 排程经理 | `manager-排程经理` |
 | Notify | `POST http://localhost:9872/api/notify` |
 
+**每条消息必须包含**：`【类型】-【回复标识】`
+
+| 场景 | notify type | 回复标识 |
+|-----|-------------|---------|
+| 进度播报（开工/阶段完成/PR提交） | `success` | `【阅即可】` |
+| 方案评审 | `info` | `【需回复】` |
+| 异常/卡住 | `warning` | `【需回复】` |
+| 需人工介入/结论前 | `error` | `【需回复】` |
+
 ```bash
-MSG="[#${ISSUE}] <一句话>" && TYPE=info && \
+# 标准汇报命令（格式必须完整）
+MSG="【进度播报】-【阅即可】 [#${ISSUE}] <一句话现状>" && TYPE=success && \
 tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $MSG" Enter; \
 curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
   -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"$MSG\",\"type\":\"$TYPE\"}" >/dev/null

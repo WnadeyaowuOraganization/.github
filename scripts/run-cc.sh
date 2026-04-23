@@ -352,6 +352,7 @@ if [ -d "$SKILLS_SRC" ]; then
     ln -sfn "${skill_dir%/}" "$BASE_DIR/.claude/skills/$skill_name"
   done
   echo "✅ 同步 skills → $BASE_DIR/.claude/skills/ (软链 $(ls -1 $BASE_DIR/.claude/skills/ | wc -l) 个)"
+  # 注：team-comm等全局skill通过 ~/.claude/skills/ 加载，所有CC自动生效，不需要这里注入
 fi
 
 # === 启动tmux（交互模式）===

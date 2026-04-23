@@ -83,6 +83,13 @@ case "$MODULE" in
   plugins|gh-plugins)  PROJECT_DIR="$BASE_DIR" ;;
 esac
 
+# === kimi标签提取（需在CC_PROMPT构建之前）===
+KIMI_TAG=$(basename "$BASE_DIR" | sed 's/wande-play-//;s/wande-play//')
+[ -z "$KIMI_TAG" ] && KIMI_TAG="main"
+KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
+CC_BE_PORT=$((7100 + KIMI_NUM))
+CC_FE_PORT=$((8100 + KIMI_NUM))
+
 if [ ! -d "$PROJECT_DIR" ]; then
   echo "错误: 目录不存在 $PROJECT_DIR"
   exit 1
@@ -227,13 +234,10 @@ if [ "$MODE" = "issue" ]; then
   fi
 
   # === 构建 prompt（v3 — 简短一行，规范通过 --append-system-prompt-file 注入）===
-  CC_PROMPT="你是 kimi${KIMI_NUM}，工作目录 ~/projects/wande-play-kimi${KIMI_NUM}/，独立环境端口 backend:${BACKEND_PORT} frontend:${FRONTEND_PORT} db:wande-ai-kimi${KIMI_NUM}。cc-test-env.sh 所有命令必须用 kimi${KIMI_NUM}，不得操作其他 kimi 环境。阅读 issues/issue-${ISSUE}/issue-source.md 完成 Issue #${ISSUE}。"
+  CC_PROMPT="你是 kimi${KIMI_NUM}，工作目录 ~/projects/wande-play-kimi${KIMI_NUM}/，独立环境端口 backend:${CC_BE_PORT} frontend:${CC_FE_PORT} db:wande-ai-kimi${KIMI_NUM}。cc-test-env.sh 所有命令必须用 kimi${KIMI_NUM}，不得操作其他 kimi 环境。阅读 issues/issue-${ISSUE}/issue-source.md 完成 Issue #${ISSUE}。"
 
-  # 检查详细设计文档
-  DESIGN_DOC=$(find "$SCRIPT_DIR/../docs/design/" -name "*详细设计.md" -newer "$ISSUE_DIR" 2>/dev/null | head -1)
-  if [ -z "$DESIGN_DOC" ]; then
-    DESIGN_DOC=$(grep -rl "#${ISSUE}" "$SCRIPT_DIR/../docs/design/"*详细设计.md 2>/dev/null | head -1)
-  fi
+  # 检查详细设计文档（只匹配内容中包含 Issue 编号的设计文档）
+  DESIGN_DOC=$(grep -rl "#${ISSUE}" "$SCRIPT_DIR/../docs/design/"*/详细设计.md 2>/dev/null | head -1)
   if [ -n "$DESIGN_DOC" ]; then
     cp "$DESIGN_DOC" "$ISSUE_DIR/design.md"
     CC_PROMPT="${CC_PROMPT} 本Issue有详细设计文档，请先阅读 issues/issue-${ISSUE}/design.md 并严格按设计实现。"
@@ -271,10 +275,7 @@ if [ "$MODE" = "issue" ] && [ -f "$LOCK_FILE" ]; then
   sed -i "s/^api_source=.*/api_source=${API_SOURCE}/" "$LOCK_FILE"
 fi
 
-# === kimi标签提取 ===
-KIMI_TAG=$(basename "$BASE_DIR" | sed 's/wande-play-//;s/wande-play//')
-[ -z "$KIMI_TAG" ] && KIMI_TAG="main"
-KIMI_NUM=$(echo "$KIMI_TAG" | grep -oE '[0-9]+$' || echo "0")
+# === kimi标签已在目录解析后提取（KIMI_TAG/KIMI_NUM/CC_BE_PORT/CC_FE_PORT）===
 
 # === Maven repo：per-kimi 独立 m2（放在项目目录外，避免 CC 误提交）===
 # 路径：${HOME_DIR}/cc_scheduler/m2/<kimi_tag>/repository

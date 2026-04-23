@@ -34,6 +34,22 @@ e2e/tests/
 ```
 
 
+## 定时回归机制
+
+每 **6小时** 自动触发一轮完整回归（由 cron 调度 `e2e_top_tier.sh`）：
+
+```
+拉取dev最新代码 → 更新测试用例 → 全量回归 → 报告/创建Issue
+```
+
+每轮开始时**必须**先同步代码和依赖：
+
+```bash
+cd $HOME_DIR/projects/wande-play-e2e-top
+git fetch origin dev && git reset --hard origin/dev && git clean -fd -e 'e2e/node_modules'
+cd e2e && pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+```
+
 ## 全量回归工作流
 
 **prompt**: `执行顶层E2E全量回归测试`
@@ -82,11 +98,18 @@ echo "Created Issue #$ISSUE"
 bash $HOME_DIR/projects/.github/scripts/update-project-status.sh \
   --repo play --issue $ISSUE --status "E2E Fail"
 
-# 3. 发送通知
+# 3. 通知研发经理（必须，不能只创Issue不通知）
+MSG="[E2E回归] 发现失败，Issue #${ISSUE} 已创建(E2E Fail)，请安排CC修复"
+tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $MSG" Enter
 curl -s -X POST http://localhost:9872/api/notify \
   -H "Content-Type: application/json" \
-  -d "{\"session\":\"e2e-top\",\"message\":\"E2E回归发现失败，Issue #${ISSUE} 已创建并加入看板(E2E Fail)\",\"type\":\"warning\"}"
+  -d "{\"session\":\"e2e-top\",\"message\":\"$MSG\",\"type\":\"error\"}"
+
+# 4. 通知排程经理（排程经理负责将E2E Fail Issue纳入排程）
+tmux send-keys -t 'manager-排程经理' "[CC-REPORT] $MSG" Enter
 ```
+
+> ⚠️ **E2E失败后必须同时通知研发经理和排程经理**，只创Issue不通知=静默工作，违反红线。
 
 ### 4. 补充测试（你的核心价值）
 

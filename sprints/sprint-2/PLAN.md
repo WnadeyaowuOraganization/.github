@@ -174,6 +174,8 @@
 | 04-24 | kimi2 | #2428 | bidding | medium | In Progress | 人大代表建议/政协提案采集 |
 | 04-24 | kimi6 | ~~#4037~~ | app | medium | ~~Done~~ | 合同Tab创建+盖章+扫描件上传 — PR #4136 merged |
 | 04-24 | kimi6 | #2429 | bidding | medium | In Progress | 行业展会参展商名录采集 |
+| 04-24 | kimi2 | ~~#2428~~ | bidding | medium | ~~Done~~ | 人大代表建议/政协提案采集 — PR #4137 merged |
+| 04-24 | kimi2 | #3151 | approval | medium | In Progress | 新手引导+流程帮助中心 |
 | 04-23 | kimi3 | ~~#4013~~ | crm | **high** | ~~Plan~~ | Master CRM线索/商机统一 — 导航归类用，禁止CC开发 |
 | 04-23 | kimi3 | #3651 | bidding | medium | ~~Done~~ | 投标立项与进度管理 — PR#4112 已merged |
 | 04-23 | kimi3 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0原型 — PR#4122 admin-merged ✅ |

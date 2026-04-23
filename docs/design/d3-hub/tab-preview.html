@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Web 3D 预览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tree-node { padding: 5px 8px; cursor: pointer; font-size: 12.5px; color: #333; display: flex; align-items: center; gap: 5px; border-radius: 2px; }
+    .tree-node:hover { background: #f5f5f5; }
+    .tree-node.active { background: #e6f7ff; color: #1890ff; }
+    .tree-child { padding-left: 20px; }
+    .scene-placeholder {
+      background:
+        radial-gradient(ellipse at center, rgba(24,144,255,0.05) 0%, transparent 70%),
+        repeating-linear-gradient(0deg, transparent, transparent 38px, rgba(200,200,200,0.3) 38px, rgba(200,200,200,0.3) 39px),
+        repeating-linear-gradient(90deg, transparent, transparent 38px, rgba(200,200,200,0.3) 38px, rgba(200,200,200,0.3) 39px),
+        linear-gradient(180deg, #e8eef5 0%, #d4dce6 100%);
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab6 · Web 3D 预览（Three.js）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">在浏览器中呈现 D3 会话生成的 3D 模型，设计师/商务/客户可直接交互查看构件、切换视角、漫游场景，无需 Rhino 本地环境</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（校核）、商务（演示）、客户（验收）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">Three.js 场景渲染 / 构件树层级 / 相机控制 / 光照控制 / 隐藏显示 / 漫游模式</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">旋转/缩放/平移 / 切换构件显隐 / 截图 / 导出 glTF / 分享链接 / 进入漫游</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">3D 场景 60fps 流畅 / 构件树与 3D 场景联动选中 / glTF 导出与 Rhino 源文件对齐 / 分享链接可免登录查看</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">D3 参数化设计中心 · 详细设计 v1.0</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [两栏布局] -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左/中] Three.js 3D 场景 -->
+  <div class="col-span-9 bg-white border border-gray-300 rounded overflow-hidden">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-sm font-semibold text-gray-700">3D 场景</span>
+        <span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded">丛林城堡乐园 V2</span>
+        <span class="text-xs text-green-600">● 60fps</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <button class="text-xs px-2 py-1 border border-gray-300 bg-white rounded hover:bg-gray-50">重置视角</button>
+        <button class="text-xs px-2 py-1 border border-gray-300 bg-white rounded hover:bg-gray-50">全屏</button>
+      </div>
+    </div>
+
+    <!-- Three.js 占位场景 -->
+    <div class="scene-placeholder h-[560px] relative flex items-center justify-center">
+      <div class="text-center">
+        <div class="text-6xl mb-3 opacity-30">🎥</div>
+        <div class="text-sm font-semibold text-gray-600 mb-1">Three.js 3D 场景</div>
+        <div class="text-xs text-gray-500 mb-4">GLTFLoader 加载 D3 会话导出的 .gltf 文件</div>
+        <div class="inline-flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-300 rounded shadow-sm">
+          <span class="text-xs text-gray-500">左键拖拽 · 旋转</span>
+          <span class="text-gray-300">|</span>
+          <span class="text-xs text-gray-500">滚轮 · 缩放</span>
+          <span class="text-gray-300">|</span>
+          <span class="text-xs text-gray-500">右键拖拽 · 平移</span>
+        </div>
+      </div>
+
+      <!-- 左上角：性能监视器 -->
+      <div class="absolute top-3 left-3 bg-black/70 text-white text-xs px-2 py-1 rounded font-mono">
+        FPS: 60 | Draws: 142 | Tris: 48.2k
+      </div>
+
+      <!-- 右下角：Gizmo 视角指示器 -->
+      <div class="absolute bottom-3 right-3 w-20 h-20 bg-white/80 border border-gray-300 rounded flex items-center justify-center text-xs text-gray-600">
+        <div class="text-center">
+          <div>X / Y / Z</div>
+          <div class="text-gray-400 text-[10px] mt-1">视角指示器</div>
+        </div>
+      </div>
+
+      <!-- 左下角：Tips -->
+      <div class="absolute bottom-3 left-3 bg-white/90 border border-gray-200 rounded px-3 py-1.5 text-xs text-gray-600">
+        💡 双击构件进入聚焦模式
+      </div>
+    </div>
+
+    <!-- [底部操作栏] -->
+    <div class="px-3 py-2 border-t border-gray-200 bg-gray-50 flex items-center justify-between">
+      <div class="text-xs text-gray-500">
+        已加载：128 个构件 · 4,280 kg · 中心坐标 (6000, 4000, 2700)
+      </div>
+      <div class="flex gap-2">
+        <button class="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50">📸 截图</button>
+        <button class="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50">📦 导出 glTF</button>
+        <button class="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50">🔗 分享链接</button>
+        <button class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">🚶 漫游模式</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右栏] 控制面板 -->
+  <div class="col-span-3 space-y-3">
+    <!-- 构件树 -->
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+        <span class="text-sm font-semibold text-gray-700">构件树</span>
+        <span class="text-xs text-gray-400">128 项</span>
+      </div>
+      <div class="p-2 max-h-[280px] overflow-y-auto text-xs">
+        <div class="tree-node"><span>▼</span><span>👁️</span><span>丛林城堡乐园 V2</span></div>
+        <div class="tree-child">
+          <div class="tree-node"><span>▼</span><span>👁️</span><span>主结构 (20)</span></div>
+          <div class="tree-child">
+            <div class="tree-node active"><span>👁️</span><span>立柱 P200 × 12</span></div>
+            <div class="tree-node"><span>👁️</span><span>立柱 P150 × 8</span></div>
+          </div>
+          <div class="tree-node"><span>▼</span><span>👁️</span><span>滑筒 (3)</span></div>
+          <div class="tree-child">
+            <div class="tree-node"><span>👁️</span><span>R800 主滑筒</span></div>
+            <div class="tree-node"><span>🙈</span><span class="text-gray-400 line-through">R600 侧滑筒</span></div>
+          </div>
+          <div class="tree-node"><span>▶</span><span>👁️</span><span>攀爬 (6)</span></div>
+          <div class="tree-node"><span>▶</span><span>👁️</span><span>防护 (14)</span></div>
+          <div class="tree-node"><span>▶</span><span>👁️</span><span>饰件 (42)</span></div>
+          <div class="tree-node"><span>▶</span><span>👁️</span><span>平台 (9)</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 相机控制 -->
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="px-3 py-2 border-b border-gray-200 bg-gray-50">
+        <span class="text-sm font-semibold text-gray-700">相机控制</span>
+      </div>
+      <div class="p-3 space-y-2">
+        <div>
+          <div class="text-xs text-gray-500 mb-1">预设视角</div>
+          <div class="grid grid-cols-3 gap-1 text-xs">
+            <button class="px-1 py-1.5 border border-blue-500 bg-blue-50 text-blue-600 rounded">主视</button>
+            <button class="px-1 py-1.5 border border-gray-300 bg-white rounded">鸟瞰</button>
+            <button class="px-1 py-1.5 border border-gray-300 bg-white rounded">侧视</button>
+            <button class="px-1 py-1.5 border border-gray-300 bg-white rounded">正面</button>
+            <button class="px-1 py-1.5 border border-gray-300 bg-white rounded">背面</button>
+            <button class="px-1 py-1.5 border border-gray-300 bg-white rounded">儿童</button>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500 mb-1">投影</div>
+          <div class="flex gap-1 text-xs">
+            <button class="flex-1 px-2 py-1.5 border border-blue-500 bg-blue-50 text-blue-600 rounded">透视</button>
+            <button class="flex-1 px-2 py-1.5 border border-gray-300 bg-white rounded">正交</button>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500 mb-1">视场角 (FOV)</div>
+          <div class="flex items-center gap-2">
+            <input type="range" min="30" max="90" value="60" class="flex-1 accent-blue-500">
+            <span class="text-xs text-gray-700 font-mono w-8">60°</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 光照控制 -->
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="px-3 py-2 border-b border-gray-200 bg-gray-50">
+        <span class="text-sm font-semibold text-gray-700">光照</span>
+      </div>
+      <div class="p-3 space-y-2">
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-blue-500">环境光</label>
+          <input type="range" min="0" max="100" value="60" class="w-20 accent-blue-500">
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-1"><input type="checkbox" checked class="accent-blue-500">平行光</label>
+          <input type="range" min="0" max="100" value="80" class="w-20 accent-blue-500">
+        </div>
+        <div class="flex items-center justify-between text-xs">
+          <label class="flex items-center gap-1"><input type="checkbox" class="accent-blue-500">点光源</label>
+          <input type="range" min="0" max="100" value="50" class="w-20 accent-blue-500">
+        </div>
+        <div>
+          <div class="text-xs text-gray-500 mb-1">日照时间</div>
+          <input type="range" min="6" max="20" value="12" class="w-full accent-blue-500">
+          <div class="text-xs text-gray-400 text-center">12:00 ☀️</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [漫游模式说明] -->
+<div class="mt-4 p-3 bg-purple-50 border border-purple-200 rounded text-xs text-purple-800">
+  🚶 <strong>漫游模式（Three.js 摄像机路径动画）</strong>：预设摄像机路径点，自动匀速漫游，可用于方案演示视频录制。支持 ① 手动标记关键帧 ② 贝塞尔曲线平滑过渡 ③ 导出 MP4（需接入渲染服务）。
+</div>
+
+</body>
+</html>

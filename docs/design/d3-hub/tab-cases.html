@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史项目案例库</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .case-thumb { background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 6px, #fafafa 6px, #fafafa 12px); }
+    .case-card { transition: box-shadow 0.2s, transform 0.2s; cursor: pointer; }
+    .case-card:hover { box-shadow: 0 3px 10px rgba(0,0,0,0.08); transform: translateY(-2px); }
+    .score-ring { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab4 · 历史项目案例库（#1902 / #1922）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">结构化沉淀历史 S3 生产模型为案例资产，商务/设计师通过自然语言 + AI 智能匹配快速复用基线，缩短方案周期</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务（复用报价）、设计师（克隆基线）、方案经理（对标参考）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">自然语言搜索 / 多维过滤 / 案例卡片网格 / AI Top5 智能匹配 / 参数快照/BOM 一键复用</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">自然语言搜索 / AI 匹配推荐 / 查看详情 / 一键复用为基线</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">28 套 S3 生产模型入库（#1902）/ AI Top5 匹配准确（#1922）/ 参数快照+BOM 一键回填 D3 会话</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">D3 参数化设计中心 · 详细设计 v1.0</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [验收 Banner] -->
+<div class="mb-4 px-4 py-3 bg-blue-50 border border-blue-200 rounded flex items-center justify-between">
+  <div class="flex items-center gap-3">
+    <div class="text-2xl">📚</div>
+    <div>
+      <div class="text-sm font-semibold text-blue-900">28 套 S3 生产模型已结构化入库</div>
+      <div class="text-xs text-blue-700 mt-0.5">#1902 验收达成 · 每套含参数快照 + BOM + 效果图 + 3D 模型 + 所属项目信息</div>
+    </div>
+  </div>
+  <div class="flex items-center gap-2 text-xs">
+    <span class="px-2 py-1 bg-white border border-blue-300 text-blue-700 rounded">丛林 12</span>
+    <span class="px-2 py-1 bg-white border border-blue-300 text-blue-700 rounded">海盗 6</span>
+    <span class="px-2 py-1 bg-white border border-blue-300 text-blue-700 rounded">城堡 5</span>
+    <span class="px-2 py-1 bg-white border border-blue-300 text-blue-700 rounded">卡通 5</span>
+  </div>
+</div>
+
+<!-- [顶部搜索栏] 自然语言搜索 + 多维过滤 -->
+<div class="mb-4 bg-white border border-gray-300 rounded p-4">
+  <div class="mb-3">
+    <div class="flex gap-2">
+      <div class="flex-1 relative">
+        <input type="text" value="高度 >5000mm 的主题造型组合，丛林风，BOM 项数 120-200" class="w-full px-3 py-2.5 pl-10 text-sm border border-gray-300 rounded focus:border-blue-500 focus:outline-none">
+        <span class="absolute left-3 top-2.5 text-gray-400">🔍</span>
+      </div>
+      <button class="px-6 py-2.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">自然语言搜索</button>
+    </div>
+    <div class="mt-2 flex gap-2 text-xs text-gray-500">
+      <span>💡 试试：</span>
+      <button class="text-blue-500 hover:underline">"丛林主题+滑梯组合"</button>
+      <button class="text-blue-500 hover:underline">"300㎡ 以内的海盗船"</button>
+      <button class="text-blue-500 hover:underline">"城堡类高度 4-6m"</button>
+      <button class="text-blue-500 hover:underline">"预算 20 万以下"</button>
+    </div>
+  </div>
+  <div class="flex items-center gap-3 flex-wrap pt-3 border-t border-gray-100">
+    <span class="text-xs text-gray-500">过滤器：</span>
+    <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white"><option>面积</option><option>&lt;200㎡</option><option>200-500㎡</option><option>&gt;500㎡</option></select>
+    <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white"><option>预算</option><option>&lt;10 万</option><option>10-30 万</option><option>&gt;30 万</option></select>
+    <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white"><option>客户类型</option><option>房地产</option><option>幼教</option><option>文旅</option></select>
+    <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white"><option>年份</option><option>2024</option><option>2025</option><option>2026</option></select>
+    <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white"><option>主题</option><option>丛林</option><option>海盗</option><option>城堡</option><option>卡通</option></select>
+  </div>
+</div>
+
+<!-- [主内容] 案例卡片网格 + AI 匹配面板 -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左/中] 案例卡片网格 -->
+  <div class="col-span-9">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm text-gray-600">匹配到 <strong class="text-gray-800">18</strong> 套案例（共 28 套）</div>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="text-gray-500">排序：</span>
+        <button class="px-2 py-1 border border-blue-500 bg-blue-50 text-blue-600 rounded">相似度</button>
+        <button class="px-2 py-1 border border-gray-300 bg-white text-gray-600 rounded hover:bg-gray-50">时间</button>
+        <button class="px-2 py-1 border border-gray-300 bg-white text-gray-600 rounded hover:bg-gray-50">BOM 数</button>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-3 gap-3">
+      <!-- 案例卡片 - 9张 -->
+      <div class="case-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="case-thumb h-40 flex items-center justify-center text-5xl text-gray-400 relative">
+          🏰
+          <div class="absolute top-2 right-2 score-ring bg-green-500 text-white">92</div>
+        </div>
+        <div class="p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-1">丛林城堡乐园 · 深圳龙华</div>
+          <div class="text-xs text-gray-500 mb-2">2025.08 · 设计师：张三</div>
+          <div class="grid grid-cols-2 gap-1 text-xs text-gray-600">
+            <div>高度：5400mm</div><div>占地：12×8m</div>
+            <div>BOM：128 项</div><div>预算：¥186,400</div>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">S3 系列</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">丛林</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="case-thumb h-40 flex items-center justify-center text-5xl text-gray-400 relative">
+          🏰
+          <div class="absolute top-2 right-2 score-ring bg-green-500 text-white">88</div>
+        </div>
+        <div class="p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-1">城堡乐园 · 东莞万科</div>
+          <div class="text-xs text-gray-500 mb-2">2025.05 · 设计师：李四</div>
+          <div class="grid grid-cols-2 gap-1 text-xs text-gray-600">
+            <div>高度：5200mm</div><div>占地：10×8m</div>
+            <div>BOM：118 项</div><div>预算：¥172,000</div>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">S3 系列</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">城堡</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="case-thumb h-40 flex items-center justify-center text-5xl text-gray-400 relative">
+          ⚓
+          <div class="absolute top-2 right-2 score-ring bg-yellow-500 text-white">76</div>
+        </div>
+        <div class="p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-1">海盗船主题园 · 厦门</div>
+          <div class="text-xs text-gray-500 mb-2">2025.03 · 设计师：王五</div>
+          <div class="grid grid-cols-2 gap-1 text-xs text-gray-600">
+            <div>高度：5800mm</div><div>占地：15×10m</div>
+            <div>BOM：156 项</div><div>预算：¥240,000</div>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">S3 系列</span>
+            <span class="text-xs px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded">海盗</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="case-thumb h-40 flex items-center justify-center text-5xl text-gray-400 relative">
+          🌳
+          <div class="absolute top-2 right-2 score-ring bg-yellow-500 text-white">71</div>
+        </div>
+        <div class="p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-1">丛林探险 · 苏州园区</div>
+          <div class="text-xs text-gray-500 mb-2">2024.11 · 设计师：张三</div>
+          <div class="grid grid-cols-2 gap-1 text-xs text-gray-600">
+            <div>高度：5100mm</div><div>占地：14×10m</div>
+            <div>BOM：142 项</div><div>预算：¥210,000</div>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">S3 系列</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">丛林</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="case-thumb h-40 flex items-center justify-center text-5xl text-gray-400 relative">
+          🐘
+          <div class="absolute top-2 right-2 score-ring bg-yellow-500 text-white">68</div>
+        </div>
+        <div class="p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-1">大象滑梯广场 · 杭州</div>
+          <div class="text-xs text-gray-500 mb-2">2025.06 · 设计师：李四</div>
+          <div class="grid grid-cols-2 gap-1 text-xs text-gray-600">
+            <div>高度：4200mm</div><div>占地：8×6m</div>
+            <div>BOM：76 项</div><div>预算：¥98,000</div>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">S3 系列</span>
+            <span class="text-xs px-1.5 py-0.5 bg-yellow-50 text-yellow-600 rounded">卡通</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="case-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="case-thumb h-40 flex items-center justify-center text-5xl text-gray-400 relative">
+          🏰
+          <div class="absolute top-2 right-2 score-ring bg-gray-500 text-white">62</div>
+        </div>
+        <div class="p-3">
+          <div class="text-sm font-semibold text-gray-800 mb-1">迷你城堡 · 广州保利</div>
+          <div class="text-xs text-gray-500 mb-2">2024.09 · 设计师：王五</div>
+          <div class="grid grid-cols-2 gap-1 text-xs text-gray-600">
+            <div>高度：3800mm</div><div>占地：6×6m</div>
+            <div>BOM：58 项</div><div>预算：¥72,000</div>
+          </div>
+          <div class="flex gap-1 mt-2">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">S3 系列</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">城堡</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 加载更多 -->
+    <div class="mt-4 text-center">
+      <button class="px-6 py-2 text-sm text-blue-500 border border-blue-300 rounded hover:bg-blue-50">加载更多（剩 12 套）</button>
+    </div>
+  </div>
+
+  <!-- [右] AI 智能匹配面板 #1922 -->
+  <div class="col-span-3">
+    <div class="bg-white border border-blue-300 rounded sticky top-4">
+      <div class="px-3 py-2 border-b border-blue-200 bg-gradient-to-r from-blue-50 to-indigo-50">
+        <div class="flex items-center gap-2">
+          <span class="text-lg">🤖</span>
+          <span class="text-sm font-semibold text-blue-700">AI 智能匹配</span>
+          <span class="text-xs px-1.5 py-0.5 bg-blue-500 text-white rounded">#1922</span>
+        </div>
+        <div class="text-xs text-gray-500 mt-1">输入当前项目条件 → Top 5 相似案例</div>
+      </div>
+
+      <div class="p-3 border-b border-gray-200 bg-gray-50">
+        <div class="text-xs font-semibold text-gray-700 mb-2">当前项目条件</div>
+        <div class="space-y-1.5 text-xs text-gray-600">
+          <div class="flex justify-between"><span>主题</span><span class="font-semibold">丛林城堡</span></div>
+          <div class="flex justify-between"><span>高度</span><span class="font-semibold">5400mm</span></div>
+          <div class="flex justify-between"><span>占地</span><span class="font-semibold">12×8m</span></div>
+          <div class="flex justify-between"><span>预算</span><span class="font-semibold">¥180,000</span></div>
+          <div class="flex justify-between"><span>客户</span><span class="font-semibold">房地产</span></div>
+        </div>
+        <button class="w-full mt-2 px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">⚡ 启动 AI 匹配</button>
+      </div>
+
+      <div class="p-3">
+        <div class="text-xs font-semibold text-gray-700 mb-2">Top 5 推荐</div>
+        <div class="space-y-2">
+          <div class="p-2 border border-green-300 bg-green-50 rounded">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold">丛林城堡乐园·龙华</span>
+              <span class="text-xs px-1.5 py-0.5 bg-green-500 text-white rounded">92</span>
+            </div>
+            <div class="text-xs text-gray-600">几何 98% · 参数 90% · BOM 88%</div>
+          </div>
+          <div class="p-2 border border-gray-300 rounded hover:border-blue-300 cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold">城堡乐园·东莞万科</span>
+              <span class="text-xs px-1.5 py-0.5 bg-green-500 text-white rounded">88</span>
+            </div>
+            <div class="text-xs text-gray-600">几何 94% · 参数 86% · BOM 84%</div>
+          </div>
+          <div class="p-2 border border-gray-300 rounded hover:border-blue-300 cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold">海盗船·厦门</span>
+              <span class="text-xs px-1.5 py-0.5 bg-yellow-500 text-white rounded">76</span>
+            </div>
+            <div class="text-xs text-gray-600">几何 78% · 参数 75% · BOM 78%</div>
+          </div>
+          <div class="p-2 border border-gray-300 rounded hover:border-blue-300 cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold">丛林探险·苏州</span>
+              <span class="text-xs px-1.5 py-0.5 bg-yellow-500 text-white rounded">71</span>
+            </div>
+            <div class="text-xs text-gray-600">几何 74% · 参数 68% · BOM 72%</div>
+          </div>
+          <div class="p-2 border border-gray-300 rounded hover:border-blue-300 cursor-pointer">
+            <div class="flex items-center justify-between mb-1">
+              <span class="text-xs font-semibold">大象滑梯·杭州</span>
+              <span class="text-xs px-1.5 py-0.5 bg-yellow-500 text-white rounded">68</span>
+            </div>
+            <div class="text-xs text-gray-600">几何 70% · 参数 65% · BOM 69%</div>
+          </div>
+        </div>
+        <button class="w-full mt-3 px-3 py-2 text-xs bg-white border border-blue-500 text-blue-600 rounded hover:bg-blue-50">📋 查看 Top1 详情</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [详情抽屉说明] -->
+<div class="mt-6 p-3 bg-gray-100 border border-dashed border-gray-300 rounded text-xs text-gray-500">
+  💡 <strong>案例详情抽屉（点击卡片触发）</strong>：640px 抽屉，四 Tab：① 参数快照（GH 定义文件 + 所有参数值）② BOM 明细（可导出）③ 效果图（多角度）④ 3D 模型（Three.js 预览）+ 底部 [📋 一键复用为基线] 按钮 → 回填到 Tab1 参数化设计工作台新建会话。
+</div>
+
+</body>
+</html>

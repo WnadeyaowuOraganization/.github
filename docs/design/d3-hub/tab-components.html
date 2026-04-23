@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>构件库</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tree-node { padding: 6px 10px; cursor: pointer; font-size: 13px; color: #333; border-radius: 3px; display: flex; align-items: center; gap: 6px; }
+    .tree-node:hover { background: #f5f5f5; }
+    .tree-node.active { background: #e6f7ff; color: #1890ff; font-weight: 600; }
+    .thumb { background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 6px, #fafafa 6px, #fafafa 12px); }
+    .component-card { transition: box-shadow 0.2s, transform 0.2s; }
+    .component-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); transform: translateY(-1px); }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab2 · 构件库 🟢 262 行代码已实现</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">沉淀万德所有标准化游乐构件为可复用资产，支持设计师在参数化设计时快速选型、查看所属项目、批量导入 PLM 零件库</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师、工程师、PLM 管理员</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">6 大分类树 / 卡片瀑布流 / 多维筛选 / Three.js 3D 详情预览 / 批量导入 PLM / 导出清单</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">分类筛选 / 查看详情抽屉 / 批量导入 PLM / 新建构件 / 导出清单</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">复用现有 262 行 Vue + D3ComponentLibraryController，详情抽屉 Three.js 正常，批量导入 PLM 走 PlmD3BridgeController</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">D3 参数化设计中心 · 详细设计 v1.0</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [代码现状提示条] -->
+<div class="mb-4 px-3 py-2 bg-green-50 border border-green-200 rounded text-xs text-green-800 flex items-center gap-2">
+  <span>🟢</span>
+  <span>本 Tab 已有 <strong>262 行真实 Vue 实现</strong>（<code class="bg-white px-1 py-0.5 rounded">support/d3/components/index.vue</code>）+ 后端 <code class="bg-white px-1 py-0.5 rounded">D3ComponentLibraryController</code> @ <code class="bg-white px-1 py-0.5 rounded">/wande/ptc/d3/components</code>。原型主要补齐：批量导入 PLM、详情抽屉 Three.js 预览、所属项目关联。</span>
+</div>
+
+<!-- [顶部筛选栏] -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-4">
+  <div class="flex items-center gap-3 flex-wrap">
+    <input type="text" placeholder="🔍 关键词搜索（构件名/编码/标签）" class="flex-1 min-w-[240px] px-3 py-2 text-sm border border-gray-300 rounded">
+    <select class="px-3 py-2 text-sm border border-gray-300 rounded bg-white"><option>全部分类</option><option>主结构</option><option>滑筒</option><option>攀爬</option><option>防护</option><option>饰件</option></select>
+    <select class="px-3 py-2 text-sm border border-gray-300 rounded bg-white"><option>尺寸范围</option><option>小型 (&lt;500mm)</option><option>中型 (500-2000mm)</option><option>大型 (&gt;2000mm)</option></select>
+    <select class="px-3 py-2 text-sm border border-gray-300 rounded bg-white"><option>全部材质</option><option>镀锌钢</option><option>不锈钢</option><option>工程塑料</option><option>HDPE</option></select>
+    <select class="px-3 py-2 text-sm border border-gray-300 rounded bg-white"><option>项目标签</option><option>S3 系列</option><option>丛林主题</option><option>海盗主题</option></select>
+    <button class="px-4 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">搜索</button>
+  </div>
+</div>
+
+<!-- [主内容区 左树右卡片] -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左栏] 6 大分类树 -->
+  <div class="col-span-2 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-700">分类</span>
+      <span class="text-xs text-gray-400">6 大类</span>
+    </div>
+    <div class="p-2">
+      <div class="tree-node active"><span>🏗️</span><span>全部</span><span class="ml-auto text-xs text-gray-400">1,248</span></div>
+      <div class="tree-node"><span>🏛️</span><span>主结构</span><span class="ml-auto text-xs text-gray-400">186</span></div>
+      <div class="tree-node"><span>🛝</span><span>滑筒</span><span class="ml-auto text-xs text-gray-400">94</span></div>
+      <div class="tree-node"><span>🧗</span><span>攀爬</span><span class="ml-auto text-xs text-gray-400">128</span></div>
+      <div class="tree-node"><span>🛡️</span><span>防护</span><span class="ml-auto text-xs text-gray-400">72</span></div>
+      <div class="tree-node"><span>✨</span><span>饰件</span><span class="ml-auto text-xs text-gray-400">524</span></div>
+      <div class="tree-node"><span>📦</span><span>其他</span><span class="ml-auto text-xs text-gray-400">244</span></div>
+    </div>
+  </div>
+
+  <!-- [右侧] 卡片瀑布流 -->
+  <div class="col-span-10">
+    <!-- 操作栏 -->
+    <div class="bg-white border border-gray-300 rounded p-3 mb-3 flex items-center justify-between">
+      <div class="text-sm text-gray-600">
+        共 <strong class="text-gray-800">1,248</strong> 个构件 ·
+        <span class="text-xs text-gray-400">已选 <span class="text-blue-500 font-semibold">12</span> 项</span>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">🔗 批量导入 PLM</button>
+        <button class="px-3 py-1.5 bg-white border border-gray-300 text-sm text-gray-700 rounded hover:bg-gray-50">📥 导出清单</button>
+        <button class="px-3 py-1.5 bg-white border border-gray-300 text-sm text-gray-700 rounded hover:bg-gray-50">➕ 新建构件</button>
+        <div class="ml-2 text-xs text-gray-400">视图：<span class="cursor-pointer text-blue-500">卡片</span> / <span class="cursor-pointer hover:text-gray-700">列表</span></div>
+      </div>
+    </div>
+
+    <!-- 卡片网格 -->
+    <div class="grid grid-cols-4 gap-3">
+      <!-- 卡片模板 重复8次假数据 -->
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🏛️</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">立柱 P200×200</span>
+            <input type="checkbox" class="accent-blue-500" checked>
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-STR-P200-3000</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>200×200×3000 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>镀锌钢</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">42 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">主结构</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">PLM 已同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🛝</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">滑筒 R800 直筒</span>
+            <input type="checkbox" class="accent-blue-500" checked>
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-SLD-R800-L6200</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>∅800×6200 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>HDPE</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">28 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">滑筒</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">PLM 已同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🧗</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">攀爬网 M 型</span>
+            <input type="checkbox" class="accent-blue-500">
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-CLM-M-2400</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>2400×2000 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>不锈钢 + 尼龙绳</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">18 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">攀爬</span>
+            <span class="text-xs px-1.5 py-0.5 bg-yellow-50 text-yellow-700 rounded">PLM 待同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🛡️</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">护栏 H1100 圆弧</span>
+            <input type="checkbox" class="accent-blue-500">
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-GRD-H1100-ARC</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>R1500 高 1100 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>不锈钢 304</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">35 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">防护</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">PLM 已同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🏰</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">城堡尖顶饰件</span>
+            <input type="checkbox" class="accent-blue-500">
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-DCR-CSTL-TOP</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>800×800×1200 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>工程塑料</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">12 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">饰件</span>
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">非标件</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">⚓</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">海盗船饰件·船首</span>
+            <input type="checkbox" class="accent-blue-500">
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-DCR-PRT-BOW</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>2400×1200 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>玻璃钢</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">8 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">饰件</span>
+            <span class="text-xs px-1.5 py-0.5 bg-yellow-50 text-yellow-700 rounded">PLM 待同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🐘</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">大象滑梯主体</span>
+            <input type="checkbox" class="accent-blue-500">
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-SLD-ELPH-M</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>4000×1800×2400 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>复合材料</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">15 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">滑筒</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">PLM 已同步</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="component-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="thumb h-32 flex items-center justify-center text-4xl text-gray-400">🪵</div>
+        <div class="p-3">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-semibold text-gray-800">独木桥踏步</span>
+            <input type="checkbox" class="accent-blue-500">
+          </div>
+          <div class="text-xs text-gray-500 mb-2">编码：WD-STP-LOG-1200</div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">尺寸</span><span>1200×300 mm</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-1"><span class="w-14 text-gray-400">材质</span><span>防腐木</span></div>
+          <div class="flex items-center gap-1 text-xs text-gray-600 mb-2"><span class="w-14 text-gray-400">使用</span><span class="text-blue-500">22 次</span></div>
+          <div class="flex gap-1">
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">主结构</span>
+            <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-600 rounded">PLM 已同步</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 分页 -->
+    <div class="mt-4 flex items-center justify-center gap-1 text-sm">
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">上一页</button>
+      <button class="px-3 py-1 border border-blue-500 bg-blue-500 text-white rounded">1</button>
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">2</button>
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">3</button>
+      <span class="px-2 text-gray-400">...</span>
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">156</button>
+      <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:bg-gray-50">下一页</button>
+    </div>
+  </div>
+</div>
+
+<!-- [详情抽屉占位说明] -->
+<div class="mt-6 p-3 bg-gray-100 border border-dashed border-gray-300 rounded text-xs text-gray-500">
+  💡 <strong>详情抽屉（点击卡片触发）</strong>：右侧抽屉 560px 宽，内含 ① Three.js 3D 预览（支持旋转/缩放）② 参数面板（所有尺寸/材质/编码）③ 所属项目列表（最多 20 个项目反向链接）
+</div>
+
+</body>
+</html>

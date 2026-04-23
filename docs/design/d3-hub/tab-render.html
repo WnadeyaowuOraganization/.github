@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>效果图渲染</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .render-thumb { background: repeating-linear-gradient(135deg, #f0f0f0, #f0f0f0 5px, #fafafa 5px, #fafafa 10px); }
+    .progress-bar { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, #1890ff, #40a9ff); border-radius: 3px; transition: width 0.3s; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab5 · 效果图渲染（→ AI 中台 #4097）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">将 D3 会话生成的 3D 模型送入渲染引擎输出商务级效果图，并推送到 AI 内容生成中台作为方案封面/宣传物料素材</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（主）、商务（下载方案图）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">渲染队列管理 / 参数配置（分辨率/引擎/光照）/ 已完成画廊 / 批量渲染 / 推送 AI 中台</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">提交渲染任务 / 调整参数 / 一键重渲染 / 批量渲染 / 推送 AI 中台</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">队列进度实时更新 / 画廊按时间倒序 / 推送到 AI 中台 #4097 Master 成功建立 trace 链路</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">D3 参数化设计中心 · 详细设计 v1.0</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部操作栏] -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-4 flex items-center justify-between">
+  <div class="flex items-center gap-3">
+    <span class="text-sm text-gray-600">关联会话：</span>
+    <span class="text-sm font-semibold text-gray-800">SESSION-20260428-003 · 丛林城堡乐园 V2</span>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="px-3 py-1.5 bg-white border border-gray-300 text-sm text-gray-700 rounded hover:bg-gray-50">🎬 批量渲染</button>
+    <button class="px-3 py-1.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">🚀 推送到 AI 内容生成中台 (#4097)</button>
+  </div>
+</div>
+
+<!-- [三栏布局] -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左栏] 渲染队列 -->
+  <div class="col-span-4 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-700">渲染队列</span>
+      <div class="flex gap-1 text-xs">
+        <span class="px-1.5 py-0.5 bg-blue-50 text-blue-600 rounded">进行中 <strong>1</strong></span>
+        <span class="px-1.5 py-0.5 bg-yellow-50 text-yellow-700 rounded">排队 <strong>3</strong></span>
+        <span class="px-1.5 py-0.5 bg-green-50 text-green-700 rounded">完成 <strong>12</strong></span>
+      </div>
+    </div>
+    <div class="divide-y divide-gray-100 max-h-[520px] overflow-y-auto">
+      <!-- 进行中 -->
+      <div class="p-3 bg-blue-50">
+        <div class="flex items-start justify-between mb-1">
+          <div class="text-sm font-semibold text-gray-800">丛林城堡·主视角</div>
+          <span class="text-xs px-1.5 py-0.5 bg-blue-500 text-white rounded">渲染中</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-2">4K · Rhino Render · 预计剩余 4 分钟</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:62%"></div></div>
+        <div class="flex justify-between mt-1 text-xs text-gray-500"><span>62%</span><span>耗时 6:32</span></div>
+      </div>
+
+      <!-- 排队 -->
+      <div class="p-3">
+        <div class="flex items-start justify-between mb-1">
+          <div class="text-sm font-semibold text-gray-800">丛林城堡·鸟瞰</div>
+          <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">排队 #1</span>
+        </div>
+        <div class="text-xs text-gray-500">4K · Rhino Render · 预计 15 分钟后开始</div>
+      </div>
+      <div class="p-3">
+        <div class="flex items-start justify-between mb-1">
+          <div class="text-sm font-semibold text-gray-800">丛林城堡·夜景</div>
+          <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">排队 #2</span>
+        </div>
+        <div class="text-xs text-gray-500">4K · V-Ray · 夜景光照</div>
+      </div>
+      <div class="p-3">
+        <div class="flex items-start justify-between mb-1">
+          <div class="text-sm font-semibold text-gray-800">丛林城堡·儿童视角</div>
+          <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">排队 #3</span>
+        </div>
+        <div class="text-xs text-gray-500">2K · Rhino Render · 快速预览</div>
+      </div>
+
+      <div class="px-3 py-1 bg-gray-50 text-xs text-gray-500 font-semibold">▼ 今日已完成</div>
+      <div class="p-3 opacity-75">
+        <div class="flex items-start justify-between mb-1">
+          <div class="text-sm font-semibold text-gray-700">海盗船·主视角</div>
+          <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 rounded">✓ 完成</span>
+        </div>
+        <div class="text-xs text-gray-500">4K · 用时 8:15 · 10:12 完成</div>
+      </div>
+      <div class="p-3 opacity-75">
+        <div class="flex items-start justify-between mb-1">
+          <div class="text-sm font-semibold text-gray-700">大象滑梯·侧视</div>
+          <span class="text-xs px-1.5 py-0.5 bg-green-50 text-green-700 rounded">✓ 完成</span>
+        </div>
+        <div class="text-xs text-gray-500">2K · 用时 3:42 · 09:45 完成</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [中栏] 渲染参数 -->
+  <div class="col-span-3 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50">
+      <span class="text-sm font-semibold text-gray-700">渲染参数</span>
+    </div>
+    <div class="p-3 space-y-3">
+      <div>
+        <div class="text-xs text-gray-500 mb-1">分辨率</div>
+        <select class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded bg-white">
+          <option>4K (3840×2160)</option>
+          <option>2K (2048×1080)</option>
+          <option>Full HD (1920×1080)</option>
+          <option>预览 (1280×720)</option>
+        </select>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">渲染引擎</div>
+        <select class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded bg-white">
+          <option>Rhino Render（内置）</option>
+          <option>V-Ray for Rhino</option>
+          <option>Enscape</option>
+        </select>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">光照预设</div>
+        <div class="grid grid-cols-2 gap-1 text-xs">
+          <button class="px-2 py-1.5 border border-blue-500 bg-blue-50 text-blue-600 rounded">☀️ 日景</button>
+          <button class="px-2 py-1.5 border border-gray-300 bg-white rounded hover:bg-gray-50">🌅 黄昏</button>
+          <button class="px-2 py-1.5 border border-gray-300 bg-white rounded hover:bg-gray-50">🌙 夜景</button>
+          <button class="px-2 py-1.5 border border-gray-300 bg-white rounded hover:bg-gray-50">☁️ 阴天</button>
+        </div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">材质预设</div>
+        <select class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded bg-white">
+          <option>跟随项目配色</option>
+          <option>哑光材质</option>
+          <option>金属高光</option>
+          <option>PBR 真实材质</option>
+        </select>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">背景</div>
+        <select class="w-full px-2 py-1.5 text-sm border border-gray-300 rounded bg-white">
+          <option>草坪场景</option>
+          <option>沙地场景</option>
+          <option>纯色背景</option>
+          <option>HDRI 真实环境</option>
+        </select>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">相机视角</div>
+        <div class="grid grid-cols-3 gap-1 text-xs">
+          <button class="px-1 py-1 border border-blue-500 bg-blue-50 text-blue-600 rounded">主视角</button>
+          <button class="px-1 py-1 border border-gray-300 bg-white rounded">鸟瞰</button>
+          <button class="px-1 py-1 border border-gray-300 bg-white rounded">儿童</button>
+          <button class="px-1 py-1 border border-gray-300 bg-white rounded">左 45°</button>
+          <button class="px-1 py-1 border border-gray-300 bg-white rounded">右 45°</button>
+          <button class="px-1 py-1 border border-gray-300 bg-white rounded">自定义</button>
+        </div>
+      </div>
+      <button class="w-full px-3 py-2 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 mt-2">▶️ 提交渲染任务</button>
+    </div>
+  </div>
+
+  <!-- [右栏] 已完成画廊 -->
+  <div class="col-span-5 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-700">已完成画廊</span>
+      <div class="flex items-center gap-2 text-xs">
+        <select class="px-2 py-1 border border-gray-300 rounded bg-white"><option>按时间倒序</option><option>按分辨率</option></select>
+        <button class="text-blue-500 hover:underline">📥 批量下载</button>
+      </div>
+    </div>
+    <div class="p-3 grid grid-cols-2 gap-3 max-h-[520px] overflow-y-auto">
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div class="render-thumb h-28 flex items-center justify-center text-4xl text-gray-400">🏰</div>
+        <div class="p-2">
+          <div class="text-xs font-semibold text-gray-800">丛林城堡·主视角</div>
+          <div class="text-xs text-gray-500">4K · 8:15 · 今天 10:12</div>
+          <div class="flex gap-1 mt-1.5">
+            <button class="flex-1 text-xs px-1 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">🔄 重渲染</button>
+            <button class="flex-1 text-xs px-1 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">📥 下载</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div class="render-thumb h-28 flex items-center justify-center text-4xl text-gray-400">⚓</div>
+        <div class="p-2">
+          <div class="text-xs font-semibold text-gray-800">海盗船·主视角</div>
+          <div class="text-xs text-gray-500">4K · 9:42 · 今天 09:58</div>
+          <div class="flex gap-1 mt-1.5">
+            <button class="flex-1 text-xs px-1 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">🔄 重渲染</button>
+            <button class="flex-1 text-xs px-1 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">📥 下载</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div class="render-thumb h-28 flex items-center justify-center text-4xl text-gray-400">🐘</div>
+        <div class="p-2">
+          <div class="text-xs font-semibold text-gray-800">大象滑梯·侧视</div>
+          <div class="text-xs text-gray-500">2K · 3:42 · 今天 09:45</div>
+          <div class="flex gap-1 mt-1.5">
+            <button class="flex-1 text-xs px-1 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">🔄 重渲染</button>
+            <button class="flex-1 text-xs px-1 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">📥 下载</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div class="render-thumb h-28 flex items-center justify-center text-4xl text-gray-400">🏰</div>
+        <div class="p-2">
+          <div class="text-xs font-semibold text-gray-800">城堡乐园·鸟瞰</div>
+          <div class="text-xs text-gray-500">4K · 12:18 · 昨天 17:23</div>
+          <div class="flex gap-1 mt-1.5">
+            <button class="flex-1 text-xs px-1 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">🔄 重渲染</button>
+            <button class="flex-1 text-xs px-1 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">📥 下载</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div class="render-thumb h-28 flex items-center justify-center text-4xl text-gray-400">🌳</div>
+        <div class="p-2">
+          <div class="text-xs font-semibold text-gray-800">丛林探险·夜景</div>
+          <div class="text-xs text-gray-500">4K · 15:23 · 昨天 14:08</div>
+          <div class="flex gap-1 mt-1.5">
+            <button class="flex-1 text-xs px-1 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">🔄 重渲染</button>
+            <button class="flex-1 text-xs px-1 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">📥 下载</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded overflow-hidden hover:border-blue-400 cursor-pointer">
+        <div class="render-thumb h-28 flex items-center justify-center text-4xl text-gray-400">🏰</div>
+        <div class="p-2">
+          <div class="text-xs font-semibold text-gray-800">迷你城堡·儿童视角</div>
+          <div class="text-xs text-gray-500">2K · 4:15 · 昨天 10:45</div>
+          <div class="flex gap-1 mt-1.5">
+            <button class="flex-1 text-xs px-1 py-1 bg-blue-50 text-blue-600 rounded hover:bg-blue-100">🔄 重渲染</button>
+            <button class="flex-1 text-xs px-1 py-1 bg-gray-100 text-gray-600 rounded hover:bg-gray-200">📥 下载</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [AI 中台集成说明] -->
+<div class="mt-4 p-3 bg-indigo-50 border border-indigo-200 rounded text-xs text-indigo-800">
+  🔗 <strong>AI 内容生成中台 #4097 集成</strong>：推送后效果图自动进入 AI 中台作为素材，可用于 ① 方案封面自动合成 ② 宣传物料生成（海报/PPT/H5）③ 话术素材库。推送记录保留 D3 会话 ID → AI 中台内容 ID 的双向 trace。
+</div>
+
+</body>
+</html>

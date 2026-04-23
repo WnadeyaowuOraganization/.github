@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>材质标注</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sub-tab { padding: 8px 16px; font-size: 13px; cursor: pointer; border-bottom: 2px solid transparent; color: #666; }
+    .sub-tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+    .sub-tab:hover { color: #333; }
+    .item-row { display: flex; align-items: center; padding: 8px 10px; border-bottom: 1px solid #f0f0f0; gap: 8px; cursor: pointer; font-size: 13px; }
+    .item-row:hover { background: #fafafa; }
+    .item-row.selected { background: #e6f7ff; }
+    .color-swatch { width: 20px; height: 20px; border-radius: 3px; border: 1px solid #d9d9d9; display: inline-block; vertical-align: middle; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · 材质标注（#2268 批量标注）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">为 D3 会话中的构件批量标注材质与颜色，提升 500+ 构件项目的标注效率（从逐个标注到按类型分组一键应用）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（材质选型）、方案工程师（配色统一）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">单个标注 / 批量标注（按类型分组）/ 模板管理 / 项目配色方案管理 / 未标注/已标注分组</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">按类型全选 / 一键应用材质 / 保存标注模板 / 切换配色方案 / 配色对比</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">三 Tab 切换流畅 / 批量标注后未标注计数归零 / 模板保存后可跨项目加载 / 配色方案切换触发整项目重标</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">D3 参数化设计中心 · 详细设计 v1.0</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [Issue 关联提示条] -->
+<div class="mb-4 px-3 py-2 bg-yellow-50 border border-yellow-200 rounded text-xs text-yellow-800 flex items-center gap-2">
+  <span>🟡</span>
+  <span>本 Tab 有骨架占位（7 行）+ 基础单件标注能力（Issue <strong>#2271</strong> 已实现）；<strong>批量标注为 Issue #2268 的主诉求</strong>，需按本原型新建批量面板 + 模板管理。</span>
+</div>
+
+<!-- [三栏布局] -->
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [左栏] 待标注构件列表 -->
+  <div class="col-span-3 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50">
+      <div class="text-sm font-semibold text-gray-700 mb-2">待标注构件</div>
+      <select class="w-full px-2 py-1 text-xs border border-gray-300 rounded bg-white mb-2">
+        <option>项目：丛林城堡乐园 V2</option>
+        <option>项目：海盗船主题园</option>
+        <option>项目：大象滑梯广场</option>
+      </select>
+      <div class="flex items-center gap-2 text-xs">
+        <span class="px-2 py-0.5 bg-red-50 text-red-600 rounded">未标注 <strong>42</strong></span>
+        <span class="px-2 py-0.5 bg-green-50 text-green-600 rounded">已标注 <strong>86</strong></span>
+      </div>
+    </div>
+    <div class="p-0 max-h-[600px] overflow-y-auto">
+      <div class="px-3 py-1 bg-gray-100 text-xs text-gray-500">▼ 未标注（42）</div>
+      <div class="item-row selected"><input type="checkbox" checked><span>立柱 P200×200 × 12</span></div>
+      <div class="item-row"><input type="checkbox" checked><span>立柱 P150×150 × 8</span></div>
+      <div class="item-row"><input type="checkbox"><span>滑筒 R800 × 3</span></div>
+      <div class="item-row"><input type="checkbox"><span>攀爬网 M 型 × 6</span></div>
+      <div class="item-row"><input type="checkbox"><span>护栏 H1100 × 14</span></div>
+      <div class="item-row"><input type="checkbox"><span>平台踏板 × 9</span></div>
+      <div class="px-3 py-1 bg-gray-100 text-xs text-gray-500">▶ 已标注（86）</div>
+      <div class="item-row text-gray-500"><span>✓</span><span>城堡尖顶 ×4 <span class="color-swatch" style="background:#F5A623"></span></span></div>
+      <div class="item-row text-gray-500"><span>✓</span><span>独木桥 ×3 <span class="color-swatch" style="background:#8B572A"></span></span></div>
+    </div>
+  </div>
+
+  <!-- [中栏] 批量智能标注面板（三 Tab） -->
+  <div class="col-span-6 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50">
+      <span class="text-sm font-semibold text-gray-700">智能标注面板</span>
+    </div>
+    <!-- 三 Tab 切换 -->
+    <div class="flex border-b border-gray-200 px-3">
+      <div class="sub-tab">单个标注 <span class="text-xs text-gray-400 ml-1">(#2271)</span></div>
+      <div class="sub-tab active">批量标注 <span class="text-xs text-blue-500 ml-1">(#2268 新需求)</span></div>
+      <div class="sub-tab">标注模板</div>
+    </div>
+
+    <!-- 批量标注面板 -->
+    <div class="p-4">
+      <!-- [按类型分组全选] -->
+      <div class="mb-4">
+        <div class="text-xs text-gray-500 mb-2">按类型分组（已选 <strong class="text-blue-500">20</strong> 项）</div>
+        <div class="flex flex-wrap gap-2">
+          <label class="inline-flex items-center gap-1 px-2 py-1 border border-blue-300 bg-blue-50 text-blue-700 rounded text-xs cursor-pointer"><input type="checkbox" checked>主结构 (20/20)</label>
+          <label class="inline-flex items-center gap-1 px-2 py-1 border border-gray-300 rounded text-xs cursor-pointer"><input type="checkbox">滑筒 (0/3)</label>
+          <label class="inline-flex items-center gap-1 px-2 py-1 border border-gray-300 rounded text-xs cursor-pointer"><input type="checkbox">攀爬 (0/6)</label>
+          <label class="inline-flex items-center gap-1 px-2 py-1 border border-gray-300 rounded text-xs cursor-pointer"><input type="checkbox">防护 (0/14)</label>
+          <label class="inline-flex items-center gap-1 px-2 py-1 border border-gray-300 rounded text-xs cursor-pointer"><input type="checkbox">平台 (0/9)</label>
+        </div>
+        <div class="mt-2 flex gap-2">
+          <button class="text-xs text-blue-500 hover:underline">全选</button>
+          <button class="text-xs text-blue-500 hover:underline">反选</button>
+          <button class="text-xs text-gray-500 hover:underline">清空</button>
+        </div>
+      </div>
+
+      <!-- [材质选择] -->
+      <div class="mb-4 p-3 bg-gray-50 border border-gray-200 rounded">
+        <div class="text-xs font-semibold text-gray-700 mb-2">材质</div>
+        <div class="grid grid-cols-4 gap-2">
+          <label class="flex items-center gap-1 px-2 py-2 border border-blue-400 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat" checked>镀锌钢</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">不锈钢 304</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">HDPE</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">工程塑料</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">玻璃钢</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">防腐木</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">复合材料</label>
+          <label class="flex items-center gap-1 px-2 py-2 border border-gray-300 bg-white rounded text-xs cursor-pointer"><input type="radio" name="mat">自定义</label>
+        </div>
+      </div>
+
+      <!-- [颜色选择] -->
+      <div class="mb-4 p-3 bg-gray-50 border border-gray-200 rounded">
+        <div class="text-xs font-semibold text-gray-700 mb-2">颜色（来自当前项目配色方案：丛林暖色系）</div>
+        <div class="flex flex-wrap gap-2">
+          <div class="flex flex-col items-center"><div class="color-swatch" style="width:36px;height:36px;background:#F5A623;border-color:#1890ff;border-width:2px"></div><span class="text-xs mt-1 text-blue-500">主色</span></div>
+          <div class="flex flex-col items-center"><div class="color-swatch" style="width:36px;height:36px;background:#7ED321"></div><span class="text-xs mt-1 text-gray-500">辅色</span></div>
+          <div class="flex flex-col items-center"><div class="color-swatch" style="width:36px;height:36px;background:#8B572A"></div><span class="text-xs mt-1 text-gray-500">木色</span></div>
+          <div class="flex flex-col items-center"><div class="color-swatch" style="width:36px;height:36px;background:#D0021B"></div><span class="text-xs mt-1 text-gray-500">点缀</span></div>
+          <div class="flex flex-col items-center"><div class="color-swatch" style="width:36px;height:36px;background:#4A4A4A"></div><span class="text-xs mt-1 text-gray-500">灰</span></div>
+          <div class="flex flex-col items-center"><div class="color-swatch" style="width:36px;height:36px;background:#fff;border:1px dashed #999;display:flex;align-items:center;justify-content:center;">+</div><span class="text-xs mt-1 text-gray-500">自定义</span></div>
+        </div>
+      </div>
+
+      <!-- [操作按钮] -->
+      <div class="flex items-center justify-between pt-3 border-t border-gray-200">
+        <div class="text-xs text-gray-500">预览：<span class="font-semibold text-gray-700">20 项主结构</span> → 镀锌钢 + 主色（#F5A623）</div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50">💾 保存为模板</button>
+          <button class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">⚡ 一键应用 (20 项)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右栏] 项目配色方案管理 -->
+  <div class="col-span-3 bg-white border border-gray-300 rounded">
+    <div class="px-3 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-700">配色方案</span>
+      <button class="text-xs text-blue-500 hover:underline">➕ 新建</button>
+    </div>
+    <div class="p-3 space-y-3">
+      <!-- 方案卡片 -->
+      <div class="border border-blue-400 bg-blue-50 rounded p-2">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold text-blue-700">丛林暖色系 ✓</span>
+          <span class="text-xs text-gray-400">当前</span>
+        </div>
+        <div class="flex gap-1 mb-2">
+          <div class="color-swatch" style="background:#F5A623"></div>
+          <div class="color-swatch" style="background:#7ED321"></div>
+          <div class="color-swatch" style="background:#8B572A"></div>
+          <div class="color-swatch" style="background:#D0021B"></div>
+          <div class="color-swatch" style="background:#4A4A4A"></div>
+        </div>
+        <div class="text-xs text-gray-500">使用中：丛林城堡乐园 V2</div>
+      </div>
+
+      <div class="border border-gray-300 rounded p-2 hover:border-gray-400 cursor-pointer">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold text-gray-700">海盗冷色系</span>
+          <button class="text-xs text-blue-500 hover:underline">切换</button>
+        </div>
+        <div class="flex gap-1 mb-2">
+          <div class="color-swatch" style="background:#1E5F8E"></div>
+          <div class="color-swatch" style="background:#C9A96E"></div>
+          <div class="color-swatch" style="background:#8B572A"></div>
+          <div class="color-swatch" style="background:#2C3E50"></div>
+          <div class="color-swatch" style="background:#E8E8E8"></div>
+        </div>
+        <div class="text-xs text-gray-500">历史：3 个项目</div>
+      </div>
+
+      <div class="border border-gray-300 rounded p-2 hover:border-gray-400 cursor-pointer">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm font-semibold text-gray-700">粉彩童趣</span>
+          <button class="text-xs text-blue-500 hover:underline">切换</button>
+        </div>
+        <div class="flex gap-1 mb-2">
+          <div class="color-swatch" style="background:#FFB6C1"></div>
+          <div class="color-swatch" style="background:#87CEEB"></div>
+          <div class="color-swatch" style="background:#FFE4B5"></div>
+          <div class="color-swatch" style="background:#98FB98"></div>
+          <div class="color-swatch" style="background:#DDA0DD"></div>
+        </div>
+        <div class="text-xs text-gray-500">历史：2 个项目</div>
+      </div>
+
+      <div class="pt-3 border-t border-gray-200 space-y-2">
+        <button class="w-full px-3 py-1.5 text-xs bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50">📊 配色对比</button>
+        <button class="w-full px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">⚡ 一键应用全项目</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

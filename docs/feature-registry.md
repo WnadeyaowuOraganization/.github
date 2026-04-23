@@ -171,12 +171,13 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 | EVM挣值管理简化版 | 1 | Sprint-2 | 📋 计划中 | — | D14决策：SPI/CPI实时 |
 | 图纸/BOM/采购/生产/安装/验收 | ~16 | Sprint-2 | 📋 计划中 | `module:execution` | 全链路 57个Issue |
 
-### 18. 项目中心 ⭐ D96 三 Master 原型齐全
+### 18. 项目中心 ⭐ D96 三 Master 原型齐全 · ⭐ D97 D3 参数化设计中心归属
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
 | 执行管理（10 HTML + 详设 §2.1-§2.40）| 18 | Sprint-1−6 | 🔨 开发中 | `biz:project` | **D96**：Master #4043，项目组织 14+360 看板 3+BOM 1 全部回填 |
 | 矿场增强（11 HTML）| 1 | Sprint-1 | 🔨 开发中 | `biz:project` | **D96**：Master #3994，#3999 → §2.9 热力图 |
 | 销售记录联动 | 1 | Sprint-1 | 🔨 开发中 | `biz:project` | **D96**：Master #4004，#4011 → §2.1-§2.4 记录中心 |
+| **D3 参数化设计中心**（8 HTML + 详设 364 行，7 Tab 平展）| 3 | Sprint-1−2 | ⭐ 原型已确认 | `biz:d3-parametric` | **D97**：Master #4142，Tab2🟢构件库已实现、Tab3🟡 #2268 §2.3、Tab4🔴 #1902+#1922 §2.4。对标 Tacton CPQ/Configura CET/Grasshopper。PLM #4024 + AI 中台 #4097 桥接 |
 | 项目全景API + 费用归集 + 设计变更联动 | 12 | Sprint-6 | 📋 计划中 | `module:project` | Phase4-12 |
 | 风险台账（5维健康度） | 10 | Sprint-6 | 📋 计划中 | `module:project` | Phase13-22 |
 
@@ -205,9 +206,11 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 
 > D3参数化 + AI生成 + 协同 + 方案引擎。
 
-### 22. D3 参数化设计
+### 22. D3 参数化设计 ⭐ D97 Hub + 7 Tab 原型已确认
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
+| **D3 Hub + 7 Tab 平展**（8 HTML + 详设 364 行） | 3 | Sprint-1−2 | ⭐ 原型已确认 | `biz:d3-parametric` | **D97**：Master #4142。Tab2 构件库🟢已实现 262 行，Tab3 🟡 #2268 批量标注+配色方案，Tab4 🔴 #1902+#1922 S3 28 套模型+AI 匹配。后端 4 Controller + PLM 桥接 1。归属项目中心菜单 |
+| Tab1/5/6/7 待建子 Issue（参数化主入口/渲染/3D 预览/BOM 导出） | — | Sprint-2−3 | 📋 规划中 | `biz:d3-parametric` | **D97**：后续 Sprint 排期时按详设 §2.1/§2.5/§2.6/§2.7 新建子 Issue |
 | v2.0 核心（电池包+AI集成+Web平台+模具库） | 85 | Sprint-1 | 🔨 开发中 | `D3-parametric` | — |
 | 竞品参数对标 + 市场配置预设 | 14 | — | 📋 计划中 | `D3-parametric` | — |
 
@@ -314,6 +317,17 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ---
 
 ## 九、策略变更日志
+
+### 2026-04-23 · D97 · biz:d3-parametric 3 Issue v5.1 §5.6 B 档补原型（Master #4142 + 7 Tab 平展 + 项目中心菜单 +1）
+- **biz:d3-parametric Issue 实际**：3 open（非 D92 摘要的 38，其余早已 close）全带 needs-prototype，业务域 0 Master 0 原型
+- **代码资产扫描**（m7i）：后端 4 Controller（`D3Task`/`ProposalD3Bridge`/`ComponentDependencyGraph`/`D3ComponentLibrary`）+ PLM 桥接 `PlmD3BridgeController` 齐全；前端 8 Vue 但仅 `components/index.vue` 262 行真实，其他 7 个 7 行骨架
+- **决策路径**：Step 1 勾选框选 B 档走完整原型流程 + 7 Tab 平展架构（与代码目录 1:1）+ A 档解冻回填（不新建 Issue）+ PLM/项目中心菜单归属
+- **架构**：D3 Hub 7 Tab——Tab1 参数化设计主入口 / Tab2 构件库🟢 / Tab3 材质标注🟡（#2268）/ Tab4 历史案例库🔴（#1902+#1922）/ Tab5 效果图渲染🔴 / Tab6 Web 3D 预览🔴（Three.js）/ Tab7 BOM 图纸导出🔴
+- **关键业务伙伴**：PLM #4024（D3 BOM→零件主数据）/ AI 中台 #4097（渲染图→图像工坊）/ 提案引擎（`ProposalD3BridgeController` 已实现）/ 超级员工矩阵（`D3TaskController`）
+- **对标矩阵**：Tacton CPQ + Configura CET + Rhino+Grasshopper + SketchFab
+- **4 张新表**（Flyway `db/migration_wande_ai/V20260423_*`）：批量材质标注 + 项目配色方案 + 历史案例结构化索引 + AI 相似度匹配缓存
+- **合规统计**：A 档 360→**363**（+3 回填），Master Issue 18→**19**（新建 #4142），原型目录 20→**21**（+d3-hub/），biz:d3-parametric needs-prototype 3→**0**，all-in-one 项目中心菜单 +1
+- **产出**：原型 8 HTML（132KB）+ 详设.md 364 行 20KB + Master #4142 + 3 子 Issue 三重引用回填（#2268/#1902/#1922）+ 3 个 needs-prototype 去除 + all-in-one 项目中心 +1 菜单 + deploy_website 预览
 
 ### 2026-04-23 · D96 · biz:project 20 Issue v5.1 §5.6 A 档纯回填
 - **biz:project Issue 对账**：23 open → 3 Master（#4043/#3994/#4004）+ 20 子 Issue 全部依附 Master，**实际非 D92 摘要的 54**（D93/D94 已清理）

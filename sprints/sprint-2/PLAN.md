@@ -215,7 +215,7 @@
 | 04-24 | kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
 | 04-24 | kimi2 | #4016 | crm | medium | **等待merge** | 架构蓝图+术语数据字典（PR #4148已提交，E2E 4项全通过✅，等待CI/merge）|
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
-| 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — 后端8文件+前端7文件改造完成，mvn编译通过，待提交PR |
+| 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — PR #4133已更新push，stage改造commit已push，MERGEABLE✅，等待CI/merge |
 | 04-24 | kimi1 | #2308 | design-ai | **high** | In Progress | 主题方案灵感库（排程建议#1，03:00派遣，实际复杂度：复杂，15+文件，预计T1-15阶段交付）|
 | 04-24 | kimi3 | #2309 | design-ai | medium | **等待merge** | 颜色配置器（排程建议#2，03:03派遣，PR #4149已提交，E2E smoke 4/4绿✅，MERGEABLE✅，等待自动merge）|
 | 04-24 | kimi6 | ~~#1920~~ | d3 | medium | ~~Done~~ | wande-gh-plugins重构 — PR #34已于03:04 admin-merged ✅ |

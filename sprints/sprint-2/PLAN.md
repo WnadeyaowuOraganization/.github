@@ -434,3 +434,20 @@
 | kimi3 | #2307 | 🔄 Working | 进前端 | T7 Inpaint页面开发 |
 | kimi6 | #1920 | ⚠️ Blocked | 等待 | PR #34 merge冲突，CI全绿✅ |
 
+
+## 新增派遣（2026-04-24 07:08）— 派遣异常修复后的新一轮派遣
+
+| 指派目录 | Issue | 模块 | 优先级 | 说明 | 状态 |
+|------|-------|------|--------|------|------|
+| kimi1 | #1468 | backend | P1 | 安全标准自动合规标注 | In Progress |
+| kimi2 | #1469 | backend | P1 | AI文案增强（材质/标准/案例描述自动生成） | In Progress |
+| kimi3 | #1470 | backend | P1 | Playbook规则引擎（场景化内容推荐） | In Progress |
+| kimi5 | #1845 | design-ai | P1 | 安全合规检测引擎 — 三标融合规则(EN1176+ASTM+GB) | In Progress |
+| kimi6 | #1714 | biz-enablement | P1 | 经销报价单生成页面 — 批量选品+折扣配置+报价单预览 | In Progress |
+
+### 派遣背景
+- 原派遣Issue #4029-4032已全部完成（2026-04-23 21:xx）但CC仍在执行（重复工作）
+- 立即停止异常派遣，释放slot
+- 选择备选队列P1高优先级Issue进行新派遣
+- 预期工作周期：2-3小时
+

@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户生命周期 - 概览</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .engine-card { transition: all 0.15s ease; }
+  .engine-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .tag-sm { font-size: 11px; padding: 2px 8px; border-radius: 10px; display: inline-block; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">客户生命周期 - 概览</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td>客户生命周期全局概览，一屏看到 6 大引擎健康度+本月KPI+近期提醒</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;">👤 主要用户</td><td>吴耀（超管视角）, 商务主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;">🎯 核心功能</td><td>4 大 KPI / 6 引擎状态 / 最紧急提醒 / 最近活动 feed</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;">⚡ 关键操作</td><td>点击 KPI 下钻 / 引擎卡跳 Tab / 提醒行内执行</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;">✅ 验收要点</td><td>KPI 3秒内渲染 / 引擎卡状态灯正确 / 跳 Tab 触发父窗口切换</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;">详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- 页面标题 -->
+<div class="mb-5 flex items-center justify-between">
+  <div>
+    <h1 class="text-xl font-semibold text-gray-800">客户生命周期中心 · 概览</h1>
+    <p class="text-sm text-gray-500 mt-1">截至 2025-01-15 10:30 · 数据每 5 分钟刷新</p>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="px-3 py-1.5 text-sm text-gray-600 bg-white border border-gray-200 rounded hover:bg-gray-50">📅 本月</button>
+    <button class="px-3 py-1.5 text-sm text-white bg-blue-500 rounded hover:bg-blue-600">🔄 刷新数据</button>
+  </div>
+</div>
+
+<!-- [区域A: KPI卡片区] -->
+<div class="grid grid-cols-4 gap-4 mb-6">
+
+  <!-- KPI 1: 超时未执行提醒 -->
+  <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition cursor-pointer">
+    <div class="flex items-start justify-between">
+      <div class="flex-1">
+        <div class="text-xs text-gray-500 mb-1">⚠️ 超时未执行提醒</div>
+        <div class="text-3xl font-bold text-red-500">23</div>
+        <div class="text-xs text-gray-400 mt-1">按人排名 ↓</div>
+      </div>
+      <div class="text-right text-xs space-y-1 ml-2 border-l border-gray-100 pl-3">
+        <div class="flex items-center justify-between gap-2"><span class="text-gray-600">李明</span><span class="text-red-500 font-semibold">5</span></div>
+        <div class="flex items-center justify-between gap-2"><span class="text-gray-600">王芳</span><span class="text-red-500 font-semibold">3</span></div>
+        <div class="flex items-center justify-between gap-2"><span class="text-gray-600">陈刚</span><span class="text-red-500 font-semibold">2</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 2: 本月提醒执行率 -->
+  <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition cursor-pointer">
+    <div class="text-xs text-gray-500 mb-1">📬 本月提醒执行情况</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-3xl font-bold text-blue-500">82%</span>
+      <span class="text-sm text-gray-500">执行率</span>
+    </div>
+    <div class="text-xs text-gray-500 mt-2">新增 <span class="font-semibold text-gray-700">156</span> / 已执行 <span class="font-semibold text-gray-700">128</span></div>
+    <div class="text-xs text-green-600 mt-1">↑ 同比上月 +5.2%</div>
+    <div class="w-full bg-gray-100 rounded-full h-1.5 mt-2">
+      <div class="bg-blue-500 h-1.5 rounded-full" style="width: 82%"></div>
+    </div>
+  </div>
+
+  <!-- KPI 3: 赢率 + 丢单原因 -->
+  <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition cursor-pointer">
+    <div class="text-xs text-gray-500 mb-1">🏆 赢率趋势</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-3xl font-bold text-green-500">42.3%</span>
+    </div>
+    <div class="text-xs text-green-600 mt-1">胜率环比 +3%</div>
+    <div class="mt-2 pt-2 border-t border-gray-100">
+      <div class="text-xs text-gray-500 mb-1.5">丢单原因 TOP3</div>
+      <div class="flex flex-wrap gap-1">
+        <span class="tag-sm bg-red-50 text-red-600">价格过高</span>
+        <span class="tag-sm bg-orange-50 text-orange-600">交期太长</span>
+        <span class="tag-sm bg-yellow-50 text-yellow-700">竞品更强</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI 4: 客户分层 -->
+  <div class="bg-white rounded-lg border border-gray-200 p-4 hover:shadow-md transition cursor-pointer">
+    <div class="text-xs text-gray-500 mb-2">👥 客户分层分布</div>
+    <div class="grid grid-cols-4 gap-1 text-center">
+      <div>
+        <div class="text-lg font-bold text-purple-600">12</div>
+        <div class="text-[10px] text-gray-500">S级</div>
+      </div>
+      <div>
+        <div class="text-lg font-bold text-blue-600">45</div>
+        <div class="text-[10px] text-gray-500">A级</div>
+      </div>
+      <div>
+        <div class="text-lg font-bold text-gray-700">89</div>
+        <div class="text-[10px] text-gray-500">B级</div>
+      </div>
+      <div>
+        <div class="text-lg font-bold text-gray-500">134</div>
+        <div class="text-[10px] text-gray-500">C级</div>
+      </div>
+    </div>
+    <div class="flex h-1.5 mt-2 rounded-full overflow-hidden">
+      <div class="bg-purple-500" style="width: 4.3%"></div>
+      <div class="bg-blue-500" style="width: 16.1%"></div>
+      <div class="bg-gray-400" style="width: 31.8%"></div>
+      <div class="bg-gray-300" style="width: 47.8%"></div>
+    </div>
+    <div class="text-xs text-gray-500 mt-2">值得激活客户 <span class="font-semibold text-blue-600">28</span></div>
+  </div>
+
+</div>
+
+<!-- [区域B: 6大引擎状态卡] -->
+<div class="mb-6">
+  <div class="flex items-center justify-between mb-3">
+    <h2 class="text-base font-semibold text-gray-700">6 大自动化引擎状态</h2>
+    <span class="text-xs text-gray-500">
+      <span class="status-dot bg-green-500"></span> 正常 5
+      <span class="status-dot bg-yellow-400 ml-2"></span> 注意 0
+      <span class="status-dot bg-red-500 ml-2"></span> 异常 1
+    </span>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+
+    <!-- 引擎 1: 交付里程碑 -->
+    <div class="engine-card bg-white rounded-lg border border-gray-200 p-4" data-tab="tab-milestone">
+      <div class="flex items-start justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🎯</span>
+          <h3 class="font-semibold text-gray-800">交付里程碑引擎</h3>
+        </div>
+        <span class="status-dot bg-green-500 mt-2" title="正常"></span>
+      </div>
+      <div class="text-xs text-gray-500 mb-1">本周关键指标</div>
+      <div class="text-sm text-gray-700 mb-3">触发 <span class="font-semibold">12</span> 次 / 执行 <span class="font-semibold text-green-600">11</span></div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span class="text-[11px] text-gray-400">执行率 91.7%</span>
+        <a href="#" class="text-xs text-blue-500 hover:text-blue-600 engine-link" data-tab="tab-milestone">查看详情 →</a>
+      </div>
+    </div>
+
+    <!-- 引擎 2: 赢丢单复盘 -->
+    <div class="engine-card bg-white rounded-lg border border-gray-200 p-4" data-tab="tab-review">
+      <div class="flex items-start justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📋</span>
+          <h3 class="font-semibold text-gray-800">赢丢单复盘引擎</h3>
+        </div>
+        <span class="status-dot bg-yellow-400 mt-2" title="注意"></span>
+      </div>
+      <div class="text-xs text-gray-500 mb-1">本周关键指标</div>
+      <div class="text-sm text-gray-700 mb-3">待复盘 <span class="font-semibold text-yellow-600">5</span> / 已复盘 <span class="font-semibold">3</span></div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span class="text-[11px] text-yellow-600">⚠ 5 单待处理</span>
+        <a href="#" class="text-xs text-blue-500 hover:text-blue-600 engine-link" data-tab="tab-review">查看详情 →</a>
+      </div>
+    </div>
+
+    <!-- 引擎 3: 满意度回访 -->
+    <div class="engine-card bg-white rounded-lg border border-gray-200 p-4" data-tab="tab-satisfaction">
+      <div class="flex items-start justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">❤️</span>
+          <h3 class="font-semibold text-gray-800">满意度回访引擎</h3>
+        </div>
+        <span class="status-dot bg-green-500 mt-2" title="正常"></span>
+      </div>
+      <div class="text-xs text-gray-500 mb-1">本月关键指标</div>
+      <div class="text-sm text-gray-700 mb-3">触发 <span class="font-semibold">8</span> / 平均 NPS <span class="font-semibold text-green-600">8.2</span></div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span class="text-[11px] text-gray-400">健康 · 持续跟踪</span>
+        <a href="#" class="text-xs text-blue-500 hover:text-blue-600 engine-link" data-tab="tab-satisfaction">查看详情 →</a>
+      </div>
+    </div>
+
+    <!-- 引擎 4: 复购信号 -->
+    <div class="engine-card bg-white rounded-lg border border-gray-200 p-4" data-tab="tab-repurchase">
+      <div class="flex items-start justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🔁</span>
+          <h3 class="font-semibold text-gray-800">复购信号引擎</h3>
+        </div>
+        <span class="status-dot bg-green-500 mt-2" title="正常"></span>
+      </div>
+      <div class="text-xs text-gray-500 mb-1">本周关键指标</div>
+      <div class="text-sm text-gray-700 mb-3">匹配 <span class="font-semibold">3</span> / 已通知 <span class="font-semibold text-green-600">3</span></div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span class="text-[11px] text-gray-400">通知率 100%</span>
+        <a href="#" class="text-xs text-blue-500 hover:text-blue-600 engine-link" data-tab="tab-repurchase">查看详情 →</a>
+      </div>
+    </div>
+
+    <!-- 引擎 5: 客户分层 -->
+    <div class="engine-card bg-white rounded-lg border border-gray-200 p-4" data-tab="tab-tier">
+      <div class="flex items-start justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">🏆</span>
+          <h3 class="font-semibold text-gray-800">客户分层引擎</h3>
+        </div>
+        <span class="status-dot bg-green-500 mt-2" title="正常"></span>
+      </div>
+      <div class="text-xs text-gray-500 mb-1">本月关键指标</div>
+      <div class="text-sm text-gray-700 mb-3">自动调级 <span class="font-semibold text-green-600">17</span> 个客户</div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span class="text-[11px] text-gray-400">升级 11 / 降级 6</span>
+        <a href="#" class="text-xs text-blue-500 hover:text-blue-600 engine-link" data-tab="tab-tier">查看详情 →</a>
+      </div>
+    </div>
+
+    <!-- 引擎 6: 设备档案 -->
+    <div class="engine-card bg-white rounded-lg border border-red-200 p-4" data-tab="tab-device">
+      <div class="flex items-start justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">📦</span>
+          <h3 class="font-semibold text-gray-800">设备档案引擎</h3>
+        </div>
+        <span class="status-dot bg-red-500 mt-2" title="异常"></span>
+      </div>
+      <div class="text-xs text-gray-500 mb-1">本月关键指标</div>
+      <div class="text-sm text-gray-700 mb-3">质保临期 <span class="font-semibold text-red-500">8</span> / 巡检超期 <span class="font-semibold text-red-500">3</span></div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <span class="text-[11px] text-red-500">🔴 11 项待处理</span>
+        <a href="#" class="text-xs text-blue-500 hover:text-blue-600 engine-link" data-tab="tab-device">查看详情 →</a>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- [区域C: 近期提醒流] -->
+<div class="grid grid-cols-2 gap-4">
+
+  <!-- 左：今日最紧急 5 条提醒 -->
+  <div class="bg-white rounded-lg border border-gray-200">
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-base">🔥</span>
+        <h3 class="font-semibold text-gray-800">今日最紧急提醒</h3>
+        <span class="bg-red-50 text-red-600 text-[11px] px-2 py-0.5 rounded-full">5</span>
+      </div>
+      <a href="#" class="text-xs text-blue-500 hover:text-blue-600">查看全部 →</a>
+    </div>
+    <div class="divide-y divide-gray-100">
+
+      <!-- 提醒行 1 -->
+      <div class="px-4 py-3 hover:bg-gray-50 flex items-center gap-3">
+        <div class="flex-shrink-0">
+          <div class="text-xs text-red-500 font-semibold">今日 14:00</div>
+          <div class="text-[10px] text-red-400">⏱ 还剩 3.5h</div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="tag-sm bg-blue-50 text-blue-600">里程碑</span>
+            <span class="text-xs text-gray-500">@李明</span>
+          </div>
+          <div class="text-sm text-gray-700 truncate">深圳华强-A3项目 T+7 交付跟进</div>
+        </div>
+        <button class="flex-shrink-0 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">执行</button>
+      </div>
+
+      <!-- 提醒行 2 -->
+      <div class="px-4 py-3 hover:bg-gray-50 flex items-center gap-3">
+        <div class="flex-shrink-0">
+          <div class="text-xs text-red-500 font-semibold">今日 16:30</div>
+          <div class="text-[10px] text-red-400">⏱ 还剩 6h</div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="tag-sm bg-red-50 text-red-600">质保临期</span>
+            <span class="text-xs text-gray-500">@王芳</span>
+          </div>
+          <div class="text-sm text-gray-700 truncate">广州汇通物流 · 3 台设备质保 15 天到期</div>
+        </div>
+        <button class="flex-shrink-0 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">执行</button>
+      </div>
+
+      <!-- 提醒行 3 -->
+      <div class="px-4 py-3 hover:bg-gray-50 flex items-center gap-3">
+        <div class="flex-shrink-0">
+          <div class="text-xs text-orange-500 font-semibold">今日 18:00</div>
+          <div class="text-[10px] text-orange-400">⏱ 还剩 7.5h</div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="tag-sm bg-purple-50 text-purple-600">满意度回访</span>
+            <span class="text-xs text-gray-500">@陈刚</span>
+          </div>
+          <div class="text-sm text-gray-700 truncate">东莞顺风机械 · 交付 30 天 NPS 回访</div>
+        </div>
+        <button class="flex-shrink-0 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">执行</button>
+      </div>
+
+      <!-- 提醒行 4 -->
+      <div class="px-4 py-3 hover:bg-gray-50 flex items-center gap-3">
+        <div class="flex-shrink-0">
+          <div class="text-xs text-orange-500 font-semibold">今日 20:00</div>
+          <div class="text-[10px] text-orange-400">⏱ 还剩 9.5h</div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="tag-sm bg-green-50 text-green-600">复购信号</span>
+            <span class="text-xs text-gray-500">@李明</span>
+          </div>
+          <div class="text-sm text-gray-700 truncate">佛山金鹰制造 · 触发复购窗口（已运营 11 月）</div>
+        </div>
+        <button class="flex-shrink-0 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">执行</button>
+      </div>
+
+      <!-- 提醒行 5 -->
+      <div class="px-4 py-3 hover:bg-gray-50 flex items-center gap-3">
+        <div class="flex-shrink-0">
+          <div class="text-xs text-gray-500 font-semibold">明日 09:00</div>
+          <div class="text-[10px] text-gray-400">⏱ 还剩 22h</div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-1.5 mb-0.5">
+            <span class="tag-sm bg-yellow-50 text-yellow-700">赢丢单复盘</span>
+            <span class="text-xs text-gray-500">@王芳</span>
+          </div>
+          <div class="text-sm text-gray-700 truncate">珠海精密仪器 · 失单复盘待提交</div>
+        </div>
+        <button class="flex-shrink-0 px-3 py-1 text-xs text-white bg-blue-500 rounded hover:bg-blue-600">执行</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 右：最近活动时间线 feed -->
+  <div class="bg-white rounded-lg border border-gray-200">
+    <div class="px-4 py-3 border-b border-gray-100 flex items-center justify-between">
+      <div class="flex items-center gap-2">
+        <span class="text-base">📡</span>
+        <h3 class="font-semibold text-gray-800">最近活动</h3>
+      </div>
+      <a href="#" class="text-xs text-blue-500 hover:text-blue-600">查看全部 →</a>
+    </div>
+    <div class="p-4 space-y-4">
+
+      <!-- Feed 1 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center text-xs">✓</div>
+          <div class="flex-1 w-px bg-gray-200 mt-1"></div>
+        </div>
+        <div class="flex-1 pb-2">
+          <div class="text-sm text-gray-700"><span class="font-semibold">陈刚</span> 完成了 <span class="text-blue-600">深圳华强项目</span> 满意度回访</div>
+          <div class="text-xs text-gray-500 mt-0.5">NPS 评分 9 分 · 1 小时前</div>
+        </div>
+      </div>
+
+      <!-- Feed 2 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full bg-blue-100 flex items-center justify-center text-xs">🎯</div>
+          <div class="flex-1 w-px bg-gray-200 mt-1"></div>
+        </div>
+        <div class="flex-1 pb-2">
+          <div class="text-sm text-gray-700"><span class="font-semibold">李明</span> 确认了 <span class="text-blue-600">东莞顺风机械</span> T+30 交付里程碑</div>
+          <div class="text-xs text-gray-500 mt-0.5">提交交付评价 · 2 小时前</div>
+        </div>
+      </div>
+
+      <!-- Feed 3 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full bg-purple-100 flex items-center justify-center text-xs">⬆</div>
+          <div class="flex-1 w-px bg-gray-200 mt-1"></div>
+        </div>
+        <div class="flex-1 pb-2">
+          <div class="text-sm text-gray-700">系统自动将 <span class="text-blue-600">广州汇通物流</span> 分层从 <span class="text-gray-500">B</span> 升至 <span class="text-blue-600 font-semibold">A</span></div>
+          <div class="text-xs text-gray-500 mt-0.5">近 90 天成交额触发规则 · 3 小时前</div>
+        </div>
+      </div>
+
+      <!-- Feed 4 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full bg-yellow-100 flex items-center justify-center text-xs">📋</div>
+          <div class="flex-1 w-px bg-gray-200 mt-1"></div>
+        </div>
+        <div class="flex-1 pb-2">
+          <div class="text-sm text-gray-700"><span class="font-semibold">王芳</span> 提交了 <span class="text-blue-600">珠海精密仪器</span> 失单复盘报告</div>
+          <div class="text-xs text-gray-500 mt-0.5">标记原因：价格过高 · 5 小时前</div>
+        </div>
+      </div>
+
+      <!-- Feed 5 -->
+      <div class="flex gap-3">
+        <div class="flex flex-col items-center flex-shrink-0">
+          <div class="w-7 h-7 rounded-full bg-green-100 flex items-center justify-center text-xs">🔁</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-sm text-gray-700">复购信号引擎识别 <span class="text-blue-600">佛山金鹰制造</span> 进入复购窗口</div>
+          <div class="text-xs text-gray-500 mt-0.5">已通知 @李明 跟进 · 昨天 17:23</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // 引擎卡 & 链接：点击跳对应 Tab（通过 postMessage 通知父窗口切换）
+  function switchToTab(tabName) {
+    try {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'switch-tab', tab: tabName }, '*');
+      } else {
+        console.log('[tab-overview] switch to:', tabName);
+      }
+    } catch (e) {
+      console.warn('postMessage failed', e);
+    }
+  }
+
+  document.querySelectorAll('.engine-card').forEach(card => {
+    card.style.cursor = 'pointer';
+    card.addEventListener('click', (e) => {
+      // 避免链接重复触发
+      if (e.target.closest('.engine-link')) return;
+      const tab = card.getAttribute('data-tab');
+      if (tab) switchToTab(tab);
+    });
+  });
+
+  document.querySelectorAll('.engine-link').forEach(link => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const tab = link.getAttribute('data-tab');
+      if (tab) switchToTab(tab);
+    });
+  });
+</script>
+
+</body>
+</html>

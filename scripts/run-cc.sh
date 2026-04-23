@@ -236,13 +236,9 @@ if [ "$MODE" = "issue" ]; then
   # === 构建 prompt（v3 — 简短一行，规范通过 --append-system-prompt-file 注入）===
   CC_PROMPT="你是 kimi${KIMI_NUM}，工作目录 ~/projects/wande-play-kimi${KIMI_NUM}/，独立环境端口 backend:${CC_BE_PORT} frontend:${CC_FE_PORT} db:wande-ai-kimi${KIMI_NUM}。cc-test-env.sh 所有命令必须用 kimi${KIMI_NUM}，不得操作其他 kimi 环境。阅读 issues/issue-${ISSUE}/issue-source.md 完成 Issue #${ISSUE}。"
 
-  # 检查详细设计文档（只匹配内容中包含 Issue 编号的设计文档）
-  DESIGN_DOC=$(grep -rl "#${ISSUE}" "$SCRIPT_DIR/../docs/design/"*/详细设计.md 2>/dev/null | head -1)
-  if [ -n "$DESIGN_DOC" ]; then
-    cp "$DESIGN_DOC" "$ISSUE_DIR/design.md"
-    CC_PROMPT="${CC_PROMPT} 本Issue有详细设计文档，请先阅读 issues/issue-${ISSUE}/design.md 并严格按设计实现。"
-    echo "$(date): 详细设计文档已注入: $(basename $DESIGN_DOC)"
-  fi
+  # design.md注入已移除（2026-04-23）
+  # CC通过issue-source.md中的原型引用自行读取docs/design/下的设计文档
+  # 旧逻辑用grep反向匹配Issue号导致错误复制（#3996事故：AI中台设计文档被误放到矿场Issue）
 
   # 共享规范已合并到 CLAUDE.md，不再单独注入
   CONVENTIONS_FLAG=""

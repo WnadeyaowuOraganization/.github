@@ -98,6 +98,11 @@ public class XxxServiceImpl extends ServiceImpl<XxxMapper, XxxEntity>
 
 ### Controller
 
+> ⚠️ **红线：每个 Controller 方法必须加 `@SaCheckPermission`，无一例外**
+> - 缺失 = 安全漏洞，研发经理 code review 必驳回
+> - 新建子模块（`com.wande.ai.modules.plm.*` 等）同样适用，不受包路径影响
+> - `import cn.dev33.satoken.annotation.SaCheckPermission;`
+
 ```java
 @RestController
 @RequestMapping("/wande/xxx")
@@ -105,13 +110,13 @@ public class XxxServiceImpl extends ServiceImpl<XxxMapper, XxxEntity>
 public class XxxController {
     private final IXxxService xxxService;
 
-    @SaCheckPermission("wande:xxx:list")
+    @SaCheckPermission("wande:xxx:list")          // ← 必填，缺失直接驳回
     @GetMapping("/list")
     public TableDataInfo<XxxVo> list(XxxBo bo, PageQuery pageQuery) {
         return xxxService.queryPageList(bo, pageQuery);
     }
 
-    @SaCheckPermission("wande:xxx:add")
+    @SaCheckPermission("wande:xxx:add")           // ← 必填，缺失直接驳回
     @PostMapping
     public R<Void> add(@Validated @RequestBody XxxBo bo) {
         xxxService.insertByBo(bo);
@@ -119,6 +124,11 @@ public class XxxController {
     }
 }
 ```
+
+**PLM 子模块权限命名规范**（`com.wande.ai.modules.plm.*`）：
+- 查询类：`"plm:<module>:query"`
+- 写入/执行类：`"plm:<module>:<action>"`（如 `"plm:eco:execute"`、`"plm:configurator:confirm"`）
+- 管理员兜底：`orRole = "admin"`
 
 ## 响应格式（违反导致前端弹错、不展示数据）
 

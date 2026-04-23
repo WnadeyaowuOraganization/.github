@@ -208,6 +208,10 @@
 | 04-24 | kimi1 | #3648 | bidding | low | In Progress | 招投标-DB建表 |
 | 04-24 | kimi3 | #2307 | design-ai | medium | In Progress | 局部修改模块GUI |
 | 04-24 | kimi5 | #1875 | bidding | medium | In Progress | 赢/输复盘模板 |
+| 04-24 | kimi2 | ~~#3151~~ | approval | medium | ~~Done~~ | 新手引导+流程帮助中心追补 — PR #4140 merged，Issue自动关闭 ✅ |
+| 04-24 | kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
+| 04-24 | kimi2 | #4016 | crm | medium | In Progress | 架构蓝图+术语数据字典 |
+| 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
 
 ---
 

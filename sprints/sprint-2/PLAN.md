@@ -28,7 +28,7 @@
 | 4 | kimi4 | #3631 | P1 | bidding | high | ✅ 已派 — pipeline表对齐 |
 | 5 | kimi5 | #1692 | P1 | backend | medium | ✅ 已派（⚠️可能卡住）— 项目成本跟踪API |
 
-**4/5 并发，1个空位（kimi1释放）。** 研发经理按以下顺序补入：
+**4/5 并发，1个空位已补入。** 当前运行：kimi2/kimi3/kimi5/kimi6 + kimi1新派#2308
 
 ### 备选队列（2026-04-24 03:00 刷新，81个OPEN剩余，全部验证状态）
 
@@ -213,12 +213,12 @@
 | 04-24 | kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
 | 04-24 | kimi2 | #4016 | crm | medium | In Progress | 架构蓝图+术语数据字典 |
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
-| 04-24 | kimi1 | #4018 | crm | medium | **Continuing** | 数据迁移PR#4133已merged，续接stage体系改造（8处代码+前端对齐，预计2-4h) |
-| 04-24 | kimi1 | **待派遣** | — | medium | **空位** | 备选队列已用尽，等待排程经理补充新建议 |
+| 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — PR #4133 merged |
+| 04-24 | kimi1 | #2308 | design-ai | medium | In Progress | 主题方案灵感库（排程建议#1，03:00派遣）|
 | 04-24 | kimi6 | #1920 | d3 | medium | **Blocked** | wande-gh-plugins重构 — PR #34 merge冲突，待解决 |
 
 **当前5个CC在线运行中：**
-- kimi1 #4018: 50%进度 (stage改造中，PR #4133 open)
+- kimi1 #2308: **新派遣**（03:00 刚启动，主题方案灵感库）
 - kimi2 #4016: 29%进度 (架构蓝图+术语数据字典)
 - kimi3 #2307: 37%进度 (局部修改模块GUI，PR #4147 open 但质量预检FAILED，已通知修复)
 - kimi5 #4011: 49%进度 (记录中心三视角分组Tab)

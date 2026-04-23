@@ -33,26 +33,26 @@
 
 | 序号 | Issue | 优先级 | Sprint | 模块 | effort | 说明 |
 |------|-------|--------|--------|------|--------|------|
-| 1 | #4022 | — | S1 | crm | medium | Master — CRM商机详情页骨架（子Tab已完成，补Master） |
-| 2 | #4021 | — | S1 | crm | medium | Master — CRM商务中心10页架构 |
-| 3 | #1832 | P1 | S2 | pipeline | medium | EXEMPT — Pipeline CI质量门禁+测试框架 |
-| 4 | #1875 | P1 | S2 | bidding | medium | A档 — 赢/输复盘模板+系统化采集 |
-| 5 | #3150 | P1 | S2 | backend | medium | A档 — 审批流程图渲染API [2/8] |
-| 6 | #3149 | P1 | S2 | frontend | medium | A档 — 审批进度追踪器组件 [1/8]（⏳建议等#3150后端先完成） |
-| 7 | #3155 | P1 | S2 | frontend | medium | A档 — 流程简化配置页 [7/8] |
-| 8 | #3156 | P1 | S2 | frontend | medium | A档 — 流程效率分析看板 [8/8] |
-| 9 | #3651 | P1 | S2 | bidding | medium | A_weak — 投标立项与进度管理 |
-| 10 | #3168 | P1 | S2 | frontend | medium | A档 — 动态表单渲染器前端 [2/8]（⏳等#3167 Done） |
-| 11 | #3169 | P1 | S2 | fullstack | medium | A档 — 表单模板管理 [3/8]（⏳等#3167 Done） |
-| 12 | #4020 | — | S1 | cockpit | high | A_weak — Master超管驾驶舱18Tab |
+| 1 | #1832 | P1 | S2 | pipeline | medium | EXEMPT — Pipeline CI质量门禁+测试框架 |
+| 2 | #1875 | P1 | S2 | bidding | medium | A档 — 赢/输复盘模板+系统化采集 |
+| 3 | #3150 | P1 | S2 | backend | medium | A档 — 审批流程图渲染API [2/8] |
+| 4 | #3651 | P1 | S2 | bidding | medium | A_weak — 投标立项与进度管理 |
+| 5 | #4014 | P0 | S3 | crm | medium | 线索统一池+评分引擎（#4013子Issue） |
+| 6 | #4018 | P0 | S3 | crm | medium | 整改 crm_opportunity 明道云对齐 |
+| 7 | #3995 | P1 | S3 | project | medium | 整改 矿场按v2.0原型调整 |
+| 8 | #3996 | P1 | S3 | project | medium | 矿场-转化漏斗Tab |
+| 9 | #3997 | P1 | S3 | project | medium | 矿场-复盘洞察Tab |
+| 10 | #3998 | P1 | S3 | project | medium | 矿场-ROI看板Tab |
+| 11 | #4005 | P1 | S3 | frontend | medium | 整改 记录中心4Tab对齐v1.0原型 |
+| 12 | #4006 | P1 | S3 | frontend | medium | 整改 老板周报对齐v1.0原型 |
 | 13 | #2427 | P2 | S2 | bidding | medium | A档 — 环评/规划许可公示采集 |
 | 14 | #2428 | P2 | S2 | bidding | medium | A档 — 人大代表建议/政协提案采集 |
 | 15 | #2429 | P2 | S2 | bidding | medium | A档 — 行业展会参展商名录采集 |
-| 16 | #3151 | P2 | S2 | frontend | medium | A档 — 新手引导+流程帮助中心 [3/8] |
-| 17 | #3174 | P2 | S2 | fullstack | medium | A档 — 表单模板导入导出 [8/8] |
-| 18 | #4023 | — | S2 | approval | high | A_weak — Master审批工作台8Tab |
-| 19 | #4024 | — | S2 | plm | high | A_weak — Master PLM产品技术中心8Tab |
-| 20 | #4041 | — | S2 | cockpit | medium | A_weak — Master耀总驾驶舱8区块 |
+| 16 | #3174 | P2 | S2 | fullstack | medium | A档 — 表单模板导入导出 [8/8] |
+| 17 | #2310 | P1 | S3 | design-ai | medium | 方案文本模块 — 分Section编辑器+AI辅助 |
+| 18 | #2198 | P1 | S3 | brand | medium | 品牌中心-视频号自动化发布 |
+| 19 | #4007 | P1 | S3 | frontend | medium | 整改 工作流中心对齐v1.0原型 |
+| 20 | #4008 | P1 | S3 | project | medium | 整改 项目中心列表+详情对齐v2.0原型 |
 
 ## 指派历史
 
@@ -140,9 +140,9 @@
 | 04-23 | kimi3 | ~~#3390~~ | plm | **max** | ~~Done~~ | D3参数化→PLM BOM桥接 — PR#4111 merged（@SaCheckPermission已修复）|
 | 04-23 | kimi3 | ~~#3557~~ | e2e | **max** | ~~Done~~ | E2E回归：前端登录会话失效修复 — PR#4115 merged |
 | 04-23 | kimi3 | ~~#4022~~ | crm | **max** | ~~Done~~ | Master CRM商机详情页骨架 — PR#4118 merged |
-| 04-23 | kimi3 | #4013 | crm | **max** | In Progress | Master CRM线索/商机架构统一（新派）|
+| 04-23 | kimi3 | #4013 | crm | **high** | In Progress | Master CRM线索/商机架构统一（新派，降为high）|
 | 04-23 | kimi5 | ~~#3391~~ | plm | **max** | ~~Done~~ | 产品配置器后端API — PR#4110 merged |
-| 04-23 | kimi5 | #3397 | plm | **max** | In Progress | PLM产品配置器+报价页面（前端）— PR#4113 submitted(CI Playwright✅)|
+| 04-23 | kimi5 | #3397 | plm | **high** | In Progress | PLM产品配置器+报价页面（前端，降为high）— PR#4113 submitted(CI Playwright✅)|
 | 04-23 | kimi4 | ~~#1875~~ | bidding | **max** | ~~Done~~ | 赢/输复盘模板 — PR#3976 已于04-20 merged |
 | 04-23 | kimi4 | ~~#3174~~ | approval | **max** | ~~Done~~ | 表单模板导入导出+配置向导 — PR#3937+#4080 已merged |
 | 04-23 | kimi4 | ~~#3377~~ | plm | **max** | ~~Done~~ | PLM子系统数据库初始化 — 已merged/CLOSED |
@@ -155,7 +155,8 @@
 | 04-23 | kimi4 | ~~#4034~~ | crm | **max** | ~~Done~~ | CRM商机详情-跟进记录Tab — PR#4056+PR#4108 merged（N+1已知技术债，单商机场景可控）|
 | 04-23 | kimi4 | ~~#3394~~ | plm | **max** | ~~Done~~ | PLM零件主数据管理页面 — PR#3990 已于04-20 merged |
 | 04-23 | kimi4 | ~~#3395~~ | plm | **max** | ~~Done~~ | PLM BOM管理与版本对比页面 — PR#4116 merged |
-| 04-23 | kimi4 | #1832 | pipeline | medium | In Progress | Pipeline CI质量门禁+测试框架（新派）|
+| 04-23 | kimi4 | ~~#1832~~ | pipeline | medium | ~~Done~~ | Pipeline CI质量门禁+测试框架 — PR#4120 merged |
+| 04-23 | kimi4 | #1875 | bidding | medium | In Progress | 赢/输复盘模板（新派）|
 
 ---
 

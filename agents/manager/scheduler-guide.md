@@ -85,6 +85,45 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 > ⚠️ 研发经理也会写 PLAN.md（「当前运行」+「指派历史」表）。
 > 改 PLAN.md 前必须 `git pull`，改完立即 `git add + commit + push`，避免相互覆盖。
 
+### Master Issue 规则
+
+> Master Issue（标题含 `[Master]`）是功能归类导航用的，不是可开发的 Issue。
+
+**排除规则**：
+- 指派建议表中**禁止出现 Master Issue**，只推其子Issue
+- effort 设为 `—`（不分配CC，不消耗API额度）
+
+**自动完成检测**（每轮巡检执行）：
+1. 查找所有 OPEN 的 Master Issue（标题含 `[Master]`）
+2. 从 body 中提取子 Issue 编号（`#NNNN` 格式）
+3. 检查所有子 Issue 是否全部 CLOSED
+4. 全部 CLOSED → 自动关闭 Master Issue + 标 Done
+
+```bash
+# Master Issue 自动完成检测脚本
+gh issue list --repo WnadeyaowuOraganization/wande-play \
+  --search "title:[Master]" --state open --json number,title,body -L 50 | \
+python3 -c "
+import json, sys, re, subprocess
+for issue in json.load(sys.stdin):
+    if '[Master]' not in issue['title']: continue
+    children = set(re.findall(r'#(\d{4,})', issue.get('body','') or ''))
+    if not children: continue
+    all_closed = True
+    for c in children:
+        r = subprocess.run(['gh','issue','view',c,'--repo','WnadeyaowuOraganization/wande-play','--json','state','-q','.state'],
+                          capture_output=True, text=True, timeout=10)
+        if r.stdout.strip() != 'CLOSED':
+            all_closed = False
+            break
+    if all_closed:
+        print(f'#{issue[\"number\"]} 子Issue全部完成，自动关闭')
+        subprocess.run(['gh','issue','close',str(issue['number']),'--repo','WnadeyaowuOraganization/wande-play',
+                       '--comment','所有子Issue已完成，Master Issue自动关闭。'])
+        subprocess.run(['bash','scripts/update-project-status.sh','--repo','play','--issue',str(issue['number']),'--status','Done'])
+"
+```
+
 ### 优先级规则（从高到低）
 
 | 优先级 | 条件 |
@@ -93,6 +132,7 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 | 🟠 高 | 看板状态为 **E2E Fail** 或 **Fail** 且仍 OPEN、依赖已就绪 |
 | 🟡 中 | `priority/P0` Todo，依赖已 CLOSED |
 | 🟢 普通 | `priority/P1` Todo，依赖已 CLOSED，按模块并行原则补足20条 |
+| ⛔ 排除 | 标题含 `[Master]` 的导航 Issue — **禁止出现在建议表** |
 
 ### 建议表格式
 

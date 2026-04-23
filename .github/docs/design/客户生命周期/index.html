@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>万德AI平台 — 客户生命周期中心 低保真原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .sidebar-item { transition: all 0.15s ease; }
+  .sidebar-item:hover { background-color: #f3f4f6; }
+  .tab-item { transition: color 0.15s ease; cursor: pointer; }
+  .tab-item.active { color: #3b82f6; border-bottom: 2px solid #3b82f6; }
+  iframe { transition: height 0.2s ease; }
+</style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">客户生命周期中心</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">以客户为中心串联签约后全流程，通过系统提醒驱动内部人员主动触达客户，汇聚 6 大引擎到一个工作台</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（超管）, 商务, 售后, 项目经理</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">提醒执行看板 / 交付里程碑 / 赢丢单复盘 / 满意度回访 / 复购信号 / 客户分层 / 设备档案 / 通知规则管理</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击待办立即执行 / 填写复盘表单 / 手动调整客户分层 / 编辑通知规则 / 查看设备巡检记录</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">9 个 Tab 可切换 / KPI 数据正确 / 提醒列表行内操作 / 分层滑块模拟正确</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">客户生命周期-详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex">
+  <!-- 左侧侧边栏 -->
+  <aside class="w-16 bg-white border-r border-gray-300 min-h-screen flex flex-col items-center py-4 flex-shrink-0">
+    <div class="w-10 h-10 bg-blue-500 rounded text-white flex items-center justify-center font-bold text-sm mb-6">万</div>
+    <nav class="flex flex-col gap-2 w-full px-2">
+      <a href="#" title="驾驶舱" class="sidebar-item h-10 flex items-center justify-center rounded text-gray-500 text-xl">📊</a>
+      <a href="#" title="CRM" class="sidebar-item h-10 flex items-center justify-center rounded text-gray-500 text-xl">🛒</a>
+      <a href="#" title="项目" class="sidebar-item h-10 flex items-center justify-center rounded text-gray-500 text-xl">📁</a>
+      <a href="#" title="客户生命周期" class="sidebar-item h-10 flex items-center justify-center rounded bg-blue-50 text-blue-500 text-xl border border-blue-500">🔔</a>
+      <a href="#" title="设计" class="sidebar-item h-10 flex items-center justify-center rounded text-gray-500 text-xl">🎨</a>
+      <a href="#" title="设置" class="sidebar-item h-10 flex items-center justify-center rounded text-gray-500 text-xl">⚙️</a>
+    </nav>
+  </aside>
+
+  <!-- 主内容区 -->
+  <main class="flex-1 min-w-0">
+    <!-- 顶部面包屑 -->
+    <div class="bg-white border-b border-gray-300 px-6 py-3 flex items-center justify-between">
+      <div class="text-sm text-gray-500">
+        <span>首页</span>
+        <span class="mx-2 text-gray-300">/</span>
+        <span>CRM</span>
+        <span class="mx-2 text-gray-300">/</span>
+        <span class="text-gray-700 font-medium">客户生命周期中心</span>
+      </div>
+      <div class="flex items-center gap-3 text-sm text-gray-500">
+        <span>🔍 搜索</span>
+        <span>🔔</span>
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 bg-gray-300 rounded-full flex items-center justify-center text-xs text-gray-700">吴</div>
+          <span class="text-gray-700">吴耀</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 页面标题区 -->
+    <div class="bg-white border-b border-gray-300 px-6 pt-5 pb-0">
+      <div class="flex items-start justify-between mb-4">
+        <div>
+          <h1 class="text-xl font-semibold text-gray-700 mb-1">客户生命周期中心</h1>
+          <p class="text-sm text-gray-500">以客户为中心串联签约后全流程 · 交付 → 复盘 → 满意度 → 复购 → 分层 → 设备 → 通知</p>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700 bg-white hover:bg-gray-50">导出</button>
+          <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">新建规则</button>
+        </div>
+      </div>
+
+      <!-- Tab 栏 -->
+      <div class="flex gap-6 border-b border-gray-200 -mx-6 px-6 overflow-x-auto">
+        <div class="tab-item active py-3 text-sm font-medium whitespace-nowrap" data-key="overview" data-src="tab-overview.html">概览</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="reminders" data-src="tab-reminders.html">提醒执行看板</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="milestone" data-src="tab-milestone.html">交付里程碑</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="review" data-src="tab-review.html">赢丢单复盘</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="satisfaction" data-src="tab-satisfaction.html">满意度回访</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="repurchase" data-src="tab-repurchase.html">复购信号</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="tier" data-src="tab-tier.html">客户分层</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="device" data-src="tab-device.html">设备档案</div>
+        <div class="tab-item py-3 text-sm text-gray-500 whitespace-nowrap" data-key="rules" data-src="tab-rules.html">通知规则管理</div>
+      </div>
+    </div>
+
+    <!-- iframe 容器 -->
+    <div class="px-0 py-0 bg-gray-50">
+      <iframe id="tabFrame" src="tab-overview.html" class="w-full" style="min-height: calc(100vh - 240px); border:none;"></iframe>
+    </div>
+
+    <!-- 底部原型说明表格 -->
+    <div class="px-6 py-6 bg-gray-50">
+      <div class="bg-white border border-gray-300 rounded">
+        <div class="px-5 py-3 border-b border-gray-300 flex items-center justify-between">
+          <h2 class="text-sm font-semibold text-gray-700">原型说明 · Tab 一览</h2>
+          <span class="text-xs text-gray-500">共 9 个 Tab · 对应 14 个 Issue</span>
+        </div>
+        <table class="w-full text-sm">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-300 text-gray-500 text-left">
+              <th class="px-4 py-2.5 font-medium w-40">Tab 页</th>
+              <th class="px-4 py-2.5 font-medium w-56">文件名</th>
+              <th class="px-4 py-2.5 font-medium">功能描述</th>
+              <th class="px-4 py-2.5 font-medium w-56">对应 Issue</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">概览</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-overview.html</td>
+              <td class="px-4 py-2.5">KPI 卡片 + 引擎状态 + 近期提醒</td>
+              <td class="px-4 py-2.5 text-xs text-gray-500">—</td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">提醒执行看板</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-reminders.html</td>
+              <td class="px-4 py-2.5">待办列表 + 超时预警 + 按人排名</td>
+              <td class="px-4 py-2.5 text-xs"><a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2754" target="_blank" class="text-blue-500 hover:underline">#2754</a></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">交付里程碑</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-milestone.html</td>
+              <td class="px-4 py-2.5">阶段变更提醒规则 + 触发记录</td>
+              <td class="px-4 py-2.5 text-xs"><a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2745" target="_blank" class="text-blue-500 hover:underline">#2745</a></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">赢丢单复盘</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-review.html</td>
+              <td class="px-4 py-2.5">月度汇总 KPI + 复盘表单</td>
+              <td class="px-4 py-2.5 text-xs">
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2746" target="_blank" class="text-blue-500 hover:underline">#2746</a>
+                <span class="text-gray-300 mx-1">/</span>
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2753" target="_blank" class="text-blue-500 hover:underline">#2753</a>
+              </td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">满意度回访</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-satisfaction.html</td>
+              <td class="px-4 py-2.5">验收后 7/30 天提醒 + NPS 记录</td>
+              <td class="px-4 py-2.5 text-xs"><a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2747" target="_blank" class="text-blue-500 hover:underline">#2747</a></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">复购信号</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-repurchase.html</td>
+              <td class="px-4 py-2.5">矿场匹配历史客户提醒</td>
+              <td class="px-4 py-2.5 text-xs"><a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2748" target="_blank" class="text-blue-500 hover:underline">#2748</a></td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">客户分层</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-tier.html</td>
+              <td class="px-4 py-2.5">S/A/B/C 自动分级 + 滑块模拟器</td>
+              <td class="px-4 py-2.5 text-xs">
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2751" target="_blank" class="text-blue-500 hover:underline">#2751</a>
+                <span class="text-gray-300 mx-1">/</span>
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2752" target="_blank" class="text-blue-500 hover:underline">#2752</a>
+              </td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2.5">设备档案</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-device.html</td>
+              <td class="px-4 py-2.5">设备列表 + 详情 + 巡检 + 维保</td>
+              <td class="px-4 py-2.5 text-xs">
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2749" target="_blank" class="text-blue-500 hover:underline">#2749</a>
+                <span class="text-gray-300 mx-1">/</span>
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2750" target="_blank" class="text-blue-500 hover:underline">#2750</a>
+                <span class="text-gray-300 mx-1">/</span>
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2755" target="_blank" class="text-blue-500 hover:underline">#2755</a>
+              </td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2.5">通知规则管理</td>
+              <td class="px-4 py-2.5 text-gray-500 font-mono text-xs">tab-rules.html</td>
+              <td class="px-4 py-2.5">规则列表 + 编辑 + 监控仪表盘</td>
+              <td class="px-4 py-2.5 text-xs">
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2756" target="_blank" class="text-blue-500 hover:underline">#2756</a>
+                <span class="text-gray-300 mx-1">/</span>
+                <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2757" target="_blank" class="text-blue-500 hover:underline">#2757</a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-xs text-gray-400 mt-3 text-center">万德 AI 平台 · 客户生命周期中心 低保真原型 · v1.0</div>
+    </div>
+  </main>
+</div>
+
+<script>
+  // Tab 切换
+  const tabs = document.querySelectorAll('.tab-item');
+  const iframe = document.getElementById('tabFrame');
+
+  tabs.forEach(tab => {
+    tab.addEventListener('click', function() {
+      tabs.forEach(t => {
+        t.classList.remove('active');
+        t.classList.remove('text-blue-500');
+        t.classList.add('text-gray-500');
+      });
+      this.classList.add('active');
+      this.classList.remove('text-gray-500');
+      const src = this.getAttribute('data-src');
+      iframe.src = src;
+    });
+  });
+
+  // iframe 自动高度适配
+  iframe.addEventListener('load', function() {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if (doc && doc.documentElement) {
+        const h = doc.documentElement.scrollHeight;
+        iframe.style.height = (h + 20) + 'px';
+      }
+    } catch (e) {
+      console.warn('iframe 高度适配失败:', e);
+    }
+  });
+</script>
+
+</body>
+</html>

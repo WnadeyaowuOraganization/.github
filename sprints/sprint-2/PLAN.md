@@ -168,6 +168,8 @@
 | 04-23 | kimi3 | ~~#4022~~ | crm | **max** | ~~Done~~ | Master CRM商机详情页骨架 — PR#4118 merged |
 | 04-24 | kimi3 | ~~#4042~~ | frontend | medium | ~~Done~~ | CRM流程监控Tab — PR #4071 merged，Issue #4042已关闭 |
 | 04-24 | kimi3 | #2198 | brand | medium | In Progress | 品牌中心-视频号自动化发布 |
+| 04-24 | kimi5 | ~~#4017~~ | crm | medium | ~~Done~~ | crm_activity_log明道云迁移 — PR #4134 merged |
+| 04-24 | kimi5 | #2310 | design-ai | medium | In Progress | 方案文本模块-分Section编辑器 |
 | 04-23 | kimi3 | ~~#4013~~ | crm | **high** | ~~Plan~~ | Master CRM线索/商机统一 — 导航归类用，禁止CC开发 |
 | 04-23 | kimi3 | #3651 | bidding | medium | ~~Done~~ | 投标立项与进度管理 — PR#4112 已merged |
 | 04-23 | kimi3 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0原型 — PR#4122 admin-merged ✅ |

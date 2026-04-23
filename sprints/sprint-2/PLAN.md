@@ -200,6 +200,14 @@
 | 04-23 | kimi4 | ~~#3395~~ | plm | **max** | ~~Done~~ | PLM BOM管理与版本对比页面 — PR#4116 merged |
 | 04-23 | kimi4 | ~~#1832~~ | pipeline | medium | ~~Done~~ | Pipeline CI质量门禁+测试框架 — PR#4120 merged |
 | 04-23 | kimi4 | #1875 | bidding | medium | In Progress | 赢/输复盘模板（新派）|
+| 04-24 | kimi1 | ~~#1921~~ | d3 | medium | ~~Done~~ | D3Plugin.gha SDK降级 — PR #4143 merged，Issue自动关闭 |
+| 04-24 | kimi2 | ~~#3151~~ | approval | medium | ~~Done~~ | 新手引导+流程帮助中心 — PR #4140 merged，Issue自动关闭 |
+| 04-24 | kimi3 | ~~#2305~~ | design-ai | medium | ~~Done~~ | Three.js漫游录制 — PR #4145 merged，Issue自动关闭 |
+| 04-24 | kimi5 | ~~#2310~~ | design-ai | medium | ~~Done~~ | 方案文本生成 — PR #4144 merged，Issue手动关闭 |
+| 04-24 | kimi6 | #1920 | d3 | medium | Blocked | wande-gh-plugins重构 — PR #34 merge冲突，CI绿✅ |
+| 04-24 | kimi1 | #3648 | bidding | low | In Progress | 招投标-DB建表 |
+| 04-24 | kimi3 | #2307 | design-ai | medium | In Progress | 局部修改模块GUI |
+| 04-24 | kimi5 | #1875 | bidding | medium | In Progress | 赢/输复盘模板 |
 
 ---
 

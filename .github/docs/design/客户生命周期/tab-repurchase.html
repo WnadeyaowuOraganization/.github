@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户生命周期 - 复购信号检测</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif; }
+  .spec-card { border-left: 4px solid #3b82f6; }
+  .chip { display: inline-flex; align-items: center; padding: 2px 8px; border-radius: 4px; font-size: 12px; }
+  /* 开关 */
+  .switch { position: relative; display: inline-block; width: 40px; height: 22px; }
+  .switch input { opacity: 0; width: 0; height: 0; }
+  .slider { position: absolute; cursor: pointer; top:0; left:0; right:0; bottom:0; background:#d1d5db; border-radius:22px; transition: .3s; }
+  .slider:before { position: absolute; content: ""; height: 16px; width: 16px; left: 3px; bottom: 3px; background: white; border-radius: 50%; transition: .3s; }
+  input:checked + .slider { background: #2563eb; }
+  input:checked + .slider:before { transform: translateX(18px); }
+  /* 虚线标注框 */
+  .zone { border: 1px dashed #cbd5e1; position: relative; }
+  .zone-label { position: absolute; top: -10px; left: 12px; background: #f9fafb; padding: 0 6px; font-size: 11px; color: #94a3b8; }
+  /* 漏斗 */
+  .funnel-bar { height: 44px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; color: white; font-weight: 600; font-size: 14px; margin: 0 auto; border-radius: 4px; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- 需求说明块 SPEC-CARD -->
+<div class="spec-card bg-white rounded-lg shadow-sm p-5 mb-6">
+  <div class="flex items-center justify-between mb-3">
+    <div class="flex items-center gap-3">
+      <span class="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-semibold">SPEC-CARD</span>
+      <h2 class="text-lg font-bold text-gray-800">客户生命周期 - 复购信号检测</h2>
+      <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2748" target="_blank" class="text-xs text-blue-600 hover:underline">Issue #2748</a>
+    </div>
+    <span class="text-xs text-gray-400">需求说明块 SPEC-CARD</span>
+  </div>
+  <div class="grid grid-cols-5 gap-4 text-sm">
+    <div>
+      <div class="text-gray-500 text-xs mb-1">业务目标</div>
+      <div class="text-gray-700">基于交付后时间+客户行为识别复购窗口，主动提醒销售跟进，提升复购率</div>
+    </div>
+    <div>
+      <div class="text-gray-500 text-xs mb-1">信号源</div>
+      <div class="text-gray-700">交付满12/24月 / 设备到期换新 / 扩建意向(官网访问) / 分层升降级</div>
+    </div>
+    <div>
+      <div class="text-gray-500 text-xs mb-1">评分模型</div>
+      <div class="text-gray-700">0-100 分，时间+行为+分层加权；80+ 高信号，<50 低信号</div>
+    </div>
+    <div>
+      <div class="text-gray-500 text-xs mb-1">输出动作</div>
+      <div class="text-gray-700">自动创建商机 / 推送销售企微 / 沉默客户回访挽留</div>
+    </div>
+    <div>
+      <div class="text-gray-500 text-xs mb-1">验收要点</div>
+      <div class="text-gray-700">规则权重可调 / 信号列表带强度排序 / 一键创建商机 / 流失预警联动</div>
+    </div>
+  </div>
+</div>
+
+<!-- 区域A: KPI 条 -->
+<div class="zone p-4 mb-6 bg-gray-50">
+  <span class="zone-label">[KPI 条]</span>
+  <div class="grid grid-cols-4 gap-4">
+    <div class="bg-white rounded-lg shadow-sm p-5 border-l-4 border-blue-500">
+      <div class="text-sm text-gray-500 mb-2">本月新增复购信号</div>
+      <div class="flex items-end justify-between">
+        <div class="text-3xl font-bold text-blue-600">56</div>
+        <div class="text-xs text-gray-400 pb-1">较上月 +8</div>
+      </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm p-5 border-l-4 border-green-500">
+      <div class="text-sm text-gray-500 mb-2">已转化商机</div>
+      <div class="flex items-end justify-between">
+        <div class="text-3xl font-bold text-green-600">18</div>
+        <div class="text-xs text-gray-400 pb-1">转化率 32%</div>
+      </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm p-5 border-l-4 border-gray-400">
+      <div class="text-sm text-gray-500 mb-2">转化金额</div>
+      <div class="flex items-end justify-between">
+        <div class="text-3xl font-bold text-gray-700">¥480<span class="text-base text-gray-500">万</span></div>
+        <div class="text-xs text-gray-400 pb-1">本季度累计</div>
+      </div>
+    </div>
+    <div class="bg-white rounded-lg shadow-sm p-5 border-l-4 border-red-500">
+      <div class="text-sm text-gray-500 mb-2">高强度信号 (80+)</div>
+      <div class="flex items-end justify-between">
+        <div class="text-3xl font-bold text-red-600">12</div>
+        <div class="text-xs text-gray-400 pb-1">待紧急跟进</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 区域B: 信号规则配置 -->
+<div class="zone p-4 mb-6 bg-gray-50">
+  <span class="zone-label">[信号规则配置]</span>
+  <div class="bg-white rounded-lg shadow-sm p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-base font-bold text-gray-800">复购信号规则</h3>
+        <p class="text-xs text-gray-500 mt-1">开启的规则将计入信号强度评分，权重合计 100</p>
+      </div>
+      <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">调整权重</button>
+    </div>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-gray-500 text-xs border-b border-gray-200">
+          <th class="text-left py-2 px-3 font-normal">规则名称</th>
+          <th class="text-left py-2 px-3 font-normal">触发条件</th>
+          <th class="text-left py-2 px-3 font-normal">权重</th>
+          <th class="text-left py-2 px-3 font-normal">启用</th>
+          <th class="text-left py-2 px-3 font-normal">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-b border-gray-100">
+          <td class="py-3 px-3 text-gray-700">交付满 12 个月</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">项目交付日 + 365 天</td>
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <div class="w-20 bg-gray-200 rounded h-2"><div class="bg-blue-500 h-2 rounded" style="width:30%"></div></div>
+              <span class="text-gray-700">30</span>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">编辑</a></td>
+        </tr>
+        <tr class="border-b border-gray-100">
+          <td class="py-3 px-3 text-gray-700">设备到期 / 需换新</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">设备寿命周期 ≤ 6 月</td>
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <div class="w-20 bg-gray-200 rounded h-2"><div class="bg-blue-500 h-2 rounded" style="width:40%"></div></div>
+              <span class="text-gray-700">40</span>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">编辑</a></td>
+        </tr>
+        <tr class="border-b border-gray-100">
+          <td class="py-3 px-3 text-gray-700">客户官网访问</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">最近 30 天访问 ≥ 3 次</td>
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <div class="w-20 bg-gray-200 rounded h-2"><div class="bg-blue-500 h-2 rounded" style="width:20%"></div></div>
+              <span class="text-gray-700">20</span>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">编辑</a></td>
+        </tr>
+        <tr>
+          <td class="py-3 px-3 text-gray-700">客户分层升级</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">从普通升为 VIP / 战略</td>
+          <td class="py-3 px-3">
+            <div class="flex items-center gap-2">
+              <div class="w-20 bg-gray-200 rounded h-2"><div class="bg-blue-500 h-2 rounded" style="width:10%"></div></div>
+              <span class="text-gray-700">10</span>
+            </div>
+          </td>
+          <td class="py-3 px-3">
+            <label class="switch"><input type="checkbox" checked><span class="slider"></span></label>
+          </td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">编辑</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 区域C: 复购信号列表 -->
+<div class="zone p-4 mb-6 bg-gray-50">
+  <span class="zone-label">[复购信号列表]</span>
+  <div class="bg-white rounded-lg shadow-sm p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-base font-bold text-gray-800">复购信号线索</h3>
+        <p class="text-xs text-gray-500 mt-1">按信号强度降序排列，流失风险标红置顶</p>
+      </div>
+      <div class="flex items-center gap-2">
+        <select class="text-sm border border-gray-300 rounded px-2 py-1 text-gray-700">
+          <option>全部信号</option><option>仅高强度 (80+)</option><option>仅流失预警</option>
+        </select>
+        <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700">导出</button>
+      </div>
+    </div>
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-gray-500 text-xs border-b-2 border-gray-200">
+          <th class="text-center py-2 px-3 font-normal w-20">信号强度</th>
+          <th class="text-left py-2 px-3 font-normal">客户</th>
+          <th class="text-left py-2 px-3 font-normal">最近项目</th>
+          <th class="text-left py-2 px-3 font-normal">信号类型</th>
+          <th class="text-right py-2 px-3 font-normal">预估金额</th>
+          <th class="text-left py-2 px-3 font-normal">跟进状态</th>
+          <th class="text-left py-2 px-3 font-normal">负责人</th>
+          <th class="text-left py-2 px-3 font-normal">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 高强度信号 (80+) green -->
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-green-500">92</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">绿地集团</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">社区公园二期<br><span class="text-gray-400">2025-03 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-green-50 text-green-700">设备到期</span> <span class="chip bg-green-50 text-green-700">扩建意向</span></td>
+          <td class="py-3 px-3 text-right text-gray-700">¥120万</td>
+          <td class="py-3 px-3"><span class="chip bg-yellow-50 text-yellow-700">🟡 跟进中</span></td>
+          <td class="py-3 px-3 text-gray-700">张伟</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-green-500">85</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">万科地产</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">儿童乐园 A<br><span class="text-gray-400">2024-08 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-green-50 text-green-700">交付满24月</span> <span class="chip bg-green-50 text-green-700">分层升级</span></td>
+          <td class="py-3 px-3 text-right text-gray-700">¥80万</td>
+          <td class="py-3 px-3"><span class="chip bg-blue-50 text-blue-700">🔵 待跟进</span></td>
+          <td class="py-3 px-3 text-gray-700">李娜</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-green-500">81</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">碧桂园文旅</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">亲子水乐园<br><span class="text-gray-400">2024-06 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-green-50 text-green-700">设备到期</span> <span class="chip bg-green-50 text-green-700">官网访问</span></td>
+          <td class="py-3 px-3 text-right text-gray-700">¥95万</td>
+          <td class="py-3 px-3"><span class="chip bg-yellow-50 text-yellow-700">🟡 跟进中</span></td>
+          <td class="py-3 px-3 text-gray-700">陈晨</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <!-- 中信号 (50-79) gray-700 -->
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-gray-700">68</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">XX 主题乐园</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">大型组合滑梯<br><span class="text-gray-400">2024-12 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-gray-100 text-gray-700">交付满12月</span></td>
+          <td class="py-3 px-3 text-right text-gray-700">¥50万</td>
+          <td class="py-3 px-3"><span class="chip bg-blue-50 text-blue-700">🔵 待跟进</span></td>
+          <td class="py-3 px-3 text-gray-700">王强</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-gray-700">62</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">华润置地</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">社区游乐区<br><span class="text-gray-400">2024-09 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-gray-100 text-gray-700">官网访问</span> <span class="chip bg-gray-100 text-gray-700">分层升级</span></td>
+          <td class="py-3 px-3 text-right text-gray-700">¥38万</td>
+          <td class="py-3 px-3"><span class="chip bg-yellow-50 text-yellow-700">🟡 跟进中</span></td>
+          <td class="py-3 px-3 text-gray-700">周琳</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-gray-700">55</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">保利发展</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">幼儿园游戏区<br><span class="text-gray-400">2024-11 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-gray-100 text-gray-700">交付满12月</span></td>
+          <td class="py-3 px-3 text-right text-gray-700">¥28万</td>
+          <td class="py-3 px-3"><span class="chip bg-blue-50 text-blue-700">🔵 待跟进</span></td>
+          <td class="py-3 px-3 text-gray-700">刘洋</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <!-- 低信号 (<50) gray-500 -->
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="text-center py-3 px-3"><span class="text-2xl font-bold text-gray-500">42</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">龙湖地产</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">社区蹦床<br><span class="text-gray-400">2025-01 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-gray-100 text-gray-500">官网访问</span></td>
+          <td class="py-3 px-3 text-right text-gray-500">¥15万</td>
+          <td class="py-3 px-3"><span class="chip bg-gray-100 text-gray-500">⚪ 观察中</span></td>
+          <td class="py-3 px-3 text-gray-700">张伟</td>
+          <td class="py-3 px-3"><a class="text-blue-600 text-xs hover:underline" href="#">创建商机</a></td>
+        </tr>
+        <!-- 流失预警 red -->
+        <tr class="border-b border-gray-100 bg-red-50 hover:bg-red-100">
+          <td class="text-center py-3 px-3"><span class="text-xs font-bold text-red-500">⚠️<br>流失</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">某幼儿园（阳光宝贝）</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">室内蹦床区<br><span class="text-gray-400">2024-05 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-red-100 text-red-700">180 天无互动</span></td>
+          <td class="py-3 px-3 text-right text-gray-400">—</td>
+          <td class="py-3 px-3"><span class="chip bg-red-100 text-red-700">🔴 休眠</span></td>
+          <td class="py-3 px-3 text-gray-700">赵敏</td>
+          <td class="py-3 px-3"><a class="text-red-600 text-xs hover:underline font-medium" href="#">回访挽留</a></td>
+        </tr>
+        <tr class="border-b border-gray-100 bg-red-50 hover:bg-red-100">
+          <td class="text-center py-3 px-3"><span class="text-xs font-bold text-red-500">⚠️<br>流失</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">中海地产-长沙区</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">儿童游乐设施<br><span class="text-gray-400">2024-03 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-red-100 text-red-700">240 天无互动</span> <span class="chip bg-red-100 text-red-700">分层降级</span></td>
+          <td class="py-3 px-3 text-right text-gray-400">—</td>
+          <td class="py-3 px-3"><span class="chip bg-red-100 text-red-700">🔴 休眠</span></td>
+          <td class="py-3 px-3 text-gray-700">孙浩</td>
+          <td class="py-3 px-3"><a class="text-red-600 text-xs hover:underline font-medium" href="#">回访挽留</a></td>
+        </tr>
+        <tr class="bg-red-50 hover:bg-red-100">
+          <td class="text-center py-3 px-3"><span class="text-xs font-bold text-red-500">⚠️<br>流失</span></td>
+          <td class="py-3 px-3 text-gray-700 font-medium">新城控股-杭州</td>
+          <td class="py-3 px-3 text-gray-500 text-xs">户外组合攀爬<br><span class="text-gray-400">2023-12 交付</span></td>
+          <td class="py-3 px-3"><span class="chip bg-red-100 text-red-700">320 天无互动</span></td>
+          <td class="py-3 px-3 text-right text-gray-400">—</td>
+          <td class="py-3 px-3"><span class="chip bg-red-100 text-red-700">🔴 休眠</span></td>
+          <td class="py-3 px-3 text-gray-700">黄磊</td>
+          <td class="py-3 px-3"><a class="text-red-600 text-xs hover:underline font-medium" href="#">回访挽留</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="flex items-center justify-between mt-4 text-xs text-gray-500">
+      <div>共 56 条信号（10 条/页），当前显示 1-10</div>
+      <div class="flex items-center gap-1">
+        <button class="px-2 py-1 border border-gray-300 rounded">上一页</button>
+        <span class="px-2 py-1 bg-blue-500 text-white rounded">1</span>
+        <span class="px-2 py-1 border border-gray-300 rounded">2</span>
+        <span class="px-2 py-1 border border-gray-300 rounded">3</span>
+        <button class="px-2 py-1 border border-gray-300 rounded">下一页</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 区域D: 复购漏斗 -->
+<div class="zone p-4 mb-6 bg-gray-50">
+  <span class="zone-label">[复购漏斗占位]</span>
+  <div class="bg-white rounded-lg shadow-sm p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h3 class="text-base font-bold text-gray-800">复购漏斗 (本季度)</h3>
+        <p class="text-xs text-gray-500 mt-1">信号从检出到赢单的转化路径，数字为客户数量</p>
+      </div>
+      <div class="text-xs text-gray-500">总体转化率 <span class="text-blue-600 font-bold">18%</span></div>
+    </div>
+    <div class="space-y-2">
+      <div class="funnel-bar bg-blue-500" style="width: 100%;">
+        <span>① 信号检出</span><span>100 个</span>
+      </div>
+      <div class="funnel-bar bg-blue-400" style="width: 75%;">
+        <span>② 销售跟进</span><span>65 个 · 65%</span>
+      </div>
+      <div class="funnel-bar bg-green-400" style="width: 50%;">
+        <span>③ 商机转化</span><span>32 个 · 32%</span>
+      </div>
+      <div class="funnel-bar bg-green-500" style="width: 30%;">
+        <span>④ 赢单</span><span>18 个 · 18%</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-3 gap-4 mt-5 pt-4 border-t border-gray-100 text-sm">
+      <div>
+        <div class="text-xs text-gray-500 mb-1">信号→跟进衰减</div>
+        <div class="text-gray-700 font-medium">35% 未跟进 <span class="text-red-500 text-xs">(需提醒)</span></div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">跟进→商机衰减</div>
+        <div class="text-gray-700 font-medium">33 个流失 <span class="text-gray-500 text-xs">(战败/暂缓)</span></div>
+      </div>
+      <div>
+        <div class="text-xs text-gray-500 mb-1">平均赢单金额</div>
+        <div class="text-gray-700 font-medium">¥26.7 万/单</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 原型说明页脚 -->
+<div class="bg-white rounded-lg shadow-sm p-4 text-xs text-gray-500 border border-gray-200">
+  <div class="flex items-center justify-between">
+    <span>🔖 <b>原型说明</b>：本页对应 Issue <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2748" target="_blank" class="text-blue-600 hover:underline">#2748 复购信号检测</a>，为「客户生命周期」模块 Tab 之一。</span>
+    <span class="text-gray-400">低保真 v1.0</span>
+  </div>
+</div>
+
+</body>
+</html>

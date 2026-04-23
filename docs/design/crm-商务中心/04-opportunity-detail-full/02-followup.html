@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>跟进记录</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; margin: 0; color: #333; font-size: 13px; }
+  .wireframe-block { border: 1px dashed #d9d9d9; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff; position: relative; }
+  .wireframe-label { position: absolute; top: -8px; left: 12px; background: #f5f5f5; padding: 0 6px; font-size: 10px; color: #999; }
+  .btn-primary { background: #1890ff; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .btn-primary:hover { background: #40a9ff; }
+  .btn-ghost { background: #fff; border: 1px solid #d9d9d9; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #333; }
+  .btn-ghost:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-danger { background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .c-blue { color: #1890ff; text-decoration: none; }
+  .c-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
+  .tag-gray { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+  .tab { display: inline-block; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #999; font-size: 13px; }
+  .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+  .tab:hover { color: #1890ff; }
+  .stage-bar { display: flex; gap: 2px; margin: 8px 0; }
+  .stage-item { flex: 1; text-align: center; padding: 6px 4px; font-size: 10px; border-radius: 3px; }
+  .stage-done { background: #52c41a; color: #fff; }
+  .stage-current { background: #1890ff; color: #fff; font-weight: 700; }
+  .stage-future { background: #f0f0f0; color: #999; }
+  .field-row { display: flex; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+  .field-label { width: 100px; color: #999; font-size: 12px; flex-shrink: 0; }
+  .field-value { flex: 1; font-size: 12px; }
+  .auto-tag { background: #e6f7ff; color: #1890ff; font-size: 9px; padding: 0 4px; border-radius: 2px; margin-left: 4px; }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e8e8e8; position: fixed; left: 0; top: 40px; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; }
+  .sidebar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; cursor: pointer; font-size: 18px; }
+  .sidebar-icon:hover, .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6"><!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<!-- 此块由 wande-prototype skill 强制要求，所有原型HTML必须包含 -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">跟进记录</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">以时间线形式展示商务跟进日志（活动类型/结果/下一步行动），替代明道云手写销售日报，支持商机维度全程留痕。</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">商务专员（填写），商务经理（只读查看）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">时间线展示历史跟进记录 / 新增跟进记录表单（活动类型/时间/内容/下一步行动） / 记录类型标签（拜访/电话/邮件/会议等）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">点击[新增跟进]填写本次跟进内容 / 滚动查看历史时间线 / 点击记录查看详情</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">时间线按时间倒序展示 / 新增跟进保存后立即出现在时间线顶部 / 记录同步写入activity_logs表</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../crm-商务中心/详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 详细设计.md（商机详情相关）</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div id="tab-followup" style="">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+              <h3 style="font-size:14px;font-weight:600;margin:0;">跟进记录 <span style="color:#999;font-weight:400;font-size:12px;">共14条（3条自动 + 11条手动）</span></h3>
+              <button class="btn-primary">+ 新增跟进</button>
+            </div>
+            <div style="font-size:10px;color:#999;margin-bottom:12px;padding:6px 10px;background:#e6f7ff;border-radius:4px;">
+              💡 流程操作（下设计单/提报价/推进阶段）自动生成跟进记录，无需手写。仅需手动补充电话/拜访等线下活动。
+            </div>
+
+            <!-- 时间线 -->
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:#52c41a;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;">
+                  <span><span class="tag tag-green" style="font-size:9px;">自动</span> <b>提交报价单</b></span>
+                  <span style="color:#999;font-size:11px;">2026-04-08 16:00</span>
+                </div>
+                <div style="color:#666;font-size:12px;margin-top:2px;">上传报价单¥500,000，进入董事长审批流程 → 商机阶段自动推进到「招标准备」</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:#1890ff;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;">
+                  <span><span class="tag tag-blue" style="font-size:9px;">手动</span> <b>客户拜访</b> — 孙晓坤</span>
+                  <span style="color:#999;font-size:11px;">2026-04-07 14:30</span>
+                </div>
+                <div style="color:#666;font-size:12px;margin-top:2px;">拜访时利和集团，确认场地尺寸80×120m，客户倾向万德方案，需在4月20日前提交设计稿</div>
+                <div style="font-size:11px;color:#999;margin-top:2px;">📍 合肥市长丰县体育中心（GPS自动定位）</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:#52c41a;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;">
+                  <span><span class="tag tag-green" style="font-size:9px;">自动</span> <b>下设计单</b></span>
+                  <span style="color:#999;font-size:11px;">2026-04-04 10:30</span>
+                </div>
+                <div style="color:#666;font-size:12px;margin-top:2px;">创建设计单 X-20260404-130，设计师张华，设计需求: 场地尺寸请见附件 → 商机阶段自动推进到「商务接触」</div>
+              </div>
+            </div>
+            <div class="timeline-item">
+              <div class="timeline-dot" style="background:#1890ff;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;">
+                  <span><span class="tag tag-blue" style="font-size:9px;">手动</span> <b>电话沟通</b> — 孙晓坤</span>
+                  <span style="color:#999;font-size:11px;">2026-04-03 09:15</span>
+                </div>
+                <div style="color:#666;font-size:12px;margin-top:2px;">首次电话联系王经理，介绍万德产品线，客户有采购意向，约定下周拜访</div>
+              </div>
+            </div>
+            <div class="timeline-item" style="border:none;">
+              <div class="timeline-dot" style="background:#52c41a;"></div>
+              <div style="flex:1;">
+                <div style="display:flex;justify-content:space-between;">
+                  <span><span class="tag tag-green" style="font-size:9px;">自动</span> <b>接受矿场分配</b></span>
+                  <span style="color:#999;font-size:11px;">2026-04-02 09:30</span>
+                </div>
+                <div style="color:#666;font-size:12px;margin-top:2px;">从项目矿场接受分配，矿场评分85分，商机自动创建</div>
+              </div>
+            </div>
+            <div style="text-align:center;padding:8px;color:#999;font-size:11px;">
+              <a href="#" class="c-blue">查看更多记录 (14条) →</a>
+            </div>
+          </div>
+</body>
+</html>

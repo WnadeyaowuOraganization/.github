@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PI 形式发票</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 1 — PI 形式发票（Issue #3104）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">从商机报价一键生成 Proforma Invoice（形式发票），避免国贸商务手工誊写 PI 表格</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">国贸商务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">商机转 PI / 多币种支持 / 中英双语模板 / 版本历史 / PDF 导出</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">一键报价转 PI / 币种切换（USD/EUR/JPY/GBP）/ 模板切换 / 导出 PDF</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">PI 从商机 DEAL-xxx 一键生成 / PDF 渲染正确 / 版本历史可回溯</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §11.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部操作栏] 商机一键生成 + 币种选择 -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex items-center justify-between flex-wrap gap-3">
+    <div class="flex items-center gap-3 flex-wrap">
+      <button class="px-4 py-2 bg-blue-500 text-white rounded text-sm hover:bg-blue-600 flex items-center gap-2">
+        ⚡ 从商机一键生成 PI
+      </button>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-gray-500">关联商机：</span>
+        <input type="text" value="DEAL-2026-00123 · 俄罗斯莫斯科游乐园扩建项目" class="px-3 py-1.5 border border-gray-300 rounded w-72 text-gray-700" readonly>
+      </div>
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-gray-500">币种：</span>
+        <select class="px-3 py-1.5 border border-gray-300 rounded bg-white">
+          <option>USD 美元</option>
+          <option selected>EUR 欧元</option>
+          <option>JPY 日元</option>
+          <option>GBP 英镑</option>
+        </select>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <span class="text-xs text-gray-500">PI 编号：</span>
+      <span class="font-mono text-sm text-gray-800 font-semibold">PI-2026-0045</span>
+      <span class="ml-2 px-2 py-0.5 bg-green-100 text-green-700 text-xs rounded">草稿</span>
+    </div>
+  </div>
+</div>
+
+<div class="flex gap-4">
+  <!-- [主区] PI 表单主体 -->
+  <div class="flex-1 bg-white border border-gray-300 rounded">
+    <!-- PI 抬头预览区 -->
+    <div class="p-6 border-b border-gray-200 bg-gray-50">
+      <div class="text-center mb-4">
+        <div class="text-xl font-bold text-gray-800">PROFORMA INVOICE · 形式发票</div>
+        <div class="text-xs text-gray-500 mt-1">No. PI-2026-0045 &nbsp;&nbsp; Date: 2026-04-23</div>
+      </div>
+    </div>
+
+    <!-- [PI 表头] 卖方/买方信息 -->
+    <div class="p-5 border-b border-gray-200">
+      <div class="text-xs text-gray-400 mb-2">【PI 表头信息】</div>
+      <div class="grid grid-cols-2 gap-4 text-sm">
+        <div class="border border-dashed border-gray-300 p-3 rounded">
+          <div class="text-xs text-gray-500 mb-2">Seller 卖方</div>
+          <div class="font-semibold text-gray-800 mb-1">Shenzhen Wande Amusement Co., Ltd.</div>
+          <div class="text-xs text-gray-600 leading-relaxed">深圳万德游乐设备有限公司<br>
+            Add: 深圳市南山区高新技术产业园<br>
+            Tel: +86-755-12345678 &nbsp; Email: intl@wande.com</div>
+        </div>
+        <div class="border border-dashed border-gray-300 p-3 rounded">
+          <div class="text-xs text-gray-500 mb-2">Buyer 买方</div>
+          <div class="font-semibold text-gray-800 mb-1">Moscow Fun Park LLC</div>
+          <div class="text-xs text-gray-600 leading-relaxed">莫斯科游乐园有限责任公司<br>
+            Add: Moscow, Russian Federation<br>
+            Contact: Ivan Petrov &nbsp; +7-495-888-0099</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-4 gap-3 mt-4 text-xs">
+        <div><span class="text-gray-500">船期 ETD：</span><span class="text-gray-800 font-medium">2026-06-15</span></div>
+        <div><span class="text-gray-500">装运港：</span><span class="text-gray-800 font-medium">Shenzhen Yantian 深圳盐田</span></div>
+        <div><span class="text-gray-500">目的港：</span><span class="text-gray-800 font-medium">St.Petersburg 圣彼得堡</span></div>
+        <div><span class="text-gray-500">付款方式：</span><span class="text-gray-800 font-medium">T/T 30% 定金 + 70% 发货前</span></div>
+      </div>
+    </div>
+
+    <!-- [商品明细] -->
+    <div class="p-5 border-b border-gray-200">
+      <div class="flex items-center justify-between mb-2">
+        <div class="text-xs text-gray-400">【商品明细】</div>
+        <button class="text-xs text-blue-500 hover:underline">+ 添加商品行</button>
+      </div>
+      <table class="w-full text-xs border-collapse">
+        <thead>
+          <tr class="bg-gray-100 text-gray-600">
+            <th class="p-2 border border-gray-300 text-left">产品名称 Description</th>
+            <th class="p-2 border border-gray-300">HS Code</th>
+            <th class="p-2 border border-gray-300">数量 Qty</th>
+            <th class="p-2 border border-gray-300">单价 Unit Price</th>
+            <th class="p-2 border border-gray-300">金额 Amount</th>
+            <th class="p-2 border border-gray-300">包装 Package</th>
+            <th class="p-2 border border-gray-300">体积 m³</th>
+            <th class="p-2 border border-gray-300">毛重 kg</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr>
+            <td class="p-2 border border-gray-300">旋转木马 16座豪华型 Carousel 16-seat</td>
+            <td class="p-2 border border-gray-300 text-center">9508.9000</td>
+            <td class="p-2 border border-gray-300 text-center">2 SET</td>
+            <td class="p-2 border border-gray-300 text-right">€ 42,500.00</td>
+            <td class="p-2 border border-gray-300 text-right">€ 85,000.00</td>
+            <td class="p-2 border border-gray-300 text-center">木箱 × 4</td>
+            <td class="p-2 border border-gray-300 text-right">48.5</td>
+            <td class="p-2 border border-gray-300 text-right">6,800</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300">迷你海盗船 Mini Pirate Ship 24座</td>
+            <td class="p-2 border border-gray-300 text-center">9508.9000</td>
+            <td class="p-2 border border-gray-300 text-center">1 SET</td>
+            <td class="p-2 border border-gray-300 text-right">€ 68,000.00</td>
+            <td class="p-2 border border-gray-300 text-right">€ 68,000.00</td>
+            <td class="p-2 border border-gray-300 text-center">木箱 × 3</td>
+            <td class="p-2 border border-gray-300 text-right">36.2</td>
+            <td class="p-2 border border-gray-300 text-right">5,400</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300">碰碰车配件包 Bumper Car Parts Kit</td>
+            <td class="p-2 border border-gray-300 text-center">8708.2990</td>
+            <td class="p-2 border border-gray-300 text-center">8 SET</td>
+            <td class="p-2 border border-gray-300 text-right">€ 3,200.00</td>
+            <td class="p-2 border border-gray-300 text-right">€ 25,600.00</td>
+            <td class="p-2 border border-gray-300 text-center">纸箱 × 16</td>
+            <td class="p-2 border border-gray-300 text-right">12.0</td>
+            <td class="p-2 border border-gray-300 text-right">2,200</td>
+          </tr>
+          <tr class="bg-gray-50 font-semibold text-gray-800">
+            <td class="p-2 border border-gray-300" colspan="3">TOTAL 合计 (FOB Shenzhen)</td>
+            <td class="p-2 border border-gray-300"></td>
+            <td class="p-2 border border-gray-300 text-right text-blue-600">€ 178,600.00</td>
+            <td class="p-2 border border-gray-300 text-center">23 件</td>
+            <td class="p-2 border border-gray-300 text-right">96.7 m³</td>
+            <td class="p-2 border border-gray-300 text-right">14,400 kg</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="text-xs text-gray-500 mt-2">金额大写：SAY EURO ONE HUNDRED SEVENTY-EIGHT THOUSAND SIX HUNDRED ONLY</div>
+    </div>
+
+    <!-- [条款区] -->
+    <div class="p-5 border-b border-gray-200">
+      <div class="text-xs text-gray-400 mb-3">【Terms & Conditions 条款】</div>
+      <div class="grid grid-cols-1 gap-3 text-xs">
+        <div class="flex">
+          <span class="w-32 text-gray-500 flex-shrink-0">Payment Terms 付款条件：</span>
+          <span class="text-gray-800">T/T 30% in advance by deposit, 70% balance against copy of B/L before shipment</span>
+        </div>
+        <div class="flex">
+          <span class="w-32 text-gray-500 flex-shrink-0">Delivery 交货期：</span>
+          <span class="text-gray-800">Within 45 days after receipt of 30% deposit · 收到定金后 45 天内发货</span>
+        </div>
+        <div class="flex">
+          <span class="w-32 text-gray-500 flex-shrink-0">Validity 报价有效期：</span>
+          <span class="text-gray-800">This PI is valid for 30 days from the issuing date · 本 PI 自签发之日起 30 天内有效</span>
+        </div>
+        <div class="flex">
+          <span class="w-32 text-gray-500 flex-shrink-0">Bank Info 银行信息：</span>
+          <span class="text-gray-800">Bank of China, Shenzhen Branch &nbsp; SWIFT: BKCHCNBJ45A &nbsp; A/C: 7456 0000 1234 5678</span>
+        </div>
+        <div class="flex">
+          <span class="w-32 text-gray-500 flex-shrink-0">Insurance 保险：</span>
+          <span class="text-gray-800">Covered by Buyer (CIF Terms) / 由买方承保</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- [底部操作条] PDF 预览/导出/模板切换 -->
+    <div class="p-5 flex items-center justify-between flex-wrap gap-3 bg-gray-50">
+      <div class="flex items-center gap-2 text-sm">
+        <span class="text-gray-500">PDF 模板：</span>
+        <label class="flex items-center gap-1 text-xs px-2 py-1 border border-gray-300 rounded bg-white cursor-pointer">
+          <input type="radio" name="tpl" checked> 中英双语
+        </label>
+        <label class="flex items-center gap-1 text-xs px-2 py-1 border border-gray-300 rounded bg-white cursor-pointer">
+          <input type="radio" name="tpl"> 英文 EN
+        </label>
+        <label class="flex items-center gap-1 text-xs px-2 py-1 border border-gray-300 rounded bg-white cursor-pointer">
+          <input type="radio" name="tpl"> 俄文 RU
+        </label>
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">💾 保存草稿</button>
+        <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">👁️ PDF 预览</button>
+        <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">📄 导出 PDF</button>
+        <button class="px-3 py-1.5 bg-green-500 text-white rounded text-sm hover:bg-green-600">✉️ 发送给客户</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右侧栏] 版本历史 -->
+  <aside class="w-64 flex-shrink-0">
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="text-sm font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200">📜 版本历史</div>
+      <div class="space-y-3">
+        <div class="border-l-2 border-blue-500 pl-3 py-1 bg-blue-50 rounded-r">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-semibold text-blue-700">PI v3 · 当前</span>
+            <span class="text-xs text-blue-600">草稿</span>
+          </div>
+          <div class="text-xs text-gray-600 mt-1">2026-04-23 14:32 · 李海洋</div>
+          <div class="text-xs text-gray-500 mt-1">调整单价 €42,500，新增碰碰车配件</div>
+        </div>
+        <div class="border-l-2 border-gray-300 pl-3 py-1">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">PI v2</span>
+            <span class="text-xs text-gray-500">已发送</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">2026-04-18 10:20 · 李海洋</div>
+          <div class="text-xs text-gray-500 mt-1">买方要求新增海盗船条目</div>
+          <a href="#" class="text-xs text-blue-500 hover:underline">查看差异 →</a>
+        </div>
+        <div class="border-l-2 border-gray-300 pl-3 py-1">
+          <div class="flex items-center justify-between">
+            <span class="text-sm text-gray-700">PI v1</span>
+            <span class="text-xs text-gray-500">已归档</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-1">2026-04-10 16:45 · 李海洋</div>
+          <div class="text-xs text-gray-500 mt-1">首版（从商机 DEAL-2026-00123 生成）</div>
+          <a href="#" class="text-xs text-blue-500 hover:underline">查看差异 →</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- 商机关联信息 -->
+    <div class="bg-white border border-gray-300 rounded p-4 mt-4">
+      <div class="text-sm font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200">🔗 关联商机</div>
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between"><span class="text-gray-500">商机编号</span><span class="text-gray-800 font-mono">DEAL-2026-00123</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">客户</span><span class="text-gray-800">Moscow Fun Park LLC</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">报价金额</span><span class="text-gray-800 font-semibold">€ 178,600</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">阶段</span><span class="text-orange-600">报价已发出</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">锁定汇率</span><span class="text-gray-800">1 EUR = 7.85 CNY</span></div>
+        <a href="#" class="block mt-3 text-center text-xs text-blue-500 hover:underline">查看商机详情 →</a>
+      </div>
+    </div>
+  </aside>
+</div>
+
+</body>
+</html>

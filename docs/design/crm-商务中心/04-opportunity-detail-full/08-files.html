@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>资料</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; margin: 0; color: #333; font-size: 13px; }
+  .wireframe-block { border: 1px dashed #d9d9d9; border-radius: 6px; padding: 12px; margin-bottom: 12px; background: #fff; position: relative; }
+  .wireframe-label { position: absolute; top: -8px; left: 12px; background: #f5f5f5; padding: 0 6px; font-size: 10px; color: #999; }
+  .btn-primary { background: #1890ff; color: #fff; border: none; padding: 4px 12px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .btn-primary:hover { background: #40a9ff; }
+  .btn-ghost { background: #fff; border: 1px solid #d9d9d9; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; color: #333; }
+  .btn-ghost:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-danger { background: #fff; border: 1px solid #ff4d4f; color: #ff4d4f; padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 12px; }
+  .c-blue { color: #1890ff; text-decoration: none; }
+  .c-blue:hover { text-decoration: underline; }
+  .tag { display: inline-block; padding: 1px 8px; border-radius: 3px; font-size: 11px; }
+  .tag-green { background: #f6ffed; color: #52c41a; border: 1px solid #b7eb8f; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; border: 1px solid #91d5ff; }
+  .tag-yellow { background: #fffbe6; color: #faad14; border: 1px solid #ffe58f; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; border: 1px solid #ffa39e; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; border: 1px solid #d3adf7; }
+  .tag-gray { background: #f5f5f5; color: #666; border: 1px solid #d9d9d9; }
+  .tab { display: inline-block; padding: 8px 16px; cursor: pointer; border-bottom: 2px solid transparent; color: #999; font-size: 13px; }
+  .tab.active { color: #1890ff; border-bottom-color: #1890ff; font-weight: 600; }
+  .tab:hover { color: #1890ff; }
+  .stage-bar { display: flex; gap: 2px; margin: 8px 0; }
+  .stage-item { flex: 1; text-align: center; padding: 6px 4px; font-size: 10px; border-radius: 3px; }
+  .stage-done { background: #52c41a; color: #fff; }
+  .stage-current { background: #1890ff; color: #fff; font-weight: 700; }
+  .stage-future { background: #f0f0f0; color: #999; }
+  .field-row { display: flex; align-items: flex-start; padding: 6px 0; border-bottom: 1px solid #f8f8f8; }
+  .field-label { width: 100px; color: #999; font-size: 12px; flex-shrink: 0; }
+  .field-value { flex: 1; font-size: 12px; }
+  .auto-tag { background: #e6f7ff; color: #1890ff; font-size: 9px; padding: 0 4px; border-radius: 2px; margin-left: 4px; }
+  .timeline-item { display: flex; gap: 12px; padding: 10px 0; border-bottom: 1px solid #f5f5f5; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; margin-top: 5px; flex-shrink: 0; }
+  .sidebar { width: 56px; min-height: 100vh; background: #fff; border-right: 1px solid #e8e8e8; position: fixed; left: 0; top: 40px; z-index: 10; display: flex; flex-direction: column; align-items: center; padding-top: 12px; gap: 16px; }
+  .sidebar-icon { width: 32px; height: 32px; display: flex; align-items: center; justify-content: center; border-radius: 6px; color: #999; cursor: pointer; font-size: 18px; }
+  .sidebar-icon:hover, .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+
+  </style>
+</head>
+<body class="bg-gray-50 p-6"><!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<!-- 此块由 wande-prototype skill 强制要求，所有原型HTML必须包含 -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">附件资料</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">集中存放该商机全生命周期的附件文档（场地图纸/招标文件/技术方案/合同扫描件等），解决明道云附件散落各处的痛点。</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">商务专员，商务经理</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">附件列表（文件名/类型/上传人/上传时间/大小） / 按分类筛选（招标文件/设计图纸/合同/其他） / 批量上传/下载</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">点击[上传附件]选择文件分类上传 / 点击文件名下载 / 点击[删除]移除附件</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">附件列表加载正常 / 上传后列表刷新 / 文件名点击可下载 / 分类筛选结果正确</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../crm-商务中心/详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 详细设计.md（商机详情相关）</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div id="tab-files" style="">
+            <h3 style="font-size:14px;font-weight:600;margin:0 0 12px 0;">资料 <span style="color:#999;font-weight:400;font-size:12px;">2个文件</span></h3>
+            <div style="border:1px solid #f0f0f0;border-radius:4px;padding:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+              <span>📄 场地尺寸图.pdf — 2.3MB — 2026-04-03</span>
+              <a href="#" class="c-blue" style="font-size:11px;">下载</a>
+            </div>
+            <div style="border:1px solid #f0f0f0;border-radius:4px;padding:8px;margin-bottom:6px;display:flex;justify-content:space-between;align-items:center;">
+              <span>📄 客户需求说明.docx — 156KB — 2026-04-07</span>
+              <a href="#" class="c-blue" style="font-size:11px;">下载</a>
+            </div>
+            <button class="btn-ghost" style="margin-top:4px;">📎 上传文件</button>
+          </div>
+</body>
+</html>

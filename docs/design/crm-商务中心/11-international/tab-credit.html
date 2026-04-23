@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客户信用额度</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 4 — 客户信用额度（Issue #3109）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">客户授信+在途应收+账龄分析+超额预警（经销+国贸通用），避免坏账失控</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">国贸主管、商务总监、财务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">授信额度管理 / 使用率监控 / 账龄分析 / 超额预警 / 报价拦截</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">授信调整 / 查看账龄明细 / 冻结客户 / 配置预警规则</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">使用率≥80% 黄预警 / ≥100% 红预警拦截报价 / 账龄分段正确</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §11.4</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部 KPI] -->
+<div class="grid grid-cols-4 gap-4 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">授信客户总数</div>
+    <div class="text-2xl font-semibold text-gray-800">48</div>
+    <div class="text-xs text-gray-400 mt-1">经销 36 / 国贸 12</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">总授信额度</div>
+    <div class="text-2xl font-semibold text-gray-800">¥ 3,680 万</div>
+    <div class="text-xs text-gray-400 mt-1">人民币等值</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">已用 / 可用信用</div>
+    <div class="text-2xl font-semibold text-gray-800"><span class="text-orange-500">2,340</span> <span class="text-gray-400 text-base">/ 1,340</span></div>
+    <div class="text-xs text-gray-400 mt-1">使用率 63.6%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">超额预警</div>
+    <div class="text-2xl font-semibold text-red-500">5</div>
+    <div class="text-xs text-red-500 mt-1">⚠️ 黄预警 3 · 红预警 2</div>
+  </div>
+</div>
+
+<!-- [主区] 客户信用表 -->
+<div class="bg-white border border-gray-300 rounded mb-4">
+  <div class="p-4 border-b border-gray-200 flex items-center justify-between flex-wrap gap-2">
+    <div class="flex items-center gap-2">
+      <input type="text" placeholder="搜索客户名称" class="px-3 py-1.5 border border-gray-300 rounded text-sm w-48">
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white">
+        <option>全部类型</option>
+        <option>经销客户</option>
+        <option>国贸客户</option>
+      </select>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white">
+        <option>全部预警</option>
+        <option>正常</option>
+        <option>黄预警</option>
+        <option>红预警</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">📊 导出报表</button>
+      <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">+ 新增授信</button>
+    </div>
+  </div>
+
+  <table class="w-full text-xs">
+    <thead>
+      <tr class="bg-gray-100 text-gray-600">
+        <th class="p-2 text-left">客户名称</th>
+        <th class="p-2 text-center">类型</th>
+        <th class="p-2 text-right">授信额度</th>
+        <th class="p-2 text-right">已用</th>
+        <th class="p-2 text-right">可用</th>
+        <th class="p-2 text-center">使用率</th>
+        <th class="p-2 text-center">账龄（30/60/90+）</th>
+        <th class="p-2 text-center">预警状态</th>
+        <th class="p-2 text-center">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <!-- 红预警：超额，拦截报价（重点演示） -->
+      <tr class="border-t border-gray-200 hover:bg-red-50 bg-red-50 relative group">
+        <td class="p-2">
+          <div class="font-semibold text-gray-800">Moscow Fun Park LLC</div>
+          <div class="text-gray-400">莫斯科游乐园</div>
+        </td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded">国贸</span></td>
+        <td class="p-2 text-right font-mono">¥ 200 万</td>
+        <td class="p-2 text-right font-mono text-red-600 font-bold">¥ 218 万</td>
+        <td class="p-2 text-right font-mono text-red-600">-¥ 18 万</td>
+        <td class="p-2">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-red-500" style="width:100%"></div>
+            </div>
+            <span class="text-red-600 font-semibold w-12 text-right">109%</span>
+          </div>
+        </td>
+        <td class="p-2 text-center text-xs font-mono">80 / 60 / <span class="text-red-600 font-bold">78</span></td>
+        <td class="p-2 text-center">
+          <span class="px-2 py-0.5 bg-red-500 text-white rounded" title="报价被拦截，需主管特批">🚨 红预警 · 拦截</span>
+          <div class="invisible group-hover:visible absolute right-full top-1/2 -translate-y-1/2 mr-2 bg-gray-800 text-white text-xs rounded p-2 w-56 z-10 shadow-lg">
+            <div class="font-semibold mb-1">⚠️ 报价被拦截</div>
+            使用率 109% 超出红线 100%，新报价需主管特批方可提交。<br>
+            90+天账龄 ¥78 万需先催收。
+          </div>
+        </td>
+        <td class="p-2 text-center space-x-1">
+          <a class="text-blue-500 hover:underline">授信调整</a>
+          <span class="text-gray-300">|</span>
+          <a class="text-blue-500 hover:underline">账龄</a>
+          <span class="text-gray-300">|</span>
+          <a class="text-red-500 hover:underline">冻结</a>
+        </td>
+      </tr>
+
+      <!-- 红预警：超额2 -->
+      <tr class="border-t border-gray-200 hover:bg-red-50 bg-red-50">
+        <td class="p-2">
+          <div class="font-semibold text-gray-800">广州乐盈游乐设备有限公司</div>
+          <div class="text-gray-400">经销商</div>
+        </td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">经销</span></td>
+        <td class="p-2 text-right font-mono">¥ 150 万</td>
+        <td class="p-2 text-right font-mono text-red-600 font-bold">¥ 156 万</td>
+        <td class="p-2 text-right font-mono text-red-600">-¥ 6 万</td>
+        <td class="p-2">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-red-500" style="width:100%"></div>
+            </div>
+            <span class="text-red-600 font-semibold w-12 text-right">104%</span>
+          </div>
+        </td>
+        <td class="p-2 text-center text-xs font-mono">56 / 40 / <span class="text-red-600 font-bold">60</span></td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-red-500 text-white rounded">🚨 红预警 · 拦截</span></td>
+        <td class="p-2 text-center space-x-1"><a class="text-blue-500">授信调整</a><span class="text-gray-300">|</span><a class="text-blue-500">账龄</a></td>
+      </tr>
+
+      <!-- 黄预警 -->
+      <tr class="border-t border-gray-200 hover:bg-yellow-50 bg-yellow-50">
+        <td class="p-2">
+          <div class="font-semibold text-gray-800">Rotterdam Playground BV</div>
+          <div class="text-gray-400">鹿特丹游乐场</div>
+        </td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded">国贸</span></td>
+        <td class="p-2 text-right font-mono">¥ 180 万</td>
+        <td class="p-2 text-right font-mono text-orange-600">¥ 162 万</td>
+        <td class="p-2 text-right font-mono">¥ 18 万</td>
+        <td class="p-2">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-yellow-500" style="width:90%"></div>
+            </div>
+            <span class="text-orange-600 font-semibold w-12 text-right">90%</span>
+          </div>
+        </td>
+        <td class="p-2 text-center text-xs font-mono">102 / 30 / 30</td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-yellow-500 text-white rounded">⚠️ 黄预警</span></td>
+        <td class="p-2 text-center space-x-1"><a class="text-blue-500">授信调整</a><span class="text-gray-300">|</span><a class="text-blue-500">账龄</a></td>
+      </tr>
+
+      <!-- 黄预警2 -->
+      <tr class="border-t border-gray-200 hover:bg-yellow-50 bg-yellow-50">
+        <td class="p-2">
+          <div class="font-semibold text-gray-800">成都欢乐谷代理商</div>
+          <div class="text-gray-400">经销商</div>
+        </td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">经销</span></td>
+        <td class="p-2 text-right font-mono">¥ 100 万</td>
+        <td class="p-2 text-right font-mono text-orange-600">¥ 83 万</td>
+        <td class="p-2 text-right font-mono">¥ 17 万</td>
+        <td class="p-2">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-yellow-500" style="width:83%"></div>
+            </div>
+            <span class="text-orange-600 font-semibold w-12 text-right">83%</span>
+          </div>
+        </td>
+        <td class="p-2 text-center text-xs font-mono">50 / 20 / 13</td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-yellow-500 text-white rounded">⚠️ 黄预警</span></td>
+        <td class="p-2 text-center space-x-1"><a class="text-blue-500">授信调整</a><span class="text-gray-300">|</span><a class="text-blue-500">账龄</a></td>
+      </tr>
+
+      <!-- 正常 -->
+      <tr class="border-t border-gray-200 hover:bg-gray-50">
+        <td class="p-2">
+          <div class="font-semibold text-gray-800">LA Family Entertainment Inc.</div>
+          <div class="text-gray-400">洛杉矶家庭娱乐</div>
+        </td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded">国贸</span></td>
+        <td class="p-2 text-right font-mono">¥ 300 万</td>
+        <td class="p-2 text-right font-mono">¥ 125 万</td>
+        <td class="p-2 text-right font-mono text-green-600">¥ 175 万</td>
+        <td class="p-2">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-blue-500" style="width:42%"></div>
+            </div>
+            <span class="text-gray-700 w-12 text-right">42%</span>
+          </div>
+        </td>
+        <td class="p-2 text-center text-xs font-mono">125 / 0 / 0</td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">✅ 正常</span></td>
+        <td class="p-2 text-center space-x-1"><a class="text-blue-500">授信调整</a><span class="text-gray-300">|</span><a class="text-blue-500">账龄</a></td>
+      </tr>
+
+      <tr class="border-t border-gray-200 hover:bg-gray-50">
+        <td class="p-2">
+          <div class="font-semibold text-gray-800">Hamburg Kinderland GmbH</div>
+          <div class="text-gray-400">汉堡儿童乐园</div>
+        </td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-purple-100 text-purple-700 rounded">国贸</span></td>
+        <td class="p-2 text-right font-mono">¥ 250 万</td>
+        <td class="p-2 text-right font-mono">¥ 88 万</td>
+        <td class="p-2 text-right font-mono text-green-600">¥ 162 万</td>
+        <td class="p-2">
+          <div class="flex items-center gap-1">
+            <div class="flex-1 h-2 bg-gray-200 rounded-full overflow-hidden">
+              <div class="h-full bg-blue-500" style="width:35%"></div>
+            </div>
+            <span class="text-gray-700 w-12 text-right">35%</span>
+          </div>
+        </td>
+        <td class="p-2 text-center text-xs font-mono">88 / 0 / 0</td>
+        <td class="p-2 text-center"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">✅ 正常</span></td>
+        <td class="p-2 text-center space-x-1"><a class="text-blue-500">授信调整</a><span class="text-gray-300">|</span><a class="text-blue-500">账龄</a></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="p-3 text-xs text-gray-500 border-t border-gray-200 flex items-center justify-between">
+    <span>共 48 条记录</span>
+    <div class="flex gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded">‹</button>
+      <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- [底部 预警规则配置] -->
+<div class="bg-white border border-gray-300 rounded">
+  <div class="p-4 border-b border-gray-200">
+    <div class="text-sm font-semibold text-gray-800">⚙️ 超额预警规则配置</div>
+    <div class="text-xs text-gray-500 mt-1">使用率触发策略：已用信用 / 授信额度 × 100%</div>
+  </div>
+  <div class="p-5 grid grid-cols-3 gap-4">
+    <div class="border border-yellow-300 bg-yellow-50 rounded p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-3 h-3 bg-yellow-500 rounded-full"></span>
+        <span class="text-sm font-semibold text-gray-800">黄色预警</span>
+      </div>
+      <div class="text-xs text-gray-600 mb-2">使用率 ≥ <input type="number" value="80" class="w-12 border border-gray-300 rounded px-1"> %</div>
+      <div class="text-xs text-gray-600 space-y-1">
+        <div>✅ 客户列表黄色高亮</div>
+        <div>✅ 邮件提醒商务+主管</div>
+        <div>✅ 报价可正常提交</div>
+      </div>
+    </div>
+    <div class="border border-red-300 bg-red-50 rounded p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-3 h-3 bg-red-500 rounded-full"></span>
+        <span class="text-sm font-semibold text-gray-800">红色预警 · 报价拦截</span>
+      </div>
+      <div class="text-xs text-gray-600 mb-2">使用率 ≥ <input type="number" value="100" class="w-12 border border-gray-300 rounded px-1"> %</div>
+      <div class="text-xs text-gray-600 space-y-1">
+        <div>🚨 客户列表红色高亮</div>
+        <div>🚨 企微推送财务+商务总监</div>
+        <div>🚨 <span class="font-semibold text-red-600">新报价拦截</span>，需主管特批</div>
+      </div>
+    </div>
+    <div class="border border-gray-300 bg-gray-50 rounded p-4">
+      <div class="flex items-center gap-2 mb-2">
+        <span class="w-3 h-3 bg-gray-500 rounded-full"></span>
+        <span class="text-sm font-semibold text-gray-800">账龄 90+ 预警</span>
+      </div>
+      <div class="text-xs text-gray-600 mb-2">90+ 天应收 ≥ <input type="number" value="30" class="w-12 border border-gray-300 rounded px-1"> 万</div>
+      <div class="text-xs text-gray-600 space-y-1">
+        <div>⚠️ 账龄列红字加粗</div>
+        <div>⚠️ 触发催收任务</div>
+        <div>⚠️ 影响信用评级</div>
+      </div>
+    </div>
+  </div>
+  <div class="p-3 border-t border-gray-200 bg-gray-50 text-right">
+    <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100 mr-2">取消</button>
+    <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">保存规则</button>
+  </div>
+</div>
+
+</body>
+</html>

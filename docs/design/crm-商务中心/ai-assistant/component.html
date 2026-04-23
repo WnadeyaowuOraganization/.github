@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — AI商务助手侧边栏（纯组件） 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --ai-bg: #f0e6ff;
+      --ai-bg-soft: #f8f3ff;
+      --ai-primary: #7b61ff;
+      --ai-primary-dark: #6344f5;
+      --ai-border: #d9ccff;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .ai-card { background: var(--ai-bg-soft); border: 1px solid var(--ai-border); }
+    .ai-tag { background: var(--ai-bg); color: var(--ai-primary-dark); }
+    .ai-btn-primary { background: var(--ai-primary); color: #fff; }
+    .ai-btn-primary:hover { background: var(--ai-primary-dark); }
+    .ai-scroll::-webkit-scrollbar { width: 6px; }
+    .ai-scroll::-webkit-scrollbar-thumb { background: #d9d9d9; border-radius: 3px; }
+    .ai-sidebar { transition: width 0.25s ease; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">AI 商务助手侧边栏 — 纯组件预览页</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">AI 商务助手在 CRM 任一页面实时基于上下文推送智能建议、话术、下一步行动、竞品应答，让商务不切换页面即可获取决策辅助</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务人员、销售主管、国贸商务</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">上下文感知 / 话术建议 / 下一步推荐 / 竞品应答 / AI 对话 / 行为记忆</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">折叠/展开侧边栏 / 一键采纳建议填入文本框 / AI 对话框交互 / 话术一键复制</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">组件嵌入任一 CRM 页面不破坏主区布局 / 上下文变化时建议同步更新 / 折叠后只留 48px 图标条</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §12 AI 助手</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [页面说明] 这是纯组件预览页，用于单独查看侧边栏外观，不含 CRM 主区 -->
+  <div class="mb-4 text-xs text-gray-500 border-l-2 border-gray-300 pl-3">
+    本页为 AI 商务助手侧边栏<strong>纯组件预览</strong>，完整嵌入效果请查看 <a href="./index.html" class="text-blue-500 hover:underline">index.html（商机详情页 + 助手）</a>
+  </div>
+
+  <!-- [展开态] AI 商务助手侧边栏（320px） -->
+  <div class="flex gap-6 items-start">
+    <div>
+      <div class="text-xs text-gray-500 mb-2">📐 展开态（320px 宽）</div>
+      <!-- ==================== SIDEBAR START ==================== -->
+      <aside class="ai-sidebar bg-white border border-gray-300 flex flex-col shadow-sm" style="width:320px;height:720px;">
+
+        <!-- [1. 顶部条] AI 图标 + 标题 + 上下文芯片 + 折叠按钮 -->
+        <div class="border-b border-gray-300 p-3" style="background: var(--ai-bg-soft);">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-2">
+              <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--ai-primary); color:#fff; font-size:14px;">✨</div>
+              <div>
+                <div class="text-sm font-semibold text-gray-800">AI 商务助手</div>
+                <div class="text-[10px] text-gray-500">v1.0 · 上下文感知</div>
+              </div>
+            </div>
+            <button class="w-6 h-6 rounded hover:bg-white text-gray-500 text-sm" title="折叠">»</button>
+          </div>
+          <!-- 上下文芯片 -->
+          <div class="flex flex-wrap gap-1">
+            <span class="ai-tag text-[10px] px-2 py-0.5 rounded">📍 DEAL-2026-00123</span>
+            <span class="ai-tag text-[10px] px-2 py-0.5 rounded">阶段 S·签约中</span>
+            <span class="ai-tag text-[10px] px-2 py-0.5 rounded">B 级客户</span>
+          </div>
+        </div>
+
+        <!-- [滚动主区] -->
+        <div class="flex-1 overflow-y-auto ai-scroll">
+
+          <!-- [2. 上下文感知卡片] -->
+          <section class="p-3 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-xs font-semibold text-gray-700">💡 智能建议</div>
+              <span class="text-[10px] text-gray-400">基于当前页面</span>
+            </div>
+
+            <!-- 建议卡 1 -->
+            <div class="ai-card rounded p-2.5 mb-2">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="ai-tag text-[10px] px-1.5 py-0.5 rounded">📞 催进</span>
+                <span class="text-[10px] text-gray-400">2 分钟前</span>
+              </div>
+              <div class="text-xs text-gray-700 leading-relaxed">本商机 7 天未跟进，B 级客户建议电话催进签约进度</div>
+              <div class="flex gap-1 mt-2">
+                <button class="ai-btn-primary text-[11px] px-2 py-1 rounded">采纳</button>
+                <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100">忽略</button>
+                <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100 ml-auto">展开 ▾</button>
+              </div>
+            </div>
+
+            <!-- 建议卡 2 -->
+            <div class="ai-card rounded p-2.5 mb-2">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="ai-tag text-[10px] px-1.5 py-0.5 rounded">⚠️ 风险</span>
+                <span class="text-[10px] text-gray-400">10 分钟前</span>
+              </div>
+              <div class="text-xs text-gray-700 leading-relaxed">合同条款质保期客户可能议价，建议降级 3 年保修+付费延保 2 年方案</div>
+              <div class="flex gap-1 mt-2">
+                <button class="ai-btn-primary text-[11px] px-2 py-1 rounded">采纳</button>
+                <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100">忽略</button>
+                <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100 ml-auto">展开 ▾</button>
+              </div>
+            </div>
+
+            <!-- 建议卡 3 -->
+            <div class="ai-card rounded p-2.5">
+              <div class="flex items-center gap-1 mb-1">
+                <span class="ai-tag text-[10px] px-1.5 py-0.5 rounded">💡 机会</span>
+                <span class="text-[10px] text-gray-400">1 小时前</span>
+              </div>
+              <div class="text-xs text-gray-700 leading-relaxed">客户同区域曾采购 180 万主题乐园，可交叉推荐水上项目升级包</div>
+              <div class="flex gap-1 mt-2">
+                <button class="ai-btn-primary text-[11px] px-2 py-1 rounded">采纳</button>
+                <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100">忽略</button>
+                <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100 ml-auto">展开 ▾</button>
+              </div>
+            </div>
+          </section>
+
+          <!-- [3. 话术库] -->
+          <section class="p-3 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-xs font-semibold text-gray-700">💬 话术推荐</div>
+              <a class="text-[10px] text-blue-500 hover:underline cursor-pointer">查看全部 ›</a>
+            </div>
+            <div class="space-y-1.5">
+              <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer group">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs text-gray-700 font-medium">价格谈判开场白</div>
+                  <button class="opacity-0 group-hover:opacity-100 text-[10px] text-blue-500">📋 复制</button>
+                </div>
+                <div class="text-[10px] text-gray-500 mt-0.5 truncate">"我完全理解您对价格的关注，在我们合作的 30+ 文旅项目中..."</div>
+              </div>
+              <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer group">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs text-gray-700 font-medium">合同关键条款解释</div>
+                  <button class="opacity-0 group-hover:opacity-100 text-[10px] text-blue-500">📋 复制</button>
+                </div>
+                <div class="text-[10px] text-gray-500 mt-0.5 truncate">"质保期分为基础保修和延保两部分，基础期内..."</div>
+              </div>
+              <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer group">
+                <div class="flex items-center justify-between">
+                  <div class="text-xs text-gray-700 font-medium">丢单挽回话术</div>
+                  <button class="opacity-0 group-hover:opacity-100 text-[10px] text-blue-500">📋 复制</button>
+                </div>
+                <div class="text-[10px] text-gray-500 mt-0.5 truncate">"了解您选择其他方案的原因对我们非常重要..."</div>
+              </div>
+            </div>
+          </section>
+
+          <!-- [4. 下一步行动] -->
+          <section class="p-3 border-b border-gray-200">
+            <div class="text-xs font-semibold text-gray-700 mb-2">🎯 下一步行动</div>
+            <ol class="space-y-1.5">
+              <li class="flex gap-2 items-start p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold flex-shrink-0">紧急</span>
+                <span class="text-xs text-gray-700 leading-tight">今日 17:00 前电话确认合同最后一版</span>
+              </li>
+              <li class="flex gap-2 items-start p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                <span class="text-[10px] bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-bold flex-shrink-0">重要</span>
+                <span class="text-xs text-gray-700 leading-tight">明日寄送纸质合同样本+质保手册</span>
+              </li>
+              <li class="flex gap-2 items-start p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+                <span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-bold flex-shrink-0">常规</span>
+                <span class="text-xs text-gray-700 leading-tight">本周内完成客户满意度初评问卷</span>
+              </li>
+            </ol>
+          </section>
+
+          <!-- [5. 竞品应答] -->
+          <section class="p-3 border-b border-gray-200">
+            <div class="flex items-center justify-between mb-2">
+              <div class="text-xs font-semibold text-gray-700">⚔️ 竞品应答</div>
+              <span class="text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5 rounded">识别到 意大利 Moby</span>
+            </div>
+            <div class="ai-card rounded p-2">
+              <div class="text-[11px] text-gray-600 mb-1.5">客户提及：<span class="text-gray-800">"Moby 报价便宜 20%"</span></div>
+              <table class="w-full text-[10px]">
+                <thead>
+                  <tr class="text-gray-500 border-b border-gray-200">
+                    <th class="text-left py-1">维度</th>
+                    <th class="text-left py-1" style="color:var(--ai-primary-dark);">万德</th>
+                    <th class="text-left py-1">Moby</th>
+                  </tr>
+                </thead>
+                <tbody class="text-gray-700">
+                  <tr><td class="py-1">价格</td><td>300 万</td><td>240 万</td></tr>
+                  <tr><td class="py-1">交期</td><td class="font-semibold" style="color:var(--ai-primary-dark);">90 天</td><td>150 天</td></tr>
+                  <tr><td class="py-1">质保</td><td class="font-semibold" style="color:var(--ai-primary-dark);">5 年</td><td>2 年</td></tr>
+                  <tr><td class="py-1">售后</td><td class="font-semibold" style="color:var(--ai-primary-dark);">国内驻场</td><td>远程</td></tr>
+                </tbody>
+              </table>
+              <button class="w-full mt-2 ai-btn-primary text-[11px] py-1 rounded">生成应答话术</button>
+            </div>
+          </section>
+        </div>
+
+        <!-- [6. AI 对话框] 底部常驻 -->
+        <div class="border-t border-gray-300 p-2.5" style="background: var(--ai-bg-soft);">
+          <!-- 快捷提示词 -->
+          <div class="flex gap-1 mb-2 flex-wrap">
+            <button class="text-[10px] px-2 py-0.5 rounded bg-white border border-gray-200 text-gray-600 hover:border-purple-300">总结本客户</button>
+            <button class="text-[10px] px-2 py-0.5 rounded bg-white border border-gray-200 text-gray-600 hover:border-purple-300">生成报价邮件</button>
+            <button class="text-[10px] px-2 py-0.5 rounded bg-white border border-gray-200 text-gray-600 hover:border-purple-300">分析丢单原因</button>
+          </div>
+          <!-- 输入框 -->
+          <div class="flex gap-1 items-center bg-white rounded border border-gray-300 px-2 py-1.5">
+            <input type="text" placeholder="向 AI 助手提问..." class="flex-1 text-xs text-gray-700 outline-none" />
+            <button class="ai-btn-primary text-xs px-2 py-0.5 rounded">发送</button>
+          </div>
+        </div>
+      </aside>
+      <!-- ==================== SIDEBAR END ==================== -->
+    </div>
+
+    <!-- [折叠态] 48px 宽图标条 -->
+    <div>
+      <div class="text-xs text-gray-500 mb-2">📐 折叠态（48px 宽）</div>
+      <aside class="bg-white border border-gray-300 flex flex-col items-center shadow-sm" style="width:48px;height:720px;">
+        <!-- 展开按钮 -->
+        <button class="w-10 h-10 rounded mt-2 flex items-center justify-center text-white relative" style="background: var(--ai-primary);" title="展开">
+          ✨
+          <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center">3</span>
+        </button>
+        <div class="text-[9px] text-gray-400 mt-1 writing-vertical" style="writing-mode:vertical-rl;">AI</div>
+        <!-- 分隔 -->
+        <div class="w-6 border-t border-gray-200 my-3"></div>
+        <!-- 快捷图标 -->
+        <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="智能建议">💡</button>
+        <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="话术库">💬</button>
+        <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="下一步">🎯</button>
+        <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="竞品">⚔️</button>
+        <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="对话">💭</button>
+      </aside>
+    </div>
+  </div>
+
+  <!-- [组件说明] -->
+  <div class="mt-6 bg-white border border-gray-300 rounded p-4 max-w-4xl">
+    <h3 class="text-sm font-bold text-gray-700 mb-3">组件接入说明</h3>
+    <table class="w-full text-xs text-left border-collapse">
+      <thead><tr class="bg-gray-50">
+        <th class="p-2 border border-gray-200 w-32">项</th>
+        <th class="p-2 border border-gray-200">说明</th>
+      </tr></thead>
+      <tbody class="text-gray-700">
+        <tr><td class="p-2 border border-gray-200 font-medium">定位</td><td class="p-2 border border-gray-200">position: fixed; right: 0; top: 60px; height: calc(100vh - 60px); z-index: 100</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">展开宽度</td><td class="p-2 border border-gray-200">320px</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">折叠宽度</td><td class="p-2 border border-gray-200">48px（仅图标条，含未读徽标）</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">主色</td><td class="p-2 border border-gray-200">AI 强调色 #7b61ff / 浅紫背景 #f0e6ff（仅限 AI 卡片内，主区保持灰色调）</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">嵌入方式</td><td class="p-2 border border-gray-200">全局组件，在 App.vue 根布局中常驻，与路由无关；通过 Pinia store 监听当前上下文（商机 ID/阶段/客户属性）</td></tr>
+        <tr><td class="p-2 border border-gray-200 font-medium">响应式</td><td class="p-2 border border-gray-200">&lt; 1440px 默认折叠；&lt; 1200px 仅保留触发图标浮在右下角（抽屉式弹出）</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</body>
+</html>

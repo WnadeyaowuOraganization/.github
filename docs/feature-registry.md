@@ -121,13 +121,15 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 
 > 商机跟进到签约成交。
 
-### 13. CRM 三体系
+### 13. CRM 三体系 ⭐ v2.0 升级（D95）
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
+| CRM 商务中心 v2.0（11 页 + 2 组件）| 14 | Sprint-1−3 | 🔨 开发中 | `biz:crm` | **D95 升级**：+客户 360°（§4.x）+§11 国贸+§12 AI 助手+合并商机详情 10Tab；Master #4021 |
 | 商机管理 + 状态机 + 健康度AI评分 | ~10 | Sprint-1 | 🔨 开发中 | `module:crm` | — |
 | 渐进式字段收集 | ~5 | Sprint-6 | 📋 计划中 | `module:crm` | — |
 | 标准产品快速报价引擎 | ~5 | Sprint-6 | 📋 计划中 | `module:crm` | — |
-| 经销体系 + 国际贸易适配 | ~11 | Sprint-6 | 📋 计划中 | `module:crm` | 客户维度为核心 |
+| 经销体系 + 国际贸易适配 | ~11 | Sprint-2−6 | 🔨 开发中 | `module:crm` | **D95**：§11 国贸 5 Tab 壳 #4124 + 5 个 Tab 实现（#3104/3106/3107/3109/3111） |
+| 代理商工作台 | 3 | Sprint-5 | ⏸️ 冻结 | `biz:crm,needs-prototype` | **D95**：独立业务，不合并到 CRM，独立规划 |
 
 ### 14. 销售记录体系
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
@@ -309,6 +311,17 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ---
 
 ## 九、策略变更日志
+
+### 2026-04-23 · D95 · biz:crm 三线统一 · CRM 商务中心 v2.0 升级
+- **biz:crm Issue 对账**：16 open → 13 依附 Master #4021（3 代理商冻结）；由 CRM 商务中心 v2.0 完整承接
+- **查漏补缺 3 模块**：客户 360° §4.x（8 章节6 Tab，#4123）/ §11 国贸专属 5 Tab（#4124 壳 + 5 回填）/ §12 AI 商务助手全局组件（#4125）
+- **合并**：原独立 `crm-商机详情页`并入 `crm-商务中心/04-opportunity-detail-full/` 10 Tab，原型目录 -1
+- **回填 11 子 Issue**：6 商务中心（#4042/#4037/#4018/#4019/#4017/#4016）+ 5 国贸精确映射到 §11.1−§11.5（#3104/#3106/#3107/#3109/#3111）
+- **冻结**：代理商工作台 #1754/#2115/#1766 继续 `needs-prototype`，独立规划
+- **代码资产**：🟢 4 复用 / 🟡 3 改造 / 🔴 7 新建（国贸 = 0 全新建确认）
+- **对标矩阵**：HubSpot Contact 360 + Salesforce Account 360 + Tacton CPQ International + Gong.io/Salesloft
+- **合规统计**：A 档 326→**340**，biz:crm needs-prototype 8→**3**，all-in-one 商务部 +4 菜单，原型目录 20→**20**
+- **产出**：15 新 HTML + 1 合并 10 Tab / 详设.md v1.0+v2.0 / Master #4021 v2.0 body / 3 新 Issue #4123−#4125 / 11 三重引用回填
 
 ### 2026-04-22 · D94 · biz:collab 整体废弃 + biz:design-ai 原型启动
 - **biz:collab（协同修改）**：24 个 open Issue 全部 close as not planned（2344/1980/1981/2345/1982/2346/1983/2347/1985/2348/1986/2349/1987/1989/1772/2138/2139/2182/2190/1810/2191/2192/2193/2194），理由：生态位被 D94 design-ai（AI 内容生成）+ D66 企微审批贯通 + D67 OA 表单引擎三者叠加覆盖；相关翻译/多语言能力以其他业务原型的子功能形式重新规划

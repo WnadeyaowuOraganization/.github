@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>出口单据</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}
+    .doctype-tab{padding:8px 14px;cursor:pointer;color:#666;border-bottom:2px solid transparent;font-size:13px;}
+    .doctype-tab.active{color:#1890ff;border-bottom-color:#1890ff;font-weight:500;}
+    .doctype-tab:hover{color:#333;}
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 3 — 出口单据管理（Issue #3107）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">出口 5 类单据（CI/PL/BL/CO/FormE）自动生成+签发+归档，告别 Word/Excel 手工拼</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">国贸商务、国贸主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">CI 商业发票 / PL 装箱单 / BL 提单 / CO 原产地证 / FormE 东盟自贸证</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">批量生成 / 模板管理 / 批量打包 ZIP / 发送给客户</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">5 类单据 PDF 生成正确 / 签章自动套入 / ZIP 打包下载可用</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §11.3</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [单据类型 Tab] -->
+<div class="bg-white border border-gray-300 rounded mb-4">
+  <div class="flex border-b border-gray-200 px-2">
+    <div class="doctype-tab active">📄 CI 商业发票 <span class="text-xs text-gray-400 ml-1">(12)</span></div>
+    <div class="doctype-tab">📦 PL 装箱单 <span class="text-xs text-gray-400 ml-1">(12)</span></div>
+    <div class="doctype-tab">🚢 BL 提单 <span class="text-xs text-gray-400 ml-1">(10)</span></div>
+    <div class="doctype-tab">🏛️ CO 原产地证 <span class="text-xs text-gray-400 ml-1">(8)</span></div>
+    <div class="doctype-tab">🌏 FormE 东盟自贸证 <span class="text-xs text-gray-400 ml-1">(4)</span></div>
+  </div>
+</div>
+
+<div class="flex gap-4">
+  <!-- [主区] 单据列表 -->
+  <div class="flex-1 bg-white border border-gray-300 rounded">
+    <div class="p-4 border-b border-gray-200 flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2">
+        <input type="text" placeholder="搜索 DEAL号/单据号" class="px-3 py-1.5 border border-gray-300 rounded text-sm w-60">
+        <select class="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white">
+          <option>全部状态</option>
+          <option>待审核</option>
+          <option>已签发</option>
+          <option>已邮寄</option>
+        </select>
+        <input type="date" class="px-3 py-1.5 border border-gray-300 rounded text-sm">
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">📦 批量打包 ZIP</button>
+        <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">⚡ 批量生成单据</button>
+      </div>
+    </div>
+
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="bg-gray-100 text-gray-600">
+          <th class="p-2"><input type="checkbox"></th>
+          <th class="p-2 text-left">DEAL号</th>
+          <th class="p-2 text-left">单据号</th>
+          <th class="p-2 text-left">类型</th>
+          <th class="p-2 text-left">客户</th>
+          <th class="p-2 text-left">生成时间</th>
+          <th class="p-2 text-left">状态</th>
+          <th class="p-2 text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-t border-gray-200 hover:bg-blue-50">
+          <td class="p-2 text-center"><input type="checkbox"></td>
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00123</td>
+          <td class="p-2 font-mono">CI-2026-0045</td>
+          <td class="p-2">CI 商业发票</td>
+          <td class="p-2">Moscow Fun Park</td>
+          <td class="p-2">2026-06-12 10:30</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">✅ 已签发</span></td>
+          <td class="p-2 text-center space-x-1">
+            <a class="text-blue-500 hover:underline cursor-pointer" onclick="togglePreview(true)">预览</a>
+            <span class="text-gray-300">|</span>
+            <a class="text-blue-500 hover:underline">下载</a>
+          </td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 text-center"><input type="checkbox"></td>
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00118</td>
+          <td class="p-2 font-mono">CI-2026-0042</td>
+          <td class="p-2">CI 商业发票</td>
+          <td class="p-2">Rotterdam Playground</td>
+          <td class="p-2">2026-05-25 14:20</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded">📧 已邮寄</span></td>
+          <td class="p-2 text-center space-x-1">
+            <a class="text-blue-500 hover:underline">预览</a>
+            <span class="text-gray-300">|</span>
+            <a class="text-blue-500 hover:underline">下载</a>
+          </td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 text-center"><input type="checkbox"></td>
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00115</td>
+          <td class="p-2 font-mono">CI-2026-0038</td>
+          <td class="p-2">CI 商业发票</td>
+          <td class="p-2">LA Family Entertainment</td>
+          <td class="p-2">2026-05-18 09:15</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded">📧 已邮寄</span></td>
+          <td class="p-2 text-center space-x-1">
+            <a class="text-blue-500 hover:underline">预览</a>
+            <span class="text-gray-300">|</span>
+            <a class="text-blue-500 hover:underline">下载</a>
+          </td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 text-center"><input type="checkbox"></td>
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00109</td>
+          <td class="p-2 font-mono">CI-2026-0033</td>
+          <td class="p-2">CI 商业发票</td>
+          <td class="p-2">Hamburg Kinderland</td>
+          <td class="p-2">2026-05-30 16:00</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded">⏳ 待审核</span></td>
+          <td class="p-2 text-center space-x-1">
+            <a class="text-blue-500 hover:underline">预览</a>
+            <span class="text-gray-300">|</span>
+            <a class="text-blue-500 hover:underline">编辑</a>
+          </td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 text-center"><input type="checkbox"></td>
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00107</td>
+          <td class="p-2 font-mono">CI-2026-0031</td>
+          <td class="p-2">CI 商业发票</td>
+          <td class="p-2">Dubai Kidz World</td>
+          <td class="p-2">2026-04-20 11:40</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">✅ 已签发</span></td>
+          <td class="p-2 text-center space-x-1">
+            <a class="text-blue-500 hover:underline">预览</a>
+            <span class="text-gray-300">|</span>
+            <a class="text-blue-500 hover:underline">下载</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="p-3 text-xs text-gray-500 border-t border-gray-200 flex items-center justify-between">
+      <span>共 12 条记录 · 已选 0 条</span>
+      <div class="flex gap-1">
+        <button class="px-2 py-1 border border-gray-300 rounded">‹</button>
+        <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
+        <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+        <button class="px-2 py-1 border border-gray-300 rounded">3</button>
+        <button class="px-2 py-1 border border-gray-300 rounded">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右侧栏] 模板管理 -->
+  <aside class="w-72 flex-shrink-0">
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="text-sm font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200 flex items-center justify-between">
+        <span>📋 模板管理</span>
+        <button class="text-xs text-blue-500 hover:underline">+ 上传</button>
+      </div>
+      <div class="space-y-2 text-xs">
+        <div class="p-3 border border-gray-300 rounded hover:border-blue-500 cursor-pointer">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-gray-800">🚢 海运提单模板</span>
+            <span class="text-green-600">默认</span>
+          </div>
+          <div class="text-gray-500 mt-1">Ocean B/L · 英文版本</div>
+          <div class="text-gray-400 mt-1">最近使用: 10 次 · 2026-06-15</div>
+        </div>
+        <div class="p-3 border border-gray-300 rounded hover:border-blue-500 cursor-pointer">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-gray-800">✈️ 空运提单模板</span>
+            <span class="text-gray-500">启用</span>
+          </div>
+          <div class="text-gray-500 mt-1">Air Waybill · 中英双语</div>
+          <div class="text-gray-400 mt-1">最近使用: 3 次 · 2026-04-25</div>
+        </div>
+        <div class="p-3 border border-gray-300 rounded hover:border-blue-500 cursor-pointer">
+          <div class="flex items-center justify-between">
+            <span class="font-semibold text-gray-800">🚂 铁路运单模板</span>
+            <span class="text-gray-500">启用</span>
+          </div>
+          <div class="text-gray-500 mt-1">Rail CIM · 中俄双语</div>
+          <div class="text-gray-400 mt-1">最近使用: 1 次 · 2026-03-10</div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-gray-200">
+        <div class="text-xs font-semibold text-gray-700 mb-2">📎 公司素材</div>
+        <div class="space-y-2 text-xs">
+          <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+            <div>
+              <div class="text-gray-700">公司抬头 logo.png</div>
+              <div class="text-gray-400">320×80 · 45 KB</div>
+            </div>
+            <button class="text-blue-500 hover:underline">更换</button>
+          </div>
+          <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+            <div>
+              <div class="text-gray-700">公司签章 stamp.png</div>
+              <div class="text-gray-400">200×200 · 28 KB</div>
+            </div>
+            <button class="text-blue-500 hover:underline">更换</button>
+          </div>
+          <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+            <div>
+              <div class="text-gray-700">授权代表签名.png</div>
+              <div class="text-gray-400">300×100 · 12 KB</div>
+            </div>
+            <button class="text-blue-500 hover:underline">更换</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- [单据详情预览 抽屉] -->
+<div id="docPreview" class="fixed inset-y-0 right-0 w-[680px] bg-white border-l border-gray-300 shadow-2xl transform translate-x-full transition-transform duration-200 z-50 overflow-y-auto">
+  <div class="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
+    <div>
+      <div class="text-base font-semibold text-gray-800">CI-2026-0045 · 商业发票预览</div>
+      <div class="text-xs text-gray-500 mt-0.5">DEAL-2026-00123 · Moscow Fun Park LLC</div>
+    </div>
+    <button onclick="togglePreview(false)" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+  </div>
+
+  <div class="p-5">
+    <!-- 单据表单预览 -->
+    <div class="border-2 border-gray-300 bg-white p-6 text-xs">
+      <div class="text-center pb-3 border-b-2 border-gray-800">
+        <div class="text-lg font-bold">SHENZHEN WANDE AMUSEMENT CO., LTD.</div>
+        <div class="text-gray-600">深圳万德游乐设备有限公司</div>
+      </div>
+      <div class="text-center my-3">
+        <div class="text-base font-bold">COMMERCIAL INVOICE · 商业发票</div>
+      </div>
+      <div class="grid grid-cols-2 gap-3 mb-3">
+        <div>
+          <div class="text-gray-500 text-xs">Invoice No. 发票号</div>
+          <div class="font-mono font-bold">CI-2026-0045</div>
+        </div>
+        <div>
+          <div class="text-gray-500 text-xs">Date 日期</div>
+          <div class="font-bold">2026-06-12</div>
+        </div>
+        <div>
+          <div class="text-gray-500 text-xs">Buyer 买方</div>
+          <div>Moscow Fun Park LLC</div>
+        </div>
+        <div>
+          <div class="text-gray-500 text-xs">B/L No. 提单号</div>
+          <div class="font-mono">MSKU-7834901</div>
+        </div>
+      </div>
+      <table class="w-full border-collapse border border-gray-400 text-xs">
+        <thead class="bg-gray-100">
+          <tr><th class="p-1 border border-gray-400">Description</th><th class="p-1 border border-gray-400">Qty</th><th class="p-1 border border-gray-400">Unit Price</th><th class="p-1 border border-gray-400">Amount</th></tr>
+        </thead>
+        <tbody>
+          <tr><td class="p-1 border border-gray-400">Carousel 16-seat 旋转木马</td><td class="p-1 border border-gray-400 text-center">2 SET</td><td class="p-1 border border-gray-400 text-right">€ 42,500</td><td class="p-1 border border-gray-400 text-right">€ 85,000</td></tr>
+          <tr><td class="p-1 border border-gray-400">Mini Pirate Ship 迷你海盗船</td><td class="p-1 border border-gray-400 text-center">1 SET</td><td class="p-1 border border-gray-400 text-right">€ 68,000</td><td class="p-1 border border-gray-400 text-right">€ 68,000</td></tr>
+          <tr><td class="p-1 border border-gray-400">Bumper Car Parts 碰碰车配件</td><td class="p-1 border border-gray-400 text-center">8 SET</td><td class="p-1 border border-gray-400 text-right">€ 3,200</td><td class="p-1 border border-gray-400 text-right">€ 25,600</td></tr>
+          <tr class="bg-gray-50 font-bold"><td class="p-1 border border-gray-400" colspan="3">TOTAL (FOB Shenzhen)</td><td class="p-1 border border-gray-400 text-right">€ 178,600</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-6 flex justify-end">
+        <div class="text-center">
+          <div class="w-24 h-24 border-2 border-dashed border-red-300 rounded-full flex items-center justify-center text-red-400 text-xs">公司签章<br>STAMP</div>
+          <div class="text-xs text-gray-500 mt-1">Authorized Signature</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 mt-4 pt-4 border-t border-gray-200">
+      <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">📥 下载 PDF</button>
+      <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">📦 批量打包 ZIP</button>
+      <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">✉️ 发送给客户</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function togglePreview(show) {
+    const d = document.getElementById('docPreview');
+    if (show) d.classList.remove('translate-x-full');
+    else d.classList.add('translate-x-full');
+  }
+  // 单据类型tab简单切换
+  document.querySelectorAll('.doctype-tab').forEach(t => {
+    t.addEventListener('click', () => {
+      document.querySelectorAll('.doctype-tab').forEach(x => x.classList.remove('active'));
+      t.classList.add('active');
+    });
+  });
+</script>
+
+</body>
+</html>

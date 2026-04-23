@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>发货管理</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab 2 — 发货管理（Issue #3106）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">国贸专用发货全流程管控：装箱→报关→海运/空运跟踪→清关→提货，避免依赖货代邮件零散反馈</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">国贸商务、国贸主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">装箱单 / 报关单 / BL&amp;AWB 跟踪 / 时间线可视化 / 地图定位</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">查看发货详情 / 更新跟踪状态 / 滞港预警处理</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">发货列表状态实时 / 时间线高亮当前位置 / 滞港预警自动触发</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §11.2</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部 KPI] -->
+<div class="grid grid-cols-4 gap-4 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">在途订单数</div>
+    <div class="text-2xl font-semibold text-gray-800">12</div>
+    <div class="text-xs text-gray-400 mt-1">单 · 海运 9 / 空运 3</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">本月已发货</div>
+    <div class="text-2xl font-semibold text-gray-800">8</div>
+    <div class="text-xs text-green-600 mt-1">↑ 较上月 +33%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">滞港预警</div>
+    <div class="text-2xl font-semibold text-red-500">2</div>
+    <div class="text-xs text-red-500 mt-1">⚠️ 超过 ETA 3 天</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">本月海运费累计</div>
+    <div class="text-2xl font-semibold text-gray-800">$ 86,400</div>
+    <div class="text-xs text-gray-400 mt-1">折 RMB ¥ 622,080</div>
+  </div>
+</div>
+
+<div class="flex gap-4">
+  <!-- [主区] 发货列表 -->
+  <div class="flex-1 bg-white border border-gray-300 rounded">
+    <div class="p-4 border-b border-gray-200 flex items-center justify-between flex-wrap gap-2">
+      <div class="flex items-center gap-2">
+        <input type="text" placeholder="搜索 DEAL号/客户/跟踪号" class="px-3 py-1.5 border border-gray-300 rounded text-sm w-60">
+        <select class="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white">
+          <option>全部状态</option>
+          <option>待装箱</option>
+          <option>已装箱</option>
+          <option>已报关</option>
+          <option>运输中</option>
+          <option>已到港</option>
+          <option>已清关</option>
+        </select>
+        <select class="px-3 py-1.5 border border-gray-300 rounded text-sm bg-white">
+          <option>全部方式</option>
+          <option>海运 Sea</option>
+          <option>空运 Air</option>
+        </select>
+      </div>
+      <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">+ 新建发货单</button>
+    </div>
+    <table class="w-full text-xs">
+      <thead>
+        <tr class="bg-gray-100 text-gray-600">
+          <th class="p-2 text-left">DEAL号</th>
+          <th class="p-2 text-left">客户</th>
+          <th class="p-2 text-left">装运港</th>
+          <th class="p-2 text-left">目的港</th>
+          <th class="p-2 text-left">预计开船</th>
+          <th class="p-2 text-left">当前状态</th>
+          <th class="p-2 text-left">跟踪号</th>
+          <th class="p-2 text-center">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-t border-gray-200 hover:bg-blue-50 cursor-pointer" onclick="toggleDrawer(true)">
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00123</td>
+          <td class="p-2">Moscow Fun Park</td>
+          <td class="p-2">🇨🇳 深圳盐田</td>
+          <td class="p-2">🇷🇺 圣彼得堡</td>
+          <td class="p-2">2026-06-15</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded">🚢 运输中</span></td>
+          <td class="p-2 font-mono">MSKU-7834901</td>
+          <td class="p-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00118</td>
+          <td class="p-2">Rotterdam Playground BV</td>
+          <td class="p-2">🇨🇳 上海外高桥</td>
+          <td class="p-2">🇳🇱 鹿特丹</td>
+          <td class="p-2">2026-05-28</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-red-100 text-red-700 rounded">⚠️ 滞港</span></td>
+          <td class="p-2 font-mono">COSU-6458123</td>
+          <td class="p-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00115</td>
+          <td class="p-2">LA Family Entertainment</td>
+          <td class="p-2">🇨🇳 深圳盐田</td>
+          <td class="p-2">🇺🇸 洛杉矶</td>
+          <td class="p-2">2026-05-20</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">✅ 已清关</span></td>
+          <td class="p-2 font-mono">EGLV-1234567</td>
+          <td class="p-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00109</td>
+          <td class="p-2">Hamburg Kinderland GmbH</td>
+          <td class="p-2">🇨🇳 上海外高桥</td>
+          <td class="p-2">🇩🇪 汉堡</td>
+          <td class="p-2">2026-06-02</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-yellow-100 text-yellow-700 rounded">📦 已装箱</span></td>
+          <td class="p-2 font-mono">HLCU-5512876</td>
+          <td class="p-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00107</td>
+          <td class="p-2">Dubai Kidz World</td>
+          <td class="p-2">🇨🇳 深圳机场</td>
+          <td class="p-2">🇦🇪 迪拜</td>
+          <td class="p-2">2026-04-25</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-blue-100 text-blue-700 rounded">✈️ 空运中</span></td>
+          <td class="p-2 font-mono">AWB-160-8834</td>
+          <td class="p-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="p-2 font-mono text-blue-600">DEAL-2026-00103</td>
+          <td class="p-2">Tokyo Family Park</td>
+          <td class="p-2">🇨🇳 上海外高桥</td>
+          <td class="p-2">🇯🇵 横滨</td>
+          <td class="p-2">2026-04-10</td>
+          <td class="p-2"><span class="px-2 py-0.5 bg-gray-200 text-gray-600 rounded">📥 已提货</span></td>
+          <td class="p-2 font-mono">ONEU-4488112</td>
+          <td class="p-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="p-3 text-xs text-gray-500 border-t border-gray-200 flex items-center justify-between">
+      <span>共 12 条记录</span>
+      <div class="flex gap-1">
+        <button class="px-2 py-1 border border-gray-300 rounded">‹</button>
+        <button class="px-2 py-1 bg-blue-500 text-white rounded">1</button>
+        <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+        <button class="px-2 py-1 border border-gray-300 rounded">›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右侧地图占位] 船/飞机位置 -->
+  <aside class="w-80 flex-shrink-0">
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="text-sm font-semibold text-gray-800 mb-3 pb-2 border-b border-gray-200">🗺️ 在途船货位置</div>
+      <div class="h-64 bg-gradient-to-br from-blue-50 to-blue-100 border-2 border-dashed border-gray-300 rounded flex flex-col items-center justify-center text-center relative">
+        <div class="text-4xl mb-2">🗺️</div>
+        <div class="text-xs text-gray-500 mb-1">地图组件占位</div>
+        <div class="text-xs text-gray-400">MarineTraffic API / 高德地图</div>
+        <!-- 模拟船/飞机标记点 -->
+        <div class="absolute top-6 left-8 text-lg" title="MSKU-7834901 印度洋">🚢</div>
+        <div class="absolute top-16 right-10 text-lg" title="AWB-160-8834 空运中">✈️</div>
+        <div class="absolute bottom-8 left-20 text-lg" title="EGLV-1234567 太平洋">🚢</div>
+      </div>
+      <div class="mt-3 space-y-2 text-xs">
+        <div class="flex items-center justify-between p-2 bg-gray-50 rounded">
+          <div>
+            <div class="font-mono text-blue-600">MSKU-7834901</div>
+            <div class="text-gray-500">印度洋 · 马六甲海峡附近</div>
+          </div>
+          <span class="text-green-600">准点</span>
+        </div>
+        <div class="flex items-center justify-between p-2 bg-red-50 rounded">
+          <div>
+            <div class="font-mono text-blue-600">COSU-6458123</div>
+            <div class="text-gray-500">苏伊士运河 · 滞港 3 天</div>
+          </div>
+          <span class="text-red-600">滞港</span>
+        </div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<!-- [详情抽屉] 默认关闭 - 点击表格行可打开 -->
+<div id="shipDrawer" class="fixed inset-y-0 right-0 w-[720px] bg-white border-l border-gray-300 shadow-2xl transform translate-x-full transition-transform duration-200 z-50 overflow-y-auto">
+  <div class="sticky top-0 bg-white border-b border-gray-200 p-4 flex items-center justify-between z-10">
+    <div>
+      <div class="text-base font-semibold text-gray-800">DEAL-2026-00123 · 发货详情</div>
+      <div class="text-xs text-gray-500 mt-0.5">Moscow Fun Park LLC · 深圳盐田 → 圣彼得堡</div>
+    </div>
+    <button onclick="toggleDrawer(false)" class="text-gray-400 hover:text-gray-600 text-xl">✕</button>
+  </div>
+
+  <div class="p-5 space-y-5">
+    <!-- [装箱单] -->
+    <div>
+      <div class="text-xs text-gray-400 mb-2">【装箱单 Packing List】</div>
+      <table class="w-full text-xs border-collapse border border-gray-300">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="p-2 border border-gray-300">箱号</th>
+            <th class="p-2 border border-gray-300">尺寸 cm</th>
+            <th class="p-2 border border-gray-300">毛重 kg</th>
+            <th class="p-2 border border-gray-300">净重 kg</th>
+            <th class="p-2 border border-gray-300">内容</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr><td class="p-2 border border-gray-300 font-mono">BOX-001</td><td class="p-2 border border-gray-300 text-center">220×180×160</td><td class="p-2 border border-gray-300 text-right">1,800</td><td class="p-2 border border-gray-300 text-right">1,650</td><td class="p-2 border border-gray-300">旋转木马主体 ×1</td></tr>
+          <tr><td class="p-2 border border-gray-300 font-mono">BOX-002</td><td class="p-2 border border-gray-300 text-center">220×180×160</td><td class="p-2 border border-gray-300 text-right">1,800</td><td class="p-2 border border-gray-300 text-right">1,650</td><td class="p-2 border border-gray-300">旋转木马主体 ×1</td></tr>
+          <tr><td class="p-2 border border-gray-300 font-mono">BOX-003</td><td class="p-2 border border-gray-300 text-center">150×100×80</td><td class="p-2 border border-gray-300 text-right">620</td><td class="p-2 border border-gray-300 text-right">580</td><td class="p-2 border border-gray-300">木马动物配件 ×16</td></tr>
+          <tr><td class="p-2 border border-gray-300 font-mono">BOX-004</td><td class="p-2 border border-gray-300 text-center">280×200×180</td><td class="p-2 border border-gray-300 text-right">2,200</td><td class="p-2 border border-gray-300 text-right">2,050</td><td class="p-2 border border-gray-300">海盗船船体 ×1</td></tr>
+          <tr><td class="p-2 border border-gray-300 font-mono">BOX-005</td><td class="p-2 border border-gray-300 text-center">200×150×100</td><td class="p-2 border border-gray-300 text-right">980</td><td class="p-2 border border-gray-300 text-right">900</td><td class="p-2 border border-gray-300">海盗船控制系统 + 座椅</td></tr>
+          <tr><td class="p-2 border border-gray-300 font-mono">BOX-006</td><td class="p-2 border border-gray-300 text-center">120×80×60</td><td class="p-2 border border-gray-300 text-right">450</td><td class="p-2 border border-gray-300 text-right">420</td><td class="p-2 border border-gray-300">碰碰车配件包 ×8</td></tr>
+          <tr class="bg-gray-50 font-semibold"><td class="p-2 border border-gray-300" colspan="2">合计（6 箱）</td><td class="p-2 border border-gray-300 text-right">7,850 kg</td><td class="p-2 border border-gray-300 text-right">7,250 kg</td><td class="p-2 border border-gray-300">总体积 48.5 m³</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- [报关单] -->
+    <div>
+      <div class="text-xs text-gray-400 mb-2">【报关单 Customs Declaration】</div>
+      <div class="grid grid-cols-2 gap-3 text-xs p-4 border border-gray-300 rounded bg-gray-50">
+        <div><span class="text-gray-500">提单号 B/L：</span><span class="font-mono text-gray-800">MSKU-7834901</span></div>
+        <div><span class="text-gray-500">报关行：</span><span class="text-gray-800">中外运敦豪深圳分公司</span></div>
+        <div><span class="text-gray-500">报关日期：</span><span class="text-gray-800">2026-06-10</span></div>
+        <div><span class="text-gray-500">海关编号：</span><span class="font-mono text-gray-800">530120260610001234</span></div>
+        <div><span class="text-gray-500">贸易方式：</span><span class="text-gray-800">一般贸易（0110）</span></div>
+        <div><span class="text-gray-500">结汇方式：</span><span class="text-gray-800">T/T 电汇</span></div>
+        <div><span class="text-gray-500">申报总额：</span><span class="text-gray-800 font-semibold">€ 178,600 (FOB)</span></div>
+        <div><span class="text-gray-500">报关状态：</span><span class="px-2 py-0.5 bg-green-100 text-green-700 rounded">✅ 已放行</span></div>
+      </div>
+    </div>
+
+    <!-- [航运跟踪时间线] -->
+    <div>
+      <div class="text-xs text-gray-400 mb-3">【航运跟踪 Shipment Tracking — 当前位置高亮】</div>
+      <div class="relative pl-8 space-y-4">
+        <div class="absolute left-3 top-2 bottom-2 w-0.5 bg-gray-200"></div>
+        <!-- 步骤1 完成 -->
+        <div class="relative">
+          <div class="absolute -left-6 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">✓</div>
+          <div class="text-sm font-semibold text-gray-800">装船 Loaded on Board</div>
+          <div class="text-xs text-gray-500">2026-06-15 14:30 · 深圳盐田港 3 号泊位 · 船名 COSCO SHIPPING UNIVERSE</div>
+        </div>
+        <!-- 步骤2 完成 -->
+        <div class="relative">
+          <div class="absolute -left-6 w-5 h-5 bg-green-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs">✓</div>
+          <div class="text-sm font-semibold text-gray-800">离港 Vessel Departed</div>
+          <div class="text-xs text-gray-500">2026-06-16 08:00 · 驶离深圳盐田港</div>
+        </div>
+        <!-- 步骤3 当前 高亮 -->
+        <div class="relative">
+          <div class="absolute -left-6 w-5 h-5 bg-blue-500 rounded-full border-2 border-white flex items-center justify-center text-white text-xs animate-pulse">●</div>
+          <div class="text-sm font-semibold text-blue-700">运输中 In Transit <span class="ml-2 px-2 py-0.5 bg-blue-100 text-blue-700 text-xs rounded">当前位置</span></div>
+          <div class="text-xs text-gray-600">2026-06-22 09:15（最新）· 印度洋 · 马六甲海峡附近 · 预计 07-05 抵达苏伊士运河</div>
+        </div>
+        <!-- 步骤4 待完成 -->
+        <div class="relative opacity-60">
+          <div class="absolute -left-6 w-5 h-5 bg-gray-300 rounded-full border-2 border-white"></div>
+          <div class="text-sm text-gray-600">到港 Vessel Arrived</div>
+          <div class="text-xs text-gray-400">预计 2026-07-20 · 圣彼得堡港</div>
+        </div>
+        <!-- 步骤5 待完成 -->
+        <div class="relative opacity-60">
+          <div class="absolute -left-6 w-5 h-5 bg-gray-300 rounded-full border-2 border-white"></div>
+          <div class="text-sm text-gray-600">清关 Customs Cleared</div>
+          <div class="text-xs text-gray-400">预计 2026-07-23</div>
+        </div>
+        <!-- 步骤6 待完成 -->
+        <div class="relative opacity-60">
+          <div class="absolute -left-6 w-5 h-5 bg-gray-300 rounded-full border-2 border-white"></div>
+          <div class="text-sm text-gray-600">提货 Delivered to Consignee</div>
+          <div class="text-xs text-gray-400">预计 2026-07-25 · Moscow Fun Park 仓库</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="flex items-center gap-2 pt-4 border-t border-gray-200">
+      <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">📧 通知客户</button>
+      <button class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-100">📄 下载装箱单</button>
+      <button class="px-3 py-1.5 bg-blue-500 text-white rounded text-sm hover:bg-blue-600">🔄 更新跟踪状态</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleDrawer(show) {
+    const d = document.getElementById('shipDrawer');
+    if (show) d.classList.remove('translate-x-full');
+    else d.classList.add('translate-x-full');
+  }
+</script>
+
+</body>
+</html>

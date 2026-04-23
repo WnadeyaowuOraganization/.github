@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>活动时间线 — 客户360°</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #fafafa; color: #333; margin:0; padding: 20px; }
+  .panel { background: #fff; border: 1px solid #f0f0f0; border-radius: 6px; margin-bottom: 16px; overflow: hidden; }
+  .panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; background: #fafafa; }
+  .panel-title { font-size: 14px; font-weight: 600; color: #333; display: flex; align-items: center; gap: 8px; }
+  /* 筛选 */
+  .filter-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #fff; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
+  select, input[type=text], input[type=date] { height: 30px; border: 1px solid #d9d9d9; border-radius: 3px; padding: 0 10px; font-size: 13px; color: #333; background: #fff; outline: none; }
+  .btn { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 13px; cursor: pointer; background: #fff; color: #555; gap: 4px; }
+  .btn:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+  .btn-primary:hover { background: #40a9ff; color:#fff; border-color:#40a9ff; }
+  /* 类型切换 */
+  .type-chips { display: flex; gap: 6px; flex-wrap: wrap; }
+  .chip { padding: 4px 10px; border: 1px solid #d9d9d9; border-radius: 14px; font-size: 12px; cursor: pointer; background: #fff; color: #555; display: inline-flex; align-items: center; gap: 4px; }
+  .chip.active { background: #1890ff; color: #fff; border-color: #1890ff; }
+  .chip .count { font-size: 11px; opacity: 0.8; }
+  /* KPI小条 */
+  .summary-bar { display: flex; gap: 12px; padding: 12px 16px; background: #fafafa; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #555; }
+  .summary-bar strong { color: #333; font-size: 15px; }
+  /* 时间线 */
+  .timeline { position: relative; padding: 20px 16px 12px 16px; }
+  .timeline::before {
+    content: ''; position: absolute; left: 52px; top: 20px; bottom: 20px; width: 2px; background: #e8e8e8;
+  }
+  .date-divider {
+    display: flex; align-items: center; gap: 10px; margin: 10px 0 14px 0;
+  }
+  .date-divider-label {
+    padding: 3px 10px; background: #fafafa; border: 1px solid #f0f0f0; border-radius: 12px; font-size: 12px; color: #666; font-weight: 500; margin-left: 24px; position: relative; z-index: 2;
+  }
+  .date-divider-label.today { background: #e6f7ff; color: #1890ff; border-color: #91d5ff; }
+  .tl-item { display: flex; gap: 16px; margin-bottom: 18px; position: relative; }
+  .tl-icon { width: 40px; height: 40px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; position: relative; z-index: 2; border: 2px solid #fff; box-shadow: 0 0 0 1px #e8e8e8; background: #fff; }
+  .tl-icon.call     { background: #e6f7ff; color: #1890ff; }
+  .tl-icon.record   { background: #f6ffed; color: #52c41a; }
+  .tl-icon.email    { background: #fff7e6; color: #fa8c16; }
+  .tl-icon.visit    { background: #f9f0ff; color: #722ed1; }
+  .tl-icon.doc      { background: #fff1f0; color: #ff4d4f; }
+  .tl-icon.wechat   { background: #f6ffed; color: #07c160; }
+  .tl-icon.opp      { background: #e6fffb; color: #13c2c2; }
+  .tl-icon.contract { background: #fff0f6; color: #eb2f96; }
+  .tl-icon.payment  { background: #f0f5ff; color: #2f54eb; }
+  .tl-body { flex: 1; padding: 10px 14px; background: #fff; border: 1px solid #f0f0f0; border-radius: 6px; }
+  .tl-body:hover { border-color: #91d5ff; background: #f0f9ff; }
+  .tl-meta { display: flex; align-items: center; gap: 8px; font-size: 12px; color: #888; margin-bottom: 6px; flex-wrap: wrap; }
+  .tl-type { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 500; }
+  .tl-type.call     { background: #e6f7ff; color: #1890ff; }
+  .tl-type.record   { background: #f6ffed; color: #52c41a; }
+  .tl-type.email    { background: #fff7e6; color: #fa8c16; }
+  .tl-type.visit    { background: #f9f0ff; color: #722ed1; }
+  .tl-type.doc      { background: #fff1f0; color: #ff4d4f; }
+  .tl-type.wechat   { background: #f6ffed; color: #07c160; }
+  .tl-type.opp      { background: #e6fffb; color: #13c2c2; }
+  .tl-type.contract { background: #fff0f6; color: #eb2f96; }
+  .tl-type.payment  { background: #f0f5ff; color: #2f54eb; }
+  .tl-time { color: #999; }
+  .tl-op { color: #555; font-weight: 500; }
+  .tl-title { font-size: 14px; font-weight: 500; color: #333; margin-bottom: 4px; }
+  .tl-desc { font-size: 13px; color: #666; line-height: 1.6; }
+  .tl-refs { margin-top: 8px; padding-top: 6px; border-top: 1px dashed #f0f0f0; font-size: 12px; color: #888; }
+  .tl-refs a { color: #1890ff; text-decoration: none; margin-right: 10px; }
+  .tl-refs a:hover { text-decoration: underline; }
+  .tl-attach { margin-top: 6px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .tl-attach-item { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border: 1px dashed #d9d9d9; border-radius: 3px; font-size: 11px; color: #666; background: #fafafa; }
+  /* 加载更多 */
+  .load-more { padding: 14px; text-align: center; border-top: 1px solid #f0f0f0; color: #1890ff; font-size: 13px; cursor: pointer; }
+  .load-more:hover { background: #f0f9ff; }
+  /* 快捷新增按钮条 */
+  .quick-add { display: flex; gap: 8px; padding: 12px 16px; background: #f0f9ff; border-bottom: 1px solid #91d5ff; flex-wrap: wrap; align-items: center; }
+  .quick-add-label { font-size: 13px; color: #1890ff; font-weight: 500; margin-right: 4px; }
+</style>
+</head>
+<body>
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab6 · 活动时间线（核心）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">以时间倒序呈现客户全部互动活动（电话/记录/邮件/拜访/文档/微信/商机节点/合同节点/回款节点），形成客户关系数字孪生。对标 HubSpot Activity Feed + Salesforce Engagement Timeline。</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务（复盘+跟进）、销售主管（审视团队动作密度）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">竖向时间线（图标+类型+描述+关联对象+操作人）/ 按类型/时间/操作人筛选 / 滚动加载 / 快捷新增活动</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">[+写跟进] / [+记电话] / [+发邮件] / 点击关联商机#/合同#跳转 / 筛选切换</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">时间倒序正确 / 类型筛选可联合 / 滚动到底自动加载下一页 / 关联链接跨模块跳转不破</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §4.x 客户360°</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [区域1] 筛选与快捷操作 -->
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">📅 活动时间线 <span style="color:#999; font-weight:400; font-size:13px;">（累计 128 条活动）</span></div>
+    <div style="display:flex; gap:6px;">
+      <button class="btn">📊 活动分析</button>
+      <button class="btn">📤 导出</button>
+    </div>
+  </div>
+
+  <!-- 快捷新增 -->
+  <div class="quick-add">
+    <span class="quick-add-label">⚡ 快捷记录：</span>
+    <button class="btn btn-primary">+ 写跟进</button>
+    <button class="btn">📞 记电话</button>
+    <button class="btn">✉ 发邮件</button>
+    <button class="btn">🏢 登记拜访</button>
+    <button class="btn">📎 上传文档</button>
+    <button class="btn">💬 微信沟通</button>
+  </div>
+
+  <!-- 类型筛选 -->
+  <div class="filter-bar">
+    <div class="type-chips">
+      <span class="chip active">全部 <span class="count">128</span></span>
+      <span class="chip">📞 电话 <span class="count">28</span></span>
+      <span class="chip">📝 跟进记录 <span class="count">42</span></span>
+      <span class="chip">✉ 邮件 <span class="count">15</span></span>
+      <span class="chip">🏢 拜访 <span class="count">18</span></span>
+      <span class="chip">📎 文档 <span class="count">8</span></span>
+      <span class="chip">💬 微信 <span class="count">9</span></span>
+      <span class="chip">🎯 商机节点 <span class="count">5</span></span>
+      <span class="chip">📋 合同/回款 <span class="count">3</span></span>
+    </div>
+  </div>
+
+  <!-- 时间与操作人筛选 -->
+  <div class="filter-bar" style="border-top: 1px dashed #f0f0f0;">
+    <input type="date" value="2024-01-01"> <span style="color:#888;">—</span> <input type="date" value="2026-04-23">
+    <select>
+      <option>最近3个月</option>
+      <option>最近6个月</option>
+      <option>最近1年</option>
+      <option>全部时间</option>
+    </select>
+    <select>
+      <option>全部操作人</option>
+      <option>张三（负责人）</option>
+      <option>李四</option>
+      <option>王五</option>
+      <option>系统自动</option>
+    </select>
+    <select>
+      <option>全部关联对象</option>
+      <option>关联商机 OPP-2026-0032</option>
+      <option>关联合同 HT-2025-0088</option>
+      <option>无关联</option>
+    </select>
+    <input type="text" placeholder="🔍 活动内容关键词" style="width:200px;">
+    <button class="btn">重置</button>
+    <button class="btn btn-primary">查询</button>
+  </div>
+
+  <!-- 动作汇总 -->
+  <div class="summary-bar">
+    <span>本月活动 <strong>14 条</strong></span>
+    <span style="color:#ccc;">|</span>
+    <span>本周活动 <strong>5 条</strong></span>
+    <span style="color:#ccc;">|</span>
+    <span>最近互动 <strong style="color:#1890ff;">今天 14:30</strong></span>
+    <span style="color:#ccc;">|</span>
+    <span>月均活动 <strong>10.7 条</strong></span>
+    <span style="color:#ccc;">|</span>
+    <span style="color:#52c41a;">✓ 客户关系健康度 <strong>高（Top 10%）</strong></span>
+  </div>
+
+  <!-- 时间线 -->
+  <div class="timeline">
+
+    <div class="date-divider"><div class="date-divider-label today">📍 今天 · 2026-04-23 周三</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon call">📞</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type call">📞 电话</span>
+          <span class="tl-time">14:30</span>
+          <span class="tl-op">· 张三 拨出</span>
+          <span style="color:#888;">· 时长 18 分钟</span>
+        </div>
+        <div class="tl-title">催收电话 — 无锡过山车改造项目50%发货款</div>
+        <div class="tl-desc">联系人王志强。客户表示集团财务正在走审批，承诺本月底前完成支付。提醒下月还有常州项目投标事宜，需要配合提前准备资质文件。</div>
+        <div class="tl-refs">
+          🔗 关联合同：<a href="#">HT-2025-0088 凯伦·无锡过山车改造</a>
+          🔗 关联商机：<a href="#">OPP-2026-0018 常州恐龙园项目</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-icon wechat">💬</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type wechat">💬 微信</span>
+          <span class="tl-time">10:05</span>
+          <span class="tl-op">· 张三</span>
+        </div>
+        <div class="tl-title">微信沟通 — 扬州二期增补设备方案</div>
+        <div class="tl-desc">客户采购经理李秀芳发来：希望在现有方案基础上增加2台小型儿童攀爬设备，预算控制在¥30万以内。已答应周五前出修订方案。</div>
+        <div class="tl-refs">
+          🔗 关联商机：<a href="#">OPP-2026-0032 凯伦·扬州二期设备增补</a>
+        </div>
+        <div class="tl-attach"><span class="tl-attach-item">📎 微信聊天记录.txt</span></div>
+      </div>
+    </div>
+
+    <div class="date-divider"><div class="date-divider-label">昨天 · 2026-04-22</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon doc">📎</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type doc">📎 文档</span>
+          <span class="tl-time">16:20</span>
+          <span class="tl-op">· 张三 上传</span>
+        </div>
+        <div class="tl-title">上传文档 — 扬州二期设备配置清单 v1.0</div>
+        <div class="tl-desc">发送给客户采购确认，设备清单包含6个大项21台设备，总报价¥680万。</div>
+        <div class="tl-attach">
+          <span class="tl-attach-item">📎 配置清单_v1.0.xlsx (128KB)</span>
+          <span class="tl-attach-item">📎 设备规格说明.pdf (3.2MB)</span>
+        </div>
+        <div class="tl-refs">🔗 关联商机：<a href="#">OPP-2026-0032</a></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-icon call">📞</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type call">📞 电话</span>
+          <span class="tl-time">09:15</span>
+          <span class="tl-op">· 售后刘工 接入</span>
+        </div>
+        <div class="tl-title">售后报修电话 — 旋转飞椅异响</div>
+        <div class="tl-desc">南京旗舰店运营经理反映旋转飞椅启动时有异常响声。已开单派工，计划 4-23 下午到场排查。</div>
+        <div class="tl-refs">
+          🔗 关联工单：<a href="#">TK-2026-0156</a>
+          🔗 关联设备：<a href="#">EQ-2024-0003 WD-CR120</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="date-divider"><div class="date-divider-label">2026-04-20 周日</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon visit">🏢</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type visit">🏢 拜访</span>
+          <span class="tl-time">10:00 — 12:30</span>
+          <span class="tl-op">· 张三 + 销售总监陈总</span>
+        </div>
+        <div class="tl-title">客户拜访 — 南京凯伦文旅总部</div>
+        <div class="tl-desc">
+          参会方：客户副总王志强、采购经理李秀芳、工程总监赵工。<br>
+          会议内容：
+          ① 回顾无锡改造项目进度，客户对进度满意；<br>
+          ② 扬州二期增补采购进一步沟通，预算确定¥600-700万区间；<br>
+          ③ 常州恐龙园项目投标前期准备，客户表态倾向万德；<br>
+          ④ 讨论无锡店已过保设备的续保方案（8台设备，预估¥80万续保包）。
+        </div>
+        <div class="tl-attach">
+          <span class="tl-attach-item">📎 拜访纪要.docx</span>
+          <span class="tl-attach-item">🖼 合影.jpg</span>
+          <span class="tl-attach-item">🖼 会议白板.jpg</span>
+        </div>
+        <div class="tl-refs">
+          🔗 关联商机：<a href="#">OPP-2026-0032</a>, <a href="#">OPP-2026-0018</a>, <a href="#">OPP-2025-0088</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="date-divider"><div class="date-divider-label">2026-04-15</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon email">✉</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type email">✉ 邮件</span>
+          <span class="tl-time">15:40</span>
+          <span class="tl-op">· 张三 发送</span>
+        </div>
+        <div class="tl-title">邮件 — 常州恐龙园项目标书模板确认</div>
+        <div class="tl-desc">致：陈会计 · 抄送：王志强。附件包含三类资质扫描件 + 历史案例集，请客户评估后提供 4-25 前的书面确认。</div>
+        <div class="tl-attach">
+          <span class="tl-attach-item">📎 资质三件套.zip (15MB)</span>
+          <span class="tl-attach-item">📎 历史案例集.pdf (28MB)</span>
+        </div>
+        <div class="tl-refs">🔗 关联商机：<a href="#">OPP-2026-0018</a></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-icon record">📝</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type record">📝 跟进记录</span>
+          <span class="tl-time">11:20</span>
+          <span class="tl-op">· 张三</span>
+        </div>
+        <div class="tl-title">跟进记录 — 无锡项目客户现场验收反馈</div>
+        <div class="tl-desc">无锡店运营半年，客户对质量和售后响应整体满意。提了两个改进点：① 希望控制系统增加"节假日大流量预警"；② 建议备件库前置到苏州仓。</div>
+        <div class="tl-refs">🔗 关联合同：<a href="#">HT-2025-0088</a></div>
+      </div>
+    </div>
+
+    <div class="date-divider"><div class="date-divider-label">2026-04-12</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon payment">💰</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type payment">💰 回款节点</span>
+          <span class="tl-time">10:15</span>
+          <span class="tl-op">· 系统自动</span>
+        </div>
+        <div class="tl-title">回款提醒 — HT-2025-0088 50%发货款临近到期</div>
+        <div class="tl-desc">系统自动提醒：¥210万发货款将于 4-08 到期，已触发张三进行主动催收（关联微信消息条）。</div>
+        <div class="tl-refs">🔗 关联合同：<a href="#">HT-2025-0088</a></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-icon wechat">💬</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type wechat">💬 微信</span>
+          <span class="tl-time">10:18</span>
+          <span class="tl-op">· 张三</span>
+        </div>
+        <div class="tl-title">微信沟通 — 回款预提醒</div>
+        <div class="tl-desc">温馨提醒王志强发货款即将到期。客户回复"收到，本周走流程"。</div>
+        <div class="tl-refs">🔗 关联合同：<a href="#">HT-2025-0088</a></div>
+      </div>
+    </div>
+
+    <div class="date-divider"><div class="date-divider-label">2026-04-02</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon opp">🎯</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type opp">🎯 商机节点</span>
+          <span class="tl-time">09:00</span>
+          <span class="tl-op">· 张三</span>
+        </div>
+        <div class="tl-title">商机阶段推进 — 扬州二期 · 新建 → 商务跟进</div>
+        <div class="tl-desc">客户内部立项完成，正式启动采购流程，商机进入"商务跟进"阶段。</div>
+        <div class="tl-refs">🔗 关联商机：<a href="#">OPP-2026-0032</a></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-icon record">📝</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type record">📝 跟进记录</span>
+          <span class="tl-time">14:25</span>
+          <span class="tl-op">· 张三</span>
+        </div>
+        <div class="tl-title">跟进记录 — 扬州二期客户需求梳理</div>
+        <div class="tl-desc">通过微信+电话与李秀芳沟通，确认：预算¥600-700万、预计 9 月开业、重点关注儿童设备安全性、希望沿用南京店的控制系统方案。</div>
+        <div class="tl-refs">🔗 关联商机：<a href="#">OPP-2026-0032</a></div>
+      </div>
+    </div>
+
+    <div class="date-divider"><div class="date-divider-label">2026-03-15</div></div>
+
+    <div class="tl-item">
+      <div class="tl-icon opp">🎯</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type opp">🎯 商机节点</span>
+          <span class="tl-time">16:00</span>
+          <span class="tl-op">· 张三 创建</span>
+        </div>
+        <div class="tl-title">新建商机 — 凯伦·扬州二期设备增补</div>
+        <div class="tl-desc">客户主动询盘，张三创建商机，预算¥600万，预计 Q3 签约。</div>
+        <div class="tl-refs">🔗 关联商机：<a href="#">OPP-2026-0032</a></div>
+      </div>
+    </div>
+
+    <div class="tl-item">
+      <div class="tl-icon call">📞</div>
+      <div class="tl-body">
+        <div class="tl-meta">
+          <span class="tl-type call">📞 电话</span>
+          <span class="tl-time">14:10</span>
+          <span class="tl-op">· 张三 接入</span>
+          <span style="color:#888;">· 时长 22 分钟</span>
+        </div>
+        <div class="tl-title">客户询盘电话 — 扬州二期</div>
+        <div class="tl-desc">王志强主动来电，告知扬州店即将启动二期，希望万德提供配置方案。</div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- 加载更多 -->
+  <div class="load-more">
+    ▼ 加载更早的活动（已显示 14 / 128 条）
+  </div>
+</div>
+
+</body>
+</html>

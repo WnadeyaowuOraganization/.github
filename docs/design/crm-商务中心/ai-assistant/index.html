@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — AI商务助手侧边栏（嵌入演示） 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    :root {
+      --ai-bg: #f0e6ff;
+      --ai-bg-soft: #f8f3ff;
+      --ai-primary: #7b61ff;
+      --ai-primary-dark: #6344f5;
+      --ai-border: #d9ccff;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .ai-card { background: var(--ai-bg-soft); border: 1px solid var(--ai-border); }
+    .ai-tag { background: var(--ai-bg); color: var(--ai-primary-dark); }
+    .ai-btn-primary { background: var(--ai-primary); color: #fff; }
+    .ai-btn-primary:hover { background: var(--ai-primary-dark); }
+    .ai-scroll::-webkit-scrollbar { width: 6px; }
+    .ai-scroll::-webkit-scrollbar-thumb { background: #d9d9d9; border-radius: 3px; }
+    .ai-sidebar { transition: width 0.25s ease; }
+    /* 主区让出右侧空间给 sidebar */
+    .main-content { transition: margin-right 0.25s ease; }
+    .main-content.expanded { margin-right: 320px; }
+    .main-content.collapsed { margin-right: 48px; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:76px 16px 16px 16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">AI 商务助手侧边栏 — 嵌入商机详情页演示</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">AI 商务助手在 CRM 任一页面实时基于上下文推送智能建议、话术、下一步行动、竞品应答，让商务不切换页面即可获取决策辅助</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务人员、销售主管、国贸商务</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">上下文感知 / 话术建议 / 下一步推荐 / 竞品应答 / AI 对话 / 行为记忆</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">折叠/展开侧边栏 / 一键采纳建议填入文本框 / AI 对话框交互 / 话术一键复制</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">组件嵌入任一 CRM 页面不破坏主区布局 / 上下文变化时建议同步更新 / 折叠后只留 48px 图标条</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §12 AI 助手</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [顶栏] 模拟万德 CRM 导航栏 -->
+  <header class="fixed top-0 left-0 right-0 h-[60px] bg-white border-b border-gray-300 flex items-center px-6 z-50">
+    <div class="flex items-center gap-3">
+      <div class="w-8 h-8 rounded bg-gray-800 text-white flex items-center justify-center text-xs font-bold">W</div>
+      <div class="text-sm font-semibold text-gray-800">万德AI · CRM 商务中心 v2.0</div>
+    </div>
+    <nav class="flex gap-1 ml-8 text-xs text-gray-600">
+      <a class="px-3 py-1 rounded hover:bg-gray-100">驾驶舱</a>
+      <a class="px-3 py-1 rounded hover:bg-gray-100">客户</a>
+      <a class="px-3 py-1 rounded bg-gray-100 text-gray-800 font-medium">商机</a>
+      <a class="px-3 py-1 rounded hover:bg-gray-100">合同</a>
+      <a class="px-3 py-1 rounded hover:bg-gray-100">收款</a>
+    </nav>
+    <div class="ml-auto flex items-center gap-3 text-xs text-gray-500">
+      <span>🔔</span>
+      <span>👤 王经理</span>
+    </div>
+  </header>
+
+  <!-- [主内容区] 左：商机详情页；右侧空间给 AI 助手 -->
+  <main id="mainContent" class="main-content expanded">
+    <!-- 面包屑 -->
+    <div class="px-6 pt-4 pb-2 text-xs text-gray-500">
+      首页 &gt; 商务中心 &gt; 商机管理 &gt; <span class="text-gray-700">DEAL-2026-00123</span>
+    </div>
+
+    <div class="px-6 pb-6 space-y-4">
+
+      <!-- [商机基本信息卡] -->
+      <section class="bg-white border border-gray-300 rounded p-4">
+        <div class="flex items-start justify-between mb-3">
+          <div>
+            <div class="flex items-center gap-2 mb-1">
+              <span class="text-[11px] text-gray-500">DEAL-2026-00123</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-blue-50 text-blue-600">阶段 S · 签约中</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-yellow-50 text-yellow-700">B 级客户</span>
+              <span class="text-[10px] px-2 py-0.5 rounded bg-green-50 text-green-700">赢率 75%</span>
+            </div>
+            <h1 class="text-lg font-semibold text-gray-800">江苏凯伦文旅·儿童乐园项目</h1>
+            <div class="text-xs text-gray-500 mt-1">金额 ¥3,000,000 · 预计签约 2026-05-20 · 归属 王经理</div>
+          </div>
+          <div class="flex gap-1.5">
+            <button class="text-xs px-3 py-1 border border-gray-300 rounded hover:bg-gray-50 text-gray-600">编辑</button>
+            <button class="text-xs px-3 py-1 rounded bg-blue-500 text-white hover:bg-blue-600">推进阶段</button>
+          </div>
+        </div>
+
+        <!-- 关键字段 -->
+        <div class="grid grid-cols-4 gap-4 pt-3 border-t border-gray-100">
+          <div>
+            <div class="text-[10px] text-gray-400">客户名称</div>
+            <div class="text-sm text-gray-700">江苏凯伦文旅有限公司</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-gray-400">项目类型</div>
+            <div class="text-sm text-gray-700">主题乐园 · 室内儿童</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-gray-400">决策人</div>
+            <div class="text-sm text-gray-700">凯总（总经理）</div>
+          </div>
+          <div>
+            <div class="text-[10px] text-gray-400">最后联系</div>
+            <div class="text-sm text-red-500">5 天前 ⚠️</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- [两栏] 阶段进度 + 近期活动 -->
+      <div class="grid grid-cols-2 gap-4">
+
+        <!-- 阶段进度 -->
+        <section class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-sm font-semibold text-gray-700 mb-3">阶段进度</div>
+          <div class="flex items-center gap-1">
+            <div class="flex-1 text-center">
+              <div class="h-1.5 rounded-l bg-green-400"></div>
+              <div class="text-[10px] text-gray-500 mt-1">L 线索</div>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-1.5 bg-green-400"></div>
+              <div class="text-[10px] text-gray-500 mt-1">Q 询盘</div>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-1.5 bg-green-400"></div>
+              <div class="text-[10px] text-gray-500 mt-1">P 方案</div>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-1.5 bg-green-400"></div>
+              <div class="text-[10px] text-gray-500 mt-1">N 谈判</div>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-1.5 bg-blue-500"></div>
+              <div class="text-[10px] text-blue-600 font-semibold mt-1">S 签约 ◀</div>
+            </div>
+            <div class="flex-1 text-center">
+              <div class="h-1.5 rounded-r bg-gray-200"></div>
+              <div class="text-[10px] text-gray-400 mt-1">W 赢单</div>
+            </div>
+          </div>
+          <div class="mt-3 pt-3 border-t border-gray-100 text-[11px] text-gray-500">
+            在 S 阶段已停留 <span class="text-red-500 font-semibold">12 天</span>（该阶段平均 7 天）
+          </div>
+        </section>
+
+        <!-- 竞争情报 -->
+        <section class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-sm font-semibold text-gray-700 mb-3">竞争情报</div>
+          <div class="space-y-2 text-xs">
+            <div class="flex items-center justify-between py-1.5 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-red-400"></span>
+                <span class="text-gray-700">意大利 Moby</span>
+              </div>
+              <span class="text-gray-500">报价 ¥2,400,000 · 交期 150 天</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-yellow-400"></span>
+                <span class="text-gray-700">广东金马</span>
+              </div>
+              <span class="text-gray-500">报价 ¥2,800,000 · 交期 120 天</span>
+            </div>
+            <div class="flex items-center justify-between py-1.5">
+              <div class="flex items-center gap-2">
+                <span class="w-1.5 h-1.5 rounded-full bg-green-400"></span>
+                <span class="text-gray-700 font-semibold">万德（本方）</span>
+              </div>
+              <span class="text-gray-700 font-semibold">报价 ¥3,000,000 · 交期 90 天</span>
+            </div>
+          </div>
+        </section>
+      </div>
+
+      <!-- [近期活动时间线] -->
+      <section class="bg-white border border-gray-300 rounded p-4">
+        <div class="flex items-center justify-between mb-3">
+          <div class="text-sm font-semibold text-gray-700">近期活动</div>
+          <button class="text-xs px-2 py-0.5 border border-gray-300 rounded text-gray-600 hover:bg-gray-50">+ 记录活动</button>
+        </div>
+        <ul class="space-y-3">
+          <li class="flex gap-3">
+            <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs flex-shrink-0">📞</div>
+            <div class="flex-1 border-b border-gray-100 pb-3">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="font-medium text-gray-700">电话沟通</span>
+                <span class="text-gray-400">5 天前 · 王经理</span>
+              </div>
+              <div class="text-xs text-gray-600 mt-1">与凯总讨论合同质保期条款，客户认为 5 年质保偏短，希望延长到 8 年或降价</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs flex-shrink-0">📧</div>
+            <div class="flex-1 border-b border-gray-100 pb-3">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="font-medium text-gray-700">发送邮件</span>
+                <span class="text-gray-400">8 天前 · 王经理</span>
+              </div>
+              <div class="text-xs text-gray-600 mt-1">发送合同终版（v3.2）及质保手册，附 Moby 交期对比说明</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs flex-shrink-0">🤝</div>
+            <div class="flex-1 border-b border-gray-100 pb-3">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="font-medium text-gray-700">现场拜访</span>
+                <span class="text-gray-400">12 天前 · 王经理 + 李工</span>
+              </div>
+              <div class="text-xs text-gray-600 mt-1">赴南京与客户 3 位决策人会议，客户提及正在比价意大利 Moby</div>
+            </div>
+          </li>
+          <li class="flex gap-3">
+            <div class="w-7 h-7 rounded-full bg-gray-100 flex items-center justify-center text-xs flex-shrink-0">📄</div>
+            <div class="flex-1">
+              <div class="flex items-center gap-2 text-xs">
+                <span class="font-medium text-gray-700">方案评审</span>
+                <span class="text-gray-400">20 天前 · 方案组</span>
+              </div>
+              <div class="text-xs text-gray-600 mt-1">完成定制方案 v2，含 18 项游乐设备 + 主题 IP 授权</div>
+            </div>
+          </li>
+        </ul>
+      </section>
+
+      <!-- [底部提示] -->
+      <div class="text-center text-[10px] text-gray-400 py-2">— 右侧 AI 助手侧边栏持续监听本页面上下文，建议会随内容变化实时更新 —</div>
+    </div>
+  </main>
+
+  <!-- ========== AI 商务助手 侧边栏 (fixed right) ========== -->
+  <!-- [展开态] -->
+  <aside id="aiSidebarExpanded" class="ai-sidebar fixed bg-white border-l border-gray-300 flex flex-col shadow-md z-[100]"
+         style="width:320px; right:0; top:60px; height:calc(100vh - 60px);">
+
+    <!-- [1. 顶部条] -->
+    <div class="border-b border-gray-300 p-3 flex-shrink-0" style="background: var(--ai-bg-soft);">
+      <div class="flex items-center justify-between mb-2">
+        <div class="flex items-center gap-2">
+          <div class="w-7 h-7 rounded-md flex items-center justify-center" style="background: var(--ai-primary); color:#fff; font-size:14px;">✨</div>
+          <div>
+            <div class="text-sm font-semibold text-gray-800">AI 商务助手</div>
+            <div class="text-[10px] text-gray-500">已感知当前页面上下文</div>
+          </div>
+        </div>
+        <button id="btnCollapse" class="w-6 h-6 rounded hover:bg-white text-gray-500 text-sm" title="折叠">»</button>
+      </div>
+      <div class="flex flex-wrap gap-1">
+        <span class="ai-tag text-[10px] px-2 py-0.5 rounded">📍 DEAL-2026-00123</span>
+        <span class="ai-tag text-[10px] px-2 py-0.5 rounded">S·签约中</span>
+        <span class="ai-tag text-[10px] px-2 py-0.5 rounded">B 级客户</span>
+      </div>
+    </div>
+
+    <!-- [滚动主区] -->
+    <div class="flex-1 overflow-y-auto ai-scroll">
+
+      <!-- [2. 上下文感知建议] -->
+      <section class="p-3 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-semibold text-gray-700">💡 智能建议 <span class="text-[10px] text-gray-400">(3)</span></div>
+          <span class="text-[10px] text-gray-400">刚刚更新</span>
+        </div>
+
+        <div class="ai-card rounded p-2.5 mb-2">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="ai-tag text-[10px] px-1.5 py-0.5 rounded">📞 催进</span>
+            <span class="text-[10px] text-red-500 font-semibold">高优先级</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">客户 5 天未回复，S 阶段已停留 12 天，建议今日电话催进签约</div>
+          <div class="flex gap-1 mt-2">
+            <button class="ai-btn-primary text-[11px] px-2 py-1 rounded">采纳</button>
+            <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100">忽略</button>
+            <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100 ml-auto">展开 ▾</button>
+          </div>
+        </div>
+
+        <div class="ai-card rounded p-2.5 mb-2">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="ai-tag text-[10px] px-1.5 py-0.5 rounded">⚠️ 风险</span>
+            <span class="text-[10px] text-gray-400">基于活动记录</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">质保期客户可能议价，推荐降级 3 年保修 + 付费延保 2 年方案（可守住 5% 利润）</div>
+          <div class="flex gap-1 mt-2">
+            <button class="ai-btn-primary text-[11px] px-2 py-1 rounded">采纳</button>
+            <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100">忽略</button>
+            <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100 ml-auto">展开 ▾</button>
+          </div>
+        </div>
+
+        <div class="ai-card rounded p-2.5">
+          <div class="flex items-center gap-1 mb-1">
+            <span class="ai-tag text-[10px] px-1.5 py-0.5 rounded">💡 机会</span>
+            <span class="text-[10px] text-gray-400">交叉销售</span>
+          </div>
+          <div class="text-xs text-gray-700 leading-relaxed">凯伦同集团（苏州凯伦）2025 采购过 180 万主题乐园，可追加水上项目升级包</div>
+          <div class="flex gap-1 mt-2">
+            <button class="ai-btn-primary text-[11px] px-2 py-1 rounded">采纳</button>
+            <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100">忽略</button>
+            <button class="text-[11px] px-2 py-1 rounded text-gray-500 hover:bg-gray-100 ml-auto">展开 ▾</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- [3. 话术库] -->
+      <section class="p-3 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-semibold text-gray-700">💬 话术推荐</div>
+          <a class="text-[10px] text-blue-500 hover:underline cursor-pointer">全部 ›</a>
+        </div>
+        <div class="space-y-1.5">
+          <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer group">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-700 font-medium">价格谈判开场白</div>
+              <button class="opacity-0 group-hover:opacity-100 text-[10px] text-blue-500">📋 复制</button>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5 truncate">"我完全理解您对价格的关注..."</div>
+          </div>
+          <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer group">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-700 font-medium">合同关键条款解释</div>
+              <button class="opacity-0 group-hover:opacity-100 text-[10px] text-blue-500">📋 复制</button>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5 truncate">"质保期分为基础保修和延保两部分..."</div>
+          </div>
+          <div class="border border-gray-200 rounded p-2 hover:bg-gray-50 cursor-pointer group">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-700 font-medium">丢单挽回话术</div>
+              <button class="opacity-0 group-hover:opacity-100 text-[10px] text-blue-500">📋 复制</button>
+            </div>
+            <div class="text-[10px] text-gray-500 mt-0.5 truncate">"了解您选择其他方案的原因对我们非常重要..."</div>
+          </div>
+        </div>
+      </section>
+
+      <!-- [4. 下一步行动] -->
+      <section class="p-3 border-b border-gray-200">
+        <div class="text-xs font-semibold text-gray-700 mb-2">🎯 下一步行动</div>
+        <ol class="space-y-1.5">
+          <li class="flex gap-2 items-start p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+            <span class="text-[10px] bg-red-100 text-red-600 px-1.5 py-0.5 rounded font-bold flex-shrink-0">紧急</span>
+            <span class="text-xs text-gray-700 leading-tight">今日 17:00 前电话确认合同最后一版</span>
+          </li>
+          <li class="flex gap-2 items-start p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+            <span class="text-[10px] bg-yellow-100 text-yellow-700 px-1.5 py-0.5 rounded font-bold flex-shrink-0">重要</span>
+            <span class="text-xs text-gray-700 leading-tight">明日寄送纸质合同样本 + 质保手册</span>
+          </li>
+          <li class="flex gap-2 items-start p-1.5 rounded hover:bg-gray-50 cursor-pointer">
+            <span class="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded font-bold flex-shrink-0">常规</span>
+            <span class="text-xs text-gray-700 leading-tight">本周内完成客户满意度初评问卷</span>
+          </li>
+        </ol>
+      </section>
+
+      <!-- [5. 竞品应答] -->
+      <section class="p-3 border-b border-gray-200">
+        <div class="flex items-center justify-between mb-2">
+          <div class="text-xs font-semibold text-gray-700">⚔️ 竞品应答</div>
+          <span class="text-[10px] bg-red-50 text-red-500 px-1.5 py-0.5 rounded">识别到 Moby</span>
+        </div>
+        <div class="ai-card rounded p-2">
+          <div class="text-[11px] text-gray-600 mb-1.5">客户提及：<span class="text-gray-800">"Moby 报价便宜 20%"</span></div>
+          <table class="w-full text-[10px]">
+            <thead>
+              <tr class="text-gray-500 border-b border-gray-200">
+                <th class="text-left py-1">维度</th>
+                <th class="text-left py-1" style="color:var(--ai-primary-dark);">万德</th>
+                <th class="text-left py-1">Moby</th>
+              </tr>
+            </thead>
+            <tbody class="text-gray-700">
+              <tr><td class="py-1">价格</td><td>300 万</td><td>240 万</td></tr>
+              <tr><td class="py-1">交期</td><td class="font-semibold" style="color:var(--ai-primary-dark);">90 天</td><td>150 天</td></tr>
+              <tr><td class="py-1">质保</td><td class="font-semibold" style="color:var(--ai-primary-dark);">5 年</td><td>2 年</td></tr>
+              <tr><td class="py-1">售后</td><td class="font-semibold" style="color:var(--ai-primary-dark);">国内驻场</td><td>远程</td></tr>
+            </tbody>
+          </table>
+          <button class="w-full mt-2 ai-btn-primary text-[11px] py-1 rounded">生成应答话术</button>
+        </div>
+      </section>
+
+      <!-- [6. AI 对话历史] -->
+      <section class="p-3">
+        <div class="text-xs font-semibold text-gray-700 mb-2">💭 对话记录</div>
+
+        <!-- 用户提问 -->
+        <div class="flex justify-end mb-2">
+          <div class="max-w-[85%] bg-blue-50 text-gray-700 text-xs rounded-lg rounded-tr-none px-2.5 py-1.5">
+            客户说意大利 Moby 报价便宜 20%，怎么回复？
+          </div>
+        </div>
+
+        <!-- AI 回复 -->
+        <div class="flex justify-start mb-2">
+          <div class="max-w-[90%]">
+            <div class="flex items-center gap-1 mb-1">
+              <div class="w-4 h-4 rounded flex items-center justify-center text-[10px] text-white" style="background:var(--ai-primary);">✨</div>
+              <span class="text-[10px] text-gray-400">AI 助手</span>
+            </div>
+            <div class="ai-card text-xs text-gray-700 rounded-lg rounded-tl-none px-2.5 py-2 leading-relaxed">
+              建议从"总拥有成本"切入，强调 <strong>交期、质保、售后</strong> 三维度：
+              <div class="mt-1.5 bg-white rounded p-1.5 border border-gray-100 text-[11px]">
+                "凯总，您看 Moby 便宜的 60 万里，交期多 2 个月意味着项目晚开业 60 天，按您园区预估日营收 8 万算，就是 480 万损失。加上质保期只有 2 年...我们实际是帮您省钱。"
+              </div>
+              <button class="ai-btn-primary text-[10px] px-2 py-0.5 rounded mt-1.5">📋 复制话术</button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- [底部对话输入] -->
+    <div class="border-t border-gray-300 p-2.5 flex-shrink-0" style="background: var(--ai-bg-soft);">
+      <div class="flex gap-1 mb-2 flex-wrap">
+        <button class="text-[10px] px-2 py-0.5 rounded bg-white border border-gray-200 text-gray-600 hover:border-purple-300">总结本客户</button>
+        <button class="text-[10px] px-2 py-0.5 rounded bg-white border border-gray-200 text-gray-600 hover:border-purple-300">生成报价邮件</button>
+        <button class="text-[10px] px-2 py-0.5 rounded bg-white border border-gray-200 text-gray-600 hover:border-purple-300">分析丢单原因</button>
+      </div>
+      <div class="flex gap-1 items-center bg-white rounded border border-gray-300 px-2 py-1.5">
+        <input type="text" placeholder="向 AI 助手提问..." class="flex-1 text-xs text-gray-700 outline-none" />
+        <button class="ai-btn-primary text-xs px-2 py-0.5 rounded">发送</button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- [折叠态] -->
+  <aside id="aiSidebarCollapsed" class="fixed bg-white border-l border-gray-300 flex flex-col items-center shadow-md z-[100] hidden"
+         style="width:48px; right:0; top:60px; height:calc(100vh - 60px);">
+    <button id="btnExpand" class="w-10 h-10 rounded mt-2 flex items-center justify-center text-white relative" style="background: var(--ai-primary);" title="展开 AI 助手">
+      ✨
+      <span class="absolute -top-1 -right-1 w-4 h-4 bg-red-500 text-white text-[9px] rounded-full flex items-center justify-center">3</span>
+    </button>
+    <div class="text-[9px] text-gray-400 mt-1" style="writing-mode:vertical-rl;">AI 助手</div>
+    <div class="w-6 border-t border-gray-200 my-3"></div>
+    <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="智能建议">💡</button>
+    <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="话术库">💬</button>
+    <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="下一步">🎯</button>
+    <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="竞品">⚔️</button>
+    <button class="w-8 h-8 rounded hover:bg-gray-100 flex items-center justify-center text-gray-500 text-xs mb-1" title="对话">💭</button>
+  </aside>
+
+  <script>
+    // 折叠/展开逻辑
+    const sidebarExpanded = document.getElementById('aiSidebarExpanded');
+    const sidebarCollapsed = document.getElementById('aiSidebarCollapsed');
+    const main = document.getElementById('mainContent');
+
+    document.getElementById('btnCollapse').addEventListener('click', () => {
+      sidebarExpanded.classList.add('hidden');
+      sidebarCollapsed.classList.remove('hidden');
+      main.classList.remove('expanded');
+      main.classList.add('collapsed');
+    });
+
+    document.getElementById('btnExpand').addEventListener('click', () => {
+      sidebarCollapsed.classList.add('hidden');
+      sidebarExpanded.classList.remove('hidden');
+      main.classList.remove('collapsed');
+      main.classList.add('expanded');
+    });
+  </script>
+</body>
+</html>

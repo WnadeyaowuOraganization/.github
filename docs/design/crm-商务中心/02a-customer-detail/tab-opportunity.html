@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>商机历史 — 客户360°</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 14px; background: #fafafa; color: #333; margin:0; padding: 20px; }
+  .panel { background: #fff; border: 1px solid #f0f0f0; border-radius: 6px; margin-bottom: 16px; overflow: hidden; }
+  .panel-header { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #f0f0f0; background: #fafafa; }
+  .panel-title { font-size: 14px; font-weight: 600; color: #333; display: flex; align-items: center; gap: 8px; }
+  .panel-body { padding: 0; }
+  /* KPI条 */
+  .kpi-strip { display: flex; gap: 0; background: #fff; border: 1px solid #f0f0f0; border-radius: 6px; margin-bottom: 16px; overflow: hidden; }
+  .kpi-item { flex: 1; padding: 12px 16px; border-right: 1px solid #f0f0f0; }
+  .kpi-item:last-child { border-right: none; }
+  .kpi-label { font-size: 12px; color: #888; margin-bottom: 4px; }
+  .kpi-value { font-size: 20px; font-weight: 700; color: #333; }
+  .kpi-value .unit { font-size: 12px; color: #888; font-weight: 400; }
+  .kpi-value.primary { color: #1890ff; }
+  .kpi-value.success { color: #52c41a; }
+  .kpi-value.danger { color: #ff4d4f; }
+  /* 筛选 */
+  .filter-bar { display: flex; align-items: center; gap: 8px; padding: 12px 16px; background: #fff; border-bottom: 1px solid #f0f0f0; flex-wrap: wrap; }
+  select, input[type=text], input[type=date] { height: 30px; border: 1px solid #d9d9d9; border-radius: 3px; padding: 0 10px; font-size: 13px; color: #333; background: #fff; outline: none; }
+  .btn { display: inline-flex; align-items: center; height: 30px; padding: 0 12px; border: 1px solid #d9d9d9; border-radius: 3px; font-size: 13px; cursor: pointer; background: #fff; color: #555; gap: 4px; }
+  .btn:hover { border-color: #1890ff; color: #1890ff; }
+  .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+  .btn-primary:hover { background: #40a9ff; color:#fff; border-color:#40a9ff; }
+  /* 状态切换 */
+  .status-tabs { display: flex; gap: 0; }
+  .status-tab { padding: 6px 14px; border: 1px solid #d9d9d9; border-right: none; font-size: 13px; cursor: pointer; background: #fff; color: #555; }
+  .status-tab:first-child { border-radius: 3px 0 0 3px; }
+  .status-tab:last-child { border-radius: 0 3px 3px 0; border-right: 1px solid #d9d9d9; }
+  .status-tab.active { background: #1890ff; color: #fff; border-color: #1890ff; }
+  /* 表格 */
+  table { width: 100%; border-collapse: collapse; }
+  th { background: #fafafa; font-size: 12px; font-weight: 600; color: #555; padding: 10px 12px; text-align: left; border-bottom: 1px solid #f0f0f0; white-space: nowrap; }
+  td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; font-size: 13px; color: #333; vertical-align: middle; }
+  tr:hover td { background: #fafafa; }
+  .tag { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 12px; font-weight: 500; }
+  .tag-blue { background: #e6f7ff; color: #1890ff; }
+  .tag-green { background: #f6ffed; color: #52c41a; }
+  .tag-orange { background: #fff7e6; color: #fa8c16; }
+  .tag-red { background: #fff1f0; color: #ff4d4f; }
+  .tag-gray { background: #f0f0f0; color: #8c8c8c; }
+  .tag-purple { background: #f9f0ff; color: #722ed1; }
+  .btn-link { color: #1890ff; background: none; border: none; cursor: pointer; font-size: 13px; padding: 2px 6px; }
+  .btn-link:hover { text-decoration: underline; }
+  .code { font-family: Monaco, monospace; font-size: 12px; color: #555; }
+  .amount { font-family: Monaco, monospace; font-weight: 600; }
+  /* 阶段徽章 */
+  .stage { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 10px; font-size: 11px; }
+  /* 饼图占位 */
+  .pie-chart { width: 180px; height: 180px; border-radius: 50%; background:
+    conic-gradient(
+      #1890ff 0deg 144deg,
+      #fa8c16 144deg 230deg,
+      #722ed1 230deg 310deg,
+      #bfbfbf 310deg 360deg
+    );
+    margin: 0 auto;
+    position: relative;
+  }
+  .pie-chart::after {
+    content: ''; position: absolute; inset: 42px; background: #fff; border-radius: 50%;
+  }
+  .pie-chart-label {
+    position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1;
+  }
+  .pie-legend { display: flex; flex-direction: column; gap: 6px; font-size: 12px; }
+  .pie-dot { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: middle; }
+  .pager { display: flex; justify-content: center; padding: 14px; gap: 6px; font-size: 13px; color: #666; }
+  .pager-btn { height: 26px; min-width: 26px; padding: 0 8px; border: 1px solid #d9d9d9; border-radius: 3px; background: #fff; cursor: pointer; font-size: 12px; }
+  .pager-btn.active { background: #1890ff; color: #fff; border-color: #1890ff; }
+</style>
+</head>
+<body>
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · 商机历史</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">汇总客户名下所有商机历史（跟进中/成单/丢单），聚合成单率与丢单原因，支持复盘与复购识别。</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务（复盘）、销售主管（评估客户贡献）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">筛选（状态/时间）/ 商机列表 / 丢单原因聚合饼图（价格/交期/竞品/其他）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击商机编号跳转商机详情 / 点击阶段查看历史变更 / 按状态快速筛选</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">筛选后KPI实时变化 / 点击商机跳转正确 / 丢单聚合百分比一致</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">CRM商务中心 v2.0 详细设计 §4.x 客户360°</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [区域1] 商机KPI -->
+<div class="kpi-strip">
+  <div class="kpi-item">
+    <div class="kpi-label">🎯 累计商机</div>
+    <div class="kpi-value">12 <span class="unit">个</span></div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-label">🔄 跟进中</div>
+    <div class="kpi-value primary">3 <span class="unit">个</span></div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-label">✅ 已成单</div>
+    <div class="kpi-value success">8 <span class="unit">个</span> <span style="font-size:12px; color:#888;">成单率 72.7%</span></div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-label">❌ 丢单</div>
+    <div class="kpi-value danger">1 <span class="unit">个</span></div>
+  </div>
+  <div class="kpi-item">
+    <div class="kpi-label">💰 平均合同金额</div>
+    <div class="kpi-value">¥410 <span class="unit">万</span></div>
+  </div>
+</div>
+
+<!-- [区域2] 商机列表 -->
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">📋 商机历史清单</div>
+    <button class="btn btn-primary">+ 新建商机</button>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="filter-bar">
+    <div class="status-tabs">
+      <div class="status-tab active">全部 <span style="color:#888; margin-left:4px;">12</span></div>
+      <div class="status-tab">跟进中 <span style="color:#888; margin-left:4px;">3</span></div>
+      <div class="status-tab">已成单 <span style="color:#888; margin-left:4px;">8</span></div>
+      <div class="status-tab">丢单 <span style="color:#888; margin-left:4px;">1</span></div>
+    </div>
+    <span style="width:1px; height:18px; background:#e8e8e8; margin:0 4px;"></span>
+    <input type="date" value="2024-01-01"> <span style="color:#888;">—</span> <input type="date" value="2026-04-23">
+    <select>
+      <option>全部阶段</option>
+      <option>新建</option>
+      <option>商务跟进</option>
+      <option>招投标</option>
+      <option>签约</option>
+      <option>回款</option>
+      <option>验收</option>
+      <option>结项</option>
+    </select>
+    <select>
+      <option>全部负责人</option>
+      <option>张三（拓展一部）</option>
+      <option>李四（拓展二部）</option>
+    </select>
+    <input type="text" placeholder="🔍 商机名/编号" style="width:180px;">
+    <button class="btn">重置</button>
+    <button class="btn btn-primary">查询</button>
+  </div>
+
+  <!-- 表格 -->
+  <div class="panel-body" style="overflow-x:auto;">
+    <table>
+      <thead>
+        <tr>
+          <th>商机编号</th>
+          <th>商机名称</th>
+          <th>创建日期</th>
+          <th>当前阶段</th>
+          <th style="text-align:right;">金额（万元）</th>
+          <th>负责人</th>
+          <th>结果</th>
+          <th>关键节点</th>
+          <th style="text-align:right;">操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- 跟进中 -->
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2026-0032</a></td>
+          <td><div style="font-weight:500;">凯伦·扬州二期设备增补</div><div style="font-size:11px; color:#888;">💡 复购来源：客户主动询盘</div></td>
+          <td>2026-03-15</td>
+          <td><span class="tag tag-blue">商务跟进</span></td>
+          <td style="text-align:right;" class="amount">¥680</td>
+          <td>张三</td>
+          <td><span class="tag tag-blue">🔄 跟进中</span></td>
+          <td style="font-size:12px; color:#888;">报价已提交</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2026-0018</a></td>
+          <td><div style="font-weight:500;">凯伦·常州恐龙园配套项目</div></td>
+          <td>2026-01-28</td>
+          <td><span class="tag tag-orange">招投标</span></td>
+          <td style="text-align:right;" class="amount">¥1,200</td>
+          <td>张三</td>
+          <td><span class="tag tag-blue">🔄 跟进中</span></td>
+          <td style="font-size:12px; color:#888;">投标中 · 2026-05-10 开标</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2025-0088</a></td>
+          <td><div style="font-weight:500;">凯伦·无锡过山车改造</div></td>
+          <td>2025-11-12</td>
+          <td><span class="tag tag-purple">签约</span></td>
+          <td style="text-align:right;" class="amount">¥420</td>
+          <td>张三</td>
+          <td><span class="tag tag-blue">🔄 跟进中</span></td>
+          <td style="font-size:12px; color:#888;">合同待盖章</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+
+        <!-- 已成单 -->
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2025-0012</a></td>
+          <td><div style="font-weight:500;">凯伦·常州恐龙园一期</div></td>
+          <td>2025-01-15</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥260</td>
+          <td>张三</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">2025-03-08 安装完成</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2024-0076</a></td>
+          <td><div style="font-weight:500;">凯伦·南京旗舰店整体采购</div></td>
+          <td>2024-04-22</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥1,680</td>
+          <td>张三</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">战略订单</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2024-0042</a></td>
+          <td><div style="font-weight:500;">凯伦·苏州园区店采购</div></td>
+          <td>2024-02-10</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥820</td>
+          <td>张三</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">—</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2024-0018</a></td>
+          <td><div style="font-weight:500;">凯伦·苏州店补充采购</div></td>
+          <td>2024-06-05</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥210</td>
+          <td>李四</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">小单</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2023-0096</a></td>
+          <td><div style="font-weight:500;">凯伦·无锡新城店</div></td>
+          <td>2023-06-28</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥560</td>
+          <td>张三</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">—</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2023-0044</a></td>
+          <td><div style="font-weight:500;">凯伦·扬州运河店</div></td>
+          <td>2023-02-14</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥340</td>
+          <td>张三</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">—</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2022-0312</a></td>
+          <td><div style="font-weight:500;">凯伦·无锡店一期建设</div></td>
+          <td>2022-10-05</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥780</td>
+          <td>张三</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">首次合作订单</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+        <tr>
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2021-0205</a></td>
+          <td><div style="font-weight:500;">凯伦·扬州店开业定制</div></td>
+          <td>2021-05-18</td>
+          <td><span class="tag tag-green">结项</span></td>
+          <td style="text-align:right;" class="amount">¥195</td>
+          <td>王五</td>
+          <td><span class="tag tag-green">✓ 已成单</span></td>
+          <td style="font-size:12px; color:#888;">—</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+
+        <!-- 丢单 -->
+        <tr style="background:#fff8f8;">
+          <td><a href="#" class="code" style="color:#1890ff;">OPP-2025-0058</a></td>
+          <td><div style="font-weight:500;">凯伦·镇江商业街项目</div><div style="font-size:11px; color:#ff4d4f;">❌ 丢单原因：客户选择了XX游乐（报价低18%）</div></td>
+          <td>2025-08-15</td>
+          <td><span class="tag tag-gray">招投标</span></td>
+          <td style="text-align:right;" class="amount" style="color:#ff4d4f;">¥480</td>
+          <td>张三</td>
+          <td><span class="tag tag-red">❌ 丢单</span></td>
+          <td style="font-size:12px; color:#ff4d4f;">价格劣势</td>
+          <td style="text-align:right;"><button class="btn-link">查看详情</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="pager">
+    <button class="pager-btn">«</button>
+    <button class="pager-btn active">1</button>
+    <button class="pager-btn">»</button>
+    <span style="margin-left:8px; color:#999;">共 12 条</span>
+  </div>
+</div>
+
+<!-- [区域3] 丢单原因聚合 -->
+<div class="panel">
+  <div class="panel-header">
+    <div class="panel-title">📊 丢单原因聚合分析 <span style="color:#999; font-weight:400; font-size:12px;">（基于历史全部丢单，含同行业匿名数据对比）</span></div>
+    <select>
+      <option>最近3年</option>
+      <option>最近1年</option>
+      <option>全部时间</option>
+    </select>
+  </div>
+  <div style="padding:20px; display:grid; grid-template-columns: 220px 1fr; gap:32px; align-items:center;">
+
+    <!-- 饼图占位 -->
+    <div style="position:relative;">
+      <div class="pie-chart">
+        <div class="pie-chart-label">
+          <div style="font-size:20px; font-weight:700; color:#333; z-index:2; position:relative;">1</div>
+          <div style="font-size:11px; color:#999; z-index:2; position:relative;">累计丢单</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 图例 + 说明 -->
+    <div>
+      <div class="pie-legend" style="margin-bottom:14px;">
+        <div><span class="pie-dot" style="background:#1890ff;"></span><strong>价格因素 40%</strong> — 1 次（OPP-2025-0058 客户选择低价竞品）</div>
+        <div><span class="pie-dot" style="background:#fa8c16;"></span><strong>交期 24%</strong> — 0 次（该客户历史上未因交期丢单）</div>
+        <div><span class="pie-dot" style="background:#722ed1;"></span><strong>竞品 22%</strong> — 0 次</div>
+        <div><span class="pie-dot" style="background:#bfbfbf;"></span><strong>其他 14%</strong> — 0 次</div>
+      </div>
+      <div style="padding:10px 12px; background:#f0f9ff; border:1px solid #91d5ff; border-radius:4px; font-size:12px; color:#1890ff;">
+        💡 <strong>洞察：</strong>该客户对价格较敏感，在丢单场景中100%为价格因素。建议下次报价前先与客户确认预算上限，必要时提交"三档报价方案"（低配/标配/高配）提升中标率。
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

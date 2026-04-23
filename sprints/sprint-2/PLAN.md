@@ -115,7 +115,7 @@
 | 04-22 | kimi1 | ~~#3997~~ | project | **max** | ~~Done~~ | 矿场复盘洞察Tab — PR #4099 merged |
 | 04-22 | kimi3 | ~~#3998~~ | project | **max** | ~~Done~~ | 矿场ROI看板Tab — PR #4092 merged |
 | 04-22 | kimi5 | ~~#4014~~ | crm | **max** | ~~Done~~ | CRM线索统一池+评分引擎 — PR #4090 merged |
-| 04-22 | kimi5 | #4010 | project | **max** | In Progress | 手动补录记录模态 |
+| 04-22 | kimi5 | ~~#4010~~ | project | **max** | ~~Done~~ | 手动补录记录模态 — PR #4105 merged |
 | 04-22 | kimi3 | ~~#4015~~ | crm | **max** | ~~Done~~ | 矿场转商机 readiness检查 — PR #4102 merged |
 | 04-22 | kimi4 | ~~#4009~~ | project | **max** | ~~Done~~ | 记录中心三视角分组Tab — PR #4098 merged |
 | 04-22 | kimi4 | ~~#2851~~ | cockpit | **max** | ~~Done~~ | 验收队列E2E修复 — PR #4101 merged |
@@ -133,7 +133,8 @@
 | 04-23 | kimi3 | ~~#3545~~ | intelligence-hub | **max** | ~~Done~~ | 前端关系网络Tab — PR #4104 merged |
 | 04-23 | kimi1 | ~~#3386~~ | plm | **max** | ~~Done~~ | ECO审批流集成 — PR#4051 已于04-21 merged |
 | 04-23 | kimi1 | #3651 | bidding | **max** | In Progress | 投标立项与进度管理 |
-| 04-23 | kimi3 | #3389 | plm | **max** | In Progress | EBOM解析API |
+| 04-23 | kimi3 | #3389 | plm | **max** | In Progress | EBOM解析API — PR #4107 submitted |
+| 04-23 | kimi5 | #3392 | plm | **max** | In Progress | 版本化定价引擎API |
 | 04-23 | kimi4 | ~~#1875~~ | bidding | **max** | ~~Done~~ | 赢/输复盘模板 — PR#3976 已于04-20 merged |
 | 04-23 | kimi4 | ~~#3174~~ | approval | **max** | ~~Done~~ | 表单模板导入导出+配置向导 — PR#3937+#4080 已merged |
 | 04-23 | kimi4 | ~~#3377~~ | plm | **max** | ~~Done~~ | PLM子系统数据库初始化 — 已merged/CLOSED |

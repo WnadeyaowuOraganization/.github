@@ -1,6 +1,6 @@
 # 万德AI平台 · 功能注册表
 
-> ⏰ 最后更新：2026-04-08 by Perplexity Computer
+> ⏰ 最后更新：2026-04-23 by Perplexity Computer（D96 biz:project A 档纯回填）
 > 📊 统计：1182 个 open Issue | 36 条业务线 | 8 个 Sprint
 
 ---
@@ -171,9 +171,12 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 | EVM挣值管理简化版 | 1 | Sprint-2 | 📋 计划中 | — | D14决策：SPI/CPI实时 |
 | 图纸/BOM/采购/生产/安装/验收 | ~16 | Sprint-2 | 📋 计划中 | `module:execution` | 全链路 57个Issue |
 
-### 18. 项目中心
+### 18. 项目中心 ⭐ D96 三 Master 原型齐全
 | 功能模块 | Issue数 | Sprint | 状态 | 标签 | 策略备注 |
 |----------|---------|--------|------|------|---------|
+| 执行管理（10 HTML + 详设 §2.1-§2.40）| 18 | Sprint-1−6 | 🔨 开发中 | `biz:project` | **D96**：Master #4043，项目组织 14+360 看板 3+BOM 1 全部回填 |
+| 矿场增强（11 HTML）| 1 | Sprint-1 | 🔨 开发中 | `biz:project` | **D96**：Master #3994，#3999 → §2.9 热力图 |
+| 销售记录联动 | 1 | Sprint-1 | 🔨 开发中 | `biz:project` | **D96**：Master #4004，#4011 → §2.1-§2.4 记录中心 |
 | 项目全景API + 费用归集 + 设计变更联动 | 12 | Sprint-6 | 📋 计划中 | `module:project` | Phase4-12 |
 | 风险台账（5维健康度） | 10 | Sprint-6 | 📋 计划中 | `module:project` | Phase13-22 |
 
@@ -311,6 +314,15 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ---
 
 ## 九、策略变更日志
+
+### 2026-04-23 · D96 · biz:project 20 Issue v5.1 §5.6 A 档纯回填
+- **biz:project Issue 对账**：23 open → 3 Master（#4043/#3994/#4004）+ 20 子 Issue 全部依附 Master，**实际非 D92 摘要的 54**（D93/D94 已清理）
+- **原型现状**：3 Master 原型全部完备——#4043 执行管理（10 HTML + 详设 1453 行）+ #3994 矿场（11 HTML + 详设）+ #4004 销售记录（prototype + boss-report），**零新增原型**
+- **精准映射**：执行管理 18 个（项目组织 14 → §2.4/2.6/2.7/2.9/2.32/2.33/2.40 + 项目 360 看板 3 → §2.34 Tab7 文档中心 + AI BOM 1 → §2.16 Tab4）+ 矿场 1 → §2.9 区域品类热力图 + 销售记录 1 → §2.1-2.4 记录中心
+- **代码资产**：🟡 `execution/project-hub-360/` 已部分实现（OverviewTab/DocsTab + tab-*.vue 5 个）/ 后端 6 大域齐全（mine/planning/budget/bidding/project/risk/projectcenter）/ 无需新画原型
+- **决策路径**：Step 1 勾选框选 A 纯回填式 + A 直接回填已有 Master — 最低成本清理
+- **合规统计**：A 档 340→**360**（+20），Master Issue 18→**18**，原型目录 20→**20**，biz:project open（非 Master）20 全合规
+- **产出**：20 个 Issue body 三重引用追加（幂等关键字 `v5.1 历史回填（biz:project）`，OK 20 / SKIP 0 / FAIL 0）/ 零新增 Issue / 零 all-in-one 菜单变更
 
 ### 2026-04-23 · D95 · biz:crm 三线统一 · CRM 商务中心 v2.0 升级
 - **biz:crm Issue 对账**：16 open → 13 依附 Master #4021（3 代理商冻结）；由 CRM 商务中心 v2.0 完整承接

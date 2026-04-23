@@ -1310,3 +1310,15 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **当前阈值**：2 PR / 2 CC，登记"频繁"、观察中（阈值4次才自动改skill）
 - **临时处置**：逐 CC code review 注入提示，均已要求修复后 force-push
 - **后续**：若第3次再出现，升级为 skill 更新
+
+## 2026-04-23 — @SaCheckPermission 止血完成（3PR触发自动更新）
+
+- **升级时间**：09:54
+- **第3次触发 PR**：#4111（kimi3 #3390 D3桥接）
+- **总计影响**：3 PR / 3 CC（#4109 kimi2、#4110 kimi5、#4111 kimi3）
+- **已执行**：
+  - backend-coding/SKILL.md 红线区域增加强制说明 + PLM命名规范
+  - git push main（软链自动生效，无需手动cp）
+  - tmux 广播通知 kimi1/2/4/5 所有在运行CC
+  - kimi3 code review 注入具体修复方案
+- **状态**：止血完成，后续若再出现视为个案处理

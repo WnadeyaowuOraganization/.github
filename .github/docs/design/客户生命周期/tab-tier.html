@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>客户分层 — 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    input[type="range"] { accent-color: #3b82f6; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">客户分层 Tab — 自动分级 + 运营提醒</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 业务目标</td><td style="padding:4px 0;color:#333;">自动给客户打分并分层（VIP/A/B/C/休眠），驱动差异化运营节奏，替代销售主管凭感觉判断客户重要性</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">销售主管（设置规则）、商务人员（查看自己客户分层）、吴耀（超管查看全局分布）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 分级维度</td><td style="padding:4px 0;color:#333;">累计成交金额（权重40）/ 项目数（20）/ 最近活跃度（20）/ 行业影响力（20）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 分级阈值</td><td style="padding:4px 0;color:#333;">VIP ≥ 90 / A 70-89 / B 50-69 / C 30-49 / 休眠 &lt; 30；分别对应月访 / 季访 / 半年访 / 年访 / 挽留策略</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 对应 Issue</td><td style="padding:4px 0;color:#333;"><a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2751" target="_blank" style="color:#1890ff;text-decoration:none;">#2751 自动分级</a> + <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2752" target="_blank" style="color:#1890ff;text-decoration:none;">#2752 运营提醒</a></td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">客户生命周期 — 详细设计.md（§2.3 客户分层Tab）</a>
+    </div>
+  </div>
+</div>
+<!-- end spec-card -->
+
+<!-- [KPI条 — 5个分层小卡] -->
+<div class="grid grid-cols-5 gap-3 mb-5">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">VIP 客户</div>
+    <div class="text-3xl font-bold" style="color:#22c55e;">28</div>
+    <div class="text-xs text-gray-400 mt-1">≥ 90 分 · 月度拜访</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">A 级客户</div>
+    <div class="text-3xl font-bold text-gray-700">145</div>
+    <div class="text-xs text-gray-400 mt-1">70 - 89 分 · 季度拜访</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">B 级客户</div>
+    <div class="text-3xl font-bold text-gray-700">320</div>
+    <div class="text-xs text-gray-400 mt-1">50 - 69 分 · 半年拜访</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">C 级客户</div>
+    <div class="text-3xl font-bold text-gray-700">580</div>
+    <div class="text-xs text-gray-400 mt-1">30 - 49 分 · 年度拜访</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">休眠客户</div>
+    <div class="text-3xl font-bold" style="color:#ef4444;">120</div>
+    <div class="text-xs text-gray-400 mt-1">&lt; 30 分 · 挽留策略</div>
+  </div>
+</div>
+
+<!-- [分级规则配置卡] -->
+<div class="bg-white border border-gray-300 rounded mb-5">
+  <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+    <div class="text-sm font-bold text-gray-700">评分规则与权重</div>
+    <div class="flex gap-2">
+      <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-600 bg-white hover:bg-gray-50">恢复默认</button>
+      <button class="px-3 py-1 text-xs rounded text-white" style="background:#3b82f6;">保存规则</button>
+    </div>
+  </div>
+
+  <div class="p-5 grid grid-cols-12 gap-6">
+    <!-- 左：4个维度权重滑块 -->
+    <div class="col-span-8">
+      <div class="text-xs text-gray-500 mb-3">评分维度权重（四项之和应等于 100）</div>
+
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm text-gray-700">累计成交金额</span>
+          <span class="text-sm font-semibold text-gray-700" id="w1Label">40</span>
+        </div>
+        <input type="range" id="w1" min="0" max="100" value="40" class="w-full" oninput="updateWeights()">
+      </div>
+
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm text-gray-700">项目数量</span>
+          <span class="text-sm font-semibold text-gray-700" id="w2Label">20</span>
+        </div>
+        <input type="range" id="w2" min="0" max="100" value="20" class="w-full" oninput="updateWeights()">
+      </div>
+
+      <div class="mb-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm text-gray-700">最近活跃度</span>
+          <span class="text-sm font-semibold text-gray-700" id="w3Label">20</span>
+        </div>
+        <input type="range" id="w3" min="0" max="100" value="20" class="w-full" oninput="updateWeights()">
+      </div>
+
+      <div class="mb-1">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-sm text-gray-700">行业影响力</span>
+          <span class="text-sm font-semibold text-gray-700" id="w4Label">20</span>
+        </div>
+        <input type="range" id="w4" min="0" max="100" value="20" class="w-full" oninput="updateWeights()">
+      </div>
+    </div>
+
+    <!-- 右：总计显示 + 阈值说明 -->
+    <div class="col-span-4">
+      <div class="border border-gray-200 rounded p-4 bg-gray-50 mb-3">
+        <div class="text-xs text-gray-500 mb-1">权重总计</div>
+        <div class="text-3xl font-bold" id="weightSum" style="color:#22c55e;">100</div>
+        <div class="text-xs mt-1" id="weightHint" style="color:#22c55e;">✓ 权重总和正确</div>
+      </div>
+      <div class="text-xs text-gray-500 leading-relaxed">
+        调整滑块会实时重算总分。系统按每夜定时任务重新评估所有客户分层，或手动点击"立即重算"触发。
+      </div>
+    </div>
+  </div>
+
+  <!-- 下：分层阈值滑块 -->
+  <div class="px-5 pb-5 pt-2 border-t border-dashed border-gray-200">
+    <div class="text-xs text-gray-500 mb-3 mt-3">分层阈值（综合评分 0-100）</div>
+    <div class="grid grid-cols-5 gap-4">
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold" style="color:#22c55e;">VIP ≥</span>
+          <span class="text-sm font-semibold text-gray-700">90</span>
+        </div>
+        <input type="range" min="80" max="100" value="90" class="w-full">
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">A ≥</span>
+          <span class="text-sm font-semibold text-gray-700">70</span>
+        </div>
+        <input type="range" min="60" max="89" value="70" class="w-full">
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">B ≥</span>
+          <span class="text-sm font-semibold text-gray-700">50</span>
+        </div>
+        <input type="range" min="40" max="69" value="50" class="w-full">
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">C ≥</span>
+          <span class="text-sm font-semibold text-gray-700">30</span>
+        </div>
+        <input type="range" min="20" max="49" value="30" class="w-full">
+      </div>
+      <div>
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold" style="color:#ef4444;">休眠 &lt;</span>
+          <span class="text-sm font-semibold text-gray-700">30</span>
+        </div>
+        <input type="range" min="10" max="29" value="29" class="w-full" disabled>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [模拟器卡] -->
+<div class="bg-white border border-gray-300 rounded mb-5">
+  <div class="px-5 py-3 border-b border-gray-200">
+    <div class="text-sm font-bold text-gray-700">分层模拟器</div>
+    <div class="text-xs text-gray-500 mt-1">输入测试客户数据，查看当前规则下的分层结果</div>
+  </div>
+
+  <div class="p-5 grid grid-cols-12 gap-5">
+    <!-- 左：输入表单 -->
+    <div class="col-span-7 grid grid-cols-2 gap-4">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">客户</label>
+        <select class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm bg-white">
+          <option>绿地集团</option>
+          <option>万科地产</option>
+          <option selected>XX主题乐园</option>
+          <option>某幼儿园</option>
+          <option>— 自定义 —</option>
+        </select>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">累计成交金额（万元）</label>
+        <div class="flex items-center border border-gray-300 rounded px-2 bg-white">
+          <span class="text-xs text-gray-400 mr-1">¥</span>
+          <input type="number" value="480" class="w-full py-1.5 text-sm outline-none">
+          <span class="text-xs text-gray-400 ml-1">万</span>
+        </div>
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">项目数量</label>
+        <input type="number" value="8" class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">最近活跃度（0-100）</label>
+        <input type="number" value="75" class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+      </div>
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">行业影响力（0-100）</label>
+        <input type="number" value="60" class="w-full border border-gray-300 rounded px-2 py-1.5 text-sm">
+      </div>
+      <div class="flex items-end">
+        <button class="px-4 py-1.5 text-sm rounded text-white w-full" style="background:#3b82f6;">计算分层</button>
+      </div>
+    </div>
+
+    <!-- 右：结果卡 -->
+    <div class="col-span-5">
+      <div class="border border-gray-200 rounded p-4 bg-gray-50">
+        <div class="text-xs text-gray-500 mb-2">模拟计算结果</div>
+        <div class="flex items-end gap-3 mb-3">
+          <div class="text-xs text-gray-500">综合评分</div>
+          <div class="text-4xl font-bold text-gray-700 leading-none">88</div>
+          <div class="text-xs text-gray-400 mb-1">/ 100</div>
+        </div>
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-xs text-gray-500">分层：</span>
+          <span class="inline-block px-2 py-0.5 text-xs rounded text-white font-semibold" style="background:#22c55e;">A 级</span>
+        </div>
+        <div class="text-xs text-gray-500 mb-1">推荐运营动作</div>
+        <div class="text-xs text-gray-700 leading-relaxed bg-white border border-gray-200 rounded p-2">
+          · 季度拜访（每90天）<br>
+          · 专属客户经理跟进<br>
+          · 新品首发体验机会
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [客户分层列表] -->
+<div class="bg-white border border-gray-300 rounded">
+  <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+    <div class="text-sm font-bold text-gray-700">客户分层列表</div>
+    <div class="flex gap-2">
+      <select class="border border-gray-300 rounded px-2 py-1 text-xs bg-white">
+        <option>全部分层</option>
+        <option>VIP</option><option>A</option><option>B</option><option>C</option><option>休眠</option>
+      </select>
+      <input type="text" placeholder="搜索客户名称" class="border border-gray-300 rounded px-2 py-1 text-xs w-40">
+      <button class="px-3 py-1 text-xs rounded text-white" style="background:#3b82f6;">立即重算</button>
+    </div>
+  </div>
+
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="bg-gray-50 text-xs text-gray-500">
+        <th class="text-left px-4 py-2 font-medium">分层</th>
+        <th class="text-left px-4 py-2 font-medium">客户</th>
+        <th class="text-left px-4 py-2 font-medium">综合评分</th>
+        <th class="text-left px-4 py-2 font-medium">累计金额</th>
+        <th class="text-left px-4 py-2 font-medium">项目数</th>
+        <th class="text-left px-4 py-2 font-medium">最近活跃</th>
+        <th class="text-left px-4 py-2 font-medium">负责人</th>
+        <th class="text-left px-4 py-2 font-medium">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded text-white font-semibold" style="background:#22c55e;">VIP</span></td>
+        <td class="px-4 py-2">绿地集团</td>
+        <td class="px-4 py-2 font-semibold">94</td>
+        <td class="px-4 py-2">¥1,200 万</td>
+        <td class="px-4 py-2">23</td>
+        <td class="px-4 py-2 text-gray-500">2 天前</td>
+        <td class="px-4 py-2">张伟</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded text-white font-semibold" style="background:#22c55e;">VIP</span></td>
+        <td class="px-4 py-2">万科地产</td>
+        <td class="px-4 py-2 font-semibold">92</td>
+        <td class="px-4 py-2">¥980 万</td>
+        <td class="px-4 py-2">18</td>
+        <td class="px-4 py-2 text-gray-500">5 天前</td>
+        <td class="px-4 py-2">李娜</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-400 text-gray-700 font-semibold">A</span></td>
+        <td class="px-4 py-2">XX主题乐园</td>
+        <td class="px-4 py-2 font-semibold">82</td>
+        <td class="px-4 py-2">¥480 万</td>
+        <td class="px-4 py-2">8</td>
+        <td class="px-4 py-2 text-gray-500">15 天前</td>
+        <td class="px-4 py-2">王强</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-400 text-gray-700 font-semibold">A</span></td>
+        <td class="px-4 py-2">华侨城文旅</td>
+        <td class="px-4 py-2 font-semibold">78</td>
+        <td class="px-4 py-2">¥360 万</td>
+        <td class="px-4 py-2">6</td>
+        <td class="px-4 py-2 text-gray-500">20 天前</td>
+        <td class="px-4 py-2">赵敏</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-400 text-gray-700 font-semibold">A</span></td>
+        <td class="px-4 py-2">海昌海洋公园</td>
+        <td class="px-4 py-2 font-semibold">72</td>
+        <td class="px-4 py-2">¥290 万</td>
+        <td class="px-4 py-2">5</td>
+        <td class="px-4 py-2 text-gray-500">28 天前</td>
+        <td class="px-4 py-2">孙浩</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-300 text-gray-600">B</span></td>
+        <td class="px-4 py-2">蓝城教育集团</td>
+        <td class="px-4 py-2 font-semibold">65</td>
+        <td class="px-4 py-2">¥180 万</td>
+        <td class="px-4 py-2">3</td>
+        <td class="px-4 py-2 text-gray-500">45 天前</td>
+        <td class="px-4 py-2">周丽</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-300 text-gray-600">B</span></td>
+        <td class="px-4 py-2">紫荆花幼教</td>
+        <td class="px-4 py-2 font-semibold">58</td>
+        <td class="px-4 py-2">¥120 万</td>
+        <td class="px-4 py-2">2</td>
+        <td class="px-4 py-2 text-gray-500">60 天前</td>
+        <td class="px-4 py-2">吴磊</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-300 text-gray-600">B</span></td>
+        <td class="px-4 py-2">阳光社区文旅</td>
+        <td class="px-4 py-2 font-semibold">52</td>
+        <td class="px-4 py-2">¥95 万</td>
+        <td class="px-4 py-2">2</td>
+        <td class="px-4 py-2 text-gray-500">75 天前</td>
+        <td class="px-4 py-2">陈静</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded border border-gray-300 text-gray-500">C</span></td>
+        <td class="px-4 py-2">某幼儿园</td>
+        <td class="px-4 py-2 font-semibold">38</td>
+        <td class="px-4 py-2">¥45 万</td>
+        <td class="px-4 py-2">1</td>
+        <td class="px-4 py-2 text-gray-500">120 天前</td>
+        <td class="px-4 py-2">黄涛</td>
+        <td class="px-4 py-2"><a href="#" style="color:#3b82f6;">查看详情</a></td>
+      </tr>
+      <tr class="border-t border-gray-200">
+        <td class="px-4 py-2"><span class="inline-block px-2 py-0.5 text-xs rounded text-white font-semibold" style="background:#ef4444;">休眠</span></td>
+        <td class="px-4 py-2">XX游乐设备商</td>
+        <td class="px-4 py-2 font-semibold">22</td>
+        <td class="px-4 py-2">¥28 万</td>
+        <td class="px-4 py-2">1</td>
+        <td class="px-4 py-2 text-gray-500">240 天前</td>
+        <td class="px-4 py-2">郑阳</td>
+        <td class="px-4 py-2"><a href="#" style="color:#ef4444;font-weight:600;">回访挽留</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+    <div>共 1,193 条客户记录 · 当前显示前 10 条</div>
+    <div class="flex gap-1">
+      <button class="px-2 py-1 border border-gray-300 rounded">‹</button>
+      <button class="px-2 py-1 border border-gray-300 rounded bg-gray-100">1</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">2</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">3</button>
+      <button class="px-2 py-1 border border-gray-300 rounded">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div style="margin:16px 0 0 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body2');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">开发说明</span>
+      <span style="font-weight:600;color:#ad6800;">运营策略触达 — 对应 #2752</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body2" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 分层升降</td><td style="padding:4px 0;color:#333;">分层变化时自动推送企微通知给负责人；连续3次降级触发销售主管介入提醒</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 运营节奏</td><td style="padding:4px 0;color:#333;">VIP 月访 / A 季访 / B 半年访 / C 年访 / 休眠：90天无互动自动进入挽留SOP</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 定时任务</td><td style="padding:4px 0;color:#333;">每日凌晨 2:00 批量重算全量客户评分；活跃度字段由 CRM 操作日志滚动计算</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">规则修改可保存并立即重算 / 模拟器与实际规则一致 / 分层变更推送企微成功率 ≥ 99%</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">客户生命周期 — 详细设计.md（§2.3 客户分层Tab）</a>
+    </div>
+  </div>
+</div>
+<!-- end spec-card -->
+
+<script>
+function updateWeights() {
+  var w1 = parseInt(document.getElementById('w1').value);
+  var w2 = parseInt(document.getElementById('w2').value);
+  var w3 = parseInt(document.getElementById('w3').value);
+  var w4 = parseInt(document.getElementById('w4').value);
+  document.getElementById('w1Label').textContent = w1;
+  document.getElementById('w2Label').textContent = w2;
+  document.getElementById('w3Label').textContent = w3;
+  document.getElementById('w4Label').textContent = w4;
+  var sum = w1 + w2 + w3 + w4;
+  var sumEl = document.getElementById('weightSum');
+  var hintEl = document.getElementById('weightHint');
+  sumEl.textContent = sum;
+  if (sum === 100) {
+    sumEl.style.color = '#22c55e';
+    hintEl.style.color = '#22c55e';
+    hintEl.textContent = '✓ 权重总和正确';
+  } else {
+    sumEl.style.color = '#ef4444';
+    hintEl.style.color = '#ef4444';
+    hintEl.textContent = '✗ 权重总和须等于 100（当前 ' + sum + '）';
+  }
+}
+</script>
+
+</body>
+</html>

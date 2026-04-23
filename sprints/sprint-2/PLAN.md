@@ -214,11 +214,11 @@
 | 04-24 | kimi2 | #4016 | crm | medium | In Progress | 架构蓝图+术语数据字典 |
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
 | 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — PR #4133 merged |
-| 04-24 | kimi1 | #2308 | design-ai | medium | In Progress | 主题方案灵感库（排程建议#1，03:00派遣）|
+| 04-24 | kimi1 | #2308 | design-ai | **high** | In Progress | 主题方案灵感库（排程建议#1，03:00派遣，实际复杂度：复杂，15+文件，预计T1-15阶段交付）|
 | 04-24 | kimi6 | #1920 | d3 | medium | **Blocked** | wande-gh-plugins重构 — PR #34 merge冲突，待解决 |
 
 **当前5个CC在线运行中：**
-- kimi1 #2308: **新派遣**（03:00 刚启动，主题方案灵感库）
+- kimi1 #2308: 58%进度（主题方案灵感库，复杂度高，T1-15分阶段交付，目前T1-2建表）
 - kimi2 #4016: 29%进度 (架构蓝图+术语数据字典)
 - kimi3 #2307: 37%进度 (局部修改模块GUI，PR #4147 open 但质量预检FAILED，已通知修复)
 - kimi5 #4011: 49%进度 (记录中心三视角分组Tab)

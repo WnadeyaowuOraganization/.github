@@ -104,6 +104,16 @@ start_manager() {
   ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
   [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
 
+  # 加载共享 skill 到工作目录
+  mkdir -p "$GITHUB_DIR/.claude/skills"
+  SHARED_SKILLS="${GITHUB_DIR}/agents/shared"
+  if [ -d "$SHARED_SKILLS" ]; then
+    for skill_dir in "$SHARED_SKILLS"/*/; do
+      [ -f "${skill_dir}SKILL.md" ] || continue
+      ln -sfn "${skill_dir%/}" "$GITHUB_DIR/.claude/skills/$(basename "$skill_dir")"
+    done
+  fi
+
   tmux new-session -d -s "$SESSION" -c "$GITHUB_DIR" \
     "export GH_TOKEN=${GH_TOKEN}; \
      export HOME=${HOME_DIR}; \

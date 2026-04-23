@@ -89,7 +89,16 @@ for skill_dir in "$REGULAR_SKILLS_SRC"/*/; do
   ln -sfn "${skill_dir%/}" "$SKILLS_DIR/$skill_name"
   skill_count=$((skill_count + 1))
 done
-echo "✅ 普通 skills: $skill_count 个"
+# 3. 加载共享 skill（team-comm等）
+SHARED_SKILLS="${GITHUB_DIR}/agents/shared"
+if [ -d "$SHARED_SKILLS" ]; then
+  for skill_dir in "$SHARED_SKILLS"/*/; do
+    [ -f "${skill_dir}SKILL.md" ] || continue
+    ln -sfn "${skill_dir%/}" "$SKILLS_DIR/$(basename "$skill_dir")"
+    skill_count=$((skill_count + 1))
+  done
+fi
+echo "✅ skills: $skill_count 个（含共享）"
 echo "   加载顺序: $(ls -1 "$SKILLS_DIR" | head -5 | tr '\n' ' ')..."
 
 # ==============================================================

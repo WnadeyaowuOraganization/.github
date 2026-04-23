@@ -1302,23 +1302,41 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 频次：首次，观察中
 - TODO：考虑在 backend-coding skill 中补充"提交前先 git add + git commit，避免 git checkout . 清空未追踪文件"红线
 
-## 2026-04-23 — PLM Controller 缺少 @SaCheckPermission（观察中）
+---
 
-- **发现时间**：09:34 巡检
-- **影响 PR**：#4109（kimi2 #3387）、#4110（kimi5 #3391）
-- **现象**：新增 `com.wande.ai.modules.plm.*` 子模块的 Controller 方法均未加 `@SaCheckPermission`，backend-coding skill 示例中已有但未被遵循
-- **当前阈值**：2 PR / 2 CC，登记"频繁"、观察中（阈值4次才自动改skill）
-- **临时处置**：逐 CC code review 注入提示，均已要求修复后 force-push
-- **后续**：若第3次再出现，升级为 skill 更新
+## 2026-04-20 【重大】GitHub Actions CI 全量 startup_failure — GitHub 内部状态损坏
 
-## 2026-04-23 — @SaCheckPermission 止血完成（3PR触发自动更新）
+**症状**：
+- 2026-04-19 17:20 UTC，g7e runner 机器下线后，所有 push/PR 事件开始触发 BuildFailed 合成 workflow（ID: 263166433）而非真实 workflow
+- `workflow_dispatch` 触发的 run 创建 0 个 job，1秒内即完成 startup_failure
+- m7i runner 在线并连接到 broker，但 GitHub 从未向其派发任何 job
+- 影响：所有分支 CI 完全停止 ≥20小时
 
-- **升级时间**：09:54
-- **第3次触发 PR**：#4111（kimi3 #3390 D3桥接）
-- **总计影响**：3 PR / 3 CC（#4109 kimi2、#4110 kimi5、#4111 kimi3）
-- **已执行**：
-  - backend-coding/SKILL.md 红线区域增加强制说明 + PLM命名规范
-  - git push main（软链自动生效，无需手动cp）
-  - tmux 广播通知 kimi1/2/4/5 所有在运行CC
-  - kimi3 code review 注入具体修复方案
-- **状态**：止血完成，后续若再出现视为个案处理
+**根本原因（已确认为 GitHub 侧问题）**：
+- GitHub 内部 job dispatcher 在所有 runner 离线期间创建了 "BuildFailed" 合成 workflow 状态
+- 即使 runner 恢复上线（17:20→20:00 m7i runner 重连），GitHub 也不再向该 repo 派发新 job
+- 表现：0 jobs 创建 + <2秒 startup_failure = GitHub 在 job 创建阶段（非 runner 匹配阶段）即失败
+
+**已尝试的修复（全部无效）**：
+1. Runner repo 级别重注册（AgentId 24, 25）
+2. Runner org 级别重注册（AgentId 41, 42）
+3. 不同 runner 名称（m7i-runner, wande-ci-runner）
+4. Runner group 可见性 selected → all
+5. 删除所有离线 g7e runner（IDs: 24-29, 41）
+6. 禁用/重启 GitHub Actions
+7. 禁用/重启 pr-test.yml 等各 workflow
+8. 删除并重建 pr-test.yml 文件
+9. 创建全新 workflow 文件（fresh-test-*.yml）
+
+**当前状态（2026-04-20 22:10 CST）**：
+- m7i-runner (AgentId: 42, org 级别) 在线，Default 组 visibility=all，wande-play 可见
+- run 24670508094 已 rerun 并进入 queued 状态（>20分钟仍卡住，runner 未收到派发）
+- 新 workflow_dispatch 仍即时 startup_failure
+
+**建议行动**：
+1. 等待 GitHub 自愈（可能需要 24-48小时）
+2. 或向 GitHub Support 提交 ticket，描述：repo `WnadeyaowuOraganization/wande-play`，所有 workflow runs 从 2026-04-19T17:20Z 起均为 startup_failure with 0 jobs，runner online
+3. Demo 期间需要手动操作 dev 部署，绕过 CI
+
+**kimi3/kimi4 锁清理**：
+- PR #3990 (kimi3/#3394) 和 PR #3991 (kimi4/#3383) 均已 merged，Project 状态已更新为 Done，cc_scheduler/lock 文件已清除

@@ -600,6 +600,34 @@ def classify_kimi_provider(status_code, resp_body):
     return ErrorType.UNRECOVERABLE, err_type or f"HTTP{status_code}", None, message
 
 
+def classify_infini_provider(status_code, resp_body):
+    """无问星穹 (infini-ai) 错误分类
+
+    无问星穹 429 = 日配额耗尽，reset 在次日 00:00 +08:00。
+    返回空 body，不带任何关键词，无法通过通用函数识别。
+
+    Returns: (ErrorType, error_code, cooldown_until_iso, raw_message)
+    """
+    fields, message = _extract_error_fields(resp_body)
+    err_type = fields.get("type", "")
+
+    # 认证错误
+    if status_code in (401, 403):
+        return ErrorType.UNRECOVERABLE, err_type or f"HTTP{status_code}", None, message
+
+    # 日配额耗尽 —— 冷却到次日 00:00:00 +08:00
+    if status_code == 429:
+        now_bj = datetime.now(CST)
+        midnight_bj = (now_bj + timedelta(days=1)).replace(
+            hour=0, minute=0, second=0, microsecond=0
+        )
+        reset_iso = midnight_bj.isoformat()
+        return ErrorType.QUOTA_EXHAUSTED, "daily_quota_exhausted", reset_iso, message or "Daily quota exhausted, resets at midnight +08:00"
+
+    # 其他错误回退到通用处理
+    return classify_anthropic_compat(status_code, resp_body)
+
+
 def classify_error(key_cfg, status_code, resp_body):
     """根据 provider 分派到对应的错误分类函数
 
@@ -611,6 +639,8 @@ def classify_error(key_cfg, status_code, resp_body):
         return classify_zhipu_provider(status_code, resp_body)
     elif provider == "kimi":
         return classify_kimi_provider(status_code, resp_body)
+    elif provider == "infini":
+        return classify_infini_provider(status_code, resp_body)
     else:
         # 其他供应商统一使用 anthropic_compat 错误分类
         return classify_anthropic_compat(status_code, resp_body)

@@ -1,9 +1,16 @@
 {
   "kimi1": {
-    "cooldown_until": "2026-04-24T01:14:08.800750+08:00",
-    "marked_at": "2026-04-23T20:14:08.800750+08:00",
+    "cooldown_until": "2026-04-21T00:14:39.983082+08:00",
+    "marked_at": "2026-04-20T19:14:39.983082+08:00",
     "error_type": "balance_exhausted",
-    "error_code": "rate_limit_error",
-    "raw_error": "You've reached your usage limit for this period. Your quota will be refreshed in the next period. Upgrade to get more: https://www.kimi.com/code/console?from=limit-upgrade"
+    "error_code": "permission_error",
+    "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
+  },
+  "无问星穹": {
+    "cooldown_until": "2026-04-21T00:00:00+08:00",
+    "marked_at": "2026-04-20T20:38:00+08:00",
+    "error_type": "quota_exhausted",
+    "error_code": "daily_quota_exhausted",
+    "raw_error": "Daily quota exhausted (HTTP 429, empty body), resets at midnight +08:00"
   }
 }

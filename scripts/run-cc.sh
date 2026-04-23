@@ -240,19 +240,8 @@ if [ "$MODE" = "issue" ]; then
     echo "$(date): 详细设计文档已注入: $(basename $DESIGN_DOC)"
   fi
 
-  # shared-conventions.md 作为 system prompt 追加（含硬约束+工作流规范）
-  # envsubst 替换 ${ISSUE} 占位符
-  CONVENTIONS_FILE="$SCRIPT_DIR/../docs/agent-docs/share/shared-conventions.md"
-  CONVENTIONS_INJECT="/tmp/cc-conventions-${SESSION}.md"
-  if [ -f "$CONVENTIONS_FILE" ]; then
-    ISSUE="$ISSUE" envsubst '${ISSUE}' < "$CONVENTIONS_FILE" > "$CONVENTIONS_INJECT" 2>/dev/null \
-      || sed "s/\${ISSUE}/${ISSUE}/g" "$CONVENTIONS_FILE" > "$CONVENTIONS_INJECT"
-    CONVENTIONS_FLAG="--append-system-prompt-file ${CONVENTIONS_INJECT}"
-    echo "$(date): 共享规范注入 system prompt ($(wc -l < "$CONVENTIONS_FILE") 行)"
-  else
-    CONVENTIONS_FLAG=""
-    echo "$(date): [WARN] shared-conventions.md 不存在，跳过规范注入"
-  fi
+  # 共享规范已合并到 CLAUDE.md，不再单独注入
+  CONVENTIONS_FLAG=""
 else
   CC_PROMPT="$PROMPT"
 fi
@@ -352,8 +341,9 @@ SKILLS_SRC="${HOME_DIR}/projects/.github/docs/agent-docs/skills"
 if [ -d "$SKILLS_SRC" ]; then
   # 1. 覆盖 CLAUDE.md（位于 BASE_DIR 根，被 PROJECT_DIR/parents 自动加载）
   if [ -f "$SKILLS_SRC/CLAUDE.md" ]; then
-    cp -f "$SKILLS_SRC/CLAUDE.md" "$BASE_DIR/CLAUDE.md"
-    echo "✅ 同步 CLAUDE.md → $BASE_DIR/CLAUDE.md"
+    ISSUE="$ISSUE" envsubst '${ISSUE}' < "$SKILLS_SRC/CLAUDE.md" > "$BASE_DIR/CLAUDE.md" 2>/dev/null \
+      || sed "s/\${ISSUE}/${ISSUE}/g" "$SKILLS_SRC/CLAUDE.md" > "$BASE_DIR/CLAUDE.md"
+    echo "✅ 同步 CLAUDE.md → $BASE_DIR/CLAUDE.md (含 \${ISSUE} 替换)"
   fi
   # 2. 软链每个 skill 子目录到 BASE_DIR/.claude/skills/<name>
   mkdir -p "$BASE_DIR/.claude/skills"

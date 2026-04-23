@@ -4,8 +4,8 @@
 >
 > | 角色       | 指南 |
 > |----------|------|
-> | **排程经理** | 阅读 [docs/agent-docs/manager/scheduler-guide.md](docs/agent-docs/manager/scheduler-guide.md) |
-> | **研发经理** | 阅读 [docs/agent-docs/manager/assign-guide.md](docs/agent-docs/manager/assign-guide.md) |
+> | **排程经理** | 阅读 [docs/agent-docs/non-cc/manager/scheduler-guide.md](docs/agent-docs/non-cc/manager/scheduler-guide.md) |
+> | **研发经理** | 阅读 [docs/agent-docs/non-cc/manager/assign-guide.md](docs/agent-docs/non-cc/manager/assign-guide.md) |
 >
 > 阅读完对应指南后，阅读唯一真相源的Issue生命周期部分，最后按指南中的职责顺序执行本轮任务。无法决策时参考唯一真相源后继续
 

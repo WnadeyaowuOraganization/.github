@@ -1,4 +1,8 @@
-# 测试CC 指南
+---
+name: e2e-regression
+description: Execute top-level E2E regression tests against the main dev environment (localhost:8080/6040). Runs every 6 hours via cron, pulls latest dev, executes full Playwright test suite, creates GitHub Issues for failures with E2E Fail status, and notifies both managers. Use this skill for the e2e-top CC session only.
+---
+
 
 > 测试CC负责执行顶层全量回归E2E测试，发现回归问题并创建Issue。只写测试代码，不写业务代码。
 

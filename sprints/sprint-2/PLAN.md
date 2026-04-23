@@ -110,9 +110,10 @@
 | 04-23 | kimi1 | #2427 | pipeline | medium | In Progress | 环评/规划许可公示采集 — PR #4130 |
 | 04-23 | kimi2 | #4005 | frontend | medium | In Progress | 整改 记录中心4Tab对齐 — PR #4131 |
 | 04-23 | kimi3 | ~~#4006~~ | frontend | medium | ~~Done~~ | 整改 老板周报对齐 — PR #4106 merged |
-| 04-23 | kimi5 | #3397 | frontend | medium | In Progress | 产品配置器+报价页面 — PR #4128 |
+| 04-23 | kimi5 | ~~#3397~~ | frontend | medium | ~~Done~~ | 产品配置器+报价页面 — PR #4083 merged |
 | 04-23 | kimi6 | #4037 | crm | medium | In Progress | CRM商机详情-合同Tab |
 | 04-23 | kimi3 | #4042 | frontend | medium | In Progress | CRM流程监控Tab |
+| 04-23 | kimi5 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
 | 04-22 | kimi2 | ~~#4008~~ | project | **max** | ~~Done~~ | 记录中心时间线视角增强 — PR #4096 merged |
 | 04-22 | kimi4 | ~~#3996~~ | project | **max** | ~~Done~~ | 矿场转化漏斗Tab — PR #4089 merged |
 | 04-22 | kimi4 | #4009 | project | **max** | In Progress | 记录中心三视角分组Tab |

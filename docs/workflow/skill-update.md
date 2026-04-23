@@ -1301,3 +1301,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 救援路径：M2 cache .class 文件仍存 + target/generated-sources MapStruct 文件保留字段信息 + 后端进程仍运行 → 方案2重实现
 - 频次：首次，观察中
 - TODO：考虑在 backend-coding skill 中补充"提交前先 git add + git commit，避免 git checkout . 清空未追踪文件"红线
+
+## 2026-04-23 — PLM Controller 缺少 @SaCheckPermission（观察中）
+
+- **发现时间**：09:34 巡检
+- **影响 PR**：#4109（kimi2 #3387）、#4110（kimi5 #3391）
+- **现象**：新增 `com.wande.ai.modules.plm.*` 子模块的 Controller 方法均未加 `@SaCheckPermission`，backend-coding skill 示例中已有但未被遵循
+- **当前阈值**：2 PR / 2 CC，登记"频繁"、观察中（阈值4次才自动改skill）
+- **临时处置**：逐 CC code review 注入提示，均已要求修复后 force-push
+- **后续**：若第3次再出现，升级为 skill 更新

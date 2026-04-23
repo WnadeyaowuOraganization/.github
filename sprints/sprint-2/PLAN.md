@@ -115,7 +115,8 @@
 | 04-23 | kimi3 | #4042 | frontend | medium | In Progress | CRM流程监控Tab |
 | 04-23 | kimi5 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
 | 04-23 | kimi2 | #3156 | approval | **max** | In Progress | 流程效率分析看板 |
-| 04-23 | kimi1 | #4018 | crm | medium | In Progress | 整改 crm_opportunity 明道云对齐 |
+| 04-23 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改 crm_opportunity 明道云对齐 — PR #4133 merged |
+| 04-23 | kimi1 | #4007 | frontend | medium | In Progress | 整改 项目周报+Nudge联动改造 |
 | 04-22 | kimi2 | ~~#4008~~ | project | **max** | ~~Done~~ | 记录中心时间线视角增强 — PR #4096 merged |
 | 04-22 | kimi4 | ~~#3996~~ | project | **max** | ~~Done~~ | 矿场转化漏斗Tab — PR #4089 merged |
 | 04-22 | kimi4 | #4009 | project | **max** | In Progress | 记录中心三视角分组Tab |

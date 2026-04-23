@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>赢/丢单复盘 — 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 环形进度（赢率）占位 */
+    .ring-chart {
+      width: 96px;
+      height: 96px;
+      border-radius: 50%;
+      background: conic-gradient(#22c55e 0% 65%, #e5e7eb 65% 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+    .ring-chart::after {
+      content: "";
+      position: absolute;
+      width: 68px;
+      height: 68px;
+      border-radius: 50%;
+      background: #ffffff;
+    }
+    .ring-chart span {
+      position: relative;
+      z-index: 1;
+      font-size: 18px;
+      font-weight: 700;
+      color: #374151;
+    }
+    /* 简易开关 */
+    .switch {
+      width: 36px;
+      height: 18px;
+      background: #22c55e;
+      border-radius: 999px;
+      position: relative;
+      display: inline-block;
+      vertical-align: middle;
+    }
+    .switch.off { background: #d1d5db; }
+    .switch::after {
+      content: "";
+      position: absolute;
+      top: 2px;
+      left: 20px;
+      width: 14px;
+      height: 14px;
+      background: #fff;
+      border-radius: 50%;
+      transition: left .15s;
+    }
+    .switch.off::after { left: 2px; }
+    /* 柱状图占位 */
+    .bar {
+      height: 8px;
+      background: #3b82f6;
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- 需求说明块 SPEC-CARD BEGIN -->
+<details open class="mb-6 border border-gray-300 rounded bg-white">
+  <summary class="cursor-pointer px-4 py-2 font-semibold text-gray-700 border-b border-gray-300 bg-gray-100">
+    📋 需求说明｜赢/丢单复盘
+  </summary>
+  <div class="p-4 text-sm text-gray-700 space-y-2">
+    <p>• <b>业务目标</b>：商机结果闭环复盘，沉淀赢单经验与丢单教训，月度汇总驱动团队改进</p>
+    <p>• <b>触发</b>：商机状态变更为已赢/已丢 → 自动创建复盘任务 → T+5/T+7 截止 → 超时红色提醒</p>
+    <p>• <b>数据</b>：opportunity.status / review_task / review_form（字段：结果/关键因素/客户反馈/改进点/下一步）</p>
+    <p>• <b>汇总</b>：月度赢率 / 丢单TOP3原因 / 按人排名，顶部卡片展示</p>
+    <p>• <b>对应 Issue</b>：<a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2746" target="_blank" class="text-blue-500 underline">#2746 赢/丢单复盘触发</a> ｜ <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2753" target="_blank" class="text-blue-500 underline">#2753 复盘表单页</a></p>
+  </div>
+</details>
+<!-- 需求说明块 SPEC-CARD END -->
+
+<!-- [区域1] 月度汇总卡片 -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-5">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-semibold text-gray-700">📊 本月复盘汇总（2026年4月）</h2>
+    <span class="text-xs text-gray-500">数据更新时间：2026-04-21 10:30</span>
+  </div>
+
+  <div class="grid grid-cols-12 gap-6">
+    <!-- 左：总量大字 -->
+    <div class="col-span-3 border-r border-gray-200 pr-6">
+      <div class="text-xs text-gray-500 mb-1">本月复盘总数</div>
+      <div class="text-4xl font-bold text-gray-700 leading-none mb-2">23</div>
+      <div class="text-sm text-gray-600 mb-3">
+        <span class="text-green-500 font-medium">赢 15</span>
+        <span class="mx-1 text-gray-400">/</span>
+        <span class="text-red-500 font-medium">丢 8</span>
+      </div>
+      <div class="text-xs text-green-500">▲ 较上月 +12%</div>
+    </div>
+
+    <!-- 中：赢率 + 丢单TOP3 -->
+    <div class="col-span-5 border-r border-gray-200 pr-6">
+      <div class="flex items-start gap-5">
+        <div class="flex flex-col items-center">
+          <div class="ring-chart mb-2"><span>65%</span></div>
+          <div class="text-xs text-gray-500">月度赢率</div>
+        </div>
+        <div class="flex-1">
+          <div class="text-xs text-gray-500 mb-2">丢单 TOP3 原因</div>
+          <div class="space-y-1.5 text-sm">
+            <div class="flex items-center justify-between">
+              <span class="text-gray-700">1. 价格劣势</span>
+              <span class="text-red-500 font-medium">5 单</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-700">2. 方案不匹配</span>
+              <span class="text-red-500 font-medium">2 单</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <span class="text-gray-700">3. 客户关系弱</span>
+              <span class="text-red-500 font-medium">1 单</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：销售排名 -->
+    <div class="col-span-4">
+      <div class="text-xs text-gray-500 mb-2">按销售完成复盘排名</div>
+      <div class="space-y-2.5 text-sm">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-gray-700">🥇 张伟</span>
+            <span class="text-gray-600 font-medium">8 单</span>
+          </div>
+          <div class="bar" style="width: 100%;"></div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-gray-700">🥈 李娜</span>
+            <span class="text-gray-600 font-medium">6 单</span>
+          </div>
+          <div class="bar" style="width: 75%;"></div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-gray-700">🥉 王强</span>
+            <span class="text-gray-600 font-medium">5 单</span>
+          </div>
+          <div class="bar" style="width: 62%;"></div>
+        </div>
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-gray-700">　 赵敏</span>
+            <span class="text-gray-600 font-medium">4 单</span>
+          </div>
+          <div class="bar" style="width: 50%;"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [区域2] 自动触发规则 -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-5">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-semibold text-gray-700">⚙️ 自动触发规则</h2>
+    <button class="px-3 py-1.5 bg-blue-500 text-white text-sm rounded hover:bg-blue-600">+ 新增规则</button>
+  </div>
+
+  <div class="space-y-3">
+    <!-- 规则1 -->
+    <div class="border border-gray-200 rounded p-4 flex items-start justify-between">
+      <div class="flex-1">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2 py-0.5 bg-green-50 text-green-500 text-xs rounded border border-green-200">赢单</span>
+          <span class="text-sm font-medium text-gray-700">商机赢单复盘</span>
+        </div>
+        <div class="text-sm text-gray-600">
+          当商机状态变更为 <b class="text-gray-700">"已赢单"</b> → 自动创建复盘任务，截止日 <b class="text-gray-700">T+7</b>，指派给 <b class="text-gray-700">商机负责人</b>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 ml-4">
+        <span class="switch"></span>
+        <a class="text-blue-500 text-sm hover:underline" href="#">编辑</a>
+      </div>
+    </div>
+
+    <!-- 规则2 -->
+    <div class="border border-gray-200 rounded p-4 flex items-start justify-between">
+      <div class="flex-1">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="px-2 py-0.5 bg-red-50 text-red-500 text-xs rounded border border-red-200">丢单</span>
+          <span class="text-sm font-medium text-gray-700">商机丢单复盘</span>
+        </div>
+        <div class="text-sm text-gray-600">
+          当商机状态变更为 <b class="text-gray-700">"已丢单"</b> → 自动创建复盘任务，截止日 <b class="text-gray-700">T+5</b>，<b class="text-gray-700">抄送销售总监</b>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 ml-4">
+        <span class="switch"></span>
+        <a class="text-blue-500 text-sm hover:underline" href="#">编辑</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- [区域3] 复盘任务列表 -->
+<div class="bg-white border border-gray-300 rounded p-5 mb-5">
+  <div class="flex items-center justify-between mb-4">
+    <h2 class="text-base font-semibold text-gray-700">📝 复盘任务列表</h2>
+    <div class="flex items-center gap-2 text-sm">
+      <select class="border border-gray-300 rounded px-2 py-1 text-gray-700 text-sm">
+        <option>全部状态</option>
+        <option>已完成</option>
+        <option>进行中</option>
+        <option>逾期</option>
+      </select>
+      <select class="border border-gray-300 rounded px-2 py-1 text-gray-700 text-sm">
+        <option>全部类型</option>
+        <option>赢单</option>
+        <option>丢单</option>
+      </select>
+      <input type="text" placeholder="搜索商机名" class="border border-gray-300 rounded px-2 py-1 text-sm w-40" />
+    </div>
+  </div>
+
+  <table class="w-full text-sm border-collapse">
+    <thead>
+      <tr class="bg-gray-100 text-gray-700">
+        <th class="border border-gray-300 px-3 py-2 text-left font-medium w-28">状态</th>
+        <th class="border border-gray-300 px-3 py-2 text-left font-medium">商机名</th>
+        <th class="border border-gray-300 px-3 py-2 text-left font-medium w-20">类型</th>
+        <th class="border border-gray-300 px-3 py-2 text-right font-medium w-24">金额</th>
+        <th class="border border-gray-300 px-3 py-2 text-left font-medium w-24">负责人</th>
+        <th class="border border-gray-300 px-3 py-2 text-left font-medium w-32">截止日期</th>
+        <th class="border border-gray-300 px-3 py-2 text-left font-medium w-28">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5 align-middle"></span>已完成</td>
+        <td class="border border-gray-300 px-3 py-2">某大型主题乐园-大型滑梯采购</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-green-500">赢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥280万</td>
+        <td class="border border-gray-300 px-3 py-2">张伟</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-15</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">查看复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full mr-1.5 align-middle" style="background:#eab308;"></span>进行中</td>
+        <td class="border border-gray-300 px-3 py-2">社区公园-组合滑梯</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-green-500">赢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥45万</td>
+        <td class="border border-gray-300 px-3 py-2">李娜</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-28</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">填写复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5 align-middle"></span><span class="text-red-500">逾期</span></td>
+        <td class="border border-gray-300 px-3 py-2">幼儿园-蹦床项目</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-red-500">丢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥12万</td>
+        <td class="border border-gray-300 px-3 py-2">王强</td>
+        <td class="border border-gray-300 px-3 py-2 text-red-500">2026-04-10</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">填写复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5 align-middle"></span>已完成</td>
+        <td class="border border-gray-300 px-3 py-2">深圳万象城-儿童淘气堡升级</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-green-500">赢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥156万</td>
+        <td class="border border-gray-300 px-3 py-2">张伟</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-08</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">查看复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5 align-middle"></span>已完成</td>
+        <td class="border border-gray-300 px-3 py-2">杭州文旅集团-主题乐园二期</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-red-500">丢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥520万</td>
+        <td class="border border-gray-300 px-3 py-2">赵敏</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-12</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">查看复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full mr-1.5 align-middle" style="background:#eab308;"></span>进行中</td>
+        <td class="border border-gray-300 px-3 py-2">成都户外乐园-无动力设施</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-green-500">赢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥88万</td>
+        <td class="border border-gray-300 px-3 py-2">李娜</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-30</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">填写复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-red-500 mr-1.5 align-middle"></span><span class="text-red-500">逾期</span></td>
+        <td class="border border-gray-300 px-3 py-2">重庆某商业综合体-中庭设备</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-red-500">丢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥96万</td>
+        <td class="border border-gray-300 px-3 py-2">赵敏</td>
+        <td class="border border-gray-300 px-3 py-2 text-red-500">2026-04-05</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">填写复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5 align-middle"></span>已完成</td>
+        <td class="border border-gray-300 px-3 py-2">某知名地产-小区景观互动装置</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-green-500">赢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥62万</td>
+        <td class="border border-gray-300 px-3 py-2">王强</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-18</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">查看复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full mr-1.5 align-middle" style="background:#eab308;"></span>进行中</td>
+        <td class="border border-gray-300 px-3 py-2">南京某教育集团-校园游乐区</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-red-500">丢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥34万</td>
+        <td class="border border-gray-300 px-3 py-2">王强</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-26</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">填写复盘</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border border-gray-300 px-3 py-2"><span class="inline-block w-2 h-2 rounded-full bg-green-500 mr-1.5 align-middle"></span>已完成</td>
+        <td class="border border-gray-300 px-3 py-2">武汉东湖景区-亲子互动区</td>
+        <td class="border border-gray-300 px-3 py-2"><span class="text-green-500">赢单</span></td>
+        <td class="border border-gray-300 px-3 py-2 text-right">¥178万</td>
+        <td class="border border-gray-300 px-3 py-2">张伟</td>
+        <td class="border border-gray-300 px-3 py-2">2026-04-03</td>
+        <td class="border border-gray-300 px-3 py-2"><a href="#" class="text-blue-500 hover:underline">查看复盘</a></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="flex items-center justify-between mt-3 text-sm text-gray-500">
+    <span>共 23 条｜显示 1-10</span>
+    <div class="flex items-center gap-1">
+      <button class="border border-gray-300 rounded px-2 py-1 text-gray-500">上一页</button>
+      <button class="border border-gray-300 rounded px-2 py-1 bg-blue-500 text-white">1</button>
+      <button class="border border-gray-300 rounded px-2 py-1 text-gray-700">2</button>
+      <button class="border border-gray-300 rounded px-2 py-1 text-gray-700">3</button>
+      <button class="border border-gray-300 rounded px-2 py-1 text-gray-700">下一页</button>
+    </div>
+  </div>
+</div>
+
+<!-- [区域4] 复盘表单页入口占位 -->
+<div class="bg-white border border-gray-300 rounded p-5">
+  <h2 class="text-base font-semibold text-gray-700 mb-3">📄 复盘表单预览（占位）</h2>
+  <div class="border-2 border-dashed border-gray-300 rounded p-8 text-center bg-gray-50">
+    <div class="text-gray-500 text-sm mb-2">
+      🔗 点击列表「填写复盘」进入 <b class="text-gray-700">复盘表单页</b>（独立页面）
+    </div>
+    <div class="text-xs text-gray-500 mb-3">
+      表单字段：结果 / 关键因素 / 客户反馈 / 改进点 / 下一步行动
+    </div>
+    <div class="inline-flex flex-wrap items-center justify-center gap-2 text-xs">
+      <span class="px-2 py-1 bg-white border border-gray-300 rounded text-gray-600">结果</span>
+      <span class="text-gray-400">→</span>
+      <span class="px-2 py-1 bg-white border border-gray-300 rounded text-gray-600">关键因素</span>
+      <span class="text-gray-400">→</span>
+      <span class="px-2 py-1 bg-white border border-gray-300 rounded text-gray-600">客户反馈</span>
+      <span class="text-gray-400">→</span>
+      <span class="px-2 py-1 bg-white border border-gray-300 rounded text-gray-600">改进点</span>
+      <span class="text-gray-400">→</span>
+      <span class="px-2 py-1 bg-white border border-gray-300 rounded text-gray-600">下一步</span>
+    </div>
+    <div class="mt-4 text-xs text-gray-400">
+      详见 <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2753" target="_blank" class="text-blue-500 underline">Issue #2753 复盘表单页</a> —— 此处仅占位
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

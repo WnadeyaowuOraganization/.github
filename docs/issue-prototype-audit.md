@@ -709,4 +709,43 @@ P0 补集剩余目录（依然需要先对账确认实际工作量）：
 - 🔴 最高优先级（无原型+无 Master，规模 ≥20）：intelligence-hub 74 / brand-center 28 / collab 24 / design-ai 23 / biz-enablement 22 / sample 20
 - 🟡 中优先级：outreach 22 / budget 16 / wechat 14 / customer-lifecycle 11
 - 🟢 低优先级（原型+Master 均有，脚本回填）：将 biz:crm 部分 / ptc 部分 / bidding 残余 2
+---
+
+## 2026-04-24 对账 · A+C 档批量清理
+
+**背景**：本次会话盘点全部 628 open Issue（工具盘点完成时实际 627），按 wande-prototype v5.1 §5.6 三档处置矩阵分档后批量执行 A 档回填 + C 档补标签/豁免。
+
+### 执行分布
+
+| 档位 | 动作 | Issue 数 |
+|------|------|---------|
+| A档 回填引用 | gh issue edit 追加三重引用块（指向执行管理 Tab4/Tab5） | 2（#3203 #3200） |
+| C档 补 biz:intelligence-hub | 矿场 Phase4/5 归入商战情报中台 | 6 |
+| C档 补 biz:budget | 预算关卡 + 总控预算增强 | 10 |
+| C档 补 biz:crm | 经销商发现脚本 | 4 |
+| C档 补 biz:solution-engine | 方案引擎 + PPT插件全系 | 31 |
+| C档 补 biz:design-ai | 文生图 + 设计模型训练 | 10 |
+| C档 补 biz:d3-parametric | D3 v2.0 重构 | 2 |
+| C档 补 biz:ai-infra | G7e 工具链 | 1 |
+| C档 原型豁免（issue-type:exempt）| Quick-Fix 6 + 测试/阻塞 4 + docs 1 | 11 |
+
+**合计处理**：77 个 Issue。
+
+### 新增标签
+
+- `issue-type:exempt`（#c5def5）：免原型支撑（bug修复/纯后端/阻塞项/docs 等非产品功能 Issue）
+
+### 治理效果
+
+| 指标 | 前 | 后 |
+|------|----|----|
+| 三重引用合规 | 236 (37.6%) | 243 (38.8%) |
+| 已挂 biz 标签 | ~445 (70.9%) | 509 (81.2%) |
+| 合规+豁免+冻结覆盖 | ~517 | 532 (84.8%) |
+| C 档无 biz 裸 Issue | 75 | ~3 |
+
+### 剩余待处理
+
+- B 档 41 个有 biz 无原型目录的 Issue（主要是 biz:sample 11 + biz:customer-lifecycle 9 + biz:h5-mobile 8 + biz:marketing-automation/outreach 9）→ 等业务域启动 Sprint 时出原型
+- needs-prototype 冻结 278 个 → 保持冻结，对应 biz 域进 Sprint 时解冻+补原型
 

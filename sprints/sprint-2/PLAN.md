@@ -1,9 +1,10 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-04-22
+> 更新时间：2026-04-24 02:50
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > 并发上限：5个CC
+> ⚠️ **备选队列已用尽** — 20个Issue全部完成，需排程经理补充新建议
 
 ## 排程统计
 
@@ -212,6 +213,15 @@
 | 04-24 | kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
 | 04-24 | kimi2 | #4016 | crm | medium | In Progress | 架构蓝图+术语数据字典 |
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
+| 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 — PR #4133已于04-23 merged，Issue #4018 CLOSED |
+| 04-24 | kimi1 | **待派遣** | — | medium | **空位** | 备选队列已用尽，等待排程经理补充新建议 |
+| 04-24 | kimi6 | #1920 | d3 | medium | **Blocked** | wande-gh-plugins重构 — PR #34 merge冲突，待解决 |
+
+**当前4个CC在线运行中：**
+- kimi2 #4016: 49%进度 (架构蓝图+术语数据字典)
+- kimi3 #2307: 40%进度 (局部修改模块GUI)
+- kimi5 #4011: 62%进度 (记录中心三视角分组Tab)
+- kimi6 #1920: blocked (wande-gh-plugins PR#34冲突)
 
 ---
 

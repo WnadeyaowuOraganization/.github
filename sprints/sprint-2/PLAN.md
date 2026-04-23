@@ -30,30 +30,30 @@
 
 **4/5 并发，1个空位已补入。** 当前运行：kimi2/kimi3/kimi5/kimi6 + kimi1新派#2308
 
-### 备选队列（2026-04-24 03:00 刷新，81个OPEN剩余，全部验证状态）
+### 备选队列（2026-04-24 07:00 刷新，66个OPEN剩余）
 
 | 序号 | Issue | 优先级 | Sprint | 模块 | effort | 说明 |
 |------|-------|--------|--------|------|--------|------|
-| 1 | #2308 | P2 | S3 | design-ai | medium | 主题方案灵感库 — 20+主题模板+AI变体 |
-| 2 | #2309 | P2 | S3 | design-ai | medium | 颜色配置器 — Three.js实时预览 |
-| 3 | #3999 | P2 | S3 | project | medium | 矿场-区域品类热力图Tab |
-| 4 | #4025 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱总览仪表盘 |
-| 5 | #4026 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Claude Office |
-| 6 | #4027 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Token Pool管理 |
-| 7 | #4028 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱定时任务管理 |
-| 8 | #4029 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱GPU资源监控 |
-| 9 | #4030 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱外部工具管理 |
-| 10 | #4031 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱确认中心 |
-| 11 | #4032 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Issue看板 |
-| 12 | #1714 | P1 | S4 | biz | medium | 经销报价单生成页面 |
-| 13 | #2358 | P2 | S4 | finance | medium | 商机详情页获客成本Tab |
-| 14 | #2430 | P2 | S4 | intelligence | medium | 竞品合同到期预测 |
-| 15 | #1468 | P1 | Backlog | biz | medium | 安全标准自动合规标注 |
-| 16 | #1469 | P1 | Backlog | biz | medium | AI文案增强 |
-| 17 | #1470 | P1 | Backlog | biz | medium | Playbook规则引擎 |
-| 18 | #1466 | P2 | Backlog | biz | medium | 案例相似度推荐 |
-| 19 | #1487 | P3 | Backlog | backend | medium | 跨境客户资格评估 |
-| 20 | #1498 | P2 | Backlog | backend | medium | 经销商项目情报推送 |
+| 1 | #4029 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱GPU资源监控 |
+| 2 | #4030 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱外部工具管理 |
+| 3 | #4031 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱确认中心 |
+| 4 | #4032 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Issue看板 |
+| 5 | #1714 | P1 | S4 | biz | medium | 经销报价单生成页面 |
+| 6 | #2358 | P2 | S4 | finance | medium | 商机详情页获客成本Tab |
+| 7 | #2430 | P2 | S4 | intelligence | medium | 竞品合同到期预测 |
+| 8 | #1468 | P1 | Backlog | biz | medium | 安全标准自动合规标注 |
+| 9 | #1469 | P1 | Backlog | biz | medium | AI文案增强 |
+| 10 | #1470 | P1 | Backlog | biz | medium | Playbook规则引擎 |
+| 11 | #1594 | P1 | Backlog | budget | medium | 借款逾期提醒+工资扣除预警 |
+| 12 | #1599 | P1 | Backlog | budget | medium | 采购比价强制校验 |
+| 13 | #1613 | P1 | Backlog | wechat | medium | 数据安全分级与访问控制 |
+| 14 | #1614 | P1 | Backlog | wechat | medium | PII自动脱敏服务 |
+| 15 | #1873 | P1 | Backlog | bidding | medium | 分级超时升级机制 |
+| 16 | #2215 | P1 | Backlog | biz | medium | 引导式PPT组装向导 |
+| 17 | #2275 | P1 | Backlog | cockpit | medium | DORA指标卡片+最近错误滚动条 |
+| 18 | #2437 | P1 | Backlog | bidding | medium | 推荐行动计划按阶段自动生成 |
+| 19 | #2439 | P1 | Backlog | intelligence | medium | 竞品自动分级+升降级 |
+| 20 | #2440 | P1 | Backlog | intelligence | medium | 竞品定价数据库 |
 
 ## 指派历史
 

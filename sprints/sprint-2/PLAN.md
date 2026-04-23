@@ -135,8 +135,9 @@
 | 04-23 | kimi1 | #3651 | bidding | **max** | In Progress | 投标立项与进度管理 |
 | 04-23 | kimi3 | ~~#3389~~ | plm | **max** | ~~Done~~ | EBOM解析API — PR#4107 merged |
 | 04-23 | kimi5 | ~~#3392~~ | plm | **max** | ~~Done~~ | 版本化定价引擎API — PR已于04-21 merged(CLOSED) |
-| 04-23 | kimi3 | #3390 | plm | **max** | In Progress | D3参数化→PLM BOM桥接 |
-| 04-23 | kimi5 | #3391 | plm | **max** | In Progress | 产品配置器后端API |
+| 04-23 | kimi3 | #3390 | plm | **max** | In Progress | D3参数化→PLM BOM桥接 — PR#4111 submitted(待修@SaCheckPermission) |
+| 04-23 | kimi5 | ~~#3391~~ | plm | **max** | ~~Done~~ | 产品配置器后端API — PR#4110 merged |
+| 04-23 | kimi5 | #3397 | plm | **max** | In Progress | PLM产品配置器+报价页面（前端）|
 | 04-23 | kimi4 | ~~#1875~~ | bidding | **max** | ~~Done~~ | 赢/输复盘模板 — PR#3976 已于04-20 merged |
 | 04-23 | kimi4 | ~~#3174~~ | approval | **max** | ~~Done~~ | 表单模板导入导出+配置向导 — PR#3937+#4080 已merged |
 | 04-23 | kimi4 | ~~#3377~~ | plm | **max** | ~~Done~~ | PLM子系统数据库初始化 — 已merged/CLOSED |

@@ -217,14 +217,14 @@
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
 | 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — 后端8文件+前端7文件改造完成，mvn编译通过，待提交PR |
 | 04-24 | kimi1 | #2308 | design-ai | **high** | In Progress | 主题方案灵感库（排程建议#1，03:00派遣，实际复杂度：复杂，15+文件，预计T1-15阶段交付）|
-| 04-24 | kimi3 | #2309 | design-ai | medium | **准备提PR** | 颜色配置器（排程建议#2，03:03派遣，T1-T11全通过✅，E2E smoke 4/4绿✅，待提PR）|
+| 04-24 | kimi3 | #2309 | design-ai | medium | **等待merge** | 颜色配置器（排程建议#2，03:03派遣，PR #4149已提交，E2E smoke 4/4绿✅，MERGEABLE✅，等待自动merge）|
 | 04-24 | kimi6 | ~~#1920~~ | d3 | medium | ~~Done~~ | wande-gh-plugins重构 — PR #34已于03:04 admin-merged ✅ |
 | 04-24 | kimi6 | #3999 | project | **high** | In Progress | 矿场区域品类热力图Tab（排程建议#3，03:06派遣，实际高复杂度，15+文件，分契约→后端→前端→E2E→PR）|
 
 **当前5个CC在线运行中（03:15更新）：**
 - kimi1 #2308: 55%进度（主题方案灵感库，复杂度高，T1-15分阶段，推进中）
 - kimi2 #4016: **等待merge** ✅（架构蓝图，PR #4148已提交，E2E 4/4全通过，故障已修复）
-- kimi3 #2309: **准备提PR** ✅（颜色配置器，T1-T11全通过，E2E 4/4绿，高效A+）
+- kimi3 #2309: **等待merge** ✅（颜色配置器，PR #4149已提交，MERGEABLE✅，预计5min释放）
 - kimi5 #4011: 39%进度（多实体关联模型，等待PR确认）
 - kimi6 #3999: 55%进度（矿场热力图Tab，高复杂度，快速推进）
 

@@ -217,11 +217,12 @@
 | 04-24 | kimi1 | **待派遣** | — | medium | **空位** | 备选队列已用尽，等待排程经理补充新建议 |
 | 04-24 | kimi6 | #1920 | d3 | medium | **Blocked** | wande-gh-plugins重构 — PR #34 merge冲突，待解决 |
 
-**当前4个CC在线运行中：**
-- kimi2 #4016: 49%进度 (架构蓝图+术语数据字典)
-- kimi3 #2307: 40%进度 (局部修改模块GUI)
-- kimi5 #4011: 62%进度 (记录中心三视角分组Tab)
-- kimi6 #1920: blocked (wande-gh-plugins PR#34冲突)
+**当前5个CC在线运行中：**
+- kimi1 #4018: 50%进度 (stage改造中，PR #4133 open)
+- kimi2 #4016: 29%进度 (架构蓝图+术语数据字典)
+- kimi3 #2307: 37%进度 (局部修改模块GUI，PR #4147 open 但质量预检FAILED，已通知修复)
+- kimi5 #4011: 49%进度 (记录中心三视角分组Tab)
+- kimi6 #1920: 39%进度 (wande-gh-plugins重构，PR #34 merge冲突)
 
 ---
 

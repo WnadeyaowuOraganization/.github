@@ -132,11 +132,12 @@
 | 04-23 | kimi1 | ~~#2078~~ | backend | **max** | ~~Done~~ | 原因诊断API — PR #4103 merged |
 | 04-23 | kimi3 | ~~#3545~~ | intelligence-hub | **max** | ~~Done~~ | 前端关系网络Tab — PR #4104 merged |
 | 04-23 | kimi1 | ~~#3386~~ | plm | **max** | ~~Done~~ | ECO审批流集成 — PR#4051 已于04-21 merged |
-| 04-23 | kimi1 | #3651 | bidding | **max** | In Progress | 投标立项与进度管理 |
+| 04-23 | kimi1 | ~~#3651~~ | bidding | **max** | ~~Done~~ | 投标立项与进度管理 — PR#4112 merged |
+| 04-23 | kimi1 | #2317 | ptc | **max** | In Progress | D3 Web技术确认中心前端 |
 | 04-23 | kimi3 | ~~#3389~~ | plm | **max** | ~~Done~~ | EBOM解析API — PR#4107 merged |
 | 04-23 | kimi5 | ~~#3392~~ | plm | **max** | ~~Done~~ | 版本化定价引擎API — PR已于04-21 merged(CLOSED) |
 | 04-23 | kimi3 | ~~#3390~~ | plm | **max** | ~~Done~~ | D3参数化→PLM BOM桥接 — PR#4111 merged（@SaCheckPermission已修复）|
-| 04-23 | kimi3 | #3557 | e2e | **max** | In Progress | E2E回归：前端登录会话失效修复 |
+| 04-23 | kimi3 | #3557 | e2e | **max** | In Progress | E2E回归：前端登录会话失效修复 — PR#4115 submitted(code review✅)|
 | 04-23 | kimi5 | ~~#3391~~ | plm | **max** | ~~Done~~ | 产品配置器后端API — PR#4110 merged |
 | 04-23 | kimi5 | #3397 | plm | **max** | In Progress | PLM产品配置器+报价页面（前端）|
 | 04-23 | kimi4 | ~~#1875~~ | bidding | **max** | ~~Done~~ | 赢/输复盘模板 — PR#3976 已于04-20 merged |
@@ -146,7 +147,7 @@
 | 04-23 | kimi2 | ~~#4012~~ | project | **max** | ~~Done~~ | 老板周报AI建议Section — PR#4106 merged |
 | 04-23 | kimi2 | ~~#4033~~ | crm | **max** | ~~Done~~ | CRM商机详情-基本信息Tab — PR#4062 已于04-22 merged |
 | 04-23 | kimi2 | ~~#3387~~ | plm | **max** | ~~Done~~ | ECO执行引擎 — PR#4109 merged（@SaCheckPermission已修复）|
-| 04-23 | kimi2 | #3396 | plm | **max** | In Progress | PLM ECO变更管理页面（前端）|
+| 04-23 | kimi2 | #3396 | plm | **max** | In Progress | PLM ECO变更管理页面 — PR#4114 submitted(code review✅)|
 | 04-23 | kimi4 | ~~#4034~~ | crm | **max** | ~~Done~~ | CRM商机详情-跟进记录Tab — PR#4056+PR#4108 merged（N+1已知技术债，单商机场景可控）|
 | 04-23 | kimi4 | ~~#3394~~ | plm | **max** | ~~Done~~ | PLM零件主数据管理页面 — PR#3990 已于04-20 merged |
 | 04-23 | kimi4 | #3395 | plm | **max** | In Progress | PLM BOM管理与版本对比页面 |

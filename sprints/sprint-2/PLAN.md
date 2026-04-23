@@ -28,32 +28,32 @@
 | 4 | kimi4 | #3631 | P1 | bidding | high | ✅ 已派 — pipeline表对齐 |
 | 5 | kimi5 | #1692 | P1 | backend | medium | ✅ 已派（⚠️可能卡住）— 项目成本跟踪API |
 
-**3/5 并发，2个空位。** 研发经理按以下顺序补入：
+**4/5 并发，1个空位（kimi1释放）。** 研发经理按以下顺序补入：
 
-### 备选队列（2026-04-23 21:00 刷新，已清除CLOSED Issue）
+### 备选队列（2026-04-24 03:00 刷新，81个OPEN剩余，全部验证状态）
 
 | 序号 | Issue | 优先级 | Sprint | 模块 | effort | 说明 |
 |------|-------|--------|--------|------|--------|------|
-| 1 | #4037 | P1 | S1 | crm | medium | CRM商机详情-合同Tab |
-| 2 | #4042 | P1 | S1 | crm | medium | CRM商机详情-流程监控Tab |
-| 3 | #3155 | P1 | S2 | approval | medium | 流程简化配置页 [7/8] |
-| 4 | #3156 | P1 | S2 | approval | medium | 流程效率分析看板 [8/8] |
-| 5 | #4018 | P0 | S3 | crm | medium | 整改 crm_opportunity 明道云对齐 |
-| 6 | #4005 | P1 | S3 | frontend | medium | 整改 记录中心4Tab对齐v1.0原型 |
-| 7 | #4006 | P1 | S3 | frontend | medium | 整改 老板周报对齐v1.0原型 |
-| 8 | #4007 | P1 | S3 | frontend | medium | 整改 项目周报+Nudge联动改造 |
-| 9 | #4017 | P1 | S3 | crm | medium | 整改 crm_activity_log 明道云对齐 |
-| 10 | #4019 | P1 | S3 | crm | medium | 整改 crm_customer 明道云补齐 |
-| 11 | #2198 | P1 | S3 | brand | medium | 品牌中心-视频号自动化发布 |
-| 12 | #2310 | P1 | S3 | design-ai | medium | 方案文本模块 — 分Section编辑器 |
-| 13 | #2427 | P2 | S2 | bidding | medium | 环评/规划许可公示采集 |
-| 14 | #2428 | P2 | S2 | bidding | medium | 人大代表建议/政协提案采集 |
-| 15 | #2429 | P2 | S2 | bidding | medium | 行业展会参展商名录采集 |
-| 16 | #3151 | P2 | S2 | approval | medium | 新手引导+流程帮助中心 [3/8] |
-| 17 | #3174 | P2 | S2 | approval | medium | 表单模板导入导出 [8/8] |
-| 18 | #2305 | P2 | S3 | design-ai | medium | Three.js漫游录制 |
-| 19 | #1920 | — | S1 | d3 | medium | EXEMPT wande-gh-plugins仓库重构 |
-| 20 | #1921 | — | S1 | d3 | medium | EXEMPT D3Plugin.gha SDK降级 |
+| 1 | #2308 | P2 | S3 | design-ai | medium | 主题方案灵感库 — 20+主题模板+AI变体 |
+| 2 | #2309 | P2 | S3 | design-ai | medium | 颜色配置器 — Three.js实时预览 |
+| 3 | #3999 | P2 | S3 | project | medium | 矿场-区域品类热力图Tab |
+| 4 | #4025 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱总览仪表盘 |
+| 5 | #4026 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Claude Office |
+| 6 | #4027 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Token Pool管理 |
+| 7 | #4028 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱定时任务管理 |
+| 8 | #4029 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱GPU资源监控 |
+| 9 | #4030 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱外部工具管理 |
+| 10 | #4031 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱确认中心 |
+| 11 | #4032 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Issue看板 |
+| 12 | #1714 | P1 | S4 | biz | medium | 经销报价单生成页面 |
+| 13 | #2358 | P2 | S4 | finance | medium | 商机详情页获客成本Tab |
+| 14 | #2430 | P2 | S4 | intelligence | medium | 竞品合同到期预测 |
+| 15 | #1468 | P1 | Backlog | biz | medium | 安全标准自动合规标注 |
+| 16 | #1469 | P1 | Backlog | biz | medium | AI文案增强 |
+| 17 | #1470 | P1 | Backlog | biz | medium | Playbook规则引擎 |
+| 18 | #1466 | P2 | Backlog | biz | medium | 案例相似度推荐 |
+| 19 | #1487 | P3 | Backlog | backend | medium | 跨境客户资格评估 |
+| 20 | #1498 | P2 | Backlog | backend | medium | 经销商项目情报推送 |
 
 ## 指派历史
 

@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>通知规则管理 - 客户生命周期</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .chip { display:inline-block; padding:1px 6px; border-radius:3px; font-size:11px; border:1px solid #d9d9d9; background:#fafafa; color:#555; margin-right:2px; }
+    .chip-blue { background:#e6f4ff; border-color:#91caff; color:#0958d9; }
+    .chip-green { background:#f6ffed; border-color:#b7eb8f; color:#389e0d; }
+    .chip-gray { background:#fafafa; border-color:#d9d9d9; color:#595959; }
+    .dashed-box { border:1px dashed #bfbfbf; }
+    .btn-primary { background:#3b82f6; color:#fff; }
+    .btn-primary:hover { background:#2563eb; }
+    .btn-default { background:#fff; color:#333; border:1px solid #d9d9d9; }
+    .btn-default:hover { border-color:#3b82f6; color:#3b82f6; }
+    .tbl th { background:#fafafa; color:#666; font-weight:600; font-size:12px; text-align:left; padding:8px 10px; border-bottom:1px solid #e5e7eb; }
+    .tbl td { padding:10px; border-bottom:1px solid #f0f0f0; font-size:12.5px; color:#333; vertical-align:middle; }
+    .tbl tr:hover td { background:#fafbfc; }
+    .dot { display:inline-block; width:8px; height:8px; border-radius:50%; margin-right:6px; vertical-align:middle; }
+    .dot-green { background:#22c55e; }
+    .dot-gray { background:#9ca3af; }
+    .link-action { color:#3b82f6; cursor:pointer; margin-right:8px; font-size:12px; }
+    .link-action:hover { text-decoration:underline; }
+    .link-danger { color:#ef4444; }
+    .form-label { font-size:12px; color:#666; margin-bottom:4px; display:block; }
+    .form-input { width:100%; padding:6px 10px; border:1px solid #d9d9d9; border-radius:3px; font-size:13px; background:#fff; }
+    .form-input:focus { outline:none; border-color:#3b82f6; }
+    .toggle { position:relative; display:inline-block; width:36px; height:20px; }
+    .toggle input { opacity:0; width:0; height:0; }
+    .slider { position:absolute; cursor:pointer; inset:0; background:#22c55e; border-radius:20px; transition:.2s; }
+    .slider:before { position:absolute; content:""; height:14px; width:14px; left:19px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">通知规则管理后台（#2756 API + #2757 后台页）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:90px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 业务目标</td><td style="padding:4px 0;color:#333;">统一管理所有生命周期提醒规则（里程碑 / 满意度 / 复购 / 分层 / 设备 / 复盘），可视化配置触发条件 + 通知渠道 + 接收人，替代散落在各模块的硬编码定时任务</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🧩 规则模型</td><td style="padding:4px 0;color:#333;">name / module / trigger_event / trigger_condition / channels[] / recipients[] / message_template / enabled</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📡 通知渠道</td><td style="padding:4px 0;color:#333;">站内信 / 企微 / 短信 / 邮件（可多选组合）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 接收人</td><td style="padding:4px 0;color:#333;">商机负责人 / 客户经理 / 销售总监 / 自定义角色或人员</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🔗 对应 Issue</td><td style="padding:4px 0;color:#333;">
+        <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2756" target="_blank" style="color:#1890ff;text-decoration:none;">#2756 通知规则 API</a>
+        &nbsp;·&nbsp;
+        <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2757" target="_blank" style="color:#1890ff;text-decoration:none;">#2757 通知规则后台页</a>
+      </td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">客户生命周期 — 详细设计</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [页面标题] -->
+<div class="mb-4">
+  <h1 class="text-xl font-semibold text-gray-800">通知规则管理</h1>
+  <p class="text-xs text-gray-500 mt-1">统一配置所有生命周期提醒规则，支持可视化编辑触发条件、通知渠道、接收人。</p>
+</div>
+
+<!-- [KPI条 - 4个小卡] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">规则总数</div>
+    <div class="text-2xl font-semibold text-gray-800">28</div>
+    <div class="text-[11px] text-gray-400 mt-1">覆盖6个业务模块</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">启用中</div>
+    <div class="text-2xl font-semibold text-green-500">24</div>
+    <div class="text-[11px] text-gray-400 mt-1">停用 4 条</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">今日触发次数</div>
+    <div class="text-2xl font-semibold text-gray-800">186</div>
+    <div class="text-[11px] text-gray-400 mt-1">较昨日 +12</div>
+  </div>
+  <div class="bg-white border border-gray-200 rounded p-4">
+    <div class="text-xs text-gray-500 mb-1">失败率</div>
+    <div class="text-2xl font-semibold text-green-500">2.1%</div>
+    <div class="text-[11px] text-gray-400 mt-1">近24h 失败 <span class="text-red-500">4</span> / 成功 182</div>
+  </div>
+</div>
+
+<!-- [筛选区] -->
+<div class="bg-white border border-gray-200 rounded p-3 mb-4 flex items-center gap-3 flex-wrap">
+  <div class="flex items-center gap-2">
+    <span class="text-xs text-gray-500">模块</span>
+    <select class="form-input" style="width:120px;">
+      <option>全部</option><option>里程碑</option><option>满意度</option><option>复购</option><option>分层</option><option>设备</option><option>复盘</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <span class="text-xs text-gray-500">状态</span>
+    <select class="form-input" style="width:100px;">
+      <option>全部</option><option>启用</option><option>停用</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <span class="text-xs text-gray-500">渠道</span>
+    <select class="form-input" style="width:100px;">
+      <option>全部</option><option>站内</option><option>企微</option><option>短信</option><option>邮件</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2 flex-1">
+    <input type="text" placeholder="搜索规则名称..." class="form-input" style="max-width:240px;">
+  </div>
+  <button class="btn-primary px-4 py-1.5 rounded text-sm">+ 新建规则</button>
+</div>
+
+<!-- [规则列表表格] -->
+<div class="bg-white border border-gray-200 rounded mb-4">
+  <div class="flex items-center justify-between px-4 py-2 border-b border-gray-200">
+    <div class="text-sm font-medium text-gray-700">规则列表 <span class="text-xs text-gray-400 ml-2">共 28 条，当前显示 12 条</span></div>
+    <div class="text-xs text-gray-400">按"今日触发"倒序</div>
+  </div>
+  <table class="tbl w-full">
+    <thead>
+      <tr>
+        <th style="width:70px;">状态</th>
+        <th>规则名</th>
+        <th style="width:90px;">所属模块</th>
+        <th style="width:200px;">触发事件</th>
+        <th style="width:160px;">渠道</th>
+        <th style="width:180px;">接收人</th>
+        <th style="width:80px;">今日触发</th>
+        <th style="width:180px;">操作</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">里程碑-设计稿截止前3天</td>
+        <td><span class="chip chip-gray">里程碑</span></td>
+        <td><code class="text-[11px] text-gray-600">cron: 每日 09:00</code></td>
+        <td><span class="chip">站内</span><span class="chip">企微</span></td>
+        <td>商机负责人</td>
+        <td class="text-gray-700">12</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">里程碑-发货前1天</td>
+        <td><span class="chip chip-gray">里程碑</span></td>
+        <td><code class="text-[11px] text-gray-600">cron: 每日 09:00</code></td>
+        <td><span class="chip">站内</span><span class="chip">企微</span><span class="chip">短信</span></td>
+        <td>商机负责人 + 项目经理</td>
+        <td class="text-gray-700">8</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">满意度-交付后30天</td>
+        <td><span class="chip chip-gray">满意度</span></td>
+        <td><code class="text-[11px] text-gray-600">delivery.completed + 30d</code></td>
+        <td><span class="chip">站内</span><span class="chip">邮件</span></td>
+        <td>客户经理</td>
+        <td class="text-gray-700">5</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">复购-满12月</td>
+        <td><span class="chip chip-gray">复购</span></td>
+        <td><code class="text-[11px] text-gray-600">delivery.completed + 365d</code></td>
+        <td><span class="chip">站内</span></td>
+        <td>客户经理</td>
+        <td class="text-gray-700">15</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-gray"></span><span class="text-gray-400">停用</span></td>
+        <td class="font-medium text-gray-500">分层-降级提醒</td>
+        <td><span class="chip chip-gray">分层</span></td>
+        <td><code class="text-[11px] text-gray-600">tier.downgrade</code></td>
+        <td><span class="chip">站内</span></td>
+        <td>客户经理</td>
+        <td class="text-gray-400">0</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action" style="color:#22c55e;">启用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">设备-质保前30天</td>
+        <td><span class="chip chip-gray">设备</span></td>
+        <td><code class="text-[11px] text-gray-600">device.warranty - 30d</code></td>
+        <td><span class="chip">站内</span><span class="chip">企微</span><span class="chip">短信</span></td>
+        <td>负责人</td>
+        <td class="text-gray-700">22</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">设备-巡检前7天</td>
+        <td><span class="chip chip-gray">设备</span></td>
+        <td><code class="text-[11px] text-gray-600">device.inspection - 7d</code></td>
+        <td><span class="chip">站内</span><span class="chip">企微</span></td>
+        <td>负责人</td>
+        <td class="text-gray-700">18</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">复盘-赢单T+7</td>
+        <td><span class="chip chip-gray">复盘</span></td>
+        <td><code class="text-[11px] text-gray-600">opp.won + 7d</code></td>
+        <td><span class="chip">站内</span><span class="chip">邮件</span></td>
+        <td>商机负责人</td>
+        <td class="text-gray-700">2</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">复盘-丢单T+5</td>
+        <td><span class="chip chip-gray">复盘</span></td>
+        <td><code class="text-[11px] text-gray-600">opp.lost + 5d</code></td>
+        <td><span class="chip">站内</span><span class="chip">邮件</span></td>
+        <td>商机负责人 + 总监</td>
+        <td class="text-gray-700">1</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">分层-VIP首单提醒</td>
+        <td><span class="chip chip-gray">分层</span></td>
+        <td><code class="text-[11px] text-gray-600">tier.upgrade → VIP</code></td>
+        <td><span class="chip">站内</span><span class="chip">企微</span></td>
+        <td>销售总监 + 客户经理</td>
+        <td class="text-gray-700">3</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">满意度-回访超时T+7</td>
+        <td><span class="chip chip-gray">满意度</span></td>
+        <td><code class="text-[11px] text-gray-600">satisfaction.overdue + 7d</code></td>
+        <td><span class="chip">站内</span><span class="chip">企微</span></td>
+        <td>客户经理 + 销售总监</td>
+        <td class="text-gray-700">4</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+      <tr>
+        <td><span class="dot dot-green"></span>启用</td>
+        <td class="font-medium">里程碑-合同签约T+0</td>
+        <td><span class="chip chip-gray">里程碑</span></td>
+        <td><code class="text-[11px] text-gray-600">contract.signed</code></td>
+        <td><span class="chip">站内</span><span class="chip">邮件</span></td>
+        <td>商机负责人 + 项目经理</td>
+        <td class="text-gray-700">6</td>
+        <td>
+          <span class="link-action">编辑</span><span class="link-action link-danger">停用</span><span class="link-action">复制</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="px-4 py-2 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+    <div>共 28 条</div>
+    <div class="flex items-center gap-1">
+      <button class="btn-default px-2 py-0.5 rounded">‹</button>
+      <button class="btn-primary px-2 py-0.5 rounded">1</button>
+      <button class="btn-default px-2 py-0.5 rounded">2</button>
+      <button class="btn-default px-2 py-0.5 rounded">3</button>
+      <button class="btn-default px-2 py-0.5 rounded">›</button>
+    </div>
+  </div>
+</div>
+
+<!-- [编辑抽屉占位 + 触发日志 两栏布局] -->
+<div class="grid grid-cols-2 gap-4">
+
+  <!-- [左 - 规则编辑抽屉占位] -->
+  <div class="bg-white border border-gray-200 rounded dashed-box" style="border-style:dashed;">
+    <div class="px-4 py-2 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+      <div class="text-sm font-medium text-gray-700">规则编辑</div>
+      <div class="text-[11px] text-gray-400">（占位，点击列表编辑时从右侧滑出）</div>
+    </div>
+    <div class="p-4 space-y-3">
+      <div>
+        <label class="form-label">规则名称</label>
+        <input class="form-input" value="满意度-交付后30天">
+      </div>
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="form-label">所属模块</label>
+          <select class="form-input">
+            <option>满意度</option><option>里程碑</option><option>复购</option><option>分层</option><option>设备</option><option>复盘</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">触发事件</label>
+          <select class="form-input">
+            <option>基于事件（event-based）</option>
+            <option>基于时间（cron-based）</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <label class="form-label">触发条件</label>
+        <textarea class="form-input" rows="2">delivery.completed_at + interval '30 days'</textarea>
+      </div>
+      <div>
+        <label class="form-label">通知渠道（可多选）</label>
+        <div class="flex items-center gap-4 text-sm">
+          <label class="flex items-center gap-1.5"><input type="checkbox" checked> 站内信</label>
+          <label class="flex items-center gap-1.5"><input type="checkbox"> 企微</label>
+          <label class="flex items-center gap-1.5"><input type="checkbox"> 短信</label>
+          <label class="flex items-center gap-1.5"><input type="checkbox" checked> 邮件</label>
+        </div>
+      </div>
+      <div>
+        <label class="form-label">接收人</label>
+        <div class="flex items-center gap-2 flex-wrap p-1.5 border border-gray-200 rounded bg-white" style="min-height:34px;">
+          <span class="chip chip-blue">客户经理 ×</span>
+          <span class="chip chip-gray" style="color:#999;">+ 添加：商机负责人 / 销售总监 / 自定义</span>
+        </div>
+      </div>
+      <div>
+        <label class="form-label">消息模板</label>
+        <textarea class="form-input" rows="3" placeholder="支持变量占位符">{{customer_name}} 的 {{project_name}} 进入满意度回访阶段，请于 T+3 完成回访</textarea>
+        <div class="text-[11px] text-gray-400 mt-1">可用变量：<code>{{customer_name}}</code> <code>{{project_name}}</code> <code>{{owner_name}}</code> <code>{{trigger_date}}</code></div>
+      </div>
+      <div class="flex items-center justify-between pt-2 border-t border-gray-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-600">启用</span>
+          <label class="toggle"><input type="checkbox" checked><span class="slider"></span></label>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="btn-default px-3 py-1 rounded text-xs">取消</button>
+          <button class="btn-primary px-3 py-1 rounded text-xs">保存</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右 - 最近触发日志] -->
+  <div class="bg-white border border-gray-200 rounded">
+    <div class="px-4 py-2 border-b border-gray-200 flex items-center justify-between">
+      <div class="text-sm font-medium text-gray-700">最近触发日志</div>
+      <div class="text-[11px] text-gray-400">最近 50 条（占位）</div>
+    </div>
+    <table class="tbl w-full">
+      <thead>
+        <tr>
+          <th style="width:130px;">时间</th>
+          <th>规则</th>
+          <th style="width:120px;">客户/订单</th>
+          <th style="width:110px;">渠道</th>
+          <th style="width:120px;">结果</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="text-gray-600">2026-04-23 14:05</td>
+          <td>设备-质保前30天</td>
+          <td>绿地集团 WD-2024-001</td>
+          <td><span class="chip">站内</span><span class="chip">企微</span></td>
+          <td><span class="dot dot-green"></span><span class="text-green-500">成功</span></td>
+        </tr>
+        <tr>
+          <td class="text-gray-600">2026-04-23 13:50</td>
+          <td>里程碑-发货前1天</td>
+          <td>万科订单 #3344</td>
+          <td><span class="chip">站内</span><span class="chip">短信</span></td>
+          <td><span class="dot dot-green"></span><span class="text-green-500">成功</span></td>
+        </tr>
+        <tr>
+          <td class="text-gray-600">2026-04-23 13:12</td>
+          <td>满意度-交付后30天</td>
+          <td>XX主题乐园</td>
+          <td><span class="chip">邮件</span></td>
+          <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:6px;"></span><span class="text-red-500">失败（邮箱无效）</span></td>
+        </tr>
+        <tr>
+          <td class="text-gray-600">2026-04-23 12:40</td>
+          <td>复购-满12月</td>
+          <td>华侨城文旅 WD-2023-087</td>
+          <td><span class="chip">站内</span></td>
+          <td><span class="dot dot-green"></span><span class="text-green-500">成功</span></td>
+        </tr>
+        <tr>
+          <td class="text-gray-600">2026-04-23 11:58</td>
+          <td>复盘-赢单T+7</td>
+          <td>方特欢乐世界</td>
+          <td><span class="chip">站内</span><span class="chip">邮件</span></td>
+          <td><span class="dot dot-green"></span><span class="text-green-500">成功</span></td>
+        </tr>
+        <tr>
+          <td class="text-gray-600">2026-04-23 11:30</td>
+          <td>设备-巡检前7天</td>
+          <td>长隆海洋王国</td>
+          <td><span class="chip">站内</span><span class="chip">企微</span></td>
+          <td><span class="dot dot-green"></span><span class="text-green-500">成功</span></td>
+        </tr>
+        <tr>
+          <td class="text-gray-600">2026-04-23 10:15</td>
+          <td>满意度-回访超时T+7</td>
+          <td>碧桂园产业园</td>
+          <td><span class="chip">企微</span></td>
+          <td><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:#ef4444;margin-right:6px;"></span><span class="text-red-500">失败（企微 token 过期）</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="px-4 py-2 border-t border-gray-100 text-[11px] text-gray-400 flex items-center justify-between">
+      <span>今日 186 次触发 · 成功 182 · 失败 4</span>
+      <span class="link-action">查看全部日志 →</span>
+    </div>
+  </div>
+</div>
+
+<!-- [页脚说明] -->
+<div class="mt-6 p-3 bg-white border border-gray-200 rounded text-[11px] text-gray-500">
+  <div class="font-medium text-gray-600 mb-1">原型说明</div>
+  <ul class="list-disc pl-5 space-y-0.5">
+    <li>本页对应 Issue <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2756" target="_blank" class="text-blue-500">#2756 通知规则 API</a> 与 <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2757" target="_blank" class="text-blue-500">#2757 通知规则后台页</a></li>
+    <li>规则列表 + 筛选条 + KPI 条 + 右抽屉编辑 + 触发日志，组成完整 CRUD + 监控闭环</li>
+    <li>渠道与接收人均为多选，触发事件支持 cron 表达式与业务事件两种模式</li>
+    <li>失败日志需记录失败原因（邮箱无效 / 企微 token 过期 / 用户停用等），便于运维排查</li>
+  </ul>
+</div>
+
+</body>
+</html>

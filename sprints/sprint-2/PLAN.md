@@ -122,6 +122,16 @@
 | 04-22 | kimi4 | ~~#2926~~ | backend | **max** | ~~Done~~ | 数据质量KPI API — PR #4053 已于04-21 merged |
 | 04-22 | kimi4 | ~~#2944~~ | backend | **max** | ~~Done~~ | 7天滚动基线异常检测 — PR #4055 已于04-21 merged |
 | 04-22 | kimi4 | ~~#3149~~ | approval | **max** | ~~Done~~ | 审批进度追踪器组件 — PR#3902+PR#4077 已merged |
+| 04-23 | kimi1 | #2427 | bidding | medium | In Progress | 环评/规划许可公示采集 |
+| 04-23 | kimi2 | #4005 | frontend | medium | In Progress | 整改 记录中心4Tab对齐v1.0原型 |
+| 04-23 | kimi3 | #4006 | frontend | medium | In Progress | 整改 老板周报对齐v1.0原型 |
+| 04-23 | kimi5 | #3397 | frontend | medium | In Progress | PLM产品配置器+报价页面 (PR#4128已打开) |
+| 04-23 | kimi4 | ~~#3996~~ | project | medium | ~~Done~~ | 矿场-转化漏斗Tab — PR #4127 merged |
+| 04-23 | kimi5 | ~~#4014~~ | crm | medium | ~~Done~~ | 线索统一池+评分引擎 — PR #4126 merged |
+| 04-23 | kimi1 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0执行组6Tab对齐 — PR #4122 merged |
+| 04-23 | kimi2 | ~~#4018~~ | crm | medium | ~~Done~~ | 明道云商机数据迁移+表结构调整 — PR #4121 merged |
+| 04-23 | kimi3 | ~~#4021~~ | crm | medium | ~~Done~~ | CRM商务中心仪表盘实现 — PR #4119 merged |
+| 04-23 | kimi1 | ~~#2317~~ | plm | medium | ~~Done~~ | PLM技术确认中心前端 — PR #4117 merged |
 | 04-22 | kimi4 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 已于04-21 merged |
 | 04-22 | kimi2 | ~~#4012~~ | project | **max** | ~~Done~~ | 老板周报AI建议Section — PR#4106 merged |
 | 04-22 | kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
@@ -136,7 +146,8 @@
 | 04-23 | kimi1 | ~~#2317~~ | ptc | **max** | ~~Done~~ | D3 Web技术确认中心前端 — PR#4117 admin-merged ✅|
 | 04-23 | kimi1 | ~~#4020~~ | cockpit | **high** | ~~Plan~~ | Master超管驾驶舱18Tab — 导航归类用，禁止CC开发 |
 | 04-23 | kimi1 | ~~#4014~~ | crm | medium | ~~Done~~ | 线索统一池+评分引擎 — PR#4126 admin-merged ✅ |
-| 04-23 | kimi1 | #3998 | project | medium | In Progress | 矿场-ROI看板Tab |
+| 04-23 | kimi1 | ~~#3998~~ | project | medium | ~~Done~~ | 矿场-ROI看板Tab — PR#4092 已merged（误派，实际已完成）|
+| 04-23 | kimi1 | #2427 | bidding | medium | In Progress | 环评/规划许可公示采集 |
 | 04-23 | kimi3 | ~~#3389~~ | plm | **max** | ~~Done~~ | EBOM解析API — PR#4107 merged |
 | 04-23 | kimi5 | ~~#3392~~ | plm | **max** | ~~Done~~ | 版本化定价引擎API — PR已于04-21 merged(CLOSED) |
 | 04-23 | kimi3 | ~~#3390~~ | plm | **max** | ~~Done~~ | D3参数化→PLM BOM桥接 — PR#4111 merged（@SaCheckPermission已修复）|
@@ -145,7 +156,8 @@
 | 04-23 | kimi3 | ~~#4013~~ | crm | **high** | ~~Plan~~ | Master CRM线索/商机统一 — 导航归类用，禁止CC开发 |
 | 04-23 | kimi3 | #3651 | bidding | medium | ~~Done~~ | 投标立项与进度管理 — PR#4112 已merged |
 | 04-23 | kimi3 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0原型 — PR#4122 admin-merged ✅ |
-| 04-23 | kimi3 | #3997 | project | medium | In Progress | 矿场-复盘洞察Tab |
+| 04-23 | kimi3 | ~~#3997~~ | project | medium | ~~Done~~ | 矿场-复盘洞察Tab — PR#4099 已merged ✅ |
+| 04-23 | kimi3 | #4006 | frontend | medium | In Progress | 老板周报对齐v1.0原型 |
 | 04-23 | kimi5 | ~~#3391~~ | plm | **max** | ~~Done~~ | 产品配置器后端API — PR#4110 merged |
 | 04-23 | kimi5 | #3397 | plm | **high** | In Progress | PLM产品配置器+报价页面（前端，降为high）— PR#4113 submitted(CI Playwright✅)|
 | 04-23 | kimi4 | ~~#1875~~ | bidding | **max** | ~~Done~~ | 赢/输复盘模板 — PR#3976 已于04-20 merged |

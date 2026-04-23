@@ -112,7 +112,7 @@
 | 04-23 | kimi3 | ~~#4006~~ | frontend | medium | ~~Done~~ | 整改 老板周报对齐 — PR #4106 merged |
 | 04-23 | kimi5 | ~~#3397~~ | frontend | medium | ~~Done~~ | 产品配置器+报价页面 — PR #4083 merged |
 | 04-23 | kimi6 | #4037 | crm | medium | In Progress | CRM商机详情-合同Tab |
-| 04-23 | kimi3 | #4042 | frontend | medium | In Progress | CRM流程监控Tab |
+| 04-23 | kimi3 | ~~#4042~~ | frontend | medium | ~~Done~~ | CRM流程监控Tab — PR #4071 merged，Issue #4042已关闭 |
 | 04-23 | kimi5 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR #4084 merged |
 | 04-23 | kimi2 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — PR #4079 merged |
 | 04-23 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改 crm_opportunity 明道云对齐 — PR #4133 merged |
@@ -166,6 +166,8 @@
 | 04-23 | kimi3 | ~~#3390~~ | plm | **max** | ~~Done~~ | D3参数化→PLM BOM桥接 — PR#4111 merged（@SaCheckPermission已修复）|
 | 04-23 | kimi3 | ~~#3557~~ | e2e | **max** | ~~Done~~ | E2E回归：前端登录会话失效修复 — PR#4115 merged |
 | 04-23 | kimi3 | ~~#4022~~ | crm | **max** | ~~Done~~ | Master CRM商机详情页骨架 — PR#4118 merged |
+| 04-24 | kimi3 | ~~#4042~~ | frontend | medium | ~~Done~~ | CRM流程监控Tab — PR #4071 merged，Issue #4042已关闭 |
+| 04-24 | kimi3 | #2198 | brand | medium | In Progress | 品牌中心-视频号自动化发布 |
 | 04-23 | kimi3 | ~~#4013~~ | crm | **high** | ~~Plan~~ | Master CRM线索/商机统一 — 导航归类用，禁止CC开发 |
 | 04-23 | kimi3 | #3651 | bidding | medium | ~~Done~~ | 投标立项与进度管理 — PR#4112 已merged |
 | 04-23 | kimi3 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0原型 — PR#4122 admin-merged ✅ |

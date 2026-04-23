@@ -4,8 +4,8 @@
 >
 > | 角色       | 指南 |
 > |----------|------|
-> | **排程经理** | 阅读 [docs/agent-docs/non-cc/manager/scheduler-guide.md](docs/agent-docs/non-cc/manager/scheduler-guide.md) |
-> | **研发经理** | 阅读 [docs/agent-docs/non-cc/manager/assign-guide.md](docs/agent-docs/non-cc/manager/assign-guide.md) |
+> | **排程经理** | 阅读 [agents/non-cc/manager/scheduler-guide.md](agents/non-cc/manager/scheduler-guide.md) |
+> | **研发经理** | 阅读 [agents/non-cc/manager/assign-guide.md](agents/non-cc/manager/assign-guide.md) |
 >
 > 阅读完对应指南后，阅读唯一真相源的Issue生命周期部分，最后按指南中的职责顺序执行本轮任务。无法决策时参考唯一真相源后继续
 
@@ -72,11 +72,11 @@ bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort medium
 
 ## 团队内沟通机制（必读）
 
-> **启动后立即阅读** `docs/agent-docs/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」，每次向他人发送消息前必须遵守。
+> **启动后立即阅读** `agents/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」，每次向他人发送消息前必须遵守。
 
 ## 文档更新规范（必读）
 
-> **启动后立即阅读** `docs/agent-docs/README.md` §更新规范，更新 `docs/agent-docs/` 下任何文档前必须遵守。
+> **启动后立即阅读** `agents/README.md` §更新规范，更新 `agents/` 下任何文档前必须遵守。
 
 ## wande-play 项目改动规范
 
@@ -117,11 +117,11 @@ done
 
 **更新已有 skill**：
 
-直接修改本仓库（`.github`）下的 `docs/agent-docs/skills/<skill>/SKILL.md` 并 push main。各 kimi 目录的 `.claude/skills/` 是软链，自动生效，**不需要**改 wande-play 或 kimi 目录，**不触发**人工批准。
+直接修改本仓库（`.github`）下的 `agents/skills/<skill>/SKILL.md` 并 push main。各 kimi 目录的 `.claude/skills/` 是软链，自动生效，**不需要**改 wande-play 或 kimi 目录，**不触发**人工批准。
 
 ```bash
-vi docs/agent-docs/skills/frontend-coding/SKILL.md
-git add docs/agent-docs/skills/frontend-coding/SKILL.md
+vi agents/skills/frontend-coding/SKILL.md
+git add agents/skills/frontend-coding/SKILL.md
 git commit -m "feat(skill/<name>): ..."
 git push origin main
 # 然后 tmux send-keys 通知每个活跃 CC 新规则要点（CC 不会自动 reload skill，需文字提醒）
@@ -129,8 +129,8 @@ git push origin main
 
 **新增 skill 灰度发布规则**：
 
-1. 新 skill 必须放在 `docs/agent-docs/new-skills/<skill-name>/`（**不是** `skills/`，避免自动软链给所有 kimi）
+1. 新 skill 必须放在 `agents/new-skills/<skill-name>/`（**不是** `skills/`，避免自动软链给所有 kimi）
 2. 只用 **kimi1** 做灰度验证（kimi1 的 `.claude/skills/` 需额外软链到 `new-skills/<skill-name>` — 由 run-cc.sh 或手动软链）
 3. kimi1 至少跑完 **5 个 Issue** 验证 skill 无误
-4. 验证通过后 `mv docs/agent-docs/new-skills/<skill-name> docs/agent-docs/skills/<skill-name>` 全面应用（push main 即对所有 kimi 生效）
+4. 验证通过后 `mv agents/new-skills/<skill-name> agents/skills/<skill-name>` 全面应用（push main 即对所有 kimi 生效）
 5. 验证期间出卡点直接 rm 或回滚 `new-skills/<skill-name>`，不污染其他 kimi

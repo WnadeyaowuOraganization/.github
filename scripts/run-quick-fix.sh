@@ -71,7 +71,7 @@ mkdir -p "$SKILLS_DIR"
 find "$SKILLS_DIR" -maxdepth 1 -type l -exec rm -f {} \; 2>/dev/null || true
 
 # 1. 首位加载 quick-fix（前缀 000- 保证字母序最先）
-QUICKFIX_SKILL_SRC="${GITHUB_DIR}/docs/agent-docs/quick-fix"
+QUICKFIX_SKILL_SRC="${GITHUB_DIR}/agents/quick-fix"
 if [ -f "${QUICKFIX_SKILL_SRC}/SKILL.md" ]; then
   ln -sfn "$QUICKFIX_SKILL_SRC" "$SKILLS_DIR/quick-fix"
   echo "✅ 首位 skill: quick-fix → quick-fix"
@@ -81,7 +81,7 @@ else
 fi
 
 # 2. 追加所有普通 CC skills（正常字母序，排在 quick-fix 之后）
-REGULAR_SKILLS_SRC="${GITHUB_DIR}/docs/agent-docs/coding"
+REGULAR_SKILLS_SRC="${GITHUB_DIR}/agents/coding"
 skill_count=0
 for skill_dir in "$REGULAR_SKILLS_SRC"/*/; do
   [ -f "${skill_dir}SKILL.md" ] || continue

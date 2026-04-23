@@ -7,7 +7,7 @@ description: Full-stack engineer skill for rapid fixes to the main test environm
 
 > **快速开始**：
 > ```bash
-> source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+> source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 > init-gh-token
 > verify-local  # 必须通过才能 push
 > wait-ci-complete "$RUN_ID"  # 自动轮询至完成或超时
@@ -48,7 +48,7 @@ description: Full-stack engineer skill for rapid fixes to the main test environm
 
 **🆕 使用工具函数（推荐）**：
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 
 # 自动登录 + 截图（参数化）
 take-screenshot \
@@ -112,7 +112,7 @@ find backend/ruoyi-modules/wande-ai/src -name "*Controller.java" | xargs grep -l
 **🆕 使用工具函数（推荐 — 自动化 + 模板分化）**：
 
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 
 # 初始化 token（一次性）
 init-gh-token
@@ -217,7 +217,7 @@ ISSUE_NUM=$(gh issue create --repo WnadeyaowuOraganization/wande-play --title "[
 
 **🆕 使用工具函数（推荐 — 自动化 + 强制拦截）**：
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 
 # 一行命令通过所有验证，失败自动停止
 verify-local "ruoyi-modules/wande-ai" || exit 1
@@ -252,7 +252,7 @@ mysql -h 127.0.0.1 -u root -p<password> <db_name> < backend/ruoyi-modules/wande-
 > **push 前必须 sync-dev**：其他人可能已经push了新代码到dev，不同步会导致冲突或覆盖。
 
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 cd /data/home/ubuntu/projects/wande-play-quick-fix
 
 # 1. 同步最新 dev（必做，检测远端新提交并 rebase）
@@ -285,7 +285,7 @@ RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play \
 echo "CI Run: https://github.com/WnadeyaowuOraganization/wande-play/actions/runs/${RUN_ID}"
 
 # 轮询CI（最多10分钟）
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 if wait-ci-complete "$RUN_ID" 600; then
   echo "✅ CI passed"
 else
@@ -321,7 +321,7 @@ done
 
 **🆕 使用工具函数（推荐 — 自动回滚后端 + 前端 + 验证）**：
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 
 # 自动完整回滚
 if ! rollback-complete; then
@@ -358,7 +358,7 @@ curl -sf http://localhost:6040 && curl -sf http://localhost:8080 && echo "✅ Ro
 
 **🆕 使用工具函数（推荐）**：
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 
 # 自动登录 + 截图
 take-screenshot \
@@ -374,7 +374,7 @@ echo "✅ After 截图完成"
 
 **🆕 使用工具函数（推荐 — 自动填充改动摘要）**：
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 
 # 上传 after 截图
 AFTER_URL=$(upload-release-asset "/tmp/after-fix.png")
@@ -418,7 +418,7 @@ gh issue close $ISSUE_NUM --repo WnadeyaowuOraganization/wande-play
 
 ```bash
 # === 【推荐】使用工具库完整流程 ===
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix-code/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
 init-gh-token
 verify-local "ruoyi-modules/wande-ai"
 wait-ci-complete "$RUN_ID"

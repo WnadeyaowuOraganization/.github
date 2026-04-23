@@ -35,7 +35,7 @@ description: 甲方问题反馈收集工具。接收甲方在测试环境（http
 用 Playwright 截取问题现场（before截图）：
 
 ```bash
-source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix/scripts/utils.sh
+source /data/home/ubuntu/projects/.github/agents/quick-fix/scripts/utils.sh
 
 take-screenshot \
   "http://localhost:8080/<问题页面路径>" \

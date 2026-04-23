@@ -667,7 +667,7 @@ Quick-Fix Utils Library v1.1 — 快速修复工具库
 【快速参考】
 
   # 1. 初始化
-  source /data/home/ubuntu/projects/.github/docs/agent-docs/quick-fix/utils.sh
+  source /data/home/ubuntu/projects/.github/agents/quick-fix-code/utils.sh
   init-gh-token
 
   # 2. 复现问题 + 记录 before

@@ -337,7 +337,7 @@ if [ "$MODE" = "issue" ]; then
 fi
 
 # === 同步 skill 化 CLAUDE.md + 软链 skills 到工作目录（每次启动强制覆盖）===
-SKILLS_SRC="${HOME_DIR}/projects/.github/docs/agent-docs/coding"
+SKILLS_SRC="${HOME_DIR}/projects/.github/agents/coding"
 if [ -d "$SKILLS_SRC" ]; then
   # 1. 覆盖 CLAUDE.md（位于 BASE_DIR 根，被 PROJECT_DIR/parents 自动加载）
   if [ -f "$SKILLS_SRC/CLAUDE.md" ]; then

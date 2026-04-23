@@ -213,7 +213,7 @@
 | 04-24 | kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
 | 04-24 | kimi2 | #4016 | crm | medium | In Progress | 架构蓝图+术语数据字典 |
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
-| 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 — PR #4133已于04-23 merged，Issue #4018 CLOSED |
+| 04-24 | kimi1 | #4018 | crm | medium | **Continuing** | 数据迁移PR#4133已merged，续接stage体系改造（8处代码+前端对齐，预计2-4h) |
 | 04-24 | kimi1 | **待派遣** | — | medium | **空位** | 备选队列已用尽，等待排程经理补充新建议 |
 | 04-24 | kimi6 | #1920 | d3 | medium | **Blocked** | wande-gh-plugins重构 — PR #34 merge冲突，待解决 |
 

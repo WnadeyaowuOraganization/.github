@@ -145,7 +145,8 @@
 | 04-23 | kimi2 | ~~#4033~~ | crm | **max** | ~~Done~~ | CRM商机详情-基本信息Tab — PR#4062 已于04-22 merged |
 | 04-23 | kimi2 | #3387 | plm | **max** | In Progress | ECO执行引擎 — 审批通过自动执行版本更新+BOM递增 |
 | 04-23 | kimi4 | ~~#4034~~ | crm | **max** | ~~Done~~ | CRM商机详情-跟进记录Tab — PR#4056+PR#4108 merged（N+1已知技术债，单商机场景可控）|
-| 04-23 | kimi4 | #3394 | plm | **max** | In Progress | PLM零件主数据管理页面 |
+| 04-23 | kimi4 | ~~#3394~~ | plm | **max** | ~~Done~~ | PLM零件主数据管理页面 — PR#3990 已于04-20 merged |
+| 04-23 | kimi4 | #3395 | plm | **max** | In Progress | PLM BOM管理与版本对比页面 |
 
 ---
 

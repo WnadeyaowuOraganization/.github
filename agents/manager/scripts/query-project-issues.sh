@@ -1,0 +1,1 @@
+../../../scripts/query-project-issues.sh

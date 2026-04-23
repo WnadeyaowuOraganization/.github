@@ -1,0 +1,1 @@
+../../../../scripts/parse-e2e-failures.py

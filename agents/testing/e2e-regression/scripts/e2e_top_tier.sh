@@ -1,0 +1,1 @@
+../../../../scripts/e2e_top_tier.sh

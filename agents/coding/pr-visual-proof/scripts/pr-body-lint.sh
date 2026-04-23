@@ -1,0 +1,1 @@
+../../../../scripts/pr-body-lint.sh

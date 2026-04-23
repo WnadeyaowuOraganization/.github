@@ -204,6 +204,8 @@
 | 04-24 | kimi1 | ~~#1921~~ | d3 | medium | ~~Done~~ | D3Plugin.gha SDK降级 — PR #4143 merged，Issue自动关闭 |
 | 04-24 | kimi2 | ~~#3151~~ | approval | medium | ~~Done~~ | 新手引导+流程帮助中心 — PR #4140 merged，Issue自动关闭 |
 | 04-24 | kimi3 | ~~#2305~~ | design-ai | medium | ~~Done~~ | Three.js漫游录制 — PR #4145 merged，Issue自动关闭 |
+| 04-24 | kimi3 | ~~#2307~~ | design-ai | medium | ~~Done~~ | 局部修改模块GUI — PR #4147 merged，Issue自动关闭 |
+| 04-24 | kimi3 | #2309 | design-ai | medium | In Progress | 颜色配置器（排程建议#2，03:03派遣）|
 | 04-24 | kimi5 | ~~#2310~~ | design-ai | medium | ~~Done~~ | 方案文本生成 — PR #4144 merged，Issue手动关闭 |
 | 04-24 | kimi6 | #1920 | d3 | medium | Blocked | wande-gh-plugins重构 — PR #34 merge冲突，CI绿✅ |
 | 04-24 | kimi1 | #3648 | bidding | low | In Progress | 招投标-DB建表 |
@@ -218,10 +220,10 @@
 | 04-24 | kimi6 | #1920 | d3 | medium | **Blocked** | wande-gh-plugins重构 — PR #34 merge冲突，待解决 |
 
 **当前5个CC在线运行中：**
-- kimi1 #2308: 58%进度（主题方案灵感库，复杂度高，T1-15分阶段交付，目前T1-2建表）
+- kimi1 #2308: 30%进度（主题方案灵感库，复杂度高，T1-15分阶段交付）
 - kimi2 #4016: 29%进度 (架构蓝图+术语数据字典)
-- kimi3 #2307: 37%进度 (局部修改模块GUI，PR #4147 open 但质量预检FAILED，已通知修复)
-- kimi5 #4011: 49%进度 (记录中心三视角分组Tab)
+- kimi3 #2309: **新派遣**（03:03 刚启动，颜色配置器 Three.js实时预览）
+- kimi5 #4011: 46%进度 (多实体关联数据模型)
 - kimi6 #1920: 39%进度 (wande-gh-plugins重构，PR #34 merge冲突)
 
 ---

@@ -81,7 +81,7 @@ else
 fi
 
 # 2. 追加所有普通 CC skills（正常字母序，排在 quick-fix 之后）
-REGULAR_SKILLS_SRC="${GITHUB_DIR}/docs/agent-docs/skills"
+REGULAR_SKILLS_SRC="${GITHUB_DIR}/docs/agent-docs/coding"
 skill_count=0
 for skill_dir in "$REGULAR_SKILLS_SRC"/*/; do
   [ -f "${skill_dir}SKILL.md" ] || continue

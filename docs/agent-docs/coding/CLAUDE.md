@@ -2,7 +2,7 @@
 
 > 你是万德 Wande-Play 项目的编程 CC（Claude Code 实例），由研发经理通过 `run-cc.sh` 启动，绑定到一个独立 kimi 工作目录与隔离测试环境。
 >
-> 本文件由 `~/projects/.github/docs/agent-docs/skills/CLAUDE.md` 模板派生，每次启动时被 `run-cc.sh` 强制覆盖到工作目录根，**禁止本地修改**。
+> 本文件由 `~/projects/.github/docs/agent-docs/coding/CLAUDE.md` 模板派生，每次启动时被 `run-cc.sh` 强制覆盖到工作目录根，**禁止本地修改**。
 
 ## 你的身份
 
@@ -106,7 +106,7 @@
 10a. **收到研发经理"提PR"注入时，若自身上下文 ≥80%，必须先执行 `/compact`，等压缩完成再继续提PR流程**；禁止直接跳入 pr-visual-proof（上下文不足会导致代码不完整交付，如 #1728 仅交付建表，后端+前端未实现）
 11. **禁止无测试的 PR**：后端改动**必须按顺序**包含 JUnit 单测（先）+ Playwright API spec（后）；前端改动**必须**含 Playwright e2e spec；Bug 修复**必含**"复现红灯"测试；纯文档/配置 Issue **必须**在 task.md 显式注明"跳过测试原因"
 12. **收到 CI 失败注入立即切 fix-ci-failure**：连续同一失败 3 轮未修好 → 发 cc-report stuck，禁止盲目重跑 `gh run rerun`
-13. **禁止动 `.claude/skills/` 和根 `CLAUDE.md`**：这两个是 `run-cc.sh` 启动时注入的运行时资产（`.claude/skills/*` 为软链到 `~/projects/.github/docs/agent-docs/skills/`，`CLAUDE.md` 由模板覆盖生成）。`git status` 里它们 untracked 属正常，**禁止** `rm -rf .claude/skills`、`git restore CLAUDE.md`、`git clean -fd` 不带排除。PR 提交前要清 untracked 用：`git clean -fd -e '.claude/skills/' -e 'CLAUDE.md'`
+13. **禁止动 `.claude/skills/` 和根 `CLAUDE.md`**：这两个是 `run-cc.sh` 启动时注入的运行时资产（`.claude/skills/*` 为软链到 `~/projects/.github/docs/agent-docs/coding/`，`CLAUDE.md` 由模板覆盖生成）。`git status` 里它们 untracked 属正常，**禁止** `rm -rf .claude/skills`、`git restore CLAUDE.md`、`git clean -fd` 不带排除。PR 提交前要清 untracked 用：`git clean -fd -e '.claude/skills/' -e 'CLAUDE.md'`
 14. **遇到 API Error 400 `thinking is enabled but reasoning_content is missing` 立即 `/clear`**：此错误表示对话历史中 thinking token 状态损坏（常发生在 /compact 后），**禁止**重试出错操作、**禁止**再次 /compact（会再次触发）。正确处理：立即执行 `/clear` 重置对话 → 重新 `git status` + 读取已有代码 → 从断点处继续（代码文件不受影响）
 
 ## 共用脚本速查

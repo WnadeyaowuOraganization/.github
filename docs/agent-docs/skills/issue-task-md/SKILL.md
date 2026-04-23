@@ -13,6 +13,28 @@ description: Evaluate an Issue against design docs and existing code, produce a 
 - 重启 / compact 后恢复
 - 研发经理要求拆分复杂 Issue
 
+## 原型检查（三方对仗之前，强制第一步）
+
+读完 Issue 后，**先判断是否有原型支撑**：
+
+| 条件 | 判定 | 动作 |
+|------|------|------|
+| Issue body 引用了 `docs/design/` 下文件 | ✅ 有原型 | 继续三方对仗 |
+| Issue body 含原型截图或 Figma 链接 | ✅ 有原型 | 继续三方对仗 |
+| 纯后端API/数据库/pipeline（无UI） | ✅ 无需原型 | 继续三方对仗 |
+| `type:bugfix` / `type:docs` / `type:refactor` / `type:test` | ✅ EXEMPT | 继续三方对仗 |
+| **以上都不满足** | ❌ 缺原型 | **立即停止，执行以下命令** |
+
+```bash
+# 缺原型处理流程
+bash ~/projects/.github/scripts/update-project-status.sh --repo play --issue ${ISSUE} --status "pause"
+gh issue edit ${ISSUE} --repo WnadeyaowuOraganization/wande-play --add-label "needs-prototype"
+MSG="[#${ISSUE}] 缺少原型支撑，已pause等待原型补充" && \
+tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $MSG" Enter && \
+curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
+  -d "{\"session\":\"cc-report-${ISSUE}\",\"message\":\"$MSG\",\"type\":\"warning\"}" >/dev/null
+```
+
 ## 三方对仗（强制顺序）
 
 缺一步 = 漏需求 / 字段错位 / 返工。

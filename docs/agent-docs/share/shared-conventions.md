@@ -3,6 +3,22 @@
 > 所有编程 CC 启动时 `run-cc.sh` 自动注入本文件作为初始 prompt。
 > 任何规则变更必须改本文件，不得分散到其他文件。
 
+## 🚨 原型检查规则（最高优先级）
+
+**开工前必须确认Issue有原型支撑。** 以下情况视为"有原型"：
+1. Issue body 引用了 `docs/design/` 下的原型文件路径
+2. Issue body 包含原型截图或Figma链接
+3. Issue 是纯后端API/数据库/pipeline类（无需原型）
+4. Issue 类型是 `type:bugfix` / `type:docs` / `type:refactor` / `type:test`（EXEMPT豁免）
+
+**如果Issue不满足以上任一条件（缺少原型）：**
+1. **立即停止开发**，不要写任何代码
+2. 将Issue设置为pause状态：`bash ~/projects/.github/scripts/update-project-status.sh --repo play --issue ${ISSUE} --status "pause"`
+3. 给Issue加 `needs-prototype` 标签：`gh issue edit ${ISSUE} --repo WnadeyaowuOraganization/wande-play --add-label "needs-prototype"`
+4. 通知研发经理：`tmux send-keys -t 'manager-研发经理' "[CC-REPORT] [#${ISSUE}] 缺少原型支撑，已pause等待原型补充" Enter`
+
+> **Why**：没有原型的前端页面开发出来与甲方预期不符，返工成本远高于等原型。
+
 ## 🚨 菜单规则（最高优先级）
 
 **禁止 INSERT 新菜单**。平台菜单结构已通过 8 个 Issue 统一建好，所有页面都有对应的占位菜单。

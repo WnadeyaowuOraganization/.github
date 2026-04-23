@@ -1,6 +1,6 @@
 # 万德AI平台 · 功能注册表
 
-> ⏰ 最后更新：2026-04-23 by Perplexity Computer（D96 biz:project A 档纯回填）
+> ⏰ 最后更新：2026-04-24 by Perplexity Computer（D98 B 档 18 裸 Issue 按关键词归域·裸 B 档清零）
 > 📊 统计：1182 个 open Issue | 36 条业务线 | 8 个 Sprint
 
 ---
@@ -317,6 +317,22 @@ gh search issues "Sprint-N" --state open --repo WnadeyaowuOraganization/wande-pl
 ---
 
 ## 九、策略变更日志
+
+### 2026-04-24 · D98 · B 档 18 裸 Issue 按标题关键词归域（零新原型·纯标签操作·裸 B 档清零）
+- **背景颠覆**：D92 摘要称 B 档 424，D97 摘要称 14，**实际 D98 摸底总 open 616**（非 98）——无 biz 标签 113——其中 11 exempt 豁免 + 84 needs-prototype 冻结 + **18 个纯裸 B 档**
+- **D97 摘要传话偏差**：`gh issue list` 默认 `--limit 100` 截断被当成全量，遗漏 518 个 Issue。**教训**：后续摸底必须 `--limit 2000`
+- **决策路径**：wande-prototype v5.1 §5.6.3 A 档回填式（零风险/最快清理）——按标题关键词精准匹配已有 biz 域，批量 `gh issue edit --add-label`
+- **精准归域映射**（18 裸 B 档 + 5 D97 遗漏）23 个 Issue：
+  - `biz:approval` +11：审批引擎 10（#3153/#3132/#2016/#2020/#2021/#2364/#2365/#2024/#2025/#2027）+ #3154 智能路由引擎
+  - `biz:bidding` +4：矿场 Phase5 国际化（#2226/#1486/#2227/#1488），项目矿场归并招投标域
+  - `biz:project` +2：#3622 全过程资料管理 Master + #3185 全阶段资料看板子
+  - `biz:finance` +2：#3191 甲方资料需求模板库 + #2358 商机获客成本 Tab
+  - `biz:d3-parametric` +2：#1923 AI 合规报告 + #3567 电池包管理（保留 needs-prototype）
+  - `biz:cockpit` +1：#2275 DORA 指标卡片
+  - `biz:design-ai` +1：#1845 EN1176+ASTM+GB 三标融合
+- **wande-prototype v5.1 §5.6.5 登记**：9 exempt（#4095/#4094/#4093/#4063/#4060/#4059 Quick-Fix bugfix + #3886/#3570/#3558 测试类）永久豁免；84 needs-prototype（D92 §5.6.3 C 档存量冻结）不进 Sprint
+- **合规统计**：总 open 616 不变 / 有 biz 521（84.6%，+23）/ 无 biz 95（11 exempt + 84 冻结 + **0 裸 B 档**）/ A 档合规 363 不变（B 档归域不涉回填）/ Master 19 不变 / 原型目录 21 不变
+- **下一步**：D99 候选——A. needs-prototype 84 冻结按业务域逐个补原型 / B. C 档 biz:approval 31 + biz:brand-center 31 补原型 / C. 继续回填已有 biz 标签但无原型支撑的子 Issue
 
 ### 2026-04-23 · D97 · biz:d3-parametric 3 Issue v5.1 §5.6 B 档补原型（Master #4142 + 7 Tab 平展 + 项目中心菜单 +1）
 - **biz:d3-parametric Issue 实际**：3 open（非 D92 摘要的 38，其余早已 close）全带 needs-prototype，业务域 0 Master 0 原型

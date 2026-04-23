@@ -4,8 +4,8 @@
 >
 > | 角色       | 指南 |
 > |----------|------|
-> | **排程经理** | 阅读 [agents/non-cc/manager/scheduler-guide.md](agents/non-cc/manager/scheduler-guide.md) |
-> | **研发经理** | 阅读 [agents/non-cc/manager/assign-guide.md](agents/non-cc/manager/assign-guide.md) |
+> | **排程经理** | 阅读 [agents/manager/scheduler-guide.md](agents/manager/scheduler-guide.md) |
+> | **研发经理** | 阅读 [agents/manager/assign-guide.md](agents/manager/assign-guide.md) |
 >
 > 阅读完对应指南后，阅读唯一真相源的Issue生命周期部分，最后按指南中的职责顺序执行本轮任务。无法决策时参考唯一真相源后继续
 
@@ -70,9 +70,33 @@ bash scripts/run-cc.sh --module backend --issue 1234 --dir kimi1 --effort medium
 
 评估编程CC的自测计划时，**不要否定其图形化测试能力**，应鼓励CC充分利用 Playwright + 截图进行前端功能验证。
 
-## 团队内沟通机制（必读）
+## 团队内沟通机制（全局强制，所有角色遵守）
 
-> **启动后立即阅读** `agents/share/shared-conventions.md` §10「阶段性主动汇报」及§「团队内沟通机制」，每次向他人发送消息前必须遵守。
+**每条消息必须包含** `【类型】-【回复标识】`，禁止发裸消息。
+
+| 场景 | 类型 | 回复标识 | 示例 |
+|-----|------|---------|------|
+| 进度播报 | 进度播报 | 【阅即可】 | 【进度播报】-【阅即可】 kimi1/#3995 已提PR |
+| 方案评审 | 方案评审 | 【需回复】 | 【方案评审】-【需回复】 #2367建议纯DB操作 |
+| 异常发现 | 异常发现 | 【需回复】 | 【异常发现】-【需回复】 kimi3 卡住15分钟 |
+| 需人工介入 | 需人工介入 | 【需回复】 | 【需人工介入】-【需回复】 CI连续3轮失败 |
+
+**通讯录**：
+
+| 角色 | tmux 会话 |
+|------|----------|
+| 研发经理 | `manager-研发经理` |
+| 排程经理 | `manager-排程经理` |
+| 编程CC | `cc-wande-play-kimiN-ISSUE` |
+| Notify API | `POST http://localhost:9872/api/notify` |
+
+**发送流程**（tmux + notify双通道，缺一不可）：
+```bash
+MSG="【类型】-【回复标识】 内容"
+tmux send-keys -t '<目标会话>' "$MSG" Enter
+curl -s -X POST http://localhost:9872/api/notify -H 'Content-Type: application/json' \
+  -d "{\"session\":\"<目标会话>\",\"message\":\"$MSG\",\"type\":\"info\"}"
+```
 
 ## 文档更新规范（必读）
 

@@ -27,39 +27,32 @@
 | 4 | kimi4 | #3631 | P1 | bidding | high | ✅ 已派 — pipeline表对齐 |
 | 5 | kimi5 | #1692 | P1 | backend | medium | ✅ 已派（⚠️可能卡住）— 项目成本跟踪API |
 
-**5/5 并发已满。** 有CC释放时按以下顺序补入（Sprint-1优先 > Sprint-2 > NoSprint）：
+**3/5 并发，2个空位。** 研发经理按以下顺序补入：
 
-### 备选队列（按Perplexity Sprint优先级排序）
+### 备选队列（2026-04-23 更新，Sprint-1剩余 > Sprint-2）
 
-**Sprint-1 P1（最高优先）：**
-
-| 序号 | Issue | 优先级 | 模块 | effort | 说明 |
-|------|-------|--------|------|--------|------|
-| 6 | ~~#2296~~ | P1 | wechat | medium | ✅ 已派 — Cockpit安全审计页面 |
-| 7 | ~~#2298~~ | P1 | cockpit | medium | ✅ 已派 — AI对话监控面板 |
-| 8 | ~~#2925~~ | P1 | backend | medium | ✅ 已派 — 字段级数据完整度计算引擎 |
-| 9 | ~~#2926~~ | P1 | backend | medium | ✅ 已派 — 数据质量KPI API |
-| 10 | ~~#2944~~ | P1 | backend | medium | ✅ 已派 — 7天滚动基线异常检测 |
-| 11 | ~~#4033~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-基本信息Tab |
-| 12 | ~~#4034~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-跟进记录Tab |
-| 13 | ~~#4035~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-设计单Tab |
-| 14 | ~~#4036~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-报价Tab |
-| ~~15~~ | ~~#4037~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-合同Tab |
-| ~~16~~ | ~~#4038~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-回款Tab |
-| ~~17~~ | ~~#4039~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-投标HZTab |
-| ~~18~~ | ~~#4040~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-资料Tab |
-| ~~19~~ | ~~#4042~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-流程监控Tab |
-| ~~20~~ | ~~#4044~~ | P1 | crm | medium | ✅ 已派 — CRM商机详情-变更日志Tab |
-
-**Sprint-1 其他 + Sprint-2（续）：**
-
-| 序号 | Issue | 优先级 | 模块 | effort | 说明 |
-|------|-------|--------|------|--------|------|
-| ~~21~~ | ~~#2849~~ | P1 | cockpit | medium | ✅ 已派 — Agent效率看板前端 |
-| ~~22~~ | ~~#2851~~ | P1 | cockpit | medium | ✅ 已派 — 验收队列前端 |
-| 23 | #1920 | — | d3 | medium | EXEMPT — wande-gh-plugins仓库重构（跳过）|
-| 24 | #1921 | — | d3 | medium | EXEMPT — D3Plugin.gha SDK降级（跳过）|
-| ~~25~~ | ~~#3648~~ | P0 | bidding | low | ✅ 已派 — 招投标DB建表 |
+| 序号 | Issue | 优先级 | Sprint | 模块 | effort | 说明 |
+|------|-------|--------|--------|------|--------|------|
+| 1 | #4022 | — | S1 | crm | medium | Master — CRM商机详情页骨架（子Tab已完成，补Master） |
+| 2 | #4021 | — | S1 | crm | medium | Master — CRM商务中心10页架构 |
+| 3 | #1832 | P1 | S2 | pipeline | medium | EXEMPT — Pipeline CI质量门禁+测试框架 |
+| 4 | #1875 | P1 | S2 | bidding | medium | A档 — 赢/输复盘模板+系统化采集 |
+| 5 | #3150 | P1 | S2 | backend | medium | A档 — 审批流程图渲染API [2/8] |
+| 6 | #3149 | P1 | S2 | frontend | medium | A档 — 审批进度追踪器组件 [1/8]（⏳建议等#3150后端先完成） |
+| 7 | #3155 | P1 | S2 | frontend | medium | A档 — 流程简化配置页 [7/8] |
+| 8 | #3156 | P1 | S2 | frontend | medium | A档 — 流程效率分析看板 [8/8] |
+| 9 | #3651 | P1 | S2 | bidding | medium | A_weak — 投标立项与进度管理 |
+| 10 | #3168 | P1 | S2 | frontend | medium | A档 — 动态表单渲染器前端 [2/8]（⏳等#3167 Done） |
+| 11 | #3169 | P1 | S2 | fullstack | medium | A档 — 表单模板管理 [3/8]（⏳等#3167 Done） |
+| 12 | #4020 | — | S1 | cockpit | high | A_weak — Master超管驾驶舱18Tab |
+| 13 | #2427 | P2 | S2 | bidding | medium | A档 — 环评/规划许可公示采集 |
+| 14 | #2428 | P2 | S2 | bidding | medium | A档 — 人大代表建议/政协提案采集 |
+| 15 | #2429 | P2 | S2 | bidding | medium | A档 — 行业展会参展商名录采集 |
+| 16 | #3151 | P2 | S2 | frontend | medium | A档 — 新手引导+流程帮助中心 [3/8] |
+| 17 | #3174 | P2 | S2 | fullstack | medium | A档 — 表单模板导入导出 [8/8] |
+| 18 | #4023 | — | S2 | approval | high | A_weak — Master审批工作台8Tab |
+| 19 | #4024 | — | S2 | plm | high | A_weak — Master PLM产品技术中心8Tab |
+| 20 | #4041 | — | S2 | cockpit | medium | A_weak — Master耀总驾驶舱8区块 |
 
 ## 指派历史
 

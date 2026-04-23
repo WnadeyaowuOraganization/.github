@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>客户生命周期 - 提醒执行看板</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .tab-btn { padding: 8px 4px; font-size: 14px; color: #6b7280; cursor: pointer; border-bottom: 2px solid transparent; }
+  .tab-btn.active { color: #2563eb; border-bottom-color: #2563eb; font-weight: 600; }
+  .chip { display:inline-block; padding: 2px 8px; border-radius: 10px; font-size: 12px; font-weight: 500; }
+  .chip-gray   { background:#f3f4f6; color:#374151; }
+  .chip-blue   { background:#dbeafe; color:#1d4ed8; }
+  .chip-green  { background:#dcfce7; color:#15803d; }
+  .chip-orange { background:#ffedd5; color:#c2410c; }
+  .chip-purple { background:#ede9fe; color:#6d28d9; }
+  .chip-rose   { background:#ffe4e6; color:#be123c; }
+  .dot { width: 8px; height: 8px; border-radius: 50%; display:inline-block; }
+  .btn-xs { padding: 3px 10px; border-radius: 4px; font-size: 12px; border: 1px solid transparent; white-space: nowrap; }
+  .btn-primary { background:#2563eb; color:#fff; }
+  .btn-primary:hover { background:#1d4ed8; }
+  .btn-ghost { background:#fff; color:#374151; border-color:#d1d5db; }
+  .btn-ghost:hover { background:#f3f4f6; }
+  .avatar { width: 24px; height: 24px; border-radius: 50%; background:#6b7280; color:#fff; display:inline-flex; align-items:center; justify-content:center; font-size: 11px; font-weight: 600; }
+  table.list-table tbody tr:hover { background:#f9fafb; }
+  .bar { background:#93c5fd; border-radius: 3px 3px 0 0; display:inline-block; width:24px; margin: 0 4px; vertical-align:bottom; }
+  .bar.overdue { background:#ef4444; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<!-- 此块由 wande-prototype skill 强制要求，所有原型HTML必须包含 -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">客户生命周期 - 提醒执行看板</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr>
+        <td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td>
+        <td style="padding:4px 0;color:#333;">商务/售后每日打开第一站，把所有来自6大引擎（交付里程碑/满意度回访/复购信号/客户分层/设备档案/巡检）的待办提醒统一列出，支持行内立即执行，降低跨系统跳转成本（对应 Issue #2754）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td>
+        <td style="padding:4px 0;color:#333;">商务（跟进复购信号/满意度回访）, 售后（设备巡检/客户关怀）, 项目经理（交付里程碑把控）, 吴耀（管理层全员执行率视图）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td>
+        <td style="padding:4px 0;color:#333;">我的待办列表（6大引擎统一入口） / 全员执行率视图（管理层） / 超时预警（红色高亮+升级） / 行内快捷操作（立即执行/稍后提醒/已完成/详情）</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td>
+        <td style="padding:4px 0;color:#333;">切换视图tab / 按提醒类型+状态+日期筛选 / 点击[立即执行]跳转执行页 / [稍后提醒]重置闹钟 / [已完成]标记 / 查看[详情]弹窗</td>
+      </tr>
+      <tr>
+        <td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td>
+        <td style="padding:4px 0;color:#333;">列表默认加载"我的待办" / 超时记录 red-500 加粗 + "已超时 Xh" 标签 / 行内按钮触发对应 API / 管理层视图受权限控制（仅 吴耀/总监以上可见全员视图）/ 统计摘要条 5 项数字实时</td>
+      </tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">客户生命周期 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+<!-- [区域A: 筛选栏+视图切换] -->
+<div class="bg-white border border-gray-200 rounded-md px-5 py-3 mb-4">
+  <div class="flex items-center justify-between flex-wrap gap-3">
+    <!-- 左：视图切换 -->
+    <div class="flex items-center gap-6" id="viewTabs">
+      <div class="tab-btn active" data-view="my">我的待办</div>
+      <div class="tab-btn" data-view="team">全员执行率</div>
+      <div class="tab-btn" data-view="overdue">超时预警</div>
+    </div>
+    <!-- 右：筛选 -->
+    <div class="flex items-center gap-2 flex-wrap">
+      <select class="text-sm border border-gray-300 rounded px-2 py-1 bg-white">
+        <option>提醒类型：全部</option>
+        <option>交付里程碑</option>
+        <option>满意度回访</option>
+        <option>复购信号</option>
+        <option>客户分层</option>
+        <option>设备档案</option>
+        <option>设备巡检</option>
+      </select>
+      <select class="text-sm border border-gray-300 rounded px-2 py-1 bg-white">
+        <option>状态：全部</option>
+        <option>待办</option>
+        <option>进行中</option>
+        <option>已执行</option>
+        <option>超时</option>
+      </select>
+      <input type="date" value="2026-04-26" class="text-sm border border-gray-300 rounded px-2 py-1 bg-white">
+      <span class="text-gray-400 text-sm">~</span>
+      <input type="date" value="2026-05-03" class="text-sm border border-gray-300 rounded px-2 py-1 bg-white">
+      <input type="text" placeholder="🔍 搜索标题/客户/项目" class="text-sm border border-gray-300 rounded px-3 py-1 bg-white w-56">
+    </div>
+  </div>
+</div>
+
+
+<!-- [区域B: 统计摘要条] -->
+<div class="bg-white border border-gray-200 rounded-md px-5 py-4 mb-4">
+  <div class="flex items-center gap-10 text-sm">
+    <div>
+      <div class="text-xs text-gray-500 mb-1">待办</div>
+      <div class="text-xl font-semibold text-gray-800">12</div>
+    </div>
+    <div class="border-l border-gray-200 pl-10">
+      <div class="text-xs text-gray-500 mb-1">已超时</div>
+      <div class="text-xl font-bold text-red-500">3</div>
+    </div>
+    <div class="border-l border-gray-200 pl-10">
+      <div class="text-xs text-gray-500 mb-1">今日截止</div>
+      <div class="text-xl font-semibold text-gray-800">5</div>
+    </div>
+    <div class="border-l border-gray-200 pl-10">
+      <div class="text-xs text-gray-500 mb-1">本周截止</div>
+      <div class="text-xl font-semibold text-gray-800">18</div>
+    </div>
+    <div class="border-l border-gray-200 pl-10">
+      <div class="text-xs text-gray-500 mb-1">本月执行率</div>
+      <div class="text-xl font-semibold text-gray-800">82<span class="text-sm text-gray-500">%</span></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- [区域C: 提醒列表] -->
+<div class="bg-white border border-gray-200 rounded-md overflow-hidden mb-4">
+  <div class="px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+    <div class="text-sm font-semibold text-gray-700">提醒列表 <span class="text-gray-400 font-normal">（共 12 条）</span></div>
+    <div class="flex items-center gap-2 text-xs text-gray-500">
+      <span class="inline-flex items-center gap-1"><span class="dot" style="background:#ef4444"></span>超时</span>
+      <span class="inline-flex items-center gap-1"><span class="dot" style="background:#eab308"></span>&lt;6h</span>
+      <span class="inline-flex items-center gap-1"><span class="dot" style="background:#22c55e"></span>正常</span>
+    </div>
+  </div>
+  <table class="list-table w-full text-sm">
+    <thead class="bg-gray-50 text-gray-500 text-xs">
+      <tr>
+        <th class="px-3 py-2 text-left w-12">紧急度</th>
+        <th class="px-3 py-2 text-left w-28">类型</th>
+        <th class="px-3 py-2 text-left">标题</th>
+        <th class="px-3 py-2 text-left w-56">关联</th>
+        <th class="px-3 py-2 text-left w-28">目标人</th>
+        <th class="px-3 py-2 text-left w-44">截止时间</th>
+        <th class="px-3 py-2 text-left w-80">操作</th>
+      </tr>
+    </thead>
+    <tbody class="divide-y divide-gray-100 text-gray-700">
+      <!-- 行1: 超时 交付里程碑 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#ef4444"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-gray">交付里程碑</span></td>
+        <td class="px-3 py-3 font-semibold">深圳华强签约30天未安装提醒</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">深圳华强</a> /
+          <a href="#" class="text-blue-600 hover:underline">项目#PRJ-2024-088</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#3b82f6">陈</span>
+          <span class="ml-1">陈刚</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-red-500 font-bold">2026-04-26 18:00</div>
+          <div class="text-red-500 text-xs font-bold">已超时 12小时</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+            <span class="chip chip-rose">已升级</span>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行2: 超时 满意度回访 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#ef4444"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-green">满意度回访</span></td>
+        <td class="px-3 py-3 font-semibold">广州日化-交付后7天NPS回访</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">广州日化股份</a> /
+          <a href="#" class="text-blue-600 hover:underline">项目#PRJ-2024-102</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#f59e0b">林</span>
+          <span class="ml-1">林慧敏</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-red-500 font-bold">2026-04-25 17:00</div>
+          <div class="text-red-500 text-xs font-bold">已超时 37小时</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+            <span class="chip chip-rose">已升级</span>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行3: 超时 设备巡检 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#ef4444"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-orange">设备巡检</span></td>
+        <td class="px-3 py-3 font-semibold">东莞立胜注塑机季度巡检</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">东莞立胜科技</a> /
+          <a href="#" class="text-blue-600 hover:underline">设备#EQ-0471</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#10b981">赵</span>
+          <span class="ml-1">赵伟强</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-red-500 font-bold">2026-04-24 10:00</div>
+          <div class="text-red-500 text-xs font-bold">已超时 2天</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+            <span class="chip chip-rose">已升级</span>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行4: <6h 复购信号 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#eab308"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-blue">复购信号</span></td>
+        <td class="px-3 py-3 font-semibold">苏州精益询价未响应-复购窗口</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">苏州精益制造</a> /
+          <a href="#" class="text-blue-600 hover:underline">商机#OPP-2026-0412</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#8b5cf6">王</span>
+          <span class="ml-1">王海峰</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-yellow-600 font-semibold">2026-04-27 12:00</div>
+          <div class="text-yellow-600 text-xs">剩余 4小时</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行5: <6h 客户分层 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#eab308"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-purple">客户分层</span></td>
+        <td class="px-3 py-3 font-semibold">宁波奥丁季度分层复评-升A</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">宁波奥丁电气</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#3b82f6">陈</span>
+          <span class="ml-1">陈刚</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-yellow-600 font-semibold">2026-04-27 14:00</div>
+          <div class="text-yellow-600 text-xs">剩余 5小时</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行6: 正常 交付里程碑 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#22c55e"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-gray">交付里程碑</span></td>
+        <td class="px-3 py-3 font-semibold">杭州智造-FAT验收计划确认</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">杭州智造集团</a> /
+          <a href="#" class="text-blue-600 hover:underline">项目#PRJ-2025-017</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#ec4899">吴</span>
+          <span class="ml-1">吴梓涵</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-gray-700">2026-04-29 18:00</div>
+          <div class="text-gray-400 text-xs">剩余 2天</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行7: 正常 满意度回访 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#22c55e"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-green">满意度回访</span></td>
+        <td class="px-3 py-3 font-semibold">青岛海信半年度满意度调研</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">青岛海信模具</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#f59e0b">林</span>
+          <span class="ml-1">林慧敏</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-gray-700">2026-04-30 17:00</div>
+          <div class="text-gray-400 text-xs">剩余 3天</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行8: 正常 复购信号 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#22c55e"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-blue">复购信号</span></td>
+        <td class="px-3 py-3 font-semibold">佛山顺德官网3次访问-询价触发</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">佛山顺德精工</a> /
+          <a href="#" class="text-blue-600 hover:underline">线索#LEAD-2026-1883</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#8b5cf6">王</span>
+          <span class="ml-1">王海峰</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-gray-700">2026-04-28 18:00</div>
+          <div class="text-gray-400 text-xs">剩余 1天</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行9: 正常 设备档案 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#22c55e"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-orange">设备档案</span></td>
+        <td class="px-3 py-3 font-semibold">天津瑞能设备质保到期30天预警</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">天津瑞能重工</a> /
+          <a href="#" class="text-blue-600 hover:underline">设备#EQ-0588</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#10b981">赵</span>
+          <span class="ml-1">赵伟强</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-gray-700">2026-05-02 18:00</div>
+          <div class="text-gray-400 text-xs">剩余 5天</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+
+      <!-- 行10: 正常 客户分层 -->
+      <tr>
+        <td class="px-3 py-3"><span class="dot" style="background:#22c55e"></span></td>
+        <td class="px-3 py-3"><span class="chip chip-purple">客户分层</span></td>
+        <td class="px-3 py-3 font-semibold">成都川润分层评级-由C升B</td>
+        <td class="px-3 py-3">
+          <a href="#" class="text-blue-600 hover:underline">成都川润动力</a>
+        </td>
+        <td class="px-3 py-3">
+          <span class="avatar" style="background:#ec4899">吴</span>
+          <span class="ml-1">吴梓涵</span>
+        </td>
+        <td class="px-3 py-3">
+          <div class="text-gray-700">2026-05-03 18:00</div>
+          <div class="text-gray-400 text-xs">剩余 6天</div>
+        </td>
+        <td class="px-3 py-3">
+          <div class="flex items-center gap-1 flex-wrap">
+            <button class="btn-xs btn-primary">立即执行</button>
+            <button class="btn-xs btn-ghost">稍后提醒</button>
+            <button class="btn-xs btn-ghost">已完成</button>
+            <button class="btn-xs btn-ghost">详情</button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <!-- 分页占位 -->
+  <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-between text-xs text-gray-500">
+    <div>共 12 条 · 显示 1-10</div>
+    <div class="flex items-center gap-1">
+      <button class="btn-xs btn-ghost">上一页</button>
+      <button class="btn-xs btn-primary">1</button>
+      <button class="btn-xs btn-ghost">2</button>
+      <button class="btn-xs btn-ghost">下一页</button>
+    </div>
+  </div>
+</div>
+
+
+<!-- [区域D: 管理层视图] -->
+<div id="teamView" class="bg-white border border-gray-200 rounded-md p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <div class="text-base font-semibold text-gray-800">管理层视图 — 全员执行率</div>
+      <div class="text-xs text-gray-500 mt-1">仅 吴耀 / 总监以上角色可见 · 数据范围：本月</div>
+    </div>
+    <span class="chip chip-blue">管理层专属</span>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+    <!-- 左：排名表 -->
+    <div>
+      <div class="text-sm font-semibold text-gray-700 mb-2">按人排名</div>
+      <table class="w-full text-sm border border-gray-200">
+        <thead class="bg-gray-50 text-gray-500 text-xs">
+          <tr>
+            <th class="px-3 py-2 text-left">姓名</th>
+            <th class="px-3 py-2 text-right">本月待办</th>
+            <th class="px-3 py-2 text-right">已执行</th>
+            <th class="px-3 py-2 text-right">执行率</th>
+            <th class="px-3 py-2 text-right">超时数</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-700">
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#ec4899">吴</span> <span class="ml-1">吴梓涵</span></td>
+            <td class="px-3 py-2 text-right">24</td>
+            <td class="px-3 py-2 text-right">23</td>
+            <td class="px-3 py-2 text-right font-semibold text-green-600">96%</td>
+            <td class="px-3 py-2 text-right">0</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#10b981">赵</span> <span class="ml-1">赵伟强</span></td>
+            <td class="px-3 py-2 text-right">32</td>
+            <td class="px-3 py-2 text-right">29</td>
+            <td class="px-3 py-2 text-right font-semibold text-green-600">91%</td>
+            <td class="px-3 py-2 text-right">1</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#8b5cf6">王</span> <span class="ml-1">王海峰</span></td>
+            <td class="px-3 py-2 text-right">28</td>
+            <td class="px-3 py-2 text-right">24</td>
+            <td class="px-3 py-2 text-right font-semibold text-gray-700">86%</td>
+            <td class="px-3 py-2 text-right">1</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#3b82f6">陈</span> <span class="ml-1">陈刚</span></td>
+            <td class="px-3 py-2 text-right">30</td>
+            <td class="px-3 py-2 text-right">24</td>
+            <td class="px-3 py-2 text-right font-semibold text-gray-700">80%</td>
+            <td class="px-3 py-2 text-right">2</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#f59e0b">林</span> <span class="ml-1">林慧敏</span></td>
+            <td class="px-3 py-2 text-right">26</td>
+            <td class="px-3 py-2 text-right">19</td>
+            <td class="px-3 py-2 text-right font-semibold text-yellow-600">73%</td>
+            <td class="px-3 py-2 text-right">3</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#6366f1">刘</span> <span class="ml-1">刘子豪</span></td>
+            <td class="px-3 py-2 text-right">22</td>
+            <td class="px-3 py-2 text-right">15</td>
+            <td class="px-3 py-2 text-right font-semibold text-yellow-600">68%</td>
+            <td class="px-3 py-2 text-right">3</td>
+          </tr>
+          <tr>
+            <td class="px-3 py-2"><span class="avatar" style="background:#ef4444">黄</span> <span class="ml-1">黄晓峰</span></td>
+            <td class="px-3 py-2 text-right">20</td>
+            <td class="px-3 py-2 text-right">12</td>
+            <td class="px-3 py-2 text-right font-semibold text-red-500">60%</td>
+            <td class="px-3 py-2 text-right">4</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 右：柱状图占位 -->
+    <div>
+      <div class="text-sm font-semibold text-gray-700 mb-2">按人超时预警（本月累计）</div>
+      <div class="border border-gray-200 rounded px-4 py-4 bg-gray-50" style="height: 280px; position:relative;">
+        <div class="absolute left-4 right-4 bottom-10 border-b border-gray-300"></div>
+        <div class="flex items-end justify-around h-full pb-10">
+          <div class="flex flex-col items-center">
+            <div class="bar" style="height:12px"></div>
+            <div class="text-xs text-gray-500 mt-2">吴梓涵</div>
+            <div class="text-xs text-gray-700 font-semibold">0</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="bar" style="height:24px"></div>
+            <div class="text-xs text-gray-500 mt-2">赵伟强</div>
+            <div class="text-xs text-gray-700 font-semibold">1</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="bar" style="height:24px"></div>
+            <div class="text-xs text-gray-500 mt-2">王海峰</div>
+            <div class="text-xs text-gray-700 font-semibold">1</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="bar" style="height:56px"></div>
+            <div class="text-xs text-gray-500 mt-2">陈刚</div>
+            <div class="text-xs text-gray-700 font-semibold">2</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="bar overdue" style="height:90px"></div>
+            <div class="text-xs text-gray-500 mt-2">林慧敏</div>
+            <div class="text-xs text-red-500 font-semibold">3</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="bar overdue" style="height:90px"></div>
+            <div class="text-xs text-gray-500 mt-2">刘子豪</div>
+            <div class="text-xs text-red-500 font-semibold">3</div>
+          </div>
+          <div class="flex flex-col items-center">
+            <div class="bar overdue" style="height:120px"></div>
+            <div class="text-xs text-gray-500 mt-2">黄晓峰</div>
+            <div class="text-xs text-red-500 font-semibold">4</div>
+          </div>
+        </div>
+        <div class="absolute top-3 right-4 text-xs text-gray-400">
+          <span class="inline-flex items-center gap-1"><span class="dot" style="background:#93c5fd"></span>正常</span>
+          <span class="inline-flex items-center gap-1 ml-3"><span class="dot" style="background:#ef4444"></span>超标</span>
+        </div>
+      </div>
+      <div class="text-xs text-gray-500 mt-2">⚠️ 超标阈值：本月超时数 ≥ 3</div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+  // 视图切换：切换 active，并控制管理层视图显示
+  const tabs = document.querySelectorAll('#viewTabs .tab-btn');
+  const teamView = document.getElementById('teamView');
+  function applyView(view){
+    tabs.forEach(t => t.classList.toggle('active', t.dataset.view === view));
+    teamView.style.display = (view === 'team') ? '' : 'none';
+  }
+  tabs.forEach(t => t.addEventListener('click', () => applyView(t.dataset.view)));
+  // 默认：我的待办（管理层视图隐藏）
+  applyView('my');
+</script>
+
+</body>
+</html>

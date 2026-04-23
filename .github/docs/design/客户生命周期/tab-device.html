@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>设备档案 - 客户生命周期</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; vertical-align: middle; }
+    .table-cell { padding: 10px 12px; border-bottom: 1px solid #e5e7eb; font-size: 13px; color: #333; }
+    .table-head { padding: 10px 12px; background: #fafafa; border-bottom: 1px solid #d9d9d9; font-size: 12px; color: #666; font-weight: 600; text-align: left; white-space: nowrap; }
+    .kpi-card { background: #fff; border: 1px solid #e5e7eb; border-radius: 6px; padding: 16px; }
+    .kpi-label { font-size: 12px; color: #999; margin-bottom: 6px; }
+    .kpi-value { font-size: 24px; font-weight: 600; color: #333; }
+    .area-label { font-size: 11px; color: #999; margin-bottom: 8px; display: inline-block; background: #f0f0f0; padding: 2px 8px; border-radius: 3px; }
+    .btn-primary { background: #3b82f6; color: #fff; border: 1px solid #3b82f6; padding: 6px 14px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+    .btn-default { background: #fff; color: #333; border: 1px solid #d9d9d9; padding: 6px 14px; font-size: 13px; border-radius: 4px; cursor: pointer; }
+    .link-btn { color: #3b82f6; cursor: pointer; font-size: 12px; margin-right: 8px; }
+    select, input { border: 1px solid #d9d9d9; border-radius: 4px; padding: 5px 8px; font-size: 13px; background: #fff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">设备档案 Tab — 一物一码全生命周期追溯</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:88px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 业务目标</td><td style="padding:4px 0;color:#333;">一物一码，每台交付设备全生命周期可追溯，驱动巡检/质保/工单闭环</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🗄️ 数据模型</td><td style="padding:4px 0;color:#333;">device（序列号 / 产品 / 客户 / 项目 / 状态 / 安装日 / 质保截止 / 下次巡检 / 区域 / 经纬度 / 负责人）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🔄 生命周期</td><td style="padding:4px 0;color:#333;">安装 → 质保中 → 出保 → 翻新 / 报废</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⏰ 提醒触发</td><td style="padding:4px 0;color:#333;">质保前30天 / 巡检前7天 / 故障工单超时</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🔗 对应 Issue</td><td style="padding:4px 0;color:#333;">
+        <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2749" target="_blank" style="color:#1890ff;text-decoration:none;margin-right:12px;">#2749 数据模型</a>
+        <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2750" target="_blank" style="color:#1890ff;text-decoration:none;margin-right:12px;">#2750 生命周期提醒</a>
+        <a href="https://github.com/WnadeyaowuOraganization/wande-play/issues/2755" target="_blank" style="color:#1890ff;text-decoration:none;">#2755 管理页</a>
+      </td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">客户生命周期 · 详细设计.md §2 设备档案 Tab</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="max-w-full mx-auto">
+
+  <!-- [KPI条] -->
+  <div class="area-label">[KPI 统计条]</div>
+  <div class="grid grid-cols-5 gap-4 mb-6">
+    <div class="kpi-card">
+      <div class="kpi-label">总设备</div>
+      <div class="kpi-value">1,248</div>
+      <div class="text-xs text-gray-400 mt-1">全部交付设备</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">质保中</div>
+      <div class="kpi-value" style="color:#22c55e;">856</div>
+      <div class="text-xs text-gray-400 mt-1">占比 68.6%</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">即将到期（30天）</div>
+      <div class="kpi-value" style="color:#ef4444;">42</div>
+      <div class="text-xs text-gray-400 mt-1">需续保沟通</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">超期未巡检</div>
+      <div class="kpi-value" style="color:#ef4444;">18</div>
+      <div class="text-xs text-gray-400 mt-1">巡检计划已逾期</div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-label">故障工单</div>
+      <div class="kpi-value">7</div>
+      <div class="text-xs text-gray-400 mt-1">待处理</div>
+    </div>
+  </div>
+
+  <!-- [筛选区] -->
+  <div class="area-label">[筛选栏]</div>
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4">
+    <div class="flex flex-wrap items-center gap-3">
+      <label class="text-xs text-gray-500">状态</label>
+      <select>
+        <option>全部</option><option>质保中</option><option>已出保</option><option>维修中</option><option>报废</option>
+      </select>
+      <label class="text-xs text-gray-500">产品线</label>
+      <select>
+        <option>全部产品</option><option>大型组合</option><option>滑梯</option><option>蹦床</option><option>攀爬</option><option>秋千</option>
+      </select>
+      <label class="text-xs text-gray-500">区域</label>
+      <select>
+        <option>全部区域</option><option>华东</option><option>华北</option><option>华南</option><option>华中</option><option>西南</option>
+      </select>
+      <label class="text-xs text-gray-500">安装日期</label>
+      <input type="date" style="width:140px;" value="2024-01-01">
+      <span class="text-gray-400">~</span>
+      <input type="date" style="width:140px;" value="2026-12-31">
+      <input type="text" placeholder="搜索序列号 / 客户名" style="width:200px;">
+      <div class="ml-auto flex gap-2">
+        <button class="btn-default">导出</button>
+        <button class="btn-primary">+ 新建设备</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4 mb-4">
+    <!-- [设备档案列表] -->
+    <div class="col-span-2">
+      <div class="area-label">[设备档案列表 — 核心表格，覆盖全部字段]</div>
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <table class="w-full border-collapse">
+          <thead>
+            <tr>
+              <th class="table-head">序列号</th>
+              <th class="table-head">产品</th>
+              <th class="table-head">客户 / 项目</th>
+              <th class="table-head">状态</th>
+              <th class="table-head">安装日</th>
+              <th class="table-head">质保截止</th>
+              <th class="table-head">下次巡检</th>
+              <th class="table-head">区域</th>
+              <th class="table-head">负责人</th>
+              <th class="table-head">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2024-001</td>
+              <td class="table-cell">大型组合滑梯A型</td>
+              <td class="table-cell"><div>绿地集团</div><div class="text-xs text-gray-400">社区公园二期</div></td>
+              <td class="table-cell"><span class="dot" style="background:#22c55e;"></span>质保中</td>
+              <td class="table-cell text-xs">2024-03-15</td>
+              <td class="table-cell text-xs">2026-03-14</td>
+              <td class="table-cell text-xs">2026-05-10</td>
+              <td class="table-cell text-xs">华东/上海</td>
+              <td class="table-cell">张伟</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">工单</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2024-058</td>
+              <td class="table-cell">蹦床区B</td>
+              <td class="table-cell"><div>万科地产</div><div class="text-xs text-gray-400">儿童乐园A</div></td>
+              <td class="table-cell"><span class="dot" style="background:#ef4444;"></span>工单中</td>
+              <td class="table-cell text-xs">2024-08-20</td>
+              <td class="table-cell text-xs">2026-08-19</td>
+              <td class="table-cell text-xs" style="color:#ef4444;">逾期</td>
+              <td class="table-cell text-xs">华北/北京</td>
+              <td class="table-cell">李娜</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">工单</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2023-312</td>
+              <td class="table-cell">攀爬网C型</td>
+              <td class="table-cell"><div>XX主题乐园</div><div class="text-xs text-gray-400">二期扩建区</div></td>
+              <td class="table-cell"><span class="dot" style="background:#eab308;"></span>即将到期</td>
+              <td class="table-cell text-xs">2024-05-01</td>
+              <td class="table-cell text-xs" style="color:#ef4444;">2026-04-30</td>
+              <td class="table-cell text-xs">2026-04-28</td>
+              <td class="table-cell text-xs">西南/成都</td>
+              <td class="table-cell">王强</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">续保</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2023-188</td>
+              <td class="table-cell">秋千D型</td>
+              <td class="table-cell"><div>某幼儿园</div><div class="text-xs text-gray-400">主操场</div></td>
+              <td class="table-cell"><span class="dot" style="background:#6b7280;"></span>已出保</td>
+              <td class="table-cell text-xs">2023-11-12</td>
+              <td class="table-cell text-xs">2025-11-11</td>
+              <td class="table-cell text-xs">—</td>
+              <td class="table-cell text-xs">华东/杭州</td>
+              <td class="table-cell">赵敏</td>
+              <td class="table-cell"><span class="link-btn">查看</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2024-077</td>
+              <td class="table-cell">大型组合滑梯E型</td>
+              <td class="table-cell"><div>保利发展</div><div class="text-xs text-gray-400">翡翠湾社区</div></td>
+              <td class="table-cell"><span class="dot" style="background:#22c55e;"></span>质保中</td>
+              <td class="table-cell text-xs">2024-10-08</td>
+              <td class="table-cell text-xs">2026-10-07</td>
+              <td class="table-cell text-xs">2026-06-15</td>
+              <td class="table-cell text-xs">华南/深圳</td>
+              <td class="table-cell">陈浩</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">工单</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2024-142</td>
+              <td class="table-cell">滑梯F型</td>
+              <td class="table-cell"><div>龙湖集团</div><div class="text-xs text-gray-400">春江郦城</div></td>
+              <td class="table-cell"><span class="dot" style="background:#22c55e;"></span>质保中</td>
+              <td class="table-cell text-xs">2025-01-22</td>
+              <td class="table-cell text-xs">2027-01-21</td>
+              <td class="table-cell text-xs">2026-07-20</td>
+              <td class="table-cell text-xs">华中/武汉</td>
+              <td class="table-cell">刘洋</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">工单</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2023-256</td>
+              <td class="table-cell">蹦床G型</td>
+              <td class="table-cell"><div>融创文旅</div><div class="text-xs text-gray-400">冰雪世界室外区</div></td>
+              <td class="table-cell"><span class="dot" style="background:#eab308;"></span>即将到期</td>
+              <td class="table-cell text-xs">2024-06-18</td>
+              <td class="table-cell text-xs" style="color:#ef4444;">2026-06-17</td>
+              <td class="table-cell text-xs">2026-05-25</td>
+              <td class="table-cell text-xs">华北/天津</td>
+              <td class="table-cell">孙磊</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">续保</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2024-203</td>
+              <td class="table-cell">攀爬架H型</td>
+              <td class="table-cell"><div>碧桂园</div><div class="text-xs text-gray-400">凤凰城幼儿园</div></td>
+              <td class="table-cell"><span class="dot" style="background:#3b82f6;"></span>维修中</td>
+              <td class="table-cell text-xs">2024-11-30</td>
+              <td class="table-cell text-xs">2026-11-29</td>
+              <td class="table-cell text-xs">2026-08-10</td>
+              <td class="table-cell text-xs">华南/广州</td>
+              <td class="table-cell">周婷</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">工单</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2022-091</td>
+              <td class="table-cell">组合游乐设备I型</td>
+              <td class="table-cell"><div>某市政公园</div><div class="text-xs text-gray-400">中心广场</div></td>
+              <td class="table-cell"><span class="dot" style="background:#1f2937;"></span>报废</td>
+              <td class="table-cell text-xs">2022-04-05</td>
+              <td class="table-cell text-xs">2024-04-04</td>
+              <td class="table-cell text-xs">—</td>
+              <td class="table-cell text-xs">西南/重庆</td>
+              <td class="table-cell">吴帆</td>
+              <td class="table-cell"><span class="link-btn">查看</span></td>
+            </tr>
+            <tr>
+              <td class="table-cell font-mono text-xs">WD-2025-015</td>
+              <td class="table-cell">大型组合滑梯J型</td>
+              <td class="table-cell"><div>华润置地</div><div class="text-xs text-gray-400">悦府社区</div></td>
+              <td class="table-cell"><span class="dot" style="background:#22c55e;"></span>质保中</td>
+              <td class="table-cell text-xs">2025-02-10</td>
+              <td class="table-cell text-xs">2027-02-09</td>
+              <td class="table-cell text-xs">2026-05-08</td>
+              <td class="table-cell text-xs">华东/南京</td>
+              <td class="table-cell">郑凯</td>
+              <td class="table-cell"><span class="link-btn">查看</span><span class="link-btn">工单</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="flex justify-between items-center px-4 py-2 bg-gray-50 border-t border-gray-200 text-xs text-gray-500">
+          <span>共 1,248 条，当前显示 10 条</span>
+          <div class="flex items-center gap-2">
+            <button class="btn-default" style="padding:3px 10px;">上一页</button>
+            <span>1 / 125</span>
+            <button class="btn-default" style="padding:3px 10px;">下一页</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [右侧详情面板占位] -->
+    <div class="col-span-1">
+      <div class="area-label">[设备详情抽屉 — 点击行触发]</div>
+      <div class="bg-white border border-gray-300 rounded p-4" style="border-style:dashed;">
+        <div class="text-xs text-gray-500 mb-3 pb-2 border-b border-dashed border-gray-300">
+          💡 点击列表行查看详情 → 弹出右侧抽屉（占位）
+        </div>
+
+        <div class="mb-4">
+          <div class="text-xs font-semibold text-gray-600 mb-2">📋 基础信息</div>
+          <div class="text-xs text-gray-500 space-y-1 pl-2">
+            <div>序列号：<span class="font-mono text-gray-700">WD-2024-001</span></div>
+            <div>产品：大型组合滑梯A型</div>
+            <div>SKU：WD-HX-A-20240315</div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-xs font-semibold text-gray-600 mb-2">📍 位置信息</div>
+          <div class="text-xs text-gray-500 space-y-1 pl-2">
+            <div>客户：绿地集团</div>
+            <div>项目：社区公园二期</div>
+            <div>区域：华东 / 上海</div>
+            <div>GPS：<span class="font-mono">31.2304, 121.4737</span></div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-xs font-semibold text-gray-600 mb-2">🕐 时间线</div>
+          <div class="text-xs text-gray-500 space-y-1 pl-2">
+            <div>• 2024-03-15 设备安装</div>
+            <div>• 2024-09-12 首次巡检</div>
+            <div>• 2025-03-15 半年巡检</div>
+            <div>• 2026-03-14 质保到期</div>
+            <div>• 2026-05-10 下次巡检（计划）</div>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <div class="text-xs font-semibold text-gray-600 mb-2">🔧 关联工单（3条）</div>
+          <div class="text-xs text-gray-500 space-y-1 pl-2">
+            <div>• #WO-0812 滑梯面板划痕修复 · 已完成</div>
+            <div>• #WO-1024 扶手松动紧固 · 已完成</div>
+            <div>• #WO-2301 底座漆面翻新 · 处理中</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="text-xs font-semibold text-gray-600 mb-2">🔍 巡检历史（5条）</div>
+          <div class="text-xs text-gray-500 space-y-1 pl-2">
+            <div>• 2025-11-08 季度巡检 · 通过</div>
+            <div>• 2025-08-10 季度巡检 · 通过</div>
+            <div>• 2025-05-15 季度巡检 · 轻微整改</div>
+            <div>• 2025-02-18 季度巡检 · 通过</div>
+            <div>• 2024-11-20 季度巡检 · 通过</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [地图占位] -->
+  <div class="area-label">[设备分布地图 — 占位]</div>
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <div class="text-sm font-semibold text-gray-700">设备分布地图</div>
+        <div class="text-xs text-gray-400 mt-1">占位，后续集成高德地图 Marker 聚合</div>
+      </div>
+      <div class="flex gap-2">
+        <button class="btn-default" style="padding:3px 10px;font-size:12px;">全国视图</button>
+        <button class="btn-default" style="padding:3px 10px;font-size:12px;">按状态筛选</button>
+        <button class="btn-default" style="padding:3px 10px;font-size:12px;">热力图</button>
+      </div>
+    </div>
+    <div style="background:#e5e7eb;height:280px;border-radius:4px;display:flex;align-items:center;justify-content:center;color:#9ca3af;font-size:13px;position:relative;overflow:hidden;">
+      <div style="position:absolute;inset:0;background-image:linear-gradient(0deg,transparent 24%,rgba(255,255,255,.3) 25%,rgba(255,255,255,.3) 26%,transparent 27%,transparent 74%,rgba(255,255,255,.3) 75%,rgba(255,255,255,.3) 76%,transparent 77%,transparent),linear-gradient(90deg,transparent 24%,rgba(255,255,255,.3) 25%,rgba(255,255,255,.3) 26%,transparent 27%,transparent 74%,rgba(255,255,255,.3) 75%,rgba(255,255,255,.3) 76%,transparent 77%,transparent);background-size:40px 40px;"></div>
+      <div style="position:relative;z-index:1;text-align:center;">
+        <div style="font-size:36px;margin-bottom:8px;">🗺️</div>
+        <div>地图组件占位（高德地图 AMap.Marker 聚合）</div>
+        <div class="text-xs mt-2" style="color:#6b7280;">已配置 1,248 台设备位置点 · 按区域聚合显示</div>
+      </div>
+      <!-- 模拟几个marker -->
+      <div style="position:absolute;top:40%;left:65%;width:12px;height:12px;background:#22c55e;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.2);"></div>
+      <div style="position:absolute;top:30%;left:60%;width:12px;height:12px;background:#ef4444;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.2);"></div>
+      <div style="position:absolute;top:55%;left:70%;width:12px;height:12px;background:#22c55e;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.2);"></div>
+      <div style="position:absolute;top:60%;left:45%;width:12px;height:12px;background:#eab308;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.2);"></div>
+      <div style="position:absolute;top:50%;left:55%;width:12px;height:12px;background:#22c55e;border-radius:50%;border:2px solid #fff;box-shadow:0 0 4px rgba(0,0,0,0.2);"></div>
+    </div>
+    <div class="flex items-center gap-4 mt-3 text-xs text-gray-500">
+      <span><span class="dot" style="background:#22c55e;"></span>质保中 856</span>
+      <span><span class="dot" style="background:#eab308;"></span>即将到期 42</span>
+      <span><span class="dot" style="background:#ef4444;"></span>故障 7</span>
+      <span><span class="dot" style="background:#6b7280;"></span>已出保 325</span>
+      <span><span class="dot" style="background:#1f2937;"></span>报废 18</span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

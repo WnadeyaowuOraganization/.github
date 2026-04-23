@@ -1,1 +1,0 @@
-../../../../scripts/gh-app-token.py

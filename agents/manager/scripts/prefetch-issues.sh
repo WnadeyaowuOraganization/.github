@@ -1,1 +1,0 @@
-../../../scripts/prefetch-issues.sh

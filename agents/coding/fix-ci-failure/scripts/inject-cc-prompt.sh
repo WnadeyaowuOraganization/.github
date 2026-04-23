@@ -1,1 +1,0 @@
-../../../../scripts/inject-cc-prompt.sh

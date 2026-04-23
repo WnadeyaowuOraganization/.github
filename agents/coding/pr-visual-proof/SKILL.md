@@ -138,7 +138,7 @@ cat > /tmp/pr-body-draft.md <<'EOF'
 # PR body 内容...
 EOF
 
-bash ~/projects/.github/scripts/pr-body-lint.sh --pr-body-stdin --issue ${ISSUE} < /tmp/pr-body-draft.md
+bash .claude/skills/pr-visual-proof/scripts/pr-body-lint.sh --pr-body-stdin --issue ${ISSUE} < /tmp/pr-body-draft.md
 ```
 
 检查：
@@ -210,7 +210,7 @@ cd frontend && pnpm build:antd
 # 修完后重跑此步，确认零错误再继续
 
 # 3. 预检
-bash ~/projects/.github/scripts/pr-body-lint.sh --pr-body-stdin --issue ${ISSUE} < /tmp/pr-body-draft.md
+bash .claude/skills/pr-visual-proof/scripts/pr-body-lint.sh --pr-body-stdin --issue ${ISSUE} < /tmp/pr-body-draft.md
 
 # 4. 截图 + 上传（若是首次发 PR，先建 draft PR 拿 PR 号再上传）
 gh release create screenshot-${PR} ...

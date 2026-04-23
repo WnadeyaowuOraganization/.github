@@ -1,1 +1,0 @@
-../../../../scripts/cc-test-env.sh

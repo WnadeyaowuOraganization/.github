@@ -1,1 +1,0 @@
-../../../../scripts/e2e-result-handler.py

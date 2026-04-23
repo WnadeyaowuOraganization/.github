@@ -1,1 +1,0 @@
-../../../scripts/update-project-status.sh

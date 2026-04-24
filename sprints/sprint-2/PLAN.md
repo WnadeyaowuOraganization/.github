@@ -30,30 +30,33 @@
 
 **4/5 并发，1个空位已补入。** 当前运行：kimi2/kimi3/kimi5/kimi6 + kimi1新派#2308
 
-### 备选队列（2026-04-24 07:00 刷新，66个OPEN剩余）
+### 备选队列（2026-04-24 09:00 刷新）
+
+当前在跑：kimi2/#1469 kimi3/#1470 kimi5/#1845 kimi6/#1714
+kimi1空闲，立即派序号1。
 
 | 序号 | Issue | 优先级 | Sprint | 模块 | effort | 说明 |
 |------|-------|--------|--------|------|--------|------|
-| 1 | #4029 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱GPU资源监控 |
-| 2 | #4030 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱外部工具管理 |
-| 3 | #4031 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱确认中心 |
-| 4 | #4032 | P2 | S3 | cockpit | medium | 整改-超管驾驶舱Issue看板 |
-| 5 | #1714 | P1 | S4 | biz | medium | 经销报价单生成页面 |
-| 6 | #2358 | P2 | S4 | finance | medium | 商机详情页获客成本Tab |
-| 7 | #2430 | P2 | S4 | intelligence | medium | 竞品合同到期预测 |
-| 8 | #1468 | P1 | Backlog | biz | medium | 安全标准自动合规标注 |
-| 9 | #1469 | P1 | Backlog | biz | medium | AI文案增强 |
-| 10 | #1470 | P1 | Backlog | biz | medium | Playbook规则引擎 |
-| 11 | #1594 | P1 | Backlog | budget | medium | 借款逾期提醒+工资扣除预警 |
-| 12 | #1599 | P1 | Backlog | budget | medium | 采购比价强制校验 |
-| 13 | #1613 | P1 | Backlog | wechat | medium | 数据安全分级与访问控制 |
-| 14 | #1614 | P1 | Backlog | wechat | medium | PII自动脱敏服务 |
-| 15 | #1873 | P1 | Backlog | bidding | medium | 分级超时升级机制 |
-| 16 | #2215 | P1 | Backlog | biz | medium | 引导式PPT组装向导 |
-| 17 | #2275 | P1 | Backlog | cockpit | medium | DORA指标卡片+最近错误滚动条 |
-| 18 | #2437 | P1 | Backlog | bidding | medium | 推荐行动计划按阶段自动生成 |
-| 19 | #2439 | P1 | Backlog | intelligence | medium | 竞品自动分级+升降级 |
-| 20 | #2440 | P1 | Backlog | intelligence | medium | 竞品定价数据库 |
+| 1 | #2358 | P2 | S4 | finance | medium | 商机详情页获客成本Tab |
+| 2 | #2430 | P2 | S4 | intelligence | medium | 竞品合同到期预测 |
+| 3 | #1594 | P1 | Backlog | budget | medium | 借款逾期提醒+工资扣除预警 |
+| 4 | #1599 | P1 | Backlog | budget | medium | 采购比价强制校验 |
+| 5 | #1613 | P1 | Backlog | wechat | medium | 数据安全分级与访问控制 |
+| 6 | #1614 | P1 | Backlog | wechat | medium | PII自动脱敏服务 |
+| 7 | #1873 | P1 | Backlog | bidding | medium | 分级超时升级机制 |
+| 8 | #2215 | P1 | Backlog | biz | medium | 引导式PPT组装向导 |
+| 9 | #2275 | P1 | Backlog | cockpit | medium | DORA指标卡片+最近错误滚动条 |
+| 10 | #2437 | P1 | Backlog | bidding | medium | 推荐行动计划按阶段自动生成 |
+| 11 | #2439 | P1 | Backlog | intelligence | medium | 竞品自动分级+升降级 |
+| 12 | #2440 | P1 | Backlog | intelligence | medium | 竞品定价数据库 |
+| 13 | #2441 | P1 | Backlog | intelligence | medium | 竞品区域热力图 vs 万德 |
+| 14 | #2527 | P1 | Backlog | project | medium | 项目组织管理-版本历史+审批流 |
+| 15 | #2532 | P1 | Backlog | project | medium | 项目组织管理-已读追踪+公告 |
+| 16 | #2534 | P1 | Backlog | project | medium | 项目组织管理-任务面板 |
+| 17 | #2536 | P1 | Backlog | project | medium | 项目组织管理-项目预算+成本 |
+| 18 | #2537 | P1 | Backlog | project | medium | 项目组织管理-文档分类+权限 |
+| 19 | #1466 | P2 | Backlog | biz | medium | 案例相似度推荐 |
+| 20 | #1498 | P2 | Backlog | backend | medium | 经销商项目情报推送 |
 
 ## 指派历史
 
@@ -437,13 +440,13 @@
 
 ## 新增派遣（2026-04-24 07:08）— 派遣异常修复后的新一轮派遣
 
-| 指派目录 | Issue | 模块 | 优先级 | 说明 | 状态 |
-|------|-------|------|--------|------|------|
-| kimi1 | #1468 | backend | P1 | 安全标准自动合规标注 | In Progress |
-| kimi2 | #1469 | backend | P1 | AI文案增强（材质/标准/案例描述自动生成） | In Progress |
-| kimi3 | #1470 | backend | P1 | Playbook规则引擎（场景化内容推荐） | In Progress |
-| kimi5 | #1845 | design-ai | P1 | 安全合规检测引擎 — 三标融合规则(EN1176+ASTM+GB) | In Progress |
-| kimi6 | #1714 | biz-enablement | P1 | 经销报价单生成页面 — 批量选品+折扣配置+报价单预览 | In Progress |
+| 指派目录 | Issue | 模块 | 优先级 | 说明 | 状态 | 进展 |
+|------|-------|------|--------|------|------|------|
+| kimi1 | #1468 | backend | P1 | 安全标准自动合规标注 | ✅ PR #4166 | 21文件+1820行，JUnit 13/13✅，CI运行中 |
+| kimi2 | #1469 | backend | P1 | AI文案增强（材质/标准/案例描述自动生成） | 🔄 开发中 | 42% 进度，单测编写中 |
+| kimi3 | #1470 | backend | P1 | Playbook规则引擎（场景化内容推荐） | 🔄 开发中 | 28% 进度，基础CRUD中 |
+| kimi5 | #1845 | design-ai | P1 | 安全合规检测引擎 — 三标融合规则(EN1176+ASTM+GB) | 🔄 开发中 | 36% 进度，基础CRUD中 |
+| kimi6 | #1714 | biz-enablement | P1 | 经销报价单生成页面 — 批量选品+折扣配置+报价单预览 | 🔄 开发中 | 29% 进度，E2E测试调优中 |
 
 ### 派遣背景
 - 原派遣Issue #4029-4032已全部完成（2026-04-23 21:xx）但CC仍在执行（重复工作）

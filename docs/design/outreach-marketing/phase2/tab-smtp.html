@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>SMTP 配置管理 · #2796</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">SMTP 配置管理 · #2796</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">管理多域名 SMTP 配置，维护 DKIM/SPF/DMARC，监控各域名发送限额与使用量</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗, 运维</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">域名列表 / DNS 验证 / 限额监控 / 新增域名</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新增域名 / 验证 DNS / 查看 DNS 记录抽屉</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">域名列表展示正常 / DNS 状态实时</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.2.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+
+<div class="max-w-7xl mx-auto">
+  <!-- 标题栏 -->
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800">SMTP 配置管理</h1>
+      <p class="text-sm text-gray-500 mt-1">管理发送域名、SMTP 提供商及 DNS 记录（DKIM / SPF / DMARC）</p>
+    </div>
+    <div class="flex space-x-2">
+      <button class="px-4 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700 hover:bg-gray-50">验证 DNS</button>
+      <button class="px-4 py-2 bg-gray-700 text-white rounded text-sm hover:bg-gray-800">+ 新增域名</button>
+    </div>
+  </div>
+
+  <!-- KPI 概览 -->
+  <div class="grid grid-cols-4 gap-4 mb-6">
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">发送域名</div>
+      <div class="text-2xl font-semibold text-gray-800 mt-1">3</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">今日总发送</div>
+      <div class="text-2xl font-semibold text-gray-800 mt-1">2,847</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">日配额总和</div>
+      <div class="text-2xl font-semibold text-gray-800 mt-1">6,000</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">DNS 健康</div>
+      <div class="text-2xl font-semibold text-green-600 mt-1">✓ 全部通过</div>
+    </div>
+  </div>
+
+  <div class="flex gap-6">
+    <!-- 左侧：域名列表 -->
+    <div class="flex-1 bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <h2 class="text-sm font-medium text-gray-700">发送域名列表</h2>
+      </div>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-gray-500">
+          <tr>
+            <th class="px-3 py-2 text-left font-medium">域名</th>
+            <th class="px-3 py-2 text-left font-medium">SMTP 提供商</th>
+            <th class="px-3 py-2 text-center font-medium">DKIM</th>
+            <th class="px-3 py-2 text-center font-medium">SPF</th>
+            <th class="px-3 py-2 text-center font-medium">DMARC</th>
+            <th class="px-3 py-2 text-right font-medium">日配额 / 已用</th>
+            <th class="px-3 py-2 text-center font-medium">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-3 text-gray-800 font-medium">sales01.wande.com</td>
+            <td class="px-3 py-3 text-gray-600">SendGrid</td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-right text-gray-700">2,000 / <span class="text-gray-900 font-medium">1,247</span></td>
+            <td class="px-3 py-3 text-center"><button class="text-xs text-gray-600 hover:text-gray-800">查看</button></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-3 text-gray-800 font-medium">sales02.wande.com</td>
+            <td class="px-3 py-3 text-gray-600">AWS SES</td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-yellow-500 rounded-full"></span> <span class="text-xs text-gray-600">警告</span></td>
+            <td class="px-3 py-3 text-right text-gray-700">2,000 / <span class="text-gray-900 font-medium">892</span></td>
+            <td class="px-3 py-3 text-center"><button class="text-xs text-gray-600 hover:text-gray-800">查看</button></td>
+          </tr>
+          <tr class="bg-gray-50">
+            <td class="px-3 py-3 text-gray-800 font-medium">sales-na.wande.com</td>
+            <td class="px-3 py-3 text-gray-600">Mailgun</td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-center"><span class="inline-block w-2 h-2 bg-green-500 rounded-full"></span> <span class="text-xs text-gray-600">有效</span></td>
+            <td class="px-3 py-3 text-right text-gray-700">2,000 / <span class="text-gray-900 font-medium">708</span></td>
+            <td class="px-3 py-3 text-center"><button class="text-xs text-gray-700 font-medium">查看 →</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 右侧抽屉：DNS 记录配置 -->
+    <aside class="w-96 bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-sm font-semibold text-gray-800">DNS 记录配置</h3>
+        <span class="text-xs text-gray-500">sales-na.wande.com</span>
+      </div>
+
+      <div class="space-y-4 text-xs">
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-medium text-gray-700">DKIM</span>
+            <span class="text-green-600">✓ 验证通过</span>
+          </div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 font-mono text-gray-600 break-all">
+            <div><span class="text-gray-400">Type:</span> TXT</div>
+            <div><span class="text-gray-400">Host:</span> mg._domainkey</div>
+            <div><span class="text-gray-400">Value:</span> v=DKIM1; k=rsa; p=MIGfMA0GCSqG...QAB</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-medium text-gray-700">SPF</span>
+            <span class="text-green-600">✓ 验证通过</span>
+          </div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 font-mono text-gray-600 break-all">
+            <div><span class="text-gray-400">Type:</span> TXT</div>
+            <div><span class="text-gray-400">Host:</span> @</div>
+            <div><span class="text-gray-400">Value:</span> v=spf1 include:mailgun.org ~all</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="flex items-center justify-between mb-1">
+            <span class="font-medium text-gray-700">DMARC</span>
+            <span class="text-green-600">✓ 验证通过</span>
+          </div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 font-mono text-gray-600 break-all">
+            <div><span class="text-gray-400">Type:</span> TXT</div>
+            <div><span class="text-gray-400">Host:</span> _dmarc</div>
+            <div><span class="text-gray-400">Value:</span> v=DMARC1; p=quarantine; rua=mailto:dmarc@wande.com</div>
+          </div>
+        </div>
+
+        <div>
+          <div class="font-medium text-gray-700 mb-1">MX 记录</div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 font-mono text-gray-600">
+            <div>10 mxa.mailgun.org</div>
+            <div>10 mxb.mailgun.org</div>
+          </div>
+        </div>
+
+        <button class="w-full mt-2 px-3 py-2 bg-gray-700 text-white rounded text-xs hover:bg-gray-800">重新验证 DNS</button>
+        <button class="w-full px-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-700">复制配置指南</button>
+      </div>
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Sales Navigator 导入 · #2813</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background:#f5f5f5;}
+    .wf-card { background:#fff; border:1px solid #d9d9d9; border-radius:4px; }
+    .wf-btn { background:#4b5563; color:#fff; padding:6px 14px; font-size:12px; border-radius:3px; cursor:pointer; border:none;}
+    .wf-btn-default { background:#fff; color:#333; border:1px solid #d9d9d9; padding:6px 14px; font-size:12px; border-radius:3px; cursor:pointer; }
+    .wf-table th { background:#fafafa; font-weight:500; color:#555; padding:6px 8px; border-bottom:1px solid #d9d9d9; font-size:12px; text-align:left; }
+    .wf-table td { padding:6px 8px; border-bottom:1px solid #f0f0f0; font-size:12px; color:#333; }
+    .wf-tag { background:#f0f0f0; color:#555; padding:1px 8px; font-size:11px; border-radius:10px; display:inline-block; }
+    .region-title{font-size:14px;font-weight:600;color:#333;display:flex;align-items:center;gap:6px;}
+    .region-num{background:#6b7280;color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+    .dropzone{border:2px dashed #bfbfbf;background:#fafafa;border-radius:6px;padding:30px 15px;text-align:center;color:#666;}
+    .field-box{border:1px dashed #bfbfbf;background:#fafafa;padding:10px;border-radius:4px;}
+    .mapping-row{display:flex;align-items:center;gap:6px;padding:8px;background:#fff;border:1px solid #e5e7eb;border-radius:4px;margin-bottom:6px;}
+    .mapping-row .csv{background:#e5e7eb;color:#1f2937;padding:2px 8px;border-radius:3px;font-family:monospace;font-size:11px;flex:1;}
+    .mapping-row .arrow{color:#9ca3af;font-weight:bold;}
+    .mapping-row .lead{background:#374151;color:#fff;padding:2px 8px;border-radius:3px;font-family:monospace;font-size:11px;flex:1;text-align:right;}
+    .rule-row{background:#fff;border:1px solid #e5e7eb;border-radius:4px;padding:8px 10px;margin-bottom:6px;font-size:12px;}
+  </style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:12px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:8px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Sales Navigator 导入 · #2813 [20/25]</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:10px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:90px;padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 PAGE_TITLE</td><td style="padding:3px 0;">Sales Navigator 导入 · #2813</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:3px 0;">CSV 拖放上传 + 前10行预览 / 字段映射 CSV→CRM Lead / 去重（LinkedIn URL / 邮箱）/ 评分规则（行业+50 职位+30）/ 按国家分配销售 / 导入历史</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:3px 0;">CSV 前 10 行预览 · 5 条字段映射 · 2 种去重策略 · 评分规则可配置 · 导入历史可回溯</td></tr>
+    </table>
+    <div style="margin-top:8px;padding-top:6px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#4b5563;text-decoration:none;">外展获客 · 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="p-4 space-y-4 max-w-[1400px] mx-auto">
+
+  <!-- 三栏布局 -->
+  <div class="grid grid-cols-12 gap-4">
+
+    <!-- 左侧：CSV 上传区 -->
+    <div class="col-span-4 wf-card p-4">
+      <div class="region-title mb-3"><span class="region-num">1</span>CSV 上传</div>
+      <div class="dropzone mb-3">
+        <div class="text-3xl mb-2">📁</div>
+        <div class="text-sm font-semibold text-gray-700">拖放 CSV / XLSX 文件到这里</div>
+        <div class="text-xs text-gray-500 mt-1">或 <a href="#" class="text-gray-600 underline">点击选择文件</a></div>
+        <div class="text-[11px] text-gray-400 mt-2">支持 Sales Navigator 导出 · 最大 20 MB</div>
+      </div>
+      <div class="text-xs text-gray-600 mb-2">✓ 已上传：<span class="font-semibold">sales_nav_us_ceo_2025-11.csv</span> (284 KB · 320 行)</div>
+
+      <div class="text-xs font-semibold text-gray-700 mt-4 mb-2">前 10 行预览</div>
+      <div class="overflow-x-auto border border-gray-200 rounded">
+        <table class="wf-table text-[11px]" style="min-width:560px">
+          <thead>
+            <tr>
+              <th>Name</th><th>Title</th><th>Company</th><th>Location</th><th>Industry</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td>John Smith</td><td>CEO</td><td>Amusement Park Supplier</td><td>Orlando, US</td><td>Leisure</td></tr>
+            <tr><td>Maria Garcia</td><td>Procurement Dir.</td><td>FunParks Intl.</td><td>Madrid, ES</td><td>Amusement</td></tr>
+            <tr><td>David Müller</td><td>Head of Purchasing</td><td>Europa Rides GmbH</td><td>Berlin, DE</td><td>Entertainment</td></tr>
+            <tr><td>Hiroshi Tanaka</td><td>Managing Director</td><td>Tokyo Amusement Co.</td><td>Tokyo, JP</td><td>Amusement</td></tr>
+            <tr><td>Ahmed Hassan</td><td>Technical Buyer</td><td>Dubai Parks</td><td>Dubai, AE</td><td>Hospitality</td></tr>
+            <tr><td>Emily Chen</td><td>CEO</td><td>Pacific Rides Ltd.</td><td>Toronto, CA</td><td>Amusement</td></tr>
+            <tr><td>Pierre Laurent</td><td>Operations VP</td><td>ParcAttractions SA</td><td>Paris, FR</td><td>Leisure</td></tr>
+            <tr><td>Sofia Rossi</td><td>Purchasing Mgr</td><td>Italia Giostre</td><td>Milan, IT</td><td>Amusement</td></tr>
+            <tr><td>Kim Jae-ho</td><td>CEO</td><td>Seoul Thrill Park</td><td>Seoul, KR</td><td>Entertainment</td></tr>
+            <tr><td>Nina Petrova</td><td>Owner</td><td>Volga Rides</td><td>Moscow, RU</td><td>Amusement</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="text-[11px] text-gray-400 mt-2">共 320 行，显示前 10 行</div>
+    </div>
+
+    <!-- 中间：字段映射 -->
+    <div class="col-span-4 wf-card p-4">
+      <div class="region-title mb-3"><span class="region-num">2</span>字段映射（CSV → CRM Lead）</div>
+      <div class="text-xs text-gray-500 mb-3">系统已基于列名自动匹配，可手动调整</div>
+
+      <div class="mapping-row">
+        <span class="csv">Name</span>
+        <span class="arrow">→</span>
+        <span class="lead">lead_name</span>
+      </div>
+      <div class="mapping-row">
+        <span class="csv">Title</span>
+        <span class="arrow">→</span>
+        <span class="lead">job_title</span>
+      </div>
+      <div class="mapping-row">
+        <span class="csv">Company</span>
+        <span class="arrow">→</span>
+        <span class="lead">company</span>
+      </div>
+      <div class="mapping-row">
+        <span class="csv">Location</span>
+        <span class="arrow">→</span>
+        <span class="lead">country</span>
+      </div>
+      <div class="mapping-row">
+        <span class="csv">Industry</span>
+        <span class="arrow">→</span>
+        <span class="lead">industry_tag</span>
+      </div>
+      <div class="mapping-row" style="opacity:.6">
+        <span class="csv">LinkedIn URL</span>
+        <span class="arrow">→</span>
+        <span class="lead">linkedin_url</span>
+      </div>
+      <div class="mapping-row" style="opacity:.6">
+        <span class="csv">Email (若有)</span>
+        <span class="arrow">→</span>
+        <span class="lead">email</span>
+      </div>
+
+      <div class="mt-3 p-2 bg-gray-50 border border-gray-200 rounded text-[11px] text-gray-600">
+        💡 <strong>未映射列</strong> 将丢弃：<span class="wf-tag">Years in Company</span> <span class="wf-tag">Seniority</span> <span class="wf-tag">Connections</span>
+      </div>
+      <button class="wf-btn mt-3 w-full">下一步：配置导入规则 →</button>
+    </div>
+
+    <!-- 右侧：导入规则 -->
+    <div class="col-span-4 wf-card p-4">
+      <div class="region-title mb-3"><span class="region-num">3</span>导入规则</div>
+
+      <div class="text-xs font-semibold text-gray-700 mb-2">🔁 去重策略</div>
+      <div class="rule-row">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked />
+          <span>按 <strong>LinkedIn URL</strong> 完全匹配去重</span>
+        </label>
+        <div class="text-[11px] text-gray-400 mt-1 ml-6">已存在 Lead 则合并字段（保留更完整值）</div>
+      </div>
+      <div class="rule-row">
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked />
+          <span>按 <strong>邮箱地址</strong> 匹配去重</span>
+        </label>
+        <div class="text-[11px] text-gray-400 mt-1 ml-6">邮箱相同视为同一 Lead</div>
+      </div>
+
+      <div class="text-xs font-semibold text-gray-700 mt-3 mb-2">🏆 评分规则（自动加分）</div>
+      <div class="rule-row">
+        <div class="flex justify-between">
+          <span>行业 = <strong>游乐设备 / Amusement</strong></span>
+          <span class="wf-tag" style="background:#374151;color:#fff">+50 分</span>
+        </div>
+      </div>
+      <div class="rule-row">
+        <div class="flex justify-between">
+          <span>职位 含 <strong>CEO / Owner / 采购</strong></span>
+          <span class="wf-tag" style="background:#374151;color:#fff">+30 分</span>
+        </div>
+      </div>
+      <div class="rule-row">
+        <div class="flex justify-between">
+          <span>公司员工规模 &gt; 50 人</span>
+          <span class="wf-tag">+20 分</span>
+        </div>
+      </div>
+      <div class="rule-row">
+        <div class="flex justify-between">
+          <span>国家 ∈ 目标市场（US/EU/JP/KR/AU）</span>
+          <span class="wf-tag">+15 分</span>
+        </div>
+      </div>
+
+      <div class="text-xs font-semibold text-gray-700 mt-3 mb-2">👤 自动分配（按国家分配销售员）</div>
+      <div class="rule-row">
+        <div class="grid grid-cols-2 gap-1 text-[11px]">
+          <span class="text-gray-500">US / CA</span><span class="text-right">→ 张伟</span>
+          <span class="text-gray-500">DE / FR / IT / ES</span><span class="text-right">→ 李娜</span>
+          <span class="text-gray-500">JP / KR</span><span class="text-right">→ 王磊</span>
+          <span class="text-gray-500">AE / SA</span><span class="text-right">→ 刘敏</span>
+          <span class="text-gray-500">其他</span><span class="text-right">→ 轮询</span>
+        </div>
+      </div>
+
+      <button class="wf-btn mt-4 w-full">确认并导入 320 条</button>
+      <div class="text-[11px] text-gray-400 mt-2 text-center">预估：去重 40 条 · 入库 280 条 · 高分 Lead 112 条</div>
+    </div>
+
+  </div>
+
+  <!-- 底部：导入历史 -->
+  <div class="wf-card p-4">
+    <div class="region-title mb-3"><span class="region-num">4</span>导入历史</div>
+    <table class="w-full wf-table">
+      <thead>
+        <tr>
+          <th>导入时间</th>
+          <th>CSV 文件名</th>
+          <th>操作人</th>
+          <th>导入总数</th>
+          <th>去重数</th>
+          <th>评分 &gt; 60 数</th>
+          <th>状态</th>
+          <th>操作</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>2025-11-10 14:22</td>
+          <td class="font-mono text-[11px]">sales_nav_eu_procurement_2025-11.csv</td>
+          <td>李娜</td>
+          <td>180</td>
+          <td>22</td>
+          <td><strong>68</strong></td>
+          <td><span class="wf-tag" style="background:#e5e7eb">成功</span></td>
+          <td><a href="#" class="text-gray-600 underline">查看</a> · <a href="#" class="text-gray-600 underline">回滚</a></td>
+        </tr>
+        <tr>
+          <td>2025-11-08 10:05</td>
+          <td class="font-mono text-[11px]">sales_nav_us_ceo_2025-11.csv</td>
+          <td>张伟</td>
+          <td>320</td>
+          <td>40</td>
+          <td><strong>112</strong></td>
+          <td><span class="wf-tag" style="background:#e5e7eb">成功</span></td>
+          <td><a href="#" class="text-gray-600 underline">查看</a> · <a href="#" class="text-gray-600 underline">回滚</a></td>
+        </tr>
+        <tr>
+          <td>2025-11-05 16:40</td>
+          <td class="font-mono text-[11px]">sales_nav_japan_parks_2025-11.csv</td>
+          <td>王磊</td>
+          <td>95</td>
+          <td>8</td>
+          <td><strong>34</strong></td>
+          <td><span class="wf-tag" style="background:#e5e7eb">成功</span></td>
+          <td><a href="#" class="text-gray-600 underline">查看</a> · <a href="#" class="text-gray-600 underline">回滚</a></td>
+        </tr>
+        <tr>
+          <td>2025-11-02 09:30</td>
+          <td class="font-mono text-[11px]">sales_nav_mideast_buyers.csv</td>
+          <td>刘敏</td>
+          <td>62</td>
+          <td>15</td>
+          <td><strong>18</strong></td>
+          <td><span class="wf-tag" style="background:#d4d4d4">部分失败</span></td>
+          <td><a href="#" class="text-gray-600 underline">查看</a> · <a href="#" class="text-gray-600 underline">重试</a></td>
+        </tr>
+        <tr>
+          <td>2025-10-28 11:15</td>
+          <td class="font-mono text-[11px]">sales_nav_latam_test.csv</td>
+          <td>张伟</td>
+          <td>45</td>
+          <td>3</td>
+          <td><strong>12</strong></td>
+          <td><span class="wf-tag" style="background:#e5e7eb">成功</span></td>
+          <td><a href="#" class="text-gray-600 underline">查看</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-3 flex items-center gap-6 text-xs text-gray-500">
+      <span>累计导入：<strong class="text-gray-700">702 条</strong></span>
+      <span>·</span>
+      <span>累计去重：<strong class="text-gray-700">88 条</strong></span>
+      <span>·</span>
+      <span>高分 Lead（&gt;60）：<strong class="text-gray-700">244 条</strong></span>
+      <span>·</span>
+      <span>转机会：<strong class="text-gray-700">18 条（2.6%）</strong></span>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

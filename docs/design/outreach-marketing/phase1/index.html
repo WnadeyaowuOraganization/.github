@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Phase 1 · 营销序列引擎 | 万德AI平台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .tab-active { border-bottom: 2px solid #3b82f6; color: #3b82f6; font-weight: 600; }
+  .tab-inactive { color: #4b5563; }
+  .tab-inactive:hover { color: #3b82f6; }
+</style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Phase 1 · 营销序列引擎</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">统一序列编排+模板管理+冷外展标准化+A/B科学优化，替代人工复制粘贴</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗,商务主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">序列列表/模板编辑器/7步冷外展/A/B测试</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新建序列/编辑模板/克隆预置7步/创建A/B测试</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">Tab切换正常/序列CRUD可用</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+
+  <!-- [左侧图标侧边栏] -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex flex-col items-center py-4 gap-4">
+    <div class="w-8 h-8 bg-gray-300 rounded flex items-center justify-center text-xs text-gray-600">万</div>
+    <div class="w-8 h-8 hover:bg-gray-200 rounded flex items-center justify-center text-gray-500 cursor-pointer" title="首页">⌂</div>
+    <div class="w-8 h-8 hover:bg-gray-200 rounded flex items-center justify-center text-gray-500 cursor-pointer" title="线索">👥</div>
+    <div class="w-8 h-8 bg-blue-500 text-white rounded flex items-center justify-center cursor-pointer" title="营销">✉</div>
+    <div class="w-8 h-8 hover:bg-gray-200 rounded flex items-center justify-center text-gray-500 cursor-pointer" title="数据">📊</div>
+    <div class="w-8 h-8 hover:bg-gray-200 rounded flex items-center justify-center text-gray-500 cursor-pointer" title="设置">⚙</div>
+  </aside>
+
+  <!-- [主工作区] -->
+  <main class="flex-1 flex flex-col">
+
+    <!-- [顶部面包屑] -->
+    <div class="bg-white border-b border-gray-300 px-6 py-3 text-sm text-gray-600">
+      <span class="hover:text-blue-500 cursor-pointer">首页</span>
+      <span class="mx-2 text-gray-400">/</span>
+      <span class="hover:text-blue-500 cursor-pointer">商务部</span>
+      <span class="mx-2 text-gray-400">/</span>
+      <span class="hover:text-blue-500 cursor-pointer">外展获客中台</span>
+      <span class="mx-2 text-gray-400">/</span>
+      <span class="text-gray-900 font-medium">Phase 1 营销序列引擎</span>
+    </div>
+
+    <!-- [Tab 水平栏] -->
+    <div class="bg-white border-b border-gray-300 px-6 flex items-center gap-6">
+      <button data-src="tab-sequences.html" class="tab-btn tab-active py-3 px-1 text-sm">序列管理 <span class="text-xs text-gray-400">#2793</span></button>
+      <button data-src="tab-templates.html" class="tab-btn tab-inactive py-3 px-1 text-sm">模板编辑器 <span class="text-xs text-gray-400">#2798</span></button>
+      <button data-src="tab-cold-outreach.html" class="tab-btn tab-inactive py-3 px-1 text-sm">冷外展序列 <span class="text-xs text-gray-400">#2800</span></button>
+      <button data-src="tab-abtest.html" class="tab-btn tab-inactive py-3 px-1 text-sm">A/B测试 <span class="text-xs text-gray-400">#2802</span></button>
+    </div>
+
+    <!-- [iframe 加载区] -->
+    <div class="flex-1 bg-gray-50">
+      <iframe id="tabFrame" src="tab-sequences.html" class="w-full h-full border-0" style="min-height: 900px;"></iframe>
+    </div>
+
+    <!-- [底部原型说明表] -->
+    <div class="bg-white border-t border-gray-300 px-6 py-4">
+      <div class="text-sm font-semibold text-gray-700 mb-2">📋 原型说明</div>
+      <table class="w-full text-xs text-gray-600 border border-gray-300">
+        <thead class="bg-gray-100">
+          <tr>
+            <th class="border border-gray-300 px-3 py-1 text-left">Tab</th>
+            <th class="border border-gray-300 px-3 py-1 text-left">对应 Issue</th>
+            <th class="border border-gray-300 px-3 py-1 text-left">核心能力</th>
+            <th class="border border-gray-300 px-3 py-1 text-left">数据状态</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td class="border border-gray-300 px-3 py-1">序列管理</td>
+            <td class="border border-gray-300 px-3 py-1">#2793 [1/25]</td>
+            <td class="border border-gray-300 px-3 py-1">数据模型 + CRUD API + 列表筛选</td>
+            <td class="border border-gray-300 px-3 py-1">低保真灰度，6条假数据</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-3 py-1">模板编辑器</td>
+            <td class="border border-gray-300 px-3 py-1">#2798 [6/25]</td>
+            <td class="border border-gray-300 px-3 py-1">变量 + 个性化预览 + 拖拽编辑器</td>
+            <td class="border border-gray-300 px-3 py-1">三栏布局占位</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-3 py-1">冷外展序列</td>
+            <td class="border border-gray-300 px-3 py-1">#2800 [8/25]</td>
+            <td class="border border-gray-300 px-3 py-1">3个预置7步模板（欧美/东南亚/中东）</td>
+            <td class="border border-gray-300 px-3 py-1">时间线展开</td>
+          </tr>
+          <tr>
+            <td class="border border-gray-300 px-3 py-1">A/B测试</td>
+            <td class="border border-gray-300 px-3 py-1">#2802 [10/25]</td>
+            <td class="border border-gray-300 px-3 py-1">主题/正文/发送时间测试 + 显著性标注</td>
+            <td class="border border-gray-300 px-3 py-1">含条形图占位</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<!-- [Tab 切换脚本] -->
+<script>
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', function() {
+      document.querySelectorAll('.tab-btn').forEach(b => {
+        b.classList.remove('tab-active');
+        b.classList.add('tab-inactive');
+      });
+      this.classList.remove('tab-inactive');
+      this.classList.add('tab-active');
+      document.getElementById('tabFrame').src = this.dataset.src;
+    });
+  });
+</script>
+
+</body>
+</html>

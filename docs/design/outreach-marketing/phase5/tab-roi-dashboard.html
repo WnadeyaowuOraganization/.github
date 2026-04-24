@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ROI 渠道看板 · #2817</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .kpi-card { background: #fff; border: 1px solid #d9d9d9; border-radius: 4px; padding: 14px 16px; }
+    .kpi-label { font-size: 11.5px; color: #8c8c8c; }
+    .kpi-value { font-size: 22px; font-weight: 700; color: #262626; margin-top: 4px; }
+    .kpi-delta { font-size: 11px; color: #595959; margin-top: 2px; }
+    .chan-btn { padding: 6px 14px; font-size: 12.5px; border: 1px solid #d9d9d9; background: #fff; color: #595959; border-radius: 4px; cursor: pointer; }
+    .chan-btn.active { background: #595959; color: #fff; border-color: #595959; }
+    .chan-btn:hover:not(.active) { background: #fafafa; }
+    .bar { background: #8c8c8c; border-right: 1px solid #fff; }
+    .bar.b1 { background: #595959; }
+    .bar.b2 { background: #8c8c8c; }
+    .bar.b3 { background: #bfbfbf; }
+    .bar.b4 { background: #d9d9d9; }
+    .bar.b5 { background: #f0f0f0; }
+    .line-point { width: 6px; height: 6px; background: #595959; border-radius: 50%; position: absolute; transform: translate(-50%, 50%); }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fafafa;border:1px solid #d9d9d9;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #d9d9d9;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#8c8c8c;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#595959;">Tab② · ROI 渠道看板（#2817 · 24/25）</span>
+      <span style="background:#f0f0f0;color:#595959;padding:1px 6px;border-radius:3px;font-size:11px;">PAGE_TITLE: ROI 渠道看板 · #2817</span>
+      <span style="background:#fff1f0;color:#cf1322;padding:1px 6px;border-radius:3px;font-size:11px;border:1px solid #ffa39e;">🔴 新建 ROI 聚合服务</span>
+    </div>
+    <span class="spec-arrow" style="color:#595959;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#595959;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">把 5 个获客渠道（邮件 / 企微 / LinkedIn / 展会 / SEM）的<b>投入与产出</b>放在一张看板上横向对比，让市场总监清楚"下月预算该加码哪个渠道"</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#595959;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">市场总监（决策预算）· CFO（审计ROI）· 商务总监（看渠道健康度）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#595959;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">渠道切换 / 4 KPI 卡 / CPL·CPMQL·CPSQL 对比表 / 漏斗柱状图 / 12 月趋势折线 / 导出报告</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#595959;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切换"全部/单渠道" / 切换时间窗（近30天/季度/年）/ 点击表格列排序 / 导出月度 PDF</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#595959;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">KPI 随渠道切换联动 / 表格 CPL/CPMQL/CPSQL 口径统一 / 漏斗各阶段留存率之和正确 / 折线图 12 点稠密</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#595959;font-weight:600;vertical-align:top;white-space:nowrap;">🔧 代码现状</td><td style="padding:4px 0;color:#333;"><span style="color:#cf1322;font-weight:600;">🔴 新建</span> 跨渠道 ROI 聚合服务：新建 <code>MarketingRoiAggregateService</code>，ETL 从 5 个业务库汇聚每日 ROI 指标到数仓大宽表</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #d9d9d9;font-size:11.5px;color:#595959;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#595959;text-decoration:underline;">外展获客 · 详细设计.md § Phase 5 · #2817</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部：渠道切换 + 时间窗] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4 flex items-center justify-between flex-wrap gap-3">
+  <div class="flex items-center gap-2 flex-wrap">
+    <span class="text-xs text-gray-500 mr-2">渠道：</span>
+    <button class="chan-btn active">全部</button>
+    <button class="chan-btn">✉️ 邮件</button>
+    <button class="chan-btn">🟢 企微</button>
+    <button class="chan-btn">🔗 LinkedIn</button>
+    <button class="chan-btn">🎪 展会</button>
+    <button class="chan-btn">🔍 SEM</button>
+  </div>
+  <div class="flex items-center gap-2">
+    <span class="text-xs text-gray-500">时间窗：</span>
+    <select class="text-xs border border-gray-300 rounded px-2 py-1">
+      <option>近 30 天</option>
+      <option>近 90 天</option>
+      <option selected>本季度</option>
+      <option>本年</option>
+      <option>自定义</option>
+    </select>
+    <button class="px-3 py-1.5 text-xs border border-gray-300 rounded text-gray-700 hover:bg-gray-50">刷新</button>
+    <button class="px-3 py-1.5 text-xs bg-gray-700 text-white rounded hover:bg-gray-800">📄 导出月度报告</button>
+  </div>
+</div>
+
+<!-- [4 KPI 卡片（+第5张 ROI 倍数）] -->
+<div class="grid grid-cols-5 gap-3 mb-4">
+  <div class="kpi-card">
+    <div class="kpi-label">💰 总投入</div>
+    <div class="kpi-value">¥1,284,500</div>
+    <div class="kpi-delta">较上季度 ↑ 8.3%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">🎯 获线索数（Leads）</div>
+    <div class="kpi-value">12,483</div>
+    <div class="kpi-delta">较上季度 ↑ 14.2%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">📈 转商机数（SQL）</div>
+    <div class="kpi-value">318</div>
+    <div class="kpi-delta">较上季度 ↑ 21.5%</div>
+  </div>
+  <div class="kpi-card">
+    <div class="kpi-label">💵 成交金额</div>
+    <div class="kpi-value">¥8.62M</div>
+    <div class="kpi-delta">较上季度 ↑ 18.0%</div>
+  </div>
+  <div class="kpi-card" style="background:#595959;color:#fff;border-color:#595959;">
+    <div class="kpi-label" style="color:#d9d9d9;">⚡ ROI 倍数</div>
+    <div class="kpi-value" style="color:#fff;">6.71x</div>
+    <div class="kpi-delta" style="color:#d9d9d9;">目标 ≥ 5x · 达成 ✓</div>
+  </div>
+</div>
+
+<!-- [渠道对比表格] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+    <h2 class="text-sm font-bold text-gray-800">📋 渠道对比表（按 ROI ↓）</h2>
+    <span class="text-xs text-gray-500">口径：CPL = 投入 / 线索数 · CPMQL = 投入 / MQL · CPSQL = 投入 / SQL</span>
+  </div>
+  <table class="w-full text-xs border-collapse">
+    <thead>
+      <tr class="bg-gray-50 text-gray-600">
+        <th class="text-left p-2 border border-gray-200">渠道</th>
+        <th class="text-right p-2 border border-gray-200">触达成本</th>
+        <th class="text-right p-2 border border-gray-200">CPL<br><span class="font-normal text-gray-400">每线索</span></th>
+        <th class="text-right p-2 border border-gray-200">CPMQL<br><span class="font-normal text-gray-400">每合格线索</span></th>
+        <th class="text-right p-2 border border-gray-200">CPSQL<br><span class="font-normal text-gray-400">每销售合格线索</span></th>
+        <th class="text-right p-2 border border-gray-200">成交单价</th>
+        <th class="text-right p-2 border border-gray-200">ROI</th>
+        <th class="text-center p-2 border border-gray-200">健康度</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-800">
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 font-medium">✉️ 邮件</td>
+        <td class="p-2 border border-gray-200 text-right">¥ 185,000</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 28</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 412</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 2,180</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 58,000</td>
+        <td class="p-2 border border-gray-200 text-right font-bold">9.80x</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="px-1.5 py-0.5 text-[10px] bg-gray-700 text-white rounded">优</span></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 font-medium">🟢 企微</td>
+        <td class="p-2 border border-gray-200 text-right">¥ 142,000</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 62</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 388</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 1,950</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 62,000</td>
+        <td class="p-2 border border-gray-200 text-right font-bold">8.45x</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="px-1.5 py-0.5 text-[10px] bg-gray-700 text-white rounded">优</span></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 font-medium">🔗 LinkedIn</td>
+        <td class="p-2 border border-gray-200 text-right">¥ 278,000</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 156</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 820</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 3,420</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 72,000</td>
+        <td class="p-2 border border-gray-200 text-right font-bold">6.12x</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="px-1.5 py-0.5 text-[10px] bg-gray-500 text-white rounded">良</span></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 font-medium">🎪 展会</td>
+        <td class="p-2 border border-gray-200 text-right">¥ 425,000</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 412</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 1,240</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 4,850</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 95,000</td>
+        <td class="p-2 border border-gray-200 text-right font-bold">5.85x</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="px-1.5 py-0.5 text-[10px] bg-gray-500 text-white rounded">良</span></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="p-2 border border-gray-200 font-medium">🔍 SEM</td>
+        <td class="p-2 border border-gray-200 text-right">¥ 254,500</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 92</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 1,840</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 6,920</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 48,000</td>
+        <td class="p-2 border border-gray-200 text-right font-bold">3.28x</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="px-1.5 py-0.5 text-[10px] bg-gray-400 text-white rounded">警</span></td>
+      </tr>
+      <tr class="bg-gray-50 font-semibold">
+        <td class="p-2 border border-gray-200">合计 / 加权</td>
+        <td class="p-2 border border-gray-200 text-right">¥ 1,284,500</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 103</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 684</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 4,038</td>
+        <td class="p-2 border border-gray-200 text-right font-mono">¥ 27,101</td>
+        <td class="p-2 border border-gray-200 text-right font-bold">6.71x</td>
+        <td class="p-2 border border-gray-200 text-center"><span class="px-1.5 py-0.5 text-[10px] bg-gray-700 text-white rounded">优</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="mt-2 text-[11px] text-gray-500">💡 SEM 进入"警"区：虽然 CPL 低，但 MQL→SQL 转化差（线索质量低），建议落地页和关键词匹配度优化。</div>
+</div>
+
+<!-- [漏斗对比 + 趋势折线] -->
+<div class="grid grid-cols-2 gap-4 mb-4">
+
+  <!-- 漏斗柱状图 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+      <h2 class="text-sm font-bold text-gray-800">🔽 各渠道漏斗留存率对比</h2>
+      <span class="text-xs text-gray-500">触达 → 线索 → MQL → SQL → 成交</span>
+    </div>
+
+    <!-- 柱状图占位（5 渠道 × 5 阶段） -->
+    <div class="space-y-3">
+      <!-- 邮件 -->
+      <div>
+        <div class="flex justify-between text-xs text-gray-600 mb-1"><span>✉️ 邮件</span><span class="text-gray-400">100% → 18% → 6.8% → 1.3% → 0.12%</span></div>
+        <div class="flex h-6 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b1" style="width:100%;"></div>
+        </div>
+        <div class="flex h-4 mt-0.5 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b2" style="width:18%;"></div>
+          <div style="width:82%;background:#fafafa;"></div>
+        </div>
+      </div>
+      <!-- 企微 -->
+      <div>
+        <div class="flex justify-between text-xs text-gray-600 mb-1"><span>🟢 企微</span><span class="text-gray-400">100% → 36% → 14.2% → 2.8% → 0.28%</span></div>
+        <div class="flex h-6 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b1" style="width:100%;"></div>
+        </div>
+        <div class="flex h-4 mt-0.5 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b2" style="width:36%;"></div>
+          <div style="width:64%;background:#fafafa;"></div>
+        </div>
+      </div>
+      <!-- LinkedIn -->
+      <div>
+        <div class="flex justify-between text-xs text-gray-600 mb-1"><span>🔗 LinkedIn</span><span class="text-gray-400">100% → 22% → 9.1% → 2.1% → 0.21%</span></div>
+        <div class="flex h-6 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b1" style="width:100%;"></div>
+        </div>
+        <div class="flex h-4 mt-0.5 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b2" style="width:22%;"></div>
+          <div style="width:78%;background:#fafafa;"></div>
+        </div>
+      </div>
+      <!-- 展会 -->
+      <div>
+        <div class="flex justify-between text-xs text-gray-600 mb-1"><span>🎪 展会</span><span class="text-gray-400">100% → 68% → 28.5% → 4.8% → 0.52%</span></div>
+        <div class="flex h-6 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b1" style="width:100%;"></div>
+        </div>
+        <div class="flex h-4 mt-0.5 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b2" style="width:68%;"></div>
+          <div style="width:32%;background:#fafafa;"></div>
+        </div>
+      </div>
+      <!-- SEM -->
+      <div>
+        <div class="flex justify-between text-xs text-gray-600 mb-1"><span>🔍 SEM</span><span class="text-gray-400">100% → 42% → 4.8% → 1.2% → 0.18%</span></div>
+        <div class="flex h-6 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b1" style="width:100%;"></div>
+        </div>
+        <div class="flex h-4 mt-0.5 border border-gray-200 rounded overflow-hidden">
+          <div class="bar b2" style="width:42%;"></div>
+          <div style="width:58%;background:#fafafa;"></div>
+        </div>
+      </div>
+    </div>
+    <div class="mt-3 text-[11px] text-gray-500">💡 展会的每阶段留存率最高（高质量面对面接触），但 CPL 也最贵；需结合 ROI 综合判断。</div>
+  </div>
+
+  <!-- 12 月 ROI 趋势折线 -->
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3 pb-2 border-b border-gray-200">
+      <h2 class="text-sm font-bold text-gray-800">📈 12 月 ROI 趋势</h2>
+      <div class="flex gap-2 text-[11px]">
+        <span><span class="inline-block w-3 h-0.5 bg-gray-800 align-middle mr-1"></span>总体</span>
+        <span><span class="inline-block w-3 h-0.5 bg-gray-500 align-middle mr-1"></span>邮件</span>
+        <span><span class="inline-block w-3 h-0.5 bg-gray-400 align-middle mr-1"></span>企微</span>
+      </div>
+    </div>
+
+    <!-- 折线图占位（SVG） -->
+    <div class="relative" style="height:220px;">
+      <svg viewBox="0 0 600 220" class="w-full h-full" preserveAspectRatio="none">
+        <!-- 网格 -->
+        <g stroke="#f0f0f0" stroke-width="1">
+          <line x1="0" y1="40"  x2="600" y2="40"/>
+          <line x1="0" y1="90"  x2="600" y2="90"/>
+          <line x1="0" y1="140" x2="600" y2="140"/>
+          <line x1="0" y1="190" x2="600" y2="190"/>
+        </g>
+        <!-- Y 轴刻度 -->
+        <g fill="#8c8c8c" font-size="10" font-family="monospace">
+          <text x="2" y="44">8x</text>
+          <text x="2" y="94">6x</text>
+          <text x="2" y="144">4x</text>
+          <text x="2" y="194">2x</text>
+        </g>
+        <!-- 总体 ROI 折线（12 点） -->
+        <polyline fill="none" stroke="#262626" stroke-width="2"
+          points="30,160 80,150 130,145 180,135 230,128 280,118 330,112 380,105 430,95 480,88 530,82 580,75"/>
+        <!-- 邮件 ROI -->
+        <polyline fill="none" stroke="#8c8c8c" stroke-width="1.5" stroke-dasharray="3,2"
+          points="30,135 80,120 130,112 180,108 230,98 280,88 330,82 380,72 430,60 480,55 530,50 580,45"/>
+        <!-- 企微 ROI -->
+        <polyline fill="none" stroke="#bfbfbf" stroke-width="1.5" stroke-dasharray="2,2"
+          points="30,148 80,140 130,132 180,125 230,118 280,108 330,100 380,92 430,82 480,72 530,68 580,62"/>
+        <!-- 点 -->
+        <g fill="#262626">
+          <circle cx="30" cy="160" r="3"/><circle cx="80" cy="150" r="3"/><circle cx="130" cy="145" r="3"/>
+          <circle cx="180" cy="135" r="3"/><circle cx="230" cy="128" r="3"/><circle cx="280" cy="118" r="3"/>
+          <circle cx="330" cy="112" r="3"/><circle cx="380" cy="105" r="3"/><circle cx="430" cy="95" r="3"/>
+          <circle cx="480" cy="88" r="3"/><circle cx="530" cy="82" r="3"/><circle cx="580" cy="75" r="3"/>
+        </g>
+        <!-- X 轴月份 -->
+        <g fill="#8c8c8c" font-size="10">
+          <text x="22" y="212">5月</text><text x="72" y="212">6月</text><text x="122" y="212">7月</text>
+          <text x="172" y="212">8月</text><text x="222" y="212">9月</text><text x="272" y="212">10月</text>
+          <text x="322" y="212">11月</text><text x="372" y="212">12月</text><text x="422" y="212">1月</text>
+          <text x="472" y="212">2月</text><text x="522" y="212">3月</text><text x="572" y="212">4月</text>
+        </g>
+      </svg>
+    </div>
+    <div class="mt-3 text-[11px] text-gray-500">💡 总体 ROI 从 5月的 3.2x 稳步上升至 4月的 6.9x，主要贡献来自邮件 + 企微的自动化触达规模化。</div>
+  </div>
+
+</div>
+
+<!-- [洞察卡片] -->
+<div class="bg-white border border-gray-300 rounded p-4">
+  <h2 class="text-sm font-bold text-gray-800 mb-3 pb-2 border-b border-gray-200">💡 本季度关键洞察（自动生成）</h2>
+  <div class="grid grid-cols-3 gap-3 text-xs">
+    <div class="p-3 border border-gray-200 rounded">
+      <div class="font-semibold text-gray-800 mb-1">🏆 ROI 冠军：邮件（9.80x）</div>
+      <div class="text-gray-600">自动化 SOP 降低人工成本，CPL 仅 ¥28。建议 <b>下季度预算 +15%</b>。</div>
+    </div>
+    <div class="p-3 border border-gray-200 rounded">
+      <div class="font-semibold text-gray-800 mb-1">⚠️ 注意：SEM（3.28x）</div>
+      <div class="text-gray-600">CPL 低但 SQL 转化差，线索质量问题。建议 <b>暂停低意向词包</b>，回归核心关键词。</div>
+    </div>
+    <div class="p-3 border border-gray-200 rounded">
+      <div class="font-semibold text-gray-800 mb-1">📈 上升最快：企微（+38%）</div>
+      <div class="text-gray-600">SOP 培育路径上线后 MQL→SQL 翻倍。建议 <b>复制路径到 LinkedIn</b>。</div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

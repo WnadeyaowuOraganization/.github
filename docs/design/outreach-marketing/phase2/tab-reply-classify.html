@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>回复智能分类 · #2806</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">回复智能分类 · #2806</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">AI 自动分类邮件回复（感兴趣/需信息/转介绍/不感兴趣/退订/自动回复）+ 自动创建 CRM 商机</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗, 销售</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">未分类队列 / AI 分类 / 商机自动创建 / 自动化规则</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">确认分类 / 创建商机 / 加入培育序列</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">AI 分类置信度展示 / 商机自动化规则生效</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.2.6</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+
+<div class="max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800">回复智能分类 + CRM 商机自动创建</h1>
+      <p class="text-sm text-gray-500 mt-1">AI 自动分类感兴趣 / 不感兴趣 / 退订等 6 类标签，并同步 CRM 商机</p>
+    </div>
+    <div class="flex gap-2">
+      <span class="px-3 py-1 text-xs bg-gray-200 text-gray-700 rounded">待分类 37</span>
+      <span class="px-3 py-1 text-xs bg-green-100 text-green-700 rounded">已创建商机 12</span>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-12 gap-4 mb-6">
+    <!-- 左：未分类回复队列 -->
+    <div class="col-span-4 bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-200 bg-gray-50 flex items-center justify-between">
+        <h2 class="text-sm font-medium text-gray-700">未分类回复队列</h2>
+        <span class="text-xs text-gray-400">37 条</span>
+      </div>
+      <div class="divide-y divide-gray-100 max-h-[580px] overflow-y-auto">
+        <div class="px-4 py-3 bg-gray-50 border-l-4 border-gray-700 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">张伟 / Acme制造</span>
+            <span class="text-xs text-gray-400">2 分钟前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: 万德AI · 制造业数据分析试用邀请</div>
+          <div class="text-xs text-gray-500 line-clamp-2">方案看起来不错，下周二下午方便安排一个在线演示吗？我们 IT 和业务负责人都会参加…</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">Lisa Chen / xyz.io</span>
+            <span class="text-xs text-gray-400">14 分钟前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: Boost your sales with Wande</div>
+          <div class="text-xs text-gray-500 line-clamp-2">Could you share pricing for a 50-seat team? Also interested in SSO support…</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">procurement@factory.com</span>
+            <span class="text-xs text-gray-400">32 分钟前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: 季度采购数据洞察</div>
+          <div class="text-xs text-gray-500 line-clamp-2">这个方向我们今年预算已定，下半年可能再考虑，谢谢…</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">王芳 / retailer</span>
+            <span class="text-xs text-gray-400">1 小时前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: Q4 retail analytics benchmark</div>
+          <div class="text-xs text-gray-500 line-clamp-2">我已不负责此业务，建议联系 zhou.jian@retailer.com 他负责数据分析团队…</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">cfo@mid-market.cn</span>
+            <span class="text-xs text-gray-400">2 小时前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: CFO 必读：财务数据智能化</div>
+          <div class="text-xs text-gray-500 line-clamp-2">请不要再发邮件给我，已要求退订。</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">head.ops@enterprise.com</span>
+            <span class="text-xs text-gray-400">3 小时前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Auto-reply: Out of office</div>
+          <div class="text-xs text-gray-500 line-clamp-2">I am out of office until Nov 15. For urgent matters contact…</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">刘洋 / BigCorp</span>
+            <span class="text-xs text-gray-400">4 小时前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: 续约方案</div>
+          <div class="text-xs text-gray-500 line-clamp-2">合同可以续签，金额上需要再谈一下，周四下午我们开个会…</div>
+        </div>
+        <div class="px-4 py-3 hover:bg-gray-50 cursor-pointer">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-sm font-medium text-gray-800">cto@scale-up.com</span>
+            <span class="text-xs text-gray-400">5 小时前</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">Re: 技术集成可行性</div>
+          <div class="text-xs text-gray-500 line-clamp-2">Can you send API docs and a sandbox environment? We'd like to POC…</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 中：AI 分类结果 -->
+    <div class="col-span-5 bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex items-center justify-between mb-4">
+        <h3 class="text-sm font-semibold text-gray-800">AI 分类结果</h3>
+        <span class="text-xs text-gray-500">GPT-4o · 中英双语</span>
+      </div>
+
+      <!-- 当前邮件 -->
+      <div class="border border-gray-200 rounded p-3 mb-4 bg-gray-50">
+        <div class="text-xs text-gray-500 mb-1">来自</div>
+        <div class="text-sm font-medium text-gray-800">张伟 &lt;zhang.wei@acme.com.cn&gt;</div>
+        <div class="text-xs text-gray-600 mt-1">Re: 万德AI · 制造业数据分析试用邀请</div>
+        <div class="text-sm text-gray-700 mt-2 leading-relaxed">
+          "方案看起来不错，下周二下午方便安排一个在线演示吗？我们 IT 和业务负责人都会参加。另外能否提前发份采购合同模板让法务同步审核。"
+        </div>
+      </div>
+
+      <!-- 分类结果 -->
+      <div class="mb-4">
+        <div class="text-xs text-gray-500 mb-2">Top 3 分类建议</div>
+        <div class="space-y-2">
+          <div class="flex items-center justify-between p-3 border-2 border-green-500 bg-green-50 rounded">
+            <div class="flex items-center gap-3">
+              <span class="text-2xl">✅</span>
+              <div>
+                <div class="text-sm font-semibold text-gray-800">感兴趣 · 要求演示</div>
+                <div class="text-xs text-gray-500">主动请求下一步行动</div>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-xs text-gray-500">置信度</div>
+              <div class="text-sm font-semibold text-green-600">94.2%</div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-3 border border-gray-200 rounded">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">📋</span>
+              <div class="text-sm text-gray-700">需信息（合同/报价）</div>
+            </div>
+            <div class="text-sm text-gray-500">4.8%</div>
+          </div>
+          <div class="flex items-center justify-between p-3 border border-gray-200 rounded">
+            <div class="flex items-center gap-3">
+              <span class="text-xl">↗</span>
+              <div class="text-sm text-gray-700">转介绍</div>
+            </div>
+            <div class="text-sm text-gray-500">1.0%</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 所有标签参考 -->
+      <div>
+        <div class="text-xs text-gray-500 mb-2">全部标签体系</div>
+        <div class="flex flex-wrap gap-1.5">
+          <span class="px-2 py-1 text-xs bg-green-100 text-green-700 rounded">感兴趣</span>
+          <span class="px-2 py-1 text-xs bg-blue-100 text-blue-700 rounded">需信息</span>
+          <span class="px-2 py-1 text-xs bg-purple-100 text-purple-700 rounded">转介绍</span>
+          <span class="px-2 py-1 text-xs bg-gray-200 text-gray-700 rounded">不感兴趣</span>
+          <span class="px-2 py-1 text-xs bg-red-100 text-red-700 rounded">退订</span>
+          <span class="px-2 py-1 text-xs bg-yellow-100 text-yellow-700 rounded">休假自动回复</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 右：操作区 -->
+    <div class="col-span-3 space-y-4">
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <h3 class="text-sm font-semibold text-gray-800 mb-3">操作</h3>
+        <div class="space-y-2">
+          <button class="w-full px-3 py-2 bg-gray-700 text-white rounded text-sm">✓ 确认分类 · 感兴趣</button>
+          <button class="w-full px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700">修改分类</button>
+        </div>
+      </div>
+
+      <!-- 创建商机 -->
+      <div class="bg-white border-2 border-gray-700 rounded-lg p-4">
+        <div class="flex items-center gap-2 mb-3">
+          <span class="text-lg">💼</span>
+          <h3 class="text-sm font-semibold text-gray-800">创建 CRM 商机</h3>
+        </div>
+        <div class="space-y-2 text-xs">
+          <div>
+            <label class="text-gray-500">客户</label>
+            <div class="mt-0.5 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-gray-800">Acme 制造 集团</div>
+          </div>
+          <div>
+            <label class="text-gray-500">商机名</label>
+            <div class="mt-0.5 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-gray-800">Acme · 制造业数据分析试用→POC</div>
+          </div>
+          <div>
+            <label class="text-gray-500">预测金额</label>
+            <div class="mt-0.5 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-gray-800">¥ 180,000（AI 预估）</div>
+          </div>
+          <div>
+            <label class="text-gray-500">阶段</label>
+            <div class="mt-0.5 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-gray-800">需求确认</div>
+          </div>
+          <div>
+            <label class="text-gray-500">分配销售</label>
+            <div class="mt-0.5 px-2 py-1.5 bg-gray-50 border border-gray-200 rounded text-gray-800">李娜（sales01@wande.com）</div>
+          </div>
+        </div>
+        <button class="w-full mt-3 px-3 py-2 bg-gray-700 text-white rounded text-sm">一键创建商机</button>
+      </div>
+
+      <div class="bg-white border border-gray-200 rounded-lg p-4">
+        <h3 class="text-sm font-semibold text-gray-800 mb-2">其他操作</h3>
+        <div class="space-y-2 text-sm">
+          <button class="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 rounded border border-gray-200">↻ 加入培育序列</button>
+          <button class="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 rounded border border-gray-200">🚫 加入退订名单</button>
+          <button class="w-full px-3 py-2 text-left text-gray-700 hover:bg-gray-50 rounded border border-gray-200">📋 复制到我的收件箱</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 底部：自动化规则 -->
+  <div class="bg-white border border-gray-200 rounded-lg p-5">
+    <div class="flex items-center justify-between mb-4">
+      <h3 class="text-sm font-semibold text-gray-800">自动化规则</h3>
+      <button class="text-xs text-gray-600 hover:text-gray-800">+ 新增规则</button>
+    </div>
+    <div class="grid grid-cols-3 gap-3">
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700">规则 1</span>
+          <span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">启用</span>
+        </div>
+        <div class="text-sm text-gray-800 mb-2">感兴趣（置信度≥85%）</div>
+        <div class="text-xs text-gray-500">→ 自动创建 CRM 商机<br>→ 分配给负责销售<br>→ 通知飞书机器人</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700">规则 2</span>
+          <span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">启用</span>
+        </div>
+        <div class="text-sm text-gray-800 mb-2">不感兴趣</div>
+        <div class="text-xs text-gray-500">→ 立即结束当前序列<br>→ 3 个月后可重新激活<br>→ 标记「冷」线索</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700">规则 3</span>
+          <span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">启用</span>
+        </div>
+        <div class="text-sm text-gray-800 mb-2">退订</div>
+        <div class="text-xs text-gray-500">→ 加入全局退订名单<br>→ 所有序列移除<br>→ 记录合规日志</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700">规则 4</span>
+          <span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">启用</span>
+        </div>
+        <div class="text-sm text-gray-800 mb-2">休假自动回复</div>
+        <div class="text-xs text-gray-500">→ 暂停序列直到指定日期<br>→ 到期后自动继续</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700">规则 5</span>
+          <span class="text-xs px-2 py-0.5 bg-green-100 text-green-700 rounded">启用</span>
+        </div>
+        <div class="text-sm text-gray-800 mb-2">转介绍</div>
+        <div class="text-xs text-gray-500">→ 提取新联系人<br>→ 创建新线索<br>→ 启动破冰序列</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="flex items-center justify-between mb-2">
+          <span class="text-xs font-medium text-gray-700">规则 6</span>
+          <span class="text-xs px-2 py-0.5 bg-gray-200 text-gray-700 rounded">草稿</span>
+        </div>
+        <div class="text-sm text-gray-800 mb-2">需信息</div>
+        <div class="text-xs text-gray-500">→ 调用资料库自动回复<br>→ 附件自动附带<br>→ 人工审核后发送</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

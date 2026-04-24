@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>Phase 2 · 邮件外展</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Phase 2 · 邮件外展</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">统一管理邮件外展的发送基础设施、送达率监控、追踪、轮转与效果分析，替代分散的冷外展工具</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗, 商务主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">SMTP配置 / 送达率监控 / 追踪 / 轮转 / 看板 / 回复分类</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切换 6 Tab / 配置 SMTP / 查看送达率 / 分类回复</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">6 Tab 切换正常 / 各子页渲染正常</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.2</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+
+<div class="flex min-h-screen">
+  <!-- 左侧 16px 侧边栏 -->
+  <aside class="w-16 bg-gray-800 flex flex-col items-center py-4 space-y-6 text-gray-300 text-xs">
+    <div class="w-10 h-10 rounded bg-gray-700 flex items-center justify-center font-bold text-white">万</div>
+    <div class="flex flex-col items-center space-y-4">
+      <div class="w-8 h-8 rounded hover:bg-gray-700 flex items-center justify-center" title="首页">🏠</div>
+      <div class="w-8 h-8 rounded hover:bg-gray-700 flex items-center justify-center" title="商务">💼</div>
+      <div class="w-8 h-8 rounded bg-gray-600 flex items-center justify-center" title="外展">📧</div>
+      <div class="w-8 h-8 rounded hover:bg-gray-700 flex items-center justify-center" title="CRM">👥</div>
+      <div class="w-8 h-8 rounded hover:bg-gray-700 flex items-center justify-center" title="分析">📊</div>
+      <div class="w-8 h-8 rounded hover:bg-gray-700 flex items-center justify-center" title="设置">⚙️</div>
+    </div>
+  </aside>
+
+  <!-- 主内容区 -->
+  <div class="flex-1 flex flex-col">
+    <!-- 顶部面包屑 -->
+    <header class="bg-white border-b border-gray-200 px-6 py-3 flex items-center justify-between">
+      <div class="text-sm text-gray-500">
+        <span class="hover:text-gray-700 cursor-pointer">首页</span>
+        <span class="mx-2 text-gray-400">›</span>
+        <span class="hover:text-gray-700 cursor-pointer">商务部</span>
+        <span class="mx-2 text-gray-400">›</span>
+        <span class="hover:text-gray-700 cursor-pointer">外展获客</span>
+        <span class="mx-2 text-gray-400">›</span>
+        <span class="text-gray-800 font-medium">Phase 2 · 邮件外展</span>
+      </div>
+      <div class="flex items-center space-x-3 text-sm">
+        <span class="text-gray-500">sales01@wande.com</span>
+        <div class="w-8 h-8 rounded-full bg-gray-300"></div>
+      </div>
+    </header>
+
+    <!-- Tab 水平栏 -->
+    <nav class="bg-white border-b border-gray-200 px-6 flex space-x-1">
+      <button onclick="switchTab('tab-smtp.html', this)" class="tab-btn px-4 py-3 text-sm font-medium text-gray-700 border-b-2 border-gray-700">SMTP 配置</button>
+      <button onclick="switchTab('tab-deliverability.html', this)" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700">预热+送达率</button>
+      <button onclick="switchTab('tab-tracking.html', this)" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700">邮件追踪</button>
+      <button onclick="switchTab('tab-rotation.html', this)" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700">收件箱轮转</button>
+      <button onclick="switchTab('tab-analytics.html', this)" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700">分析看板</button>
+      <button onclick="switchTab('tab-reply-classify.html', this)" class="tab-btn px-4 py-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700">回复分类</button>
+    </nav>
+
+    <!-- iframe 主区 -->
+    <main class="flex-1 bg-gray-50">
+      <iframe id="tab-frame" src="tab-smtp.html" class="w-full h-full border-0" style="min-height:calc(100vh - 110px);"></iframe>
+    </main>
+  </div>
+</div>
+
+<script>
+function switchTab(src, el){
+  document.getElementById('tab-frame').src = src;
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.remove('text-gray-700','border-gray-700');
+    b.classList.add('text-gray-500','border-transparent');
+  });
+  el.classList.remove('text-gray-500','border-transparent');
+  el.classList.add('text-gray-700','border-gray-700');
+}
+</script>
+</body>
+</html>

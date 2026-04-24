@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 外展获客 Phase 4 · LinkedIn 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #4b5563; border-bottom-color: #4b5563; font-weight: 500; background: #f5f5f5; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 180px); }
+    .sidebar-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; margin: 8px auto; border-radius: 4px; cursor: pointer; color: #666; font-size: 18px; }
+    .sidebar-icon:hover { background: #f0f0f0; }
+    .sidebar-icon.active { background: #e5e7eb; color: #1f2937; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Phase 4 · LinkedIn（批量加好友 + CSV 导入 CRM + 多渠道协同）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:90px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 PAGE_TITLE</td><td style="padding:4px 0;color:#333;">Phase 4 · LinkedIn</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">面向海外游乐设备 B 端客户，以 LinkedIn 为主渠道实现批量加好友、Sales Navigator 联系人入 CRM、LinkedIn+邮件多渠道协同触达</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务部海外获客专员、外贸销售、市场运营</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">批量加好友（#2812） / Sales Navigator CSV 导入 CRM（#2813） / LinkedIn+邮件协同序列（#2815）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">导入 LinkedIn URL / 配置加友频率 / CSV 字段映射 / 设计多渠道序列 / 查看转化路径热力图</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">3 Tab 切换正常 / 频率控制与风险评分可见 / CSV 字段映射→Lead 字段完整 / 时间轴序列 6 节点可视化</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#4b5563;text-decoration:none;">外展获客 · 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏 16px 折叠 / 实际宽 w-14=56px 容器，icon 自身 16px 视觉] -->
+  <aside class="w-14 bg-white border-r border-gray-300 flex-shrink-0 flex flex-col items-center py-3">
+    <div class="text-gray-700 font-bold text-xl mb-3">万</div>
+    <div class="sidebar-icon" title="驾驶舱">📊</div>
+    <div class="sidebar-icon" title="CRM">👥</div>
+    <div class="sidebar-icon active" title="商务部 · 外展获客">📣</div>
+    <div class="sidebar-icon" title="品牌中心">🎨</div>
+    <div class="sidebar-icon" title="项目">📁</div>
+    <div class="sidebar-icon" title="审批">✅</div>
+    <div class="sidebar-icon" title="资源">📚</div>
+    <div class="sidebar-icon" title="系统">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col">
+    <!-- [顶部栏：面包屑 + 返回] -->
+    <div class="px-6 py-3 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div class="flex items-center gap-4">
+        <a href="../index.html" class="text-gray-600 text-sm hover:underline flex items-center gap-1">← 返回总览</a>
+        <span class="text-gray-300">|</span>
+        <div class="text-sm text-gray-500">
+          首页 &gt; <span class="text-gray-700">商务部</span> &gt; <span class="text-gray-700">外展获客</span> &gt; <span class="text-gray-900 font-medium">Phase 4 · LinkedIn</span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3 text-sm">
+        <span class="text-gray-400">Phase 4/5</span>
+        <span class="px-2 py-0.5 bg-gray-100 text-gray-600 text-xs rounded border border-gray-300">代码现状 🔴 全部待新建</span>
+      </div>
+    </div>
+
+    <!-- [页面标题] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200">
+      <h1 class="text-xl font-semibold text-gray-800">外展获客 · Phase 4 · LinkedIn</h1>
+      <p class="text-sm text-gray-500 mt-1">对标 Dripify + Expandi + Waalaxy，实现 LinkedIn 批量加好友、Sales Navigator CSV 入 CRM、LinkedIn+邮件多渠道协同触达</p>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-bulk-connect.html"></iframe>
+    </div>
+
+    <!-- [原型说明] -->
+    <div class="p-6 bg-white border-t border-gray-300">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead><tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300 w-40">Tab 页</th>
+          <th class="p-2 border border-gray-300 w-52">文件名</th>
+          <th class="p-2 border border-gray-300 w-28">对应 Issue</th>
+          <th class="p-2 border border-gray-300 w-28">代码现状</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">批量加好友</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-bulk-connect.html</td>
+            <td class="p-2 border border-gray-300 text-xs">#2812 [19/25]</td>
+            <td class="p-2 border border-gray-300 text-red-500">🔴 需新建</td>
+            <td class="p-2 border border-gray-300">Sales Nav / URL 列表导入 · 每日加友上限 25 · 3-8 分钟随机间隔 · 周末暂停 · 异常阈值暂停 · 待加队列 + 风险评分 · 邀请语 A/B + 个性化字段</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Sales Nav 导入</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-sales-nav-import.html</td>
+            <td class="p-2 border border-gray-300 text-xs">#2813 [20/25]</td>
+            <td class="p-2 border border-gray-300 text-red-500">🔴 需新建</td>
+            <td class="p-2 border border-gray-300">CSV 拖放上传 + 前10行预览 · 字段映射 CSV→Lead · 去重（URL/邮箱）· 评分规则（行业+50/职位+30）· 按国家分配销售 · 导入历史</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">LinkedIn+邮件协同</td>
+            <td class="p-2 border border-gray-300 font-mono text-xs">tab-multi-channel.html</td>
+            <td class="p-2 border border-gray-300 text-xs">#2815 [22/25]</td>
+            <td class="p-2 border border-gray-300 text-red-500">🔴 需新建</td>
+            <td class="p-2 border border-gray-300">Day 0/3/7/14/21/30 六节点时间轴序列 · 每节点渠道+条件+成功率 · 转化路径热力图：哪条路径最终转化率最高</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'bulk', label: '① 批量加好友 #2812', src: 'tab-bulk-connect.html' },
+    { key: 'import', label: '② Sales Nav CSV 导入 #2813', src: 'tab-sales-nav-import.html' },
+    { key: 'multi', label: '③ LinkedIn+邮件协同 #2815', src: 'tab-multi-channel.html' }
+  ];
+  const tabBar = document.getElementById('tabBar');
+  const tabFrame = document.getElementById('tabFrame');
+  let activeKey = tabs[0].key;
+
+  function renderTabs() {
+    tabBar.innerHTML = tabs.map(t =>
+      `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+    ).join('');
+  }
+
+  tabBar.addEventListener('click', (e) => {
+    const item = e.target.closest('.tab-item');
+    if (!item) return;
+    activeKey = item.dataset.key;
+    tabFrame.src = item.dataset.src;
+    renderTabs();
+  });
+
+  tabFrame.addEventListener('load', () => {
+    try {
+      const h = tabFrame.contentDocument.documentElement.scrollHeight;
+      tabFrame.style.height = (h + 20) + 'px';
+    } catch(e) {}
+  });
+
+  renderTabs();
+</script>
+
+</body>
+</html>

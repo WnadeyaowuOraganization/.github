@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>预热+送达率监控 · #2797</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">预热+送达率监控 · #2797</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">域名预热进度管理 + 送达率/退回率/黑名单实时监控，保障邮件触达率</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗, 运维</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">预热曲线 / 送达率趋势 / 黑名单监测 / PTR 检查</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">查看预热进度 / 查看趋势 / 监测黑名单</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">预热 7-56 天爬坡曲线展示 / KPI 实时</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.2.2</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+
+<div class="max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800">预热 + 送达率监控</h1>
+      <p class="text-sm text-gray-500 mt-1">新域名预热进度、黑名单监测与反向 DNS 健康检查</p>
+    </div>
+    <select class="px-3 py-2 bg-white border border-gray-300 rounded text-sm text-gray-700">
+      <option>sales01.wande.com</option>
+      <option>sales02.wande.com</option>
+      <option>sales-na.wande.com</option>
+    </select>
+  </div>
+
+  <!-- 顶部 KPI -->
+  <div class="grid grid-cols-5 gap-4 mb-6">
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">预热进度</div>
+      <div class="text-2xl font-semibold text-gray-800 mt-1">第 12 / 56 天</div>
+      <div class="mt-2 h-1.5 bg-gray-200 rounded-full overflow-hidden"><div class="h-full bg-gray-600 rounded-full" style="width:21%"></div></div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">今日配额</div>
+      <div class="text-2xl font-semibold text-gray-800 mt-1">80 封</div>
+      <div class="text-xs text-gray-400 mt-2">明日配额 96 封</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">送达率</div>
+      <div class="text-2xl font-semibold text-green-600 mt-1">97.2%</div>
+      <div class="text-xs text-gray-400 mt-2">行业基准 95%</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">软退回</div>
+      <div class="text-2xl font-semibold text-yellow-600 mt-1">1.1%</div>
+      <div class="text-xs text-gray-400 mt-2">阈值 3%</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">硬退回</div>
+      <div class="text-2xl font-semibold text-red-600 mt-1">0.3%</div>
+      <div class="text-xs text-gray-400 mt-2">阈值 2%</div>
+    </div>
+  </div>
+
+  <!-- 图表区 -->
+  <div class="grid grid-cols-2 gap-4 mb-6">
+    <!-- 预热曲线 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-gray-800">预热爬坡曲线（7→56 天）</h3>
+        <span class="text-xs text-gray-400">每日自动递增 20%</span>
+      </div>
+      <div class="h-48 bg-gray-50 border border-dashed border-gray-300 rounded relative overflow-hidden">
+        <!-- 简易柱状占位 -->
+        <div class="absolute bottom-0 left-0 right-0 flex items-end justify-around px-4 pb-2 h-full">
+          <div class="w-2 bg-gray-400" style="height:8%"></div>
+          <div class="w-2 bg-gray-400" style="height:12%"></div>
+          <div class="w-2 bg-gray-400" style="height:15%"></div>
+          <div class="w-2 bg-gray-400" style="height:18%"></div>
+          <div class="w-2 bg-gray-500" style="height:22%"></div>
+          <div class="w-2 bg-gray-500" style="height:26%"></div>
+          <div class="w-2 bg-gray-500" style="height:30%"></div>
+          <div class="w-2 bg-gray-600" style="height:35%"></div>
+          <div class="w-2 bg-gray-600" style="height:40%"></div>
+          <div class="w-2 bg-gray-600" style="height:45%"></div>
+          <div class="w-2 bg-gray-700" style="height:50%"></div>
+          <div class="w-2 bg-gray-700 ring-2 ring-blue-400" style="height:55%"></div>
+          <div class="w-2 bg-gray-300" style="height:60%"></div>
+          <div class="w-2 bg-gray-300" style="height:65%"></div>
+          <div class="w-2 bg-gray-300" style="height:72%"></div>
+          <div class="w-2 bg-gray-300" style="height:78%"></div>
+          <div class="w-2 bg-gray-300" style="height:85%"></div>
+          <div class="w-2 bg-gray-300" style="height:92%"></div>
+        </div>
+        <div class="absolute top-2 left-3 text-xs text-gray-500">📊 预热曲线 (日配额 10 → 2000)</div>
+        <div class="absolute bottom-2 right-3 text-xs text-blue-500">↑ 当前第 12 天</div>
+      </div>
+    </div>
+
+    <!-- 送达率趋势 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-gray-800">送达率趋势（近 30 天）</h3>
+        <span class="text-xs text-gray-400">目标 ≥ 95%</span>
+      </div>
+      <div class="h-48 bg-gray-50 border border-dashed border-gray-300 rounded relative overflow-hidden">
+        <svg class="w-full h-full" viewBox="0 0 300 150" preserveAspectRatio="none">
+          <polyline fill="none" stroke="#6b7280" stroke-width="1.5" points="0,40 20,35 40,42 60,30 80,38 100,28 120,32 140,25 160,30 180,22 200,28 220,20 240,24 260,18 280,22 300,15"/>
+          <line x1="0" y1="50" x2="300" y2="50" stroke="#d1d5db" stroke-dasharray="3,3" stroke-width="1"/>
+        </svg>
+        <div class="absolute top-2 left-3 text-xs text-gray-500">📈 97.2% ↑ +0.8% 周环比</div>
+        <div class="absolute bottom-2 left-3 text-xs text-gray-400">30 天前</div>
+        <div class="absolute bottom-2 right-3 text-xs text-gray-400">今日</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 黑名单监测 + 反向DNS -->
+  <div class="grid grid-cols-2 gap-4">
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <h3 class="text-sm font-semibold text-gray-800 mb-3">黑名单监测</h3>
+      <table class="w-full text-sm">
+        <thead class="text-xs text-gray-500 border-b border-gray-200">
+          <tr>
+            <th class="text-left py-2 font-medium">黑名单</th>
+            <th class="text-left py-2 font-medium">IP</th>
+            <th class="text-left py-2 font-medium">状态</th>
+            <th class="text-right py-2 font-medium">最后检查</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-700">
+          <tr><td class="py-2">Spamhaus SBL</td><td class="py-2 text-gray-500">198.51.100.12</td><td class="py-2"><span class="text-green-600">✓ 清白</span></td><td class="py-2 text-right text-gray-400">2 分钟前</td></tr>
+          <tr><td class="py-2">Spamhaus XBL</td><td class="py-2 text-gray-500">198.51.100.12</td><td class="py-2"><span class="text-green-600">✓ 清白</span></td><td class="py-2 text-right text-gray-400">2 分钟前</td></tr>
+          <tr><td class="py-2">Barracuda</td><td class="py-2 text-gray-500">198.51.100.12</td><td class="py-2"><span class="text-green-600">✓ 清白</span></td><td class="py-2 text-right text-gray-400">15 分钟前</td></tr>
+          <tr><td class="py-2">SpamCop</td><td class="py-2 text-gray-500">198.51.100.12</td><td class="py-2"><span class="text-green-600">✓ 清白</span></td><td class="py-2 text-right text-gray-400">1 小时前</td></tr>
+          <tr><td class="py-2">SORBS</td><td class="py-2 text-gray-500">198.51.100.12</td><td class="py-2"><span class="text-yellow-600">⚠ 观察</span></td><td class="py-2 text-right text-gray-400">3 小时前</td></tr>
+          <tr><td class="py-2">UCEPROTECT L1</td><td class="py-2 text-gray-500">198.51.100.12</td><td class="py-2"><span class="text-green-600">✓ 清白</span></td><td class="py-2 text-right text-gray-400">6 小时前</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <h3 class="text-sm font-semibold text-gray-800 mb-3">反向 DNS 检查</h3>
+      <div class="space-y-3 text-sm">
+        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+          <div>
+            <div class="font-medium text-gray-800">198.51.100.12</div>
+            <div class="text-xs text-gray-500 mt-0.5">mta01.sales01.wande.com</div>
+          </div>
+          <span class="text-xs px-2 py-1 bg-green-50 text-green-700 rounded">PTR 匹配</span>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+          <div>
+            <div class="font-medium text-gray-800">198.51.100.13</div>
+            <div class="text-xs text-gray-500 mt-0.5">mta02.sales01.wande.com</div>
+          </div>
+          <span class="text-xs px-2 py-1 bg-green-50 text-green-700 rounded">PTR 匹配</span>
+        </div>
+        <div class="flex items-center justify-between py-2 border-b border-gray-100">
+          <div>
+            <div class="font-medium text-gray-800">198.51.100.14</div>
+            <div class="text-xs text-gray-500 mt-0.5">mta03.sales02.wande.com</div>
+          </div>
+          <span class="text-xs px-2 py-1 bg-green-50 text-green-700 rounded">PTR 匹配</span>
+        </div>
+        <div class="flex items-center justify-between py-2">
+          <div>
+            <div class="font-medium text-gray-800">203.0.113.45</div>
+            <div class="text-xs text-gray-500 mt-0.5">mta-na.wande.com</div>
+          </div>
+          <span class="text-xs px-2 py-1 bg-yellow-50 text-yellow-700 rounded">PTR 不匹配</span>
+        </div>
+        <button class="w-full mt-2 px-3 py-2 bg-white border border-gray-300 rounded text-xs text-gray-700">重新扫描所有 IP</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

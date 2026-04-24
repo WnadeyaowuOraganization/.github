@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企微效果看板 · #2811</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .wf-box { border:1px dashed #bfbfbf; background:#fafafa; }
+    /* 柱状图低保真 */
+    .bar-row { display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:12px; }
+    .bar-label { width:90px; color:#595959; text-align:right; }
+    .bar-track { flex:1; height:18px; background:#f5f5f5; border:1px solid #e8e8e8; position:relative; }
+    .bar-fill { height:100%; background:#8c8c8c; }
+    .bar-fill.light { background:#bfbfbf; }
+    .bar-value { width:80px; color:#333; font-weight:600; }
+
+    /* 漏斗 */
+    .funnel-stage { margin:0 auto; height:36px; background:#d9d9d9; color:#333; display:flex;align-items:center;justify-content:space-between; padding:0 16px; font-size:13px; border-bottom:1px solid #fff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab5 · 企微效果看板 · #2811</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">一屏查看企微获客全链路效果：加粉数、通过率、流失率、渠道对比、员工排行、漏斗转化</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务总监（宏观监控），市场运营（渠道调优），商务人员（个人复盘）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">KPI卡 / 渠道对比柱状图 / 员工排行榜 / 获客漏斗图</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切换日/周/月 / 下钻某渠道 / 导出报表 / 查看单员工详情</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">KPI 5张卡 / 5渠道ROI对比 / Top10员工排行 / 6环节漏斗</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客·详细设计.md §Phase3.5 效果分析看板</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [筛选条] -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-4 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <div class="flex border border-gray-300 rounded overflow-hidden text-xs">
+      <button class="px-3 py-1 text-gray-600">今日</button>
+      <button class="px-3 py-1 bg-gray-100 text-gray-800 font-semibold border-l border-gray-300">近7日</button>
+      <button class="px-3 py-1 text-gray-600 border-l border-gray-300">近30日</button>
+      <button class="px-3 py-1 text-gray-600 border-l border-gray-300">本月</button>
+      <button class="px-3 py-1 text-gray-600 border-l border-gray-300">自定义</button>
+    </div>
+    <select class="px-2 py-1 border border-gray-300 rounded text-xs text-gray-600">
+      <option>全部渠道</option><option>抖音官方</option><option>小红书种草</option><option>百度SEM</option><option>展会扫码</option><option>线索表单</option>
+    </select>
+    <select class="px-2 py-1 border border-gray-300 rounded text-xs text-gray-600">
+      <option>全部部门</option><option>商务一部</option><option>商务二部</option><option>2C 组</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2 text-xs">
+    <span class="text-gray-500">数据更新：2026-04-24 12:45</span>
+    <button class="px-2 py-1 border border-gray-300 rounded">刷新</button>
+    <button class="px-2 py-1 border border-gray-300 rounded">导出</button>
+  </div>
+</div>
+
+<!-- [KPI 卡片区] -->
+<div class="grid grid-cols-5 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">累计加粉</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">18,642</div>
+    <div class="text-xs text-gray-400 mt-1">企微主体 wande-crm 全量</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">本月加粉</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">1,286</div>
+    <div class="text-xs text-gray-400 mt-1">↑ 18% vs 上月</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">通过率</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">86.4%</div>
+    <div class="text-xs text-gray-400 mt-1">含自动/人工验证</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">流失率（7日无互动）</div>
+    <div class="text-2xl font-bold text-gray-500 mt-1">22.1%</div>
+    <div class="text-xs text-gray-400 mt-1">行业均值 28%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">转商机数</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">142</div>
+    <div class="text-xs text-gray-400 mt-1">本月 · 商机率 11.0%</div>
+  </div>
+</div>
+
+<div class="grid grid-cols-12 gap-4">
+  <!-- [渠道对比] -->
+  <div class="col-span-6 bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-gray-800">📊 渠道对比 · 加粉数 & ROI</h3>
+      <div class="flex items-center gap-2 text-xs text-gray-500">
+        <span class="inline-flex items-center gap-1"><span style="width:10px;height:10px;background:#8c8c8c;display:inline-block"></span>加粉数</span>
+        <span class="inline-flex items-center gap-1"><span style="width:10px;height:10px;background:#bfbfbf;display:inline-block"></span>ROI 倍数</span>
+      </div>
+    </div>
+    <div>
+      <div class="bar-row">
+        <div class="bar-label">抖音官方</div>
+        <div class="bar-track"><div class="bar-fill" style="width:85%"></div></div>
+        <div class="bar-value">432 / 3.2x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"></div>
+        <div class="bar-track"><div class="bar-fill light" style="width:64%"></div></div>
+        <div class="bar-value text-gray-400">ROI 3.2x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">小红书种草</div>
+        <div class="bar-track"><div class="bar-fill" style="width:58%"></div></div>
+        <div class="bar-value">286 / 2.1x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"></div>
+        <div class="bar-track"><div class="bar-fill light" style="width:42%"></div></div>
+        <div class="bar-value text-gray-400">ROI 2.1x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">百度SEM</div>
+        <div class="bar-track"><div class="bar-fill" style="width:72%"></div></div>
+        <div class="bar-value">368 / 1.6x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"></div>
+        <div class="bar-track"><div class="bar-fill light" style="width:32%"></div></div>
+        <div class="bar-value text-gray-400">ROI 1.6x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">展会扫码</div>
+        <div class="bar-track"><div class="bar-fill" style="width:42%"></div></div>
+        <div class="bar-value">186 / 4.8x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"></div>
+        <div class="bar-track"><div class="bar-fill light" style="width:96%"></div></div>
+        <div class="bar-value text-gray-400">ROI 4.8x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">线索表单</div>
+        <div class="bar-track"><div class="bar-fill" style="width:14%"></div></div>
+        <div class="bar-value">62 / 2.4x</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label"></div>
+        <div class="bar-track"><div class="bar-fill light" style="width:48%"></div></div>
+        <div class="bar-value text-gray-400">ROI 2.4x</div>
+      </div>
+    </div>
+    <div class="text-xs text-gray-500 mt-2">说明：展会扫码 ROI 最高（客单价高+转化快）；SEM 加粉多但 ROI 偏低，建议优化落地页。</div>
+  </div>
+
+  <!-- [员工排行榜] -->
+  <div class="col-span-6 bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-gray-800">🏆 员工排行榜 · Top 10</h3>
+      <select class="px-2 py-0.5 border border-gray-300 rounded text-xs text-gray-600">
+        <option>按加粉数</option><option>按通过率</option><option>按响应速度</option><option>按转商机数</option>
+      </select>
+    </div>
+    <table class="w-full text-xs">
+      <thead class="bg-gray-50 text-gray-500 border-b border-gray-200">
+        <tr>
+          <th class="p-2 text-left font-medium w-10">#</th>
+          <th class="p-2 text-left font-medium">员工</th>
+          <th class="p-2 text-right font-medium">加粉数</th>
+          <th class="p-2 text-right font-medium">通过率</th>
+          <th class="p-2 text-right font-medium">响应速度</th>
+          <th class="p-2 text-right font-medium">转商机</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">1</td><td class="p-2">李雪 · 商一</td><td class="p-2 text-right font-semibold">186</td><td class="p-2 text-right">92%</td><td class="p-2 text-right">8 分钟</td><td class="p-2 text-right">24</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">2</td><td class="p-2">王敏 · 商一</td><td class="p-2 text-right font-semibold">142</td><td class="p-2 text-right">89%</td><td class="p-2 text-right">12 分钟</td><td class="p-2 text-right">18</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">3</td><td class="p-2">张伟 · 2C</td><td class="p-2 text-right font-semibold">128</td><td class="p-2 text-right">86%</td><td class="p-2 text-right">15 分钟</td><td class="p-2 text-right">14</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">4</td><td class="p-2">赵丽 · 商二</td><td class="p-2 text-right">108</td><td class="p-2 text-right">84%</td><td class="p-2 text-right">22 分钟</td><td class="p-2 text-right">12</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">5</td><td class="p-2">孙磊 · 商二</td><td class="p-2 text-right">94</td><td class="p-2 text-right">88%</td><td class="p-2 text-right">18 分钟</td><td class="p-2 text-right">11</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">6</td><td class="p-2">陈诚 · 商一</td><td class="p-2 text-right">82</td><td class="p-2 text-right">79%</td><td class="p-2 text-right">26 分钟</td><td class="p-2 text-right">8</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">7</td><td class="p-2">周颖 · 展会组</td><td class="p-2 text-right">76</td><td class="p-2 text-right">96%</td><td class="p-2 text-right">5 分钟</td><td class="p-2 text-right">18</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">8</td><td class="p-2">吴昊 · 2C</td><td class="p-2 text-right">68</td><td class="p-2 text-right">82%</td><td class="p-2 text-right">28 分钟</td><td class="p-2 text-right">7</td></tr>
+        <tr class="border-b border-gray-100"><td class="p-2 font-bold text-gray-500">9</td><td class="p-2">郑涛 · 商二</td><td class="p-2 text-right">62</td><td class="p-2 text-right">78%</td><td class="p-2 text-right">32 分钟</td><td class="p-2 text-right">6</td></tr>
+        <tr><td class="p-2 font-bold text-gray-500">10</td><td class="p-2">林悦 · 展会组</td><td class="p-2 text-right">54</td><td class="p-2 text-right">94%</td><td class="p-2 text-right">6 分钟</td><td class="p-2 text-right">12</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- [漏斗图] -->
+  <div class="col-span-12 bg-white border border-gray-300 rounded p-4">
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-sm font-bold text-gray-800">🔻 获客漏斗 · 近30天全渠道</h3>
+      <div class="text-xs text-gray-500">扫描 → 加好友 → 通过 → 首次聊天 → 培育中 → 商机</div>
+    </div>
+    <div class="max-w-3xl mx-auto">
+      <div class="funnel-stage" style="width:100%;background:#595959;color:#fff;">
+        <span>① 活码扫描</span><span class="font-bold">12,482</span><span class="text-xs opacity-80">100%</span>
+      </div>
+      <div class="funnel-stage" style="width:84%;background:#737373;color:#fff;">
+        <span>② 加好友申请</span><span class="font-bold">5,214</span><span class="text-xs opacity-80">41.8%</span>
+      </div>
+      <div class="funnel-stage" style="width:70%;background:#8c8c8c;color:#fff;">
+        <span>③ 通过加好友</span><span class="font-bold">4,506</span><span class="text-xs opacity-80">36.1%</span>
+      </div>
+      <div class="funnel-stage" style="width:56%;background:#a6a6a6;color:#333;">
+        <span>④ 首次聊天</span><span class="font-bold">3,812</span><span class="text-xs">30.5%</span>
+      </div>
+      <div class="funnel-stage" style="width:40%;background:#bfbfbf;color:#333;">
+        <span>⑤ 培育中（SOP进行）</span><span class="font-bold">2,684</span><span class="text-xs">21.5%</span>
+      </div>
+      <div class="funnel-stage" style="width:20%;background:#d9d9d9;color:#333;">
+        <span>⑥ 商机</span><span class="font-bold">648</span><span class="text-xs">5.2%</span>
+      </div>
+    </div>
+    <div class="grid grid-cols-5 gap-3 mt-4 text-xs text-gray-600">
+      <div class="wf-box rounded p-2 text-center"><div class="text-gray-500">扫码→申请</div><div class="font-bold text-gray-800 text-sm">41.8%</div></div>
+      <div class="wf-box rounded p-2 text-center"><div class="text-gray-500">申请→通过</div><div class="font-bold text-gray-800 text-sm">86.4%</div></div>
+      <div class="wf-box rounded p-2 text-center"><div class="text-gray-500">通过→聊天</div><div class="font-bold text-gray-800 text-sm">84.6%</div></div>
+      <div class="wf-box rounded p-2 text-center"><div class="text-gray-500">聊天→培育</div><div class="font-bold text-gray-800 text-sm">70.4%</div></div>
+      <div class="wf-box rounded p-2 text-center"><div class="text-gray-500">培育→商机</div><div class="font-bold text-gray-800 text-sm">24.1%</div></div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

@@ -104,7 +104,6 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 - [ ] T8 Playwright e2e spec 通过（前端门）
 - [ ] T9 截图上传 Release screenshot-<PR>
 - [ ] T10 task.md 全勾 + pr-body-lint 通过
-- [ ] T11 rebase origin/dev + gh pr create --base dev
 
 ## Files Changed
 （随开发更新）
@@ -117,7 +116,7 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 
 - `任何 - [ ]` 未勾 = quality-gate 门 2 拦截
 - 做不完的项：拆追补 Issue 后勾选原步骤，在 task.md 备注 `→ 追补 #M`
-- **⛔ 禁止在 task.md 末尾写"轮询等待 merge"步骤**（如 `T_N 轮询直到 PR merged`）：CI 门 2 在 PR push 时检查全勾，但 merge 未发生时该步骤必然未勾 → 永远触发门 2 失败。最后一步**必须**是 `T_N rebase origin/dev + gh pr create --base dev`，PR 创建后勾选即通过门 2。
+- **⛔ 禁止在 task.md 写"rebase+PR创建"或"轮询等待merge"步骤**：CI门2在PR push时检查全勾，但这些步骤在PR创建时尚未完成 → 永远触发门2失败。最后一步必须是 `T_N task.md 全勾 + pr-body-lint 通过`。rebase和PR创建是CC的标准操作流程，不作为task.md检查项。
 
 ## 开工同步
 

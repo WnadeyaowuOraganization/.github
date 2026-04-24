@@ -16,47 +16,34 @@
 | C_frozen（缺原型冻结） | 165 | 保持Plan，needs-prototype标签 |
 | **合计** | **326** | |
 
-## 指派建议（下一批）
+## 指派建议（最近20个）
 
-> 排程经理维护，研发经理按此顺序指派。每轮巡检更新。
+> 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
+> 更新时间：2026-04-24 15:55（第6轮刷新）
+> 排除：needs-prototype 标签、Master Issue、已派/已完成
 
-| 序号 | kimi | Issue | 优先级 | 模块 | effort | 说明 |
-|------|------|-------|--------|------|--------|------|
-| 1 | kimi1 | #3386 | P0 | backend/PLM | medium | ✅ 已派 — ECO审批流集成 |
-| 2 | kimi2 | #3389 | P1 | backend/PLM | medium | ✅ 已派 — EBOM解析API |
-| 3 | kimi3 | #3392 | P1 | backend/PLM | medium | ✅ 已派 — 版本化定价引擎API |
-| 4 | kimi4 | #3631 | P1 | bidding | high | ✅ 已派 — pipeline表对齐 |
-| 5 | kimi5 | #1692 | P1 | backend | medium | ✅ 已派（⚠️可能卡住）— 项目成本跟踪API |
-
-**5/5 并发已满。** 当前运行：kimi1新派#2358 + kimi2/#1469 + kimi3/#1470 + kimi5/#1845 + kimi6/#1714
-
-### 备选队列（2026-04-24 09:00 刷新）
-
-当前在跑：kimi2/#1469 kimi3/#1470 kimi5/#1845 kimi6/#1714
-kimi1空闲，立即派序号1。
-
-| 序号 | Issue | 优先级 | Sprint | 模块 | effort | 说明 |
-|------|-------|--------|--------|------|--------|------|
-| 1 | #2358 | P2 | S4 | finance | medium | 商机详情页获客成本Tab |
-| 2 | #2430 | P2 | S4 | intelligence | medium | 竞品合同到期预测 |
-| 3 | #1594 | P1 | Backlog | budget | medium | 借款逾期提醒+工资扣除预警 |
-| 4 | #1599 | P1 | Backlog | budget | medium | 采购比价强制校验 |
-| 5 | #1613 | P1 | Backlog | wechat | medium | 数据安全分级与访问控制 |
-| 6 | #1614 | P1 | Backlog | wechat | medium | PII自动脱敏服务 |
-| 7 | #1873 | P1 | Backlog | bidding | medium | 分级超时升级机制 |
-| 8 | #2215 | P1 | Backlog | biz | medium | 引导式PPT组装向导 |
-| 9 | #2275 | P1 | Backlog | cockpit | medium | DORA指标卡片+最近错误滚动条 |
-| 10 | #2437 | P1 | Backlog | bidding | medium | 推荐行动计划按阶段自动生成 |
-| 11 | #2439 | P1 | Backlog | intelligence | medium | 竞品自动分级+升降级 |
-| 12 | #2440 | P1 | Backlog | intelligence | medium | 竞品定价数据库 |
-| 13 | #2441 | P1 | Backlog | intelligence | medium | 竞品区域热力图 vs 万德 |
-| 14 | #2527 | P1 | Backlog | project | medium | 项目组织管理-版本历史+审批流 |
-| 15 | #2532 | P1 | Backlog | project | medium | 项目组织管理-已读追踪+公告 |
-| 16 | #2534 | P1 | Backlog | project | medium | 项目组织管理-任务面板 |
-| 17 | #2536 | P1 | Backlog | project | medium | 项目组织管理-项目预算+成本 |
-| 18 | #2537 | P1 | Backlog | project | medium | 项目组织管理-文档分类+权限 |
-| 19 | #1466 | P2 | Backlog | biz | medium | 案例相似度推荐 |
-| 20 | #1498 | P2 | Backlog | backend | medium | 经销商项目情报推送 |
+| 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
+|------|-------|--------|------|--------|------|------|
+| 1 | #1906 | P0 | backend | medium | [D3-Web] 技术标准管理中心 — 胡总统一维护+全局生效 | ✅ |
+| 2 | #3383 | P1 | backend/PLM | medium | BOM成本自动Roll-up API — 多层级递归成本汇总 | ✅ |
+| 3 | #3384 | P1 | backend/PLM | medium | BOM Where-Used反查API — 零件被引用+在途订单 | ✅ |
+| 4 | #1923 | P1 | backend/D3 | medium | AI合规报告自动生成 — EN/GB/ASTM三标准PDF | ✅ |
+| 5 | #1926 | P1 | backend/D3 | medium | D3成果Web预览 — 3D模型+BOM+图纸在线浏览 | ✅ |
+| 6 | #2275 | P1 | backend/dashboard | medium | 驾驶舱DORA指标卡片+最近错误滚动条 | ✅ |
+| 7 | #2440 | P1 | backend | medium | 竞品定价数据库（⚠️ #2441前端依赖此后端） | ✅ |
+| 8 | #2439 | P1 | pipeline | medium | T0/T1/T2竞品自动分级+升降级机制 | ✅ |
+| 9 | #2617 | P1 | fullstack | low | Issue创建SOP更新 — size/S 文档类 | ✅ |
+| 10 | #2306 | P1 | fullstack/design-ai | high | D3 Web设计工作台 — Three.js 3D+电池包拖拽 | ✅ |
+| 11 | #2441 | P1 | frontend | medium | 竞品区域热力图 vs 万德（⏳ 需 #2440 先完成） | ⏳ |
+| 12 | #2527 | P1 | frontend/project | medium | 项目组织管理-版本历史+审批流程面板 | ✅ |
+| 13 | #2532 | P1 | frontend/project | medium | 项目组织管理-已读追踪+公告详情 | ✅ |
+| 14 | #2534 | P1 | frontend/project | medium | 项目组织管理-任务面板快速行动项 | ✅ |
+| 15 | #2536 | P1 | frontend/project | medium | 项目组织管理-阶段推进确认弹窗增强 | ✅ |
+| 16 | #2447 | P2 | backend | medium | 商务作战资源包自动生成（概况卡+行动建议） | ✅ |
+| 17 | #2430 | P2 | pipeline | medium | 竞品合同到期预测→重新招标机会 | ✅ |
+| 18 | #2537 | P2 | backend/project | medium | 经验卡片增强 — 关联风险/公告+项目关闭触发 | ✅ |
+| 19 | #2432 | P2 | backend | medium | 竞品空白区域发现 | ✅ |
+| 20 | #1870 | P2 | backend | medium | 客户关系图谱（甲方/设计院/代理机构网络） | ✅ |
 
 ## 指派历史
 

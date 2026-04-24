@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>样品管理中心 - 多仓库库存联通</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .warn-row { background-color: #fef2f2; }
+  .warn-row:hover { background-color: #fee2e2 !important; }
+  .expand-row { display: none; }
+  .expand-row.open { display: table-row; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">多仓库库存联通</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">从单仓文本字段升级为多仓库精确管理，支持跨仓查询/智能调拨/外部仓API对接</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">仓管, 业务员, 工厂PMC, 销售（库存可见性）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">仓库维度 / 多仓矩阵看板 / 智能调拨 / 外部仓API对接</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切仓/查库存 / 新建调拨单 / 出库签收登记 / 配置外部仓</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">多仓库存数实时正确 / 调拨流转记录可追溯 / 外部仓 API 同步成功</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">样品管理中心-详细设计.md §2.4</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+<!-- ========== 区域1：KPI 顶部条 ========== -->
+<div class="grid grid-cols-4 gap-4 mb-5">
+  <div class="bg-white rounded border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-2">总库存件数</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-gray-800">1,248</span>
+      <span class="text-xs text-gray-400">件</span>
+    </div>
+  </div>
+  <div class="bg-white rounded border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-2">可用件数</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-gray-800">980</span>
+      <span class="text-xs text-gray-400">件</span>
+    </div>
+  </div>
+  <div class="bg-white rounded border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-2">在途调拨</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-gray-800">32</span>
+      <span class="text-xs text-gray-400">件</span>
+    </div>
+  </div>
+  <div class="bg-white rounded border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-2">低库存预警</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-red-600">18</span>
+      <span class="text-xs text-gray-400">项</span>
+    </div>
+  </div>
+</div>
+<!-- ========== /区域1 ========== -->
+
+
+<!-- ========== 区域2：仓库切换条 ========== -->
+<div class="bg-white rounded border border-gray-200 mb-5">
+  <div class="flex items-center border-b border-gray-200 px-2">
+    <button class="px-4 py-3 text-sm font-medium text-blue-500 border-b-2 border-blue-500 -mb-px">
+      全部 <span class="ml-1 text-xs text-gray-400">(1,248)</span>
+    </button>
+    <button class="px-4 py-3 text-sm text-gray-600 hover:text-gray-900">
+      深圳总仓 <span class="ml-1 text-xs text-gray-400">(625)</span>
+    </button>
+    <button class="px-4 py-3 text-sm text-gray-600 hover:text-gray-900">
+      南京分仓 <span class="ml-1 text-xs text-gray-400">(318)</span>
+    </button>
+    <button class="px-4 py-3 text-sm text-gray-600 hover:text-gray-900">
+      工厂制作仓 <span class="ml-1 text-xs text-gray-400">(142)</span>
+    </button>
+    <button class="px-4 py-3 text-sm text-gray-600 hover:text-gray-900">
+      外部仓库（顺丰云仓） <span class="ml-1 text-xs text-gray-400">(163)</span>
+    </button>
+  </div>
+</div>
+<!-- ========== /区域2 ========== -->
+
+
+<!-- ========== 区域3：多仓库库存矩阵看板 ========== -->
+<div class="bg-white rounded border border-gray-200 mb-5">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+    <div class="flex items-center gap-2">
+      <h3 class="text-sm font-semibold text-gray-800">多仓库存矩阵</h3>
+      <span class="text-xs text-gray-400">共 8 项物料</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <input type="text" placeholder="搜索物料编码/名称" class="border border-gray-300 rounded px-3 py-1 text-xs w-56" />
+      <button class="text-xs text-gray-600 border border-gray-300 rounded px-3 py-1 hover:bg-gray-50">导出</button>
+    </div>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-xs text-gray-500">
+        <tr>
+          <th class="px-4 py-2 text-left font-medium">物料编码</th>
+          <th class="px-4 py-2 text-left font-medium">物料名</th>
+          <th class="px-4 py-2 text-right font-medium">深圳仓</th>
+          <th class="px-4 py-2 text-right font-medium">南京仓</th>
+          <th class="px-4 py-2 text-right font-medium">工厂仓</th>
+          <th class="px-4 py-2 text-right font-medium">外部仓</th>
+          <th class="px-4 py-2 text-right font-medium">总数</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 text-gray-700">
+
+        <!-- 行 1 -->
+        <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleRow('r1')">
+          <td class="px-4 py-3 font-mono text-xs">SP-MOLD-001</td>
+          <td class="px-4 py-3">8mm 滚塑模型</td>
+          <td class="px-4 py-3 text-right">12</td>
+          <td class="px-4 py-3 text-right">3</td>
+          <td class="px-4 py-3 text-right text-gray-400">0</td>
+          <td class="px-4 py-3 text-right">2</td>
+          <td class="px-4 py-3 text-right font-semibold">17</td>
+        </tr>
+        <tr id="r1" class="expand-row bg-gray-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div>规格：8mm ABS · 标准色卡 · 单件重 120g</div>
+                <div>最近入库：2025-03-12 · 深圳仓（+5）</div>
+                <div>关联项目：某鞋业客户 2025 春夏样品</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 2 低库存预警 -->
+        <tr class="warn-row cursor-pointer" onclick="toggleRow('r2')">
+          <td class="px-4 py-3 font-mono text-xs">SP-MOLD-002</td>
+          <td class="px-4 py-3">12mm 气模样品</td>
+          <td class="px-4 py-3 text-right">2</td>
+          <td class="px-4 py-3 text-right">1</td>
+          <td class="px-4 py-3 text-right text-gray-400">0</td>
+          <td class="px-4 py-3 text-right text-gray-400">0</td>
+          <td class="px-4 py-3 text-right font-semibold text-red-600">3</td>
+        </tr>
+        <tr id="r2" class="expand-row bg-red-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div><span class="text-red-600 font-medium">⚠ 低库存预警：</span>当前总数 3 低于阈值 10</div>
+                <div>建议操作：触发工厂制作单 / 发起跨仓调拨</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 3 -->
+        <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleRow('r3')">
+          <td class="px-4 py-3 font-mono text-xs">SP-PKG-015</td>
+          <td class="px-4 py-3">成品包装盒（大）</td>
+          <td class="px-4 py-3 text-right">88</td>
+          <td class="px-4 py-3 text-right">42</td>
+          <td class="px-4 py-3 text-right">15</td>
+          <td class="px-4 py-3 text-right">26</td>
+          <td class="px-4 py-3 text-right font-semibold">171</td>
+        </tr>
+        <tr id="r3" class="expand-row bg-gray-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div>规格：380×280×120mm · 双层瓦楞 · 印刷版 v2</div>
+                <div>最近入库：2025-03-08 · 工厂仓（+50）</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 4 -->
+        <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleRow('r4')">
+          <td class="px-4 py-3 font-mono text-xs">SP-FABRIC-007</td>
+          <td class="px-4 py-3">定制面料样板 A 款</td>
+          <td class="px-4 py-3 text-right">35</td>
+          <td class="px-4 py-3 text-right">18</td>
+          <td class="px-4 py-3 text-right">22</td>
+          <td class="px-4 py-3 text-right">8</td>
+          <td class="px-4 py-3 text-right font-semibold">83</td>
+        </tr>
+        <tr id="r4" class="expand-row bg-gray-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div>规格：150 × 200mm · 棉麻混纺 · 色号 Pantone 14-4318</div>
+                <div>最近入库：2025-03-15 · 南京分仓（+20）</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 5 低库存预警 -->
+        <tr class="warn-row cursor-pointer" onclick="toggleRow('r5')">
+          <td class="px-4 py-3 font-mono text-xs">SP-HW-022</td>
+          <td class="px-4 py-3">五金配件套装</td>
+          <td class="px-4 py-3 text-right">4</td>
+          <td class="px-4 py-3 text-right">0</td>
+          <td class="px-4 py-3 text-right">1</td>
+          <td class="px-4 py-3 text-right">2</td>
+          <td class="px-4 py-3 text-right font-semibold text-red-600">7</td>
+        </tr>
+        <tr id="r5" class="expand-row bg-red-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div><span class="text-red-600 font-medium">⚠ 低库存预警：</span>当前总数 7 低于阈值 15</div>
+                <div>采购周期：7 天 · 建议尽快补货</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 6 -->
+        <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleRow('r6')">
+          <td class="px-4 py-3 font-mono text-xs">SP-LABEL-003</td>
+          <td class="px-4 py-3">吊牌样品（烫金）</td>
+          <td class="px-4 py-3 text-right">210</td>
+          <td class="px-4 py-3 text-right">95</td>
+          <td class="px-4 py-3 text-right">30</td>
+          <td class="px-4 py-3 text-right">55</td>
+          <td class="px-4 py-3 text-right font-semibold">390</td>
+        </tr>
+        <tr id="r6" class="expand-row bg-gray-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div>规格：60 × 90mm · 300g 铜版纸 · 烫金 LOGO</div>
+                <div>最近入库：2025-03-10 · 深圳总仓（+100）</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 7 低库存预警 -->
+        <tr class="warn-row cursor-pointer" onclick="toggleRow('r7')">
+          <td class="px-4 py-3 font-mono text-xs">SP-PROTO-011</td>
+          <td class="px-4 py-3">原型手板 V3</td>
+          <td class="px-4 py-3 text-right">1</td>
+          <td class="px-4 py-3 text-right text-gray-400">0</td>
+          <td class="px-4 py-3 text-right">2</td>
+          <td class="px-4 py-3 text-right text-gray-400">0</td>
+          <td class="px-4 py-3 text-right font-semibold text-red-600">3</td>
+        </tr>
+        <tr id="r7" class="expand-row bg-red-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div><span class="text-red-600 font-medium">⚠ 低库存预警：</span>当前总数 3 低于阈值 5</div>
+                <div>状态：开模中 · 预计 2025-03-25 到货</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- 行 8 -->
+        <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleRow('r8')">
+          <td class="px-4 py-3 font-mono text-xs">SP-ACC-048</td>
+          <td class="px-4 py-3">辅料包（定制）</td>
+          <td class="px-4 py-3 text-right">66</td>
+          <td class="px-4 py-3 text-right">28</td>
+          <td class="px-4 py-3 text-right">11</td>
+          <td class="px-4 py-3 text-right">14</td>
+          <td class="px-4 py-3 text-right font-semibold">119</td>
+        </tr>
+        <tr id="r8" class="expand-row bg-gray-50">
+          <td colspan="7" class="px-6 py-3">
+            <div class="flex items-center justify-between">
+              <div class="text-xs text-gray-600 space-y-1">
+                <div>规格：含拉链/魔术贴/松紧带 · 客户专属定制</div>
+                <div>最近入库：2025-03-13 · 外部仓（+20）</div>
+              </div>
+              <button class="bg-blue-500 hover:bg-blue-600 text-white text-xs px-3 py-1.5 rounded">申请调拨</button>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- ========== /区域3 ========== -->
+
+
+<!-- ========== 区域4：智能调拨单管理 ========== -->
+<div class="bg-white rounded border border-gray-200 mb-5">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+    <h3 class="text-sm font-semibold text-gray-800">智能调拨单管理</h3>
+    <div class="flex items-center gap-2">
+      <button class="text-xs text-gray-600 border border-gray-300 rounded px-3 py-1.5 hover:bg-gray-50">智能调拨建议</button>
+      <button class="text-xs text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1.5">+ 新建调拨单</button>
+    </div>
+  </div>
+
+  <!-- 状态卡 3 个 -->
+  <div class="grid grid-cols-3 gap-4 px-4 py-4 border-b border-gray-200">
+    <div class="border border-gray-200 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">待发货</div>
+      <div class="text-xl font-semibold text-gray-800">5</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">在途</div>
+      <div class="text-xl font-semibold text-gray-800">12</div>
+    </div>
+    <div class="border border-gray-200 rounded p-3">
+      <div class="text-xs text-gray-500 mb-1">已签收</div>
+      <div class="text-xl font-semibold text-gray-800">28</div>
+    </div>
+  </div>
+
+  <!-- 调拨单表格 -->
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead class="bg-gray-50 text-xs text-gray-500">
+        <tr>
+          <th class="px-4 py-2 text-left font-medium">调拨单号</th>
+          <th class="px-4 py-2 text-left font-medium">物料</th>
+          <th class="px-4 py-2 text-right font-medium">数量</th>
+          <th class="px-4 py-2 text-left font-medium">出库仓</th>
+          <th class="px-4 py-2 text-left font-medium">入库仓</th>
+          <th class="px-4 py-2 text-left font-medium">申请人</th>
+          <th class="px-4 py-2 text-left font-medium">状态</th>
+          <th class="px-4 py-2 text-left font-medium">操作</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100 text-gray-700">
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-mono text-xs">TR-20250318-001</td>
+          <td class="px-4 py-3">12mm 气模样品</td>
+          <td class="px-4 py-3 text-right">10</td>
+          <td class="px-4 py-3">深圳总仓</td>
+          <td class="px-4 py-3">南京分仓</td>
+          <td class="px-4 py-3">张仓管</td>
+          <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">待发货</span></td>
+          <td class="px-4 py-3 text-xs">
+            <a href="#" class="text-blue-500 hover:underline mr-2">详情</a>
+            <a href="#" class="text-blue-500 hover:underline mr-2">出库登记</a>
+            <a href="#" class="text-gray-500 hover:underline">取消</a>
+          </td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-mono text-xs">TR-20250317-009</td>
+          <td class="px-4 py-3">成品包装盒（大）</td>
+          <td class="px-4 py-3 text-right">30</td>
+          <td class="px-4 py-3">工厂制作仓</td>
+          <td class="px-4 py-3">深圳总仓</td>
+          <td class="px-4 py-3">李业务</td>
+          <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">在途</span></td>
+          <td class="px-4 py-3 text-xs">
+            <a href="#" class="text-blue-500 hover:underline mr-2">详情</a>
+            <a href="#" class="text-blue-500 hover:underline mr-2">签收</a>
+            <a href="#" class="text-gray-500 hover:underline">取消</a>
+          </td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-mono text-xs">TR-20250316-003</td>
+          <td class="px-4 py-3">五金配件套装</td>
+          <td class="px-4 py-3 text-right">5</td>
+          <td class="px-4 py-3">深圳总仓</td>
+          <td class="px-4 py-3">外部仓（顺丰云仓）</td>
+          <td class="px-4 py-3">王业务</td>
+          <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">在途</span></td>
+          <td class="px-4 py-3 text-xs">
+            <a href="#" class="text-blue-500 hover:underline mr-2">详情</a>
+            <a href="#" class="text-blue-500 hover:underline mr-2">签收</a>
+            <a href="#" class="text-gray-500 hover:underline">取消</a>
+          </td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-mono text-xs">TR-20250315-012</td>
+          <td class="px-4 py-3">吊牌样品（烫金）</td>
+          <td class="px-4 py-3 text-right">100</td>
+          <td class="px-4 py-3">深圳总仓</td>
+          <td class="px-4 py-3">南京分仓</td>
+          <td class="px-4 py-3">赵销售</td>
+          <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">已签收</span></td>
+          <td class="px-4 py-3 text-xs">
+            <a href="#" class="text-blue-500 hover:underline">详情</a>
+          </td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-4 py-3 font-mono text-xs">TR-20250314-007</td>
+          <td class="px-4 py-3">定制面料样板 A 款</td>
+          <td class="px-4 py-3 text-right">20</td>
+          <td class="px-4 py-3">工厂制作仓</td>
+          <td class="px-4 py-3">南京分仓</td>
+          <td class="px-4 py-3">陈PMC</td>
+          <td class="px-4 py-3"><span class="inline-flex items-center gap-1 text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">已签收</span></td>
+          <td class="px-4 py-3 text-xs">
+            <a href="#" class="text-blue-500 hover:underline">详情</a>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- ========== /区域4 ========== -->
+
+
+<!-- ========== 区域5：外部仓 API 对接配置 ========== -->
+<div class="bg-white rounded border border-gray-200 mb-5">
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+    <h3 class="text-sm font-semibold text-gray-800">外部仓 API 对接配置</h3>
+    <button class="text-xs text-white bg-blue-500 hover:bg-blue-600 rounded px-3 py-1.5">+ 新增外部仓对接</button>
+  </div>
+
+  <div class="divide-y divide-gray-100">
+    <!-- 外部仓 1 -->
+    <div class="px-4 py-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex-1 grid grid-cols-4 gap-4 items-center">
+        <div>
+          <div class="text-sm font-medium text-gray-800">顺丰云仓</div>
+          <div class="text-xs text-gray-400 mt-0.5">SF-CLOUD-WMS</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          <span class="text-xs text-gray-600">已连接</span>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">最后同步</div>
+          <div class="text-xs text-gray-700 mt-0.5">2025-03-18 14:32:08</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">API 地址</div>
+          <div class="text-xs text-gray-700 mt-0.5 font-mono truncate">https://api.sf-cloud.com/wms/v2</div>
+        </div>
+      </div>
+      <button class="text-xs text-blue-500 hover:underline ml-4">编辑</button>
+    </div>
+
+    <!-- 外部仓 2 -->
+    <div class="px-4 py-4 flex items-center justify-between hover:bg-gray-50">
+      <div class="flex-1 grid grid-cols-4 gap-4 items-center">
+        <div>
+          <div class="text-sm font-medium text-gray-800">京东仓配</div>
+          <div class="text-xs text-gray-400 mt-0.5">JD-LOGISTICS-OPEN</div>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="w-2 h-2 rounded-full bg-green-500"></span>
+          <span class="text-xs text-gray-600">已连接</span>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">最后同步</div>
+          <div class="text-xs text-gray-700 mt-0.5">2025-03-18 14:30:15</div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500">API 地址</div>
+          <div class="text-xs text-gray-700 mt-0.5 font-mono truncate">https://open.jdl.com/api/v1</div>
+        </div>
+      </div>
+      <button class="text-xs text-blue-500 hover:underline ml-4">编辑</button>
+    </div>
+  </div>
+
+  <!-- 同步频率配置 -->
+  <div class="px-4 py-4 border-t border-gray-200 bg-gray-50 flex items-center gap-6">
+    <div class="text-xs text-gray-600 font-medium">同步频率：</div>
+    <label class="flex items-center gap-1.5 text-xs text-gray-700 cursor-pointer">
+      <input type="radio" name="sync-freq" class="accent-blue-500" checked />
+      实时
+    </label>
+    <label class="flex items-center gap-1.5 text-xs text-gray-700 cursor-pointer">
+      <input type="radio" name="sync-freq" class="accent-blue-500" />
+      5 分钟
+    </label>
+    <label class="flex items-center gap-1.5 text-xs text-gray-700 cursor-pointer">
+      <input type="radio" name="sync-freq" class="accent-blue-500" />
+      1 小时
+    </label>
+    <div class="ml-auto">
+      <button class="text-xs text-gray-600 border border-gray-300 rounded px-3 py-1 hover:bg-white">立即同步</button>
+    </div>
+  </div>
+</div>
+<!-- ========== /区域5 ========== -->
+
+
+<script>
+  function toggleRow(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

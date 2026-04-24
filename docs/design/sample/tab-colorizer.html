@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>色卡配色器 - 样品管理中心</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">色卡配色器</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">在线交互式配色工具，替代犀牛手动配色+效果图来回沟通，缩短甲方确认周期</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（配色）, 设计主管（审批）, 总部（生成需求表）, 工厂（打样依据）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">预设方案库 / 交互式配色面板 / 实时预览 / 一键生成总部需求表</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">选预设/自定义配色 / 替换色卡 / 实时预览 / 导出需求表 / 提交审批</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">配色实时反映预览 / 导出需求表字段完整 / 审批流转可追溯</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">样品管理中心-详细设计.md §2.3</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ========== [区域1] 方案库 + 交互配色面板 + 实时预览（三栏） ========== -->
+<div class="flex gap-4 mb-4" style="min-height: 560px;">
+
+  <!-- 左侧：方案库 -->
+  <aside class="w-56 bg-white rounded-lg border border-gray-200 flex flex-col">
+    <div class="px-4 py-3 border-b border-gray-200">
+      <h3 class="text-sm font-semibold text-gray-800">方案库</h3>
+    </div>
+    <!-- 方案类型筛选 -->
+    <div class="px-3 py-2 border-b border-gray-200 flex gap-1">
+      <button class="flex-1 px-2 py-1 text-xs bg-gray-800 text-white rounded">预设</button>
+      <button class="flex-1 px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded hover:bg-gray-200">项目自定义</button>
+    </div>
+    <!-- 方案卡片列表 -->
+    <div class="flex-1 overflow-y-auto p-3 space-y-2">
+      <!-- 自然系（默认选中）-->
+      <div class="border-2 border-blue-500 bg-blue-50 rounded-md p-2.5 cursor-pointer">
+        <div class="flex justify-between items-center mb-1.5">
+          <span class="text-xs font-semibold text-gray-800">自然系 ★</span>
+          <span class="text-[10px] text-gray-500">使用 128</span>
+        </div>
+        <div class="flex gap-1">
+          <span class="flex-1 h-5 rounded" style="background:#4F6F52;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#86614A;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#F5EFE0;"></span>
+        </div>
+      </div>
+      <!-- 活力系 -->
+      <div class="border border-gray-200 rounded-md p-2.5 cursor-pointer hover:border-gray-400">
+        <div class="flex justify-between items-center mb-1.5">
+          <span class="text-xs font-semibold text-gray-800">活力系</span>
+          <span class="text-[10px] text-gray-500">使用 96</span>
+        </div>
+        <div class="flex gap-1">
+          <span class="flex-1 h-5 rounded" style="background:#F28E1C;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#F2C649;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#C8102E;"></span>
+        </div>
+      </div>
+      <!-- 都市系 -->
+      <div class="border border-gray-200 rounded-md p-2.5 cursor-pointer hover:border-gray-400">
+        <div class="flex justify-between items-center mb-1.5">
+          <span class="text-xs font-semibold text-gray-800">都市系</span>
+          <span class="text-[10px] text-gray-500">使用 74</span>
+        </div>
+        <div class="flex gap-1">
+          <span class="flex-1 h-5 rounded" style="background:#6B7280;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#1F2937;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#F9FAFB;border:1px solid #e5e7eb;"></span>
+        </div>
+      </div>
+      <!-- 海洋系 -->
+      <div class="border border-gray-200 rounded-md p-2.5 cursor-pointer hover:border-gray-400">
+        <div class="flex justify-between items-center mb-1.5">
+          <span class="text-xs font-semibold text-gray-800">海洋系</span>
+          <span class="text-[10px] text-gray-500">使用 52</span>
+        </div>
+        <div class="flex gap-1">
+          <span class="flex-1 h-5 rounded" style="background:#1E6091;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#52B2BF;"></span>
+          <span class="flex-1 h-5 rounded" style="background:#F0F9FF;border:1px solid #e5e7eb;"></span>
+        </div>
+      </div>
+      <!-- 新建 -->
+      <button class="w-full border border-dashed border-gray-300 rounded-md py-3 text-xs text-gray-500 hover:border-blue-500 hover:text-blue-500">
+        + 新建项目方案
+      </button>
+    </div>
+  </aside>
+
+  <!-- 中部：交互配色面板 -->
+  <section class="flex-1 bg-white rounded-lg border border-gray-200 flex flex-col">
+    <!-- 标题区 -->
+    <div class="px-5 py-3 border-b border-gray-200">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 class="text-base font-semibold text-gray-800">方案：自然系</h3>
+          <p class="text-xs text-gray-500 mt-0.5">森林与大地的配色语言，适用于户外自然主题游乐场景</p>
+        </div>
+        <span class="text-[11px] px-2 py-1 bg-gray-100 text-gray-600 rounded">预设方案 · 已被 128 个项目采用</span>
+      </div>
+    </div>
+
+    <!-- 6个组件配色槽位 -->
+    <div class="flex-1 p-5 grid grid-cols-2 gap-3 overflow-y-auto">
+      <!-- 主框架 -->
+      <div class="border border-gray-200 rounded-md p-3 flex items-center gap-3">
+        <div class="w-14 h-14 rounded border border-gray-200 flex-shrink-0" style="background:#4F6F52;"></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500">主框架</div>
+          <div class="text-sm font-semibold text-gray-800 truncate">森林绿</div>
+          <div class="text-[11px] text-gray-500">RAL 6005</div>
+        </div>
+        <button class="px-2.5 py-1 text-[11px] border border-gray-300 rounded hover:border-blue-500 hover:text-blue-500 flex-shrink-0">点击替换</button>
+      </div>
+      <!-- 立柱 -->
+      <div class="border border-gray-200 rounded-md p-3 flex items-center gap-3">
+        <div class="w-14 h-14 rounded border border-gray-200 flex-shrink-0" style="background:#86614A;"></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500">立柱</div>
+          <div class="text-sm font-semibold text-gray-800 truncate">木纹棕</div>
+          <div class="text-[11px] text-gray-500">RAL 8011</div>
+        </div>
+        <button class="px-2.5 py-1 text-[11px] border border-gray-300 rounded hover:border-blue-500 hover:text-blue-500 flex-shrink-0">点击替换</button>
+      </div>
+      <!-- 顶棚 -->
+      <div class="border border-gray-200 rounded-md p-3 flex items-center gap-3">
+        <div class="w-14 h-14 rounded border border-gray-200 flex-shrink-0" style="background:#F5EFE0;"></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500">顶棚</div>
+          <div class="text-sm font-semibold text-gray-800 truncate">奶油米</div>
+          <div class="text-[11px] text-gray-500">RAL 9001</div>
+        </div>
+        <button class="px-2.5 py-1 text-[11px] border border-gray-300 rounded hover:border-blue-500 hover:text-blue-500 flex-shrink-0">点击替换</button>
+      </div>
+      <!-- 滑梯 -->
+      <div class="border border-gray-200 rounded-md p-3 flex items-center gap-3">
+        <div class="w-14 h-14 rounded border border-gray-200 flex-shrink-0" style="background:#5A7247;"></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500">滑梯</div>
+          <div class="text-sm font-semibold text-gray-800 truncate">苔藓绿</div>
+          <div class="text-[11px] text-gray-500">RAL 6021</div>
+        </div>
+        <button class="px-2.5 py-1 text-[11px] border border-gray-300 rounded hover:border-blue-500 hover:text-blue-500 flex-shrink-0">点击替换</button>
+      </div>
+      <!-- 攀爬网 -->
+      <div class="border border-gray-200 rounded-md p-3 flex items-center gap-3">
+        <div class="w-14 h-14 rounded border border-gray-200 flex-shrink-0" style="background:#BFA18A;"></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500">攀爬网</div>
+          <div class="text-sm font-semibold text-gray-800 truncate">浅咖</div>
+          <div class="text-[11px] text-gray-500">RAL 8003</div>
+        </div>
+        <button class="px-2.5 py-1 text-[11px] border border-gray-300 rounded hover:border-blue-500 hover:text-blue-500 flex-shrink-0">点击替换</button>
+      </div>
+      <!-- 安全垫 -->
+      <div class="border border-gray-200 rounded-md p-3 flex items-center gap-3">
+        <div class="w-14 h-14 rounded border border-gray-200 flex-shrink-0" style="background:#7A9B76;"></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500">安全垫</div>
+          <div class="text-sm font-semibold text-gray-800 truncate">草甸绿</div>
+          <div class="text-[11px] text-gray-500">RAL 6037</div>
+        </div>
+        <button class="px-2.5 py-1 text-[11px] border border-gray-300 rounded hover:border-blue-500 hover:text-blue-500 flex-shrink-0">点击替换</button>
+      </div>
+    </div>
+
+    <!-- 色卡库选择器（底部小弹窗，常驻展示）-->
+    <div class="px-5 py-3 border-t border-gray-200 bg-gray-50">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold text-gray-700">色卡库 · 可选替换色卡</span>
+        <span class="text-[11px] text-gray-500">共 12 个 · 点击应用到当前槽位</span>
+      </div>
+      <div class="grid grid-cols-12 gap-1.5">
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#4F6F52;" title="森林绿"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#86614A;" title="木纹棕"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#F5EFE0;" title="奶油米"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#5A7247;" title="苔藓绿"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#BFA18A;" title="浅咖"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#7A9B76;" title="草甸绿"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#F28E1C;" title="橙"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#F2C649;" title="黄"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#C8102E;" title="红"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#1E6091;" title="深蓝"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#52B2BF;" title="青"></div>
+        <div class="aspect-square rounded border border-gray-200 cursor-pointer hover:ring-2 hover:ring-blue-500" style="background:#1F2937;" title="黑"></div>
+      </div>
+    </div>
+
+    <!-- 底部操作按钮 -->
+    <div class="px-5 py-3 border-t border-gray-200 flex items-center justify-end gap-2">
+      <button class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:border-gray-400">保存方案</button>
+      <button class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:border-gray-400">另存为</button>
+      <button class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:border-gray-400">导出</button>
+      <button class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">提交审批</button>
+    </div>
+  </section>
+
+  <!-- 右侧：实时预览 -->
+  <aside class="w-72 bg-white rounded-lg border border-gray-200 flex flex-col">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-800">效果预览</h3>
+      <span class="text-[10px] px-1.5 py-0.5 bg-green-100 text-green-700 rounded">实时同步</span>
+    </div>
+    <div class="p-4 flex-1 flex flex-col">
+      <!-- 大预览框 -->
+      <div class="h-64 bg-gradient-to-b from-sky-50 to-gray-100 rounded-md border border-gray-200 flex items-center justify-center overflow-hidden">
+        <!-- SVG 简化游乐设备渲染 -->
+        <svg viewBox="0 0 280 220" class="w-full h-full p-2">
+          <!-- 地面（安全垫 草甸绿）-->
+          <rect x="10" y="180" width="260" height="30" fill="#7A9B76" rx="2"/>
+          <!-- 立柱左（立柱 木纹棕）-->
+          <rect x="40" y="70" width="10" height="115" fill="#86614A"/>
+          <!-- 立柱右 -->
+          <rect x="230" y="70" width="10" height="115" fill="#86614A"/>
+          <!-- 立柱中 -->
+          <rect x="135" y="100" width="10" height="85" fill="#86614A"/>
+          <!-- 顶棚（奶油米）-->
+          <polygon points="30,70 250,70 220,40 60,40" fill="#F5EFE0" stroke="#86614A" stroke-width="1"/>
+          <!-- 主框架（森林绿 横梁平台）-->
+          <rect x="30" y="100" width="115" height="10" fill="#4F6F52"/>
+          <rect x="30" y="140" width="115" height="10" fill="#4F6F52"/>
+          <!-- 滑梯（苔藓绿）-->
+          <polygon points="145,110 240,180 225,180 140,120" fill="#5A7247"/>
+          <!-- 攀爬网（浅咖 交叉线）-->
+          <g stroke="#BFA18A" stroke-width="2" fill="none">
+            <line x1="155" y1="110" x2="220" y2="175"/>
+            <line x1="220" y1="110" x2="155" y2="175"/>
+            <line x1="155" y1="110" x2="155" y2="175"/>
+            <line x1="220" y1="110" x2="220" y2="175"/>
+            <line x1="155" y1="142" x2="220" y2="142"/>
+            <line x1="187" y1="110" x2="187" y2="175"/>
+          </g>
+          <!-- 太阳装饰 -->
+          <circle cx="250" cy="25" r="8" fill="#F2C649" opacity="0.6"/>
+        </svg>
+      </div>
+      <!-- 色卡 legend -->
+      <div class="mt-3 grid grid-cols-3 gap-1.5">
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-sm" style="background:#4F6F52;"></span>
+          <span class="text-[10px] text-gray-600">主框架</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-sm" style="background:#86614A;"></span>
+          <span class="text-[10px] text-gray-600">立柱</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-sm" style="background:#F5EFE0;border:1px solid #e5e7eb;"></span>
+          <span class="text-[10px] text-gray-600">顶棚</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-sm" style="background:#5A7247;"></span>
+          <span class="text-[10px] text-gray-600">滑梯</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-sm" style="background:#BFA18A;"></span>
+          <span class="text-[10px] text-gray-600">攀爬网</span>
+        </div>
+        <div class="flex items-center gap-1">
+          <span class="w-3 h-3 rounded-sm" style="background:#7A9B76;"></span>
+          <span class="text-[10px] text-gray-600">安全垫</span>
+        </div>
+      </div>
+      <p class="text-[11px] text-gray-500 mt-3 leading-relaxed">实时同步当前配色，最终效果以工厂打样为准。预览图为 AI 渲染示意，建议结合 2D 立面图一并审核。</p>
+    </div>
+  </aside>
+
+</div>
+<!-- ========== [/区域1] ========== -->
+
+
+<!-- ========== [区域2] 方案对比模式 ========== -->
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-base font-semibold text-gray-800">方案对比</h3>
+      <p class="text-xs text-gray-500 mt-0.5">横向对比多个方案，辅助甲方快速决策</p>
+    </div>
+    <button class="px-3 py-1.5 text-xs border border-dashed border-gray-300 text-gray-600 rounded hover:border-blue-500 hover:text-blue-500">+ 添加对比</button>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 对比卡 1 -->
+    <div class="border-2 border-blue-500 bg-blue-50 rounded-lg p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-gray-800">方案A · 自然系</span>
+        <span class="text-[10px] px-1.5 py-0.5 bg-blue-500 text-white rounded">当前</span>
+      </div>
+      <!-- 缩略渲染图 -->
+      <div class="h-28 bg-gradient-to-b from-sky-50 to-gray-100 rounded border border-gray-200 mb-2 overflow-hidden">
+        <svg viewBox="0 0 280 220" class="w-full h-full">
+          <rect x="10" y="180" width="260" height="30" fill="#7A9B76"/>
+          <rect x="40" y="70" width="10" height="115" fill="#86614A"/>
+          <rect x="230" y="70" width="10" height="115" fill="#86614A"/>
+          <polygon points="30,70 250,70 220,40 60,40" fill="#F5EFE0"/>
+          <rect x="30" y="100" width="115" height="10" fill="#4F6F52"/>
+          <polygon points="145,110 240,180 225,180 140,120" fill="#5A7247"/>
+        </svg>
+      </div>
+      <!-- 6色 swatch -->
+      <div class="flex gap-0.5 mb-2">
+        <span class="flex-1 h-3 rounded-sm" style="background:#4F6F52;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#86614A;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#F5EFE0;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#5A7247;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#BFA18A;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#7A9B76;"></span>
+      </div>
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-gray-500">预估成本</span>
+        <span class="font-semibold text-gray-800">¥ 28,500</span>
+      </div>
+    </div>
+
+    <!-- 对比卡 2 -->
+    <div class="border border-gray-200 rounded-lg p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-gray-800">方案B · 活力系</span>
+        <button class="text-[10px] text-gray-400 hover:text-red-500">移除</button>
+      </div>
+      <div class="h-28 bg-gradient-to-b from-sky-50 to-gray-100 rounded border border-gray-200 mb-2 overflow-hidden">
+        <svg viewBox="0 0 280 220" class="w-full h-full">
+          <rect x="10" y="180" width="260" height="30" fill="#F2C649"/>
+          <rect x="40" y="70" width="10" height="115" fill="#C8102E"/>
+          <rect x="230" y="70" width="10" height="115" fill="#C8102E"/>
+          <polygon points="30,70 250,70 220,40 60,40" fill="#F5EFE0"/>
+          <rect x="30" y="100" width="115" height="10" fill="#F28E1C"/>
+          <polygon points="145,110 240,180 225,180 140,120" fill="#F28E1C"/>
+        </svg>
+      </div>
+      <div class="flex gap-0.5 mb-2">
+        <span class="flex-1 h-3 rounded-sm" style="background:#F28E1C;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#C8102E;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#F5EFE0;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#F2C649;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#E07B3C;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#F2C649;"></span>
+      </div>
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-gray-500">预估成本</span>
+        <span class="font-semibold text-gray-800">¥ 31,200</span>
+      </div>
+    </div>
+
+    <!-- 对比卡 3 -->
+    <div class="border border-gray-200 rounded-lg p-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-sm font-semibold text-gray-800">方案C · 海洋系</span>
+        <button class="text-[10px] text-gray-400 hover:text-red-500">移除</button>
+      </div>
+      <div class="h-28 bg-gradient-to-b from-sky-50 to-gray-100 rounded border border-gray-200 mb-2 overflow-hidden">
+        <svg viewBox="0 0 280 220" class="w-full h-full">
+          <rect x="10" y="180" width="260" height="30" fill="#52B2BF"/>
+          <rect x="40" y="70" width="10" height="115" fill="#1E6091"/>
+          <rect x="230" y="70" width="10" height="115" fill="#1E6091"/>
+          <polygon points="30,70 250,70 220,40 60,40" fill="#F0F9FF"/>
+          <rect x="30" y="100" width="115" height="10" fill="#1E6091"/>
+          <polygon points="145,110 240,180 225,180 140,120" fill="#52B2BF"/>
+        </svg>
+      </div>
+      <div class="flex gap-0.5 mb-2">
+        <span class="flex-1 h-3 rounded-sm" style="background:#1E6091;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#52B2BF;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#F0F9FF;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#2E86AB;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#A8DADC;"></span>
+        <span class="flex-1 h-3 rounded-sm" style="background:#457B9D;"></span>
+      </div>
+      <div class="flex items-center justify-between text-xs">
+        <span class="text-gray-500">预估成本</span>
+        <span class="font-semibold text-gray-800">¥ 29,800</span>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ========== [/区域2] ========== -->
+
+
+<!-- ========== [区域3] 导出 + 总部需求表生成 ========== -->
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-base font-semibold text-gray-800">总部需求表生成</h3>
+      <p class="text-xs text-gray-500 mt-0.5">基于配色方案一键生成标准化需求表，提交总部 / 工厂</p>
+    </div>
+  </div>
+
+  <!-- 筛选条 -->
+  <div class="flex items-center gap-3 mb-4 p-3 bg-gray-50 rounded-md">
+    <div class="flex items-center gap-2">
+      <label class="text-xs text-gray-600">配色方案</label>
+      <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white min-w-[140px]">
+        <option>方案A · 自然系（当前）</option>
+        <option>方案B · 活力系</option>
+        <option>方案C · 海洋系</option>
+        <option>方案D · 都市系</option>
+      </select>
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-xs text-gray-600">关联项目</label>
+      <select class="px-2 py-1 text-xs border border-gray-300 rounded bg-white min-w-[180px]">
+        <option>WD-2024-0128 杭州万象城儿童乐园</option>
+        <option>WD-2024-0142 苏州金鸡湖亲子主题区</option>
+        <option>WD-2024-0156 上海前滩太古里游乐场</option>
+      </select>
+    </div>
+    <button class="ml-auto px-4 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600 font-semibold">
+      ⚡ 一键生成需求表
+    </button>
+  </div>
+
+  <!-- 需求表预览 -->
+  <div class="border border-gray-200 rounded-md overflow-x-auto">
+    <table class="w-full text-xs">
+      <thead class="bg-gray-100 text-gray-700">
+        <tr>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">项目编号</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">客户名</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">组件名</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">色卡编码</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">色卡名称</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">RAL/Pantone</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">数量</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">工艺要求</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">备注</th>
+          <th class="px-3 py-2 text-left font-semibold whitespace-nowrap">状态</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-200 text-gray-700">
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2 whitespace-nowrap">WD-2024-0128</td>
+          <td class="px-3 py-2 whitespace-nowrap">杭州万象城</td>
+          <td class="px-3 py-2 whitespace-nowrap">主框架</td>
+          <td class="px-3 py-2 whitespace-nowrap font-mono text-gray-500">SC-G-001</td>
+          <td class="px-3 py-2 whitespace-nowrap">
+            <span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#4F6F52;"></span>森林绿
+          </td>
+          <td class="px-3 py-2 whitespace-nowrap">RAL 6005</td>
+          <td class="px-3 py-2 whitespace-nowrap">12 根</td>
+          <td class="px-3 py-2">粉末喷涂 · 哑光</td>
+          <td class="px-3 py-2 text-gray-500">户外耐候</td>
+          <td class="px-3 py-2"><span class="px-1.5 py-0.5 text-[10px] bg-green-100 text-green-700 rounded">已确认</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2 whitespace-nowrap">WD-2024-0128</td>
+          <td class="px-3 py-2 whitespace-nowrap">杭州万象城</td>
+          <td class="px-3 py-2 whitespace-nowrap">立柱</td>
+          <td class="px-3 py-2 whitespace-nowrap font-mono text-gray-500">SC-B-011</td>
+          <td class="px-3 py-2 whitespace-nowrap">
+            <span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#86614A;"></span>木纹棕
+          </td>
+          <td class="px-3 py-2 whitespace-nowrap">RAL 8011</td>
+          <td class="px-3 py-2 whitespace-nowrap">8 根</td>
+          <td class="px-3 py-2">木纹转印 · 半光</td>
+          <td class="px-3 py-2 text-gray-500">需防腐处理</td>
+          <td class="px-3 py-2"><span class="px-1.5 py-0.5 text-[10px] bg-green-100 text-green-700 rounded">已确认</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2 whitespace-nowrap">WD-2024-0128</td>
+          <td class="px-3 py-2 whitespace-nowrap">杭州万象城</td>
+          <td class="px-3 py-2 whitespace-nowrap">顶棚</td>
+          <td class="px-3 py-2 whitespace-nowrap font-mono text-gray-500">SC-W-901</td>
+          <td class="px-3 py-2 whitespace-nowrap">
+            <span class="inline-block w-3 h-3 rounded-sm align-middle mr-1 border border-gray-200" style="background:#F5EFE0;"></span>奶油米
+          </td>
+          <td class="px-3 py-2 whitespace-nowrap">RAL 9001</td>
+          <td class="px-3 py-2 whitespace-nowrap">4 片</td>
+          <td class="px-3 py-2">PC 板 · 防紫外</td>
+          <td class="px-3 py-2 text-gray-500">厚度 4mm</td>
+          <td class="px-3 py-2"><span class="px-1.5 py-0.5 text-[10px] bg-yellow-100 text-yellow-700 rounded">待审核</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2 whitespace-nowrap">WD-2024-0128</td>
+          <td class="px-3 py-2 whitespace-nowrap">杭州万象城</td>
+          <td class="px-3 py-2 whitespace-nowrap">滑梯</td>
+          <td class="px-3 py-2 whitespace-nowrap font-mono text-gray-500">SC-G-021</td>
+          <td class="px-3 py-2 whitespace-nowrap">
+            <span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#5A7247;"></span>苔藓绿
+          </td>
+          <td class="px-3 py-2 whitespace-nowrap">RAL 6021</td>
+          <td class="px-3 py-2 whitespace-nowrap">2 套</td>
+          <td class="px-3 py-2">滚塑成型 · 光面</td>
+          <td class="px-3 py-2 text-gray-500">食品级 PE</td>
+          <td class="px-3 py-2"><span class="px-1.5 py-0.5 text-[10px] bg-yellow-100 text-yellow-700 rounded">待审核</span></td>
+        </tr>
+        <tr class="hover:bg-gray-50">
+          <td class="px-3 py-2 whitespace-nowrap">WD-2024-0128</td>
+          <td class="px-3 py-2 whitespace-nowrap">杭州万象城</td>
+          <td class="px-3 py-2 whitespace-nowrap">攀爬网</td>
+          <td class="px-3 py-2 whitespace-nowrap font-mono text-gray-500">SC-B-003</td>
+          <td class="px-3 py-2 whitespace-nowrap">
+            <span class="inline-block w-3 h-3 rounded-sm align-middle mr-1" style="background:#BFA18A;"></span>浅咖
+          </td>
+          <td class="px-3 py-2 whitespace-nowrap">RAL 8003</td>
+          <td class="px-3 py-2 whitespace-nowrap">1 组</td>
+          <td class="px-3 py-2">编织绳 · 染色</td>
+          <td class="px-3 py-2 text-gray-500">绳径 18mm</td>
+          <td class="px-3 py-2"><span class="px-1.5 py-0.5 text-[10px] bg-gray-100 text-gray-600 rounded">草稿</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- 底部导出按钮 -->
+  <div class="flex items-center justify-between mt-4">
+    <span class="text-xs text-gray-500">共 5 行 · 3 条已确认 · 2 条待审核</span>
+    <div class="flex items-center gap-2">
+      <button class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:border-gray-400">导出 PDF</button>
+      <button class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:border-gray-400">导出 Excel</button>
+      <button class="px-3 py-1.5 text-xs border border-gray-300 text-gray-700 rounded hover:border-gray-400">抄送企微</button>
+      <button class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">提交审批</button>
+    </div>
+  </div>
+</div>
+<!-- ========== [/区域3] ========== -->
+
+
+<!-- ========== [区域4] 审批状态时间线 ========== -->
+<div class="bg-white rounded-lg border border-gray-200 p-5">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h3 class="text-base font-semibold text-gray-800">审批状态</h3>
+      <p class="text-xs text-gray-500 mt-0.5">方案 WD-2024-0128 · 自然系配色 · 提交于 2024-05-18 14:32</p>
+    </div>
+    <span class="text-[11px] px-2 py-1 bg-blue-50 text-blue-600 rounded">当前：总部审批中</span>
+  </div>
+
+  <!-- 横向时间线 -->
+  <div class="relative pt-2">
+    <!-- 背景进度条 -->
+    <div class="absolute top-5 left-[5%] right-[5%] h-0.5 bg-gray-200"></div>
+    <div class="absolute top-5 left-[5%] w-[32%] h-0.5 bg-blue-500"></div>
+
+    <div class="relative grid grid-cols-6 gap-2">
+      <!-- 节点 1 完成 -->
+      <div class="flex flex-col items-center">
+        <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-[11px] font-semibold z-10">✓</div>
+        <div class="mt-2 text-center">
+          <div class="text-xs font-semibold text-gray-800">提交方案</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">设计师 张磊</div>
+          <div class="text-[10px] text-gray-400">05-18 14:32</div>
+        </div>
+      </div>
+      <!-- 节点 2 完成 -->
+      <div class="flex flex-col items-center">
+        <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-[11px] font-semibold z-10">✓</div>
+        <div class="mt-2 text-center">
+          <div class="text-xs font-semibold text-gray-800">设计主管审批</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">主管 李雯</div>
+          <div class="text-[10px] text-gray-400">05-19 09:15</div>
+        </div>
+      </div>
+      <!-- 节点 3 当前 -->
+      <div class="flex flex-col items-center">
+        <div class="w-6 h-6 rounded-full bg-blue-500 text-white flex items-center justify-center text-[11px] font-semibold z-10 ring-4 ring-blue-100 animate-pulse">3</div>
+        <div class="mt-2 text-center">
+          <div class="text-xs font-semibold text-blue-600">总部审批</div>
+          <div class="text-[10px] text-gray-500 mt-0.5">审核中</div>
+          <div class="text-[10px] text-gray-400">预计 05-20</div>
+        </div>
+      </div>
+      <!-- 节点 4 待办 -->
+      <div class="flex flex-col items-center">
+        <div class="w-6 h-6 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center text-[11px] font-semibold z-10">4</div>
+        <div class="mt-2 text-center">
+          <div class="text-xs font-semibold text-gray-400">工厂打样</div>
+          <div class="text-[10px] text-gray-400 mt-0.5">--</div>
+          <div class="text-[10px] text-gray-400">待启动</div>
+        </div>
+      </div>
+      <!-- 节点 5 待办 -->
+      <div class="flex flex-col items-center">
+        <div class="w-6 h-6 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center text-[11px] font-semibold z-10">5</div>
+        <div class="mt-2 text-center">
+          <div class="text-xs font-semibold text-gray-400">客户确认</div>
+          <div class="text-[10px] text-gray-400 mt-0.5">--</div>
+          <div class="text-[10px] text-gray-400">待启动</div>
+        </div>
+      </div>
+      <!-- 节点 6 待办 -->
+      <div class="flex flex-col items-center">
+        <div class="w-6 h-6 rounded-full bg-white border-2 border-gray-300 text-gray-400 flex items-center justify-center text-[11px] font-semibold z-10">6</div>
+        <div class="mt-2 text-center">
+          <div class="text-xs font-semibold text-gray-400">完成归档</div>
+          <div class="text-[10px] text-gray-400 mt-0.5">--</div>
+          <div class="text-[10px] text-gray-400">待启动</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ========== [/区域4] ========== -->
+
+</body>
+</html>

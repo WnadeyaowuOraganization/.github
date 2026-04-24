@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab4 版本 & 日志</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Timeline 样式 */
+    .timeline { position: relative; padding-left: 24px; }
+    .timeline::before {
+      content: ''; position: absolute; left: 7px; top: 8px; bottom: 8px;
+      width: 2px; background: #d9d9d9;
+    }
+    .timeline-node { position: relative; padding-bottom: 20px; }
+    .timeline-node::before {
+      content: ''; position: absolute; left: -21px; top: 6px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: #fff; border: 2px solid #bfbfbf;
+    }
+    .timeline-node.current::before { background: #52c41a; border-color: #52c41a; box-shadow: 0 0 0 3px rgba(82,196,26,0.2); }
+    .timeline-node.deprecated::before { background: #ff4d4f; border-color: #ff4d4f; }
+
+    /* Tag 样式 */
+    .tag { display: inline-flex; align-items: center; padding: 1px 8px; font-size: 11px; border-radius: 3px; border: 1px solid; line-height: 18px; }
+    .tag-green { color: #389e0d; background: #f6ffed; border-color: #b7eb8f; }
+    .tag-gray { color: #595959; background: #fafafa; border-color: #d9d9d9; }
+    .tag-red { color: #cf1322; background: #fff1f0; border-color: #ffa39e; }
+    .tag-blue { color: #096dd9; background: #e6f7ff; border-color: #91d5ff; }
+    .tag-orange { color: #d46b08; background: #fff7e6; border-color: #ffd591; }
+    .tag-purple { color: #531dab; background: #f9f0ff; border-color: #d3adf7; }
+
+    /* 表格 */
+    .audit-table { font-size: 12.5px; }
+    .audit-table th { background: #fafafa; font-weight: 600; color: #333; padding: 10px 12px; text-align: left; border-bottom: 1px solid #d9d9d9; white-space: nowrap; }
+    .audit-table td { padding: 10px 12px; border-bottom: 1px solid #f0f0f0; vertical-align: middle; color: #333; }
+    .audit-table tbody tr:hover { background: #fafafa; }
+
+    /* 头像占位 */
+    .avatar { width: 24px; height: 24px; border-radius: 50%; background: #e6f7ff; color: #1890ff; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 600; flex-shrink: 0; }
+
+    /* 缩略图占位 */
+    .thumb { width: 28px; height: 28px; background: #f0f0f0; border: 1px solid #d9d9d9; border-radius: 3px; display: inline-flex; align-items: center; justify-content: center; color: #bfbfbf; font-size: 10px; flex-shrink: 0; }
+    .thumb-lg { width: 48px; height: 48px; font-size: 11px; }
+
+    /* 筛选栏 */
+    .filter-input { background: #fff; border: 1px solid #d9d9d9; border-radius: 3px; padding: 4px 10px; font-size: 12.5px; color: #333; }
+    .filter-input:hover { border-color: #40a9ff; }
+
+    /* 按钮 */
+    .btn { padding: 5px 14px; border-radius: 3px; font-size: 12.5px; cursor: pointer; border: 1px solid #d9d9d9; background: #fff; color: #333; }
+    .btn:hover { border-color: #40a9ff; color: #1890ff; }
+    .btn-primary { background: #1890ff; color: #fff; border-color: #1890ff; }
+    .btn-primary:hover { background: #40a9ff; color: #fff; border-color: #40a9ff; }
+
+    /* 分页 */
+    .pagination { display: flex; gap: 6px; align-items: center; font-size: 12.5px; }
+    .pagination .page { padding: 2px 8px; border: 1px solid #d9d9d9; border-radius: 3px; background: #fff; cursor: pointer; min-width: 26px; text-align: center; }
+    .pagination .page.active { color: #1890ff; border-color: #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab4 版本 &amp; 日志 — 版本历史 + 审计日志 + 水印配置</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">素材版本管控（查看/回退/对比）+ 审计日志（可追溯的操作记录）+ 下载水印防泄密</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">素材管理员、超管、合规审计</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">版本时间线 / 版本对比 / 审计日志检索 / 下载水印规则</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">上传新版本 / 回退版本 / 筛选日志 / 导出CSV / 配置水印规则</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">版本回退保留原版本 / 日志完整性 100% / 下载带水印率 ≥ 99%</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">方案素材中心 — 详细设计.md §2.4 Tab4 版本 &amp; 日志</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex gap-4">
+
+  <!-- ============================================================ -->
+  <!-- 左栏 40% — 版本历史                                          -->
+  <!-- ============================================================ -->
+  <div class="w-2/5 flex-shrink-0 flex flex-col gap-4">
+
+    <!-- [当前素材卡] -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-start gap-3">
+        <div class="thumb thumb-lg flex-shrink-0">缩略图</div>
+        <div class="flex-1 min-w-0">
+          <div class="flex items-center gap-2 mb-1">
+            <div class="text-sm font-semibold text-gray-800 truncate">深圳万江湾文旅方案_主视觉.psd</div>
+            <span class="tag tag-green">v5 当前</span>
+          </div>
+          <div class="text-xs text-gray-500 mb-1">作者：张三 · 创建于 2026-02-18</div>
+          <div class="text-xs text-gray-500">文件大小：42.8 MB · 格式 PSD · 共 6 个版本</div>
+        </div>
+        <div class="flex flex-col gap-2 flex-shrink-0">
+          <button class="btn btn-primary text-xs">上传新版本</button>
+          <button class="btn text-xs">回退到此版本</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [版本时间线] -->
+    <div class="bg-white border border-gray-300 rounded p-4 flex-1">
+      <div class="flex items-center justify-between mb-4">
+        <div class="text-sm font-semibold text-gray-800">版本历史</div>
+        <div class="text-xs text-gray-500">共 6 个版本</div>
+      </div>
+
+      <div class="timeline">
+        <!-- v5 当前 -->
+        <div class="timeline-node current">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-semibold text-gray-800">v5</span>
+            <span class="tag tag-green">最新</span>
+            <span class="text-xs text-gray-400 ml-auto">2026-04-18 14:22</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">优化主视觉排版，新增吉祥物元素</div>
+          <div class="text-xs text-gray-500 flex items-center gap-3">
+            <span>👤 李四</span><span>📦 42.8 MB</span>
+            <button class="text-blue-500 hover:underline ml-auto">对比差异</button>
+          </div>
+        </div>
+
+        <!-- v4 -->
+        <div class="timeline-node">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-semibold text-gray-800">v4</span>
+            <span class="tag tag-gray">历史</span>
+            <span class="text-xs text-gray-400 ml-auto">2026-04-10 09:15</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">调整色彩饱和度，适配夜场氛围</div>
+          <div class="text-xs text-gray-500 flex items-center gap-3">
+            <span>👤 张三</span><span>📦 41.2 MB</span>
+            <button class="text-blue-500 hover:underline ml-auto">对比差异</button>
+          </div>
+        </div>
+
+        <!-- v3 -->
+        <div class="timeline-node">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-semibold text-gray-800">v3</span>
+            <span class="tag tag-gray">历史</span>
+            <span class="text-xs text-gray-400 ml-auto">2026-03-28 16:40</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">客户反馈：调整 LOGO 位置，加大 CTA 按钮</div>
+          <div class="text-xs text-gray-500 flex items-center gap-3">
+            <span>👤 王五</span><span>📦 40.5 MB</span>
+            <button class="text-blue-500 hover:underline ml-auto">对比差异</button>
+          </div>
+        </div>
+
+        <!-- v2 废弃 -->
+        <div class="timeline-node deprecated">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-semibold text-gray-800">v2</span>
+            <span class="tag tag-red">废弃</span>
+            <span class="text-xs text-gray-400 ml-auto">2026-03-15 11:08</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">试验版：尝试蓝绿双主色（未采纳）</div>
+          <div class="text-xs text-gray-500 flex items-center gap-3">
+            <span>👤 张三</span><span>📦 38.9 MB</span>
+            <button class="text-blue-500 hover:underline ml-auto">对比差异</button>
+          </div>
+        </div>
+
+        <!-- v1.5 -->
+        <div class="timeline-node">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-semibold text-gray-800">v1.5</span>
+            <span class="tag tag-gray">历史</span>
+            <span class="text-xs text-gray-400 ml-auto">2026-03-02 14:33</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">补充 H5 端适配素材切图</div>
+          <div class="text-xs text-gray-500 flex items-center gap-3">
+            <span>👤 赵六</span><span>📦 37.1 MB</span>
+            <button class="text-blue-500 hover:underline ml-auto">对比差异</button>
+          </div>
+        </div>
+
+        <!-- v1 初始 -->
+        <div class="timeline-node">
+          <div class="flex items-center gap-2 mb-1">
+            <span class="text-sm font-semibold text-gray-800">v1</span>
+            <span class="tag tag-gray">历史</span>
+            <span class="text-xs text-gray-400 ml-auto">2026-02-18 10:00</span>
+          </div>
+          <div class="text-xs text-gray-600 mb-1">初始版本 · 方案主视觉首稿</div>
+          <div class="text-xs text-gray-500 flex items-center gap-3">
+            <span>👤 张三</span><span>📦 35.6 MB</span>
+            <button class="text-blue-500 hover:underline ml-auto">—</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-gray-200 text-center">
+        <a href="#" class="text-xs text-blue-500 hover:underline">查看完整版本树 →</a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ============================================================ -->
+  <!-- 右栏 60% — 操作审计日志 + 水印配置                           -->
+  <!-- ============================================================ -->
+  <div class="w-3/5 flex-1 flex flex-col gap-4">
+
+    <!-- 统计小字 + 表头 -->
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <div class="text-sm font-semibold text-gray-800">操作审计日志</div>
+        <div class="text-xs text-gray-500">
+          最近 30 天共 <span class="text-gray-800 font-semibold">8,245</span> 次操作 ·
+          其中下载 <span class="text-gray-800 font-semibold">1,823</span> 次（带水印 <span class="text-green-600 font-semibold">99.6%</span>） ·
+          异常 <span class="text-red-500 font-semibold">3</span> 次
+        </div>
+      </div>
+
+      <!-- [日志筛选栏] -->
+      <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <div class="flex flex-wrap items-center gap-2">
+          <select class="filter-input">
+            <option>操作人：全部</option>
+            <option>张三</option><option>李四</option><option>王五</option>
+          </select>
+          <select class="filter-input">
+            <option>操作类型：全部</option>
+            <option>查看</option><option>下载</option><option>编辑</option><option>删除</option><option>权限变更</option>
+          </select>
+          <input type="text" class="filter-input" placeholder="时间范围：2026-03-20 ~ 2026-04-18" style="width:240px">
+          <input type="text" class="filter-input" placeholder="素材名称/ID" style="width:180px">
+          <div class="ml-auto flex gap-2">
+            <button class="btn">重置</button>
+            <button class="btn btn-primary">筛选</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- [审计日志表格] -->
+      <div class="overflow-x-auto">
+        <table class="audit-table w-full">
+          <thead>
+            <tr>
+              <th>时间</th>
+              <th>操作人</th>
+              <th>操作类型</th>
+              <th>目标素材</th>
+              <th>客户端IP</th>
+              <th>水印</th>
+              <th>设备</th>
+              <th style="width:60px">详情</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="text-gray-500">04-18 14:22</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">李</div>李四</div></td>
+              <td><span class="tag tag-blue">编辑</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">深圳万江湾_主视觉.psd</span></div></td>
+              <td class="text-gray-500">10.8.2.45</td>
+              <td>—</td>
+              <td class="text-gray-500">Mac · Chrome</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-18 11:05</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">王</div>王五</div></td>
+              <td><span class="tag tag-purple">下载</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">宁波欢乐谷_效果图合集.zip</span></div></td>
+              <td class="text-gray-500">10.8.3.12</td>
+              <td><span class="tag tag-green">有</span></td>
+              <td class="text-gray-500">Win · Edge</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-18 10:48</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">张</div>张三</div></td>
+              <td><span class="tag tag-gray">查看</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">成都天府新城_效果图.jpg</span></div></td>
+              <td class="text-gray-500">10.8.1.88</td>
+              <td>—</td>
+              <td class="text-gray-500">Mac · Safari</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-17 17:30</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">赵</div>赵六</div></td>
+              <td><span class="tag tag-orange">权限变更</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">夹</div><span class="truncate" style="max-width:160px">方案模板库/标准方案</span></div></td>
+              <td class="text-gray-500">10.8.5.22</td>
+              <td>—</td>
+              <td class="text-gray-500">Win · Chrome</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-17 15:12</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">李</div>李四</div></td>
+              <td><span class="tag tag-purple">下载</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">万德VI规范_2026版.pdf</span></div></td>
+              <td class="text-gray-500">10.8.2.45</td>
+              <td><span class="tag tag-green">有</span></td>
+              <td class="text-gray-500">Mac · Chrome</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr class="bg-red-50">
+              <td class="text-gray-500">04-17 13:08</td>
+              <td><div class="flex items-center gap-2"><div class="avatar" style="background:#fff1f0;color:#cf1322">孙</div>孙七</div></td>
+              <td><span class="tag tag-purple">下载</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">广州南沙项目_施工图.dwg</span></div></td>
+              <td class="text-gray-500">202.108.22.5</td>
+              <td><span class="tag tag-red">无</span></td>
+              <td class="text-gray-500">Win · Chrome</td>
+              <td><button class="text-red-500 text-xs hover:underline">⚠ 异常</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-17 10:45</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">张</div>张三</div></td>
+              <td><span class="tag tag-blue">编辑</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">深圳万江湾_主视觉.psd</span></div></td>
+              <td class="text-gray-500">10.8.1.88</td>
+              <td>—</td>
+              <td class="text-gray-500">Mac · Safari</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-16 16:22</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">周</div>周八</div></td>
+              <td><span class="tag tag-purple">下载</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">亲子乐园_IP形象设计集.ai</span></div></td>
+              <td class="text-gray-500">10.8.4.77</td>
+              <td><span class="tag tag-green">有</span></td>
+              <td class="text-gray-500">Win · Chrome</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-16 14:15</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">王</div>王五</div></td>
+              <td><span class="tag tag-red">删除</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">过期广告物料_2024Q4.zip</span></div></td>
+              <td class="text-gray-500">10.8.3.12</td>
+              <td>—</td>
+              <td class="text-gray-500">Win · Edge</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-16 11:30</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">李</div>李四</div></td>
+              <td><span class="tag tag-gray">查看</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">常州恐龙园_升级方案.pptx</span></div></td>
+              <td class="text-gray-500">10.8.2.45</td>
+              <td>—</td>
+              <td class="text-gray-500">Mac · Chrome</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-15 17:55</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">张</div>张三</div></td>
+              <td><span class="tag tag-purple">下载</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">图</div><span class="truncate" style="max-width:160px">深圳万江湾_主视觉.psd</span></div></td>
+              <td class="text-gray-500">10.8.1.88</td>
+              <td><span class="tag tag-green">有</span></td>
+              <td class="text-gray-500">Mac · Safari</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+            <tr>
+              <td class="text-gray-500">04-15 15:40</td>
+              <td><div class="flex items-center gap-2"><div class="avatar">赵</div>赵六</div></td>
+              <td><span class="tag tag-orange">权限变更</span></td>
+              <td><div class="flex items-center gap-2"><div class="thumb">夹</div><span class="truncate" style="max-width:160px">设计师组共享素材</span></div></td>
+              <td class="text-gray-500">10.8.5.22</td>
+              <td>—</td>
+              <td class="text-gray-500">Win · Chrome</td>
+              <td><button class="text-blue-500 text-xs hover:underline">展开</button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 分页 + 导出 -->
+      <div class="px-4 py-3 border-t border-gray-200 flex items-center justify-between">
+        <div class="text-xs text-gray-500">共 8,245 条记录</div>
+        <div class="flex items-center gap-3">
+          <div class="pagination">
+            <span class="page">‹</span>
+            <span class="page active">1</span>
+            <span class="page">2</span>
+            <span class="page">3</span>
+            <span class="page">4</span>
+            <span class="page">…</span>
+            <span class="page">687</span>
+            <span class="page">›</span>
+          </div>
+          <button class="btn text-xs">导出 CSV</button>
+          <button class="btn btn-primary text-xs">配置告警</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [水印配置面板] -->
+    <div class="bg-white border border-gray-300 rounded">
+      <div onclick="(function(el){var b=el.parentElement.querySelector('.watermark-body');var a=el.querySelector('.wm-arrow');if(b.style.display==='none'){b.style.display='block';a.textContent='▼';}else{b.style.display='none';a.textContent='▶';}})(this)"
+           class="flex items-center justify-between px-4 py-3 border-b border-gray-200 cursor-pointer select-none">
+        <div class="flex items-center gap-2">
+          <span class="wm-arrow text-xs text-gray-500">▼</span>
+          <span class="text-sm font-semibold text-gray-800">下载水印规则配置</span>
+          <span class="tag tag-blue">3 条规则</span>
+        </div>
+        <button class="btn btn-primary text-xs" onclick="event.stopPropagation()">+ 新建水印规则</button>
+      </div>
+
+      <div class="watermark-body" style="display:block;">
+        <table class="audit-table w-full">
+          <thead>
+            <tr>
+              <th style="width:18%">规则名</th>
+              <th style="width:20%">触发条件</th>
+              <th>水印内容模板</th>
+              <th style="width:18%">应用范围</th>
+              <th style="width:100px">操作</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-gray-800">默认水印</span>
+                  <span class="tag tag-green">启用</span>
+                </div>
+              </td>
+              <td class="text-gray-600">所有下载</td>
+              <td>
+                <code class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-700">{用户姓名} · {手机后4} · {下载时间}</code>
+              </td>
+              <td><span class="tag tag-gray">全员</span></td>
+              <td>
+                <button class="text-blue-500 text-xs hover:underline mr-2">编辑</button>
+                <button class="text-gray-400 text-xs hover:text-red-500">禁用</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-gray-800">方案原图水印</span>
+                  <span class="tag tag-green">启用</span>
+                </div>
+              </td>
+              <td class="text-gray-600">文件类型 = PSD</td>
+              <td>
+                <code class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-700">万德机密 · {工号} · 请勿外传</code>
+              </td>
+              <td><span class="tag tag-blue">设计师组</span></td>
+              <td>
+                <button class="text-blue-500 text-xs hover:underline mr-2">编辑</button>
+                <button class="text-gray-400 text-xs hover:text-red-500">禁用</button>
+              </td>
+            </tr>
+            <tr>
+              <td>
+                <div class="flex items-center gap-2">
+                  <span class="font-semibold text-gray-800">客户演示版水印</span>
+                  <span class="tag tag-gray">禁用</span>
+                </div>
+              </td>
+              <td class="text-gray-600">标签 = 客户演示</td>
+              <td>
+                <code class="text-xs bg-gray-100 px-2 py-0.5 rounded text-gray-700">万德 WANDE · 客户 {客户名称} 专属</code>
+              </td>
+              <td><span class="tag tag-blue">商务组</span></td>
+              <td>
+                <button class="text-blue-500 text-xs hover:underline mr-2">编辑</button>
+                <button class="text-gray-400 text-xs hover:text-green-500">启用</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="px-4 py-3 border-t border-gray-200 text-xs text-gray-500 bg-gray-50">
+          💡 规则优先级从上至下匹配，命中首条规则即应用对应水印。支持变量：<code class="bg-gray-100 px-1 rounded">{用户姓名}</code>、<code class="bg-gray-100 px-1 rounded">{工号}</code>、<code class="bg-gray-100 px-1 rounded">{手机后4}</code>、<code class="bg-gray-100 px-1 rounded">{部门}</code>、<code class="bg-gray-100 px-1 rounded">{下载时间}</code>、<code class="bg-gray-100 px-1 rounded">{客户名称}</code>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+</body>
+</html>

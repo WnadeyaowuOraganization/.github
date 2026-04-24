@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab3 权限矩阵 — 方案素材中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .perm-cell { text-align: center; font-size: 15px; line-height: 1; }
+    .perm-yes { color: #52c41a; }
+    .perm-no { color: #bfbfbf; }
+    .perm-req { color: #fa8c16; font-size: 12px; white-space: nowrap; }
+    .matrix-table th, .matrix-table td { border: 1px solid #e5e7eb; padding: 10px 8px; }
+    .matrix-table thead th {
+      background: #fafafa; font-weight: 600; color: #595959; font-size: 12px;
+      position: sticky; top: 0; vertical-align: bottom; text-align: center;
+    }
+    .matrix-table tbody tr:hover { background: #fafbff; }
+    .role-name { font-weight: 600; color: #262626; white-space: nowrap; background: #fafafa; }
+    .role-desc { font-size: 11px; color: #8c8c8c; font-weight: normal; }
+    .log-table th { background: #fafafa; font-weight: 600; color: #595959; font-size: 12px; padding: 10px 8px; border: 1px solid #e5e7eb; text-align: left; }
+    .log-table td { padding: 10px 8px; border: 1px solid #e5e7eb; font-size: 12.5px; color: #333; }
+    .badge { display: inline-block; padding: 2px 8px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">Tab3 权限矩阵 — RBAC + 中标状态双维度可见性</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">可视化 RBAC 权限矩阵 + 中标状态驱动的素材可见性规则，支撑跨部门防泄密</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">超管、素材管理员（配置）；全员（查看规则）</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">三档可见性规则 / 角色-操作矩阵 / 中标状态事件日志 / 矩阵同步到 DB</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">编辑角色权限 / 新增角色 / 同步矩阵 / 查看事件刷新日志</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">未中标素材仅团队可见 / 中标事件触发权限刷新 ≤ 5s / 矩阵变更审计可追溯</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">方案素材中心 · 详细设计.md §2.3 权限矩阵</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [可见性规则卡] -->
+  <section class="bg-blue-50 border border-blue-200 rounded-md p-5 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-bold text-gray-800">素材可见性规则 — 中标状态驱动</h2>
+        <p class="text-xs text-gray-500 mt-1">第一层过滤：中标状态 × 项目成员关系；第二层过滤：RBAC 角色操作权限（见下方矩阵）</p>
+      </div>
+      <span class="badge bg-blue-500 text-white">规则版本 v1.2 · 2026-03</span>
+    </div>
+
+    <div class="grid grid-cols-3 gap-4">
+      <!-- 已中标 -->
+      <div class="bg-white border border-green-300 rounded-md p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span>
+          <span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">🟢 已中标项目</span>
+        </div>
+        <p class="text-sm text-gray-700 font-medium mb-1">全员可见</p>
+        <p class="text-xs text-gray-500 leading-relaxed">绑定的所有素材对万德内部全员可见。外部访客与未登录用户始终不可见。</p>
+        <div class="mt-2 pt-2 border-t border-dashed border-gray-200 text-xs text-gray-400">
+          条件：<code class="text-gray-600">project.bid_status = 'WON'</code>
+        </div>
+      </div>
+
+      <!-- 未中标 -->
+      <div class="bg-white border border-orange-300 rounded-md p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span>
+          <span class="badge" style="background:#fff7e6;color:#d46b08;border:1px solid #ffd591;">🟡 未中标项目</span>
+        </div>
+        <p class="text-sm text-gray-700 font-medium mb-1">仅团队成员 + 超管</p>
+        <p class="text-xs text-gray-500 leading-relaxed">仅该项目 <code class="text-gray-600">project_members</code> 列表内成员 + 超管角色可见。防止方案素材外泄。</p>
+        <div class="mt-2 pt-2 border-t border-dashed border-gray-200 text-xs text-gray-400">
+          条件：<code class="text-gray-600">bid_status ∈ {'DRAFT','BIDDING','LOST'}</code>
+        </div>
+      </div>
+
+      <!-- 未关联 -->
+      <div class="bg-white border border-gray-300 rounded-md p-4">
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-gray-400"></span>
+          <span class="badge" style="background:#fafafa;color:#595959;border:1px solid #d9d9d9;">⚪ 未关联项目</span>
+        </div>
+        <p class="text-sm text-gray-700 font-medium mb-1">全员可见</p>
+        <p class="text-xs text-gray-500 leading-relaxed">通用素材库（模板、品牌物料、公共案例）不绑定具体项目，对内部全员开放。</p>
+        <div class="mt-2 pt-2 border-t border-dashed border-gray-200 text-xs text-gray-400">
+          条件：<code class="text-gray-600">asset_project_relations = ∅</code>
+        </div>
+      </div>
+    </div>
+
+    <div class="mt-4 p-3 bg-white border border-blue-100 rounded text-xs text-gray-600 leading-relaxed">
+      <span class="text-blue-600 font-semibold">⚡ 自动刷新机制：</span>
+      当项目状态从「未中标」→「已中标」时，系统自动触发权限刷新（Spring <code class="text-gray-700">ApplicationEvent</code> 机制），
+      延时 <span class="font-semibold text-gray-800">≤ 5 秒</span>。刷新过程包含：重建 <code>asset_visibility_cache</code>、清理前端权限缓存、推送 WebSocket 通知。
+      <span class="text-gray-400">· 对应 Issue #1880 / #1887</span>
+    </div>
+  </section>
+
+  <!-- [角色权限矩阵] -->
+  <section class="bg-white border border-gray-300 rounded-md p-5 mb-6">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-bold text-gray-800">角色-操作权限矩阵</h2>
+        <p class="text-xs text-gray-500 mt-1">8 角色 × 10 操作，单元格为权限状态；编辑后点击「同步到 RBAC 表」生效</p>
+      </div>
+      <div class="flex gap-2">
+        <button class="px-3 py-1.5 text-xs border border-gray-300 bg-white text-gray-700 rounded hover:bg-gray-50">+ 新增角色</button>
+        <button class="px-3 py-1.5 text-xs border border-gray-300 bg-white text-gray-700 rounded hover:bg-gray-50">⬇ 导出矩阵</button>
+        <button class="px-3 py-1.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">⟲ 同步到 RBAC 表</button>
+      </div>
+    </div>
+
+    <!-- 图例 -->
+    <div class="flex items-center gap-4 mb-3 text-xs text-gray-500">
+      <span><span class="perm-yes font-bold text-base align-middle">✓</span> 允许</span>
+      <span><span class="perm-no font-bold text-base align-middle">✗</span> 禁止</span>
+      <span><span class="perm-req font-semibold align-middle">📋需申请</span> 需走审批流</span>
+      <span class="ml-auto text-gray-400">最后更新：2026-03-18 10:24 · 操作人：吴严之</span>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="matrix-table w-full text-xs" style="border-collapse: collapse; min-width: 1100px;">
+        <thead>
+          <tr>
+            <th style="text-align:left; min-width: 160px;">角色 \ 操作</th>
+            <th>查看<br>列表</th>
+            <th>查看<br>未中标</th>
+            <th>下载<br>原图</th>
+            <th>下载<br>水印版</th>
+            <th>上传<br>新素材</th>
+            <th>修改<br>分类标签</th>
+            <th>删除<br>素材</th>
+            <th>发布/<br>下架</th>
+            <th>审计<br>日志</th>
+            <th>权限<br>配置</th>
+            <th style="min-width: 80px;">操作</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 超管 -->
+          <tr>
+            <td class="role-name">超管<div class="role-desc">SUPER_ADMIN</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 素材管理员 -->
+          <tr>
+            <td class="role-name">素材管理员<div class="role-desc">ASSET_ADMIN</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 商务主管 -->
+          <tr>
+            <td class="role-name">商务主管<div class="role-desc">BIZ_MANAGER</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 商务经理 -->
+          <tr>
+            <td class="role-name">商务经理<div class="role-desc">BIZ_STAFF</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 设计师 -->
+          <tr>
+            <td class="role-name">设计师<div class="role-desc">DESIGNER</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 方案策划 -->
+          <tr>
+            <td class="role-name">方案策划<div class="role-desc">PLANNER</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 项目经理 -->
+          <tr>
+            <td class="role-name">项目经理<div class="role-desc">PROJECT_MANAGER</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+          <!-- 访客 -->
+          <tr>
+            <td class="role-name">访客<div class="role-desc">GUEST</div></td>
+            <td class="perm-cell"><span class="perm-yes font-bold">✓</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-req">📋需申请</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><span class="perm-no font-bold">✗</span></td>
+            <td class="perm-cell"><button class="text-blue-500 hover:underline">编辑权限</button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="mt-3 text-xs text-gray-500">
+      该矩阵对应后端 RBAC <code class="text-gray-700 bg-gray-100 px-1 rounded">role_permissions</code> 表，编辑后点击「同步」落库生效。
+      同步过程会写入 <code class="text-gray-700 bg-gray-100 px-1 rounded">permission_audit_log</code>，可在审计模块追溯。
+    </p>
+  </section>
+
+  <!-- [中标状态事件日志] -->
+  <section class="bg-white border border-gray-300 rounded-md p-5">
+    <div class="flex items-center justify-between mb-4">
+      <div>
+        <h2 class="text-base font-bold text-gray-800">中标状态变更事件 — 权限刷新日志</h2>
+        <p class="text-xs text-gray-500 mt-1">监听 <code class="text-gray-700">ProjectBidStatusChangedEvent</code>，异步刷新该项目绑定素材的可见性缓存</p>
+      </div>
+      <div class="flex gap-2">
+        <select class="px-3 py-1.5 text-xs border border-gray-300 rounded bg-white text-gray-700">
+          <option>近 7 天</option>
+          <option>近 30 天</option>
+          <option>全部</option>
+        </select>
+        <button class="px-3 py-1.5 text-xs border border-gray-300 bg-white text-gray-700 rounded hover:bg-gray-50">🔔 订阅日志推送</button>
+      </div>
+    </div>
+
+    <div class="overflow-x-auto">
+      <table class="log-table w-full" style="border-collapse: collapse; min-width: 1000px;">
+        <thead>
+          <tr>
+            <th style="min-width: 150px;">事件 ID</th>
+            <th>项目 ID</th>
+            <th style="min-width: 200px;">项目名</th>
+            <th>状态变更</th>
+            <th>触发方</th>
+            <th style="text-align:right;">影响素材数</th>
+            <th style="text-align:right;">刷新耗时</th>
+            <th>执行状态</th>
+            <th>时间</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260320-001</code></td>
+            <td class="text-blue-500">#328</td>
+            <td>2024广州天河万达少儿乐园</td>
+            <td><span class="text-gray-500">未中标</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>吴严之</td>
+            <td style="text-align:right;">78</td>
+            <td style="text-align:right;" class="text-green-600">2.4s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-20 14:23</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260320-002</code></td>
+            <td class="text-blue-500">#331</td>
+            <td>深圳宝安海岸城主题乐园</td>
+            <td><span class="text-gray-500">草稿</span> → <span class="text-orange-600 font-semibold">投标中</span></td>
+            <td>李娜</td>
+            <td style="text-align:right;">42</td>
+            <td style="text-align:right;" class="text-green-600">1.8s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-20 11:07</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260319-008</code></td>
+            <td class="text-blue-500">#325</td>
+            <td>成都双流欢乐水世界二期</td>
+            <td><span class="text-gray-500">未中标</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>张伟</td>
+            <td style="text-align:right;">156</td>
+            <td style="text-align:right;" class="text-green-600">3.1s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-19 17:52</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260319-007</code></td>
+            <td class="text-blue-500">#319</td>
+            <td>杭州萧山亲子农场项目</td>
+            <td><span class="text-orange-600">投标中</span> → <span class="text-red-500 font-semibold">已失标</span></td>
+            <td>吴严之</td>
+            <td style="text-align:right;">23</td>
+            <td style="text-align:right;" class="text-green-600">0.9s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-19 15:30</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260319-005</code></td>
+            <td class="text-blue-500">#317</td>
+            <td>西安曲江新区儿童主题街区</td>
+            <td><span class="text-gray-500">未中标</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>系统定时任务</td>
+            <td style="text-align:right;">94</td>
+            <td style="text-align:right;" class="text-orange-500">4.7s</td>
+            <td><span class="badge" style="background:#fffbe6;color:#d48806;border:1px solid #ffe58f;">⏳ 进行中</span></td>
+            <td class="text-gray-500">2026-03-19 10:18</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260318-012</code></td>
+            <td class="text-blue-500">#314</td>
+            <td>南京江宁万达广场儿童区</td>
+            <td><span class="text-gray-500">未中标</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>王芳</td>
+            <td style="text-align:right;">67</td>
+            <td style="text-align:right;" class="text-green-600">2.2s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-18 16:45</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260318-009</code></td>
+            <td class="text-blue-500">#309</td>
+            <td>青岛崂山滨海乐园改造</td>
+            <td><span class="text-orange-600">投标中</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>李娜</td>
+            <td style="text-align:right;">112</td>
+            <td style="text-align:right;" class="text-red-500">—</td>
+            <td><span class="badge" style="background:#fff1f0;color:#cf1322;border:1px solid #ffa39e;">❌ 失败</span></td>
+            <td class="text-gray-500">2026-03-18 14:02</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260318-006</code></td>
+            <td class="text-blue-500">#302</td>
+            <td>重庆江北嘴CBD亲子空间</td>
+            <td><span class="text-gray-500">未中标</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>吴严之</td>
+            <td style="text-align:right;">51</td>
+            <td style="text-align:right;" class="text-green-600">1.6s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-18 09:27</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260317-015</code></td>
+            <td class="text-blue-500">#298</td>
+            <td>长沙梅溪湖文旅综合体</td>
+            <td><span class="text-gray-500">草稿</span> → <span class="text-orange-600 font-semibold">投标中</span></td>
+            <td>张伟</td>
+            <td style="text-align:right;">35</td>
+            <td style="text-align:right;" class="text-green-600">1.2s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-17 18:10</td>
+          </tr>
+          <tr>
+            <td><code class="text-gray-700">EVT-20260317-011</code></td>
+            <td class="text-blue-500">#294</td>
+            <td>苏州工业园区亲子乐园三期</td>
+            <td><span class="text-gray-500">未中标</span> → <span class="text-green-600 font-semibold">已中标</span></td>
+            <td>王芳</td>
+            <td style="text-align:right;">89</td>
+            <td style="text-align:right;" class="text-green-600">2.8s</td>
+            <td><span class="badge" style="background:#f6ffed;color:#389e0d;border:1px solid #b7eb8f;">✅ 成功</span></td>
+            <td class="text-gray-500">2026-03-17 13:35</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 分页/统计 -->
+    <div class="flex items-center justify-between mt-4 text-xs text-gray-500">
+      <div>
+        共 <span class="text-gray-700 font-semibold">128</span> 条事件 ·
+        成功 <span class="text-green-600 font-semibold">119</span> ·
+        进行中 <span class="text-orange-500 font-semibold">6</span> ·
+        失败 <span class="text-red-500 font-semibold">3</span> ·
+        平均耗时 <span class="text-gray-700 font-semibold">2.3s</span>
+      </div>
+      <div class="flex items-center gap-1">
+        <button class="px-2 py-1 border border-gray-300 rounded text-gray-500 hover:bg-gray-50">&lt;</button>
+        <button class="px-2.5 py-1 border border-blue-500 bg-blue-500 text-white rounded">1</button>
+        <button class="px-2.5 py-1 border border-gray-300 rounded text-gray-700 hover:bg-gray-50">2</button>
+        <button class="px-2.5 py-1 border border-gray-300 rounded text-gray-700 hover:bg-gray-50">3</button>
+        <span class="text-gray-400">...</span>
+        <button class="px-2.5 py-1 border border-gray-300 rounded text-gray-700 hover:bg-gray-50">13</button>
+        <button class="px-2 py-1 border border-gray-300 rounded text-gray-500 hover:bg-gray-50">&gt;</button>
+      </div>
+    </div>
+  </section>
+
+</body>
+</html>

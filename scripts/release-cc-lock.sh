@@ -51,5 +51,19 @@ for lockfile in $LOCK_DIR/wande-play-kimi*.lock; do
 done
 
 if [ "$FOUND" = "false" ]; then
-  echo "[release-cc-lock] 未找到 Issue #$ISSUE 对应的锁文件（可能已释放）"
+  echo "[release-cc-lock] 未找到 Issue #$ISSUE 对应的锁文件"
+  # fallback: lock文件可能已被清理，但tmux session还在，直接按Issue号搜session
+  FALLBACK_SESSION=$(tmux ls -F '#{session_name}' 2>/dev/null | grep -E "cc-wande-play-kimi[0-9]+-${ISSUE}$" | head -1)
+  if [ -n "$FALLBACK_SESSION" ]; then
+    # 提取kimi目录名
+    DIRNAME=$(echo "$FALLBACK_SESSION" | sed "s/^cc-//;s/-${ISSUE}$//")
+    dir="${HOME_DIR}/projects/$DIRNAME"
+
+    tmux kill-session -t "$FALLBACK_SESSION" 2>/dev/null
+    echo "[release-cc-lock] ✅ fallback: 已停止残留会话 $FALLBACK_SESSION"
+
+    [ -d "$dir" ] && cd "$dir" && git checkout dev 2>/dev/null && echo "[release-cc-lock] ✅ 已切回 dev 分支"
+  else
+    echo "[release-cc-lock] 无残留会话"
+  fi
 fi

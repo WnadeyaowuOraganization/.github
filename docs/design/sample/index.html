@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>万德AI平台 — 样品管理中心 低保真原型</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  /* Ant Design-style bottom line tabs */
+  .ant-tabs-nav {
+    display: flex;
+    border-bottom: 1px solid #d9d9d9;
+    background: #fff;
+    padding: 0 24px;
+  }
+  .ant-tab {
+    padding: 12px 16px;
+    margin-right: 32px;
+    cursor: pointer;
+    color: #595959;
+    font-size: 14px;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    user-select: none;
+  }
+  .ant-tab:hover { color: #1890ff; }
+  .ant-tab.active {
+    color: #1890ff;
+    border-bottom-color: #1890ff;
+    font-weight: 500;
+  }
+  .sidebar-icon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 4px auto;
+    border-radius: 6px;
+    color: #8c8c8c;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .sidebar-icon:hover { background: #f0f0f0; }
+  .sidebar-icon.active { background: #e6f7ff; color: #1890ff; }
+  iframe {
+    width: 100%;
+    min-height: calc(100vh - 160px);
+    border: none;
+    background: #fff;
+    display: block;
+  }
+</style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">样品管理中心</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">整合D3出图→样品清单→工厂制作→借还→看板的全流程，统一管理5大子模块（生命周期/色卡材料/配色器/库存/样品箱），替代当前犀牛手动+纸质流程的碎片化管理</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师, 商务/销售, 设计主管（审批）, 工厂PMC, 仓管, 业务员（外出携箱）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">样品全生命周期 / 色卡材料标准化+审批 / 在线配色器 / 多仓库联通 / 标准样品箱制度</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">D3一键生成样品清单 / 非标色卡审批 / 在线配色出方案 / 跨仓调拨 / 样品箱领用归还</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">页面在3秒内渲染 / 5个Tab可正常切换 / 各Tab数据独立加载 / 不影响其他业务模块</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">样品管理中心-详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- 左侧侧边栏（折叠 w-16） -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex flex-col items-center py-3">
+    <div class="w-10 h-10 flex items-center justify-center mb-2 rounded bg-gray-800 text-white text-xs font-bold">WD</div>
+    <div class="sidebar-icon" title="首页">🏠</div>
+    <div class="sidebar-icon" title="项目">📁</div>
+    <div class="sidebar-icon" title="设计">✏️</div>
+    <div class="sidebar-icon active" title="样品中心">📦</div>
+    <div class="sidebar-icon" title="库存">🗃️</div>
+    <div class="sidebar-icon" title="工厂">🏭</div>
+    <div class="sidebar-icon" title="报表">📊</div>
+    <div class="sidebar-icon" title="设置">⚙️</div>
+  </aside>
+
+  <!-- 右侧主区 -->
+  <main class="flex-1 flex flex-col">
+    <!-- 顶部面包屑 -->
+    <div class="bg-white border-b border-gray-300 px-6 py-3 flex items-center justify-between">
+      <nav class="text-sm text-gray-600">
+        <span class="hover:text-blue-500 cursor-pointer">首页</span>
+        <span class="mx-2 text-gray-400">/</span>
+        <span class="hover:text-blue-500 cursor-pointer">综合管理中心</span>
+        <span class="mx-2 text-gray-400">/</span>
+        <span class="text-gray-900 font-medium">样品管理中心</span>
+      </nav>
+      <div class="text-xs text-gray-500">万德AI平台 · 低保真原型</div>
+    </div>
+
+    <!-- Tab栏 -->
+    <div id="tab-nav" class="ant-tabs-nav"></div>
+
+    <!-- iframe容器 -->
+    <div class="flex-1 bg-gray-50">
+      <iframe id="tab-iframe" src=""></iframe>
+    </div>
+
+    <!-- 底部「原型说明」 -->
+    <section class="bg-white border-t border-gray-300 px-6 py-6">
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">📋 原型说明</h2>
+      <p class="text-sm text-gray-600 mb-4">本原型将 5 个紧耦合的样品相关子模块整合为统一的「样品管理中心」，覆盖样品从 D3 出图到回收的完整生命周期。</p>
+
+      <div class="overflow-x-auto border border-gray-300 rounded">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100 text-gray-700">
+            <tr>
+              <th class="px-4 py-2 text-left border-b border-gray-300 w-40">Tab 页</th>
+              <th class="px-4 py-2 text-left border-b border-gray-300 w-48">文件名</th>
+              <th class="px-4 py-2 text-left border-b border-gray-300">功能描述</th>
+              <th class="px-4 py-2 text-left border-b border-gray-300">覆盖 Issue 编号</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2 font-medium">样品全生命周期</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">tab-lifecycle.html</td>
+              <td class="px-4 py-2">申请 → 工单 → 入库 → 借还 → 看板</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">#1948, #1950, #1951, #1952, #2335, #2336, #2337, #2338</td>
+            </tr>
+            <tr class="border-b border-gray-200 bg-gray-50">
+              <td class="px-4 py-2 font-medium">色卡材料标准化</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">tab-colors.html</td>
+              <td class="px-4 py-2">色卡库 + 材料库 + 非标审批</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">#2031, #2032, #2370</td>
+            </tr>
+            <tr class="border-b border-gray-200">
+              <td class="px-4 py-2 font-medium">色卡配色器</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">tab-colorizer.html</td>
+              <td class="px-4 py-2">在线配色 + 导出 + 需求表</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">#2659, #2660, #2661, #2662</td>
+            </tr>
+            <tr class="border-b border-gray-200 bg-gray-50">
+              <td class="px-4 py-2 font-medium">多仓库库存联通</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">tab-inventory.html</td>
+              <td class="px-4 py-2">仓库维度 + 多仓查询 + 调拨 + 外部API</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">#2663, #2664, #2665, #2666</td>
+            </tr>
+            <tr>
+              <td class="px-4 py-2 font-medium">样品箱制度</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">tab-kit.html</td>
+              <td class="px-4 py-2">标准箱 + 项目箱 + 追踪借还</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-600">#2668, #2669, #2670</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4 text-xs text-gray-600">
+        <div class="border border-gray-300 rounded p-3 bg-gray-50">
+          <div class="font-semibold text-gray-700 mb-1">📌 Issue 汇总</div>
+          <div>共 <span class="font-semibold">22</span> 个 Issue 被本中心覆盖，分布于 5 个 Tab 页。</div>
+        </div>
+        <div class="border border-gray-300 rounded p-3 bg-gray-50">
+          <div class="font-semibold text-gray-700 mb-1">🔗 模块整合逻辑</div>
+          <div>D3 出图 → 清单生成 → 申请审批 → 工厂制作 → 入库 → 借还 → 项目使用 → 回收</div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<script>
+  const tabs = [
+    { key: 'lifecycle', label: '样品全生命周期', src: 'tab-lifecycle.html' },
+    { key: 'colors',    label: '色卡材料标准化', src: 'tab-colors.html' },
+    { key: 'colorizer', label: '色卡配色器',     src: 'tab-colorizer.html' },
+    { key: 'inventory', label: '多仓库库存联通', src: 'tab-inventory.html' },
+    { key: 'kit',       label: '样品箱制度',     src: 'tab-kit.html' },
+  ];
+  let activeKey = tabs[0].key;
+
+  const tabNav = document.getElementById('tab-nav');
+  const iframe = document.getElementById('tab-iframe');
+
+  function renderTabs() {
+    tabNav.innerHTML = '';
+    tabs.forEach(t => {
+      const el = document.createElement('div');
+      el.className = 'ant-tab' + (t.key === activeKey ? ' active' : '');
+      el.textContent = t.label;
+      el.addEventListener('click', () => switchTab(t.key));
+      tabNav.appendChild(el);
+    });
+  }
+
+  function switchTab(key) {
+    if (key === activeKey) return;
+    activeKey = key;
+    renderTabs();
+    const tab = tabs.find(t => t.key === key);
+    if (tab) iframe.src = tab.src;
+  }
+
+  // iframe 加载后自适应高度
+  iframe.addEventListener('load', () => {
+    try {
+      const doc = iframe.contentDocument || iframe.contentWindow.document;
+      if (doc && doc.body) {
+        const h = Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight);
+        const minH = window.innerHeight - 160;
+        iframe.style.height = Math.max(h, minH) + 'px';
+      }
+    } catch (e) {
+      // 跨域或未加载完成，忽略
+    }
+  });
+
+  // 初始化
+  renderTabs();
+  iframe.src = tabs[0].src;
+</script>
+
+</body>
+</html>

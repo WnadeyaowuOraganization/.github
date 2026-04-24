@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 方案素材中心 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .sidebar-item { padding: 12px 0; text-align: center; color: #666; cursor: pointer; }
+    .sidebar-item:hover { background: #f0f0f0; }
+    .sidebar-item.active { color: #1890ff; background: #e6f7ff; border-left: 3px solid #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">方案素材中心 — Hub 主框架</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">为万德 30+份/年方案提供统一素材中心，替代散落的本地文件夹，支撑"客户说要动物造型→3秒找到"的精准检索</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师、方案策划、商务经理、项目经理；超管具备素材+权限双维度管控</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">素材浏览+多维度筛选 / 上传分类打标 / RBAC权限矩阵 / 版本+操作日志 / AI智能推荐</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">关键词+标签筛选 / 素材卡片预览+下载（带水印）/ 角色权限矩阵配置 / 中标状态触发权限刷新 / 一键推荐插入PPT</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">访问 /wande/asset 页面3秒内渲染 / 5 Tab 切换无闪烁 / 筛选&lt;1s响应 / 未中标素材仅项目团队可见</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">方案素材中心 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏] 折叠图标菜单 -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0">
+    <div class="p-3 text-center border-b border-gray-200">
+      <div class="w-10 h-10 bg-blue-500 text-white rounded flex items-center justify-center mx-auto text-sm font-bold">万</div>
+    </div>
+    <div class="sidebar-item" title="工作台">🏠</div>
+    <div class="sidebar-item" title="CRM">👥</div>
+    <div class="sidebar-item" title="项目中心">📋</div>
+    <div class="sidebar-item" title="D3设计">🎨</div>
+    <div class="sidebar-item active" title="素材库">📦</div>
+    <div class="sidebar-item" title="方案引擎">📄</div>
+    <div class="sidebar-item" title="驾驶舱">📊</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col">
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 资源中心 &gt; <span class="text-gray-700 font-medium">方案素材中心</span>
+    </div>
+
+    <!-- [页面头部] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200">
+      <h1 class="text-xl font-bold text-gray-800">方案素材中心</h1>
+      <p class="text-xs text-gray-500 mt-1">万德设计方案素材统一入口 · 支持按项目中标状态驱动可见性 · AI 辅助智能推荐</p>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容 — iframe加载] -->
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-browse.html"></iframe>
+    </div>
+
+    <!-- [原型说明] -->
+    <div class="p-6 bg-white border-t border-gray-300 mt-4">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead><tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300 w-40">Tab页</th>
+          <th class="p-2 border border-gray-300 w-48">文件名</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+          <th class="p-2 border border-gray-300 w-32">对应Issue</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab1 素材浏览</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-browse.html</td>
+            <td class="p-2 border border-gray-300">分类树+多维度筛选+关键字搜索+卡片瀑布流；支持类型/场地/年龄段/色系/材质筛选</td>
+            <td class="p-2 border border-gray-300 text-xs">#1882</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab2 上传分类</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-upload.html</td>
+            <td class="p-2 border border-gray-300">批量上传（PPT/图/PDF/视频/源文件）+ 自动分类打标 + 项目绑定（决定权限）</td>
+            <td class="p-2 border border-gray-300 text-xs">#1793 #2163</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab3 权限矩阵</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-permission.html</td>
+            <td class="p-2 border border-gray-300">角色×操作权限矩阵 + 可见性三档规则 + 中标状态事件触发权限刷新</td>
+            <td class="p-2 border border-gray-300 text-xs">#1880 #1887</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab4 版本&日志</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-version.html</td>
+            <td class="p-2 border border-gray-300">素材版本历史（查看/回退/对比）+ 操作审计日志（查看/下载/编辑）+ 下载水印配置</td>
+            <td class="p-2 border border-gray-300 text-xs">#1793 #2163</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab5 AI 推荐</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-ai-recommend.html</td>
+            <td class="p-2 border border-gray-300">按项目类型+行业+阶段推荐相关素材；CLIP 向量相似度；一键插入 PPT 插件</td>
+            <td class="p-2 border border-gray-300 text-xs">#1972</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+const tabs = [
+  { key: 'browse',       label: 'Tab1 素材浏览',   src: 'tab-browse.html' },
+  { key: 'upload',       label: 'Tab2 上传分类',   src: 'tab-upload.html' },
+  { key: 'permission',   label: 'Tab3 权限矩阵',   src: 'tab-permission.html' },
+  { key: 'version',      label: 'Tab4 版本&日志',  src: 'tab-version.html' },
+  { key: 'ai-recommend', label: 'Tab5 AI 推荐',    src: 'tab-ai-recommend.html' },
+];
+
+const tabBar = document.getElementById('tabBar');
+const tabFrame = document.getElementById('tabFrame');
+let activeKey = tabs[0].key;
+
+function renderTabs() {
+  tabBar.innerHTML = tabs.map(t =>
+    `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+  ).join('');
+}
+
+tabBar.addEventListener('click', (e) => {
+  const item = e.target.closest('.tab-item');
+  if (!item) return;
+  activeKey = item.dataset.key;
+  tabFrame.src = item.dataset.src;
+  renderTabs();
+});
+
+tabFrame.addEventListener('load', () => {
+  try {
+    const h = tabFrame.contentDocument.documentElement.scrollHeight;
+    tabFrame.style.height = Math.max(h, 600) + 'px';
+  } catch(e) {}
+});
+
+renderTabs();
+</script>
+</body>
+</html>

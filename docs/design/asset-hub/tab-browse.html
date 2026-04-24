@@ -1,0 +1,676 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab1 素材浏览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* 卡片hover浮层 */
+    .asset-card { position: relative; overflow: hidden; }
+    .asset-card .hover-actions {
+      position: absolute;
+      top: 0; left: 0; right: 0;
+      height: 120px;
+      background: rgba(0,0,0,0.55);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      opacity: 0;
+      transition: opacity 0.18s ease;
+      pointer-events: none;
+    }
+    .asset-card:hover .hover-actions { opacity: 1; pointer-events: auto; }
+    .hover-actions button {
+      width: 32px; height: 32px;
+      background: #fff;
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: #555;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .hover-actions button:hover { color: #1890ff; }
+
+    /* 分类树 */
+    .tree-node { cursor: pointer; }
+    .tree-node .tree-children { display: none; }
+    .tree-node.open .tree-children { display: block; }
+    .tree-node.open .tree-arrow { transform: rotate(90deg); }
+    .tree-arrow { display: inline-block; transition: transform 0.15s; font-size: 10px; color: #999; }
+
+    /* 筛选tag */
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 10px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      font-size: 12px;
+      color: #595959;
+      background: #fff;
+      cursor: pointer;
+      user-select: none;
+      margin-right: 6px;
+      margin-bottom: 4px;
+      transition: all 0.15s;
+    }
+    .tag-chip:hover { border-color: #1890ff; color: #1890ff; }
+    .tag-chip.active { border-color: #1890ff; color: #1890ff; background: #e6f4ff; }
+
+    /* Ant Design 风格分页 */
+    .ant-pagination {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+    }
+    .ant-pagination .pg-item {
+      min-width: 32px;
+      height: 32px;
+      padding: 0 8px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      background: #fff;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      color: #595959;
+    }
+    .ant-pagination .pg-item:hover { border-color: #1890ff; color: #1890ff; }
+    .ant-pagination .pg-item.active { border-color: #1890ff; color: #1890ff; }
+    .ant-pagination .pg-item.disabled { color: #bfbfbf; cursor: not-allowed; background: #f5f5f5; }
+
+    /* 中标角标 */
+    .badge-status {
+      position: absolute;
+      top: 6px; right: 6px;
+      padding: 2px 8px;
+      font-size: 11px;
+      color: #fff;
+      border-radius: 3px;
+      font-weight: 500;
+      z-index: 1;
+    }
+    .badge-won { background: #52c41a; }
+    .badge-lost { background: #fa8c16; }
+    .badge-none { background: #bfbfbf; }
+
+    /* Ant 下拉/输入 */
+    .ant-input, .ant-select {
+      height: 32px;
+      padding: 0 11px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 13px;
+      color: #595959;
+      outline: none;
+    }
+    .ant-input:focus, .ant-select:focus { border-color: #1890ff; }
+
+    .ant-btn {
+      height: 32px;
+      padding: 0 15px;
+      border: 1px solid #d9d9d9;
+      border-radius: 4px;
+      background: #fff;
+      font-size: 13px;
+      color: #595959;
+      cursor: pointer;
+    }
+    .ant-btn:hover { border-color: #1890ff; color: #1890ff; }
+    .ant-btn-primary {
+      background: #1890ff;
+      border-color: #1890ff;
+      color: #fff;
+    }
+    .ant-btn-primary:hover { background: #40a9ff; border-color: #40a9ff; color: #fff; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab1 素材浏览 — 分类树 + 多维筛选 + 卡片瀑布流</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">支撑"客户说要动物造型→3秒找到"的精准检索，替代翻文件夹找图</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师、方案策划、商务经理（按权限差异化可见）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">左侧分类树 / 7维度组合筛选 / 关键字全文搜索 / 卡片瀑布流 / 中标状态权限过滤</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击分类树节点过滤 / 多维度组合筛选 / 卡片 hover 展示操作 / 视图切换 / 分页</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">筛选&lt;1s响应 / 未中标素材非团队成员不可见 / 卡片 hover 操作图标正确</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">方案素材中心 详细设计.md §2.1</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [主布局：左树右内容] -->
+<div class="flex gap-4" style="min-height: calc(100vh - 220px);">
+
+  <!-- [分类树] 左侧 240px 分类树 -->
+  <aside class="bg-white border border-gray-300 rounded" style="width:240px; flex-shrink:0;">
+    <div class="px-3 py-2 border-b border-gray-200 text-sm font-semibold text-gray-700 flex items-center justify-between">
+      <span>素材分类</span>
+      <span class="text-xs text-gray-400 font-normal">1,248</span>
+    </div>
+    <div class="p-2 text-sm" id="categoryTree">
+
+      <!-- 全部 -->
+      <div class="tree-node">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded bg-blue-50 text-blue-600 font-medium">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 全部素材</span>
+          <span class="text-xs text-blue-500">1,248</span>
+        </div>
+      </div>
+
+      <!-- 产品类型 -->
+      <div class="tree-node open mt-1">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-gray-700">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 产品类型</span>
+          <span class="text-xs text-gray-400">486</span>
+        </div>
+        <div class="tree-children pl-5 mt-0.5">
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 组合滑梯</span><span class="text-gray-400">128</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 主题乐园</span><span class="text-gray-400">96</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 无动力设备</span><span class="text-gray-400">74</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 水上乐园</span><span class="text-gray-400">62</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 蹦床公园</span><span class="text-gray-400">58</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 拓展设施</span><span class="text-gray-400">42</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 造型雕塑</span><span class="text-gray-400">26</span></div>
+        </div>
+      </div>
+
+      <!-- 场地 -->
+      <div class="tree-node mt-1">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-gray-700">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 场地</span>
+          <span class="text-xs text-gray-400">312</span>
+        </div>
+        <div class="tree-children pl-5 mt-0.5">
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 室内</span><span class="text-gray-400">142</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 室外</span><span class="text-gray-400">108</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 水上</span><span class="text-gray-400">38</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 通用</span><span class="text-gray-400">24</span></div>
+        </div>
+      </div>
+
+      <!-- 年龄段 -->
+      <div class="tree-node mt-1">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-gray-700">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 年龄段</span>
+          <span class="text-xs text-gray-400">198</span>
+        </div>
+        <div class="tree-children pl-5 mt-0.5">
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 0-3岁</span><span class="text-gray-400">42</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 3-6岁</span><span class="text-gray-400">68</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 6-12岁</span><span class="text-gray-400">54</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 12岁+</span><span class="text-gray-400">20</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 全龄</span><span class="text-gray-400">14</span></div>
+        </div>
+      </div>
+
+      <!-- 材质 -->
+      <div class="tree-node mt-1">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-gray-700">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 材质</span>
+          <span class="text-xs text-gray-400">124</span>
+        </div>
+        <div class="tree-children pl-5 mt-0.5">
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· EPDM</span><span class="text-gray-400">38</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 塑胶</span><span class="text-gray-400">32</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 木质</span><span class="text-gray-400">24</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 金属</span><span class="text-gray-400">18</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 组合</span><span class="text-gray-400">12</span></div>
+        </div>
+      </div>
+
+      <!-- 色系 -->
+      <div class="tree-node mt-1">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-gray-700">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 色系</span>
+          <span class="text-xs text-gray-400">88</span>
+        </div>
+        <div class="tree-children pl-5 mt-0.5">
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 马卡龙</span><span class="text-gray-400">22</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 莫兰迪</span><span class="text-gray-400">18</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 国潮</span><span class="text-gray-400">14</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 彩虹</span><span class="text-gray-400">12</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 自然</span><span class="text-gray-400">12</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 定制</span><span class="text-gray-400">10</span></div>
+        </div>
+      </div>
+
+      <!-- 行业 -->
+      <div class="tree-node mt-1">
+        <div class="flex items-center justify-between px-2 py-1.5 rounded hover:bg-gray-100 text-gray-700">
+          <span class="flex items-center gap-1.5"><span class="tree-arrow">▶</span>📁 行业</span>
+          <span class="text-xs text-gray-400">140</span>
+        </div>
+        <div class="tree-children pl-5 mt-0.5">
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 商业综合体</span><span class="text-gray-400">46</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 文旅景区</span><span class="text-gray-400">32</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 幼儿园/学校</span><span class="text-gray-400">28</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 社区/公园</span><span class="text-gray-400">20</span></div>
+          <div class="flex items-center justify-between px-2 py-1 rounded hover:bg-gray-100 text-gray-600 text-xs"><span>· 酒店/民宿</span><span class="text-gray-400">14</span></div>
+        </div>
+      </div>
+
+    </div>
+  </aside>
+
+  <!-- [右侧主区域] -->
+  <div class="flex-1 min-w-0">
+
+    <!-- [筛选栏] 顶部筛选栏（一行可折叠） -->
+    <div class="bg-white border border-gray-300 rounded p-4 mb-3">
+      <!-- 第一行：搜索 + 下拉 -->
+      <div class="flex items-center gap-3 mb-3 flex-wrap">
+        <div class="flex items-center gap-2 flex-1 min-w-[300px]">
+          <span class="text-xs text-gray-500 w-16 text-right">关键词</span>
+          <input type="text" class="ant-input flex-1" placeholder="搜素材名/标签/描述...">
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-500 w-16 text-right">素材类型</span>
+          <select class="ant-select w-40">
+            <option>全部类型</option>
+            <option>效果图</option>
+            <option>实拍照</option>
+            <option>方案PPT页</option>
+            <option>施工图</option>
+            <option>视频</option>
+            <option>源文件</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-500 w-16 text-right">场地类型</span>
+          <select class="ant-select w-32">
+            <option>全部场地</option>
+            <option>室内</option>
+            <option>室外</option>
+            <option>水上</option>
+            <option>通用</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-500 w-16 text-right">中标状态</span>
+          <select class="ant-select w-32">
+            <option>全部</option>
+            <option>仅已中标</option>
+            <option>仅未中标</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- 第二行：多选 tag -->
+      <div class="grid grid-cols-3 gap-4">
+        <div>
+          <div class="text-xs text-gray-500 mb-1.5">年龄段</div>
+          <div class="flex flex-wrap">
+            <span class="tag-chip active">0-3岁</span>
+            <span class="tag-chip">3-6岁</span>
+            <span class="tag-chip active">6-12岁</span>
+            <span class="tag-chip">12岁+</span>
+            <span class="tag-chip">全龄</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500 mb-1.5">色系</div>
+          <div class="flex flex-wrap">
+            <span class="tag-chip">马卡龙</span>
+            <span class="tag-chip">莫兰迪</span>
+            <span class="tag-chip">国潮</span>
+            <span class="tag-chip active">彩虹</span>
+            <span class="tag-chip">自然</span>
+            <span class="tag-chip">定制</span>
+          </div>
+        </div>
+        <div>
+          <div class="text-xs text-gray-500 mb-1.5">材质</div>
+          <div class="flex flex-wrap">
+            <span class="tag-chip active">EPDM</span>
+            <span class="tag-chip">塑胶</span>
+            <span class="tag-chip">木质</span>
+            <span class="tag-chip">金属</span>
+            <span class="tag-chip">组合</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 第三行：操作按钮 -->
+      <div class="flex items-center justify-between mt-3 pt-3 border-t border-gray-100">
+        <div class="text-xs text-gray-500">
+          已选筛选条件：<span class="text-blue-600">年龄段×2</span> · <span class="text-blue-600">色系×1</span> · <span class="text-blue-600">材质×1</span>
+        </div>
+        <div class="flex items-center gap-2">
+          <button class="ant-btn">重置</button>
+          <button class="ant-btn ant-btn-primary">应用筛选</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [工具栏] -->
+    <div class="bg-white border border-gray-300 rounded px-4 py-2.5 mb-3 flex items-center justify-between">
+      <div class="text-sm text-gray-600">
+        共筛选出 <span class="text-blue-600 font-semibold">1,248</span> 个素材
+      </div>
+      <div class="flex items-center gap-4 text-sm">
+        <!-- 视图切换 -->
+        <div class="flex items-center gap-1 border border-gray-300 rounded overflow-hidden">
+          <button class="px-3 py-1 bg-blue-500 text-white text-xs">卡片</button>
+          <button class="px-3 py-1 bg-white text-gray-600 text-xs hover:bg-gray-50">列表</button>
+        </div>
+        <!-- 排序 -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-500">排序</span>
+          <select class="ant-select w-28">
+            <option>最新</option>
+            <option>最热</option>
+            <option>按大小</option>
+          </select>
+        </div>
+        <!-- 每页数 -->
+        <div class="flex items-center gap-2">
+          <span class="text-xs text-gray-500">每页</span>
+          <select class="ant-select w-20">
+            <option>24</option>
+            <option>48</option>
+            <option>96</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- [素材卡片网格] 6 列网格 -->
+    <div class="grid gap-3 mb-3" style="grid-template-columns: repeat(6, minmax(0, 1fr));">
+
+      <!-- 卡片 1 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e8e8e8 0%, #d1d1d1 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[效果图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="海盗船主题方案页_V3">海盗船主题方案页_V3</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">深圳华润万象城项目</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">方案PPT页</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 2 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e0e7ec 0%, #c9d4dc 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[效果图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="2024迪士尼项目效果图-海景">2024迪士尼项目效果图-海景</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">上海迪士尼二期</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">效果图</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 3 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #f5e6e6 0%, #e5d1d1 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-lost">未中标</span>
+          <span>[实拍照预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="EPDM地面彩虹图案">EPDM地面彩虹图案</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">杭州万象汇项目（投标）</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">实拍照</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 4 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e6f0e6 0%, #cfdecf 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[效果图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="动物造型组合滑梯_室外3-12岁">动物造型组合滑梯_室外3-12岁</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">广州融创文旅城</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">效果图</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 5 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e6e8f0 0%, #cfd3e0 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-none">无项目</span>
+          <span>[源文件预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="蹦床公园吊顶设计_通用版">蹦床公园吊顶设计_通用版</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">素材库·通用资源</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">源文件</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 6 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #f0ebe1 0%, #dfd5c4 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[施工图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="国潮主题木质蹦床区施工图">国潮主题木质蹦床区施工图</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">成都太古里项目</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">施工图</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 7 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e6eef0 0%, #cfd8dc 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-lost">未中标</span>
+          <span>[视频预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="水上乐园造浪池方案宣传片">水上乐园造浪池方案宣传片</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">三亚亚特兰蒂斯（投标）</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">视频</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 8 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #f0e6f0 0%, #dfcfdf 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[效果图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="马卡龙色系幼儿园0-3岁区域">马卡龙色系幼儿园0-3岁区域</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">深圳南山实验幼儿园</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">效果图</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 9 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e8f0e6 0%, #d2dccf 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-none">无项目</span>
+          <span>[实拍照预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="自然色系原木无动力拓展">自然色系原木无动力拓展</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">素材库·标准产品</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">实拍照</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 10 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #f0e6e6 0%, #dfcfcf 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[方案PPT预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="恐龙主题乐园整体方案_终版">恐龙主题乐园整体方案_终版</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">重庆欢乐谷扩建</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">方案PPT页</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 11 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #e6edf0 0%, #cfd9dc 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-lost">未中标</span>
+          <span>[效果图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="莫兰迪色室内6-12岁攀爬网">莫兰迪色室内6-12岁攀爬网</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">北京朝阳大悦城（投标）</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">效果图</span></div>
+        </div>
+      </div>
+
+      <!-- 卡片 12 -->
+      <div class="asset-card bg-white border border-gray-300 rounded overflow-hidden">
+        <div class="relative w-full" style="aspect-ratio: 3/2; background: linear-gradient(135deg, #f0ece0 0%, #dfd8c3 100%); display:flex; align-items:center; justify-content:center; color:#999; font-size:12px;">
+          <span class="badge-status badge-won">已中标</span>
+          <span>[施工图预览]</span>
+          <div class="hover-actions">
+            <button title="预览">👁</button>
+            <button title="下载">⬇</button>
+            <button title="收藏">☆</button>
+            <button title="对比">⇌</button>
+          </div>
+        </div>
+        <div class="p-2">
+          <div class="text-xs font-medium text-gray-700 truncate" title="金属蹦床立柱结构施工详图">金属蹦床立柱结构施工详图</div>
+          <div class="text-[11px] text-gray-400 truncate mt-0.5">西安大唐不夜城</div>
+          <div class="mt-1.5"><span class="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded">施工图</span></div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- [分页] Ant Design 分页组件样式 -->
+    <div class="bg-white border border-gray-300 rounded px-4 py-3 flex items-center justify-between">
+      <div class="text-xs text-gray-500">
+        第 1-24 条 / 共 1,248 条
+      </div>
+      <div class="ant-pagination">
+        <span class="pg-item disabled">‹</span>
+        <span class="pg-item active">1</span>
+        <span class="pg-item">2</span>
+        <span class="pg-item">3</span>
+        <span class="pg-item">4</span>
+        <span class="pg-item">5</span>
+        <span class="pg-item">···</span>
+        <span class="pg-item">52</span>
+        <span class="pg-item">›</span>
+        <span class="text-xs text-gray-500 ml-2">跳至</span>
+        <input type="text" class="ant-input w-14 text-center" style="height:32px;" value="1">
+        <span class="text-xs text-gray-500">页</span>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+  // 分类树展开/收起
+  document.querySelectorAll('#categoryTree .tree-node > div:first-child').forEach(function(header){
+    header.addEventListener('click', function(e){
+      var node = header.parentElement;
+      // 只对包含 tree-children 的节点响应折叠
+      if (node.querySelector('.tree-children')) {
+        node.classList.toggle('open');
+      }
+    });
+  });
+
+  // 筛选 tag 点击切换
+  document.querySelectorAll('.tag-chip').forEach(function(chip){
+    chip.addEventListener('click', function(){
+      chip.classList.toggle('active');
+    });
+  });
+</script>
+
+</body>
+</html>

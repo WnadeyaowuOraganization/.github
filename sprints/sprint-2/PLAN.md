@@ -19,26 +19,31 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-24 15:55（第6轮刷新）
+> 更新时间：2026-04-24 20:15（第7轮刷新，追加序号16-35）
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 1 | #2275 | P1 | backend/dashboard | medium | 驾驶舱DORA指标卡片+最近错误滚动条 | ✅ |
-| 2 | #2440 | P1 | backend | medium | 竞品定价数据库（⚠️ #2441前端依赖此后端） | ✅ |
-| 3 | #2439 | P1 | pipeline | medium | T0/T1/T2竞品自动分级+升降级机制 | ✅ |
-| 4 | #2617 | P1 | fullstack | low | Issue创建SOP更新 — size/S 文档类 | ✅ |
-| 5 | #2306 | P1 | fullstack/design-ai | high | D3 Web设计工作台 — Three.js 3D+电池包拖拽 | ✅ |
-| 6 | #2441 | P1 | frontend | medium | 竞品区域热力图 vs 万德（⏳ 需 #2440 先完成） | ⏳ |
-| 7 | #2527 | P1 | frontend/project | medium | 项目组织管理-版本历史+审批流程面板 | ✅ |
-| 8 | #2532 | P1 | frontend/project | medium | 项目组织管理-已读追踪+公告详情 | ✅ |
-| 9 | #2534 | P1 | frontend/project | medium | 项目组织管理-任务面板快速行动项 | ✅ |
-| 10 | #2536 | P1 | frontend/project | medium | 项目组织管理-阶段推进确认弹窗增强 | ✅ |
-| 11 | #2447 | P2 | backend | medium | 商务作战资源包自动生成（概况卡+行动建议） | ✅ |
-| 12 | #2430 | P2 | pipeline | medium | 竞品合同到期预测→重新招标机会 | ✅ |
-| 13 | #2537 | P2 | backend/project | medium | 经验卡片增强 — 关联风险/公告+项目关闭触发 | ✅ |
-| 14 | #2432 | P2 | backend | medium | 竞品空白区域发现 | ✅ |
-| 15 | #1870 | P2 | backend | medium | 客户关系图谱（甲方/设计院/代理机构网络） | ✅ |
+| 16 | #4171 | P0 | fullstack | low | [Quick-Fix] finance/analytics SQL双AS+API前缀 bugfix | ✅ |
+| 17 | #2678 | P1 | backend | medium | 商战情报中台-采集源注册与健康度管理 [5/12] | ✅ |
+| 18 | #2681 | P1 | backend | medium | 商战情报中台-情报权限与数据隔离模型 [8/12] | ✅ |
+| 19 | #2683 | P1 | backend | medium | 商战情报中台-情报质量评分框架 [10/12] | ✅ |
+| 20 | #2688 | P1 | backend | medium | 商战情报中台-政策法规影响评估与预警 [3/10] | ✅ |
+| 21 | #2690 | P1 | fullstack | medium | 商战情报中台-万德产品结构化档案 [5/10] | ✅ |
+| 22 | #2691 | P1 | fullstack | medium | 商战情报中台-竞品产品对比矩阵 [6/10] | ✅ |
+| 23 | #2692 | P1 | fullstack | medium | 商战情报中台-行业案例库标杆项目收录 [7/10] | ✅ |
+| 24 | #2693 | P1 | pipeline | medium | 商战情报中台-行业报告AI摘要与入库 [8/10] | ✅ |
+| 25 | #2702 | P1 | bidding | medium | 商战情报中台-历史中标数据分析·胜率模式挖掘 | ✅ |
+| 26 | #2703 | P1 | bidding | medium | 商战情报中台-竞争格局前置评估 | ✅ |
+| 27 | #2704 | P1 | bidding | medium | 商战情报中台-中标概率评分可视化看板 | ✅ |
+| 28 | #2720 | P1 | backend | medium | 商战情报中台-竞品动态AI评分与分级 [5/10] | ✅ |
+| 29 | #2721 | P1 | pipeline | medium | 商战情报中台-竞品财务与经营数据追踪 [6/10] | ✅ |
+| 30 | #2722 | P1 | pipeline | medium | 商战情报中台-竞品产品线变化检测 [7/10] | ✅ |
+| 31 | #2723 | P1 | backend | medium | 商战情报中台-竞品情报KIQ自动应答 [8/10] | ✅ |
+| 32 | #2724 | P1 | frontend | medium | 商战情报中台-竞品全景对比仪表盘 [9/10] | ✅ |
+| 33 | #2730 | P1 | fullstack | medium | 商战情报中台-智能推荐每日必看清单 [5/10] | ✅ |
+| 34 | #2731 | P1 | backend | medium | 商战情报中台-作战方案自动编排 [6/10] | ✅ |
+| 35 | #2732 | P1 | fullstack | medium | 商战情报中台-情报Copilot对话引擎 [7/10] | ✅ |
 
 ## 指派历史
 

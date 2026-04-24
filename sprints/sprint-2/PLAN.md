@@ -205,13 +205,29 @@
 | 04-24 | kimi3 | #2309 | design-ai | medium | **等待merge** | 颜色配置器（排程建议#2，03:03派遣，PR #4149已提交，E2E smoke 4/4绿✅，MERGEABLE✅，等待自动merge）|
 | 04-24 | kimi6 | ~~#1920~~ | d3 | medium | ~~Done~~ | wande-gh-plugins重构 — PR #34已于03:04 admin-merged ✅ |
 | 04-24 | kimi6 | #3999 | project | **high** | In Progress | 矿场区域品类热力图Tab（排程建议#3，03:06派遣，实际高复杂度，15+文件，分契约→后端→前端→E2E→PR）|
+| 04-24 | ~~kimi5~~ | ~~#1926~~ | d3 | medium | ~~Done~~ | D3成果Web预览 — PR #4185 merged 08:57:13，Issue自动关闭 08:58:02 ✅ |
+| 04-24 | kimi2 | #3383 | backend | medium | ⏳ 等待close | 竞品定价数据库 — PR #3991已merged，等Issue自动关闭中 |
+| 04-24 | kimi3 | #3384 | backend | medium | ⏳ 等待close | BOM Where-Used反查API — PR #4186 merged 08:53:07，等Issue自动关闭中 |
+| 04-24 | kimi1 | #1906 | backend | medium | In Progress | DORA指标卡片+最近错误滚动条（派遣目标序号#1，实际Issue不同，56%进度） |
+| 04-24 | kimi4 | #1923 | backend | medium | In Progress | 竞品定价数据库（派遣目标序号#2，实际Issue不同，50%进度） |
+| 04-24 | **kimi5** | **#2536** | **frontend** | **medium** | **In Progress** | **项目组织管理-阶段推进确认弹窗增强（派遣目标序号#10，17:03派遣，26%进度）** |
 
-**当前5个CC在线运行中（03:15更新）：**
-- kimi1 #2308: 55%进度（主题方案灵感库，复杂度高，T1-15分阶段，推进中）
-- kimi2 #4016: **等待merge** ✅（架构蓝图，PR #4148已提交，E2E 4/4全通过，故障已修复）
-- kimi3 #2309: **等待merge** ✅（颜色配置器，PR #4149已提交，MERGEABLE✅，预计5min释放）
-- kimi5 #4011: 39%进度（多实体关联模型，等待PR确认）
-- kimi6 #3999: 55%进度（矿场热力图Tab，高复杂度，快速推进）
+**当前5个CC在线运行中（17:03:57更新 — 第22轮巡检）：**
+- kimi1 #1906: 56%进度（DORA指标卡片+错误滚动条，backend，持续工作中）
+- kimi2 #3383: ⏳ **等待Issue自动关闭** ✅（PR #3991已merged，21分钟无新输出，正常等待）
+- kimi3 #3384: ⏳ **等待Issue自动关闭** ✅（PR #4186已merged 08:53:07，13分钟无新输出，正常等待）
+- kimi4 #1923: 50%进度（竞品定价数据库，backend，持续工作中）
+- kimi5 #2536: 26%进度（项目组织管理-阶段推进弹窗增强，frontend，刚启动2分钟）
+
+**最近完成（本轮巡检新增）**:
+- ~~kimi5 #1926~~ → PR #4185 merged 08:57:13 → Issue自动关闭 08:58:02 ✅
+- ~~kimi3 #3384~~ → PR #4186 merged 08:53:07 → 等待自动关闭
+- ~~kimi2 #3383~~ → PR #3991已merged → 等待自动关闭
+
+**下一批派遣计划**（kimi2/3释放后）:
+1. kimi2释放 → 派遣 #2527（序号#7，版本历史+审批流程面板，frontend）
+2. kimi3释放 → 派遣 #2532（序号#8，已读追踪+公告详情，frontend）
+3. 暂停 #2441（序号#6需要#2440先完成，目前#2440未派遣）
 
 ---
 

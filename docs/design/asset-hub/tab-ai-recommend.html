@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab5 AI 推荐 — 方案素材中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .region-label { font-size: 10px; color: #8c8c8c; background: #fafafa; padding: 2px 6px; border: 1px dashed #d9d9d9; border-radius: 3px; display: inline-block; margin-bottom: 6px; }
+    .region-box { border: 1px dashed #d9d9d9; }
+    .chip { display: inline-block; padding: 2px 8px; font-size: 11px; border-radius: 10px; background: #f5f5f5; color: #595959; border: 1px solid #e8e8e8; margin-right: 4px; margin-bottom: 2px; }
+    .chip-tag { background: #e6f7ff; color: #1890ff; border-color: #bae7ff; }
+    .progress-track { height: 6px; background: #f0f0f0; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; border-radius: 3px; }
+    .weight-bar { height: 8px; background: #f0f0f0; border-radius: 4px; overflow: hidden; display: flex; }
+    .weight-seg { height: 100%; }
+    .thumb-placeholder { background: linear-gradient(135deg, #fafafa 25%, #f0f0f0 25%, #f0f0f0 50%, #fafafa 50%, #fafafa 75%, #f0f0f0 75%); background-size: 12px 12px; display: flex; align-items: center; justify-content: center; color: #bfbfbf; font-size: 11px; }
+    .ppt-slide { background: #fff; border: 1px solid #d9d9d9; aspect-ratio: 16/9; display: flex; flex-direction: column; align-items: center; justify-content: center; color: #bfbfbf; font-size: 11px; position: relative; }
+    .ppt-slide::before { content: ''; position: absolute; top: 8px; left: 8px; width: 40%; height: 4px; background: #e8e8e8; border-radius: 2px; }
+    .ppt-slide::after { content: ''; position: absolute; top: 18px; left: 8px; width: 25%; height: 3px; background: #f0f0f0; border-radius: 2px; }
+    .ring-chart { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#1890ff 0 42.8%, #f0f0f0 42.8% 100%); display: flex; align-items: center; justify-content: center; }
+    .ring-chart-inner { width: 58px; height: 58px; border-radius: 50%; background: #fff; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 600; color: #333; }
+    .pie-chart { width: 90px; height: 90px; border-radius: 50%; background: conic-gradient(#1890ff 0 30%, #40a9ff 30% 50%, #69c0ff 50% 65%, #91d5ff 65% 85%, #bae7ff 85% 100%); }
+    details > summary { list-style: none; cursor: pointer; }
+    details > summary::-webkit-details-marker { display: none; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">Tab5 AI 推荐 — 方案引擎智能推荐 + PPT 一键插入</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">设计师做方案时系统主动推荐匹配素材，替代翻文件夹找图，节省 4h/周·人</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师、方案策划（主要）、PPT 插件调用方</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">条件推荐 / 权重说明 / TOP-30评分 / PPT一键插入 / 效果统计</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">设置推荐条件 / 点击推荐素材 / 一键插入PPT / 标记不相关（降权）</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">推荐 &lt;2s / 推荐点击率 ≥ 30% / PPT插件插入成功率 ≥ 95%</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">方案素材中心 — 详细设计 §2.5 AI 推荐</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [推荐条件面板] -->
+  <div class="region-box bg-white rounded p-4 mb-4">
+    <span class="region-label">[推荐条件面板]</span>
+    <div class="flex items-center justify-between mb-3">
+      <h3 class="text-base font-semibold text-gray-700">设置推荐条件</h3>
+      <div class="flex items-center gap-2 text-xs text-gray-400">
+        <span>核心 Issue：#1972 方案引擎素材智能推荐 API</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-3 mb-3">
+      <!-- 行1 -->
+      <div class="col-span-5">
+        <label class="block text-xs text-gray-500 mb-1">关联项目 <span class="text-red-400">*</span></label>
+        <div class="flex items-center bg-white border border-gray-300 rounded px-3 py-2 text-sm text-gray-700">
+          <svg class="w-4 h-4 text-gray-400 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <span class="flex-1">天河万达·室内儿童乐园改造项目</span>
+          <span class="text-xs text-gray-400">▾</span>
+        </div>
+      </div>
+      <div class="col-span-4">
+        <label class="block text-xs text-gray-500 mb-1">项目类型</label>
+        <div class="flex items-center justify-between bg-white border border-gray-300 rounded px-3 py-2 text-sm text-gray-700">
+          <span>室内乐园</span>
+          <span class="text-xs text-gray-400">▾</span>
+        </div>
+      </div>
+      <div class="col-span-3">
+        <label class="block text-xs text-gray-500 mb-1">行业</label>
+        <div class="flex items-center justify-between bg-white border border-gray-300 rounded px-3 py-2 text-sm text-gray-700">
+          <span>商业综合体</span>
+          <span class="text-xs text-gray-400">▾</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-12 gap-3 items-start">
+      <!-- 行2 -->
+      <div class="col-span-3">
+        <label class="block text-xs text-gray-500 mb-1">方案阶段</label>
+        <div class="flex items-center justify-between bg-white border border-gray-300 rounded px-3 py-2 text-sm text-gray-700">
+          <span>详细方案</span>
+          <span class="text-xs text-gray-400">▾</span>
+        </div>
+      </div>
+      <div class="col-span-4">
+        <label class="block text-xs text-gray-500 mb-1">风格偏好（多选）</label>
+        <div class="bg-white border border-gray-300 rounded px-2 py-1.5 min-h-[36px]">
+          <span class="chip chip-tag">国潮 ✕</span>
+          <span class="chip chip-tag">马卡龙 ✕</span>
+          <span class="chip text-gray-400">+ 莫兰迪</span>
+          <span class="chip text-gray-400">+ 彩虹</span>
+          <span class="chip text-gray-400">+ 自然</span>
+        </div>
+      </div>
+      <div class="col-span-3">
+        <label class="block text-xs text-gray-500 mb-1">年龄段（多选）</label>
+        <div class="bg-white border border-gray-300 rounded px-2 py-1.5 min-h-[36px]">
+          <span class="chip chip-tag">3-6 ✕</span>
+          <span class="chip chip-tag">6-12 ✕</span>
+          <span class="chip text-gray-400">+ 0-3</span>
+          <span class="chip text-gray-400">+ 全龄</span>
+        </div>
+      </div>
+      <div class="col-span-2 flex flex-col items-stretch">
+        <label class="block text-xs text-gray-500 mb-1">&nbsp;</label>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded px-4 py-2 flex items-center justify-center gap-1">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+          立即推荐
+        </button>
+        <div class="text-[11px] text-gray-400 mt-1.5 leading-tight">基于 CLIP 图像向量 + 项目标签相似度，实时计算 TOP-30</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [推荐结果区：3列布局] -->
+  <div class="grid grid-cols-12 gap-4 mb-4">
+
+    <!-- [推荐逻辑说明] 左列 25% -->
+    <div class="col-span-3 region-box bg-white rounded p-4">
+      <span class="region-label">[推荐逻辑说明]</span>
+      <details open>
+        <summary class="flex items-center justify-between mb-3">
+          <h4 class="text-sm font-semibold text-gray-700">本次推荐依据</h4>
+          <span class="text-xs text-gray-400">▼</span>
+        </summary>
+        <ul class="space-y-2 text-sm text-gray-700 mb-4">
+          <li class="flex items-center justify-between">
+            <span class="flex items-center"><span class="text-green-500 mr-1.5">✅</span>项目类型=室内乐园</span>
+            <span class="text-xs text-gray-500">30%</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <span class="flex items-center"><span class="text-green-500 mr-1.5">✅</span>行业=商业综合体</span>
+            <span class="text-xs text-gray-500">20%</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <span class="flex items-center"><span class="text-green-500 mr-1.5">✅</span>阶段=详细方案</span>
+            <span class="text-xs text-gray-500">15%</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <span class="flex items-center"><span class="text-green-500 mr-1.5">✅</span>风格=国潮</span>
+            <span class="text-xs text-gray-500">20%</span>
+          </li>
+          <li class="flex items-center justify-between">
+            <span class="flex items-center"><span class="text-green-500 mr-1.5">✅</span>向量相似度</span>
+            <span class="text-xs text-gray-500">15%</span>
+          </li>
+        </ul>
+
+        <div class="mb-3">
+          <div class="text-xs text-gray-500 mb-2">权重占比</div>
+          <div class="weight-bar mb-2">
+            <div class="weight-seg" style="width:30%;background:#1890ff"></div>
+            <div class="weight-seg" style="width:20%;background:#40a9ff"></div>
+            <div class="weight-seg" style="width:15%;background:#69c0ff"></div>
+            <div class="weight-seg" style="width:20%;background:#91d5ff"></div>
+            <div class="weight-seg" style="width:15%;background:#bae7ff"></div>
+          </div>
+          <div class="flex justify-center">
+            <div class="pie-chart"></div>
+          </div>
+        </div>
+
+        <div class="border-t border-gray-200 pt-2 text-[11px] text-gray-400 leading-relaxed">
+          推荐模型 v2.3<br>基于 1,248 已中标方案训练
+        </div>
+      </details>
+    </div>
+
+    <!-- [推荐素材列表] 中列 45% -->
+    <div class="col-span-6 region-box bg-white rounded p-4">
+      <span class="region-label">[推荐素材列表]</span>
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="text-sm font-semibold text-gray-700">推荐 TOP 30 · 命中历史成交方案的相似素材</h4>
+        <div class="flex items-center gap-2 text-xs">
+          <span class="text-gray-500">排序：</span>
+          <span class="text-blue-500">匹配度</span>
+          <span class="text-gray-400">|</span>
+          <span class="text-gray-500">时间</span>
+          <span class="text-gray-400">|</span>
+          <span class="text-gray-500">热度</span>
+        </div>
+      </div>
+
+      <div class="space-y-3">
+        <!-- 卡片1 -->
+        <div class="flex gap-3 p-3 border border-gray-200 rounded hover:border-blue-300">
+          <div class="thumb-placeholder flex-shrink-0" style="width:120px;height:80px">缩略图 3:2</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between">
+              <div class="text-sm font-medium text-gray-700 truncate">国潮主题·龙门阵滑梯组合·成都远洋太古里</div>
+              <span class="text-xs text-green-600 font-semibold ml-2">92</span>
+            </div>
+            <div class="progress-track mt-1.5 mb-2"><div class="progress-fill" style="width:92%;background:#52c41a"></div></div>
+            <div class="mb-1.5">
+              <span class="chip chip-tag">#国潮</span>
+              <span class="chip chip-tag">#室内</span>
+              <span class="chip chip-tag">#详细方案</span>
+              <span class="chip chip-tag">#3-6岁</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <a href="#" class="text-xs text-blue-500 hover:underline">来自：成都远洋太古里·儿童主题馆</a>
+              <div class="flex items-center gap-1.5">
+                <button class="text-xs text-gray-600 border border-gray-300 rounded px-2 py-0.5 hover:bg-gray-50">预览</button>
+                <button class="text-xs text-white bg-blue-500 rounded px-2 py-0.5 hover:bg-blue-600">插入PPT</button>
+                <button class="text-xs text-gray-400 hover:text-red-500 px-1">不相关</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片2 -->
+        <div class="flex gap-3 p-3 border border-gray-200 rounded hover:border-blue-300">
+          <div class="thumb-placeholder flex-shrink-0" style="width:120px;height:80px">缩略图 3:2</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between">
+              <div class="text-sm font-medium text-gray-700 truncate">马卡龙色·软包攀爬城堡·适合室内综合体</div>
+              <span class="text-xs text-green-600 font-semibold ml-2">87</span>
+            </div>
+            <div class="progress-track mt-1.5 mb-2"><div class="progress-fill" style="width:87%;background:#52c41a"></div></div>
+            <div class="mb-1.5">
+              <span class="chip chip-tag">#马卡龙</span>
+              <span class="chip chip-tag">#室内</span>
+              <span class="chip chip-tag">#商业综合体</span>
+              <span class="chip chip-tag">#3-6岁</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <a href="#" class="text-xs text-blue-500 hover:underline">来自：杭州万象城·奇幻乐园</a>
+              <div class="flex items-center gap-1.5">
+                <button class="text-xs text-gray-600 border border-gray-300 rounded px-2 py-0.5 hover:bg-gray-50">预览</button>
+                <button class="text-xs text-white bg-blue-500 rounded px-2 py-0.5 hover:bg-blue-600">插入PPT</button>
+                <button class="text-xs text-gray-400 hover:text-red-500 px-1">不相关</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片3 -->
+        <div class="flex gap-3 p-3 border border-gray-200 rounded hover:border-blue-300">
+          <div class="thumb-placeholder flex-shrink-0" style="width:120px;height:80px">缩略图 3:2</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between">
+              <div class="text-sm font-medium text-gray-700 truncate">国潮纹样·立体风车组·适合6-12岁互动区</div>
+              <span class="text-xs text-green-600 font-semibold ml-2">81</span>
+            </div>
+            <div class="progress-track mt-1.5 mb-2"><div class="progress-fill" style="width:81%;background:#52c41a"></div></div>
+            <div class="mb-1.5">
+              <span class="chip chip-tag">#国潮</span>
+              <span class="chip chip-tag">#6-12岁</span>
+              <span class="chip chip-tag">#互动装置</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <a href="#" class="text-xs text-blue-500 hover:underline">来自：西安大唐不夜城·童趣馆</a>
+              <div class="flex items-center gap-1.5">
+                <button class="text-xs text-gray-600 border border-gray-300 rounded px-2 py-0.5 hover:bg-gray-50">预览</button>
+                <button class="text-xs text-white bg-blue-500 rounded px-2 py-0.5 hover:bg-blue-600">插入PPT</button>
+                <button class="text-xs text-gray-400 hover:text-red-500 px-1">不相关</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片4 -->
+        <div class="flex gap-3 p-3 border border-gray-200 rounded hover:border-blue-300">
+          <div class="thumb-placeholder flex-shrink-0" style="width:120px;height:80px">缩略图 3:2</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between">
+              <div class="text-sm font-medium text-gray-700 truncate">蹦床+海洋球复合区·商场中庭爆款组合</div>
+              <span class="text-xs text-orange-500 font-semibold ml-2">74</span>
+            </div>
+            <div class="progress-track mt-1.5 mb-2"><div class="progress-fill" style="width:74%;background:#fa8c16"></div></div>
+            <div class="mb-1.5">
+              <span class="chip chip-tag">#商业综合体</span>
+              <span class="chip chip-tag">#蹦床</span>
+              <span class="chip chip-tag">#全龄</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <a href="#" class="text-xs text-blue-500 hover:underline">来自：深圳海岸城·飞跃奇境</a>
+              <div class="flex items-center gap-1.5">
+                <button class="text-xs text-gray-600 border border-gray-300 rounded px-2 py-0.5 hover:bg-gray-50">预览</button>
+                <button class="text-xs text-white bg-blue-500 rounded px-2 py-0.5 hover:bg-blue-600">插入PPT</button>
+                <button class="text-xs text-gray-400 hover:text-red-500 px-1">不相关</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片5 -->
+        <div class="flex gap-3 p-3 border border-gray-200 rounded hover:border-blue-300">
+          <div class="thumb-placeholder flex-shrink-0" style="width:120px;height:80px">缩略图 3:2</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between">
+              <div class="text-sm font-medium text-gray-700 truncate">祥云纹主题墙+中式灯笼吊饰·软装素材</div>
+              <span class="text-xs text-orange-500 font-semibold ml-2">68</span>
+            </div>
+            <div class="progress-track mt-1.5 mb-2"><div class="progress-fill" style="width:68%;background:#fa8c16"></div></div>
+            <div class="mb-1.5">
+              <span class="chip chip-tag">#国潮</span>
+              <span class="chip chip-tag">#软装</span>
+              <span class="chip chip-tag">#详细方案</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <a href="#" class="text-xs text-blue-500 hover:underline">来自：苏州中心·非遗童乐园</a>
+              <div class="flex items-center gap-1.5">
+                <button class="text-xs text-gray-600 border border-gray-300 rounded px-2 py-0.5 hover:bg-gray-50">预览</button>
+                <button class="text-xs text-white bg-blue-500 rounded px-2 py-0.5 hover:bg-blue-600">插入PPT</button>
+                <button class="text-xs text-gray-400 hover:text-red-500 px-1">不相关</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 卡片6 -->
+        <div class="flex gap-3 p-3 border border-gray-200 rounded hover:border-blue-300">
+          <div class="thumb-placeholder flex-shrink-0" style="width:120px;height:80px">缩略图 3:2</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-start justify-between">
+              <div class="text-sm font-medium text-gray-700 truncate">EPP积木拼搭区·适合0-3岁早教场景</div>
+              <span class="text-xs text-gray-500 font-semibold ml-2">58</span>
+            </div>
+            <div class="progress-track mt-1.5 mb-2"><div class="progress-fill" style="width:58%;background:#bfbfbf"></div></div>
+            <div class="mb-1.5">
+              <span class="chip chip-tag">#0-3岁</span>
+              <span class="chip chip-tag">#早教</span>
+              <span class="chip chip-tag">#安全地垫</span>
+            </div>
+            <div class="flex items-center justify-between">
+              <a href="#" class="text-xs text-blue-500 hover:underline">来自：上海国金中心·小小探险家</a>
+              <div class="flex items-center gap-1.5">
+                <button class="text-xs text-gray-600 border border-gray-300 rounded px-2 py-0.5 hover:bg-gray-50">预览</button>
+                <button class="text-xs text-white bg-blue-500 rounded px-2 py-0.5 hover:bg-blue-600">插入PPT</button>
+                <button class="text-xs text-gray-400 hover:text-red-500 px-1">不相关</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="text-center mt-4">
+        <button class="text-sm text-blue-500 hover:text-blue-600 border border-blue-300 rounded px-4 py-1.5 hover:bg-blue-50">
+          加载更多（剩余 24 个）
+        </button>
+      </div>
+    </div>
+
+    <!-- [PPT插入面板] 右列 30% -->
+    <div class="col-span-3 region-box bg-white rounded p-4">
+      <span class="region-label">[PPT插入面板]</span>
+      <div class="flex items-center justify-between mb-3">
+        <h4 class="text-sm font-semibold text-gray-700">PPT 插件 · 一键插入</h4>
+        <span class="chip chip-tag text-[10px]">已连接</span>
+      </div>
+
+      <!-- PPT 缩略图预览 -->
+      <div class="ppt-slide rounded mb-2">
+        <div class="text-xs">当前页 14/28 预览</div>
+      </div>
+      <div class="bg-gray-50 rounded px-2 py-2 mb-3 text-[11px] text-gray-600 leading-relaxed border border-gray-200">
+        <div class="truncate"><span class="text-gray-400">文件：</span>方案_2024天河万达_V3.pptx</div>
+        <div><span class="text-gray-400">共</span> 28 页 · <span class="text-gray-400">当前</span>第 14 页</div>
+      </div>
+
+      <!-- 操作按钮组 -->
+      <div class="space-y-2 mb-3">
+        <button class="w-full bg-blue-500 hover:bg-blue-600 text-white text-sm font-medium rounded px-3 py-2 flex items-center justify-center gap-1.5">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+          插入到当前页
+        </button>
+        <button class="w-full border border-gray-300 text-gray-700 text-sm rounded px-3 py-1.5 hover:bg-gray-50">新增一页并插入</button>
+        <button class="w-full border border-gray-300 text-gray-700 text-sm rounded px-3 py-1.5 hover:bg-gray-50">替换现有图片</button>
+        <button class="w-full border border-gray-300 text-gray-700 text-sm rounded px-3 py-1.5 hover:bg-gray-50">加入候选列表</button>
+      </div>
+
+      <!-- 候选列表（折叠） -->
+      <details class="mb-3 border border-gray-200 rounded">
+        <summary class="flex items-center justify-between px-3 py-2 text-sm text-gray-700 bg-gray-50">
+          <span>候选列表 <span class="text-xs text-gray-400">(3)</span></span>
+          <span class="text-xs text-gray-400">▾</span>
+        </summary>
+        <div class="px-3 py-2 space-y-1.5 border-t border-gray-200">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-700 truncate">国潮·龙门阵滑梯组合</span>
+            <button class="text-gray-400 hover:text-red-500 ml-2">✕</button>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-700 truncate">马卡龙·软包攀爬城堡</span>
+            <button class="text-gray-400 hover:text-red-500 ml-2">✕</button>
+          </div>
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-gray-700 truncate">祥云纹主题墙+灯笼</span>
+            <button class="text-gray-400 hover:text-red-500 ml-2">✕</button>
+          </div>
+        </div>
+      </details>
+
+      <!-- 底部说明卡 -->
+      <div class="bg-blue-50 border border-blue-200 rounded p-2.5 text-[11px] text-blue-700 leading-relaxed">
+        <div class="flex items-start gap-1.5">
+          <svg class="w-3.5 h-3.5 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/></svg>
+          <span>插件通过 PPT COM 接口调用，支持 Office 365/WPS；插入后自动按模板版式对齐</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [推荐效果统计] -->
+  <div class="region-box bg-white rounded p-4">
+    <span class="region-label">[推荐效果统计]</span>
+    <h4 class="text-sm font-semibold text-gray-700 mb-3">推荐效果统计 · 近 30 天</h4>
+    <div class="grid grid-cols-4 gap-4">
+      <!-- 卡1 -->
+      <div class="border border-gray-200 rounded p-4 flex items-center gap-3">
+        <div class="ring-chart"><div class="ring-chart-inner">42.8%</div></div>
+        <div class="flex-1 min-w-0">
+          <div class="text-xs text-gray-500 mb-1">推荐点击率</div>
+          <div class="text-lg font-bold text-gray-700">42.8%</div>
+          <div class="text-[11px] text-gray-400 leading-tight">近 30 天设计师点击率</div>
+        </div>
+      </div>
+      <!-- 卡2 -->
+      <div class="border border-gray-200 rounded p-4">
+        <div class="text-xs text-gray-500 mb-1">推荐插入率</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-2xl font-bold text-gray-700">18.3%</span>
+          <span class="text-xs text-green-500">↑ 3.1%</span>
+        </div>
+        <div class="text-[11px] text-gray-400 leading-tight mt-1">点击后插入 PPT 比例<br>TOP 竞品 15.2%</div>
+      </div>
+      <!-- 卡3 -->
+      <div class="border border-gray-200 rounded p-4">
+        <div class="text-xs text-gray-500 mb-1">节省时间</div>
+        <div class="flex items-baseline gap-1">
+          <span class="text-2xl font-bold text-gray-700">4.2</span>
+          <span class="text-sm text-gray-500">h/周·人</span>
+        </div>
+        <div class="text-[11px] text-gray-400 leading-tight mt-1">对比翻文件夹找图<br>按 38 位设计师汇总</div>
+      </div>
+      <!-- 卡4 -->
+      <div class="border border-gray-200 rounded p-4">
+        <div class="text-xs text-gray-500 mb-1">推荐覆盖率</div>
+        <div class="flex items-baseline gap-2 mb-2">
+          <span class="text-2xl font-bold text-gray-700">86%</span>
+        </div>
+        <div class="progress-track mb-1.5"><div class="progress-fill" style="width:86%;background:#1890ff"></div></div>
+        <div class="text-[11px] text-gray-400 leading-tight">有推荐结果的项目占比</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

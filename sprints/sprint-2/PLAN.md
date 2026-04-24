@@ -208,13 +208,14 @@
 | 04-24 | ~~kimi5~~ | ~~#1926~~ | d3 | medium | ~~Done~~ | D3成果Web预览 — PR #4185 merged 08:57:13，Issue自动关闭 08:58:02 ✅ |
 | 04-24 | kimi2 | #3383 | backend | medium | ⏳ 等待close | 竞品定价数据库 — PR #3991已merged，等Issue自动关闭中 |
 | 04-24 | kimi3 | #3384 | backend | medium | ⏳ 等待close | BOM Where-Used反查API — PR #4186 merged 08:53:07，等Issue自动关闭中 |
-| 04-24 | kimi1 | #1906 | backend | medium | In Progress | DORA指标卡片+最近错误滚动条（派遣目标序号#1，实际Issue不同，56%进度） |
-| 04-24 | kimi4 | #1923 | backend | medium | In Progress | 竞品定价数据库（派遣目标序号#2，实际Issue不同，50%进度） |
+| 04-24 | ~~kimi1~~ | ~~#1906~~ | backend | medium | ~~Done~~ | **DORA指标卡片+最近错误滚动条** — Issue自动关闭 09:34:06 ✅ |
+| 04-24 | kimi4 | #1923 | backend | medium | In Progress | 竞品定价数据库（派遣目标序号#2，实际Issue不同，49%进度） |
 | 04-24 | **kimi5** | **#2536** | **frontend** | **medium** | **In Progress** | **项目组织管理-阶段推进确认弹窗增强（派遣目标序号#10，17:03派遣，44%进度）** |
 | 04-24 | ~~kimi2~~ | ~~#3383~~ | backend | medium | ~~Done~~ | **Issue关闭异常修复** — PR #3991缺closingIssuesReferences，手动gh issue close，已释放 ✅ |
-| 04-24 | **kimi2** | **#2527** | **frontend** | **medium** | **In Progress** | **版本历史+审批流程面板（派遣目标序号#7，17:16派遣，0%启动）** |
+| 04-24 | **kimi2** | **#2527** | **frontend** | **medium** | **In Progress** | **版本历史+审批流程面板（派遣目标序号#7，17:40进度50%）** |
 | 04-24 | ~~kimi3~~ | ~~#3384~~ | backend | medium | ~~Done~~ | **BOM Where-Used反查API** — PR #4186已merged，Issue手动关闭，已释放 ✅ |
-| 04-24 | **kimi3** | **#2532** | **frontend** | **medium** | **In Progress** | **已读追踪+公告详情（派遣目标序号#8，17:16派遣，0%启动）** |
+| 04-24 | **kimi3** | **#2532** | **frontend** | **medium** | **In Progress** | **已读追踪+公告详情（派遣目标序号#8，17:40进度55%）** |
+| 04-24 | **kimi1** | **#2534** | **frontend** | **medium** | **派遣开工** | **项目组织管理-任务面板快速行动项（派遣目标序号#9，17:41派遣）** |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
 - kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）

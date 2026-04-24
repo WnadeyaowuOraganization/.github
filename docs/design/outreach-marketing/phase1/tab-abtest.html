@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>A/B测试 · #2802</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">A/B测试 · #2802</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">对邮件主题行/正文/发送时间进行 A/B 测试，自动计算统计显著性</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">营销主管,数据运营</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">测试列表/新建测试/A vs B指标对比/显著性标记</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">创建测试/查看详情/提前终止/应用获胜版本</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">p值计算正确/显著性自动标红/对比图表可读</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.1.10 A/B测试引擎</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部操作条] -->
+<div class="flex items-center justify-between mb-4">
+  <div class="flex items-center gap-3">
+    <h2 class="text-lg font-semibold text-gray-800">A/B 测试引擎</h2>
+    <span class="text-xs text-gray-500">· 当前 3 个进行中 · 2 个已完成</span>
+  </div>
+  <button class="bg-blue-500 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-600">+ 新建 A/B 测试</button>
+</div>
+
+<!-- [A/B 测试列表] -->
+<div class="bg-white border border-gray-300 rounded overflow-hidden mb-6">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">测试名</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">类型</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">关联序列</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">样本量</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">进度</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">状态</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="hover:bg-gray-50">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">主题行 · 问句 vs 陈述句</td>
+        <td class="border-b border-gray-300 px-4 py-2">主题行</td>
+        <td class="border-b border-gray-300 px-4 py-2">外贸欧美7步</td>
+        <td class="border-b border-gray-300 px-4 py-2">1,200</td>
+        <td class="border-b border-gray-300 px-4 py-2">
+          <div class="w-24 h-2 bg-gray-200 rounded"><div class="w-[78%] h-2 bg-blue-500 rounded"></div></div>
+          <span class="text-xs text-gray-500">78%</span>
+        </td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">进行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">正文 · 长版 vs 短版</td>
+        <td class="border-b border-gray-300 px-4 py-2">正文</td>
+        <td class="border-b border-gray-300 px-4 py-2">SMB企微首触</td>
+        <td class="border-b border-gray-300 px-4 py-2">800</td>
+        <td class="border-b border-gray-300 px-4 py-2">
+          <div class="w-24 h-2 bg-gray-200 rounded"><div class="w-[45%] h-2 bg-blue-500 rounded"></div></div>
+          <span class="text-xs text-gray-500">45%</span>
+        </td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">进行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">发送时间 · 09:00 vs 14:00</td>
+        <td class="border-b border-gray-300 px-4 py-2">发送时间</td>
+        <td class="border-b border-gray-300 px-4 py-2">中东建材首触</td>
+        <td class="border-b border-gray-300 px-4 py-2">600</td>
+        <td class="border-b border-gray-300 px-4 py-2">
+          <div class="w-24 h-2 bg-gray-200 rounded"><div class="w-[92%] h-2 bg-blue-500 rounded"></div></div>
+          <span class="text-xs text-gray-500">92%</span>
+        </td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">进行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">主题行 · 带公司名 vs 不带</td>
+        <td class="border-b border-gray-300 px-4 py-2">主题行</td>
+        <td class="border-b border-gray-300 px-4 py-2">东南亚制造业</td>
+        <td class="border-b border-gray-300 px-4 py-2">1,500</td>
+        <td class="border-b border-gray-300 px-4 py-2">
+          <div class="w-24 h-2 bg-gray-200 rounded"><div class="w-[100%] h-2 bg-gray-500 rounded"></div></div>
+          <span class="text-xs text-gray-500">100%</span>
+        </td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-400 text-white px-2 py-0.5 rounded text-xs">已完成</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看报告</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- [活跃测试详情卡] -->
+<div class="bg-white border border-gray-300 rounded p-5">
+  <div class="flex items-center justify-between mb-4 pb-3 border-b border-gray-300">
+    <div>
+      <div class="text-xs text-gray-500">当前详情</div>
+      <div class="font-semibold text-gray-800">主题行 · 问句 vs 陈述句</div>
+      <div class="text-xs text-gray-500 mt-1">关联序列：外贸欧美7步标准序列 · Step 1 · 已运行 4 天</div>
+    </div>
+    <div class="flex gap-2">
+      <button class="text-xs border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50">提前终止</button>
+      <button class="text-xs bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">应用获胜版本</button>
+    </div>
+  </div>
+
+  <!-- [A vs B 对比] -->
+  <div class="grid grid-cols-2 gap-4 mb-5">
+
+    <!-- [A组] -->
+    <div class="border border-gray-300 rounded p-4 bg-gray-50">
+      <div class="flex items-center justify-between mb-2">
+        <span class="bg-gray-300 text-gray-800 px-2 py-0.5 rounded text-xs font-semibold">A 组 · 对照</span>
+        <span class="text-xs text-gray-500">样本：600</span>
+      </div>
+      <div class="text-sm text-gray-800 mb-3 p-2 bg-white border border-gray-300 rounded">
+        "Quick question about {{company}}'s expansion plan"
+      </div>
+      <div class="space-y-2">
+        <!-- [指标 · A打开率] -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-600 mb-1"><span>打开率</span><span class="font-semibold">38.2%</span></div>
+          <div class="w-full h-3 bg-gray-200 rounded"><div class="h-3 bg-gray-500 rounded" style="width:38.2%"></div></div>
+        </div>
+        <!-- [指标 · A点击率] -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-600 mb-1"><span>点击率</span><span class="font-semibold">4.1%</span></div>
+          <div class="w-full h-3 bg-gray-200 rounded"><div class="h-3 bg-gray-500 rounded" style="width:8.2%"></div></div>
+        </div>
+        <!-- [指标 · A回复率] -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-600 mb-1"><span>回复率</span><span class="font-semibold">9.8%</span></div>
+          <div class="w-full h-3 bg-gray-200 rounded"><div class="h-3 bg-gray-500 rounded" style="width:19.6%"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [B组] -->
+    <div class="border-2 border-blue-500 rounded p-4 bg-gray-50 relative">
+      <div class="absolute -top-3 right-3 bg-blue-500 text-white text-xs px-2 py-0.5 rounded">🏆 领先</div>
+      <div class="flex items-center justify-between mb-2">
+        <span class="bg-blue-500 text-white px-2 py-0.5 rounded text-xs font-semibold">B 组 · 变体</span>
+        <span class="text-xs text-gray-500">样本：600</span>
+      </div>
+      <div class="text-sm text-gray-800 mb-3 p-2 bg-white border border-gray-300 rounded">
+        "{{first_name}}, is {{company}} planning to expand into EU this year?"
+      </div>
+      <div class="space-y-2">
+        <!-- [指标 · B打开率] -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-600 mb-1"><span>打开率</span><span class="font-semibold text-blue-500">46.7% ↑ 8.5pp</span></div>
+          <div class="w-full h-3 bg-gray-200 rounded"><div class="h-3 bg-blue-500 rounded" style="width:46.7%"></div></div>
+        </div>
+        <!-- [指标 · B点击率] -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-600 mb-1"><span>点击率</span><span class="font-semibold text-blue-500">5.8% ↑ 1.7pp</span></div>
+          <div class="w-full h-3 bg-gray-200 rounded"><div class="h-3 bg-blue-500 rounded" style="width:11.6%"></div></div>
+        </div>
+        <!-- [指标 · B回复率] -->
+        <div>
+          <div class="flex justify-between text-xs text-gray-600 mb-1"><span>回复率</span><span class="font-semibold text-blue-500">13.4% ↑ 3.6pp</span></div>
+          <div class="w-full h-3 bg-gray-200 rounded"><div class="h-3 bg-blue-500 rounded" style="width:26.8%"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [显著性标记区] -->
+  <div class="border border-gray-300 rounded p-4 bg-gray-50">
+    <div class="text-sm font-semibold text-gray-700 mb-3">📊 统计显著性</div>
+    <table class="w-full text-sm text-gray-700">
+      <thead class="text-xs text-gray-500">
+        <tr>
+          <th class="text-left py-2">指标</th>
+          <th class="text-left py-2">A 组</th>
+          <th class="text-left py-2">B 组</th>
+          <th class="text-left py-2">相对提升</th>
+          <th class="text-left py-2">p 值</th>
+          <th class="text-left py-2">结论</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="border-t border-gray-300">
+          <td class="py-2">打开率</td>
+          <td class="py-2">38.2%</td>
+          <td class="py-2">46.7%</td>
+          <td class="py-2 text-blue-500">+22.3%</td>
+          <td class="py-2 font-mono">0.0018</td>
+          <td class="py-2"><span class="bg-blue-500 text-white px-2 py-0.5 rounded text-xs">✓ 显著 (p&lt;0.05)</span></td>
+        </tr>
+        <tr class="border-t border-gray-300">
+          <td class="py-2">点击率</td>
+          <td class="py-2">4.1%</td>
+          <td class="py-2">5.8%</td>
+          <td class="py-2 text-blue-500">+41.5%</td>
+          <td class="py-2 font-mono">0.0423</td>
+          <td class="py-2"><span class="bg-blue-500 text-white px-2 py-0.5 rounded text-xs">✓ 显著 (p&lt;0.05)</span></td>
+        </tr>
+        <tr class="border-t border-gray-300">
+          <td class="py-2">回复率</td>
+          <td class="py-2">9.8%</td>
+          <td class="py-2">13.4%</td>
+          <td class="py-2 text-blue-500">+36.7%</td>
+          <td class="py-2 font-mono">0.0712</td>
+          <td class="py-2"><span class="bg-gray-300 text-gray-700 px-2 py-0.5 rounded text-xs">— 未显著</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="text-xs text-gray-500 mt-3 pt-3 border-t border-gray-300">
+      💡 建议：打开率与点击率已达统计显著水平（p &lt; 0.05），可应用 B 组变体。回复率样本不足，建议继续运行至达成 1,500 样本。
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

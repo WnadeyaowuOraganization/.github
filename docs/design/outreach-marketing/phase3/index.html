@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 外展获客·Phase 3 企微获客 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; overflow-x: auto; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #595959; border-bottom-color: #595959; font-weight: 600; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 200px); background: #fafafa; }
+    .side-icon { width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #999; cursor: pointer; font-size: 16px; margin: 4px auto; border-radius: 4px; }
+    .side-icon.active { background: #f0f0f0; color: #595959; }
+    .side-icon:hover { background: #f5f5f5; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Phase 3 · 企微获客</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">以企业微信为核心获客载体，打通"渠道获客→活码分流→自动标签→SOP培育→效果分析"全链路，覆盖 Issue #2807-#2811</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">商务总监（看全局效果），商务人员（使用活码加粉），市场运营（配置SOP），CRM管理员（同步画像）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">获客链接批量生成 / 渠道活码自动分流+分时段欢迎语 / 自动标签+画像同步CRM / 多渠道SOP差异化培育 / 获客效果看板</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">批量生成带UTM的获客链接 / 配置活码员工池+欢迎语 / 编辑自动打标规则 / 克隆SOP模板 / 查看渠道ROI</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">5 Tab 切换正常 / 获客链接二维码可预览 / 活码员工分流规则可配置 / 标签规则生效 / SOP 节点可克隆 / 漏斗图渲染</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客·详细设计.md（Phase 3 企微获客）</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <!-- [侧边栏 16px wide icons] -->
+  <aside class="w-12 bg-white border-r border-gray-300 flex-shrink-0 py-2">
+    <div class="side-icon" title="首页">🏠</div>
+    <div class="side-icon" title="CRM">👥</div>
+    <div class="side-icon active" title="商务部·外展获客">📣</div>
+    <div class="side-icon" title="商战情报中台">📡</div>
+    <div class="side-icon" title="项目中心">📁</div>
+    <div class="side-icon" title="D3设计">🎨</div>
+    <div class="side-icon" title="审批">✅</div>
+    <div class="side-icon" title="系统管理">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 flex flex-col overflow-hidden">
+    <!-- [面包屑] -->
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 商务部 &gt; 外展获客 &gt; <span class="text-gray-700 font-medium">Phase 3 · 企微获客</span>
+    </div>
+
+    <!-- [页头] -->
+    <div class="px-6 py-4 bg-white border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h1 class="text-lg font-bold text-gray-800">企微获客 <span class="text-xs text-gray-400 font-normal ml-2">WeCom Acquisition · 企业微信全链路获客</span></h1>
+        <div class="text-xs text-gray-500 mt-1">获客链接 + 渠道活码 + 自动标签 + SOP培育 + 效果看板 · 覆盖 Issue #2807-#2811</div>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="px-2 py-1 text-xs bg-gray-100 text-gray-600 rounded border border-gray-200">企微主体：wande-crm · 已授权</span>
+        <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700 hover:bg-gray-50">同步企微</button>
+        <button class="px-3 py-1.5 text-sm border border-gray-400 bg-gray-100 text-gray-700 rounded hover:bg-gray-200">导出获客报告</button>
+      </div>
+    </div>
+
+    <!-- [Tab栏] -->
+    <div class="tab-bar" id="tabBar"></div>
+
+    <!-- [Tab内容区] -->
+    <iframe id="tabFrame" class="tab-content-frame" src="tab-acquisition-link.html"></iframe>
+  </main>
+</div>
+
+<script>
+  const tabs = [
+    { id: 'acquisition-link', title: '获客链接管理', issue: '#2807', src: 'tab-acquisition-link.html' },
+    { id: 'channel-qrcode',   title: '渠道活码引擎', issue: '#2808', src: 'tab-channel-qrcode.html' },
+    { id: 'auto-tag',         title: '自动标签+CRM同步', issue: '#2809', src: 'tab-auto-tag.html' },
+    { id: 'sop-nurture',      title: '企微SOP培育', issue: '#2810', src: 'tab-sop-nurture.html' },
+    { id: 'effect-dashboard', title: '效果分析看板', issue: '#2811', src: 'tab-effect-dashboard.html' },
+  ];
+
+  const bar = document.getElementById('tabBar');
+  const frame = document.getElementById('tabFrame');
+  tabs.forEach((t, i) => {
+    const el = document.createElement('div');
+    el.className = 'tab-item' + (i === 0 ? ' active' : '');
+    el.innerHTML = `${t.title} <span style="color:#bfbfbf;font-size:11px;margin-left:4px;">${t.issue}</span>`;
+    el.onclick = () => {
+      document.querySelectorAll('.tab-item').forEach(x => x.classList.remove('active'));
+      el.classList.add('active');
+      frame.src = t.src;
+    };
+    bar.appendChild(el);
+  });
+</script>
+
+</body>
+</html>

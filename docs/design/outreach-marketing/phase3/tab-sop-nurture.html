@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>企微SOP培育 · #2810</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .wf-box { border:1px dashed #bfbfbf; background:#fafafa; }
+    .sop-step { position:relative; padding-left:28px; padding-bottom:16px; }
+    .sop-step:before { content:''; position:absolute; left:10px; top:16px; bottom:0; width:1px; background:#d9d9d9; }
+    .sop-step:last-child:before { display:none; }
+    .sop-dot { position:absolute; left:4px; top:4px; width:14px; height:14px; border-radius:50%; background:#fff; border:2px solid #8c8c8c; }
+    .tag-chip { display:inline-flex;align-items:center;gap:4px;padding:1px 6px;background:#f5f5f5;border:1px solid #d9d9d9;border-radius:10px;font-size:11px;color:#595959;margin:1px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab4 · 企微SOP培育 · #2810</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">按渠道差异化建设企微SOP培育序列，每步可配置时间/动作/内容/条件跳转，支持克隆复用</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">市场运营（配置SOP），商务人员（执行/克隆为自己的SOP）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">SOP模板库（按渠道分组） / 多种动作（消息/朋友圈/任务）/ 条件跳转 / 克隆</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新建SOP / 拖拽节点 / 设置条件分支 / 克隆为我的SOP / 发布</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">3套基础模板（抖音/展会/线索）/ 节点完成率可追踪 / 条件跳转生效 / 克隆后与原版解耦</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客·详细设计.md §Phase3.4 企微SOP培育</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="grid grid-cols-12 gap-4">
+  <!-- [左：SOP 模板库] -->
+  <div class="col-span-3">
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="flex items-center justify-between p-3 border-b border-gray-200">
+        <h2 class="text-sm font-bold text-gray-800">📚 SOP 模板库</h2>
+        <button class="px-2 py-0.5 text-xs border border-gray-400 bg-gray-100 rounded">+ 新建</button>
+      </div>
+
+      <div class="p-2">
+        <div class="text-xs text-gray-500 font-semibold px-2 py-1">抖音渠道</div>
+        <div class="p-2 rounded bg-gray-100 border border-gray-300 mb-1">
+          <div class="text-sm font-medium text-gray-800">抖音SOP · 标准版</div>
+          <div class="text-xs text-gray-500 mt-1">5步 · 15天 · 已应用 6 个活码</div>
+        </div>
+        <div class="p-2 rounded hover:bg-gray-50 mb-1">
+          <div class="text-sm text-gray-700">抖音SOP · 早教园所版</div>
+          <div class="text-xs text-gray-500 mt-1">6步 · 20天 · 2 个活码</div>
+        </div>
+
+        <div class="text-xs text-gray-500 font-semibold px-2 py-1 mt-2">展会渠道</div>
+        <div class="p-2 rounded hover:bg-gray-50 mb-1">
+          <div class="text-sm text-gray-700">展会SOP · 标准版</div>
+          <div class="text-xs text-gray-500 mt-1">4步 · 10天 · 1 个活码</div>
+        </div>
+        <div class="p-2 rounded hover:bg-gray-50 mb-1">
+          <div class="text-sm text-gray-700">展会SOP · 深圳矿博会</div>
+          <div class="text-xs text-gray-500 mt-1">5步 · 14天 · 草稿</div>
+        </div>
+
+        <div class="text-xs text-gray-500 font-semibold px-2 py-1 mt-2">线索/表单</div>
+        <div class="p-2 rounded hover:bg-gray-50 mb-1">
+          <div class="text-sm text-gray-700">线索SOP · 按需求分支</div>
+          <div class="text-xs text-gray-500 mt-1">7步 · 含条件分支 · 4 个活码</div>
+        </div>
+
+        <div class="text-xs text-gray-500 font-semibold px-2 py-1 mt-2">小红书渠道</div>
+        <div class="p-2 rounded hover:bg-gray-50 mb-1">
+          <div class="text-sm text-gray-700">小红书SOP · 种草版</div>
+          <div class="text-xs text-gray-500 mt-1">6步 · 12天 · 2 个活码</div>
+        </div>
+
+        <div class="text-xs text-gray-500 font-semibold px-2 py-1 mt-2">百度SEM</div>
+        <div class="p-2 rounded hover:bg-gray-50 mb-1">
+          <div class="text-sm text-gray-700">SEM SOP · 矿场加盟</div>
+          <div class="text-xs text-gray-500 mt-1">5步 · 15天 · 3 个活码</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [中：SOP 节点编辑器] -->
+  <div class="col-span-6">
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3 pb-3 border-b border-gray-200">
+        <div>
+          <div class="text-xs text-gray-500">当前SOP</div>
+          <h2 class="text-base font-bold text-gray-800 mt-0.5">抖音SOP · 标准版</h2>
+          <div class="text-xs text-gray-500 mt-1">触发：新好友来源="抖音官方" · 预计周期 15 天 · 节点完成率 68%</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-700">预览</button>
+          <button class="px-3 py-1 text-xs border border-gray-300 rounded text-gray-700">🔁 克隆为我的SOP</button>
+          <button class="px-3 py-1 text-xs border border-gray-400 bg-gray-100 text-gray-800 rounded font-medium">保存 / 发布</button>
+        </div>
+      </div>
+
+      <!-- 节点时间轴 -->
+      <div class="pl-2">
+        <!-- Step 1 -->
+        <div class="sop-step">
+          <span class="sop-dot"></span>
+          <div class="wf-box rounded p-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-sm font-semibold text-gray-800">Day 0 · 加好友后 30 秒内</div>
+              <span class="tag-chip">动作：发消息</span>
+            </div>
+            <div class="text-xs text-gray-700 leading-relaxed mt-1">"您好，感谢关注万德AI！我是您的专属顾问。您是在抖音看到了哪条视频感兴趣呢？这边可以发完整案例给您～"</div>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="tag-chip">文字</span><span class="tag-chip">矿场全景视频·30s</span>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 flex items-center justify-between">
+              <span>完成率 92% · 平均回复时长 2h</span>
+              <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">条件跳转</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="sop-step">
+          <span class="sop-dot"></span>
+          <div class="wf-box rounded p-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-sm font-semibold text-gray-800">Day 1 · 次日 10:00</div>
+              <span class="tag-chip">动作：发消息</span>
+            </div>
+            <div class="text-xs text-gray-700 leading-relaxed mt-1">"早上好～ 这是我们产品图册，里面有针对 <i>[自动填行业]</i> 的解决方案对比，您可以先浏览 👇"</div>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="tag-chip">产品图册·PDF</span><span class="tag-chip">动态变量</span>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 flex items-center justify-between">
+              <span>完成率 81% · 条件：未标记"已购买"</span>
+              <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">条件跳转</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="sop-step">
+          <span class="sop-dot"></span>
+          <div class="wf-box rounded p-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-sm font-semibold text-gray-800">Day 3 · 上午 11:00</div>
+              <span class="tag-chip">动作：发朋友圈+@客户</span>
+            </div>
+            <div class="text-xs text-gray-700 leading-relaxed mt-1">"@客户 刚完成的矿场案例分享 · 江西上饶 · 3个月ROI回正 📈 详情可点开图集"</div>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="tag-chip">朋友圈</span><span class="tag-chip">案例图集·9张</span><span class="tag-chip">@客户</span>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 flex items-center justify-between">
+              <span>完成率 73% · 互动+2 触发 R03 打高意向</span>
+              <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">条件跳转</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="sop-step">
+          <span class="sop-dot"></span>
+          <div class="wf-box rounded p-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-sm font-semibold text-gray-800">Day 7 · 上午 09:30</div>
+              <span class="tag-chip">动作：任务提醒销售</span>
+            </div>
+            <div class="text-xs text-gray-700 leading-relaxed mt-1">系统任务：销售@李雪 主动邀约客户 → 1v1 方案讲解 30分钟 · 附预约日历小程序</div>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="tag-chip">销售任务</span><span class="tag-chip">预约日历</span><span class="tag-chip">升级分支</span>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 flex items-center justify-between">
+              <span>完成率 58% · 条件：近3日有回复</span>
+              <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">条件跳转</a></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="sop-step">
+          <span class="sop-dot"></span>
+          <div class="wf-box rounded p-3">
+            <div class="flex items-center justify-between mb-1">
+              <div class="text-sm font-semibold text-gray-800">Day 15 · 上午 10:00</div>
+              <span class="tag-chip">动作：发消息</span>
+            </div>
+            <div class="text-xs text-gray-700 leading-relaxed mt-1">"最近有一个新的矿场方案上线了，包含补贴政策和样板间参观邀请，您有空的话我给您寄一份资料～"</div>
+            <div class="mt-2 flex flex-wrap gap-1">
+              <span class="tag-chip">文字</span><span class="tag-chip">复购提醒</span><span class="tag-chip">寄样表单</span>
+            </div>
+            <div class="mt-2 text-xs text-gray-500 flex items-center justify-between">
+              <span>完成率 42% · 若 Day7 已转商机则跳过</span>
+              <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">条件跳转</a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="mt-2 pt-3 border-t border-gray-200 text-center">
+        <button class="px-4 py-1.5 text-sm border border-dashed border-gray-400 text-gray-600 rounded">+ 添加节点</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右：SOP 详情/说明] -->
+  <div class="col-span-3 space-y-3">
+    <div class="bg-white border border-gray-300 rounded p-3">
+      <h3 class="text-sm font-bold text-gray-800 mb-2">⚙️ SOP 设置</h3>
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between"><span class="text-gray-500">触发条件</span><span class="text-gray-700">活码="抖音"</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">执行身份</span><span class="text-gray-700">分配的企微员工</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">暂停条件</span><span class="text-gray-700">客户回复"停止"</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">结束条件</span><span class="text-gray-700">转商机 / 流失</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">最大节点</span><span class="text-gray-700">20 步</span></div>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-300 rounded p-3">
+      <h3 class="text-sm font-bold text-gray-800 mb-2">📊 运行统计（近30天）</h3>
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between"><span class="text-gray-500">进入SOP</span><span class="text-gray-700 font-semibold">486</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">执行中</span><span class="text-gray-700 font-semibold">312</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">转商机</span><span class="text-gray-700 font-semibold">58</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">流失</span><span class="text-gray-400">116</span></div>
+        <div class="flex justify-between"><span class="text-gray-500">转化率</span><span class="text-gray-700 font-semibold">11.9%</span></div>
+      </div>
+      <div class="wf-box mt-3 h-16 rounded flex items-center justify-center text-xs text-gray-400">节点漏斗图占位</div>
+    </div>
+
+    <div class="bg-white border border-gray-300 rounded p-3">
+      <h3 class="text-sm font-bold text-gray-800 mb-2">🔀 条件跳转示例</h3>
+      <div class="wf-box rounded p-2 text-xs text-gray-700 leading-relaxed">
+        若 Day3 客户 回复含"价格/报价" → 跳转 <b>线索SOP · 价格分支</b>；<br>
+        若 客户回复含"参观/实地" → 跳转 <b>展会SOP · 邀请到厂</b>；<br>
+        否则 → 默认继续下一节点。
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

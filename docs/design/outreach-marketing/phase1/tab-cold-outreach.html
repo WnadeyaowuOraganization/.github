@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>冷外展7步序列 · #2800</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">冷外展7步序列 · #2800</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">提供三套地域化 7 步冷外展预置序列，一键克隆到用户账户</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">新手外贸岗,跨区域营销</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">欧美/东南亚/中东 3 个模板 · 7步时间线 · 主题与时机规则 · 克隆</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">展开时间线/查看每步详情/克隆为我的序列</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">7步完整可见/时机规则清晰/克隆后跳转序列列表</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.1.8 冷外展预置</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部 - 模板卡片区] -->
+<div class="grid grid-cols-3 gap-4 mb-6">
+
+  <!-- [模板卡片 · 欧美市场] -->
+  <div class="bg-white border border-gray-300 rounded p-4 hover:shadow">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded">预置模板</span>
+      <span class="text-xs text-gray-500">已被克隆 342 次</span>
+    </div>
+    <div class="font-semibold text-gray-800 mb-1">🇺🇸🇪🇺 欧美市场 · 标准7步</div>
+    <div class="text-xs text-gray-500 mb-3">适用于北美、西欧 B2B SaaS / 制造业，语气专业、短句为主</div>
+    <div class="text-xs text-gray-600 space-y-1 mb-3">
+      <div>· 周期：45 天 · 7 步</div>
+      <div>· 参考回复率：12-15%</div>
+      <div>· 语言：English</div>
+    </div>
+    <button onclick="toggleTimeline('tl-us')" class="w-full text-xs border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50">展开时间线 ▼</button>
+  </div>
+
+  <!-- [模板卡片 · 东南亚] -->
+  <div class="bg-white border border-gray-300 rounded p-4 hover:shadow">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded">预置模板</span>
+      <span class="text-xs text-gray-500">已被克隆 218 次</span>
+    </div>
+    <div class="font-semibold text-gray-800 mb-1">🇸🇬🇻🇳 东南亚 · 制造业7步</div>
+    <div class="text-xs text-gray-500 mb-3">适用于越南、印尼、泰国等制造业集群，强调性价比与账期弹性</div>
+    <div class="text-xs text-gray-600 space-y-1 mb-3">
+      <div>· 周期：45 天 · 7 步</div>
+      <div>· 参考回复率：9-11%</div>
+      <div>· 语言：English / 简体中文</div>
+    </div>
+    <button onclick="toggleTimeline('tl-sea')" class="w-full text-xs border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50">展开时间线 ▼</button>
+  </div>
+
+  <!-- [模板卡片 · 中东] -->
+  <div class="bg-white border border-gray-300 rounded p-4 hover:shadow">
+    <div class="flex items-center justify-between mb-2">
+      <span class="text-xs bg-gray-200 text-gray-700 px-2 py-0.5 rounded">预置模板</span>
+      <span class="text-xs text-gray-500">已被克隆 96 次</span>
+    </div>
+    <div class="font-semibold text-gray-800 mb-1">🇦🇪🇸🇦 中东 · 建材/工程7步</div>
+    <div class="text-xs text-gray-500 mb-3">适用于沙特、阿联酋基建与建材贸易，尊重本地节假日 & 周五周六休</div>
+    <div class="text-xs text-gray-600 space-y-1 mb-3">
+      <div>· 周期：50 天 · 7 步</div>
+      <div>· 参考回复率：14-17%</div>
+      <div>· 语言：English + Arabic 问候</div>
+    </div>
+    <button onclick="toggleTimeline('tl-me')" class="w-full text-xs border border-gray-300 text-gray-700 px-3 py-1.5 rounded hover:bg-gray-50">展开时间线 ▼</button>
+  </div>
+
+</div>
+
+<!-- [时间线详情 · 欧美] -->
+<div id="tl-us" class="bg-white border border-gray-300 rounded p-5 mb-4">
+  <div class="flex items-center justify-between mb-4">
+    <div class="font-semibold text-gray-800">🇺🇸🇪🇺 欧美市场 · 标准7步 — 时间线</div>
+    <button class="bg-blue-500 text-white text-xs px-4 py-1.5 rounded hover:bg-blue-600">📋 克隆为我的序列</button>
+  </div>
+
+  <!-- [时间线容器] -->
+  <div class="relative pl-8 border-l-2 border-gray-300 space-y-4">
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-blue-500 text-white rounded-full flex items-center justify-center text-xs font-bold">1</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 0 · 首触</span>
+          <span class="text-xs text-gray-500">🕘 工作日 09:00-11:00 当地时间</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">Quick question about {{company}}'s expansion</div>
+        <div class="text-xs text-gray-600 mt-1">简短自我介绍 + 基于公开动态的价值钩子，不超过 80 词。</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">2</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 3 · 跟进</span>
+          <span class="text-xs text-gray-500">🕘 未回复触发，同线程回复</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">Re: Quick question about {{company}}'s expansion</div>
+        <div class="text-xs text-gray-600 mt-1">Bump + 换一个切入角度：聚焦痛点而非产品。</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">3</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 7 · 案例</span>
+          <span class="text-xs text-gray-500">🕘 未回复触发，新线程</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">How {{similar_company}} saved 30% lead time</div>
+        <div class="text-xs text-gray-600 mt-1">附 1 个同行业成功案例链接，强化社会认同。</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">4</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 14 · 异议处理</span>
+          <span class="text-xs text-gray-500">🕘 未回复或打开未回复</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">3 reasons teams like yours pause on this</div>
+        <div class="text-xs text-gray-600 mt-1">主动提出常见顾虑（预算/时间/供应商锁定）并给出反驳。</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">5</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 21 · 搁置信号</span>
+          <span class="text-xs text-gray-500">🕘 仍无回复</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">Should I close your file, {{first_name}}?</div>
+        <div class="text-xs text-gray-600 mt-1">反向心理：明确提出是否要关闭对话，通常能触发 5-8% 额外回复。</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-gray-400 text-white rounded-full flex items-center justify-center text-xs font-bold">6</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 30 · 重启</span>
+          <span class="text-xs text-gray-500">🕘 新角度、新线程</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">New {{industry}} benchmark report (Q2 2025)</div>
+        <div class="text-xs text-gray-600 mt-1">用新内容重新激活，不再销售而是给行业洞察。</div>
+      </div>
+    </div>
+
+    <div class="relative">
+      <div class="absolute -left-[41px] w-6 h-6 bg-gray-300 text-gray-700 rounded-full flex items-center justify-center text-xs font-bold">7</div>
+      <div class="border border-gray-300 rounded p-3 bg-gray-50">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-semibold text-gray-600">Day 45 · 结束</span>
+          <span class="text-xs text-gray-500">🕘 退出序列，加入培育池</span>
+        </div>
+        <div class="text-sm text-gray-800 font-medium">Breakup email — thanks for your time</div>
+        <div class="text-xs text-gray-600 mt-1">礼貌告别并留开门：自动退出序列，转入 90 天唤回池。</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- [时间线详情 · 东南亚（折叠占位）] -->
+<div id="tl-sea" class="bg-white border border-gray-300 rounded p-5 mb-4 hidden">
+  <div class="flex items-center justify-between mb-3">
+    <div class="font-semibold text-gray-800">🇸🇬🇻🇳 东南亚 · 制造业7步 — 时间线</div>
+    <button class="bg-blue-500 text-white text-xs px-4 py-1.5 rounded hover:bg-blue-600">📋 克隆为我的序列</button>
+  </div>
+  <div class="text-xs text-gray-500 mb-3">结构与欧美版一致，时机调整为：Day 0 / 3 / 7 / 14 / 21 / 30 / 45。语气更亲和，强调价格与供货稳定。</div>
+  <div class="grid grid-cols-7 gap-2 text-xs">
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 0</div><div class="text-gray-500 mt-1">首触</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 3</div><div class="text-gray-500 mt-1">跟进</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 7</div><div class="text-gray-500 mt-1">案例</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 14</div><div class="text-gray-500 mt-1">异议</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 21</div><div class="text-gray-500 mt-1">搁置</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 30</div><div class="text-gray-500 mt-1">重启</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 45</div><div class="text-gray-500 mt-1">结束</div></div>
+  </div>
+</div>
+
+<!-- [时间线详情 · 中东（折叠占位）] -->
+<div id="tl-me" class="bg-white border border-gray-300 rounded p-5 mb-4 hidden">
+  <div class="flex items-center justify-between mb-3">
+    <div class="font-semibold text-gray-800">🇦🇪🇸🇦 中东 · 建材/工程7步 — 时间线</div>
+    <button class="bg-blue-500 text-white text-xs px-4 py-1.5 rounded hover:bg-blue-600">📋 克隆为我的序列</button>
+  </div>
+  <div class="text-xs text-gray-500 mb-3">跳过周五周六（本地休息日），自动避开斋月工作时段。周期拉长到 50 天。</div>
+  <div class="grid grid-cols-7 gap-2 text-xs">
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 0</div><div class="text-gray-500 mt-1">首触</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 4</div><div class="text-gray-500 mt-1">跟进</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 8</div><div class="text-gray-500 mt-1">案例</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 15</div><div class="text-gray-500 mt-1">异议</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 23</div><div class="text-gray-500 mt-1">搁置</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 33</div><div class="text-gray-500 mt-1">重启</div></div>
+    <div class="border border-gray-300 rounded p-2 bg-gray-50 text-center"><div class="font-semibold text-gray-600">Day 50</div><div class="text-gray-500 mt-1">结束</div></div>
+  </div>
+</div>
+
+<script>
+  function toggleTimeline(id) {
+    const el = document.getElementById(id);
+    el.classList.toggle('hidden');
+  }
+</script>
+
+</body>
+</html>

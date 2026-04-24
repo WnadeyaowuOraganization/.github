@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>邮件追踪 · #2801</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">邮件追踪 · #2801</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">追踪邮件打开/点击/回复等事件，为营销效果和回复分类提供数据基础</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗, 数据分析</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">事件流 / 追踪像素 / 短链 / 回复检测</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">筛选事件 / 查看详情抽屉</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">事件流实时 / 追踪像素可用</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.2.3</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+
+<div class="max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800">邮件追踪</h1>
+      <p class="text-sm text-gray-500 mt-1">实时事件流：发送 / 打开 / 点击 / 回复</p>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4 flex flex-wrap gap-3 items-center">
+    <div>
+      <label class="text-xs text-gray-500 mr-2">序列</label>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700">
+        <option>全部</option>
+        <option>SaaS决策人冷启动-Q4</option>
+        <option>北美区EDM-11月</option>
+        <option>制造业老客户续约</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mr-2">时间段</label>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700">
+        <option>最近 24 小时</option>
+        <option>最近 7 天</option>
+        <option>最近 30 天</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mr-2">收件人</label>
+      <input type="text" placeholder="搜索邮箱..." class="px-3 py-1.5 border border-gray-300 rounded text-sm w-48">
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mr-2">事件类型</label>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700">
+        <option>全部</option><option>发送</option><option>打开</option><option>点击</option><option>回复</option>
+      </select>
+    </div>
+    <button class="px-3 py-1.5 bg-gray-700 text-white rounded text-sm ml-auto">导出 CSV</button>
+  </div>
+
+  <!-- KPI -->
+  <div class="grid grid-cols-4 gap-4 mb-4">
+    <div class="bg-white border border-gray-200 rounded p-3"><div class="text-xs text-gray-500">发送</div><div class="text-lg font-semibold text-gray-800">10,458</div></div>
+    <div class="bg-white border border-gray-200 rounded p-3"><div class="text-xs text-gray-500">打开率</div><div class="text-lg font-semibold text-gray-800">42.6%</div></div>
+    <div class="bg-white border border-gray-200 rounded p-3"><div class="text-xs text-gray-500">点击率</div><div class="text-lg font-semibold text-gray-800">11.8%</div></div>
+    <div class="bg-white border border-gray-200 rounded p-3"><div class="text-xs text-gray-500">回复率</div><div class="text-lg font-semibold text-gray-800">8.3%</div></div>
+  </div>
+
+  <div class="flex gap-4">
+    <!-- 事件流表格 -->
+    <div class="flex-1 bg-white border border-gray-200 rounded-lg overflow-hidden">
+      <div class="px-4 py-3 border-b border-gray-200 bg-gray-50">
+        <h2 class="text-sm font-medium text-gray-700">事件流（近 20 条）</h2>
+      </div>
+      <table class="w-full text-xs">
+        <thead class="bg-gray-50 text-gray-500">
+          <tr>
+            <th class="px-3 py-2 text-left font-medium">时间</th>
+            <th class="px-3 py-2 text-left font-medium">事件</th>
+            <th class="px-3 py-2 text-left font-medium">收件人</th>
+            <th class="px-3 py-2 text-left font-medium">序列</th>
+            <th class="px-3 py-2 text-left font-medium">主题</th>
+            <th class="px-3 py-2 text-left font-medium">IP</th>
+            <th class="px-3 py-2 text-left font-medium">UA</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-700" id="event-rows"></tbody>
+      </table>
+    </div>
+
+    <!-- 右侧：邮件详情 -->
+    <aside class="w-80 bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-gray-800">邮件追踪详情</h3>
+        <span class="text-xs text-gray-400">EM-2024-10458</span>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <div class="text-gray-500 mb-1">收件人</div>
+          <div class="text-gray-800">zhang.wei@acme.com.cn</div>
+        </div>
+        <div>
+          <div class="text-gray-500 mb-1">主题</div>
+          <div class="text-gray-800">万德AI · 制造业数据分析试用邀请</div>
+        </div>
+        <div>
+          <div class="text-gray-500 mb-1">发送人</div>
+          <div class="text-gray-800">sales01@wande.com</div>
+        </div>
+        <div>
+          <div class="text-gray-500 mb-1">追踪像素 URL</div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 font-mono text-gray-600 break-all">
+            https://t.wande.com/px/a1b2c3d4.gif
+          </div>
+        </div>
+        <div>
+          <div class="text-gray-500 mb-1">短链映射</div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 font-mono text-gray-600 break-all">
+            <div>t.wande.com/k9x2 → demo.wande.com</div>
+            <div class="mt-1">t.wande.com/m4p1 → wande.com/pricing</div>
+          </div>
+        </div>
+        <div>
+          <div class="text-gray-500 mb-1">回复检测规则</div>
+          <div class="bg-gray-50 border border-gray-200 rounded p-2 text-gray-600">
+            <div>• In-Reply-To 头匹配</div>
+            <div>• References 链追溯</div>
+            <div>• Subject Re: 前缀识别</div>
+            <div>• IMAP 收件箱扫描（5 分钟轮询）</div>
+          </div>
+        </div>
+        <div>
+          <div class="text-gray-500 mb-1">事件时间线</div>
+          <div class="space-y-1 text-gray-700">
+            <div>✉ 发送  14:02:11</div>
+            <div>👁 打开  14:18:47  (北京)</div>
+            <div>🖱 点击  14:19:02  k9x2</div>
+            <div>👁 打开  15:42:19  (再次)</div>
+            <div>💬 回复  16:03:55</div>
+          </div>
+        </div>
+      </div>
+    </aside>
+  </div>
+</div>
+
+<script>
+const events = [
+  ["16:03:55","回复","zhang.wei@acme.com.cn","制造业老客户续约","万德AI · 制造业数据分析试用邀请","218.30.12.88","Outlook/16.0"],
+  ["15:42:19","打开","zhang.wei@acme.com.cn","制造业老客户续约","万德AI · 制造业数据分析试用邀请","218.30.12.88","Gmail/iOS"],
+  ["15:38:02","点击","li.ming@beta-tech.cn","SaaS决策人冷启动-Q4","关于AI分析平台的合作提议","114.88.203.45","Chrome/120"],
+  ["15:35:48","打开","li.ming@beta-tech.cn","SaaS决策人冷启动-Q4","关于AI分析平台的合作提议","114.88.203.45","Chrome/120"],
+  ["15:22:11","发送","wang.fang@retailer.com","北美区EDM-11月","Q4 retail analytics benchmark","—","—"],
+  ["14:58:30","打开","ceo@startup-ai.io","SaaS决策人冷启动-Q4","万德AI · Series B 公司必读","104.198.14.52","Safari/17"],
+  ["14:42:17","回复","liu.yang@bigcorp.com","制造业老客户续约","Re: 续约方案","202.96.134.22","Foxmail"],
+  ["14:19:02","点击","zhang.wei@acme.com.cn","制造业老客户续约","万德AI · 制造业数据分析试用邀请","218.30.12.88","Gmail/iOS"],
+  ["14:18:47","打开","zhang.wei@acme.com.cn","制造业老客户续约","万德AI · 制造业数据分析试用邀请","218.30.12.88","Gmail/iOS"],
+  ["14:02:11","发送","zhang.wei@acme.com.cn","制造业老客户续约","万德AI · 制造业数据分析试用邀请","—","—"],
+  ["13:55:40","打开","procurement@factory.com","制造业老客户续约","季度采购数据洞察","61.135.169.125","Thunderbird"],
+  ["13:48:22","发送","cfo@mid-market.cn","SaaS决策人冷启动-Q4","CFO 必读：财务数据智能化","—","—"],
+  ["13:30:11","点击","head.sales@xyz.io","北美区EDM-11月","Boost your sales with Wande","54.230.15.88","Chrome/120"],
+  ["13:28:09","打开","head.sales@xyz.io","北美区EDM-11月","Boost your sales with Wande","54.230.15.88","Chrome/120"],
+  ["12:50:55","回复","cto@scale-up.com","SaaS决策人冷启动-Q4","Re: 技术集成可行性","8.8.8.8","Apple Mail"],
+  ["12:35:18","发送","gm@logistics.cn","制造业老客户续约","物流数据看板升级","—","—"],
+  ["11:48:22","打开","vp.ops@enterprise.com","北美区EDM-11月","Operations intelligence demo","18.144.2.10","Edge/119"],
+  ["11:22:33","发送","director@holding-group.cn","SaaS决策人冷启动-Q4","集团级数据中台方案","—","—"],
+  ["10:55:07","点击","buyer@supplier.com","制造业老客户续约","价格谈判数据支持","120.78.55.12","Chrome Mobile"],
+  ["10:40:02","发送","marketing@brand.cn","北美区EDM-11月","Marketing data playbook","—","—"],
+];
+const tbody = document.getElementById('event-rows');
+const colorMap = {"发送":"text-gray-500","打开":"text-blue-600","点击":"text-purple-600","回复":"text-green-600"};
+events.forEach(r=>{
+  const tr = document.createElement('tr');
+  tr.className = 'hover:bg-gray-50';
+  tr.innerHTML = `
+    <td class="px-3 py-2 text-gray-500 whitespace-nowrap">${r[0]}</td>
+    <td class="px-3 py-2 ${colorMap[r[1]]||''} font-medium">${r[1]}</td>
+    <td class="px-3 py-2">${r[2]}</td>
+    <td class="px-3 py-2 text-gray-600">${r[3]}</td>
+    <td class="px-3 py-2 text-gray-700 truncate max-w-xs">${r[4]}</td>
+    <td class="px-3 py-2 text-gray-500">${r[5]}</td>
+    <td class="px-3 py-2 text-gray-500">${r[6]}</td>`;
+  tbody.appendChild(tr);
+});
+</script>
+
+</body>
+</html>

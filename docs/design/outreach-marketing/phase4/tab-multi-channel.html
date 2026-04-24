@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>LinkedIn+邮件协同 · #2815</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background:#f5f5f5;}
+    .wf-card { background:#fff; border:1px solid #d9d9d9; border-radius:4px; }
+    .wf-btn { background:#4b5563; color:#fff; padding:6px 14px; font-size:12px; border-radius:3px; cursor:pointer; border:none;}
+    .wf-btn-default { background:#fff; color:#333; border:1px solid #d9d9d9; padding:6px 14px; font-size:12px; border-radius:3px; cursor:pointer; }
+    .wf-tag { background:#f0f0f0; color:#555; padding:1px 8px; font-size:11px; border-radius:10px; display:inline-block; }
+    .region-title{font-size:14px;font-weight:600;color:#333;display:flex;align-items:center;gap:6px;}
+    .region-num{background:#6b7280;color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+
+    /* 时间轴 */
+    .timeline{position:relative;padding:20px 0;}
+    .timeline::before{content:'';position:absolute;left:40px;top:0;bottom:0;width:2px;background:#d1d5db;}
+    .tl-node{position:relative;padding-left:90px;margin-bottom:20px;}
+    .tl-dot{position:absolute;left:32px;top:14px;width:18px;height:18px;border-radius:50%;background:#6b7280;border:3px solid #fff;box-shadow:0 0 0 2px #6b7280;}
+    .tl-day{position:absolute;left:0;top:12px;width:30px;text-align:center;font-size:11px;color:#6b7280;font-weight:600;}
+    .tl-card{background:#fff;border:1px solid #e5e7eb;border-radius:5px;padding:12px;position:relative;}
+    .tl-card:hover{border-color:#9ca3af;}
+    .channel-badge{display:inline-flex;align-items:center;gap:4px;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;}
+    .ch-linkedin{background:#d1d5db;color:#1f2937;}
+    .ch-email{background:#e5e7eb;color:#374151;}
+    .ch-both{background:#374151;color:#fff;}
+    .branch{margin-top:8px;padding:8px;background:#fafafa;border-left:3px solid #9ca3af;border-radius:3px;font-size:12px;color:#4b5563;}
+    .branch.fail{border-left-color:#d4d4d4;}
+
+    /* 热力图 */
+    .heat-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+    .heat-label{width:120px;font-size:11px;color:#555;}
+    .heat-bar{flex:1;height:18px;background:#f3f4f6;border-radius:2px;overflow:hidden;position:relative;}
+    .heat-fill{height:100%;}
+    .heat-value{width:50px;text-align:right;font-size:11px;color:#333;font-weight:500;}
+  </style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:12px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:8px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">LinkedIn+邮件协同 · #2815 [22/25]</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:10px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:90px;padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 PAGE_TITLE</td><td style="padding:3px 0;">LinkedIn+邮件协同 · #2815</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:3px 0;">时间轴序列（Day 0/3/7/14/21/30 六节点）/ 每步节点显示渠道图标+动作+条件+成功率 / 转化路径热力图</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:3px 0;">6 节点完整渲染 · 每节点含渠道标记 · Day 3 分支条件清晰 · 右侧热力图 ≥5 条路径</td></tr>
+    </table>
+    <div style="margin-top:8px;padding-top:6px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#4b5563;text-decoration:none;">外展获客 · 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="p-4 space-y-4 max-w-[1400px] mx-auto">
+
+  <!-- 顶部：序列选择 + 指标 -->
+  <div class="wf-card p-4">
+    <div class="flex items-center justify-between flex-wrap gap-3">
+      <div>
+        <div class="region-title"><span class="region-num">1</span>当前序列：<span class="font-normal text-gray-600">海外游乐设备 CEO/采购 · LinkedIn+邮件 30 天协同</span></div>
+        <div class="text-xs text-gray-500 mt-1">目标 Lead 数：<strong>186</strong> · 运行中：<strong>124</strong> · 已完成：<strong>41</strong> · 已转 Lead：<strong>11</strong></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="wf-btn-default">选择序列 ▾</button>
+        <button class="wf-btn-default">+ 新建序列</button>
+        <button class="wf-btn">保存草稿</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 两栏：左时间轴 · 右热力图 -->
+  <div class="grid grid-cols-12 gap-4">
+
+    <!-- 左：时间轴序列设计器 -->
+    <div class="col-span-8 wf-card p-4">
+      <div class="region-title mb-2"><span class="region-num">2</span>多渠道协同序列（时间轴可视化）</div>
+      <div class="text-xs text-gray-500 mb-2">支持 LinkedIn + Email + WhatsApp · 条件分支 · 自动填充邮箱（官网 MX 推测）</div>
+
+      <div class="timeline">
+
+        <!-- Day 0 -->
+        <div class="tl-node">
+          <div class="tl-day">Day 0</div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="channel-badge ch-linkedin">🔗 LinkedIn</span>
+                <span class="text-sm font-semibold text-gray-800">发送连接请求</span>
+              </div>
+              <span class="wf-tag">成功率 41.7%</span>
+            </div>
+            <div class="text-xs text-gray-600 leading-relaxed">使用 A/B 胜出版本："Hi {first_name}, saw your role at {company}..."</div>
+            <div class="text-[11px] text-gray-400 mt-1">📊 已触达 186 · 通过 78 · 拒绝 12 · 等待 96</div>
+          </div>
+        </div>
+
+        <!-- Day 3 - 分支 -->
+        <div class="tl-node">
+          <div class="tl-day">Day 3</div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="channel-badge ch-both">🔀 条件分支</span>
+                <span class="text-sm font-semibold text-gray-800">判定连接请求是否通过</span>
+              </div>
+            </div>
+            <div class="branch">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="channel-badge ch-linkedin">✓ 已通过</span>
+                <span class="text-xs font-semibold">→ LinkedIn 发送第一条消息（含价值点 + 案例 PDF 链接）</span>
+              </div>
+              <div class="text-[11px] text-gray-500">命中 78 人 · 回复 23 · 回复率 29.5%</div>
+            </div>
+            <div class="branch fail">
+              <div class="flex items-center gap-2 mb-1">
+                <span class="channel-badge ch-email">✗ 未通过 / 未读</span>
+                <span class="text-xs font-semibold">→ 发送邮件（从公司官网 MX 推测邮箱 · {first}.{last}@{company-domain}）</span>
+              </div>
+              <div class="text-[11px] text-gray-500">命中 108 人 · 邮箱推测成功 91 · 送达 84 · 打开 31</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Day 7 -->
+        <div class="tl-node">
+          <div class="tl-day">Day 7</div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="channel-badge ch-email">✉ 邮件</span>
+                <span class="text-sm font-semibold text-gray-800">邮件跟进 + 发送案例</span>
+              </div>
+              <span class="wf-tag">打开率 38.2%</span>
+            </div>
+            <div class="text-xs text-gray-600">主题：Case Study - How {similar_company} reduced Ferris Wheel cost by 30%</div>
+            <div class="text-[11px] text-gray-400 mt-1">📎 附件：amusement-park-case-study.pdf</div>
+          </div>
+        </div>
+
+        <!-- Day 14 -->
+        <div class="tl-node">
+          <div class="tl-day">Day 14</div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="channel-badge ch-linkedin">🔗 LinkedIn</span>
+                <span class="text-sm font-semibold text-gray-800">LinkedIn 互动（点赞近期帖子）</span>
+              </div>
+              <span class="wf-tag">互动率 24.3%</span>
+            </div>
+            <div class="text-xs text-gray-600">软触达：对目标最近 1 条发帖点赞 + 评论（预设 3 条通用评论）</div>
+            <div class="text-[11px] text-gray-400 mt-1">💡 不计入每日加好友额度 · 提升品牌认知</div>
+          </div>
+        </div>
+
+        <!-- Day 21 -->
+        <div class="tl-node">
+          <div class="tl-day">Day 21</div>
+          <div class="tl-dot"></div>
+          <div class="tl-card">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="channel-badge ch-email">✉ 邮件</span>
+                <span class="text-sm font-semibold text-gray-800">邮件异议处理</span>
+              </div>
+              <span class="wf-tag">回复率 16.8%</span>
+            </div>
+            <div class="text-xs text-gray-600">主题：Common concerns about China sourcing - addressed</div>
+            <div class="text-[11px] text-gray-400 mt-1">内容：质检流程 / 认证 / 航运 / 售后 4 大异议 FAQ</div>
+          </div>
+        </div>
+
+        <!-- Day 30 -->
+        <div class="tl-node">
+          <div class="tl-day">Day 30</div>
+          <div class="tl-dot" style="background:#1f2937;box-shadow:0 0 0 2px #1f2937;"></div>
+          <div class="tl-card" style="border-color:#374151;border-width:2px;">
+            <div class="flex items-center justify-between mb-1">
+              <div class="flex items-center gap-2">
+                <span class="channel-badge ch-both">🔗✉ LinkedIn + 邮件</span>
+                <span class="text-sm font-semibold text-gray-800">最终邀约（双渠道同时发送）</span>
+              </div>
+              <span class="wf-tag" style="background:#374151;color:#fff">最终转化 5.9%</span>
+            </div>
+            <div class="text-xs text-gray-600">消息：邀约 15 分钟线上会议 / Canton Fair 展会见面 · Calendly 链接</div>
+            <div class="text-[11px] text-gray-400 mt-1">🎯 序列结束 · 未回复 → 移入「30天再营销池」（90天后重启）</div>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="flex items-center gap-2 mt-2">
+        <button class="wf-btn-default text-xs">+ 在此添加节点</button>
+        <button class="wf-btn-default text-xs">+ 添加条件分支</button>
+        <button class="wf-btn-default text-xs">导入 JSON 序列模板</button>
+      </div>
+    </div>
+
+    <!-- 右：转化路径热力图 -->
+    <div class="col-span-4 space-y-4">
+
+      <div class="wf-card p-4">
+        <div class="region-title mb-3"><span class="region-num">3</span>转化路径热力图</div>
+        <div class="text-xs text-gray-500 mb-3">过去 90 天完成序列的 Lead · 按路径最终转化率排序</div>
+
+        <div class="heat-row">
+          <div class="heat-label">LinkedIn 通过 → 回复</div>
+          <div class="heat-bar"><div class="heat-fill" style="width:92%;background:#1f2937;"></div></div>
+          <div class="heat-value">18.4%</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">LinkedIn+邮件 双触达</div>
+          <div class="heat-bar"><div class="heat-fill" style="width:72%;background:#374151;"></div></div>
+          <div class="heat-value">14.2%</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">邮件首触 → 回复</div>
+          <div class="heat-bar"><div class="heat-fill" style="width:48%;background:#6b7280;"></div></div>
+          <div class="heat-value">9.6%</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">LinkedIn 点赞后回关</div>
+          <div class="heat-bar"><div class="heat-fill" style="width:35%;background:#9ca3af;"></div></div>
+          <div class="heat-value">6.8%</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">仅 LinkedIn 未通过</div>
+          <div class="heat-bar"><div class="heat-fill" style="width:18%;background:#d1d5db;"></div></div>
+          <div class="heat-value">3.2%</div>
+        </div>
+        <div class="heat-row">
+          <div class="heat-label">仅邮件 不打开</div>
+          <div class="heat-bar"><div class="heat-fill" style="width:6%;background:#e5e7eb;"></div></div>
+          <div class="heat-value">0.8%</div>
+        </div>
+
+        <div class="mt-4 p-2 bg-gray-50 border border-gray-200 rounded text-[11px] text-gray-600">
+          💡 <strong>结论：</strong>LinkedIn 通过+直接回复 是最高价值路径（18.4%），建议把更多预算投入 A/B 邀请语优化
+        </div>
+      </div>
+
+      <div class="wf-card p-4">
+        <div class="region-title mb-3"><span class="region-num">4</span>序列节点转化漏斗</div>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between items-center py-1 border-b border-gray-100">
+            <span>Day 0 发送请求</span><span class="font-semibold">186</span>
+          </div>
+          <div class="flex justify-between items-center py-1 border-b border-gray-100">
+            <span>Day 3 LinkedIn 通过</span><span class="font-semibold">78 <span class="text-gray-400 text-[10px]">(41.9%)</span></span>
+          </div>
+          <div class="flex justify-between items-center py-1 border-b border-gray-100">
+            <span>Day 7 邮件送达</span><span class="font-semibold">84 <span class="text-gray-400 text-[10px]">(45.2%)</span></span>
+          </div>
+          <div class="flex justify-between items-center py-1 border-b border-gray-100">
+            <span>Day 14 互动触发</span><span class="font-semibold">132 <span class="text-gray-400 text-[10px]">(71.0%)</span></span>
+          </div>
+          <div class="flex justify-between items-center py-1 border-b border-gray-100">
+            <span>Day 21 邮件回复</span><span class="font-semibold">28 <span class="text-gray-400 text-[10px]">(15.1%)</span></span>
+          </div>
+          <div class="flex justify-between items-center py-1 border-b border-gray-100">
+            <span>Day 30 邀约接受</span><span class="font-semibold">11 <span class="text-gray-400 text-[10px]">(5.9%)</span></span>
+          </div>
+          <div class="flex justify-between items-center py-1 pt-2 border-t-2 border-gray-300">
+            <span class="font-semibold">转商机数</span><span class="font-bold text-gray-800">11</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="wf-card p-4">
+        <div class="region-title mb-3"><span class="region-num">5</span>渠道贡献拆解</div>
+        <div class="space-y-2 text-xs">
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span><span class="channel-badge ch-linkedin">🔗 LinkedIn</span> 首次触达占比</span>
+            <span class="font-semibold">63%</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span><span class="channel-badge ch-email">✉ 邮件</span> 首次触达占比</span>
+            <span class="font-semibold">37%</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span><span class="channel-badge ch-linkedin">🔗 LinkedIn</span> 最终转化贡献</span>
+            <span class="font-semibold">54%</span>
+          </div>
+          <div class="flex justify-between py-1 border-b border-gray-100">
+            <span><span class="channel-badge ch-email">✉ 邮件</span> 最终转化贡献</span>
+            <span class="font-semibold">46%</span>
+          </div>
+          <div class="flex justify-between py-1">
+            <span>双渠道协同提升</span>
+            <span class="font-semibold text-gray-800">+32%</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

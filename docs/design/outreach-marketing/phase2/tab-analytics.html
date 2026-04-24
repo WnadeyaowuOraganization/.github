@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>外展分析看板 · #2804</title>
+<script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">外展分析看板 · #2804</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">邮件外展全漏斗数据看板 — 送达/打开/点击/回复/会议转化率多维分析</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗, 商务主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5 KPI / 漏斗图 / 序列对比 / 时间热力图</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">切换日期/序列 / 导出报告</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">漏斗图 5 阶段数据正常 / 筛选生效</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.2.5</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+
+
+<div class="max-w-7xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <div>
+      <h1 class="text-xl font-semibold text-gray-800">外展分析看板</h1>
+      <p class="text-sm text-gray-500 mt-1">送达率 · 打开率 · 回复率 · 会议转化 全链路分析</p>
+    </div>
+  </div>
+
+  <!-- 筛选栏 -->
+  <div class="bg-white border border-gray-200 rounded-lg p-4 mb-4 flex flex-wrap gap-3 items-center">
+    <div>
+      <label class="text-xs text-gray-500 mr-2">日期</label>
+      <input type="date" value="2024-11-01" class="px-3 py-1.5 border border-gray-300 rounded text-sm">
+      <span class="text-gray-400 mx-1">至</span>
+      <input type="date" value="2024-11-30" class="px-3 py-1.5 border border-gray-300 rounded text-sm">
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mr-2">序列</label>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700">
+        <option>全部序列</option>
+        <option>SaaS决策人冷启动-Q4</option>
+        <option>北美区EDM-11月</option>
+        <option>制造业老客户续约</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mr-2">渠道</label>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700">
+        <option>邮件</option><option>领英</option><option>多渠道</option>
+      </select>
+    </div>
+    <div>
+      <label class="text-xs text-gray-500 mr-2">发送人</label>
+      <select class="px-3 py-1.5 border border-gray-300 rounded text-sm text-gray-700">
+        <option>全部</option><option>sales01@wande.com</option>
+      </select>
+    </div>
+    <button class="ml-auto px-3 py-1.5 bg-gray-700 text-white rounded text-sm">导出报告</button>
+  </div>
+
+  <!-- KPI 卡片 -->
+  <div class="grid grid-cols-5 gap-4 mb-6">
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">送达率</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1">97.2%</div>
+      <div class="text-xs text-green-600 mt-1">↑ 0.8% 环比</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">打开率</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1">42.6%</div>
+      <div class="text-xs text-green-600 mt-1">↑ 2.1% 环比</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">点击率</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1">11.8%</div>
+      <div class="text-xs text-red-600 mt-1">↓ 0.4% 环比</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">回复率</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1">8.3%</div>
+      <div class="text-xs text-green-600 mt-1">↑ 1.2% 环比</div>
+    </div>
+    <div class="bg-white border border-gray-200 rounded-lg p-4">
+      <div class="text-xs text-gray-500">会议预约率</div>
+      <div class="text-3xl font-semibold text-gray-800 mt-1">2.4%</div>
+      <div class="text-xs text-green-600 mt-1">↑ 0.3% 环比</div>
+    </div>
+  </div>
+
+  <!-- 漏斗图 -->
+  <div class="bg-white border border-gray-200 rounded-lg p-5 mb-6">
+    <h3 class="text-sm font-semibold text-gray-800 mb-4">转化漏斗</h3>
+    <div class="space-y-2">
+      <div class="flex items-center gap-4">
+        <div class="w-20 text-xs text-gray-600">发送</div>
+        <div class="flex-1 bg-gray-700 h-10 rounded flex items-center justify-between px-4 text-white text-sm" style="width:100%">
+          <span>📤 发送</span>
+          <span class="font-semibold">10,458</span>
+        </div>
+        <div class="w-16 text-xs text-gray-500 text-right">100%</div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-20 text-xs text-gray-600">送达</div>
+        <div class="bg-gray-600 h-10 rounded flex items-center justify-between px-4 text-white text-sm" style="width:97.2%">
+          <span>✓ 送达</span>
+          <span class="font-semibold">10,165</span>
+        </div>
+        <div class="w-16 text-xs text-gray-500 text-right">97.2%</div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-20 text-xs text-gray-600">打开</div>
+        <div class="bg-gray-500 h-10 rounded flex items-center justify-between px-4 text-white text-sm" style="width:42.6%">
+          <span>👁 打开</span>
+          <span class="font-semibold">4,455</span>
+        </div>
+        <div class="w-16 text-xs text-gray-500 text-right">42.6%</div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-20 text-xs text-gray-600">点击</div>
+        <div class="bg-gray-400 h-10 rounded flex items-center justify-between px-4 text-white text-sm" style="width:11.8%">
+          <span>🖱 点击</span>
+          <span class="font-semibold">1,234</span>
+        </div>
+        <div class="w-16 text-xs text-gray-500 text-right">11.8%</div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-20 text-xs text-gray-600">回复</div>
+        <div class="bg-gray-400 h-10 rounded flex items-center justify-between px-4 text-white text-sm" style="width:8.3%">
+          <span>💬 回复</span>
+          <span class="font-semibold">868</span>
+        </div>
+        <div class="w-16 text-xs text-gray-500 text-right">8.3%</div>
+      </div>
+      <div class="flex items-center gap-4">
+        <div class="w-20 text-xs text-gray-600">会议</div>
+        <div class="bg-gray-300 h-10 rounded flex items-center justify-between px-4 text-gray-800 text-sm" style="width:2.4%">
+          <span class="text-xs">📅</span>
+          <span class="font-semibold text-xs">251</span>
+        </div>
+        <div class="w-16 text-xs text-gray-500 text-right">2.4%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 序列对比 + 热力图 -->
+  <div class="grid grid-cols-2 gap-4">
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <h3 class="text-sm font-semibold text-gray-800 mb-3">按序列对比</h3>
+      <table class="w-full text-sm">
+        <thead class="bg-gray-50 text-gray-500 text-xs border-b border-gray-200">
+          <tr>
+            <th class="px-2 py-2 text-left font-medium">序列</th>
+            <th class="px-2 py-2 text-right font-medium">送达率</th>
+            <th class="px-2 py-2 text-right font-medium">回复率</th>
+            <th class="px-2 py-2 text-right font-medium">会议转化</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100">
+          <tr><td class="px-2 py-2">SaaS决策人冷启动-Q4</td><td class="px-2 py-2 text-right">98.1%</td><td class="px-2 py-2 text-right text-green-600 font-medium">11.2%</td><td class="px-2 py-2 text-right">3.8%</td></tr>
+          <tr><td class="px-2 py-2">制造业老客户续约</td><td class="px-2 py-2 text-right">97.8%</td><td class="px-2 py-2 text-right text-green-600 font-medium">14.5%</td><td class="px-2 py-2 text-right">5.2%</td></tr>
+          <tr><td class="px-2 py-2">北美区EDM-11月</td><td class="px-2 py-2 text-right">96.4%</td><td class="px-2 py-2 text-right">6.1%</td><td class="px-2 py-2 text-right">1.8%</td></tr>
+          <tr><td class="px-2 py-2">金融行业破冰</td><td class="px-2 py-2 text-right">95.2%</td><td class="px-2 py-2 text-right">4.8%</td><td class="px-2 py-2 text-right">1.2%</td></tr>
+          <tr><td class="px-2 py-2">活动邀请-产品发布会</td><td class="px-2 py-2 text-right">98.8%</td><td class="px-2 py-2 text-right">9.3%</td><td class="px-2 py-2 text-right">0.9%</td></tr>
+          <tr><td class="px-2 py-2">已使用但未付费唤醒</td><td class="px-2 py-2 text-right">97.1%</td><td class="px-2 py-2 text-right text-green-600 font-medium">12.8%</td><td class="px-2 py-2 text-right">4.1%</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 热力图 -->
+    <div class="bg-white border border-gray-200 rounded-lg p-5">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-semibold text-gray-800">发送时间分布 · 打开率热力图</h3>
+        <span class="text-xs text-gray-400">深色 = 打开率高</span>
+      </div>
+      <div class="overflow-x-auto">
+        <div class="inline-block">
+          <div class="flex text-xs text-gray-500 ml-8 mb-1">
+            <div class="w-6 text-center">9</div>
+            <div class="w-6 text-center">10</div>
+            <div class="w-6 text-center">11</div>
+            <div class="w-6 text-center">12</div>
+            <div class="w-6 text-center">13</div>
+            <div class="w-6 text-center">14</div>
+            <div class="w-6 text-center">15</div>
+            <div class="w-6 text-center">16</div>
+            <div class="w-6 text-center">17</div>
+            <div class="w-6 text-center">18</div>
+            <div class="w-6 text-center">19</div>
+            <div class="w-6 text-center">20</div>
+          </div>
+          <!-- heatmap rows -->
+          <div id="heatmap"></div>
+        </div>
+        <div class="flex items-center justify-end mt-3 gap-1 text-xs text-gray-500">
+          <span>低</span>
+          <div class="w-4 h-3 bg-gray-100"></div>
+          <div class="w-4 h-3 bg-gray-300"></div>
+          <div class="w-4 h-3 bg-gray-500"></div>
+          <div class="w-4 h-3 bg-gray-700"></div>
+          <div class="w-4 h-3 bg-gray-900"></div>
+          <span>高</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const days = ['周一','周二','周三','周四','周五','周六','周日'];
+const colors = ['bg-gray-100','bg-gray-200','bg-gray-300','bg-gray-400','bg-gray-500','bg-gray-600','bg-gray-700','bg-gray-800','bg-gray-900'];
+const heatmap = document.getElementById('heatmap');
+days.forEach((d, i)=>{
+  const row = document.createElement('div');
+  row.className = 'flex items-center mb-0.5';
+  const label = document.createElement('div');
+  label.className = 'w-8 text-xs text-gray-500';
+  label.textContent = d;
+  row.appendChild(label);
+  for (let h=0; h<12; h++){
+    const cell = document.createElement('div');
+    // 工作日10-11点 和 14-15点 最深
+    let intensity = 2;
+    if (i < 5){
+      if (h===1 || h===2) intensity = 7;
+      else if (h===5 || h===6) intensity = 8;
+      else if (h===0 || h===3 || h===7) intensity = 5;
+      else if (h===4) intensity = 4;
+      else intensity = 3;
+    } else {
+      intensity = Math.max(0, Math.floor(Math.random()*4));
+    }
+    cell.className = `w-6 h-6 ${colors[intensity]} border border-white`;
+    row.appendChild(cell);
+  }
+  heatmap.appendChild(row);
+});
+</script>
+
+</body>
+</html>

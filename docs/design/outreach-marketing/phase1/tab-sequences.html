@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>序列管理 · #2793</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">序列管理 · #2793</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">建立营销序列的数据模型与核心CRUD API，为所有营销动作提供统一编排入口</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗,商务主管,运营</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">序列列表/筛选/状态管理/数据模型预览/API端点暴露</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新建序列/暂停/归档/查看Schema/复制序列</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">状态/渠道筛选生效/抽屉展开正常/JSON Schema可读</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.1.1 序列数据模型</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [筛选栏] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4 flex items-center gap-3 flex-wrap">
+  <div class="flex items-center gap-2">
+    <label class="text-sm text-gray-700">状态：</label>
+    <select class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 bg-white">
+      <option>全部</option>
+      <option>草稿</option>
+      <option>运行中</option>
+      <option>已归档</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <label class="text-sm text-gray-700">渠道：</label>
+    <select class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 bg-white">
+      <option>全部</option>
+      <option>邮件</option>
+      <option>企微</option>
+      <option>LinkedIn</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <label class="text-sm text-gray-700">创建者：</label>
+    <select class="border border-gray-300 rounded px-3 py-1 text-sm text-gray-700 bg-white">
+      <option>全部</option>
+      <option>张伟（外贸主管）</option>
+      <option>李娜（营销岗）</option>
+      <option>王磊（商务）</option>
+    </select>
+  </div>
+  <input type="text" placeholder="搜索序列名..." class="border border-gray-300 rounded px-3 py-1 text-sm flex-1 min-w-[200px]">
+  <button class="bg-blue-500 text-white px-4 py-1.5 rounded text-sm hover:bg-blue-600">+ 新建序列</button>
+</div>
+
+<!-- [序列列表表格] -->
+<div class="bg-white border border-gray-300 rounded overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-100 text-gray-700">
+      <tr>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">序列名</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">渠道</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">步骤数</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">活跃线索数</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">回复率</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">状态</th>
+        <th class="border-b border-gray-300 px-4 py-2 text-left font-medium">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('外贸欧美7步标准序列')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">外贸欧美7步标准序列</td>
+        <td class="border-b border-gray-300 px-4 py-2">邮件</td>
+        <td class="border-b border-gray-300 px-4 py-2">7</td>
+        <td class="border-b border-gray-300 px-4 py-2">1,284</td>
+        <td class="border-b border-gray-300 px-4 py-2">12.4%</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">运行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a> · <a class="text-blue-500 hover:underline">暂停</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('SMB企微首触序列')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">SMB企微首触序列</td>
+        <td class="border-b border-gray-300 px-4 py-2">企微</td>
+        <td class="border-b border-gray-300 px-4 py-2">5</td>
+        <td class="border-b border-gray-300 px-4 py-2">642</td>
+        <td class="border-b border-gray-300 px-4 py-2">18.7%</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">运行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a> · <a class="text-blue-500 hover:underline">暂停</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('LinkedIn KOL 触达')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">LinkedIn KOL 触达</td>
+        <td class="border-b border-gray-300 px-4 py-2">LinkedIn</td>
+        <td class="border-b border-gray-300 px-4 py-2">4</td>
+        <td class="border-b border-gray-300 px-4 py-2">218</td>
+        <td class="border-b border-gray-300 px-4 py-2">23.1%</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-300 text-gray-700 px-2 py-0.5 rounded text-xs">草稿</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">编辑</a> · <a class="text-blue-500 hover:underline">发布</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('东南亚制造业唤醒序列')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">东南亚制造业唤醒序列</td>
+        <td class="border-b border-gray-300 px-4 py-2">邮件</td>
+        <td class="border-b border-gray-300 px-4 py-2">6</td>
+        <td class="border-b border-gray-300 px-4 py-2">890</td>
+        <td class="border-b border-gray-300 px-4 py-2">9.2%</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">运行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a> · <a class="text-blue-500 hover:underline">暂停</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('中东建材批发首触')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">中东建材批发首触</td>
+        <td class="border-b border-gray-300 px-4 py-2">邮件</td>
+        <td class="border-b border-gray-300 px-4 py-2">7</td>
+        <td class="border-b border-gray-300 px-4 py-2">356</td>
+        <td class="border-b border-gray-300 px-4 py-2">14.8%</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-200 text-gray-700 px-2 py-0.5 rounded text-xs">运行中</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a> · <a class="text-blue-500 hover:underline">暂停</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('展会后48H跟进')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">展会后48H跟进</td>
+        <td class="border-b border-gray-300 px-4 py-2">邮件</td>
+        <td class="border-b border-gray-300 px-4 py-2">3</td>
+        <td class="border-b border-gray-300 px-4 py-2">124</td>
+        <td class="border-b border-gray-300 px-4 py-2">31.5%</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-400 text-white px-2 py-0.5 rounded text-xs">已归档</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">查看</a> · <a class="text-blue-500 hover:underline">恢复</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 cursor-pointer" onclick="toggleDrawer('休眠客户重启序列')">
+        <td class="border-b border-gray-300 px-4 py-2 text-blue-500">休眠客户重启序列</td>
+        <td class="border-b border-gray-300 px-4 py-2">邮件</td>
+        <td class="border-b border-gray-300 px-4 py-2">5</td>
+        <td class="border-b border-gray-300 px-4 py-2">0</td>
+        <td class="border-b border-gray-300 px-4 py-2">—</td>
+        <td class="border-b border-gray-300 px-4 py-2"><span class="bg-gray-300 text-gray-700 px-2 py-0.5 rounded text-xs">草稿</span></td>
+        <td class="border-b border-gray-300 px-4 py-2"><a class="text-blue-500 hover:underline">编辑</a> · <a class="text-blue-500 hover:underline">发布</a></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- [侧边抽屉 - 数据模型+API] -->
+<div id="drawer" class="fixed top-0 right-0 h-full w-[520px] bg-white border-l border-gray-300 shadow-lg transform translate-x-full transition-transform duration-200 overflow-y-auto z-50">
+  <div class="p-4 border-b border-gray-300 flex items-center justify-between bg-gray-50">
+    <div>
+      <div class="text-xs text-gray-500">序列详情</div>
+      <div id="drawerTitle" class="font-semibold text-gray-800">外贸欧美7步标准序列</div>
+    </div>
+    <button onclick="document.getElementById('drawer').classList.add('translate-x-full')" class="text-gray-500 hover:text-gray-700 text-xl">×</button>
+  </div>
+  <div class="p-4">
+    <!-- [数据模型 JSON] -->
+    <div class="mb-4">
+      <div class="text-sm font-semibold text-gray-700 mb-2">📦 数据模型 Schema 预览</div>
+      <pre class="bg-gray-100 border border-gray-300 rounded p-3 text-xs text-gray-700 overflow-x-auto leading-relaxed">{
+  "sequence_id": "seq_20250315_001",
+  "name": "外贸欧美7步标准序列",
+  "channel": "email",
+  "status": "running",
+  "owner_id": "u_zhangwei",
+  "created_at": "2025-03-15T08:00:00Z",
+  "steps": [
+    {
+      "step_no": 1,
+      "day_offset": 0,
+      "template_id": "tpl_cold_intro_us",
+      "trigger": "manual_start",
+      "exit_condition": "replied|unsubscribed"
+    }
+    // ... 共 7 步
+  ],
+  "metrics": {
+    "active_leads": 1284,
+    "reply_rate": 0.124,
+    "bounce_rate": 0.021
+  },
+  "ab_test_ref": null
+}</pre>
+    </div>
+
+    <!-- [核心API端点] -->
+    <div>
+      <div class="text-sm font-semibold text-gray-700 mb-2">🔌 核心 API 端点</div>
+      <div class="space-y-2 text-xs">
+        <div class="border border-gray-300 rounded p-2 bg-gray-50">
+          <span class="bg-gray-700 text-white px-2 py-0.5 rounded mr-2">GET</span>
+          <code class="text-gray-800">/api/v1/sequences</code>
+          <div class="text-gray-500 mt-1">列出全部序列，支持 status/channel/owner 筛选</div>
+        </div>
+        <div class="border border-gray-300 rounded p-2 bg-gray-50">
+          <span class="bg-gray-700 text-white px-2 py-0.5 rounded mr-2">POST</span>
+          <code class="text-gray-800">/api/v1/sequences</code>
+          <div class="text-gray-500 mt-1">创建新序列，body 接收完整 steps 配置</div>
+        </div>
+        <div class="border border-gray-300 rounded p-2 bg-gray-50">
+          <span class="bg-gray-700 text-white px-2 py-0.5 rounded mr-2">GET</span>
+          <code class="text-gray-800">/api/v1/sequences/{id}</code>
+          <div class="text-gray-500 mt-1">获取单条序列详情 + metrics</div>
+        </div>
+        <div class="border border-gray-300 rounded p-2 bg-gray-50">
+          <span class="bg-gray-700 text-white px-2 py-0.5 rounded mr-2">PATCH</span>
+          <code class="text-gray-800">/api/v1/sequences/{id}/status</code>
+          <div class="text-gray-500 mt-1">暂停 / 恢复 / 归档</div>
+        </div>
+        <div class="border border-gray-300 rounded p-2 bg-gray-50">
+          <span class="bg-gray-700 text-white px-2 py-0.5 rounded mr-2">POST</span>
+          <code class="text-gray-800">/api/v1/sequences/{id}/enroll</code>
+          <div class="text-gray-500 mt-1">批量入组线索（接收 lead_ids 数组）</div>
+        </div>
+        <div class="border border-gray-300 rounded p-2 bg-gray-50">
+          <span class="bg-gray-700 text-white px-2 py-0.5 rounded mr-2">GET</span>
+          <code class="text-gray-800">/api/v1/sequences/{id}/metrics</code>
+          <div class="text-gray-500 mt-1">获取序列实时指标</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  function toggleDrawer(name) {
+    document.getElementById('drawerTitle').textContent = name;
+    document.getElementById('drawer').classList.remove('translate-x-full');
+  }
+</script>
+
+</body>
+</html>

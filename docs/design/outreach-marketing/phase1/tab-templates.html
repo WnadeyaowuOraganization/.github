@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<title>模板编辑器 · #2798</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;}</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">模板编辑器 · #2798</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">提供变量化、拖拽式邮件模板编辑能力，并支持个性化实时预览</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸营销岗,内容运营</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">模板分组列表/富文本+拖拽编辑器/变量插入/个性化预览/版本历史</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">插入变量/切换预览收件人/保存版本/测试发送</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">变量占位符正确替换/版本历史可回滚/测试发送触发</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客详细设计.md §2.1.6 模板引擎</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [三栏布局主容器] -->
+<div class="grid grid-cols-12 gap-4" style="min-height:700px;">
+
+  <!-- [左侧 - 模板列表] -->
+  <aside class="col-span-3 bg-white border border-gray-300 rounded overflow-hidden flex flex-col">
+    <div class="p-3 border-b border-gray-300 bg-gray-100 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-700">模板库</span>
+      <button class="text-xs bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600">+ 新建</button>
+    </div>
+    <input type="text" placeholder="搜索模板..." class="m-3 border border-gray-300 rounded px-3 py-1.5 text-sm">
+
+    <div class="flex-1 overflow-y-auto text-sm">
+      <!-- [分组 · 冷外展] -->
+      <div class="px-3 py-2 bg-gray-100 text-xs font-semibold text-gray-600 border-y border-gray-300">▼ 冷外展（预置）</div>
+      <div class="px-3 py-2 border-b border-gray-200 bg-blue-50 text-blue-500 cursor-pointer">✉ 欧美首触 · Intro</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 欧美 · Follow-up Day3</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 东南亚 · 制造业首触</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 中东 · 建材询盘</div>
+
+      <!-- [分组 · 培育] -->
+      <div class="px-3 py-2 bg-gray-100 text-xs font-semibold text-gray-600 border-y border-gray-300">▼ 培育</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 案例分享</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 行业白皮书</div>
+
+      <!-- [分组 · 跟进] -->
+      <div class="px-3 py-2 bg-gray-100 text-xs font-semibold text-gray-600 border-y border-gray-300">▼ 跟进</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 报价后跟进</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 样品寄送确认</div>
+
+      <!-- [分组 · 唤回] -->
+      <div class="px-3 py-2 bg-gray-100 text-xs font-semibold text-gray-600 border-y border-gray-300">▼ 唤回</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 休眠30天重启</div>
+      <div class="px-3 py-2 border-b border-gray-200 text-gray-700 hover:bg-gray-50 cursor-pointer">✉ 老客户复购</div>
+    </div>
+  </aside>
+
+  <!-- [中间 - 模板编辑器] -->
+  <section class="col-span-6 bg-white border border-gray-300 rounded overflow-hidden flex flex-col">
+    <div class="p-3 border-b border-gray-300 bg-gray-100">
+      <div class="flex items-center justify-between">
+        <div>
+          <div class="text-xs text-gray-500">编辑模板</div>
+          <div class="font-semibold text-gray-800">欧美首触 · Intro</div>
+        </div>
+        <div class="flex gap-2">
+          <button class="text-xs border border-gray-300 text-gray-700 px-3 py-1 rounded hover:bg-gray-50">撤销</button>
+          <button class="text-xs border border-gray-300 text-gray-700 px-3 py-1 rounded hover:bg-gray-50">重做</button>
+          <button class="text-xs bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600">保存版本</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- [主题行] -->
+    <div class="p-4 border-b border-gray-300">
+      <label class="block text-xs text-gray-600 mb-1">邮件主题</label>
+      <div class="border border-gray-300 rounded px-3 py-2 text-sm text-gray-800 bg-gray-50">
+        Quick question about <span class="bg-blue-100 text-blue-500 px-1.5 py-0.5 rounded text-xs">{{company}}</span>'s expansion plan in <span class="bg-blue-100 text-blue-500 px-1.5 py-0.5 rounded text-xs">{{project_city}}</span>
+      </div>
+    </div>
+
+    <!-- [富文本工具条] -->
+    <div class="px-4 py-2 border-b border-gray-300 bg-gray-50 flex items-center gap-2 text-xs text-gray-600">
+      <button class="px-2 py-1 hover:bg-gray-200 rounded font-bold">B</button>
+      <button class="px-2 py-1 hover:bg-gray-200 rounded italic">I</button>
+      <button class="px-2 py-1 hover:bg-gray-200 rounded underline">U</button>
+      <span class="text-gray-300">|</span>
+      <button class="px-2 py-1 hover:bg-gray-200 rounded">🔗 链接</button>
+      <button class="px-2 py-1 hover:bg-gray-200 rounded">📎 附件</button>
+      <button class="px-2 py-1 hover:bg-gray-200 rounded">🖼 图片</button>
+      <span class="text-gray-300">|</span>
+      <button class="px-2 py-1 hover:bg-gray-200 rounded">{ } 变量</button>
+    </div>
+
+    <!-- [富文本编辑区] -->
+    <div class="p-4 flex-1 overflow-y-auto">
+      <div class="text-sm text-gray-800 leading-relaxed space-y-3">
+        <p>Hi <span class="bg-blue-100 text-blue-500 px-1.5 py-0.5 rounded text-xs">{{first_name}}</span>,</p>
+        <p>I noticed that <span class="bg-blue-100 text-blue-500 px-1.5 py-0.5 rounded text-xs">{{company}}</span> recently announced expansion into <span class="bg-blue-100 text-blue-500 px-1.5 py-0.5 rounded text-xs">{{project_city}}</span>. Congratulations on the progress.</p>
+        <p>We've been helping companies in similar stages to reduce sourcing lead time by 30%+. Would it be worth a 15-min chat next week?</p>
+
+        <!-- [拖拽编辑器占位区] -->
+        <div class="mt-4 border-2 border-dashed border-gray-300 rounded p-6 text-center text-gray-400 bg-gray-50">
+          <div class="text-3xl mb-2">⊞</div>
+          <div class="text-sm">拖拽编辑器区域</div>
+          <div class="text-xs mt-1">从右侧拖入 变量 / 按钮 / 图片 / 分隔线 等组件</div>
+        </div>
+
+        <p class="mt-4">Best,<br><span class="bg-blue-100 text-blue-500 px-1.5 py-0.5 rounded text-xs">{{sender_name}}</span></p>
+      </div>
+    </div>
+
+    <!-- [底部 - 版本历史+测试发送] -->
+    <div class="p-3 border-t border-gray-300 bg-gray-50 flex items-center justify-between text-xs">
+      <div class="flex items-center gap-3 text-gray-600">
+        <span>📜 版本历史：</span>
+        <select class="border border-gray-300 rounded px-2 py-0.5 bg-white">
+          <option>v12 · 2025-03-18 14:22（当前）</option>
+          <option>v11 · 2025-03-16 09:10</option>
+          <option>v10 · 2025-03-14 17:30</option>
+          <option>v9 · 2025-03-12 11:05</option>
+        </select>
+        <a class="text-blue-500 hover:underline cursor-pointer">对比</a>
+        <a class="text-blue-500 hover:underline cursor-pointer">回滚</a>
+      </div>
+      <button class="bg-blue-500 text-white px-3 py-1.5 rounded hover:bg-blue-600">📤 测试发送</button>
+    </div>
+  </section>
+
+  <!-- [右侧 - 变量面板+个性化预览] -->
+  <aside class="col-span-3 bg-white border border-gray-300 rounded overflow-hidden flex flex-col">
+
+    <!-- [变量面板] -->
+    <div class="p-3 border-b border-gray-300 bg-gray-100">
+      <span class="text-sm font-semibold text-gray-700">可用变量</span>
+    </div>
+    <div class="p-3 border-b border-gray-300 space-y-1.5">
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{first_name}} <span class="text-gray-400">· 名字</span></div>
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{last_name}} <span class="text-gray-400">· 姓氏</span></div>
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{company}} <span class="text-gray-400">· 公司</span></div>
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{project_city}} <span class="text-gray-400">· 城市</span></div>
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{industry}} <span class="text-gray-400">· 行业</span></div>
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{sender_name}} <span class="text-gray-400">· 发件人</span></div>
+      <div class="border border-gray-300 rounded px-3 py-1.5 text-xs text-gray-700 bg-gray-50 hover:bg-blue-50 hover:text-blue-500 cursor-pointer">{{last_news}} <span class="text-gray-400">· 最新动态</span></div>
+    </div>
+
+    <!-- [个性化预览] -->
+    <div class="p-3 border-b border-gray-300 bg-gray-100 flex items-center justify-between">
+      <span class="text-sm font-semibold text-gray-700">个性化预览</span>
+      <select class="border border-gray-300 rounded px-2 py-0.5 text-xs bg-white">
+        <option>John Smith · Acme Inc</option>
+        <option>Maria Garcia · Delta Co</option>
+        <option>Ahmed Ali · Gulf Trade</option>
+      </select>
+    </div>
+    <div class="p-3 flex-1 overflow-y-auto text-xs text-gray-700 leading-relaxed bg-gray-50">
+      <div class="border-b border-gray-200 pb-2 mb-2 text-gray-500">
+        <div><span class="font-semibold text-gray-700">主题：</span>Quick question about Acme Inc's expansion plan in Munich</div>
+      </div>
+      <p class="mb-2">Hi John,</p>
+      <p class="mb-2">I noticed that Acme Inc recently announced expansion into Munich. Congratulations on the progress.</p>
+      <p class="mb-2">We've been helping companies in similar stages to reduce sourcing lead time by 30%+. Would it be worth a 15-min chat next week?</p>
+      <p>Best,<br>张伟</p>
+    </div>
+  </aside>
+
+</div>
+
+</body>
+</html>

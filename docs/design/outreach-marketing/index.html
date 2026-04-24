@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>万德AI平台 — 外展获客中台 总览</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-700">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">外展获客中台 · 总览 Hub</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">统一管理邮件/企微/LinkedIn三通道外展与营销自动化，替代分散的销售私域工具，实现从线索发现到商机转化的端到端自动化</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">外贸部, 商务部营销岗, 销售主管</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5 Phase 卡片入口 / KPI 快照 / Phase 0 采集脚本管控 / Issue 清单汇总</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">点击 Phase 卡片跳转子原型 / 手动触发采集脚本 / 查看 Master Issue 汇总</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">5 Phase 卡片全部可跳转 / KPI 数据实时 / 采集脚本状态实时</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客中台详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+
+  <!-- [左侧侧边栏] -->
+  <aside class="w-16 bg-white border-r border-gray-300 flex flex-col items-center py-4 space-y-5 text-gray-500">
+    <div class="w-8 h-8 rounded bg-gray-200 flex items-center justify-center text-xs">万</div>
+    <div class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer" title="首页">🏠</div>
+    <div class="w-8 h-8 flex items-center justify-center bg-gray-100 rounded cursor-pointer" title="外展">📢</div>
+    <div class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer" title="邮件">📧</div>
+    <div class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer" title="企微">💬</div>
+    <div class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer" title="LinkedIn">💼</div>
+    <div class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer" title="数据">📊</div>
+    <div class="w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded cursor-pointer" title="设置">⚙️</div>
+  </aside>
+
+  <!-- [主内容区] -->
+  <main class="flex-1 p-6">
+
+    <!-- [顶部面包屑 + 用户] -->
+    <div class="flex items-center justify-between mb-5">
+      <nav class="text-sm text-gray-500">
+        <span class="hover:text-gray-700 cursor-pointer">首页</span>
+        <span class="mx-2">&gt;</span>
+        <span class="hover:text-gray-700 cursor-pointer">商务部</span>
+        <span class="mx-2">&gt;</span>
+        <span class="text-gray-700 font-medium">外展获客中台</span>
+      </nav>
+      <div class="text-xs text-gray-500">
+        <span>张三 · 外贸部</span>
+        <span class="mx-2">|</span>
+        <span>深圳万德国际业务部</span>
+      </div>
+    </div>
+
+    <!-- [页面标题] -->
+    <div class="mb-6">
+      <h1 class="text-xl font-semibold text-gray-700">万德AI平台 — 外展获客中台 总览</h1>
+      <p class="text-sm text-gray-500 mt-1">统一管理邮件 / 企微 / LinkedIn 三通道外展，端到端线索至商机转化 · 月度预算 ￥100,000</p>
+    </div>
+
+    <!-- [顶部 KPI 条] -->
+    <section class="mb-6">
+      <div class="grid grid-cols-5 gap-3">
+        <div class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-xs text-gray-500 mb-1">本月触达线索数</div>
+          <div class="text-2xl font-semibold text-gray-700">12,458</div>
+          <div class="text-xs text-gray-400 mt-1">↑ 较上月 +8.2%</div>
+        </div>
+        <div class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-xs text-gray-500 mb-1">邮件回复率</div>
+          <div class="text-2xl font-semibold text-gray-700">8.3%</div>
+          <div class="text-xs text-gray-400 mt-1">行业均值 6.1%</div>
+        </div>
+        <div class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-xs text-gray-500 mb-1">企微加好友通过率</div>
+          <div class="text-2xl font-semibold text-gray-700">42%</div>
+          <div class="text-xs text-gray-400 mt-1">↑ 较上月 +3.1%</div>
+        </div>
+        <div class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-xs text-gray-500 mb-1">LinkedIn 接受率</div>
+          <div class="text-2xl font-semibold text-gray-700">18%</div>
+          <div class="text-xs text-gray-400 mt-1">↓ 较上月 -1.2%</div>
+        </div>
+        <div class="bg-white border border-gray-300 rounded p-4">
+          <div class="text-xs text-gray-500 mb-1">线索→商机转化率</div>
+          <div class="text-2xl font-semibold text-gray-700">5.6%</div>
+          <div class="text-xs text-gray-400 mt-1">↑ 较上月 +0.8%</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- [Phase 0 海外客户发现·管控面板] -->
+    <section class="mb-6">
+      <div class="bg-white border border-gray-300 rounded">
+        <div class="flex items-center justify-between px-4 py-3 border-b border-gray-300">
+          <div class="flex items-center gap-2">
+            <span class="text-gray-400 text-sm">Phase 0</span>
+            <h2 class="text-sm font-semibold text-gray-700">🌍 海外客户发现 · 采集脚本管控面板</h2>
+          </div>
+          <span class="text-xs text-gray-500">采集脚本无独立 UI，仅在此面板管控</span>
+        </div>
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100 text-gray-500 text-xs">
+            <tr>
+              <th class="px-4 py-2 text-left font-medium">脚本名</th>
+              <th class="px-4 py-2 text-left font-medium">上次运行</th>
+              <th class="px-4 py-2 text-left font-medium">新增数据量</th>
+              <th class="px-4 py-2 text-left font-medium">状态</th>
+              <th class="px-4 py-2 text-left font-medium">操作</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-3">海关数据采集</td>
+              <td class="px-4 py-3 text-gray-500">2025-01-15 03:00</td>
+              <td class="px-4 py-3">+ 2,341 条</td>
+              <td class="px-4 py-3">✅ 正常</td>
+              <td class="px-4 py-3"><button class="text-blue-500 hover:underline text-xs">立即运行</button></td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-3">展会名录采集</td>
+              <td class="px-4 py-3 text-gray-500">2025-01-14 22:30</td>
+              <td class="px-4 py-3">+ 876 条</td>
+              <td class="px-4 py-3">✅ 正常</td>
+              <td class="px-4 py-3"><button class="text-blue-500 hover:underline text-xs">立即运行</button></td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-3">竞品反向采集</td>
+              <td class="px-4 py-3 text-gray-500">2025-01-15 01:15</td>
+              <td class="px-4 py-3">— (0 条)</td>
+              <td class="px-4 py-3">❌ 登录失效</td>
+              <td class="px-4 py-3"><button class="text-blue-500 hover:underline text-xs">立即运行</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div class="px-4 py-2 border-t border-gray-200 bg-gray-50 text-xs text-gray-500">
+          备注：采集脚本无独立 UI，仅在此面板管控。详见 Issue #2412 #2413 #2414
+        </div>
+      </div>
+    </section>
+
+    <!-- [5 Phase 卡片网格] -->
+    <section class="mb-6">
+      <h2 class="text-sm font-semibold text-gray-700 mb-3">营销外展 5 Phase 管线</h2>
+      <div class="grid grid-cols-3 gap-4">
+
+        <!-- Phase 1 卡片 -->
+        <div class="bg-white border border-gray-300 rounded p-5 hover:border-gray-400 transition">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Phase 1</span>
+              <span class="text-2xl">📋</span>
+            </div>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">4 Issue</span>
+          </div>
+          <h3 class="text-base font-semibold text-gray-700 mb-2">营销序列引擎</h3>
+          <p class="text-xs text-gray-500 leading-relaxed mb-4 h-12">
+            数据模型+核心API · 模板引擎 · 冷外展 7 步序列 · A/B 测试，构建自动化营销流程基座
+          </p>
+          <button onclick="window.location.href='phase1/index.html'" class="w-full text-xs bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            进入 →
+          </button>
+        </div>
+
+        <!-- Phase 2 卡片 -->
+        <div class="bg-white border border-gray-300 rounded p-5 hover:border-gray-400 transition">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Phase 2</span>
+              <span class="text-2xl">📧</span>
+            </div>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">6 Issue</span>
+          </div>
+          <h3 class="text-base font-semibold text-gray-700 mb-2">邮件外展</h3>
+          <p class="text-xs text-gray-500 leading-relaxed mb-4 h-12">
+            SMTP 基础设施 · 送达率监控 · 追踪 · 收件箱轮转 · 分析看板 · 回复分类
+          </p>
+          <button onclick="window.location.href='phase2/index.html'" class="w-full text-xs bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            进入 →
+          </button>
+        </div>
+
+        <!-- Phase 3 卡片 -->
+        <div class="bg-white border border-gray-300 rounded p-5 hover:border-gray-400 transition">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Phase 3</span>
+              <span class="text-2xl">💬</span>
+            </div>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">5 Issue</span>
+          </div>
+          <h3 class="text-base font-semibold text-gray-700 mb-2">企微获客</h3>
+          <p class="text-xs text-gray-500 leading-relaxed mb-4 h-12">
+            获客链接 · 渠道活码 · 自动标签 · SOP 培育 · 效果看板，全链路私域运营
+          </p>
+          <button onclick="window.location.href='phase3/index.html'" class="w-full text-xs bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            进入 →
+          </button>
+        </div>
+
+        <!-- Phase 4 卡片 -->
+        <div class="bg-white border border-gray-300 rounded p-5 hover:border-gray-400 transition">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Phase 4</span>
+              <span class="text-2xl">💼</span>
+            </div>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">3 Issue</span>
+          </div>
+          <h3 class="text-base font-semibold text-gray-700 mb-2">LinkedIn</h3>
+          <p class="text-xs text-gray-500 leading-relaxed mb-4 h-12">
+            批量加好友 · Sales Navigator 导入 · 多渠道协同，精准触达海外决策人
+          </p>
+          <button onclick="window.location.href='phase4/index.html'" class="w-full text-xs bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            进入 →
+          </button>
+        </div>
+
+        <!-- Phase 5 卡片 -->
+        <div class="bg-white border border-gray-300 rounded p-5 hover:border-gray-400 transition">
+          <div class="flex items-start justify-between mb-3">
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-gray-400">Phase 5</span>
+              <span class="text-2xl">🎯</span>
+            </div>
+            <span class="text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">3 Issue</span>
+          </div>
+          <h3 class="text-base font-semibold text-gray-700 mb-2">统一数据层</h3>
+          <p class="text-xs text-gray-500 leading-relaxed mb-4 h-12">
+            线索评分融合 · ROI 看板 · 营销-销售移交，打通数据孤岛与分润闭环
+          </p>
+          <button onclick="window.location.href='phase5/index.html'" class="w-full text-xs bg-blue-500 text-white py-2 rounded hover:bg-blue-600">
+            进入 →
+          </button>
+        </div>
+
+        <!-- 占位卡片（网格视觉平衡） -->
+        <div class="bg-gray-50 border border-dashed border-gray-300 rounded p-5 flex flex-col items-center justify-center text-gray-400 text-xs">
+          <div class="text-3xl mb-2">＋</div>
+          <div>未来 Phase 预留位</div>
+          <div class="mt-1 text-gray-300">（v2.0 路线图）</div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- [Master Issue 状态] -->
+    <section class="mb-6">
+      <div class="bg-white border border-gray-300 rounded p-4">
+        <div class="flex items-center justify-between">
+          <div class="flex items-center gap-6 text-sm">
+            <div>
+              <span class="text-gray-500 text-xs">Master Issue：</span>
+              <span class="text-gray-700">待创建（D100 完成后填充 #）</span>
+            </div>
+            <div class="h-4 w-px bg-gray-300"></div>
+            <div>
+              <span class="text-gray-500 text-xs">子 Issue 清单：</span>
+              <span class="text-gray-700">24 个</span>
+              <span class="ml-2 text-xs bg-gray-100 text-gray-600 px-2 py-0.5 rounded">全部 needs-prototype 回填中</span>
+            </div>
+          </div>
+          <button class="text-blue-500 hover:underline text-xs">查看 GitHub Project 面板 →</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- [原型说明] -->
+    <section class="mb-4">
+      <h2 class="text-sm font-semibold text-gray-700 mb-3">子原型索引</h2>
+      <div class="bg-white border border-gray-300 rounded overflow-hidden">
+        <table class="w-full text-sm">
+          <thead class="bg-gray-100 text-gray-500 text-xs">
+            <tr>
+              <th class="px-4 py-2 text-left font-medium">子原型</th>
+              <th class="px-4 py-2 text-left font-medium">文件路径</th>
+              <th class="px-4 py-2 text-left font-medium">Phase</th>
+              <th class="px-4 py-2 text-left font-medium">Issue 范围</th>
+              <th class="px-4 py-2 text-left font-medium">状态</th>
+            </tr>
+          </thead>
+          <tbody class="text-gray-700">
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-2">总览 Hub</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500">prototype-outreach-marketing/index.html</td>
+              <td class="px-4 py-2">—</td>
+              <td class="px-4 py-2 text-gray-500">入口页</td>
+              <td class="px-4 py-2">✅ 已完成</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-2">营销序列引擎</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500">phase1/index.html</td>
+              <td class="px-4 py-2">Phase 1</td>
+              <td class="px-4 py-2 text-gray-500">#2415 - #2418</td>
+              <td class="px-4 py-2 text-gray-500">🟡 进行中</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-2">邮件外展</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500">phase2/index.html</td>
+              <td class="px-4 py-2">Phase 2</td>
+              <td class="px-4 py-2 text-gray-500">#2419 - #2424</td>
+              <td class="px-4 py-2 text-gray-500">🟡 进行中</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-2">企微获客</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500">phase3/index.html</td>
+              <td class="px-4 py-2">Phase 3</td>
+              <td class="px-4 py-2 text-gray-500">#2425 - #2429</td>
+              <td class="px-4 py-2 text-gray-500">⚪ 未开始</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-2">LinkedIn</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500">phase4/index.html</td>
+              <td class="px-4 py-2">Phase 4</td>
+              <td class="px-4 py-2 text-gray-500">#2430 - #2432</td>
+              <td class="px-4 py-2 text-gray-500">⚪ 未开始</td>
+            </tr>
+            <tr class="border-t border-gray-200">
+              <td class="px-4 py-2">统一数据层</td>
+              <td class="px-4 py-2 font-mono text-xs text-gray-500">phase5/index.html</td>
+              <td class="px-4 py-2">Phase 5</td>
+              <td class="px-4 py-2 text-gray-500">#2433 - #2435</td>
+              <td class="px-4 py-2 text-gray-500">⚪ 未开始</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- [页脚] -->
+    <footer class="mt-8 pt-4 border-t border-gray-200 text-xs text-gray-400 flex items-center justify-between">
+      <div>万德AI平台 · 外展获客中台 v1.0 · 原型规范 v4.1</div>
+      <div>© 深圳万德国际业务部 · 商务部</div>
+    </footer>
+
+  </main>
+</div>
+
+</body>
+</html>

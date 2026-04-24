@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>批量加好友 · #2812</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; background:#f5f5f5;}
+    .wf-card { background:#fff; border:1px solid #d9d9d9; border-radius:4px; }
+    .wf-btn { background:#4b5563; color:#fff; padding:6px 14px; font-size:12px; border-radius:3px; cursor:pointer; border:none;}
+    .wf-btn-default { background:#fff; color:#333; border:1px solid #d9d9d9; padding:6px 14px; font-size:12px; border-radius:3px; cursor:pointer; }
+    .wf-table th { background:#fafafa; font-weight:500; color:#555; padding:8px; border-bottom:1px solid #d9d9d9; font-size:12px; text-align:left; }
+    .wf-table td { padding:8px; border-bottom:1px solid #f0f0f0; font-size:12px; color:#333; }
+    .wf-tag { background:#f0f0f0; color:#555; padding:1px 8px; font-size:11px; border-radius:10px; display:inline-block; }
+    .wf-dot { width:8px; height:8px; border-radius:50%; display:inline-block; margin-right:4px;}
+    .badge-risk-low{background:#e5e7eb;color:#374151;padding:2px 6px;border-radius:3px;font-size:11px;}
+    .badge-risk-mid{background:#d4d4d4;color:#262626;padding:2px 6px;border-radius:3px;font-size:11px;}
+    .badge-risk-high{background:#9ca3af;color:#fff;padding:2px 6px;border-radius:3px;font-size:11px;}
+    .region-title{font-size:14px;font-weight:600;color:#333;display:flex;align-items:center;gap:6px;}
+    .region-num{background:#6b7280;color:#fff;width:22px;height:22px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;font-size:11px;}
+    .field-box{border:1px dashed #bfbfbf;background:#fafafa;padding:10px;border-radius:4px;}
+  </style>
+</head>
+<body>
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:12px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:8px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">批量加好友 · #2812 [19/25]</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:10px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:90px;padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 PAGE_TITLE</td><td style="padding:3px 0;">批量加好友 · #2812</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:3px 0;">导入 LinkedIn URL / 频率控制（日上限 25 · 间隔 3-8 分钟 · 周末暂停 · 异常暂停阈值）/ 待加队列 · 风险评分 / 邀请语 A/B · 个性化字段 · 最佳发送时间</td></tr>
+      <tr><td style="padding:3px 8px 3px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:3px 0;">3 种导入方式 · 4 项频率控制 · 队列含风险评分 · A/B 测试 2 套邀请语 · 最佳发送时间推荐</td></tr>
+    </table>
+    <div style="margin-top:8px;padding-top:6px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#4b5563;text-decoration:none;">外展获客 · 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="p-4 space-y-4 max-w-[1400px] mx-auto">
+
+  <!-- 区域 1 :: 导入面板 -->
+  <div class="wf-card p-4">
+    <div class="region-title mb-3"><span class="region-num">1</span>导入 LinkedIn 目标联系人</div>
+    <div class="grid grid-cols-3 gap-4">
+
+      <!-- 导入方式 A -->
+      <div class="field-box">
+        <div class="text-sm font-semibold text-gray-700 mb-2">📥 方式 A · Sales Navigator CSV</div>
+        <div class="text-xs text-gray-500 mb-3">从 Sales Navigator 导出的 .csv / .xlsx</div>
+        <button class="wf-btn w-full">从 Sales Navigator CSV 导入</button>
+        <div class="text-xs text-gray-400 mt-2">最近导入：2025-11-08 · 320 条</div>
+      </div>
+
+      <!-- 导入方式 B -->
+      <div class="field-box">
+        <div class="text-sm font-semibold text-gray-700 mb-2">🔗 方式 B · 粘贴 URL 列表</div>
+        <textarea class="w-full h-20 text-xs border border-gray-300 rounded p-2 font-mono" placeholder="每行一个 LinkedIn URL&#10;https://linkedin.com/in/john-smith-amusement&#10;https://linkedin.com/in/maria-garcia-parks"></textarea>
+        <button class="wf-btn-default mt-2">解析并加入队列</button>
+      </div>
+
+      <!-- 导入方式 C -->
+      <div class="field-box">
+        <div class="text-sm font-semibold text-gray-700 mb-2">👥 方式 C · 从 CRM Lead 选取</div>
+        <div class="text-xs text-gray-500 mb-2">按标签筛选：<span class="wf-tag">游乐设备</span> <span class="wf-tag">CEO/Owner</span></div>
+        <div class="text-xs text-gray-500 mb-3">当前匹配：<span class="font-semibold text-gray-700">186</span> 条 Lead</div>
+        <button class="wf-btn-default w-full">从 CRM 选取</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 区域 2 :: 频率控制配置 -->
+  <div class="wf-card p-4">
+    <div class="region-title mb-3"><span class="region-num">2</span>频率控制配置（防止 LinkedIn 限制账号）</div>
+    <div class="grid grid-cols-4 gap-4">
+      <div class="field-box">
+        <div class="text-xs text-gray-500 mb-1">每天加好友上限</div>
+        <div class="flex items-center gap-2">
+          <input type="number" value="25" class="w-16 border border-gray-300 rounded px-2 py-1 text-sm" />
+          <span class="text-xs text-gray-500">条/日</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">推荐 ≤ 25（LinkedIn 周上限 100）</div>
+      </div>
+      <div class="field-box">
+        <div class="text-xs text-gray-500 mb-1">连续加好友间隔</div>
+        <div class="flex items-center gap-2">
+          <input type="number" value="3" class="w-12 border border-gray-300 rounded px-2 py-1 text-sm" />
+          <span class="text-xs">-</span>
+          <input type="number" value="8" class="w-12 border border-gray-300 rounded px-2 py-1 text-sm" />
+          <span class="text-xs text-gray-500">分钟随机</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">模拟人工随机节奏</div>
+      </div>
+      <div class="field-box">
+        <div class="text-xs text-gray-500 mb-1">周末暂停</div>
+        <label class="flex items-center gap-2 cursor-pointer">
+          <input type="checkbox" checked class="scale-110" />
+          <span class="text-sm text-gray-700">周六、周日不发送</span>
+        </label>
+        <div class="text-[11px] text-gray-400 mt-1">欧美工作日发送通过率更高</div>
+      </div>
+      <div class="field-box">
+        <div class="text-xs text-gray-500 mb-1">异常暂停阈值</div>
+        <div class="flex items-center gap-2">
+          <span class="text-xs">24h 拒绝率 ≥</span>
+          <input type="number" value="30" class="w-14 border border-gray-300 rounded px-2 py-1 text-sm" />
+          <span class="text-xs">%</span>
+        </div>
+        <div class="text-[11px] text-gray-400 mt-1">自动暂停并告警（企微）</div>
+      </div>
+    </div>
+    <div class="mt-3 flex items-center gap-3 text-xs text-gray-500">
+      <span>🕐 发送时段：<strong class="text-gray-700">09:00 - 18:00</strong> (目标时区)</span>
+      <span>·</span>
+      <span>📅 本周已用：<strong class="text-gray-700">42 / 100</strong></span>
+      <span>·</span>
+      <span><span class="wf-dot" style="background:#6b7280"></span>账号健康度：<strong class="text-gray-700">健康</strong></span>
+    </div>
+  </div>
+
+  <!-- 区域 3 :: 待加好友队列 -->
+  <div class="wf-card p-4">
+    <div class="region-title mb-3"><span class="region-num">3</span>待加好友队列 <span class="text-xs text-gray-400 ml-2">共 186 条 · 今日计划 25 条</span></div>
+    <div class="flex items-center gap-2 mb-3">
+      <button class="wf-btn-default text-xs">▶ 启动任务</button>
+      <button class="wf-btn-default text-xs">⏸ 暂停</button>
+      <button class="wf-btn-default text-xs">筛选国家 ▾</button>
+      <button class="wf-btn-default text-xs">按风险评分排序 ▾</button>
+    </div>
+    <table class="w-full wf-table">
+      <thead>
+        <tr>
+          <th>姓名 / Name</th>
+          <th>公司 / Company</th>
+          <th>职位 / Title</th>
+          <th>国家</th>
+          <th>风险评分</th>
+          <th>计划执行时间</th>
+          <th>状态</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>John Smith</strong><div class="text-[11px] text-gray-400">linkedin.com/in/john-smith</div></td>
+          <td>Amusement Park Supplier</td>
+          <td>CEO</td>
+          <td>🇺🇸 US</td>
+          <td><span class="badge-risk-low">低 12</span></td>
+          <td>2025-11-12 10:23</td>
+          <td><span class="wf-dot" style="background:#6b7280"></span>待发送</td>
+        </tr>
+        <tr>
+          <td><strong>Maria Garcia</strong><div class="text-[11px] text-gray-400">linkedin.com/in/maria-garcia</div></td>
+          <td>FunParks International</td>
+          <td>Procurement Director</td>
+          <td>🇪🇸 ES</td>
+          <td><span class="badge-risk-low">低 18</span></td>
+          <td>2025-11-12 10:28</td>
+          <td><span class="wf-dot" style="background:#6b7280"></span>待发送</td>
+        </tr>
+        <tr>
+          <td><strong>David Müller</strong><div class="text-[11px] text-gray-400">linkedin.com/in/d-muller</div></td>
+          <td>Europa Rides GmbH</td>
+          <td>Head of Purchasing</td>
+          <td>🇩🇪 DE</td>
+          <td><span class="badge-risk-mid">中 47</span></td>
+          <td>2025-11-12 10:35</td>
+          <td><span class="wf-dot" style="background:#9ca3af"></span>待发送</td>
+        </tr>
+        <tr>
+          <td><strong>Hiroshi Tanaka</strong><div class="text-[11px] text-gray-400">linkedin.com/in/h-tanaka</div></td>
+          <td>Tokyo Amusement Co.</td>
+          <td>Managing Director</td>
+          <td>🇯🇵 JP</td>
+          <td><span class="badge-risk-low">低 21</span></td>
+          <td>2025-11-12 10:42</td>
+          <td><span class="wf-dot" style="background:#6b7280"></span>待发送</td>
+        </tr>
+        <tr>
+          <td><strong>Ahmed Hassan</strong><div class="text-[11px] text-gray-400">linkedin.com/in/a-hassan</div></td>
+          <td>Dubai Parks &amp; Resorts</td>
+          <td>Technical Buyer</td>
+          <td>🇦🇪 AE</td>
+          <td><span class="badge-risk-high">高 72</span></td>
+          <td>已跳过</td>
+          <td><span class="wf-dot" style="background:#9ca3af"></span>风险过高</td>
+        </tr>
+        <tr style="background:#fafafa">
+          <td><strong>Emily Chen</strong><div class="text-[11px] text-gray-400">linkedin.com/in/emily-chen</div></td>
+          <td>Pacific Rides Ltd.</td>
+          <td>CEO</td>
+          <td>🇨🇦 CA</td>
+          <td><span class="badge-risk-low">低 15</span></td>
+          <td>2025-11-11 14:18</td>
+          <td><span class="wf-dot" style="background:#374151"></span>已发送 · 待通过</td>
+        </tr>
+        <tr style="background:#fafafa">
+          <td><strong>Pierre Laurent</strong><div class="text-[11px] text-gray-400">linkedin.com/in/p-laurent</div></td>
+          <td>ParcAttractions SA</td>
+          <td>Operations VP</td>
+          <td>🇫🇷 FR</td>
+          <td><span class="badge-risk-low">低 22</span></td>
+          <td>2025-11-10 11:05</td>
+          <td><span class="wf-dot" style="background:#1f2937"></span>已通过 ✓</td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-3 flex items-center gap-6 text-xs text-gray-500">
+      <span>风险评分说明：</span>
+      <span><span class="badge-risk-low">低 ≤30</span> 可发</span>
+      <span><span class="badge-risk-mid">中 30-60</span> 降频</span>
+      <span><span class="badge-risk-high">高 ≥60</span> 跳过</span>
+      <span class="ml-4">依据：目标账号是否近期被大量加好友 / 是否 2 度连接 / 是否同行业</span>
+    </div>
+  </div>
+
+  <!-- 区域 4 :: 通过率优化面板 -->
+  <div class="wf-card p-4">
+    <div class="region-title mb-3"><span class="region-num">4</span>通过率优化（A/B 测试 + 个性化 + 最佳发送时间）</div>
+    <div class="grid grid-cols-3 gap-4">
+
+      <!-- A/B 测试 -->
+      <div class="field-box">
+        <div class="text-sm font-semibold text-gray-700 mb-2">🧪 邀请语 A/B 测试</div>
+        <div class="border border-gray-300 rounded bg-white p-2 mb-2">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-semibold">版本 A · 自我介绍</span>
+            <span class="wf-tag">通过率 34.2%</span>
+          </div>
+          <div class="text-[11px] text-gray-600 leading-relaxed">Hi {first_name}, I help {industry} companies source reliable amusement equipment from China. Would love to connect.</div>
+          <div class="text-[11px] text-gray-400 mt-1">样本 120 · 通过 41</div>
+        </div>
+        <div class="border border-gray-300 rounded bg-white p-2">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-semibold">版本 B · 价值点</span>
+            <span class="wf-tag" style="background:#374151;color:#fff;">通过率 41.7% ★</span>
+          </div>
+          <div class="text-[11px] text-gray-600 leading-relaxed">Hi {first_name}, saw your role at {company}. We just helped a US park save 30% on Ferris Wheel procurement. Happy to share the case.</div>
+          <div class="text-[11px] text-gray-400 mt-1">样本 120 · 通过 50</div>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-500">💡 B 胜出 · 建议流量分配 80/20</div>
+      </div>
+
+      <!-- 个性化字段 -->
+      <div class="field-box">
+        <div class="text-sm font-semibold text-gray-700 mb-2">🧩 个性化字段替换</div>
+        <div class="space-y-1 text-xs">
+          <div class="flex justify-between border-b border-dashed border-gray-300 py-1"><span class="font-mono text-gray-600">{first_name}</span><span class="text-gray-500">→ John</span></div>
+          <div class="flex justify-between border-b border-dashed border-gray-300 py-1"><span class="font-mono text-gray-600">{company}</span><span class="text-gray-500">→ Amusement Park Supplier</span></div>
+          <div class="flex justify-between border-b border-dashed border-gray-300 py-1"><span class="font-mono text-gray-600">{industry}</span><span class="text-gray-500">→ Amusement / Theme Park</span></div>
+          <div class="flex justify-between border-b border-dashed border-gray-300 py-1"><span class="font-mono text-gray-600">{country}</span><span class="text-gray-500">→ US</span></div>
+          <div class="flex justify-between border-b border-dashed border-gray-300 py-1"><span class="font-mono text-gray-600">{recent_post}</span><span class="text-gray-500">→ "New Park Opening 2025"</span></div>
+          <div class="flex justify-between py-1"><span class="font-mono text-gray-600">{mutual_connections}</span><span class="text-gray-500">→ 3</span></div>
+        </div>
+        <div class="mt-2 text-[11px] text-gray-500">字段缺失时自动回退 · 如 {first_name} 缺失 → "there"</div>
+      </div>
+
+      <!-- 最佳发送时间 -->
+      <div class="field-box">
+        <div class="text-sm font-semibold text-gray-700 mb-2">🕐 最佳发送时间推荐</div>
+        <div class="text-xs text-gray-500 mb-2">按目标用户时区 · 过去 30 天数据</div>
+        <table class="w-full text-xs">
+          <thead>
+            <tr class="text-gray-500 border-b border-gray-200">
+              <th class="text-left py-1">时段</th><th class="text-left">通过率</th><th class="text-left">建议</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr><td class="py-1">周二 09:00</td><td>43.2%</td><td><span class="wf-tag" style="background:#374151;color:#fff">最佳</span></td></tr>
+            <tr><td class="py-1">周三 10:00</td><td>41.8%</td><td><span class="wf-tag">推荐</span></td></tr>
+            <tr><td class="py-1">周四 14:00</td><td>38.5%</td><td><span class="wf-tag">推荐</span></td></tr>
+            <tr><td class="py-1">周五 16:00</td><td>27.3%</td><td class="text-gray-400">一般</td></tr>
+            <tr><td class="py-1">周一 08:00</td><td>19.4%</td><td class="text-gray-400">避免</td></tr>
+          </tbody>
+        </table>
+        <div class="mt-2 text-[11px] text-gray-500">💡 系统将优先调度到周二/周三上午</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- 区域 5 :: 整体指标 -->
+  <div class="wf-card p-4">
+    <div class="region-title mb-3"><span class="region-num">5</span>近 30 天整体指标</div>
+    <div class="grid grid-cols-5 gap-4 text-center">
+      <div class="field-box"><div class="text-2xl font-bold text-gray-700">642</div><div class="text-xs text-gray-500 mt-1">累计发送邀请</div></div>
+      <div class="field-box"><div class="text-2xl font-bold text-gray-700">248</div><div class="text-xs text-gray-500 mt-1">通过数</div></div>
+      <div class="field-box"><div class="text-2xl font-bold text-gray-700">38.6%</div><div class="text-xs text-gray-500 mt-1">通过率</div></div>
+      <div class="field-box"><div class="text-2xl font-bold text-gray-700">73</div><div class="text-xs text-gray-500 mt-1">回复数</div></div>
+      <div class="field-box"><div class="text-2xl font-bold text-gray-700">11</div><div class="text-xs text-gray-500 mt-1">转 Lead 数</div></div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

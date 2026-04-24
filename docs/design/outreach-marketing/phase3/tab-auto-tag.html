@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>自动标签+CRM同步 · #2809</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .wf-box { border:1px dashed #bfbfbf; background:#fafafa; }
+    .tag-chip { display:inline-flex;align-items:center;gap:4px;padding:2px 8px;background:#f5f5f5;border:1px solid #d9d9d9;border-radius:12px;font-size:12px;color:#595959;margin:2px; }
+    .tag-chip.on { background:#595959;color:#fff;border-color:#595959; }
+    .tree-node { padding:4px 0 4px 14px; font-size:13px; color:#333; cursor:pointer; }
+    .tree-node:hover { background:#f5f5f5; }
+    .tree-node.active { background:#f0f0f0; font-weight:600; }
+    .tree-kids { padding-left:14px; border-left:1px dashed #d9d9d9; margin-left:6px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab3 · 自动标签+CRM同步 · #2809</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">建立企微客户标签体系 + 自动打标规则 + 画像字段同步至CRM的 wechat → crm_lead 映射</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">市场运营（维护标签体系），CRM管理员（字段映射），商务人员（下游使用）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">5大标签体系树 / 自动打标规则 / CRM字段映射 / 同步日志</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新建/编辑规则 / 调整字段映射 / 回溯同步 / 查看同步失败</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">标签树5大类/20+子标签 / 规则命中率实时统计 / 映射支持默认值与函数转换 / 同步失败可重试</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客·详细设计.md §Phase3.3 自动标签+CRM同步</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="grid grid-cols-12 gap-4">
+  <!-- [左：标签体系树] -->
+  <div class="col-span-3">
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="flex items-center justify-between p-3 border-b border-gray-200">
+        <h2 class="text-sm font-bold text-gray-800">🏷️ 标签体系</h2>
+        <button class="px-2 py-0.5 text-xs border border-gray-300 rounded">+ 新建</button>
+      </div>
+      <div class="p-2 text-sm">
+        <div class="tree-node active">📡 渠道 <span class="text-xs text-gray-400">(6)</span></div>
+        <div class="tree-kids">
+          <div class="tree-node">· 抖音来源</div>
+          <div class="tree-node">· 小红书来源</div>
+          <div class="tree-node">· 百度SEM</div>
+          <div class="tree-node">· 展会扫码</div>
+          <div class="tree-node">· 老客户转介绍</div>
+          <div class="tree-node">· 官网表单</div>
+        </div>
+        <div class="tree-node">🏭 行业 <span class="text-xs text-gray-400">(5)</span></div>
+        <div class="tree-kids">
+          <div class="tree-node">· 早教幼儿园</div>
+          <div class="tree-node">· 矿场/矿业</div>
+          <div class="tree-node">· 建材家居</div>
+          <div class="tree-node">· 连锁餐饮</div>
+          <div class="tree-node">· 医美健康</div>
+        </div>
+        <div class="tree-node">📍 地域 <span class="text-xs text-gray-400">(4)</span></div>
+        <div class="tree-kids">
+          <div class="tree-node">· 华南</div>
+          <div class="tree-node">· 华东</div>
+          <div class="tree-node">· 华北</div>
+          <div class="tree-node">· 西南</div>
+        </div>
+        <div class="tree-node">💡 兴趣 <span class="text-xs text-gray-400">(4)</span></div>
+        <div class="tree-kids">
+          <div class="tree-node">· 关注价格</div>
+          <div class="tree-node">· 关注案例</div>
+          <div class="tree-node">· 关注技术</div>
+          <div class="tree-node">· 关注服务</div>
+        </div>
+        <div class="tree-node">🎯 阶段 <span class="text-xs text-gray-400">(5)</span></div>
+        <div class="tree-kids">
+          <div class="tree-node">· 新粉</div>
+          <div class="tree-node">· 培育中</div>
+          <div class="tree-node">· 高意向</div>
+          <div class="tree-node">· 已成单</div>
+          <div class="tree-node">· 已流失</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [中：自动打标规则列表] -->
+  <div class="col-span-5">
+    <div class="bg-white border border-gray-300 rounded">
+      <div class="flex items-center justify-between p-3 border-b border-gray-200">
+        <h2 class="text-sm font-bold text-gray-800">⚙️ 自动打标规则</h2>
+        <div class="flex gap-2">
+          <input type="text" placeholder="搜索规则" class="px-2 py-0.5 border border-gray-300 rounded text-xs w-32">
+          <button class="px-2 py-0.5 text-xs border border-gray-400 bg-gray-100 rounded">+ 新建规则</button>
+        </div>
+      </div>
+      <div class="divide-y divide-gray-100">
+        <!-- 规则1 -->
+        <div class="p-3">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold text-gray-500 mr-1">R01</span>
+              <span class="text-sm font-medium text-gray-800">活码渠道 = 抖音 → 打渠道标签</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[11px] bg-gray-200 text-gray-700 rounded">启用</span>
+          </div>
+          <div class="wf-box rounded p-2 text-xs text-gray-700 space-y-1 mb-2">
+            <div><span class="text-gray-500">IF</span> 好友来源.活码 ∈ [抖音官方·主活码, 抖音·早教园所专题]</div>
+            <div><span class="text-gray-500">THEN</span> 打标 <span class="tag-chip on">抖音来源</span> <span class="tag-chip on">2C偏好</span></div>
+          </div>
+          <div class="text-xs text-gray-500 flex items-center justify-between">
+            <span>近7日命中 218 次 · 成功率 100%</span>
+            <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">日志</a></div>
+          </div>
+        </div>
+
+        <!-- 规则2 -->
+        <div class="p-3">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold text-gray-500 mr-1">R02</span>
+              <span class="text-sm font-medium text-gray-800">聊天关键词匹配 → 打行业标签</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[11px] bg-gray-200 text-gray-700 rounded">启用</span>
+          </div>
+          <div class="wf-box rounded p-2 text-xs text-gray-700 space-y-1 mb-2">
+            <div><span class="text-gray-500">IF</span> 近7日聊天内容 包含 [幼儿园, 早教, 亲子园, 托育]</div>
+            <div><span class="text-gray-500">THEN</span> 打标 <span class="tag-chip on">早教客户</span> <span class="tag-chip on">行业·早教</span></div>
+          </div>
+          <div class="text-xs text-gray-500 flex items-center justify-between">
+            <span>近7日命中 56 次 · 成功率 98%</span>
+            <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">日志</a></div>
+          </div>
+        </div>
+
+        <!-- 规则3 -->
+        <div class="p-3">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold text-gray-500 mr-1">R03</span>
+              <span class="text-sm font-medium text-gray-800">朋友圈互动 ≥ 3 → 高意向</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[11px] bg-gray-200 text-gray-700 rounded">启用</span>
+          </div>
+          <div class="wf-box rounded p-2 text-xs text-gray-700 space-y-1 mb-2">
+            <div><span class="text-gray-500">IF</span> 近14日朋友圈点赞+评论 ≥ 3</div>
+            <div><span class="text-gray-500">THEN</span> 打标 <span class="tag-chip on">高意向</span> · 并推送"高意向提醒"给负责商务</div>
+          </div>
+          <div class="text-xs text-gray-500 flex items-center justify-between">
+            <span>近7日命中 34 次 · 成功率 100%</span>
+            <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">日志</a></div>
+          </div>
+        </div>
+
+        <!-- 规则4 -->
+        <div class="p-3">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold text-gray-500 mr-1">R04</span>
+              <span class="text-sm font-medium text-gray-800">手机号归属地 → 地域标签</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[11px] bg-gray-200 text-gray-700 rounded">启用</span>
+          </div>
+          <div class="wf-box rounded p-2 text-xs text-gray-700 space-y-1 mb-2">
+            <div><span class="text-gray-500">IF</span> 手机号归属地 ∈ [广东, 广西, 海南, 福建]</div>
+            <div><span class="text-gray-500">THEN</span> 打标 <span class="tag-chip on">华南</span></div>
+          </div>
+          <div class="text-xs text-gray-500 flex items-center justify-between">
+            <span>近7日命中 142 次 · 成功率 96%</span>
+            <div><a class="text-gray-600 mr-2">编辑</a><a class="text-gray-500">日志</a></div>
+          </div>
+        </div>
+
+        <!-- 规则5 -->
+        <div class="p-3 opacity-60">
+          <div class="flex items-start justify-between mb-2">
+            <div>
+              <span class="text-xs font-bold text-gray-500 mr-1">R05</span>
+              <span class="text-sm font-medium text-gray-800">7日未回复 → 培育阶段调整</span>
+            </div>
+            <span class="px-1.5 py-0.5 text-[11px] bg-gray-100 text-gray-500 rounded border border-gray-200">草稿</span>
+          </div>
+          <div class="wf-box rounded p-2 text-xs text-gray-700 space-y-1 mb-2">
+            <div><span class="text-gray-500">IF</span> 最后回复时间 > 7日</div>
+            <div><span class="text-gray-500">THEN</span> 阶段 从"培育中" → "待激活"</div>
+          </div>
+          <div class="text-xs text-gray-500">未启用 · 编辑中</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [右：CRM字段映射 + 同步日志] -->
+  <div class="col-span-4 space-y-3">
+    <div class="bg-white border border-gray-300 rounded p-3">
+      <div class="flex items-center justify-between mb-2">
+        <h2 class="text-sm font-bold text-gray-800">🔄 画像同步 CRM</h2>
+        <span class="text-xs text-gray-500">实时 · 最近成功 2分钟前</span>
+      </div>
+      <div class="text-xs text-gray-500 mb-2">字段映射：<span class="font-mono text-gray-700">wechat_contact</span> → <span class="font-mono text-gray-700">crm_lead</span></div>
+      <table class="w-full text-xs">
+        <thead class="bg-gray-50 text-gray-500">
+          <tr>
+            <th class="p-2 text-left">企微字段</th>
+            <th class="p-2 text-left">CRM字段</th>
+            <th class="p-2 text-left">转换</th>
+          </tr>
+        </thead>
+        <tbody class="text-gray-700">
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">wx_userid</td><td class="p-2 font-mono">lead.source_id</td><td class="p-2 text-gray-500">直通</td></tr>
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">wx_nickname</td><td class="p-2 font-mono">lead.name</td><td class="p-2 text-gray-500">直通</td></tr>
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">wx_mobile</td><td class="p-2 font-mono">lead.phone</td><td class="p-2 text-gray-500">脱敏</td></tr>
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">qrcode_channel</td><td class="p-2 font-mono">lead.source</td><td class="p-2 text-gray-500">枚举映射</td></tr>
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">tags[]</td><td class="p-2 font-mono">lead.tags</td><td class="p-2 text-gray-500">合并</td></tr>
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">added_at</td><td class="p-2 font-mono">lead.created_at</td><td class="p-2 text-gray-500">UTC+8</td></tr>
+          <tr class="border-t border-gray-100"><td class="p-2 font-mono">owner_staff</td><td class="p-2 font-mono">lead.owner_id</td><td class="p-2 text-gray-500">staff→user</td></tr>
+        </tbody>
+      </table>
+      <div class="mt-2 flex gap-2">
+        <button class="flex-1 px-2 py-1 text-xs border border-gray-300 rounded">编辑映射</button>
+        <button class="flex-1 px-2 py-1 text-xs border border-gray-400 bg-gray-100 rounded">手动回溯同步</button>
+      </div>
+    </div>
+
+    <div class="bg-white border border-gray-300 rounded p-3">
+      <h2 class="text-sm font-bold text-gray-800 mb-2">📜 同步日志（近24h）</h2>
+      <div class="space-y-1 text-xs">
+        <div class="wf-box rounded p-2 flex items-center justify-between">
+          <span class="text-gray-700">✅ 12:42 · 批量同步 56 条 · 成功</span>
+          <span class="text-gray-500">2m前</span>
+        </div>
+        <div class="wf-box rounded p-2 flex items-center justify-between">
+          <span class="text-gray-700">✅ 11:00 · 批量同步 42 条 · 成功</span>
+          <span class="text-gray-500">1h前</span>
+        </div>
+        <div class="wf-box rounded p-2 flex items-center justify-between">
+          <span class="text-gray-700">⚠️ 09:28 · 3 条失败 · 手机号重复</span>
+          <span class="text-gray-500 underline cursor-pointer">查看</span>
+        </div>
+        <div class="wf-box rounded p-2 flex items-center justify-between">
+          <span class="text-gray-700">✅ 08:05 · 批量同步 31 条 · 成功</span>
+          <span class="text-gray-500">4h前</span>
+        </div>
+        <div class="wf-box rounded p-2 flex items-center justify-between">
+          <span class="text-gray-700">✅ 昨日 18:30 · 批量 89 条 · 成功</span>
+          <span class="text-gray-500">18h前</span>
+        </div>
+      </div>
+      <div class="mt-2 text-xs text-gray-500 flex items-center justify-between">
+        <span>今日合计：412 条成功 · 3 条失败</span>
+        <a class="text-gray-600 underline">全部日志 →</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

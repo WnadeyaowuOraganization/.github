@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>获客链接管理 · #2807</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .wf-box { border:1px dashed #bfbfbf; background:#fafafa; }
+    .qr-placeholder { width:40px;height:40px;border:1px dashed #bfbfbf;background:repeating-linear-gradient(45deg,#e8e8e8,#e8e8e8 3px,#fafafa 3px,#fafafa 6px); display:inline-block; }
+    .qr-big { width:140px;height:140px;border:1px dashed #bfbfbf;background:repeating-linear-gradient(45deg,#e8e8e8,#e8e8e8 4px,#fafafa 4px,#fafafa 8px); display:flex;align-items:center;justify-content:center;color:#999;font-size:11px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">Tab1 · 获客链接管理 · #2807</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">对接企微获客助手API，批量生成带UTM的获客链接+活码，追踪每条链接的点击/新增好友数据</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">市场运营（生成链接），商务人员（查看自己的链接数据）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">获客链接列表 / 批量生成 / 单链详情抽屉（短链+二维码+UTM+实时数据）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">批量生成链接 / 下载二维码 / 复制短链 / 绑定员工 / 归档失效链接</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">批量生成最多50条 / UTM参数自动回填 / 点击数T+1更新 / 二维码支持PNG下载</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">外展获客·详细设计.md §Phase3.1 获客链接管理</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [顶部概览卡] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">活跃链接</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">48</div>
+    <div class="text-xs text-gray-400 mt-1">↑ 6 本周新增</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">今日累计点击</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">2,314</div>
+    <div class="text-xs text-gray-400 mt-1">全部渠道</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">今日新增好友</div>
+    <div class="text-2xl font-bold text-gray-800 mt-1">186</div>
+    <div class="text-xs text-gray-400 mt-1">转化率 8.04%</div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-4">
+    <div class="text-xs text-gray-500">失效/归档</div>
+    <div class="text-2xl font-bold text-gray-400 mt-1">12</div>
+    <div class="text-xs text-gray-400 mt-1">可重新激活</div>
+  </div>
+</div>
+
+<!-- [操作栏] -->
+<div class="bg-white border border-gray-300 rounded p-3 mb-3 flex items-center justify-between">
+  <div class="flex items-center gap-2">
+    <input type="text" placeholder="搜索链接名/渠道/员工…" class="px-3 py-1.5 border border-gray-300 rounded text-sm w-64">
+    <select class="px-2 py-1.5 border border-gray-300 rounded text-sm text-gray-600">
+      <option>全部渠道</option><option>抖音官方</option><option>小红书种草</option><option>百度SEM</option><option>展会扫码</option>
+    </select>
+    <select class="px-2 py-1.5 border border-gray-300 rounded text-sm text-gray-600">
+      <option>全部状态</option><option>活跃</option><option>已归档</option>
+    </select>
+  </div>
+  <div class="flex items-center gap-2">
+    <button class="px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700">导出CSV</button>
+    <button class="px-3 py-1.5 text-sm border border-gray-400 bg-gray-100 text-gray-800 rounded font-medium">+ 批量生成链接</button>
+  </div>
+</div>
+
+<!-- [链接列表表格] -->
+<div class="bg-white border border-gray-300 rounded overflow-hidden">
+  <table class="w-full text-sm">
+    <thead class="bg-gray-100 text-gray-600 border-b border-gray-300">
+      <tr>
+        <th class="p-3 text-left font-medium w-10"><input type="checkbox"></th>
+        <th class="p-3 text-left font-medium">链接名</th>
+        <th class="p-3 text-left font-medium">所属渠道</th>
+        <th class="p-3 text-left font-medium">绑定员工</th>
+        <th class="p-3 text-right font-medium">累计点击</th>
+        <th class="p-3 text-right font-medium">新增好友</th>
+        <th class="p-3 text-right font-medium">转化率</th>
+        <th class="p-3 text-left font-medium">创建时间</th>
+        <th class="p-3 text-center font-medium">二维码</th>
+        <th class="p-3 text-center font-medium">操作</th>
+      </tr>
+    </thead>
+    <tbody class="text-gray-700">
+      <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-3"><input type="checkbox"></td>
+        <td class="p-3 font-medium">抖音-4月矿场专题-小李</td>
+        <td class="p-3"><span class="px-2 py-0.5 text-xs bg-gray-100 rounded text-gray-600 border border-gray-200">抖音官方</span></td>
+        <td class="p-3">李雪（商务一部）</td>
+        <td class="p-3 text-right">1,286</td>
+        <td class="p-3 text-right font-semibold">142</td>
+        <td class="p-3 text-right text-gray-500">11.0%</td>
+        <td class="p-3 text-gray-500">2026-04-02</td>
+        <td class="p-3 text-center"><span class="qr-placeholder"></span></td>
+        <td class="p-3 text-center text-xs"><a class="text-gray-600 hover:text-gray-900" onclick="openDrawer()">详情</a> · <a class="text-gray-500">复制</a></td>
+      </tr>
+      <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-3"><input type="checkbox"></td>
+        <td class="p-3 font-medium">小红书-春季种草-王敏</td>
+        <td class="p-3"><span class="px-2 py-0.5 text-xs bg-gray-100 rounded text-gray-600 border border-gray-200">小红书种草</span></td>
+        <td class="p-3">王敏（商务二部）</td>
+        <td class="p-3 text-right">968</td>
+        <td class="p-3 text-right font-semibold">98</td>
+        <td class="p-3 text-right text-gray-500">10.1%</td>
+        <td class="p-3 text-gray-500">2026-04-08</td>
+        <td class="p-3 text-center"><span class="qr-placeholder"></span></td>
+        <td class="p-3 text-center text-xs"><a class="text-gray-600">详情</a> · <a class="text-gray-500">复制</a></td>
+      </tr>
+      <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-3"><input type="checkbox"></td>
+        <td class="p-3 font-medium">百度SEM-矿场加盟-统一落地</td>
+        <td class="p-3"><span class="px-2 py-0.5 text-xs bg-gray-100 rounded text-gray-600 border border-gray-200">百度SEM</span></td>
+        <td class="p-3">活码池·商务一部</td>
+        <td class="p-3 text-right">3,451</td>
+        <td class="p-3 text-right font-semibold">268</td>
+        <td class="p-3 text-right text-gray-500">7.8%</td>
+        <td class="p-3 text-gray-500">2026-03-22</td>
+        <td class="p-3 text-center"><span class="qr-placeholder"></span></td>
+        <td class="p-3 text-center text-xs"><a class="text-gray-600">详情</a> · <a class="text-gray-500">复制</a></td>
+      </tr>
+      <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-3"><input type="checkbox"></td>
+        <td class="p-3 font-medium">展会扫码-2026深圳矿博会</td>
+        <td class="p-3"><span class="px-2 py-0.5 text-xs bg-gray-100 rounded text-gray-600 border border-gray-200">展会扫码</span></td>
+        <td class="p-3">展会组（4人轮询）</td>
+        <td class="p-3 text-right">612</td>
+        <td class="p-3 text-right font-semibold">476</td>
+        <td class="p-3 text-right text-gray-500">77.8%</td>
+        <td class="p-3 text-gray-500">2026-04-15</td>
+        <td class="p-3 text-center"><span class="qr-placeholder"></span></td>
+        <td class="p-3 text-center text-xs"><a class="text-gray-600">详情</a> · <a class="text-gray-500">复制</a></td>
+      </tr>
+      <tr class="border-b border-gray-200 hover:bg-gray-50">
+        <td class="p-3"><input type="checkbox"></td>
+        <td class="p-3 font-medium">抖音-早教园所专题</td>
+        <td class="p-3"><span class="px-2 py-0.5 text-xs bg-gray-100 rounded text-gray-600 border border-gray-200">抖音官方</span></td>
+        <td class="p-3">张伟（2C组）</td>
+        <td class="p-3 text-right">824</td>
+        <td class="p-3 text-right font-semibold">76</td>
+        <td class="p-3 text-right text-gray-500">9.2%</td>
+        <td class="p-3 text-gray-500">2026-04-11</td>
+        <td class="p-3 text-center"><span class="qr-placeholder"></span></td>
+        <td class="p-3 text-center text-xs"><a class="text-gray-600">详情</a> · <a class="text-gray-500">复制</a></td>
+      </tr>
+      <tr class="hover:bg-gray-50 opacity-60">
+        <td class="p-3"><input type="checkbox"></td>
+        <td class="p-3 font-medium">百度SEM-旧版-已归档</td>
+        <td class="p-3"><span class="px-2 py-0.5 text-xs bg-gray-100 rounded text-gray-500 border border-gray-200">百度SEM</span></td>
+        <td class="p-3 text-gray-400">—</td>
+        <td class="p-3 text-right text-gray-400">5,812</td>
+        <td class="p-3 text-right text-gray-400">412</td>
+        <td class="p-3 text-right text-gray-400">7.1%</td>
+        <td class="p-3 text-gray-400">2026-02-08</td>
+        <td class="p-3 text-center"><span class="qr-placeholder" style="opacity:.5"></span></td>
+        <td class="p-3 text-center text-xs text-gray-400">已归档</td>
+      </tr>
+    </tbody>
+  </table>
+  <div class="px-4 py-2.5 text-xs text-gray-500 border-t border-gray-200 flex items-center justify-between">
+    <span>共 48 条 · 已选 0 条</span>
+    <span>每页 20 条 · 第 1/3 页</span>
+  </div>
+</div>
+
+<!-- [右侧详情抽屉 - 默认可见低保真] -->
+<div id="linkDrawer" class="fixed right-0 top-0 h-full w-[420px] bg-white border-l border-gray-300 shadow-xl p-5 overflow-y-auto" style="display:none;">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-base font-bold text-gray-800">链接详情</h3>
+    <button onclick="closeDrawer()" class="text-gray-400 text-xl">×</button>
+  </div>
+
+  <div class="text-xs text-gray-500 mb-1">链接名</div>
+  <div class="text-sm font-semibold text-gray-800 mb-3">抖音-4月矿场专题-小李</div>
+
+  <div class="mb-4">
+    <div class="text-xs text-gray-500 mb-2">二维码 / 活码</div>
+    <div class="flex items-center gap-3">
+      <div class="qr-big">二维码占位</div>
+      <div class="text-xs text-gray-500 space-y-2">
+        <button class="block w-full px-2 py-1 border border-gray-300 rounded text-gray-700">下载PNG</button>
+        <button class="block w-full px-2 py-1 border border-gray-300 rounded text-gray-700">复制图片</button>
+        <button class="block w-full px-2 py-1 border border-gray-300 rounded text-gray-700">生成带Logo版</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <div class="text-xs text-gray-500 mb-1">短链</div>
+    <div class="wf-box p-2 text-xs text-gray-700 font-mono rounded">https://w-ai.cn/c/a3xk2p</div>
+  </div>
+
+  <div class="mb-4">
+    <div class="text-xs text-gray-500 mb-1">UTM 参数</div>
+    <table class="w-full text-xs">
+      <tr class="border-b border-gray-100"><td class="py-1 text-gray-500">utm_source</td><td class="py-1 text-gray-700">douyin</td></tr>
+      <tr class="border-b border-gray-100"><td class="py-1 text-gray-500">utm_medium</td><td class="py-1 text-gray-700">video</td></tr>
+      <tr class="border-b border-gray-100"><td class="py-1 text-gray-500">utm_campaign</td><td class="py-1 text-gray-700">mine_apr2026</td></tr>
+      <tr class="border-b border-gray-100"><td class="py-1 text-gray-500">utm_content</td><td class="py-1 text-gray-700">lixue_video_01</td></tr>
+      <tr><td class="py-1 text-gray-500">utm_term</td><td class="py-1 text-gray-700">矿场加盟</td></tr>
+    </table>
+  </div>
+
+  <div class="mb-4">
+    <div class="text-xs text-gray-500 mb-2">实时数据（近 24 小时）</div>
+    <div class="grid grid-cols-2 gap-2 text-xs">
+      <div class="wf-box p-2 rounded"><div class="text-gray-500">点击</div><div class="text-base font-bold text-gray-800">128</div></div>
+      <div class="wf-box p-2 rounded"><div class="text-gray-500">新增好友</div><div class="text-base font-bold text-gray-800">14</div></div>
+      <div class="wf-box p-2 rounded"><div class="text-gray-500">通过率</div><div class="text-base font-bold text-gray-800">89%</div></div>
+      <div class="wf-box p-2 rounded"><div class="text-gray-500">拒绝</div><div class="text-base font-bold text-gray-800">2</div></div>
+    </div>
+    <div class="wf-box mt-2 h-24 rounded flex items-center justify-center text-xs text-gray-400">折线图占位 · 按小时点击趋势</div>
+  </div>
+
+  <div class="mb-4">
+    <div class="text-xs text-gray-500 mb-1">绑定员工</div>
+    <div class="text-sm text-gray-700">李雪 · 商务一部</div>
+  </div>
+
+  <div class="flex gap-2 pt-2 border-t border-gray-200">
+    <button class="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700">编辑</button>
+    <button class="flex-1 px-3 py-1.5 text-sm border border-gray-300 rounded text-gray-700">归档</button>
+  </div>
+</div>
+
+<!-- [浮动按钮 - 打开示例详情] -->
+<button onclick="openDrawer()" class="fixed bottom-6 right-6 px-3 py-2 text-xs border border-gray-400 bg-white text-gray-700 rounded shadow hover:bg-gray-50">👁️ 预览链接详情抽屉</button>
+
+<script>
+  function openDrawer(){ document.getElementById('linkDrawer').style.display='block'; }
+  function closeDrawer(){ document.getElementById('linkDrawer').style.display='none'; }
+</script>
+
+</body>
+</html>

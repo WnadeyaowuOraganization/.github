@@ -362,6 +362,12 @@ if [ -d "$SKILLS_SRC" ]; then
   echo "✅ 同步 skills → $BASE_DIR/.claude/skills/ (软链 $(ls -1 $BASE_DIR/.claude/skills/ | wc -l) 个)"
 fi
 
+# === 清理同目录旧会话（Issue已关闭但tmux未释放）===
+for old_session in $(tmux ls -F '#{session_name}' 2>/dev/null | grep "^cc-wande-play-${DIR}-" | grep -v "^${SESSION}$"); do
+  echo "🧹 清理残留会话: $old_session"
+  tmux kill-session -t "$old_session" 2>/dev/null
+done
+
 # === 启动tmux（交互模式）===
 tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
   "export GH_TOKEN=$GH_TOKEN; ${API_ENV} ${CONFIG_DIR_ENV} ${MAVEN_ENV} ${TEST_ENV_INFO} \

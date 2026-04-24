@@ -205,6 +205,40 @@ else
   log "门 5 跳过（非 git 仓库）"
 fi
 
+# ============================================================
+# 门 6 — Issue checkbox 全勾（甲方需求验收项必须全部满足）
+# ============================================================
+if [ -n "$ISSUE" ]; then
+  ISSUE_SOURCE=""
+  for kimi in /home/ubuntu/projects/wande-play-kimi* /home/ubuntu/projects/wande-play; do
+    f="$kimi/issues/issue-${ISSUE}/issue-source.md"
+    if [ -f "$f" ]; then
+      ISSUE_SOURCE="$f"
+      break
+    fi
+  done
+
+  if [ -n "$ISSUE_SOURCE" ]; then
+    UNCHECKED_ISSUE=$(grep -cE '^\s*- \[ \]' "$ISSUE_SOURCE" 2>/dev/null || true)
+    UNCHECKED_ISSUE=${UNCHECKED_ISSUE:-0}
+    if [ "$UNCHECKED_ISSUE" -gt 0 ]; then
+      echo "═══ 门 6 失败：Issue #${ISSUE} 存在 $UNCHECKED_ISSUE 项未勾需求 ═══"
+      echo ""
+      echo "未满足的需求项："
+      grep -nE '^\s*- \[ \]' "$ISSUE_SOURCE" | head -10
+      echo ""
+      echo "Issue checkbox 是甲方的需求验收清单，必须全部满足后才能提 PR。"
+      echo "如果某项确认不做，在 task.md 备注原因并勾选该项。"
+      fail 6 "门 6: Issue #${ISSUE} 需求清单存在 $UNCHECKED_ISSUE 项未勾"
+    fi
+    ok "门 6 通过：Issue #${ISSUE} 需求清单全部勾选（或无 checkbox）"
+  else
+    log "门 6 跳过：issue-source.md 未找到"
+  fi
+else
+  log "门 6 跳过：未指定 --issue"
+fi
+
 echo ""
-echo "🎉 pr-body-lint 全部 5 道门通过，可以 gh pr create"
+echo "🎉 pr-body-lint 全部 6 道门通过，可以 gh pr create"
 exit 0

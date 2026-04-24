@@ -129,6 +129,8 @@ bash .claude/skills/pr-visual-proof/scripts/pr-body-lint.sh --pr-body-stdin --is
 | 门 2 | `issues/issue-<N>/task.md` 无 `- [ ]` 未勾选 |
 | 门 3 | 前端改动 PR body 含 `![](.*\.png)` + 勾选"截图"类文字必有图 |
 | 门 4 | 新增 `views/**/index.vue` 有对应 `e2e/tests/front/smoke/<module>-page.spec.ts` |
+| 门 5 | 分支已 rebase origin/dev（不能落后） |
+| 门 6 | `issues/issue-<N>/issue-source.md` 无 `- [ ]` 未勾（甲方需求清单全满足） |
 
 **任一 fail → 不要 `gh pr create`**，先补齐再跑预检。
 

@@ -82,7 +82,10 @@ bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort
 # 6. 标 In Progress
 bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
 
-# 7. 更新 PLAN.md：当前运行 + 指派历史 各新增一行
+# 7. 更新 PLAN.md 三处：
+#    - 当前运行表新增一行
+#    - 指派历史表新增一行
+#    - 指派建议表删除已派的行（排程经理下次刷新不用重复判断）
 ```
 
 ### module 对应
@@ -203,7 +206,7 @@ bash scripts/cc-check.sh
 
 | 事件 | 更新位置 |
 |------|---------|
-| 指派新 Issue | 当前运行 + 指派历史 各新增行 |
+| 指派新 Issue | 当前运行 + 指派历史 各新增行 + **指派建议表删除已派行** |
 | PR squash-merged | 当前运行删行 + 指派历史 ~~Done~~ |
 | CC 失败放弃 | 当前运行删行 + 指派历史 ~~Fail~~ |
 

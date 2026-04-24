@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab2 上传分类 — 方案素材中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .dashed-drop {
+      background-image: repeating-linear-gradient(45deg, #fafafa, #fafafa 10px, #f5f5f5 10px, #f5f5f5 20px);
+    }
+    .progress-bar {
+      background: linear-gradient(90deg, #1890ff 0%, #40a9ff 100%);
+    }
+    .tag-ai {
+      background: #f3e8ff;
+      color: #a855f7;
+      border: 1px solid #e9d5ff;
+    }
+    .tag-chip {
+      display: inline-flex;
+      align-items: center;
+      padding: 2px 8px;
+      border-radius: 4px;
+      font-size: 11px;
+      margin: 1px 2px;
+      background: #f0f5ff;
+      color: #1d4ed8;
+      border: 1px solid #d6e4ff;
+    }
+    .tag-chip .close { margin-left: 4px; color: #94a3b8; cursor: pointer; }
+    .thumb {
+      width: 40px; height: 40px; border-radius: 4px;
+      background: linear-gradient(135deg, #e5e7eb 25%, #d1d5db 25%, #d1d5db 50%, #e5e7eb 50%, #e5e7eb 75%, #d1d5db 75%);
+      background-size: 10px 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: #6b7280; font-size: 10px; font-weight: 600;
+      border: 1px solid #d1d5db;
+      flex-shrink: 0;
+    }
+    .badge-type {
+      display: inline-block; padding: 1px 6px; border-radius: 3px;
+      font-size: 10px; font-weight: 500; line-height: 1.6;
+    }
+    .select-ghost {
+      appearance: none;
+      background: #fff url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 4l3 3 3-3' fill='none' stroke='%23999' stroke-width='1'/%3E%3C/svg%3E") no-repeat right 6px center;
+      padding-right: 20px;
+    }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">Tab2 上传分类 — 批量上传 + AI 自动分类 + 项目绑定</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">批量入库方案素材，通过AI自动分类打标减少人工，绑定项目后权限自动生成</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师、方案策划、素材管理员</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">拖拽上传 / AI预分类 / 标签打标 / 项目绑定 / 批量编辑保存</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">批量拖拽 / 选中批量改分类 / 绑定项目 / 标签编辑 / 保存入库</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">单文件上传成功 / AI分类命中率 ≥ 70% / 绑定项目后权限正确生成</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">方案素材中心 详细设计 §2.2</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [批量上传区] -->
+  <section class="bg-white border border-gray-300 rounded p-5 mb-5">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="text-base font-semibold text-gray-800">批量上传</h2>
+        <p class="text-xs text-gray-500 mt-0.5">支持拖拽、批量选择、断点续传；上传完成后自动进入下方分类打标</p>
+      </div>
+      <div class="text-xs text-gray-500">
+        已上传 <span class="text-gray-800 font-semibold">28</span> / 30 · 总大小 <span class="text-gray-800 font-semibold">1.24GB</span>
+      </div>
+    </div>
+
+    <!-- 拖拽框 -->
+    <div class="dashed-drop border-2 border-dashed border-gray-300 rounded-md py-10 text-center hover:border-blue-400 transition">
+      <div class="flex items-center justify-center mb-3">
+        <div class="w-14 h-14 rounded-full bg-blue-50 flex items-center justify-center">
+          <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="none" stroke="#1890ff" stroke-width="1.5" viewBox="0 0 24 24">
+            <path d="M12 19V5M5 12l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      </div>
+      <div class="text-sm text-gray-700 mb-1">
+        <span class="font-medium">拖拽文件到此处</span>
+        <span class="text-gray-400 mx-1">或</span>
+        <button class="text-blue-500 hover:text-blue-600 font-medium">点击选择文件</button>
+      </div>
+      <div class="text-xs text-gray-400">
+        PPT / PDF / 图片(JPG/PNG) / 视频(MP4) / 源文件(PSD/AI/RAR) &nbsp;·&nbsp; 单文件 ≤ 500MB
+      </div>
+    </div>
+
+    <!-- [上传队列] -->
+    <div class="mt-5">
+      <div class="flex items-center justify-between mb-2">
+        <h3 class="text-sm font-semibold text-gray-700">上传队列 <span class="text-gray-400 font-normal">(5)</span></h3>
+        <div class="text-xs space-x-3">
+          <button class="text-gray-500 hover:text-gray-700">全部暂停</button>
+          <button class="text-gray-500 hover:text-gray-700">清空已完成</button>
+        </div>
+      </div>
+
+      <div class="border border-gray-200 rounded divide-y divide-gray-200">
+        <!-- Row template -->
+        <!-- 上传中 1 -->
+        <div class="flex items-center px-3 py-2.5 gap-3 hover:bg-gray-50">
+          <div class="thumb">PPT</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-800 truncate">2024广州天河万达少儿乐园_方案汇报V3.pptx</span>
+              <span class="badge-type bg-orange-50 text-orange-600 border border-orange-200">PPT</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1.5">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded overflow-hidden">
+                <div class="progress-bar h-full" style="width:68%"></div>
+              </div>
+              <span class="text-xs text-gray-500 w-10 text-right">68%</span>
+            </div>
+          </div>
+          <div class="text-xs text-gray-500 w-20 text-right">84.3 MB</div>
+          <div class="text-xs text-blue-500 w-16 text-center">上传中</div>
+          <div class="w-20 text-right space-x-2 text-xs">
+            <button class="text-gray-500 hover:text-gray-700">暂停</button>
+            <button class="text-gray-400 hover:text-red-500">删除</button>
+          </div>
+        </div>
+
+        <!-- 上传中 2 -->
+        <div class="flex items-center px-3 py-2.5 gap-3 hover:bg-gray-50">
+          <div class="thumb" style="background:linear-gradient(135deg,#fde68a,#fbbf24);color:#92400e;">PSD</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-800 truncate">主入口大门效果图_源文件_V2.psd</span>
+              <span class="badge-type bg-purple-50 text-purple-600 border border-purple-200">PSD</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1.5">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded overflow-hidden">
+                <div class="progress-bar h-full" style="width:42%"></div>
+              </div>
+              <span class="text-xs text-gray-500 w-10 text-right">42%</span>
+            </div>
+          </div>
+          <div class="text-xs text-gray-500 w-20 text-right">312.8 MB</div>
+          <div class="text-xs text-blue-500 w-16 text-center">上传中</div>
+          <div class="w-20 text-right space-x-2 text-xs">
+            <button class="text-gray-500 hover:text-gray-700">暂停</button>
+            <button class="text-gray-400 hover:text-red-500">删除</button>
+          </div>
+        </div>
+
+        <!-- 解析中 -->
+        <div class="flex items-center px-3 py-2.5 gap-3 hover:bg-gray-50">
+          <div class="thumb" style="background:linear-gradient(135deg,#bfdbfe,#60a5fa);color:#1e3a8a;">MP4</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-800 truncate">蹦床馆场景漫游_15s.mp4</span>
+              <span class="badge-type bg-blue-50 text-blue-600 border border-blue-200">MP4</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1.5">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded overflow-hidden">
+                <div class="progress-bar h-full" style="width:100%"></div>
+              </div>
+              <span class="text-xs text-gray-500 w-10 text-right">100%</span>
+            </div>
+          </div>
+          <div class="text-xs text-gray-500 w-20 text-right">58.2 MB</div>
+          <div class="text-xs text-purple-500 w-16 text-center">解析中…</div>
+          <div class="w-20 text-right space-x-2 text-xs">
+            <button class="text-gray-300 cursor-not-allowed">—</button>
+            <button class="text-gray-400 hover:text-red-500">删除</button>
+          </div>
+        </div>
+
+        <!-- 完成 1 -->
+        <div class="flex items-center px-3 py-2.5 gap-3 hover:bg-gray-50">
+          <div class="thumb" style="background:linear-gradient(135deg,#a7f3d0,#34d399);color:#065f46;">JPG</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-800 truncate">深圳南山宝安机场店_实拍_大厅.jpg</span>
+              <span class="badge-type bg-green-50 text-green-600 border border-green-200">JPG</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1.5">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-green-400" style="width:100%"></div>
+              </div>
+              <span class="text-xs text-gray-500 w-10 text-right">100%</span>
+            </div>
+          </div>
+          <div class="text-xs text-gray-500 w-20 text-right">6.4 MB</div>
+          <div class="text-xs text-green-600 w-16 text-center">✓ 完成</div>
+          <div class="w-20 text-right space-x-2 text-xs">
+            <button class="text-gray-400 hover:text-red-500">删除</button>
+          </div>
+        </div>
+
+        <!-- 失败 -->
+        <div class="flex items-center px-3 py-2.5 gap-3 hover:bg-gray-50 bg-red-50/30">
+          <div class="thumb" style="background:linear-gradient(135deg,#fecaca,#f87171);color:#7f1d1d;">RAR</div>
+          <div class="flex-1 min-w-0">
+            <div class="flex items-center gap-2">
+              <span class="text-sm text-gray-800 truncate">儿童主题墙_矢量源文件合集.rar</span>
+              <span class="badge-type bg-gray-100 text-gray-600 border border-gray-200">RAR</span>
+            </div>
+            <div class="flex items-center gap-2 mt-1.5">
+              <div class="flex-1 h-1.5 bg-gray-100 rounded overflow-hidden">
+                <div class="h-full bg-red-400" style="width:23%"></div>
+              </div>
+              <span class="text-xs text-red-500 w-10 text-right">23%</span>
+            </div>
+            <div class="text-xs text-red-500 mt-0.5">上传失败：网络中断，可重试</div>
+          </div>
+          <div class="text-xs text-gray-500 w-20 text-right">428.5 MB</div>
+          <div class="text-xs text-red-500 w-16 text-center">失败</div>
+          <div class="w-20 text-right space-x-2 text-xs">
+            <button class="text-blue-500 hover:text-blue-600">重试</button>
+            <button class="text-gray-400 hover:text-red-500">删除</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- [分类打标面板] -->
+  <section class="bg-white border border-gray-300 rounded p-5">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h2 class="text-base font-semibold text-gray-800">分类打标 — 已上传素材批量编辑</h2>
+        <p class="text-xs text-gray-500 mt-0.5">自动识别 + 人工校对；绑定项目后权限自动推算</p>
+      </div>
+      <div class="text-xs text-gray-500">待处理 <span class="text-gray-800 font-semibold">8</span> 条</div>
+    </div>
+
+    <!-- AI 规则说明卡 -->
+    <div class="flex items-start gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-xs rounded px-3 py-2 mb-4">
+      <span class="mt-0.5">💡</span>
+      <div>
+        <strong>AI 分类规则：</strong>基于文件名关键词 + 图像 CLIP 模型预分类，识别结果带<span class="tag-ai px-1.5 rounded text-[10px] mx-0.5">AI识别</span>标签，可手工修正。
+        若未绑定项目则默认全员可见；绑定未中标项目时，可见性仅限方案团队；绑定已中标项目时可见性升级为全员。
+      </div>
+    </div>
+
+    <!-- [批量操作栏] -->
+    <div class="flex items-center justify-between bg-gray-50 border border-gray-200 rounded px-3 py-2 mb-3">
+      <div class="flex items-center gap-4 text-xs">
+        <label class="flex items-center gap-1.5 cursor-pointer">
+          <input type="checkbox" class="w-3.5 h-3.5"> <span class="text-gray-600">全选</span>
+        </label>
+        <span class="text-gray-400">|</span>
+        <span class="text-gray-600">已选 <span class="text-blue-500 font-semibold">3</span> 项</span>
+      </div>
+      <div class="flex items-center gap-2 text-xs">
+        <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:border-blue-400 hover:text-blue-500">批量指派分类</button>
+        <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:border-blue-400 hover:text-blue-500">批量添加标签</button>
+        <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:border-blue-400 hover:text-blue-500">批量绑定项目</button>
+        <button class="px-3 py-1 border border-gray-300 rounded bg-white hover:border-red-400 hover:text-red-500">批量删除</button>
+      </div>
+    </div>
+
+    <!-- [素材编辑表格] -->
+    <div class="border border-gray-200 rounded overflow-hidden overflow-x-auto">
+      <table class="w-full text-xs" style="min-width:1100px;">
+        <thead class="bg-gray-100 text-gray-600">
+          <tr>
+            <th class="px-3 py-2 text-left w-8"><input type="checkbox" class="w-3.5 h-3.5"></th>
+            <th class="px-2 py-2 text-left w-14">缩略图</th>
+            <th class="px-2 py-2 text-left">文件名</th>
+            <th class="px-2 py-2 text-left w-40">自动识别分类</th>
+            <th class="px-2 py-2 text-left w-56">关联项目</th>
+            <th class="px-2 py-2 text-left">标签</th>
+            <th class="px-2 py-2 text-left w-24">可见性</th>
+            <th class="px-2 py-2 text-left w-20">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200">
+
+          <tr class="hover:bg-gray-50 bg-blue-50/30">
+            <td class="px-3 py-2"><input type="checkbox" checked class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#fef3c7,#fcd34d);color:#78350f;">效果</div></td>
+            <td class="px-2 py-2 text-gray-800">主入口大门_日景效果图_V3.jpg</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>效果图</option><option>实拍照</option><option>平面图</option><option>源文件</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>2024广州天河万达少儿乐园</option>
+                <option>2024深圳南山宝安机场店</option>
+                <option>未绑定</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">3-6岁<span class="close">×</span></span>
+                <span class="tag-chip">室内<span class="close">×</span></span>
+                <span class="tag-chip">暖色系<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-gray-500 text-[11px]">仅团队</span><div class="text-[10px] text-gray-400">（未中标）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-2"><input type="checkbox" class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#a7f3d0,#34d399);color:#065f46;">实拍</div></td>
+            <td class="px-2 py-2 text-gray-800">深圳南山宝安机场店_大厅实拍_001.jpg</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>实拍照</option><option>效果图</option><option>平面图</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>2024深圳南山宝安机场店</option>
+                <option>2024广州天河万达少儿乐园</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">全龄<span class="close">×</span></span>
+                <span class="tag-chip">商场<span class="close">×</span></span>
+                <span class="tag-chip">冷色系<span class="close">×</span></span>
+                <span class="tag-chip">实景<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-green-600 text-[11px]">全员</span><div class="text-[10px] text-gray-400">（已中标）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50 bg-blue-50/30">
+            <td class="px-3 py-2"><input type="checkbox" checked class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#ddd6fe,#a78bfa);color:#4c1d95;">平面</div></td>
+            <td class="px-2 py-2 text-gray-800">蹦床馆_平面布置图_CAD.pdf</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>平面图</option><option>效果图</option><option>源文件</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>2024成都龙泉驿蹦床乐园</option>
+                <option>未绑定</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">6-12岁<span class="close">×</span></span>
+                <span class="tag-chip">蹦床<span class="close">×</span></span>
+                <span class="tag-chip">图纸<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-gray-500 text-[11px]">仅团队</span><div class="text-[10px] text-gray-400">（未中标）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-2"><input type="checkbox" class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#bfdbfe,#60a5fa);color:#1e3a8a;">视频</div></td>
+            <td class="px-2 py-2 text-gray-800">蹦床馆场景漫游_15s.mp4</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>视频素材</option><option>效果图</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>未绑定</option>
+                <option>2024成都龙泉驿蹦床乐园</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">漫游<span class="close">×</span></span>
+                <span class="tag-chip">蹦床<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-green-600 text-[11px]">全员</span><div class="text-[10px] text-gray-400">（未绑定默认）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50 bg-blue-50/30">
+            <td class="px-3 py-2"><input type="checkbox" checked class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#fbcfe8,#f472b6);color:#831843;">源件</div></td>
+            <td class="px-2 py-2 text-gray-800">主入口大门效果图_源文件_V2.psd</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>源文件</option><option>效果图</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>2024广州天河万达少儿乐园</option>
+                <option>未绑定</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">PSD<span class="close">×</span></span>
+                <span class="tag-chip">大门<span class="close">×</span></span>
+                <span class="tag-chip">暖色系<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-gray-500 text-[11px]">仅团队</span><div class="text-[10px] text-gray-400">（未中标）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-2"><input type="checkbox" class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#fed7aa,#fb923c);color:#7c2d12;">PPT</div></td>
+            <td class="px-2 py-2 text-gray-800">2024广州天河万达少儿乐园_方案汇报V3.pptx</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>方案文档</option><option>源文件</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>2024广州天河万达少儿乐园</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">方案<span class="close">×</span></span>
+                <span class="tag-chip">汇报<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-gray-500 text-[11px]">仅团队</span><div class="text-[10px] text-gray-400">（未中标）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-2"><input type="checkbox" class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#fef3c7,#fcd34d);color:#78350f;">效果</div></td>
+            <td class="px-2 py-2 text-gray-800">海洋主题墙_夜景效果图_V1.jpg</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>效果图</option><option>实拍照</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>未绑定</option>
+                <option>2024青岛海昌海洋馆</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">海洋<span class="close">×</span></span>
+                <span class="tag-chip">主题墙<span class="close">×</span></span>
+                <span class="tag-chip">冷色系<span class="close">×</span></span>
+                <span class="tag-chip">夜景<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-green-600 text-[11px]">全员</span><div class="text-[10px] text-gray-400">（未绑定默认）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+          <tr class="hover:bg-gray-50">
+            <td class="px-3 py-2"><input type="checkbox" class="w-3.5 h-3.5"></td>
+            <td class="px-2 py-2"><div class="thumb" style="background:linear-gradient(135deg,#a7f3d0,#34d399);color:#065f46;">实拍</div></td>
+            <td class="px-2 py-2 text-gray-800">成都龙泉驿蹦床乐园_施工现场_0518.jpg</td>
+            <td class="px-2 py-2">
+              <div class="flex items-center gap-1">
+                <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-28">
+                  <option>实拍照</option><option>效果图</option>
+                </select>
+                <span class="tag-ai px-1.5 py-0.5 rounded text-[10px]">AI识别</span>
+              </div>
+            </td>
+            <td class="px-2 py-2">
+              <select class="select-ghost border border-gray-300 rounded px-2 py-1 text-xs w-full">
+                <option>2024成都龙泉驿蹦床乐园</option>
+              </select>
+            </td>
+            <td class="px-2 py-2">
+              <div class="flex flex-wrap items-center">
+                <span class="tag-chip">施工<span class="close">×</span></span>
+                <span class="tag-chip">现场<span class="close">×</span></span>
+                <button class="text-gray-400 hover:text-blue-500 text-[11px] px-1">+ 添加</button>
+              </div>
+            </td>
+            <td class="px-2 py-2"><span class="text-gray-500 text-[11px]">仅团队</span><div class="text-[10px] text-gray-400">（未中标）</div></td>
+            <td class="px-2 py-2 space-x-1 text-xs">
+              <button class="text-blue-500">保存</button>
+              <button class="text-gray-400 hover:text-red-500">删</button>
+            </td>
+          </tr>
+
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 底部操作栏 -->
+    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+      <div class="text-xs text-gray-500">
+        共 8 条 · 已完成打标 <span class="text-gray-800 font-semibold">5</span> 条 · 待校对 3 条
+      </div>
+      <div class="flex items-center gap-2">
+        <button class="px-4 py-1.5 border border-gray-300 rounded bg-white text-xs text-gray-700 hover:border-blue-400">保存为草稿</button>
+        <button class="px-4 py-1.5 rounded bg-blue-500 text-white text-xs hover:bg-blue-600">批量保存入库</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 原型说明 -->
+  <section class="mt-6 bg-white border border-gray-300 rounded p-5">
+    <h3 class="text-sm font-bold text-gray-700 mb-3">原型说明</h3>
+    <table class="w-full text-xs border-collapse">
+      <thead><tr class="bg-gray-100 text-gray-600">
+        <th class="p-2 border border-gray-300 text-left w-32">区域</th>
+        <th class="p-2 border border-gray-300 text-left">功能描述</th>
+      </tr></thead>
+      <tbody class="text-gray-700">
+        <tr><td class="p-2 border border-gray-300">批量上传区</td><td class="p-2 border border-gray-300">大型拖拽框 + 支持格式说明；断点续传；批量文件选择</td></tr>
+        <tr><td class="p-2 border border-gray-300">上传队列</td><td class="p-2 border border-gray-300">显示每个文件的缩略图、进度、状态（上传中/解析中/完成/失败），支持暂停/重试/删除</td></tr>
+        <tr><td class="p-2 border border-gray-300">分类打标面板</td><td class="p-2 border border-gray-300">已上传素材的批量编辑入口，含AI识别规则说明卡</td></tr>
+        <tr><td class="p-2 border border-gray-300">批量操作栏</td><td class="p-2 border border-gray-300">全选/已选数 + 批量指派分类、添加标签、绑定项目、删除</td></tr>
+        <tr><td class="p-2 border border-gray-300">素材编辑表格</td><td class="p-2 border border-gray-300">逐行编辑分类/项目/标签/可见性，可见性根据项目中标状态自动推算</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+</body>
+</html>

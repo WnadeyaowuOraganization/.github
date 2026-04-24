@@ -69,64 +69,44 @@ await page.waitForResponse(r => r.url().includes('/list'));
 await page.screenshot({ path: '/tmp/04-after-submit.png' });
 ```
 
-## 上传到 Release
+## 截图存放
 
-GitHub Release 作为静态图床（PR body 可直接用 URL）：
+截图commit到PR分支的 `issues/issue-${ISSUE}/screenshots/` 目录，PR body用相对路径引用：
 
 ```bash
-export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
-PR=3642  # 你的 PR 号
+# 1. 截图保存到Issue目录
+mkdir -p issues/issue-${ISSUE}/screenshots
+cp /tmp/01-list.png /tmp/02-modal.png issues/issue-${ISSUE}/screenshots/
 
-# 第一次建 release
-gh release create screenshot-${PR} \
-  --repo WnadeyaowuOraganization/wande-play \
-  --title "Screenshots for PR #${PR}" \
-  --notes "visual evidence" \
-  /tmp/01-list.png /tmp/02-modal-open.png /tmp/03-form-filled.png /tmp/04-after-submit.png
+# 2. commit到PR分支
+git add issues/issue-${ISSUE}/screenshots/
+git commit -m "docs: 添加截图证据 #${ISSUE}"
+git push --force-with-lease
 
-# 追加新图
-gh release upload screenshot-${PR} \
-  --repo WnadeyaowuOraganization/wande-play /tmp/new.png
-
-# 拿下载 URL
-gh release view screenshot-${PR} --repo WnadeyaowuOraganization/wande-play --json assets \
-  -q '.assets[] | "\(.name)\t\(.url)"'
+# 3. PR body中用相对路径引用
 ```
 
-## 贴 PR body
+## PR body 截图引用
 
 ```markdown
 ## 截图证据
 
 ### 列表页
-![列表](https://github.com/WnadeyaowuOraganization/wande-play/releases/download/screenshot-3642/01-list.png)
+![列表](issues/issue-3642/screenshots/01-list.png)
 
 ### 新增 Modal
-![新增表单](.../02-modal-open.png)
+![新增表单](issues/issue-3642/screenshots/02-modal.png)
 
 ### 前后对比（若修 bug）
 **修复前：**
-![before](.../before-list.png)
+![before](issues/issue-3642/screenshots/before.png)
 **修复后：**
-![after](.../after-list.png)
-```
-
-追加到 PR body：
-
-```bash
-gh pr view ${PR} --repo WnadeyaowuOraganization/wande-play --json body -q .body > /tmp/pr-body.md
-cat >> /tmp/pr-body.md <<'EOF'
-
-## 截图证据
-![列表](https://github.com/WnadeyaowuOraganization/wande-play/releases/download/screenshot-3642/01-list.png)
-![新增](https://github.com/WnadeyaowuOraganization/wande-play/releases/download/screenshot-3642/02-modal-open.png)
-EOF
-gh pr edit ${PR} --repo WnadeyaowuOraganization/wande-play --body-file /tmp/pr-body.md
+![after](issues/issue-3642/screenshots/after.png)
 ```
 
 ## 强制要求
 
-改动涉及 `frontend/apps/web-antd/src/views/**` → PR body 必须至少 1 张 `![alt](https://....png)` 格式图片。否则 quality-gate 门 3 block。
+改动涉及 `frontend/apps/web-antd/src/views/**` → PR body 必须至少 1 张 `![alt](....png)` 格式图片（相对路径或URL均可）。否则 quality-gate 门 3 block。
 
 **禁止假勾选**：勾了 "截图 / 视觉 / screenshot" 类文字，body 必须有对应 `![](.*\.png)`。勾没图 = 门 3 拦截。
 
@@ -176,8 +156,8 @@ Fixes #<Issue号>
 - [x] E2E：`<module>-regression.spec.ts` 绿灯
 
 ## 截图证据
-![列表](https://github.com/.../screenshot-${PR}/01-list.png)
-![Modal](https://github.com/.../screenshot-${PR}/02-modal.png)
+![列表](issues/issue-${ISSUE}/screenshots/01-list.png)
+![Modal](issues/issue-${ISSUE}/screenshots/02-modal.png)
 
 ## 验收对账（原型 §X.X）
 - [x] 表格列 13 项与 01-all.html 一致

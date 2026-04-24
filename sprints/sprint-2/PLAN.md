@@ -455,3 +455,27 @@ kimi1空闲，立即派序号1。
 - 预期工作周期：2-3小时
 
 | 04-24 | kimi1 | #2358 | finance | medium | In Progress | 商机详情页获客成本Tab（备选队列#1指派）|
+
+## 派遣进度（2026-04-24 13:10）— 全部完成，新一轮巡检
+
+### 前轮派遣状态（04-24 07:08）
+| kimi | Issue | 模块 | 状态 |
+|------|-------|------|------|
+| kimi1 | ~~#1468~~ | backend | ~~Done~~ — PR #4166 merged |
+| kimi2 | ~~#1469~~ | backend | ~~Done~~ — PR merged |
+| kimi3 | ~~#1470~~ | backend | ~~Done~~ — PR merged |
+| kimi5 | ~~#1845~~ | design-ai | ~~Done~~ — PR #4178 merged |
+| kimi6 | ~~#1714~~ | biz-enablement | ~~Done~~ — PR #4167 merged |
+
+**状态**：全部5个CC已完成，15/15槽位可用。
+
+### 当前运行（04-24 13:12）
+| kimi | Issue | 模块 | 优先级 | 内容 |
+|------|-------|------|--------|------|
+| kimi1 | #1594 | budget | P1 | 借款逾期提醒+工资扣除预警 |
+| kimi2 | #1599 | budget | P1 | 采购比价强制校验 |
+| kimi3 | #1613 | wechat | P1 | 数据安全分级与访问控制 |
+| kimi4 | #1614 | wechat | P1 | PII自动脱敏服务 |
+| kimi5 | #1873 | bidding | P1 | 分级超时升级机制 |
+
+**5/5 并发已满，10/15 槽位可用。**

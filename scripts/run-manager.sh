@@ -114,6 +114,15 @@ start_manager() {
     done
   fi
 
+  # 加载经理专属 skill（agents/manager/*/SKILL.md）
+  MANAGER_SKILLS="${GITHUB_DIR}/agents/manager"
+  if [ -d "$MANAGER_SKILLS" ]; then
+    for skill_dir in "$MANAGER_SKILLS"/*/; do
+      [ -f "${skill_dir}SKILL.md" ] || continue
+      ln -sfn "${skill_dir%/}" "$GITHUB_DIR/.claude/skills/$(basename "$skill_dir")"
+    done
+  fi
+
   tmux new-session -d -s "$SESSION" -c "$GITHUB_DIR" \
     "export GH_TOKEN=${GH_TOKEN}; \
      export HOME=${HOME_DIR}; \
@@ -139,6 +148,6 @@ start_manager() {
 }
 
 # 排程经理：结构化清单驱动 → Haiku 4.5（速度快、token 省）
-start_manager "排程经理" "\\loop 10m 你是排程经理，按 agents/manager/scheduler-guide.md 执行本轮巡检" "claude-haiku-4-5-20251001"
+start_manager "排程经理" "\\loop 10m 你是排程经理，按 scheduler-workflow skill 执行本轮巡检（skill已自动加载）" "claude-haiku-4-5-20251001"
 # 研发经理：W1+W2+W3 改造后任务二瘦身为 attention-only，Done Guard 硬隔离 → Haiku 4.5
-start_manager "研发经理" "\\loop 10m 你是研发经理，按 agents/manager/assign-guide.md 执行本轮任务" "claude-haiku-4-5-20251001"
+start_manager "研发经理" "\\loop 10m 你是研发经理，按 assign-workflow skill 执行本轮任务（skill已自动加载）" "claude-haiku-4-5-20251001"

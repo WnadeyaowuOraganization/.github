@@ -1,0 +1,604 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>色卡材料标准化 - 样品管理中心</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .sub-tab-active { color: #1f2937; border-bottom-color: #3b82f6; }
+    .sub-tab-inactive { color: #6b7280; border-bottom-color: transparent; }
+    .view { display: none; }
+    .view.active { display: block; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">色卡材料标准化</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">统一管理标准色卡+材料库，强制设计阶段使用标准项；非标使用走主管审批，避免随意采购</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（选用）, 设计主管（审批）, 采购</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">色卡库 / 材料库 / 非标使用审批流程</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新增标准项 / 启停 / 提交非标申请 / 主管审批通过-拒绝</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">非标项必须审批后才可使用 / 审批操作可追溯 / 标准项使用频次正确统计</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">样品管理中心-详细设计.md §2.2</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- ========== [区域1] 内部子Tab栏 ========== -->
+  <div class="bg-white border border-gray-200 rounded-md mb-4">
+    <div class="flex items-center border-b border-gray-200 px-4">
+      <button onclick="switchView('colors')" id="tab-colors" class="sub-tab-active py-3 px-4 text-sm font-medium border-b-2 transition-colors">
+        色卡库
+      </button>
+      <button onclick="switchView('materials')" id="tab-materials" class="sub-tab-inactive py-3 px-4 text-sm font-medium border-b-2 transition-colors hover:text-gray-800">
+        材料库
+      </button>
+      <button onclick="switchView('approvals')" id="tab-approvals" class="sub-tab-inactive py-3 px-4 text-sm font-medium border-b-2 transition-colors hover:text-gray-800 flex items-center gap-2">
+        待审批申请
+        <span class="inline-flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-red-500 text-white text-[11px] font-semibold">8</span>
+      </button>
+    </div>
+  </div>
+  <!-- ========== [/区域1] ========== -->
+
+  <!-- ========== [区域2] 色卡库视图 ========== -->
+  <div id="view-colors" class="view active">
+    <!-- 筛选条 -->
+    <div class="bg-white border border-gray-200 rounded-md p-4 mb-4">
+      <div class="flex flex-wrap items-center gap-3">
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-gray-500">标准类型</label>
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:border-gray-400">
+            <option>全部</option>
+            <option>RAL</option>
+            <option>Pantone</option>
+            <option>万德标准</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-gray-500">颜色系</label>
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:border-gray-400">
+            <option>全部</option>
+            <option>红色系</option>
+            <option>黄色系</option>
+            <option>蓝色系</option>
+            <option>绿色系</option>
+            <option>中性色</option>
+          </select>
+        </div>
+        <div class="flex items-center gap-2">
+          <label class="text-xs text-gray-500">状态</label>
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700 focus:outline-none focus:border-gray-400">
+            <option>全部</option>
+            <option>启用</option>
+            <option>停用</option>
+          </select>
+        </div>
+        <div class="flex-1"></div>
+        <input type="text" placeholder="搜索编码 / 中文名" class="text-sm border border-gray-300 rounded px-3 py-1.5 w-56 focus:outline-none focus:border-gray-400" />
+        <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded flex items-center gap-1">
+          <span class="text-base leading-none">+</span> 新增色卡
+        </button>
+      </div>
+    </div>
+
+    <!-- 色卡网格 -->
+    <div class="grid grid-cols-6 gap-3">
+      <!-- 12 张色卡 -->
+      <!-- 1 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#F5F5F0;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 9010</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">信号白</div>
+          <div class="text-[11px] text-gray-400">使用 128 次</div>
+        </div>
+      </div>
+      <!-- 2 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#1E1E1E;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 9005</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">乌黑色</div>
+          <div class="text-[11px] text-gray-400">使用 96 次</div>
+        </div>
+      </div>
+      <!-- 3 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#A52019;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 3003</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">宝石红</div>
+          <div class="text-[11px] text-gray-400">使用 54 次</div>
+        </div>
+      </div>
+      <!-- 4 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#F8B500;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 1023</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">交通黄</div>
+          <div class="text-[11px] text-gray-400">使用 72 次</div>
+        </div>
+      </div>
+      <!-- 5 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#1F3A93;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 5002</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">群青蓝</div>
+          <div class="text-[11px] text-gray-400">使用 88 次</div>
+        </div>
+      </div>
+      <!-- 6 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#2E7D32;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 6018</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">黄绿色</div>
+          <div class="text-[11px] text-gray-400">使用 41 次</div>
+        </div>
+      </div>
+      <!-- 7 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#C0C0C0;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 9006</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">白铝灰</div>
+          <div class="text-[11px] text-gray-400">使用 112 次</div>
+        </div>
+      </div>
+      <!-- 8 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#D4A574;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">Pantone 7503C</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">米驼色</div>
+          <div class="text-[11px] text-gray-400">使用 37 次</div>
+        </div>
+      </div>
+      <!-- 9 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#8B4513;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">Pantone 4695C</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">胡桃木棕</div>
+          <div class="text-[11px] text-gray-400">使用 63 次</div>
+        </div>
+      </div>
+      <!-- 10 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#E8DCC4;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">WD-C-001</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">万德标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">万德米白</div>
+          <div class="text-[11px] text-gray-400">使用 204 次</div>
+        </div>
+      </div>
+      <!-- 11 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden hover:shadow-md transition-shadow cursor-pointer">
+        <div class="h-24" style="background:#3C3C3C;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">WD-C-002</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">万德标准</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">万德石墨灰</div>
+          <div class="text-[11px] text-gray-400">使用 156 次</div>
+        </div>
+      </div>
+      <!-- 12 -->
+      <div class="bg-white border border-gray-200 rounded-md overflow-hidden opacity-60 cursor-pointer">
+        <div class="h-24" style="background:#7A9EC4;border-bottom:1px solid #eee;"></div>
+        <div class="p-2.5">
+          <div class="flex items-center justify-between mb-1">
+            <span class="text-xs font-mono text-gray-800">RAL 5024</span>
+            <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-200 text-gray-500">已停用</span>
+          </div>
+          <div class="text-xs text-gray-700 mb-1">淡蓝色</div>
+          <div class="text-[11px] text-gray-400">使用 18 次</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/区域2] ========== -->
+
+  <!-- ========== [区域3] 材料库视图 ========== -->
+  <div id="view-materials" class="view">
+    <div class="bg-white border border-gray-200 rounded-md">
+      <!-- 工具栏 -->
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700">
+            <option>全部类别</option>
+            <option>金属</option>
+            <option>塑料</option>
+            <option>木材</option>
+            <option>橡胶</option>
+            <option>复合</option>
+          </select>
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700">
+            <option>全部状态</option>
+            <option>标准</option>
+            <option>非标</option>
+          </select>
+          <input type="text" placeholder="搜索物料编码 / 材料名" class="text-sm border border-gray-300 rounded px-3 py-1.5 w-64" />
+        </div>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded flex items-center gap-1">
+          <span class="text-base leading-none">+</span> 新增材料
+        </button>
+      </div>
+
+      <!-- 表格 -->
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-gray-600 text-xs">
+            <th class="text-left px-4 py-2.5 font-medium">物料编码</th>
+            <th class="text-left px-4 py-2.5 font-medium">材料名</th>
+            <th class="text-left px-4 py-2.5 font-medium">类别</th>
+            <th class="text-left px-4 py-2.5 font-medium">规格</th>
+            <th class="text-left px-4 py-2.5 font-medium">厚度</th>
+            <th class="text-left px-4 py-2.5 font-medium">单位</th>
+            <th class="text-left px-4 py-2.5 font-medium">是否标准</th>
+            <th class="text-right px-4 py-2.5 font-medium">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-700">
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-STL-001</td>
+            <td class="px-4 py-3">304不锈钢板</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">金属</span></td>
+            <td class="px-4 py-3 text-gray-600">1500×3000mm</td>
+            <td class="px-4 py-3 text-gray-600">2mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-STL-002</td>
+            <td class="px-4 py-3">冷轧钢板 Q235</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">金属</span></td>
+            <td class="px-4 py-3 text-gray-600">1250×2500mm</td>
+            <td class="px-4 py-3 text-gray-600">1.5mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-ALU-003</td>
+            <td class="px-4 py-3">6063-T5 铝型材</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">金属</span></td>
+            <td class="px-4 py-3 text-gray-600">40×40×6000mm</td>
+            <td class="px-4 py-3 text-gray-600">2mm</td>
+            <td class="px-4 py-3 text-gray-600">根</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-PLA-004</td>
+            <td class="px-4 py-3">ABS塑料板</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">塑料</span></td>
+            <td class="px-4 py-3 text-gray-600">1000×2000mm</td>
+            <td class="px-4 py-3 text-gray-600">3mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-PLA-005</td>
+            <td class="px-4 py-3">亚克力透明板</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">塑料</span></td>
+            <td class="px-4 py-3 text-gray-600">1220×2440mm</td>
+            <td class="px-4 py-3 text-gray-600">5mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-WOD-006</td>
+            <td class="px-4 py-3">E1级多层板</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">木材</span></td>
+            <td class="px-4 py-3 text-gray-600">1220×2440mm</td>
+            <td class="px-4 py-3 text-gray-600">18mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-WOD-007</td>
+            <td class="px-4 py-3">橡木实木板</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">木材</span></td>
+            <td class="px-4 py-3 text-gray-600">600×2000mm</td>
+            <td class="px-4 py-3 text-gray-600">25mm</td>
+            <td class="px-4 py-3 text-gray-600">块</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-RUB-008</td>
+            <td class="px-4 py-3">丁腈橡胶条</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">橡胶</span></td>
+            <td class="px-4 py-3 text-gray-600">20×10×10000mm</td>
+            <td class="px-4 py-3 text-gray-600">10mm</td>
+            <td class="px-4 py-3 text-gray-600">卷</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-CMP-009</td>
+            <td class="px-4 py-3">蜂窝铝复合板</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">复合</span></td>
+            <td class="px-4 py-3 text-gray-600">1500×3000mm</td>
+            <td class="px-4 py-3 text-gray-600">15mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">标准</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">M-CMP-010</td>
+            <td class="px-4 py-3">碳纤维板材</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-600">复合</span></td>
+            <td class="px-4 py-3 text-gray-600">500×500mm</td>
+            <td class="px-4 py-3 text-gray-600">3mm</td>
+            <td class="px-4 py-3 text-gray-600">张</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-200 text-gray-600">非标</span></td>
+            <td class="px-4 py-3 text-right text-xs"><a class="text-gray-600 hover:text-gray-900 mr-3">编辑</a><a class="text-gray-400 hover:text-gray-700">停用</a></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <!-- 分页 -->
+      <div class="flex items-center justify-between px-4 py-3 border-t border-gray-100 text-xs text-gray-500">
+        <span>共 10 条</span>
+        <div class="flex items-center gap-1">
+          <button class="px-2 py-1 border border-gray-200 rounded hover:bg-gray-50">上一页</button>
+          <button class="px-2.5 py-1 border border-gray-300 rounded bg-gray-100">1</button>
+          <button class="px-2 py-1 border border-gray-200 rounded hover:bg-gray-50">下一页</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/区域3] ========== -->
+
+  <!-- ========== [区域4] 非标审批流程视图 ========== -->
+  <div id="view-approvals" class="view">
+    <!-- 4 个状态卡 -->
+    <div class="grid grid-cols-4 gap-3 mb-4">
+      <div class="bg-white border border-gray-200 rounded-md p-4">
+        <div class="text-xs text-gray-500 mb-1">待审批</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-2xl font-semibold text-gray-800">8</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">待处理</span>
+        </div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-md p-4">
+        <div class="text-xs text-gray-500 mb-1">审批中</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-2xl font-semibold text-gray-800">3</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">进行中</span>
+        </div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-md p-4">
+        <div class="text-xs text-gray-500 mb-1">通过</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-2xl font-semibold text-gray-800">142</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">累计</span>
+        </div>
+      </div>
+      <div class="bg-white border border-gray-200 rounded-md p-4">
+        <div class="text-xs text-gray-500 mb-1">拒绝</div>
+        <div class="flex items-baseline gap-2">
+          <span class="text-2xl font-semibold text-gray-800">12</span>
+          <span class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 text-gray-600">累计</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- 审批表格 -->
+    <div class="bg-white border border-gray-200 rounded-md">
+      <div class="flex items-center justify-between px-4 py-3 border-b border-gray-200">
+        <div class="flex items-center gap-3">
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700">
+            <option>全部状态</option>
+            <option>待审批</option>
+            <option>审批中</option>
+            <option>通过</option>
+            <option>拒绝</option>
+          </select>
+          <select class="text-sm border border-gray-300 rounded px-3 py-1.5 bg-white text-gray-700">
+            <option>全部类型</option>
+            <option>非标色卡</option>
+            <option>非标材料</option>
+          </select>
+          <input type="text" placeholder="搜索申请单号 / 项目 / 设计师" class="text-sm border border-gray-300 rounded px-3 py-1.5 w-64" />
+        </div>
+        <span class="text-xs text-gray-500">共 165 条申请</span>
+      </div>
+
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="bg-gray-50 text-gray-600 text-xs">
+            <th class="text-left px-4 py-2.5 font-medium">申请单号</th>
+            <th class="text-left px-4 py-2.5 font-medium">项目</th>
+            <th class="text-left px-4 py-2.5 font-medium">设计师</th>
+            <th class="text-left px-4 py-2.5 font-medium">申请类型</th>
+            <th class="text-left px-4 py-2.5 font-medium">非标项详情</th>
+            <th class="text-left px-4 py-2.5 font-medium">申请理由</th>
+            <th class="text-left px-4 py-2.5 font-medium">审批人</th>
+            <th class="text-left px-4 py-2.5 font-medium">状态</th>
+            <th class="text-right px-4 py-2.5 font-medium">操作</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-100 text-gray-700">
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">APR-2025-0142</td>
+            <td class="px-4 py-3">华东展厅A区</td>
+            <td class="px-4 py-3">陈晓</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">非标色卡</span></td>
+            <td class="px-4 py-3 text-gray-600 text-xs">定制莫兰迪灰 #A8A39D</td>
+            <td class="px-4 py-3 text-gray-600 text-xs max-w-[180px] truncate">客户要求与品牌色保持一致</td>
+            <td class="px-4 py-3 text-gray-600">李主管</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">● 待审批</span></td>
+            <td class="px-4 py-3 text-right text-xs whitespace-nowrap">
+              <button onclick="openApproval('APR-2025-0142','pass')" class="text-gray-700 hover:text-gray-900 mr-3">通过</button>
+              <button onclick="openApproval('APR-2025-0142','reject')" class="text-gray-500 hover:text-gray-800">拒绝</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">APR-2025-0141</td>
+            <td class="px-4 py-3">苏州品牌店</td>
+            <td class="px-4 py-3">王楠</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">非标材料</span></td>
+            <td class="px-4 py-3 text-gray-600 text-xs">进口黑胡桃实木 35mm</td>
+            <td class="px-4 py-3 text-gray-600 text-xs max-w-[180px] truncate">VIP区需要天然木纹质感</td>
+            <td class="px-4 py-3 text-gray-600">李主管</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">● 待审批</span></td>
+            <td class="px-4 py-3 text-right text-xs whitespace-nowrap">
+              <button onclick="openApproval('APR-2025-0141','pass')" class="text-gray-700 hover:text-gray-900 mr-3">通过</button>
+              <button onclick="openApproval('APR-2025-0141','reject')" class="text-gray-500 hover:text-gray-800">拒绝</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">APR-2025-0140</td>
+            <td class="px-4 py-3">深圳旗舰店</td>
+            <td class="px-4 py-3">刘昊</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">非标色卡</span></td>
+            <td class="px-4 py-3 text-gray-600 text-xs">Pantone 871C 金色</td>
+            <td class="px-4 py-3 text-gray-600 text-xs max-w-[180px] truncate">Logo立体字需要金属金效果</td>
+            <td class="px-4 py-3 text-gray-600">李主管</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-200 text-gray-700">● 审批中</span></td>
+            <td class="px-4 py-3 text-right text-xs whitespace-nowrap">
+              <button class="text-gray-400 cursor-not-allowed mr-3">通过</button>
+              <button class="text-gray-400 cursor-not-allowed">拒绝</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">APR-2025-0139</td>
+            <td class="px-4 py-3">北京办公展示</td>
+            <td class="px-4 py-3">张敏</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">非标材料</span></td>
+            <td class="px-4 py-3 text-gray-600 text-xs">磨砂玻璃 8mm</td>
+            <td class="px-4 py-3 text-gray-600 text-xs max-w-[180px] truncate">隔断需要半透明效果</td>
+            <td class="px-4 py-3 text-gray-600">李主管</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-800 font-medium">● 通过</span></td>
+            <td class="px-4 py-3 text-right text-xs whitespace-nowrap">
+              <button class="text-gray-500 hover:text-gray-800">查看详情</button>
+            </td>
+          </tr>
+          <tr class="hover:bg-gray-50">
+            <td class="px-4 py-3 font-mono text-xs text-gray-800">APR-2025-0138</td>
+            <td class="px-4 py-3">杭州新店</td>
+            <td class="px-4 py-3">周杰</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-100 text-gray-700">非标色卡</span></td>
+            <td class="px-4 py-3 text-gray-600 text-xs">自定义珊瑚粉 #FF8A7A</td>
+            <td class="px-4 py-3 text-gray-600 text-xs max-w-[180px] truncate">客户坚持使用非标色</td>
+            <td class="px-4 py-3 text-gray-600">李主管</td>
+            <td class="px-4 py-3"><span class="text-xs px-2 py-0.5 rounded bg-gray-200 text-gray-500">● 拒绝</span></td>
+            <td class="px-4 py-3 text-right text-xs whitespace-nowrap">
+              <button class="text-gray-500 hover:text-gray-800">查看意见</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+  <!-- ========== [/区域4] ========== -->
+
+  <!-- 审批弹窗 -->
+  <div id="approval-modal" class="fixed inset-0 bg-black bg-opacity-40 hidden items-center justify-center z-50">
+    <div class="bg-white rounded-md shadow-xl w-[480px] overflow-hidden">
+      <div class="flex items-center justify-between px-5 py-3 border-b border-gray-200">
+        <h3 class="text-sm font-semibold text-gray-800" id="modal-title">审批意见</h3>
+        <button onclick="closeApproval()" class="text-gray-400 hover:text-gray-600 text-lg leading-none">×</button>
+      </div>
+      <div class="px-5 py-4">
+        <div class="text-xs text-gray-500 mb-3">
+          申请单号：<span id="modal-apr-no" class="font-mono text-gray-700">-</span>
+        </div>
+        <label class="text-xs text-gray-600 mb-1 block">审批意见 <span class="text-gray-400">（必填）</span></label>
+        <textarea rows="4" placeholder="请输入审批意见..." class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none focus:border-gray-400"></textarea>
+      </div>
+      <div class="flex items-center justify-end gap-2 px-5 py-3 bg-gray-50 border-t border-gray-200">
+        <button onclick="closeApproval()" class="text-sm px-4 py-1.5 border border-gray-300 rounded bg-white hover:bg-gray-50 text-gray-700">取消</button>
+        <button onclick="closeApproval()" class="text-sm px-4 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded">提交</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function switchView(name) {
+      const views = ['colors', 'materials', 'approvals'];
+      views.forEach(v => {
+        document.getElementById('view-' + v).classList.toggle('active', v === name);
+        const tab = document.getElementById('tab-' + v);
+        if (v === name) {
+          tab.classList.remove('sub-tab-inactive');
+          tab.classList.add('sub-tab-active');
+        } else {
+          tab.classList.remove('sub-tab-active');
+          tab.classList.add('sub-tab-inactive');
+        }
+      });
+    }
+
+    function openApproval(no, type) {
+      document.getElementById('modal-apr-no').textContent = no;
+      document.getElementById('modal-title').textContent = type === 'pass' ? '审批通过 - 意见' : '审批拒绝 - 意见';
+      const modal = document.getElementById('approval-modal');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+    function closeApproval() {
+      const modal = document.getElementById('approval-modal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+  </script>
+
+</body>
+</html>

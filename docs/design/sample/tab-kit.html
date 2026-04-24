@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>样品箱制度 - 万德AI平台</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+  .cell-ok { background: #f0fdf4; border-color: #bbf7d0; }
+  .cell-warn { background: #fefce8; border-color: #fef08a; }
+  .cell-miss { background: #fef2f2; border-color: #fecaca; }
+</style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">样品箱制度</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">建立标准样品箱体系，业务员现场携带让客户确认色卡，替代邮寄+多次往返沟通</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">业务员（外出携箱）, 仓管（领用归还）, 商务（项目箱配置）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">标准模板CRUD / 项目箱一键生成+BOM工单 / 全程追踪 / 领用归还登记</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">新增标准模板 / 一键生成项目箱 / 业务员领用 / 归还实物清点</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">项目箱生成自动出BOM工单 / 追踪记录可追溯 / 超期预警企微推送</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">样品管理中心-详细设计.md §2.5</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- ========== [区域1: KPI 顶部条] ========== -->
+<div class="grid grid-cols-4 gap-4 mb-6">
+  <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-1">标准模板</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-gray-800">6</span>
+      <span class="text-sm text-gray-500">套</span>
+    </div>
+    <div class="text-xs text-gray-400 mt-1">当前版本 v2026.1</div>
+  </div>
+  <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-1">在用项目箱</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-gray-800">18</span>
+      <span class="text-sm text-gray-500">个</span>
+    </div>
+    <div class="text-xs text-gray-400 mt-1">覆盖 15 个在谈项目</div>
+  </div>
+  <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-1">业务员持箱</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-gray-800">12</span>
+      <span class="text-sm text-gray-500">件</span>
+    </div>
+    <div class="text-xs text-gray-400 mt-1">外出携带中</div>
+  </div>
+  <div class="bg-white rounded-lg border border-gray-200 p-4">
+    <div class="text-xs text-gray-500 mb-1">待归还预警</div>
+    <div class="flex items-baseline gap-2">
+      <span class="text-2xl font-semibold text-red-600">3</span>
+      <span class="text-sm text-gray-500">件</span>
+    </div>
+    <div class="text-xs text-red-500 mt-1">超过计划归还日</div>
+  </div>
+</div>
+<!-- ========== [/区域1] ========== -->
+
+<!-- ========== [区域2: 标准箱模板管理] ========== -->
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-base font-semibold text-gray-800">标准箱模板</h2>
+      <div class="text-xs text-gray-500 mt-0.5">最新版本 v2026.1 · 每季度升级一次</div>
+    </div>
+    <div class="flex gap-2">
+      <button class="px-3 py-1.5 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">+ 新增标准模板</button>
+      <button class="px-3 py-1.5 text-sm bg-gray-100 text-gray-700 rounded hover:bg-gray-200 border border-gray-200">升级版本</button>
+    </div>
+  </div>
+
+  <div class="grid grid-cols-3 gap-4">
+    <!-- 模板1 -->
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <div class="flex items-center gap-2">
+            <h3 class="font-medium text-gray-800">标准展示箱</h3>
+            <span class="text-xs px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded">★ 最常用</span>
+          </div>
+          <div class="text-xs text-gray-500 mt-0.5">全色卡集</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-xs text-gray-600 mb-3">
+        <div><div class="text-gray-400">卡位数</div><div class="font-medium text-gray-800">22 位</div></div>
+        <div><div class="text-gray-400">BOM物料</div><div class="font-medium text-gray-800">22 项</div></div>
+        <div><div class="text-gray-400">版本</div><div class="font-medium text-gray-800">v2026.1</div></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 text-xs py-1.5 bg-gray-50 text-gray-700 rounded border border-gray-200 hover:bg-gray-100">管理 BOM</button>
+        <button class="flex-1 text-xs py-1.5 bg-blue-50 text-blue-600 rounded border border-blue-100 hover:bg-blue-100">克隆为项目箱</button>
+      </div>
+    </div>
+
+    <!-- 模板2 -->
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <h3 class="font-medium text-gray-800">木纹材质箱</h3>
+          <div class="text-xs text-gray-500 mt-0.5">木纹色卡专项</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-xs text-gray-600 mb-3">
+        <div><div class="text-gray-400">卡位数</div><div class="font-medium text-gray-800">12 位</div></div>
+        <div><div class="text-gray-400">BOM物料</div><div class="font-medium text-gray-800">12 项</div></div>
+        <div><div class="text-gray-400">版本</div><div class="font-medium text-gray-800">v2026.1</div></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 text-xs py-1.5 bg-gray-50 text-gray-700 rounded border border-gray-200 hover:bg-gray-100">管理 BOM</button>
+        <button class="flex-1 text-xs py-1.5 bg-blue-50 text-blue-600 rounded border border-blue-100 hover:bg-blue-100">克隆为项目箱</button>
+      </div>
+    </div>
+
+    <!-- 模板3 -->
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <h3 class="font-medium text-gray-800">海绵泡棉箱</h3>
+          <div class="text-xs text-gray-500 mt-0.5">软包样品</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-xs text-gray-600 mb-3">
+        <div><div class="text-gray-400">卡位数</div><div class="font-medium text-gray-800">8 位</div></div>
+        <div><div class="text-gray-400">BOM物料</div><div class="font-medium text-gray-800">8 项</div></div>
+        <div><div class="text-gray-400">版本</div><div class="font-medium text-gray-800">v2026.1</div></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 text-xs py-1.5 bg-gray-50 text-gray-700 rounded border border-gray-200 hover:bg-gray-100">管理 BOM</button>
+        <button class="flex-1 text-xs py-1.5 bg-blue-50 text-blue-600 rounded border border-blue-100 hover:bg-blue-100">克隆为项目箱</button>
+      </div>
+    </div>
+
+    <!-- 模板4 -->
+    <div class="border border-gray-200 rounded-lg p-4 hover:border-gray-300">
+      <div class="flex items-start justify-between mb-3">
+        <div>
+          <h3 class="font-medium text-gray-800">金属材质箱</h3>
+          <div class="text-xs text-gray-500 mt-0.5">金属饰面样品</div>
+        </div>
+      </div>
+      <div class="grid grid-cols-3 gap-2 text-xs text-gray-600 mb-3">
+        <div><div class="text-gray-400">卡位数</div><div class="font-medium text-gray-800">10 位</div></div>
+        <div><div class="text-gray-400">BOM物料</div><div class="font-medium text-gray-800">10 项</div></div>
+        <div><div class="text-gray-400">版本</div><div class="font-medium text-gray-800">v2026.1</div></div>
+      </div>
+      <div class="flex gap-2">
+        <button class="flex-1 text-xs py-1.5 bg-gray-50 text-gray-700 rounded border border-gray-200 hover:bg-gray-100">管理 BOM</button>
+        <button class="flex-1 text-xs py-1.5 bg-blue-50 text-blue-600 rounded border border-blue-100 hover:bg-blue-100">克隆为项目箱</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- ========== [/区域2] ========== -->
+
+<!-- ========== [区域3: 项目箱一键生成] ========== -->
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+  <div class="mb-4">
+    <h2 class="text-base font-semibold text-gray-800">项目箱一键生成</h2>
+    <div class="text-xs text-gray-500 mt-0.5">选择标准模板克隆为项目专用箱，库存不足自动生成工厂制作工单</div>
+  </div>
+
+  <div class="grid grid-cols-12 gap-3 mb-4">
+    <div class="col-span-4">
+      <label class="block text-xs text-gray-500 mb-1">关联项目</label>
+      <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+        <option>OPP-892 · 深圳科技园软装项目</option>
+        <option>OPP-901 · 上海静安办公楼</option>
+        <option>OPP-910 · 杭州酒店集团</option>
+      </select>
+    </div>
+    <div class="col-span-4">
+      <label class="block text-xs text-gray-500 mb-1">选择标准模板</label>
+      <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+        <option>标准展示箱（22位）</option>
+        <option>木纹材质箱（12位）</option>
+        <option>海绵泡棉箱（8位）</option>
+        <option>金属材质箱（10位）</option>
+      </select>
+    </div>
+    <div class="col-span-4 flex items-end">
+      <button class="w-full px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">一键生成项目箱</button>
+    </div>
+  </div>
+
+  <!-- 卡位预览 -->
+  <div class="bg-gray-50 border border-gray-200 rounded-lg p-4">
+    <div class="flex items-center justify-between mb-3">
+      <div class="text-sm font-medium text-gray-700">卡位预览（4 × 6 = 24 位）</div>
+      <div class="flex items-center gap-3 text-xs text-gray-500">
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-green-100 border border-green-200 inline-block"></span>库存满足</span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-yellow-100 border border-yellow-200 inline-block"></span>部分缺</span>
+        <span class="flex items-center gap-1"><span class="w-3 h-3 rounded bg-red-100 border border-red-200 inline-block"></span>完全缺 · 需制作工单</span>
+      </div>
+    </div>
+
+    <div class="grid grid-cols-6 gap-2">
+      <!-- 24 cells -->
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-gray-300 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-001</div>
+        <div class="text-[10px] text-green-700">库存 24</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-amber-700 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-002</div>
+        <div class="text-[10px] text-green-700">库存 18</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-stone-400 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-003</div>
+        <div class="text-[10px] text-green-700">库存 32</div>
+      </div>
+      <div class="cell-warn border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-zinc-600 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-004</div>
+        <div class="text-[10px] text-yellow-700">库存 3 / 需 5</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-neutral-200 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-005</div>
+        <div class="text-[10px] text-green-700">库存 40</div>
+      </div>
+      <div class="cell-miss border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-red-200 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-006</div>
+        <div class="text-[10px] text-red-700">缺货 · 制作</div>
+      </div>
+
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-amber-200 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-007</div>
+        <div class="text-[10px] text-green-700">库存 15</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-amber-400 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-008</div>
+        <div class="text-[10px] text-green-700">库存 22</div>
+      </div>
+      <div class="cell-warn border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-orange-300 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-009</div>
+        <div class="text-[10px] text-yellow-700">库存 2 / 需 5</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-yellow-700 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-010</div>
+        <div class="text-[10px] text-green-700">库存 10</div>
+      </div>
+      <div class="cell-miss border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-red-300 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-011</div>
+        <div class="text-[10px] text-red-700">缺货 · 制作</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-amber-900 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-012</div>
+        <div class="text-[10px] text-green-700">库存 8</div>
+      </div>
+
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-green-700 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-013</div>
+        <div class="text-[10px] text-green-700">库存 16</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-emerald-600 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-014</div>
+        <div class="text-[10px] text-green-700">库存 21</div>
+      </div>
+      <div class="cell-warn border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-teal-600 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-015</div>
+        <div class="text-[10px] text-yellow-700">库存 1 / 需 5</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-sky-500 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-016</div>
+        <div class="text-[10px] text-green-700">库存 14</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-indigo-700 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-017</div>
+        <div class="text-[10px] text-green-700">库存 19</div>
+      </div>
+      <div class="cell-miss border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-red-400 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-018</div>
+        <div class="text-[10px] text-red-700">缺货 · 制作</div>
+      </div>
+
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-rose-300 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-019</div>
+        <div class="text-[10px] text-green-700">库存 11</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-rose-500 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-020</div>
+        <div class="text-[10px] text-green-700">库存 13</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-pink-400 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-021</div>
+        <div class="text-[10px] text-green-700">库存 9</div>
+      </div>
+      <div class="cell-ok border rounded p-2 text-xs">
+        <div class="w-full h-6 bg-purple-500 rounded mb-1"></div>
+        <div class="text-gray-700 truncate">WD-022</div>
+        <div class="text-[10px] text-green-700">库存 17</div>
+      </div>
+      <div class="border border-dashed border-gray-300 rounded p-2 text-xs bg-white text-gray-400 flex items-center justify-center">
+        空位
+      </div>
+      <div class="border border-dashed border-gray-300 rounded p-2 text-xs bg-white text-gray-400 flex items-center justify-center">
+        空位
+      </div>
+    </div>
+
+    <div class="flex items-center justify-between mt-4 pt-3 border-t border-gray-200">
+      <div class="text-xs text-gray-500">
+        <span class="text-green-700">满足 18 位</span> · 
+        <span class="text-yellow-700">部分缺 3 位</span> · 
+        <span class="text-red-700">需制作 3 位</span>
+      </div>
+      <button class="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600">确认生成 + 工厂工单</button>
+    </div>
+  </div>
+</div>
+<!-- ========== [/区域3] ========== -->
+
+<!-- ========== [区域4: 样品箱追踪] ========== -->
+<div class="bg-white rounded-lg border border-gray-200 p-5 mb-6">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-base font-semibold text-gray-800">样品箱追踪</h2>
+      <div class="text-xs text-gray-500 mt-0.5">全箱全生命周期追溯 · 超期自动企微推送</div>
+    </div>
+    <div class="flex gap-2">
+      <select class="text-sm px-3 py-1.5 border border-gray-200 rounded bg-white">
+        <option>全部状态</option>
+        <option>在仓</option>
+        <option>在外</option>
+        <option>超期</option>
+        <option>归档</option>
+      </select>
+      <select class="text-sm px-3 py-1.5 border border-gray-200 rounded bg-white">
+        <option>全部类型</option>
+        <option>标准展示箱</option>
+        <option>木纹材质箱</option>
+        <option>项目定制箱</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-xs text-gray-500 bg-gray-50 border-y border-gray-200">
+          <th class="text-left font-medium px-3 py-2">箱号</th>
+          <th class="text-left font-medium px-3 py-2">类型</th>
+          <th class="text-left font-medium px-3 py-2">当前持有人</th>
+          <th class="text-left font-medium px-3 py-2">当前位置</th>
+          <th class="text-left font-medium px-3 py-2">出库时间</th>
+          <th class="text-left font-medium px-3 py-2">计划归还</th>
+          <th class="text-left font-medium px-3 py-2">状态</th>
+          <th class="text-left font-medium px-3 py-2">关联项目</th>
+          <th class="text-left font-medium px-3 py-2">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-mono text-xs">SK-2026-001</td>
+          <td class="px-3 py-2.5">标准展示箱</td>
+          <td class="px-3 py-2.5">张三</td>
+          <td class="px-3 py-2.5 text-gray-600">深圳XX项目现场</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-15</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-25</td>
+          <td class="px-3 py-2.5"><span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded">在外</span></td>
+          <td class="px-3 py-2.5 font-mono text-xs text-gray-600">OPP-892</td>
+          <td class="px-3 py-2.5 text-xs">
+            <button class="text-blue-500 hover:underline">详情</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-blue-500 hover:underline">归还登记</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-gray-500 hover:underline">转交</button>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-mono text-xs">SK-2026-002</td>
+          <td class="px-3 py-2.5">木纹材质箱</td>
+          <td class="px-3 py-2.5">李四</td>
+          <td class="px-3 py-2.5 text-gray-600">上海客户公司</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-10</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-18</td>
+          <td class="px-3 py-2.5"><span class="text-xs px-2 py-0.5 bg-red-50 text-red-600 rounded">超期</span></td>
+          <td class="px-3 py-2.5 font-mono text-xs text-gray-600">OPP-901</td>
+          <td class="px-3 py-2.5 text-xs">
+            <button class="text-blue-500 hover:underline">详情</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-blue-500 hover:underline">归还登记</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-gray-500 hover:underline">转交</button>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-mono text-xs">SK-2026-003</td>
+          <td class="px-3 py-2.5">标准展示箱</td>
+          <td class="px-3 py-2.5 text-gray-500">— 仓库 —</td>
+          <td class="px-3 py-2.5 text-gray-600">总部A区样品架</td>
+          <td class="px-3 py-2.5 text-gray-400">—</td>
+          <td class="px-3 py-2.5 text-gray-400">—</td>
+          <td class="px-3 py-2.5"><span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded">在仓</span></td>
+          <td class="px-3 py-2.5 text-gray-400">—</td>
+          <td class="px-3 py-2.5 text-xs">
+            <button class="text-blue-500 hover:underline">详情</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-gray-500 hover:underline">报损</button>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-mono text-xs">SK-2026-004</td>
+          <td class="px-3 py-2.5">项目定制箱</td>
+          <td class="px-3 py-2.5">王芳</td>
+          <td class="px-3 py-2.5 text-gray-600">杭州酒店集团总部</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-18</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-28</td>
+          <td class="px-3 py-2.5"><span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-700 rounded">在外</span></td>
+          <td class="px-3 py-2.5 font-mono text-xs text-gray-600">OPP-910</td>
+          <td class="px-3 py-2.5 text-xs">
+            <button class="text-blue-500 hover:underline">详情</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-blue-500 hover:underline">归还登记</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-gray-500 hover:underline">转交</button>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-mono text-xs">SK-2026-005</td>
+          <td class="px-3 py-2.5">金属材质箱</td>
+          <td class="px-3 py-2.5">陈伟</td>
+          <td class="px-3 py-2.5 text-gray-600">广州建材展会</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-05</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-04-15</td>
+          <td class="px-3 py-2.5"><span class="text-xs px-2 py-0.5 bg-red-50 text-red-600 rounded">超期</span></td>
+          <td class="px-3 py-2.5 font-mono text-xs text-gray-600">OPP-876</td>
+          <td class="px-3 py-2.5 text-xs">
+            <button class="text-blue-500 hover:underline">详情</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-blue-500 hover:underline">归还登记</button>
+            <span class="text-gray-300 mx-1">·</span>
+            <button class="text-gray-500 hover:underline">转交</button>
+          </td>
+        </tr>
+        <tr class="border-b border-gray-100 hover:bg-gray-50">
+          <td class="px-3 py-2.5 font-mono text-xs">SK-2025-128</td>
+          <td class="px-3 py-2.5">标准展示箱</td>
+          <td class="px-3 py-2.5 text-gray-500">— 已归档 —</td>
+          <td class="px-3 py-2.5 text-gray-600">历史记录</td>
+          <td class="px-3 py-2.5 text-gray-600">2025-12-20</td>
+          <td class="px-3 py-2.5 text-gray-600">2026-01-05</td>
+          <td class="px-3 py-2.5"><span class="text-xs px-2 py-0.5 bg-gray-100 text-gray-500 rounded">归档</span></td>
+          <td class="px-3 py-2.5 font-mono text-xs text-gray-600">OPP-721</td>
+          <td class="px-3 py-2.5 text-xs">
+            <button class="text-blue-500 hover:underline">详情</button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+<!-- ========== [/区域4] ========== -->
+
+<!-- ========== [区域5: 领用/归还操作面板] ========== -->
+<div class="grid grid-cols-2 gap-4">
+
+  <!-- 领用登记 -->
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="mb-4">
+      <h2 class="text-base font-semibold text-gray-800">领用登记</h2>
+      <div class="text-xs text-gray-500 mt-0.5">业务员出库领用样品箱登记</div>
+    </div>
+
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">业务员</label>
+        <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+          <option>张三 · 华南大区</option>
+          <option>李四 · 华东大区</option>
+          <option>王芳 · 华北大区</option>
+          <option>陈伟 · 华南大区</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">箱号</label>
+        <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+          <option>SK-2026-003 · 标准展示箱（在仓）</option>
+          <option>SK-2026-006 · 木纹材质箱（在仓）</option>
+          <option>SK-2026-007 · 项目定制箱（在仓）</option>
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-3">
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">关联项目</label>
+          <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+            <option>OPP-892 深圳科技园</option>
+            <option>OPP-901 上海静安</option>
+            <option>OPP-910 杭州酒店</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-xs text-gray-500 mb-1">关联商机</label>
+          <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+            <option>LEAD-2025 软装初选</option>
+            <option>LEAD-2031 装修合同</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">计划归还日期</label>
+        <input type="date" value="2026-04-28" class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">备注</label>
+        <textarea rows="2" placeholder="客户特殊要求 / 携带其他物品..." class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white resize-none"></textarea>
+      </div>
+
+      <button class="w-full px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 mt-2">确认领用</button>
+    </div>
+  </div>
+
+  <!-- 归还登记 -->
+  <div class="bg-white rounded-lg border border-gray-200 p-5">
+    <div class="mb-4">
+      <h2 class="text-base font-semibold text-gray-800">归还登记</h2>
+      <div class="text-xs text-gray-500 mt-0.5">仓管实物清点样品箱归还入库</div>
+    </div>
+
+    <div class="space-y-3">
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">箱号</label>
+        <select class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white">
+          <option>SK-2026-001 · 标准展示箱</option>
+          <option>SK-2026-002 · 木纹材质箱</option>
+          <option>SK-2026-004 · 项目定制箱</option>
+          <option>SK-2026-005 · 金属材质箱</option>
+        </select>
+      </div>
+
+      <div class="bg-gray-50 border border-gray-200 rounded p-3 text-xs space-y-1.5">
+        <div class="flex justify-between">
+          <span class="text-gray-500">当前持有人</span>
+          <span class="text-gray-800 font-medium">张三 · 华南大区</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">出库时间</span>
+          <span class="text-gray-800">2026-04-15 09:32</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">计划归还</span>
+          <span class="text-gray-800">2026-04-25</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-gray-500">在外天数</span>
+          <span class="text-gray-800">10 天</span>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-2">实物清点结果</label>
+        <div class="space-y-2">
+          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input type="radio" name="check" checked class="text-blue-500">
+            <span>完好 · 全部 22 项物料齐全</span>
+          </label>
+          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input type="radio" name="check" class="text-blue-500">
+            <span>部分缺失</span>
+          </label>
+          <input type="text" placeholder="填写缺失项编号，如 WD-004, WD-011" class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white ml-6" style="width: calc(100% - 1.5rem);">
+          <label class="flex items-center gap-2 text-sm text-gray-700 cursor-pointer">
+            <input type="radio" name="check" class="text-blue-500">
+            <span>全部缺失 · 报损处理</span>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label class="block text-xs text-gray-500 mb-1">备注</label>
+        <textarea rows="2" placeholder="外观磨损 / 客户反馈 / 其他..." class="w-full text-sm px-3 py-2 border border-gray-200 rounded bg-white resize-none"></textarea>
+      </div>
+
+      <button class="w-full px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 mt-2">确认归还</button>
+    </div>
+  </div>
+
+</div>
+<!-- ========== [/区域5] ========== -->
+
+</body>
+</html>

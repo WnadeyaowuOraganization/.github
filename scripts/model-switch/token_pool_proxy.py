@@ -453,13 +453,9 @@ def classify_zhipu_provider(status_code, resp_body):
     if code == "1304":
         return ErrorType.QUOTA_EXHAUSTED, code, None, message
 
-    # 公平使用策略限速 (1313) — 临时限制，需手动解除，冷却24h避免持续打
+    # 公平使用策略限速 (1313) — 仅警告，换key继续即可
     if code == "1313":
-        # 24小时后重试（用户需前往智谱控制台申请解除）
-        from datetime import datetime, timedelta, timezone
-        _cst = timezone(timedelta(hours=8))
-        until_iso = (datetime.now(_cst) + timedelta(hours=24)).isoformat()
-        return ErrorType.QUOTA_EXHAUSTED, code, until_iso, message
+        return ErrorType.RATE_LIMIT, code, None, message
 
     # 不可恢复
     if code in ("1309", "1311"):

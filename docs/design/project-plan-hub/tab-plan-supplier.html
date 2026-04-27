@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>供应商排程（三段式+日历）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .cal-grid { display: grid; grid-template-columns: 160px repeat(24, minmax(28px, 1fr)); border-left: 1px solid #d9d9d9; border-top: 1px solid #d9d9d9; }
+    .cal-cell { border-right: 1px solid #f1f5f9; border-bottom: 1px solid #e5e7eb; min-height: 36px; position: relative; background: #fff; }
+    .cal-head { background: #f9fafb; font-size: 11px; color: #6b7280; padding: 6px 4px; border-right: 1px solid #e5e7eb; border-bottom: 1px solid #d9d9d9; text-align: center; }
+    .cal-row-head { background: #f9fafb; font-size: 12px; color: #374151; padding: 8px; border-right: 1px solid #d9d9d9; border-bottom: 1px solid #e5e7eb; }
+    .seg-design { background: #6366f1; color: #fff; }
+    .seg-mfg { background: #0ea5e9; color: #fff; }
+    .seg-install { background: #8b5cf6; color: #fff; }
+    .seg-bar { position: absolute; top: 6px; height: 24px; border-radius: 3px; font-size: 10px; padding: 4px 6px; white-space: nowrap; overflow: hidden; cursor: pointer; }
+    .interface-pin { position: absolute; top: -2px; width: 12px; height: 12px; background: #ef4444; border: 2px solid #fff; border-radius: 50%; z-index: 5; }
+    .matrix-cell { width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; font-size: 11px; border: 1px solid #e5e7eb; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">供应商排程（三段式+日历）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">多供应商在同一项目下并行/串行排程，识别接口点与依赖矩阵</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">项目经理（编制）、供应商接口人（执行）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">三段式日历排程 / 供应商依赖矩阵 / 接口点管理 / plan_supplier_schedule数据模型</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">拖拽排程 / 设置依赖关系 / 标记接口点（前置完成时间）/ 冲突检测</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">排程拖拽<200ms / 依赖矩阵关键路径标红 / 接口点冲突自动告警</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">项目计划管理 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [项目与供应商筛选] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex flex-wrap gap-3 items-end">
+    <div>
+      <div class="text-xs text-gray-500 mb-1">项目</div>
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm w-56 bg-white">
+        <option>深圳A体游中标</option>
+        <option>广州B商业体游</option>
+      </select>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500 mb-1">供应商筛选</div>
+      <select class="border border-gray-300 rounded px-3 py-1.5 text-sm w-56 bg-white">
+        <option>全部（4 家）</option>
+        <option>仅核心制造</option>
+      </select>
+    </div>
+    <div>
+      <div class="text-xs text-gray-500 mb-1">时间粒度</div>
+      <div class="flex gap-1">
+        <button class="border border-gray-300 px-2 py-1 rounded text-xs hover:bg-gray-50">日</button>
+        <button class="border border-blue-500 text-blue-500 px-2 py-1 rounded text-xs">周</button>
+        <button class="border border-gray-300 px-2 py-1 rounded text-xs hover:bg-gray-50">月</button>
+      </div>
+    </div>
+    <div class="ml-auto flex gap-2">
+      <button class="border border-gray-300 px-3 py-1.5 rounded text-sm hover:bg-gray-50">⚠ 冲突检测</button>
+      <button class="bg-blue-500 text-white px-3 py-1.5 rounded text-sm hover:bg-blue-600">+ 新增排程</button>
+    </div>
+  </div>
+</div>
+
+<!-- [供应商概览卡片] -->
+<div class="grid grid-cols-4 gap-3 mb-4">
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="flex justify-between items-start">
+      <div>
+        <div class="text-sm font-semibold text-gray-800">宁波钢构科技</div>
+        <div class="text-xs text-gray-500 mt-0.5">主供 · 钢结构</div>
+      </div>
+      <span class="text-xs bg-blue-50 text-blue-500 px-2 py-0.5 rounded">在档</span>
+    </div>
+    <div class="mt-3 grid grid-cols-3 gap-1 text-xs">
+      <div><div class="text-gray-400">任务</div><div class="font-semibold text-gray-700">14</div></div>
+      <div><div class="text-gray-400">工时</div><div class="font-semibold text-gray-700">3,200h</div></div>
+      <div><div class="text-gray-400">进度</div><div class="font-semibold text-gray-700">62%</div></div>
+    </div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="flex justify-between items-start">
+      <div>
+        <div class="text-sm font-semibold text-gray-800">佛山玻璃钢制造</div>
+        <div class="text-xs text-gray-500 mt-0.5">主供 · 玻璃钢</div>
+      </div>
+      <span class="text-xs bg-blue-50 text-blue-500 px-2 py-0.5 rounded">在档</span>
+    </div>
+    <div class="mt-3 grid grid-cols-3 gap-1 text-xs">
+      <div><div class="text-gray-400">任务</div><div class="font-semibold text-gray-700">9</div></div>
+      <div><div class="text-gray-400">工时</div><div class="font-semibold text-gray-700">1,860h</div></div>
+      <div><div class="text-gray-400">进度</div><div class="font-semibold text-gray-700">48%</div></div>
+    </div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="flex justify-between items-start">
+      <div>
+        <div class="text-sm font-semibold text-gray-800">温州外采</div>
+        <div class="text-xs text-gray-500 mt-0.5">外采 · 配件</div>
+      </div>
+      <span class="text-xs bg-amber-50 text-amber-600 px-2 py-0.5 rounded">备选</span>
+    </div>
+    <div class="mt-3 grid grid-cols-3 gap-1 text-xs">
+      <div><div class="text-gray-400">任务</div><div class="font-semibold text-gray-700">6</div></div>
+      <div><div class="text-gray-400">工时</div><div class="font-semibold text-gray-700">820h</div></div>
+      <div><div class="text-gray-400">进度</div><div class="font-semibold text-gray-700">21%</div></div>
+    </div>
+  </div>
+  <div class="bg-white border border-gray-300 rounded p-3">
+    <div class="flex justify-between items-start">
+      <div>
+        <div class="text-sm font-semibold text-gray-800">本部安装组</div>
+        <div class="text-xs text-gray-500 mt-0.5">自营 · 安装</div>
+      </div>
+      <span class="text-xs bg-blue-50 text-blue-500 px-2 py-0.5 rounded">在档</span>
+    </div>
+    <div class="mt-3 grid grid-cols-3 gap-1 text-xs">
+      <div><div class="text-gray-400">任务</div><div class="font-semibold text-gray-700">11</div></div>
+      <div><div class="text-gray-400">工时</div><div class="font-semibold text-gray-700">2,180h</div></div>
+      <div><div class="text-gray-400">进度</div><div class="font-semibold text-gray-700">0%</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- [日历排程视图（横轴时间，纵轴供应商）] -->
+<div class="bg-white border border-gray-300 rounded p-4 mb-4">
+  <div class="flex justify-between items-center mb-3">
+    <div class="font-semibold text-gray-700 text-sm">日历排程视图（三段式：设计 / 制造 / 安装）</div>
+    <div class="flex gap-3 text-xs text-gray-500">
+      <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-indigo-500 rounded"></span>① 设计段</span>
+      <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-sky-500 rounded"></span>② 制造段</span>
+      <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-violet-500 rounded"></span>③ 安装段</span>
+      <span class="flex items-center gap-1.5"><span class="inline-block w-3 h-3 bg-red-500 rounded-full"></span>接口点</span>
+    </div>
+  </div>
+
+  <div class="cal-grid text-xs overflow-x-auto">
+    <div class="cal-head">供应商 / 周</div>
+    <div class="cal-head">W18</div><div class="cal-head">W19</div><div class="cal-head">W20</div><div class="cal-head">W21</div>
+    <div class="cal-head">W22</div><div class="cal-head">W23</div><div class="cal-head">W24</div><div class="cal-head">W25</div>
+    <div class="cal-head">W26</div><div class="cal-head">W27</div><div class="cal-head">W28</div><div class="cal-head">W29</div>
+    <div class="cal-head">W30</div><div class="cal-head">W31</div><div class="cal-head">W32</div><div class="cal-head">W33</div>
+    <div class="cal-head">W34</div><div class="cal-head">W35</div><div class="cal-head">W36</div><div class="cal-head">W37</div>
+    <div class="cal-head">W38</div><div class="cal-head">W39</div><div class="cal-head">W40</div><div class="cal-head">W41</div>
+
+    <div class="cal-row-head">宁波钢构科技</div>
+    <div class="cal-cell" style="grid-column: span 24; position: relative;">
+      <div class="seg-bar seg-design" style="left:1%;width:8%;">设计配合</div>
+      <div class="seg-bar seg-mfg" style="left:14%;width:42%;">制造主任务（焊接+面漆）</div>
+      <div class="interface-pin" style="left:14%;" title="接口点：设计→制造移交"></div>
+      <div class="interface-pin" style="left:56%;" title="接口点：出厂验收"></div>
+    </div>
+
+    <div class="cal-row-head">佛山玻璃钢制造</div>
+    <div class="cal-cell" style="grid-column: span 24; position: relative;">
+      <div class="seg-bar seg-design" style="left:5%;width:6%;">玻璃钢设计</div>
+      <div class="seg-bar seg-mfg" style="left:18%;width:32%;">玻璃钢成型+表面</div>
+      <div class="interface-pin" style="left:18%;" title="接口点：模具就绪"></div>
+    </div>
+
+    <div class="cal-row-head">温州外采</div>
+    <div class="cal-cell" style="grid-column: span 24; position: relative;">
+      <div class="seg-bar seg-mfg" style="left:24%;width:18%;">机电采购</div>
+      <div class="seg-bar seg-mfg" style="left:46%;width:14%;">控制系统</div>
+      <div class="interface-pin" style="left:60%;" title="接口点：到货验收"></div>
+    </div>
+
+    <div class="cal-row-head">本部安装组</div>
+    <div class="cal-cell" style="grid-column: span 24; position: relative;">
+      <div class="seg-bar seg-install" style="left:62%;width:30%;">现场安装+调试</div>
+      <div class="interface-pin" style="left:62%;" title="接口点：进场条件确认"></div>
+      <div class="interface-pin" style="left:92%;" title="接口点：客户验收"></div>
+    </div>
+  </div>
+
+  <div class="mt-3 text-xs text-gray-500">
+    💡 拖拽色块可调整起止日期（拖拽响应 < 200ms） · 双击编辑任务详情 · 右键调出依赖配置
+  </div>
+</div>
+
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [依赖矩阵热力图] -->
+  <div class="col-span-7 bg-white border border-gray-300 rounded p-4">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-semibold text-gray-700 text-sm">供应商依赖矩阵（行=前置，列=后续）</div>
+      <span class="text-xs text-red-500">⚠ 检出 2 处关键路径耦合</span>
+    </div>
+    <table class="text-xs">
+      <thead>
+        <tr>
+          <th class="p-2"></th>
+          <th class="p-2 text-gray-600">宁波钢构</th>
+          <th class="p-2 text-gray-600">佛山玻璃钢</th>
+          <th class="p-2 text-gray-600">温州外采</th>
+          <th class="p-2 text-gray-600">本部安装</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="p-2 text-gray-700 font-semibold">宁波钢构</td>
+          <td><div class="matrix-cell bg-gray-100 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-blue-50 text-blue-600">弱</div></td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-red-100 text-red-600 font-semibold">强★</div></td>
+        </tr>
+        <tr>
+          <td class="p-2 text-gray-700 font-semibold">佛山玻璃钢</td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-100 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-blue-100 text-blue-700">中</div></td>
+        </tr>
+        <tr>
+          <td class="p-2 text-gray-700 font-semibold">温州外采</td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-100 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-red-100 text-red-600 font-semibold">强★</div></td>
+        </tr>
+        <tr>
+          <td class="p-2 text-gray-700 font-semibold">本部安装</td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-50 text-gray-400">—</div></td>
+          <td><div class="matrix-cell bg-gray-100 text-gray-400">—</div></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="mt-3 text-xs text-gray-500">
+      ★ 标记为关键路径耦合：宁波钢构→本部安装 · 温州外采→本部安装 — 任一前置延期将直接导致项目交付延期
+    </div>
+  </div>
+
+  <!-- [接口点列表] -->
+  <div class="col-span-5 bg-white border border-gray-300 rounded p-4">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-semibold text-gray-700 text-sm">接口点列表（共 6 个）</div>
+      <button class="text-xs text-blue-500 hover:underline">+ 新增接口点</button>
+    </div>
+    <div class="space-y-2 text-xs">
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50">
+        <div class="flex justify-between items-start">
+          <div class="font-semibold text-gray-800">IF-001 设计→制造移交</div>
+          <span class="text-red-500 text-[10px] bg-red-50 px-1.5 py-0.5 rounded">关键</span>
+        </div>
+        <div class="text-gray-500 mt-1">前置：本部设计组（详图绘制） → 后续：宁波钢构（下料）</div>
+        <div class="text-gray-500 mt-0.5">截止：2026-07-01 · 状态：待移交</div>
+      </div>
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50">
+        <div class="flex justify-between items-start">
+          <div class="font-semibold text-gray-800">IF-002 模具就绪</div>
+          <span class="text-amber-500 text-[10px] bg-amber-50 px-1.5 py-0.5 rounded">中等</span>
+        </div>
+        <div class="text-gray-500 mt-1">前置：佛山玻璃钢（模具设计） → 后续：佛山玻璃钢（成型）</div>
+        <div class="text-gray-500 mt-0.5">截止：2026-07-15 · 状态：进行中</div>
+      </div>
+      <div class="border border-red-200 bg-red-50 rounded p-2">
+        <div class="flex justify-between items-start">
+          <div class="font-semibold text-red-700">IF-003 出厂验收 ⚠</div>
+          <span class="text-red-500 text-[10px] bg-white px-1.5 py-0.5 rounded">冲突</span>
+        </div>
+        <div class="text-red-600 mt-1">前置：宁波钢构（焊接组装） → 后续：本部安装（基础安装）</div>
+        <div class="text-red-600 mt-0.5">冲突：前置预计完成 09-28，后续要求 09-25 前到位（差 3 天）</div>
+      </div>
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50">
+        <div class="flex justify-between items-start">
+          <div class="font-semibold text-gray-800">IF-004 到货验收</div>
+          <span class="text-amber-500 text-[10px] bg-amber-50 px-1.5 py-0.5 rounded">中等</span>
+        </div>
+        <div class="text-gray-500 mt-1">前置：温州外采（控制系统到货） → 后续：本部安装（电气调试）</div>
+        <div class="text-gray-500 mt-0.5">截止：2026-09-30 · 状态：待启动</div>
+      </div>
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50">
+        <div class="flex justify-between items-start">
+          <div class="font-semibold text-gray-800">IF-005 进场条件确认</div>
+          <span class="text-gray-500 text-[10px] bg-gray-100 px-1.5 py-0.5 rounded">普通</span>
+        </div>
+        <div class="text-gray-500 mt-1">前置：甲方场地交付 → 后续：本部安装（基础安装）</div>
+      </div>
+      <div class="border border-gray-200 rounded p-2 hover:bg-gray-50">
+        <div class="flex justify-between items-start">
+          <div class="font-semibold text-gray-800">IF-006 客户验收</div>
+          <span class="text-red-500 text-[10px] bg-red-50 px-1.5 py-0.5 rounded">关键</span>
+        </div>
+        <div class="text-gray-500 mt-1">前置：本部安装（调试） → 后续：项目结项</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

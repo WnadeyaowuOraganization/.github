@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>调剂审批（跨区域+跨科目）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">调剂审批（跨区域+跨科目）</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">预算编制后的调整通过调剂申请走审批，保证总额不变且记录可追溯</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">项目经理（申请）、商务总监（审批）、财务（备案）</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">跨区域调剂 / 跨科目调剂 / 总额不变校验 / 审批流 / 调剂记录查询</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">申请：选择源/目标→金额→理由 / 审批：通过/驳回/转审 / 记录：筛选+导出</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">总额不平衡时无法提交 / 审批通过后矩阵自动更新 / 调剂记录与budget_transfer表一致</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">总控预算二维矩阵 详细设计.md</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [项目选择栏] -->
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4 flex items-center gap-4 flex-wrap">
+    <span class="text-sm text-gray-600">项目：</span>
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white min-w-[280px]">
+      <option>深圳A体游公园中标项目（2026-D71）</option>
+    </select>
+    <div class="flex-1"></div>
+    <span class="text-xs text-gray-500">本月调剂笔数 <span class="font-semibold text-gray-700">8</span></span>
+    <span class="text-xs text-gray-500">待审批 <span class="font-semibold text-yellow-600">3</span></span>
+    <span class="text-xs text-gray-500">已通过 <span class="font-semibold text-green-600">5</span></span>
+  </div>
+
+  <!-- [调剂申请表单] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-700">新建调剂申请</h3>
+      <span class="text-xs text-gray-500">总额不变校验：源金额 = 目标金额</span>
+    </div>
+    <div class="p-4 grid grid-cols-2 gap-6">
+      <!-- 源 -->
+      <div class="border border-gray-200 rounded p-4 bg-gray-50">
+        <div class="text-sm font-semibold text-gray-700 mb-3">📤 调出方（源信封）</div>
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">区域</label>
+            <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white w-full">
+              <option>游乐核心区</option>
+              <option>接待区</option>
+              <option>餐饮区</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">科目</label>
+            <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white w-full">
+              <option>设备采购</option>
+              <option>钢结构</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">当前限额 / 已用 / 剩余</label>
+            <div class="text-sm text-gray-700 bg-white border border-gray-200 rounded px-3 py-2">￥3,200,000 / ￥2,400,000 / <span class="font-semibold text-green-600">￥800,000</span></div>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">调出金额</label>
+            <input type="text" value="￥300,000" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full">
+          </div>
+        </div>
+      </div>
+      <!-- 目标 -->
+      <div class="border border-gray-200 rounded p-4 bg-gray-50">
+        <div class="text-sm font-semibold text-gray-700 mb-3">📥 调入方（目标信封）</div>
+        <div class="space-y-3">
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">区域</label>
+            <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white w-full">
+              <option>接待区</option>
+              <option>餐饮区</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">科目</label>
+            <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white w-full">
+              <option>设备采购</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">当前限额 / 已用 / 剩余</label>
+            <div class="text-sm text-gray-700 bg-white border border-gray-200 rounded px-3 py-2">￥600,000 / ￥580,000 / <span class="font-semibold text-red-500">￥20,000</span></div>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">调入金额</label>
+            <input type="text" value="￥300,000" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 border-t border-gray-200">
+      <label class="text-xs text-gray-500 block mb-1">调剂理由（必填，≥30字）</label>
+      <textarea class="border border-gray-300 rounded px-3 py-2 text-sm w-full" rows="2">接待区高端展示设备需要追加预算，从游乐核心区设备采购科目结余调出。</textarea>
+      <div class="flex items-center gap-3 mt-3">
+        <span class="text-xs text-gray-500">总额校验：</span>
+        <span class="text-xs bg-green-50 text-green-600 px-2 py-1 rounded border border-green-200">✓ 调出 ￥300,000 = 调入 ￥300,000</span>
+        <div class="flex-1"></div>
+        <button class="border border-gray-300 hover:bg-gray-50 text-sm px-4 py-1.5 rounded">取消</button>
+        <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded">提交审批</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [调剂前后对比卡] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300">
+      <h3 class="text-sm font-semibold text-gray-700">调剂前后对比（实时预览）</h3>
+    </div>
+    <div class="p-4 grid grid-cols-2 gap-4">
+      <div class="border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500 mb-2">调剂前</div>
+        <table class="w-full text-xs">
+          <tr class="border-b border-gray-100"><td class="py-1 text-gray-600">游乐核心区·设备采购</td><td class="text-right font-medium">￥3,200,000</td></tr>
+          <tr><td class="py-1 text-gray-600">接待区·设备采购</td><td class="text-right font-medium">￥600,000</td></tr>
+        </table>
+      </div>
+      <div class="border border-gray-200 rounded p-3 bg-blue-50">
+        <div class="text-xs text-blue-600 mb-2">调剂后</div>
+        <table class="w-full text-xs">
+          <tr class="border-b border-blue-100"><td class="py-1 text-gray-600">游乐核心区·设备采购</td><td class="text-right font-medium text-red-500">￥2,900,000 ↓</td></tr>
+          <tr><td class="py-1 text-gray-600">接待区·设备采购</td><td class="text-right font-medium text-green-600">￥900,000 ↑</td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- [待审批列表] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-700">待审批列表</h3>
+      <span class="text-xs text-gray-500">3 条待处理</span>
+    </div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 text-xs">
+        <tr>
+          <th class="px-3 py-2 text-left">单号</th>
+          <th class="px-3 py-2 text-left">申请人</th>
+          <th class="px-3 py-2 text-left">调出</th>
+          <th class="px-3 py-2 text-left">调入</th>
+          <th class="px-3 py-2 text-right">金额</th>
+          <th class="px-3 py-2 text-left">提交时间</th>
+          <th class="px-3 py-2 text-left">当前节点</th>
+          <th class="px-3 py-2 text-center w-40">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">BT-2026-0418-001</td>
+          <td class="px-3 py-2">张三</td>
+          <td class="px-3 py-2 text-xs">游乐核心区·设备采购</td>
+          <td class="px-3 py-2 text-xs">接待区·设备采购</td>
+          <td class="px-3 py-2 text-right font-medium">￥300,000</td>
+          <td class="px-3 py-2 text-gray-500 text-xs">2026-04-18 10:23</td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">商务总监审批</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-green-600 hover:underline mr-2">通过</a><a class="text-red-500 hover:underline mr-2">驳回</a><a class="text-blue-500 hover:underline">转审</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">BT-2026-0417-005</td>
+          <td class="px-3 py-2">李四</td>
+          <td class="px-3 py-2 text-xs">餐饮区·调试</td>
+          <td class="px-3 py-2 text-xs">餐饮区·安装</td>
+          <td class="px-3 py-2 text-right font-medium">￥50,000</td>
+          <td class="px-3 py-2 text-gray-500 text-xs">2026-04-17 16:45</td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">财务备案</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-green-600 hover:underline mr-2">通过</a><a class="text-red-500 hover:underline mr-2">驳回</a><a class="text-blue-500 hover:underline">转审</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">BT-2026-0416-008</td>
+          <td class="px-3 py-2">王五</td>
+          <td class="px-3 py-2 text-xs">管理区·包装运输</td>
+          <td class="px-3 py-2 text-xs">卫生间·设备采购</td>
+          <td class="px-3 py-2 text-right font-medium">￥20,000</td>
+          <td class="px-3 py-2 text-gray-500 text-xs">2026-04-16 09:12</td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">商务总监审批</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-green-600 hover:underline mr-2">通过</a><a class="text-red-500 hover:underline mr-2">驳回</a><a class="text-blue-500 hover:underline">转审</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- [已完成调剂记录] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between gap-2 flex-wrap">
+      <h3 class="text-sm font-semibold text-gray-700">已完成调剂记录</h3>
+      <div class="flex items-center gap-2">
+        <input type="text" placeholder="单号/申请人" class="border border-gray-300 rounded px-2 py-1 text-xs w-36">
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>近30天</option>
+          <option>近90天</option>
+          <option>全部</option>
+        </select>
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>全部状态</option>
+          <option>已通过</option>
+          <option>已驳回</option>
+        </select>
+        <button class="border border-gray-300 text-xs px-3 py-1 rounded hover:bg-gray-50">导出</button>
+      </div>
+    </div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 text-xs">
+        <tr>
+          <th class="px-3 py-2 text-left">单号</th>
+          <th class="px-3 py-2 text-left">申请人</th>
+          <th class="px-3 py-2 text-left">调出 → 调入</th>
+          <th class="px-3 py-2 text-right">金额</th>
+          <th class="px-3 py-2 text-left">完成时间</th>
+          <th class="px-3 py-2 text-left">状态</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-t border-gray-200">
+          <td class="px-3 py-2 font-mono text-xs">BT-2026-0410-003</td>
+          <td class="px-3 py-2">张三</td>
+          <td class="px-3 py-2 text-xs">游乐核心区·钢结构 → 接待区·钢结构</td>
+          <td class="px-3 py-2 text-right">￥120,000</td>
+          <td class="px-3 py-2 text-gray-500 text-xs">2026-04-12 14:20</td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">已通过</span></td>
+        </tr>
+        <tr class="border-t border-gray-200">
+          <td class="px-3 py-2 font-mono text-xs">BT-2026-0405-007</td>
+          <td class="px-3 py-2">李四</td>
+          <td class="px-3 py-2 text-xs">餐饮区·设备采购 → 卫生间·安装</td>
+          <td class="px-3 py-2 text-right">￥40,000</td>
+          <td class="px-3 py-2 text-gray-500 text-xs">2026-04-08 09:30</td>
+          <td class="px-3 py-2"><span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">已驳回</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>

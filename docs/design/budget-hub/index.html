@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 总控预算二维矩阵 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .sidebar-item { padding: 12px 0; text-align: center; color: #666; cursor: pointer; }
+    .sidebar-item:hover { background: #f0f0f0; }
+    .sidebar-item.active { color: #1890ff; background: #e6f7ff; border-left: 3px solid #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">总控预算二维矩阵 — Hub 主框架</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">区域×科目两维矩阵编制+三级校验+BOM联动+调剂审批，替代Excel维护，让吴总和项目经理3秒看清"哪个区域哪个科目超支"</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（总控视角）、项目经理（编制视角）、采购/报销人（校验消费）、财务（审计）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">区域CRUD（招标导入）/ 二维矩阵编制 / 调剂审批 / BOM预算联动 / 执行仪表盘 / 历史复盘</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">招标文件导入区域 / 矩阵格内限额编辑+红线 / 跨区域调剂申请 / BOM绑定区域科目 / 仪表盘热力图钻取</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">矩阵渲染<3s / 三级汇总（区域×科目+区域汇总+科目汇总）实时校验 / 采购/报销硬拦截超限 / BOM变更自动汇总</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">总控预算二维矩阵 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0">
+    <div class="p-3 text-center border-b border-gray-200">
+      <div class="w-10 h-10 bg-blue-500 text-white rounded flex items-center justify-center mx-auto text-sm font-bold">万</div>
+    </div>
+    <div class="sidebar-item" title="工作台">🏠</div>
+    <div class="sidebar-item" title="CRM">👥</div>
+    <div class="sidebar-item active" title="项目中心">📋</div>
+    <div class="sidebar-item" title="D3设计">🎨</div>
+    <div class="sidebar-item" title="素材库">📦</div>
+    <div class="sidebar-item" title="方案引擎">📄</div>
+    <div class="sidebar-item " title="驾驶舱">📊</div>
+    <div class="sidebar-item " title="财务">💰</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 项目中心 &gt; 预算管理 &gt; <span class="text-gray-700 font-medium">总控预算二维矩阵</span>
+    </div>
+
+    <div class="px-6 py-4 bg-white border-b border-gray-200">
+      <h1 class="text-xl font-bold text-gray-800">总控预算二维矩阵</h1>
+      <p class="text-xs text-gray-500 mt-1">区域×科目二维矩阵 · BOM联动校验 · 调剂审批闭环 · 执行热力图</p>
+    </div>
+
+    <div class="tab-bar" id="tabBar"></div>
+
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-budget-zone.html"></iframe>
+    </div>
+
+    <div class="p-6 bg-white border-t border-gray-300 mt-4">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead><tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300 w-40">Tab页</th>
+          <th class="p-2 border border-gray-300 w-48">文件名</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+          <th class="p-2 border border-gray-300 w-40">对应Issue</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab1 区域管理</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-budget-zone.html</td>
+            <td class="p-2 border border-gray-300">预算区域CRUD（招标导入/手动添加/排序）+ 区域维度数据模型 + budget_zone表</td>
+            <td class="p-2 border border-gray-300 text-xs">#3208 #3209 #3217</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab2 矩阵编制</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-budget-matrix.html</td>
+            <td class="p-2 border border-gray-300">区域×科目二维表格编辑器 + 限额信封 + 红线设置 + 三级汇总实时校验 + 模板复用</td>
+            <td class="p-2 border border-gray-300 text-xs">#3210 #3214 #3218 #2260 #2287</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab3 调剂审批</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-budget-transfer.html</td>
+            <td class="p-2 border border-gray-300">跨区域调剂申请 + 科目间调剂申请 + 总额不变校验 + 审批流 + 调剂记录</td>
+            <td class="p-2 border border-gray-300 text-xs">#3216 #2259</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab4 BOM联动</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-budget-bom.html</td>
+            <td class="p-2 border border-gray-300">BOM→预算信封关联（绑定区域+科目）+ BOM编辑页预算余额条+超限高亮 + BOM列表只读视图</td>
+            <td class="p-2 border border-gray-300 text-xs">#3213 #3219</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab5 执行仪表盘</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-budget-dashboard.html</td>
+            <td class="p-2 border border-gray-300">热力图（区域×科目）+ 区域钻取 + BOM关联明细 + 报销/采购消费曲线 + 借款额度</td>
+            <td class="p-2 border border-gray-300 text-xs">#3220 #2285 #2286 #1601 #1597 #2436</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab6 历史复盘</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-budget-history.html</td>
+            <td class="p-2 border border-gray-300">成本基准库（项目关闭自动入库）+ 成本复盘报告 + 保证金台账 + 参数配置</td>
+            <td class="p-2 border border-gray-300 text-xs">#1539 #2288 #2293</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+const tabs = [
+  { key: 'zone', label: 'Tab1 区域管理', src: 'tab-budget-zone.html' },
+  { key: 'matrix', label: 'Tab2 矩阵编制', src: 'tab-budget-matrix.html' },
+  { key: 'transfer', label: 'Tab3 调剂审批', src: 'tab-budget-transfer.html' },
+  { key: 'bom', label: 'Tab4 BOM联动', src: 'tab-budget-bom.html' },
+  { key: 'dashboard', label: 'Tab5 执行仪表盘', src: 'tab-budget-dashboard.html' },
+  { key: 'history', label: 'Tab6 历史复盘', src: 'tab-budget-history.html' }
+];
+
+const tabBar = document.getElementById('tabBar');
+const tabFrame = document.getElementById('tabFrame');
+let activeKey = tabs[0].key;
+
+function renderTabs() {
+  tabBar.innerHTML = tabs.map(t =>
+    `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+  ).join('');
+}
+
+tabBar.addEventListener('click', (e) => {
+  const item = e.target.closest('.tab-item');
+  if (!item) return;
+  activeKey = item.dataset.key;
+  tabFrame.src = item.dataset.src;
+  renderTabs();
+});
+
+tabFrame.addEventListener('load', () => {
+  try {
+    const h = tabFrame.contentDocument.documentElement.scrollHeight;
+    tabFrame.style.height = Math.max(h, 600) + 'px';
+  } catch(e) {}
+});
+
+renderTabs();
+</script>
+</body>
+</html>

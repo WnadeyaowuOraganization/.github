@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>预警引擎（变更管理+延期推送）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .ver-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; align-items: center; padding: 6px 8px; border-bottom: 1px dashed #e5e7eb; font-size: 12px; }
+    .ver-cell { padding: 4px 8px; border-radius: 3px; }
+    .ver-changed-old { background: #fee2e2; color: #b91c1c; }
+    .ver-changed-new { background: #dcfce7; color: #15803d; }
+    .ver-same { color: #6b7280; }
+    .alert-bar { border-left: 4px solid #ef4444; background: #fef2f2; padding: 10px 12px; border-radius: 4px; }
+    .alert-bar-amber { border-left-color: #f59e0b; background: #fffbeb; }
+    .alert-bar-blue { border-left-color: #3b82f6; background: #eff6ff; }
+    .escalation-step { display: flex; align-items: center; gap: 8px; padding: 8px; border: 1px solid #e5e7eb; border-radius: 4px; background: #fff; }
+    .escalation-arrow { color: #d1d5db; font-size: 18px; }
+    .qy-toggle { width: 36px; height: 18px; background: #d1d5db; border-radius: 10px; position: relative; cursor: pointer; }
+    .qy-toggle.on { background: #3b82f6; }
+    .qy-toggle::after { content: ''; position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; background: #fff; border-radius: 50%; transition: left .2s; }
+    .qy-toggle.on::after { left: 20px; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">预警引擎（变更管理+延期推送）</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">计划变更走版本+审批流，运行期延期预警自动企微推送+升级机制</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">项目经理（变更发起）、商务总监（审批）、吴耀（升级触发）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">计划变更（版本对比+影响分析+审批）/ 延期预警 / 企微推送 / 升级机制</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">提交变更→审批 / 延期>3天自动推送 / 升级到上一级 / 处理超时再升级</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">版本对比清晰 / 延期>3天自动企微通知 / 升级机制7级追溯</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">项目计划管理 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<!-- [运行期告警条] -->
+<div class="space-y-2 mb-4">
+  <div class="alert-bar flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-red-500 text-xl">⚠</span>
+      <div>
+        <div class="text-sm font-semibold text-red-700">深圳A体游中标 — T-MFG-008 焊接组装 延期 5 天（已超 3 天阈值）</div>
+        <div class="text-xs text-red-600 mt-0.5">企微已推送至：项目经理 / 商务总监 · 12 分钟前 · 已升级至 商务总监 待处理</div>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="border border-red-300 bg-white text-red-600 text-xs px-2 py-1 rounded">查看任务</button>
+      <button class="bg-blue-500 text-white text-xs px-2 py-1 rounded">立即处理</button>
+    </div>
+  </div>
+  <div class="alert-bar alert-bar-amber flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-amber-500 text-xl">⚠</span>
+      <div>
+        <div class="text-sm font-semibold text-amber-700">广州B商业体游 — IF-003 出厂验收接口点 冲突（差 3 天）</div>
+        <div class="text-xs text-amber-600 mt-0.5">企微已通知：项目经理 · 1 小时前 · 待项目经理评估</div>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="border border-amber-300 bg-white text-amber-600 text-xs px-2 py-1 rounded">查看接口点</button>
+    </div>
+  </div>
+  <div class="alert-bar alert-bar-blue flex items-center justify-between">
+    <div class="flex items-center gap-3">
+      <span class="text-blue-500 text-xl">ℹ</span>
+      <div>
+        <div class="text-sm font-semibold text-blue-700">深圳A体游中标 — 计划变更 v3 待审批</div>
+        <div class="text-xs text-blue-600 mt-0.5">由项目经理赵六提交 · 影响 6 个任务 / +4 天工期 · 待商务总监审批</div>
+      </div>
+    </div>
+    <div class="flex gap-2">
+      <button class="bg-blue-500 text-white text-xs px-2 py-1 rounded">去审批</button>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-12 gap-4">
+
+  <!-- [版本对比卡] -->
+  <div class="col-span-7 bg-white border border-gray-300 rounded p-4">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-semibold text-gray-700 text-sm">计划变更 — 版本对比</div>
+      <div class="flex gap-2 text-xs items-center">
+        <select class="border border-gray-300 rounded px-2 py-1 bg-white">
+          <option>v2 (2026-04-15)</option>
+          <option>v1 (2026-04-01)</option>
+        </select>
+        <span class="text-gray-400">vs</span>
+        <select class="border border-gray-300 rounded px-2 py-1 bg-white">
+          <option>v3 (待审批)</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="border border-gray-200 rounded">
+      <div class="grid grid-cols-2 bg-gray-50 text-xs text-gray-600 font-semibold border-b border-gray-200">
+        <div class="px-3 py-2 border-r border-gray-200">v2 当前生效版</div>
+        <div class="px-3 py-2">v3 待审批版（变更项色条标识）</div>
+      </div>
+
+      <div class="ver-row">
+        <div class="ver-cell ver-same">T-MFG-008 焊接组装 · 75d · 宁波钢构</div>
+        <div class="ver-cell ver-changed-new">T-MFG-008 焊接组装 · <b>79d</b> · 宁波钢构 (+4d)</div>
+      </div>
+      <div class="ver-row">
+        <div class="ver-cell ver-same">T-MFG-012 表面处理 · 14d</div>
+        <div class="ver-cell ver-changed-new">T-MFG-012 表面处理 · <b>18d</b> (+4d)</div>
+      </div>
+      <div class="ver-row">
+        <div class="ver-cell ver-same">T-INST-007 主体安装 · 36d</div>
+        <div class="ver-cell ver-changed-new">T-INST-007 主体安装 · <b>40d</b> (+4d)</div>
+      </div>
+      <div class="ver-row">
+        <div class="ver-cell ver-changed-old">T-MFG-019 (已删除)</div>
+        <div class="ver-cell ver-changed-new">— 取消该任务 —</div>
+      </div>
+      <div class="ver-row">
+        <div class="ver-cell ver-changed-old">— 无 —</div>
+        <div class="ver-cell ver-changed-new">T-MFG-022 二次加固 · 5d (新增)</div>
+      </div>
+      <div class="ver-row">
+        <div class="ver-cell ver-same">客户验收里程碑 · 12-31</div>
+        <div class="ver-cell ver-changed-new">客户验收里程碑 · <b>2027-01-04</b> (顺延 4d)</div>
+      </div>
+    </div>
+
+    <div class="mt-4 grid grid-cols-3 gap-3">
+      <div class="border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">变更项数</div>
+        <div class="text-lg font-semibold text-gray-800 mt-0.5">6</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">总工时变化</div>
+        <div class="text-lg font-semibold text-red-500 mt-0.5">+ 184 h</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3">
+        <div class="text-xs text-gray-500">里程碑顺延</div>
+        <div class="text-lg font-semibold text-red-500 mt-0.5">+ 4 天</div>
+      </div>
+    </div>
+
+    <!-- [审批操作区] -->
+    <div class="mt-4 pt-3 border-t border-gray-200">
+      <div class="text-xs font-semibold text-gray-600 mb-2">审批意见</div>
+      <textarea class="w-full border border-gray-300 rounded p-2 text-xs" rows="2" placeholder="请输入审批意见..."></textarea>
+      <div class="mt-2 flex justify-end gap-2">
+        <button class="border border-gray-300 text-gray-700 text-sm px-4 py-1.5 rounded hover:bg-gray-50">驳回</button>
+        <button class="border border-gray-300 text-gray-700 text-sm px-4 py-1.5 rounded hover:bg-gray-50">退回修改</button>
+        <button class="bg-blue-500 text-white text-sm px-4 py-1.5 rounded hover:bg-blue-600">同意变更</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- [待审批变更列表] -->
+  <div class="col-span-5 bg-white border border-gray-300 rounded p-4">
+    <div class="flex justify-between items-center mb-3">
+      <div class="font-semibold text-gray-700 text-sm">待审批变更队列</div>
+      <span class="text-xs text-gray-500">3 项待审批</span>
+    </div>
+    <div class="space-y-2 text-xs">
+      <div class="border border-blue-200 bg-blue-50 rounded p-2.5 cursor-pointer">
+        <div class="flex justify-between">
+          <span class="font-semibold text-gray-800">深圳A体游 v3 — BOM联动重排</span>
+          <span class="text-red-500">+4d</span>
+        </div>
+        <div class="text-gray-500 mt-0.5">提交：项目经理 赵六 · 04-15 14:32</div>
+        <div class="text-gray-500">影响：6 任务 / 184h / 里程碑顺延 4d</div>
+        <div class="mt-1 flex gap-2">
+          <span class="bg-blue-100 text-blue-600 px-1.5 py-0.5 rounded text-[10px]">当前查看</span>
+          <span class="bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded text-[10px]">商务总监审批中</span>
+        </div>
+      </div>
+      <div class="border border-gray-200 rounded p-2.5 cursor-pointer hover:bg-gray-50">
+        <div class="flex justify-between">
+          <span class="font-semibold text-gray-800">广州B体游 v2 — 接口点冲突调整</span>
+          <span class="text-red-500">+3d</span>
+        </div>
+        <div class="text-gray-500 mt-0.5">提交：项目经理 钱七 · 04-15 11:08</div>
+        <div class="text-gray-500">影响：3 任务 / 60h / 里程碑顺延 3d</div>
+        <div class="mt-1"><span class="bg-amber-100 text-amber-600 px-1.5 py-0.5 rounded text-[10px]">商务总监审批中</span></div>
+      </div>
+      <div class="border border-gray-200 rounded p-2.5 cursor-pointer hover:bg-gray-50">
+        <div class="flex justify-between">
+          <span class="font-semibold text-gray-800">杭州C乐园 v4 — 资源平衡优化</span>
+          <span class="text-green-500">-2d</span>
+        </div>
+        <div class="text-gray-500 mt-0.5">提交：项目经理 孙八 · 04-14 16:50</div>
+        <div class="text-gray-500">影响：8 任务 / -120h / 里程碑提前 2d</div>
+        <div class="mt-1"><span class="bg-green-100 text-green-600 px-1.5 py-0.5 rounded text-[10px]">已批准 · 待应用</span></div>
+      </div>
+    </div>
+
+    <!-- [企微通知配置] -->
+    <div class="mt-4 pt-3 border-t border-gray-200">
+      <div class="font-semibold text-gray-700 text-sm mb-2">企微推送配置</div>
+      <div class="space-y-2 text-xs">
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="text-gray-700">延期预警推送</div>
+            <div class="text-gray-400 text-[11px]">延期 > 3 天自动推送责任人</div>
+          </div>
+          <div class="qy-toggle on"></div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="text-gray-700">变更审批通知</div>
+            <div class="text-gray-400 text-[11px]">变更提交时通知审批人</div>
+          </div>
+          <div class="qy-toggle on"></div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="text-gray-700">接口点冲突通知</div>
+            <div class="text-gray-400 text-[11px]">接口点检测冲突时推送</div>
+          </div>
+          <div class="qy-toggle on"></div>
+        </div>
+        <div class="flex justify-between items-center">
+          <div>
+            <div class="text-gray-700">每日计划摘要</div>
+            <div class="text-gray-400 text-[11px]">每日 08:30 推送计划摘要</div>
+          </div>
+          <div class="qy-toggle"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- [升级机制配置] -->
+<div class="bg-white border border-gray-300 rounded p-4 mt-4">
+  <div class="flex justify-between items-center mb-3">
+    <div class="font-semibold text-gray-700 text-sm">延期升级机制（7 级追溯链）</div>
+    <span class="text-xs text-gray-500">超时未处理则自动升级到上一级</span>
+  </div>
+
+  <div class="grid grid-cols-7 gap-2 items-stretch">
+    <div class="escalation-step">
+      <div>
+        <div class="text-[10px] text-gray-400">L1</div>
+        <div class="text-xs font-semibold text-gray-800">责任人</div>
+        <div class="text-[10px] text-gray-500 mt-1">超时 24h</div>
+      </div>
+    </div>
+    <div class="flex items-center justify-center"><span class="escalation-arrow">→</span></div>
+    <div class="escalation-step">
+      <div>
+        <div class="text-[10px] text-gray-400">L2</div>
+        <div class="text-xs font-semibold text-gray-800">项目经理</div>
+        <div class="text-[10px] text-gray-500 mt-1">超时 12h</div>
+      </div>
+    </div>
+    <div class="flex items-center justify-center"><span class="escalation-arrow">→</span></div>
+    <div class="escalation-step">
+      <div>
+        <div class="text-[10px] text-gray-400">L3</div>
+        <div class="text-xs font-semibold text-gray-800">商务总监</div>
+        <div class="text-[10px] text-gray-500 mt-1">超时 8h</div>
+      </div>
+    </div>
+    <div class="flex items-center justify-center"><span class="escalation-arrow">→</span></div>
+    <div class="escalation-step border-red-300 bg-red-50">
+      <div>
+        <div class="text-[10px] text-red-400">L4</div>
+        <div class="text-xs font-semibold text-red-700">吴耀</div>
+        <div class="text-[10px] text-red-500 mt-1">最终升级</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="mt-3 grid grid-cols-2 gap-3">
+    <div class="border border-gray-200 rounded p-3">
+      <div class="text-xs text-gray-500 mb-2">本月升级统计</div>
+      <div class="grid grid-cols-4 gap-2 text-xs">
+        <div><div class="text-gray-400">L1→L2</div><div class="font-semibold text-gray-800">12</div></div>
+        <div><div class="text-gray-400">L2→L3</div><div class="font-semibold text-gray-800">5</div></div>
+        <div><div class="text-gray-400">L3→L4</div><div class="font-semibold text-red-500">2</div></div>
+        <div><div class="text-gray-400">未升级</div><div class="font-semibold text-green-600">86%</div></div>
+      </div>
+    </div>
+    <div class="border border-gray-200 rounded p-3">
+      <div class="text-xs text-gray-500 mb-2">触发条件配置</div>
+      <div class="grid grid-cols-2 gap-2 text-xs">
+        <div>
+          <div class="text-gray-400">延期阈值</div>
+          <input type="text" value="3 天" class="border border-gray-300 rounded px-2 py-0.5 w-full mt-0.5">
+        </div>
+        <div>
+          <div class="text-gray-400">关键路径阈值</div>
+          <input type="text" value="1 天" class="border border-gray-300 rounded px-2 py-0.5 w-full mt-0.5">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

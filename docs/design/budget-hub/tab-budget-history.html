@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>历史复盘（基准库+保证金）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">历史复盘（基准库+保证金）</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">项目关闭后将实际成本入历史库，为未来项目提供基准参考；管理保证金台账与参数配置</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（基准维护）、项目经理（参考查询）、财务（保证金）</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">历史成本基准库 / 成本复盘报告 / 保证金台账 / 参数配置</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">项目关闭→自动入库 / 查询历史项目 / 复盘报告生成 / 保证金登记/退还</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">项目关闭后自动入库&lt;5s / 复盘报告含5维度对比 / 保证金台账与历史一致</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">总控预算二维矩阵 详细设计.md</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [子模块切换] -->
+  <div class="bg-white border border-gray-300 rounded p-2 mb-4 flex items-center gap-1">
+    <button class="bg-blue-500 text-white text-sm px-4 py-1.5 rounded">📚 基准库</button>
+    <button class="text-gray-600 hover:bg-gray-50 text-sm px-4 py-1.5 rounded">📋 复盘报告</button>
+    <button class="text-gray-600 hover:bg-gray-50 text-sm px-4 py-1.5 rounded">💰 保证金台账</button>
+    <button class="text-gray-600 hover:bg-gray-50 text-sm px-4 py-1.5 rounded">⚙️ 参数配置</button>
+    <div class="flex-1"></div>
+    <span class="text-xs text-gray-400 pr-3">本Tab四个子模块平铺展示</span>
+  </div>
+
+  <!-- [基准库历史项目列表] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between gap-2 flex-wrap">
+      <h3 class="text-sm font-semibold text-gray-700">📚 历史项目基准库</h3>
+      <div class="flex items-center gap-2">
+        <input type="text" placeholder="项目名/编号" class="border border-gray-300 rounded px-2 py-1 text-xs w-40">
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>全部类型</option>
+          <option>体游</option>
+          <option>水游</option>
+          <option>商业体游</option>
+        </select>
+        <select class="border border-gray-300 rounded px-2 py-1 text-xs">
+          <option>近3年</option>
+          <option>近5年</option>
+          <option>全部</option>
+        </select>
+        <button class="border border-gray-300 text-xs px-3 py-1 rounded hover:bg-gray-50">导出基准</button>
+      </div>
+    </div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 text-xs">
+        <tr>
+          <th class="px-3 py-2 text-left">项目编号</th>
+          <th class="px-3 py-2 text-left">项目名称</th>
+          <th class="px-3 py-2 text-left">类型</th>
+          <th class="px-3 py-2 text-right">合同金额</th>
+          <th class="px-3 py-2 text-right">实际成本</th>
+          <th class="px-3 py-2 text-right">毛利率</th>
+          <th class="px-3 py-2 text-left">关闭日期</th>
+          <th class="px-3 py-2 text-center w-32">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 text-xs">
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono">D58</td>
+          <td class="px-3 py-2 font-medium text-sm">珠海C欢乐谷扩建</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">体游</span></td>
+          <td class="px-3 py-2 text-right">￥18,500,000</td>
+          <td class="px-3 py-2 text-right">￥15,200,000</td>
+          <td class="px-3 py-2 text-right text-green-600 font-medium">17.8%</td>
+          <td class="px-3 py-2 text-gray-500">2025-12-08</td>
+          <td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline mr-2">复盘</a><a class="text-blue-500 hover:underline">作基准</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono">D45</td>
+          <td class="px-3 py-2 font-medium text-sm">东莞D水游乐园</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">水游</span></td>
+          <td class="px-3 py-2 text-right">￥9,800,000</td>
+          <td class="px-3 py-2 text-right">￥8,950,000</td>
+          <td class="px-3 py-2 text-right text-green-600 font-medium">8.7%</td>
+          <td class="px-3 py-2 text-gray-500">2025-08-22</td>
+          <td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline mr-2">复盘</a><a class="text-blue-500 hover:underline">作基准</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono">D38</td>
+          <td class="px-3 py-2 font-medium text-sm">惠州E商业体游</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">商业体游</span></td>
+          <td class="px-3 py-2 text-right">￥6,200,000</td>
+          <td class="px-3 py-2 text-right">￥6,580,000</td>
+          <td class="px-3 py-2 text-right text-red-500 font-medium">-6.1%</td>
+          <td class="px-3 py-2 text-gray-500">2025-05-14</td>
+          <td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline mr-2">复盘</a><a class="text-blue-500 hover:underline">作基准</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono">D29</td>
+          <td class="px-3 py-2 font-medium text-sm">广州F亲子乐园</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">体游</span></td>
+          <td class="px-3 py-2 text-right">￥12,500,000</td>
+          <td class="px-3 py-2 text-right">￥10,800,000</td>
+          <td class="px-3 py-2 text-right text-green-600 font-medium">13.6%</td>
+          <td class="px-3 py-2 text-gray-500">2024-11-30</td>
+          <td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline mr-2">复盘</a><a class="text-blue-500 hover:underline">作基准</a></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="px-4 py-2 border-t border-gray-200 bg-gray-50 text-xs text-gray-500">
+      项目关闭时自动入库，5秒内完成；可作为新项目模板的基准参考
+    </div>
+  </div>
+
+  <!-- [复盘报告示意 — 计划vs实际] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-700">📋 复盘报告示意 — 珠海C欢乐谷扩建（D58）</h3>
+      <button class="border border-gray-300 hover:bg-gray-50 text-xs px-3 py-1 rounded">📤 导出PDF</button>
+    </div>
+    <div class="p-4 grid grid-cols-3 gap-4 mb-4">
+      <div class="border border-gray-200 rounded p-3 bg-gray-50">
+        <div class="text-xs text-gray-500 mb-1">计划总成本</div>
+        <div class="text-lg font-semibold text-gray-800">￥15,800,000</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3 bg-gray-50">
+        <div class="text-xs text-gray-500 mb-1">实际总成本</div>
+        <div class="text-lg font-semibold text-gray-800">￥15,200,000</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3 bg-green-50">
+        <div class="text-xs text-gray-500 mb-1">节余 / 偏差率</div>
+        <div class="text-lg font-semibold text-green-600">￥600,000 / -3.8%</div>
+      </div>
+    </div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 text-xs">
+        <tr>
+          <th class="px-3 py-2 text-left">维度</th>
+          <th class="px-3 py-2 text-right">计划</th>
+          <th class="px-3 py-2 text-right">实际</th>
+          <th class="px-3 py-2 text-right">偏差</th>
+          <th class="px-3 py-2 text-right">偏差率</th>
+          <th class="px-3 py-2 text-left">原因分析</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 text-xs">
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">设备采购</td><td class="px-3 py-2 text-right">￥7,200,000</td><td class="px-3 py-2 text-right">￥7,850,000</td><td class="px-3 py-2 text-right text-red-500">+￥650,000</td><td class="px-3 py-2 text-right text-red-500">+9.0%</td><td class="px-3 py-2 text-gray-500">高端展示设备追加</td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">钢结构</td><td class="px-3 py-2 text-right">￥3,500,000</td><td class="px-3 py-2 text-right">￥3,200,000</td><td class="px-3 py-2 text-right text-green-600">-￥300,000</td><td class="px-3 py-2 text-right text-green-600">-8.6%</td><td class="px-3 py-2 text-gray-500">材料价格下降</td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">玻璃钢</td><td class="px-3 py-2 text-right">￥1,800,000</td><td class="px-3 py-2 text-right">￥1,650,000</td><td class="px-3 py-2 text-right text-green-600">-￥150,000</td><td class="px-3 py-2 text-right text-green-600">-8.3%</td><td class="px-3 py-2 text-gray-500">优化拼接方案</td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">包装运输</td><td class="px-3 py-2 text-right">￥800,000</td><td class="px-3 py-2 text-right">￥720,000</td><td class="px-3 py-2 text-right text-green-600">-￥80,000</td><td class="px-3 py-2 text-right text-green-600">-10.0%</td><td class="px-3 py-2 text-gray-500">合并运输批次</td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">安装+调试</td><td class="px-3 py-2 text-right">￥2,500,000</td><td class="px-3 py-2 text-right">￥1,780,000</td><td class="px-3 py-2 text-right text-green-600">-￥720,000</td><td class="px-3 py-2 text-right text-green-600">-28.8%</td><td class="px-3 py-2 text-gray-500">现场配合度高</td></tr>
+      </tbody>
+    </table>
+    <div class="p-4 border-t border-gray-200">
+      <div class="text-xs font-semibold text-gray-700 mb-2">超支Top 3 科目</div>
+      <ol class="text-xs text-gray-600 list-decimal pl-5 space-y-1">
+        <li>设备采购 +￥650,000（+9.0%）— 高端展示设备追加，建议未来项目矩阵预留10%缓冲</li>
+        <li>暂无</li>
+        <li>暂无</li>
+      </ol>
+    </div>
+  </div>
+
+  <!-- [保证金台账] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-700">💰 保证金台账</h3>
+      <div class="flex items-center gap-2">
+        <button class="border border-gray-300 hover:bg-gray-50 text-xs px-3 py-1 rounded">+ 新增保证金</button>
+        <button class="border border-gray-300 hover:bg-gray-50 text-xs px-3 py-1 rounded">导出</button>
+      </div>
+    </div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 text-xs">
+        <tr>
+          <th class="px-3 py-2 text-left">项目</th>
+          <th class="px-3 py-2 text-left">类型</th>
+          <th class="px-3 py-2 text-right">金额</th>
+          <th class="px-3 py-2 text-left">缴纳日期</th>
+          <th class="px-3 py-2 text-left">到期/退还日期</th>
+          <th class="px-3 py-2 text-left">状态</th>
+          <th class="px-3 py-2 text-center w-28">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700 text-xs">
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">深圳A体游公园（D71）</td><td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">投标保证金</span></td><td class="px-3 py-2 text-right">￥100,000</td><td class="px-3 py-2 text-gray-500">2026-02-08</td><td class="px-3 py-2 text-gray-500">中标后退还</td><td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 px-2 py-0.5 rounded">待退还</span></td><td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline">登记退还</a></td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">深圳A体游公园（D71）</td><td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">履约保证金</span></td><td class="px-3 py-2 text-right">￥640,000</td><td class="px-3 py-2 text-gray-500">2026-03-15</td><td class="px-3 py-2 text-gray-500">竣工后6个月</td><td class="px-3 py-2"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">在缴中</span></td><td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">珠海C欢乐谷（D58）</td><td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">质保金</span></td><td class="px-3 py-2 text-right">￥925,000</td><td class="px-3 py-2 text-gray-500">2025-12-08</td><td class="px-3 py-2 text-gray-500">2027-12-08</td><td class="px-3 py-2"><span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">在缴中</span></td><td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td></tr>
+        <tr class="border-t border-gray-200"><td class="px-3 py-2 font-medium">东莞D水游乐园（D45）</td><td class="px-3 py-2"><span class="bg-gray-100 px-2 py-0.5 rounded">投标保证金</span></td><td class="px-3 py-2 text-right">￥80,000</td><td class="px-3 py-2 text-gray-500">2025-04-02</td><td class="px-3 py-2 text-gray-500">2025-08-30</td><td class="px-3 py-2"><span class="bg-green-100 text-green-700 px-2 py-0.5 rounded">已退还</span></td><td class="px-3 py-2 text-center"><a class="text-blue-500 hover:underline">详情</a></td></tr>
+      </tbody>
+      <tfoot class="bg-gray-50 text-gray-700 font-medium text-xs">
+        <tr class="border-t border-gray-300"><td class="px-3 py-2">合计</td><td class="px-3 py-2"></td><td class="px-3 py-2 text-right">￥1,745,000</td><td class="px-3 py-2" colspan="4">在缴 ￥1,565,000 · 待退 ￥100,000 · 已退 ￥80,000</td></tr>
+      </tfoot>
+    </table>
+  </div>
+
+  <!-- [参数配置卡] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300">
+      <h3 class="text-sm font-semibold text-gray-700">⚙️ 参数配置</h3>
+    </div>
+    <div class="p-4 grid grid-cols-2 gap-6">
+      <div class="space-y-3">
+        <div class="text-xs font-semibold text-gray-700 border-b border-gray-200 pb-1">红线告警参数</div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">接近红线阈值</span>
+          <input type="text" value="80%" class="border border-gray-300 rounded px-2 py-1 text-xs w-20 text-right">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">超限阻止保存</span>
+          <select class="border border-gray-300 rounded px-2 py-1 text-xs"><option>启用</option><option>仅警告</option></select>
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">企微推送告警</span>
+          <select class="border border-gray-300 rounded px-2 py-1 text-xs"><option>启用</option><option>关闭</option></select>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="text-xs font-semibold text-gray-700 border-b border-gray-200 pb-1">借款额度参数</div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">建议预警线</span>
+          <input type="text" value="85%" class="border border-gray-300 rounded px-2 py-1 text-xs w-20 text-right">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">单项目额度上限</span>
+          <input type="text" value="￥3,000,000" class="border border-gray-300 rounded px-2 py-1 text-xs w-32 text-right">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">总额度池</span>
+          <input type="text" value="￥20,000,000" class="border border-gray-300 rounded px-2 py-1 text-xs w-32 text-right">
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="text-xs font-semibold text-gray-700 border-b border-gray-200 pb-1">基准库参数</div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">项目关闭后入库延迟</span>
+          <input type="text" value="5秒" class="border border-gray-300 rounded px-2 py-1 text-xs w-20 text-right">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">基准参考默认范围</span>
+          <select class="border border-gray-300 rounded px-2 py-1 text-xs"><option>近3年</option><option>近5年</option></select>
+        </div>
+      </div>
+      <div class="space-y-3">
+        <div class="text-xs font-semibold text-gray-700 border-b border-gray-200 pb-1">保证金参数</div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">到期前提醒天数</span>
+          <input type="text" value="30天" class="border border-gray-300 rounded px-2 py-1 text-xs w-20 text-right">
+        </div>
+        <div class="flex items-center justify-between text-sm">
+          <span class="text-gray-600">提醒方式</span>
+          <select class="border border-gray-300 rounded px-2 py-1 text-xs"><option>企微+邮件</option><option>仅企微</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="p-4 border-t border-gray-200 flex items-center justify-end gap-2 bg-gray-50">
+      <button class="border border-gray-300 hover:bg-gray-50 text-sm px-4 py-1.5 rounded">取消</button>
+      <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded">保存配置</button>
+    </div>
+  </div>
+</body>
+</html>

@@ -19,31 +19,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-26 23:17（第10轮刷新，前75条全部完成，新建议76-95）
+> 更新时间：2026-04-27 14:42（第11轮刷新，#76-95全部完成/冻结，新建议96-115）
+> ⚠️ #2585/#1573/#2222/#2288/#2277 有 needs-prototype 冻结，不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 76 | #2704 | P1 | bidding | medium | 中标概率评分可视化看板（已启动过，恢复） | ✅ |
-| 77 | #3172 | P1 | backend | medium | 质量管理表单组5模板（已启动过，恢复） | ✅ |
-| 78 | #2275 | P1 | dashboard | medium | 驾驶舱首页DORA指标卡片+最近错误滚动条 | ✅ |
-| 79 | #2437 | P1 | backend | medium | 推荐行动计划按阶段自动生成 [22/38] | ✅ |
-| 80 | #2440 | P1 | backend | medium | 竞品定价数据库 [18/38] | ✅ |
-| 81 | #1598 | P1 | budget | medium | 付款申请接入预算关卡 [15/32] | ✅ |
-| 82 | #1603 | P1 | budget | medium | 中标服务费自动计算 [9/32] | ✅ |
-| 83 | #2439 | P1 | pipeline | medium | T0/T1/T2竞品自动分级+升降级机制 [19/38] | ✅ |
-| 84 | #2215 | P1 | biz-enablement | medium | 引导式PPT组装向导 [22/28] | ✅ |
-| 85 | #2306 | P1 | design-ai | high | D3 Web设计工作台 — 电池包拖拽+Three.js | ✅ |
-| 86 | #2441 | P1 | frontend | medium | 竞品区域热力图 vs 万德区域热力图 [17/38] | ⏳前置#2440 |
-| 87 | #2617 | P1 | fullstack | low | Issue创建SOP更新 — PageGuide必填 [4/4] | ✅ |
-| 88 | #2585 | P2 | backend | medium | refactor: 合并wande-ai-api模块到wande-ai | ✅ |
-| 89 | #1573 | P2 | policy | medium | 制度智能问答API [22/22] | ✅ |
-| 90 | #2444 | P2 | backend | medium | keyword_pool新增政策类关键词 [13/38] | ✅ |
-| 91 | #2222 | P2 | biz-enablement | medium | 案例搜索（1搜索框+6维筛选）[6/28] | ✅ |
-| 92 | #2526 | P2 | frontend | medium | 文档上传+新版本上传弹窗 [6/18] | ✅ |
-| 93 | #2288 | P2 | budget | medium | 成本复盘报告页面 [30/32] | ✅ |
-| 94 | #3109 | P2 | fullstack | medium | 客户信用额度管理 — 授信+在途应收+超额预警 | ✅ |
-| 95 | #2277 | P2 | policy | medium | 条款库管理页面 [21/22] | ✅ |
+| 96 | #2215 | P1 | biz-enablement | medium | 引导式PPT组装向导 [22/28] — 唯一剩余P1 | ✅ |
+| 97 | #1498 | P2 | backend | medium | 经销商项目情报推送 — 覆盖区域内新匹配项目 [4/17] | ✅ |
+| 98 | #2445 | P2 | pipeline | medium | 锁定100个儿童友好城市+50个体育公园定向监控 [12/38] | ✅ |
+| 99 | #2319 | P2 | frontend | medium | 商务反馈增加"客户提及竞品"字段 [35/38] | ✅ |
+| 100 | #1466 | P2 | biz-enablement | medium | 案例相似度推荐 [27/28] | ✅ |
+| 101 | #2223 | P2 | biz-enablement | medium | 照片上传+批量导入 [5/28] | ✅ |
+| 102 | #2219 | P2 | biz-enablement | medium | 标准库管理页面 [14/28] | ✅ |
+| 103 | #2221 | P2 | biz-enablement | medium | 材质知识库管理页面 [9/28] | ✅ |
+| 104 | #2217 | P2 | biz-enablement | medium | 设备维护档案页面 [18/28] | ✅ |
+| 105 | #2220 | P2 | biz-enablement | medium | 材质参数一键导出 [10/28] | ✅ |
+| 106 | #2218 | P2 | biz-enablement | medium | 标准合规说明导出 [15/28] | ✅ |
+| 107 | #2278 | P2 | policy | medium | AI制度起草向导页面 [20/22] | ✅ |
+| 108 | #2293 | P2 | budget | medium | 保证金台账页面 [7/32] | ✅ |
+| 109 | #2389 | P2 | biz-enablement | medium | 季度照片采集提醒+任务推送 [28/28] | ✅ |
+| 110 | #2390 | P2 | biz-enablement | high | 照片AI自动标签（CLIP模型）[26/28] | ✅ |
+| 111 | #2539 | P2 | fullstack | medium | 项目通讯录增强 — 外部干系人+RACI矩阵 [18/18] | ✅ |
+| 112 | #3106 | P2 | fullstack | medium | 发货管理（国贸专用）— 装箱单+报关+海运空运 | ✅ |
+| 113 | #3107 | P2 | fullstack | medium | 出口单据管理 — CI/PL/BL/CO/FormE自动生成 | ✅ |
+| 114 | #3111 | P2 | backend | medium | 汇率管理+利润自动计算 — 报价锁汇+收款汇率 | ✅ |
+| 115 | #2639 | P2 | backend | low | 数字人+声音克隆平台选型对比评估（文档）[7/7] | ✅ |
 
 ## 指派历史
 

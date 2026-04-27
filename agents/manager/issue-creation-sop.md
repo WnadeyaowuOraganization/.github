@@ -1,6 +1,6 @@
 # Issue创建SOP — 自动编程需求源
 
-> **版本**: v3.0 | **生效日期**: 2026-04-08
+> **版本**: v3.1 | **生效日期**: 2026-04-27
 > **适用仓库**: wande-play（Monorepo）
 > **上游**: 吴耀提出需求 → Perplexity分析
 > **下游**: Claude Code从 wande-play Issue 接任务 → 自动编程执行 → Perplexity产品验收
@@ -79,7 +79,7 @@
 
 ## 四、Issue模板（标准格式）
 
-每个Issue的Body必须包含以下 **7个Section**：
+每个Issue的Body必须包含以下 **8个Section**（含PageGuide则为9个）：
 
 ```markdown
 ## 需求背景
@@ -121,6 +121,27 @@
 |------|---------|-------------|---------|
 | 1 | ... | ... | ... |
 | 2 | ... | ... | ... |
+
+## PageGuide（页面说明）—— 仅含前端页面的Issue需填写
+
+<!--
+⚠️ 此Section仅 module:frontend / module:fullstack 且包含新建页面的Issue需要填写。
+纯后端/文档/Bug修复 Issue 跳过此Section。
+-->
+
+> 每个新建前端页面必须包含PageGuide组件。以下内容将录入 `page-guide-data.ts` 配置文件。
+
+- **pageKey**: `小写字母+连字符，与路由path对应`
+- **title**: `页面名称（2-6个字）`
+- **这是什么**: `一句话定位，不超过30个字`
+- **解决什么问题**:
+  - 痛点1
+  - 痛点2
+  - （可选）痛点3
+- **快速上手**:
+  1. 第一步操作
+  2. 第二步操作
+  3. 第三步操作
 
 ## 其他要求
 
@@ -277,9 +298,10 @@ type:docs                                → 无需产品验收
 
 ### 7.3 模板预检
 
-- [ ] 7个Section都已填写（需求背景/关联Issue/环境配置/处理步骤/其他要求/技术验收/产品验收）
+- [ ] 8个Section都已填写（需求背景/关联Issue/环境配置/处理步骤/其他要求/技术验收/产品验收），含前端页面的Issue还需填写PageGuide Section
 - [ ] 处理步骤有表格或清单（不是纯文字描述）
 - [ ] 「产品验收清单」已填写环境URL和功能Checklist（`module:frontend/fullstack` 必填）
+- [ ] PageGuide Section（`module:frontend/fullstack` 含新建页面时必填）：pageKey/title/这是什么/解决什么问题/快速上手 已填写
 - [ ] 标签至少4个（module + 优先级 + 类型 + 状态）
 - [ ] 标签名称拼写正确（与 wande-label.md 一致）
 - [ ] Sprint标签已添加（Sprint-1 / Sprint-2 等）
@@ -347,3 +369,4 @@ gh api repos/WnadeyaowuOraganization/wande-play/contents/frontend/apps/web-antd/
 | v1.3 | 2026-03-21 | 新增测试验收标准Section |
 | v2.0 | 2026-04-03 | Monorepo重构，仓库路由更新 |
 | **v3.0** | **2026-04-08** | **全面重写**：①对齐Monorepo+Project#4+Flyway现状；②新增§三「Scope边界规则」（Issue #3226 教训：跨仓库需求必须拆分，不能在评论追加）；③Issue模板新增「产品验收清单」Section（第7个Section）；④新增§六「产品验收流程」（Given-When-Then Checklist + 验收评论模板）；⑤新增 review:needed / review:passed / review:rework 标签；⑥预检清单新增Scope预检组；⑦废弃手动Project看板关联步骤（已由auto-add-to-project.yml自动化）|
+| **v3.1** | **2026-04-27** | **PageGuide纳入Issue模板**：①§四Issue模板新增「PageGuide（页面说明）」Section（处理步骤后、其他要求前，前端Issue必填）；②§七预检清单增加PageGuide填写检查项；③Issue Section数从7→8（含PageGuide时9个） |

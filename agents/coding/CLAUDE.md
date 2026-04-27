@@ -65,6 +65,7 @@
 12. **上下文≥80%先 `/compact`** — 再继续提PR（#1728教训）
 13. **API Error 400 `thinking...missing` 立即 `/clear`** — 不重试不再compact
 14. **禁止 push dev/main** — 只push `feature-Issue-<N>`
+15. **PR提交前必须勾选所有checkbox** — `gh pr create` 之前：1) PR body 里所有 `- [ ]` 改为 `- [x]`；2) task.md 所有完成步骤的 `- [ ]` 改为 `- [x]`。质量预检 gate 会 block 任何未勾选项（2026-04-27 10个PR连续失败的教训）
 
 ## 环境速查
 

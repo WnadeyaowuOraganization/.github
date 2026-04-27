@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>全景一览 — 项目全景控制表</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Microsoft YaHei', sans-serif; }
+    .health-bar { width: 4px; border-radius: 2px; }
+    .kpi-card { transition: box-shadow 0.15s; }
+    .kpi-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+    .matrix-table th { background: #fafafa; font-weight: 600; color: #555; font-size: 12px; }
+    .matrix-table td { font-size: 13px; }
+    .matrix-table .sub-header { background: #f5f5f5; font-size: 11px; color: #888; font-weight: 500; }
+    .progress-bar { height: 4px; background: #f0f0f0; border-radius: 2px; overflow: hidden; }
+    .progress-fill { height: 100%; transition: width 0.3s; }
+    .status-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 4px; }
+    .badge { display: inline-block; padding: 1px 6px; border-radius: 3px; font-size: 11px; font-weight: 600; }
+  </style>
+</head>
+<body class="bg-gray-50 p-6">
+
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">全景一览（区域×预算/计划/BOM三维矩阵+EVM仪表盘）</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">一张表看进度×预算×BOM三维联动+EVM挣值仪表盘，让吴总5秒判断项目健康/红灯</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">吴耀（总控视角）、项目经理（自查视角）、管理层例会（决策视角）</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">区域三维矩阵聚合 / EVM指标计算 / 健康度雷达 / 多项目对比</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">区域钻取 / 项目切换对比 / 导出例会PPT / 健康度排行查异常</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">聚合API&lt;2s / EVM三色一目了然 / 区域钻取直达源页 / 数据每5分钟刷新</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">项目全景控制表 详细设计.md</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [区域1：顶部项目选择栏] -->
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4 flex items-center justify-between flex-wrap gap-3">
+    <div class="flex items-center gap-3 flex-wrap">
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">项目：</span>
+        <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white min-w-[200px]">
+          <option>深圳A体游公园（在建）</option>
+          <option>广州B商业体游</option>
+          <option>佛山C酒店亲子区</option>
+          <option>东莞D室内乐园</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-gray-500">时间范围：</span>
+        <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white">
+          <option>最近4周</option>
+          <option>本月</option>
+          <option>本季度</option>
+          <option>项目周期</option>
+        </select>
+      </div>
+      <div class="flex items-center gap-2 text-xs text-gray-500 ml-2">
+        <span class="status-dot" style="background:#52c41a;"></span>
+        <span>数据更新：2026-04-21 15:32（5分钟前）</span>
+      </div>
+    </div>
+    <div class="flex items-center gap-2">
+      <button class="border border-gray-300 rounded px-3 py-1.5 text-sm text-gray-600 hover:bg-gray-50">
+        <span class="mr-1">⟳</span>刷新
+      </button>
+      <button class="bg-blue-500 text-white rounded px-4 py-1.5 text-sm hover:bg-blue-600">
+        导出例会PPT
+      </button>
+    </div>
+  </div>
+
+  <!-- [区域2：EVM全局仪表盘 5个KPI大卡] -->
+  <div class="mb-4">
+    <div class="flex items-center justify-between mb-2">
+      <h3 class="text-sm font-semibold text-gray-700">EVM 挣值仪表盘 <span class="text-xs text-gray-400 font-normal ml-2">挣值法 5 大核心指标</span></h3>
+      <span class="text-xs text-gray-400">基准日期：2026-04-21</span>
+    </div>
+    <div class="grid grid-cols-5 gap-3">
+      <!-- KPI 1: PV -->
+      <div class="kpi-card bg-white border border-gray-300 rounded p-4">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs text-gray-500">PV 计划值</span>
+          <span class="badge" style="background:#f0f0f0;color:#888;">基准</span>
+        </div>
+        <div class="text-2xl font-semibold text-gray-800">¥1,200,000</div>
+        <div class="text-xs text-gray-400 mt-1">Planned Value</div>
+        <!-- 趋势小折线 -->
+        <svg width="100%" height="28" viewBox="0 0 120 28" class="mt-2">
+          <path d="M0,22 L20,20 L40,17 L60,14 L80,10 L100,7 L120,4" stroke="#bfbfbf" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="text-xs text-gray-500 mt-1">vs 上周 <span class="text-gray-700">+¥120K</span></div>
+      </div>
+
+      <!-- KPI 2: EV -->
+      <div class="kpi-card bg-white border border-gray-300 rounded p-4 relative">
+        <div class="health-bar absolute left-0 top-2 bottom-2" style="background:#52c41a;"></div>
+        <div class="flex items-center justify-between mb-1 ml-2">
+          <span class="text-xs text-gray-500">EV 挣值</span>
+          <span class="badge" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;">健康</span>
+        </div>
+        <div class="text-2xl font-semibold text-gray-800 ml-2">¥1,080,000</div>
+        <div class="text-xs text-gray-400 mt-1 ml-2">Earned Value</div>
+        <svg width="100%" height="28" viewBox="0 0 120 28" class="mt-2">
+          <path d="M0,24 L20,21 L40,19 L60,15 L80,12 L100,9 L120,6" stroke="#52c41a" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="text-xs text-gray-500 mt-1 ml-2">vs 上周 <span class="text-green-600">+¥95K</span></div>
+      </div>
+
+      <!-- KPI 3: AC -->
+      <div class="kpi-card bg-white border border-gray-300 rounded p-4 relative">
+        <div class="health-bar absolute left-0 top-2 bottom-2" style="background:#faad14;"></div>
+        <div class="flex items-center justify-between mb-1 ml-2">
+          <span class="text-xs text-gray-500">AC 实际成本</span>
+          <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">注意</span>
+        </div>
+        <div class="text-2xl font-semibold text-gray-800 ml-2">¥1,150,000</div>
+        <div class="text-xs text-gray-400 mt-1 ml-2">Actual Cost</div>
+        <svg width="100%" height="28" viewBox="0 0 120 28" class="mt-2">
+          <path d="M0,23 L20,20 L40,17 L60,12 L80,8 L100,5 L120,3" stroke="#faad14" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="text-xs text-gray-500 mt-1 ml-2">vs 上周 <span class="text-yellow-600">+¥130K</span></div>
+      </div>
+
+      <!-- KPI 4: SPI -->
+      <div class="kpi-card bg-white border border-gray-300 rounded p-4 relative">
+        <div class="health-bar absolute left-0 top-2 bottom-2" style="background:#faad14;"></div>
+        <div class="flex items-center justify-between mb-1 ml-2">
+          <span class="text-xs text-gray-500">SPI 进度绩效</span>
+          <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯</span>
+        </div>
+        <div class="text-2xl font-semibold text-gray-800 ml-2">0.90</div>
+        <div class="text-xs text-gray-400 mt-1 ml-2">EV / PV  &lt;1 进度滞后</div>
+        <svg width="100%" height="28" viewBox="0 0 120 28" class="mt-2">
+          <line x1="0" y1="14" x2="120" y2="14" stroke="#d9d9d9" stroke-dasharray="2,2"/>
+          <path d="M0,12 L20,13 L40,15 L60,17 L80,16 L100,15 L120,17" stroke="#faad14" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="text-xs text-gray-500 mt-1 ml-2">vs 上周 <span class="text-yellow-600">−0.03</span></div>
+      </div>
+
+      <!-- KPI 5: CPI -->
+      <div class="kpi-card bg-white border border-gray-300 rounded p-4 relative">
+        <div class="health-bar absolute left-0 top-2 bottom-2" style="background:#faad14;"></div>
+        <div class="flex items-center justify-between mb-1 ml-2">
+          <span class="text-xs text-gray-500">CPI 成本绩效</span>
+          <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯</span>
+        </div>
+        <div class="text-2xl font-semibold text-gray-800 ml-2">0.94</div>
+        <div class="text-xs text-gray-400 mt-1 ml-2">EV / AC  &lt;1 成本超支</div>
+        <svg width="100%" height="28" viewBox="0 0 120 28" class="mt-2">
+          <line x1="0" y1="14" x2="120" y2="14" stroke="#d9d9d9" stroke-dasharray="2,2"/>
+          <path d="M0,11 L20,12 L40,14 L60,16 L80,17 L100,18 L120,19" stroke="#faad14" stroke-width="1.5" fill="none"/>
+        </svg>
+        <div class="text-xs text-gray-500 mt-1 ml-2">vs 上周 <span class="text-yellow-600">−0.04</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [区域3：三维矩阵主表 区域×预算×计划×BOM] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-200 flex items-center justify-between">
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700">区域×预算×计划×BOM 三维矩阵</h3>
+        <p class="text-xs text-gray-400 mt-0.5">从 budget_zone + project_plan + bom_items 三源聚合，按区域逐行展示</p>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <span><span class="status-dot" style="background:#52c41a;"></span>健康</span>
+        <span><span class="status-dot" style="background:#faad14;"></span>黄灯</span>
+        <span><span class="status-dot" style="background:#ff4d4f;"></span>红灯</span>
+      </div>
+    </div>
+    <div class="overflow-x-auto">
+      <table class="w-full matrix-table border-collapse">
+        <thead>
+          <tr>
+            <th class="text-left p-2 border-b border-gray-200 sticky left-0 bg-white" rowspan="2" style="min-width:140px;">区域</th>
+            <th class="text-left p-2 border-b border-gray-200 border-l border-gray-200" colspan="4">预算（来自 budget_zone）</th>
+            <th class="text-left p-2 border-b border-gray-200 border-l border-gray-200" colspan="4">计划（来自 project_plan）</th>
+            <th class="text-left p-2 border-b border-gray-200 border-l border-gray-200" colspan="4">BOM（来自 bom_items）</th>
+            <th class="text-center p-2 border-b border-gray-200 border-l border-gray-200" rowspan="2" style="min-width:100px;">综合健康度</th>
+            <th class="text-center p-2 border-b border-gray-200 border-l border-gray-200" rowspan="2" style="min-width:80px;">操作</th>
+          </tr>
+          <tr class="sub-header">
+            <td class="p-1.5 border-b border-gray-200 border-l border-gray-200">限额</td>
+            <td class="p-1.5 border-b border-gray-200">已用</td>
+            <td class="p-1.5 border-b border-gray-200">剩余</td>
+            <td class="p-1.5 border-b border-gray-200">使用%</td>
+            <td class="p-1.5 border-b border-gray-200 border-l border-gray-200">计划完成</td>
+            <td class="p-1.5 border-b border-gray-200">实际完成</td>
+            <td class="p-1.5 border-b border-gray-200">SPI</td>
+            <td class="p-1.5 border-b border-gray-200">状态</td>
+            <td class="p-1.5 border-b border-gray-200 border-l border-gray-200">BOM项数</td>
+            <td class="p-1.5 border-b border-gray-200">已交付</td>
+            <td class="p-1.5 border-b border-gray-200">未到货</td>
+            <td class="p-1.5 border-b border-gray-200">交付%</td>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- 接待区 - 健康 -->
+          <tr class="hover:bg-gray-50">
+            <td class="p-2 border-b border-gray-100 sticky left-0 bg-white">
+              <div class="flex items-center">
+                <div class="health-bar mr-2" style="height:24px;background:#52c41a;"></div>
+                <span class="font-medium text-gray-800">接待区</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">¥180,000</td>
+            <td class="p-2 border-b border-gray-100">¥152,000</td>
+            <td class="p-2 border-b border-gray-100 text-gray-500">¥28,000</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:84%;background:#52c41a;"></div></div>
+                <span class="text-xs">84%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">85%</td>
+            <td class="p-2 border-b border-gray-100">88%</td>
+            <td class="p-2 border-b border-gray-100"><span class="text-green-600 font-semibold">1.04</span></td>
+            <td class="p-2 border-b border-gray-100"><span class="badge" style="background:#f6ffed;color:#52c41a;">超前</span></td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">36</td>
+            <td class="p-2 border-b border-gray-100">34</td>
+            <td class="p-2 border-b border-gray-100">2</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:94%;background:#52c41a;"></div></div>
+                <span class="text-xs">94%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <span class="badge" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;">健康 92</span>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <a href="#" class="text-blue-500 text-xs hover:underline">钻取 →</a>
+            </td>
+          </tr>
+
+          <!-- 游乐核心区 - 红灯 -->
+          <tr class="hover:bg-gray-50">
+            <td class="p-2 border-b border-gray-100 sticky left-0 bg-white">
+              <div class="flex items-center">
+                <div class="health-bar mr-2" style="height:24px;background:#ff4d4f;"></div>
+                <span class="font-medium text-gray-800">游乐核心区</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">¥520,000</td>
+            <td class="p-2 border-b border-gray-100 text-red-600 font-semibold">¥598,000</td>
+            <td class="p-2 border-b border-gray-100 text-red-600">−¥78,000</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:115%;background:#ff4d4f;"></div></div>
+                <span class="text-xs text-red-600 font-semibold">115%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">75%</td>
+            <td class="p-2 border-b border-gray-100">62%</td>
+            <td class="p-2 border-b border-gray-100"><span class="text-red-600 font-semibold">0.83</span></td>
+            <td class="p-2 border-b border-gray-100"><span class="badge" style="background:#fff1f0;color:#ff4d4f;">延期7天</span></td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">128</td>
+            <td class="p-2 border-b border-gray-100">98</td>
+            <td class="p-2 border-b border-gray-100 text-red-600 font-semibold">30</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:77%;background:#ff4d4f;"></div></div>
+                <span class="text-xs">77%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <span class="badge" style="background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;">红灯 48</span>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <a href="#" class="text-blue-500 text-xs hover:underline">钻取 →</a>
+            </td>
+          </tr>
+
+          <!-- 餐饮区 - 黄灯 -->
+          <tr class="hover:bg-gray-50">
+            <td class="p-2 border-b border-gray-100 sticky left-0 bg-white">
+              <div class="flex items-center">
+                <div class="health-bar mr-2" style="height:24px;background:#faad14;"></div>
+                <span class="font-medium text-gray-800">餐饮区</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">¥220,000</td>
+            <td class="p-2 border-b border-gray-100">¥210,000</td>
+            <td class="p-2 border-b border-gray-100 text-gray-500">¥10,000</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:95%;background:#faad14;"></div></div>
+                <span class="text-xs text-yellow-600">95%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">80%</td>
+            <td class="p-2 border-b border-gray-100">73%</td>
+            <td class="p-2 border-b border-gray-100"><span class="text-yellow-600 font-semibold">0.91</span></td>
+            <td class="p-2 border-b border-gray-100"><span class="badge" style="background:#fffbe6;color:#faad14;">轻微滞后</span></td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">52</td>
+            <td class="p-2 border-b border-gray-100">45</td>
+            <td class="p-2 border-b border-gray-100">7</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:87%;background:#faad14;"></div></div>
+                <span class="text-xs">87%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 73</span>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <a href="#" class="text-blue-500 text-xs hover:underline">钻取 →</a>
+            </td>
+          </tr>
+
+          <!-- 卫生间 - 健康 -->
+          <tr class="hover:bg-gray-50">
+            <td class="p-2 border-b border-gray-100 sticky left-0 bg-white">
+              <div class="flex items-center">
+                <div class="health-bar mr-2" style="height:24px;background:#52c41a;"></div>
+                <span class="font-medium text-gray-800">卫生间</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">¥85,000</td>
+            <td class="p-2 border-b border-gray-100">¥68,000</td>
+            <td class="p-2 border-b border-gray-100 text-gray-500">¥17,000</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:80%;background:#52c41a;"></div></div>
+                <span class="text-xs">80%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">90%</td>
+            <td class="p-2 border-b border-gray-100">92%</td>
+            <td class="p-2 border-b border-gray-100"><span class="text-green-600 font-semibold">1.02</span></td>
+            <td class="p-2 border-b border-gray-100"><span class="badge" style="background:#f6ffed;color:#52c41a;">按计划</span></td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">28</td>
+            <td class="p-2 border-b border-gray-100">28</td>
+            <td class="p-2 border-b border-gray-100">0</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:100%;background:#52c41a;"></div></div>
+                <span class="text-xs">100%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <span class="badge" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;">健康 95</span>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <a href="#" class="text-blue-500 text-xs hover:underline">钻取 →</a>
+            </td>
+          </tr>
+
+          <!-- 管理区 - 黄灯 -->
+          <tr class="hover:bg-gray-50">
+            <td class="p-2 border-b border-gray-100 sticky left-0 bg-white">
+              <div class="flex items-center">
+                <div class="health-bar mr-2" style="height:24px;background:#faad14;"></div>
+                <span class="font-medium text-gray-800">管理区</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">¥95,000</td>
+            <td class="p-2 border-b border-gray-100">¥122,000</td>
+            <td class="p-2 border-b border-gray-100 text-red-600">−¥27,000</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:128%;background:#faad14;"></div></div>
+                <span class="text-xs text-yellow-600 font-semibold">128%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">88%</td>
+            <td class="p-2 border-b border-gray-100">86%</td>
+            <td class="p-2 border-b border-gray-100"><span class="text-yellow-600 font-semibold">0.98</span></td>
+            <td class="p-2 border-b border-gray-100"><span class="badge" style="background:#fffbe6;color:#faad14;">超限15%</span></td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200">22</td>
+            <td class="p-2 border-b border-gray-100">21</td>
+            <td class="p-2 border-b border-gray-100">1</td>
+            <td class="p-2 border-b border-gray-100">
+              <div class="flex items-center gap-2">
+                <div class="progress-bar w-16"><div class="progress-fill" style="width:95%;background:#52c41a;"></div></div>
+                <span class="text-xs">95%</span>
+              </div>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 68</span>
+            </td>
+            <td class="p-2 border-b border-gray-100 border-l border-gray-200 text-center">
+              <a href="#" class="text-blue-500 text-xs hover:underline">钻取 →</a>
+            </td>
+          </tr>
+
+          <!-- 合计行 -->
+          <tr class="bg-gray-50 font-semibold">
+            <td class="p-2 sticky left-0 bg-gray-50">合计</td>
+            <td class="p-2 border-l border-gray-200">¥1,100,000</td>
+            <td class="p-2">¥1,150,000</td>
+            <td class="p-2 text-red-600">−¥50,000</td>
+            <td class="p-2"><span class="text-yellow-600">105%</span></td>
+            <td class="p-2 border-l border-gray-200">83%</td>
+            <td class="p-2">80%</td>
+            <td class="p-2"><span class="text-yellow-600">0.96</span></td>
+            <td class="p-2">—</td>
+            <td class="p-2 border-l border-gray-200">266</td>
+            <td class="p-2">226</td>
+            <td class="p-2">40</td>
+            <td class="p-2">85%</td>
+            <td class="p-2 border-l border-gray-200 text-center">
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 75</span>
+            </td>
+            <td class="p-2 border-l border-gray-200"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- [区域4-5 双栏布局：健康度雷达 + 异常区域排行] -->
+  <div class="grid grid-cols-2 gap-4 mb-4">
+    <!-- [区域4：健康度雷达图占位] -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <h3 class="text-sm font-semibold text-gray-700 mb-1">健康度五维雷达</h3>
+      <p class="text-xs text-gray-400 mb-3">综合评分 75 / 100 · 黄灯</p>
+      <div class="flex items-center gap-4">
+        <!-- SVG 雷达占位 -->
+        <svg viewBox="0 0 240 240" width="240" height="240" class="flex-shrink-0">
+          <!-- 网格 -->
+          <g stroke="#e8e8e8" fill="none">
+            <polygon points="120,20 215,80 180,200 60,200 25,80"/>
+            <polygon points="120,50 190,93 165,180 75,180 50,93"/>
+            <polygon points="120,80 165,107 150,160 90,160 75,107"/>
+            <polygon points="120,110 140,120 135,140 105,140 100,120"/>
+          </g>
+          <!-- 轴线 -->
+          <g stroke="#d9d9d9">
+            <line x1="120" y1="120" x2="120" y2="20"/>
+            <line x1="120" y1="120" x2="215" y2="80"/>
+            <line x1="120" y1="120" x2="180" y2="200"/>
+            <line x1="120" y1="120" x2="60" y2="200"/>
+            <line x1="120" y1="120" x2="25" y2="80"/>
+          </g>
+          <!-- 数据多边形（半透明黄色） -->
+          <polygon points="120,40 195,86 168,184 78,188 50,95" fill="#faad14" fill-opacity="0.2" stroke="#faad14" stroke-width="1.5"/>
+          <!-- 节点 -->
+          <g fill="#faad14">
+            <circle cx="120" cy="40" r="3"/>
+            <circle cx="195" cy="86" r="3"/>
+            <circle cx="168" cy="184" r="3"/>
+            <circle cx="78" cy="188" r="3"/>
+            <circle cx="50" cy="95" r="3"/>
+          </g>
+          <!-- 标签 -->
+          <g font-size="11" fill="#666" text-anchor="middle">
+            <text x="120" y="13">进度 80</text>
+            <text x="225" y="78">成本 65</text>
+            <text x="190" y="216">质量 78</text>
+            <text x="50" y="216">资源 82</text>
+            <text x="15" y="76">风险 70</text>
+          </g>
+        </svg>
+        <!-- 维度评分明细 -->
+        <div class="flex-1 space-y-2 text-xs">
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">进度</span>
+            <div class="flex items-center gap-2">
+              <div class="progress-bar w-24"><div class="progress-fill" style="width:80%;background:#52c41a;"></div></div>
+              <span class="font-semibold w-8 text-right">80</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">成本</span>
+            <div class="flex items-center gap-2">
+              <div class="progress-bar w-24"><div class="progress-fill" style="width:65%;background:#ff4d4f;"></div></div>
+              <span class="font-semibold w-8 text-right text-red-600">65</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">质量</span>
+            <div class="flex items-center gap-2">
+              <div class="progress-bar w-24"><div class="progress-fill" style="width:78%;background:#faad14;"></div></div>
+              <span class="font-semibold w-8 text-right">78</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">资源</span>
+            <div class="flex items-center gap-2">
+              <div class="progress-bar w-24"><div class="progress-fill" style="width:82%;background:#52c41a;"></div></div>
+              <span class="font-semibold w-8 text-right">82</span>
+            </div>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-gray-500">风险</span>
+            <div class="flex items-center gap-2">
+              <div class="progress-bar w-24"><div class="progress-fill" style="width:70%;background:#faad14;"></div></div>
+              <span class="font-semibold w-8 text-right">70</span>
+            </div>
+          </div>
+          <div class="pt-2 mt-2 border-t border-gray-200 text-xs text-gray-400">
+            权重：进度30% / 成本25% / 质量20% / 资源15% / 风险10%
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- [区域5：异常区域Top5排行] -->
+    <div class="bg-white border border-gray-300 rounded p-4">
+      <div class="flex items-center justify-between mb-3">
+        <div>
+          <h3 class="text-sm font-semibold text-gray-700">异常区域 Top 5</h3>
+          <p class="text-xs text-gray-400 mt-0.5">按健康度倒序，越靠前越紧急</p>
+        </div>
+        <a href="#" class="text-xs text-blue-500 hover:underline">查看全部 →</a>
+      </div>
+      <div class="space-y-2">
+        <!-- 排行项 1 -->
+        <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="badge" style="background:#ff4d4f;color:#fff;width:20px;text-align:center;">1</span>
+              <span class="font-medium text-gray-800 text-sm">游乐核心区</span>
+              <span class="badge" style="background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;">红灯 48</span>
+            </div>
+            <a href="#" class="text-xs text-blue-500 hover:underline">跳转 →</a>
+          </div>
+          <div class="text-xs text-gray-600">原因：钢结构延期7天 + 玻璃钢BOM未到3项 + 预算超支15%</div>
+          <div class="text-xs text-gray-400 mt-1">责任人：张三（项目经理） · 最近更新：2026-04-21 10:15</div>
+        </div>
+        <!-- 排行项 2 -->
+        <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="badge" style="background:#faad14;color:#fff;width:20px;text-align:center;">2</span>
+              <span class="font-medium text-gray-800 text-sm">管理区</span>
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 68</span>
+            </div>
+            <a href="#" class="text-xs text-blue-500 hover:underline">跳转 →</a>
+          </div>
+          <div class="text-xs text-gray-600">原因：采购超限15%（办公家具升级未走变更流程）</div>
+          <div class="text-xs text-gray-400 mt-1">责任人：李四（采购主管） · 最近更新：2026-04-20 16:42</div>
+        </div>
+        <!-- 排行项 3 -->
+        <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="badge" style="background:#faad14;color:#fff;width:20px;text-align:center;">3</span>
+              <span class="font-medium text-gray-800 text-sm">餐饮区</span>
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 73</span>
+            </div>
+            <a href="#" class="text-xs text-blue-500 hover:underline">跳转 →</a>
+          </div>
+          <div class="text-xs text-gray-600">原因：厨房设备BOM未到7项（供应商延迟） + 进度滞后2天</div>
+          <div class="text-xs text-gray-400 mt-1">责任人：王五（区域负责人） · 最近更新：2026-04-21 09:30</div>
+        </div>
+        <!-- 排行项 4 -->
+        <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="badge" style="background:#faad14;color:#fff;width:20px;text-align:center;">4</span>
+              <span class="font-medium text-gray-800 text-sm">广州B商业体游 / 入口大堂</span>
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 71</span>
+            </div>
+            <a href="#" class="text-xs text-blue-500 hover:underline">跳转 →</a>
+          </div>
+          <div class="text-xs text-gray-600">原因：吊顶图纸变更延误5天 + 灯具BOM未到2项</div>
+          <div class="text-xs text-gray-400 mt-1">责任人：赵六（项目经理） · 最近更新：2026-04-21 11:08</div>
+        </div>
+        <!-- 排行项 5 -->
+        <div class="border border-gray-200 rounded p-3 hover:bg-gray-50">
+          <div class="flex items-center justify-between mb-1">
+            <div class="flex items-center gap-2">
+              <span class="badge" style="background:#faad14;color:#fff;width:20px;text-align:center;">5</span>
+              <span class="font-medium text-gray-800 text-sm">佛山C酒店亲子区 / 戏水区</span>
+              <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄灯 74</span>
+            </div>
+            <a href="#" class="text-xs text-blue-500 hover:underline">跳转 →</a>
+          </div>
+          <div class="text-xs text-gray-600">原因：水循环系统调试延迟3天 + 防水材料超支8%</div>
+          <div class="text-xs text-gray-400 mt-1">责任人：钱七（项目经理） · 最近更新：2026-04-20 18:20</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [区域6：多项目对比卡片栅格] -->
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700">多项目对比</h3>
+        <p class="text-xs text-gray-400 mt-0.5">在建项目横向对比，便于资源调配决策</p>
+      </div>
+      <button class="text-xs text-blue-500 hover:underline">+ 添加对比项目</button>
+    </div>
+    <div class="grid grid-cols-4 gap-3">
+      <!-- 项目卡 1 - 当前项目 -->
+      <div class="border-2 border-blue-500 rounded p-3 relative">
+        <span class="absolute -top-2 left-3 bg-blue-500 text-white text-xs px-2 py-0.5 rounded">当前</span>
+        <div class="flex items-center justify-between mb-2 mt-1">
+          <span class="font-medium text-sm text-gray-800">深圳A体游公园</span>
+          <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄 75</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+          <div>
+            <div class="text-gray-400">SPI</div>
+            <div class="font-semibold text-yellow-600">0.90</div>
+          </div>
+          <div>
+            <div class="text-gray-400">CPI</div>
+            <div class="font-semibold text-yellow-600">0.94</div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">
+          <div>下一里程碑：游乐设备进场</div>
+          <div class="text-gray-400 mt-0.5">2026-05-10（19天后）</div>
+        </div>
+        <div class="text-xs mt-2 flex items-center justify-between">
+          <span class="text-red-600">⚠ 异常 5</span>
+          <a href="#" class="text-blue-500 hover:underline">详情 →</a>
+        </div>
+      </div>
+
+      <!-- 项目卡 2 -->
+      <div class="border border-gray-300 rounded p-3 hover:border-blue-500 hover:shadow">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-medium text-sm text-gray-800">广州B商业体游</span>
+          <span class="badge" style="background:#fffbe6;color:#faad14;border:1px solid #ffe58f;">黄 71</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+          <div>
+            <div class="text-gray-400">SPI</div>
+            <div class="font-semibold text-yellow-600">0.92</div>
+          </div>
+          <div>
+            <div class="text-gray-400">CPI</div>
+            <div class="font-semibold text-green-600">1.02</div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">
+          <div>下一里程碑：吊顶完工验收</div>
+          <div class="text-gray-400 mt-0.5">2026-05-03（12天后）</div>
+        </div>
+        <div class="text-xs mt-2 flex items-center justify-between">
+          <span class="text-yellow-600">⚠ 异常 3</span>
+          <a href="#" class="text-blue-500 hover:underline">详情 →</a>
+        </div>
+      </div>
+
+      <!-- 项目卡 3 -->
+      <div class="border border-gray-300 rounded p-3 hover:border-blue-500 hover:shadow">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-medium text-sm text-gray-800">佛山C酒店亲子区</span>
+          <span class="badge" style="background:#f6ffed;color:#52c41a;border:1px solid #b7eb8f;">绿 88</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+          <div>
+            <div class="text-gray-400">SPI</div>
+            <div class="font-semibold text-green-600">1.05</div>
+          </div>
+          <div>
+            <div class="text-gray-400">CPI</div>
+            <div class="font-semibold text-green-600">1.08</div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">
+          <div>下一里程碑：戏水区调试</div>
+          <div class="text-gray-400 mt-0.5">2026-04-28（7天后）</div>
+        </div>
+        <div class="text-xs mt-2 flex items-center justify-between">
+          <span class="text-green-600">✓ 异常 1</span>
+          <a href="#" class="text-blue-500 hover:underline">详情 →</a>
+        </div>
+      </div>
+
+      <!-- 项目卡 4 -->
+      <div class="border border-gray-300 rounded p-3 hover:border-blue-500 hover:shadow">
+        <div class="flex items-center justify-between mb-2">
+          <span class="font-medium text-sm text-gray-800">东莞D室内乐园</span>
+          <span class="badge" style="background:#fff1f0;color:#ff4d4f;border:1px solid #ffa39e;">红 58</span>
+        </div>
+        <div class="grid grid-cols-2 gap-2 text-xs mb-2">
+          <div>
+            <div class="text-gray-400">SPI</div>
+            <div class="font-semibold text-red-600">0.78</div>
+          </div>
+          <div>
+            <div class="text-gray-400">CPI</div>
+            <div class="font-semibold text-red-600">0.85</div>
+          </div>
+        </div>
+        <div class="text-xs text-gray-500 pt-2 border-t border-gray-100">
+          <div>下一里程碑：主体结构封顶</div>
+          <div class="text-gray-400 mt-0.5">2026-05-15（24天后，已延）</div>
+        </div>
+        <div class="text-xs mt-2 flex items-center justify-between">
+          <span class="text-red-600">⚠ 异常 9</span>
+          <a href="#" class="text-blue-500 hover:underline">详情 →</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [区域7：EVM趋势曲线 PV/EV/AC 三线对比] -->
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4">
+    <div class="flex items-center justify-between mb-3">
+      <div>
+        <h3 class="text-sm font-semibold text-gray-700">EVM 趋势曲线（PV / EV / AC）</h3>
+        <p class="text-xs text-gray-400 mt-0.5">最近12周累计金额走势，EV低于PV说明进度滞后，AC高于EV说明成本超支</p>
+      </div>
+      <div class="flex items-center gap-3 text-xs">
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-gray-400"></span>PV 计划值</span>
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-green-500"></span>EV 挣值</span>
+        <span class="flex items-center gap-1"><span class="inline-block w-3 h-0.5 bg-yellow-500"></span>AC 实际成本</span>
+      </div>
+    </div>
+
+    <!-- SVG 折线图占位 -->
+    <svg viewBox="0 0 900 280" width="100%" height="280" preserveAspectRatio="none">
+      <!-- 网格 -->
+      <g stroke="#f0f0f0" stroke-width="1">
+        <line x1="60" y1="40" x2="880" y2="40"/>
+        <line x1="60" y1="100" x2="880" y2="100"/>
+        <line x1="60" y1="160" x2="880" y2="160"/>
+        <line x1="60" y1="220" x2="880" y2="220"/>
+      </g>
+      <!-- Y 轴 -->
+      <line x1="60" y1="40" x2="60" y2="240" stroke="#d9d9d9"/>
+      <!-- X 轴 -->
+      <line x1="60" y1="240" x2="880" y2="240" stroke="#d9d9d9"/>
+
+      <!-- Y 轴刻度文字 -->
+      <g font-size="10" fill="#999" text-anchor="end">
+        <text x="55" y="44">¥1.5M</text>
+        <text x="55" y="104">¥1.0M</text>
+        <text x="55" y="164">¥0.5M</text>
+        <text x="55" y="224">¥0</text>
+      </g>
+
+      <!-- X 轴刻度（12周） -->
+      <g font-size="10" fill="#999" text-anchor="middle">
+        <text x="120" y="258">W1</text>
+        <text x="190" y="258">W2</text>
+        <text x="260" y="258">W3</text>
+        <text x="330" y="258">W4</text>
+        <text x="400" y="258">W5</text>
+        <text x="470" y="258">W6</text>
+        <text x="540" y="258">W7</text>
+        <text x="610" y="258">W8</text>
+        <text x="680" y="258">W9</text>
+        <text x="750" y="258">W10</text>
+        <text x="820" y="258">W11</text>
+        <text x="870" y="258">W12</text>
+      </g>
+
+      <!-- 当前周分隔线 -->
+      <line x1="750" y1="40" x2="750" y2="240" stroke="#ff4d4f" stroke-width="1" stroke-dasharray="4,3"/>
+      <text x="750" y="34" font-size="10" fill="#ff4d4f" text-anchor="middle">本周</text>
+
+      <!-- PV 线（灰，基准平稳上升） -->
+      <path d="M 120,225 L 190,215 L 260,200 L 330,180 L 400,160 L 470,140 L 540,120 L 610,100 L 680,82 L 750,68 L 820,55 L 870,48"
+            stroke="#bfbfbf" stroke-width="2" fill="none"/>
+      <!-- EV 线（绿，落后于PV） -->
+      <path d="M 120,228 L 190,220 L 260,208 L 330,192 L 400,175 L 470,158 L 540,140 L 610,120 L 680,100 L 750,82"
+            stroke="#52c41a" stroke-width="2" fill="none"/>
+      <!-- AC 线（黄，高于EV） -->
+      <path d="M 120,226 L 190,216 L 260,202 L 330,184 L 400,162 L 470,140 L 540,118 L 610,95 L 680,72 L 750,55"
+            stroke="#faad14" stroke-width="2" fill="none"/>
+
+      <!-- 数据点 -->
+      <g fill="#52c41a">
+        <circle cx="750" cy="82" r="4"/>
+      </g>
+      <g fill="#faad14">
+        <circle cx="750" cy="55" r="4"/>
+      </g>
+      <g fill="#bfbfbf">
+        <circle cx="750" cy="68" r="4"/>
+      </g>
+
+      <!-- 当前周数据标注 -->
+      <g font-size="10" fill="#666">
+        <text x="765" y="60">AC ¥1.15M</text>
+        <text x="765" y="74">PV ¥1.20M</text>
+        <text x="765" y="88">EV ¥1.08M</text>
+      </g>
+
+      <!-- 未来预测区（虚线，仅PV继续延伸） -->
+      <g opacity="0.5">
+        <path d="M 750,68 L 820,55 L 870,48" stroke="#bfbfbf" stroke-width="2" fill="none" stroke-dasharray="4,4"/>
+      </g>
+    </svg>
+
+    <div class="mt-3 pt-3 border-t border-gray-100 grid grid-cols-3 gap-4 text-xs">
+      <div>
+        <div class="text-gray-400">本周 SPI 趋势</div>
+        <div class="text-gray-700 mt-1">连续3周 &lt; 0.95，需关注 <span class="text-yellow-600">⚠</span></div>
+      </div>
+      <div>
+        <div class="text-gray-400">本周 CPI 趋势</div>
+        <div class="text-gray-700 mt-1">最近5周持续下滑，从1.02→0.94 <span class="text-yellow-600">⚠</span></div>
+      </div>
+      <div>
+        <div class="text-gray-400">EAC 预测完工成本</div>
+        <div class="text-gray-700 mt-1">¥2,128,000（基线 ¥2,000,000，超支6.4%）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [底部说明] -->
+  <div class="text-xs text-gray-400 text-center py-3">
+    数据源：budget_zone（区域预算）+ project_plan（计划进度）+ bom_items（BOM清单）三源聚合 · 每5分钟自动刷新
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>万德AI平台 — 项目计划管理 低保真原型</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .tab-bar { display: flex; border-bottom: 1px solid #d9d9d9; background: #fff; padding: 0 16px; }
+    .tab-item { padding: 12px 20px; cursor: pointer; color: #999; border-bottom: 2px solid transparent; font-size: 14px; white-space: nowrap; }
+    .tab-item.active { color: #1890ff; border-bottom-color: #1890ff; }
+    .tab-item:hover { color: #333; }
+    .tab-content-frame { width: 100%; border: none; min-height: calc(100vh - 160px); }
+    .sidebar-item { padding: 12px 0; text-align: center; color: #666; cursor: pointer; }
+    .sidebar-item:hover { background: #f0f0f0; }
+    .sidebar-item.active { color: #1890ff; background: #e6f7ff; border-left: 3px solid #1890ff; }
+  </style>
+</head>
+<body class="bg-gray-50">
+
+<!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+<div id="wande-spec-card" style="margin:16px;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+  <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+      <span style="font-weight:600;color:#ad6800;">项目计划管理 — Hub 主框架</span>
+    </div>
+    <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+  </div>
+  <div class="spec-body" style="padding:12px 14px;display:block;">
+    <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+      <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">中标后一键生成主计划+多供应商三段式排程+BOM联动+延期预警，替代Project散表，让项目经理和吴总看清"哪个供应商哪条线晚了"</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">项目经理（编制视角）、供应商接口人（执行视角）、吴耀+管理层（仪表盘视角）、商务（验收）</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">中标→主计划生成 / 三段式（设计/制造/安装）+日历排程 / 供应商依赖矩阵 / BOM变更联动 / 延期预警+企微推送 / 多项目仪表盘</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">选模板生成主计划 / 拖拽排程供应商 / 调整接口点关键路径 / BOM变更触发计划重排 / 预警企微推送 / 计划版本对比</td></tr>
+      <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">中标后10秒生成主计划 / 排程拖拽<200ms / BOM变更3分钟内联动 / 延期>3天自动企微通知 / 关键路径标红</td></tr>
+    </table>
+    <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+      📖 详细设计文档：<a href="./详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">项目计划管理 详细设计.md</a>
+    </div>
+  </div>
+</div>
+<!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+<div class="flex min-h-screen">
+  <aside class="w-16 bg-white border-r border-gray-300 flex-shrink-0">
+    <div class="p-3 text-center border-b border-gray-200">
+      <div class="w-10 h-10 bg-blue-500 text-white rounded flex items-center justify-center mx-auto text-sm font-bold">万</div>
+    </div>
+    <div class="sidebar-item" title="工作台">🏠</div>
+    <div class="sidebar-item" title="CRM">👥</div>
+    <div class="sidebar-item active" title="项目中心">📋</div>
+    <div class="sidebar-item" title="D3设计">🎨</div>
+    <div class="sidebar-item" title="素材库">📦</div>
+    <div class="sidebar-item" title="方案引擎">📄</div>
+    <div class="sidebar-item " title="驾驶舱">📊</div>
+    <div class="sidebar-item " title="财务">💰</div>
+  </aside>
+
+  <main class="flex-1 flex flex-col">
+    <div class="px-6 py-3 text-sm text-gray-500 bg-white border-b border-gray-200">
+      首页 &gt; 项目中心 &gt; 计划管理 &gt; <span class="text-gray-700 font-medium">项目计划管理</span>
+    </div>
+
+    <div class="px-6 py-4 bg-white border-b border-gray-200">
+      <h1 class="text-xl font-bold text-gray-800">项目计划管理</h1>
+      <p class="text-xs text-gray-500 mt-1">三段式条线 · 供应商日历排程 · BOM变更引擎 · 延期预警企微推送</p>
+    </div>
+
+    <div class="tab-bar" id="tabBar"></div>
+
+    <div class="flex-1 p-0 bg-gray-50">
+      <iframe id="tabFrame" class="tab-content-frame" src="tab-plan-master.html"></iframe>
+    </div>
+
+    <div class="p-6 bg-white border-t border-gray-300 mt-4">
+      <h3 class="text-base font-bold text-gray-700 mb-3">原型说明</h3>
+      <table class="w-full text-sm text-left border-collapse">
+        <thead><tr class="bg-gray-100">
+          <th class="p-2 border border-gray-300 w-40">Tab页</th>
+          <th class="p-2 border border-gray-300 w-48">文件名</th>
+          <th class="p-2 border border-gray-300">功能描述</th>
+          <th class="p-2 border border-gray-300 w-40">对应Issue</th>
+        </tr></thead>
+        <tbody>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab1 主计划</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-plan-master.html</td>
+            <td class="p-2 border border-gray-300">条线视图+甘特图（设计/制造/安装三段式）+ 关键路径标红 + 计划模板引擎（中标后一键生成）+ Controller+API</td>
+            <td class="p-2 border border-gray-300 text-xs">#3195 #3197 #3198</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab2 供应商排程</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-plan-supplier.html</td>
+            <td class="p-2 border border-gray-300">三段式+日历排程页面 + 供应商依赖矩阵 + 接口点管理与关键路径识别 + plan_supplier_schedule数据模型</td>
+            <td class="p-2 border border-gray-300 text-xs">#3194 #3196 #3201</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab3 BOM联动</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-plan-bom.html</td>
+            <td class="p-2 border border-gray-300">BOM变更→计划联动引擎（事件驱动计划自动调整）+ BOM列表只读视图 + 影响分析 + 受影响任务标识</td>
+            <td class="p-2 border border-gray-300 text-xs">#3203</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab4 预警引擎</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-plan-alert.html</td>
+            <td class="p-2 border border-gray-300">计划变更管理（版本对比+影响分析+审批流）+ 计划预警引擎（延期预警+企微推送+升级机制）</td>
+            <td class="p-2 border border-gray-300 text-xs">#3199 #3200</td>
+          </tr>
+          <tr>
+            <td class="p-2 border border-gray-300 font-medium">Tab5 管理层仪表盘</td>
+            <td class="p-2 border border-gray-300 text-xs font-mono">tab-plan-dashboard.html</td>
+            <td class="p-2 border border-gray-300">多项目汇总+健康度评分 + 工艺路线模板（钢结构/玻璃钢/外采）+分区支持 + 设备级进度追踪（BOM项×工艺步骤进度矩阵）</td>
+            <td class="p-2 border border-gray-300 text-xs">#3202 #3211 #3212</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script>
+const tabs = [
+  { key: 'master', label: 'Tab1 主计划', src: 'tab-plan-master.html' },
+  { key: 'supplier', label: 'Tab2 供应商排程', src: 'tab-plan-supplier.html' },
+  { key: 'bom', label: 'Tab3 BOM联动', src: 'tab-plan-bom.html' },
+  { key: 'alert', label: 'Tab4 预警引擎', src: 'tab-plan-alert.html' },
+  { key: 'dashboard', label: 'Tab5 管理层仪表盘', src: 'tab-plan-dashboard.html' }
+];
+
+const tabBar = document.getElementById('tabBar');
+const tabFrame = document.getElementById('tabFrame');
+let activeKey = tabs[0].key;
+
+function renderTabs() {
+  tabBar.innerHTML = tabs.map(t =>
+    `<div class="tab-item ${t.key === activeKey ? 'active' : ''}" data-key="${t.key}" data-src="${t.src}">${t.label}</div>`
+  ).join('');
+}
+
+tabBar.addEventListener('click', (e) => {
+  const item = e.target.closest('.tab-item');
+  if (!item) return;
+  activeKey = item.dataset.key;
+  tabFrame.src = item.dataset.src;
+  renderTabs();
+});
+
+tabFrame.addEventListener('load', () => {
+  try {
+    const h = tabFrame.contentDocument.documentElement.scrollHeight;
+    tabFrame.style.height = Math.max(h, 600) + 'px';
+  } catch(e) {}
+});
+
+renderTabs();
+</script>
+</body>
+</html>

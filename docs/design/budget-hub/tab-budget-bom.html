@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BOM联动（绑定+余额提示）</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-50 p-6">
+  <!-- ========== [需求说明块 SPEC-CARD] 万德AI平台原型规范 v1.0 ========== -->
+  <div id="wande-spec-card" style="margin:0 0 16px 0;padding:0;background:#fffbe6;border:1px solid #ffe58f;border-radius:6px;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;font-size:13px;color:#333;box-shadow:0 1px 2px rgba(0,0,0,0.04);">
+    <div onclick="(function(el){var c=el.parentElement.querySelector('.spec-body');var a=el.querySelector('.spec-arrow');if(c.style.display==='none'){c.style.display='block';a.textContent='▼';}else{c.style.display='none';a.textContent='▶';}})(this)" style="padding:10px 14px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #ffe58f;user-select:none;">
+      <div style="display:flex;align-items:center;gap:8px;">
+        <span style="background:#faad14;color:#fff;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:600;">需求说明</span>
+        <span style="font-weight:600;color:#ad6800;">BOM联动（绑定+余额提示）</span>
+      </div>
+      <span class="spec-arrow" style="color:#ad6800;font-size:12px;">▼</span>
+    </div>
+    <div class="spec-body" style="padding:12px 14px;display:block;">
+      <table style="width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.6;">
+        <tr><td style="width:80px;padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">📌 页面目的</td><td style="padding:4px 0;color:#333;">BOM清单与预算信封强联动，BOM编辑时实时显示预算余额，超限拦截</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">👤 主要用户</td><td style="padding:4px 0;color:#333;">设计师（BOM编辑视角）、项目经理（监控视角）</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">🎯 核心功能</td><td style="padding:4px 0;color:#333;">BOM绑定区域+科目 / BOM编辑页顶部余额条 / 超限红线高亮 / BOM列表只读视图</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">⚡ 关键操作</td><td style="padding:4px 0;color:#333;">BOM项绑定zone+subject / 编辑BOM时余额条实时刷新 / 跳转到BOM详情页 / 调剂入口</td></tr>
+        <tr><td style="padding:4px 8px 4px 0;color:#8c6a00;font-weight:600;vertical-align:top;white-space:nowrap;">✅ 验收要点</td><td style="padding:4px 0;color:#333;">BOM绑定后矩阵自动汇总&lt;200ms / 余额条加载&lt;500ms / 超限BOM项行红色 / 跳转BOM保留状态</td></tr>
+      </table>
+      <div style="margin-top:10px;padding-top:8px;border-top:1px dashed #ffe58f;font-size:11.5px;color:#8c6a00;">
+        📖 详细设计文档：<a href="../详细设计.md" target="_blank" style="color:#1890ff;text-decoration:none;">总控预算二维矩阵 详细设计.md</a>
+      </div>
+    </div>
+  </div>
+  <!-- ========== [/需求说明块 SPEC-CARD] ========== -->
+
+  <!-- [项目+筛选栏] -->
+  <div class="bg-white border border-gray-300 rounded p-4 mb-4 flex items-center gap-3 flex-wrap">
+    <span class="text-sm text-gray-600">项目：</span>
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white min-w-[260px]">
+      <option>深圳A体游公园中标项目（2026-D71）</option>
+    </select>
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white">
+      <option>全部区域</option>
+      <option>接待区</option>
+      <option>游乐核心区</option>
+      <option>餐饮区</option>
+    </select>
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white">
+      <option>全部科目</option>
+      <option>设备采购</option>
+      <option>钢结构</option>
+    </select>
+    <select class="border border-gray-300 rounded px-3 py-1.5 text-sm bg-white">
+      <option>全部状态</option>
+      <option>正常</option>
+      <option>超限</option>
+      <option>未绑定</option>
+    </select>
+    <input type="text" placeholder="物料名/编码" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-44">
+    <div class="flex-1"></div>
+    <button class="bg-blue-500 hover:bg-blue-600 text-white text-sm px-4 py-1.5 rounded">+ 新增BOM项</button>
+    <button class="border border-gray-300 hover:bg-gray-50 text-sm px-3 py-1.5 rounded">批量绑定</button>
+  </div>
+
+  <!-- [BOM列表 — 带zone/subject绑定列] -->
+  <div class="bg-white border border-gray-300 rounded mb-4 overflow-x-auto">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-700">BOM 清单（绑定预算信封）</h3>
+      <span class="text-xs text-gray-500">共 28 项 · 超限 2 项 · 未绑定 1 项</span>
+    </div>
+    <table class="w-full text-sm">
+      <thead class="bg-gray-100 text-gray-600 text-xs">
+        <tr>
+          <th class="px-3 py-2 text-left">物料编码</th>
+          <th class="px-3 py-2 text-left">物料名称</th>
+          <th class="px-3 py-2 text-right">数量</th>
+          <th class="px-3 py-2 text-right">单价</th>
+          <th class="px-3 py-2 text-right">金额</th>
+          <th class="px-3 py-2 text-left">绑定区域</th>
+          <th class="px-3 py-2 text-left">绑定科目</th>
+          <th class="px-3 py-2 text-left">信封状态</th>
+          <th class="px-3 py-2 text-center w-32">操作</th>
+        </tr>
+      </thead>
+      <tbody class="text-gray-700">
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">WD-EQ-001</td>
+          <td class="px-3 py-2">大型旋转木马 A型</td>
+          <td class="px-3 py-2 text-right">1</td>
+          <td class="px-3 py-2 text-right">￥1,200,000</td>
+          <td class="px-3 py-2 text-right font-medium">￥1,200,000</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">游乐核心区</span></td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">设备采购</span></td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">正常 60%</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-blue-500 hover:underline mr-2">编辑</a><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50 bg-red-50">
+          <td class="px-3 py-2 font-mono text-xs">WD-EQ-008</td>
+          <td class="px-3 py-2 text-red-600 font-medium">高端互动展示墙</td>
+          <td class="px-3 py-2 text-right">2</td>
+          <td class="px-3 py-2 text-right">￥420,000</td>
+          <td class="px-3 py-2 text-right font-medium text-red-600">￥840,000</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">接待区</span></td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">设备采购</span></td>
+          <td class="px-3 py-2"><span class="bg-red-100 text-red-700 text-xs px-2 py-0.5 rounded">超限 140%</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-blue-500 hover:underline mr-2">编辑</a><a class="text-orange-600 hover:underline">调剂</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">WD-ST-005</td>
+          <td class="px-3 py-2">主体钢结构</td>
+          <td class="px-3 py-2 text-right">1</td>
+          <td class="px-3 py-2 text-right">￥1,800,000</td>
+          <td class="px-3 py-2 text-right font-medium">￥1,800,000</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">游乐核心区</span></td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">钢结构</span></td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">接近红线 92%</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-blue-500 hover:underline mr-2">编辑</a><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">WD-FB-012</td>
+          <td class="px-3 py-2">玻璃钢造型组件</td>
+          <td class="px-3 py-2 text-right">8</td>
+          <td class="px-3 py-2 text-right">￥75,000</td>
+          <td class="px-3 py-2 text-right font-medium">￥600,000</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">游乐核心区</span></td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">玻璃钢</span></td>
+          <td class="px-3 py-2"><span class="bg-green-100 text-green-700 text-xs px-2 py-0.5 rounded">正常 100%</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-blue-500 hover:underline mr-2">编辑</a><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50">
+          <td class="px-3 py-2 font-mono text-xs">WD-IN-021</td>
+          <td class="px-3 py-2">现场安装服务包</td>
+          <td class="px-3 py-2 text-right">1</td>
+          <td class="px-3 py-2 text-right">￥600,000</td>
+          <td class="px-3 py-2 text-right font-medium">￥600,000</td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">游乐核心区</span></td>
+          <td class="px-3 py-2"><span class="bg-gray-100 text-gray-700 text-xs px-2 py-0.5 rounded">安装</span></td>
+          <td class="px-3 py-2"><span class="bg-yellow-100 text-yellow-700 text-xs px-2 py-0.5 rounded">接近红线 88%</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-blue-500 hover:underline mr-2">编辑</a><a class="text-blue-500 hover:underline">详情</a></td>
+        </tr>
+        <tr class="border-t border-gray-200 hover:bg-gray-50 bg-yellow-50">
+          <td class="px-3 py-2 font-mono text-xs">WD-OT-099</td>
+          <td class="px-3 py-2 text-yellow-700">特殊定制项 ★未绑定</td>
+          <td class="px-3 py-2 text-right">1</td>
+          <td class="px-3 py-2 text-right">￥80,000</td>
+          <td class="px-3 py-2 text-right font-medium">￥80,000</td>
+          <td class="px-3 py-2"><span class="text-xs text-red-500">⚠ 未绑定</span></td>
+          <td class="px-3 py-2"><span class="text-xs text-red-500">⚠ 未绑定</span></td>
+          <td class="px-3 py-2"><span class="bg-gray-200 text-gray-600 text-xs px-2 py-0.5 rounded">无信封</span></td>
+          <td class="px-3 py-2 text-center text-xs"><a class="text-blue-500 hover:underline">立即绑定</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- [BOM编辑模态框示意 — 顶部预算余额条] -->
+  <div class="bg-white border border-gray-300 rounded mb-4">
+    <div class="px-4 py-3 border-b border-gray-300 flex items-center justify-between">
+      <h3 class="text-sm font-semibold text-gray-700">BOM 编辑模态框（示意）— 顶部预算余额条</h3>
+      <span class="text-xs text-gray-500">点击「编辑」时弹出，余额条实时刷新</span>
+    </div>
+    <div class="p-4">
+      <!-- 模态框框架 -->
+      <div class="border-2 border-gray-400 rounded-lg shadow-sm bg-white">
+        <div class="bg-gray-100 border-b border-gray-300 px-4 py-2 flex items-center justify-between">
+          <span class="text-sm font-medium text-gray-700">编辑 BOM — 高端互动展示墙（WD-EQ-008）</span>
+          <span class="text-gray-400 cursor-pointer">✕</span>
+        </div>
+        <!-- 余额条 -->
+        <!-- [预算余额条 BUDGET-BAR] -->
+        <div class="bg-red-50 border-b border-red-200 px-4 py-3">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center gap-3">
+              <span class="text-xs text-gray-600">所属信封：</span>
+              <span class="bg-white border border-gray-300 text-xs px-2 py-0.5 rounded">接待区</span>
+              <span class="text-gray-400">×</span>
+              <span class="bg-white border border-gray-300 text-xs px-2 py-0.5 rounded">设备采购</span>
+            </div>
+            <a class="text-xs text-blue-500 hover:underline">→ 跳转矩阵</a>
+          </div>
+          <div class="flex items-center gap-4 text-xs">
+            <span class="text-gray-600">总额 <span class="font-semibold text-gray-800">￥600,000</span></span>
+            <span class="text-gray-600">已用 <span class="font-semibold text-red-600">￥840,000</span></span>
+            <span class="text-gray-600">剩余 <span class="font-semibold text-red-600">-￥240,000</span></span>
+            <span class="text-red-600 font-semibold">超限 140%</span>
+          </div>
+          <div class="w-full h-3 bg-gray-200 rounded mt-2 overflow-hidden">
+            <div class="h-full bg-red-500" style="width:100%"></div>
+          </div>
+          <div class="text-xs text-red-600 mt-2 flex items-center gap-2">
+            <span>⛔ 已超出红线，无法保存。建议：</span>
+            <a class="underline">申请调剂</a>
+            <span>或</span>
+            <a class="underline">调整数量</a>
+          </div>
+        </div>
+        <!-- 表单 -->
+        <div class="p-4 grid grid-cols-2 gap-4">
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">物料名称</label>
+            <input type="text" value="高端互动展示墙" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">物料编码</label>
+            <input type="text" value="WD-EQ-008" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full bg-gray-50">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">绑定区域</label>
+            <select class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full bg-white">
+              <option>接待区</option>
+              <option>游乐核心区</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">绑定科目</label>
+            <select class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full bg-white">
+              <option>设备采购</option>
+              <option>钢结构</option>
+            </select>
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">数量</label>
+            <input type="text" value="2" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full">
+          </div>
+          <div>
+            <label class="text-xs text-gray-500 block mb-1">单价</label>
+            <input type="text" value="￥420,000" class="border border-gray-300 rounded px-3 py-1.5 text-sm w-full">
+          </div>
+        </div>
+        <div class="px-4 py-3 border-t border-gray-200 flex items-center justify-end gap-2 bg-gray-50">
+          <button class="border border-gray-300 hover:bg-gray-50 text-sm px-4 py-1.5 rounded">取消</button>
+          <button class="bg-gray-300 text-gray-500 text-sm px-4 py-1.5 rounded cursor-not-allowed" disabled>保存（已禁用·超限）</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- [超限拦截示意] -->
+  <div class="bg-white border border-gray-300 rounded mb-4 p-4">
+    <h3 class="text-sm font-semibold text-gray-700 mb-3">超限拦截规则</h3>
+    <div class="grid grid-cols-3 gap-3 text-xs">
+      <div class="border border-gray-200 rounded p-3 bg-gray-50">
+        <div class="font-semibold text-gray-700 mb-1">🟢 正常 ≤ 80%</div>
+        <div class="text-gray-600">允许保存，仅显示绿色信封状态</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3 bg-yellow-50">
+        <div class="font-semibold text-yellow-700 mb-1">🟡 接近红线 80%-100%</div>
+        <div class="text-gray-600">允许保存，弹出黄色提示，建议关注</div>
+      </div>
+      <div class="border border-gray-200 rounded p-3 bg-red-50">
+        <div class="font-semibold text-red-600 mb-1">🔴 超限 &gt; 100%</div>
+        <div class="text-gray-600">禁止保存，引导走调剂申请流程</div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

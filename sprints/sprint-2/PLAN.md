@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-04-29 01:10（#1901 PR#4319 merged，kimi6
+> 更新时间：2026-04-29 01:56（排程经理巡检）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > 并发上限：8个CC（D3-v2.0冲刺批次）
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 01:10（#1901 PR#4319 merged，kimi6
+> 更新时间：2026-04-29 01:56（排程经理巡检）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -27,20 +27,18 @@
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
+| 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 — kimi6 运行中 | ✅ |
 | 180 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — kimi3 运行中 | ✅ |
-| 181 | #1851 | P1 | design-ai | medium | 审核与自动部署流程 — kimi1 运行中 | ✅ |
 | 182 | #1900 | P1 | backend | high | 采购下料单自动生成 — kimi2 运行中 | ✅ |
-| 183 | #1901 | P1 | fullstack | high | 施工安装包自动生成 — kimi6 运行中 | ✅ |
-| 184 | #1902 | P1 | backend | medium | 历史项目结构化索引 — kimi4 运行中 | ✅ |
-| 185 | #1908 | P1 | backend | high | 电池包几何生成第二批 — kimi5 运行中 | ✅ |
+| 184 | #1902 | P1 | backend | medium | 历史项目结构化索引 — kimi4 超时需重启 | 🚨 |
+| 185 | #1908 | P1 | backend | high | 电池包几何生成第二批 — kimi5 可能卡住 | ⏸️ |
 | 186 | #1922 | P1 | backend | medium | AI历史项目智能匹配 — 等待 CC 释放 | ⏳ |
 | 187 | #1927 | P0 | fullstack | high | D3端到端验证（海盗船）— kimi2 运行中 | ✅ |
 | 188 | #1928 | P1 | backend | high | v2.0电池包→图纸输出桥接 | ⏳前置#1909 |
-| 189 | #1946 | P0 | backend | high | D3最小单元合并名单 — kimi8 运行中 | ✅ |
-| 190 | #1947 | P0 | backend | high | 邵鹏电池包连接公式提取 — kimi7 运行中 | ✅ |
+| 189 | #1946 | P0 | backend | high | D3最小单元合并名单 — kimi8 运行中（⚠️ kimi8同时跑#1951） | ✅ |
+| 190 | #1947 | P0 | backend | high | 邵鹏电池包连接公式提取 — kimi7 超时需重启 | 🚨 |
 | 191 | #1950 | P1 | sample | medium | CRM商机→样品需求联动API — kimi3 运行中 | ✅ |
-| 192 | #1951 | P1 | sample | high | D3→样品自动生成引擎 — 等待 CC 释放 | ⏳ |
+| 192 | #1951 | P1 | sample | high | D3→样品自动生成引擎 — kimi8 运行中（⚠️同目录冲突风险） | ✅ |
 | 193 | #1952 | P1 | sample | medium | 样品申请单+制作工单 API — 等待 CC 释放 | ⏳ |
 
 ## 指派历史

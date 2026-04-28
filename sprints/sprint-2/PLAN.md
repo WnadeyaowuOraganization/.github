@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 19:25（#1932 PR#4305 → kimi1/#4172，4/4在线）
+> 更新时间：2026-04-28 19:30（kimi2已指派#4174，4/4在线）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -28,7 +28,7 @@
 |------|-------|--------|------|--------|------|------|
 | 167 | #4176 | P1 | frontend | low | 🔧 Quick-Fix /project-center/execution/invoice 页面显示不出来 | ✅ |
 | 168 | #4201 | P1 | backend | low | 🔧 Quick-Fix /business/crm/activity 时间线加载失败 — ✅ Done PR#4304 merged | ✅ |
-| 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 — kimi2 运行中 | ✅ |
+| 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 — ✅ Done PR#4306 submitted | ✅ |
 | 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
 | 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404（cockpit/g7e 和 cockpit/tools 均报告） | ✅ |
 | 172 | #4175 | P2 | backend | low | 🔧 Quick-Fix /cockpit/issue-board：后端 /wande/cockpit/issues 和 /wande/cockpit/comments 404 | ✅ |
@@ -496,20 +496,21 @@
 | 04-28 | kimi1 | #1932 | backend | P0 | In Progress | 秋千/吊环电池包 — 独立件+A型架(Phase2-3/6) |
 | 04-28 | kimi4 | #4176 | frontend | P1 | In Progress | 🔧 Quick-Fix 发票页显示（/project-center/execution/invoice） |
 | 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 merged |
-| 04-28 | kimi2 | #4200 | fullstack | P1 | In Progress | 🔧 Quick-Fix 矿场列表报错（wdpp_project_mine 缺失新字段） |
+| 04-28 | kimi2 | ~~#4200~~ | fullstack | P1 | ~~Done~~ | 🔧 Quick-Fix 矿场列表报错 — PR #4306 submitted |
 | 04-28 | kimi3 | #1930 | fullstack | P0 | In Progress | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) |
 | 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
 | 04-28 | kimi1 | #4172 | backend | P1 | In Progress | 🔧 Quick-Fix Prompt管理（/cockpit/prompt-management Controller 缺/api前缀） |
+| 04-28 | kimi2 | #4174 | backend | P2 | In Progress | 🔧 Quick-Fix GPU监控接口404（/monitor/gpu） |
 
-### 当前运行（04-28 19:25）
+### 当前运行（04-28 19:30）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #4172 | backend | P1 | 🔧 Quick-Fix Prompt管理（建议#170） | 编码中 |
-| kimi2 | #4200 | fullstack | P1 | 🔧 Quick-Fix 矿场列表（建议#169） | 编码中 |
+| kimi2 | #4174 | backend | P2 | 🔧 Quick-Fix GPU监控404（建议#171） | 编码中 |
 | kimi3 | #1930 | fullstack | P0 | 攀爬网/爬梯电池包（建议#155） | 编码中 |
 | kimi4 | #4176 | frontend | P1 | 🔧 Quick-Fix 发票页显示（建议#167） | 编码中 |
 
-**4/4 并发在线。**
+**4/4 并发在线。kimi2空闲已指派#4174**
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

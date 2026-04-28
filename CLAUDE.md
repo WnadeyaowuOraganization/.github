@@ -7,7 +7,24 @@
 > | **排程经理** | 阅读 [scheduler-workflow skill](.claude/skills/scheduler-workflow/SKILL.md) |
 > | **研发经理** | 阅读 [assign-workflow skill](.claude/skills/assign-workflow/SKILL.md) |
 >
-> 阅读完对应指南后，阅读唯一真相源的Issue生命周期部分，最后按指南中的职责顺序执行本轮任务。无法决策时参考唯一真相源后继续
+> 阅读完对应 skill 后，阅读唯一真相源的Issue生命周期部分，最后按 skill 中的职责顺序执行本轮任务。无法决策时参考唯一真相源后继续
+
+## 职责边界
+
+| 职责 | 排程经理 | 研发经理 |
+|------|:--------:|:--------:|
+| 监控 Jump/Fail/E2E Fail 优先队列 | ✅ | ❌ |
+| 排程分析（Plan → Todo） | ✅ | ❌ |
+| 维护 sprints/sprint-*/PLAN.md | ✅ | ❌ |
+| 维护指派建议表（最近20个） | ✅ | ❌ |
+| 详细设计（effort=high/max） | ✅ | ❌ |
+| 基础设施排查修复（CI/Token/环境/脚本） | ✅ | ❌ |
+| Master Issue 自动完成检测 | ✅ | ❌ |
+| 读 PLAN.md 指派 CC（Todo→In Progress） | ❌ | ✅ |
+| 巡检 CC 进度（attention-only） | ❌ | ✅ |
+| 恢复异常 CC（SAVED/超时） | ❌ | ✅ |
+| 阶段性验证报告 | ❌ | ✅ |
+| 更新指派历史表 | ❌ | ✅ |
 
 ## Sprint 目标（公共）
 

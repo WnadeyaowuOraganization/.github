@@ -345,18 +345,26 @@ if [ -d "$SKILLS_SRC" ]; then
   # 2. 软链每个 skill 子目录到 BASE_DIR/.claude/skills/<name>
   mkdir -p "$BASE_DIR/.claude/skills"
   # 清掉旧的失效 symlink（保留非 symlink 的本地 skill 不动）
-  find "$BASE_DIR/.claude/skills" -maxdepth 1 -type l -exec rm -f {} \; 2>/dev/null || true
+  find "$BASE_DIR/.claude/skills" -maxdepth 1 \( -type l -exec rm -f {} \; -o -type f -name "SKILL.md" -exec rm -f {} \; \) 2>/dev/null || true
   for skill_dir in "$SKILLS_SRC"/*/; do
     [ -f "${skill_dir}SKILL.md" ] || continue
-    skill_name=$(basename "$skill_dir")
-    ln -sfn "${skill_dir%/}" "$BASE_DIR/.claude/skills/$skill_name"
+    skill_name=$(basename "${skill_dir%/}")
+    # 验证目标真实存在
+    if [ ! -e "$skill_dir" ]; then
+      echo "⚠️ 跳过损坏 skill：$skill_dir 不存在"
+      continue
+    fi
+    rm -f "$BASE_DIR/.claude/skills/$skill_name"
+    ln -sfn "$skill_dir" "$BASE_DIR/.claude/skills/$skill_name"
   done
   # 3. 加载共享 skill（team-comm等，所有角色通用）
   SHARED_SKILLS="${HOME_DIR}/projects/.github/agents/shared"
   if [ -d "$SHARED_SKILLS" ]; then
     for skill_dir in "$SHARED_SKILLS"/*/; do
       [ -f "${skill_dir}SKILL.md" ] || continue
-      ln -sfn "${skill_dir%/}" "$BASE_DIR/.claude/skills/$(basename "$skill_dir")"
+      skill_name=$(basename "${skill_dir%/}")
+      rm -f "$BASE_DIR/.claude/skills/$skill_name"
+      ln -sfn "$skill_dir" "$BASE_DIR/.claude/skills/$skill_name"
     done
   fi
   echo "✅ 同步 skills → $BASE_DIR/.claude/skills/ (软链 $(ls -1 $BASE_DIR/.claude/skills/ | wc -l) 个)"

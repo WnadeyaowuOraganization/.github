@@ -82,7 +82,8 @@ if os.path.exists(f):
 start_manager() {
   local ROLE="$1"      # 排程经理 | 研发经理
   local LOOP_PROMPT="$2"
-  local MODEL="${3:-claude-sonnet-4-6}"   # 默认 Sonnet 4.6；调用方可显式传 Haiku
+  local MODEL="${3:-claude-sonnet-4-6}"   # 默认 Sonnet 4.6
+  local API_MODE="${4:-direct}"          # direct 或 token-pool
   local SESSION="manager-${ROLE}"
 
   if tmux has-session -t "$SESSION" 2>/dev/null; then
@@ -96,13 +97,25 @@ start_manager() {
   local BEFORE_LIST
   BEFORE_LIST=$(ls -1 "${JSONL_DIR}"/*.jsonl 2>/dev/null | sort)
 
-  # 隔离 claude config（使用真实订阅凭证）
+  # 隔离 claude config
   local CONFIG_DIR="/tmp/cc-config-${SESSION}"
   mkdir -p "$CONFIG_DIR"
   rsync -a --exclude='projects' \
     "${HOME_DIR}/.claude/" "$CONFIG_DIR/" 2>/dev/null
   ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
   [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
+
+  # Token Pool 模式：隔离凭证 + 设置代理
+  local EXTRA_ENV=""
+  if [ "$API_MODE" = "token-pool" ]; then
+    local PROXY_CONFIG_DIR="${HOME_DIR}/cc_scheduler/cc-configs/${SESSION}"
+    mkdir -p "$PROXY_CONFIG_DIR"
+    rsync -a --exclude='.credentials.json' --exclude='projects' "${HOME_DIR}/.claude/" "$PROXY_CONFIG_DIR/" 2>/dev/null
+    ln -sfn "${HOME_DIR}/.claude/projects" "$PROXY_CONFIG_DIR/projects"
+    CONFIG_DIR="$PROXY_CONFIG_DIR"
+    EXTRA_ENV="export ANTHROPIC_BASE_URL=http://localhost:8081; export CLAUDE_API_KEY=token-pool-key;"
+    MODEL="claude-sonnet-4-6"
+  fi
 
   # 加载共享 skill 到工作目录
   mkdir -p "$GITHUB_DIR/.claude/skills"
@@ -128,6 +141,7 @@ start_manager() {
      export HOME=${HOME_DIR}; \
      export PATH=${HOME_DIR}/.local/bin:\$PATH; \
      unset ANTHROPIC_API_KEY; unset ANTHROPIC_BASE_URL; \
+     ${EXTRA_ENV} \
      export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1; \
      export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
      claude --model ${MODEL} --dangerously-skip-permissions; \
@@ -144,10 +158,10 @@ start_manager() {
     _associate_jsonl "$SESSION" "$BEFORE_LIST"
   ) &
 
-  log "✓ ${ROLE} 已启动 (model=${MODEL})，JSONL关联中..."
+  log "✓ ${ROLE} 已启动 (model=${MODEL}, api=${API_MODE})，JSONL关联中..."
 }
 
-# 排程经理：结构化清单驱动 → Haiku 4.5（速度快、token 省）
-start_manager "排程经理" "\\loop 10m 你是排程经理，按 scheduler-workflow skill 执行本轮巡检（skill已自动加载）" "claude-haiku-4-5-20251001"
-# 研发经理：W1+W2+W3 改造后任务二瘦身为 attention-only，Done Guard 硬隔离 → Haiku 4.5
-start_manager "研发经理" "\\loop 10m 你是研发经理，按 assign-workflow skill 执行本轮任务（skill已自动加载）" "claude-haiku-4-5-20251001"
+# 排程经理：结构化清单驱动 → Token Pool Sonnet 4.6
+start_manager "排程经理" "\\loop 10m 你是排程经理，按 scheduler-workflow skill 执行本轮巡检（skill已自动加载）" "claude-sonnet-4-6" "token-pool"
+# 研发经理：W1+W2+W3 改造后任务二瘦身为 attention-only，Done Guard 硬隔离 → Token Pool Sonnet 4.6
+start_manager "研发经理" "\\loop 10m 你是研发经理，按 assign-workflow skill 执行本轮任务（skill已自动加载）" "claude-sonnet-4-6" "token-pool"

@@ -508,7 +508,7 @@
 | kimi5 | #1908 | backend | P1 | 电池包几何生成第二批（建议#163） | 编码中 |
 | kimi6 | #4172 | backend | P1 | 🔧Quick-Fix PromptAdminController缺/api前缀（建议#170） | 编码中 |
 | kimi7 | #1947 | backend | P0 | 邵鹏电池包连接公式提取（建议#176） | 编码中（已重启） |
-| kimi8 | #1951 | backend | P1 | D3→样品自动生成引擎（建议#192） | 编码中 |
+| kimi8 | ~~#1951~~ | backend | P1 | ~~Done~~ | D3→样品自动生成引擎 — PR #4325 merged |
 
 **8/8 并发在线。**
 

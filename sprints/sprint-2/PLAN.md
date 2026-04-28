@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 20:50（#4175 PR#4313 merged）
+> 更新时间：2026-04-28 20:55（恢复5席位，kimi5/#1908已指派）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -31,7 +31,7 @@
 | 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 — ✅ Done PR#4306 merged | ✅ |
 | 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
 | 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404 — ✅ Done PR#4309 merged | ✅ |
-| 172 | #4175 | P2 | backend | low | 🔧 Quick-Fix /cockpit/issue-board：后端 /wande/cockpit/issues 和 /wande/cockpit/comments 404 | ✅ |
+| 172 | #4175 | P2 | backend | low | 🔧 Quick-Fix /cockpit/issue-board：后端 /wande/cockpit/issues 和 /wande/cockpit/comments 404 — ✅ Done | ✅ |
 | 173 | #4173 | P2 | frontend | low | 🔧 Quick-Fix /profit-dashboard：利润率列表不可见 — ✅ Done PR#4310 merged | ✅ |
 | 147 | #1835 | P1 | design-ai | medium | 环境模板库 — ✅ Done PR#4295 merged | ✅ |
 | 148 | #1836 | P1 | design-ai | high | 受力计算+基础设计引擎 — ✅ Done PR#4296 merged | ✅ |
@@ -517,8 +517,9 @@
 | kimi2 | #1907 | backend | P0 | 滚塑滑桶专项（建议#154） | 编码中 |
 | kimi3 | #1850 | design-ai | P1 | Agent自学习闭环（建议#159） | 编码中 |
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中 |
+| kimi5 | #1908 | backend | P1 | 电池包几何生成第二批（建议#163） | 编码中 |
 
-**4/4 并发在线。**
+**5/5 并发在线。**
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

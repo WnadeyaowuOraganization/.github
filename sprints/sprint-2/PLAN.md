@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-04-29 00:10（#1849 PR#4316 merged，kimi8
+> 更新时间：2026-04-29 00:20（#1928 PR#4315 merged，kimi7
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > 并发上限：5个CC
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 00:10（#1849 PR#4316 merged，kimi8
+> 更新时间：2026-04-29 00:20（#1928 PR#4315 merged，kimi7
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -54,7 +54,7 @@
 | 166 | #1849 | P2 | design-ai | medium | 意图路由API — 用户输入→自动分发到对应设计子模块 | ✅ |
 | 174 | #1927 | P0 | fullstack | high | D3端到端验证 — 海盗船98100322从场地导入到工程图全流程 — kimi2 运行中 | ✅ |
 | 175 | #1946 | P0 | backend | high | D3最小单元合并 — 邵鹏电池包(7件)+#1196规划(9件)统一为16件 | ✅ |
-| 176 | #1947 | P0 | backend | high | 邵鹏电池包连接公式提取 — 9个Cluster拆解为组合规则入库 | ✅ |
+| 176 | #1947 | P0 | backend | high | 邵鹏电池包连接公式提取 — 9个Cluster拆解为组合规则入库 — kimi7 运行中 | ✅ |
 | 177 | #1950 | P1 | sample | medium | CRM商机→样品需求联动API — Phase8 [8/16] | ✅ |
 | 178 | #1951 | P1 | sample | high | D3→样品自动生成引擎 — 从D3出图自动生成样品清单 | ✅ |
 | 179 | #1952 | P1 | sample | medium | 样品申请单+制作工单 Service+API — Phase6 [6/16] | ✅ |
@@ -525,7 +525,7 @@
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中 |
 | kimi5 | #1908 | backend | P1 | 电池包几何生成第二批（建议#163） | 编码中 |
 | kimi6 | #1901 | fullstack | P1 | 施工安装包自动生成（建议#164） | 编码中 |
-| kimi7 | #1928 | backend | P1 | v2.0电池包→图纸输出桥接（建议#165） | 编码中 |
+| kimi7 | #1947 | backend | P0 | 邵鹏电池包连接公式提取（建议#176） | 编码中 |
 | kimi8 | #1946 | backend | P0 | D3最小单元合并（建议#175） | 编码中 |
 
 **8/8 并发在线。**

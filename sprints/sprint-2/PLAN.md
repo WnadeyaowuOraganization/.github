@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-04-29 01:05（排程经理巡检）
+> 更新时间：2026-04-29 01:10（#1901 PR#4319 merged，kimi6
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > 并发上限：8个CC（D3-v2.0冲刺批次）
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 01:05（排程经理巡检）
+> 更新时间：2026-04-29 01:10（#1901 PR#4319 merged，kimi6
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -508,7 +508,7 @@
 | kimi3 | #1950 | backend | P1 | CRM商机→样品需求联动API（建议#177） | 编码中 |
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中 |
 | kimi5 | #1908 | backend | P1 | 电池包几何生成第二批（建议#163） | 编码中 |
-| kimi6 | #1901 | fullstack | P1 | 施工安装包自动生成（建议#164） | 待提PR |
+| kimi6 | #4172 | backend | P1 | 🔧Quick-Fix PromptAdminController缺/api前缀（建议#170） | 编码中 |
 | kimi7 | #1947 | backend | P0 | 邵鹏电池包连接公式提取（建议#176） | 编码中 |
 | kimi8 | #1946 | backend | P0 | D3最小单元合并（建议#175） | 编码中 |
 

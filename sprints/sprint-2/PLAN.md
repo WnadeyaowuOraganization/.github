@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 19:12（kimi4/#4176已指派，4/4在线）
+> 更新时间：2026-04-28 19:15（#1900 PR#4303 → kimi2/#4201，4/4在线）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -490,17 +490,19 @@
 | 04-26 | kimi2 | ~~#3172~~ | backend | medium | ~~Done~~ | 质量管理表单组5模板 — PR#3911已于04-19 merged，误恢复 |
 | 04-27 | kimi2 | ~~#2275~~ | backend | medium | ~~释放→Todo~~ | 驾驶舱DORA指标卡片+最近错误滚动条 — CC超时释放，需重新指派 |
 | 04-28 | kimi2 | ~~#1898~~ | backend | **high** | ~~Done~~ | 发货防错系统 — PR #4300 merged |
+| 04-28 | kimi2 | ~~#1900~~ | backend | **high** | ~~Done~~ | 采购下料单自动生成 — PR #4303 submitted |
 | 04-28 | kimi1 | ~~#1911~~ | backend | **high** | ~~Done~~ | AI电池包开发助手 — PR #4301 merged |
 | 04-28 | kimi1 | ~~#1933~~ | backend | **P0** | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged |
 | 04-28 | kimi1 | #1932 | backend | P0 | In Progress | 秋千/吊环电池包 — 独立件+A型架(Phase2-3/6) |
 | 04-28 | kimi4 | #4176 | frontend | P1 | In Progress | 🔧 Quick-Fix 发票页显示（/project-center/execution/invoice） |
+| 04-28 | kimi2 | #4201 | backend | P1 | In Progress | 🔧 Quick-Fix 时间线加载失败（ops-hub Controller 缺/api前缀） |
 | 04-28 | kimi3 | #1930 | fullstack | P0 | In Progress | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) |
 
-### 当前运行（04-28 19:12）
+### 当前运行（04-28 19:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1932 | backend | P0 | 秋千/吊环电池包（建议#153） | 编码中 |
-| kimi2 | #1900 | backend | P1 | 采购下料单自动生成（建议#161） | 编码中 |
+| kimi2 | #4201 | backend | P1 | 🔧 Quick-Fix 时间线加载失败（建议#168） | 编码中 |
 | kimi3 | #1930 | fullstack | P0 | 攀爬网/爬梯电池包（建议#155） | 编码中 |
 | kimi4 | #4176 | frontend | P1 | 🔧 Quick-Fix 发票页显示（建议#167） | 编码中 |
 

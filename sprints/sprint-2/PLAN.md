@@ -498,7 +498,8 @@
 | 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 merged |
 | 04-28 | kimi2 | ~~#4200~~ | fullstack | P1 | ~~Done~~ | 🔧 Quick-Fix 矿场列表报错 — PR #4306 merged |
 | 04-28 | kimi3 | ~~#1930~~ | fullstack | **P0** | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 submitted |
-| 04-28 | kimi3 | #4173 | frontend | P2 | In Progress | 🔧 Quick-Fix 利润率列表（/profit-dashboard WandeSpecCard遮挡+mock数据） |
+| 04-28 | kimi3 | ~~#4173~~ | frontend | P2 | ~~Done~~ | 🔧 Quick-Fix 利润率列表 — PR #4310 submitted |
+| 04-28 | kimi3 | #1929 | frontend | P0 | In Progress | GH插件.gha安装包 — 双击安装+工具栏分类+搜索(Phase2-6/6) |
 | 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
 | 04-28 | kimi1 | ~~#4172~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix Prompt管理 — PR #4307 submitted |
 | 04-28 | kimi1 | #4175 | backend | P2 | In Progress | 🔧 Quick-Fix issue-board 404（/wande/cockpit/issues 和 /comments） |
@@ -510,7 +511,7 @@
 |------|-------|------|--------|------|--------|
 | kimi1 | #4175 | backend | P2 | 🔧 Quick-Fix issue-board 404（建议#172） | 编码中 |
 | kimi2 | #1907 | backend | P0 | 滚塑滑桶专项（建议#154） | 编码中 |
-| kimi3 | #4173 | frontend | P2 | 🔧 Quick-Fix 利润率列表（建议#173） | 编码中 |
+| kimi3 | #1929 | frontend | P0 | GH插件.gha安装包（建议#156） | 编码中 |
 | kimi4 | #4176 | frontend | P1 | 🔧 Quick-Fix 发票页显示（建议#167） | 编码中 |
 
 **4/4 并发在线。**

@@ -41,7 +41,7 @@
 | 152 | #1933 | P0 | backend | high | 螺旋滑梯电池包 — ✅ Done PR#4302 merged | ✅前置已解除 |
 | 153 | #1932 | P0 | backend | high | 秋千/吊环电池包 — ✅ Done PR#4305 submitted | ✅前置已解除 |
 | 154 | #1907 | P0 | backend | high | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 | ✅前置已解除 |
-| 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) — kimi3 运行中 | ✅前置已解除 |
+| 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — PR#4308 submitted（EN1176安全校验+坠落区域） | ✅前置已解除 |
 | 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — 双击安装+工具栏分类+搜索(Phase2-6/6) | ✅前置已解除 |
 | 157 | #1911 | P0 | backend | high | AI电池包开发助手 — ✅ Done PR#4301 merged | ✅ |
 | 159 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — 纠正记录/失败模式/模板积累 | ✅ |

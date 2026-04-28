@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 20:10（#4174 PR#4309 → kimi2/#1907，4/4在线）
+> 更新时间：2026-04-28 20:15（#4174 PR#4309 merged）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -502,7 +502,7 @@
 | 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
 | 04-28 | kimi1 | ~~#4172~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix Prompt管理 — PR #4307 submitted |
 | 04-28 | kimi1 | #4175 | backend | P2 | In Progress | 🔧 Quick-Fix issue-board 404（/wande/cockpit/issues 和 /comments） |
-| 04-28 | kimi2 | ~~#4174~~ | backend | P2 | ~~Done~~ | 🔧 Quick-Fix GPU监控接口404 — PR #4309 submitted |
+| 04-28 | kimi2 | ~~#4174~~ | backend | P2 | ~~Done~~ | 🔧 Quick-Fix GPU监控接口404 — PR #4309 merged |
 | 04-28 | kimi2 | #1907 | backend | P0 | In Progress | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 |
 
 ### 当前运行（04-28 20:05）

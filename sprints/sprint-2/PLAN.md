@@ -503,7 +503,7 @@
 |------|-------|------|--------|------|--------|
 | kimi1 | #1922 | backend | P1 | AI历史项目智能匹配（建议#186） | 编码中 |
 | kimi2 | #1927 | fullstack | P0 | D3端到端验证（建议#174） | 编码中 |
-| kimi3 | #1950 | backend | P1 | CRM商机→样品需求联动API（建议#177） | 编码中 |
+| kimi3 | #1953 | backend | P1 | 样品相关API（建议#194） | 编码中 |
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中（已重启） |
 | kimi5 | #1908 | backend | P1 | 电池包几何生成第二批（建议#163） | 编码中 |
 | kimi6 | #4172 | backend | P1 | 🔧Quick-Fix PromptAdminController缺/api前缀（建议#170） | 编码中 |

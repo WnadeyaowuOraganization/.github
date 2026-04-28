@@ -30,7 +30,7 @@
 | 149 | #1910 | P0 | backend | high | 万德知识库构建 — ✅ Done PR#4297 merged | ✅ |
 | 150 | #1909 | P0 | backend | high | 电池包几何生成第一批 — ✅ Done PR#4298 merged | ✅ |
 | 151 | #1937 | P0 | fullstack | high | 扣件螺栓精确定位 — ✅ Done PR#4299 merged | ✅ |
-| 152 | #1933 | P0 | backend | high | 螺旋滑梯电池包 — ✅ Done PR#4302 submitted | ✅前置已解除 |
+| 152 | #1933 | P0 | backend | high | 螺旋滑梯电池包 — ✅ Done PR#4302 merged | ✅前置已解除 |
 | 153 | #1932 | P0 | backend | high | 秋千/吊环电池包 — 独立件+A型架+运动轨迹安全区(Phase2-3/6) — kimi1 运行中 | ✅前置已解除 |
 | 154 | #1907 | P0 | backend | high | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 | ✅前置已解除 |
 | 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) — kimi3 运行中 | ✅前置已解除 |

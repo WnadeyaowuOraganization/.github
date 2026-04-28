@@ -495,7 +495,7 @@
 | 04-28 | kimi1 | ~~#1933~~ | backend | **P0** | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged |
 | 04-28 | kimi1 | #1932 | backend | P0 | In Progress | 秋千/吊环电池包 — 独立件+A型架(Phase2-3/6) |
 | 04-28 | kimi4 | #4176 | frontend | P1 | In Progress | 🔧 Quick-Fix 发票页显示（/project-center/execution/invoice） |
-| 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 submitted |
+| 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 merged |
 | 04-28 | kimi2 | #4200 | fullstack | P1 | In Progress | 🔧 Quick-Fix 矿场列表报错（wdpp_project_mine 缺失新字段） |
 | 04-28 | kimi3 | #1930 | fullstack | P0 | In Progress | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) |
 | 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |

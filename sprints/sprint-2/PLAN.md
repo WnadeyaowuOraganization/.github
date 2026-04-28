@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 19:20（#4201 PR#4304 → kimi2/#4200，4/4在线）
+> 更新时间：2026-04-28 19:25（#1932 PR#4305 → kimi1/#4172，4/4在线）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -39,7 +39,7 @@
 | 150 | #1909 | P0 | backend | high | 电池包几何生成第一批 — ✅ Done PR#4298 merged | ✅ |
 | 151 | #1937 | P0 | fullstack | high | 扣件螺栓精确定位 — ✅ Done PR#4299 merged | ✅ |
 | 152 | #1933 | P0 | backend | high | 螺旋滑梯电池包 — ✅ Done PR#4302 merged | ✅前置已解除 |
-| 153 | #1932 | P0 | backend | high | 秋千/吊环电池包 — 独立件+A型架+运动轨迹安全区(Phase2-3/6) — kimi1 运行中 | ✅前置已解除 |
+| 153 | #1932 | P0 | backend | high | 秋千/吊环电池包 — ✅ Done PR#4305 submitted | ✅前置已解除 |
 | 154 | #1907 | P0 | backend | high | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 | ✅前置已解除 |
 | 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) — kimi3 运行中 | ✅前置已解除 |
 | 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — 双击安装+工具栏分类+搜索(Phase2-6/6) | ✅前置已解除 |
@@ -498,11 +498,13 @@
 | 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 submitted |
 | 04-28 | kimi2 | #4200 | fullstack | P1 | In Progress | 🔧 Quick-Fix 矿场列表报错（wdpp_project_mine 缺失新字段） |
 | 04-28 | kimi3 | #1930 | fullstack | P0 | In Progress | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) |
+| 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
+| 04-28 | kimi1 | #4172 | backend | P1 | In Progress | 🔧 Quick-Fix Prompt管理（/cockpit/prompt-management Controller 缺/api前缀） |
 
-### 当前运行（04-28 19:20）
+### 当前运行（04-28 19:25）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1932 | backend | P0 | 秋千/吊环电池包（建议#153） | 编码中 |
+| kimi1 | #4172 | backend | P1 | 🔧 Quick-Fix Prompt管理（建议#170） | 编码中 |
 | kimi2 | #4200 | fullstack | P1 | 🔧 Quick-Fix 矿场列表（建议#169） | 编码中 |
 | kimi3 | #1930 | fullstack | P0 | 攀爬网/爬梯电池包（建议#155） | 编码中 |
 | kimi4 | #4176 | frontend | P1 | 🔧 Quick-Fix 发票页显示（建议#167） | 编码中 |

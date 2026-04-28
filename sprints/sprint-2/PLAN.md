@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 18:55（kimi1/#1932 + kimi3/#1930 已指派，3/4在线）
+> 更新时间：2026-04-28 19:00（#1933 PR#4302 merged）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 
@@ -483,7 +483,7 @@
 | 04-27 | kimi2 | ~~#2275~~ | backend | medium | ~~释放→Todo~~ | 驾驶舱DORA指标卡片+最近错误滚动条 — CC超时释放，需重新指派 |
 | 04-28 | kimi2 | ~~#1898~~ | backend | **high** | ~~Done~~ | 发货防错系统 — PR #4300 merged |
 | 04-28 | kimi1 | ~~#1911~~ | backend | **high** | ~~Done~~ | AI电池包开发助手 — PR #4301 merged |
-| 04-28 | kimi1 | ~~#1933~~ | backend | **P0** | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 submitted |
+| 04-28 | kimi1 | ~~#1933~~ | backend | **P0** | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged |
 | 04-28 | kimi1 | #1932 | backend | P0 | In Progress | 秋千/吊环电池包 — 独立件+A型架(Phase2-3/6) |
 | 04-28 | kimi3 | #1930 | fullstack | P0 | In Progress | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态(Phase2-5/6) |
 

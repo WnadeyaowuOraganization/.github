@@ -19,12 +19,20 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 19:00（#1933 PR#4302 merged）
+> 更新时间：2026-04-28 19:10（quick-fix 7个批量加入Todo）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
+> 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
+| 167 | #4176 | P1 | frontend | low | 🔧 Quick-Fix /project-center/execution/invoice 页面显示不出来 | ✅ |
+| 168 | #4201 | P1 | backend | low | 🔧 Quick-Fix /business/crm/activity 时间线加载失败：ops-hub Controller 缺/api前缀 | ✅ |
+| 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 | ✅ |
+| 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
+| 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404（cockpit/g7e 和 cockpit/tools 均报告） | ✅ |
+| 172 | #4175 | P2 | backend | low | 🔧 Quick-Fix /cockpit/issue-board：后端 /wande/cockpit/issues 和 /wande/cockpit/comments 404 | ✅ |
+| 173 | #4173 | P2 | frontend | low | 🔧 Quick-Fix /profit-dashboard：利润率列表不可见（误植WandeSpecCard遮挡+mock数据） | ✅ |
 | 147 | #1835 | P1 | design-ai | medium | 环境模板库 — ✅ Done PR#4295 merged | ✅ |
 | 148 | #1836 | P1 | design-ai | high | 受力计算+基础设计引擎 — ✅ Done PR#4296 merged | ✅ |
 | 149 | #1910 | P0 | backend | high | 万德知识库构建 — ✅ Done PR#4297 merged | ✅ |

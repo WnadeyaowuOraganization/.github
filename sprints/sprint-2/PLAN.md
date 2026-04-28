@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-04-28 21:35（#1907 PR#4314 merged，kimi2
+> 更新时间：2026-04-29 00:10（#1849 PR#4316 merged，kimi8
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > 并发上限：5个CC
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 21:35（#1907 PR#4314 merged，kimi2
+> 更新时间：2026-04-29 00:10（#1849 PR#4316 merged，kimi8
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -526,7 +526,7 @@
 | kimi5 | #1908 | backend | P1 | 电池包几何生成第二批（建议#163） | 编码中 |
 | kimi6 | #1901 | fullstack | P1 | 施工安装包自动生成（建议#164） | 编码中 |
 | kimi7 | #1928 | backend | P1 | v2.0电池包→图纸输出桥接（建议#165） | 编码中 |
-| kimi8 | #1849 | backend | P2 | 意图路由API（建议#166） | 编码中 |
+| kimi8 | #1946 | backend | P0 | D3最小单元合并（建议#175） | 编码中 |
 
 **8/8 并发在线。**
 

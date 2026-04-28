@@ -36,7 +36,7 @@
 6. **同一页面功能，后端 Issue 必须排在配对前端 Issue 之前** — 后端未 merged 前端只能 mock，造成集成风险
 7. `blocked-by` 依赖未关闭的排末尾
 
-## 任务一：监控优先队列（Jump / Fail / E2E Fail / 新 Done）
+## 任务一：监控优先队列（Jump / Fail / E2E Fail / Quick-Fix / 新 Done）
 
 ```bash
 export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
@@ -44,6 +44,9 @@ export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
 bash scripts/query-project-issues.sh --repo play --status "Jump" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "Fail" 2>/dev/null
 bash scripts/query-project-issues.sh --repo play --status "E2E Fail" 2>/dev/null
+# quick-fix Issue 与 E2E Fail 同级优先处理
+gh issue list --repo WnadeyaowuOraganization/wande-play --search "quick-fix in:title" --state open --json number,title,labels -L 50 2>/dev/null | \
+  python3 -c "import json,sys; issues=json.load(sys.stdin); [print(f'#{i[\"number\"]} [{[l[\"name\"] for l in i[\"labels\"]]}') for i in issues if 'issue-type:exempt' not in [l['name'] for l in i['labels']]]"
 # 也查 Done 状态：被动发现 CI 自动改的 Done，同步 Sprint 明细表「状态」列
 bash scripts/query-project-issues.sh --repo play --status "Done" 2>/dev/null
 ```
@@ -53,9 +56,10 @@ bash scripts/query-project-issues.sh --repo play --status "Done" 2>/dev/null
 2. 分析依赖，若无 blocker → 标 `Todo`，写入 PLAN.md 队首「指派建议」第1位
 3. 发送通知
 
-**Fail / E2E Fail 处理流程**：
+**Fail / E2E Fail / Quick-Fix 处理流程**：
 1. 检查 Issue 是否 OPEN（CLOSED 的跳过）
 2. OPEN → 分析失败原因（看标签/评论）→ 若依赖已就绪重新标 Todo，写入 PLAN.md
+3. quick-fix Issue 筛选排除 `issue-type:exempt` 后，批量加入 Todo + 建议表队首
 
 ## 任务二：排程分析（Plan → Todo）
 

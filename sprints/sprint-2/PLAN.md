@@ -27,7 +27,7 @@
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
 | 167 | #4176 | P1 | frontend | low | 🔧 Quick-Fix /project-center/execution/invoice 页面显示不出来 | ✅ |
-| 168 | #4201 | P1 | backend | low | 🔧 Quick-Fix /business/crm/activity 时间线加载失败：ops-hub Controller 缺/api前缀 | ✅ |
+| 168 | #4201 | P1 | backend | low | 🔧 Quick-Fix /business/crm/activity 时间线加载失败 — ✅ Done PR#4304 merged | ✅ |
 | 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 — kimi2 运行中 | ✅ |
 | 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
 | 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404（cockpit/g7e 和 cockpit/tools 均报告） | ✅ |

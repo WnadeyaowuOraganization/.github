@@ -97,24 +97,33 @@ start_manager() {
   local BEFORE_LIST
   BEFORE_LIST=$(ls -1 "${JSONL_DIR}"/*.jsonl 2>/dev/null | sort)
 
-  # 隔离 claude config
-  local CONFIG_DIR="/tmp/cc-config-${SESSION}"
-  mkdir -p "$CONFIG_DIR"
-  rsync -a --exclude='projects' \
-    "${HOME_DIR}/.claude/" "$CONFIG_DIR/" 2>/dev/null
-  ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
-  [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
-
-  # Token Pool 模式：隔离凭证 + 设置代理
-  local EXTRA_ENV=""
+  # Token Pool 模式配置
+  local API_ENV=""
+  local CONFIG_DIR_ENV=""
+  local CLEANUP_CMD=""
+  local API_SOURCE="Claude Max订阅"
   if [ "$API_MODE" = "token-pool" ]; then
+    API_SOURCE="Token Pool Proxy"
+    API_ENV="export ANTHROPIC_BASE_URL=http://localhost:9855; export ANTHROPIC_API_KEY=dummy; export API_TIMEOUT_MS=3000000; export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
     local PROXY_CONFIG_DIR="${HOME_DIR}/cc_scheduler/cc-configs/${SESSION}"
     mkdir -p "$PROXY_CONFIG_DIR"
     rsync -a --exclude='.credentials.json' --exclude='projects' "${HOME_DIR}/.claude/" "$PROXY_CONFIG_DIR/" 2>/dev/null
     ln -sfn "${HOME_DIR}/.claude/projects" "$PROXY_CONFIG_DIR/projects"
-    CONFIG_DIR="$PROXY_CONFIG_DIR"
-    EXTRA_ENV="export ANTHROPIC_BASE_URL=http://localhost:8081; export CLAUDE_API_KEY=token-pool-key;"
+    [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$PROXY_CONFIG_DIR/.claude.json"
+    CONFIG_DIR_ENV="export CLAUDE_CONFIG_DIR=${PROXY_CONFIG_DIR};"
+    CLEANUP_CMD="rm -rf ${PROXY_CONFIG_DIR};"
     MODEL="claude-sonnet-4-6"
+  else
+    # 隔离 claude config（使用真实订阅凭证）
+    local CONFIG_DIR="/tmp/cc-config-${SESSION}"
+    mkdir -p "$CONFIG_DIR"
+    rsync -a --exclude='projects' \
+      "${HOME_DIR}/.claude/" "$CONFIG_DIR/" 2>/dev/null
+    ln -sfn "${HOME_DIR}/.claude/projects" "$CONFIG_DIR/projects"
+    [ -f "${HOME_DIR}/.claude.json" ] && cp "${HOME_DIR}/.claude.json" "$CONFIG_DIR/.claude.json"
+    API_ENV="export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1;"
+    CONFIG_DIR_ENV="export CLAUDE_CONFIG_DIR=${CONFIG_DIR};"
+    CLEANUP_CMD="rm -rf ${CONFIG_DIR};"
   fi
 
   # 加载共享 skill 到工作目录
@@ -140,12 +149,10 @@ start_manager() {
     "export GH_TOKEN=${GH_TOKEN}; \
      export HOME=${HOME_DIR}; \
      export PATH=${HOME_DIR}/.local/bin:\$PATH; \
-     unset ANTHROPIC_API_KEY; unset ANTHROPIC_BASE_URL; \
-     ${EXTRA_ENV} \
-     export CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC=1; \
-     export CLAUDE_CONFIG_DIR=${CONFIG_DIR}; \
+     ${API_ENV} \
+     ${CONFIG_DIR_ENV} \
      claude --model ${MODEL} --dangerously-skip-permissions; \
-     rm -rf ${CONFIG_DIR}; exec bash"
+     ${CLEANUP_CMD} exec bash"
 
   # 等待 Claude Code CLI 初始化并关联 JSONL（后台执行，不阻塞下一个经理启动）
   # ASSOC_DELAY：第几个经理*5秒，错开竞争窗口
@@ -158,7 +165,7 @@ start_manager() {
     _associate_jsonl "$SESSION" "$BEFORE_LIST"
   ) &
 
-  log "✓ ${ROLE} 已启动 (model=${MODEL}, api=${API_MODE})，JSONL关联中..."
+  log "✓ ${ROLE} 已启动 (model=${MODEL}, api=${API_SOURCE})，JSONL关联中..."
 }
 
 # 排程经理：结构化清单驱动 → Token Pool Sonnet 4.6

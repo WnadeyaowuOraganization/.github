@@ -44,10 +44,10 @@
 | 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — PR#4308 submitted（EN1176安全校验+坠落区域） | ✅前置已解除 |
 | 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — ✅ Done PR#4312 merged(Phase2-6/6) | ✅前置已解除 |
 | 157 | #1911 | P0 | backend | high | AI电池包开发助手 — ✅ Done PR#4301 merged | ✅ |
-| 159 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — 纠正记录/失败模式/模板积累 | ✅ |
+| 159 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — 纠正记录/失败模式/模板积累 — kimi3 运行中 | ✅ |
 | 160 | #1851 | P1 | design-ai | medium | 审核与自动部署流程 — 邵鹏提交→吴耀审核→一键部署 | ✅ |
 | 161 | #1900 | P1 | backend | high | 采购下料单自动生成 — BOM→分类采购单+钢管下料优化 — kimi2 运行中 | ✅ |
-| 162 | #1902 | P1 | backend | medium | 历史项目结构化索引 — S3生产模型参数提取+设计师搜索 | ✅ |
+| 162 | #1902 | P1 | backend | medium | 历史项目结构化索引 — S3生产模型参数提取+设计师搜索 — kimi4 运行中 | ✅ |
 | 163 | #1908 | P1 | backend | high | 电池包几何生成第二批 — 秋千+攀岩墙+梯子+屋顶等 | ✅ |
 | 164 | #1901 | P1 | fullstack | high | 施工安装包自动生成 — 工人可视化安装指导+分步骤图+QR溯源 | ✅ |
 | 165 | #1928 | P1 | backend | high | v2.0电池包→图纸输出桥接 — 制造级数据驱动L0-L4图纸(Phase3) | ⏳前置#1909 |

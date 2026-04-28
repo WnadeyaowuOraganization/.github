@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-28 20:15（#4174 PR#4309 merged）
+> 更新时间：2026-04-28 20:25（#4173 PR#4310 merged）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
@@ -32,7 +32,7 @@
 | 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
 | 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404 — ✅ Done PR#4309 merged | ✅ |
 | 172 | #4175 | P2 | backend | low | 🔧 Quick-Fix /cockpit/issue-board：后端 /wande/cockpit/issues 和 /wande/cockpit/comments 404 | ✅ |
-| 173 | #4173 | P2 | frontend | low | 🔧 Quick-Fix /profit-dashboard：利润率列表不可见 — PR#4310 submitted | ✅ |
+| 173 | #4173 | P2 | frontend | low | 🔧 Quick-Fix /profit-dashboard：利润率列表不可见 — ✅ Done PR#4310 merged | ✅ |
 | 147 | #1835 | P1 | design-ai | medium | 环境模板库 — ✅ Done PR#4295 merged | ✅ |
 | 148 | #1836 | P1 | design-ai | high | 受力计算+基础设计引擎 — ✅ Done PR#4296 merged | ✅ |
 | 149 | #1910 | P0 | backend | high | 万德知识库构建 — ✅ Done PR#4297 merged | ✅ |
@@ -498,7 +498,7 @@
 | 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 merged |
 | 04-28 | kimi2 | ~~#4200~~ | fullstack | P1 | ~~Done~~ | 🔧 Quick-Fix 矿场列表报错 — PR #4306 merged |
 | 04-28 | kimi3 | ~~#1930~~ | fullstack | **P0** | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 submitted |
-| 04-28 | kimi3 | ~~#4173~~ | frontend | P2 | ~~Done~~ | 🔧 Quick-Fix 利润率列表 — PR #4310 submitted |
+| 04-28 | kimi3 | ~~#4173~~ | frontend | P2 | ~~Done~~ | 🔧 Quick-Fix 利润率列表 — PR #4310 merged |
 | 04-28 | kimi3 | #1929 | frontend | P0 | In Progress | GH插件.gha安装包 — 双击安装+工具栏分类+搜索(Phase2-6/6) |
 | 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
 | 04-28 | kimi1 | ~~#4172~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix Prompt管理 — PR #4307 submitted |

@@ -30,9 +30,9 @@
 | 168 | #4201 | P1 | backend | low | 🔧 Quick-Fix /business/crm/activity 时间线加载失败 — ✅ Done PR#4304 merged | ✅ |
 | 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 — ✅ Done PR#4306 merged | ✅ |
 | 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
-| 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404（cockpit/g7e 和 cockpit/tools 均报告） | ✅ |
+| 171 | #4174 | P2 | backend | low | 🔧 Quick-Fix /monitor/gpu 接口 404 — ✅ Done PR#4309 merged | ✅ |
 | 172 | #4175 | P2 | backend | low | 🔧 Quick-Fix /cockpit/issue-board：后端 /wande/cockpit/issues 和 /wande/cockpit/comments 404 | ✅ |
-| 173 | #4173 | P2 | frontend | low | 🔧 Quick-Fix /profit-dashboard：利润率列表不可见（误植WandeSpecCard遮挡+mock数据） | ✅ |
+| 173 | #4173 | P2 | frontend | low | 🔧 Quick-Fix /profit-dashboard：利润率列表不可见 — PR#4310 submitted | ✅ |
 | 147 | #1835 | P1 | design-ai | medium | 环境模板库 — ✅ Done PR#4295 merged | ✅ |
 | 148 | #1836 | P1 | design-ai | high | 受力计算+基础设计引擎 — ✅ Done PR#4296 merged | ✅ |
 | 149 | #1910 | P0 | backend | high | 万德知识库构建 — ✅ Done PR#4297 merged | ✅ |
@@ -42,7 +42,7 @@
 | 153 | #1932 | P0 | backend | high | 秋千/吊环电池包 — ✅ Done PR#4305 submitted | ✅前置已解除 |
 | 154 | #1907 | P0 | backend | high | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 — kimi2 运行中 | ✅前置已解除 |
 | 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — PR#4308 submitted（EN1176安全校验+坠落区域） | ✅前置已解除 |
-| 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — 双击安装+工具栏分类+搜索(Phase2-6/6) | ✅前置已解除 |
+| 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — kimi3 运行中(Phase2-6/6) | ✅前置已解除 |
 | 157 | #1911 | P0 | backend | high | AI电池包开发助手 — ✅ Done PR#4301 merged | ✅ |
 | 159 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — 纠正记录/失败模式/模板积累 | ✅ |
 | 160 | #1851 | P1 | design-ai | medium | 审核与自动部署流程 — 邵鹏提交→吴耀审核→一键部署 | ✅ |

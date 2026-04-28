@@ -26,7 +26,7 @@
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 167 | #4176 | P1 | frontend | low | 🔧 Quick-Fix /project-center/execution/invoice 页面显示不出来 | ✅ |
+| 167 | #4176 | P1 | frontend | low | 🔧 Quick-Fix /project-center/execution/invoice 页面显示不出来 — ✅ Done PR#4311 merged | ✅ |
 | 168 | #4201 | P1 | backend | low | 🔧 Quick-Fix /business/crm/activity 时间线加载失败 — ✅ Done PR#4304 merged | ✅ |
 | 169 | #4200 | P1 | fullstack | medium | 🔧 Quick-Fix /business/tender/project-mine 列表查询报错：wdpp_project_mine 缺失新字段 — ✅ Done PR#4306 merged | ✅ |
 | 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 | ✅ |
@@ -42,7 +42,7 @@
 | 153 | #1932 | P0 | backend | high | 秋千/吊环电池包 — ✅ Done PR#4305 submitted | ✅前置已解除 |
 | 154 | #1907 | P0 | backend | high | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 — kimi2 运行中 | ✅前置已解除 |
 | 155 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — PR#4308 submitted（EN1176安全校验+坠落区域） | ✅前置已解除 |
-| 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — kimi3 运行中(Phase2-6/6) | ✅前置已解除 |
+| 156 | #1929 | P0 | frontend | medium | GH插件.gha安装包 — ✅ Done PR#4312 merged(Phase2-6/6) | ✅前置已解除 |
 | 157 | #1911 | P0 | backend | high | AI电池包开发助手 — ✅ Done PR#4301 merged | ✅ |
 | 159 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — 纠正记录/失败模式/模板积累 | ✅ |
 | 160 | #1851 | P1 | design-ai | medium | 审核与自动部署流程 — 邵鹏提交→吴耀审核→一键部署 | ✅ |

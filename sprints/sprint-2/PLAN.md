@@ -499,7 +499,7 @@
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | #1900 | backend | P1 | 采购下料单自动生成（建议#198） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
-| kimi4 | #4333+#4334 | frontend | P2 | E2E回归失败修复：CRM路由+招标商机404 | 编码中 |
+| kimi4 | ~~#4333~~+#4334 | frontend | P2 | E2E回归失败修复：CRM路由已修复 — PR #4335 merged，#4334继续 |
 | kimi5 | 空闲 | - | - | - | 等待Issue |
 | kimi6 | 空闲 | - | - | - | 等待Issue |
 | kimi7 | 空闲 | - | - | - | 等待Issue |

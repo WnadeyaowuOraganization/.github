@@ -82,6 +82,24 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 ### 触发时机
 - 建议表**无任何 Todo / In Progress 行** → 必须重新生成（旧数据清空，重写20条）
 - 发现 Jump / Fail / E2E Fail → 立即插入队首
+- 建议表中**未指派行数 < 5** → 从 Plan/Todo 状态补充新 Issue
+
+### 判断是否需要补充指派建议（**禁止运行 cc-check.sh**）
+
+排程经理**绝不巡检 CC**，活跃指派数量通过读取 PLAN.md 中研发经理维护的区域获取：
+
+```bash
+# 方式1：读取「当前运行」表（研发经理维护），统计 In Progress 行数
+cat sprints/sprint-2/PLAN.md | awk '/当前运行/,/PR进度总览/' | grep -c '编码中\|工作中'
+
+# 方式2：读取「指派历史」表，统计最近未完成的指派
+cat sprints/sprint-2/PLAN.md | awk '/指派历史/,/^$/' | grep 'In Progress\|编码中'
+
+# 方式3：直接读取指派建议表，统计未指派行数
+cat sprints/sprint-2/PLAN.md | awk '/## 指派建议/,/## 指派历史/' | grep -c '^| [0-9]\+ | #[0-9]\+.*| ✅ |'
+```
+
+> 排程经理**不执行** `cc-check.sh`、**不查看** tmux 会话、**不检查** CC 上下文使用率。这些信息由研发经理通过 assign-workflow skill 获取。
 
 ### 并发约束
 > 改 PLAN.md 前必须 `git pull`，改完立即 `git add + commit + push`。
@@ -95,6 +113,7 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 | 🟡 中 | `priority/P0` Todo，依赖已 CLOSED |
 | 🟢 普通 | `priority/P1` Todo，依赖已 CLOSED |
 | ⛔ 排除 | 标题含 `[Master]` — **禁止出现在建议表** |
+| ⛔ 排除 | Issue 含 `needs-prototype` 标签 — **冻结，等产品补原型后再入队** |
 
 ### 格式
 

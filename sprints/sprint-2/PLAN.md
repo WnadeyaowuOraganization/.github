@@ -19,23 +19,23 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 17:57（第47轮巡检，kimi1/#1957 PR#4341 merged Done，转#1573）
+> 更新时间：2026-04-29 18:48（第52轮巡检，kimi1/#1573已提PR，刷新建议表）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 当前运行：kimi1(#1573)/kimi2(#1940)，2CC活跃，2空位可补
+> 当前运行：kimi1(#1573)，1CC活跃，3空位可补（#206/#207/#208已从GitHub删除）
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
 | 199 | ~~#1955~~ | P1 | backend | medium | ~~方案引擎AI文案知识增强 — PR#4339 merged~~ | ~~✅~~ |
-| 200 | #1957 | P1 | frontend | medium | 方案引擎PPT插件 — 数据可视化工具（图表美化+数据卡片+进度条） | ✅ |
-| 201 | ~~#1942~~ | P2 | backend | medium | ~~文生图Phase1 — 已指派kimi1~~ | ~~✅~~ |
-| 202 | #1940 | P2 | backend | medium | 文生图Phase3 — Prompt引擎引导式场景模板组装+智能扩写（#1942已CLOSED） | ✅ |
+| 200 | ~~#1957~~ | P1 | frontend | medium | ~~方案引擎PPT插件 — 数据可视化工具~~ | ~~✅~~ |
+| 201 | ~~#1942~~ | P2 | backend | medium | ~~文生图Phase1 — PR#4338 merged~~ | ~~✅~~ |
+| 202 | ~~#1940~~ | P2 | backend | medium | ~~文生图Phase3 — PR#4342 merged~~ | ~~✅~~ |
 | 203 | ~~#1944~~ | P2 | backend | low | ~~工具中心种子数据 — PR#4340 merged~~ | ~~✅~~ |
-| 204 | #1573 | P2 | policy | medium | 制度智能问答API — 制度智能问答（22/22 Phase完结） | ✅ |
-| 205 | #2219 | P2 | biz-enablement | medium | 商务赋能 — 标准库管理页面（14/28） | ✅ |
-| 206 | #2220 | P2 | biz-enablement | medium | 商务赋能 — 材质参数一键导出（10/28） | ✅ |
-| 207 | #2221 | P2 | biz-enablement | medium | 商务赋能 — 材质知识库管理页面（9/28） | ✅ |
-| 208 | #2222 | P2 | biz-enablement | medium | 商务赋能 — 案例搜索1搜索框+6维筛选（6/28） | ✅ |
+| 204 | ~~#1573~~ | P2 | policy | medium | ~~制度智能问答API — PR#4343 merged~~ | ~~✅~~ |
+| 205 | ~~#2219~~ | P2 | biz-enablement | medium | ~~商务赋能标准库管理页面 — PR#4344 merged~~ | ~~✅~~ |
+| 206 | ~~#2220~~ | P2 | biz-enablement | medium | ~~商务赋能材质参数一键导出~~ | ~~✅~~ |
+| 207 | ~~#2221~~ | P2 | biz-enablement | medium | ~~商务赋能材质知识库管理页面~~ | ~~✅~~ |
+| 208 | ~~#2222~~ | P2 | biz-enablement | medium | ~~商务赋能案例搜索~~ | ~~✅~~ |
 | 209 | #2277 | P2 | policy | medium | 条款库管理页面（21/22） | ✅ |
 | 210 | #2278 | P2 | policy | medium | AI制度起草向导页面（20/22） | ✅ |
 | 211 | #2288 | P2 | budget | medium | 成本复盘报告页面（30/32） | ✅ |

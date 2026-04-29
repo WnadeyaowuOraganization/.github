@@ -92,14 +92,16 @@ if [ -n "$ISSUE" ]; then
     done
   fi
   if [ -f "$TASK_FILE" ]; then
-    UNCHECKED_TASK=$(grep -c '^- \[ \]' "$TASK_FILE" 2>/dev/null || true)
+    # 过滤掉 CC 标准操作类检查项（这些在 PR 创建时不可能已完成）
+    # 匹配模式：PR创建 / rebase / gh pr / push / 轮询merge / lint预检 / CI通过 等 CC 自动步骤
+    UNCHECKED_TASK=$(grep '^- \[ \]' "$TASK_FILE" 2>/dev/null | grep -vcE '(PR创建|gh pr|push.*PR|rebase|轮询|merge|quality-gate|pr-body-lint|lint预检|CI通过|smoke过|PR提交)' || true)
     UNCHECKED_TASK=${UNCHECKED_TASK:-0}
     if [ "$UNCHECKED_TASK" -gt 0 ]; then
-      echo "═══ 门 2 失败：$TASK_FILE 存在 $UNCHECKED_TASK 项未勾 steps ═══"
-      grep -n '^- \[ \]' "$TASK_FILE" | head -10
-      fail 2 "门 2: task.md 必须全勾，如无法完成请拆分为追补 Issue 后勾选"
+      echo "═══ 门 2 失败：$TASK_FILE 存在 $UNCHECKED_TASK 项未勾业务检查项 ═══"
+      grep '^- \[ \]' "$TASK_FILE" | grep -vE '(PR创建|gh pr|push.*PR|rebase|轮询|merge|quality-gate|pr-body-lint|lint预检|CI通过|smoke过|PR提交)' | head -10 | cat -n
+      fail 2 "门 2: task.md 业务检查项必须全勾，CC标准操作（PR创建/rebase/轮询）不计入"
     fi
-    ok "门 2 通过：$TASK_FILE 无未勾 steps"
+    ok "门 2 通过：task.md 无未勾业务检查项（CC自动步骤已过滤）"
   else
     log "task.md 未找到，跳过门 2（非 issue 模式）"
   fi

@@ -19,16 +19,16 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 12:48（第13轮巡检，#1900跳过，kimi2转#2217）
+> 更新时间：2026-04-29 14:38（第26轮巡检，kimi1/#1930 PR#4308 merged Done，转#2218）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 当前运行：kimi1(#1930)/kimi2(#2217)，2CC活跃，2空位可补#2218/#1940
+> 当前运行：kimi1(#2218)/kimi2(#2217)，2CC活跃，2空位可补#1940/#1881
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
 | 196 | ~~#1900~~ | P1 | backend | high | ~~采购下料单自动生成 — 已指派kimi2~~ | ~~✅~~ |
 | 197 | ~~#2217~~ | P2 | biz-enablement | medium | ~~商务赋能知识中台 — 设备维护档案页面，已指派kimi2~~ | ~~✅~~ |
-| 198 | #2218 | P2 | biz-enablement | medium | 商务赋能知识中台 — 标准合规说明导出 | ✅ |
+| 198 | ~~#2218~~ | P2 | biz-enablement | medium | ~~商务赋能知识中台 — 标准合规说明导出，已指派kimi1~~ | ~~✅~~ |
 
 ## 指派历史
 
@@ -491,12 +491,14 @@
 | 04-29 | kimi4 | ~~#1866~~ | backend | P1 | ~~Done~~ | GH AI插件生态补充评估 — PR #4332 merged |
 | 04-29 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | 04-29 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |
+| 04-29 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
+| 04-29 | kimi1 | #2218 | frontend | P2 | In Progress | 商务赋能标准合规说明导出（建议#198） |
 
 ### 当前运行（04-29 11:50）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
-| kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 标准合规说明导出 — 缺原型，等待补齐 |
+| kimi1 | #2218 | frontend | P2 | 编码中 | 标准合规说明导出 |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
 | kimi2 | #2217 | frontend | P2 | 商务赋能设备维护档案页面（建议#197） | 编码中 |

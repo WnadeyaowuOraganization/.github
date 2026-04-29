@@ -537,6 +537,7 @@
 | kimi3 | #3211 | backend | P1 | 工艺路线模板 | 编码中 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi4 | ~~#3641~~ | frontend | P1 | ~~Done~~ | 管线健康度Tab — PR #4353 merged |
+| kimi4 | ~~#3393~~ | backend | P1 | ~~Done~~ | PLM供应商价格联动 — PR #4356 merged |
 | kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |
 | kimi5 | ~~#3886~~ | fullstack | P3 | ~~Done~~ | 代码质量Hook体系 — PR#4351 merged，Issue CLOSED |

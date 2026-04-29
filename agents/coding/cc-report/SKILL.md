@@ -94,13 +94,29 @@ to: manager-研发经理
 mvn compile ✅
 JUnit wande-ai 模块 Tests run:N Failures:0 ✅
 Playwright API spec <module>.spec.ts 全绿 ✅
-下一步：前端 index.vue'
+下一步：前端 index.vue
+
+---本轮回顾（PR创建后汇报排程经理参考）---
+本次各 skill 耗时排序：<最耗时> → <最快>
+卡点：<如 context 超限 / 编译错误次数 / 重复尝试>
+建议：<给排程经理的优化建议，如有>'
 
 tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $CONTENT" Enter
 curl -s -X POST http://localhost:9872/api/notify \
   -H 'Content-Type: application/json' \
   -d '{"session":"cc-report-'${ISSUE}'","message":"[#'${ISSUE}'] 后端完成","type":"success"}'
+
+# 本轮回顾发排程经理（不填可以跳过，但建议每次 PR 创建后都发）
+tmux send-keys -t 'manager-排程经理' "[CC-REVIEW] $CONTENT" Enter
+curl -s -X POST http://localhost:9872/api/notify \
+  -H 'Content-Type: application/json' \
+  -d '{"session":"cc-report-'${ISSUE}'","message":"[#'${ISSUE}'] 本轮回顾","type":"info"}'
 ```
+
+> **本轮回顾**：`stage-done` 在 PR 创建成功后填写（约 50~100 字），发排程经理参考。
+> 格式：① 各 skill 耗时排序（最耗时→最快）② 卡点（编译错误次数/context 超限/重复尝试）③ 给排程经理的优化建议（如有）。
+> 目的：排程经理据此优化 skill 引导、脚本精度，减少后续 CC 的 token 和时间消耗。
+> 不强制，但建议每次 PR 创建后都发。
 
 ### stuck — 卡住求助
 
@@ -123,7 +139,7 @@ curl -s -X POST http://localhost:9872/api/notify \
   -d '{"session":"cc-report-'${ISSUE}'","message":"[#'${ISSUE}'] 卡住:Flyway","type":"warning"}'
 ```
 
-### close — 完工
+### close — 完工（PR 创建成功后）
 
 ```bash
 CONTENT='【进度播报】-【阅即可】 [#'${ISSUE}'] PR #'${PR}' 已创建，轮询 merge 中
@@ -134,7 +150,17 @@ PR: https://github.com/WnadeyaowuOraganization/wande-play/pull/'${PR}'
 改动：后端 6 文件 + 前端 4 文件 + Flyway 1 脚本
 自测：task.md 全勾 + 4 张截图贴 PR + Playwright smoke 4/4 ✅
 门禁：pr-body-lint 通过
-等待：CI + auto-merge'
+等待：CI + auto-merge
+
+---本轮回顾（发排程经理优化参考）---
+本次各 skill 耗时排序：<最耗时> → <最快>
+卡点：<如 context 超限 / 编译错误次数 / 重复尝试>
+建议：<给排程经理的优化建议，如有>'
+# 发排程经理
+tmux send-keys -t 'manager-排程经理' "[CC-REVIEW] $CONTENT" Enter
+curl -s -X POST http://localhost:9872/api/notify \
+  -H 'Content-Type: application/json' \
+  -d '{"session":"cc-report-'${ISSUE}'","message":"[#'${ISSUE}'] 本轮回顾","type":"info"}'
 
 tmux send-keys -t 'manager-研发经理' "[CC-REPORT] $CONTENT" Enter
 curl -s -X POST http://localhost:9872/api/notify \

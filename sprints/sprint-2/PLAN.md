@@ -500,7 +500,7 @@
 | kimi2 | #1900 | backend | P1 | 采购下料单自动生成（建议#198） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
-| kimi4 | #4334 | frontend | P2 | E2E回归 /business/tender/opportunity 404 — 已恢复，编码中 |
+| kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |
 | kimi5 | 空闲 | - | - | - | 等待Issue |
 | kimi6 | 空闲 | - | - | - | 等待Issue |
 | kimi7 | 空闲 | - | - | - | 等待Issue |

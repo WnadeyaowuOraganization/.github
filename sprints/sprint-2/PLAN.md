@@ -525,6 +525,7 @@
 | kimi1 | ~~#1573~~ | backend | P2 | ~~Done~~ | 制度智能问答API — PR #4343 merged |
 | kimi1 | ~~#2277~~ | frontend | P2 | ~~Done~~ | 条款库管理页面 — PR #4346 merged |
 | kimi1 | ~~#3558~~ | fullstack | P2 | ~~Done~~ | E2E回归API超时 — PR #4348 merged |
+| kimi1 | ~~#4063~~ | backend | P1 | ~~Done~~ | Quick-Fix bossCockpit/overview — PR #4359 merged |
 | kimi1 | ~~#4059~~ | backend | P1 | ~~Done~~ | Quick-Fix keyword-pool — PR #4355 merged |
 | kimi1 | #4063 | backend | P1 | Quick-Fix bossCockpit/overview | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |

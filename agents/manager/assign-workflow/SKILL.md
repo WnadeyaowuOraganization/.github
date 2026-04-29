@@ -106,18 +106,24 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 
 ## 任务二：巡检 CC 进度（attention-only 模式）
 
-> 不再 tmux capture-pane 全场扫描。改用 server.py 规则引擎预筛，只对 `needs_attention=true` 精细介入。
+> **必须使用 `bash scripts/cc-check.sh`** 作为全场 CC 状态主数据源，它直接查 tmux session，比 server.py 更可靠。
 
 ### Step 1：拉取全场摘要
 
 ```bash
-curl -s http://localhost:9872/api/status | jq '.agents[] | {
-  id, issue_number, module, status,
-  silent_minutes, lock_state,
-  pr_summary, needs_attention, attention_reason,
-  estimated_progress, progress_source
-}'
+bash scripts/cc-check.sh
+```
 
+此脚本输出：
+- 运行中的 CC 会话列表
+- 锁文件状态
+- 最近输出行
+- 超时需处理的 CC
+
+### Step 2：处理 attention CC
+
+```bash
+# 用 server.py 预筛 needs_attention
 ATTENTION=$(curl -s http://localhost:9872/api/status \
   | jq -c '.agents[] | select(.needs_attention)')
 

@@ -19,36 +19,33 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 23:55（第57轮巡检，Plan→Todo转#4125/#3641，活跃CC=2）
+> 更新时间：2026-04-30 00:05（第58轮巡检，清空已完成项，重写20条指派建议，活跃CC=4）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 注意：序号与GitHub Issue号是不同编号，序号206=GitHub#2220
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 199 | ~~#1955~~ | P1 | backend | medium | ~~方案引擎AI文案知识增强 — PR#4339 merged~~ | ~~✅~~ |
-| 200 | ~~#1957~~ | P1 | frontend | medium | ~~方案引擎PPT插件 — 数据可视化工具~~ | ~~✅~~ |
-| 201 | ~~#1942~~ | P2 | backend | medium | ~~文生图Phase1 — PR#4338 merged~~ | ~~✅~~ |
-| 202 | ~~#1940~~ | P2 | backend | medium | ~~文生图Phase3 — PR#4342 merged~~ | ~~✅~~ |
-| 203 | ~~#1944~~ | P2 | backend | low | ~~工具中心种子数据 — PR#4340 merged~~ | ~~✅~~ |
-| 204 | ~~#1573~~ | P2 | policy | medium | ~~制度智能问答API — PR#4343 merged~~ | ~~✅~~ |
-| 205 | ~~#2219~~ | P2 | biz-enablement | medium | ~~商务赋能标准库管理页面 — PR#4344 merged~~ | ~~✅~~ |
-| 206 | #2220 | P2 | biz-enablement | medium | 商务赋能 — 材质参数一键导出（10/28）needs-prototype，kimi3已派 | ✅ |
-| 207 | ~~#2221~~ | P2 | biz-enablement | medium | ~~商务赋能 — 材质知识库管理页面（9/28） — PR#4345 merged~~ | ~~✅~~ |
-| 208 | ~~#2222~~ | P2 | biz-enablement | medium | ~~商务赋能 — 案例搜索1搜索框+6维筛选（6/28） — PR#4349 merged~~ | ~~✅~~ |
-| 209 | ~~#2277~~ | P2 | policy | medium | ~~条款库管理页面（21/22） — PR#4346 merged~~ | ~~✅~~ |
-| 210 | ~~#2278~~ | P2 | policy | medium | ~~AI制度起草向导页面（20/22） — needs-prototype冻结~~ | ~~⛔~~ |
-| 211 | ~~#2288~~ | P2 | budget | medium | ~~成本复盘报告页面（30/32） — PR#4347 merged~~ | ~~✅~~ |
-| 212 | ~~#2389~~ | P2 | biz-enablement | medium | ~~季度照片采集提醒+任务推送（28/28） — needs-prototype冻结~~ | ~~⛔~~ |
-| 213 | ~~#2390~~ | P2 | biz-enablement | medium | ~~照片AI自动标签CLIP模型（26/28） — needs-prototype冻结~~ | ~~⛔~~ |
-| 214 | ~~#2585~~ | P2 | backend | high | ~~refactor合并wande-ai-api到wande-ai — needs-prototype冻结~~ | ~~⛔~~ |
-| 215 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败（kimi1正在做） | ✅ |
-| 216 | ~~#3886~~ | P3 | testing | medium | ~~代码质量Hook体系 — PR#4351 merged，Issue CLOSED~~ | ~~✅~~ |
-| 217 | ~~#1487~~ | P3 | backend | medium | ~~矿场跨境客户资格评估 — PR#4350 merged，Issue CLOSED~~ | ~~✅~~ |
-| 218 | #1900 | P1 | backend | medium | 采购下料单自动生成 — PR#4303 OPEN等待merge，不可重复指派 | ⏳ |
-| 219 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — kimi2已派，编码中 | ✅ |
-| 220 | #4125 | P1 | fullstack | medium | CRM客户360°详情页 — 6Tab聚合（Plan→Todo） | ✅ |
-| 221 | #3641 | P1 | frontend | medium | 管线健康度Tab前端 — 接入#3635真数据（Plan→Todo） | ✅ |
+| 1 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — kimi2已派，编码中 | ✅ |
+| 2 | #3378 | P1 | backend | medium | PLM零件主数据CRUD API — Draft→Review→Released状态机 | ✅ |
+| 3 | #3393 | P1 | backend | medium | PLM供应商价格联动 — 报价变动→BOM成本重算+企微预警 | ✅ |
+| 4 | #3211 | P1 | backend | medium | 工艺路线模板 — 钢结构/玻璃钢/外采+分区(zone)支持 | ✅ |
+| 5 | #4059 | P1 | backend | medium | Quick-Fix keyword-pool — Controller缺/api前缀导致404 | ✅ |
+| 6 | #4063 | P1 | backend | medium | Quick-Fix bossCockpit/overview — 缺/api前缀 | ✅ |
+| 7 | #3213 | P1 | budget | medium | BOM→预算信封关联API — BomItem绑定区域+科目自动汇总 | ✅ |
+| 8 | #3214 | P1 | budget | medium | 预算矩阵校验增强 — 区域维度+设计阶段软提醒+采购硬拦截 | ✅ |
+| 9 | #3216 | P1 | budget | medium | 区域间预算调剂API — 跨区域调剂申请+审批+总额不变校验 | ✅ |
+| 10 | #3222 | P1 | budget | medium | 项目全景控制表API — EVM指标计算+区域级健康度 | ✅ |
+| 11 | #3641 | P1 | frontend | medium | 管线健康度Tab前端 — 接入#3635真数据，kimi4已派 | ✅ |
+| 12 | #3219 | P1 | budget | medium | BOM预算余额提示组件 — 编辑页顶部余额条+超限高亮 | ✅ |
+| 13 | #3220 | P1 | budget | medium | 预算矩阵执行仪表盘 — 热力图+区域钻取+BOM关联明细 | ✅ |
+| 14 | #3223 | P1 | budget | medium | 项目全景控制表页面 — 进度×预算×BOM三维矩阵+EVM仪表盘 | ✅ |
+| 15 | #3212 | P1 | fullstack | medium | 设备级进度追踪 — BOM项×工艺步骤进度矩阵 | ✅ |
+| 16 | #4093 | P1 | fullstack | medium | Quick-Fix /profit-alert — 后端ProfitAlert模块缺失+页面误植 | ✅ |
+| 17 | #4095 | P1 | fullstack | medium | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | ✅ |
+| 18 | #4124 | P1 | fullstack | medium | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
+| 19 | #4125 | P1 | fullstack | medium | CRM客户360°详情页 — 6Tab聚合，kimi3已派，编码中 | ✅ |
+| 20 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败，kimi1正在做 | ✅ |
 
 ## 指派历史
 
@@ -551,7 +548,7 @@
 | kimi7 | 空闲 | - | - | - | 等待Issue |
 | kimi8 | 空闲 | - | - | - | 等待Issue |
 
-**2/8 并发运行中（kimi1/#3558、kimi2/#1939），6个CC空闲。**
+**4/8 并发运行中（kimi1/#3558、kimi2/#1939、kimi3/#4125、kimi4/#3641），4个CC空闲。**
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

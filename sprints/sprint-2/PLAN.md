@@ -541,7 +541,7 @@
 | kimi4 | ~~#3641~~ | frontend | P1 | ~~Done~~ | 管线健康度Tab — PR #4353 merged |
 | kimi4 | ~~#3393~~ | backend | P1 | ~~Done~~ | PLM供应商价格联动 — PR #4356 merged |
 | kimi4 | ~~#3214~~ | backend | P1 | ~~Done~~ | 预算矩阵校验增强 — PR #4357 merged |
-| kimi4 | ~~#3222~~ | backend | P1 | ~~Done~~ | 项目全景控制表API — PR pending |
+| kimi4 | ~~#3222~~ | backend | P1 | ~~Done~~ | 项目全景控制表API — PR #4361 merged |
 | kimi4 | #3222 | backend | P1 | 项目全景控制表API | 编码中 |
 | kimi4 | #3214 | backend | P1 | 预算矩阵校验增强 | 编码中 |
 | kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |

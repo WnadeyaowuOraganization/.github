@@ -33,9 +33,9 @@
 | 203 | ~~#1944~~ | P2 | backend | low | ~~工具中心种子数据 — PR#4340 merged~~ | ~~✅~~ |
 | 204 | ~~#1573~~ | P2 | policy | medium | ~~制度智能问答API — PR#4343 merged~~ | ~~✅~~ |
 | 205 | ~~#2219~~ | P2 | biz-enablement | medium | ~~商务赋能标准库管理页面 — PR#4344 merged~~ | ~~✅~~ |
-| 206 | ~~#2220~~ | P2 | biz-enablement | medium | ~~商务赋能材质参数一键导出~~ | ~~✅~~ |
-| 207 | ~~#2221~~ | P2 | biz-enablement | medium | ~~商务赋能材质知识库管理页面~~ | ~~✅~~ |
-| 208 | ~~#2222~~ | P2 | biz-enablement | medium | ~~商务赋能案例搜索~~ | ~~✅~~ |
+| 206 | ~~#2220~~ | P2 | biz-enablement | medium | ~~商务赋能材质参数一键导出（GitHub无此Issue#206）~~ | ~~✅~~ |
+| 207 | ~~#2221~~ | P2 | biz-enablement | medium | ~~商务赋能材质知识库管理页面（GitHub无此Issue#207）~~ | ~~✅~~ |
+| 208 | ~~#2222~~ | P2 | biz-enablement | medium | ~~商务赋能案例搜索（GitHub无此Issue#208）~~ | ~~✅~~ |
 | 209 | #2277 | P2 | policy | medium | 条款库管理页面（21/22） | ✅ |
 | 210 | #2278 | P2 | policy | medium | AI制度起草向导页面（20/22） | ✅ |
 | 211 | #2288 | P2 | budget | medium | 成本复盘报告页面（30/32） | ✅ |

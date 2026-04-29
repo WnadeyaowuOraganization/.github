@@ -524,6 +524,7 @@
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
 | kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |
+| kimi2 | #1944 | backend | P2 | 工具中心种子数据（建议#203） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |

@@ -507,7 +507,7 @@
 | kimi3 | ~~#1928~~ | backend | P1 | ~~Done~~ | v2.0电池包→图纸输出桥接 — PR #4315 merged |
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中（已重启） |
 | kimi5 | ~~#1908~~ | backend | P1 | ~~Done~~ | 电池包几何生成第二批 — PR #4318 merged |
-| kimi6 | #1954 | backend | P1 | D3参数化-参数约束规则API（建议#195） | 编码中 |
+| kimi6 | ~~#1954~~ | backend | P1 | ~~Done~~ | D3参数化-参数约束规则API — PR #4330 merged |
 | kimi7 | #1947 | backend | P0 | 邵鹏电池包连接公式提取（建议#176） | 编码中（已重启） |
 | kimi8 | ~~#1951~~ | backend | P1 | ~~Done~~ | D3→样品自动生成引擎 — PR #4325 merged |
 

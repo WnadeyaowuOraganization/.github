@@ -495,7 +495,7 @@
 | kimi2 | #1933 | backend | P0 | 螺旋滑梯电池包（建议#196） | 编码中 |
 | kimi3 | #1928 | backend | P1 | D3端到端验证 | 超时355分钟需释放 |
 | kimi4 | ~~#1902~~ | backend | P1 | ~~Done~~ | 历史项目结构化索引 — PR #4331 merged |
-| kimi4 | #1866 | backend | P1 | GH AI插件生态补充评估（建议#197） | 编码中 |
+| kimi4 | ~~#1866~~ | backend | P1 | ~~Done~~ | GH AI插件生态补充评估 — PR #4332 merged |
 | kimi5 | 空闲 | - | - | - | 等待Issue |
 | kimi6 | 空闲 | - | - | - | 等待Issue |
 | kimi7 | 空闲 | - | - | - | 等待Issue |

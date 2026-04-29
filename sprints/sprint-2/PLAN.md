@@ -504,7 +504,7 @@
 | kimi1 | ~~#1922~~ | backend | P1 | ~~Done~~ | AI历史项目智能匹配 — PR #4328 merged |
 | kimi1 | 空闲 | - | - | - | 等待Issue |
 | kimi2 | ~~#1952~~ | backend | P1 | ~~Done~~ | 样品申请单+制作工单API — PR #4329 merged |
-| kimi3 | #1928 | backend | P1 | v2.0电池包→图纸输出桥接（建议#188） | 编码中 |
+| kimi3 | ~~#1928~~ | backend | P1 | ~~Done~~ | v2.0电池包→图纸输出桥接 — PR #4315 merged |
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中（已重启） |
 | kimi5 | ~~#1908~~ | backend | P1 | ~~Done~~ | 电池包几何生成第二批 — PR #4318 merged |
 | kimi6 | #1954 | backend | P1 | D3参数化-参数约束规则API（建议#195） | 编码中 |

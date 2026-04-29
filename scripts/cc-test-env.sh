@@ -427,6 +427,10 @@ start_frontend() {
 #  stop_backend / stop_frontend: 只停进程，不碰数据库（供 restart-* 复用）
 # ============================================================
 stop_backend() {
+  # 开头兜底：防止Maven fork的Java子进程逃脱process group kill导致端口残留
+  local be_start=$(lsof -ti ":${BACKEND_PORT}" 2>/dev/null || true)
+  [ -n "$be_start" ] && echo "  [兜底] 清理残留端口进程 $be_start" && kill -9 "$be_start" 2>/dev/null || true
+
   if [ -f "$PID_FILE" ]; then
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
@@ -440,11 +444,16 @@ stop_backend() {
     fi
     rm -f "$PID_FILE"
   fi
+  # 末尾兜底：处理Maven fork子进程逃逸场景
   local be_left=$(lsof -ti ":${BACKEND_PORT}" 2>/dev/null || true)
-  [ -n "$be_left" ] && kill -9 "$be_left" 2>/dev/null || true
+  [ -n "$be_left" ] && echo "  [兜底] 清理残留端口进程 $be_left" && kill -9 "$be_left" 2>/dev/null || true
 }
 
 stop_frontend() {
+  # 开头兜底：防止子进程逃逸导致端口残留
+  local fe_start=$(lsof -ti ":${FRONTEND_PORT}" 2>/dev/null || true)
+  [ -n "$fe_start" ] && echo "  [兜底] 清理前端残留进程 $fe_start" && kill -9 "$fe_start" 2>/dev/null || true
+
   if [ -f "$FRONT_PID_FILE" ]; then
     local front_pid=$(cat "$FRONT_PID_FILE")
     if kill -0 "$front_pid" 2>/dev/null; then
@@ -455,8 +464,9 @@ stop_frontend() {
     fi
     rm -f "$FRONT_PID_FILE"
   fi
+  # 末尾兜底
   local fe_left=$(lsof -ti ":${FRONTEND_PORT}" 2>/dev/null || true)
-  [ -n "$fe_left" ] && kill -9 "$fe_left" 2>/dev/null || true
+  [ -n "$fe_left" ] && echo "  [兜底] 清理前端残留进程 $fe_left" && kill -9 "$fe_left" 2>/dev/null || true
 }
 
 cmd_start_backend() {

@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-04-29 02:50（#4172 PR#4307 merged，kimi6/#1954已指派）
+> 更新时间：2026-04-29 03:02（排程经理第1轮自动巡检）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > 并发上限：8个CC（D3-v2.0冲刺批次）
@@ -19,27 +19,19 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 02:50（#4172 PR#4307 merged，kimi6/#1954已指派）
+> 更新时间：2026-04-29 03:02（排程经理第1轮自动巡检，8个CC全部空闲）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 🔧 quick-fix Issue 需优先处理，与 E2E Fail 同级监控
-> 当前运行：8个CC全速运转 D3-v2.0 冲刺批次
+> 当前运行：kimi4(#1902)，其余7个CC空闲
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 170 | #4172 | P1 | backend | low | 🔧 Quick-Fix /cockpit/prompt-management：PromptAdminController 缺/api前缀 — kimi6 运行中 | ✅ |
-| 180 | #1850 | P1 | design-ai | high | Agent自学习闭环+效果度量 — kimi3 运行中 | ✅ |
-| 182 | #1900 | P1 | backend | high | 采购下料单自动生成 — kimi2 运行中 | ✅ |
-| 184 | #1902 | P1 | backend | medium | 历史项目结构化索引 — kimi4 超时需重启 | 🚨 |
-| 185 | #1908 | P1 | backend | high | 电池包几何生成第二批 — kimi5 可能卡住 | ⏸️ |
-| 186 | #1922 | P1 | backend | medium | AI历史项目智能匹配 — 等待 CC 释放 | ⏳ |
-| 187 | #1927 | P0 | fullstack | high | D3端到端验证（海盗船）— kimi2 运行中 | ✅ |
-| 188 | #1928 | P1 | backend | high | v2.0电池包→图纸输出桥接 | ⏳前置#1909 |
-| 189 | #1946 | P0 | backend | high | D3最小单元合并名单 — kimi8 运行中（⚠️ kimi8同时跑#1951） | ✅ |
-| 190 | #1947 | P0 | backend | high | 邵鹏电池包连接公式提取 — kimi7 超时需重启 | 🚨 |
-| 191 | #1950 | P1 | sample | medium | CRM商机→样品需求联动API — kimi3 运行中 | ✅ |
-| 192 | #1951 | P1 | sample | high | D3→样品自动生成引擎 — kimi8 运行中（⚠️同目录冲突风险） | ✅ |
-| 193 | #1952 | P1 | sample | medium | 样品申请单+制作工单 API — 等待 CC 释放 | ⏳ |
+| 194 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态 | ✅ |
+| 195 | #1932 | P0 | backend | high | 秋千/吊环电池包 — 独立件+A型架+运动轨迹安全区 | ✅ |
+| 196 | #1933 | P0 | backend | high | 螺旋滑梯电池包 — 邵鹏参数(圈数/方向/角度)+塑料滑桶 | ✅ |
+| 197 | #1866 | P1 | backend | high | GH AI插件生态补充评估 — Smarthopper+OKIE-5 Ollama本地模型 | ✅ |
+| 198 | #1900 | P1 | backend | high | 采购下料单自动生成 — BOM→分类采购单+钢管下料优化 | ✅ |
+| 199 | #1902 | P1 | backend | medium | 历史项目结构化索引 — kimi4 运行中 | ✅ |
 
 ## 指派历史
 
@@ -496,22 +488,21 @@
 | 04-28 | kimi2 | ~~#4174~~ | backend | P2 | ~~Done~~ | 🔧 Quick-Fix GPU监控接口404 — PR #4309 merged |
 | 04-28 | kimi2 | #1907 | backend | P0 | In Progress | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 |
 | 04-28 | kimi4 | ~~#4176~~ | frontend | P1 | ~~Done~~ | 🔧 Quick-Fix 发票页显示 — PR #4311 merged |
-| 04-28 | kimi4 | #1902 | backend | P1 | In Progress | 历史项目结构化索引 — S3生产模型参数提取+设计师搜索 |
+| 04-29 | kimi4 | #1902 | backend | P1 | In Progress | 历史项目结构化索引 — S3生产模型参数提取+设计师搜索 |
 
-### 当前运行（04-28 20:45）
+### 当前运行（04-29 03:02）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | ~~#1922~~ | backend | P1 | ~~Done~~ | AI历史项目智能匹配 — PR #4328 merged |
+| kimi4 | #1902 | backend | P1 | 历史项目结构化索引 | 编码中 |
 | kimi1 | 空闲 | - | - | - | 等待Issue |
-| kimi2 | ~~#1952~~ | backend | P1 | ~~Done~~ | 样品申请单+制作工单API — PR #4329 merged |
-| kimi3 | ~~#1928~~ | backend | P1 | ~~Done~~ | v2.0电池包→图纸输出桥接 — PR #4315 merged |
-| kimi4 | #1902 | backend | P1 | 历史项目结构化索引（建议#162） | 编码中（已重启） |
-| kimi5 | ~~#1908~~ | backend | P1 | ~~Done~~ | 电池包几何生成第二批 — PR #4318 merged |
-| kimi6 | ~~#1954~~ | backend | P1 | ~~Done~~ | D3参数化-参数约束规则API — PR #4330 merged |
-| kimi7 | #1947 | backend | P0 | 邵鹏电池包连接公式提取（建议#176） | 编码中（已重启） |
-| kimi8 | ~~#1951~~ | backend | P1 | ~~Done~~ | D3→样品自动生成引擎 — PR #4325 merged |
+| kimi2 | 空闲 | - | - | - | 等待Issue |
+| kimi3 | ~~#1928~~ | backend | P1 | ~~Done~~ | PR #4315 merged |
+| kimi5 | ~~#1908~~ | backend | P1 | ~~Done~~ | PR #4318 merged |
+| kimi6 | ~~#1954~~ | backend | P1 | ~~Done~~ | PR #4330 merged |
+| kimi7 | ~~#1947~~ | backend | P0 | ~~Done~~ | PR #4326 merged |
+| kimi8 | ~~#1951~~ | backend | P1 | ~~Done~~ | PR #4325 merged |
 
-**8/8 并发在线。**
+**1/8 并发运行中，7个CC空闲。**
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

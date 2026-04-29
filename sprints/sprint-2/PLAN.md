@@ -522,7 +522,7 @@
 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 | kimi1 | ~~#1573~~ | backend | P2 | ~~Done~~ | 制度智能问答API — PR #4343 merged |
-| kimi1 | #2277 | frontend | P2 | 条款库管理页面（建议#209） | 编码中 |
+| kimi1 | ~~#2277~~ | frontend | P2 | ~~Done~~ | 条款库管理页面 — PR #4346 merged |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
 | kimi2 | #2288 | frontend | P2 | 成本复盘报告页面（建议#211） | 编码中 |
 | kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |

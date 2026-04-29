@@ -74,9 +74,16 @@ ok "门 1 通过：PR body 无未勾 checkbox"
 # 门 2 — task.md 无 `- [ ]`
 # ============================================================
 if [ -n "$ISSUE" ]; then
-  TASK_FILE="$BASE_DIR/issues/issue-${ISSUE}/task.md"
-  if [ ! -f "$TASK_FILE" ]; then
-    # 也尝试 kimi 目录
+  TASK_FILE=""
+  # 优先：当前调用者 git 根目录（pwd 的 git toplevel），确保取到当前 CC 的 task.md
+  CWD_ROOT="$(git rev-parse --show-toplevel 2>/dev/null || echo "")"
+  if [ -n "$CWD_ROOT" ] && [ -f "$CWD_ROOT/issues/issue-${ISSUE}/task.md" ]; then
+    TASK_FILE="$CWD_ROOT/issues/issue-${ISSUE}/task.md"
+  # 其次：BASE_DIR（共享 pr-visual-proof 目录）
+  elif [ -f "$BASE_DIR/issues/issue-${ISSUE}/task.md" ]; then
+    TASK_FILE="$BASE_DIR/issues/issue-${ISSUE}/task.md"
+  # 兜底：按字母序遍历 kimi 目录（仅当前两者都找不到时）
+  else
     for kimi_dir in /home/ubuntu/projects/wande-play-kimi*/issues/issue-${ISSUE}/task.md; do
       if [ -f "$kimi_dir" ]; then
         TASK_FILE="$kimi_dir"

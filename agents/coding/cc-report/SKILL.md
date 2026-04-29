@@ -183,28 +183,53 @@ curl -s -X POST http://localhost:9872/api/notify \
 > **只有前台 while 循环才能让 CC 保持"可被唤醒"状态。**
 
 ```bash
-# 前台阻塞式轮询（主线程保持可响应，每次 sleep 180 由 CC 内置允许）
+# 前台阻塞式轮询 — CI 优先检测，CI 结论出来立刻响应
 while true; do
-  STATE=$(gh pr view --head "feature-Issue-${ISSUE}" \
+  # 1. 查最新 CI run 状态（比 PR state 更早反映结果）
+  RUN=$(gh run list -b "feature-Issue-${ISSUE}" \
     --repo WnadeyaowuOraganization/wande-play \
-    --json state --jq '.state' 2>/dev/null)
-  if [ "$STATE" = "MERGED" ]; then
-    echo "✅ PR merged，等待 cc-lock-manager 释放 tmux 会话"
-    break
+    --json status,conclusion,name \
+    --jq '.[0]' 2>/dev/null)
+  CI_STATUS=$(echo "$RUN" | jq -r '.status' 2>/dev/null)
+  CI_CONCLUSION=$(echo "$RUN" | jq -r '.conclusion' 2>/dev/null)
+
+  if [ "$CI_STATUS" = "completed" ]; then
+    if [ "$CI_CONCLUSION" = "failure" ] || [ "$CI_CONCLUSION" = "cancelled" ]; then
+      echo "❌ CI 失败 (conclusion=$CI_CONCLUSION)，切换 fix-ci-failure skill"
+      # 立刻切 fix-ci-failure skill，不等 inject-cc-prompt.sh 注入
+      # （CI 失败已经本轮检测到，主动切比被动等注入更快）
+      break   # 退出循环后 CC 自行切换 skill
+    fi
+    if [ "$CI_CONCLUSION" = "success" ]; then
+      echo "✅ CI 通过，继续等 PR merge"
+    fi
+    # 2. CI 完成后再查 PR state
+    PR_STATE=$(gh pr view --head "feature-Issue-${ISSUE}" \
+      --repo WnadeyaowuOraganization/wande-play \
+      --json state --jq '.state' 2>/dev/null)
+    if [ "$PR_STATE" = "MERGED" ]; then
+      echo "✅ PR merged，等待 cc-lock-manager 释放 tmux 会话"
+      break
+    fi
+    if [ "$PR_STATE" = "CLOSED" ]; then
+      echo "⚠️ PR 被关闭（非 merge），汇报研发经理"
+      break
+    fi
+    echo "CI=$CI_CONCLUSION PR=$PR_STATE, sleep 60"
+    sleep 60   # CI 已通过，PR 还在等 merge，降频轮询
+  else
+    # CI 跑动中：每 30 秒检测一次，不等 3 分钟
+    echo "CI running... status=$CI_STATUS, sleep 30"
+    sleep 30
   fi
-  if [ "$STATE" = "CLOSED" ]; then
-    # PR 被手动关闭（非 merge）→ 立刻 cc-report stuck
-    break
-  fi
-  echo "PR state=${STATE:-unknown}, sleep 180"
-  sleep 180   # 3 分钟一次，降低 gh API / tmux 刷新频率
 done
 
-# merged 后，不要退出 CC。cc-lock-manager.yml 会自动 kill 本 tmux 会话并释放 .cc-lock
+# merged / CI 失败 / PR 关闭 → 不退出 CC，等 cc-lock-manager 或经理注入
 sleep infinity
 ```
 
-轮询过程中若 CI 红 / 失败 → 会收到 `inject-cc-prompt.sh` 注入的"❌ CI 失败"提示词，此时 `sleep 180` 会被 tmux 输入流打断，**立刻切 `fix-ci-failure` skill**。
+> **轮询策略**：CI 进行中 30s 轮询（快响应失败）；CI 完成后切 PR state，60s 轮询（降频省 API）。
+> CI 红/绿立刻检测到，**不等** `inject-cc-prompt.sh` 注入就能切 `fix-ci-failure`。主动检测比被动等注入更快发现问题。
 
 ### 结论前 — 禁止自行下结论
 

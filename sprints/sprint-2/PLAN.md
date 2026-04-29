@@ -530,7 +530,7 @@
 | kimi2 | #1939 | backend | P0 | 文生图素材库（#1939） | 编码中 |
 | kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
 | kimi3 | ~~#2220~~ | frontend | P2 | ~~暂停~~ | 材质参数一键导出 — needs-prototype冻结 |
-| kimi3 | #4125 | fullstack | P1 | CRM客户360°详情页 | 编码中 |
+| kimi3 | ~~#4125~~ | fullstack | P1 | ~~Done~~ | CRM客户360°详情页 — PR #4354 merged |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi4 | #3641 | frontend | P1 | 管线健康度Tab | 编码中 |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |

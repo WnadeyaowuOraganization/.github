@@ -540,6 +540,7 @@
 | kimi4 | ~~#3641~~ | frontend | P1 | ~~Done~~ | 管线健康度Tab — PR #4353 merged |
 | kimi4 | ~~#3393~~ | backend | P1 | ~~Done~~ | PLM供应商价格联动 — PR #4356 merged |
 | kimi4 | ~~#3214~~ | backend | P1 | ~~Done~~ | 预算矩阵校验增强 — PR #4357 merged |
+| kimi4 | #3222 | backend | P1 | 项目全景控制表API | 编码中 |
 | kimi4 | #3214 | backend | P1 | 预算矩阵校验增强 | 编码中 |
 | kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |

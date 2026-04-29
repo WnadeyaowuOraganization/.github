@@ -19,14 +19,14 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 11:58（第8轮自动巡检，E2E回归#4333/#4334已指派kimi4）
+> 更新时间：2026-04-29 12:19（第9轮自动巡检，kimi4恢复处理#4334）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 当前运行：kimi1(#1930)/kimi2(#1933)/kimi4(#4333+#4334)，3个活跃CC，1个空位可补#1900
+> 当前运行：kimi1(#1930)/kimi2(#1900)/kimi4(#4334)，3CC活跃，1空位可补#2217
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 196 | #1900 | P1 | backend | high | 采购下料单自动生成 — BOM→分类采购单+钢管下料优化 | ✅ |
+| 196 | ~~#1900~~ | P1 | backend | high | ~~采购下料单自动生成 — 已指派kimi2~~ | ~~✅~~ |
 | 197 | #2217 | P2 | biz-enablement | medium | 商务赋能知识中台 — 设备维护档案页面 | ✅ |
 | 198 | #2218 | P2 | biz-enablement | medium | 商务赋能知识中台 — 标准合规说明导出 | ✅ |
 
@@ -500,7 +500,7 @@
 | kimi2 | #1900 | backend | P1 | 采购下料单自动生成（建议#198） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
-| kimi4 | #4334 | frontend | P2 | E2E回归 /business/tender/opportunity 404 — 待重新指派 |
+| kimi4 | #4334 | frontend | P2 | E2E回归 /business/tender/opportunity 404 — 已恢复，编码中 |
 | kimi5 | 空闲 | - | - | - | 等待Issue |
 | kimi6 | 空闲 | - | - | - | 等待Issue |
 | kimi7 | 空闲 | - | - | - | 等待Issue |

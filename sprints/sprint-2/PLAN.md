@@ -19,16 +19,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 14:38（第26轮巡检，kimi1/#1930 PR#4308 merged Done，转#2218）
+> 更新时间：2026-04-29 14:45（第26轮巡检，kimi1空闲，生成新建议表）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 当前运行：kimi1(#2218)/kimi2(#2217)，2CC活跃，2空位可补#1940/#1881
+> 当前运行：kimi2(#2217)，1CC活跃，3空位可补
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 196 | ~~#1900~~ | P1 | backend | high | ~~采购下料单自动生成 — 已指派kimi2~~ | ~~✅~~ |
-| 197 | ~~#2217~~ | P2 | biz-enablement | medium | ~~商务赋能知识中台 — 设备维护档案页面，已指派kimi2~~ | ~~✅~~ |
-| 198 | ~~#2218~~ | P2 | biz-enablement | medium | ~~商务赋能知识中台 — 标准合规说明导出，已指派kimi1~~ | ~~✅~~ |
+| 199 | #1955 | P1 | backend | medium | 方案引擎AI文案知识增强 — 接入RAG知识库+历史方案文案学习 | ✅ |
+| 200 | #1957 | P1 | frontend | medium | 方案引擎PPT插件 — 数据可视化工具（图表美化+数据卡片+进度条） | ✅ |
+| 201 | #1942 | P2 | backend | medium | 文生图Phase1 — ai_image_generations记录表+关联表（文生图基础） | ✅ |
+| 202 | #1940 | P2 | backend | medium | 文生图Phase3 — Prompt引擎引导式场景模板组装+智能扩写（依赖#1942） | ⏳ |
+| 203 | #1944 | P2 | backend | low | 工具中心种子数据 — 4个工具初始化入库 | ✅ |
+| 204 | #1573 | P2 | policy | medium | 制度智能问答API — 制度智能问答（22/22 Phase完结） | ✅ |
+| 205 | #2219 | P2 | biz-enablement | medium | 商务赋能 — 标准库管理页面（14/28） | ✅ |
+| 206 | #2220 | P2 | biz-enablement | medium | 商务赋能 — 材质参数一键导出（10/28） | ✅ |
+| 207 | #2221 | P2 | biz-enablement | medium | 商务赋能 — 材质知识库管理页面（9/28） | ✅ |
+| 208 | #2222 | P2 | biz-enablement | medium | 商务赋能 — 案例搜索1搜索框+6维筛选（6/28） | ✅ |
+| 209 | #2277 | P2 | policy | medium | 条款库管理页面（21/22） | ✅ |
+| 210 | #2278 | P2 | policy | medium | AI制度起草向导页面（20/22） | ✅ |
+| 211 | #2288 | P2 | budget | medium | 成本复盘报告页面（30/32） | ✅ |
+| 212 | #2389 | P2 | biz-enablement | medium | 季度照片采集提醒+任务推送（28/28） | ✅ |
+| 213 | #2390 | P2 | biz-enablement | medium | 照片AI自动标签CLIP模型（26/28） | ✅ |
+| 214 | #2585 | P2 | backend | high | refactor合并wande-ai-api到wande-ai消除42个重复类冲突 | ✅ |
+| 215 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败 | ✅ |
+| 216 | #3886 | P3 | testing | medium | 代码质量Hook体系 — pre-commit/push/CI质量门/分支保护联调 | ✅ |
+| 217 | #1487 | P3 | backend | medium | 矿场跨境客户资格评估 — 8维度评估表+评级计算 | ✅ |
 
 ## 指派历史
 
@@ -492,7 +508,7 @@
 | 04-29 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | 04-29 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |
 | 04-29 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
-| 04-29 | kimi1 | #2218 | frontend | P2 | In Progress | 商务赋能标准合规说明导出（建议#198） |
+| 04-29 | kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 商务赋能标准合规说明导出 — 缺原型，等待补齐 |
 
 ### 当前运行（04-29 11:50）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |

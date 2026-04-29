@@ -26,8 +26,6 @@
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
-| 194 | #1930 | P0 | fullstack | high | 攀爬网/爬梯电池包 — 垂直/倾斜/绳网3种形态 | ✅ |
-| 195 | #1932 | P0 | backend | high | 秋千/吊环电池包 — 独立件+A型架+运动轨迹安全区 | ✅ |
 | 196 | #1933 | P0 | backend | high | 螺旋滑梯电池包 — 邵鹏参数(圈数/方向/角度)+塑料滑桶 | ✅ |
 | 197 | #1866 | P1 | backend | high | GH AI插件生态补充评估 — Smarthopper+OKIE-5 Ollama本地模型 | ✅ |
 | 198 | #1900 | P1 | backend | high | 采购下料单自动生成 — BOM→分类采购单+钢管下料优化 | ✅ |
@@ -494,9 +492,9 @@
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi4 | #1902 | backend | P1 | 历史项目结构化索引 | 编码中 |
-| kimi1 | 空闲 | - | - | - | 等待Issue |
-| kimi2 | 空闲 | - | - | - | 等待Issue |
-| kimi3 | ~~#1928~~ | backend | P1 | ~~Done~~ | PR #4315 merged |
+| kimi1 | #1930 | fullstack | P0 | 攀爬网/爬梯电池包（建议#194） | 编码中 |
+| kimi1 | 空闲 | - | - | - | 等待Issue || kimi2 | #1932 | backend | P0 | 秋千/吊环电池包（建议#195） | 编码中 |
+| kimi2 | 空闲 | - | - | - | 等待Issue || kimi3 | ~~#1928~~ | backend | P1 | ~~Done~~ | PR #4315 merged |
 | kimi5 | ~~#1908~~ | backend | P1 | ~~Done~~ | PR #4318 merged |
 | kimi6 | ~~#1954~~ | backend | P1 | ~~Done~~ | PR #4330 merged |
 | kimi7 | ~~#1947~~ | backend | P0 | ~~Done~~ | PR #4326 merged |

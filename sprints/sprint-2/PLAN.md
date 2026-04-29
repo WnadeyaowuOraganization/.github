@@ -525,7 +525,7 @@
 | kimi1 | #2277 | frontend | P2 | 条款库管理页面（建议#209） | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
 | kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |
-| kimi4 | #2221 | frontend | P2 | 材质知识库管理页面（建议#207） | 编码中 |
+| kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi5 | #2222 | frontend | P2 | 案例搜索1搜索框+6维筛选（建议#208） | 编码中 |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |

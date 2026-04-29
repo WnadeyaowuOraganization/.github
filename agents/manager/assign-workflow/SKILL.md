@@ -97,6 +97,13 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progr
 | `module:pipeline` | pipeline | `wande-play-<suffix>/pipeline` |
 | `module:fullstack` | fullstack | `wande-play-<suffix>/`（根目录） |
 
+### E2E 修复类 Issue 指派规则
+
+1. **effort 统一为 low**（比 feature 短 50%）
+2. **指派建议表标注「E2E优先派空闲CC」**
+3. **不同测试文件可并发，同文件不可并发**
+4. 优先从空闲槽位安排 E2E Issue
+
 ## 任务二：巡检 CC 进度（attention-only 模式）
 
 > 不再 tmux capture-pane 全场扫描。改用 server.py 规则引擎预筛，只对 `needs_attention=true` 精细介入。

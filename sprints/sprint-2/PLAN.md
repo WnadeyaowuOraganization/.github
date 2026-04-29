@@ -527,6 +527,7 @@
 | kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |
 | kimi2 | ~~#1944~~ | backend | P2 | ~~Done~~ | 工具中心种子数据 — PR #4340 merged |
 | kimi2 | ~~#1940~~ | backend | P2 | ~~Done~~ | 文生图Phase3 — PR #4342 merged |
+| kimi2 | #2219 | frontend | P2 | 商务赋能标准库管理页面（建议#205） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |

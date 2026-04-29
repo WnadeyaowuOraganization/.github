@@ -511,6 +511,7 @@
 | 04-29 | kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 商务赋能标准合规说明导出 — 缺原型，等待补齐 |
 
 | 04-29 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
+| kimi1 | #1957 | frontend | P1 | 方案引擎PPT插件（建议#200） | 编码中 |
 
 ### 当前运行（04-29 16:42）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
@@ -519,6 +520,7 @@
 | kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 标准合规说明导出 — 缺原型，等待补齐 |
 | kimi1 | ~~#1942~~ | fullstack | P2 | ~~Done~~ | 文生图Phase1基础 — PR #4338 merged |
 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
+| kimi1 | #1957 | frontend | P1 | 方案引擎PPT插件（建议#200） | 编码中 |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
 | kimi2 | #2217 | frontend | P2 | 商务赋能设备维护档案页面（建议#197） | 编码中 |

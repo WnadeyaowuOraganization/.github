@@ -75,7 +75,7 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 
 ## task.md 标准结构
 
-写入 `issues/issue-<N>/task.md`：
+写入前先自检：Steps 中**不得包含**上方「反模式」列表中任一写法。如不确定，写完后再 grep 自查一遍。
 
 ```markdown
 # Task: Issue #N — <一句话标题>
@@ -93,7 +93,7 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 - [ ] 筛选栏：项目类型/区域/...
 - [ ] 操作按钮：详情/修正/有效/无效/分配/删除 (tooltip文字已核对)
 
-## Steps
+## Steps（仅业务实现项，CC标准操作不写入）
 - [ ] T1 建表 wdpp_xxx + Flyway 脚本
 - [ ] T2 Entity + Mapper + Service + Controller
 - [ ] T3 JUnit 单测（BaseServiceTest）通过 + mvn compile 绿
@@ -103,7 +103,6 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 - [ ] T7 pnpm build 通过
 - [ ] T8 Playwright e2e spec 通过（前端门）
 - [ ] T9 截图上传 Release screenshot-<PR>
-- [ ] T10 task.md 全勾 + pr-body-lint 通过
 
 ## Files Changed
 （随开发更新）
@@ -112,11 +111,23 @@ curl -s -H "Authorization: token $GH_TOKEN" \
 （无 / 列出阻塞项）
 ```
 
-## 质量门（task.md 全部 `- [ ]` 必须勾完）
+### ⛔ 禁止写入 task.md 的内容（写入 = lint 门 2 必然失败）
 
-- `任何 - [ ]` 未勾 = quality-gate 门 2 拦截
-- 做不完的项：拆追补 Issue 后勾选原步骤，在 task.md 备注 `→ 追补 #M`
-- **⛔ 禁止在 task.md 写"rebase+PR创建"或"轮询等待merge"步骤**：CI门2在PR push时检查全勾，但这些步骤在PR创建时尚未完成 → 永远触发门2失败。最后一步必须是 `T_N task.md 全勾 + pr-body-lint 通过`。rebase和PR创建是CC的标准操作流程，不作为task.md检查项。
+以下均为 CC 标准操作，由 CC 自动执行，**不得作为 task.md 检查项**：
+
+| 禁止写法 | 原因 |
+|---------|------|
+| `T_N rebase origin/dev` | CC 在 `pr-body-lint` 前自动执行，写入 = 循环依赖 |
+| `T_N gh pr create` | CC 在 `pr-body-lint` 通过后自动执行，同上 |
+| `T_N 轮询等待 merge` | CC 在 PR 创建后自动轮询，同上 |
+| `T_N task.md 全勾 + pr-body-lint 通过` | lint 检查 task.md 本身，此项 = 自指循环 |
+| `T_N 截图上传 Release` | 截图是 `pr-visual-proof` skill 的输出，不是业务实现 |
+
+**违反以上任一条，pr-body-lint Gate 2 必然失败。** 如业务步骤确实做不完，拆追补 Issue 并在原 task.md 备注 `→ 追补 #M`，不要写 CC 操作项。
+
+### 质量门（task.md 业务检查项必须全部 `- [ ]` 勾完）
+
+`任何 - [ ]` 未勾 = quality-gate 门 2 拦截。做不完的项：拆追补 Issue → 备注 `→ 追补 #M` → 勾原步骤。
 
 ## 开工同步
 

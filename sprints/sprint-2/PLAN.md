@@ -529,7 +529,7 @@
 | kimi1 | #4063 | backend | P1 | Quick-Fix bossCockpit/overview | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
 | kimi2 | ~~#1487~~ | backend | P3 | ~~Done~~ | 矿场跨境客户资格评估 — PR #4350 merged |
-| kimi2 | ~~#1939~~ | backend | P0 | ~~Done~~ | 文生图素材库 — PR #4352 merged |
+| kimi2 | ~~#1939~~ | backend | P0 | ~~Done~~ | 文生图素材库 — PR #4352 merged（前端build失败修复中）|
 | kimi2 | #1939 | backend | P0 | 文生图素材库（#1939） | 编码中 |
 | kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
 | kimi3 | ~~#2220~~ | frontend | P2 | ~~暂停~~ | 材质参数一键导出 — needs-prototype冻结 |

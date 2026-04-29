@@ -521,6 +521,7 @@
 | kimi1 | ~~#1942~~ | fullstack | P2 | ~~Done~~ | 文生图Phase1基础 — PR #4338 merged |
 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
+| kimi1 | #1573 | backend | P2 | 制度智能问答API（建议#204） | 编码中 |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
 | kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |

@@ -19,15 +19,15 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 12:38（第12轮自动巡检，kimi4/#4334 PR#4336 merged Done）
+> 更新时间：2026-04-29 12:48（第13轮巡检，#1900跳过，kimi2转#2217）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 当前运行：kimi1(#1930)/kimi2(#1900)，2CC活跃，2空位可补#2217/#2218
+> 当前运行：kimi1(#1930)/kimi2(#2217)，2CC活跃，2空位可补#2218/#1940
 
 | 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
 |------|-------|--------|------|--------|------|------|
 | 196 | ~~#1900~~ | P1 | backend | high | ~~采购下料单自动生成 — 已指派kimi2~~ | ~~✅~~ |
-| 197 | #2217 | P2 | biz-enablement | medium | 商务赋能知识中台 — 设备维护档案页面 | ✅ |
+| 197 | ~~#2217~~ | P2 | biz-enablement | medium | ~~商务赋能知识中台 — 设备维护档案页面，已指派kimi2~~ | ~~✅~~ |
 | 198 | #2218 | P2 | biz-enablement | medium | 商务赋能知识中台 — 标准合规说明导出 | ✅ |
 
 ## 指派历史
@@ -490,7 +490,7 @@
 | 04-29 | kimi4 | #1866 | backend | P1 | In Progress | GH AI插件生态补充评估 — Smarthopper+OKIE-5 Ollama本地模型 |
 | 04-29 | kimi4 | ~~#1866~~ | backend | P1 | ~~Done~~ | GH AI插件生态补充评估 — PR #4332 merged |
 | 04-29 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
-| 04-29 | kimi4 | #4334 | frontend | P2 | In Progress | E2E回归 /business/tender/opportunity 404 |
+| 04-29 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |
 
 ### 当前运行（04-29 11:50）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |

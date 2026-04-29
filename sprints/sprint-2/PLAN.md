@@ -525,6 +525,7 @@
 | kimi1 | ~~#2277~~ | frontend | P2 | ~~Done~~ | 条款库管理页面 — PR #4346 merged |
 | kimi1 | #3558 | fullstack | P2 | E2E回归API请求超时（建议#215） | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
+| kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
 | kimi2 | #2288 | frontend | P2 | 成本复盘报告页面（建议#211） | 编码中 |
 | kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |

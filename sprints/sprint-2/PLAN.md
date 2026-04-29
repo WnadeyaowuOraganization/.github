@@ -525,8 +525,8 @@
 | kimi1 | ~~#2277~~ | frontend | P2 | ~~Done~~ | 条款库管理页面 — PR #4346 merged |
 | kimi1 | #3558 | fullstack | P2 | E2E回归API请求超时（建议#215） | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
+| kimi2 | #1487 | backend | P3 | 矿场跨境客户资格评估（建议#217） | 编码中 |
 | kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
-| kimi2 | #2288 | frontend | P2 | 成本复盘报告页面（建议#211） | 编码中 |
 | kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi5 | #2222 | frontend | P2 | 案例搜索1搜索框+6维筛选（建议#208） | 编码中 |
@@ -535,7 +535,6 @@
 | kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |
 | kimi2 | ~~#1944~~ | backend | P2 | ~~Done~~ | 工具中心种子数据 — PR #4340 merged |
 | kimi2 | ~~#1940~~ | backend | P2 | ~~Done~~ | 文生图Phase3 — PR #4342 merged |
-| kimi2 | #2219 | frontend | P2 | 商务赋能标准库管理页面（建议#205） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |

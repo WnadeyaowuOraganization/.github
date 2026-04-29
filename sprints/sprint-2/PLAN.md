@@ -535,6 +535,7 @@
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi4 | ~~#3641~~ | frontend | P1 | ~~Done~~ | 管线健康度Tab — PR #4353 merged |
 | kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
+| kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |
 | kimi5 | ~~#3886~~ | fullstack | P3 | ~~Done~~ | 代码质量Hook体系 — PR#4351 merged，Issue CLOSED |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |

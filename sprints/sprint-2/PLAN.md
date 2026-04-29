@@ -514,7 +514,7 @@
 | 04-29 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 
-### 当前运行（04-30 03:50）
+### 当前运行（04-30 04:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
@@ -535,6 +535,8 @@
 | kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
 | kimi3 | ~~#2220~~ | frontend | P2 | ~~暂停~~ | 材质参数一键导出 — needs-prototype冻结 |
 | kimi3 | ~~#4125~~ | fullstack | P1 | ~~Done~~ | CRM客户360°详情页 — PR #4354 merged |
+| kimi3 | ~~#3211~~ | backend | P1 | ~~Done~~ | 工艺路线模板 — PR #4362 merged |
+| kimi3 | #3220 | backend | P1 | 预算矩阵执行仪表盘 | 编码中 |
 | kimi3 | ~~#3378~~ | backend | P1 | ~~Done~~ | PLM零件主数据CRUD API — PR #3979 merged（2026-04-20） |
 | kimi3 | #3211 | backend | P1 | 工艺路线模板 | 编码中 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
@@ -542,6 +544,7 @@
 | kimi4 | ~~#3393~~ | backend | P1 | ~~Done~~ | PLM供应商价格联动 — PR #4356 merged |
 | kimi4 | ~~#3214~~ | backend | P1 | ~~Done~~ | 预算矩阵校验增强 — PR #4357 merged |
 | kimi4 | ~~#3222~~ | backend | P1 | ~~Done~~ | 项目全景控制表API — PR #4361 merged |
+| kimi4 | #3223 | backend | P1 | 项目全景控制表页面 | 编码中 |
 | kimi4 | #3222 | backend | P1 | 项目全景控制表API | 编码中 |
 | kimi4 | #3214 | backend | P1 | 预算矩阵校验增强 | 编码中 |
 | kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |

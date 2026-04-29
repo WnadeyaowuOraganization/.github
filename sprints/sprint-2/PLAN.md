@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 23:35（第55轮巡检，清空needs-prototype冻结项，新增#1900/#1939）
+> 更新时间：2026-04-29 23:45（第56轮巡检，#1939已派kimi2，#1900有PR#4303等待merge）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 注意：序号与GitHub Issue号是不同编号，序号206=GitHub#2220
@@ -45,8 +45,8 @@
 | 215 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败（kimi1正在做） | ✅ |
 | 216 | ~~#3886~~ | P3 | testing | medium | ~~代码质量Hook体系 — PR#4351 merged，Issue CLOSED~~ | ~~✅~~ |
 | 217 | ~~#1487~~ | P3 | backend | medium | ~~矿场跨境客户资格评估 — PR#4350 merged，Issue CLOSED~~ | ~~✅~~ |
-| 218 | #1900 | P1 | backend | medium | 采购下料单自动生成 — D3-v2.0，无needs-prototype | ✅ |
-| 219 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — 无needs-prototype | ✅ |
+| 218 | #1900 | P1 | backend | medium | 采购下料单自动生成 — PR#4303 OPEN等待merge，不可重复指派 | ⏳ |
+| 219 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — kimi2已派，编码中 | ✅ |
 
 ## 指派历史
 
@@ -547,7 +547,7 @@
 | kimi7 | 空闲 | - | - | - | 等待Issue |
 | kimi8 | 空闲 | - | - | - | 等待Issue |
 
-**3/8 并发运行中（kimi1/#3558、kimi3/#2220、kimi5/#3886已CLOSED待释放），5个CC空闲。**
+**2/8 并发运行中（kimi1/#3558、kimi2/#1939），6个CC空闲。**
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

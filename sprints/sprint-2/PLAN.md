@@ -489,7 +489,7 @@
 | 04-29 | kimi4 | ~~#1902~~ | backend | P1 | ~~Done~~ | 历史项目结构化索引 — PR #4331 merged |
 | 04-29 | kimi4 | #1866 | backend | P1 | In Progress | GH AI插件生态补充评估 — Smarthopper+OKIE-5 Ollama本地模型 |
 | 04-29 | kimi4 | ~~#1866~~ | backend | P1 | ~~Done~~ | GH AI插件生态补充评估 — PR #4332 merged |
-| 04-29 | kimi4 | #4333 | frontend | P2 | In Progress | E2E回归 /business/crm Component view not found |
+| 04-29 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | 04-29 | kimi4 | #4334 | frontend | P2 | In Progress | E2E回归 /business/tender/opportunity 404 |
 
 ### 当前运行（04-29 11:50）
@@ -499,7 +499,8 @@
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | #1900 | backend | P1 | 采购下料单自动生成（建议#198） | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
-| kimi4 | ~~#4333~~+#4334 | frontend | P2 | E2E回归失败修复：CRM路由已修复 — PR #4335 merged，#4334继续 |
+| kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
+| kimi4 | #4334 | frontend | P2 | E2E回归 /business/tender/opportunity 404 — 待重新指派 |
 | kimi5 | 空闲 | - | - | - | 等待Issue |
 | kimi6 | 空闲 | - | - | - | 等待Issue |
 | kimi7 | 空闲 | - | - | - | 等待Issue |

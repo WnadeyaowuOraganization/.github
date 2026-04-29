@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 23:22（第53轮巡检，更新已完成项）
+> 更新时间：2026-04-29 23:35（第55轮巡检，清空needs-prototype冻结项，新增#1900/#1939）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 注意：序号与GitHub Issue号是不同编号，序号206=GitHub#2220
@@ -33,18 +33,20 @@
 | 203 | ~~#1944~~ | P2 | backend | low | ~~工具中心种子数据 — PR#4340 merged~~ | ~~✅~~ |
 | 204 | ~~#1573~~ | P2 | policy | medium | ~~制度智能问答API — PR#4343 merged~~ | ~~✅~~ |
 | 205 | ~~#2219~~ | P2 | biz-enablement | medium | ~~商务赋能标准库管理页面 — PR#4344 merged~~ | ~~✅~~ |
-| 206 | #2220 | P2 | biz-enablement | medium | 商务赋能 — 材质参数一键导出（10/28） | ✅ |
+| 206 | #2220 | P2 | biz-enablement | medium | 商务赋能 — 材质参数一键导出（10/28）needs-prototype，kimi3已派 | ✅ |
 | 207 | ~~#2221~~ | P2 | biz-enablement | medium | ~~商务赋能 — 材质知识库管理页面（9/28） — PR#4345 merged~~ | ~~✅~~ |
 | 208 | ~~#2222~~ | P2 | biz-enablement | medium | ~~商务赋能 — 案例搜索1搜索框+6维筛选（6/28） — PR#4349 merged~~ | ~~✅~~ |
 | 209 | ~~#2277~~ | P2 | policy | medium | ~~条款库管理页面（21/22） — PR#4346 merged~~ | ~~✅~~ |
-| 210 | #2278 | P2 | policy | medium | AI制度起草向导页面（20/22） | ✅ |
+| 210 | ~~#2278~~ | P2 | policy | medium | ~~AI制度起草向导页面（20/22） — needs-prototype冻结~~ | ~~⛔~~ |
 | 211 | ~~#2288~~ | P2 | budget | medium | ~~成本复盘报告页面（30/32） — PR#4347 merged~~ | ~~✅~~ |
-| 212 | #2389 | P2 | biz-enablement | medium | 季度照片采集提醒+任务推送（28/28） | ✅ |
-| 213 | #2390 | P2 | biz-enablement | medium | 照片AI自动标签CLIP模型（26/28） | ✅ |
-| 214 | #2585 | P2 | backend | high | refactor合并wande-ai-api到wande-ai消除42个重复类冲突 | ✅ |
-| 215 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败 | ✅ |
-| 216 | #3886 | P3 | testing | medium | 代码质量Hook体系 — pre-commit/push/CI质量门/分支保护联调 | ✅ |
-| 217 | #1487 | P3 | backend | medium | 矿场跨境客户资格评估 — 8维度评估表+评级计算 | ✅ |
+| 212 | ~~#2389~~ | P2 | biz-enablement | medium | ~~季度照片采集提醒+任务推送（28/28） — needs-prototype冻结~~ | ~~⛔~~ |
+| 213 | ~~#2390~~ | P2 | biz-enablement | medium | ~~照片AI自动标签CLIP模型（26/28） — needs-prototype冻结~~ | ~~⛔~~ |
+| 214 | ~~#2585~~ | P2 | backend | high | ~~refactor合并wande-ai-api到wande-ai — needs-prototype冻结~~ | ~~⛔~~ |
+| 215 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败（kimi1正在做） | ✅ |
+| 216 | ~~#3886~~ | P3 | testing | medium | ~~代码质量Hook体系 — PR#4351 merged，Issue CLOSED~~ | ~~✅~~ |
+| 217 | ~~#1487~~ | P3 | backend | medium | ~~矿场跨境客户资格评估 — PR#4350 merged，Issue CLOSED~~ | ~~✅~~ |
+| 218 | #1900 | P1 | backend | medium | 采购下料单自动生成 — D3-v2.0，无needs-prototype | ✅ |
+| 219 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — 无needs-prototype | ✅ |
 
 ## 指派历史
 
@@ -530,7 +532,7 @@
 | kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |
-| kimi5 | #3886 | fullstack | P3 | 代码质量Hook体系（建议#216） | PR#4351 submitted |
+| kimi5 | ~~#3886~~ | fullstack | P3 | ~~Done~~ | 代码质量Hook体系 — PR#4351 merged，Issue CLOSED |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
 | kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |
@@ -544,7 +546,7 @@
 | kimi7 | 空闲 | - | - | - | 等待Issue |
 | kimi8 | 空闲 | - | - | - | 等待Issue |
 
-**4/8 并发运行中，4个CC空闲。**
+**3/8 并发运行中（kimi1/#3558、kimi3/#2220、kimi5/#3886已CLOSED待释放），5个CC空闲。**
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

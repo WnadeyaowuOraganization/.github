@@ -528,8 +528,9 @@
 | kimi1 | #3558 | fullstack | P2 | E2E回归API请求超时（建议#215） | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
 | kimi2 | ~~#1487~~ | backend | P3 | ~~Done~~ | 矿场跨境客户资格评估 — PR #4350 merged |
+| kimi2 | #1939 | backend | P0 | 文生图素材库（#1939） | 编码中 |
 | kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
-| kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |
+| kimi3 | ~~#2220~~ | frontend | P2 | ~~暂停~~ | 材质参数一键导出 — needs-prototype冻结 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |
 | kimi5 | ~~#3886~~ | fullstack | P3 | ~~Done~~ | 代码质量Hook体系 — PR#4351 merged，Issue CLOSED |

@@ -514,7 +514,7 @@
 | 04-29 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 
-### 当前运行（04-29 17:27）
+### 当前运行（04-30 02:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
@@ -527,7 +527,6 @@
 | kimi1 | ~~#3558~~ | fullstack | P2 | ~~Done~~ | E2E回归API超时 — PR #4348 merged |
 | kimi1 | ~~#4059~~ | backend | P1 | ~~Done~~ | Quick-Fix keyword-pool — PR #4355 merged |
 | kimi1 | #4063 | backend | P1 | Quick-Fix bossCockpit/overview | 编码中 |
-| kimi1 | #4059 | backend | P1 | Quick-Fix keyword-pool | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
 | kimi2 | ~~#1487~~ | backend | P3 | ~~Done~~ | 矿场跨境客户资格评估 — PR #4350 merged |
 | kimi2 | #1939 | backend | P0 | 文生图素材库（#1939） | 编码中 |
@@ -536,13 +535,12 @@
 | kimi3 | ~~#4125~~ | fullstack | P1 | ~~Done~~ | CRM客户360°详情页 — PR #4354 merged |
 | kimi3 | ~~#3378~~ | backend | P1 | ~~Done~~ | PLM零件主数据CRUD API — PR #3979 merged（2026-04-20） |
 | kimi3 | #3211 | backend | P1 | 工艺路线模板 | 编码中 |
-| kimi3 | #3378 | backend | P1 | PLM零件主数据CRUD API | 编码中 |
 | kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
 | kimi4 | ~~#3641~~ | frontend | P1 | ~~Done~~ | 管线健康度Tab — PR #4353 merged |
 | kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
-| kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
 | kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |
 | kimi5 | ~~#3886~~ | fullstack | P3 | ~~Done~~ | 代码质量Hook体系 — PR#4351 merged，Issue CLOSED |
+| kimi5 | #3213 | backend | P1 | BOM→预算信封关联API | 编码中 |
 | kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
 | kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
 | kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |

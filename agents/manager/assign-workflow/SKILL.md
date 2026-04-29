@@ -164,6 +164,9 @@ gh pr list --repo WnadeyaowuOraganization/wande-play --state merged \
 ```bash
 bash scripts/cc-check.sh | grep "SAVED\|超时"
 
+# 诊断卡住CC（自动分析tmux输出、上下文、锁状态）
+bash scripts/cc-diagnose-stuck.sh
+
 # 重新触发
 bash scripts/run-cc.sh --module <原module> --issue <N> --dir <原kimi目录> --effort <原effort>
 
@@ -223,6 +226,7 @@ bash scripts/cc-check.sh
 | `gh` 401 | `export GH_TOKEN=$(python3 scripts/gh-app-token.py wandeyaowu)` |
 | `cc-check.sh` 报错 | `git pull` 同步最新版本 |
 | `tmux send-keys` 特殊字符 | 用 `scripts/inject-cc-prompt.sh` |
+| CC卡住诊断 | `bash scripts/cc-diagnose-stuck.sh` |
 
 ## 辅助 Agent
 

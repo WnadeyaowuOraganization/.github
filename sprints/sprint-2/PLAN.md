@@ -496,7 +496,7 @@
 | kimi1 | #1930 | fullstack | P0 | 攀爬网/爬梯电池包 | 编码中 |
 | kimi2 | #1933 | backend | P0 | 螺旋滑梯电池包 | 编码中 |
 | kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
-| kimi4 | 空闲 | - | - | - | 等待Issue |
+| kimi4 | #4333 | frontend | P2 | CRM路由组件找不到（E2E回归失败） | 编码中 |
 | kimi5 | 空闲 | - | - | - | 等待Issue |
 | kimi6 | 空闲 | - | - | - | 等待Issue |
 | kimi7 | 空闲 | - | - | - | 等待Issue |

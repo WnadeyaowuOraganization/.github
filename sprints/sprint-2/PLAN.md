@@ -524,7 +524,7 @@
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 | kimi1 | ~~#1573~~ | backend | P2 | ~~Done~~ | 制度智能问答API — PR #4343 merged |
 | kimi1 | ~~#2277~~ | frontend | P2 | ~~Done~~ | 条款库管理页面 — PR #4346 merged |
-| kimi1 | ~~#3558~~ | fullstack | P2 | ~~退出~~ | E2E回归API超时 — 会话异常退出 |
+| kimi1 | ~~#3558~~ | fullstack | P2 | ~~Done~~ | E2E回归API超时 — PR #4348 merged |
 | kimi1 | #4059 | backend | P1 | Quick-Fix keyword-pool | 编码中 |
 | kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
 | kimi2 | ~~#1487~~ | backend | P3 | ~~Done~~ | 矿场跨境客户资格评估 — PR #4350 merged |

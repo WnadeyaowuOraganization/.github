@@ -29,6 +29,18 @@ Done 由 `pr-test.yml` 自动触发。研发经理 ⛔ **永远不要**主动执
 - `gh issue close`
 - 任何手动改看板为 Done 的操作
 
+### CC 目录释放时机（红线）
+
+**PR merge ≠ 目录释放**。锁文件释放必须满足：
+
+| 条件 | 说明 |
+|------|------|
+| PR merged | 触发 CI 部署 |
+| CI 部署到 dev 成功 | **真正释放锁文件** |
+| 锁文件 `/home/ubuntu/cc_scheduler/lock/wande-play-kimi{N}.lock` 已删除 | 可指派新 Issue |
+
+**不能**在 PR merge 后立即指派新 Issue 到同一 kimi，必须等 dev 部署完成。
+
 ### 状态对照表
 
 | 阶段 | 看板状态 | 研发经理动作 |
@@ -40,6 +52,7 @@ Done 由 `pr-test.yml` 自动触发。研发经理 ⛔ **永远不要**主动执
 | PR + CI failure | In Progress | 看失败详情，注入 CC 修复 |
 | PR + CONFLICTING | In Progress | 注入 rebase 命令 |
 | PR squash-merged | **自动 → Done** | 仅 PLAN.md 划删除线 |
+| CI 部署到 dev 成功 | — | **删除锁文件**，可指派新 Issue 到同一 kimi |
 | CC 异常无法恢复 | Fail | **唯一允许的失败终态变更** |
 
 ### ⛔ Done 禁止操作
@@ -50,6 +63,7 @@ Done 由 `pr-test.yml` 自动触发。研发经理 ⛔ **永远不要**主动执
 - 手动 `gh issue close`
 - In Progress 直接跳 Done
 - 批量把多个 issue 改 Done
+- **PR merge 后立即指派新 Issue 到同一 kimi**（必须等 dev 部署）
 
 ### Done Guard（硬隔离）
 
@@ -68,8 +82,9 @@ gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json state,stateRe
 
 | 条件 | 动作 |
 |------|------|
-| 有 PR merged | **立即**更新PLAN.md + 立即指派下一个 |
-| `bash scripts/cc-check.sh` 显示活跃 CC < 5 | **立即指派**，不受其他消息干扰 |
+| 有 PR merged | 更新 PLAN.md（**不等 dev 部署**） |
+| CI 部署到 dev 成功 + 锁文件已删除 | **立即**指派新 Issue 到同一 kimi |
+| `bash scripts/cc-check.sh` 显示活跃 CC < 5 且有空闲 kimi 目录 | **立即指派** |
 | 指派建议表刷新新增项 | 立即指派（有空槽时） |
 
 ### 执行步骤
@@ -78,15 +93,19 @@ gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json state,stateRe
 # 1. 检查槽位（最多5个并发CC，用cc-check.sh）
 bash scripts/cc-check.sh
 
-# 2. 读排程经理的指派建议表
+# 2. 检查空闲 kimi 目录（锁文件不存在）
+ls /home/ubuntu/cc_scheduler/lock/wande-play-kimi*.lock
+
+# 3. 读排程经理的指派建议表
 cat sprints/sprint-<N>/PLAN.md | grep -A 25 "指派建议"
 
-# 3. 优先指派 P0 > P1 > P2
+# 4. 优先指派 P0 > P1 > P2
 
-# 4. 启动 CC
+# 5. 启动 CC（kimi 目录必须有锁文件才能复用）
+rm -f /home/ubuntu/cc_scheduler/lock/wande-play-kimi{N}.lock
 bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
 
-# 5. 更新 PLAN.md 三处
+# 6. 更新 PLAN.md 三处
 ```
 
 ### module 对应

@@ -64,28 +64,29 @@ gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json state,stateRe
 
 ## 任务一：指派（Todo → In Progress）
 
+### 触发条件
+
+| 条件 | 动作 |
+|------|------|
+| `bash scripts/cc-check.sh` 显示活跃 CC < 5 | 立即指派 |
+| 有 CC PR merged → 释放 | 立即指派下一个建议 |
+| 指派建议表刷新新增项 | 立即指派（有空槽时） |
+
+### 执行步骤
+
 ```bash
-# 1. 检查槽位（最多15个并发CC）
+# 1. 检查槽位（最多5个并发CC，用cc-check.sh）
 bash scripts/cc-check.sh
 
 # 2. 读排程经理的指派建议表
 cat sprints/sprint-<N>/PLAN.md | grep -A 25 "指派建议"
 
-# 3. 前端 Issue 指派前确认配对后端 PR 已 merged
+# 3. 优先指派 P0 > P1 > P2
 
-# 4. prefetch Issue
-bash scripts/prefetch-issues.sh <issue1> <issue2> ...
-
-# 5. 启动 CC
+# 4. 启动 CC
 bash scripts/run-cc.sh --module <module> --issue <N> --dir <kimi目录> --effort <effort>
 
-# 6. 标 In Progress
-bash scripts/update-project-status.sh --repo play --issue <N> --status "In Progress"
-
-# 7. 更新 PLAN.md 三处：
-#    - 当前运行表新增一行
-#    - 指派历史表新增一行
-#    - 指派建议表删除已派的行（排程经理下次刷新不用重复判断）
+# 5. 更新 PLAN.md 三处
 ```
 
 ### module 对应
@@ -131,6 +132,16 @@ if [ -z "$ATTENTION" ]; then
   echo "✓ 全场自监控中，本轮无需介入"
 fi
 ```
+
+### attention 触发条件
+
+| 条件 | 原因字段 | 处理 |
+|------|---------|------|
+| `needs_attention: true` | 由 server.py 规则引擎设置 | 查 `attention_reason` 字段 |
+| 静默超时 | `静默 N 分钟无新输出` | 唤醒或 kill 重启 |
+| 无 PR | `无 PR 已超时` | 注入 `gh pr create` |
+| CI failure | `CI 失败` | 注入修复 |
+| Fail 终态 | `CC 已放弃` | 标 Fail |
 
 ### Step 2：处理 attention CC
 

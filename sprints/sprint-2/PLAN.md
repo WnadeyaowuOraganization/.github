@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 18:50（第52轮巡检，修正序号与Issue对应关系）
+> 更新时间：2026-04-29 23:22（第53轮巡检，更新已完成项）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 注意：序号与GitHub Issue号是不同编号，序号206=GitHub#2220
@@ -34,11 +34,11 @@
 | 204 | ~~#1573~~ | P2 | policy | medium | ~~制度智能问答API — PR#4343 merged~~ | ~~✅~~ |
 | 205 | ~~#2219~~ | P2 | biz-enablement | medium | ~~商务赋能标准库管理页面 — PR#4344 merged~~ | ~~✅~~ |
 | 206 | #2220 | P2 | biz-enablement | medium | 商务赋能 — 材质参数一键导出（10/28） | ✅ |
-| 207 | #2221 | P2 | biz-enablement | medium | 商务赋能 — 材质知识库管理页面（9/28） | ✅ |
-| 208 | #2222 | P2 | biz-enablement | medium | 商务赋能 — 案例搜索1搜索框+6维筛选（6/28） | ✅ |
-| 209 | #2277 | P2 | policy | medium | 条款库管理页面（21/22） | ✅ |
+| 207 | ~~#2221~~ | P2 | biz-enablement | medium | ~~商务赋能 — 材质知识库管理页面（9/28） — PR#4345 merged~~ | ~~✅~~ |
+| 208 | ~~#2222~~ | P2 | biz-enablement | medium | ~~商务赋能 — 案例搜索1搜索框+6维筛选（6/28） — PR#4349 merged~~ | ~~✅~~ |
+| 209 | ~~#2277~~ | P2 | policy | medium | ~~条款库管理页面（21/22） — PR#4346 merged~~ | ~~✅~~ |
 | 210 | #2278 | P2 | policy | medium | AI制度起草向导页面（20/22） | ✅ |
-| 211 | #2288 | P2 | budget | medium | 成本复盘报告页面（30/32） | ✅ |
+| 211 | ~~#2288~~ | P2 | budget | medium | ~~成本复盘报告页面（30/32） — PR#4347 merged~~ | ~~✅~~ |
 | 212 | #2389 | P2 | biz-enablement | medium | 季度照片采集提醒+任务推送（28/28） | ✅ |
 | 213 | #2390 | P2 | biz-enablement | medium | 照片AI自动标签CLIP模型（26/28） | ✅ |
 | 214 | #2585 | P2 | backend | high | refactor合并wande-ai-api到wande-ai消除42个重复类冲突 | ✅ |

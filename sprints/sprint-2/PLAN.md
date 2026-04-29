@@ -521,7 +521,7 @@
 | kimi1 | ~~#1942~~ | fullstack | P2 | ~~Done~~ | 文生图Phase1基础 — PR #4338 merged |
 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
-| kimi1 | #1573 | backend | P2 | 制度智能问答API（建议#204） | 编码中 |
+| kimi1 | ~~#1573~~ | backend | P2 | ~~Done~~ | 制度智能问答API — PR #4343 merged |
 | kimi2 | #2219 | frontend | P2 | 商务赋能标准库管理页面（建议#205） | 编码中 |
 | kimi3 | #2220 | frontend | P2 | 材质参数一键导出（建议#206） | 编码中 |
 | kimi4 | #2221 | frontend | P2 | 材质知识库管理页面（建议#207） | 编码中 |

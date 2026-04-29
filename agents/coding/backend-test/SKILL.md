@@ -24,6 +24,12 @@ description: Test Wande-Play backend endpoints and services using JUnit unit tes
 | Redis DB | `db{N}` |
 | DB 用户 | `wande`（无主库 `wande-ai` 权限）|
 
+**环境变量（run-cc.sh 自动注入，禁止硬编码端口）：**
+- `BASE_URL` = `http://localhost:810N` — 前端地址
+- `BASE_URL_API` = `http://localhost:710N` — 后端API地址
+- `CC_TEST_FRONTEND_URL` = `http://localhost:810N` — CC独立测试前端
+- `CC_TEST_BACKEND_URL` = `http://localhost:710N` — CC独立测试后端
+
 ## TDD 红灯先行（强制）
 
 1. 写测试（单测 + Playwright API）

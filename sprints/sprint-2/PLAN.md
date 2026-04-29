@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29 23:45（第56轮巡检，#1939已派kimi2，#1900有PR#4303等待merge）
+> 更新时间：2026-04-29 23:55（第57轮巡检，Plan→Todo转#4125/#3641，活跃CC=2）
 > ⚠️ needs-prototype冻结不出现在本表
 > 排除：needs-prototype 标签、Master Issue、已派/已完成
 > 注意：序号与GitHub Issue号是不同编号，序号206=GitHub#2220
@@ -47,6 +47,8 @@
 | 217 | ~~#1487~~ | P3 | backend | medium | ~~矿场跨境客户资格评估 — PR#4350 merged，Issue CLOSED~~ | ~~✅~~ |
 | 218 | #1900 | P1 | backend | medium | 采购下料单自动生成 — PR#4303 OPEN等待merge，不可重复指派 | ⏳ |
 | 219 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — kimi2已派，编码中 | ✅ |
+| 220 | #4125 | P1 | fullstack | medium | CRM客户360°详情页 — 6Tab聚合（Plan→Todo） | ✅ |
+| 221 | #3641 | P1 | frontend | medium | 管线健康度Tab前端 — 接入#3635真数据（Plan→Todo） | ✅ |
 
 ## 指派历史
 

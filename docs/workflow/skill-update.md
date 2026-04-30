@@ -3,6 +3,13 @@
 > 
 ---
 
+**[2026-04-30] 大规模包迁移前建议先做调研 — kimi5/#2585**
+- 现象：668文件包迁移（wande-ai-api→wande-ai）上下文占用高，重复类字段差异比对耗时
+- 建议：大规模包迁移前先用 Agent 调研团队并行执行，减少单 CC 上下文占用
+- 来源：kimi5/#2585 本轮回顾
+
+---
+
 **[2026-04-30] ant-design Select dropdown 拦截 E2E 点击 — kimi5/#2278**
 - 现象：Playwright 点击 Next 按钮时，ant-design Select 的 dropdown 弹出层拦截了 pointer events，导致按钮无法点击
 - 解决：`await page.keyboard.press('Escape')` 先关闭 dropdown，再点击后续按钮

@@ -174,3 +174,4 @@ cd backend && mvn flyway:validate
 - ❌ `INSERT INTO sys_menu VALUES` 不带列名：`sys_menu` 有 20 列（含 `query_param`、`create_dept`），无列名 INSERT 若少列即报 `Column count doesn't match`（error 1136）。**必须**写 `INSERT INTO sys_menu (menu_id, menu_name, ...) VALUES`（2026-04-19 事故）
 - ❌ `INSERT INTO sys_menu (menu_name, ...)` 省略 `menu_id`：`sys_menu.menu_id` 是 `BIGINT NOT NULL` 无 AUTO_INCREMENT，省略报 `Field 'menu_id' doesn't have a default value`（error 1364）。**必须**先 `SET @max_id = (SELECT COALESCE(MAX(menu_id),0) FROM sys_menu)` 后写 `menu_id, ... VALUES (@max_id + 1, ...)`（2026-04-19 事故）
 - ❌ `INSERT INTO sys_menu` 用 `query` 或 `route_name` 列名：`sys_menu` 无这两列（正确列名是 `query_param`，无 `route_name`），报 `Unknown column`（error 1054）（2026-04-19 事故）
+- ❌ Flyway 脚本含中文但不指定字符集：MySQL docker 默认 `latin1` 客户端，UTF-8 中文会被双编码（变成乱码如 `????`）。**必须**在 `docker exec mysql-dev mysql ...` 时加 `--default-character-set=utf8mb4`，或在脚本开头加 `SET NAMES utf8mb4;`（2026-04-30 事故：sys_menu 十余个菜单乱码，需 `SET NAMES utf8mb4` 后重新 UPDATE）

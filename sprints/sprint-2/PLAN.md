@@ -25,13 +25,11 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #3208 | P1 | backend | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | ✅ |
-| 2 | #3570 | P1 | frontend | 关系网络Tab组件测试与截图验证（#3545-followup） | ✅ |
-| 3 | #4094 | P2 | frontend | Quick-Fix — 菜单配置指向不存在的组件record-center | ✅ |
-| 4 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | ✅ |
-| 5 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充（kimi3已接） | 🔥 |
-| 6 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
-| 7 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出（kimi1已接） | 🔥 |
+| 1 | #4094 | P2 | frontend | Quick-Fix — 菜单配置指向不存在的组件record-center | ✅ |
+| 2 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | ✅ |
+| 3 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充（kimi3已接） | 🔥 |
+| 4 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
+| 5 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出（kimi1已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -514,57 +512,17 @@
 | 04-30 | kimi5 | ~~#2389~~ | biz-enablement | P2 | ~~Done~~ | 季度照片采集提醒+任务推送 — PR #4383 merged |
 | 04-30 | kimi5 | ~~#2278~~ | policy | P2 | ~~Done~~ | AI制度起草向导页面 Phase20 — PR #4385 merged |
 | 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
+| 04-30 | kimi2 | #3208 | backend | P1 | In Progress | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id |
+| 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
 
-### 当前运行（04-30 19:15）
+### 当前运行（04-30 20:45）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
-| kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 标准合规说明导出 — 缺原型，等待补齐 |
-| kimi1 | ~~#1942~~ | fullstack | P2 | ~~Done~~ | 文生图Phase1基础 — PR #4338 merged |
-| kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
-| kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
-| kimi1 | ~~#1573~~ | backend | P2 | ~~Done~~ | 制度智能问答API — PR #4343 merged |
-| kimi1 | ~~#2277~~ | frontend | P2 | ~~Done~~ | 条款库管理页面 — PR #4346 merged |
-| kimi1 | ~~#3558~~ | fullstack | P2 | ~~Done~~ | E2E回归API超时 — PR #4348 merged |
-| kimi1 | ~~#4063~~ | backend | P1 | ~~Done~~ | Quick-Fix bossCockpit/overview — PR #4359 merged |
-| kimi1 | ~~#4059~~ | backend | P1 | ~~Done~~ | Quick-Fix keyword-pool — PR #4355 merged |
-| kimi1 | #4063 | backend | P1 | Quick-Fix bossCockpit/overview | 编码中 |
-| kimi2 | ~~#2219~~ | frontend | P2 | ~~Done~~ | 商务赋能标准库管理页面 — PR #4344 merged |
-| kimi2 | ~~#1487~~ | backend | P3 | ~~Done~~ | 矿场跨境客户资格评估 — PR #4350 merged |
-| kimi2 | ~~#1939~~ | backend | P0 | ~~Done~~ | 文生图素材库 — PR #4352 merged（前端build失败修复中）|
-| kimi2 | #1939 | backend | P0 | 文生图素材库（#1939） | 编码中 |
-| kimi2 | ~~#2288~~ | frontend | P2 | ~~Done~~ | 成本复盘报告页面 — PR #4347 merged |
-| kimi3 | ~~#2220~~ | frontend | P2 | ~~暂停~~ | 材质参数一键导出 — needs-prototype冻结 |
-| kimi3 | ~~#4125~~ | fullstack | P1 | ~~Done~~ | CRM客户360°详情页 — PR #4354 merged |
-| kimi3 | ~~#3211~~ | backend | P1 | ~~Done~~ | 工艺路线模板 — PR #4362 merged |
-| kimi3 | #3220 | backend | P1 | 预算矩阵执行仪表盘 | 编码中 |
-| kimi3 | ~~#3378~~ | backend | P1 | ~~Done~~ | PLM零件主数据CRUD API — PR #3979 merged（2026-04-20） |
-| kimi3 | #3211 | backend | P1 | 工艺路线模板 | 编码中 |
-| kimi4 | ~~#2221~~ | frontend | P2 | ~~Done~~ | 材质知识库管理页面 — PR #4345 merged |
-| kimi4 | ~~#3641~~ | frontend | P1 | ~~Done~~ | 管线健康度Tab — PR #4353 merged |
-| kimi4 | ~~#3393~~ | backend | P1 | ~~Done~~ | PLM供应商价格联动 — PR #4356 merged |
-| kimi4 | ~~#3214~~ | backend | P1 | ~~Done~~ | 预算矩阵校验增强 — PR #4357 merged |
-| kimi4 | ~~#3222~~ | backend | P1 | ~~Done~~ | 项目全景控制表API — PR #4361 merged |
-| kimi4 | #3223 | backend | P1 | 项目全景控制表页面 | 编码中 |
-| kimi4 | #3222 | backend | P1 | 项目全景控制表API | 编码中 |
-| kimi4 | #3214 | backend | P1 | 预算矩阵校验增强 | 编码中 |
-| kimi4 | #3393 | backend | P1 | PLM供应商价格联动 | 编码中 |
-| kimi5 | ~~#2222~~ | frontend | P2 | ~~Done~~ | 案例搜索1搜索框+6维筛选 — PR #4349 merged |
-| kimi5 | ~~#3886~~ | fullstack | P3 | ~~Done~~ | 代码质量Hook体系 — PR#4351 merged，Issue CLOSED |
-| kimi5 | ~~#3213~~ | backend | P1 | ~~Done~~ | BOM→预算信封关联API — PR #4360 merged |
-| kimi5 | #3213 | backend | P1 | BOM→预算信封关联API | 编码中 |
-| kimi2 | ~~#1933~~ | backend | P0 | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged，Issue #1933已关闭 |
-| kimi2 | ~~#1900~~ | backend | P1 | ~~跳过~~ | PR#4303已由bot创建，无需重复 |
-| kimi2 | ~~#2217~~ | frontend | P2 | ~~Done~~ | 设备维护档案页面 — PR #4337 merged |
-| kimi2 | ~~#1944~~ | backend | P2 | ~~Done~~ | 工具中心种子数据 — PR #4340 merged |
-| kimi2 | ~~#1940~~ | backend | P2 | ~~Done~~ | 文生图Phase3 — PR #4342 merged |
-| kimi3 | ~~#1928~~ | backend | P1 | ~~超时释放~~ | D3端到端验证 — Issue已CLOSED |
-| kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
-| kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |
-| kimi5 | 空闲 | - | - | - | 等待Issue |
-| kimi6 | 空闲 | - | - | - | 等待Issue |
-| kimi7 | 空闲 | - | - | - | 等待Issue |
-| kimi8 | 空闲 | - | - | - | 等待Issue |
+| kimi1 | #2220 | biz-enablement | P2 | 商务赋能 Phase10 — 材质参数一键导出 | 编码中 |
+| kimi2 | #3208 | backend | P1 | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | 编码中 |
+| kimi3 | #4095 | fullstack | P1 | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | PR #4370 CI失败修复中（缺截图） |
+| kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 CI取消修复中 |
+| kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | 编码中 |
 
 **4/8 并发运行中（kimi1/#3558、kimi2/#1939、kimi3/#4125、kimi4/#3641），4个CC空闲。**
 

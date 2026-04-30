@@ -32,7 +32,7 @@
 | 5 | ~~#3208~~ | P1 | backend | ~~总控预算增强[1/10]（kimi2已完成，PR#4392 merged）~~ | ✅ |
 | 6 | #3570 | P1 | frontend | 关系网络Tab组件测试与截图验证（kimi5已接，PR#4388） | 🔥 |
 | 7 | #2738 | P1 | backend | 商战情报中台·分发[3/8] 邮件订阅与定时报告（kimi3已接） | 🔥 |
-| 8 | #1978 | P1 | backend | 方案引擎DB设计 — 方案模板引擎3张表（已流转Todo，待指派） | ✅ |
+| 8 | #1978 | P0 | backend | 方案引擎DB设计 — 方案模板引擎3张表（kimi1已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

@@ -146,12 +146,16 @@ CREATE TABLE IF NOT EXISTS wdpp_xxx (
 
 ```bash
 # 1. 在 kimi 独立 DB 试跑
-cd /data/home/ubuntu/projects/wande-play-kimiN
+cd ~/projects/wande-play-kimiN
 bash e2e/scripts/reset-db.sh       # 重置 kimiN 独立 DB
-bash e2e/scripts/start-backend.sh  # Flyway 启动时自动执行
-tail -f logs/sys-info.log | grep -i flyway  # 看 "Successfully applied" 即通过
+bash e2e/scripts/start-backend.sh  # 启动后端
+# ⚠️ Flyway 执行方式因环境而异：
+#   - 部分环境：Spring Boot 启动时自动检测并执行 pending 脚本
+#   - 部分环境：需手动执行 bash e2e/scripts/run-pending-flyway.sh 或 mvn flyway:migrate
+#   - 启动后立即观察日志判断：tail -f logs/sys-info.log | grep -i flyway
+#   - 若启动后无 Flyway 日志 → 手动执行 mvn flyway:migrate -Dflyway.locations=filesystem:src/main/resources/db/migration
 
-# 2. 或手动 validate
+# 2. 验证
 cd backend && mvn flyway:validate
 ```
 

@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-29（排程经理第123轮巡检，移除#4125 CLOSED、#1978/#1974在Plan；#3994/#4004已自动关闭）
+> 更新时间：2026-04-30（排程经理第124轮巡检，对齐指派建议表与看板Todo 17项；移除#1969/#2031不在Todo；#4043/#4045/#4046 Master Issue需移出Todo）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -28,21 +28,20 @@
 | 1 | #4093 | P1 | fullstack | Quick-Fix /profit-alert — ProfitAlert模块缺失+页面误植 | ✅ |
 | 2 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | ✅ |
 | 3 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
-| 4 | #2032 | P1 | backend | 色卡材料 Phase4 — Controller API色卡+材料+审批接口 | ✅ |
-| 5 | #2031 | P1 | backend | 色卡材料 Phase5 — 审批流程（色卡/材料使用审批） | ⏳ 依赖#2032 |
+| 4 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
+| 5 | #2032 | P1 | backend | 色卡材料 Phase4 — Controller API色卡+材料+审批接口 | ✅ |
 | 6 | #2035 | P1 | backend | 人事管理 Phase7 — 数据库表创建（hr_training_plans等） | ✅ |
 | 7 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
 | 8 | #1975 | P1 | backend | 方案引擎 — PPT模板解析引擎（识别章节+可替换区域） | ✅ |
 | 9 | #1966 | P1 | backend | PPT插件 Phase1 — 样式一致性检查+一键修复 | ✅ |
 | 10 | #1967 | P1 | frontend | PPT插件 Phase1 — 素材智能推荐+一键插入 | ✅ |
 | 11 | #1968 | P1 | backend | PPT插件 Phase1 — 一键套模板（选模板→替换PPT结构） | ✅ |
-| 12 | #1969 | P1 | backend | PPT插件 Phase1 — COM Add-in核心（DLL+注册+功能区） | ⏳ Phase0 #1971先行 |
-| 13 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
-| 14 | #1958 | P1 | backend | 方案引擎 Phase27 — PPT图片美化工具（裁切+蒙版+滤镜+图片墙） | ✅ |
-| 15 | #2390 | P2 | biz-enablement | 商务赋能 Phase26 — 照片AI自动标签（CLIP模型） | ✅ |
-| 16 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
-| 17 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
-| 18 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
+| 12 | #1958 | P1 | backend | 方案引擎 Phase27 — PPT图片美化工具（裁切+蒙版+滤镜+图片墙） | ✅ |
+| 13 | #2390 | P2 | biz-enablement | 商务赋能 Phase26 — 照片AI自动标签（CLIP模型） | ✅ |
+| 14 | #2389 | P2 | biz-enablement | 商务赋能 Phase28 — 季度照片采集提醒+任务推送 | ✅ |
+| 15 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
+| 16 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
+| 17 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

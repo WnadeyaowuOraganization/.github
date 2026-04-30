@@ -28,8 +28,8 @@
 | 1 | ~~#2747~~ | P1 | backend | ~~客户生命周期[4/12] 客户满意度回访提醒（kimi1已完成，PR#4391 merged）~~ | ✅ |
 | 2 | #2737 | P1 | backend | 商战情报中台·分发[2/8] 企微交互式查询指令（kimi1已接） | 🔥 |
 | 3 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
-| 4 | #3188 | P1 | fullstack | 回款资料[4/7] 企业信息库 — 万德常用信息维护+一键填充到回款表单 | ✅ |
-| 5 | #3208 | P1 | backend | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id（kimi2已接） | 🔥 |
+| 4 | #3188 | P1 | fullstack | 回款资料[4/7] 企业信息库 — 万德常用信息维护+一键填充到回款表单（kimi2已接） | 🔥 |
+| 5 | ~~#3208~~ | P1 | backend | ~~总控预算增强[1/10]（kimi2已完成，PR#4392 merged）~~ | ✅ |
 | 6 | #3570 | P1 | frontend | 关系网络Tab组件测试与截图验证（kimi5已接，PR#4388） | 🔥 |
 | 7 | #2738 | P1 | backend | 商战情报中台·分发[3/8] 邮件订阅与定时报告（kimi3已接） | 🔥 |
 
@@ -515,18 +515,18 @@
 | 04-30 | kimi5 | ~~#2278~~ | policy | P2 | ~~Done~~ | AI制度起草向导页面 Phase20 — PR #4385 merged |
 | 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
 | 04-30 | kimi1 | ~~#2220~~ | biz-enablement | P2 | ~~Done~~ | 材质参数一键导出（Word/PDF）— PR #4386 merged，Issue自动关闭 |
-| 04-30 | kimi2 | #3208 | backend | P1 | In Progress | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id |
+| 04-30 | kimi2 | ~~#3208~~ | backend | P1 | ~~Done~~ | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id — PR #4392 merged |
 | 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
 | 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
 | 04-30 | kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 01:52）
+### 当前运行（05-01 02:52）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #2737 | backend | P1 | 商战情报中台·分发[2/8] 企微交互式查询指令 | 编码中 |
-| kimi2 | #3208 | backend | P1 | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | PR #4392 |
+| kimi2 | #3188 | fullstack | P1 | 回款资料[4/7] 企业信息库 — 万德常用信息维护+一键填充到回款表单 | 编码中 |
 | kimi3 | #2738 | backend | P1 | 商战情报中台·分发[3/8] 邮件订阅与定时报告 | PR #4390 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |

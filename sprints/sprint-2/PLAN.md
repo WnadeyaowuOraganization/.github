@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-30（排程经理第132轮，#2035 PR#4372 merged移除；发现#2032逆序风险已通知研发经理）
+> 更新时间：2026-04-30（排程经理第167轮，#2389 PR#4383 merged移除；#2390 PR#4384 merged已记录）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -29,7 +29,6 @@
 | 2 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
 | 3 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
 | 4 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
-| 5 | #2389 | P2 | biz-enablement | 商务赋能 Phase28 — 季度照片采集提醒+任务推送 | ✅ |
 | 6 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
 | 7 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
 | 8 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
@@ -512,6 +511,7 @@
 | 04-30 | kimi2 | ~~#2032~~ | backend | P1 | ~~Done~~ | 色卡材料Controller API — PR #4382 merged |
 | 04-30 | kimi1 | ~~#1967~~ | frontend | P1 | ~~Done~~ | PPT素材智能推荐+一键插入 — PR #4381 merged |
 | 04-30 | kimi5 | ~~#2390~~ | biz-enablement | P2 | ~~Done~~ | 照片AI自动标签(CLIP) — PR #4384 merged |
+| 04-30 | kimi5 | ~~#2389~~ | biz-enablement | P2 | ~~Done~~ | 季度照片采集提醒+任务推送 — PR #4383 merged |
 | 04-30 | kimi5 | ~~#2278~~ | policy | P2 | ~~Done~~ | AI制度起草向导页面 Phase20 — 已提PR |
 
 ### 当前运行（04-30 19:15）

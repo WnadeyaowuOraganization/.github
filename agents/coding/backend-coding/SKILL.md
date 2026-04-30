@@ -193,6 +193,10 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 
 若新依赖版本由根 `pom.xml` `dependencyManagement` 管控，可省略 `<version>`；否则显式指定版本。
 
+## 常用库注意
+
+- Thumbnailator（`com.sksamuel.scrimage:thumbnailator`）0.4.20 **无 CropType**，图片裁切需手动实现 BufferedImage 坐标裁切，不要花时间找 CropType API
+
 ---
 
 ## 禁止清单

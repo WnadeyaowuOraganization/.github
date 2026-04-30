@@ -532,7 +532,7 @@
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | PR #4396 |
-| kimi2 | #1961 | backend | P1 | 方案引擎AI排版引擎后端API | Todo（已流转） |
+| kimi2 | #1961 | backend | P1 | 方案引擎AI排版引擎后端API | 编码中 |
 | kimi3 | #2738 | backend | P1 | 商战情报中台·分发[3/8] 邮件订阅与定时报告 | PR #4390 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |

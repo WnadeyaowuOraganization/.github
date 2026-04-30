@@ -510,6 +510,7 @@
 | 04-30 | kimi1 | ~~#2035~~ | hr | P1 | ~~Done~~ | 人事管理数据库建表 — PR #4372 merged |
 | 04-30 | kimi1 | ~~#1975~~ | backend | P1 | ~~Done~~ | PPT模板解析引擎 — PR #4374 merged |
 | 04-30 | kimi1 | ~~#1966~~ | backend | P1 | ~~Done~~ | PPT样式一致性检查+一键修复 — PR #4375 merged |
+| 04-30 | kimi5 | ~~#3212~~ | fullstack | P1 | ~~Done~~ | 设备级进度追踪(BOM×工艺步骤) — PR #4366 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 
 ### 当前运行（04-30 04:15）

@@ -13,16 +13,9 @@
     "error_code": "1310",
     "raw_error": "您已达到每周/每月使用上限，您的限额将在 2026-05-04 10:00:03 重置。"
   },
-  "kimi1": {
-    "cooldown_until": "2026-04-30T15:22:02.205653+08:00",
-    "marked_at": "2026-04-30T10:22:02.205653+08:00",
-    "error_type": "balance_exhausted",
-    "error_code": "permission_error",
-    "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
-  },
   "kimi2": {
-    "cooldown_until": "2026-04-30T17:04:32.697951+08:00",
-    "marked_at": "2026-04-30T12:04:32.697951+08:00",
+    "cooldown_until": "2026-05-01T08:04:50.348884+08:00",
+    "marked_at": "2026-05-01T03:04:50.348884+08:00",
     "error_type": "balance_exhausted",
     "error_code": "permission_error",
     "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"

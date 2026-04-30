@@ -3,6 +3,20 @@
 > 
 ---
 
+**[2026-04-30] ComponentScan 只在源码启动时生效 — kimi2/#2032**
+- 现象：JAR 模式不加载源码变更，ComponentScan 配置在 java -jar 模式下失效
+- 建议：测试时用 `mvn spring-boot:run` 而非 `java -jar`，或重新 `mvn install` 重建
+- 来源：kimi2/#2032 本轮回顾
+
+---
+
+**[2026-04-30] MyBatis Plus Mapper 泛型参数数量不一致 — kimi1/#1975**
+- 现象：BaseMapperPlus 用 3 个泛型参数，BaseMapper 用 1 个，不确定时编译报错
+- 建议：不确定泛型参数数量时，用 IDE 查同类 Mapper 确认
+- 来源：kimi1/#1975 本轮回顾
+
+---
+
 **[2026-04-30] CC 误将历史 PR 判定为当前 Issue 已完成 — kimi3/#3378**
 - 现象：CC 用 `gh pr list --search "3378"` 模糊匹配，误将 PR #3990（#3394 前端）和 #4186（#3384 BOM）判定为 #3378 已完成
 - 根因：`--search` 模糊匹配零件主数据关键字，未严格匹配 PR 标题中的 `#3378`

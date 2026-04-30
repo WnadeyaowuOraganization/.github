@@ -19,7 +19,7 @@ if [ -z "$PAGE_NAME" ]; then
   read -p "API路径前缀（如 /project-hub）: " API_PREFIX
 fi
 
-EXECUTION="frontend/apps/web-antd/src/router/modules/execution.ts"
+EXECUTION="frontend/apps/web-antd/src/router/routes/modules/execution.ts"
 FRONTEND_ROOT="frontend/apps/web-antd/src"
 RET=0
 

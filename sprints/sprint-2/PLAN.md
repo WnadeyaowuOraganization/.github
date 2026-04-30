@@ -29,9 +29,8 @@
 | 2 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
 | 3 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
 | 4 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
-| 5 | #1967 | P1 | frontend | PPT插件 Phase1 — 素材智能推荐+一键插入 | ✅ |
-| 6 | #2390 | P2 | biz-enablement | 商务赋能 Phase26 — 照片AI自动标签（CLIP模型） | ✅ |
-| 7 | #2389 | P2 | biz-enablement | 商务赋能 Phase28 — 季度照片采集提醒+任务推送 | ✅ |
+| 5 | #2390 | P2 | biz-enablement | 商务赋能 Phase26 — 照片AI自动标签（CLIP模型） | ✅ |
+| 6 | #2389 | P2 | biz-enablement | 商务赋能 Phase28 — 季度照片采集提醒+任务推送 | ✅ |
 | 8 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
 | 9 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
 | 10 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
@@ -512,8 +511,9 @@
 | 04-30 | kimi1 | ~~#1968~~ | backend | P1 | ~~Done~~ | PPT一键套模板 — PR #4378 merged |
 | 04-30 | kimi5 | ~~#1958~~ | backend | P1 | ~~Done~~ | PPT图片美化工具 — PR #4379 merged |
 | 04-30 | kimi2 | ~~#2032~~ | backend | P1 | ~~Done~~ | 色卡材料Controller API — PR #4382 merged |
+| 04-30 | kimi1 | ~~#1967~~ | frontend | P1 | ~~Done~~ | PPT素材智能推荐+一键插入 — PR #4381 merged |
 
-### 当前运行（04-30 18:30）
+### 当前运行（04-30 19:00）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |

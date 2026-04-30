@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-30（排程经理第124轮巡检，对齐指派建议表与看板Todo 17项；移除#1969/#2031不在Todo；#4043/#4045/#4046 Master Issue需移出Todo）
+> 更新时间：2026-04-30（排程经理第132轮，#2035 PR#4372 merged移除；发现#2032逆序风险已通知研发经理）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -30,18 +30,17 @@
 | 3 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
 | 4 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
 | 5 | #2032 | P1 | backend | 色卡材料 Phase4 — Controller API色卡+材料+审批接口 | ✅ |
-| 6 | #2035 | P1 | backend | 人事管理 Phase7 — 数据库表创建（hr_training_plans等） | ✅ |
-| 7 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
-| 8 | #1975 | P1 | backend | 方案引擎 — PPT模板解析引擎（识别章节+可替换区域） | ✅ |
-| 9 | #1966 | P1 | backend | PPT插件 Phase1 — 样式一致性检查+一键修复 | ✅ |
-| 10 | #1967 | P1 | frontend | PPT插件 Phase1 — 素材智能推荐+一键插入 | ✅ |
-| 11 | #1968 | P1 | backend | PPT插件 Phase1 — 一键套模板（选模板→替换PPT结构） | ✅ |
-| 12 | #1958 | P1 | backend | 方案引擎 Phase27 — PPT图片美化工具（裁切+蒙版+滤镜+图片墙） | ✅ |
-| 13 | #2390 | P2 | biz-enablement | 商务赋能 Phase26 — 照片AI自动标签（CLIP模型） | ✅ |
-| 14 | #2389 | P2 | biz-enablement | 商务赋能 Phase28 — 季度照片采集提醒+任务推送 | ✅ |
-| 15 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
-| 16 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
-| 17 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
+| 6 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
+| 7 | #1975 | P1 | backend | 方案引擎 — PPT模板解析引擎（识别章节+可替换区域） | ✅ |
+| 8 | #1966 | P1 | backend | PPT插件 Phase1 — 样式一致性检查+一键修复 | ✅ |
+| 9 | #1967 | P1 | frontend | PPT插件 Phase1 — 素材智能推荐+一键插入 | ✅ |
+| 10 | #1968 | P1 | backend | PPT插件 Phase1 — 一键套模板（选模板→替换PPT结构） | ✅ |
+| 11 | #1958 | P1 | backend | 方案引擎 Phase27 — PPT图片美化工具（裁切+蒙版+滤镜+图片墙） | ✅ |
+| 12 | #2390 | P2 | biz-enablement | 商务赋能 Phase26 — 照片AI自动标签（CLIP模型） | ✅ |
+| 13 | #2389 | P2 | biz-enablement | 商务赋能 Phase28 — 季度照片采集提醒+任务推送 | ✅ |
+| 14 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
+| 15 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
+| 16 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -510,6 +509,7 @@
 | 04-29 | kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 商务赋能标准合规说明导出 — 缺原型，等待补齐 |
 
 | 04-29 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
+| 04-30 | kimi1 | ~~#2035~~ | hr | P1 | ~~Done~~ | 人事管理数据库建表 — PR #4372 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 
 ### 当前运行（04-30 04:15）

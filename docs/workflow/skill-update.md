@@ -39,6 +39,14 @@
 
 ---
 
+**[2026-05-01] git push --force-with-lease stale info 远程引用缓存 — kimi5/#3570**
+- 现象：`push --force-with-lease` 反复报错 `stale info`（远程分支引用缓存不一致），无法成功推送
+- 解决：改用 `merge + normal push` 解决
+- 建议：pr-visual-proof skill 中增加 git remote ref 缓存问题的处理指引，或优先推荐 `git fetch origin` 刷新引用后重试
+- 来源：kimi5/#3570 本轮回顾
+
+---
+
 **[2026-04-30] CC 误将历史 PR 判定为当前 Issue 已完成 — kimi3/#3378**
 - 现象：CC 用 `gh pr list --search "3378"` 模糊匹配，误将 PR #3990（#3394 前端）和 #4186（#3384 BOM）判定为 #3378 已完成
 - 根因：`--search` 模糊匹配零件主数据关键字，未严格匹配 PR 标题中的 `#3378`

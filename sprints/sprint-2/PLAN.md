@@ -31,7 +31,6 @@
 | 4 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
 | 5 | #2032 | P1 | backend | 色卡材料 Phase4 — Controller API色卡+材料+审批接口 | ✅ |
 | 6 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
-| 7 | #1966 | P1 | backend | PPT插件 Phase1 — 样式一致性检查+一键修复 | ✅ |
 | 9 | #1967 | P1 | frontend | PPT插件 Phase1 — 素材智能推荐+一键插入 | ✅ |
 | 10 | #1968 | P1 | backend | PPT插件 Phase1 — 一键套模板（选模板→替换PPT结构） | ✅ |
 | 11 | #1958 | P1 | backend | 方案引擎 Phase27 — PPT图片美化工具（裁切+蒙版+滤镜+图片墙） | ✅ |
@@ -510,6 +509,7 @@
 | 04-29 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
 | 04-30 | kimi1 | ~~#2035~~ | hr | P1 | ~~Done~~ | 人事管理数据库建表 — PR #4372 merged |
 | 04-30 | kimi1 | ~~#1975~~ | backend | P1 | ~~Done~~ | PPT模板解析引擎 — PR #4374 merged |
+| 04-30 | kimi1 | ~~#1966~~ | backend | P1 | ~~Done~~ | PPT样式一致性检查+一键修复 — PR #4375 merged |
 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
 
 ### 当前运行（04-30 04:15）

@@ -25,7 +25,7 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #3185 | P0 | frontend | 全过程资料[1/13] 全阶段资料完成度看板 — 全项目×全阶段文件完整度+法规缺失预警+催收入口 | ✅ |
+| 1 | #3185 | P0 | frontend | 全过程资料[1/13] 全阶段资料完成度看板 — 全项目×全阶段文件完整度+法规缺失预警+催收入口（kimi3已接） | 🔥 |
 | 2 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
 | 3 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀（kimi1已接） | 🔥 |
 | 4 | #3208 | P1 | backend | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id（kimi2已接） | 🔥 |
@@ -518,13 +518,14 @@
 | 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
 | 04-30 | kimi1 | #4060 | fullstack | P2 | In Progress | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
+| 04-30 | kimi3 | #3185 | frontend | P0 | In Progress | 全过程资料[1/13] 全阶段资料完成度看板 — 依赖#3179/#3181/#4061均OPEN，排程经理建议启动 |
 
-### 当前运行（04-30 21:40）
+### 当前运行（04-30 21:53）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #4060 | fullstack | P2 | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | PR #4389 |
 | kimi2 | #3208 | backend | P1 | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | 编码中 |
-| kimi3 | — | — | — | 空闲（#4095 PR#4370已合并） | — |
+| kimi3 | #3185 | frontend | P0 | 全过程资料[1/13] 全阶段资料完成度看板 | 编码中 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

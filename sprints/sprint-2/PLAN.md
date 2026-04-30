@@ -34,7 +34,7 @@
 | 7 | ~~#2738~~ | P1 | backend | ~~商战情报中台·分发[3/8] 邮件订阅与定时报告（kimi3已完成，PR#4390 merged）~~ | ✅ |
 | 8 | ~~#1978~~ | P0 | backend | ~~方案引擎DB设计 — 方案模板引擎3张表（kimi1已完成，PR#4395 merged）~~ | ✅ |
 | 9 | #1974 | P1 | pipeline | 方案引擎DB设计 — 素材库3张表（kimi1已接） | 🔥 |
-| 10 | #1961 | P1 | backend | 方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（kimi2已接） | 🔥 |
+| 10 | ~~#1961~~ | P1 | backend | ~~方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（kimi2已完成，PR#4398 merged）~~ | ✅ |
 | 11 | ~~#1969~~ | P1 | backend | ~~方案引擎COM Add-in核心 — Ribbon界面+JS桥接+后端通信协议（kimi3已完成，PR#4397 merged）~~ | ✅ |
 | 12 | #1965 | P2 | backend | 方案引擎PowerPoint加载项集成测试（kimi3已接） | 🔥 |
 
@@ -536,7 +536,7 @@
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | PR #4396 |
-| kimi2 | #1961 | backend | P1 | 方案引擎AI排版引擎后端API | PR #4398 |
+| kimi2 | — | — | — | 空闲（#1961 PR#4398已合并） | — |
 | kimi3 | #1965 | backend | P2 | 方案引擎PowerPoint加载项集成测试 | PR #4399 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |

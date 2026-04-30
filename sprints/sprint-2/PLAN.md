@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第222轮，kimi1/#2737完成；#1978→Todo）
+> 更新时间：2026-05-01（排程经理第230轮，kimi1/#1978完成；#1974→Todo）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -33,6 +33,7 @@
 | 6 | #3570 | P1 | frontend | 关系网络Tab组件测试与截图验证（kimi5已接，PR#4388） | 🔥 |
 | 7 | #2738 | P1 | backend | 商战情报中台·分发[3/8] 邮件订阅与定时报告（kimi3已接） | 🔥 |
 | 8 | ~~#1978~~ | P0 | backend | ~~方案引擎DB设计 — 方案模板引擎3张表（kimi1已完成，PR#4395 merged）~~ | ✅ |
+| 9 | #1974 | P1 | pipeline | 方案引擎DB设计 — 素材库3张表（已流转Todo，待指派） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

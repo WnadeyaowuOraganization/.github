@@ -19,17 +19,19 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-30（排程经理第175轮，#2585 PR#4387 merged；#2220 kimi1持续编码中）
+> 更新时间：2026-04-30（排程经理第175轮，#2585 PR#4387 merged；kimi2/kimi5空闲待补）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | ✅ |
-| 2 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
-| 3 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
-| 4 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
-| 5 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
+| 1 | #3208 | P1 | backend | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | ✅ |
+| 2 | #3570 | P1 | frontend | 关系网络Tab组件测试与截图验证（#3545-followup） | ✅ |
+| 3 | #4094 | P2 | frontend | Quick-Fix — 菜单配置指向不存在的组件record-center | ✅ |
+| 4 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | ✅ |
+| 5 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充（kimi3已接） | 🔥 |
+| 6 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
+| 7 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出（kimi1已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

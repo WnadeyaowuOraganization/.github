@@ -344,27 +344,15 @@ bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN         # 等后端就
 
 ## 新增页面编码前必做检查（2026-04-30 #3212 教训）
 
-**新增页面时，编码前必须跑以下 3 项检查**，防止调试阶段才发现路由/路径/参数问题：
+**新增页面时，编码前必须跑**，防止调试阶段才发现路由/路径/参数问题：
 
 ```bash
-# 1. 检查路由是否已在 execution.ts 注册（路由未注册 = 页面 404）
-grep -n "path:.*'<你新增的path>'\|name:.*'<你新增的name>'" \
-  frontend/apps/web-antd/src/router/modules/execution.ts || echo "⚠️ 路由未注册！先在 execution.ts 添加路由再写页面"
-
-# 2. 检查 API 路径是否有重复前缀（路径重复前缀 = 接口 400/404）
-#    例如：你配置的路径是 /project/project-hub/xxx，但实际应为 /project-hub/xxx
-#    确认：grep 你在 data.ts 中写的 API 路径，确认前缀是否与现有 API 文件对齐
-grep -n "'/你新增的API路径前缀" \
-  frontend/apps/web-antd/src/api/wande/*.ts | head -5
-
-# 3. 检查路由 params 跳转时是否有回退值（planId/projectId 等丢失 = Tab 页面白屏）
-#    router.push 跳转到含参数的路由时，params 为空会导致空白
-grep -rn "router.push.*planId\|router.push.*projectId" \
-  frontend/apps/web-antd/src/views/ | grep -v "planId: " | head -5
-#    有输出 = 跳转时 params 可能为空，修复为：planId: route.params.planId || 兜底值
+bash ~/projects/.github/scripts/frontend-page-check.sh <页面名> <API路径前缀>
+# 例: bash ~/projects/.github/scripts/frontend-page-check.sh project-hub /project-hub
+# 3项检查：①路由是否已注册 ②API路径是否有重复前缀 ③params跳转是否有回退值
 ```
 
-> **为什么**：kimi5 在 #3212 调试了 3 个独立 bug，根因均是"路由未注册/路径重复前缀/参数未回退"，这类问题在编码前花 2 分钟检查即可避免，节省大量调试时间。
+> 脚本位置：`scripts/frontend-page-check.sh`，返回值非0=有风险，禁止忽略后直接编码。
 
 ```bash
 # 1. 先 rebase，合并其他 CC 的最新改动（必须，防止 duplicate declaration）

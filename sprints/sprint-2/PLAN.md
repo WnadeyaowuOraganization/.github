@@ -19,33 +19,34 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-30 00:05（第58轮巡检，清空已完成项，重写20条指派建议，活跃CC=4）
-> ⚠️ needs-prototype冻结不出现在本表
-> 排除：needs-prototype 标签、Master Issue、已派/已完成
-> 注意：序号与GitHub Issue号是不同编号，序号206=GitHub#2220
+> 更新时间：2026-04-30（排程经理第121轮巡检重写，活跃CC=0，队列已清空）
+> ⚠️ needs-prototype冻结、Master Issue不出现在本表
+> 注意：本表与GitHub Issue编号一致，无需转换
 
-| 序号 | Issue | 优先级 | 模块 | effort | 说明 | 启动 |
-|------|-------|--------|------|--------|------|------|
-| 1 | #1939 | P0 | design-ai | medium | 文生图Phase4素材库集成 — kimi2已派，编码中 | ✅ |
-| 2 | #3378 | P1 | backend | medium | PLM零件主数据CRUD API — Draft→Review→Released状态机 | ✅ |
-| 3 | #3393 | P1 | backend | medium | PLM供应商价格联动 — 报价变动→BOM成本重算+企微预警 | ✅ |
-| 4 | #3211 | P1 | backend | medium | 工艺路线模板 — 钢结构/玻璃钢/外采+分区(zone)支持 | ✅ |
-| 5 | #4059 | P1 | backend | medium | Quick-Fix keyword-pool — Controller缺/api前缀导致404 | ✅ |
-| 6 | #4063 | P1 | backend | medium | Quick-Fix bossCockpit/overview — 缺/api前缀 | ✅ |
-| 7 | #3213 | P1 | budget | medium | BOM→预算信封关联API — BomItem绑定区域+科目自动汇总 | ✅ |
-| 8 | #3214 | P1 | budget | medium | 预算矩阵校验增强 — 区域维度+设计阶段软提醒+采购硬拦截 | ✅ |
-| 9 | #3216 | P1 | budget | medium | 区域间预算调剂API — 跨区域调剂申请+审批+总额不变校验 | ✅ |
-| 10 | #3222 | P1 | budget | medium | 项目全景控制表API — EVM指标计算+区域级健康度 | ✅ |
-| 11 | #3641 | P1 | frontend | medium | 管线健康度Tab前端 — 接入#3635真数据，kimi4已派 | ✅ |
-| 12 | #3219 | P1 | budget | medium | BOM预算余额提示组件 — 编辑页顶部余额条+超限高亮 | ✅ |
-| 13 | #3220 | P1 | budget | medium | 预算矩阵执行仪表盘 — 热力图+区域钻取+BOM关联明细 | ✅ |
-| 14 | #3223 | P1 | budget | medium | 项目全景控制表页面 — 进度×预算×BOM三维矩阵+EVM仪表盘 | ✅ |
-| 15 | #3212 | P1 | fullstack | medium | 设备级进度追踪 — BOM项×工艺步骤进度矩阵 | ✅ |
-| 16 | #4093 | P1 | fullstack | medium | Quick-Fix /profit-alert — 后端ProfitAlert模块缺失+页面误植 | ✅ |
-| 17 | #4095 | P1 | fullstack | medium | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | ✅ |
-| 18 | #4124 | P1 | fullstack | medium | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
-| 19 | #4125 | P1 | fullstack | medium | CRM客户360°详情页 — 6Tab聚合，kimi3已派，编码中 | ✅ |
-| 20 | #3558 | P2 | testing | medium | E2E回归API请求超时 — 24个测试失败，kimi1正在做 | ✅ |
+| # | Issue | 优先级 | 模块 | 说明 | 启动 |
+|---|-------|--------|------|------|------|
+| 1 | #4093 | P1 | fullstack | Quick-Fix /profit-alert — ProfitAlert模块缺失+页面误植 | ✅ |
+| 2 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | ✅ |
+| 3 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（依赖#4019已CLOSED） | ✅ |
+| 4 | #1978 | P0 | backend | 方案模板引擎 DB设计 — 方案模板引擎3张表 | ⏳ 需确认前置依赖 |
+| 5 | #1974 | P0 | pipeline | 素材库 DB设计 — design_assets/tags/recommendations 3张表 | ⏳ 需确认前置依赖 |
+| 6 | #2032 | P1 | backend | 色卡材料 Phase4 — Controller API色卡+材料+审批接口 | ✅ |
+| 7 | #2031 | P1 | backend | 色卡材料 Phase5 — 审批流程（色卡/材料使用审批） | ⏳ 依赖#2032 |
+| 8 | #2035 | P1 | backend | 人事管理 Phase7 — 数据库表创建（hr_training_plans等） | ✅ |
+| 9 | #1976 | P1 | backend | 方案引擎 — 方案阶段与行业维度配置API | ✅ |
+| 10 | #1975 | P1 | backend | 方案引擎 — PPT模板解析引擎（识别章节+可替换区域） | ✅ |
+| 11 | #1966 | P1 | backend | PPT插件 Phase1 — 样式一致性检查+一键修复 | ✅ |
+| 12 | #1967 | P1 | frontend | PPT插件 Phase1 — 素材智能推荐+一键插入 | ✅ |
+| 13 | #1968 | P1 | backend | PPT插件 Phase1 — 一键套模板（选模板→替换PPT结构） | ✅ |
+| 14 | #1969 | P1 | backend | PPT插件 Phase1 — COM Add-in核心（DLL+注册+功能区） | ⏳ Phase0 #1971先行 |
+| 15 | #1971 | P0 | backend | PPT插件 Phase0 — COM Add-in架构设计（C# DLL+万德API通信） | ✅ |
+| 16 | #1958 | P1 | backend | 方案引擎 Phase27 — PPT图片美化工具（裁切+蒙版+滤镜+图片墙） | ✅ |
+| 17 | #4125 | P1 | fullstack | CRM客户360°详情页 — 6Tab聚合，依赖#4019 | ⏳ 依赖#4019已CLOSED |
+| 18 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出 | ✅ |
+| 19 | #2278 | P2 | policy | AI制度起草向导页面 Phase20 | ✅ |
+| 20 | #2585 | P2 | backend | refactor: 合并wande-ai-api到wande-ai消除42个重复类 | ✅ |
+
+> ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
 ## 指派历史
 

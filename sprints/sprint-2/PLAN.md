@@ -516,16 +516,17 @@
 | 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
 | 04-30 | kimi1 | ~~#2220~~ | biz-enablement | P2 | ~~Done~~ | 材质参数一键导出（Word/PDF）— PR #4386 merged，Issue自动关闭 |
 | 04-30 | kimi2 | ~~#3208~~ | backend | P1 | ~~Done~~ | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id — PR #4392 merged |
+| 05-01 | kimi1 | ~~#2737~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[2/8] 企微交互式查询指令 — PR #4394 merged，Issue自动关闭 |
 | 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
 | 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
 | 04-30 | kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 04:30）
+### 当前运行（05-01 04:55）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | — | — | — | 空闲（#2737 PR#4394已合并） | — |
+| kimi1 | #1978 | backend | P1 | 方案引擎DB设计 — 方案模板引擎3张表 | Todo（已流转） |
 | kimi2 | #3188 | fullstack | P1 | 回款资料[4/7] 企业信息库 — 万德常用信息维护+一键填充到回款表单 | 编码中 |
 | kimi3 | #2738 | backend | P1 | 商战情报中台·分发[3/8] 邮件订阅与定时报告 | PR #4390 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |

@@ -1,6 +1,14 @@
 # Skill 改进跟踪
 
-> 
+>
+---
+
+**[2026-04-30] PR创建后CC idle等待CI自动merge，CI失败/取消时无感知 — kimi3/#4095 + kimi4/#4124**
+- 现象：PR open后CC进入idle等待CI自动merge，但CI失败（质量预检门3 IMG_COUNT=0）或被cancel时，CC无法自动感知，持续idle 3.5-4小时
+- 影响：kimi3/#4095 PR#4370 质量预检失败idle 236分钟；kimi4/#4124 PR#4376 CI cancel idle 217分钟
+- 建议：CC在等CI时应周期性（每10分钟）主动检查PR checks状态，而非被动等待；CI failure/cancel时应立即切换为修复模式
+- 来源：本轮巡检 attention-only 模式发现
+
 ---
 
 **[2026-04-30] 大规模包迁移前建议先做调研 — kimi5/#2585**

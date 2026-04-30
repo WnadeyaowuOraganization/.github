@@ -19,15 +19,17 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-30（排程经理第175轮，#2585 PR#4387 merged；kimi2/kimi5空闲待补）
+> 更新时间：2026-04-30（排程经理第178轮，#4095/#2220 Done；kimi3空闲待补）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充（kimi3已接） | 🔥 |
+| 1 | #3185 | P0 | frontend | 全过程资料[1/13] 全阶段资料完成度看板 — 全项目×全阶段文件完整度+法规缺失预警+催收入口 | ✅ |
 | 2 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
-| 3 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出（kimi1已接） | 🔥 |
+| 3 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀（kimi1已接） | 🔥 |
+| 4 | #3208 | P1 | backend | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id（kimi2已接） | 🔥 |
+| 5 | #3570 | P1 | frontend | 关系网络Tab组件测试与截图验证（kimi5已接，PR#4388） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -515,15 +517,16 @@
 | 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
 | 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
 | 04-30 | kimi1 | #4060 | fullstack | P2 | In Progress | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 |
+| 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 
-### 当前运行（04-30 21:12）
+### 当前运行（04-30 21:40）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #4060 | fullstack | P2 | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | 编码中 |
+| kimi1 | #4060 | fullstack | P2 | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | PR #4389 |
 | kimi2 | #3208 | backend | P1 | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | 编码中 |
-| kimi3 | #4095 | fullstack | P1 | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | PR #4370 CI失败修复中（缺截图） |
-| kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 CI取消修复中 |
-| kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | 编码中 |
+| kimi3 | — | — | — | 空闲（#4095 PR#4370已合并） | — |
+| kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
+| kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -37,7 +37,7 @@
 | 10 | ~~#1961~~ | P1 | backend | ~~方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（kimi2已完成，PR#4398 merged）~~ | ✅ |
 | 11 | ~~#1969~~ | P1 | backend | ~~方案引擎COM Add-in核心 — Ribbon界面+JS桥接+后端通信协议（kimi3已完成，PR#4397 merged）~~ | ✅ |
 | 12 | #1965 | P2 | backend | 方案引擎PowerPoint加载项集成测试（kimi3已接） | 🔥 |
-| 13 | #1966 | P2 | backend | 方案引擎PowerPoint加载项UI交互与前端页面（已流转Todo，待指派） | ✅ |
+| 13 | #1966 | P1 | backend | 方案引擎PowerPoint加载项UI交互与前端页面（kimi2已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

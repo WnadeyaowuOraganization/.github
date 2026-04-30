@@ -297,6 +297,14 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 
 白名单（已知上游残留、勿动）：`src/views/system/dict/data.vue`（ele 版本占位）。
 
+### E2E Playwright 常见陷阱
+
+**ant-design Select dropdown 拦截 pointer events**
+
+- 症状：点击"下一步"等按钮时，Select 的下拉弹出层遮住按钮，Playwright `click()` 报"元素被遮挡"
+- 解决：先 `await page.keyboard.press('Escape')` 关闭下拉框，再继续后续操作
+- 案例：kimi5 #2278 E2E 阶段 Select dropdown 拦截 Next 按钮，用 Escape 关闭后正常通过
+
 ### 🚨 API 层函数命名对齐红线（2026-04-15 第 2 次事故）
 
 新文件 import 后端 API 时 **必须先** `grep -r "export.*${functionName}" src/api/` 确认后端约定的函数名。**禁止**自创 `createX/updateX/deleteX` 新名，必须严格按后端现有导出名对齐。

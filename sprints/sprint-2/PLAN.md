@@ -25,11 +25,10 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #4094 | P2 | frontend | Quick-Fix — 菜单配置指向不存在的组件record-center | ✅ |
-| 2 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | ✅ |
-| 3 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充（kimi3已接） | 🔥 |
-| 4 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
-| 5 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出（kimi1已接） | 🔥 |
+| 1 | #4060 | P2 | fullstack | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 | ✅ |
+| 2 | #4095 | P1 | fullstack | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充（kimi3已接） | 🔥 |
+| 3 | #4124 | P1 | fullstack | 国贸专属页 — 壳架构+5Tab容器+菜单入口（kimi4已接） | 🔥 |
+| 4 | #2220 | P2 | biz-enablement | 商务赋能 Phase10 — 材质参数一键导出（kimi1已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -512,13 +511,15 @@
 | 04-30 | kimi5 | ~~#2389~~ | biz-enablement | P2 | ~~Done~~ | 季度照片采集提醒+任务推送 — PR #4383 merged |
 | 04-30 | kimi5 | ~~#2278~~ | policy | P2 | ~~Done~~ | AI制度起草向导页面 Phase20 — PR #4385 merged |
 | 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
+| 04-30 | kimi1 | ~~#2220~~ | biz-enablement | P2 | ~~Done~~ | 材质参数一键导出（Word/PDF）— PR #4386 merged，Issue自动关闭 |
 | 04-30 | kimi2 | #3208 | backend | P1 | In Progress | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id |
 | 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
+| 04-30 | kimi1 | #4094 | frontend | P2 | In Progress | Quick-Fix — 菜单配置指向不存在的组件record-center |
 
 ### 当前运行（04-30 20:45）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #2220 | biz-enablement | P2 | 商务赋能 Phase10 — 材质参数一键导出 | 编码中 |
+| kimi1 | #4094 | frontend | P2 | Quick-Fix — 菜单配置指向不存在的组件record-center | 编码中 |
 | kimi2 | #3208 | backend | P1 | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id | 编码中 |
 | kimi3 | #4095 | fullstack | P1 | Quick-Fix /contacts通讯录 — 缺/api前缀+position未填充 | PR #4370 CI失败修复中（缺截图） |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 CI取消修复中 |

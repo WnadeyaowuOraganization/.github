@@ -196,6 +196,9 @@ grep -rn "class 类名" --include="*.java" backend/ | grep -v target
 ## 常用库注意
 
 - Thumbnailator（`com.sksamuel.scrimage:thumbnailator`）0.4.20 **无 CropType**，图片裁切需手动实现 BufferedImage 坐标裁切，不要花时间找 CropType API
+- **单元测试 @ServiceImpl**：Mockito `@InjectMocks` 时 `baseMapper=null`，解决：`ReflectionTestUtils.setField(service, "baseMapper", mockMapper)`
+- **后端启动**：`java -jar` 模式不走源码的 `ComponentScan`，改动后必须 `mvn install` 重建（`mvn spring-boot:run` 则实时加载源码）
+- **create_by / update_by**：字段类型是 `BIGINT(Long)`，不是 `String`；Flyway 默认填 `system` 字符串会导致 `SQLSyntaxErrorException`
 
 ---
 

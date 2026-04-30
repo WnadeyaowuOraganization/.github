@@ -352,7 +352,7 @@ bash ~/projects/.github/scripts/frontend-page-check.sh <页面名> <API路径前
 # 3项检查：①路由是否已注册 ②API路径是否有重复前缀 ③params跳转是否有回退值
 ```
 
-> 脚本位置：`scripts/frontend-page-check.sh`，返回值非0=有风险，禁止忽略后直接编码。
+> 脚本位置：`scripts/frontend-page-check.sh`（skill本地，CC可通过 `~/projects/.github/agents/coding/frontend-coding/scripts/` 访问），返回值非0=有风险，禁止忽略后直接编码。
 
 ```bash
 # 1. 先 rebase，合并其他 CC 的最新改动（必须，防止 duplicate declaration）

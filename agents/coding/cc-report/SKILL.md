@@ -1,6 +1,6 @@
 ---
 name: cc-report
-description: Report progress to manager CCs (研发经理/排程经理) at mandatory phases — start, stage-done, stuck, pre-conclusion, close — via the dual-channel tmux send-keys + HTTP /api/notify protocol. Enforces message format with type/reply markers, session identification, and forbids silent work or self-closing Issues without manager confirmation. Satisfies hard constraint #10 of Wande-Play programming CC prompt.
+description: Report progress to 研发经理 at mandatory phases (start/stage-done/stuck/close/pre-conclusion), and send optimization feedback to 排程经理 after each PR via dual-channel tmux + /api/notify. Enforces message format with type/reply markers, forbids silent work or self-closing Issues without manager confirmation. Satisfies hard constraint #10.
 ---
 
 # 阶段性主动汇报（约束 10）
@@ -16,6 +16,7 @@ description: Report progress to manager CCs (研发经理/排程经理) at manda
 | **stuck** | 连续 10 分钟同一问题无进展 | `warning` | `【需回复】` |
 | **close** | 提 PR 后发完工报告 | `success` | `【阅即可】` |
 | **结论前** | 下"问题不存在 / 无需修改 / 已修复"结论前，**必须先汇报等研发经理确认**，禁止自行 close Issue | `warning` | `【需回复】` |
+| **优化建议** | PR 创建后，向排程经理发本轮经验总结（格式见下方），供排程经理优化 skill 和脚本 | `info` | `【阅即可】` |
 
 ## 通讯录
 
@@ -113,10 +114,10 @@ curl -s -X POST http://localhost:9872/api/notify \
   -d '{"session":"cc-report-'${ISSUE}'","message":"[#'${ISSUE}'] 本轮回顾","type":"info"}'
 ```
 
-> **本轮回顾**：`stage-done` 在 PR 创建成功后填写（约 50~100 字），发排程经理参考。
-> 格式：① 各 skill 耗时排序（最耗时→最快）② 卡点（编译错误次数/context 超限/重复尝试）③ 给排程经理的优化建议（如有）。
+> **本轮回顾（发排程经理）**：`stage-done` 在 PR 创建成功后填写（约 50~100 字），发排程经理参考。
+> 格式：① 各 skill 耗时排序（最耗时→最快）② 卡点（编译错误次数/context 超限/重复尝试）③ **给排程经理的优化建议**（如有）。
 > 目的：排程经理据此优化 skill 引导、脚本精度，减少后续 CC 的 token 和时间消耗。
-> 不强制，但建议每次 PR 创建后都发。
+> **不强制，但强烈建议每次 PR 创建后都发**。排程经理会将高价值建议记入记忆系统并触发 skill 改进。
 
 ### stuck — 卡住求助
 

@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-04-30（排程经理第173轮，#2585 kimi5已提PR#4387，等待merge）
+> 更新时间：2026-04-30（排程经理第175轮，#2585 PR#4387 merged；#2220 kimi1持续编码中）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -511,7 +511,7 @@
 | 04-30 | kimi5 | ~~#2390~~ | biz-enablement | P2 | ~~Done~~ | 照片AI自动标签(CLIP) — PR #4384 merged |
 | 04-30 | kimi5 | ~~#2389~~ | biz-enablement | P2 | ~~Done~~ | 季度照片采集提醒+任务推送 — PR #4383 merged |
 | 04-30 | kimi5 | ~~#2278~~ | policy | P2 | ~~Done~~ | AI制度起草向导页面 Phase20 — PR #4385 merged |
-| 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 已提（668文件，2403/-3763行） |
+| 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
 
 ### 当前运行（04-30 19:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |

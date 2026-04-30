@@ -535,7 +535,7 @@
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | PR #4396 |
 | kimi2 | #1961 | backend | P1 | 方案引擎AI排版引擎后端API | 编码中 |
-| kimi3 | #1969 | backend | P1 | 方案引擎COM Add-in核心 | Todo（已流转） |
+| kimi3 | #1969 | backend | P1 | 方案引擎COM Add-in核心 | PR #4397 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

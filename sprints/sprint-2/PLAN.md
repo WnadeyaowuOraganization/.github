@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第238轮，kimi3/#1969完成；#1965→Todo）
+> 更新时间：2026-05-01（排程经理第240轮，kimi2/#1961完成；#1966→Todo）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -37,6 +37,7 @@
 | 10 | ~~#1961~~ | P1 | backend | ~~方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（kimi2已完成，PR#4398 merged）~~ | ✅ |
 | 11 | ~~#1969~~ | P1 | backend | ~~方案引擎COM Add-in核心 — Ribbon界面+JS桥接+后端通信协议（kimi3已完成，PR#4397 merged）~~ | ✅ |
 | 12 | #1965 | P2 | backend | 方案引擎PowerPoint加载项集成测试（kimi3已接） | 🔥 |
+| 13 | #1966 | P2 | backend | 方案引擎PowerPoint加载项UI交互与前端页面（已流转Todo，待指派） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -526,13 +527,14 @@
 | 05-01 | kimi1 | ~~#1978~~ | backend | P1 | ~~Done~~ | 方案引擎DB设计 — 方案模板引擎3张表 — PR #4395 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#2738~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[3/8] 邮件订阅与定时报告 — PR #4390 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#1969~~ | backend | P1 | ~~Done~~ | 方案引擎COM Add-in核心 — PR #4397 merged，Issue自动关闭 |
+| 05-01 | kimi2 | ~~#1961~~ | backend | P1 | ~~Done~~ | 方案引擎AI排版引擎后端API — PR #4398 merged，Issue自动关闭 |
 | 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
 | 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
 | 04-30 | kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 07:35）
+### 当前运行（05-01 07:55）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | PR #4396 |

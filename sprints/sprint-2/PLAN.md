@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第230轮，kimi1/#1978完成；#1974→Todo）
+> 更新时间：2026-05-01（排程经理第232轮，kimi1/#1978、kimi2/#3188完成；#1974/#1961→Todo）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -34,6 +34,7 @@
 | 7 | #2738 | P1 | backend | 商战情报中台·分发[3/8] 邮件订阅与定时报告（kimi3已接） | 🔥 |
 | 8 | ~~#1978~~ | P0 | backend | ~~方案引擎DB设计 — 方案模板引擎3张表（kimi1已完成，PR#4395 merged）~~ | ✅ |
 | 9 | #1974 | P1 | pipeline | 方案引擎DB设计 — 素材库3张表（kimi1已接） | 🔥 |
+| 10 | #1961 | P1 | backend | 方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（已流转Todo，待指派） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -518,6 +519,7 @@
 | 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
 | 04-30 | kimi1 | ~~#2220~~ | biz-enablement | P2 | ~~Done~~ | 材质参数一键导出（Word/PDF）— PR #4386 merged，Issue自动关闭 |
 | 04-30 | kimi2 | ~~#3208~~ | backend | P1 | ~~Done~~ | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id — PR #4392 merged |
+| 05-01 | kimi2 | ~~#3188~~ | fullstack | P1 | ~~Done~~ | 回款资料[4/7] 企业信息库 — PR #4393 merged，Issue自动关闭 |
 | 05-01 | kimi1 | ~~#2737~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[2/8] 企微交互式查询指令 — PR #4394 merged，Issue自动关闭 |
 | 05-01 | kimi1 | ~~#1978~~ | backend | P1 | ~~Done~~ | 方案引擎DB设计 — 方案模板引擎3张表 — PR #4395 merged，Issue自动关闭 |
 | 04-30 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
@@ -526,11 +528,11 @@
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 06:15）
+### 当前运行（05-01 06:35）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | 编码中 |
-| kimi2 | — | — | — | 空闲（#3188 PR#4393已手动合并） | — |
+| kimi2 | #1961 | backend | P1 | 方案引擎AI排版引擎后端API | Todo（已流转） |
 | kimi3 | #2738 | backend | P1 | 商战情报中台·分发[3/8] 邮件订阅与定时报告 | PR #4390 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |

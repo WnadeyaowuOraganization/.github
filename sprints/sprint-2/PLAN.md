@@ -34,7 +34,7 @@
 | 7 | #2738 | P1 | backend | 商战情报中台·分发[3/8] 邮件订阅与定时报告（kimi3已接） | 🔥 |
 | 8 | ~~#1978~~ | P0 | backend | ~~方案引擎DB设计 — 方案模板引擎3张表（kimi1已完成，PR#4395 merged）~~ | ✅ |
 | 9 | #1974 | P1 | pipeline | 方案引擎DB设计 — 素材库3张表（kimi1已接） | 🔥 |
-| 10 | #1961 | P1 | backend | 方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（已流转Todo，待指派） | ✅ |
+| 10 | #1961 | P1 | backend | 方案引擎AI排版引擎后端API — 版式分析+智能布局+一键优化（kimi2已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

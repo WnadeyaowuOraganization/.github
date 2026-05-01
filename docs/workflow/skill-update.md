@@ -42,6 +42,14 @@
 
 ---
 
+**[2026-05-02] pr-body-lint.sh 在 kimi 环境路径不存在 — kimi4/#2051**
+- 现象：kimi 环境找不到 ~/projects/.github/scripts/pr-body-lint.sh，CC 无法执行 PR 质量预检
+- 原因：kimi 目录是 wande-play 的外接目录，不含 .github/scripts/ 子目录
+- 建议：skill 中引用 pr-body-lint.sh 时使用绝对路径或从 wande-play 基础目录调用；或在 run-cc.sh 启动时将该脚本复制到 kimi 目录
+- 来源：kimi4/#2051 本轮回顾
+
+---
+
 **[2026-05-01] spring-boot:run 加载 JAR 而非 target/classes，新 Controller 不生效 — kimi3/#2162**
 - 现象：mvn spring-boot:run 启动后新增 Controller 未生效，需手动执行 `mvn install -pl ruoyi-modules/wande-ai` 更新 M2 中的 JAR
 - 原因：spring-boot:run 默认优先加载本地 M2 仓库的 JAR，而非 target/classes

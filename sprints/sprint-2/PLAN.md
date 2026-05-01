@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第250轮，kimi1/#1959完成；#2141/#2162→Todo）
+> 更新时间：2026-05-01（排程经理第265轮，kimi3/#2162 PR#4404已合并；kimi1空闲）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -43,7 +43,7 @@
 | 16 | ~~#1960~~ | P1 | backend | ~~方案引擎PPT插件：AI排版工具箱（kimi2已完成，PR#4401已提交）~~ | ✅ |
 | 17 | ~~#1973~~ | P1 | pipeline | ~~素材自动分类+AI标签引擎（kimi1已接）~~ | 🔥 |
 | 18 | ~~#2141~~ | P1 | backend | ~~新增素材批量迁移工具（kimi2已接）~~ | 🔥 |
-| 19 | #2162 | P1 | backend | 新增AI文案生成 — 区位分析/设计理念/活动策划（kimi3已接） | 🔥 |
+| 19 | ~~#2162~~ | P1 | backend | ~~新增AI文案生成 — 区位分析/设计理念/活动策划（kimi3已完成，PR#4404 merged）~~ | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -545,13 +545,14 @@
 | 04-30 | kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
+| 05-01 | kimi3 | ~~#2162~~ | backend | medium | **Done** | AI文案生成 — 区位分析/设计理念/活动策划 — PR #4404 merged |
 
-### 当前运行（05-01 11:05）
+### 当前运行（05-01 12:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | — | — | — | 空闲（会话已终止，PR#4403待合并） | — |
+| kimi1 | — | — | — | 空闲（PR#4403已重开，CI重新触发） | — |
 | kimi2 | #2141 | backend | P1 | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 | PR #4405 |
-| kimi3 | — | — | — | 空闲（#2162 PR#4404已提交） | — |
+| kimi3 | — | — | — | 空闲（#2162 PR#4404已合并） | ✅ |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

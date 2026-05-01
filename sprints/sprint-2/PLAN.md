@@ -38,7 +38,7 @@
 | 11 | ~~#1969~~ | P1 | backend | ~~方案引擎COM Add-in核心 — Ribbon界面+JS桥接+后端通信协议（kimi3已完成，PR#4397 merged）~~ | ✅ |
 | 12 | ~~#1965~~ | P2 | backend | ~~方案引擎PowerPoint加载项集成测试（kimi3已完成，PR#4399 merged）~~ | ✅ |
 | 13 | #1966 | P1 | backend | 方案引擎PowerPoint加载项UI交互与前端页面（kimi2已接） | 🔥 |
-| 14 | #1970 | P1 | backend | 方案引擎PPT智能排版核心（#1974后端部分）— 元素识别+智能布局+风格迁移（已流转Todo，待指派） | ✅ |
+| 14 | #1970 | P0 | backend | 方案引擎PPT插件后端API — /api/ppt-plugin/* 专用接口（kimi3已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -541,7 +541,7 @@
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | PR #4396 |
 | kimi2 | #1966 | backend | P1 | 方案引擎PowerPoint加载项UI交互与前端页面 | 编码中 |
-| kimi3 | — | — | — | 空闲（#1965 PR#4399已合并） | — |
+| kimi3 | #1970 | backend | P0 | PPT插件后端API — /api/ppt-plugin/* 专用接口 | 编码中 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

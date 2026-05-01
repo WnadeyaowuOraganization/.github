@@ -43,7 +43,7 @@
 | 16 | ~~#1960~~ | P1 | backend | ~~方案引擎PPT插件：AI排版工具箱（kimi2已完成，PR#4401已提交）~~ | ✅ |
 | 17 | ~~#1973~~ | P1 | pipeline | ~~素材自动分类+AI标签引擎（kimi1已接）~~ | 🔥 |
 | 18 | ~~#2141~~ | P1 | backend | ~~新增素材批量迁移工具（kimi2已接）~~ | 🔥 |
-| 19 | #2162 | P1 | backend | 新增AI文案生成 — 区位分析/设计理念/活动策划（已流转Todo，待指派） | ✅ |
+| 19 | #2162 | P1 | backend | 新增AI文案生成 — 区位分析/设计理念/活动策划（kimi3空闲可接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -539,18 +539,19 @@
 | 05-01 | kimi2 | ~~#1961~~ | backend | P1 | ~~Done~~ | 方案引擎AI排版引擎后端API — PR #4398 merged，Issue自动关闭 |
 | 04-30 | kimi2 | ~~#1966~~ | backend | P1 | ~~Done~~ | PPT插件样式一致性检查+一键修复 — PR #4375 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#1965~~ | backend | P2 | ~~Done~~ | 方案引擎PowerPoint加载项集成测试 — PR #4399 merged，Issue自动关闭 |
+| 05-01 | kimi3 | ~~#1970~~ | backend | P0 | ~~Done~~ | PPT插件后端API — auth/模板/素材/生成/替换 6个接口 — PR #4402 merged |
 | 05-01 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
 | 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
 | 04-30 | kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 10:05）
+### 当前运行（05-01 10:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1973 | pipeline | P1 | 素材自动分类+AI标签引擎 — S3设计文件批量处理 | 编码中 |
 | kimi2 | #2141 | backend | P1 | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 | 编码中 |
-| kimi3 | #1970 | backend | P0 | PPT插件后端API — /api/ppt-plugin/* 专用接口 | PR #4402 |
+| kimi3 | — | — | — | 空闲（#1970 PR#4402已合并） | — |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

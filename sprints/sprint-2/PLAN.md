@@ -557,14 +557,14 @@
 | 05-01 | kimi2 | #2199 | backend | P1 | In Progress | LinkedIn API发布集成 — PR #4411 BLOCKED |
 | 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — PR #4406 BLOCKED（已重启） |
 
-### 当前运行（05-01 21:15）
+### 当前运行（05-01 21:25）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 64% 🔥 |
+| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 73% 🔥 |
 | kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | PR #4411 BLOCKED |
-| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 71% 🔥 |
+| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 71% 编码中 |
 | kimi4 | #2037 | backend | P1 | D3-翻新模式（改造/翻新模式） | 70% 编码中 |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 70% ⚠️卡住27min |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 38% 编码中（重启后，PR#4410 BLOCKED） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -549,7 +549,7 @@
 |------|-------|------|--------|------|--------|
 | kimi1 | — | — | — | 空闲（#1973 PR未提交，Issue仍在进行中） | — |
 | kimi2 | #1960 | backend | P1 | PPT插件：AI排版工具箱 — 矩阵布局+智能对齐+版式优化 | PR #4401 |
-| kimi3 | #1970 | backend | P0 | PPT插件后端API — /api/ppt-plugin/* 专用接口 | PR已提交 |
+| kimi3 | #1970 | backend | P0 | PPT插件后端API — /api/ppt-plugin/* 专用接口 | PR #4402 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

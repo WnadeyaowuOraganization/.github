@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第245轮，kimi2/#1966已完成历史补录）
+> 更新时间：2026-05-01（排程经理第246轮，kimi1/#1974完成；#1959/#1960/#1973→Todo）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -39,6 +39,9 @@
 | 12 | ~~#1965~~ | P2 | backend | ~~方案引擎PowerPoint加载项集成测试（kimi3已完成，PR#4399 merged）~~ | ✅ |
 | 13 | ~~#1966~~ | P1 | backend | ~~PPT插件样式一致性检查+一键修复（kimi2已完成，PR#4375 merged）~~ | ✅ |
 | 14 | #1970 | P0 | backend | 方案引擎PPT插件后端API — /api/ppt-plugin/* 专用接口（kimi3已接） | 🔥 |
+| 15 | #1959 | P1 | backend | 方案引擎PPT插件：文字美化工具 — 文字特效+数字突出+标题样式+段落拆分（已流转Todo，待指派） | ✅ |
+| 16 | #1960 | P1 | backend | 方案引擎PPT插件：AI排版工具箱 — 矩阵布局+智能对齐+版式优化+一键统一（已流转Todo，待指派） | ✅ |
+| 17 | #1973 | P1 | pipeline | 素材自动分类+AI标签引擎 — S3设计文件批量处理（已流转Todo，待指派） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -526,6 +529,7 @@
 | 05-01 | kimi2 | ~~#3188~~ | fullstack | P1 | ~~Done~~ | 回款资料[4/7] 企业信息库 — PR #4393 merged，Issue自动关闭 |
 | 05-01 | kimi1 | ~~#2737~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[2/8] 企微交互式查询指令 — PR #4394 merged，Issue自动关闭 |
 | 05-01 | kimi1 | ~~#1978~~ | backend | P1 | ~~Done~~ | 方案引擎DB设计 — 方案模板引擎3张表 — PR #4395 merged，Issue自动关闭 |
+| 05-01 | kimi1 | ~~#1974~~ | pipeline | P1 | ~~Done~~ | 方案引擎DB设计 — 素材库3张表 — PR #4396 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#2738~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[3/8] 邮件订阅与定时报告 — PR #4390 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#1969~~ | backend | P1 | ~~Done~~ | 方案引擎COM Add-in核心 — PR #4397 merged，Issue自动关闭 |
 | 05-01 | kimi2 | ~~#1961~~ | backend | P1 | ~~Done~~ | 方案引擎AI排版引擎后端API — PR #4398 merged，Issue自动关闭 |
@@ -537,7 +541,7 @@
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 08:45）
+### 当前运行（05-01 08:55）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | — | — | — | 空闲（#1974 PR#4396已合并） | — |

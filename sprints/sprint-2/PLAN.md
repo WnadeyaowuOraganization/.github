@@ -547,14 +547,14 @@
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 | 05-01 | kimi3 | ~~#2162~~ | backend | medium | **Done** | AI文案生成 — 区位分析/设计理念/活动策划 — PR #4404 merged |
 
-### 当前运行（05-01 12:52）
+### 当前运行（05-01 13:02）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | — | — | — | 空闲（PR#4403 质量预检✅ 后端单测pending） | — |
-| kimi2 | #2141 | backend | P1 | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 | PR #4405 E2E queued>20min ⏸️CC 20min无输出 |
+| kimi2 | #2141 | backend | P1 | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 | PR #4405 E2E 终于 in_progress |
 | kimi3 | — | — | — | 空闲（#2162 PR#4404已合并） | ✅ |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 质量预检❌（其余全✅） |
-| kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 质量预检❌ E2E in_progress |
+| kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 触发E2E重跑，新workflow pending |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

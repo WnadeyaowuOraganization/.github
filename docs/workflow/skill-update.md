@@ -42,6 +42,14 @@
 
 ---
 
+**[2026-05-02] quality-gate 检查范围包含 task.md 全部 checkbox（含原型核对清单）— kimi2/#2316**
+- 现象：PR 被 quality-gate 拦截，task.md 原型核对清单 9 项未勾选，CC 误以为只需勾选 Steps
+- 影响：1 PR 被拦截，CC 需额外一轮补充勾选后重新 push
+- 建议：frontend-coding skill 明确提醒 — task.md 中所有 checkbox（包括原型核对清单、Steps、自测项）都需在提 PR 前勾选完毕
+- 来源：kimi2/#2316 本轮回顾
+
+---
+
 **[2026-05-02] pr-body-lint.sh 在 kimi 环境路径不存在 — kimi4/#2051**
 - 现象：kimi 环境找不到 ~/projects/.github/scripts/pr-body-lint.sh，CC 无法执行 PR 质量预检
 - 原因：kimi 目录是 wande-play 的外接目录，不含 .github/scripts/ 子目录

@@ -11,6 +11,14 @@
 
 ---
 
+**[2026-05-01] PR rebase 失败源于远程有 commit 本地无 — kimi2/#2199**
+- 现象：PR#4411 远程已有 commit，但 CC 本地分支无该 commit，rebase 失败
+- 解决：改用 merge 策略而非 rebase 解决冲突
+- 建议：backend-coding skill 或 git 操作规范中增加"PR 创建前先 git fetch origin 检查远程分支状态"的前置检查，若远程有本地无的 commit，优先用 merge 策略而非 rebase
+- 来源：kimi2/#2199 本轮回顾
+
+---
+
 **[2026-05-01] spring-boot:run 加载 JAR 而非 target/classes，新 Controller 不生效 — kimi3/#2162**
 - 现象：mvn spring-boot:run 启动后新增 Controller 未生效，需手动执行 `mvn install -pl ruoyi-modules/wande-ai` 更新 M2 中的 JAR
 - 原因：spring-boot:run 默认优先加载本地 M2 仓库的 JAR，而非 target/classes

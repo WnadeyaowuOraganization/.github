@@ -50,6 +50,21 @@
 
 ---
 
+**[2026-05-02] M2 jar 缓存导致 Controller 注解不更新，API 返回 405 — kimi5/#2045**
+- 现象：重启后端后旧 jar 仍被加载，新 Controller 注解未生效，API 返回 405
+- 解决：手动删除旧 jar + cp target jar + 重启后端
+- 建议：cc-test-env.sh restart-backend 应自动清理 M2 缓存 jar 确保加载最新代码
+- 来源：kimi5/#2045 本轮回顾
+
+---
+
+**[2026-05-02] init-db 在表数>=10 时跳过新 V*.sql，需增量执行机制 — kimi5/#2045**
+- 现象：现有 wdpp_proposal_illustration 表与实现字段不匹配，需 ALTER TABLE 补字段；init-db 因表数>=10 跳过了新迁移脚本
+- 建议：init-db 增加「增量执行新迁移脚本」机制，即检测当前 schema 版本 vs 目标版本，仅执行缺失的 V*.sql
+- 来源：kimi5/#2045 本轮回顾
+
+---
+
 **[2026-05-02] pr-body-lint.sh 在 kimi 环境路径不存在 — kimi4/#2051**
 - 现象：kimi 环境找不到 ~/projects/.github/scripts/pr-body-lint.sh，CC 无法执行 PR 质量预检
 - 原因：kimi 目录是 wande-play 的外接目录，不含 .github/scripts/ 子目录

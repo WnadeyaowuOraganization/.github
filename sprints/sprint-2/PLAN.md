@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第333轮，🔥kimi3 #1760 74%极速推进；kimi2已重启；PR#4410冲突已解决MERGEABLE）
+> 更新时间：2026-05-02（排程经理第334轮，✅kimi2/#1682 PR#4417 MERGED；kimi2已接#1826；kimi3 66%；kimi4 19min无输出）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -561,17 +561,18 @@
 | 05-01 | kimi5 | #2045 | backend | P1 | In Progress | AI生成Phase7方案配图自动生成 — PR #4410 MERGEABLE（冲突已解决） |
 | 05-01 | kimi3 | ~~#2312~~ | frontend | P1 | **Done** | 完整方案流程Step1 — PR #4413 MERGED（19:12 UTC），Issue #2312 CLOSED |
 | 05-02 | kimi3 | #1760 | frontend | P2 | In Progress | 经销模式前端适配 — 项目详情+经销商结算对账（blocker #2119已CLOSED） |
+| 05-02 | kimi2 | ~~#1682~~ | backend | P2 | **Done** | 新增图像生成API服务 — PR #4417 MERGED（19:49 UTC），Issue #1682 转 Done |
 
 ### 当前运行（05-02 02:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 42% 🔥 |
-| kimi2 | #1682 | backend | P2 | 新增图像生成API服务 | 21% 🔥（已重启） |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 74% 🔥🔥🔥 |
-| kimi4 | #2051 | frontend | P1 | D3 L4安装图自动化 | 49% ⏸️9min无输出 |
+| kimi2 | #1826 | brand | P2 | 新增导航入口+内容管理列表页 | 35% 🔥（新派发） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 66% 🔥 |
+| kimi4 | #2051 | frontend | P1 | D3 L4安装图自动化 | 49% ⏸️19min无输出 |
 | kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 38% 🔥 |
 
-> 🔥🔥 kimi3 #1760 74% 极速推进！kimi2已重启；PR#4410 冲突已解决MERGEABLE；全部5PR MERGEABLE
+> ✅ kimi2/#1682 PR#4417 MERGED！kimi2 已接 #1826；kimi3 66%；kimi4 19min无输出；4PR MERGEABLE
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -611,3 +612,4 @@
 | ~~kimi1~~ | ~~#2639~~ | #4272 | ✅ merged | 14:50:12 UTC |
 | ~~kimi2~~ | ~~#2316~~ | #4414 | ✅ merged | 18:10:10 UTC |
 | ~~kimi3~~ | ~~#2312~~ | #4413 | ✅ merged | 19:12:42 UTC |
+| ~~kimi2~~ | ~~#1682~~ | #4417 | ✅ merged | 19:49:28 UTC |

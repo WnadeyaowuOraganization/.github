@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第352轮，🔥kimi3+9%到37%；🚨kimi5超时27min需重启）
+> 更新时间：2026-05-02（排程经理第353轮，🎉PR#4420 MERGED（kimi5/#2044完成）；kimi5新会话#1948）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -563,17 +563,18 @@
 | 05-02 | kimi3 | #1760 | frontend | P2 | In Progress | 经销模式前端适配 — 项目详情+经销商结算对账（blocker #2119已CLOSED） |
 | 05-02 | kimi2 | ~~#1682~~ | backend | P2 | **Done** | 新增图像生成API服务 — PR #4417 MERGED（19:49 UTC），Issue #1682 转 Done |
 | 05-02 | kimi5 | ~~#2045~~ | backend | P1 | **Done** | AI生成Phase7方案配图自动生成 — PR #4410 MERGED（20:32 UTC），Issue #2045 转 Done |
+| 05-02 | kimi5 | ~~#2044~~ | backend | P2 | **Done** | 竞品情报数据库表创建 — PR #4420 MERGED（22:52 UTC），Issue #2044 转 Done |
 
 ### 当前运行（05-02 02:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 36% 🔥（373min，PR阶段） |
-| kimi2 | #1826 | brand | P2 | 新增导航入口+内容管理列表页 | 51% 🔥（PR#4419，PR阶段） |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 37% 🔥🔥🔥 |
-| kimi4 | #2051 | frontend | P1 | D3 L4安装图自动化 | 72% 🔥 |
-| kimi5 | #2044 | backend | P2 | 竞品情报数据库表创建 — 7张表+50家公司初始数据 | 34% 🚨超时27min需重启 |
+| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 37% 🔥（383min，PR阶段） |
+| kimi2 | #1826 | brand | P2 | 新增导航入口+内容管理列表页 | 52% 🔥（PR#4419，PR阶段） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 39% 🔥 |
+| kimi4 | #2051 | frontend | P1 | D3 L4安装图自动化 | 72% ⏸️21min无输出 |
+| kimi5 | #1948 | backend | — | 新CC启动中 | — |
 
-> 🔥🔥🔥 kimi3 +9%到37%；🚨 kimi5 超时27min需重启；kimi1/kimi2 PR阶段；kimi4 72%；6PR MERGEABLE
+> 🎉 PR#4420 MERGED（kimi5/#2044完成）；kimi1/kimi2 PR阶段；🔥 kimi3 39%；🚨 kimi4 21min濒临超时；kimi5新会话#1948 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -615,4 +616,4 @@
 | ~~kimi3~~ | ~~#2312~~ | #4413 | ✅ merged | 19:12:42 UTC |
 | ~~kimi2~~ | ~~#1682~~ | #4417 | ✅ merged | 19:49:28 UTC |
 | ~~kimi5~~ | ~~#2045~~ | #4410 | ✅ merged | 20:32:02 UTC |
-| ~~kimi5~~ | ~~#2044~~ | #4420 | ✅ OPEN MERGEABLE | 新PR，竞品情报数据库 |
+| ~~kimi5~~ | ~~#2044~~ | #4420 | ✅ merged | 22:52:19 UTC |

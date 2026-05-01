@@ -565,10 +565,10 @@
 | kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 38% 🔥 |
 | kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 56% 🔥 |
 | kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 80% 🔥 |
-| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | 58% 🔥 |
+| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | ✅ 后端完成，准备提PR |
 | kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 41% 🔥 ⚠️ PR#4410 CONFLICTING~80min |
 
-> kimi3 80%极近PR；kimi1/kimi3/kimi5 均有7-13min无输出；#4410冲突约80min
+> kimi3 80%极近PR；kimi4后端完成准备提PR；kimi1/kimi3/kimi5 均有7-13min无输出；#4410冲突约80min
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

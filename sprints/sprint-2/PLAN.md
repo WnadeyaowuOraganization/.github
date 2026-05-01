@@ -562,7 +562,7 @@
 | kimi2 | #2126 | fullstack | P1 | 经销商发现种子数据+方法论后端 | 55% 编码中 |
 | kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 54% 编码中 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 BLOCKED（质量预检❌，修复中） |
-| kimi5 | #4045 | fullstack | - | ⚠️ Master Issue — 经销商产品展示门户（不可开发） | 待重新指派 |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 新指派（#4045 Master已kill） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

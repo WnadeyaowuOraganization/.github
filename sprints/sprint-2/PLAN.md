@@ -540,7 +540,7 @@
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1974 | pipeline | P1 | 方案引擎DB设计 — 素材库3张表 | PR #4396 |
-| kimi2 | #1966 | backend | P1 | 方案引擎PowerPoint加载项UI交互与前端页面 | 编码中 |
+| kimi2 | — | — | — | 空闲（#1966 PR#4375已合并） | — |
 | kimi3 | #1970 | backend | P0 | PPT插件后端API — /api/ppt-plugin/* 专用接口 | 编码中 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |

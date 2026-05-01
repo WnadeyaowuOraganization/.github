@@ -549,15 +549,18 @@
 | 05-01 | kimi2 | ~~#2141~~ | backend | P1 | **Done** | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 — PR #4405 merged，Issue手动关闭 |
 | 05-01 | kimi1 | ~~#1973~~ | pipeline | P1 | **Done** | 素材自动分类+AI标签引擎 — S3设计文件批量处理 — PR #4403 merged，Issue自动关闭 |
 | 05-01 | kimi5 | ~~#3570~~ | frontend | P1 | **Done** | 关系网络Tab组件测试与截图验证 — PR #4388 手动merged（E2E队列阻塞100+min），Issue手动关闭 |
+| 05-01 | kimi1 | #2163 | backend | P1 | In Progress | 素材库API+RBAC权限管理 — 新指派 |
+| 05-01 | kimi2 | #2126 | fullstack | P1 | In Progress | 经销商发现种子数据+方法论后端 — 新指派 |
+| 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — 新指派 |
 
 ### 当前运行（05-01 16:40）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | — | — | — | 空闲（#1973 PR#4403已合并） | ✅ |
-| kimi2 | — | — | — | 空闲（#2141 PR#4405已合并） | ✅ |
-| kimi3 | — | — | — | 空闲（#2162 PR#4404已合并） | ✅ |
+| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 新指派 |
+| kimi2 | #2126 | fullstack | P1 | 经销商发现种子数据+方法论后端 | 新指派 |
+| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 新指派 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 BLOCKED（质量预检❌，修复中） |
-| kimi5 | — | — | — | 空闲（#3570 PR#4388手动合并） | ✅ |
+| kimi5 | — | — | — | 空闲 | — |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

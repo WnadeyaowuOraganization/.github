@@ -560,7 +560,7 @@
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 31% ⚠️卡住19min |
-| kimi2 | — | — | — | 空闲（#2126 PR#4407 merged，Issue CLOSED） | ✅ |
+| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 新指派 |
 | kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 46% 编码中 |
 | kimi4 | #2037 | backend | P1 | D3-翻新模式（改造/翻新模式） | 68% 编码中 |
 | kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 69% 编码中 |

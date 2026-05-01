@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第304轮，kimi1恢复良好36%；#4410冲突约40min）
+> 更新时间：2026-05-01（排程经理第305轮，kimi3 74%/kimi4 70%接近PR；#4410冲突~50min）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -559,16 +559,16 @@
 | 05-01 | kimi4 | #2201 | backend | P1 | In Progress | 角色权限系统 — 4级角色(管理员/编辑/审批/只读) — 新指派 |
 | 05-01 | kimi5 | #2045 | backend | P1 | In Progress | AI生成Phase7方案配图自动生成 — ⚠️ PR #4410 CONFLICTING需解决冲突 |
 
-### 当前运行（05-01 22:44）
+### 当前运行（05-01 22:54）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 36% 🔥（重启后恢复良好） |
-| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 38% 🔥 |
-| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 69% 🔥 ⏸️13min无输出 |
-| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | 61% 🔥 |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 69% 🔥 ⚠️ PR#4410 CONFLICTING约40min |
+| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 37% 🔥 |
+| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 42% 🔥 |
+| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 74% 🔥 ⏸️7min无输出 |
+| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | 70% 🔥 |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 32% 🔥 ⚠️ PR#4410 CONFLICTING~50min |
 
-> kimi1恢复良好（21→36%）；kimi4升至61%；#4410冲突约40min
+> kimi3升至74%接近PR；kimi4升至70%接近PR；kimi5从69%→32%疑似/compact释放上下文；#4410冲突~50min
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

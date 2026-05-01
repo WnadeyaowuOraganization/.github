@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第317轮，kimi1 68%快速推进；kimi2 14min无输出；4PR待MERGE）
+> 更新时间：2026-05-02（排程经理第318轮，kimi1 60%/compact；kimi2 24min无输出；4PR待MERGE）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -562,13 +562,13 @@
 ### 当前运行（05-02 00:55）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 68% 🔥 |
-| kimi2 | #2316 | frontend | P1 | D3 Web产品目录浏览器 | 51% ⏸️14min无输出 |
+| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 60% 🔥 |
+| kimi2 | #2316 | frontend | P1 | D3 Web产品目录浏览器 | 51% ⏸️24min无输出 |
 | kimi3 | #2312 | frontend | P1 | 完整方案流程Step1 | 39% 🔥 |
 | kimi4 | #2051 | backend | P1 | D3 L4安装图自动化 | 42% 🔥 |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 43% 🔥 |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 42% 🔥 |
 
-> kimi1 68%快速推进；kimi2 14min无输出（PR#4414 MERGEABLE，可能等CI）；4PR待MERGE
+> kimi1 60% /compact后；kimi2 24min无输出（PR#4414 MERGEABLE等CI）；4PR待MERGE
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

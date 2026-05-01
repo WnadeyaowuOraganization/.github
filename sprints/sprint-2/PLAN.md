@@ -563,12 +563,12 @@
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 41% 🔥 |
-| kimi2 | #2316 | frontend | P1 | D3 Web产品目录浏览器 | 54% 🔥 |
+| kimi2 | #2316 | frontend | P1 | D3 Web产品目录浏览器 | 🔥 PR#4414 MERGEABLE |
 | kimi3 | #2312 | frontend | P1 | 完整方案流程Step1 | 38% 🔥 PR#4413 MERGEABLE |
 | kimi4 | #2051 | backend | P1 | D3 L4安装图自动化 | 45% 🔥 |
 | kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 44% 🔥 |
 
-> kimi1已接#1490（P2）；kimi3 PR#4413 MERGEABLE；#4410 CONFLICTING；#4412 MERGEABLE
+> kimi2/#2316 PR#4414已创建MERGEABLE；kimi3 PR#4413 MERGEABLE；#4410 CONFLICTING；#4412 MERGEABLE
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -27,6 +27,21 @@
 
 ---
 
+**[2026-05-01] 派发前端Issue时需同步确认后端API状态 — kimi2/#2316**
+- 现象：前端Issue #2316 依赖后端API #1863，但 #1863 已CLOSED实际无Controller/无表，前端开工后被阻塞
+- 解决：经研发经理确认先mock实现
+- 建议：排程时派发前端Issue前，检查依赖的后端API Issue是否真实完成（有Controller+表+数据），避免前端开工后阻塞；可在PLAN.md标注依赖时增加"API就绪"检查项
+- 来源：kimi2/#2316 本轮回顾
+
+---
+
+**[2026-05-01] E2E auth.setup.ts 与 smoke test 登录方式不统一 — kimi2/#2316**
+- 现象：E2E登录selector差异(input[id] vs input[name])，导致登录代码重复且不兼容
+- 建议：frontend-coding skill 增加 E2E 登录统一规范，auth.setup.ts 与 smoke test 使用同一套登录逻辑和selector
+- 来源：kimi2/#2316 本轮回顾
+
+---
+
 **[2026-05-01] spring-boot:run 加载 JAR 而非 target/classes，新 Controller 不生效 — kimi3/#2162**
 - 现象：mvn spring-boot:run 启动后新增 Controller 未生效，需手动执行 `mvn install -pl ruoyi-modules/wande-ai` 更新 M2 中的 JAR
 - 原因：spring-boot:run 默认优先加载本地 M2 仓库的 JAR，而非 target/classes

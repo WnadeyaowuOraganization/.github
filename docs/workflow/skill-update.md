@@ -11,6 +11,14 @@
 
 ---
 
+**[2026-05-01] BaseEntity 不含 delFlag 字段需显式声明 — kimi4/#2201**
+- 现象：编译报错缺少 delFlag，因为 BaseEntity 不自动包含该字段
+- 解决：在实体类中显式声明 delFlag 字段
+- 建议：backend-coding skill 提醒 BaseEntity 不含 delFlag，实体需显式声明
+- 来源：kimi4/#2201 本轮回顾
+
+---
+
 **[2026-05-01] PR rebase 失败源于远程有 commit 本地无 — kimi2/#2199**
 - 现象：PR#4411 远程已有 commit，但 CC 本地分支无该 commit，rebase 失败
 - 解决：改用 merge 策略而非 rebase 解决冲突

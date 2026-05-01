@@ -561,7 +561,7 @@
 | kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 54% 编码中 |
 | kimi2 | #2126 | fullstack | P1 | 经销商发现种子数据+方法论后端 | 50% 编码中 |
 | kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 51% 编码中 |
-| kimi4 | — | — | — | 空闲（#4124 PR#4376 merged，Issue已关闭） | ✅ |
+| kimi4 | #2037 | backend | P1 | D3-翻新模式（改造/翻新模式） | 新指派 |
 | kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 60% 编码中 |
 
 ### PR进度总览（04-26 22:05）

@@ -11,6 +11,14 @@
 
 ---
 
+**[2026-05-01] spring-boot:run 加载 JAR 而非 target/classes，新 Controller 不生效 — kimi3/#2162**
+- 现象：mvn spring-boot:run 启动后新增 Controller 未生效，需手动执行 `mvn install -pl ruoyi-modules/wande-ai` 更新 M2 中的 JAR
+- 原因：spring-boot:run 默认优先加载本地 M2 仓库的 JAR，而非 target/classes
+- 建议：backend-coding skill 增加启动后检查步骤，或改用 `mvn compile spring-boot:run`/`mvn install` 后再 run；参考：`run-cc.sh` 启动顺序需确保 mvn install 先于 spring-boot:run
+- 来源：kimi3/#2162 本轮回顾
+
+---
+
 **[2026-04-30] 大规模包迁移前建议先做调研 — kimi5/#2585**
 - 现象：668文件包迁移（wande-ai-api→wande-ai）上下文占用高，重复类字段差异比对耗时
 - 建议：大规模包迁移前先用 Agent 调研团队并行执行，减少单 CC 上下文占用

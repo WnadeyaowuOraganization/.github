@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第329轮，🚨kimi3超时31min需重启；kimi2 28min无输出；5PR MERGEABLE）
+> 更新时间：2026-05-02（排程经理第330轮，✅kimi2/kimi3均已重启；kimi2新PR#4417 MERGEABLE；6PR MERGEABLE）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -563,13 +563,13 @@
 ### 当前运行（05-02 02:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 42% 🔥 |
-| kimi2 | #1682 | backend | P2 | 新增图像生成API服务 | 62% ⏸️28min无输出 |
-| kimi3 | #2312 | frontend | P1 | 完整方案流程Step1 | 42% 🚨超时31min需重启 |
-| kimi4 | #2051 | backend | P1 | D3 L4安装图自动化 | 39% ⏸️8min无输出 |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 50% 🔥 |
+| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 41% 🔥 |
+| kimi2 | #1682 | backend | P2 | 新增图像生成API服务 | 17% 🔥（已重启，PR#4417 MERGEABLE） |
+| kimi3 | #2312 | frontend | P1 | 完整方案流程Step1 | 31% 🔥（已重启） |
+| kimi4 | #2051 | backend | P1 | D3 L4安装图自动化 | 39% ⏸️18min无输出 |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 46% 🔥 |
 
-> 🚨 kimi3/#2312 超时31min需重启；kimi1/kimi2/kimi4无输出（PR已创建等CI）；kimi5 50%；全部5PR MERGEABLE
+> ✅ kimi2/kimi3 均已重启！kimi2新PR#4417 MERGEABLE；全部6PR MERGEABLE
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

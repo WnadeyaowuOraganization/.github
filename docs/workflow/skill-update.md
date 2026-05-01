@@ -19,6 +19,14 @@
 
 ---
 
+**[2026-05-02] backend-coding skill 建议增强 @AutoMapper 检查 — kimi5/#2044**
+- 现象：kimi5 建议 backend-coding skill 在生成 Mapper 时加强对 @AutoMapper 注解的检查
+- 建议：skill 增加 AutoMapper 相关规范检查
+- 来源：kimi5/#2044 CC-REVIEW 进度播报
+- 状态：首次提及，观察中
+
+---
+
 **[2026-05-01] PR rebase 失败源于远程有 commit 本地无 — kimi2/#2199**
 - 现象：PR#4411 远程已有 commit，但 CC 本地分支无该 commit，rebase 失败
 - 解决：改用 merge 策略而非 rebase 解决冲突

@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第331轮，✅kimi3/#2312 PR#4413 MERGED；kimi2 32%快速推进；kimi3空闲；5PR）
+> 更新时间：2026-05-02（排程经理第331轮，✅kimi3/#2312 PR#4413 MERGED；#1760/#1826 blocker已CLOSED转Todo；kimi3空闲；5PR）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 

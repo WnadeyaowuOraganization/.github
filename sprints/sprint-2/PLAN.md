@@ -556,7 +556,7 @@
 | 05-01 | kimi2 | #2199 | backend | P1 | In Progress | LinkedIn API发布集成 — PR #4411 MERGEABLE（超时32min待重启） |
 | 05-01 | kimi3 | ~~#2031~~ | backend | P1 | **Done** | 色卡材料审批流程（#2032已CLOSED） — PR #4406 MERGED，Issue #2031 CLOSED |
 | 05-01 | kimi4 | ~~#2037~~ | backend | P1 | **Done** | D3-翻新模式（改造/翻新模式） — PR #4409 MERGED（13:59:15 UTC） |
-| 05-01 | kimi4 | #2201 | backend | P1 | In Progress | 角色权限系统 — 4级角色(管理员/编辑/审批/只读) — 新指派 |
+| 05-01 | kimi4 | #2201 | backend | P1 | In Progress | 角色权限系统 — 4级角色 — PR #4412 MERGEABLE（CI等待中） |
 | 05-01 | kimi5 | #2045 | backend | P1 | In Progress | AI生成Phase7方案配图自动生成 — ⚠️ PR #4410 CONFLICTING需解决冲突 |
 
 ### 当前运行（05-01 23:34）
@@ -565,7 +565,7 @@
 | kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 38% 🔥 ⏸️23min无输出 |
 | kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 56% 🔥 |
 | kimi3 | ~~#2031~~ | backend | P1 | ~~色卡材料审批流程~~ | ✅ PR#4406 MERGED |
-| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | ✅ 后端完成，准备提PR |
+| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | 🔥 PR#4412 MERGEABLE（CI等待中） |
 | kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 41% 🔥 ⏸️23min无输出 ⚠️ PR#4410 CONFLICTING~90min |
 
 > ✅ kimi3/#2031 PR#4406 MERGED！kimi3空闲；kimi1/kimi5 23min无输出；#4410冲突约90min

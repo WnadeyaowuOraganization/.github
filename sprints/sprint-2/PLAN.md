@@ -533,6 +533,7 @@
 | 05-01 | kimi1 | ~~#1978~~ | backend | P1 | ~~Done~~ | 方案引擎DB设计 — 方案模板引擎3张表 — PR #4395 merged，Issue自动关闭 |
 | 05-01 | kimi1 | ~~#1974~~ | pipeline | P1 | ~~Done~~ | 方案引擎DB设计 — 素材库3张表 — PR #4396 merged，Issue自动关闭 |
 | 05-01 | kimi1 | ~~#1959~~ | backend | P1 | ~~Done~~ | PPT插件：文字美化工具 — 文字特效+数字突出+标题样式 — PR #4400 merged，Issue已关闭 |
+| 05-01 | kimi2 | ~~#1960~~ | backend | P1 | ~~Done~~ | PPT插件AI排版工具箱 — 7个功能点 — PR #4401 merged |
 | 05-01 | kimi3 | ~~#2738~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[3/8] 邮件订阅与定时报告 — PR #4390 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#1969~~ | backend | P1 | ~~Done~~ | 方案引擎COM Add-in核心 — PR #4397 merged，Issue自动关闭 |
 | 05-01 | kimi2 | ~~#1961~~ | backend | P1 | ~~Done~~ | 方案引擎AI排版引擎后端API — PR #4398 merged，Issue自动关闭 |
@@ -544,7 +545,7 @@
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 
-### 当前运行（05-01 09:35）
+### 当前运行（05-01 10:05）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1973 | pipeline | P1 | 素材自动分类+AI标签引擎 — S3设计文件批量处理 | 编码中 |

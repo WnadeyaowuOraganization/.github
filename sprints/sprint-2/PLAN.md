@@ -43,7 +43,7 @@
 | 16 | ~~#1960~~ | P1 | backend | ~~方案引擎PPT插件：AI排版工具箱（kimi2已完成，PR#4401已提交）~~ | ✅ |
 | 17 | ~~#1973~~ | P1 | pipeline | ~~素材自动分类+AI标签引擎（kimi1已接）~~ | 🔥 |
 | 18 | ~~#2141~~ | P1 | backend | ~~新增素材批量迁移工具（kimi2已接）~~ | 🔥 |
-| 19 | #2162 | P1 | backend | 新增AI文案生成 — 区位分析/设计理念/活动策划（kimi3空闲可接） | 🔥 |
+| 19 | #2162 | P1 | backend | 新增AI文案生成 — 区位分析/设计理念/活动策划（kimi3已接） | 🔥 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -551,7 +551,7 @@
 |------|-------|------|--------|------|--------|
 | kimi1 | #1973 | pipeline | P1 | 素材自动分类+AI标签引擎 — S3设计文件批量处理 | 编码中 |
 | kimi2 | #2141 | backend | P1 | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 | 编码中 |
-| kimi3 | — | — | — | 空闲（#1970 PR#4402已合并） | — |
+| kimi3 | #2162 | backend | P1 | AI文案生成 — 区位分析/设计理念/活动策划 | 编码中 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |
 | kimi5 | #3570 | frontend | P1 | 关系网络Tab组件测试与截图验证（#3545-followup） | PR #4388 |
 

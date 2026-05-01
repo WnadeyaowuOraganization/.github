@@ -38,10 +38,10 @@
 | 11 | ~~#1969~~ | P1 | backend | ~~方案引擎COM Add-in核心 — Ribbon界面+JS桥接+后端通信协议（kimi3已完成，PR#4397 merged）~~ | ✅ |
 | 12 | ~~#1965~~ | P2 | backend | ~~方案引擎PowerPoint加载项集成测试（kimi3已完成，PR#4399 merged）~~ | ✅ |
 | 13 | ~~#1966~~ | P1 | backend | ~~PPT插件样式一致性检查+一键修复（kimi2已完成，PR#4375 merged）~~ | ✅ |
-| 14 | #1970 | P0 | backend | 方案引擎PPT插件后端API — /api/ppt-plugin/* 专用接口（kimi3已接） | 🔥 |
+| 14 | ~~#1970~~ | P0 | backend | ~~方案引擎PPT插件后端API（kimi3已完成，PR已提交）~~ | ✅ |
 | 15 | ~~#1959~~ | P1 | backend | ~~方案引擎PPT插件：文字美化工具（kimi1已完成，PR#4400 merged）~~ | ✅ |
-| 16 | ~~#1960~~ | P1 | backend | ~~方案引擎PPT插件：AI排版工具箱（kimi2已接，PR#4401）~~ | 🔥 |
-| 17 | #1973 | P1 | pipeline | 素材自动分类+AI标签引擎 — S3设计文件批量处理（kimi1已接） | 🔥 |
+| 16 | ~~#1960~~ | P1 | backend | ~~方案引擎PPT插件：AI排版工具箱（kimi2已完成，PR#4401已提交）~~ | ✅ |
+| 17 | #1973 | P1 | pipeline | 素材自动分类+AI标签引擎 — S3设计文件批量处理（kimi1刚释放，待续） | ⏸ |
 | 18 | #2141 | P1 | ai-assistant | 新增素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签（已流转Todo，待指派） | ✅ |
 | 19 | #2162 | P1 | backend | 新增AI文案生成 — 区位分析/设计理念/活动策划（已流转Todo，待指派） | ✅ |
 
@@ -547,7 +547,7 @@
 ### 当前运行（05-01 09:35）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1973 | pipeline | P1 | 素材自动分类+AI标签引擎 — S3设计文件批量处理 | 编码中 |
+| kimi1 | — | — | — | 空闲（#1973 PR未提交，Issue仍在进行中） | — |
 | kimi2 | #1960 | backend | P1 | PPT插件：AI排版工具箱 — 矩阵布局+智能对齐+版式优化 | PR #4401 |
 | kimi3 | #1970 | backend | P0 | PPT插件后端API — /api/ppt-plugin/* 专用接口 | PR已提交 |
 | kimi4 | #4124 | fullstack | P1 | 国贸专属页 — 壳架构+5Tab容器+菜单入口 | PR #4376 |

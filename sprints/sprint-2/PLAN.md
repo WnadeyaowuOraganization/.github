@@ -553,16 +553,16 @@
 | 05-01 | kimi4 | ~~#4124~~ | fullstack | P1 | **Done** | 国贸专属页 — 壳架构+5Tab容器+菜单入口 — PR #4376 merged（10:02 UTC），Issue #4124 CLOSED |
 | 05-01 | kimi1 | #2163 | backend | P1 | In Progress | 素材库API+RBAC权限管理 — 新指派 |
 | 05-01 | kimi2 | #2126 | fullstack | P1 | In Progress | 经销商发现种子数据+方法论后端 — 新指派 |
-| 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — 新指派 |
+| 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — PR #4406 BLOCKED（已重启） |
 
-### 当前运行（05-01 18:45）
+### 当前运行（05-01 18:55）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | PR #4408 OPEN 🔥 |
-| kimi2 | #2126 | fullstack | P1 | 经销商发现种子数据+方法论后端 | 58% 编码中 |
-| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 50% ⚠️可能卡住 |
-| kimi4 | #2037 | backend | P1 | D3-翻新模式（改造/翻新模式） | 66% 编码中 |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 70% 编码中 |
+| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | PR #4408 BLOCKED |
+| kimi2 | #2126 | fullstack | P1 | 经销商发现种子数据+方法论后端 | 59% 编码中 |
+| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | PR #4406 BLOCKED（重启后提PR） |
+| kimi4 | #2037 | backend | P1 | D3-翻新模式（改造/翻新模式） | 70% 编码中 |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 71% 编码中 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

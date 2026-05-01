@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第302轮，kimi1超时需重启；kimi3升至65%；kimi4升至51%；#4410冲突）
+> 更新时间：2026-05-01（排程经理第303轮，kimi1已重启；kimi3升至69%；#4410冲突约30min）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -552,23 +552,23 @@
 | 05-01 | kimi5 | ~~#3570~~ | frontend | P1 | **Done** | 关系网络Tab组件测试与截图验证 — PR #4388 手动merged（E2E队列阻塞100+min），Issue手动关闭 |
 | 05-01 | kimi4 | ~~#4124~~ | fullstack | P1 | **Done** | 国贸专属页 — 壳架构+5Tab容器+菜单入口 — PR #4376 merged（10:02 UTC），Issue #4124 CLOSED |
 | 05-01 | kimi2 | ~~#2126~~ | fullstack | P1 | **Done** | 经销商发现种子数据+方法论后端 — PR #4407 merged（12:41 UTC），Issue #2126 CLOSED |
-| 05-01 | kimi1 | #2163 | backend | P1 | In Progress | 素材库API+RBAC权限管理 — PR #4408 MERGEABLE（Review已通过） |
+| 05-01 | kimi1 | #2163 | backend | P1 | In Progress | 素材库API+RBAC权限管理 — PR #4408 MERGEABLE（已重启，21%） |
 | 05-01 | kimi2 | #2199 | backend | P1 | In Progress | LinkedIn API发布集成 — PR #4411 MERGEABLE（超时32min待重启） |
 | 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — PR #4406 MERGEABLE（已重启，28%） |
 | 05-01 | kimi4 | ~~#2037~~ | backend | P1 | **Done** | D3-翻新模式（改造/翻新模式） — PR #4409 MERGED（13:59:15 UTC） |
 | 05-01 | kimi4 | #2201 | backend | P1 | In Progress | 角色权限系统 — 4级角色(管理员/编辑/审批/只读) — 新指派 |
 | 05-01 | kimi5 | #2045 | backend | P1 | In Progress | AI生成Phase7方案配图自动生成 — ⚠️ PR #4410 CONFLICTING需解决冲突 |
 
-### 当前运行（05-01 22:24）
+### 当前运行（05-01 22:34）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 66% 🚨超时32min |
-| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 36% 🔥 |
-| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 65% 🔥（接近提PR） |
-| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | 51% 🔥 |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 69% 🔥 ⚠️ PR#4410 CONFLICTING |
+| kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 21% 🔥（已重启） |
+| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 37% 🔥 |
+| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 69% 🔥（接近提PR） |
+| kimi4 | #2201 | backend | P1 | 角色权限系统 — 4级角色 | 56% 🔥 |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 66% 🔥 ⚠️ PR#4410 CONFLICTING |
 
-> kimi1超时需重启；kimi3从50%升至65%接近PR；kimi4从37%升至51%；#4410冲突仍存
+> kimi1已重启；kimi3升至69%接近提PR；kimi4升至56%；#4410冲突仍存约30min
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

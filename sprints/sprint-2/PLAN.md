@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-01（排程经理第298轮，5个PR全部MERGEABLE；kimi3/#2031超时32min；kimi2/#2199 23min无输出）
+> 更新时间：2026-05-01（排程经理第299轮，kimi3已重启降至28%；kimi2超时32min需重启；5 PR仍全部MERGEABLE）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -553,21 +553,21 @@
 | 05-01 | kimi4 | ~~#4124~~ | fullstack | P1 | **Done** | 国贸专属页 — 壳架构+5Tab容器+菜单入口 — PR #4376 merged（10:02 UTC），Issue #4124 CLOSED |
 | 05-01 | kimi2 | ~~#2126~~ | fullstack | P1 | **Done** | 经销商发现种子数据+方法论后端 — PR #4407 merged（12:41 UTC），Issue #2126 CLOSED |
 | 05-01 | kimi1 | #2163 | backend | P1 | In Progress | 素材库API+RBAC权限管理 — PR #4408 MERGEABLE（Review已通过） |
-| 05-01 | kimi2 | #2199 | backend | P1 | In Progress | LinkedIn API发布集成 — PR #4411 MERGEABLE |
-| 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — PR #4406 MERGEABLE（Review已通过） |
+| 05-01 | kimi2 | #2199 | backend | P1 | In Progress | LinkedIn API发布集成 — PR #4411 MERGEABLE（超时32min待重启） |
+| 05-01 | kimi3 | #2031 | backend | P1 | In Progress | 色卡材料审批流程（#2032已CLOSED） — PR #4406 MERGEABLE（已重启，28%） |
 | 05-01 | kimi4 | #2037 | backend | P1 | In Progress | D3-翻新模式（改造/翻新模式） — PR #4409 MERGEABLE |
 | 05-01 | kimi5 | #2045 | backend | P1 | In Progress | AI生成Phase7方案配图自动生成 — PR #4410 MERGEABLE |
 
-### 当前运行（05-01 21:46）
+### 当前运行（05-01 21:54）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #2163 | backend | P1 | 素材库API+RBAC权限管理 | 66% 🔥 |
-| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 50% ⏸️ 23min无输出 |
-| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 71% 🚨超时32min |
+| kimi2 | #2199 | backend | P1 | LinkedIn API发布集成 | 50% 🚨超时32min |
+| kimi3 | #2031 | backend | P1 | 色卡材料审批流程（#2032已CLOSED） | 28% 🔥（重启后） |
 | kimi4 | #2037 | backend | P1 | D3-翻新模式（改造/翻新模式） | 71% 🔥 PR#4409 MERGEABLE |
-| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 59% 🔥 PR#4410 MERGEABLE |
+| kimi5 | #2045 | backend | P1 | AI生成Phase7: 方案配图自动生成 | 67% 🔥 PR#4410 MERGEABLE |
 
-> ⚠️ 重要：5个PR（#4406/#4408/#4409/#4410/#4411）已全部从BLOCKED转为MERGEABLE，建议研发经理优先推动人工Review
+> ⚠️ 5个PR（#4406/#4408/#4409/#4410/#4411）全部MERGEABLE，#4406/#4408 Review APPROVED可合并；kimi2超时需重启
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

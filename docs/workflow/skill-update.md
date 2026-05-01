@@ -27,6 +27,14 @@
 
 ---
 
+**[2026-05-02] frontend-coding skill 应前置路由配置检查步骤 — kimi3/#1760**
+- 现象：kimi3 开发时用 `router.push(/execution/${id})` 不匹配实际路由 `/execution/detail/${id}`，绕了一圈才发现（kimi5/#3212 曾首次报告同类问题）
+- 建议：frontend-coding skill 在编码前增加路由配置检查：grep 实际路由 path，确认 router.push 路径正确
+- 来源：kimi3/#1760 CC-REVIEW 进度播报
+- 状态：🟡 第2次同类问题，观察中；≥4次更新 frontend-coding SKILL.md
+
+---
+
 **[2026-05-01] PR rebase 失败源于远程有 commit 本地无 — kimi2/#2199**
 - 现象：PR#4411 远程已有 commit，但 CC 本地分支无该 commit，rebase 失败
 - 解决：改用 merge 策略而非 rebase 解决冲突

@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第384轮，5 CC满载；kimi1 52%(24min)；kimi2 42%(94min,PR#4423,8min无输出)；kimi3 68%(252min,PR#4418)；kimi4 42%(94min,PR#4422,22min无输出)；kimi5 51%(29min,疑似/compact)；PR#4415已merged；PR#4421已merged）
+> 更新时间：2026-05-02（排程经理第385轮，5 CC满载；kimi1 47%(34min,疑似/compact)；kimi2 42%(104min,PR#4423,18min无输出)；kimi3 输出为空(262min)；kimi4 42%🚨(104min,PR#4422,超时32min)；kimi5 46%(39min,疑似/compact)；PR#4415已merged；PR#4421已merged；kimi4异常已通知研发经理）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -576,16 +576,16 @@
 
 
 
-### 当前运行（05-02 11:54）
+### 当前运行（05-02 12:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1964 | backend | P2 | 安装程序 — Windows Installer+静默部署 | 52% 🔥（24min） |
-| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 42% ⏸️（94min, PR#4423 REVIEW_REQUIRED, 8min无输出） |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 68% 🔥（252min, PR#4418 REVIEW_REQUIRED） |
-| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 42% ⏸️（94min, PR#4422 REVIEW_REQUIRED, 22min无输出） |
-| kimi5 | #1963 | backend | P2 | Rhino插件对接API — GH参数化模型→PPT效果图自动注入 | 51% 🔥（29min, 疑似/compact） |
+| kimi1 | #1964 | backend | P2 | 安装程序 — Windows Installer+静默部署 | 47% 🔥（34min, 疑似/compact） |
+| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 42% ⏸️（104min, PR#4423 REVIEW_REQUIRED, 18min无输出） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 输出为空（262min, PR#4418 REVIEW_REQUIRED） |
+| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 42% 🚨（104min, PR#4422 REVIEW_REQUIRED, **超时32min**） |
+| kimi5 | #1963 | backend | P2 | Rhino插件对接API — GH参数化模型→PPT效果图自动注入 | 46% 🔥（39min, 疑似/compact） |
 
-> 5 CC满载；kimi1 52%（+2%）；kimi2 42%（持平, 8min无输出）；kimi3 68%（-2%, /compact持续）；kimi4 42%（持平, 22min无输出）；kimi5 51%（-8%, 疑似/compact）；PR#4415已merged；PR#4421已merged
+> 5 CC满载；kimi1 47%（-5%, 疑似compact）；kimi2 42%（持平, 18min无输出）；kimi3 输出为空（262min, 需关注）；kimi4 42%（**超时32min**, 🚨已通知研发经理）；kimi5 46%（-5%, 疑似compact）；PR#4415已merged；PR#4421已merged
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

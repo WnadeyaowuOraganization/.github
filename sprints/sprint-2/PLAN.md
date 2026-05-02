@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第391轮，2 CC活跃（kimi1/kimi3/kimi5已处理）；kimi2 42%(164min,PR#4423)；kimi4 40%(164min,PR#4422,3shells活跃)；kimi1/kimi5已由研发经理处理（kill会话+释放锁）；空出2个位置可补派；PR#4415已merged；PR#4421已merged）
+> 更新时间：2026-05-02（排程经理第392轮，1 CC活跃（kimi1/kimi3/kimi4/kimi5已处理）；kimi2 44%(174min,PR#4423)；kimi4 #1495 PR#4422已merged，Issue标Done；空出3个位置可补派；PR#4415已merged；PR#4421已merged；PR#4422已merged）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -576,16 +576,16 @@
 
 
 
-### 当前运行（05-02 13:04）
+### 当前运行（05-02 13:14）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1964~~ | ~~backend~~ | ~~P2~~ | ~~安装程序 — Windows Installer+静默部署~~ | ~~已处理（研发经理kill会话+释放锁）~~ |
-| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 42% 🔥（164min, PR#4423 REVIEW_REQUIRED） |
+| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 44% 🔥（174min, PR#4423 REVIEW_REQUIRED） |
 | ~~kimi3~~ | ~~#1760~~ | ~~frontend~~ | ~~P2~~ | ~~经销模式前端适配 — 项目详情+经销商结算对账~~ | ~~已处理（研发经理kill会话+释放锁）~~ |
-| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 40% 🔥（164min, PR#4422 REVIEW_REQUIRED, 3shells活跃） |
+| ~~kimi4~~ | ~~#1495~~ | ~~backend~~ | ~~—~~ | ~~新会话（#1659→#1495切换）~~ | ~~✅ PR#4422已merged，Issue标Done~~ |
 | ~~kimi5~~ | ~~#1963~~ | ~~backend~~ | ~~P2~~ | ~~Rhino插件对接API — GH参数化模型→PPT效果图自动注入~~ | ~~已处理（研发经理kill会话+释放锁）~~ |
 
-> 2 CC活跃（kimi1/kimi3/kimi5已处理）；kimi1 已处理；kimi2 42%（持平, 活跃）；kimi3 已处理；kimi4 40%（持平, 3shells活跃）；kimi5 已处理；空出2个位置可补派；PR#4415已merged；PR#4421已merged
+> 1 CC活跃（kimi1/kimi3/kimi4/kimi5已处理）；kimi1 已处理；kimi2 44%（+2%）；kimi3 已处理；kimi4 **PR#4422已merged，Issue标Done**；kimi5 已处理；空出3个位置可补派；PR#4415已merged；PR#4421已merged；PR#4422已merged
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -632,6 +632,6 @@
 | ~~kimi4~~ | ~~#2051~~ | #4416 | ✅ merged | 00:49:00 UTC，checkbox质量门拦截已修复 |
 | ~~kimi5~~ | ~~#1948~~ | #4421 | ✅ merged | 03:21:53 UTC |
 | ~~kimi1~~ | ~~#1490~~ | #4415 | ✅ merged | 03:29:17 UTC |
-| — | #1495 | #4422 | 🔍 REVIEW_REQUIRED | kimi4 新建PR，CI跑中 |
+| — | #1495 | #4422 | ✅ merged | 05:08:49 UTC |
 | — | #1485 | #4423 | 🔍 REVIEW_REQUIRED | kimi2 新建PR，CI跑中 |
 | — | #1964 | #4424 | 🔍 REVIEW_REQUIRED | kimi1 新建PR，CI跑中 |

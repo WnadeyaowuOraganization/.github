@@ -1488,3 +1488,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 
 **kimi3/kimi4 锁清理**：
 - PR #3990 (kimi3/#3394) 和 PR #3991 (kimi4/#3383) 均已 merged，Project 状态已更新为 Done，cc_scheduler/lock 文件已清除
+
+---
+
+**[2026-05-02] git clean -fd 误删未跟踪文件（含新代码）— kimi2/#1485**
+- 现象：CC 执行 git clean -fd 清理时，误删了全部未跟踪文件（包括新编写的代码），被迫全部重建
+- 影响：开发时间浪费，代码重建风险（可能遗漏或引入差异）
+- 建议：git clean 前务必检查 -e 排除规则是否覆盖所有需要保留的未跟踪目录；建议将 issues/ 目录加入默认排除列表
+- 来源：kimi2/#1485 本轮回顾
+- 状态：首次提及，观察中

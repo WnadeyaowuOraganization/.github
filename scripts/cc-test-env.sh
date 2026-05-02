@@ -194,7 +194,8 @@ cmd_start() {
 
 # ============================================================
 #  wait: 等待后端+前端就绪，并预生成 kimi auth state
-#   1. 轮询后端 `/`（默认300s，WAIT_TIMEOUT可调）— 使用根路径避免 Basic Auth 401 问题
+#   1. 轮询后端 `/`（默认300s，WAIT_TIMEOUT可调）— 替代 /actuator/health（需要 Basic Auth）
+#      SecurityConfig 已白名单化 /actuator/health，待 backends 重建后换回
 #   2. 轮询前端 HTTP /（默认120s，FE_WAIT_TIMEOUT可调）
 #   3. 若 auth state 超过6h，运行 auth.setup.ts 预热 storageState
 #  完成后 CC 可直接 npx playwright test 跑图形化测试
@@ -227,8 +228,9 @@ cmd_wait() {
       rm -f "$PID_FILE"
       return 1
     fi
-    # 健康检查：使用根路径 `/`（返回200）而非 `/actuator/health`（需要 Basic Auth 返回401）
+    # 健康检查：使用根路径 `/`（返回200，无需 Basic Auth）
     # 000=连接拒绝（后端未就绪），其他=后端已启动
+    # 注：SecurityConfig 已将 /actuator/health 白名单化，待 backends 重建后此 workaround 可移除
     local http_code
     http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/" --max-time 2 2>/dev/null)
     if [ "$http_code" != "000" ] && [ -n "$http_code" ]; then

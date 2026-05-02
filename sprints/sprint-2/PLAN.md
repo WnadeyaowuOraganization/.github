@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第380轮，5 CC满载运转；kimi1 52%(643min,8min无输出)；kimi2 37%(54min)；kimi3 76%(211min,PR#4418,/compact持续)；kimi4 47%(53min)；kimi5 58%(261min)；PR#4415仍APPROVED待合并）
+> 更新时间：2026-05-02（排程经理第381轮，4 CC运转（kimi5已释放）；kimi1 52%(653min,7min无输出)；kimi2 41%(64min)；kimi3 72%(222min,PR#4418)；kimi4 45%(63min,PR#4422)；PR#4415仍APPROVED待合并；PR#4421已merged）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -576,16 +576,16 @@
 
 
 
-### 当前运行（05-02 11:14）
+### 当前运行（05-02 11:24）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 52% ⏸️（643min, 8min无输出） |
-| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 37% 🔥（54min） |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 76% 🔥（211min, PR#4418 REVIEW_REQUIRED, /compact持续） |
-| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 47% 🔥（53min） |
-| kimi5 | #1948 | backend | — | 新CC | 58% 🔥（261min） |
+| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 52% ⏸️（653min, 7min无输出） |
+| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 41% 🔥（64min） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 72% 🔥（222min, PR#4418 REVIEW_REQUIRED） |
+| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 45% 🔥（63min, PR#4422 REVIEW_REQUIRED） |
+| ~~kimi5~~ | ~~#1948~~ | ~~backend~~ | ~~—~~ | ~~新CC~~ | ~~PR#4421 merged 03:21:53 UTC~~ ✅ |
 
-> 5 CC满载运转；kimi1 52%（+1%, 8min无输出）；kimi2 37%（-2%）；kimi3 76%（-2%, /compact效果持续）；kimi4 47%（-1%）；kimi5 58%（持平）；PR#4415仍APPROVED待合并
+> 4 CC运转（kimi5已释放）；kimi1 52%（7min无输出）；kimi2 41%（+4%）；kimi3 72%（-4%, /compact持续）；kimi4 45%（-2%）；kimi5 PR#4421 merged；PR#4415仍APPROVED待合并；PR#4422 REVIEW_REQUIRED
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -632,3 +632,4 @@
 | ~~kimi4~~ | ~~#2051~~ | #4416 | ✅ merged | 00:49:00 UTC，checkbox质量门拦截已修复 |
 | ~~kimi5~~ | ~~#1948~~ | #4421 | ✅ merged | 03:21:53 UTC |
 | — | #1490 | #4415 | ✅ APPROVED | 待合并 |
+| — | #1495 | #4422 | 🔍 REVIEW_REQUIRED | kimi4 新建PR，CI跑中 |

@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第366轮，kimi4/#2051 PR#4416已MERGED；kimi4新会话#1730已开工；kimi3 60%；kimi1 44%；PR#4415仍APPROVED待合并）
+> 更新时间：2026-05-02（排程经理第367轮，kimi3 61%；kimi4 22%新会话；kimi2 16min暂停；PR#4415仍APPROVED待合并）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -567,16 +567,16 @@
 | 05-02 | kimi2 | ~~#1826~~ | brand | P2 | **Done** | 新增导航入口+内容管理列表页 — PR #4419 MERGED（23:23 UTC），Issue #1826 转 Done |
 | 05-02 | kimi4 | ~~#2051~~ | frontend | P1 | **Done** | D3 L4安装图自动化 — PR #4416 MERGED（00:49 UTC），quality-gate checkbox拦截已修复，Issue #2051 转 Done |
 
-### 当前运行（05-02 08:50）
+### 当前运行（05-02 08:54）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 44% 🔥 |
-| kimi2 | #1784 | backend | — | 新会话 | 17% 🔥 |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 60% 🔥（PR#4418 REVIEW_REQUIRED） |
-| kimi4 | #1730 | frontend | — | 新会话（kimi4/#2051已释放） | 0% 🔥 |
-| kimi5 | #1948 | backend | — | 新CC | 37% 🔥 |
+| kimi2 | #1784 | backend | — | 新会话 | 17% ⏸️（16min无输出） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 61% 🔥（PR#4418 REVIEW_REQUIRED） |
+| kimi4 | #1730 | frontend | — | 新会话（kimi4/#2051已释放） | 22% 🔥 |
+| kimi5 | #1948 | backend | — | 新CC | 39% ⏸️（6min无输出） |
 
-> kimi3 60%推进中；kimi4/#2051已MERGED；kimi4新会话#1730开工；kimi1 44%；PR#4415仍APPROVED待合并
+> kimi3 61%推进中；kimi4 22%新会话；kimi2 16min暂停观察；kimi5短时暂停；PR#4415仍APPROVED待合并
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

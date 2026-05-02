@@ -27,6 +27,15 @@
 
 ---
 
+**[2026-05-02] PR body checkbox 未勾导致 quality-gate 拦截 merge — kimi4/#2051**
+- 现象：PR #4416 APPROVED，但 body 含 `[ ] CI E2E checks passed` 未勾选框，导致 quality-gate-1 拦截 merge
+- 解决：修正 PR body（改为文字描述）→ merge 成功，耗时 <5min
+- 建议：pr-visual-proof skill 在 CC 提交 PR 前检查 body 是否有未勾 checkbox，避免带入；或 quality-gate 规则对 `[ ]` 未勾项改为 warning 而非 blocking
+- 来源：kimi4/#2051 CC-REVIEW 进度播报
+- 状态：🟢 第1次
+
+---
+
 **[2026-05-02] frontend-coding skill 应前置路由配置检查步骤 — kimi3/#1760**
 - 现象：kimi3 开发时用 `router.push(/execution/${id})` 不匹配实际路由 `/execution/detail/${id}`，绕了一圈才发现（kimi5/#3212 曾首次报告同类问题）
 - 建议：frontend-coding skill 在编码前增加路由配置检查：grep 实际路由 path，确认 router.push 路径正确

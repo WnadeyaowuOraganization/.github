@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第388轮，4 CC活跃（kimi3已处理）；kimi1 44%(64min,PR#4424,23min无输出)；kimi2 42%(134min,PR#4423,8min无输出)；kimi3 已处理；kimi4 40%(134min,PR#4422,compact后3shells活跃)；kimi5 45%(69min,22min无输出)；PR#4415已merged；PR#4421已merged）
+> 更新时间：2026-05-02（排程经理第389轮，4 CC活跃（kimi3已处理）；kimi1 44%🚨(74min,PR#4424,超时33min)；kimi2 42%(144min,PR#4423,18min无输出)；kimi3 已处理；kimi4 40%(144min,PR#4422,3shells活跃)；kimi5 45%🚨(79min,超时32min)；PR#4415已merged；PR#4421已merged；kimi1/kimi5异常已通知研发经理）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -576,16 +576,16 @@
 
 
 
-### 当前运行（05-02 12:34）
+### 当前运行（05-02 12:44）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1964 | backend | P2 | 安装程序 — Windows Installer+静默部署 | 44% ⏸️（64min, PR#4424 REVIEW_REQUIRED, 23min无输出） |
-| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 42% ⏸️（134min, PR#4423 REVIEW_REQUIRED, 8min无输出） |
+| kimi1 | #1964 | backend | P2 | 安装程序 — Windows Installer+静默部署 | 44% 🚨（74min, PR#4424 REVIEW_REQUIRED, **超时33min**） |
+| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 42% ⏸️（144min, PR#4423 REVIEW_REQUIRED, 18min无输出） |
 | ~~kimi3~~ | ~~#1760~~ | ~~frontend~~ | ~~P2~~ | ~~经销模式前端适配 — 项目详情+经销商结算对账~~ | ~~已处理（研发经理kill会话+释放锁）~~ |
-| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 40% 🔥（134min, PR#4422 REVIEW_REQUIRED, compact后3shells活跃） |
-| kimi5 | #1963 | backend | P2 | Rhino插件对接API — GH参数化模型→PPT效果图自动注入 | 45% ⏸️（69min, 22min无输出） |
+| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 40% 🔥（144min, PR#4422 REVIEW_REQUIRED, 3shells活跃） |
+| kimi5 | #1963 | backend | P2 | Rhino插件对接API — GH参数化模型→PPT效果图自动注入 | 45% 🚨（79min, PR#4424 REVIEW_REQUIRED, **超时32min**） |
 
-> 4 CC活跃（kimi3已处理）；kimi1 44%（持平, 23min无输出）；kimi2 42%（+1%, 8min无输出）；kimi3 已处理；kimi4 40%（-2%, compact后3shells活跃, 恢复良好）；kimi5 45%（持平, 22min无输出）；PR#4415已merged；PR#4421已merged
+> 4 CC活跃（kimi3已处理）；kimi1 44%（**超时33min**, 🚨已通知研发经理）；kimi2 42%（持平, 18min无输出）；kimi3 已处理；kimi4 40%（持平, 3shells活跃）；kimi5 45%（**超时32min**, 🚨已通知研发经理）；PR#4415已merged；PR#4421已merged
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

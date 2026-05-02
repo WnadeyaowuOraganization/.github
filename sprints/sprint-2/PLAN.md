@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第378轮，5 CC满载运转；kimi1 51%(623min)；kimi2 40%(34min,疑似/compact)；kimi3 80%⚠️(191min,PR#4418)；kimi4 57%(33min)；kimi5 57%(241min)；PR#4415仍APPROVED待合并）
+> 更新时间：2026-05-02（排程经理第379轮，5 CC满载运转；kimi1 51%(633min,9min无输出)；kimi2 39%(44min)；kimi3 78%(201min,PR#4418,/compact生效)；kimi4 48%(43min)；kimi5 58%(251min)；PR#4415仍APPROVED待合并）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -576,16 +576,16 @@
 
 
 
-### 当前运行（05-02 10:54）
+### 当前运行（05-02 11:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 51% 🔥（623min） |
-| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 40% 🔥（34min, 疑似/compact压缩） |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 80% ⚠️（191min, PR#4418 REVIEW_REQUIRED） |
-| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 57% 🔥（33min） |
-| kimi5 | #1948 | backend | — | 新CC | 57% 🔥（241min） |
+| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 51% ⏸️（633min, 9min无输出） |
+| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 39% 🔥（44min） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 78% 🔥（201min, PR#4418 REVIEW_REQUIRED, /compact生效） |
+| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 48% 🔥（43min） |
+| kimi5 | #1948 | backend | — | 新CC | 58% 🔥（251min） |
 
-> 5 CC满载运转；kimi1 51%；kimi2 40%（-9%，疑似/compact生效）；kimi3 80%⚠️（持平）；kimi4 57%（+8%）；kimi5 57%（持平）；PR#4415仍APPROVED待合并
+> 5 CC满载运转；kimi1 51%（9min无输出）；kimi2 39%（-1%）；kimi3 78%（-2%, /compact生效脱离警戒线）；kimi4 48%（-9%, 疑似compact）；kimi5 58%（+1%）；PR#4415仍APPROVED待合并
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

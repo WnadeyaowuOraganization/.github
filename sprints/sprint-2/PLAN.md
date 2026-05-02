@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第392轮，1 CC活跃（kimi1/kimi3/kimi4/kimi5已处理）；kimi2 44%(174min,PR#4423)；kimi4 #1495 PR#4422已merged，Issue标Done；空出3个位置可补派；PR#4415已merged；PR#4421已merged；PR#4422已merged）
+> 更新时间：2026-05-02（排程经理第393轮，1 CC活跃（kimi1/kimi3/kimi4/kimi5已处理）；kimi2 输出为空(184min,PR#4423)；kimi4 会话仍在但PR已合并锁已释放；空出3个位置可补派；PR#4415已merged；PR#4421已merged；PR#4422已merged）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -585,7 +585,7 @@
 | ~~kimi4~~ | ~~#1495~~ | ~~backend~~ | ~~—~~ | ~~新会话（#1659→#1495切换）~~ | ~~✅ PR#4422已merged，Issue标Done~~ |
 | ~~kimi5~~ | ~~#1963~~ | ~~backend~~ | ~~P2~~ | ~~Rhino插件对接API — GH参数化模型→PPT效果图自动注入~~ | ~~已处理（研发经理kill会话+释放锁）~~ |
 
-> 1 CC活跃（kimi1/kimi3/kimi4/kimi5已处理）；kimi1 已处理；kimi2 44%（+2%）；kimi3 已处理；kimi4 **PR#4422已merged，Issue标Done**；kimi5 已处理；空出3个位置可补派；PR#4415已merged；PR#4421已merged；PR#4422已merged
+> 1 CC活跃（kimi1/kimi3/kimi4/kimi5已处理）；kimi1 已处理；kimi2 输出为空（184min, 需关注）；kimi3 已处理；kimi4 PR#4422已merged，会话仍在（CC不自动退出），锁已释放；kimi5 已处理；空出3个位置可补派；PR#4415已merged；PR#4421已merged；PR#4422已merged
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

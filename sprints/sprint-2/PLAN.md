@@ -560,7 +560,7 @@
 | 05-01 | kimi4 | #2201 | backend | P1 | In Progress | 角色权限系统 — 4级角色 — PR #4412 MERGEABLE（CI等待中） |
 | 05-01 | kimi5 | #2045 | backend | P1 | In Progress | AI生成Phase7方案配图自动生成 — PR #4410 MERGEABLE（冲突已解决） |
 | 05-01 | kimi3 | ~~#2312~~ | frontend | P1 | **Done** | 完整方案流程Step1 — PR #4413 MERGED（19:12 UTC），Issue #2312 CLOSED |
-| 05-02 | kimi3 | #1760 | frontend | P2 | In Progress | 经销模式前端适配 — 项目详情+经销商结算对账（blocker #2119已CLOSED） |
+| 05-02 | kimi3 | ~~#1760~~ | frontend | P2 | **Done** | 经销模式前端适配 — 项目详情+经销商结算对账 — PR #4418 MERGED（11:36 UTC） |
 | 05-02 | kimi2 | ~~#1682~~ | backend | P2 | **Done** | 新增图像生成API服务 — PR #4417 MERGED（19:49 UTC），Issue #1682 转 Done |
 | 05-02 | kimi5 | ~~#2045~~ | backend | P1 | **Done** | AI生成Phase7方案配图自动生成 — PR #4410 MERGED（20:32 UTC），Issue #2045 转 Done |
 | 05-02 | kimi5 | ~~#2044~~ | backend | P2 | **Done** | 竞品情报数据库表创建 — PR #4420 MERGED（22:52 UTC），Issue #2044 转 Done |

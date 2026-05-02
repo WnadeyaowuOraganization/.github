@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
 > 更新时间：2026-04-29（排程经理第123轮巡检，移除#4125 CLOSED、#1978/#1974实际在Plan；#3994/#4004已自动关闭）
-> 活跃CC：5个（kimi1/#1496、kimi2/#1497、kimi3/#1538、kimi4/#1539、kimi5/#1590），Todo队列15项，建议P1优先
+> 活跃CC：4个（kimi2/#1497、kimi3/#1538、kimi4/#1539、kimi5/#1590），Todo队列15项，建议P1优先
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -572,7 +572,7 @@
 | 05-02 | kimi4 | ~~#1679~~ | backend | — | — | #1679切换→#1659（新Issue分配） |
 | 05-02 | kimi2 | ~~#1665~~ | backend | — | — | #1665切换→#1485（新Issue分配） |
 | 05-02 | kimi4 | ~~#1659~~ | backend | — | — | #1659切换→#1495（新Issue分配） |
-| 05-02 | kimi1 | #1496 | backend | P2 | In Progress | NBO行动推荐生成 — Today's Top 3行动（新指派） |
+| 05-02 | kimi1 | ~~#1496~~ | backend | P2 | **Done** | NBO行动推荐生成 — Today's Top 3行动 — PR #4431 已提交 |
 | 05-02 | kimi2 | #1497 | backend | P2 | In Progress | NBO评分引擎 — 项目适配度×意图×赢率综合评分（新指派） |
 | 05-02 | kimi3 | #1538 | budget | P2 | In Progress | D3造价回填接口 — D3设计完成后自动写入设备科目预算（新指派） |
 | 05-02 | kimi4 | #1539 | budget | P2 | In Progress | 历史基准自动积累 — 项目关闭时自动更新成本基准库（新指派） |
@@ -582,16 +582,16 @@
 
 
 
-### 当前运行（05-02 20:04）
+### 当前运行（05-02 20:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1496 | backend | P2 | NBO行动推荐生成 — Today's Top 3行动 | 44% 🔥（进度条恢复，28%→44%） |
-| kimi2 | #1497 | backend | P2 | NBO评分引擎 — 项目适配度×意图×赢率综合评分 | 48% 🔥（启动后853min） |
-| kimi3 | #1538 | budget | P2 | D3造价回填接口 — D3设计完成后自动写入设备科目预算 | 66% 🔥（启动后853min） |
-| kimi4 | #1539 | budget | P2 | 历史基准自动积累 — 项目关闭时自动更新成本基准库 | 57% 🔥（启动后853min，50%→57%） |
-| kimi5 | #1590 | budget | P2 | 项目成本复盘报告自动生成 | 49% 🔥（启动后838min） |
+| ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成 — Today's Top 3行动~~ | ~~✅ PR#4431已提交~~ |
+| kimi2 | #1497 | backend | P2 | NBO评分引擎 — 项目适配度×意图×赢率综合评分 | 48% 🔥 |
+| kimi3 | #1538 | budget | P2 | D3造价回填接口 — D3设计完成后自动写入设备科目预算 | 66% 🔥 |
+| kimi4 | #1539 | budget | P2 | 历史基准自动积累 — 项目关闭时自动更新成本基准库 | 57% 🔥 |
+| kimi5 | #1590 | budget | P2 | 项目成本复盘报告自动生成 | 49% 🔥 |
 
-> **5 CC活跃，池子已满**；kimi1进度条恢复44%（原28%）；kimi4持续大幅进展50%→57%；其他3 CC正常；PR#4415/4421/4422/4423/4424已merged；PR#4427/4425/4426 REVIEW_REQUIRED
+> **4 CC活跃**；kimi1/#1496 已提PR#4431；其他4 CC正常；PR#4415/4421/4422/4423/4424已merged；PR#4427/4425/4426 REVIEW_REQUIRED
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -644,3 +644,4 @@
 | kimi4 | #1539 | #4427 | 🔍 REVIEW_REQUIRED | kimi4 新指派后提PR，06:55:50 UTC |
 | — | #1826 | #4426 | 🔍 REVIEW_REQUIRED | 05:26:38 UTC，Vue JSX 插件修复构建 |
 | — | #1963 | #4425 | 🔍 REVIEW_REQUIRED | 04:10:56 UTC |
+| kimi1 | #1496 | #4431 | 🔍 REVIEW_REQUIRED | 08:15:00 UTC，NBO行动推荐生成 |

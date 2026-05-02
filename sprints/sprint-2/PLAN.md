@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第359轮，🔥🔥🔥kimi3+26%到50%；🚨kimi2 22min濒临超时）
+> 更新时间：2026-05-02（排程经理第360轮，✅kimi2/kimi4均已重启；kimi3 52%；4PR MERGEABLE）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -569,13 +569,13 @@
 ### 当前运行（05-02 03:25）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 43% 🔥（443min） |
-| kimi2 | #1851 | frontend | — | 新会话 | 17% 🚨22min濒临超时 |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 50% 🔥🔥🔥（PR#4418） |
-| kimi4 | #2051 | frontend | P1 | D3 L4安装图自动化 | 77% 🔥（PR#4416） |
-| kimi5 | #1948 | backend | — | 新CC | 33% 🔥 |
+| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 43% 🔥（453min） |
+| kimi2 | #1851 | frontend | — | 新会话 | 16% 🔥（已重启） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 52% 🔥（PR#4418） |
+| kimi4 | #2051 | frontend | P1 | D3 L4安装图自动化 | 16% 🔥（已重启，PR#4416） |
+| kimi5 | #1948 | backend | — | 新CC | 33% ⏸️8min无输出 |
 
-> ✅ kimi3 已重启（24%，PR#4418 MERGEABLE）；kimi4 77%；kimi1 433min；3PR MERGEABLE
+> ✅ kimi2/kimi4 均已重启；kimi3 52%；kimi5 33% 8min无输出；kimi1 453min；4PR MERGEABLE
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

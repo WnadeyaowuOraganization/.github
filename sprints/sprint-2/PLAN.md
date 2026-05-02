@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-02（排程经理第381轮，4 CC运转（kimi5已释放）；kimi1 52%(653min,7min无输出)；kimi2 41%(64min)；kimi3 72%(222min,PR#4418)；kimi4 45%(63min,PR#4422)；PR#4415仍APPROVED待合并；PR#4421已merged）
+> 更新时间：2026-05-02（排程经理第382轮，5 CC满载（研发经理已补派kimi1→#1964、kimi5→#1963）；kimi1 34%(4min)；kimi2 41%(74min)；kimi3 72%(231min,PR#4418)；kimi4 42%(73min,PR#4422)；kimi5 49%(9min)；PR#4415已merged；PR#4421已merged）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -576,16 +576,16 @@
 
 
 
-### 当前运行（05-02 11:24）
+### 当前运行（05-02 11:34）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| kimi1 | #1490 | backend | P2 | 个人周报/团队月报自动生成+推送 | 52% ⏸️（653min, 7min无输出） |
-| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 41% 🔥（64min） |
-| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 72% 🔥（222min, PR#4418 REVIEW_REQUIRED） |
-| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 45% 🔥（63min, PR#4422 REVIEW_REQUIRED） |
-| ~~kimi5~~ | ~~#1948~~ | ~~backend~~ | ~~—~~ | ~~新CC~~ | ~~PR#4421 merged 03:21:53 UTC~~ ✅ |
+| kimi1 | #1964 | backend | P2 | 安装程序 — Windows Installer+静默部署 | 34% 🔥（4min, 新指派） |
+| kimi2 | #1485 | backend | — | 新会话（#1665→#1485切换） | 41% 🔥（74min） |
+| kimi3 | #1760 | frontend | P2 | 经销模式前端适配 — 项目详情+经销商结算对账 | 72% 🔥（231min, PR#4418 REVIEW_REQUIRED） |
+| kimi4 | #1495 | backend | — | 新会话（#1659→#1495切换） | 42% 🔥（73min, PR#4422 REVIEW_REQUIRED） |
+| kimi5 | #1963 | backend | P2 | Rhino插件对接API — GH参数化模型→PPT效果图自动注入 | 49% 🔥（9min, 新指派） |
 
-> 4 CC运转（kimi5已释放）；kimi1 52%（7min无输出）；kimi2 41%（+4%）；kimi3 72%（-4%, /compact持续）；kimi4 45%（-2%）；kimi5 PR#4421 merged；PR#4415仍APPROVED待合并；PR#4422 REVIEW_REQUIRED
+> 5 CC满载（研发经理补派kimi1→#1964、kimi5→#1963）；kimi1 34%（新Issue）；kimi2 41%（持平）；kimi3 72%（持平,/compact持续）；kimi4 42%（-3%）；kimi5 49%（新Issue）；PR#4415已merged；PR#4421已merged；PR#4422 REVIEW_REQUIRED
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

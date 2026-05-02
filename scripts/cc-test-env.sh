@@ -194,7 +194,7 @@ cmd_start() {
 
 # ============================================================
 #  wait: 等待后端+前端就绪，并预生成 kimi auth state
-#   1. 轮询后端 /actuator/health（默认300s，WAIT_TIMEOUT可调）
+#   1. 轮询后端 `/`（默认300s，WAIT_TIMEOUT可调）— 使用根路径避免 Basic Auth 401 问题
 #   2. 轮询前端 HTTP /（默认120s，FE_WAIT_TIMEOUT可调）
 #   3. 若 auth state 超过6h，运行 auth.setup.ts 预热 storageState
 #  完成后 CC 可直接 npx playwright test 跑图形化测试
@@ -227,9 +227,10 @@ cmd_wait() {
       rm -f "$PID_FILE"
       return 1
     fi
-    # 401=Spring Security 已启动需认证，视为 UP；只有 000（连接拒绝）才视为未就绪
+    # 健康检查：使用根路径 `/`（返回200）而非 `/actuator/health`（需要 Basic Auth 返回401）
+    # 000=连接拒绝（后端未就绪），其他=后端已启动
     local http_code
-    http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 2>/dev/null)
+    http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/" --max-time 2 2>/dev/null)
     if [ "$http_code" != "000" ] && [ -n "$http_code" ]; then
       echo " OK (${i}s, HTTP=${http_code})"
       break
@@ -566,7 +567,7 @@ cmd_status() {
     local pid=$(cat "$PID_FILE")
     if kill -0 "$pid" 2>/dev/null; then
       local _hc
-      _hc=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/actuator/health" --max-time 2 2>/dev/null)
+      _hc=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/" --max-time 2 2>/dev/null)
       if [ "$_hc" != "000" ] && [ -n "$_hc" ]; then
         be_status="running(PID=$pid,HTTP=${_hc})"
       else

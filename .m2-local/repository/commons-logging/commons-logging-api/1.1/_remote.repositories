@@ -1,0 +1,5 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Sat May 02 22:11:52 CST 2026
+commons-logging-api-1.1.jar>central=
+commons-logging-api-1.1.pom>public=
+commons-logging-api-1.1.pom>central=

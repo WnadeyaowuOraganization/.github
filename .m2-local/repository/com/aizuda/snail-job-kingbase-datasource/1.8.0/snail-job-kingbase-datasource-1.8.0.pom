@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.aizuda</groupId>
+  <artifactId>snail-job-kingbase-datasource</artifactId>
+  <version>1.8.0</version>
+  <name>snail-job-kingbase-datasource</name>
+  <description>snail-job-kingbase-datasource</description>
+  <url>https://spring.io/projects/spring-boot/snail-job/snail-job-datasource/snail-job-kingbase-datasource</url>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>opensnail</name>
+      <email>snailjob@opensnail.com</email>
+      <url>https://gitee.com/opensnail</url>
+    </developer>
+  </developers>
+  <scm>
+    <connection>https://gitee.com/aizuda/snail-job/snail-job-datasource/snail-job-kingbase-datasource</connection>
+    <developerConnection>https://gitee.com/aizuda/snail-job-datasource/snail-job-kingbase-datasource/</developerConnection>
+    <url>https://gitee.com/aizuda/snail-job/snail-job-datasource/snail-job-kingbase-datasource</url>
+  </scm>
+  <issueManagement />
+  <dependencies>
+    <dependency>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>1.18.36</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>cn.com.kingbase</groupId>
+      <artifactId>kingbase8</artifactId>
+      <version>8.6.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>com.aizuda</groupId>
+      <artifactId>snail-job-datasource-template</artifactId>
+      <version>1.8.0</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>cn.idev.excel</groupId>
+  <artifactId>fastexcel-support</artifactId>
+  <version>0.0.1</version>
+  <name>fastexcel-support</name>
+  <description>fastexcel is a excel handle tools written in Java</description>
+  <url>https://github.com/CodePhiliaX/fastexcel</url>
+  <inceptionYear>2024</inceptionYear>
+  <organization>
+    <name>Chat2DB</name>
+    <url>https://github.com/CodePhiliaX</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache 2</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>A business-friendly OSS license</comments>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <id>jipengfei</id>
+      <name>jipengfei</name>
+      <email>1558143046@qq.com</email>
+    </developer>
+    <developer>
+      <id>zhuangjiaju</id>
+      <name>Jiaju Zhuang</name>
+      <email>zhuangjiaju@qq.com</email>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:https://git@github.com/CodePhiliaX/fastexcel.git/fastexcel-support</connection>
+    <url>https://github.com/CodePhiliaX/fastexcel/fastexcel-support</url>
+  </scm>
+  <distributionManagement>
+    <repository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+    </repository>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://s01.oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+  </distributionManagement>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.sonatype.central</groupId>
+        <artifactId>central-publishing-maven-plugin</artifactId>
+        <version>0.4.0</version>
+        <extensions>true</extensions>
+      </plugin>
+    </plugins>
+  </build>
+</project>

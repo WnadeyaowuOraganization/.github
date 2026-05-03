@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.aizuda</groupId>
+  <artifactId>snail-job-common-log</artifactId>
+  <version>1.8.0</version>
+  <name>snail-job-common-log</name>
+  <description>snail-job-common-log</description>
+  <url>https://spring.io/projects/spring-boot/snail-job/snail-job-common/snail-job-common-log</url>
+  <licenses>
+    <license>
+      <name>Apache License 2.0</name>
+      <url>https://www.apache.org/licenses/LICENSE-2.0</url>
+    </license>
+  </licenses>
+  <developers>
+    <developer>
+      <name>opensnail</name>
+      <email>snailjob@opensnail.com</email>
+      <url>https://gitee.com/opensnail</url>
+    </developer>
+  </developers>
+  <scm>
+    <connection>https://gitee.com/aizuda/snail-job/snail-job-common/snail-job-common-log</connection>
+    <developerConnection>https://gitee.com/aizuda/snail-job-common/snail-job-common-log/</developerConnection>
+    <url>https://gitee.com/aizuda/snail-job/snail-job-common/snail-job-common-log</url>
+  </scm>
+  <issueManagement />
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-web</artifactId>
+      <version>3.3.10</version>
+      <scope>provided</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-log4j2</artifactId>
+      <version>3.3.10</version>
+      <scope>compile</scope>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>cn.hutool</groupId>
+      <artifactId>hutool-core</artifactId>
+      <version>5.8.32</version>
+      <scope>compile</scope>
+    </dependency>
+  </dependencies>
+</project>

@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-03（排程经理第586轮，5 CC全开；kimi1/#1818 44%、kimi2/#1601 63%(✅全部CI通过/自动合并部署Queued)、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%；Todo队列26项）
-> 活跃CC：5个（kimi1/#1818 44%、kimi2/#1601 63%、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%）
+> 更新时间：2026-05-03（排程经理第587轮，4 CC活跃；✅ kimi2/#1601 PR#4438已MERGED，Issue#1601 CLOSED，kimi2空闲；kimi1/#1818 45%、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%；Todo队列26项）
+> 活跃CC：4个（kimi1/#1818 45%、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%）；kimi2空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-03（排程经理第582轮，5 CC全开；kimi1→#1818、kimi3→#1824；kimi2→#1601 CI失败⚠️；Todo队列26项）
+> 更新时间：2026-05-03（排程经理第587轮，kimi2空闲(#1601已MERGED)；4 CC活跃；请指派新Issue→kimi2）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -31,7 +31,7 @@
 | 4 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累 — 项目关闭时自动更新成本基准库（kimi4已接）~~ | 🔥 |
 | 5 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成（kimi5已接）~~ → **CLOSED** | ✅ CLOSED |
 | 6 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验Service（kimi2已接）~~ → **CLOSED** | ✅ CLOSED |
-| 7 | #1601 | P2 | budget | 报销申请接入预算关卡 | ✅ → **kimi2优先** |
+| 7 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡（kimi2已接）~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
 | 8 | ~~#1818~~ | P2 | brand | ~~平台定制发布 — 多平台标题/标签/封面微调（kimi1已接）~~ → **In Progress** | 🔥 In Progress |
 | 9 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面 — 富文本+多媒体上传+双语编辑（kimi3已接）~~ → **In Progress** | 🔥 In Progress |
 | 10 | #1486 | P3 | mine | 采购联盟资格追踪 — Sourcewell/NASPO状态管理 | ✅ |
@@ -582,17 +582,17 @@
 
 
 
-### 当前运行（05-03 21:44）
+### 当前运行（05-03 21:54）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED，Issue已CLOSED~~ |
-| kimi1 | #1818 | brand | P2 | 平台定制发布 | 44% 🔥 |
-| kimi2 | #1601 | budget | P2 | 报销申请接入预算关卡 | ✅ PR#4438 全部CI通过✅，自动合并+部署Dev Queued |
+| ~~kimi2~~ | ~~#1601~~ | ~~budget~~ | ~~P2~~ | ~~报销申请接入预算关卡~~ | ~~✅ PR#4438 MERGED，Issue已CLOSED~~ |
+| kimi1 | #1818 | brand | P2 | 平台定制发布 | 45% 🔥 |
 | kimi3 | #1824 | brand | P2 | 内容创作/编辑页面 | 54% 🔥 |
 | kimi4 | #1539 | budget | P2 | 历史基准自动积累 | 49% 🔥 |
 | kimi5 | #1590 | budget | P2 | 项目成本复盘报告 | 62% 🔥（Issue已CLOSED） |
 
-> **5 CC全开**；kimi2/#1601 全部CI通过✅，即将自动合并+部署Dev；#1538/#1497已merged
+> **4 CC活跃**；✅ kimi2/#1601 PR#4438已MERGED，kimi2空闲；Todo队列26项，下一优先#1486
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

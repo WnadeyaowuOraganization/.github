@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-03（排程经理第587轮，4 CC活跃；✅ kimi2/#1601 PR#4438已MERGED，Issue#1601 CLOSED，kimi2空闲；kimi1/#1818 45%、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%；Todo队列26项）
-> 活跃CC：4个（kimi1/#1818 45%、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%）；kimi2空闲
+> 更新时间：2026-05-03（排程经理第588轮，5 CC全开；kimi1/#1818 37%、kimi2/#1486 33%、kimi3/#1824 54%(PR#4439 CI全✅ E2E进行中)、kimi4/#1539 49%、kimi5/#1590 62%；Todo队列26项）
+> 活跃CC：5个（kimi1/#1818 37%、kimi2/#1486 33%、kimi3/#1824 54%、kimi4/#1539 49%、kimi5/#1590 62%）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -34,7 +34,7 @@
 | 7 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡（kimi2已接）~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
 | 8 | ~~#1818~~ | P2 | brand | ~~平台定制发布 — 多平台标题/标签/封面微调（kimi1已接）~~ → **In Progress** | 🔥 In Progress |
 | 9 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面 — 富文本+多媒体上传+双语编辑（kimi3已接）~~ → **In Progress** | 🔥 In Progress |
-| 10 | #1486 | P3 | mine | 采购联盟资格追踪 — Sourcewell/NASPO状态管理 | ✅ |
+| 10 | ~~#1486~~ | P3 | mine | ~~采购联盟资格追踪 — Sourcewell/NASPO状态管理（kimi2已接）~~ → **In Progress** | 🔥 In Progress |
 | 11 | #1488 | P3 | backend | 国际项目统一数据模型 — 扩展projects表支持国际项目 | ✅ |
 | 12 | #1635 | P2 | design-ai | AI图生视频 — 效果图→摄像机运动短视频→拼接投标视频 | ✅ |
 | 13 | #1758 | P3 | execution | AI BOM 推荐前端 — 项目参数输入 + 推荐结果展示 | ✅ |
@@ -582,17 +582,18 @@
 
 
 
-### 当前运行（05-03 21:54）
+### 当前运行（05-03 22:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED，Issue已CLOSED~~ |
 | ~~kimi2~~ | ~~#1601~~ | ~~budget~~ | ~~P2~~ | ~~报销申请接入预算关卡~~ | ~~✅ PR#4438 MERGED，Issue已CLOSED~~ |
-| kimi1 | #1818 | brand | P2 | 平台定制发布 | 45% 🔥 |
-| kimi3 | #1824 | brand | P2 | 内容创作/编辑页面 | 54% 🔥 |
+| kimi1 | #1818 | brand | P2 | 平台定制发布 | 37% 🔥 |
+| kimi2 | #1486 | mine | P3 | 采购联盟资格追踪 | 33% 🔥 |
+| kimi3 | #1824 | brand | P2 | 内容创作/编辑页面 | ⚠️ PR#4439 CI全✅，E2E进行中 |
 | kimi4 | #1539 | budget | P2 | 历史基准自动积累 | 49% 🔥 |
 | kimi5 | #1590 | budget | P2 | 项目成本复盘报告 | 62% 🔥（Issue已CLOSED） |
 
-> **4 CC活跃**；✅ kimi2/#1601 PR#4438已MERGED，kimi2空闲；Todo队列26项，下一优先#1486
+> **5 CC全开**；kimi3/#1824 PR#4439 E2E测试进行中；#1601/#1497/#1538已merged
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

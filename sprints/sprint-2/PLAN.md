@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-03（排程经理第592轮，5 CC全开；kimi1/#1818 43%(⚠️22分钟无输出)、kimi2/#1486 67%、kimi3/#1824 36%(PR#4439 E2E进行中)、kimi4/#1539 49%、kimi5/#1590 62%；Todo队列26项）
-> 活跃CC：5个（kimi1/#1818 43%、kimi2/#1486 67%、kimi3/#1824 36%、kimi4/#1539 49%、kimi5/#1590 62%）
+> 更新时间：2026-05-03（排程经理第593轮，4 CC活跃；✅ kimi3/#1824 PR#4439已MERGED，Issue#1824 CLOSED，kimi3空闲；kimi1/#1818 43%(⚠️超时32分钟待重启)、kimi2/#1486 68%、kimi4/#1539 49%、kimi5/#1590 62%；Todo队列26项）
+> 活跃CC：4个（kimi1/#1818 43%、kimi2/#1486 68%、kimi4/#1539 49%、kimi5/#1590 62%）；kimi3空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -33,7 +33,7 @@
 | 6 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验Service（kimi2已接）~~ → **CLOSED** | ✅ CLOSED |
 | 7 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡（kimi2已接）~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
 | 8 | ~~#1818~~ | P2 | brand | ~~平台定制发布 — 多平台标题/标签/封面微调（kimi1已接）~~ → **In Progress** | 🔥 In Progress |
-| 9 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面 — 富文本+多媒体上传+双语编辑（kimi3已接）~~ → **In Progress** | 🔥 In Progress |
+| 9 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面 — 富文本+多媒体上传+双语编辑（kimi3已接）~~ → **CLOSED PR#4439 MERGED** | ✅ CLOSED |
 | 10 | ~~#1486~~ | P3 | mine | ~~采购联盟资格追踪 — Sourcewell/NASPO状态管理（kimi2已接）~~ → **In Progress** | 🔥 In Progress |
 | 11 | #1488 | P3 | backend | 国际项目统一数据模型 — 扩展projects表支持国际项目 | ✅ |
 | 12 | #1635 | P2 | design-ai | AI图生视频 — 效果图→摄像机运动短视频→拼接投标视频 | ✅ |
@@ -582,18 +582,18 @@
 
 
 
-### 当前运行（05-03 22:44）
+### 当前运行（05-03 22:54）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED，Issue已CLOSED~~ |
 | ~~kimi2~~ | ~~#1601~~ | ~~budget~~ | ~~P2~~ | ~~报销申请接入预算关卡~~ | ~~✅ PR#4438 MERGED，Issue已CLOSED~~ |
-| kimi1 | #1818 | brand | P2 | 平台定制发布 | ⚠️ 43% 卡22分钟无输出 |
-| kimi2 | #1486 | mine | P3 | 采购联盟资格追踪 | 67% 🔥 |
-| kimi3 | #1824 | brand | P2 | 内容创作/编辑页面 | ✅ PR#4439 CI全✅，E2E进行中，36% |
+| ~~kimi3~~ | ~~#1824~~ | ~~brand~~ | ~~P2~~ | ~~内容创作/编辑页面~~ | ~~✅ PR#4439 MERGED，Issue已CLOSED~~ |
+| kimi1 | #1818 | brand | P2 | 平台定制发布 | ⚠️ 43% 超时32分钟待重启 |
+| kimi2 | #1486 | mine | P3 | 采购联盟资格追踪 | 68% 🔥 |
 | kimi4 | #1539 | budget | P2 | 历史基准自动积累 | 49% 🔥 |
 | kimi5 | #1590 | budget | P2 | 项目成本复盘报告 | 62% 🔥（Issue已CLOSED） |
 
-> **5 CC全开**；⚠️ kimi1卡22分钟；kimi2进展良好(67%)；#1601/#1497/#1538/#1496已merged
+> **4 CC活跃**；✅ kimi3/#1824 PR#4439已MERGED，kimi3空闲；⚠️ kimi1超时32分钟请重启；#1601/#1497/#1538/#1496/#1824已merged
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-03（排程经理第581轮，4 CC活跃；#1496已CLOSED）
-> 活跃CC：4个（kimi2/#1497、kimi3/#1538、kimi4/#1539、kimi5/#1590）
+> 更新时间：2026-05-03（排程经理第581轮，3 CC活跃(kimi2/4/5)；kimi1/#1496 CLOSED、kimi3/#1538 CLOSED；请指派新Issue→kimi1/kimi3）
+> 活跃CC：3个（kimi2/#1601 31%、kimi4/#1539 49%、kimi5/#1590 CLOSED但CC仍在）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,15 +19,15 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-03（排程经理第580轮，4 CC活跃；kimi2空闲；#1497/#1590/#1597已CLOSED；请指派#1601→kimi2）
+> 更新时间：2026-05-03（排程经理第581轮，3 CC活跃；#1496/#1538/#1590 CLOSED；kimi1/kimi3空闲；kimi2已接#1601）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | ~~#1496~~ | P2 | backend | ~~NBO行动推荐生成 — Today's Top 3行动（kimi1已接）~~ | 🔥 |
+| 1 | ~~#1496~~ | P2 | backend | ~~NBO行动推荐生成 — Today's Top 3行动（kimi1已接）~~ → **CLOSED** | ✅ CLOSED |
 | 2 | ~~#1497~~ | P2 | backend | ~~NBO评分引擎 — 项目适配度×意图×赢率综合评分（kimi2已接）~~ → **CLOSED** | ✅ CLOSED |
-| 3 | ~~#1538~~ | P2 | budget | ~~D3造价回填接口 — D3设计完成后自动写入设备科目预算（kimi3已接）~~ | 🔥 |
+| 3 | ~~#1538~~ | P2 | budget | ~~D3造价回填接口 — D3设计完成后自动写入设备科目预算（kimi3已接）~~ → **CLOSED** | ✅ CLOSED |
 | 4 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累 — 项目关闭时自动更新成本基准库（kimi4已接）~~ | 🔥 |
 | 5 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成（kimi5已接）~~ → **CLOSED** | ✅ CLOSED |
 | 6 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验Service（kimi2已接）~~ → **CLOSED** | ✅ CLOSED |

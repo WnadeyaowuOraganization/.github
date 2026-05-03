@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第619轮，5 CC全开；kimi1/#1818 70%、kimi2/#1486 71%/PR#4443 CI构建进行中、kimi3/#1635 69%、kimi4/#1539 51%、kimi5/#1590 62%；Todo队列23项）
-> 活跃CC：5个（kimi1/#1818 70%、kimi2/#1486 71%、kimi3/#1635 69%、kimi4/#1539 51%、kimi5/#1590 62%）
+> 更新时间：2026-05-04（排程经理第620轮，5 CC全开；kimi1/#1818 70%、kimi2/#1486 66%(⚠️再次回落5pp)/PR#4443 CI排队中、kimi3/#1635 69%、kimi4/#1539 51%、kimi5/#1590 62%；Todo队列23项）
+> 活跃CC：5个（kimi1/#1818 70%、kimi2/#1486 66%、kimi3/#1635 69%、kimi4/#1539 51%、kimi5/#1590 62%）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)

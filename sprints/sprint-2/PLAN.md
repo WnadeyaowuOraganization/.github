@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第710轮；无变化
-> ⚠️ kimi2超时但PR#4450已提；kimi5疑似卡住(7分钟)
+> 更新时间：2026-05-04（排程经理第711轮；**PR#4451(#1539)MERGED✅**；E2E Fail清零✅；2 CC运行中(kimi2 idle 54min/kimi4 72%)；kimi1+kimi3+kimi5空闲）
+> ⚠️ PR#4451 MERGED✅；#1539 E2E Fail清零；3个CC空闲可指派
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,13 +19,13 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第710轮；无变化
+> 更新时间：2026-05-04（排程经理第711轮；PR#4451(#1539)MERGED✅
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **E2E Fail（kimi3已接，PR#4429）** | ⏳ 修复中 |
+| 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **PR#4451 MERGED** | ✅ CLOSED |
 | 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **PR#4425 MERGED** | ✅ CLOSED |
 | 3 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **PR#4412 MERGED** | ✅ CLOSED |
 | 4 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
@@ -234,6 +234,7 @@
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | medium | **Done** | 素材统计接口 — **PR #4447 MERGED** ✅ |
 | 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心4级角色权限系统 — **PR #4412 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1674~~ | biz-enablement | medium | **Done** | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 — **PR #4449 MERGED** ✅ |
+| 05-04 | kimi5 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — 项目关闭时自动更新成本基准库 — **PR #4451 MERGED** ✅ |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**

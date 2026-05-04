@@ -1,6 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第688轮；无变化；PR#4448(#1881)E2E进行中；4个E2E Fail无变化；4 CC活跃）
+> 更新时间：2026-05-04（排程经理第689轮；#1881→E2E Fail(PR#4448质量门FAIL)；#1878 E2E✅但质量门FAIL未MERGE；kimi1/kimi4均需修复质量门）
+> ⚠️ PR#4447 E2E通过✅但质量门FAIL导致未MERGE；PR#4448质量门FAIL E2E进行中；需kimi1/kimi4修复
+> 活跃CC：4个(均需关注质量门)
 > ⚠️ 无变化轮次
 > 活跃CC：4个(kimi1/#1881,kimi2/#1882,kimi4/#1878,kimi5/#1674)
 > ⚠️ kimi5双会话问题已解决；#2201在E2E Fail队列中但数量统计只有3项
@@ -24,7 +26,8 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第688轮，4 CC活跃；E2E Fail 4项(#1539,#1878,#1963,#2201)；PR#4448 E2E进行中）
+> 更新时间：2026-05-04（排程经理第689轮；E2E Fail 5项(#1539,#1878,#1881,#1963,#2201)；#1878 E2E✅但质量门FAIL未MERGE）
+> ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -48,8 +51,8 @@
 | 16 | #1615 | P1 | chat | 按群分角色AI配置 — 多角色模板系统 | ✅ |
 | 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
 | 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **In Progress** | ⏳ In Progress |
-| 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **E2E Fail（质量门FAIL）** | 🔴 待修复 |
-| 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **In Progress** | ⏳ In Progress |
+| 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **E2E Fail（E2E✅但质量门FAIL，PR#4447未MERGE）** | 🔴 待修复 |
+| 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **E2E Fail（PR#4448质量门FAIL）** | 🔴 待修复 |
 | 21 | ~~#1882~~ | P2 | asset-library | ~~素材库-列表查询（kimi2已接）~~ → **In Progress** | ⏳ In Progress |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派

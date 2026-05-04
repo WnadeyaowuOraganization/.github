@@ -6,25 +6,18 @@
     "error_code": "TooManyRequests",
     "raw_error": "You have exceeded the 5-hour usage quota. It will reset at 2026-04-28 18:52:53 +0800 CST. We recommend upgrading your plan for more quota, or waiting for the reset. Request id: 021777360150934ee0befab39272c2daa6a928a2ff2cde1dce46e"
   },
-  "无问星穹": {
-    "cooldown_until": "2026-05-05T05:07:50.476215+08:00",
-    "marked_at": "2026-05-05T00:07:50.476215+08:00",
-    "error_type": "balance_exhausted",
-    "error_code": "HTTP402",
-    "raw_error": ""
-  },
-  "kimi2": {
-    "cooldown_until": "2026-05-05T06:25:13.993753+08:00",
-    "marked_at": "2026-05-05T01:25:13.993753+08:00",
-    "error_type": "balance_exhausted",
-    "error_code": "invalid_request_error",
-    "raw_error": "We're unable to verify your membership benefits at this time. Please ensure your membership is active."
-  },
   "kimi1": {
     "cooldown_until": "2026-05-05T07:47:01.623753+08:00",
     "marked_at": "2026-05-05T02:47:01.623753+08:00",
     "error_type": "balance_exhausted",
     "error_code": "permission_error",
     "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
+  },
+  "kimi2": {
+    "cooldown_until": "2026-05-05T11:25:18.945866+08:00",
+    "marked_at": "2026-05-05T06:25:18.945866+08:00",
+    "error_type": "balance_exhausted",
+    "error_code": "invalid_request_error",
+    "raw_error": "We're unable to verify your membership benefits at this time. Please ensure your membership is active."
   }
 }

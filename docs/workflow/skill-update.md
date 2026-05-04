@@ -67,6 +67,14 @@
 
 ---
 
+**[2026-05-04] M2仓库JAR与源码不同步导致运行时NoClassDefFoundError — kimi4/#1963**
+- 现象：BrandUserRoleEntity在JAR中存在但源码缺失，编译通过但运行时NoClassDefFoundError
+- 解决：mvn install -am -DskipTests 重建所有依赖模块的JAR
+- 建议：backend-coding skill 提醒：feature分支上修改Entity后，必须用 mvn install -am -DskipTests 重建依赖JAR，避免JAR缓存不一致
+- 来源：kimi4/#1963 CC-REVIEW
+
+---
+
 **[2026-05-01] E2E auth.setup.ts 与 smoke test 登录方式不统一 — kimi2/#2316**
 - 现象：E2E登录selector差异(input[id] vs input[name])，导致登录代码重复且不兼容
 - 建议：frontend-coding skill 增加 E2E 登录统一规范，auth.setup.ts 与 smoke test 使用同一套登录逻辑和selector

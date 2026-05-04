@@ -1,8 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第680轮，runners恢复✅；kimi2空闲(#1880已MERGED)；kimi4(#1539 E2E Fail-单元测试FAIL)、kimi5(#1590 Fail-质量门FAIL)待处理；kimi1(#1818)E2E进行中；Todo队列17项）
-> ⚠️ Runners已恢复，CI重新调度中；PR#4429后端单元测试失败(构建跳过)、PR#4436质量门失败(#1590已CLOSED)
-> 活跃CC：2个（kimi4/kimi5 PR待合并）、kimi2空闲待指派
+> 更新时间：2026-05-04（排程经理第681轮；kimi1/#1818 PR#4440已MERGED✅；kimi2/#1551已接(研发经理指派)；kimi4(#1539 E2E Fail)、kimi5(#1590 CLOSED)；2个E2E Fail(#1539,#1963)；已关闭2个废弃PR(#4430,#4441)）
+> ⚠️ PR#4425(#1963 Rhino插件)后端单测FAIL→已标E2E Fail；PR#4429 E2E仍在队列等待
+> 活跃CC：3个（kimi2运行中、kimi4/kimi5会话仍存）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -20,32 +20,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第680轮，kimi2空闲(#1880已MERGED)；kimi1(#1818)E2E进行中；kimi4(#1539 E2E Fail)；kimi5(#1590 Fail)；Todo队列16项）
+> 更新时间：2026-05-04（排程经理第681轮，kimi1/#1818 PR#4440已MERGED；kimi2/#1551已接；kimi4(#1539 E2E Fail)；kimi5(#1590 CLOSED)；#1963新增E2E Fail）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累（kimi4已接）~~ → **E2E Fail（单元测试失败）** | 🔴 修复中 |
-| 2 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成（kimi5已接）~~ → **Fail（质量门FAIL，#1590已CLOSED）** | 🔴 已CLOSED |
-| 3 | ~~#1818~~ | P2 | brand | ~~平台定制发布（kimi1已接）~~ → **E2E进行中** | ⏳ E2E |
-| 4 | ~~#1880~~ | P2 | asset-library | ~~素材库-中标状态变更（kimi2已接）~~ → **CLOSED PR#4445 MERGED** | ✅ CLOSED |
-| 5 | ~~#1486~~ | P3 | mine | ~~采购联盟资格追踪（kimi2已接）~~ → **CLOSED** | ✅ CLOSED |
-| 6 | ~~#1635~~ | P2 | design-ai | ~~AI图生视频（kimi3已接）~~ → **CLOSED** | ✅ CLOSED |
-| 7 | ~~#1496~~ | P2 | backend | ~~NBO行动推荐生成~~ → **CLOSED** | ✅ CLOSED |
-| 8 | ~~#1497~~ | P2 | backend | ~~NBO评分引擎~~ → **CLOSED** | ✅ CLOSED |
-| 9 | ~~#1538~~ | P2 | budget | ~~D3造价回填接口~~ → **CLOSED** | ✅ CLOSED |
-| 10 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验~~ → **CLOSED** | ✅ CLOSED |
-| 11 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
-| 12 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面~~ → **CLOSED PR#4439 MERGED** | ✅ CLOSED |
-| 13 | #1551 | P2 | wecom | 企微待办API对接 — 审批待办+任务待办推送 | ✅ |
-| 14 | #1615 | P1 | chat | 按群分角色AI配置 — 多角色模板系统 | ✅ |
-| 15 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
-| 16 | #1674 | P2 | biz-enablement | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 | ✅ |
-| 17 | #1878 | P1 | asset-library | 素材统计接口 — 分类数量、标签云、最近上传 | ✅ |
-| 18 | #1881 | P1 | asset-library | 素材下载 + 批量下载 + 分享链接 | ✅ |
-| 19 | #1882 | P2 | asset-library | 素材库 - 列表查询 + 多维度筛选 + 权限过滤 | ✅ |
-| 20 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
+| 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API（kimi待接）~~ → **E2E Fail（后端单测FAIL）** | 🔴 待处理 |
+| 3 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
+| 4 | ~~#1818~~ | P2 | brand | ~~平台定制发布（kimi1已接）~~ → **PR#4440 MERGED** | ✅ CLOSED |
+| 5 | ~~#1880~~ | P2 | asset-library | ~~素材库-中标状态变更~~ → **PR#4445 MERGED** | ✅ CLOSED |
+| 6 | ~~#1486~~ | P3 | mine | ~~采购联盟资格追踪~~ → **CLOSED** | ✅ CLOSED |
+| 7 | ~~#1635~~ | P2 | design-ai | ~~AI图生视频~~ → **CLOSED** | ✅ CLOSED |
+| 8 | ~~#1496~~ | P2 | backend | ~~NBO行动推荐生成~~ → **CLOSED** | ✅ CLOSED |
+| 9 | ~~#1497~~ | P2 | backend | ~~NBO评分引擎~~ → **CLOSED** | ✅ CLOSED |
+| 10 | ~~#1538~~ | P2 | budget | ~~D3造价回填接口~~ → **CLOSED** | ✅ CLOSED |
+| 11 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验~~ → **CLOSED** | ✅ CLOSED |
+| 12 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
+| 13 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面~~ → **CLOSED PR#4439 MERGED** | ✅ CLOSED |
+| 14 | ~~#1551~~ | P2 | wecom | ~~企微待办API对接（kimi2已接）~~ → **In Progress** | ⏳ In Progress |
+| 15 | #1615 | P1 | chat | 按群分角色AI配置 — 多角色模板系统 | ✅ |
+| 16 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
+| 17 | #1674 | P2 | biz-enablement | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 | ✅ |
+| 18 | #1878 | P1 | asset-library | 素材统计接口 — 分类数量、标签云、最近上传 | ✅ |
+| 19 | #1881 | P1 | asset-library | 素材下载 + 批量下载 + 分享链接 | ✅ |
+| 20 | #1882 | P2 | asset-library | 素材库 - 列表查询 + 多维度筛选 + 权限过滤 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -227,6 +227,8 @@
 | 04-24 | **kimi1** | **#2534** | **frontend** | **medium** | **派遣开工** | **项目组织管理-任务面板快速行动项（派遣目标序号#9，17:41派遣）** |
 | 05-04 | kimi2 | #1880 | asset-library | medium | **Done** | 素材库-中标状态变更时自动更新素材权限 — **PR #4445 MERGED** ✅ |
 | 05-04 | kimi2 | #1488 | backend | medium | **Done** | 国际项目统一数据模型（wdpp_bid_projects表region/required_cert/language） — **PR #4444 MERGED** ✅ |
+| 05-04 | kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
+| 05-04 | kimi2 | #1551 | wecom | medium | In Progress | 企微待办API对接 — 审批待办+任务待办推送 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
 - kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）

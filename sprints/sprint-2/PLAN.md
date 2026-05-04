@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第738轮；kimi2 #1882 PR#4450 OPEN(74%)/kimi3 #1616 PR#4454 OPEN(60%)
+> 更新时间：2026-05-04（排程经理第739轮；kimi2 #1882 PR#4450 OPEN(74%)/kimi3 #1616 PR#4454 OPEN(60%)
 > ⚠️ 无变化
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)

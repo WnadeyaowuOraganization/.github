@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第693轮；**PR#4447(#1878)MERGED✅**；#1881→E2E Fail(PR#4448技术CI全✅ E2E进行中)；kimi4空闲；4 E2E Fail(#1539,#1881,#1963,#2201)）
-> ⚠️ PR#4448 E2E进行中(技术CI全✅)；kimi4空闲可重新指派
+> 更新时间：2026-05-04（排程经理第694轮；**PR#4448(#1881)MERGED✅**；PR#4447(#1878)已MERGED；#1880+PR#4445+PR#4444已MERGED；kimi1空闲；4 E2E Fail(#1539,#1963,#2201)）
+> ⚠️ kimi1空闲(#1881完成)；kimi2(#1882 69%)/kimi4(#1963 27%)/kimi5(#1674 67%)工作中
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第693轮；#1878 PR#4447 MERGED✅；E2E Fail 4项(#1539,#1881,#1963,#2201)；kimi4空闲）
+> 更新时间：2026-05-04（排程经理第694轮；#1881 PR#4448 MERGED✅；kimi1空闲；E2E Fail 3项(#1539,#1963,#2201)）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -44,7 +44,7 @@
 | 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
 | 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **In Progress** | ⏳ In Progress |
 | 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **PR#4447 MERGED** | ✅ CLOSED |
-| 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **E2E Fail（PR#4448质量门FAIL）** | 🔴 待修复 |
+| 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **PR#4448 MERGED** | ✅ CLOSED |
 | 21 | ~~#1882~~ | P2 | asset-library | ~~素材库-列表查询（kimi2已接）~~ → **In Progress** | ⏳ In Progress |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
@@ -229,7 +229,7 @@
 | 05-04 | kimi2 | #1488 | backend | medium | **Done** | 国际项目统一数据模型（wdpp_bid_projects表region/required_cert/language） — **PR #4444 MERGED** ✅ |
 | 05-04 | kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
 | 05-04 | kimi2 | #1551 | wecom | medium | **Done** | 企微待办API对接 — **PR #4446 MERGED** ✅ |
-| 05-04 | kimi1 | #1881 | asset-library | medium | In Progress | 素材下载 + 批量下载 + 分享链接 |
+| 05-04 | kimi1 | ~~#1881~~ | asset-library | medium | **Done** | 素材下载 + 批量下载 + 分享链接 — **PR #4448 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | medium | **Done** | 素材统计接口 — **PR #4447 MERGED** ✅ |
 | 05-04 | kimi5 | #1674 | biz-enablement | medium | In Progress | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |

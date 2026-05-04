@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第652轮，4 CC运行中；kimi1/#1818 69%/PR#4440 E2E排队⏳/kimi2/#1488 27%/PR#4444 E2E排队⏳/kimi3空闲待分配/kimi4/#1539 53%/PR#4429 E2E排队⏳/kimi5/#1590 63%/PR#4436 E2E排队⏳；Todo队列20项；⚠️4 PR排队等1个runner）
-> 活跃CC：4个（全部等待E2E runner释放），kimi3空闲
+> 更新时间：2026-05-04（排程经理第653轮，4 CC运行中；kimi1/#1818 70%/PR#4440排队⏳/kimi2/#1488 28%/⚠️PR#4444质量门失败未触发新CI/kimi3空闲/kimi4/#1539 53%/PR#4429排队⏳/kimi5/#1590 63%/PR#4436 E2E进行中✅；Todo队列20项）
+> 活跃CC：4个（kimi5 runner运行中，其余排队），kimi3空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)

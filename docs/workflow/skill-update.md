@@ -60,6 +60,13 @@
 
 ---
 
+**[2026-05-04] @Tag("dev") 缺失导致单元测试被跳过 — kimi5/#1674**
+- 现象：单元测试类缺少 `@Tag("dev")` 导致测试被跳过，E2E / CI 时才暴露问题
+- 建议：backend-coding skill 或 backend-test skill 补充说明：@Tag("dev") 是 dev 环境测试标识，缺失时 Spring Boot test 自动跳过
+- 来源：kimi5/#1674 CC-REVIEW 本轮回顾
+
+---
+
 **[2026-05-01] E2E auth.setup.ts 与 smoke test 登录方式不统一 — kimi2/#2316**
 - 现象：E2E登录selector差异(input[id] vs input[name])，导致登录代码重复且不兼容
 - 建议：frontend-coding skill 增加 E2E 登录统一规范，auth.setup.ts 与 smoke test 使用同一套登录逻辑和selector
@@ -1497,3 +1504,18 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 建议：git clean 前务必检查 -e 排除规则是否覆盖所有需要保留的未跟踪目录；建议将 issues/ 目录加入默认排除列表
 - 来源：kimi2/#1485 本轮回顾
 - 状态：首次提及，观察中
+
+---
+
+**[2026-05-04] JUnit 中使用 MockedStatic 模拟 OssFactory — kimi4/#1963**
+- 现象：OssFactory mock 在 JUnit 中需用 MockedStatic
+- 建议：backend-test skill 预置 OssFactory mock 模板
+- 来源：kimi4/#1963 本轮回顾
+
+---
+
+**[2026-05-04] @Tag注解缺失导致测试被surefire跳过 — kimi5/#1674**
+- 现象：@Tag缺失导致测试被 surefire 跳过
+- 解决：参考现有测试补 @Tag("dev")
+- 建议：backend-coding skill 补充 @Tag注解强制要求说明
+- 来源：kimi5/#1674 本轮回顾

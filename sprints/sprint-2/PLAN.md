@@ -1,8 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第682轮；kimi2运行中；E2E Fail 3项(#1539,#1963,#2201)；PR#4436(#1590 Mapper修复)已关闭(Issue CLOSED)；kimi1空闲）
-> ⚠️ #2201(PR#4412品牌权限)新增E2E Fail(后端单测FAIL)；#1539已连续5轮E2E FAIL(根因：后端单测FAIL)；#1963后端单测FAIL
-> 活跃CC：2个(kimi2运行中，kimi4/kimi5会话存)；kimi1空闲待指派
+> 更新时间：2026-05-04（排程经理第683轮；kimi1/#1881已接(研发经理指派)；kimi2/#1551运行中；E2E Fail 3项(#1539连续6轮FAIL,#1963,#2201)；3 PR待合并(#4429,#4425,#4412)）
+> ⚠️ 3个PR(#4429/#4425/#4412)CI无新触发，E2E Fail状态持续；kimi4/kimi5会话存但无新PR
+> 活跃CC：2个(kimi1/kimi2运行中)，kimi4/kimi5空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -45,7 +45,7 @@
 | 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
 | 18 | #1674 | P2 | biz-enablement | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 | ✅ |
 | 19 | #1878 | P1 | asset-library | 素材统计接口 — 分类数量、标签云、最近上传 | ✅ |
-| 20 | #1881 | P1 | asset-library | 素材下载 + 批量下载 + 分享链接 | ✅ |
+| 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **In Progress** | ⏳ In Progress |
 | 21 | #1882 | P2 | asset-library | 素材库 - 列表查询 + 多维度筛选 + 权限过滤 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
@@ -230,6 +230,7 @@
 | 05-04 | kimi2 | #1488 | backend | medium | **Done** | 国际项目统一数据模型（wdpp_bid_projects表region/required_cert/language） — **PR #4444 MERGED** ✅ |
 | 05-04 | kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
 | 05-04 | kimi2 | #1551 | wecom | medium | In Progress | 企微待办API对接 — 审批待办+任务待办推送 |
+| 05-04 | kimi1 | #1881 | asset-library | medium | In Progress | 素材下载 + 批量下载 + 分享链接 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
 - kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）

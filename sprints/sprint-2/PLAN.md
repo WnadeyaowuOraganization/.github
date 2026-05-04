@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第672轮，4 CC运行中；全runner离线🔴持续阻塞中；Todo队列20项）
+> 更新时间：2026-05-04（排程经理第673轮，4 CC运行中；全runner离线🔴持续阻塞中；Todo队列20项）
 > ⚠️ GitHub Actions runners持续离线(total_count:0)，runner长时间离线属GitHub基础设施问题，等待自愈
 > 活跃CC：3个（kimi2空闲✅、其余runner离线阻塞），kimi3空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程

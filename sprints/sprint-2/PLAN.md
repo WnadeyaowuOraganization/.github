@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第714轮；无合并，kimi1 46%）
+> 更新时间：2026-05-04（排程经理第715轮；kimi4已改派#1615但与kimi1冲突
 > ⚠️ kimi1+kimi3已接新Issue；无新合并
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)

@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第717轮；无合并，3 CC(kimi1 73%)
-> ⚠️ kimi1+kimi3已接新Issue；无新合并
+> 更新时间：2026-05-04（排程经理第718轮；无合并，3 CC(kimi1 73%)
+> ⚠️ kimi2已恢复活跃；无新合并
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)

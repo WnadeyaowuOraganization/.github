@@ -1,7 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第657轮，4 CC运行中；kimi1/#1818 70%/PR#4440 pending⏳/kimi2/#1488 ✅MERGED!/kimi3空闲/kimi4/#1539 54%/✅PR#4429 E2E进行中/kimi5/#1590 64%/PR#4436排队⏳；Todo队列20项）
-> 活跃CC：4个（kimi2空闲可指派新Issue✅、kimi4 E2E进行中、kimi1/kimi5 pending），kimi3空闲
+> 更新时间：2026-05-04（排程经理第658轮，3 CC运行中；kimi1/#1818 70%/PR#4440 pending⏳/kimi2空闲✅/kimi3空闲/kimi4/#1539 54%/⚠️PR#4429排队等runner/kimi5/#1590 77%/⚠️runner离线5个PR排队；Todo队列20项）
+> ⚠️ GitHub Actions runners全部离线(total_count:0)，等待基础设施自愈
+> 活跃CC：3个（kimi2空闲✅、其余runner离线阻塞），kimi3空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)

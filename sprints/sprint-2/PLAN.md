@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第718轮；无合并，3 CC(kimi1 73%)
-> ⚠️ kimi2已恢复活跃；无新合并
+> 更新时间：2026-05-04（排程经理第719轮；**PR#4453(#1615)MERGED✅**；kimi1空闲；2 CC运行中(kimi2 74%/kimi3)；无E2E Fail）
+> ⚠️ PR#4453 MERGED✅；kimi1空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第712轮；kimi1接#1615；kimi3接#1616
+> 更新时间：2026-05-04（排程经理第719轮；#1615 PR#4453 MERGED✅
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -40,7 +40,7 @@
 | 13 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
 | 14 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面~~ → **CLOSED PR#4439 MERGED** | ✅ CLOSED |
 | 15 | ~~#1551~~ | P2 | wecom | ~~企微待办API对接（kimi2已接）~~ → **PR#4446 MERGED** | ✅ CLOSED |
-| 16 | #1615 | P1 | chat | 按群分角色AI配置 — 多角色模板系统 | ✅ |
+| 16 | ~~#1615~~ | P1 | chat | ~~按群分角色AI配置~~ → **PR#4453 MERGED** | ✅ CLOSED |
 | 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
 | 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **PR#4449 MERGED** | ✅ CLOSED |
 | 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **PR#4447 MERGED** | ✅ CLOSED |
@@ -235,6 +235,7 @@
 | 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心4级角色权限系统 — **PR #4412 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1674~~ | biz-enablement | medium | **Done** | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 — **PR #4449 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — 项目关闭时自动更新成本基准库 — **PR #4451 MERGED** ✅ |
+| 05-04 | kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置-多角色模板系统 — **PR #4453 MERGED** ✅ |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**

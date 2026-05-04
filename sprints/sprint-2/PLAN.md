@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第699轮；5 CC全速推进(kimi1/#2201 58%/kimi2/#1882 69%/kimi3/#1539 50%/kimi4/#1963 64%/kimi5/#1674 70%)）
-> ⚠️ 无变化轮次
+> 更新时间：2026-05-04（排程经理第700轮；**PR#4425(#1963)MERGED✅**；kimi4空闲；E2E Fail 2项(#1539/#2201)；4 CC运行中(kimi1 66%/kimi2 70%/kimi3 53%/kimi5 61%Maven报错修复中)）
+> ⚠️ PR#4425 MERGED✅；kimi4空闲；kimi5编译报错修复中
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,14 +19,14 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第699轮；5 CC全速推进；无变化）
+> 更新时间：2026-05-04（排程经理第700轮；#1963 PR#4425 MERGED✅；kimi4空闲；E2E Fail 2项）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **E2E Fail（kimi3已接，PR#4429）** | ⏳ 修复中 |
-| 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **E2E Fail（后端单测FAIL）** | 🔴 待处理 |
+| 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **PR#4425 MERGED** | ✅ CLOSED |
 | 3 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **E2E Fail（后端单测FAIL）** | 🔴 待处理 |
 | 4 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
 | 5 | ~~#1818~~ | P2 | brand | ~~平台定制发布（kimi1已接）~~ → **PR#4440 MERGED** | ✅ CLOSED |
@@ -230,6 +230,7 @@
 | 05-04 | kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
 | 05-04 | kimi2 | #1551 | wecom | medium | **Done** | 企微待办API对接 — **PR #4446 MERGED** ✅ |
 | 05-04 | kimi1 | ~~#1881~~ | asset-library | medium | **Done** | 素材下载 + 批量下载 + 分享链接 — **PR #4448 MERGED** ✅ |
+| 05-04 | kimi4 | ~~#1963~~ | backend | P2 | **Done** | Rhino插件对接API — D3/Rhino渲染效果图自动注入素材库 — **PR #4425 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | medium | **Done** | 素材统计接口 — **PR #4447 MERGED** ✅ |
 | 05-04 | kimi5 | #1674 | biz-enablement | medium | In Progress | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |

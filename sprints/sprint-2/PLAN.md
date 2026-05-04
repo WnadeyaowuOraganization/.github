@@ -42,7 +42,7 @@
 | 15 | ~~#1551~~ | P2 | wecom | ~~企微待办API对接（kimi2已接）~~ → **PR#4446 MERGED** | ✅ CLOSED |
 | 16 | #1615 | P1 | chat | 按群分角色AI配置 — 多角色模板系统 | ✅ |
 | 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
-| 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **In Progress** | ⏳ In Progress |
+| 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **PR#4449 OPEN** | ⏳ 待CI |
 | 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **PR#4447 MERGED** | ✅ CLOSED |
 | 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **PR#4448 MERGED** | ✅ CLOSED |
 | 21 | ~~#1882~~ | P2 | asset-library | ~~素材库-列表查询（kimi2已接）~~ → **In Progress** | ⏳ In Progress |

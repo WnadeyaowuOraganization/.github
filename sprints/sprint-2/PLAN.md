@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第658轮，3 CC运行中；kimi1/#1818 70%/PR#4440 pending⏳/kimi2空闲✅/kimi3空闲/kimi4/#1539 54%/⚠️PR#4429排队等runner/kimi5/#1590 77%/⚠️runner离线5个PR排队；Todo队列20项）
+> 更新时间：2026-05-04（排程经理第658轮，4 CC运行中；kimi1/#1818 70%/PR#4440 pending⏳/kimi2/#1880/PR#4445排队⏳/kimi3空闲/kimi4/#1539/⚠️PR#4429排队等runner/kimi5/#1590/⚠️runner离线6个PR排队；Todo队列20项）
 > ⚠️ GitHub Actions runners全部离线(total_count:0)，等待基础设施自愈
 > 活跃CC：3个（kimi2空闲✅、其余runner离线阻塞），kimi3空闲
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
@@ -225,6 +225,7 @@
 | 04-24 | ~~kimi3~~ | ~~#3384~~ | backend | medium | ~~Done~~ | **BOM Where-Used反查API** — PR #4186已merged，Issue手动关闭，已释放 ✅ |
 | 04-24 | **kimi3** | **#2532** | **frontend** | **medium** | **In Progress** | **已读追踪+公告详情（派遣目标序号#8，17:40进度55%）** |
 | 04-24 | **kimi1** | **#2534** | **frontend** | **medium** | **派遣开工** | **项目组织管理-任务面板快速行动项（派遣目标序号#9，17:41派遣）** |
+| 05-04 | kimi2 | #1880 | asset-library | medium | In Progress | 素材库-中标状态变更时自动更新素材权限 — PR #4445 pending（runner离线） |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
 - kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）

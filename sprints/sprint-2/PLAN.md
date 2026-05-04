@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第695轮；4 CC运行中(kimi1/#2201 18%/kimi2/#1882 69%/kimi4/#1963 31%/kimi5/#1674 67%)；3 E2E Fail(#1539无CC/#1963有kimi4/#2201有kimi1)）
-> ⚠️ #1539有PR但无CC接单，建议优先指派；kimi3~20空闲；Todo队列25项待指派
+> 更新时间：2026-05-04（排程经理第696轮；5 CC满载(kimi1/#2201 35%/kimi2/#1882 69%/kimi3/#1539 23%/kimi4/#1963 36%/kimi5/#1674 67%)；3 E2E Fail全有CC接单）
+> ⚠️ kimi3已接#1539✅；5 CC满载；无空闲CC
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,13 +19,13 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第695轮；4 CC运行中；#1539无CC(#1539有PR#4429待接单)；Todo队列25项）
+> 更新时间：2026-05-04（排程经理第696轮；kimi3已接#1539✅；5 CC满载；Todo队列25项）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **E2E Fail（后端单测FAIL，PR#4429无CC接单）** | 🔴 无CC |
+| 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **E2E Fail（kimi3已接，PR#4429）** | ⏳ 修复中 |
 | 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **E2E Fail（后端单测FAIL）** | 🔴 待处理 |
 | 3 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **E2E Fail（后端单测FAIL）** | 🔴 待处理 |
 | 4 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
@@ -584,7 +584,7 @@
 | 05-02 | kimi1 | ~~#1496~~ | backend | P2 | **Done** | NBO行动推荐生成 — Today's Top 3行动 — PR #4431 MERGED（12:23 UTC） |
 | 05-02 | kimi2 | #1497 | backend | P2 | In Progress | NBO评分引擎 — 项目适配度×意图×赢率综合评分（新指派） |
 | 05-02 | kimi3 | #1538 | budget | P2 | In Progress | D3造价回填接口 — D3设计完成后自动写入设备科目预算（新指派） |
-| 05-02 | kimi4 | #1539 | budget | P2 | In Progress | 历史基准自动积累 — 项目关闭时自动更新成本基准库（新指派） |
+| 05-04 | kimi3 | ~~#1539~~ | budget | P2 | **E2E Fail** | 历史基准自动积累 — PR#4429 E2E Fail，kimi3接单修复中 |
 | 05-02 | kimi5 | #1590 | budget | P2 | In Progress | 项目成本复盘报告自动生成（新指派） |
 
 

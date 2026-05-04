@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第704轮；5 CC运行中(kimi1/#1539 34%/kimi2/#1882 70%/kimi3/#1539冲突%/kimi4/#2201⚠️已MERGED/kimi5/#1674)；E2E Fail 1项(#1539)）
-> ⚠️ 需研发经理处理：kimi4→#2201已MERGED需改派；kimi1+kimi3双会话#1539需确认
+> 更新时间：2026-05-04（排程经理第705轮；**PR#4449(#1674)MERGED✅**；3 CC运行中(kimi1/#1539 43%/kimi2/#1882 75%/kimi4/#1963 29%)；kimi3旧会话已释放；kimi5空闲；E2E Fail 1项(#1539)）
+> ⚠️ PR#4449 MERGED✅；kimi3已释放；kimi5空闲可指派
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第704轮；kimi4被误派#2201；kimi1+kimi3双会话#1539）
+> 更新时间：2026-05-04（排程经理第705轮；PR#4449(#1674)MERGED✅；kimi3已释放；kimi5空闲）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -42,7 +42,7 @@
 | 15 | ~~#1551~~ | P2 | wecom | ~~企微待办API对接（kimi2已接）~~ → **PR#4446 MERGED** | ✅ CLOSED |
 | 16 | #1615 | P1 | chat | 按群分角色AI配置 — 多角色模板系统 | ✅ |
 | 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
-| 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **PR#4449 OPEN** | ⏳ 待CI |
+| 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **PR#4449 MERGED** | ✅ CLOSED |
 | 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **PR#4447 MERGED** | ✅ CLOSED |
 | 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **PR#4448 MERGED** | ✅ CLOSED |
 | 21 | ~~#1882~~ | P2 | asset-library | ~~素材库-列表查询（kimi2已接）~~ → **In Progress** | ⏳ In Progress |
@@ -233,7 +233,7 @@
 | 05-04 | kimi4 | ~~#1963~~ | backend | P2 | **Done** | Rhino插件对接API — D3/Rhino渲染效果图自动注入素材库 — **PR #4425 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | medium | **Done** | 素材统计接口 — **PR #4447 MERGED** ✅ |
 | 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心4级角色权限系统 — **PR #4412 MERGED** ✅ |
-| 05-04 | kimi5 | #1674 | biz-enablement | medium | In Progress | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 |
+| 05-04 | kimi5 | ~~#1674~~ | biz-enablement | medium | **Done** | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 — **PR #4449 MERGED** ✅ |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**

@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第702轮；4 CC运行中(kimi1 66%卡住/kimi2 70%/kimi3 56%/kimi5 63%)；kimi4空闲；E2E Fail 2项(#1539/#2201)）
-> ⚠️ 无变化；kimi1无后台进程需关注
+> 更新时间：2026-05-04（排程经理第703轮；**PR#4412(#2201)MERGED✅**；kimi1空闲；E2E Fail仅剩1项(#1539)；3 CC运行中(kimi2 70%/kimi3 59%/kimi5 63%)）
+> ⚠️ PR#4412 MERGED✅；kimi1+kimi4空闲；⚠️kimi5仍在等CI
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第702轮；4 CC运行中；kimi4空闲）
+> 更新时间：2026-05-04（排程经理第703轮；#2201 PR#4412 MERGED✅；E2E Fail仅剩#1539）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -27,7 +27,7 @@
 |---|-------|--------|------|------|------|
 | 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **E2E Fail（kimi3已接，PR#4429）** | ⏳ 修复中 |
 | 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **PR#4425 MERGED** | ✅ CLOSED |
-| 3 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **E2E Fail（后端单测FAIL）** | 🔴 待处理 |
+| 3 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **PR#4412 MERGED** | ✅ CLOSED |
 | 4 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
 | 5 | ~~#1818~~ | P2 | brand | ~~平台定制发布（kimi1已接）~~ → **PR#4440 MERGED** | ✅ CLOSED |
 | 6 | ~~#1880~~ | P2 | asset-library | ~~素材库-中标状态变更~~ → **PR#4445 MERGED** | ✅ CLOSED |
@@ -232,6 +232,7 @@
 | 05-04 | kimi1 | ~~#1881~~ | asset-library | medium | **Done** | 素材下载 + 批量下载 + 分享链接 — **PR #4448 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1963~~ | backend | P2 | **Done** | Rhino插件对接API — D3/Rhino渲染效果图自动注入素材库 — **PR #4425 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | medium | **Done** | 素材统计接口 — **PR #4447 MERGED** ✅ |
+| 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心4级角色权限系统 — **PR #4412 MERGED** ✅ |
 | 05-04 | kimi5 | #1674 | biz-enablement | medium | In Progress | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
 

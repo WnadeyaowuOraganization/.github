@@ -1,8 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第686轮；PR#4446(#1551)MERGED✅；#1878→E2E Fail(质量门FAIL)；kimi5/#1674已接(双会话⚠️)；kimi2空闲；kimi1/kimi4运行中）
-> ⚠️ kimi5双会话重现(kimi5-1590旧+kimi5-1674新)；#1878质量门失败(checkbox/task.md/截图)
-> 活跃CC：3个(kimi1/kimi4运行中，kimi5双会话)
+> 更新时间：2026-05-04（排程经理第687轮；PR#4446(#1551)MERGED✅；kimi5-1590旧会话消失✅；kimi2/#1882已接；PR#4448(#1881)E2E排队/待处理2项；4个E2E Fail(#1539,#1878,#1963,#2201)）
+> ⚠️ kimi5双会话问题已解决；#2201在E2E Fail队列中但数量统计只有3项
+> 活跃CC：4个(kimi1/#1881,kimi2/#1882,kimi4/#1878,kimi5/#1674)
 > ⚠️ kimi4双会话问题已解决(旧#1539会话已消失)；PR#4447(素材统计)CI刚触发
 > 活跃CC：3个(kimi1/kimi2 E2E进行中，kimi4 CI排队)
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
@@ -22,7 +22,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第682轮，kimi2运行中；E2E Fail 3项(#1539,#1963,#2201)；kimi1空闲待指派）
+> 更新时间：2026-05-04（排程经理第687轮，4 CC活跃；E2E Fail 4项(#1539,#1878,#1963,#2201)；PR#4448 E2E排队中）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -48,7 +48,7 @@
 | 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **In Progress** | ⏳ In Progress |
 | 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **E2E Fail（质量门FAIL）** | 🔴 待修复 |
 | 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **In Progress** | ⏳ In Progress |
-| 21 | #1882 | P2 | asset-library | 素材库 - 列表查询 + 多维度筛选 + 权限过滤 | ✅ |
+| 21 | ~~#1882~~ | P2 | asset-library | ~~素材库-列表查询（kimi2已接）~~ → **In Progress** | ⏳ In Progress |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -235,6 +235,7 @@
 | 05-04 | kimi1 | #1881 | asset-library | medium | In Progress | 素材下载 + 批量下载 + 分享链接 |
 | 05-04 | kimi4 | #1878 | asset-library | medium | **E2E Fail** | 素材统计接口 — **PR #4447 质量门FAIL(checkbox/task.md/截图)** |
 | 05-04 | kimi5 | #1674 | biz-enablement | medium | In Progress | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 |
+| 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
 - kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）

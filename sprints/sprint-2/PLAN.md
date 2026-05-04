@@ -1,8 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-04（排程经理第684轮；kimi2/#1551 PR#4446构建✅E2E进行中；kimi1/#1881运行中；kimi4/#1878已接；E2E Fail 3项(#1539连续7轮FAIL,#1963,#2201)）
-> ⚠️ PR#4446进度良好(构建✅E2E运行中)；kimi4双会话(#1539旧+#1878新)需确认不冲突；#1539根因仍是后端单测FAIL
-> 活跃CC：3个(kimi1/kimi2运行中，kimi4已接#1878新会话)
+> 更新时间：2026-05-04（排程经理第685轮；kimi2/#1551 PR#4446 E2E进行中；kimi1/#1881运行中；kimi4/#1878 PR#4447已提CI排队；kimi4-1539旧会话已消失✅；E2E Fail 3项(#1539连续8轮FAIL,#1963,#2201)）
+> ⚠️ kimi4双会话问题已解决(旧#1539会话已消失)；PR#4447(素材统计)CI刚触发
+> 活跃CC：3个(kimi1/kimi2 E2E进行中，kimi4 CI排队)
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -231,7 +231,7 @@
 | 05-04 | kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
 | 05-04 | kimi2 | #1551 | wecom | medium | In Progress | 企微待办API对接 — **PR #4446 已提(构建✅ E2E进行中)** |
 | 05-04 | kimi1 | #1881 | asset-library | medium | In Progress | 素材下载 + 批量下载 + 分享链接 |
-| 05-04 | kimi4 | #1878 | asset-library | medium | In Progress | 素材统计接口 — 分类数量、标签云、最近上传 |
+| 05-04 | kimi4 | #1878 | asset-library | medium | In Progress | 素材统计接口 — **PR #4447 已提(CI排队中)** |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
 - kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）

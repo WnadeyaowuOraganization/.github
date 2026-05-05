@@ -3,6 +3,14 @@
 >
 ---
 
+**[2026-05-05] Issue-source.md SQL路径错误：script/sql/update/ruoyi_ai/ 不存在 — kimi2/#2073**
+- 现象：Issue-source.md 引用参考SQL路径 `script/sql/update/ruoyi_ai/`，但项目中该路径不存在，实际 Flyway 迁移在 `backend/ruoyi-admin/src/main/resources/db/migration/`
+- 建议：更新 Issue 模板中SQL参考路径为正确的 Flyway migration 目录
+- 来源：kimi2 #2073 CC-REVIEW
+- 频次：1次，观察中
+
+---
+
 **[2026-05-05] pr-body-lint门6对纯SQL场景误判issue-source.md缺失 — kimi2/#2070**
 - 现象：纯SQL的Issue（如菜单权限SQL），pr-body-lint门6检查issue-source.md是否存在，但该文件通常非本次CC创建，导致lint失败
 - 建议：门6对SQL类Issue应跳过issue-source.md检查，或在检测到无代码文件变更时跳过

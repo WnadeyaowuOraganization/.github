@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-05（排程经理第817轮；新增20个Todo #1838/#1842/#2100/#2101/#2133/#2144/#2147/#2200/#2322~#2365）
+> 更新时间：2026-05-05（排程经理第851轮；kimi2正在#2072，#2426/#2382/#2336已补入指派表）
 > ⚠️ kimi3 PR#4454后端单测FAIL，研发经理已通知
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-05（排程经理第850轮；kimi2释放，#2071 PR#4461 MERGED）
+> 更新时间：2026-05-05（排程经理第851轮；#2426/#2382/#2336 → Todo，补满20条）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -42,6 +42,9 @@
 | 15 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
 | 16 | #2166 | P1 | backend | AI图生图API — 图片分析+出图引擎（新入Todo） | ✅ |
 | 17 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
+| 18 | #2426 | P1 | pipeline | llm_client.py — vLLM统一调用封装（新入Todo） | ✅ |
+| 19 | #2382 | P1 | hr | 前端培训计划+课程库页面 — 计划管理+课程CRUD+课件上传（新入Todo） | ⏳ 依赖#2072后端 |
+| 20 | #2336 | P1 | sample | D3样品一键生成页面（新入Todo） | ⏳ 依赖后端前置Phase |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

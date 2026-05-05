@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-05（排程经理第795轮；kimi2 #1882 PR#4450 OPEN 后端单测FAIL（疑似idle）/kimi3 #1616 PR#4454 OPEN 后端单测FAIL）
+> 更新时间：2026-05-05（排程经理第796轮；kimi2 #1882 PR#4450 OPEN 后端单测FAIL/kimi3 #1616 PR#4454 OPEN 后端单测FAIL）
 > ⚠️ 两PR均存在「后端单元测试（基线对比）」FAIL，阻断自动合并，已通知研发经理
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
@@ -19,33 +19,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-04（排程经理第719轮；#1615 PR#4453 MERGED✅
+> 更新时间：2026-05-05（排程经理第796轮；#1616(kimi3)PR#4454 FAIL/#1882(kimi2)PR#4450 FAIL 已通知研发经理）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **PR#4451 MERGED** | ✅ CLOSED |
-| 2 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **PR#4425 MERGED** | ✅ CLOSED |
-| 3 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **PR#4412 MERGED** | ✅ CLOSED |
-| 4 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
-| 5 | ~~#1818~~ | P2 | brand | ~~平台定制发布（kimi1已接）~~ → **PR#4440 MERGED** | ✅ CLOSED |
-| 6 | ~~#1880~~ | P2 | asset-library | ~~素材库-中标状态变更~~ → **PR#4445 MERGED** | ✅ CLOSED |
-| 7 | ~~#1486~~ | P3 | mine | ~~采购联盟资格追踪~~ → **CLOSED** | ✅ CLOSED |
-| 8 | ~~#1635~~ | P2 | design-ai | ~~AI图生视频~~ → **CLOSED** | ✅ CLOSED |
-| 9 | ~~#1496~~ | P2 | backend | ~~NBO行动推荐生成~~ → **CLOSED** | ✅ CLOSED |
-| 10 | ~~#1497~~ | P2 | backend | ~~NBO评分引擎~~ → **CLOSED** | ✅ CLOSED |
-| 11 | ~~#1538~~ | P2 | budget | ~~D3造价回填接口~~ → **CLOSED** | ✅ CLOSED |
-| 12 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验~~ → **CLOSED** | ✅ CLOSED |
-| 13 | ~~#1601~~ | P2 | budget | ~~报销申请接入预算关卡~~ → **CLOSED PR#4438 MERGED** | ✅ CLOSED |
-| 14 | ~~#1824~~ | P2 | brand | ~~内容创作/编辑页面~~ → **CLOSED PR#4439 MERGED** | ✅ CLOSED |
-| 15 | ~~#1551~~ | P2 | wecom | ~~企微待办API对接（kimi2已接）~~ → **PR#4446 MERGED** | ✅ CLOSED |
-| 16 | ~~#1615~~ | P1 | chat | ~~按群分角色AI配置~~ → **PR#4453 MERGED** | ✅ CLOSED |
-| 17 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式 | ✅ |
-| 18 | ~~#1674~~ | P2 | biz-enablement | ~~产品参数查询中心API（kimi5已接）~~ → **PR#4449 MERGED** | ✅ CLOSED |
-| 19 | ~~#1878~~ | P1 | asset-library | ~~素材统计接口（kimi4已接）~~ → **PR#4447 MERGED** | ✅ CLOSED |
-| 20 | ~~#1881~~ | P1 | asset-library | ~~素材下载（kimi1已接）~~ → **PR#4448 MERGED** | ✅ CLOSED |
-| 21 | ~~#1882~~ | P2 | asset-library | ~~素材库-列表查询（kimi2已接）~~ → **In Progress** | ⏳ In Progress |
+| 1 | #1616 | P1 | chat | 每日群聊摘要服务 — 定时+即时双模式（kimi3已接） | ⏳ In Progress |
+| 2 | #1882 | P2 | frontend | 素材库-列表查询+多维度筛选+权限过滤（kimi2已接） | ⏳ In Progress |
+| 3 | #1611 | P2 | chat | 消息线程化与兴趣匹配 — 话题追踪+主动提醒 | ✅ |
+| 4 | #1612 | P2 | chat | 业务场景自动分类引擎 — 群聊智能识别 | ✅ |
+| 5 | #1843 | P2 | design-ai | 招标规范文本自动生成 — 三标融合+产品参数→投标技术文本 | ✅ |
+| 6 | #2021 | P2 | approval | 报销费控模块接入审批流 — 报销提交自动发起审批 | ✅ |
+| 7 | #1686 | P2 | backend | 报销费控新增项目费用关联+财务报表导出+供应商联动 | ✅ |
+| 8 | #1698 | P2 | backend | 提成绩效新增提成计算引擎API — 阶梯计算+绩效系数+批量计算 | ✅ |
+| 9 | ~~#1539~~ | P2 | budget | ~~历史基准自动积累~~ → **PR#4451 MERGED** | ✅ CLOSED |
+| 10 | ~~#1963~~ | P2 | backend | ~~Rhino插件对接API~~ → **PR#4425 MERGED** | ✅ CLOSED |
+| 11 | ~~#2201~~ | P1 | brand | ~~品牌中心角色权限系统~~ → **PR#4412 MERGED** | ✅ CLOSED |
+| 12 | ~~#1590~~ | P2 | budget | ~~项目成本复盘报告自动生成~~ → **已CLOSED（质量门FAIL）** | 🔴 已CLOSED |
+| 13 | ~~#1818~~ | P2 | brand | ~~平台定制发布~~ → **PR#4440 MERGED** | ✅ CLOSED |
+| 14 | ~~#1880~~ | P2 | asset-library | ~~素材库-中标状态变更~~ → **PR#4445 MERGED** | ✅ CLOSED |
+| 15 | ~~#1486~~ | P3 | mine | ~~采购联盟资格追踪~~ → **CLOSED** | ✅ CLOSED |
+| 16 | ~~#1635~~ | P2 | design-ai | ~~AI图生视频~~ → **PR#4442 MERGED** | ✅ CLOSED |
+| 17 | ~~#1496~~ | P2 | backend | ~~NBO行动推荐生成~~ → **PR#4431 MERGED** | ✅ CLOSED |
+| 18 | ~~#1497~~ | P2 | backend | ~~NBO评分引擎~~ → **PR#4434 MERGED** | ✅ CLOSED |
+| 19 | ~~#1538~~ | P2 | budget | ~~D3造价回填接口~~ → **PR#4432 MERGED** | ✅ CLOSED |
+| 20 | ~~#1597~~ | P2 | budget | ~~员工借款额度校验~~ → **PR#4437 MERGED** | ✅ CLOSED |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

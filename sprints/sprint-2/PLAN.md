@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第871轮；PR#4465待merge，kimi1 468min 13min无输出，4CC运行中）
+> 更新时间：2026-05-06（排程经理第871轮；kimi2#1698 PR#4467已提CI=PENDING，kimi1 468min，kimi5 PR#4465待merge，3CC运行+1待释放）
 > ⚠️ kimi3 PR#4454后端单测FAIL，研发经理已通知
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
@@ -19,20 +19,19 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第871轮；PR#4465待merge，kimi1 468min 13min无输出，4CC运行中）
+> 更新时间：2026-05-06（排程经理第871轮；kimi2#1698 PR#4467已提CI=PENDING，kimi1 468min，kimi5 PR#4465待merge，3CC运行+1待释放）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #1698 | P2 | backend | 提成绩效新增提成计算引擎API — 阶梯计算+绩效系数+批量计算（kimi2已接，high effort） | ✅ |
-| 2 | #1838 | P2 | design-ai | 批量方案变体生成 — 输入约束→AI生成多个布局方案（kimi4已接） | ✅ |
-| 3 | #1842 | P2 | design-ai | 产品资源开放体系 — D1素材库2D/3D/SKP下载API | ✅ |
-| 4 | #2100 | P2 | backend | AI工单智能分派 — 自动推荐最优处理人 | ✅ |
-| 5 | #2101 | P2 | backend | AI预测性维护 — 故障预测+预防性维护计划 | ✅ |
-| 6 | #2133 | P1 | backend | 企微OA能力扩展 — 审批+日程+会议+智能表格+模板卡片 | ✅ |
-| 7 | #2144 | P2 | brand | AI辅助翻译 — Qwen3中英互译 | ✅ |
-| 8 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
+| 1 | #1838 | P2 | design-ai | 批量方案变体生成 — 输入约束→AI生成多个布局方案（kimi4已接） | ✅ |
+| 2 | #1842 | P2 | design-ai | 产品资源开放体系 — D1素材库2D/3D/SKP下载API | ✅ |
+| 3 | #2100 | P2 | backend | AI工单智能分派 — 自动推荐最优处理人 | ✅ |
+| 4 | #2101 | P2 | backend | AI预测性维护 — 故障预测+预防性维护计划 | ✅ |
+| 5 | #2133 | P1 | backend | 企微OA能力扩展 — 审批+日程+会议+智能表格+模板卡片 | ✅ |
+| 6 | #2144 | P2 | brand | AI辅助翻译 — Qwen3中英互译 | ✅ |
+| 7 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
 | 9 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
 | 10 | #2166 | P1 | backend | AI图生图API — 图片分析+出图引擎（新入Todo） | ✅ |
 | 11 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
@@ -613,10 +612,10 @@
 | 05-05 | kimi3 | ~~#1616~~ | chat | P1 | ~~Done~~ | 每日群聊摘要 — PR #4454 MERGED ✅ |
 | 05-06 | kimi3 | #2340 | backend | **high** | In Progress | 方案引擎方案工作台 |
 | 05-06 | kimi2 | ~~#2073~~ | hr | P2 | ~~Done~~ | 人事管理菜单+权限SQL — PR #4463 MERGED ✅ |
-| 05-06 | kimi2 | #1698 | backend | **high** | In Progress | 提成绩效计算引擎 |
+| 05-06 | kimi2 | ~~#1698~~ | backend | **high** | ~~Done~~ | 提成绩效计算引擎 — PR #4467 OPEN，CI queued |
 | 05-06 | kimi4 | ~~#2021~~ | approval | P2 | ~~Done~~ | 报销费控模块接入审批流 — PR #4464 MERGED ✅ |
 | 05-06 | kimi4 | #1838 | backend | medium | In Progress | 批量方案变体生成 |
-### 当前运行（05-06 00:58）
+### 当前运行（05-06 01:00）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
@@ -630,7 +629,7 @@
 | ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
 | ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
 | kimi1 | #2132 | backend | P1 | RBAC权限系统 | 🔨 运行中 |
-| kimi2 | #1698 | backend | P2 | 提成绩效计算引擎 | 🔨 运行中 |
+| kimi2 | #1698 | backend | P2 | 提成绩效计算引擎 | ⏳ PR#4467 OPEN，CI queued |
 | kimi3 | #2340 | backend | P1 | 方案引擎方案工作台 | ⏳ PR#4466 OPEN，CI queued |
 | kimi4 | #1838 | backend | P2 | 批量方案变体生成 | 🔨 运行中 |
 | kimi5 | #1686 | backend | P2 | 报销费控新增项目费用关联 | ⏳ PR#4465 OPEN，E2E跑中 |

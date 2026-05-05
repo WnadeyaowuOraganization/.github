@@ -3,6 +3,14 @@
 >
 ---
 
+**[2026-05-06] restart-backend 时需更新 Maven jar 缓存 — kimi2/#1698**
+- 现象：Maven jar 缓存未更新导致新方法不注册到容器
+- 建议：backend-coding skill 建议 restart-backend 时提示"可能需要 mvn install -DskipTests 更新jar"
+- 来源：kimi2 #1698 本轮回顾
+- 频次：1次，观察中
+
+---
+
 **[2026-05-06] backend-coding skill 增加循环依赖检测提示 — kimi4/#2021**
 - 现象：Service 注入 WfEngineService 且存在 Callback 时发生循环依赖（WfEngineServiceImpl ↔ ExpenseReportServiceImpl），需通过 @Lazy @Autowired 字段注入解决
 - 建议：backend-coding skill 增加"循环依赖检测"提示，当 Service 注入 WfEngineService 且存在 Callback 时优先提醒使用 @Lazy

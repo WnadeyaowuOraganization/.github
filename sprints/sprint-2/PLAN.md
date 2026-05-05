@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第876轮；kimi1 38%卡19min（518min总）+kimi3 47%卡8min已通知，2CC运行中）
+> 更新时间：2026-05-06（排程经理第877轮；kimi1#2132 PR#4469 CI=SUCCESS已释放，kimi3 47% 7min无输出，1CC运行中）
 > ⚠️ kimi3 PR#4454后端单测FAIL，研发经理已通知
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第876轮；kimi1 38%卡19min（518min总）+kimi3 47%卡8min已通知，2CC运行中）
+> 更新时间：2026-05-06（排程经理第877轮；kimi1#2132 PR#4469 CI=SUCCESS已释放，kimi3 47% 7min无输出，1CC运行中）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 

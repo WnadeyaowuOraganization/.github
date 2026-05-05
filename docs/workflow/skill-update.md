@@ -3,6 +3,14 @@
 >
 ---
 
+**[2026-05-06] backend-coding skill 增加循环依赖检测提示 — kimi4/#2021**
+- 现象：Service 注入 WfEngineService 且存在 Callback 时发生循环依赖（WfEngineServiceImpl ↔ ExpenseReportServiceImpl），需通过 @Lazy @Autowired 字段注入解决
+- 建议：backend-coding skill 增加"循环依赖检测"提示，当 Service 注入 WfEngineService 且存在 Callback 时优先提醒使用 @Lazy
+- 来源：kimi4 #2021 CC-REVIEW
+- 频次：1次，观察中
+
+---
+
 **[2026-05-05] Issue-source.md SQL路径错误：script/sql/update/ruoyi_ai/ 不存在 — kimi2/#2073**
 - 现象：Issue-source.md 引用参考SQL路径 `script/sql/update/ruoyi_ai/`，但项目中该路径不存在，实际 Flyway 迁移在 `backend/ruoyi-admin/src/main/resources/db/migration/`
 - 建议：更新 Issue 模板中SQL参考路径为正确的 Flyway migration 目录

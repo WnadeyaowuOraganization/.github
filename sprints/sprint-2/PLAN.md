@@ -614,7 +614,9 @@
 | 05-06 | kimi2 | ~~#1698~~ | backend | **high** | ~~Done~~ | 提成绩效计算引擎 — PR #4467 OPEN，CI queued |
 | 05-06 | kimi4 | ~~#2021~~ | approval | P2 | ~~Done~~ | 报销费控模块接入审批流 — PR #4464 MERGED ✅ |
 | 05-06 | kimi4 | #1838 | backend | medium | In Progress | 批量方案变体生成 |
-### 当前运行（05-06 01:06）
+| 05-06 | kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 OPEN，CI queued |
+| 05-06 | kimi5 | #2100 | backend | P2 | In Progress | AI工单智能分派 |
+### 当前运行（05-06 02:47）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
@@ -631,9 +633,9 @@
 | kimi2 | #1698 | backend | P2 | 提成绩效计算引擎 | ⏳ PR#4467 OPEN，CI queued |
 | kimi3 | #2340 | backend | P1 | 方案引擎方案工作台 | ⏳ PR#4466 OPEN，CI queued |
 | kimi4 | #1838 | backend | P2 | 批量方案变体生成 | ⏳ PR#4468 OPEN，CI queued |
-| kimi5 | #1686 | backend | P2 | 报销费控新增项目费用关联 | ⏳ PR#4465 OPEN，E2E跑中 |
+| kimi5 | #2100 | backend | P2 | AI工单智能分派 | 🔨 运行中 |
 
-> **5 CC运行中**（pool 10/15空闲）；#1616 PR#4454 MERGED✅；#2073 PR#4463 MERGED✅；#2021 PR#4464 MERGED✅；kimi2→#1698，kimi4→#1838；#4465 E2E跑中，#4466 CI queued；kimi1(74%)需关注上下文
+> **3 CC运行中**；#1616 PR#4454 MERGED✅；#2073 PR#4463 MERGED✅；#2021 PR#4464 MERGED✅；kimi1释放→#2132 PR#4469 OPEN；kimi5→#2100；#4465 E2E跑中
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

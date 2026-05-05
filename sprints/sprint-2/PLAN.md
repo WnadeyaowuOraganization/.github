@@ -613,10 +613,12 @@
 | 05-06 | kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 OPEN，CI queued |
 | 05-06 | kimi5 | #2100 | backend | P2 | In Progress | AI工单智能分派 |
 | 05-06 | kimi4 | #1838 | backend | medium | In Progress | 批量方案变体生成（重建修复） |
-| 05-06 | kimi2 | #1842 | backend | P2 | In Progress | 产品资源开放体系 |
+| 05-06 | kimi2 | ~~#1842~~ | backend | P2 | ~~Done~~ | 产品资源开放体系 — PR #4470 MERGED ✅ |
+| 05-06 | kimi2 | #2144 | brand | P2 | In Progress | AI辅助翻译 |
 | 05-06 | kimi3 | ~~#2340~~ | backend | P1 | ~~Done~~ | 方案引擎方案工作台 — PR #4466 MERGED ✅ |
 | 05-06 | kimi3 | #2133 | backend | P1 | In Progress | 企微OA能力扩展 |
-### 当前运行（05-06 03:56）
+| 05-06 | kimi5 | ~~#2100~~ | backend | P2 | ~~Done~~ | AI工单智能分派 — PR #4471 MERGED ✅ |
+### 当前运行（05-06 05:27）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
@@ -629,12 +631,12 @@
 | ~~kimi5~~ | ~~#1590~~ | ~~budget~~ | ~~P2~~ | ~~项目成本复盘报告~~ | ~~✅ PR#4428 MERGED~~ |
 | ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
 | ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
-| kimi2 | #1842 | backend | P2 | 产品资源开放体系 | 🔨 运行中 |
+| kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
 | kimi3 | #2133 | backend | P1 | 企微OA能力扩展 | 🔨 运行中 |
-| kimi4 | #1838 | backend | P2 | 批量方案变体生成 | 🔨 运行中（重建修复） |
-| kimi5 | #2100 | backend | P2 | AI工单智能分派 | 🔨 运行中 |
+| kimi4 | #1838 | backend | P2 | 批量方案变体生成 | ⏳ PR#4468 OPEN，CI FAIL |
+| kimi5 | - | - | - | 空闲 | 待指派 |
 
-> **4 CC运行中**；#2340 PR#4466 MERGED✅；#1616 PR#4454 MERGED✅；#2073 PR#4463 MERGED✅；#2021 PR#4464 MERGED✅；#1698 PR#4467 MERGED✅；kimi3→#2133
+> **2 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；kimi2→#2144，kimi5空闲
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

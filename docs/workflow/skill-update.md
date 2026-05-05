@@ -3,6 +3,14 @@
 >
 ---
 
+**[2026-05-06] E2E smoke 模态框处理可封装为公共函数 — kimi4/#1838**
+- 现象：前端页面模态框拦截测试，导致 E2E smoke 3/5 通过
+- 建议：E2E 测试 skill 建议模态框处理封装为公共函数
+- 来源：kimi4 #1838 本轮回顾
+- 频次：1次，观察中
+
+---
+
 **[2026-05-06] restart-backend 时需更新 Maven jar 缓存 — kimi2/#1698**
 - 现象：Maven jar 缓存未更新导致新方法不注册到容器
 - 建议：backend-coding skill 建议 restart-backend 时提示"可能需要 mvn install -DskipTests 更新jar"

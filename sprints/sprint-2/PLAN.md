@@ -585,28 +585,39 @@
 | 05-02 | kimi2 | ~~#1665~~ | backend | — | — | #1665切换→#1485（新Issue分配） |
 | 05-02 | kimi4 | ~~#1659~~ | backend | — | — | #1659切换→#1495（新Issue分配） |
 | 05-02 | kimi1 | ~~#1496~~ | backend | P2 | **Done** | NBO行动推荐生成 — Today's Top 3行动 — PR #4431 MERGED（12:23 UTC） |
-| 05-02 | kimi2 | #1497 | backend | P2 | In Progress | NBO评分引擎 — 项目适配度×意图×赢率综合评分（新指派） |
-| 05-02 | kimi3 | #1538 | budget | P2 | In Progress | D3造价回填接口 — D3设计完成后自动写入设备科目预算（新指派） |
-| 05-04 | kimi3 | ~~#1539~~ | budget | P2 | **E2E Fail** | 历史基准自动积累 — PR#4429 E2E Fail，kimi3接单修复中 |
-| 05-02 | kimi5 | #1590 | budget | P2 | In Progress | 项目成本复盘报告自动生成（新指派） |
-
-
-
-
-
-### 当前运行（05-03 23:24）
+| 05-02 | kimi2 | ~~#1497~~ | backend | P2 | **Done** | NBO评分引擎 — 项目适配度×意图×赢率综合评分 — PR #4434 MERGED ✅ |
+| 05-02 | kimi3 | ~~#1538~~ | budget | P2 | **Done** | D3造价回填接口 — D3设计完成后自动写入设备科目预算 — PR #4432 MERGED ✅ |
+| 05-02 | kimi5 | ~~#1590~~ | budget | P2 | **Done** | 项目成本复盘报告自动生成 — PR #4428 MERGED ✅ |
+| 05-04 | kimi3 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — PR #4451 MERGED ✅ |
+| 05-04 | kimi2 | ~~#1963~~ | backend | P2 | **Done** | Rhino插件对接API — PR #4425 MERGED ✅ |
+| 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心角色权限系统 — PR #4412 MERGED ✅ |
+| 05-04 | kimi1 | ~~#1818~~ | brand | P2 | **Done** | 平台定制发布 — PR #4440 MERGED ✅ |
+| 05-04 | kimi4 | ~~#1880~~ | asset-library | P2 | **Done** | 素材库-中标状态变更 — PR #4445 MERGED ✅ |
+| 05-04 | kimi2 | ~~#1486~~ | mine | P3 | **Done** | 采购联盟资格追踪 — PR #4443 MERGED ✅ |
+| 05-03 | kimi3 | ~~#1635~~ | design-ai | P2 | **Done** | AI图生视频 — PR #4442 MERGED ✅ |
+| 05-03 | kimi3 | ~~#1824~~ | brand | P2 | **Done** | 内容创作/编辑页面 — PR #4439 MERGED ✅ |
+| 05-03 | kimi2 | ~~#1601~~ | budget | P2 | **Done** | 报销申请接入预算关卡 — PR #4438 MERGED ✅ |
+| 05-03 | kimi2 | ~~#1597~~ | budget | P2 | **Done** | 员工借款额度校验 — PR #4437 MERGED ✅ |
+| 05-04 | kimi2 | ~~#1551~~ | wecom | P2 | **Done** | 企微待办API对接 — PR #4446 MERGED ✅ |
+| 05-04 | kimi5 | ~~#1674~~ | biz-enablement | P2 | **Done** | 产品参数查询中心API — PR #4449 MERGED ✅ |
+| 05-04 | kimi4 | ~~#1878~~ | asset-library | P1 | **Done** | 素材统计接口 — PR #4447 MERGED ✅ |
+| 05-04 | kimi1 | ~~#1881~~ | asset-library | P1 | **Done** | 素材下载 — PR #4448 MERGED ✅ |
+| 05-04 | kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置 — PR #4453 MERGED ✅ |
+### 当前运行（05-05 13:15）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
 | ~~kimi2~~ | ~~#1601~~ | ~~budget~~ | ~~P2~~ | ~~报销申请接入预算关卡~~ | ~~✅ PR#4438 MERGED~~ |
 | ~~kimi3~~ | ~~#1824~~ | ~~brand~~ | ~~P2~~ | ~~内容创作/编辑页面~~ | ~~✅ PR#4439 MERGED~~ |
-| kimi1 | #1818 | brand | P2 | 平台定制发布 | ✅ PR#4440 CI全✅，E2E进行中60% |
-| kimi2 | #1486 | mine | P3 | 采购联盟资格追踪 | ⚠️ 23%（再次回落） |
-| kimi3 | #1635 | design-ai | P2 | AI图生视频 | 57% 🔥 |
-| kimi4 | #1539 | budget | P2 | 历史基准自动积累 | 49% 🔥 |
-| kimi5 | #1590 | budget | P2 | 项目成本复盘报告 | 62% 🔥（Issue已CLOSED） |
+| ~~kimi1~~ | ~~#1818~~ | ~~brand~~ | ~~P2~~ | ~~平台定制发布~~ | ~~✅ PR#4440 MERGED~~ |
+| ~~kimi2~~ | ~~#1486~~ | ~~mine~~ | ~~P3~~ | ~~采购联盟资格追踪~~ | ~~✅ PR#4443 MERGED~~ |
+| ~~kimi3~~ | ~~#1635~~ | ~~design-ai~~ | ~~P2~~ | ~~AI图生视频~~ | ~~✅ PR#4442 MERGED~~ |
+| ~~kimi4~~ | ~~#1539~~ | ~~budget~~ | ~~P2~~ | ~~历史基准自动积累~~ | ~~✅ PR#4451 MERGED~~ |
+| ~~kimi5~~ | ~~#1590~~ | ~~budget~~ | ~~P2~~ | ~~项目成本复盘报告~~ | ~~✅ PR#4428 MERGED~~ |
+| kimi2 | #1882 | frontend | P2 | 素材库-列表查询+筛选+权限 | ⏳ PR#4450 后端单测FAIL |
+| kimi3 | #1616 | chat | P1 | 每日群聊摘要服务 | ⏳ PR#4454 后端单测FAIL |
 
-> **5 CC全开**；⚠️ kimi2再次回落23%；#1601/#1497/#1538/#1496/#1824/#4439/#4440已merged
+> **2 CC运行中**（pool 13/15空闲）；#1882/#1616单测FAIL已通知研发经理
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

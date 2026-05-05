@@ -630,11 +630,11 @@
 | ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
 | ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
 | kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
-| ~~kimi3~~ | ~~#2133~~ | ~~backend~~ | ~~P1~~ | ~~企微OA能力扩展~~ | ~~✅ CLOSED，Redis冲突修复，99测全绿~~ |
+| kimi3 | #2200 | brand | P1 | MediaX SDK部署 | 🔨 运行中 |
 | kimi4 | #1838 | backend | P2 | 批量方案变体生成 | ⏳ PR#4468 OPEN，CI FAIL |
 | kimi5 | #2166 | backend | P1 | AI图生图API | 🔨 运行中 |
 
-> **2 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；kimi2→#2144，kimi5→#2166
+> **3 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；kimi2→#2144，kimi3→#2200，kimi5→#2166
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

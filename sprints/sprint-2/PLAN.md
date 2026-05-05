@@ -1,6 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第905轮；kimi2 35%/kimi3 26%/kimi5 22%，3CC全活跃）
+> 更新时间：2026-05-06（排程经理第906轮；kimi2 35%/kimi3 26%/kimi5 38%，3CC全活跃）
+> ⚠️ kimi3/#2200 被阻塞：MediaXCollector依赖#2195未就绪，已发【需回复】给研发经理
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)

@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第902轮；kimi2 33%/kimi5 67%，2CC活跃；kimi3/#2133 已CLOSED）
-> ⚠️ kimi3/#2133企微OA扩展已CLOSED（Redis冲突修复后99测全绿）
+> 更新时间：2026-05-06（排程经理第903轮；kimi2 37%/kimi3 26%/kimi5 67%，3CC全活跃）
+> 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)

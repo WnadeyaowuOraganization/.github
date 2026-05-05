@@ -631,9 +631,9 @@
 | kimi2 | #1698 | backend | P2 | 提成绩效计算引擎 | 🔨 运行中 |
 | kimi3 | #2340 | backend | P1 | 方案引擎方案工作台 | 🔨 运行中 |
 | kimi4 | #2021 | approval | P2 | 报销费控模块接入审批流 | ⏳ PR#4464 OPEN，CI跑中 |
-| kimi5 | #1686 | backend | P2 | 报销费控新增项目费用关联 | 🔨 运行中 |
+| kimi5 | #1686 | backend | P2 | 报销费控新增项目费用关联 | ⏳ PR#4465 OPEN，CI queued |
 
-> **5 CC运行中**（pool 10/15空闲）；#1616 PR#4454 MERGED✅；#2073 PR#4463 MERGED✅；kimi2释放→#1698；#4464新PR CI跑中；kimi1(74%)需关注上下文
+> **5 CC运行中**（pool 10/15空闲）；#1616 PR#4454 MERGED✅；#2073 PR#4463 MERGED✅；kimi2释放→#1698；#4464 E2E跑中；#4465 CI queued；kimi1(74%)需关注上下文
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

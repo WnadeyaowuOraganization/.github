@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-05（排程经理第831轮；kimi2#1666后端完成待提PR）
+> 更新时间：2026-05-05（排程经理第835轮；kimi2释放，#1666 PR#4459 MERGED）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -29,23 +29,21 @@
 | 2 | #2021 | P2 | approval | 报销费控模块接入审批流 — 报销提交自动发起审批 | ✅ |
 | 3 | #1686 | P2 | backend | 报销费控新增项目费用关联+财务报表导出+供应商联动 | ✅ |
 | 4 | #1698 | P2 | backend | 提成绩效新增提成计算引擎API — 阶梯计算+绩效系数+批量计算 | ✅ |
-| 5 | ~~#1666~~ | P2 | biz-enablement | ~~AI参数问答助手API~~ → **后端完成待提PR** | ⏳ 等待提PR |
-| 6 | #2340 | P1 | backend | 方案引擎方案工作台 — 统一入口整合模板+素材+AI文案+排版+协同 | ✅ |
-| 7 | #2132 | P2 | backend | RBAC功能权限管控 — 10个新模块+功能发布开关+权限校验 | ✅ |
-| 8 | #2070 | P1 | hr | 培训管理菜单权限SQL — 培训管理5个二级菜单+按钮权限 | ✅ |
-| 9 | #2071 | P1 | hr | 培训管理后端Controller API — 培训计划/课程/记录/证书/评估接口 | ✅ |
-| 10 | #2072 | P1 | hr | 培训管理Entity+Mapper+Service — 培训计划/课程/记录+证书+评估 | ✅ |
-| 11 | #2073 | P2 | hr | 人事管理菜单和权限SQL — 人事管理菜单+按钮权限配置 | ✅ |
-| 12 | #1838 | P2 | design-ai | 批量方案变体生成 — 输入约束→AI生成多个布局方案 | ✅ |
-| 13 | #1842 | P2 | design-ai | 产品资源开放体系 — D1素材库2D/3D/SKP下载API | ✅ |
-| 14 | #2100 | P2 | backend | AI工单智能分派 — 自动推荐最优处理人 | ✅ |
-| 15 | #2101 | P2 | backend | AI预测性维护 — 故障预测+预防性维护计划 | ✅ |
-| 16 | #2133 | P1 | backend | 企微OA能力扩展 — 审批+日程+会议+智能表格+模板卡片 | ✅ |
-| 17 | #2144 | P2 | brand | AI辅助翻译 — Qwen3中英互译 | ✅ |
-| 18 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
-| 19 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
-| 20 | #2166 | P1 | backend | AI图生图API — 图片分析+出图引擎（新入Todo） | ✅ |
-| 21 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
+| 5 | #2340 | P1 | backend | 方案引擎方案工作台 — 统一入口整合模板+素材+AI文案+排版+协同 | ✅ |
+| 6 | #2070 | P1 | hr | 培训管理菜单权限SQL — 培训管理5个二级菜单+按钮权限 | ✅ |
+| 7 | #2071 | P1 | hr | 培训管理后端Controller API — 培训计划/课程/记录/证书/评估接口 | ✅ |
+| 8 | #2072 | P1 | hr | 培训管理Entity+Mapper+Service — 培训计划/课程/记录+证书+评估 | ✅ |
+| 9 | #2073 | P2 | hr | 人事管理菜单和权限SQL — 人事管理菜单+按钮权限配置 | ✅ |
+| 10 | #1838 | P2 | design-ai | 批量方案变体生成 — 输入约束→AI生成多个布局方案 | ✅ |
+| 11 | #1842 | P2 | design-ai | 产品资源开放体系 — D1素材库2D/3D/SKP下载API | ✅ |
+| 12 | #2100 | P2 | backend | AI工单智能分派 — 自动推荐最优处理人 | ✅ |
+| 13 | #2101 | P2 | backend | AI预测性维护 — 故障预测+预防性维护计划 | ✅ |
+| 14 | #2133 | P1 | backend | 企微OA能力扩展 — 审批+日程+会议+智能表格+模板卡片 | ✅ |
+| 15 | #2144 | P2 | brand | AI辅助翻译 — Qwen3中英互译 | ✅ |
+| 16 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
+| 17 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
+| 18 | #2166 | P1 | backend | AI图生图API — 图片分析+出图引擎（新入Todo） | ✅ |
+| 19 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

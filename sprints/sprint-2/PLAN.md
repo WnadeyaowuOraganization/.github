@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-05（排程经理第770轮；kimi2 #1882 PR#4450 OPEN 后端单测FAIL（疑似idle）/kimi3 #1616 PR#4454 OPEN 后端单测FAIL）
+> 更新时间：2026-05-05（排程经理第771轮；kimi2 #1882 PR#4450 OPEN 后端单测FAIL（疑似idle）/kimi3 #1616 PR#4454 OPEN 后端单测FAIL）
 > ⚠️ 两PR均存在「后端单元测试（基线对比）」FAIL，阻断自动合并，已通知研发经理
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)

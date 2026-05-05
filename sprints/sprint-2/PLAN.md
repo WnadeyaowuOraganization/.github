@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第901轮；kimi2 36%/kimi3 65%/kimi5 67%，3CC全活跃）
-> ⚠️ kimi3 PR#4454后端单测FAIL，研发经理已通知
+> 更新时间：2026-05-06（排程经理第902轮；kimi2 33%/kimi5 67%，2CC活跃；kimi3/#2133 已CLOSED）
+> ⚠️ kimi3/#2133企微OA扩展已CLOSED（Redis冲突修复后99测全绿）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -614,7 +614,7 @@
 | 05-06 | kimi2 | ~~#1842~~ | backend | P2 | ~~Done~~ | 产品资源开放体系 — PR #4470 MERGED ✅ |
 | 05-06 | kimi2 | #2144 | brand | P2 | In Progress | AI辅助翻译 |
 | 05-06 | kimi3 | ~~#2340~~ | backend | P1 | ~~Done~~ | 方案引擎方案工作台 — PR #4466 MERGED ✅ |
-| 05-06 | kimi3 | #2133 | backend | P1 | In Progress | 企微OA能力扩展 |
+| 05-06 | kimi3 | ~~#2133~~ | backend | P1 | ~~Done~~ | 企微OA能力扩展 — CLOSED（Redis冲突修复，99测全绿） |
 | 05-06 | kimi5 | ~~#2100~~ | backend | P2 | ~~Done~~ | AI工单智能分派 — PR #4471 MERGED ✅ |
 ### 当前运行（05-06 05:27）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
@@ -630,11 +630,11 @@
 | ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
 | ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
 | kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
-| kimi3 | #2133 | backend | P1 | 企微OA能力扩展 | 🔨 运行中 |
+| ~~kimi3~~ | ~~#2133~~ | ~~backend~~ | ~~P1~~ | ~~企微OA能力扩展~~ | ~~✅ CLOSED，Redis冲突修复，99测全绿~~ |
 | kimi4 | #1838 | backend | P2 | 批量方案变体生成 | ⏳ PR#4468 OPEN，CI FAIL |
-| kimi5 | - | - | - | 空闲 | 待指派 |
+| kimi5 | #2166 | backend | P1 | AI图生图API | 🔨 运行中 |
 
-> **2 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；kimi2→#2144，kimi5空闲
+> **2 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；kimi2→#2144，kimi5→#2166
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

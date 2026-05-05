@@ -3,6 +3,12 @@
 >
 ---
 
+**[2026-05-05] pr-body-lint门6对纯SQL场景误判issue-source.md缺失 — kimi2/#2070**
+- 现象：纯SQL的Issue（如菜单权限SQL），pr-body-lint门6检查issue-source.md是否存在，但该文件通常非本次CC创建，导致lint失败
+- 建议：门6对SQL类Issue应跳过issue-source.md检查，或在检测到无代码文件变更时跳过
+- 来源：kimi2 #2070 PR#4460 自述
+- 频次：1次，持续观察
+
 **[2026-04-30] PR创建后CC idle等待CI自动merge，CI失败/取消时无感知 — kimi3/#4095 + kimi4/#4124**
 - 现象：PR open后CC进入idle等待CI自动merge，但CI失败（质量预检门3 IMG_COUNT=0）或被cancel时，CC无法自动感知，持续idle 3.5-4小时
 - 影响：kimi3/#4095 PR#4370 质量预检失败idle 236分钟；kimi4/#4124 PR#4376 CI cancel idle 217分钟

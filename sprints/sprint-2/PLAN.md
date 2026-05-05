@@ -629,7 +629,7 @@
 | kimi4 | #2021 | approval | P2 | 报销费控模块接入审批流 | 🔨 运行中 |
 | kimi5 | #1686 | backend | P2 | 报销费控新增项目费用关联 | 🔨 运行中 |
 
-> **5 CC运行中**（pool 10/15空闲）；#1616单测FAIL已通知研发经理；kimi4/kimi5新指派
+> **5 CC运行中**（pool 10/15空闲）；#1616 Round1修复已提交，CI queued（runner被#4463 E2E占用）；#4463质量预检FAIL，新commit push后runner排队；kimi4(60%)/kimi5(14%)新指派正常
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

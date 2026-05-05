@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第893轮；kimi2#1842 PR#4470+kimi5#2100 PR#4471 MERGED，kimi2/kimi4/kimi5释放，1CC运行中）
+> 更新时间：2026-05-06（排程经理第894轮；kimi2→#2144 36%，kimi3→#2133 57%，kimi5→#2166 29%，3CC全活跃）
 > ⚠️ kimi3 PR#4454后端单测FAIL，研发经理已通知
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
@@ -19,27 +19,25 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第893轮；kimi2#1842 PR#4470+kimi5#2100 PR#4471 MERGED，kimi2/kimi4/kimi5释放，1CC运行中）
+> 更新时间：2026-05-06（排程经理第894轮；kimi2→#2144 36%，kimi3→#2133 57%，kimi5→#2166 29%，3CC全活跃）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #2101 | P2 | backend | AI预测性维护 — 故障预测+预防性维护计划 | ✅ |
-| 2 | #2144 | P2 | brand | AI辅助翻译 — Qwen3中英互译 | ✅ |
-| 3 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
-| 4 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
-| 5 | #2166 | P1 | backend | AI图生图API — 图片分析+出图引擎（新入Todo） | ✅ |
-| 6 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
-| 7 | #2426 | P1 | pipeline | llm_client.py — vLLM统一调用封装（新入Todo） | ✅ |
-| 8 | #2382 | P1 | hr | 前端培训计划+课程库页面 — 计划管理+课程CRUD+课件上传（新入Todo） | ✅ |
-| 9 | #2336 | P1 | sample | D3样品一键生成页面（新入Todo） | ⏳ 依赖后端前置Phase |
-| 10 | #2442 | P1 | backend | Lookalike搜索模式 → 同类项目跨区域复制（新入Todo） | ✅ |
-| 11 | #2438 | P1 | backend | 投标人名单提取 → 发现同场竞技者（新入Todo） | ✅ |
-| 12 | #2436 | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层（新入Todo） | ✅ |
-| 13 | #2434 | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联（新入Todo） | ✅ |
-| 14 | #2165 | P1 | backend | Qwen2.5-VL 多模态模型部署 — 视觉理解+图文生成（新入Todo） | ✅ |
-| 15 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版（新入Todo） | ✅ |
+| 2 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
+| 3 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
+| 4 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
+| 5 | #2426 | P1 | pipeline | llm_client.py — vLLM统一调用封装（新入Todo） | ✅ |
+| 6 | #2382 | P1 | hr | 前端培训计划+课程库页面 — 计划管理+课程CRUD+课件上传（新入Todo） | ✅ |
+| 7 | #2336 | P1 | sample | D3样品一键生成页面（新入Todo） | ⏳ 依赖后端前置Phase |
+| 8 | #2442 | P1 | backend | Lookalike搜索模式 → 同类项目跨区域复制（新入Todo） | ✅ |
+| 9 | #2438 | P1 | backend | 投标人名单提取 → 发现同场竞技者（新入Todo） | ✅ |
+| 10 | #2436 | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层（新入Todo） | ✅ |
+| 11 | #2434 | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联（新入Todo） | ✅ |
+| 12 | #2165 | P1 | backend | Qwen2.5-VL 多模态模型部署 — 视觉理解+图文生成（新入Todo） | ✅ |
+| 13 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版（新入Todo） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

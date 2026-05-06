@@ -1,8 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第913轮；kimi2 35%/kimi5 16%，2CC活跃；kimi3/#2200 已CLOSED，已重指派#2101）
-> ⚠️ kimi5/#2382 暂停：缺原型支撑，CC询问是否继续或等原型补齐
-> 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
+> 更新时间：2026-05-06（排程经理第914轮；kimi1 22%/kimi2 35%/kimi3 15%/kimi4 14%/kimi5 16%，5CC全活跃）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -633,13 +631,14 @@
 | ~~kimi5~~ | ~~#1590~~ | ~~budget~~ | ~~P2~~ | ~~项目成本复盘报告~~ | ~~✅ PR#4428 MERGED~~ |
 | ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
 | ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
+| kimi1 | #2132 | backend | P1 | RBAC权限系统 | 🔨 运行中 |
 | kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
 | ~~kimi3~~ | ~~#2200~~ | ~~brand~~ | ~~P1~~ | ~~MediaX SDK部署~~ | ~~✅ CLOSED~~ |
 | kimi3 | #2101 | backend | P1 | AI预测性维护 | 🔨 运行中 |
-| kimi4 | #1838 | backend | P2 | 批量方案变体生成 | ⏳ PR#4468 OPEN，CI FAIL |
+| kimi4 | #1838 | backend | P2 | 批量方案变体生成 | 🔨 运行中 |
 | kimi5 | #2382 | frontend | P1 | 前端培训计划+课程库页面 | 🔨 运行中 |
 
-> **3 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；kimi2→#2144，kimi3→#2101，kimi5→#2382
+> **5 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；kimi1→#2132，kimi2→#2144，kimi3→#2101，kimi4→#1838，kimi5→#2382
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

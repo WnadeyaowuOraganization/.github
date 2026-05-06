@@ -18,39 +18,50 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第1122轮；修复指派建议表：移出10个needs-prototype冻结Issue→pause；补入10个合规Issue）
+> 更新时间：2026-05-06（排程经理第1122轮；修复指派建议表：移出10个needs-prototype冻结Issue→pause；补入10个合规Issue；**拆分主表/非活跃记录**；标注3个阻塞项原因）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| ~~1~~ | ~~#2420~~ | ~~P1~~ | ~~backend~~ | ~~Agent基建 CLAUDE.md + docs/agent-guide.md~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
-| ~~2~~ | ~~#2422~~ | ~~P0~~ | ~~backend~~ | ~~Agent基建 config/agent_config.json~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
-| ~~3~~ | ~~#2425~~ | ~~P0~~ | ~~pipeline~~ | ~~Agent基建 pipelines/shared/search_client.py~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
-| ~~4~~ | ~~#2424~~ | ~~P1~~ | ~~frontend~~ | ~~Agent基建 browser_client.py~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
-| ~~5~~ | ~~#2475~~ | P1 | backend | D3-AI G7e AI建模后端 — Qwen驱动的GH脚本生成API | ~~✅~~ → kimi1 |
-| 6 | #2336 | P1 | sample | D3样品一键生成页面 | ⏳ 依赖后端前置Phase |
-| ~~7~~ | ~~#2438~~ | P1 | backend | 投标人名单提取 → 发现同场竞技者 | ~~✅~~ → kimi2 |
-| ~~8~~ | ~~#2436~~ | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层 | ~~✅~~ → kimi3 |
-| ~~9~~ | ~~#2434~~ | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联 | ~~✅~~ → kimi4 |
-| ~~10~~ | ~~#2165~~ | ~~P1~~ | ~~backend~~ | ~~Qwen2.5-VL 多模态模型部署~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
-| 11 | #1451 | P1 | brand | 品牌术语表管理 — 中英文对照术语库 + AI 生成时强制校验 | ✅ |
-| 12 | #1856 | P1 | backend | 非标件成本系数库 — 开模费/工时费率/设计费率/非标色加价定义+自动报价 | ✅ |
-| 13 | #2259 | P1 | budget | 科目间调剂申请页面 — 调剂表单+审批流+记录查看 | ✅ |
-| 14 | #2260 | P1 | budget | 项目预算编制增强 — 模板自动匹配+科目增删+限额信封可视化 | ✅ |
-| 15 | #2287 | P1 | budget | 预算管控参数配置页面 | ✅ |
-| 16 | #2328 | P1 | crm | 商机详情页信息质量面板 — 红绿灯+缺失提醒+阶段拦截弹窗 | ✅ |
-| 17 | #2329 | P1 | crm | 客户详情页情报卡Tab — MEDDIC雷达图+决策链地图+更新时间线 | ✅ |
-| 18 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
-| 19 | #2339 | P1 | frontend | 方案引擎 Web端VI标准管理页 [33/34] | ✅ |
-| 20 | #2341 | P1 | frontend | 方案引擎 素材库前端 — 瀑布流浏览+智能搜索 [12/22] | ✅ |
-| 21 | #2485 | P2 | design-ai | 设计模型训练 ComfyUI FLUX模型下载与Docker环境配置 | ✅ |
-| 22 | #2454 | P2 | backend | 中标项目名称NLP分词 → 自动扩展keyword_pool | ✅ |
-| 23 | #2332 | P1 | tool-center | 数据管理→采集工具使用指南页 | ✅ |
-| 24 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
-| 25 | #2334 | P1 | tool-center | 设计管理→设计工具下载页（D3/GH+AI渲染） | ✅ |
+| 1 | #1856 | P1 | backend | 非标件成本系数库 — 开模费/工时费率/设计费率/非标色加价定义+自动报价 | ✅ |
+| 2 | #2287 | P1 | budget | 预算管控参数配置页面 | ✅ |
+| 3 | #2328 | P1 | crm | 商机详情页信息质量面板 — 红绿灯+缺失提醒+阶段拦截弹窗 | ✅ |
+| 4 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
+| 5 | #2339 | P1 | frontend | 方案引擎 Web端VI标准管理页 [33/34] | ✅ |
+| 6 | #2341 | P1 | frontend | 方案引擎 素材库前端 — 瀑布流浏览+智能搜索 [12/22] | ✅ |
+| 7 | #2485 | P2 | design-ai | 设计模型训练 ComfyUI FLUX模型下载与Docker环境配置 | ✅ |
+| 8 | #2454 | P2 | backend | 中标项目名称NLP分词 → 自动扩展keyword_pool | ✅ |
+| 9 | #2332 | P1 | tool-center | 数据管理→采集工具使用指南页 | ✅ |
+| 10 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
+| 11 | #2334 | P1 | tool-center | 设计管理→设计工具下载页（D3/GH+AI渲染） | ✅ |
+| 12 | #2337 | P1 | sample | 样品申请单+制作工单页面 | ✅ |
+| 13 | #2338 | P1 | sample | 样品箱管理页面 — 卡位可视化布局 | ✅ |
+| 14 | #2342 | P1 | frontend | 方案引擎 方案模板管理前端 — 模板库浏览+上传+行业×阶段矩阵 | ✅ |
+| 15 | #2343 | P1 | frontend | 方案引擎 S3资产浏览器前端 — 可视化查看S3所有数据资产 | ✅ |
+| 16 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
+| 17 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
+| 18 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
+| 19 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
+| 20 | #2491 | P1 | backend | 竞品设计素材库API — 50家竞品产品图/效果图结构化存储 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
+
+### 非活跃记录（冻结/已指派/阻塞 — 不出现在主表）
+
+| Issue | 原因 | 当前状态 |
+|-------|------|---------|
+| #2420 / #2422 / #2425 / #2424 | ⛔ needs-prototype 冻结 | pause |
+| #2165 | ⛔ needs-prototype 冻结 | pause |
+| #2475 | 已指派 kimi1 | In Progress |
+| #2438 | 已指派 kimi2 | In Progress |
+| #2436 | 已指派 kimi3 | In Progress |
+| #2434 | 已指派 kimi4 | In Progress |
+| #2329 | 已指派 kimi2 | In Progress |
+| #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
+| #1451 | ⚠️ 需配前端（body 写"前端：待创建术语表管理页面"） | Todo |
+| #2259 | ❌ 依赖缺失（backend#929 在 wande-ai-backend 仓库不存在） | Todo |
+| #2260 | ❌ 依赖缺失（backend#926-928 在 wande-ai-backend 仓库不存在） | Todo |
 
 ## 指派历史
 

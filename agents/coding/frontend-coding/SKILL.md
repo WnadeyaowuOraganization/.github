@@ -362,7 +362,22 @@ bash ~/projects/.github/scripts/frontend-page-check.sh <页面名> <API路径前
 
 > 脚本位置：`scripts/frontend-page-check.sh`，返回值非0=有风险，禁止忽略后直接编码。
 
+### 🚨 启动编码前必读 issue-source.md §原型引用（2026-05-06 #2329 教训）
+
+编码前 **必须** 先阅读 `issues/issue-<N>/issue-source.md` 的 **"原型与设计引用"** 或 **"关联的 Issue"** 章节，确认：
+1. 原型页面路径（如 `.github/docs/design/crm-商务中心/index.html`）
+2. 详细设计章节（如 `详细设计.md §4`）
+3. 关联 Issue 是否已 CLOSED（后端 API 依赖）
+
+**禁止**未读 issue-source.md 直接开始编码。若原型引用缺失或设计文档不存在，立即 pause 并报告研发经理，**禁止**自行假设 UI 结构。
+
+案例：kimi2 #2329 未读 issue-source.md 中原型引用，误报"缺原型"并自行 pause，实际原型在 `crm-商务中心/` 目录已存在。
+
 ```bash
+# 0. 先读 issue-source.md 原型引用（MUST）
+cat issues/issue-${ISSUE}/issue-source.md | grep -A5 "原型\|设计\|关联"
+# 有输出 = 按引用路径查找原型；无输出 = 报告研发经理
+
 # 1. 先 rebase，合并其他 CC 的最新改动（必须，防止 duplicate declaration）
 git fetch origin dev && git rebase origin/dev
 # 有冲突解决后继续；解不了就 git rebase --abort 然后 push，让 CI 兜底

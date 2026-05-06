@@ -12,6 +12,18 @@ description: Write Spring Boot 3 backend Java code for Wande-Play following RuoY
 
 Spring Boot 3 + MyBatis-Plus + Sa-Token + RuoYi-Vue-Plus。**业务代码只能写在 `ruoyi-modules/wande-ai/`**。
 
+## 启动编码前必读 issue-source.md（2026-05-06 #2329 教训）
+
+编码前 **必须** 先阅读 `issues/issue-<N>/issue-source.md` 的完整内容，重点确认：
+1. **需求范围与数据模型** — 表结构、字段类型、关联关系
+2. **API 路径与命名约定** — Controller 方法名、权限码、请求/响应格式
+3. **关联 Issue 状态** — 前端配对 Issue 是否已启动/完成，是否需要等待
+4. **原型与设计引用** — 若 issue body 引用 `.github/docs/design/<模块>/` 设计文档，后端 CC 同样需要阅读以理解业务上下文
+
+**禁止**未读 issue-source.md 直接开始编码。若需求范围不明确或关联 Issue 状态异常，立即 pause 并报告研发经理，**禁止**自行假设业务逻辑。
+
+案例：kimi2 #2329 未读 issue-source.md 中原型引用，误报"缺原型"并自行 pause，实际设计文档已存在。后端 CC 同理，若未读 issue-source.md 可能导致 API 设计与前端预期不一致。
+
 ## 模块归属（强制）
 
 | 位置 | 允许放什么 |

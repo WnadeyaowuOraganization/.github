@@ -84,6 +84,21 @@ bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"
 - 发现 Jump / Fail / E2E Fail → 立即插入队首
 - 建议表中**未指派行数 < 5** → 从 Plan/Todo 状态补充新 Issue
 
+### ⚠️ 同步流转：维护指派建议表后必须更新 Project 状态
+
+> **教训：本轮发现指派建议表更新后 Plan 队列数量未减少，原因是只更新了 PLAN.md 文档，未同步更新 Project #4 中对应 Issue 的状态（Plan → Todo）。**
+
+指派建议表中的 Issue 必须**同步**反映在 Project #4 中：
+
+| 动作 | 必须执行的操作 |
+|------|-------------|
+| 从 Plan 队列补充 Issue 入主表 | 同步执行 `bash scripts/update-project-status.sh --repo play --issue <N> --status "Todo"` |
+| Issue 已提 PR/已完成 | 执行 `update-project-status.sh ... --status "Done"` 或 `In Progress` |
+| Issue 被冻结（needs-prototype） | 执行 `update-project-status.sh ... --status "pause"` |
+| 从主表移除（已指派/Done/冻结） | 同步更新 PLAN.md 非活跃记录区 |
+
+**禁止**：只更新 PLAN.md 而不同步 Project 状态，导致队列数量与文档不一致。
+
 ### 判断是否需要补充指派建议（**禁止运行 cc-check.sh**）
 
 排程经理**绝不巡检 CC**，活跃指派数量通过读取 PLAN.md 中研发经理维护的区域获取：

@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第910轮；kimi2 35%/kimi3 55%/kimi5 16%，3CC全活跃）
+> 更新时间：2026-05-06（排程经理第911轮；kimi2 35%/kimi3 47%/kimi5 16%，3CC全活跃）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)

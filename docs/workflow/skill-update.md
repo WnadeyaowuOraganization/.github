@@ -1,5 +1,13 @@
 # Skill 改进跟踪
 
+> ---
+
+**[2026-05-06] cc-test-env.sh 自动执行未应用 Flyway 脚本 — kimi3/#2101**
+- 现象：Flyway 被启动脚本禁用(--spring.flyway.enabled=false)，需手动执行 SQL 建表；Controller 编译后首次未热加载，需 mvn install + restart-backend
+- 建议：cc-test-env.sh 在 restart-backend 时自动检测并执行未应用的 Flyway 脚本，减少手动步骤
+- 来源：kimi3 #2101 CC-REVIEW
+- 频次：1次，观察中
+
 >
 ---
 

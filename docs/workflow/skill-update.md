@@ -2,6 +2,33 @@
 
 > ---
 
+**[2026-05-06] dev 分支 Maven 编译失败：Lombok + MapStruct 注解处理器顺序问题 — 部署失败回流**
+- 现象：CI 部署 dev 分支失败，`ruoyi-system` 模块多个 BO/VO 类编译错误：`cannot find symbol: method getUserName(), setDeptId()...`
+- 根因：`@AutoMapper` 注解处理器在 Lombok 注解处理器之前运行，导致 MapStruct 生成的代码看不到 Lombok 生成的方法
+- 修复方案：调整 `backend/pom.xml` 中 `annotationProcessorPaths` 顺序，确保 Lombok 在 MapStruct 之前
+  ```xml
+  <path>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok</artifactId>
+      <version>${lombok.version}</version>
+  </path>
+  <path>
+      <groupId>org.projectlombok</groupId>
+      <artifactId>lombok-mapstruct-binding</artifactId>
+      <version>${mapstruct-plus.lombok.version}</version>
+  </path>
+  <path>
+      <groupId>io.github.linpeilie</groupId>
+      <artifactId>mapstruct-plus-processor</artifactId>
+      <version>${mapstruct-plus.version}</version>
+  </path>
+  ```
+- 来源：CI run #25414768705 部署失败
+- 状态：**已修复** — commit e9e60d61f 推送到 origin/dev，backend/pom.xml annotationProcessorPaths 已调整为正确顺序
+- 优先级：P0（基础设施问题）
+
+> ---
+
 **[2026-05-06] cc-test-env.sh 自动执行未应用 Flyway 脚本 — kimi3/#2101**
 - 现象：Flyway 被启动脚本禁用(--spring.flyway.enabled=false)，需手动执行 SQL 建表；Controller 编译后首次未热加载，需 mvn install + restart-backend
 - 建议：cc-test-env.sh 在 restart-backend 时自动检测并执行未应用的 Flyway 脚本，减少手动步骤

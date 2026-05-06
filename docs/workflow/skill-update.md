@@ -2,6 +2,15 @@
 
 > ---
 
+**[2026-05-06] 指派建议表系统性混入 needs-prototype 冻结 Issue — 排程经理错误**
+- 现象：#2420/#2422/#2425/#2424（Agent基建）+ #2165（Qwen部署）+ #2322-#2326（素材库前端）共10个含 `needs-prototype` 标签的 Issue 被放入指派建议表
+- 根因：一次性批量排程326个Issue时，参考了 CSV/文档中的预分析结果而非直接查询 GitHub 标签，导致过时数据未过滤 `needs-prototype` 标记
+- 处置：10个Issue全部移入 Project `pause` 状态；指派建议表替换为10个合规 Issue（#1451/#1856/#2259/#2260/#2287/#2328/#2329/#2332/#2333/#2334）；Plan队列231个Issue全面核查无遗漏
+- 教训：**排程经理每次维护指派建议表时，必须对每个候选 Issue 逐个执行 `gh issue view #N --json labels` 确认不含 needs-prototype，再放入建议表**
+- 状态：**已修复** — commit 17a110ff，PLAN.md已更新
+
+> ---
+
 **[2026-05-06] dev 分支 Maven 编译失败：Lombok + MapStruct 注解处理器顺序问题 — 部署失败回流**
 - 现象：CI 部署 dev 分支失败，`ruoyi-system` 模块多个 BO/VO 类编译错误：`cannot find symbol: method getUserName(), setDeptId()...`
 - 根因：`@AutoMapper` 注解处理器在 Lombok 注解处理器之前运行，导致 MapStruct 生成的代码看不到 Lombok 生成的方法

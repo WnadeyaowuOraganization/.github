@@ -115,6 +115,30 @@ cat sprints/sprint-2/PLAN.md | awk '/## 指派建议/,/## 指派历史/' | grep 
 | ⛔ 排除 | 标题含 `[Master]` — **禁止出现在建议表** |
 | ⛔ 排除 | Issue 含 `needs-prototype` 标签 — **冻结，等产品补原型后再入队** |
 
+### 强制校验（每次更新建议表前必做）
+
+> **教训：#2420/#2422/#2425/#2424/#2165/#2322-#2326 等10个 needs-prototype Issue 被误放入建议表，根因是引用了非实时的预分析数据而未逐个查询 GitHub 标签。**
+
+每个候选 Issue **必须**执行以下命令之一确认不含 `needs-prototype`：
+
+```bash
+# 方式1：单 Issue 查询
+gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json labels -q '.labels | map(.name) | join(", ")'
+
+# 方式2：批量查询（并发加速）
+export GH_TOKEN=$(python3 scripts/gh-app-token.py 2>/dev/null)
+for issue in 2420 2422 2425 2424; do
+  labels=$(gh issue view $issue --repo WnadeyaowuOraganization/wande-play --json labels -q '.labels | map(.name) | join(", ")')
+  if echo "$labels" | grep -q "needs-prototype"; then
+    echo "FROZEN: #$issue"
+    # 移入 pause 状态
+    bash scripts/update-project-status.sh --repo play --issue $issue --status "pause"
+  fi
+done
+```
+
+有 `needs-prototype` 的 Issue → Project 状态标 `pause`，**不得**放入建议表。
+
 ### 格式
 
 ```markdown

@@ -1,6 +1,6 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-05-06 by 研发经理（D90 E2E环境变量约束 + #4467/#1539 CI runner阻塞修复 · quality-gate门5新增 + CC启动脚本注入BASE_URL_API）
+> ⏰ 最后更新：2026-05-06 by 研发经理（D90 v3 E2E URL统一配置 · 仅BASE_URL_API/BASE_URL_FRONT两个变量 · 门5+6严格检查硬编码）
 > ⏰ 上次更新：2026-04-27 04:30 by 吴耀（D105 预算+计划+全景表三连击 B档建原型 · 3 Hub + 12 Tab + 3 详设 md · 3 Master #4262/#4263/#4264 + 33 子 Issue 三重引用 · needs-prototype 136→112）
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
@@ -11,7 +11,7 @@
 | 时间 | 问题 | 症状 | 修复 |
 |------|------|------|------|
 | 2026-04-19 02:17 | wande-ai-api 引用遗漏 | CI workflow 引用已删除模块，导致所有PR单测失败 | pr-test.yml 第126行删除过时构建命令 |
-| 2026-05-06 | D90 E2E测试硬编码kimi端口 | #4467 commission-calculate.spec.ts 硬编码localhost:7102，CI中无服务 → 655个API测试全部30秒超时×retries2，E2E运行4小时阻塞整个runner | (1) pr-test.yml注入所有已知变量名作为别名；(2) e2e/helpers/url-config.ts统一URL读取+向后兼容；(3) playwright.config.ts配置各project baseURL；(4) quality-gate门6新增检查；(5) wande-ai skill §7.7更新为Playwright baseURL+相对路径方案；(6) CC自创CC_TEST_BACKEND_URL违规已修复 |
+| 2026-05-06 | D90 E2E测试硬编码kimi端口 | #4467 commission-calculate.spec.ts 硬编码localhost:7102，CI中无服务 → 655个API测试全部30秒超时×retries2，E2E运行4小时阻塞整个runner | (1) D90 v3：统一使用BASE_URL_API/BASE_URL_FRONT两个变量；(2) pr-test.yml/ci-env.sh仅注入两个合法变量；(3) playwright.config.ts配置各project baseURL；(4) quality-gate门5+6严格检查所有硬编码URL；(5) wande-ai skill §7.7 + coding skills同步简化；(6) 移除所有旧变量兼容 |
 ## 🔄 Issue 生命周期 + 测试层级
 
 ### 完整流程图

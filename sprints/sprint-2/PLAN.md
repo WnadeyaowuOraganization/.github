@@ -1,9 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第1121轮；kimi1-4 (#2132/#2144/#2442/#2147) ✅全部merged，4CC空闲待指派）
+> 更新时间：2026-05-06（研发经理指派；kimi1-4全部启动新Issue #2475/#2438/#2436/#2434）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
-> Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
 
 ## 排程统计
@@ -19,7 +18,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第1121轮；kimi1-4 (#2132/#2144/#2442/#2147) ✅全部merged，4CC空闲待指派）
+> 更新时间：2026-05-06（研发经理指派；kimi1-4全部启动新Issue）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -29,11 +28,11 @@
 | 2 | #2422 | P0 | backend | Agent基建 config/agent_config.json — Agent配置文件 | ✅ |
 | 3 | #2425 | P0 | pipeline | Agent基建 pipelines/shared/search_client.py — SearXNG统一搜索 | ✅ |
 | 4 | #2424 | P1 | frontend | Agent基建 browser_client.py — Browser Agent统一封装 | ✅ |
-| 5 | #2475 | P1 | backend | D3-AI G7e AI建模后端 — Qwen驱动的GH脚本生成API | ✅ |
+| ~~5~~ | ~~#2475~~ | P1 | backend | D3-AI G7e AI建模后端 — Qwen驱动的GH脚本生成API | ~~✅~~ → kimi1 |
 | 6 | #2336 | P1 | sample | D3样品一键生成页面 | ⏳ 依赖后端前置Phase |
-| 7 | #2438 | P1 | backend | 投标人名单提取 → 发现同场竞技者 | ✅ |
-| 8 | #2436 | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层 | ✅ |
-| 9 | #2434 | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联 | ✅ |
+| ~~7~~ | ~~#2438~~ | P1 | backend | 投标人名单提取 → 发现同场竞技者 | ~~✅~~ → kimi2 |
+| ~~8~~ | ~~#2436~~ | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层 | ~~✅~~ → kimi3 |
+| ~~9~~ | ~~#2434~~ | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联 | ~~✅~~ → kimi4 |
 | 10 | #2165 | P1 | backend | Qwen2.5-VL 多模态模型部署 — 视觉理解+图文生成 | ✅ |
 | 11 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
 | 12 | #2322 | P1 | asset-library | 素材库前端 - 标签管理页面 | ✅ |
@@ -235,10 +234,16 @@
 | 05-04 | kimi5 | ~~#1674~~ | biz-enablement | medium | **Done** | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 — **PR #4449 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — 项目关闭时自动更新成本基准库 — **PR #4451 MERGED** ✅ |
 | 05-04 | #2132 ✅merged/kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置-多角色模板系统 — **PR #4453 MERGED** ✅ |
-| 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
+| 05-06 | kimi1 | #2475 | backend | **high** | In Progress | D3-AI G7e AI建模后端 — Qwen驱动GH脚本生成API |
+| 05-06 | kimi2 | #2438 | backend | **high** | In Progress | 投标人名单提取 → 发现同场竞技者 |
+| 05-06 | kimi3 | #2436 | pipeline | **high** | In Progress | 财政预算信号采集 → 六层信号源第三层 |
+| 05-06 | kimi4 | #2434 | backend | **high** | In Progress | 信号链自动串联 → 同项目不同阶段信号关联 |
 
-**当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
-- #2132 ✅merged/kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）
+**当前4个CC在线运行中（05-06研发经理指派）：**
+- kimi1 #2475: D3-AI G7e AI建模后端（backend，**high**，刚启动）
+- kimi2 #2438: 投标人名单提取（backend，**high**，刚启动）
+- kimi3 #2436: 财政预算信号采集（pipeline，**high**，刚启动）
+- kimi4 #2434: 信号链自动串联（backend，**high**，刚启动）
 - ~~kimi2 #3383~~ → **kimi2 #2527**: 0%进度（版本历史+审批流程面板，frontend，刚启动）✅ 序号#7
 - ~~kimi3 #3384~~ → **kimi3 #2532**: 0%进度（已读追踪+公告详情，frontend，刚启动）✅ 序号#8
 - kimi4 #1923: 62%进度（竞品定价数据库，backend，持续工作中）

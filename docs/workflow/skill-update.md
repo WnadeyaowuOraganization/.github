@@ -2,6 +2,15 @@
 
 > ---
 
+**[2026-05-07] 指派建议表3项改进 — 研发经理方案评审**
+- 改进1「可用Issue埋没」：主表25行中仅15行可用，冻结/已指派/阻塞项与可用项混排 → **主表拆分**：仅保留可立即指派Issue（max 20），其余移入「非活跃记录」区
+- 改进2「缺乏依赖校验」：#2259依赖backend#929、#2260依赖backend#926-928，入表时未验证，指派后发现依赖Issue在wande-ai-backend仓库**不存在** → **scheduler-workflow skill新增「依赖校验」小节**：入表前扫描body跨仓库依赖并逐个`gh issue view`验证
+- 改进3「纯后端未配前端」：#1451 body写"前端：待创建术语表管理页面"，违反「后端必配前端」红线 → **scheduler-workflow skill新增「后端必配前端校验」小节**：扫描body中"前端待创建"等关键字，未配前端的标`⚠️需配前端`并移出主表
+- 改进4「CC未读issue-source.md」：#2329已派kimi2，CC反馈"缺原型"，但实际body已引用crm-商务中心设计文档 → **建议研发经理更新 frontend-coding/backend-coding skill**：启动检查清单新增「必读issue-source.md §原型引用」门控
+- 状态：**已修复** — PLAN.md commit addf7a27，scheduler-workflow skill commit 925f6f50
+
+> ---
+
 **[2026-05-06] 指派建议表系统性混入 needs-prototype 冻结 Issue — 排程经理错误**
 - 现象：#2420/#2422/#2425/#2424（Agent基建）+ #2165（Qwen部署）+ #2322-#2326（素材库前端）共10个含 `needs-prototype` 标签的 Issue 被放入指派建议表
 - 根因：一次性批量排程326个Issue时，参考了 CSV/文档中的预分析结果而非直接查询 GitHub 标签，导致过时数据未过滤 `needs-prototype` 标记

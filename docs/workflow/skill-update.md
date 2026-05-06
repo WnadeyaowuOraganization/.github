@@ -11,6 +11,15 @@
 >
 ---
 
+**[2026-05-06] run-cc.sh 启动时应清理 .claude/skills/ untracked 变更 — kimi1/#2132**
+- 现象：pre-push hook 拦截 .claude/skills/team-comm 等文件，导致 CC push 被阻断；feature 分支远程已有旧实现(modulepermission 包)，首次 push 前未 fetch 导致 rebase 冲突 5 文件；--force-with-lease 多次 stale
+- 建议：① run-cc.sh 启动时清理 .claude/skills/ 的 untracked 变更；② feature 分支首次 push 前检查远程是否已有代码，如有先 fetch 再 rebase
+- 来源：kimi1 #2132 CC-REVIEW
+- 频次：1次，观察中
+
+>
+---
+
 **[2026-05-06] E2E smoke 模态框处理可封装为公共函数 — kimi4/#1838**
 - 现象：前端页面模态框拦截测试，导致 E2E smoke 3/5 通过
 - 建议：E2E 测试 skill 建议模态框处理封装为公共函数

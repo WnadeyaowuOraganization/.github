@@ -1582,3 +1582,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 解决：参考现有测试补 @Tag("dev")
 - 建议：backend-coding skill 补充 @Tag注解强制要求说明
 - 来源：kimi5/#1674 本轮回顾
+
+---
+
+**[2026-05-06] 根pom skipTests=true 时测试运行命令不明确（累计2次）— kimi4/#2147**
+- 现象：根 pom.xml 设置 `<skipTests>true</skipTests>`，新测试默认被跳过；需同时满足 `-DskipTests=false` + 测试类加 `@Tag("dev")` + surefire `groups=dev` 才能运行；且 Pattern.compile 反斜杠转义易出错
+- 建议：① backend-test skill 增加「根 pom skipTests=true 时的测试运行命令」模板（`mvn test -DskipTests=false -Dgroups=dev`）；② 新增测试类模板中预置 `@Tag("dev")`，避免遗漏
+- 来源：kimi4 #2147 CC-REVIEW
+- 频次：2次（kimi5/#1674, kimi4/#2147），接近阈值，持续观察

@@ -326,12 +326,14 @@ GitHub Wiki + Issues + docs/workflow/（组织知识持久化）
 **红线**：
 - E2E 测试文件（`e2e/tests/**/*.spec.ts`）**禁止**出现 `localhost:710[0-9]` 或 `127.0.0.1:710[0-9]` 硬编码
 - `API_BASE` / `BASE_URL` 等变量**禁止**使用 `|| 'http://localhost:710X'` 作为 fallback，必须依赖环境变量
+- **禁止创建新的环境变量名**（如 `CC_TEST_BACKEND_URL`），必须复用 `BASE_URL_API` / `BASE_URL_FRONT`
 - 唯一合法的默认回退是 CI/Dev 端口（`localhost:6041` / `localhost:6040`）
 
-**Why**：#4467 事故 — `commission-calculate.spec.ts` 硬编码 `localhost:7102`，CI 中该端口无服务，导致 655 个 API 测试全部 30 秒超时 × retries 2，E2E 运行 4 小时阻塞整个 runner。
+**Why**：#4467 事故 — `commission-calculate.spec.ts` 硬编码 `localhost:7102`，CI 中该端口无服务，导致 655 个 API 测试全部 30 秒超时 × retries 2，E2E 运行 4 小时阻塞整个 runner。#4475 新增 — CC 自创 `CC_TEST_BACKEND_URL` 绕开规范，CI 未注入导致同款超时。
 
 **How to apply**：
 - 新增/修改 E2E 测试时，用 `process.env.BASE_URL_API` 读取环境变量
+- **禁止使用** `CC_TEST_BACKEND_URL` 等自定义变量，必须使用 `BASE_URL_API`
 - 本地开发跑 E2E 时，由 `cc-test-env.sh` 自动注入 `BASE_URL_API=http://localhost:${BACKEND_PORT}`
 - CI 工作流 `pr-test.yml` 已强制注入 `BASE_URL_API=http://localhost:6041`
 - PR quality-gate 门 5 已增加 `localhost:710[0-9]` 自动拦截

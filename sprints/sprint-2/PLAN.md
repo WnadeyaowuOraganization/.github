@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第998轮；kimi1/#2132 rebase 71%，kimi2 30%（rebase中），kimi3 58%，kimi4 66%（PR#4479已恢复feature分支），4CC全活跃）
+> 更新时间：2026-05-06（排程经理第999轮；kimi1/#2132 rebase 72%，kimi2 30%，kimi3 58%，kimi4 66%（PR#4479），4CC全活跃）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)

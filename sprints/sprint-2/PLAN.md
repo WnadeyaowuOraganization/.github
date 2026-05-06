@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第925轮；kimi1 40%/kimi2 35%/kimi3 0%/kimi4 59%/kimi5 27%，5CC全活跃）
+> 更新时间：2026-05-06（排程经理第925轮；kimi1 40%/kimi2 35%/kimi4 59%/kimi5 27%，4CC活跃；kimi3/#2165 已暂停→pause队列）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -637,12 +637,12 @@
 | kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
 | ~~kimi3~~ | ~~#2200~~ | ~~brand~~ | ~~P1~~ | ~~MediaX SDK部署~~ | ~~✅ CLOSED~~ |
 | ~~kimi3~~ | ~~#2101~~ | ~~backend~~ | ~~P1~~ | ~~AI预测性维护~~ | ~~✅ CLOSED~~ |
-| kimi3 | #2165 | backend | P1 | Qwen2.5-VL部署 | 🔨 运行中 |
+| ~~kimi3~~ | ~~#2165~~ | ~~backend~~ | ~~P1~~ | ~~Qwen2.5-VL部署~~ | ~~⏸️ pause~~ |
 | ~~kimi4~~ | ~~#1838~~ | ~~backend~~ | ~~P2~~ | ~~批量方案变体生成~~ | ~~✅ CLOSED~~ |
 | kimi4 | #2147 | pipeline | P2 | G7e工具链部署 | 🔨 运行中 |
 | kimi5 | #2382 | frontend | P1 | 前端培训计划+课程库页面 | 🔨 运行中 |
 
-> **5 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；kimi1→#2132，kimi2→#2144，kimi3→#2165，kimi4→#2147，kimi5→#2382
+> **4 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2165 pause⏸️；kimi1→#2132，kimi2→#2144，kimi4→#2147，kimi5→#2382
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

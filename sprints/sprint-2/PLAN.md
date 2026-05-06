@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第921轮；kimi1 40%/kimi2 35%/kimi3 55%/kimi4 46%/kimi5 27%，5CC全活跃）
+> 更新时间：2026-05-06（排程经理第922轮；kimi1 40%/kimi2 35%/kimi4 59%/kimi5 27%，4CC活跃；kimi3/#2101 已CLOSED）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -619,7 +619,8 @@
 | 05-06 | kimi5 | ~~#2166~~ | backend | P1 | ~~Done~~ | AI图生图API — CLOSED |
 | 05-06 | kimi5 | ~~#2426~~ | pipeline | P1 | ~~Done~~ | vLLM统一调用封装 — CLOSED |
 | 05-06 | kimi4 | ~~#1838~~ | backend | P2 | ~~Done~~ | 批量方案变体生成 — CLOSED |
-### 当前运行（05-06 09:34）
+| 05-06 | kimi3 | ~~#2101~~ | backend | P1 | ~~Done~~ | AI预测性维护 — CLOSED |
+### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
 | ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
@@ -640,7 +641,7 @@
 | kimi4 | #2147 | pipeline | P2 | G7e工具链部署 | 🔨 运行中 |
 | kimi5 | #2382 | frontend | P1 | 前端培训计划+课程库页面 | 🔨 运行中 |
 
-> **5 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；kimi1→#2132，kimi2→#2144，kimi3→#2101，kimi4→#2147，kimi5→#2382
+> **4 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；kimi1→#2132，kimi2→#2144，kimi4→#2147，kimi5→#2382
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

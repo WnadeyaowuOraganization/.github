@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第1092轮；kimi1/#2132 PR已提(等CI auto-merge)，kimi2 52%，kimi3 64%，kimi4 66%（PR#4479审查），4CC全活跃）
+> 更新时间：2026-05-06（排程经理第1092轮；kimi1/#2132 PR#4469 CI✅/kimi2/#2144 PR#4474 CI✅/kimi3/#2442 PR#4481 CI✅/kimi4/#2147 PR#4479 CI✅，4CC全活跃）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,25 +19,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第1092轮；kimi1/#2132 PR已提(等CI auto-merge)，kimi2 52%，kimi3 64%，kimi4 66%（PR#4479审查），4CC全活跃）
+> 更新时间：2026-05-06（排程经理第1092轮；kimi1/#2132 PR#4469 CI✅/kimi2/#2144 PR#4474 CI✅/kimi3/#2442 PR#4481 CI✅/kimi4/#2147 PR#4479 CI✅，4CC全活跃）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #2101 | P2 | backend | AI预测性维护 — 故障预测+预防性维护计划 | ✅ |
-| 2 | #2147 | P2 | pipeline | G7e工具链部署 — PRD Generator + Acceptance Tester | ✅ |
-| 3 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
-| 4 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md（新入Todo） | ✅ |
-| 5 | #2426 | P1 | pipeline | llm_client.py — vLLM统一调用封装（新入Todo） | ✅ |
-| 6 | #2382 | P1 | hr | 前端培训计划+课程库页面 — 计划管理+课程CRUD+课件上传（新入Todo） | ✅ |
-| 7 | #2336 | P1 | sample | D3样品一键生成页面（新入Todo） | ⏳ 依赖后端前置Phase |
-| 8 | #2442 | P1 | backend | Lookalike搜索模式 → 同类项目跨区域复制（新入Todo） | ✅ |
-| 9 | #2438 | P1 | backend | 投标人名单提取 → 发现同场竞技者（新入Todo） | ✅ |
-| 10 | #2436 | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层（新入Todo） | ✅ |
-| 11 | #2434 | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联（新入Todo） | ✅ |
-| 12 | #2165 | P1 | backend | Qwen2.5-VL 多模态模型部署 — 视觉理解+图文生成（新入Todo） | ✅ |
-| 13 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版（新入Todo） | ✅ |
+| 2 | #2200 | P1 | brand | G7e MediaX SDK — 抖音/B站/小红书/YouTube发布 | ✅ |
+| 3 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md | ✅ |
+| 4 | #2422 | P0 | backend | Agent基建 config/agent_config.json — Agent配置文件 | ✅ |
+| 5 | #2425 | P0 | pipeline | Agent基建 pipelines/shared/search_client.py — SearXNG统一搜索 | ✅ |
+| 6 | #2426 | P1 | pipeline | llm_client.py — vLLM统一调用封装 | ✅ |
+| 7 | #2382 | P1 | hr | 前端培训计划+课程库页面 — 计划管理+课程CRUD+课件上传 | ✅ |
+| 8 | #2336 | P1 | sample | D3样品一键生成页面 | ⏳ 依赖后端前置Phase |
+| 9 | #2438 | P1 | backend | 投标人名单提取 → 发现同场竞技者 | ✅ |
+| 10 | #2436 | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层 | ✅ |
+| 11 | #2434 | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联 | ✅ |
+| 12 | #2165 | P1 | backend | Qwen2.5-VL 多模态模型部署 — 视觉理解+图文生成 | ✅ |
+| 13 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
+| 14 | #2322 | P1 | asset-library | 素材库前端 - 标签管理页面 | ✅ |
+| 15 | #2323 | P1 | asset-library | 素材库前端 - 分类管理页面 | ✅ |
+| 16 | #2324 | P2 | asset-library | 素材库前端 - 素材上传页面 | ✅ |
+| 17 | #2325 | P2 | asset-library | 素材库前端 - 素材详情弹窗 | ✅ |
+| 18 | #2326 | P2 | asset-library | 素材库前端 - 素材列表页 | ✅ |
+| 19 | #2339 | P1 | frontend | 方案引擎 Web端VI标准管理页 [33/34] | ✅ |
+| 20 | #2341 | P1 | frontend | 方案引擎 素材库前端 — 瀑布流浏览+智能搜索 [12/22] | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

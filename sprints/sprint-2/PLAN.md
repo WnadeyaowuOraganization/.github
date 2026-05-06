@@ -628,6 +628,10 @@
 | 05-06 | kimi5 | ~~#2426~~ | pipeline | P1 | ~~Done~~ | vLLM统一调用封装 — CLOSED |
 | 05-06 | kimi4 | ~~#1838~~ | backend | P2 | ~~Done~~ | 批量方案变体生成 — CLOSED |
 | 05-06 | kimi3 | ~~#2101~~ | backend | P1 | ~~Done~~ | AI预测性维护 — CLOSED |
+| 05-06 | kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 MERGED ✅ |
+| 05-06 | kimi2 | ~~#2144~~ | brand | P2 | ~~Done~~ | AI辅助翻译 — PR #4474 MERGED ✅ |
+| 05-06 | kimi4 | ~~#2147~~ | pipeline | P2 | ~~Done~~ | G7e工具链部署 — PR #4479 MERGED ✅ |
+| 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -641,17 +645,17 @@
 | ~~kimi5~~ | ~~#1590~~ | ~~budget~~ | ~~P2~~ | ~~项目成本复盘报告~~ | ~~✅ PR#4428 MERGED~~ |
 | ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
 | ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
-| kimi1 | #2132 | backend | P1 | RBAC权限系统 | 🔨 运行中 |
-| kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
+| ~~kimi1~~ | ~~#2132~~ | ~~backend~~ | ~~P1~~ | ~~RBAC权限系统~~ | ~~✅ PR#4469 MERGED~~ |
+| ~~kimi2~~ | ~~#2144~~ | ~~brand~~ | ~~P2~~ | ~~AI辅助翻译~~ | ~~✅ PR#4474 MERGED~~ |
 | ~~kimi3~~ | ~~#2200~~ | ~~brand~~ | ~~P1~~ | ~~MediaX SDK部署~~ | ~~✅ CLOSED~~ |
 | ~~kimi3~~ | ~~#2101~~ | ~~backend~~ | ~~P1~~ | ~~AI预测性维护~~ | ~~✅ CLOSED~~ |
 | ~~kimi3~~ | ~~#2165~~ | ~~backend~~ | ~~P1~~ | ~~Qwen2.5-VL部署~~ | ~~⏸️ pause（GPU环境不可达）~~ |
-| kimi3 | #2442 | backend | P1 | Lookalike搜索 | 🔨 运行中 |
+| ~~kimi3~~ | ~~#2442~~ | ~~backend~~ | ~~P1~~ | ~~Lookalike搜索~~ | ~~✅ PR#4481 MERGED~~ |
 | ~~kimi4~~ | ~~#1838~~ | ~~backend~~ | ~~P2~~ | ~~批量方案变体生成~~ | ~~✅ CLOSED~~ |
-| kimi4 | #2147 | pipeline | P2 | G7e工具链部署 | 🔨 运行中 |
-| kimi5 | #2382 | frontend | P1 | 前端培训计划+课程库页面 | 🔨 运行中 |
+| ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
+| ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
 
-> **5 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2165 pause⏸️；kimi1→#2132，kimi2→#2144，kimi3→#2442，kimi4→#2147，kimi5→#2382
+> **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；kimi1/2/3/4空闲，kimi5→#2382
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

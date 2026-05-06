@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第1108轮；kimi1/#2132 ✅merged/kimi2/#2144 ✅merged/kimi3/#2442 ✅merged/kimi4/#2147 ✅merged，4PR全merged，4CC空闲待指派）
+> 更新时间：2026-05-06（排程经理第1109轮；kimi1/#2132 ✅merged/kimi2/#2144 ✅merged/kimi3/#2442 ✅merged/kimi4/#2147 ✅merged，4PR全merged，4CC空闲待指派）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第1108轮；kimi1/#2132 ✅merged/kimi2/#2144 ✅merged/kimi3/#2442 ✅merged/kimi4/#2147 ✅merged，4PR全merged，4CC空闲待指派）
+> 更新时间：2026-05-06（排程经理第1109轮；kimi1/#2132 ✅merged/kimi2/#2144 ✅merged/kimi3/#2442 ✅merged/kimi4/#2147 ✅merged，4PR全merged，4CC空闲待指派）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 

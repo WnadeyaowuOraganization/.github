@@ -11,9 +11,7 @@
 | 时间 | 问题 | 症状 | 修复 |
 |------|------|------|------|
 | 2026-04-19 02:17 | wande-ai-api 引用遗漏 | CI workflow 引用已删除模块，导致所有PR单测失败 | pr-test.yml 第126行删除过时构建命令 |
-| 2026-05-06 | D90 E2E测试硬编码kimi端口 | #4467 commission-calculate.spec.ts 硬编码localhost:7102，CI中无服务 → 655个API测试全部30秒超时×retries2，E2E运行4小时阻塞整个runner | (1) pr-test.yml E2E步骤强制注入BASE_URL_API/BASE_URL_FRONT；(2) quality-gate新增门5自动拦截localhost:710[0-9]；(3) cc-test-env.sh/run-cc.sh注入BASE_URL_API；(4) wande-ai skill新增§7.7 D90约束 |
-
----
+| 2026-05-06 | D90 E2E测试硬编码kimi端口 | #4467 commission-calculate.spec.ts 硬编码localhost:7102，CI中无服务 → 655个API测试全部30秒超时×retries2，E2E运行4小时阻塞整个runner | (1) pr-test.yml注入所有已知变量名作为别名；(2) e2e/helpers/url-config.ts统一URL读取+向后兼容；(3) playwright.config.ts配置各project baseURL；(4) quality-gate门6新增检查；(5) wande-ai skill §7.7更新为Playwright baseURL+相对路径方案；(6) CC自创CC_TEST_BACKEND_URL违规已修复 |
 ## 🔄 Issue 生命周期 + 测试层级
 
 ### 完整流程图

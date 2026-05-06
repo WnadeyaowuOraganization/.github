@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第1110轮；kimi1/#2132 ✅merged/kimi2/#2144 ✅merged/kimi3/#2442 ✅merged/kimi4/#2147 ✅merged，4PR全merged，4CC空闲待指派）
+> 更新时间：2026-05-06（排程经理第1111轮；kimi1-4 (#2132/#2144/#2442/#2147) ✅全部merged，4CC空闲待指派）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -19,7 +19,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（排程经理第1110轮；kimi1/#2132 ✅merged/kimi2/#2144 ✅merged/kimi3/#2442 ✅merged/kimi4/#2147 ✅merged，4PR全merged，4CC空闲待指派）
+> 更新时间：2026-05-06（排程经理第1111轮；kimi1-4 (#2132/#2144/#2442/#2147) ✅全部merged，4CC空闲待指派）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -52,24 +52,24 @@
 
 | 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
 |------|------|-------|------|--------|------|------|
-| 04-22 | kimi1 | ~~#3386~~ | PLM | medium | ~~Done~~ | ECO审批流集成 — CLOSED/COMPLETED |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3386~~ | PLM | medium | ~~Done~~ | ECO审批流集成 — CLOSED/COMPLETED |
 | 04-22 | kimi2 | ~~#3389~~ | PLM | medium | ~~Done~~ | EBOM解析API — CLOSED/COMPLETED |
 | 04-22 | kimi3 | ~~#3392~~ | PLM | medium | ~~Done~~ | 版本化定价引擎API — CLOSED/COMPLETED |
 | 04-22 | kimi4 | ~~#3631~~ | bidding | high | ~~Done~~ | pipeline表对齐 — CLOSED/COMPLETED |
 | 04-22 | kimi5 | ~~#1692~~ | backend | medium | ~~Done~~ | ~~项目成本跟踪API~~ — PR #3844 已于04-19 merged，误派 |
 | 04-22 | kimi5 | ~~#2113~~ | backend | medium | ~~Done~~ | 合同审批流程 — CLOSED/COMPLETED |
-| 04-22 | kimi1 | ~~#2296~~ | wechat | medium | ~~Done~~ | Cockpit安全审计页面 — CLOSED/COMPLETED |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#2296~~ | wechat | medium | ~~Done~~ | Cockpit安全审计页面 — CLOSED/COMPLETED |
 | 04-22 | kimi5 | #2298 | cockpit | medium | In Progress | AI对话监控面板 |
 | 04-22 | kimi2 | ~~#2925~~ | backend | medium | ~~Done~~ | 字段级数据完整度计算引擎 — CLOSED/COMPLETED |
 | 04-22 | kimi3 | ~~#2926~~ | backend | medium | ~~Done~~ | 数据质量KPI API — CLOSED/COMPLETED |
 | 04-22 | kimi2 | ~~#2944~~ | backend | medium | ~~Done~~ | 7天滚动基线异常检测 — CLOSED/COMPLETED |
 | 04-22 | kimi4 | #4033 | crm | medium | In Progress | CRM商机详情-基本信息Tab |
-| 04-22 | kimi1 | #4034 | crm | medium | In Progress | CRM商机详情-跟进记录Tab |
+| 04-22 | #2132 ✅merged/kimi1 | #4034 | crm | medium | In Progress | CRM商机详情-跟进记录Tab |
 | 04-22 | kimi2 | #4035 | crm | medium | In Progress | CRM商机详情-设计单Tab |
 | 04-22 | kimi3 | #4036 | crm | medium | In Progress | CRM商机详情-报价Tab |
-| 04-22 | kimi1 | #4034 | crm | medium | **Done** | CRM商机详情-跟进记录Tab — PR #4056 merged |
-| 04-22 | kimi1 | #4037 | crm | medium | **Done** | CRM商机详情-合同Tab — PR #4064 merged |
-| 04-22 | kimi1 | #4042 | crm | medium | **Done** | CRM商机详情-流程监控Tab — PR #4071 merged |
+| 04-22 | #2132 ✅merged/kimi1 | #4034 | crm | medium | **Done** | CRM商机详情-跟进记录Tab — PR #4056 merged |
+| 04-22 | #2132 ✅merged/kimi1 | #4037 | crm | medium | **Done** | CRM商机详情-合同Tab — PR #4064 merged |
+| 04-22 | #2132 ✅merged/kimi1 | #4042 | crm | medium | **Done** | CRM商机详情-流程监控Tab — PR #4071 merged |
 | 04-22 | kimi2 | #4035 | crm | medium | **Done** | CRM商机详情-设计单Tab — PR #4057 merged |
 | 04-22 | kimi2 | #4038 | crm | medium | **Done** | CRM商机详情-回款Tab — PR #4067 merged |
 | 04-22 | kimi2 | #2849 | cockpit | medium | In Progress | Agent效率看板前端 |
@@ -81,7 +81,7 @@
 | 04-22 | kimi4 | #4044 | crm | medium | **Done** | CRM商机详情-变更日志Tab — PR #4068 merged |
 | 04-22 | kimi4 | #2851 | cockpit | medium | In Progress | 验收队列前端 |
 | 04-22 | kimi5 | #2298 | cockpit | medium | **Done** | AI对话监控面板 — PR #4069 merged |
-| 04-22 | kimi1 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 补充PR #4072 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 补充PR #4072 merged |
 | 04-22 | kimi5 | ~~#3169~~ | approval | **max** | ~~Done~~ | 表单模板管理 — PR #4076 merged |
 | 04-22 | kimi2 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板前端 — PR #4074 merged |
 | 04-22 | kimi3 | ~~#3648~~ | bidding | **max** | ~~Done~~ | 招投标DB建表 — 补充PR #4073 merged |
@@ -89,19 +89,19 @@
 | 04-22 | kimi2 | #3149 | approval | **max** | In Progress | 审批进度追踪器组件 |
 | 04-22 | kimi3 | #3155 | approval | **max** | In Progress | 流程简化配置页 |
 | 04-22 | kimi4 | #3156 | approval | **max** | In Progress | 流程效率分析看板 |
-| 04-22 | kimi1 | #3168 | approval | **max** | In Progress | 动态表单渲染器前端 |
+| 04-22 | #2132 ✅merged/kimi1 | #3168 | approval | **max** | In Progress | 动态表单渲染器前端 |
 | 04-22 | kimi5 | #3151 | approval | **max** | In Progress | 新手引导+流程帮助中心 |
 | 04-22 | kimi2 | ~~#3149~~ | approval | **max** | ~~Done~~ | 审批进度追踪器组件 — PR #4077 merged |
 | 04-22 | kimi2 | ~~#3174~~ | approval | **max** | ~~Done~~ | 表单模板导入导出+配置向导 — PR #4080 merged |
 | 04-22 | kimi4 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — PR #4079 merged |
-| 04-22 | kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR #4078 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR #4078 merged |
 | 04-22 | kimi2 | ~~#4024~~ | plm | **max** | ~~Done~~ | PLM产品技术中心 — PR #4083 merged |
-| 04-22 | kimi1 | ~~#4023~~ | approval | **max** | ~~Done~~ | 统一审批工作台 — PR #4082 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#4023~~ | approval | **max** | ~~Done~~ | 统一审批工作台 — PR #4082 merged |
 | 04-22 | kimi5 | ~~#3151~~ | approval | **max** | ~~Done~~ | 新手引导+流程帮助中心 — PR #4081 merged |
 | 04-22 | kimi3 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR #4084 merged |
 | 04-22 | kimi4 | ~~#4041~~ | cockpit | **max** | ~~Done~~ | 耀总驾驶舱 — PR #4085 merged |
 | 04-22 | kimi2 | ~~#3189~~ | finance | **max** | ~~Done~~ | 甲方表单填写辅助 — PR #4088 merged |
-| 04-23 | kimi1 | ~~#2427~~ | pipeline | medium | ~~Done~~ | 环评/规划许可公示采集 — PR #4130 merged |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#2427~~ | pipeline | medium | ~~Done~~ | 环评/规划许可公示采集 — PR #4130 merged |
 | 04-23 | kimi2 | ~~#4005~~ | frontend | medium | ~~Done~~ | 整改 记录中心4Tab对齐 — PR #4131 merged |
 | 04-23 | kimi3 | ~~#4006~~ | frontend | medium | ~~Done~~ | 整改 老板周报对齐 — PR #4106 merged |
 | 04-23 | kimi5 | ~~#3397~~ | frontend | medium | ~~Done~~ | 产品配置器+报价页面 — PR #4083 merged |
@@ -109,16 +109,16 @@
 | 04-23 | kimi3 | ~~#4042~~ | frontend | medium | ~~Done~~ | CRM流程监控Tab — PR #4071 merged，Issue #4042已关闭 |
 | 04-23 | kimi5 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR #4084 merged |
 | 04-23 | kimi2 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — PR #4079 merged |
-| 04-23 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改 crm_opportunity 明道云对齐 — PR #4133 merged |
-| 04-23 | kimi1 | #4007 | frontend | medium | In Progress | 整改 项目周报+Nudge联动改造 |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改 crm_opportunity 明道云对齐 — PR #4133 merged |
+| 04-23 | #2132 ✅merged/kimi1 | #4007 | frontend | medium | In Progress | 整改 项目周报+Nudge联动改造 |
 | 04-23 | kimi5 | #4017 | crm | medium | In Progress | 整改 crm_activity_log 明道云对齐 |
 | 04-23 | kimi2 | #4019 | crm | medium | In Progress | 整改 crm_customer 明道云补齐 |
 | 04-22 | kimi2 | ~~#4008~~ | project | **max** | ~~Done~~ | 记录中心时间线视角增强 — PR #4096 merged |
 | 04-22 | kimi4 | ~~#3996~~ | project | **max** | ~~Done~~ | 矿场转化漏斗Tab — PR #4089 merged |
 | 04-22 | kimi4 | #4009 | project | **max** | In Progress | 记录中心三视角分组Tab |
-| 04-22 | kimi1 | ~~#3184~~ | project360 | **max** | ~~Done~~ | 文档访问日志+统计 — PR #4086 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3184~~ | project360 | **max** | ~~Done~~ | 文档访问日志+统计 — PR #4086 merged |
 | 04-22 | kimi3 | ~~#3185~~ | project360 | **max** | ~~Done~~ | 全阶段资料完成度看板 — PR #4087 merged |
-| 04-22 | kimi1 | ~~#3997~~ | project | **max** | ~~Done~~ | 矿场复盘洞察Tab — PR #4099 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3997~~ | project | **max** | ~~Done~~ | 矿场复盘洞察Tab — PR #4099 merged |
 | 04-22 | kimi3 | ~~#3998~~ | project | **max** | ~~Done~~ | 矿场ROI看板Tab — PR #4092 merged |
 | 04-22 | kimi5 | ~~#4014~~ | crm | **max** | ~~Done~~ | CRM线索统一池+评分引擎 — PR #4090 merged |
 | 04-22 | kimi5 | ~~#4010~~ | project | **max** | ~~Done~~ | 手动补录记录模态 — PR #4105 merged |
@@ -128,33 +128,33 @@
 | 04-22 | kimi4 | ~~#2926~~ | backend | **max** | ~~Done~~ | 数据质量KPI API — PR #4053 已于04-21 merged |
 | 04-22 | kimi4 | ~~#2944~~ | backend | **max** | ~~Done~~ | 7天滚动基线异常检测 — PR #4055 已于04-21 merged |
 | 04-22 | kimi4 | ~~#3149~~ | approval | **max** | ~~Done~~ | 审批进度追踪器组件 — PR#3902+PR#4077 已merged |
-| 04-23 | kimi1 | #2427 | bidding | medium | In Progress | 环评/规划许可公示采集 (PR#4130等待CI) |
+| 04-23 | #2132 ✅merged/kimi1 | #2427 | bidding | medium | In Progress | 环评/规划许可公示采集 (PR#4130等待CI) |
 | 04-23 | kimi2 | #4005 | frontend | medium | In Progress | 整改 记录中心4Tab对齐v1.0原型 (PR#4131 E2E 3/3通过) |
 | 04-23 | kimi3 | #4006 | frontend | medium | In Progress | 整改 老板周报对齐v1.0原型 (PR#4132 E2E 11/11通过) |
 | 04-23 | kimi5 | #3397 | frontend | medium | In Progress | PLM产品配置器+报价页面 (PR#4128冲突解决中) |
 | 04-23 | kimi4 | ~~#3996~~ | project | medium | ~~Done~~ | 矿场-转化漏斗Tab — PR #4127 merged |
 | 04-23 | kimi5 | ~~#4014~~ | crm | medium | ~~Done~~ | 线索统一池+评分引擎 — PR #4126 merged |
-| 04-23 | kimi1 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0执行组6Tab对齐 — PR #4122 merged |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#3995~~ | project | medium | ~~Done~~ | 矿场v2.0执行组6Tab对齐 — PR #4122 merged |
 | 04-23 | kimi2 | ~~#4018~~ | crm | medium | ~~Done~~ | 明道云商机数据迁移+表结构调整 — PR #4121 merged |
 | 04-23 | kimi3 | ~~#4021~~ | crm | medium | ~~Done~~ | CRM商务中心仪表盘实现 — PR #4119 merged |
-| 04-23 | kimi1 | ~~#2317~~ | plm | medium | ~~Done~~ | PLM技术确认中心前端 — PR #4117 merged |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#2317~~ | plm | medium | ~~Done~~ | PLM技术确认中心前端 — PR #4117 merged |
 | 04-22 | kimi4 | ~~#3150~~ | approval | **max** | ~~Done~~ | 审批流程图渲染API — 已于04-21 merged |
 | 04-22 | kimi2 | ~~#4012~~ | project | **max** | ~~Done~~ | 老板周报AI建议Section — PR#4106 merged |
-| 04-22 | kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
-| 04-22 | kimi1 | ~~#2925~~ | backend | **max** | ~~Done~~ | 字段级数据完整度计算引擎 — PR #4052 已于04-21 merged |
-| 04-22 | kimi1 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR#3931+#4084 已merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#2849~~ | cockpit | **max** | ~~Done~~ | Agent效率看板Vitest补测 — PR #4100 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#2925~~ | backend | **max** | ~~Done~~ | 字段级数据完整度计算引擎 — PR #4052 已于04-21 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3155~~ | approval | **max** | ~~Done~~ | 流程简化配置页 — PR#3931+#4084 已merged |
 | 04-23 | kimi6 | #4037 | fullstack | medium | In Progress | CRM合同Tab创建+盖章+扫描件上传（备选队列#1指派） |
-| 04-22 | kimi1 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — 已merged |
-| 04-22 | kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR#4078 merged |
-| 04-23 | kimi1 | ~~#2078~~ | backend | **max** | ~~Done~~ | 原因诊断API — PR #4103 merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3156~~ | approval | **max** | ~~Done~~ | 流程效率分析看板 — 已merged |
+| 04-22 | #2132 ✅merged/kimi1 | ~~#3168~~ | approval | **max** | ~~Done~~ | 动态表单渲染器前端 — PR#4078 merged |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#2078~~ | backend | **max** | ~~Done~~ | 原因诊断API — PR #4103 merged |
 | 04-23 | kimi3 | ~~#3545~~ | intelligence-hub | **max** | ~~Done~~ | 前端关系网络Tab — PR #4104 merged |
-| 04-23 | kimi1 | ~~#3386~~ | plm | **max** | ~~Done~~ | ECO审批流集成 — PR#4051 已于04-21 merged |
-| 04-23 | kimi1 | ~~#3651~~ | bidding | **max** | ~~Done~~ | 投标立项与进度管理 — PR#4112 merged |
-| 04-23 | kimi1 | ~~#2317~~ | ptc | **max** | ~~Done~~ | D3 Web技术确认中心前端 — PR#4117 admin-merged ✅|
-| 04-23 | kimi1 | ~~#4020~~ | cockpit | **high** | ~~Plan~~ | Master超管驾驶舱18Tab — 导航归类用，禁止CC开发 |
-| 04-23 | kimi1 | ~~#4014~~ | crm | medium | ~~Done~~ | 线索统一池+评分引擎 — PR#4126 admin-merged ✅ |
-| 04-23 | kimi1 | ~~#3998~~ | project | medium | ~~Done~~ | 矿场-ROI看板Tab — PR#4092 已merged（误派，实际已完成）|
-| 04-23 | kimi1 | #2427 | bidding | medium | In Progress | 环评/规划许可公示采集 |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#3386~~ | plm | **max** | ~~Done~~ | ECO审批流集成 — PR#4051 已于04-21 merged |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#3651~~ | bidding | **max** | ~~Done~~ | 投标立项与进度管理 — PR#4112 merged |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#2317~~ | ptc | **max** | ~~Done~~ | D3 Web技术确认中心前端 — PR#4117 admin-merged ✅|
+| 04-23 | #2132 ✅merged/kimi1 | ~~#4020~~ | cockpit | **high** | ~~Plan~~ | Master超管驾驶舱18Tab — 导航归类用，禁止CC开发 |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#4014~~ | crm | medium | ~~Done~~ | 线索统一池+评分引擎 — PR#4126 admin-merged ✅ |
+| 04-23 | #2132 ✅merged/kimi1 | ~~#3998~~ | project | medium | ~~Done~~ | 矿场-ROI看板Tab — PR#4092 已merged（误派，实际已完成）|
+| 04-23 | #2132 ✅merged/kimi1 | #2427 | bidding | medium | In Progress | 环评/规划许可公示采集 |
 | 04-23 | kimi3 | ~~#3389~~ | plm | **max** | ~~Done~~ | EBOM解析API — PR#4107 merged |
 | 04-23 | kimi5 | ~~#3392~~ | plm | **max** | ~~Done~~ | 版本化定价引擎API — PR已于04-21 merged(CLOSED) |
 | 04-23 | kimi3 | ~~#3390~~ | plm | **max** | ~~Done~~ | D3参数化→PLM BOM桥接 — PR#4111 merged（@SaCheckPermission已修复）|
@@ -194,51 +194,51 @@
 | 04-23 | kimi4 | ~~#3395~~ | plm | **max** | ~~Done~~ | PLM BOM管理与版本对比页面 — PR#4116 merged |
 | 04-23 | kimi4 | ~~#1832~~ | pipeline | medium | ~~Done~~ | Pipeline CI质量门禁+测试框架 — PR#4120 merged |
 | 04-23 | kimi4 | #1875 | bidding | medium | In Progress | 赢/输复盘模板（新派）|
-| 04-24 | kimi1 | ~~#1921~~ | d3 | medium | ~~Done~~ | D3Plugin.gha SDK降级 — PR #4143 merged，Issue自动关闭 |
+| 04-24 | #2132 ✅merged/kimi1 | ~~#1921~~ | d3 | medium | ~~Done~~ | D3Plugin.gha SDK降级 — PR #4143 merged，Issue自动关闭 |
 | 04-24 | kimi2 | ~~#3151~~ | approval | medium | ~~Done~~ | 新手引导+流程帮助中心 — PR #4140 merged，Issue自动关闭 |
 | 04-24 | kimi3 | ~~#2305~~ | design-ai | medium | ~~Done~~ | Three.js漫游录制 — PR #4145 merged，Issue自动关闭 |
 | 04-24 | kimi3 | ~~#2307~~ | design-ai | medium | ~~Done~~ | 局部修改模块GUI — PR #4147 merged，Issue自动关闭 |
 | 04-24 | kimi3 | #2309 | design-ai | medium | In Progress | 颜色配置器（排程建议#2，03:03派遣）|
 | 04-24 | kimi5 | ~~#2310~~ | design-ai | medium | ~~Done~~ | 方案文本生成 — PR #4144 merged，Issue手动关闭 |
 | 04-24 | kimi6 | #1920 | d3 | medium | Blocked | wande-gh-plugins重构 — PR #34 merge冲突，CI绿✅ |
-| 04-24 | kimi1 | #3648 | bidding | low | In Progress | 招投标-DB建表 |
+| 04-24 | #2132 ✅merged/kimi1 | #3648 | bidding | low | In Progress | 招投标-DB建表 |
 | 04-24 | kimi3 | #2307 | design-ai | medium | In Progress | 局部修改模块GUI |
 | 04-24 | kimi5 | #1875 | bidding | medium | In Progress | 赢/输复盘模板 |
 | 04-24 | kimi2 | ~~#3151~~ | approval | medium | ~~Done~~ | 新手引导+流程帮助中心追补 — PR #4140 merged，Issue自动关闭 ✅ |
-| 04-24 | kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
+| 04-24 | #2132 ✅merged/kimi1 | #4015 | crm | medium | In Progress | 矿场转商机 readiness检查 |
 | 04-24 | kimi2 | #4016 | crm | medium | **等待merge** | 架构蓝图+术语数据字典（PR #4148已提交，E2E 4项全通过✅，等待CI/merge）|
 | 04-24 | kimi5 | #4011 | project | medium | In Progress | 记录中心三视角分组Tab |
-| 04-24 | kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — PR #4133已更新push，stage改造commit已push，MERGEABLE✅，等待CI/merge |
-| 04-24 | kimi1 | #2308 | design-ai | **high** | In Progress | 主题方案灵感库（排程建议#1，03:00派遣，实际复杂度：复杂，15+文件，预计T1-15阶段交付）|
+| 04-24 | #2132 ✅merged/kimi1 | ~~#4018~~ | crm | medium | ~~Done~~ | 整改crm_opportunity明道云对齐 + stage体系改造 — PR #4133已更新push，stage改造commit已push，MERGEABLE✅，等待CI/merge |
+| 04-24 | #2132 ✅merged/kimi1 | #2308 | design-ai | **high** | In Progress | 主题方案灵感库（排程建议#1，03:00派遣，实际复杂度：复杂，15+文件，预计T1-15阶段交付）|
 | 04-24 | kimi3 | #2309 | design-ai | medium | **等待merge** | 颜色配置器（排程建议#2，03:03派遣，PR #4149已提交，E2E smoke 4/4绿✅，MERGEABLE✅，等待自动merge）|
 | 04-24 | kimi6 | ~~#1920~~ | d3 | medium | ~~Done~~ | wande-gh-plugins重构 — PR #34已于03:04 admin-merged ✅ |
 | 04-24 | kimi6 | #3999 | project | **high** | In Progress | 矿场区域品类热力图Tab（排程建议#3，03:06派遣，实际高复杂度，15+文件，分契约→后端→前端→E2E→PR）|
 | 04-24 | ~~kimi5~~ | ~~#1926~~ | d3 | medium | ~~Done~~ | D3成果Web预览 — PR #4185 merged 08:57:13，Issue自动关闭 08:58:02 ✅ |
 | 04-24 | kimi2 | #3383 | backend | medium | ⏳ 等待close | 竞品定价数据库 — PR #3991已merged，等Issue自动关闭中 |
 | 04-24 | kimi3 | #3384 | backend | medium | ⏳ 等待close | BOM Where-Used反查API — PR #4186 merged 08:53:07，等Issue自动关闭中 |
-| 04-24 | ~~kimi1~~ | ~~#1906~~ | backend | medium | ~~Done~~ | **DORA指标卡片+最近错误滚动条** — Issue自动关闭 09:34:06 ✅ |
+| 04-24 | ~~#2132 ✅merged/kimi1~~ | ~~#1906~~ | backend | medium | ~~Done~~ | **DORA指标卡片+最近错误滚动条** — Issue自动关闭 09:34:06 ✅ |
 | 04-24 | kimi4 | #1923 | backend | medium | In Progress | 竞品定价数据库（派遣目标序号#2，实际Issue不同，49%进度） |
 | 04-24 | **kimi5** | **#2536** | **frontend** | **medium** | **In Progress** | **项目组织管理-阶段推进确认弹窗增强（派遣目标序号#10，17:03派遣，44%进度）** |
 | 04-24 | ~~kimi2~~ | ~~#3383~~ | backend | medium | ~~Done~~ | **Issue关闭异常修复** — PR #3991缺closingIssuesReferences，手动gh issue close，已释放 ✅ |
 | 04-24 | **kimi2** | **#2527** | **frontend** | **medium** | **In Progress** | **版本历史+审批流程面板（派遣目标序号#7，17:40进度50%）** |
 | 04-24 | ~~kimi3~~ | ~~#3384~~ | backend | medium | ~~Done~~ | **BOM Where-Used反查API** — PR #4186已merged，Issue手动关闭，已释放 ✅ |
 | 04-24 | **kimi3** | **#2532** | **frontend** | **medium** | **In Progress** | **已读追踪+公告详情（派遣目标序号#8，17:40进度55%）** |
-| 04-24 | **kimi1** | **#2534** | **frontend** | **medium** | **派遣开工** | **项目组织管理-任务面板快速行动项（派遣目标序号#9，17:41派遣）** |
+| 04-24 | **#2132 ✅merged/kimi1** | **#2534** | **frontend** | **medium** | **派遣开工** | **项目组织管理-任务面板快速行动项（派遣目标序号#9，17:41派遣）** |
 | 05-04 | kimi2 | #1880 | asset-library | medium | **Done** | 素材库-中标状态变更时自动更新素材权限 — **PR #4445 MERGED** ✅ |
 | 05-04 | kimi2 | #1488 | backend | medium | **Done** | 国际项目统一数据模型（wdpp_bid_projects表region/required_cert/language） — **PR #4444 MERGED** ✅ |
-| 05-04 | kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | #1818 | brand | medium | **Done** | 平台定制发布 — 多平台标题/标签/封面微调 — **PR #4440 MERGED** ✅ |
 | 05-04 | kimi2 | #1551 | wecom | medium | **Done** | 企微待办API对接 — **PR #4446 MERGED** ✅ |
-| 05-04 | kimi1 | ~~#1881~~ | asset-library | medium | **Done** | 素材下载 + 批量下载 + 分享链接 — **PR #4448 MERGED** ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#1881~~ | asset-library | medium | **Done** | 素材下载 + 批量下载 + 分享链接 — **PR #4448 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1963~~ | backend | P2 | **Done** | Rhino插件对接API — D3/Rhino渲染效果图自动注入素材库 — **PR #4425 MERGED** ✅ |
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | medium | **Done** | 素材统计接口 — **PR #4447 MERGED** ✅ |
-| 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心4级角色权限系统 — **PR #4412 MERGED** ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心4级角色权限系统 — **PR #4412 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1674~~ | biz-enablement | medium | **Done** | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 — **PR #4449 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — 项目关闭时自动更新成本基准库 — **PR #4451 MERGED** ✅ |
-| 05-04 | kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置-多角色模板系统 — **PR #4453 MERGED** ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置-多角色模板系统 — **PR #4453 MERGED** ✅ |
 | 05-04 | kimi2 | #1882 | asset-library | medium | In Progress | 素材库-列表查询 + 多维度筛选 + 权限过滤 |
 
 **当前5个CC在线运行中（17:16:56更新 — 派遣链恢复）：**
-- kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）
+- #2132 ✅merged/kimi1 #1906: 58%进度（DORA指标卡片+错误滚动条，backend，持续工作中）
 - ~~kimi2 #3383~~ → **kimi2 #2527**: 0%进度（版本历史+审批流程面板，frontend，刚启动）✅ 序号#7
 - ~~kimi3 #3384~~ → **kimi3 #2532**: 0%进度（已读追踪+公告详情，frontend，刚启动）✅ 序号#8
 - kimi4 #1923: 62%进度（竞品定价数据库，backend，持续工作中）
@@ -456,7 +456,7 @@
 |------|-------|------|------|------|
 | kimi5 | #4011 | 🔄 Working | 31% | T1-T2 Flyway完成，纯后端最快完成预期 |
 | kimi2 | #4016 | 🔄 Working | 33% | T1 Backend开发中 |
-| kimi1 | #4015 | 🔄 Working | 31% | API测试阶段 |
+| #2132 ✅merged/kimi1 | #4015 | 🔄 Working | 31% | API测试阶段 |
 | kimi3 | #2307 | 🔄 Working | 进前端 | T7 Inpaint页面开发 |
 | kimi6 | #1920 | ⚠️ Blocked | 等待 | PR #34 merge冲突，CI全绿✅ |
 
@@ -465,7 +465,7 @@
 
 | 指派目录 | Issue | 模块 | 优先级 | 说明 | 状态 | 进展 |
 |------|-------|------|--------|------|------|------|
-| kimi1 | #1468 | backend | P1 | 安全标准自动合规标注 | ✅ PR #4166 | 21文件+1820行，JUnit 13/13✅，CI运行中 |
+| #2132 ✅merged/kimi1 | #1468 | backend | P1 | 安全标准自动合规标注 | ✅ PR #4166 | 21文件+1820行，JUnit 13/13✅，CI运行中 |
 | kimi2 | #1469 | backend | P1 | AI文案增强（材质/标准/案例描述自动生成） | 🔄 开发中 | 42% 进度，单测编写中 |
 | kimi3 | #1470 | backend | P1 | Playbook规则引擎（场景化内容推荐） | 🔄 开发中 | 28% 进度，基础CRUD中 |
 | kimi5 | #1845 | design-ai | P1 | 安全合规检测引擎 — 三标融合规则(EN1176+ASTM+GB) | 🔄 开发中 | 36% 进度，基础CRUD中 |
@@ -477,14 +477,14 @@
 - 选择备选队列P1高优先级Issue进行新派遣
 - 预期工作周期：2-3小时
 
-| 04-24 | kimi1 | #2358 | finance | medium | In Progress | 商机详情页获客成本Tab（备选队列#1指派）|
+| 04-24 | #2132 ✅merged/kimi1 | #2358 | finance | medium | In Progress | 商机详情页获客成本Tab（备选队列#1指派）|
 
 ## 派遣进度（2026-04-24 13:10）— 全部完成，新一轮巡检
 
 ### 前轮派遣状态（04-24 07:08）
 | kimi | Issue | 模块 | 状态 |
 |------|-------|------|------|
-| kimi1 | ~~#1468~~ | backend | ~~Done~~ — PR #4166 merged |
+| #2132 ✅merged/kimi1 | ~~#1468~~ | backend | ~~Done~~ — PR #4166 merged |
 | kimi2 | ~~#1469~~ | backend | ~~Done~~ — PR merged |
 | kimi3 | ~~#1470~~ | backend | ~~Done~~ — PR merged |
 | kimi5 | ~~#1845~~ | design-ai | ~~Done~~ — PR #4178 merged |
@@ -492,15 +492,15 @@
 
 **状态**：全部5个CC已完成，15/15槽位可用。
 
-| 04-26 | kimi1 | ~~#2704~~ | frontend | medium | ~~Done~~ | 中标概率评分可视化看板 — PR#4248 merged ✅ |
-| 04-27 | kimi1 | ~~#2437~~ | backend | medium | ~~释放→Todo~~ | 推荐行动计划按阶段自动生成 — CC超时释放，需重新指派 |
+| 04-26 | #2132 ✅merged/kimi1 | ~~#2704~~ | frontend | medium | ~~Done~~ | 中标概率评分可视化看板 — PR#4248 merged ✅ |
+| 04-27 | #2132 ✅merged/kimi1 | ~~#2437~~ | backend | medium | ~~释放→Todo~~ | 推荐行动计划按阶段自动生成 — CC超时释放，需重新指派 |
 | 04-26 | kimi2 | ~~#3172~~ | backend | medium | ~~Done~~ | 质量管理表单组5模板 — PR#3911已于04-19 merged，误恢复 |
 | 04-27 | kimi2 | ~~#2275~~ | backend | medium | ~~释放→Todo~~ | 驾驶舱DORA指标卡片+最近错误滚动条 — CC超时释放，需重新指派 |
 | 04-28 | kimi2 | ~~#1898~~ | backend | **high** | ~~Done~~ | 发货防错系统 — PR #4300 merged |
 | 04-28 | kimi2 | ~~#1900~~ | backend | **high** | ~~Done~~ | 采购下料单自动生成 — PR #4303 submitted |
-| 04-28 | kimi1 | ~~#1911~~ | backend | **high** | ~~Done~~ | AI电池包开发助手 — PR #4301 merged |
-| 04-28 | kimi1 | ~~#1933~~ | backend | **P0** | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged |
-| 04-28 | kimi1 | #1932 | backend | P0 | In Progress | 秋千/吊环电池包 — 独立件+A型架(Phase2-3/6) |
+| 04-28 | #2132 ✅merged/kimi1 | ~~#1911~~ | backend | **high** | ~~Done~~ | AI电池包开发助手 — PR #4301 merged |
+| 04-28 | #2132 ✅merged/kimi1 | ~~#1933~~ | backend | **P0** | ~~Done~~ | 螺旋滑梯电池包 — PR #4302 merged |
+| 04-28 | #2132 ✅merged/kimi1 | #1932 | backend | P0 | In Progress | 秋千/吊环电池包 — 独立件+A型架(Phase2-3/6) |
 | 04-28 | kimi4 | #4176 | frontend | P1 | In Progress | 🔧 Quick-Fix 发票页显示（/project-center/execution/invoice） |
 | 04-28 | kimi2 | ~~#4201~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix 时间线加载失败 — PR #4304 merged |
 | 04-28 | kimi2 | ~~#4200~~ | fullstack | P1 | ~~Done~~ | 🔧 Quick-Fix 矿场列表报错 — PR #4306 merged |
@@ -508,10 +508,10 @@
 | 04-28 | kimi3 | ~~#4173~~ | frontend | P2 | ~~Done~~ | 🔧 Quick-Fix 利润率列表 — PR #4310 merged |
 | 04-28 | kimi3 | ~~#1929~~ | frontend | P0 | ~~Done~~ | GH插件.gha安装包 — PR #4312 merged |
 | 04-28 | kimi3 | #1850 | design-ai | P1 | In Progress | Agent自学习闭环+效果度量 — 纠正记录/失败模式/模板积累 |
-| 04-28 | kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
-| 04-28 | kimi1 | ~~#4172~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix Prompt管理 — PR #4307 submitted |
-| 04-28 | kimi1 | ~~#4175~~ | backend | P2 | ~~Done~~ | 🔧 Quick-Fix issue-board 404 — PR #4313 merged |
-| 04-28 | kimi1 | #1851 | backend | P1 | In Progress | 审核与自动部署流程 — 邵鹏提交→吴耀审核→一键部署 |
+| 04-28 | #2132 ✅merged/kimi1 | ~~#1932~~ | backend | **P0** | ~~Done~~ | 秋千/吊环电池包 — PR #4305 submitted |
+| 04-28 | #2132 ✅merged/kimi1 | ~~#4172~~ | backend | P1 | ~~Done~~ | 🔧 Quick-Fix Prompt管理 — PR #4307 submitted |
+| 04-28 | #2132 ✅merged/kimi1 | ~~#4175~~ | backend | P2 | ~~Done~~ | 🔧 Quick-Fix issue-board 404 — PR #4313 merged |
+| 04-28 | #2132 ✅merged/kimi1 | #1851 | backend | P1 | In Progress | 审核与自动部署流程 — 邵鹏提交→吴耀审核→一键部署 |
 | 04-28 | kimi2 | ~~#4174~~ | backend | P2 | ~~Done~~ | 🔧 Quick-Fix GPU监控接口404 — PR #4309 merged |
 | 04-28 | kimi2 | #1907 | backend | P0 | In Progress | 滚塑滑桶专项 — φ800模具+分节规则+透明桶+三标准合规 |
 | 04-28 | kimi4 | ~~#4176~~ | frontend | P1 | ~~Done~~ | 🔧 Quick-Fix 发票页显示 — PR #4311 merged |
@@ -521,31 +521,31 @@
 | 04-29 | kimi4 | ~~#1866~~ | backend | P1 | ~~Done~~ | GH AI插件生态补充评估 — PR #4332 merged |
 | 04-29 | kimi4 | ~~#4333~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/crm — PR #4335 merged |
 | 04-29 | kimi4 | ~~#4334~~ | frontend | P2 | ~~Done~~ | E2E回归 /business/tender/opportunity 404 — PR #4336 merged |
-| 04-29 | kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
-| 04-29 | kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 商务赋能标准合规说明导出 — 缺原型，等待补齐 |
+| 04-29 | #2132 ✅merged/kimi1 | ~~#1930~~ | fullstack | P0 | ~~Done~~ | 攀爬网/爬梯电池包 — PR #4308 merged |
+| 04-29 | #2132 ✅merged/kimi1 | ~~#2218~~ | frontend | P2 | ~~暂停~~ | 商务赋能标准合规说明导出 — 缺原型，等待补齐 |
 
-| 04-29 | kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
-| 04-30 | kimi1 | ~~#2035~~ | hr | P1 | ~~Done~~ | 人事管理数据库建表 — PR #4372 merged |
-| 04-30 | kimi1 | ~~#1975~~ | backend | P1 | ~~Done~~ | PPT模板解析引擎 — PR #4374 merged |
-| 04-30 | kimi1 | ~~#1966~~ | backend | P1 | ~~Done~~ | PPT样式一致性检查+一键修复 — PR #4375 merged |
+| 04-29 | #2132 ✅merged/kimi1 | ~~#1955~~ | backend | P1 | ~~Done~~ | 方案引擎AI文案知识增强 — PR #4339 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#2035~~ | hr | P1 | ~~Done~~ | 人事管理数据库建表 — PR #4372 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#1975~~ | backend | P1 | ~~Done~~ | PPT模板解析引擎 — PR #4374 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#1966~~ | backend | P1 | ~~Done~~ | PPT样式一致性检查+一键修复 — PR #4375 merged |
 | 04-30 | kimi5 | ~~#3212~~ | fullstack | P1 | ~~Done~~ | 设备级进度追踪(BOM×工艺步骤) — PR #4366 merged |
 | 04-30 | kimi2 | ~~#4093~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /profit-alert — PR #4371 merged |
-| 04-30 | kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
-| 04-30 | kimi1 | ~~#1968~~ | backend | P1 | ~~Done~~ | PPT一键套模板 — PR #4378 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#1957~~ | frontend | P1 | ~~Done~~ | 方案引擎PPT插件 — PR #4341 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#1968~~ | backend | P1 | ~~Done~~ | PPT一键套模板 — PR #4378 merged |
 | 04-30 | kimi5 | ~~#1958~~ | backend | P1 | ~~Done~~ | PPT图片美化工具 — PR #4379 merged |
 | 04-30 | kimi2 | ~~#2032~~ | backend | P1 | ~~Done~~ | 色卡材料Controller API — PR #4382 merged |
-| 04-30 | kimi1 | ~~#1967~~ | frontend | P1 | ~~Done~~ | PPT素材智能推荐+一键插入 — PR #4381 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#1967~~ | frontend | P1 | ~~Done~~ | PPT素材智能推荐+一键插入 — PR #4381 merged |
 | 04-30 | kimi5 | ~~#2390~~ | biz-enablement | P2 | ~~Done~~ | 照片AI自动标签(CLIP) — PR #4384 merged |
 | 04-30 | kimi5 | ~~#2389~~ | biz-enablement | P2 | ~~Done~~ | 季度照片采集提醒+任务推送 — PR #4383 merged |
 | 04-30 | kimi5 | ~~#2278~~ | policy | P2 | ~~Done~~ | AI制度起草向导页面 Phase20 — PR #4385 merged |
 | 04-30 | kimi5 | ~~#2585~~ | backend | P2 | ~~Done~~ | 合并wande-ai-api到wande-ai消除42个重复类 — PR #4387 merged，Issue自动关闭 |
-| 04-30 | kimi1 | ~~#2220~~ | biz-enablement | P2 | ~~Done~~ | 材质参数一键导出（Word/PDF）— PR #4386 merged，Issue自动关闭 |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#2220~~ | biz-enablement | P2 | ~~Done~~ | 材质参数一键导出（Word/PDF）— PR #4386 merged，Issue自动关闭 |
 | 04-30 | kimi2 | ~~#3208~~ | backend | P1 | ~~Done~~ | 总控预算增强[1/10] — budget_zone表+BudgetItem增加zone_id — PR #4392 merged |
 | 05-01 | kimi2 | ~~#3188~~ | fullstack | P1 | ~~Done~~ | 回款资料[4/7] 企业信息库 — PR #4393 merged，Issue自动关闭 |
-| 05-01 | kimi1 | ~~#2737~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[2/8] 企微交互式查询指令 — PR #4394 merged，Issue自动关闭 |
-| 05-01 | kimi1 | ~~#1978~~ | backend | P1 | ~~Done~~ | 方案引擎DB设计 — 方案模板引擎3张表 — PR #4395 merged，Issue自动关闭 |
-| 05-01 | kimi1 | ~~#1974~~ | pipeline | P1 | ~~Done~~ | 方案引擎DB设计 — 素材库3张表 — PR #4396 merged，Issue自动关闭 |
-| 05-01 | kimi1 | ~~#1959~~ | backend | P1 | ~~Done~~ | PPT插件：文字美化工具 — 文字特效+数字突出+标题样式 — PR #4400 merged，Issue已关闭 |
+| 05-01 | #2132 ✅merged/kimi1 | ~~#2737~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[2/8] 企微交互式查询指令 — PR #4394 merged，Issue自动关闭 |
+| 05-01 | #2132 ✅merged/kimi1 | ~~#1978~~ | backend | P1 | ~~Done~~ | 方案引擎DB设计 — 方案模板引擎3张表 — PR #4395 merged，Issue自动关闭 |
+| 05-01 | #2132 ✅merged/kimi1 | ~~#1974~~ | pipeline | P1 | ~~Done~~ | 方案引擎DB设计 — 素材库3张表 — PR #4396 merged，Issue自动关闭 |
+| 05-01 | #2132 ✅merged/kimi1 | ~~#1959~~ | backend | P1 | ~~Done~~ | PPT插件：文字美化工具 — 文字特效+数字突出+标题样式 — PR #4400 merged，Issue已关闭 |
 | 05-01 | kimi2 | ~~#1960~~ | backend | P1 | ~~Done~~ | PPT插件AI排版工具箱 — 7个功能点 — PR #4401 merged |
 | 05-01 | kimi3 | ~~#2738~~ | backend | P1 | ~~Done~~ | 商战情报中台·分发[3/8] 邮件订阅与定时报告 — PR #4390 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#1969~~ | backend | P1 | ~~Done~~ | 方案引擎COM Add-in核心 — PR #4397 merged，Issue自动关闭 |
@@ -554,17 +554,17 @@
 | 05-01 | kimi3 | ~~#1965~~ | backend | P2 | ~~Done~~ | 方案引擎PowerPoint加载项集成测试 — PR #4399 merged，Issue自动关闭 |
 | 05-01 | kimi3 | ~~#1970~~ | backend | P0 | ~~Done~~ | PPT插件后端API — auth/模板/素材/生成/替换 6个接口 — PR #4402 merged |
 | 05-01 | kimi5 | #3570 | frontend | P1 | In Progress | 关系网络Tab组件测试与截图验证（#3545-followup） |
-| 04-30 | kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
-| 04-30 | kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#4094~~ | frontend | P2 | ~~关闭~~ | 菜单配置指向不存在的组件 — 历史提交9b0612b96已修复，Issue直接关闭 |
+| 04-30 | #2132 ✅merged/kimi1 | ~~#4060~~ | fullstack | P2 | ~~Done~~ | Quick-Fix — finops成本看板mock数据+Controller缺/api前缀 — PR #4389 merged |
 | 04-30 | kimi3 | ~~#4095~~ | fullstack | P1 | ~~Done~~ | Quick-Fix /contacts通讯录 — PR #4370 merged |
 | 04-30 | kimi3 | ~~#3185~~ | frontend | P0 | ~~Done~~ | 全过程资料[1/13] 全阶段资料完成度看板 — PR#4087已于04-22合并，Issue确认关闭 |
 | 05-01 | kimi3 | ~~#2162~~ | backend | medium | **Done** | AI文案生成 — 区位分析/设计理念/活动策划 — PR #4404 merged |
 | 05-01 | kimi2 | ~~#2141~~ | backend | P1 | **Done** | 素材批量迁移工具 — S3/NAS/PPT拆页+AI自动打标签 — PR #4405 merged，Issue手动关闭 |
-| 05-01 | kimi1 | ~~#1973~~ | pipeline | P1 | **Done** | 素材自动分类+AI标签引擎 — S3设计文件批量处理 — PR #4403 merged，Issue自动关闭 |
+| 05-01 | #2132 ✅merged/kimi1 | ~~#1973~~ | pipeline | P1 | **Done** | 素材自动分类+AI标签引擎 — S3设计文件批量处理 — PR #4403 merged，Issue自动关闭 |
 | 05-01 | kimi5 | ~~#3570~~ | frontend | P1 | **Done** | 关系网络Tab组件测试与截图验证 — PR #4388 手动merged（E2E队列阻塞100+min），Issue手动关闭 |
 | 05-01 | kimi4 | ~~#4124~~ | fullstack | P1 | **Done** | 国贸专属页 — 壳架构+5Tab容器+菜单入口 — PR #4376 merged（10:02 UTC），Issue #4124 CLOSED |
 | 05-01 | kimi2 | ~~#2126~~ | fullstack | P1 | **Done** | 经销商发现种子数据+方法论后端 — PR #4407 merged（12:41 UTC），Issue #2126 CLOSED |
-| 05-01 | kimi1 | ~~#2163~~ | backend | P1 | **Done** | 素材库API+RBAC权限管理 — PR #4408 MERGED（16:19 UTC），Issue #2163 CLOSED |
+| 05-01 | #2132 ✅merged/kimi1 | ~~#2163~~ | backend | P1 | **Done** | 素材库API+RBAC权限管理 — PR #4408 MERGED（16:19 UTC），Issue #2163 CLOSED |
 | 05-01 | kimi2 | ~~#2199~~ | backend | P1 | **Done** | LinkedIn API发布集成 — PR #4411 MERGED（15:42 UTC），Issue #2199 CLOSED |
 | 05-01 | kimi3 | ~~#2031~~ | backend | P1 | **Done** | 色卡材料审批流程（#2032已CLOSED） — PR #4406 MERGED，Issue #2031 CLOSED |
 | 05-01 | kimi4 | ~~#2037~~ | backend | P1 | **Done** | D3-翻新模式（改造/翻新模式） — PR #4409 MERGED（13:59:15 UTC） |
@@ -584,14 +584,14 @@
 | 05-02 | kimi4 | ~~#1679~~ | backend | — | — | #1679切换→#1659（新Issue分配） |
 | 05-02 | kimi2 | ~~#1665~~ | backend | — | — | #1665切换→#1485（新Issue分配） |
 | 05-02 | kimi4 | ~~#1659~~ | backend | — | — | #1659切换→#1495（新Issue分配） |
-| 05-02 | kimi1 | ~~#1496~~ | backend | P2 | **Done** | NBO行动推荐生成 — Today's Top 3行动 — PR #4431 MERGED（12:23 UTC） |
+| 05-02 | #2132 ✅merged/kimi1 | ~~#1496~~ | backend | P2 | **Done** | NBO行动推荐生成 — Today's Top 3行动 — PR #4431 MERGED（12:23 UTC） |
 | 05-02 | kimi2 | ~~#1497~~ | backend | P2 | **Done** | NBO评分引擎 — 项目适配度×意图×赢率综合评分 — PR #4434 MERGED ✅ |
 | 05-02 | kimi3 | ~~#1538~~ | budget | P2 | **Done** | D3造价回填接口 — D3设计完成后自动写入设备科目预算 — PR #4432 MERGED ✅ |
 | 05-02 | kimi5 | ~~#1590~~ | budget | P2 | **Done** | 项目成本复盘报告自动生成 — PR #4428 MERGED ✅ |
 | 05-04 | kimi3 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — PR #4451 MERGED ✅ |
 | 05-04 | kimi2 | ~~#1963~~ | backend | P2 | **Done** | Rhino插件对接API — PR #4425 MERGED ✅ |
-| 05-04 | kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心角色权限系统 — PR #4412 MERGED ✅ |
-| 05-04 | kimi1 | ~~#1818~~ | brand | P2 | **Done** | 平台定制发布 — PR #4440 MERGED ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#2201~~ | brand | P1 | **Done** | 品牌中心角色权限系统 — PR #4412 MERGED ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#1818~~ | brand | P2 | **Done** | 平台定制发布 — PR #4440 MERGED ✅ |
 | 05-04 | kimi4 | ~~#1880~~ | asset-library | P2 | **Done** | 素材库-中标状态变更 — PR #4445 MERGED ✅ |
 | 05-04 | kimi2 | ~~#1486~~ | mine | P3 | **Done** | 采购联盟资格追踪 — PR #4443 MERGED ✅ |
 | 05-03 | kimi3 | ~~#1635~~ | design-ai | P2 | **Done** | AI图生视频 — PR #4442 MERGED ✅ |
@@ -601,11 +601,11 @@
 | 05-04 | kimi2 | ~~#1551~~ | wecom | P2 | **Done** | 企微待办API对接 — PR #4446 MERGED ✅ |
 | 05-04 | kimi5 | ~~#1674~~ | biz-enablement | P2 | **Done** | 产品参数查询中心API — PR #4449 MERGED ✅ |
 | 05-04 | kimi4 | ~~#1878~~ | asset-library | P1 | **Done** | 素材统计接口 — PR #4447 MERGED ✅ |
-| 05-04 | kimi1 | ~~#1881~~ | asset-library | P1 | **Done** | 素材下载 — PR #4448 MERGED ✅ |
-| 05-04 | kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置 — PR #4453 MERGED ✅ |
-| 05-05 | kimi1 | ~~#1611~~ | chat | P2 | **Done** | 消息线程化与兴趣匹配 — PR #4455 MERGED ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#1881~~ | asset-library | P1 | **Done** | 素材下载 — PR #4448 MERGED ✅ |
+| 05-04 | #2132 ✅merged/kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置 — PR #4453 MERGED ✅ |
+| 05-05 | #2132 ✅merged/kimi1 | ~~#1611~~ | chat | P2 | **Done** | 消息线程化与兴趣匹配 — PR #4455 MERGED ✅ |
 | 05-05 | kimi2 | ~~#1882~~ | frontend | P2 | **Done** | 素材库-列表查询+筛选+权限 — PR #4450 MERGED ✅ |
-| 05-05 | kimi1 | ~~#1843~~ | design-ai | P2 | **Done** | 招标规范文本自动生成 — PR #4456 MERGED ✅ |
+| 05-05 | #2132 ✅merged/kimi1 | ~~#1843~~ | design-ai | P2 | **Done** | 招标规范文本自动生成 — PR #4456 MERGED ✅ |
 | 05-05 | kimi2 | ~~#1612~~ | chat | P2 | **Done** | 业务场景自动分类引擎 — PR #4457 MERGED ✅ |
 | 05-05 | kimi2 | ~~#2072~~ | hr | P2 | **Done** | Phase7 培训管理后端补充 — PR #4462 MERGED ✅ |
 | 05-05 | kimi4 | #2021 | approval | P2 | In Progress | 报销费控模块接入审批流 |
@@ -615,7 +615,7 @@
 | 05-06 | kimi2 | ~~#2073~~ | hr | P2 | ~~Done~~ | 人事管理菜单+权限SQL — PR #4463 MERGED ✅ |
 | 05-06 | kimi2 | ~~#1698~~ | backend | **high** | ~~Done~~ | 提成绩效计算引擎 — PR #4467 OPEN，CI queued |
 | 05-06 | kimi4 | ~~#2021~~ | approval | P2 | ~~Done~~ | 报销费控模块接入审批流 — PR #4464 MERGED ✅ |
-| 05-06 | kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 OPEN，CI queued |
+| 05-06 | #2132 ✅merged/kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 OPEN，CI queued |
 | 05-06 | kimi5 | #2100 | backend | P2 | In Progress | AI工单智能分派 |
 | 05-06 | kimi4 | #1838 | backend | medium | In Progress | 批量方案变体生成（重建修复） |
 | 05-06 | kimi2 | ~~#1842~~ | backend | P2 | ~~Done~~ | 产品资源开放体系 — PR #4470 MERGED ✅ |
@@ -628,24 +628,24 @@
 | 05-06 | kimi5 | ~~#2426~~ | pipeline | P1 | ~~Done~~ | vLLM统一调用封装 — CLOSED |
 | 05-06 | kimi4 | ~~#1838~~ | backend | P2 | ~~Done~~ | 批量方案变体生成 — CLOSED |
 | 05-06 | kimi3 | ~~#2101~~ | backend | P1 | ~~Done~~ | AI预测性维护 — CLOSED |
-| 05-06 | kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 MERGED ✅ |
+| 05-06 | #2132 ✅merged/kimi1 | ~~#2132~~ | backend | P1 | ~~Done~~ | RBAC权限系统 — PR #4469 MERGED ✅ |
 | 05-06 | kimi2 | ~~#2144~~ | brand | P2 | ~~Done~~ | AI辅助翻译 — PR #4474 MERGED ✅ |
 | 05-06 | kimi4 | ~~#2147~~ | pipeline | P2 | ~~Done~~ | G7e工具链部署 — PR #4479 MERGED ✅ |
 | 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
-| ~~kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
+| ~~#2132 ✅merged/kimi1~~ | ~~#1496~~ | ~~backend~~ | ~~P2~~ | ~~NBO行动推荐生成~~ | ~~✅ PR#4431 MERGED~~ |
 | ~~kimi2~~ | ~~#1601~~ | ~~budget~~ | ~~P2~~ | ~~报销申请接入预算关卡~~ | ~~✅ PR#4438 MERGED~~ |
 | ~~kimi3~~ | ~~#1824~~ | ~~brand~~ | ~~P2~~ | ~~内容创作/编辑页面~~ | ~~✅ PR#4439 MERGED~~ |
-| ~~kimi1~~ | ~~#1818~~ | ~~brand~~ | ~~P2~~ | ~~平台定制发布~~ | ~~✅ PR#4440 MERGED~~ |
+| ~~#2132 ✅merged/kimi1~~ | ~~#1818~~ | ~~brand~~ | ~~P2~~ | ~~平台定制发布~~ | ~~✅ PR#4440 MERGED~~ |
 | ~~kimi2~~ | ~~#1486~~ | ~~mine~~ | ~~P3~~ | ~~采购联盟资格追踪~~ | ~~✅ PR#4443 MERGED~~ |
 | ~~kimi3~~ | ~~#1635~~ | ~~design-ai~~ | ~~P2~~ | ~~AI图生视频~~ | ~~✅ PR#4442 MERGED~~ |
 | ~~kimi4~~ | ~~#1539~~ | ~~budget~~ | ~~P2~~ | ~~历史基准自动积累~~ | ~~✅ PR#4451 MERGED~~ |
 | ~~kimi5~~ | ~~#1590~~ | ~~budget~~ | ~~P2~~ | ~~项目成本复盘报告~~ | ~~✅ PR#4428 MERGED~~ |
-| ~~kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
-| ~~kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
-| ~~kimi1~~ | ~~#2132~~ | ~~backend~~ | ~~P1~~ | ~~RBAC权限系统~~ | ~~✅ PR#4469 MERGED~~ |
+| ~~#2132 ✅merged/kimi1~~ | ~~#1611~~ | ~~chat~~ | ~~P2~~ | ~~消息线程化与兴趣匹配~~ | ~~✅ PR#4455 MERGED~~ |
+| ~~#2132 ✅merged/kimi1~~ | ~~#1843~~ | ~~design-ai~~ | ~~P2~~ | ~~招标规范文本自动生成~~ | ~~✅ PR#4456 MERGED~~ |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2132~~ | ~~backend~~ | ~~P1~~ | ~~RBAC权限系统~~ | ~~✅ PR#4469 MERGED~~ |
 | ~~kimi2~~ | ~~#2144~~ | ~~brand~~ | ~~P2~~ | ~~AI辅助翻译~~ | ~~✅ PR#4474 MERGED~~ |
 | ~~kimi3~~ | ~~#2200~~ | ~~brand~~ | ~~P1~~ | ~~MediaX SDK部署~~ | ~~✅ CLOSED~~ |
 | ~~kimi3~~ | ~~#2101~~ | ~~backend~~ | ~~P1~~ | ~~AI预测性维护~~ | ~~✅ CLOSED~~ |
@@ -655,7 +655,7 @@
 | ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
 | ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
 
-> **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；kimi1/2/3/4空闲，kimi5→#2382
+> **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -665,34 +665,34 @@
 | ~~kimi2~~ | ~~#2756~~ | #4241 | ✅ merged | 11:39:30 UTC |
 | ~~kimi7~~ | ~~#2271~~ | #4242 | ✅ merged | 12:31:50 UTC |
 | ~~kimi4~~ | ~~#2264~~ | #4243 | ✅ merged | 12:40:45 UTC |
-| ~~kimi1~~ | ~~#2265~~ | #4244 | ✅ merged | 13:52:23 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2265~~ | #4244 | ✅ merged | 13:52:23 UTC |
 | ~~kimi5~~ | ~~#2268~~ | #4245 | ✅ merged | 14:01:36 UTC |
 | ~~kimi6~~ | ~~#2712~~ | #4247 | ✅ merged | 15:02:44 UTC |
-| ~~kimi1~~ | ~~#2704~~ | #4248 | ✅ merged | 16:11:30 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2704~~ | #4248 | ✅ merged | 16:11:30 UTC |
 | ~~kimi2~~ | ~~#3172~~ | #3911 | ✅ merged | 04-19误恢复，确认Done |
-| ~~kimi1~~ | ~~#2437~~ | #4249 | ✅ merged | 02:11:49 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2437~~ | #4249 | ✅ merged | 02:11:49 UTC |
 | ~~kimi2~~ | ~~#2275~~ | #4250 | ✅ merged | 02:44:37 UTC |
-| ~~kimi1~~ | ~~#2440~~ | #4251 | ✅ merged | 03:48:01 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2440~~ | #4251 | ✅ merged | 03:48:01 UTC |
 | ~~kimi2~~ | ~~#1598~~ | #4252 | ✅ merged | 04:00:18 UTC |
 | ~~kimi2~~ | ~~#2439~~ | #4253 | ✅ merged | 04:43:25 UTC |
-| ~~kimi1~~ | ~~#1603~~ | #4254 | ✅ merged | 04:55:43 UTC |
-| ~~kimi1~~ | ~~#2441~~ | #4255 | ✅ merged | 05:24:50 UTC |
-| ~~kimi1~~ | ~~#2617~~ | #4256 | ✅ merged | 05:48:17 UTC |
-| ~~kimi1~~ | ~~#2444~~ | #4258 | ✅ merged | 手动关闭Issue |
+| ~~#2132 ✅merged/kimi1~~ | ~~#1603~~ | #4254 | ✅ merged | 04:55:43 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2441~~ | #4255 | ✅ merged | 05:24:50 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2617~~ | #4256 | ✅ merged | 05:48:17 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2444~~ | #4258 | ✅ merged | 手动关闭Issue |
 | ~~kimi2~~ | ~~#2306~~ | #4257 | ✅ merged | 06:13:19 UTC |
-| ~~kimi1~~ | ~~#2526~~ | #4259 | ✅ merged | 06:33:53 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2526~~ | #4259 | ✅ merged | 06:33:53 UTC |
 | ~~kimi2~~ | ~~#3109~~ | #4260 | ✅ merged | 07:53:25 UTC |
-| ~~kimi1~~ | ~~#2215~~ | #4261 | ✅ merged | 08:17:48 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2215~~ | #4261 | ✅ merged | 08:17:48 UTC |
 | ~~kimi2~~ | ~~#1498~~ | #4265 | ✅ merged | 09:20:15 UTC |
-| ~~kimi1~~ | ~~#2445~~ | #4266 | ✅ merged | 09:36:28 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2445~~ | #4266 | ✅ merged | 09:36:28 UTC |
 | ~~kimi2~~ | ~~#2319~~ | #4267 | ✅ merged | 11:00:07 UTC |
 | ~~kimi2~~ | ~~#2539~~ | #4268 | ✅ merged | 12:46:37 UTC |
-| ~~kimi1~~ | ~~#2293~~ | #4269 | ✅ merged | 13:03:37 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2293~~ | #4269 | ✅ merged | 13:03:37 UTC |
 | ~~kimi2~~ | ~~#3106~~ | #4270 | ✅ merged | 13:56:59 UTC |
-| ~~kimi1~~ | ~~#3107~~ | #4271 | ✅ merged | 14:30:11 UTC |
-| ~~kimi1~~ | ~~#2639~~ | #4272 | ✅ merged | 14:50:12 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#3107~~ | #4271 | ✅ merged | 14:30:11 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2639~~ | #4272 | ✅ merged | 14:50:12 UTC |
 | ~~kimi2~~ | ~~#3111~~ | #4273 | ✅ merged | 15:16:56 UTC |
-| ~~kimi1~~ | ~~#2639~~ | #4272 | ✅ merged | 14:50:12 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#2639~~ | #4272 | ✅ merged | 14:50:12 UTC |
 | ~~kimi2~~ | ~~#2316~~ | #4414 | ✅ merged | 18:10:10 UTC |
 | ~~kimi3~~ | ~~#2312~~ | #4413 | ✅ merged | 19:12:42 UTC |
 | ~~kimi2~~ | ~~#1682~~ | #4417 | ✅ merged | 19:49:28 UTC |
@@ -701,11 +701,11 @@
 | ~~kimi2~~ | ~~#1826~~ | #4419 | ✅ merged | 23:23:04 UTC |
 | ~~kimi4~~ | ~~#2051~~ | #4416 | ✅ merged | 00:49:00 UTC，checkbox质量门拦截已修复 |
 | ~~kimi5~~ | ~~#1948~~ | #4421 | ✅ merged | 03:21:53 UTC |
-| ~~kimi1~~ | ~~#1490~~ | #4415 | ✅ merged | 03:29:17 UTC |
+| ~~#2132 ✅merged/kimi1~~ | ~~#1490~~ | #4415 | ✅ merged | 03:29:17 UTC |
 | — | #1495 | #4422 | ✅ merged | 05:08:49 UTC |
 | — | #1485 | #4423 | ✅ merged | 05:37:00 UTC |
 | — | #1964 | #4424 | ✅ merged | 05:41:30 UTC |
 | kimi4 | #1539 | #4427 | 🔍 REVIEW_REQUIRED | kimi4 新指派后提PR，06:55:50 UTC |
 | — | #1826 | #4426 | 🔍 REVIEW_REQUIRED | 05:26:38 UTC，Vue JSX 插件修复构建 |
 | — | #1963 | #4425 | 🔍 REVIEW_REQUIRED | 04:10:56 UTC |
-| kimi1 | #1496 | #4431 | 🔍 REVIEW_REQUIRED | 08:15:00 UTC，NBO行动推荐生成 |
+| #2132 ✅merged/kimi1 | #1496 | #4431 | 🔍 REVIEW_REQUIRED | 08:15:00 UTC，NBO行动推荐生成 |

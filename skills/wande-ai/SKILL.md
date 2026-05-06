@@ -313,7 +313,30 @@ GitHub Wiki + Issues + docs/workflow/（组织知识持久化）
 
 同一页面功能，**后端Issue必须先merged前端才可派发**，防止前端以mock数据交付。规则已同步到scheduler-guide / assign-guide / frontend-coding SKILL。
 
-### §7.7 员工时间解放路线图
+### §7.7 E2E测试环境变量约束（D90 新规）
+
+**禁止在 E2E 测试代码中硬编码 kimi 独立环境端口。**
+
+| 环境 | 后端端口 | 前端端口 | 注入方式 |
+|------|---------|---------|---------|
+| CI（pr-test.yml） | `:6041` | `:8084` | `BASE_URL_API` / `BASE_URL_FRONT` |
+| Dev（主环境） | `:6040` | `:8080` | `BASE_URL_API` / `BASE_URL_FRONT` |
+| kimi{N} | `:7100+N` | `:8100+N` | `BASE_URL_API` / `BASE_URL_FRONT`（由 cc-test-env.sh 注入） |
+
+**红线**：
+- E2E 测试文件（`e2e/tests/**/*.spec.ts`）**禁止**出现 `localhost:710[0-9]` 或 `127.0.0.1:710[0-9]` 硬编码
+- `API_BASE` / `BASE_URL` 等变量**禁止**使用 `|| 'http://localhost:710X'` 作为 fallback，必须依赖环境变量
+- 唯一合法的默认回退是 CI/Dev 端口（`localhost:6041` / `localhost:6040`）
+
+**Why**：#4467 事故 — `commission-calculate.spec.ts` 硬编码 `localhost:7102`，CI 中该端口无服务，导致 655 个 API 测试全部 30 秒超时 × retries 2，E2E 运行 4 小时阻塞整个 runner。
+
+**How to apply**：
+- 新增/修改 E2E 测试时，用 `process.env.BASE_URL_API` 读取环境变量
+- 本地开发跑 E2E 时，由 `cc-test-env.sh` 自动注入 `BASE_URL_API=http://localhost:${BACKEND_PORT}`
+- CI 工作流 `pr-test.yml` 已强制注入 `BASE_URL_API=http://localhost:6041`
+- PR quality-gate 门 5 已增加 `localhost:710[0-9]` 自动拦截
+
+### §7.8 员工时间解放路线图
 
 | 阶段 | 解放谁 | 解放什么 | AI替代方案 |
 |------|--------|---------|-----------| 

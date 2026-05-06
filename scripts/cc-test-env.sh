@@ -284,6 +284,7 @@ cmd_wait() {
         E2E_ENV="${tag}" \
         CC_TEST_FRONTEND_URL="http://localhost:${FRONTEND_PORT}" \
         BASE_URL_FRONT="http://localhost:${FRONTEND_PORT}" \
+        BASE_URL_API="http://localhost:${BACKEND_PORT}" \
         E2E_AUTH_STATE="${auth_file}" \
         npx playwright test tests/setup/auth.setup.ts --project=setup 2>/dev/null \
         && echo "✓ auth state 已生成: ${auth_file}" \

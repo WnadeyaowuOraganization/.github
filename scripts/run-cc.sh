@@ -315,7 +315,7 @@ if [ -f "${HOME_DIR}/projects/wande-play/e2e/tests/setup/auth.setup.ts" ]; then
   if [ "$AUTH_AGE" -ge 6 ]; then
     echo "🔑 刷新主环境 auth state → $MAIN_AUTH_FILE"
     cd "${HOME_DIR}/projects/wande-play/e2e" && \
-      E2E_ENV=main BASE_URL_FRONT=http://localhost:8080 \
+      E2E_ENV=main BASE_URL_FRONT=http://localhost:8080 BASE_URL_API=http://localhost:6040 \
       npx playwright test tests/setup/auth.setup.ts --project=setup 2>/dev/null || true
     cd - >/dev/null
   fi

@@ -139,6 +139,41 @@ done
 
 有 `needs-prototype` 的 Issue → Project 状态标 `pause`，**不得**放入建议表。
 
+### 依赖校验（每次入表前必做）
+
+> **教训：#2259 依赖 backend#929、#2260 依赖 backend#926-928，入表时未验证，研发经理指派后发现依赖 Issue 在 wande-ai-backend 仓库根本不存在。**
+
+对每个候选 Issue，扫描其 body 中的依赖引用，**逐个验证存在性和状态**：
+
+```bash
+# 扫描 body 中的跨仓库依赖
+gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json body -q '.body' | \
+  grep -oE 'WnadeyaowuOraganization/wande-ai-(backend|front|api)#\d+' | \
+  sed 's/WnadeyaowuOraganization\///' | sort -u
+
+# 验证每个依赖是否存在且 CLOSED
+gh issue view <dep_number> --repo WnadeyaowuOraganization/<repo> --json state -q '.state'
+```
+
+| 依赖状态 | 处置 |
+|---------|------|
+| 依赖 Issue **不存在**（404 或 empty） | 标 `❌ 依赖缺失` → **移出主表**，放入「非活跃记录」 |
+| 依赖 Issue **OPEN** | 标 `⏳ 依赖未关闭` → **移出主表**，放入「非活跃记录」 |
+| 依赖 Issue **CLOSED** | 标 `✅` → 可入主表 |
+
+### 后端必配前端校验（每次入表前必做）
+
+> **红线：后端 Issue 禁止单独派发，必须配前端才能平台可见。来源：feedback_assign_with_design_and_frontend.md**
+
+对 `module:backend` 候选 Issue，扫描 body 中是否含以下关键字：
+- `前端待创建`、`前端待补`、`前端：待创建`、`页面：待创建`、`frontend: TBD`
+
+| 扫描结果 | 处置 |
+|---------|------|
+| body 含「前端待创建」等关键字 | 标 `⚠️ 需配前端` → **移出主表**，放入「非活跃记录」；排程经理应创建配套前端 Issue 后成对入表 |
+| body 已引用前端页面/已有配套前端 Issue | 标 `✅` → 可入主表 |
+| 纯数据/API/后台任务（无用户可见页面） | 标 `✅`（如 #2454 NLP分词、#1856 成本系数库）→ 可入主表 |
+
 ### 格式
 
 ```markdown
@@ -151,6 +186,26 @@ done
 - 每次重新建议**清空旧内容，整体替换**
 - Jump/Fail 插队在现有表格**首行插入**
 - `启动` 列：无 blocker → ✅，有依赖 → ⏳
+- **主表只保留可立即指派的 Issue**（max 20），冻结/已指派/阻塞项放入下方「非活跃记录」区
+
+```markdown
+## 指派建议（最近20个）
+| # | Issue | 优先级 | 模块 | 说明 | 启动 |
+|---|-------|--------|------|------|------|
+| 1 | #1856 | P1 | backend | ... | ✅ |
+
+> ⚠️ 指派前请确认依赖已CLOSED
+
+### 非活跃记录（冻结/已指派/阻塞 — 不出现在主表）
+
+| Issue | 原因 | 当前状态 |
+|-------|------|---------|
+| #2420 | ⛔ needs-prototype 冻结 | pause |
+| #2475 | 已指派 kimi1 | In Progress |
+| #1451 | ⚠️ 需配前端（body 写"前端待创建"） | Todo |
+| #2259 | ❌ 依赖缺失 backend#929 不存在 | Todo |
+| #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
+```
 
 ## Master Issue 规则
 

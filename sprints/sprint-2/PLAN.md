@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（研发经理指派；kimi1-4全部启动新Issue #2475/#2438/#2436/#2434）
+> 更新时间：2026-05-06（排程经理第1122轮；4 CC空闲；指派建议表已更新：10个needs-prototype冻结Issue移入pause）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -18,32 +18,37 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-06（研发经理指派；kimi1-4全部启动新Issue）
-> ⚠️ needs-prototype冻结、Master Issue不出现在本表
+> 更新时间：2026-05-06（排程经理第1122轮；修复指派建议表：移出10个needs-prototype冻结Issue→pause；补入10个合规Issue）
+> ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #2420 | P1 | backend | Agent基建 CLAUDE.md + docs/agent-guide.md | ✅ |
-| 2 | #2422 | P0 | backend | Agent基建 config/agent_config.json — Agent配置文件 | ✅ |
-| 3 | #2425 | P0 | pipeline | Agent基建 pipelines/shared/search_client.py — SearXNG统一搜索 | ✅ |
-| 4 | #2424 | P1 | frontend | Agent基建 browser_client.py — Browser Agent统一封装 | ✅ |
+| ~~1~~ | ~~#2420~~ | ~~P1~~ | ~~backend~~ | ~~Agent基建 CLAUDE.md + docs/agent-guide.md~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
+| ~~2~~ | ~~#2422~~ | ~~P0~~ | ~~backend~~ | ~~Agent基建 config/agent_config.json~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
+| ~~3~~ | ~~#2425~~ | ~~P0~~ | ~~pipeline~~ | ~~Agent基建 pipelines/shared/search_client.py~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
+| ~~4~~ | ~~#2424~~ | ~~P1~~ | ~~frontend~~ | ~~Agent基建 browser_client.py~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
 | ~~5~~ | ~~#2475~~ | P1 | backend | D3-AI G7e AI建模后端 — Qwen驱动的GH脚本生成API | ~~✅~~ → kimi1 |
 | 6 | #2336 | P1 | sample | D3样品一键生成页面 | ⏳ 依赖后端前置Phase |
 | ~~7~~ | ~~#2438~~ | P1 | backend | 投标人名单提取 → 发现同场竞技者 | ~~✅~~ → kimi2 |
 | ~~8~~ | ~~#2436~~ | P1 | pipeline | 财政预算信号采集 → 六层信号源第三层 | ~~✅~~ → kimi3 |
 | ~~9~~ | ~~#2434~~ | P1 | backend | 信号链自动串联 → 同项目不同阶段信号关联 | ~~✅~~ → kimi4 |
-| 10 | #2165 | P1 | backend | Qwen2.5-VL 多模态模型部署 — 视觉理解+图文生成 | ✅ |
-| 11 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
-| 12 | #2322 | P1 | asset-library | 素材库前端 - 标签管理页面 | ✅ |
-| 13 | #2323 | P1 | asset-library | 素材库前端 - 分类管理页面 | ✅ |
-| 14 | #2324 | P2 | asset-library | 素材库前端 - 素材上传页面 | ✅ |
-| 15 | #2325 | P2 | asset-library | 素材库前端 - 素材详情弹窗 | ✅ |
-| 16 | #2326 | P2 | asset-library | 素材库前端 - 素材列表页 | ✅ |
-| 17 | #2339 | P1 | frontend | 方案引擎 Web端VI标准管理页 [33/34] | ✅ |
-| 18 | #2341 | P1 | frontend | 方案引擎 素材库前端 — 瀑布流浏览+智能搜索 [12/22] | ✅ |
-| 19 | #2485 | P2 | design-ai | 设计模型训练 ComfyUI FLUX模型下载与Docker环境配置 | ✅ |
-| 20 | #2454 | P2 | backend | 中标项目名称NLP分词 → 自动扩展keyword_pool | ✅ |
+| ~~10~~ | ~~#2165~~ | ~~P1~~ | ~~backend~~ | ~~Qwen2.5-VL 多模态模型部署~~ | ~~✅~~ → ⛔ needs-prototype冻结 |
+| 11 | #1451 | P1 | brand | 品牌术语表管理 — 中英文对照术语库 + AI 生成时强制校验 | ✅ |
+| 12 | #1856 | P1 | backend | 非标件成本系数库 — 开模费/工时费率/设计费率/非标色加价定义+自动报价 | ✅ |
+| 13 | #2259 | P1 | budget | 科目间调剂申请页面 — 调剂表单+审批流+记录查看 | ✅ |
+| 14 | #2260 | P1 | budget | 项目预算编制增强 — 模板自动匹配+科目增删+限额信封可视化 | ✅ |
+| 15 | #2287 | P1 | budget | 预算管控参数配置页面 | ✅ |
+| 16 | #2328 | P1 | crm | 商机详情页信息质量面板 — 红绿灯+缺失提醒+阶段拦截弹窗 | ✅ |
+| 17 | #2329 | P1 | crm | 客户详情页情报卡Tab — MEDDIC雷达图+决策链地图+更新时间线 | ✅ |
+| 18 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
+| 19 | #2339 | P1 | frontend | 方案引擎 Web端VI标准管理页 [33/34] | ✅ |
+| 20 | #2341 | P1 | frontend | 方案引擎 素材库前端 — 瀑布流浏览+智能搜索 [12/22] | ✅ |
+| 21 | #2485 | P2 | design-ai | 设计模型训练 ComfyUI FLUX模型下载与Docker环境配置 | ✅ |
+| 22 | #2454 | P2 | backend | 中标项目名称NLP分词 → 自动扩展keyword_pool | ✅ |
+| 23 | #2332 | P1 | tool-center | 数据管理→采集工具使用指南页 | ✅ |
+| 24 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
+| 25 | #2334 | P1 | tool-center | 设计管理→设计工具下载页（D3/GH+AI渲染） | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

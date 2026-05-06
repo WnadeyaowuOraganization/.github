@@ -637,12 +637,13 @@
 | kimi2 | #2144 | brand | P2 | AI辅助翻译 | 🔨 运行中 |
 | ~~kimi3~~ | ~~#2200~~ | ~~brand~~ | ~~P1~~ | ~~MediaX SDK部署~~ | ~~✅ CLOSED~~ |
 | ~~kimi3~~ | ~~#2101~~ | ~~backend~~ | ~~P1~~ | ~~AI预测性维护~~ | ~~✅ CLOSED~~ |
-| ~~kimi3~~ | ~~#2165~~ | ~~backend~~ | ~~P1~~ | ~~Qwen2.5-VL部署~~ | ~~⏸️ pause~~ |
+| ~~kimi3~~ | ~~#2165~~ | ~~backend~~ | ~~P1~~ | ~~Qwen2.5-VL部署~~ | ~~⏸️ pause（GPU环境不可达）~~ |
+| kimi3 | #2442 | backend | P1 | Lookalike搜索 | 🔨 运行中 |
 | ~~kimi4~~ | ~~#1838~~ | ~~backend~~ | ~~P2~~ | ~~批量方案变体生成~~ | ~~✅ CLOSED~~ |
 | kimi4 | #2147 | pipeline | P2 | G7e工具链部署 | 🔨 运行中 |
 | kimi5 | #2382 | frontend | P1 | 前端培训计划+课程库页面 | 🔨 运行中 |
 
-> **4 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2165 pause⏸️；kimi1→#2132，kimi2→#2144，kimi4→#2147，kimi5→#2382
+> **5 CC运行中**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2165 pause⏸️；kimi1→#2132，kimi2→#2144，kimi3→#2442，kimi4→#2147，kimi5→#2382
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

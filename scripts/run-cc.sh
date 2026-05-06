@@ -295,7 +295,7 @@ if [ "$KIMI_TAG" != "main" ] && [ -f "$SCRIPT_DIR/cc-test-env.sh" ]; then
   CC_BE_PORT=$((7100 + KIMI_NUM))
   CC_FE_PORT=$((8100 + KIMI_NUM))
   CC_LOG_DIR="/apps/wande-ai-backend-${KIMI_TAG}/logs"
-  TEST_ENV_INFO="export CC_TEST_BACKEND_PORT=${CC_BE_PORT}; export CC_TEST_BACKEND_URL=http://localhost:${CC_BE_PORT}; export CC_TEST_FRONTEND_PORT=${CC_FE_PORT}; export CC_TEST_FRONTEND_URL=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log; export KIMI_ID=${KIMI_NUM}; export E2E_MAIN_AUTH=/tmp/e2e-auth-state-main.json;"
+  TEST_ENV_INFO="export BASE_URL_API=http://localhost:${CC_BE_PORT}; export BASE_URL_FRONT=http://localhost:${CC_FE_PORT}; export CC_TEST_LOG_BACKEND=${CC_LOG_DIR}/backend.log; export CC_TEST_LOG_FRONTEND=${CC_LOG_DIR}/frontend.log; export KIMI_ID=${KIMI_NUM}; export E2E_MAIN_AUTH=/tmp/e2e-auth-state-main.json;"
 fi
 
 # === e2e/node_modules 统一软链到 e2e-top（避免各 kimi 独立安装/版本不一致）===

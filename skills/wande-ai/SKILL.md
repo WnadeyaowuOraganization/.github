@@ -313,50 +313,34 @@ GitHub Wiki + Issues + docs/workflow/（组织知识持久化）
 
 同一页面功能，**后端Issue必须先merged前端才可派发**，防止前端以mock数据交付。规则已同步到scheduler-guide / assign-guide / frontend-coding SKILL。
 
-### §7.7 E2E测试环境变量约束（D90 新规，v2）
+### §7.7 E2E测试URL约束（D90 新规）
 
-**禁止在 E2E 测试代码中硬编码 kimi 独立环境端口。**
+**所有环境共用两个环境变量**：
+- `BASE_URL_API` — 后端 API 地址
+- `BASE_URL_FRONT` — 前端地址
 
-| 环境 | 后端端口 | 前端端口 | 注入方式 |
-|------|---------|---------|---------|
-| CI（pr-test.yml） | `:6041` | `:8084` | `BASE_URL_API` / `BASE_URL_FRONT` |
-| Dev（主环境） | `:6040` | `:8080` | `BASE_URL_API` / `BASE_URL_FRONT` |
-| kimi{N} | `:7100+N` | `:8100+N` | `BASE_URL_API` / `BASE_URL_FRONT`（由 cc-test-env.sh 注入） |
-
-**业界标准方案**：使用 Playwright `baseURL` + 相对路径
-
-**红线**：
-- E2E 测试文件**禁止**出现 `localhost:710[0-9]` 或 `127.0.0.1:710[0-9]` 硬编码
-- `API_BASE` / `BASE_URL` 等变量**禁止**使用 `|| 'http://localhost:710X'` 作为 fallback
-
-**Why**：#4467 事故 — `commission-calculate.spec.ts` 硬编码 `localhost:7102`，CI 中该端口无服务，导致 655 个 API 测试全部 30 秒超时 × retries 2，E2E 运行 4 小时阻塞整个 runner。
-
-**推荐做法**：
+**唯一正确做法：使用相对路径**
 
 ```typescript
-// 方式 1（推荐）：使用 Playwright baseURL + 相对路径
-// playwright.config.ts 中已配置 baseURL
-await page.goto('/wande/xxx/page');  // 前端页面
-await request.get('/wande/xxx/api');  // API 调用
+// ✅ 正确：相对路径，baseURL 由 Playwright config 提供
+await request.get('/wande/xxx/api');
+await page.goto('/wande/xxx/page');
 
-// 方式 2：使用统一 helper
-import { getApiUrl, getFrontUrl } from '../../helpers/url-config';
-const api = getApiUrl();
-await request.get(\`\${api}/wande/xxx/api\`);
-
-// 方式 3（兼容旧测试）：直接用环境变量
-// playwright.config.ts 会自动同步所有别名到 BASE_URL_API / BASE_URL_FRONT
+// ❌ 错误：硬编码任何 URL
+const url = 'http://localhost:7101/xxx';  // 禁止
 ```
 
+**红线**：
+- 禁止硬编码 `http://localhost:XXXX` 或 `http://127.0.0.1:XXXX`
+- 禁止创建新的环境变量名
+
 **配置来源**：
-- `e2e/helpers/url-config.ts` — 统一 URL 读取，向后兼容所有旧变量名
-- `e2e/playwright.config.ts` — 配置各 project 的 baseURL
-- `cc-test-env.sh` — 注入 `BASE_URL_API=http://localhost:${BACKEND_PORT}`
-- `pr-test.yml` — 注入 `BASE_URL_API=http://localhost:6041`
+- `e2e/playwright.config.ts` — 定义 baseURL
+- `pr-test.yml` — CI 注入 `BASE_URL_API=http://localhost:6041`
+- `cc-test-env.sh` — 本地注入 `BASE_URL_API=http://localhost:${BACKEND_PORT}`
 
 **PR quality-gate**：
-- 门 5：自动拦截 `localhost:710[0-9]` 硬编码
-- 门 6：新增测试文件必须符合 URL 规范
+- 门 5+6：自动拦截任何硬编码 URL
 
 ### §7.8 员工时间解放路线图
 

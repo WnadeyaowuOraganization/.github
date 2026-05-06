@@ -18,12 +18,10 @@ description: End-to-end test Wande-Play frontend pages with Playwright in the is
 | Playwright 依赖 | `e2e/node_modules/playwright/...` |
 
 **环境变量（run-cc.sh 自动注入，禁止硬编码端口）：**
-- `BASE_URL` = `http://localhost:810N` — 前端地址（自动使用自己的端口）
+- `BASE_URL_FRONT` = `http://localhost:810N` — 前端地址
 - `BASE_URL_API` = `http://localhost:710N` — 后端API地址
-- `CC_TEST_FRONTEND_URL` = `http://localhost:810N` — CC独立测试前端
-- `CC_TEST_BACKEND_URL` = `http://localhost:710N` — CC独立测试后端
 
-**smoke 测试中请使用 `process.env.BASE_URL` 而非硬编码端口。**
+**smoke 测试必须使用相对路径，禁止硬编码端口。**
 
 ## 启动环境
 

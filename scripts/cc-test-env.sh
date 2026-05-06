@@ -282,7 +282,6 @@ cmd_wait() {
     if [ -d "$e2e_dir" ]; then
       (cd "$e2e_dir" && \
         E2E_ENV="${tag}" \
-        CC_TEST_FRONTEND_URL="http://localhost:${FRONTEND_PORT}" \
         BASE_URL_FRONT="http://localhost:${FRONTEND_PORT}" \
         BASE_URL_API="http://localhost:${BACKEND_PORT}" \
         E2E_AUTH_STATE="${auth_file}" \

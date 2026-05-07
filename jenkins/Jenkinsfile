@@ -1,155 +1,362 @@
-@Library('wande-play') _
+// Issue 生命周期完整流水线
+// 触发：GitHub Webhook pull_request 事件（opened/synchronize/reopened）
+// 覆盖：pr-test + build-deploy-dev + cc-lock-manager + issue-sync
 
-// PR 测试流水线
 pipeline {
     agent any
-    
+
     options {
         timeout(time: 2, unit: 'HOURS')
         buildDiscarder(logRotator(numToKeepStr: '30'))
     }
-    
+
+    triggers {
+        GenericTrigger(
+            genericVariables: [
+                [key: 'PR_NUMBER',  value: '$.pull_request.number'],
+                [key: 'BRANCH',     value: '$.pull_request.head.ref'],
+                [key: 'PR_ACTION',  value: '$.action'],
+                [key: 'PR_MERGED',  value: '$.pull_request.merged']
+            ],
+            causeString: 'PR #$PR_NUMBER ($PR_ACTION)',
+            token: 'wande-play-pr',
+            printContributedVariables: false,
+            printPostContent: false,
+            regexpFilterText: '$PR_ACTION',
+            regexpFilterExpression: 'opened|synchronize|reopened'
+        )
+    }
+
     parameters {
         string(name: 'PR_NUMBER', defaultValue: '', description: 'PR Number')
-        string(name: 'BRANCH', defaultValue: '', description: 'Branch name')
-        string(name: 'REPO', defaultValue: 'WnadeyaowuOraganization/wande-play', description: 'Repository')
+        string(name: 'BRANCH',    defaultValue: '', description: 'Branch name')
     }
-    
+
     environment {
-        GH_TOKEN = credentials('github-bot')
-        WEIPING_TOKEN = credentials('github-weiping')
-        REPO = 'WnadeyaowuOraganization/wande-play'
-        CI_WORK_DIR = '/tmp/wande-play-ci'
+        REPO         = 'WnadeyaowuOraganization/wande-play'
+        CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci'
         CI_BACKEND_PORT = '6041'
         CI_FRONTEND_PORT = '8084'
-        CI_DB_HOST = 'localhost'
-        CI_DB_PORT = '3306'
-        CI_DB_NAME = 'wande-ai-ci'
-        CI_DB_USER = 'root'
-        CI_DB_PASS = 'root'
+        CI_DB_NAME   = 'wande-ai-ci'
+        SCRIPTS_DIR  = '/data/home/ubuntu/projects/.github/scripts'
+        JENKINS_DIR  = '/data/home/ubuntu/projects/.github/jenkins'
+        WANDE_DIR    = '/home/ubuntu/projects/wande-play'
     }
-    
+
     stages {
+
+        // ── 阶段1：拉取 PR 代码 ──────────────────────────────────────────
         stage('Checkout') {
             steps {
-                script {
-                    // 克隆代码
-                    sh """
-                        rm -rf ${CI_WORK_DIR}
-                        mkdir -p ${CI_WORK_DIR}
-                        cd ${CI_WORK_DIR}
-                        git clone https://x-access-token:${GH_TOKEN}@github.com/${REPO} .
-                        git fetch origin ${params.BRANCH}
-                        git checkout ${params.BRANCH}
-                        git fetch origin dev
-                    """
+                withCredentials([usernamePassword(credentialsId: 'github-bot-token',
+                        usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                    script {
+                        def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
+                        sh """
+                            rm -rf ${CI_WORK_DIR}
+                            mkdir -p ${CI_WORK_DIR}
+                            cd ${CI_WORK_DIR}
+                            git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/${REPO} .
+                            git fetch origin ${branch}
+                            git checkout ${branch}
+                            git fetch origin dev
+                        """
+                    }
                 }
             }
         }
-        
-        stage('Conflict Check') {
+
+        // ── 阶段2：冲突检测 ──────────────────────────────────────────────
+        stage('冲突检测') {
+            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
+            steps {
+                withCredentials([string(credentialsId: 'github-weiping-token', variable: 'WEIPING_TOKEN')]) {
+                    script {
+                        def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                        sh """
+                            MERGEABLE=\$(gh pr view ${pr} --repo ${REPO} --json mergeable --jq '.mergeable')
+                            if [ "\$MERGEABLE" = "CONFLICTING" ]; then
+                                echo "PR #${pr} 有冲突，触发自动解决..."
+                                bash ${SCRIPTS_DIR}/cycle-merge.sh ${pr} || true
+                            fi
+                        """
+                    }
+                }
+            }
+        }
+
+        // ── 阶段3：质量门控（快速失败）──────────────────────────────────
+        stage('质量门控') {
+            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
             steps {
                 script {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                    def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
+                    sh "bash ${JENKINS_DIR}/quality-gate.sh ${pr} ${branch}"
+                }
+            }
+        }
+
+        // ── 阶段4：单元测试 ──────────────────────────────────────────────
+        stage('单元测试') {
+            steps {
+                sh """
+                    cd ${CI_WORK_DIR}/backend
+                    mvn test -pl ruoyi-modules/wande-ai -am -Pprod -q
+                """
+            }
+        }
+
+        // ── 阶段4.5：CI DB schema 修复 ───────────────────────────────────
+        stage('CI DB修复') {
+            steps {
+                sh """
+                    docker exec mysql-dev mysql -uroot -proot ${CI_DB_NAME} -e "
+                      CREATE TABLE IF NOT EXISTS wdpp_supplier_categories (category_id BIGINT NOT NULL AUTO_INCREMENT, parent_id BIGINT DEFAULT 0, category_name VARCHAR(100) NOT NULL, category_code VARCHAR(50) DEFAULT NULL, sort_order INT DEFAULT 0, status CHAR(1) DEFAULT '0', remark VARCHAR(500) DEFAULT NULL, tenant_id VARCHAR(20) DEFAULT '000000', create_dept BIGINT DEFAULT NULL, create_by BIGINT DEFAULT NULL, update_by BIGINT DEFAULT NULL, create_time DATETIME DEFAULT NULL, update_time DATETIME DEFAULT NULL, del_flag CHAR(1) DEFAULT '0', PRIMARY KEY (category_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                      CREATE TABLE IF NOT EXISTS wdpp_suppliers (supplier_id BIGINT NOT NULL AUTO_INCREMENT, supplier_name VARCHAR(200) NOT NULL, supplier_code VARCHAR(50) DEFAULT NULL, category_id BIGINT DEFAULT NULL, supplier_type CHAR(1) DEFAULT '1', unified_code VARCHAR(50) DEFAULT NULL, legal_person VARCHAR(50) DEFAULT NULL, supplier_status CHAR(1) DEFAULT '0', tenant_id VARCHAR(20) DEFAULT '000000', create_dept BIGINT DEFAULT NULL, create_by BIGINT DEFAULT NULL, update_by BIGINT DEFAULT NULL, create_time DATETIME DEFAULT NULL, update_time DATETIME DEFAULT NULL, del_flag CHAR(1) DEFAULT '0', PRIMARY KEY (supplier_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                      CREATE TABLE IF NOT EXISTS wdpp_supplier_contacts (contact_id BIGINT NOT NULL AUTO_INCREMENT, supplier_id BIGINT NOT NULL, contact_name VARCHAR(50) NOT NULL, position VARCHAR(50) DEFAULT NULL, mobile VARCHAR(20) DEFAULT NULL, is_primary CHAR(1) DEFAULT '0', tenant_id VARCHAR(20) DEFAULT '000000', create_dept BIGINT DEFAULT NULL, create_by BIGINT DEFAULT NULL, update_by BIGINT DEFAULT NULL, create_time DATETIME DEFAULT NULL, update_time DATETIME DEFAULT NULL, del_flag CHAR(1) DEFAULT '0', PRIMARY KEY (contact_id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                      CREATE TABLE IF NOT EXISTS wdpp_acceptance_item_template (id BIGINT AUTO_INCREMENT PRIMARY KEY, equipment_type VARCHAR(50) NOT NULL, check_item_name VARCHAR(200) NOT NULL, check_standard TEXT NULL, is_required TINYINT DEFAULT 1, sort_order INT DEFAULT 0, tenant_id BIGINT DEFAULT 0, create_by BIGINT NULL, update_by BIGINT NULL, create_time DATETIME NULL, update_time DATETIME NULL, del_flag TINYINT DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                      CREATE TABLE IF NOT EXISTS wdpp_brand_contents (id BIGINT NOT NULL AUTO_INCREMENT, title VARCHAR(300) NOT NULL, content_type VARCHAR(50) NOT NULL, platform VARCHAR(50) NOT NULL, publish_status VARCHAR(20) DEFAULT 'DRAFT', del_flag CHAR(1) DEFAULT '0', create_time DATETIME DEFAULT CURRENT_TIMESTAMP, update_time DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, tenant_id VARCHAR(20) DEFAULT '000000', create_by BIGINT, update_by BIGINT, PRIMARY KEY (id)) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+                    " 2>/dev/null || echo "⚠️ 表创建部分失败，继续"
+                    docker exec mysql-dev mysql -uroot -proot ${CI_DB_NAME} -e "
+                      SET @s=(SELECT IF((SELECT COUNT(*) FROM information_schema.COLUMNS WHERE table_schema=DATABASE() AND table_name='sys_user' AND column_name='wecom_user_id')>0,'SELECT 1','ALTER TABLE sys_user ADD COLUMN wecom_user_id VARCHAR(64) DEFAULT NULL AFTER open_id'));
+                      PREPARE p FROM @s; EXECUTE p; DEALLOCATE PREPARE p;
+                    " 2>/dev/null || echo "⚠️ wecom_user_id 修复失败，继续"
+                """
+            }
+        }
+
+        // ── 阶段4.6：Flyway 增量预校验 ──────────────────────────────────
+        stage('Flyway预校验') {
+            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
+            steps {
+                withCredentials([string(credentialsId: 'github-bot-token', variable: 'GH_TOKEN')]) {
+                    script {
+                        def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                        sh """
+                            NEW_SQLS=\$(gh pr diff ${pr} --repo ${REPO} --name-only 2>/dev/null | grep -E '^backend/.+/V[^/]+\\.sql\$' | sort -u || true)
+                            if [ -z "\$NEW_SQLS" ]; then
+                                echo "PR 无新增 V*.sql，跳过 Flyway 预校验"
+                                exit 0
+                            fi
+                            echo "📝 PR 新增迁移脚本: \$NEW_SQLS"
+                            docker exec mysql-dev mysql -uroot -proot -e "DROP DATABASE IF EXISTS wande_flyway_pr_check; CREATE DATABASE wande_flyway_pr_check DEFAULT CHARSET utf8mb4;"
+                            docker exec mysql-dev sh -c "mysqldump -uroot -proot --routines --triggers 'wande-ai' | mysql -uroot -proot wande_flyway_pr_check"
+                            FAIL=0
+                            for sql in \$NEW_SQLS; do
+                                BN=\$(basename "\$sql")
+                                if docker exec -i mysql-dev mysql -uroot -proot wande_flyway_pr_check < "\$sql" 2>&1; then
+                                    echo "✅ \$BN"
+                                else
+                                    echo "❌ \$BN 执行失败"
+                                    FAIL=\$((FAIL+1))
+                                fi
+                            done
+                            docker exec mysql-dev mysql -uroot -proot -e "DROP DATABASE IF EXISTS wande_flyway_pr_check;" 2>/dev/null || true
+                            [ \$FAIL -gt 0 ] && exit 1 || echo "✅ Flyway 预校验通过"
+                        """
+                    }
+                }
+            }
+        }
+
+        // ── 阶段5：E2E 测试 ──────────────────────────────────────────────
+        stage('E2E 测试') {
+            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
+            steps {
+                sh """
+                    # 停止旧 CI 后端
+                    PID=\$(lsof -ti :${CI_BACKEND_PORT} 2>/dev/null || true)
+                    [ -n "\$PID" ] && kill \$PID 2>/dev/null && sleep 3 && kill -9 \$PID 2>/dev/null || true
+
+                    # 启动 CI 后端（端口 ${CI_BACKEND_PORT}，wande-ai-ci 数据库）
+                    mkdir -p /apps/wande-ai-backend-ci/logs
+                    : > /apps/wande-ai-backend-ci/logs/backend.log
+                    nohup java -jar /apps/wande-ai-backend-ci/ruoyi-admin.jar \
+                        --spring.profiles.active=test \
+                        --server.port=${CI_BACKEND_PORT} \
+                        --spring.flyway.enabled=false \
+                        --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://127.0.0.1:3306/${CI_DB_NAME}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true" \
+                        --spring.datasource.dynamic.datasource.master.username=root \
+                        --spring.datasource.dynamic.datasource.master.password=root \
+                        --spring.data.redis.database=15 \
+                        > /apps/wande-ai-backend-ci/logs/backend.log 2>&1 &
+                    echo "CI后端 PID=\$!"
+
+                    # 等待就绪（最多 180s）
+                    for i in \$(seq 1 60); do
+                        curl -sf http://localhost:${CI_BACKEND_PORT}/ --max-time 5 >/dev/null 2>&1 && echo "✅ CI后端就绪 (\${i}*3s)" && break
+                        pgrep -f "ruoyi-admin.*${CI_BACKEND_PORT}" >/dev/null 2>&1 || { echo "❌ CI后端进程已退出"; tail -80 /apps/wande-ai-backend-ci/logs/backend.log; exit 1; }
+                        echo "  等待后端启动... (\$((i*3))s/180s)"
+                        sleep 3
+                        [ \$i -eq 60 ] && { echo "❌ CI后端未在180s内就绪"; tail -80 /apps/wande-ai-backend-ci/logs/backend.log; exit 1; }
+                    done
+
+                    # 运行 Playwright E2E
+                    cd /home/ubuntu/projects/wande-play-ci/e2e
+                    BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
+                    BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
+                    npx playwright test --reporter=list --timeout=120000
+                """
+            }
+        }
+
+        // ── 阶段6：自动合并 PR ───────────────────────────────────────────
+        stage('自动合并') {
+            when {
+                expression {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                    return pr?.trim() && (currentBuild.result == null || currentBuild.result == 'SUCCESS')
+                }
+            }
+            steps {
+                withCredentials([string(credentialsId: 'github-weiping-token', variable: 'WEIPING_TOKEN')]) {
+                    script {
+                        def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                        sh """
+                            gh pr review ${pr} --repo ${REPO} --approve
+                            gh pr merge ${pr} --repo ${REPO} --squash --delete-branch
+                        """
+                    }
+                }
+            }
+        }
+
+        // ── 阶段7：检测变更模块 ──────────────────────────────────────────
+        stage('检测变更') {
+            steps {
+                script {
+                    def changed = sh(
+                        script: "cd ${WANDE_DIR} && git fetch origin dev && git diff --name-only origin/dev~1 origin/dev 2>/dev/null || echo 'backend/ frontend/'",
+                        returnStdout: true
+                    ).trim()
+                    env.HAS_BACKEND  = changed.contains('backend/')  ? 'true' : 'false'
+                    env.HAS_FRONTEND = changed.contains('frontend/') ? 'true' : 'false'
+                    echo "后端变更: ${env.HAS_BACKEND}, 前端变更: ${env.HAS_FRONTEND}"
+                }
+            }
+        }
+
+        // ── 阶段8：部署后端 ──────────────────────────────────────────────
+        stage('部署后端') {
+            when { expression { return env.HAS_BACKEND == 'true' } }
+            steps {
+                sh """
+                    cd ${WANDE_DIR}
+                    git fetch origin dev && git reset --hard origin/dev && git clean -fd
+                    cd backend
+                    mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q
+                    bash /apps/wande-ai-backend/start.sh
+                    # 健康检查（最多150秒）
+                    for i in \$(seq 1 30); do
+                        curl -sf http://localhost:6040/ > /dev/null 2>&1 && echo "✅ 后端部署完成" && exit 0
+                        sleep 5
+                    done
+                    echo "❌ 后端健康检查超时，回滚..."
+                    cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar 2>/dev/null || true
+                    bash /apps/wande-ai-backend/start.sh
+                    exit 1
+                """
+            }
+        }
+
+        // ── 阶段9：部署前端 ──────────────────────────────────────────────
+        stage('部署前端') {
+            when { expression { return env.HAS_FRONTEND == 'true' } }
+            steps {
+                sh """
+                    cd ${WANDE_DIR}/frontend
+                    rm -rf .turbo node_modules/.cache apps/web-antd/dist
+                    pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+                    pnpm build:antd
+                    sudo chown -R ubuntu:ubuntu /apps/wande-ai-front/ 2>/dev/null || true
+                    rsync -a --delete apps/web-antd/dist/ /apps/wande-ai-front/
+                    sudo nginx -s reload
+                    # 健康检查
+                    for i in \$(seq 1 10); do
+                        curl -sf http://localhost:8080/ > /dev/null 2>&1 && echo "✅ 前端部署完成" && exit 0
+                        sleep 3
+                    done
+                    exit 1
+                """
+            }
+        }
+
+        // ── 阶段10：关闭 Issue + 看板 Done ──────────────────────────────
+        stage('关闭Issue') {
+            when {
+                expression {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                    return pr?.trim() && (currentBuild.result == null || currentBuild.result == 'SUCCESS')
+                }
+            }
+            steps {
+                script {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
                     sh """
-                        cd ${CI_WORK_DIR}
-                        # 检测冲突
-                        MERGEABLE=\$(gh pr view ${params.PR_NUMBER} --repo ${REPO} --json mergeable --jq '.mergeable')
-                        if [ "\$MERGEABLE" = "CONFLICTING" ]; then
-                            echo "PR #${params.PR_NUMBER} 有冲突，自动解决..."
-                            bash /home/ubuntu/projects/.github/scripts/cycle-merge.sh ${params.PR_NUMBER}
+                        GH_TOKEN=\$(python3 ${SCRIPTS_DIR}/gh-app-token.py 2>/dev/null)
+                        export GH_TOKEN
+                        # 从 PR branch 提取 Issue 号
+                        BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName')
+                        ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
+                        if [ -z "\$ISSUE_NUM" ]; then
+                            ISSUE_NUM=\$(gh pr view ${pr} --repo ${REPO} --json body,title --jq '.body + " " + .title' | grep -oP '(?<=#)\\d+' | head -1)
+                        fi
+                        if [ -n "\$ISSUE_NUM" ]; then
+                            echo "关闭 Issue #\$ISSUE_NUM"
+                            gh issue close \$ISSUE_NUM --repo ${REPO} --reason completed || true
+                            bash ${SCRIPTS_DIR}/update-project-status.sh --repo play --issue \$ISSUE_NUM --status "Done" || true
                         fi
                     """
                 }
             }
         }
-        
-        stage('Build') {
-            steps {
-                script {
-                    sh """
-                        cd ${CI_WORK_DIR}/backend
-                        mvn clean package -Pprod -DskipTests -q
-                    """
-                }
-            }
-        }
-        
-        stage('Unit Tests') {
-            steps {
-                script {
-                    sh """
-                        cd ${CI_WORK_DIR}/backend
-                        mvn test -pl ruoyi-modules/wande-ai -q
-                    """
-                }
-            }
-        }
-        
-        stage('Quality Gate') {
-            steps {
-                script {
-                    // 质量门控：检查 checkbox/task.md/截图
-                    sh """
-                        cd ${CI_WORK_DIR}
-                        .github/jenkins/quality-gate.sh ${params.PR_NUMBER} ${params.BRANCH}
-                    """
-                }
-            }
-        }
-        
-        stage('E2E Tests') {
-            steps {
-                script {
-                    sh """
-                        cd ${CI_WORK_DIR}
-                        # 启动 CI 环境
-                        bash e2e/scripts/start-all.sh
-                        
-                        # 执行 E2E 测试
-                        cd e2e
-                        BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
-                        BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
-                        npx playwright test --reporter=list --timeout=120000
-                    """
-                }
-            }
-        }
-        
-        stage('Auto Merge') {
+
+        // ── 阶段11：释放 kimi 目录锁 ────────────────────────────────────
+        stage('释放kimi锁') {
             when {
-                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+                expression {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                    return pr?.trim() && (currentBuild.result == null || currentBuild.result == 'SUCCESS')
+                }
             }
             steps {
                 script {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
                     sh """
-                        # Approve PR
-                        WEIPING_TOKEN=${WEIPING_TOKEN} gh pr review ${params.PR_NUMBER} --repo ${REPO} --approve
-                        
-                        # Merge PR
-                        WEIPING_TOKEN=${WEIPING_TOKEN} gh pr merge ${params.PR_NUMBER} --repo ${REPO} --squash --delete-branch
+                        BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName')
+                        ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
+                        if [ -n "\$ISSUE_NUM" ]; then
+                            echo "释放 Issue #\$ISSUE_NUM 的 kimi 锁"
+                            bash ${SCRIPTS_DIR}/release-cc-lock.sh "\$ISSUE_NUM" || true
+                        fi
                     """
                 }
             }
         }
     }
-    
+
     post {
+        always {
+            sh """
+                PID=\$(lsof -ti :${CI_BACKEND_PORT} 2>/dev/null || true)
+                [ -n "\$PID" ] && kill \$PID 2>/dev/null || true
+                rm -rf ${CI_WORK_DIR}
+            """
+        }
         failure {
             script {
-                // 发送失败通知
-                sh """
-                    .github/jenkins/notify-failure.sh ${params.PR_NUMBER} "\${BUILD_URL}"
-                """
-            }
-        }
-        always {
-            script {
-                // 清理环境
-                sh """
-                    cd ${CI_WORK_DIR}
-                    bash e2e/scripts/stop-all.sh 2>/dev/null || true
-                    rm -rf ${CI_WORK_DIR}
-                """
+                def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                if (pr?.trim()) {
+                    sh """
+                        BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName' 2>/dev/null || echo "")
+                        ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
+                        if [ -n "\$ISSUE_NUM" ]; then
+                            bash ${SCRIPTS_DIR}/inject-cc-prompt.sh "\$ISSUE_NUM" "CI失败，请查看Jenkins日志修复：${BUILD_URL}" || true
+                        fi
+                        bash ${JENKINS_DIR}/notify-failure.sh ${pr} "${BUILD_URL}" || true
+                    """
+                }
             }
         }
     }

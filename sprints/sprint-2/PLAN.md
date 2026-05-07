@@ -655,6 +655,7 @@
 | 05-08 | kimi4 | #2332 | pipeline | medium | In Progress | 工具中心 数据管理→采集工具使用指南页 |
 | 05-08 | kimi5 | #2334 | fullstack | medium | In Progress | 工具中心 设计管理→设计工具下载页（D3/GH+AI渲染） |
 | 05-08 | kimi6 | #2364 | backend | medium | In Progress | 审批引擎 Phase10 菜单权限SQL + 审批中心菜单注册 |
+| 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 OPEN，等CI |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -678,7 +679,7 @@
 | ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
 | ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
 | kimi1 | #2339 | frontend | P1 | 合同要点卡片（部分T1） | PR #4488 OPEN，CI 修复中 |
-| kimi1 | #2342 | frontend | P1 | 方案模板管理前端 | CC 启动 05-08 |
+| kimi1 | #2342 | frontend | P1 | 方案模板管理前端 | PR #4500 OPEN，等CI |
 | kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | PR #4496 OPEN，等CI |
 | kimi4 | #2332 | pipeline | P1 | 数据管理采集工具指南页 | CC 启动 05-08 |
 | kimi5 | #2334 | fullstack | P1 | 设计工具下载页（D3/GH+AI渲染） | PR #4499 OPEN，等CI |

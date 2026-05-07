@@ -53,6 +53,7 @@ pipeline {
                     script {
                         def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
                         sh """
+                            lsof +D ${CI_WORK_DIR} 2>/dev/null | awk 'NR>1{print \$2}' | sort -u | xargs -r kill -9 2>/dev/null || true
                             rm -rf ${CI_WORK_DIR}
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}

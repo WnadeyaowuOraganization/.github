@@ -25,20 +25,15 @@
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
-| 2 | #2343 | P1 | frontend | 方案引擎 S3资产浏览器前端 — 可视化查看S3所有数据资产 | ✅ |
-| 3 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
-| 4 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
-| 5 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
-| 6 | #2337 | P1 | sample | 样品申请单+制作工单页面 | ✅ |
-| 7 | #2338 | P1 | sample | 样品箱管理页面 — 卡位可视化布局 | ✅ |
-| 8 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
-| 9 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
-| 10 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
-| 11 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
-| 12 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
-| 13 | #2473 | P1 | finance | 律师催收数据库+API — 律师信息+催收案件+进展记录 | ✅ |
-| 14 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | ✅ |
-| 15 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
+| 2 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
+| 3 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
+| 4 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
+| 5 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
+| 6 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
+| 7 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
+| 8 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
+| 9 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | ✅ |
+| 10 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -47,12 +42,17 @@
 | Issue | 原因 | 当前状态 |
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
-| #2339 | 已提PR #4488（kimi1） | In Progress |
-| #2516 | PR #4496 OPEN（kimi3） | In Progress |
-| #2342 | 已指派 kimi1 | In Progress |
-| #2332 | 已指派 kimi4 | In Progress |
-| #2334 | 已指派 kimi5 | In Progress |
-| #2364 | 已指派 kimi6 | In Progress |
+| #2339 | ✅ PR #4488 MERGED | Done |
+| #2516 | ✅ PR #4496 MERGED | Done |
+| #2342 | ✅ PR #4500 MERGED | Done |
+| #2332 | ✅ PR #4501 MERGED | Done |
+| #2334 | ✅ PR #4499 MERGED | Done |
+| #2364 | ✅ PR #4498 MERGED | Done |
+| #2343 | 已指派 kimi1 | In Progress |
+| #2333 | 已指派 kimi3 | In Progress |
+| #2337 | 已指派 kimi4 | In Progress |
+| #2338 | 已指派 kimi5 | In Progress |
+| #2473 | 已指派 kimi6 | In Progress |
 | #2329 | ⏸️ 实际 pause（非已指派） | pause |
 | #2365 | ⏳ 依赖 #2025 未关闭（SLA规则配置页） | Plan |
 | #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
@@ -655,6 +655,11 @@
 | 05-08 | kimi4 | ~~#2332~~ | pipeline | medium | ~~Done~~ | 工具中心 数据管理→采集工具使用指南页 — PR #4501 MERGED ✅ |
 | 05-08 | kimi5 | ~~#2334~~ | fullstack | medium | ~~Done~~ | 设计工具下载页（D3/GH+AI渲染） — PR #4499 MERGED ✅ |
 | 05-08 | kimi6 | ~~#2364~~ | backend | medium | ~~Done~~ | 审批引擎Phase10菜单权限SQL — PR #4498 MERGED ✅ |
+| 05-08 | kimi1 | #2343 | frontend | medium | In Progress | S3资产浏览器前端 — 可视化查看S3所有数据资产 |
+| 05-08 | kimi3 | #2333 | fullstack | medium | In Progress | PPT插件下载页 — 方案中心 |
+| 05-08 | kimi4 | #2337 | frontend | medium | In Progress | 样品申请单+制作工单页面 |
+| 05-08 | kimi5 | #2338 | frontend | medium | In Progress | 样品箱管理页面 — 卡位可视化布局 |
+| 05-08 | kimi6 | #2473 | backend | medium | In Progress | 律师催收数据库+API — 律师信息+催收案件+进展记录 |
 | 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED ✅ |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
@@ -684,8 +689,11 @@
 | ~~kimi4~~ | ~~#2332~~ | ~~pipeline~~ | ~~P1~~ | ~~数据管理采集工具指南页~~ | ~~✅ PR #4501 MERGED~~ |
 | ~~kimi5~~ | ~~#2334~~ | ~~fullstack~~ | ~~P1~~ | ~~设计工具下载页（D3/GH+AI渲染）~~ | ~~✅ PR #4499 MERGED~~ |
 | ~~kimi6~~ | ~~#2364~~ | ~~backend~~ | ~~P1~~ | ~~审批引擎Phase10菜单权限SQL~~ | ~~✅ PR #4498 MERGED~~ |
-
-> **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
+| kimi1 | #2343 | frontend | P1 | S3资产浏览器前端 | CC 启动 05-08 |
+| kimi3 | #2333 | fullstack | P1 | PPT插件下载页 | CC 启动 05-08 |
+| kimi4 | #2337 | frontend | P1 | 样品申请单页面 | CC 启动 05-08 |
+| kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | CC 启动 05-08 |
+| kimi6 | #2473 | backend | P1 | 律师催收数据库+API | CC 启动 05-08 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

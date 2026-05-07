@@ -650,7 +650,7 @@
 | 05-06 | kimi2 | ~~#2144~~ | brand | P2 | ~~Done~~ | AI辅助翻译 — PR #4474 MERGED ✅ |
 | 05-06 | kimi4 | ~~#2147~~ | pipeline | P2 | ~~Done~~ | G7e工具链部署 — PR #4479 MERGED ✅ |
 | 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
-| 05-08 | kimi3 | #2516 | frontend | medium | In Progress | 项目详情页「合同要点」卡片 — 关键信息内嵌执行管理 |
+| 05-08 | kimi3 | ~~#2516~~ | frontend | medium | ~~Done~~ | 项目详情页「合同要点」卡片 — PR #4496 OPEN，等CI |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -674,7 +674,7 @@
 | ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
 | ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
 | kimi1 | #2339 | frontend | P1 | 合同要点卡片（部分T1） | PR #4488 OPEN，CI 修复中 |
-| kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | CC 启动 05-08 |
+| kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | PR #4496 OPEN，等CI |
 
 > **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
 

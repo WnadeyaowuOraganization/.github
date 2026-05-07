@@ -192,8 +192,8 @@ pipeline {
                         [ \$i -eq 60 ] && { echo "❌ CI后端未在180s内就绪"; tail -80 /apps/wande-ai-backend-ci/logs/backend.log; exit 1; }
                     done
 
-                    # 运行 Playwright E2E
-                    cd /home/ubuntu/projects/wande-play-ci/e2e
+                    # 运行 Playwright E2E（用 CI_WORK_DIR 里刚 checkout 的代码）
+                    cd ${CI_WORK_DIR}/e2e
                     BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
                     BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
                     npx playwright test --reporter=list --timeout=120000

@@ -692,8 +692,8 @@
 | kimi1 | #2343 | frontend | P1 | S3资产浏览器前端 | CC 启动 05-08 |
 | kimi3 | #2333 | fullstack | P1 | PPT插件下载页 | PR #4502 OPEN，等CI |
 | kimi4 | #2337 | frontend | P1 | 样品申请单页面 | CC 启动 05-08 |
-| kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | CC 启动 05-08 |
-| kimi6 | #2473 | backend | P1 | 律师催收数据库+API | CC 启动 05-08 |
+| kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
+| kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

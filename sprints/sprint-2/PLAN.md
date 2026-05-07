@@ -689,7 +689,7 @@
 | ~~kimi4~~ | ~~#2332~~ | ~~pipeline~~ | ~~P1~~ | ~~数据管理采集工具指南页~~ | ~~✅ PR #4501 MERGED~~ |
 | ~~kimi5~~ | ~~#2334~~ | ~~fullstack~~ | ~~P1~~ | ~~设计工具下载页（D3/GH+AI渲染）~~ | ~~✅ PR #4499 MERGED~~ |
 | ~~kimi6~~ | ~~#2364~~ | ~~backend~~ | ~~P1~~ | ~~审批引擎Phase10菜单权限SQL~~ | ~~✅ PR #4498 MERGED~~ |
-| kimi1 | #2343 | frontend | P1 | S3资产浏览器前端 | CC 启动 05-08 |
+| kimi1 | #2343 | frontend | P1 | S3资产浏览器前端 | PR #4503 OPEN，等CI |
 | kimi3 | #2333 | fullstack | P1 | PPT插件下载页 | PR #4502 OPEN，等CI |
 | kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
 | kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |

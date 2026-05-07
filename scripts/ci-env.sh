@@ -125,6 +125,14 @@ start_ci_backend() {
     nohup java -jar "$CI_BACKEND_DIR/ruoyi-admin.jar" \
         --spring.profiles.active=dev \
         --server.port=$CI_BACKEND_PORT \
+        --spring.flyway.enabled=true \
+        --spring.flyway.url="jdbc:mysql://127.0.0.1:3306/wande-ai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8" \
+        --spring.flyway.user=root \
+        --spring.flyway.password=root \
+        --spring.flyway.baseline-on-migrate=true \
+        --spring.flyway.baseline-version=20991231235959 \
+        --spring.flyway.locations=classpath:db/migration \
+        --spring.flyway.clean-disabled=true \
         --spring.datasource.dynamic.datasource.master.driverClassName=com.mysql.cj.jdbc.Driver \
         --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://127.0.0.1:3306/wande-ai?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true" \
         --spring.datasource.dynamic.datasource.master.username=root \

@@ -1,0 +1,156 @@
+@Library('wande-play') _
+
+// PR 测试流水线
+pipeline {
+    agent any
+    
+    options {
+        timeout(time: 2, unit: 'HOURS')
+        buildDiscarder(logRotator(numToKeepStr: '30'))
+    }
+    
+    parameters {
+        string(name: 'PR_NUMBER', defaultValue: '', description: 'PR Number')
+        string(name: 'BRANCH', defaultValue: '', description: 'Branch name')
+        string(name: 'REPO', defaultValue: 'WnadeyaowuOraganization/wande-play', description: 'Repository')
+    }
+    
+    environment {
+        GH_TOKEN = credentials('github-bot')
+        WEIPING_TOKEN = credentials('github-weiping')
+        REPO = 'WnadeyaowuOraganization/wande-play'
+        CI_WORK_DIR = '/tmp/wande-play-ci'
+        CI_BACKEND_PORT = '6041'
+        CI_FRONTEND_PORT = '8084'
+        CI_DB_HOST = 'localhost'
+        CI_DB_PORT = '3306'
+        CI_DB_NAME = 'wande-ai-ci'
+        CI_DB_USER = 'root'
+        CI_DB_PASS = 'root'
+    }
+    
+    stages {
+        stage('Checkout') {
+            steps {
+                script {
+                    // 克隆代码
+                    sh """
+                        rm -rf ${CI_WORK_DIR}
+                        mkdir -p ${CI_WORK_DIR}
+                        cd ${CI_WORK_DIR}
+                        git clone https://x-access-token:${GH_TOKEN}@github.com/${REPO} .
+                        git fetch origin ${params.BRANCH}
+                        git checkout ${params.BRANCH}
+                        git fetch origin dev
+                    """
+                }
+            }
+        }
+        
+        stage('Conflict Check') {
+            steps {
+                script {
+                    sh """
+                        cd ${CI_WORK_DIR}
+                        # 检测冲突
+                        MERGEABLE=\$(gh pr view ${params.PR_NUMBER} --repo ${REPO} --json mergeable --jq '.mergeable')
+                        if [ "\$MERGEABLE" = "CONFLICTING" ]; then
+                            echo "PR #${params.PR_NUMBER} 有冲突，自动解决..."
+                            bash /home/ubuntu/projects/.github/scripts/cycle-merge.sh ${params.PR_NUMBER}
+                        fi
+                    """
+                }
+            }
+        }
+        
+        stage('Build') {
+            steps {
+                script {
+                    sh """
+                        cd ${CI_WORK_DIR}/backend
+                        mvn clean package -Pprod -DskipTests -q
+                    """
+                }
+            }
+        }
+        
+        stage('Unit Tests') {
+            steps {
+                script {
+                    sh """
+                        cd ${CI_WORK_DIR}/backend
+                        mvn test -pl ruoyi-modules/wande-ai -q
+                    """
+                }
+            }
+        }
+        
+        stage('Quality Gate') {
+            steps {
+                script {
+                    // 质量门控：检查 checkbox/task.md/截图
+                    sh """
+                        cd ${CI_WORK_DIR}
+                        .github/jenkins/quality-gate.sh ${params.PR_NUMBER} ${params.BRANCH}
+                    """
+                }
+            }
+        }
+        
+        stage('E2E Tests') {
+            steps {
+                script {
+                    sh """
+                        cd ${CI_WORK_DIR}
+                        # 启动 CI 环境
+                        bash e2e/scripts/start-all.sh
+                        
+                        # 执行 E2E 测试
+                        cd e2e
+                        BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
+                        BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
+                        npx playwright test --reporter=list --timeout=120000
+                    """
+                }
+            }
+        }
+        
+        stage('Auto Merge') {
+            when {
+                expression { currentBuild.result == null || currentBuild.result == 'SUCCESS' }
+            }
+            steps {
+                script {
+                    sh """
+                        # Approve PR
+                        WEIPING_TOKEN=${WEIPING_TOKEN} gh pr review ${params.PR_NUMBER} --repo ${REPO} --approve
+                        
+                        # Merge PR
+                        WEIPING_TOKEN=${WEIPING_TOKEN} gh pr merge ${params.PR_NUMBER} --repo ${REPO} --squash --delete-branch
+                    """
+                }
+            }
+        }
+    }
+    
+    post {
+        failure {
+            script {
+                // 发送失败通知
+                sh """
+                    .github/jenkins/notify-failure.sh ${params.PR_NUMBER} "\${BUILD_URL}"
+                """
+            }
+        }
+        always {
+            script {
+                // 清理环境
+                sh """
+                    cd ${CI_WORK_DIR}
+                    bash e2e/scripts/stop-all.sh 2>/dev/null || true
+                    rm -rf ${CI_WORK_DIR}
+                """
+            }
+        }
+    }
+}

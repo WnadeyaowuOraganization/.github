@@ -681,8 +681,8 @@
 | kimi1 | #2342 | frontend | P1 | 方案模板管理前端 | CC 启动 05-08 |
 | kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | PR #4496 OPEN，等CI |
 | kimi4 | #2332 | pipeline | P1 | 数据管理采集工具指南页 | CC 启动 05-08 |
-| kimi5 | #2334 | fullstack | P1 | 设计工具下载页（D3/GH+AI渲染） | CC 启动 05-08 |
-| kimi6 | #2364 | backend | P1 | 审批引擎Phase10菜单权限SQL | CC 启动 05-08 |
+| kimi5 | #2334 | fullstack | P1 | 设计工具下载页（D3/GH+AI渲染） | PR #4499 OPEN，等CI |
+| kimi6 | #2364 | backend | P1 | 审批引擎Phase10菜单权限SQL | PR #4498 OPEN，等CI |
 
 > **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
 

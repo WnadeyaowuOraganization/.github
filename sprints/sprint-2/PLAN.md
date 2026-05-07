@@ -41,9 +41,8 @@
 | 15 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
 | 16 | #2491 | P1 | backend | 竞品设计素材库API — 50家竞品产品图/效果图结构化存储 | ✅ |
 | 17 | #2473 | P1 | finance | 律师催收数据库+API — 律师信息+催收案件+进展记录 | ✅ |
-| 18 | #2516 | P1 | frontend | 项目详情页「合同要点」卡片 — 关键信息内嵌执行管理 | ✅ |
-| 19 | #2524 | P1 | backend | 阶段门禁增强 — 阶段切换时检查必交文档清单 | ✅ |
-| 20 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
+| 18 | #2524 | P1 | backend | 阶段门禁增强 — 阶段切换时检查必交文档清单 | ✅ |
+| 19 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -58,6 +57,7 @@
 | #2434 | 已指派 kimi4 | In Progress |
 | #2329 | 已指派 kimi2 | In Progress |
 | #2339 | 已提PR #4488（kimi1） | In Progress |
+| #2516 | 已指派 kimi3 | In Progress |
 | #1856 | ✅ PR merged，已完成 | Done |
 | #2287 | ✅ 已完成 | Done |
 | #2328 | ✅ PR merged，已完成 | Done |
@@ -79,6 +79,7 @@
 | #2436 | 已指派 kimi3 | In Progress |
 | #2434 | 已指派 kimi4 | In Progress |
 | #2329 | 已指派 kimi2 | In Progress |
+| #2516 | 已指派 kimi3 | In Progress |
 | #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
 | #1451 | ⚠️ 需配前端（body 写"前端：待创建术语表管理页面"） | Todo |
 | #2259 | ❌ 依赖缺失（backend#929 在 wande-ai-backend 仓库不存在） | Todo |
@@ -674,6 +675,7 @@
 | 05-06 | kimi2 | ~~#2144~~ | brand | P2 | ~~Done~~ | AI辅助翻译 — PR #4474 MERGED ✅ |
 | 05-06 | kimi4 | ~~#2147~~ | pipeline | P2 | ~~Done~~ | G7e工具链部署 — PR #4479 MERGED ✅ |
 | 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
+| 05-08 | kimi3 | #2516 | frontend | medium | In Progress | 项目详情页「合同要点」卡片 — 关键信息内嵌执行管理 |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -696,6 +698,8 @@
 | ~~kimi4~~ | ~~#1838~~ | ~~backend~~ | ~~P2~~ | ~~批量方案变体生成~~ | ~~✅ CLOSED~~ |
 | ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
 | ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
+| kimi1 | #2339 | frontend | P1 | 合同要点卡片（部分T1） | PR #4488 OPEN，CI 修复中 |
+| kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | CC 启动 05-08 |
 
 > **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
 

@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-06（排程经理第1122轮；4 CC空闲；指派建议表已更新：10个needs-prototype冻结Issue移入pause）
+> 更新时间：2026-05-08（排程经理第1123轮；#2341/#2454/#2485/#2491/#2524已CLOSED→移除；补入#2364/#3162/#3132/#1941/#2013；非活跃记录更新）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -18,18 +18,18 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-07（排程经理第1122轮补；Plan→Todo流转12个Issue；#2328/#1856/#2287已Done；#2339已提PR→In Progress；补入合规Issue填满20条）
+> 更新时间：2026-05-08（排程经理第1123轮；移除5个CLOSED Issue；补入#2364/#3162/#3132/#1941/#2013；非活跃记录清理）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
-| 2 | #2341 | P1 | frontend | 方案引擎 素材库前端 — 瀑布流浏览+智能搜索 [12/22] | ✅ |
+| 2 | #2364 | P1 | approval | 审批引擎 Phase10: 菜单权限SQL + 审批中心菜单注册 | ✅ |
 | 3 | #2342 | P1 | frontend | 方案引擎 方案模板管理前端 — 模板库浏览+上传+行业×阶段矩阵 | ✅ |
 | 4 | #2343 | P1 | frontend | 方案引擎 S3资产浏览器前端 — 可视化查看S3所有数据资产 | ✅ |
-| 5 | #2454 | P2 | backend | 中标项目名称NLP分词 → 自动扩展keyword_pool | ✅ |
-| 6 | #2485 | P2 | design-ai | 设计模型训练 ComfyUI FLUX模型下载与Docker环境配置 | ✅ |
+| 5 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
+| 6 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
 | 7 | #2332 | P1 | tool-center | 数据管理→采集工具使用指南页 | ✅ |
 | 8 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
 | 9 | #2334 | P1 | tool-center | 设计管理→设计工具下载页（D3/GH+AI渲染） | ✅ |
@@ -39,9 +39,9 @@
 | 13 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
 | 14 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
 | 15 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
-| 16 | #2491 | P1 | backend | 竞品设计素材库API — 50家竞品产品图/效果图结构化存储 | ✅ |
+| 16 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
 | 17 | #2473 | P1 | finance | 律师催收数据库+API — 律师信息+催收案件+进展记录 | ✅ |
-| 18 | #2524 | P1 | backend | 阶段门禁增强 — 阶段切换时检查必交文档清单 | ✅ |
+| 18 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | ✅ |
 | 19 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
@@ -51,39 +51,14 @@
 | Issue | 原因 | 当前状态 |
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
-| #2475 | 已指派 kimi1 | In Progress |
-| #2438 | 已指派 kimi2 | In Progress |
-| #2436 | 已指派 kimi3 | In Progress |
-| #2434 | 已指派 kimi4 | In Progress |
-| #2329 | 已指派 kimi2 | In Progress |
 | #2339 | 已提PR #4488（kimi1） | In Progress |
 | #2516 | 已指派 kimi3 | In Progress |
-| #1856 | ✅ PR merged，已完成 | Done |
-| #2287 | ✅ 已完成 | Done |
-| #2328 | ✅ PR merged，已完成 | Done |
+| #2329 | ⏸️ 实际 pause（非已指派） | pause |
+| #2365 | ⏳ 依赖 #2025 未关闭（SLA规则配置页） | Plan |
 | #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
-| #1451 | ⚠️ 需配前端（body 写"前端待创建"） | Todo |
-| #2259 | ❌ 依赖缺失（backend#929 不存在） | Todo |
-| #2260 | ❌ 依赖缺失（backend#926-928 不存在） | Todo |
-
-> ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
-
-### 非活跃记录（冻结/已指派/阻塞 — 不出现在主表）
-
-| Issue | 原因 | 当前状态 |
-|-------|------|---------|
-| #2420 / #2422 / #2425 / #2424 | ⛔ needs-prototype 冻结 | pause |
-| #2165 | ⛔ needs-prototype 冻结 | pause |
-| #2475 | 已指派 kimi1 | In Progress |
-| #2438 | 已指派 kimi2 | In Progress |
-| #2436 | 已指派 kimi3 | In Progress |
-| #2434 | 已指派 kimi4 | In Progress |
-| #2329 | 已指派 kimi2 | In Progress |
-| #2516 | 已指派 kimi3 | In Progress |
-| #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
-| #1451 | ⚠️ 需配前端（body 写"前端：待创建术语表管理页面"） | Todo |
-| #2259 | ❌ 依赖缺失（backend#929 在 wande-ai-backend 仓库不存在） | Todo |
-| #2260 | ❌ 依赖缺失（backend#926-928 在 wande-ai-backend 仓库不存在） | Todo |
+| #1451 | ⚠️ 需配前端（body 写"前端待创建"） | Done |
+| #2259 | ❌ 依赖缺失（backend#929 不存在） | Done |
+| #2260 | ❌ 依赖缺失（backend#926-928 不存在） | Done |
 
 ## 指派历史
 

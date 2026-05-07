@@ -4,7 +4,7 @@
 
 set -e
 
-JENKINS_URL="http://localhost:8080/jenkins"
+JENKINS_URL="http://localhost:18080/jenkins"
 JENKINS_USER="admin"
 JENKINS_PASS=$(sudo cat /var/lib/jenkins/secrets/initialAdminPassword 2>/dev/null || echo "")
 
@@ -37,9 +37,10 @@ curl -s -u "${JENKINS_USER}:${JENKINS_PASS}" \
         \"credentials\": {
             \"scope\": \"GLOBAL\",
             \"id\": \"github-bot-token\",
-            \"username\": \"wandeyaowu\",
-            \"password\": \"${BOT_TOKEN}\",
-            \"description\": \"GitHub Bot Token\"
+            \"description\": \"GitHub Bot Token\",
+            \"stapler-class\": \"org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl\",
+            \"\$class\": \"org.jenkinsci.plugins.plaincredentials.impl.StringCredentialsImpl\",
+            \"secret\": \"${BOT_TOKEN}\"
         }
     }"
 
@@ -82,4 +83,4 @@ pipeline {
 </project>'
 
 echo "=== Jenkins 配置完成 ==="
-echo "访问 http://localhost:8080/jenkins 配置 GitHub Webhook"
+echo "访问 http://localhost:18080/jenkins 配置 GitHub Webhook"

@@ -48,8 +48,7 @@ pipeline {
         // ── 阶段1：拉取 PR 代码 ──────────────────────────────────────────
         stage('Checkout') {
             steps {
-                withCredentials([usernamePassword(credentialsId: 'github-bot-token',
-                        usernameVariable: 'GIT_USER', passwordVariable: 'GIT_TOKEN')]) {
+                withCredentials([string(credentialsId: 'github-bot-token', variable: 'BOT_TOKEN')]) {
                     script {
                         def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
                         sh """
@@ -57,7 +56,7 @@ pipeline {
                             rm -rf ${CI_WORK_DIR}
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}
-                            git clone https://${GIT_USER}:${GIT_TOKEN}@github.com/${REPO} .
+                            git clone https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
                             git fetch origin ${branch}
                             git checkout ${branch}
                             git fetch origin dev
@@ -131,7 +130,7 @@ pipeline {
         stage('Flyway预校验') {
             when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'github-bot-token', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
+                withCredentials([string(credentialsId: 'github-bot-token', variable: 'GH_TOKEN')]) {
                     script {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
                         sh """

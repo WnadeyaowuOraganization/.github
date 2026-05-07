@@ -691,7 +691,7 @@
 | ~~kimi6~~ | ~~#2364~~ | ~~backend~~ | ~~P1~~ | ~~审批引擎Phase10菜单权限SQL~~ | ~~✅ PR #4498 MERGED~~ |
 | kimi1 | #2343 | frontend | P1 | S3资产浏览器前端 | CC 启动 05-08 |
 | kimi3 | #2333 | fullstack | P1 | PPT插件下载页 | PR #4502 OPEN，等CI |
-| kimi4 | #2337 | frontend | P1 | 样品申请单页面 | CC 启动 05-08 |
+| kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
 | kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
 

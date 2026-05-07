@@ -652,7 +652,7 @@
 | 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
 | 05-08 | kimi3 | ~~#2516~~ | frontend | medium | ~~Done~~ | 项目详情页「合同要点」卡片 — PR #4496 OPEN，等CI |
 | 05-08 | kimi1 | #2342 | frontend | medium | In Progress | 方案引擎 方案模板管理前端 — 模板库浏览+上传+行业×阶段矩阵 |
-| 05-08 | kimi4 | #2332 | pipeline | medium | In Progress | 工具中心 数据管理→采集工具使用指南页 |
+| 05-08 | kimi4 | ~~#2332~~ | pipeline | medium | ~~Done~~ | 工具中心 数据管理→采集工具使用指南页 — PR #4501 OPEN，等CI |
 | 05-08 | kimi5 | #2334 | fullstack | medium | In Progress | 工具中心 设计管理→设计工具下载页（D3/GH+AI渲染） |
 | 05-08 | kimi6 | #2364 | backend | medium | In Progress | 审批引擎 Phase10 菜单权限SQL + 审批中心菜单注册 |
 | 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 OPEN，等CI |
@@ -681,7 +681,7 @@
 | kimi1 | #2339 | frontend | P1 | 合同要点卡片（部分T1） | PR #4488 OPEN，CI 修复中 |
 | kimi1 | #2342 | frontend | P1 | 方案模板管理前端 | PR #4500 OPEN，等CI |
 | kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | PR #4496 OPEN，等CI |
-| kimi4 | #2332 | pipeline | P1 | 数据管理采集工具指南页 | CC 启动 05-08 |
+| kimi4 | #2332 | pipeline | P1 | 数据管理采集工具指南页 | PR #4501 OPEN，等CI |
 | kimi5 | #2334 | fullstack | P1 | 设计工具下载页（D3/GH+AI渲染） | PR #4499 OPEN，等CI |
 | kimi6 | #2364 | backend | P1 | 审批引擎Phase10菜单权限SQL | PR #4498 OPEN，等CI |
 

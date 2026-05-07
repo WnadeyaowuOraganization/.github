@@ -131,7 +131,7 @@ pipeline {
         stage('Flyway预校验') {
             when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
             steps {
-                withCredentials([string(credentialsId: 'github-bot-token', variable: 'GH_TOKEN')]) {
+                withCredentials([usernamePassword(credentialsId: 'github-bot-token', usernameVariable: 'GH_USER', passwordVariable: 'GH_TOKEN')]) {
                     script {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
                         sh """

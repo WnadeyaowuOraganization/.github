@@ -650,12 +650,12 @@
 | 05-06 | kimi2 | ~~#2144~~ | brand | P2 | ~~Done~~ | AI辅助翻译 — PR #4474 MERGED ✅ |
 | 05-06 | kimi4 | ~~#2147~~ | pipeline | P2 | ~~Done~~ | G7e工具链部署 — PR #4479 MERGED ✅ |
 | 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
-| 05-08 | kimi3 | ~~#2516~~ | frontend | medium | ~~Done~~ | 项目详情页「合同要点」卡片 — PR #4496 OPEN，等CI |
+| 05-08 | kimi3 | ~~#2516~~ | frontend | medium | ~~Done~~ | 项目详情页「合同要点」卡片 — PR #4496 MERGED ✅ |
 | 05-08 | kimi1 | #2342 | frontend | medium | In Progress | 方案引擎 方案模板管理前端 — 模板库浏览+上传+行业×阶段矩阵 |
-| 05-08 | kimi4 | ~~#2332~~ | pipeline | medium | ~~Done~~ | 工具中心 数据管理→采集工具使用指南页 — PR #4501 OPEN，等CI |
-| 05-08 | kimi5 | #2334 | fullstack | medium | In Progress | 工具中心 设计管理→设计工具下载页（D3/GH+AI渲染） |
-| 05-08 | kimi6 | #2364 | backend | medium | In Progress | 审批引擎 Phase10 菜单权限SQL + 审批中心菜单注册 |
-| 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 OPEN，等CI |
+| 05-08 | kimi4 | ~~#2332~~ | pipeline | medium | ~~Done~~ | 工具中心 数据管理→采集工具使用指南页 — PR #4501 MERGED ✅ |
+| 05-08 | kimi5 | ~~#2334~~ | fullstack | medium | ~~Done~~ | 设计工具下载页（D3/GH+AI渲染） — PR #4499 MERGED ✅ |
+| 05-08 | kimi6 | ~~#2364~~ | backend | medium | ~~Done~~ | 审批引擎Phase10菜单权限SQL — PR #4498 MERGED ✅ |
+| 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED ✅ |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -678,12 +678,12 @@
 | ~~kimi4~~ | ~~#1838~~ | ~~backend~~ | ~~P2~~ | ~~批量方案变体生成~~ | ~~✅ CLOSED~~ |
 | ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
 | ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
-| kimi1 | #2339 | frontend | P1 | 合同要点卡片（部分T1） | PR #4488 OPEN，CI 修复中 |
-| kimi1 | #2342 | frontend | P1 | 方案模板管理前端 | PR #4500 OPEN，等CI |
-| kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | PR #4496 OPEN，等CI |
-| kimi4 | #2332 | pipeline | P1 | 数据管理采集工具指南页 | PR #4501 OPEN，等CI |
-| kimi5 | #2334 | fullstack | P1 | 设计工具下载页（D3/GH+AI渲染） | PR #4499 OPEN，等CI |
-| kimi6 | #2364 | backend | P1 | 审批引擎Phase10菜单权限SQL | PR #4498 OPEN，等CI |
+| ~~kimi1~~ | ~~#2339~~ | ~~frontend~~ | ~~P1~~ | ~~合同要点卡片（部分T1）~~ | ~~✅ PR #4488 MERGED~~ |
+| ~~kimi1~~ | ~~#2342~~ | ~~frontend~~ | ~~P1~~ | ~~方案模板管理前端~~ | ~~✅ PR #4500 MERGED~~ |
+| ~~kimi3~~ | ~~#2516~~ | ~~frontend~~ | ~~P1~~ | ~~项目详情页合同要点卡片~~ | ~~✅ PR #4496 MERGED~~ |
+| ~~kimi4~~ | ~~#2332~~ | ~~pipeline~~ | ~~P1~~ | ~~数据管理采集工具指南页~~ | ~~✅ PR #4501 MERGED~~ |
+| ~~kimi5~~ | ~~#2334~~ | ~~fullstack~~ | ~~P1~~ | ~~设计工具下载页（D3/GH+AI渲染）~~ | ~~✅ PR #4499 MERGED~~ |
+| ~~kimi6~~ | ~~#2364~~ | ~~backend~~ | ~~P1~~ | ~~审批引擎Phase10菜单权限SQL~~ | ~~✅ PR #4498 MERGED~~ |
 
 > **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
 

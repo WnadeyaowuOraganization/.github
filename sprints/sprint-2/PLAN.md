@@ -25,24 +25,20 @@
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
-| 2 | #2364 | P1 | approval | 审批引擎 Phase10: 菜单权限SQL + 审批中心菜单注册 | ✅ |
-| 3 | #2342 | P1 | frontend | 方案引擎 方案模板管理前端 — 模板库浏览+上传+行业×阶段矩阵 | ✅ |
-| 4 | #2343 | P1 | frontend | 方案引擎 S3资产浏览器前端 — 可视化查看S3所有数据资产 | ✅ |
-| 5 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
-| 6 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
-| 7 | #2332 | P1 | tool-center | 数据管理→采集工具使用指南页 | ✅ |
-| 8 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
-| 9 | #2334 | P1 | tool-center | 设计管理→设计工具下载页（D3/GH+AI渲染） | ✅ |
-| 10 | #2337 | P1 | sample | 样品申请单+制作工单页面 | ✅ |
-| 11 | #2338 | P1 | sample | 样品箱管理页面 — 卡位可视化布局 | ✅ |
-| 12 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
-| 13 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
-| 14 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
-| 15 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
-| 16 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
-| 17 | #2473 | P1 | finance | 律师催收数据库+API — 律师信息+催收案件+进展记录 | ✅ |
-| 18 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | ✅ |
-| 19 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
+| 2 | #2343 | P1 | frontend | 方案引擎 S3资产浏览器前端 — 可视化查看S3所有数据资产 | ✅ |
+| 3 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
+| 4 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
+| 5 | #2333 | P1 | tool-center | 方案中心→PPT插件下载页 | ✅ |
+| 6 | #2337 | P1 | sample | 样品申请单+制作工单页面 | ✅ |
+| 7 | #2338 | P1 | sample | 样品箱管理页面 — 卡位可视化布局 | ✅ |
+| 8 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
+| 9 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
+| 10 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
+| 11 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
+| 12 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
+| 13 | #2473 | P1 | finance | 律师催收数据库+API — 律师信息+催收案件+进展记录 | ✅ |
+| 14 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | ✅ |
+| 15 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -52,7 +48,11 @@
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
 | #2339 | 已提PR #4488（kimi1） | In Progress |
-| #2516 | 已指派 kimi3 | In Progress |
+| #2516 | PR #4496 OPEN（kimi3） | In Progress |
+| #2342 | 已指派 kimi1 | In Progress |
+| #2332 | 已指派 kimi4 | In Progress |
+| #2334 | 已指派 kimi5 | In Progress |
+| #2364 | 已指派 kimi6 | In Progress |
 | #2329 | ⏸️ 实际 pause（非已指派） | pause |
 | #2365 | ⏳ 依赖 #2025 未关闭（SLA规则配置页） | Plan |
 | #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
@@ -651,6 +651,10 @@
 | 05-06 | kimi4 | ~~#2147~~ | pipeline | P2 | ~~Done~~ | G7e工具链部署 — PR #4479 MERGED ✅ |
 | 05-06 | kimi3 | ~~#2442~~ | backend | P1 | ~~Done~~ | Lookalike搜索 — PR #4481 MERGED ✅ |
 | 05-08 | kimi3 | ~~#2516~~ | frontend | medium | ~~Done~~ | 项目详情页「合同要点」卡片 — PR #4496 OPEN，等CI |
+| 05-08 | kimi1 | #2342 | frontend | medium | In Progress | 方案引擎 方案模板管理前端 — 模板库浏览+上传+行业×阶段矩阵 |
+| 05-08 | kimi4 | #2332 | pipeline | medium | In Progress | 工具中心 数据管理→采集工具使用指南页 |
+| 05-08 | kimi5 | #2334 | fullstack | medium | In Progress | 工具中心 设计管理→设计工具下载页（D3/GH+AI渲染） |
+| 05-08 | kimi6 | #2364 | backend | medium | In Progress | 审批引擎 Phase10 菜单权限SQL + 审批中心菜单注册 |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -674,7 +678,11 @@
 | ~~kimi4~~ | ~~#2147~~ | ~~pipeline~~ | ~~P2~~ | ~~G7e工具链部署~~ | ~~✅ PR#4479 MERGED~~ |
 | ~~kimi5~~ | ~~#2382~~ | ~~frontend~~ | ~~P1~~ | ~~前端培训计划+课程库页面~~ | ~~✅ PR#4478 MERGED~~ |
 | kimi1 | #2339 | frontend | P1 | 合同要点卡片（部分T1） | PR #4488 OPEN，CI 修复中 |
+| kimi1 | #2342 | frontend | P1 | 方案模板管理前端 | CC 启动 05-08 |
 | kimi3 | #2516 | frontend | P1 | 项目详情页合同要点卡片 | PR #4496 OPEN，等CI |
+| kimi4 | #2332 | pipeline | P1 | 数据管理采集工具指南页 | CC 启动 05-08 |
+| kimi5 | #2334 | fullstack | P1 | 设计工具下载页（D3/GH+AI渲染） | CC 启动 05-08 |
+| kimi6 | #2364 | backend | P1 | 审批引擎Phase10菜单权限SQL | CC 启动 05-08 |
 
 > **4 CC空闲待指派**；#1842 PR#4470 MERGED✅；#2100 PR#4471 MERGED✅；#2133 CLOSED✅；#2166 CLOSED✅；#2200 CLOSED✅；#2426 CLOSED✅；#1838 CLOSED✅；#2101 CLOSED✅；#2132 PR#4469 MERGED✅；#2144 PR#4474 MERGED✅；#2147 PR#4479 MERGED✅；#2442 PR#4481 MERGED✅；#2382 PR#4478 MERGED✅；#2165 pause⏸️；#2132 ✅merged/kimi1/2/3/4空闲，kimi5→#2382
 

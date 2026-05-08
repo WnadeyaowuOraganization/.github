@@ -309,22 +309,19 @@ pipeline {
             script {
                 def pr = params.PR_NUMBER ?: env.PR_NUMBER
                 if (pr?.trim()) {
-                    sh '''
-                        BRANCH_NAME=$(gh pr view ''' + pr + ''' --repo ''' + REPO + ''' --json headRefName --jq ".headRefName" 2>/dev/null || echo "")
-                        ISSUE_NUM=$(echo "$BRANCH_NAME" | grep -oP "(?<=Issue-|issue-)\d+" | head -1)
-                        # 获取 Jenkins console 最后 30 行（免认证）
-                        ERROR_LOG=$(curl -sf "''' + env.BUILD_URL + '''consoleText" 2>/dev/null | tail -30 | grep -v "^\\[Pipeline\\]" | grep -v "^$" | head -20 || echo "无法获取日志")
-                        if [ -n "$ISSUE_NUM" ]; then
-                            PROMPT_MSG="【CI失败】请修复以下问题后重新推送代码。
-
-Jenkins 日志（最后 20 行）：
-$ERROR_LOG
-
-日志完整版（免认证）：''' + env.BUILD_URL + '''consoleText"
-                            bash ''' + SCRIPTS_DIR + '''/inject-cc-prompt.sh "$ISSUE_NUM" "$PROMPT_MSG" || true
+                    def buildUrl = env.BUILD_URL
+                    sh """
+                        BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName' 2>/dev/null || echo "")
+                        ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
+                        ERROR_LOG=\$(curl -sf "${buildUrl}consoleText" 2>/dev/null | tail -30 | grep -v '^\\[Pipeline\\]' | grep -v '^$' | head -20 || echo "无法获取日志")
+                        if [ -n "\$ISSUE_NUM" ]; then
+                            PROMPT_MSG="CI失败，请修复以下问题后重新推送代码。
+日志尾部：\$ERROR_LOG
+完整日志(免认证)：${buildUrl}consoleText"
+                            bash ${SCRIPTS_DIR}/inject-cc-prompt.sh "\$ISSUE_NUM" "\$PROMPT_MSG" || true
                         fi
-                        bash ''' + JENKINS_DIR + '''/notify-failure.sh ''' + pr + ''' "''' + env.BUILD_URL + '''" || true
-                    '''
+                        bash ${JENKINS_DIR}/notify-failure.sh ${pr} "${buildUrl}" || true
+                    """
                 }
             }
         }

@@ -28,7 +28,7 @@
 | ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
 | ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
 | ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
-| ~~5~~ | ~~#2634~~ | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | ✅ PR #4533 OPEN |
+| ~~5~~ | ~~#2634~~ | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | ✅ PR #4533 MERGED |
 | ~~6~~ | ~~#2643~~ | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | ✅ PR #4534 MERGED |
 | ~~7~~ | ~~#2653~~ | P1 | backend | 节日日历DB + 海报模板管理API（Master #4091 内容自动化 [1/5]） | ✅ PR #4536 MERGED |
 | ~~8~~ | ~~#2661~~ | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | ✅ PR #4531 MERGED |

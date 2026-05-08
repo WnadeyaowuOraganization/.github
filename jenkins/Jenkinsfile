@@ -312,10 +312,16 @@ pipeline {
                     sh """
                         BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName' 2>/dev/null || echo "")
                         ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
-                        ERROR_LOG=\$(curl -sf "${buildUrl}consoleText" 2>/dev/null | tail -30 | grep -v '^\\[Pipeline\\]' | grep . | head -20 || echo "fetch log failed")
+                        # 按错误标记反查，而非取尾部（尾部是 post-cleanup，内容无用）
+                        ERROR_LOG=\$(curl -sf "${buildUrl}consoleText" 2>/dev/null | \
+                            grep -B 3 -A 10 '❌\|ERROR:\|exit code [1-9]\|Tests run.*Errors\|失败\|×\|✘' | \
+                            grep -v '^\\[Pipeline\\]' | grep . | head -25 || echo "无法获取详细日志")
                         if [ -n "\$ISSUE_NUM" ]; then
                             PROMPT_MSG="CI失败，请修复以下问题后重新推送代码。
-日志尾部：\$ERROR_LOG
+
+Jenkins 错误详情：
+\$ERROR_LOG
+
 完整日志(免认证)：${buildUrl}consoleText"
                             bash ${SCRIPTS_DIR}/inject-cc-prompt.sh "\$ISSUE_NUM" "\$PROMPT_MSG" || true
                         fi

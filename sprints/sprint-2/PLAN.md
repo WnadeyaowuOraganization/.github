@@ -72,6 +72,8 @@
 | #3209 | 已指派 kimi1 | In Progress |
 | #2659 | 已指派 kimi4 | In Progress |
 | #2666 | 已指派 kimi5 | In Progress |
+| #3210 | 已指派 kimi2 | In Progress |
+| #2370 | 已指派 kimi5 | In Progress |
 | #3132 | ✅ PR #3917+PR #4508 MERGED | Done |
 | #2337 | ✅ PR #4506 MERGED | Done |
 | #2338 | ✅ PR #4505 MERGED | Done |

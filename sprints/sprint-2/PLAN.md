@@ -50,7 +50,7 @@
 | #2364 | ✅ PR #4498 MERGED | Done |
 | #2343 | ✅ PR #4503 MERGED | Done |
 | #2333 | 已指派 kimi3 | In Progress |
-| #3162 | 已指派 kimi2 | In Progress |
+| #3162 | ✅ PR #4508 MERGED | Done |
 | #2337 | 已指派 kimi4 | In Progress |
 | #2338 | 已指派 kimi5 | In Progress |
 | #2473 | 已指派 kimi6 | In Progress |
@@ -663,6 +663,7 @@
 | 05-08 | kimi6 | #2473 | backend | medium | In Progress | 律师催收数据库+API — 律师信息+催收案件+进展记录 |
 | 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED ✅ |
 | 05-08 | kimi1 | #2330 | backend | medium | In Progress | PPT插件文生图面板 — PR #4507 OPEN |
+| 05-08 | kimi2 | ~~#3162~~ | backend | medium | ~~Done~~ | 企微审批回调核心逻辑 — PR #4508 MERGED ✅ |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -696,7 +697,7 @@
 | kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
 | kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
-| kimi2 | #3162 | backend | P1 | 审批流程引擎回调处理 | CC工作中 |
+| kimi2 | ~~#3162~~ | backend | P1 | 审批流程引擎回调处理 | ✅ PR #4508 MERGED |
 | kimi1 | #2330 | backend | P1 | PPT插件文生图面板 | PR #4507 OPEN，等CI |
 
 ### PR进度总览（04-26 22:05）

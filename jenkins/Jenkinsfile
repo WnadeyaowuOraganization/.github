@@ -102,7 +102,7 @@ pipeline {
             steps {
                 sh """
                     cd ${CI_WORK_DIR}/backend
-                    mvn test -pl ruoyi-modules/wande-ai -am -Pprod -q
+                    mvn package -pl ruoyi-modules/wande-ai -am -Pprod -DskipTests=false -q
                 """
             }
         }
@@ -115,31 +115,8 @@ pipeline {
             steps {
                 sh """
                     # 停止旧 CI 后端
-                    PID=\$(lsof -ti :${CI_BACKEND_PORT} 2>/dev/null || true)
-                    [ -n "\$PID" ] && kill \$PID 2>/dev/null && sleep 3 && kill -9 \$PID 2>/dev/null || true
-
-                    # 启动 CI 后端（端口 ${CI_BACKEND_PORT}，wande-ai-ci 数据库）
-                    mkdir -p /apps/wande-ai-backend-ci/logs
-                    : > /apps/wande-ai-backend-ci/logs/backend.log
-                    nohup java -jar /apps/wande-ai-backend-ci/ruoyi-admin.jar \
-                        --spring.profiles.active=test \
-                        --server.port=${CI_BACKEND_PORT} \
-                        --spring.flyway.enabled=true \
-                        --spring.datasource.dynamic.datasource.master.url="jdbc:mysql://127.0.0.1:3306/${CI_DB_NAME}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=false&serverTimezone=GMT%2B8&allowPublicKeyRetrieval=true" \
-                        --spring.datasource.dynamic.datasource.master.username=root \
-                        --spring.datasource.dynamic.datasource.master.password=root \
-                        --spring.data.redis.database=15 \
-                        > /apps/wande-ai-backend-ci/logs/backend.log 2>&1 &
-                    echo "CI后端 PID=\$!"
-
-                    # 等待就绪（最多 180s）
-                    for i in \$(seq 1 60); do
-                        curl -sf http://localhost:${CI_BACKEND_PORT}/ --max-time 5 >/dev/null 2>&1 && echo "✅ CI后端就绪 (\${i}*3s)" && break
-                        pgrep -f "ruoyi-admin.*${CI_BACKEND_PORT}" >/dev/null 2>&1 || { echo "❌ CI后端进程已退出"; tail -80 /apps/wande-ai-backend-ci/logs/backend.log; exit 1; }
-                        echo "  等待后端启动... (\$((i*3))s/180s)"
-                        sleep 3
-                        [ \$i -eq 60 ] && { echo "❌ CI后端未在180s内就绪"; tail -80 /apps/wande-ai-backend-ci/logs/backend.log; exit 1; }
-                    done
+                    # 启动 CI 环境（前后端），复用 unit test 已构建 jar
+                    bash ${JENKINS_DIR}/start-all.sh || { echo "❌ start-all.sh 失败"; exit 1; }
 
                     # 运行 Playwright E2E（只跑与 PR 变更相关的测试，smoke 兜底）
                     PR_NUM="${params.PR_NUMBER ?: env.PR_NUMBER ?: ''}"

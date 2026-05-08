@@ -24,8 +24,8 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #2330 | P1 | design-ai | 文生图PPT插件 — 输入文案→AI生成配图+排版 | ✅ |
-| 2 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
+| 1 | #3162 | P1 | approval | 企微审批贯通 2/6: 审批流程引擎回调处理 — 状态变更同步 | ✅ |
+| 2 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
 | 3 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
 | 4 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
 | 5 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
@@ -48,7 +48,7 @@
 | #2332 | ✅ PR #4501 MERGED | Done |
 | #2334 | ✅ PR #4499 MERGED | Done |
 | #2364 | ✅ PR #4498 MERGED | Done |
-| #2343 | 已指派 kimi1 | In Progress |
+| #2343 | ✅ PR #4503 MERGED | Done |
 | #2333 | 已指派 kimi3 | In Progress |
 | #2337 | 已指派 kimi4 | In Progress |
 | #2338 | 已指派 kimi5 | In Progress |
@@ -655,12 +655,13 @@
 | 05-08 | kimi4 | ~~#2332~~ | pipeline | medium | ~~Done~~ | 工具中心 数据管理→采集工具使用指南页 — PR #4501 MERGED ✅ |
 | 05-08 | kimi5 | ~~#2334~~ | fullstack | medium | ~~Done~~ | 设计工具下载页（D3/GH+AI渲染） — PR #4499 MERGED ✅ |
 | 05-08 | kimi6 | ~~#2364~~ | backend | medium | ~~Done~~ | 审批引擎Phase10菜单权限SQL — PR #4498 MERGED ✅ |
-| 05-08 | kimi1 | #2343 | frontend | medium | In Progress | S3资产浏览器前端 — 可视化查看S3所有数据资产 |
+| 05-08 | kimi1 | ~~#2343~~ | frontend | medium | ~~Done~~ | S3资产浏览器前端 — PR #4503 MERGED ✅ |
 | 05-08 | kimi3 | #2333 | fullstack | medium | In Progress | PPT插件下载页 — 方案中心 |
 | 05-08 | kimi4 | #2337 | frontend | medium | In Progress | 样品申请单+制作工单页面 |
 | 05-08 | kimi5 | #2338 | frontend | medium | In Progress | 样品箱管理页面 — 卡位可视化布局 |
 | 05-08 | kimi6 | #2473 | backend | medium | In Progress | 律师催收数据库+API — 律师信息+催收案件+进展记录 |
 | 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED ✅ |
+| 05-08 | kimi1 | #2330 | backend | medium | In Progress | PPT插件文生图面板 — 文生图API+侧边栏集成 |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -694,6 +695,7 @@
 | kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
 | kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
+| kimi1 | #2330 | backend | P1 | PPT插件文生图面板 | CC工作中 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

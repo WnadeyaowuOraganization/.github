@@ -24,9 +24,9 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #2528 | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | |
-| 2 | #2529 | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
-| 3 | #2531 | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
+| ~~1~~ | ~~#2528~~ | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | |
+| ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
+| ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
 | 4 | #2633 | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | |
 | 5 | #2634 | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | |
 | 6 | #2643 | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | |

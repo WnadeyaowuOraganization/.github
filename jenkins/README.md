@@ -13,11 +13,14 @@ Jenkins 运行 wande-play PR 完整流水线：冲突检测 → 质量门控 →
 | `github-bot-token` | StringCredentials (Secret text) | git clone + Flyway预校验 |
 | `github-weiping-token` | StringCredentials (Secret text) | 冲突检测 + 自动合并PR |
 
-**凭证由 `/var/lib/jenkins/init.groovy.d/jenkins-init.groovy` 在 Jenkins 启动时从 token 文件自动创建**。Token 文件位置：
+**凭证由 `/home/ubuntu/.jenkins/init.groovy.d/jenkins-init.groovy` 在 Jenkins 启动时从 token 文件自动创建**。Token 文件位置：
 - `github-bot-token`: `/home/ubuntu/projects/.github/scripts/tokens/bot.token`
 - `github-weiping-token`: `/home/ubuntu/projects/.github/scripts/tokens/weiping.pat`
 
 凭证过期后：更新 token 文件 → 重启 Jenkins（init groovy 会重建）。
+
+**Jenkins Home**：`/home/ubuntu/.jenkins/`（非 `/var/lib/jenkins/`）。凭证存储在 `~/.jenkins/credentials.xml`。
+修改凭证方式：① Groovy Script Console（需认证）② 直接改 XML + `POST /jenkins/reload` 热加载 ③ 重启 Jenkins。
 
 ## Webhook 触发
 
@@ -31,10 +34,8 @@ GitHub Webhook → `http://54.234.200.59:18080/jenkins/generic-webhook-trigger/i
 |------|------|
 | 冲突检测 | `weiping-token` 检测 MERGEABLE，冲突则自动 resolve |
 | 质量门控 | 6道门（PR body/task.md/截图/smoke/端口/路径） |
-| 单元测试 | `mvn test -pl ruoyi-modules/wande-ai -am -Pprod` |
-| CI DB修复 | 补 `wande-ai-ci` 缺失的表（wande-ai 数据库有，ci 库没有） |
-| Flyway预校验 | 对 PR 新增的 V*.sql 在克隆库上预执行 |
-| E2E测试 | Playwright，按 PR 变更过滤 backend/frontend 测试 |
+| 单元测试 | `mvn package -pl ruoyi-modules/wande-ai -am -Pprod`（产 jar 供 E2E） |
+| E2E测试 | `start-all.sh` 启动前后端 → Playwright 按 PR 变更过滤测试 |
 | 自动合并 | `gh pr review --approve && gh pr merge --squash` |
 | 部署 | backend: `mvn package` → start.sh；frontend: `pnpm build:antd` → rsync |
 | 关闭Issue | gh issue close + 看板 Project Done |
@@ -44,6 +45,7 @@ GitHub Webhook → `http://54.234.200.59:18080/jenkins/generic-webhook-trigger/i
 | 文件 | 说明 |
 |------|------|
 | `Jenkinsfile` | 主流水线脚本 |
+| `start-all.sh` | E2E 前后端启动（跳过 mvn package，复用已构建 jar） |
 | `quality-gate.sh` | 质量门控 6 道检查 |
 | `notify-failure.sh` | 失败时评论 PR |
 | `cycle-merge.sh` | 自动解决 PR 冲突 |
@@ -51,7 +53,6 @@ GitHub Webhook → `http://54.234.200.59:18080/jenkins/generic-webhook-trigger/i
 | `release-cc-lock.sh` | 释放 kimi 目录锁 |
 | `setup-jenkins.sh` | 首次配置脚本（创建凭证 + Pipeline Job） |
 | `github-webhook-trigger.sh` | GitHub Webhook 回调脚本（参考） |
-| `init.groovy.d/jenkins-init.groovy` | Jenkins 启动时自动创建凭证 |
 
 ## CI 环境参数
 

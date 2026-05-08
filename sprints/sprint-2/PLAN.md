@@ -85,7 +85,7 @@
 | #2746 | 已指派 kimi6 | In Progress |
 | #3162 | ✅ PR #4508 MERGED | Done |
 | #3163 | ✅ PR 已合并 | Done |
-| #3164 | 已指派 | In Progress |
+| #3164 | ✅ PR #4538 OPEN | Done |
 | #3194 | 已指派 kimi3 | In Progress |
 | #3209 | ✅ PR #4518 MERGED | Done |
 | #3210 | ✅ PR #4522 MERGED | Done |
@@ -734,10 +734,11 @@
 | ~~kimi4~~ | ~~#2337~~ | ~~frontend~~ | ~~P1~~ | ~~样品申请单页面~~ | ~~✅ PR #4506 MERGED~~ |
 | ~~kimi5~~ | ~~#2338~~ | ~~frontend~~ | ~~P1~~ | ~~样品箱管理页面~~ | ~~✅ PR #4505 MERGED~~ |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
-| kimi1 | #3164 | backend | P1 | 企微审批消息卡片增强 | CC工作中 |
+| kimi1 | #3164 | backend | P1 | 企微审批消息卡片增强 | PR #4538 OPEN，等CI |
 | kimi3 | #3181 | backend | P1 | 阶段文档注册表 | CC工作中 |
 | ~~kimi3~~ | ~~#2643~~ | ~~backend~~ | ~~P1~~ | ~~员工代言内容池+分享追踪API~~ | ~~✅ PR #4534 MERGED~~ |
 | 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
+| 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 OPEN |
 | kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
 | kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
 | kimi2 | #3153 | backend | P1 | 自动审批规则引擎 — 预审条件+预清除回退 | CC工作中 |

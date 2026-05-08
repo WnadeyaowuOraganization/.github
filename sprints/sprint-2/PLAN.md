@@ -18,15 +18,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-08（排程经理第1124轮；#2476/#2486/#2487/#2488移入非CC任务；去重清理；可用Issue: #1941/#2013/#2533）
+> 更新时间：2026-05-08（排程经理第1125轮；补满20个；17个Plan→Todo；优先Master收尾）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | |
-| 2 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | |
-| 3 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | |
+| 1 | #1887 | P2 | asset-library | 素材库建表 — asset_project_relations（Master #4215最后1个子Issue） | |
+| 2 | #2335 | P2 | sample | 样品借还+看板（Master #4198 [15/16] 接近收尾） | |
+| 3 | #2535 | P1 | backend | Gate Review记录表 — project_gate_review（项目组织Phase15） | |
+| 4 | #3194 | P1 | backend | 供应商排程数据模型 — plan_supplier_schedule（Master #4263启动） | |
+| 5 | #2034 | P2 | backend | 色卡库CRUD — Entity+Mapper+Service（色卡材料Phase2） | |
+| 6 | #2744 | P2 | backend | 客户触达提醒引擎 — 统一事件检测→提醒→闭环（Master #4146核心） | |
+| 7 | #2746 | P2 | backend | 赢/丢单复盘触发 — 商机关闭自动创建复盘任务（Master #4146 [3/12]） | |
+| 8 | #3209 | P1 | budget | 预算区域CRUD API — 招标文件导入+手动增删改（Master #4262） | |
+| 9 | #3210 | P1 | budget | 预算矩阵编制API — 区域×科目交叉格限额（Master #4262） | |
+| 10 | #2666 | P1 | backend | 外部仓库API对接 — 适配层（库存联通 [1/2]） | |
+| 11 | #2285 | P2 | budget | 报销申请预算关联前端集成（Master #4262） | |
+| 12 | #2286 | P2 | budget | 采购申请预算校验前端集成（Master #4262） | |
+| 13 | #2659 | P1 | backend | 色卡配色方案CRUD + 项目关联API（色卡配色器 [1/4]） | |
+| 14 | #2670 | P1 | fullstack | 样品箱追踪 + 业务员领用/归还流程（样品箱制度 [3/3]） | |
+| 15 | #2370 | P1 | frontend | 色卡库+材料库管理+审批页面（色卡材料Phase6） | |
+| 16 | #3163 | P1 | frontend | 企微H5审批发起页适配（企微审批贯通 3/6） | |
+| 17 | #3164 | P1 | backend | 企微审批消息卡片增强 — 一键审批+富文本摘要（企微审批贯通 4/6） | |
+| 18 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | |
+| 19 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | |
+| 20 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 

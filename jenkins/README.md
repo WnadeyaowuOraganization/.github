@@ -42,7 +42,7 @@ GitHub Webhook → `http://54.234.200.59:18080/jenkins/generic-webhook-trigger/i
 | 冲突检测 | `weiping-token` 检测 MERGEABLE，冲突则自动 resolve |
 | 质量门控 | 6道门（PR body/task.md/截图/smoke/端口/路径） |
 | 单元测试 | `mvn package -pl ruoyi-modules/wande-ai -am -Pprod`（产 jar 供 E2E） |
-| E2E测试 | `start-all.sh` 启动前后端 → Playwright 按 PR 变更过滤测试 |
+| E2E测试 | **暂禁用**（待模块级过滤方案设计） |
 | 自动合并 | `gh pr review --approve && gh pr merge --squash` |
 | 部署 | backend: `mvn package` → start.sh；frontend: `pnpm build:antd` → rsync |
 | 关闭Issue | gh issue close + 看板 Project Done |

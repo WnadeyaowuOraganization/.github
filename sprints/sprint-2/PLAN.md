@@ -28,15 +28,15 @@
 | ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
 | ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
 | ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
-| ~~5~~ | #2634 | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | |
+| ~~5~~ | ~~#2634~~ | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | ✅ PR #4533 OPEN |
 | ~~6~~ | ~~#2643~~ | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | ✅ PR #4534 MERGED |
-| ~~7~~ | #2653 | P1 | backend | 节日日历DB + 海报模板管理API（Master #4091 内容自动化 [1/5]） | |
-| ~~8~~ | #2661 | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | |
-| ~~9~~ | ~~#3153~~ | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | kimi2 CC启动 |
-| 10 | #3154 | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | |
+| ~~7~~ | ~~#2653~~ | P1 | backend | 节日日历DB + 海报模板管理API（Master #4091 内容自动化 [1/5]） | ✅ PR #4536 OPEN |
+| ~~8~~ | ~~#2661~~ | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | ✅ PR #4531 OPEN |
+| ~~9~~ | ~~#3153~~ | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | ✅ PR #4537 OPEN |
+| 10 | ~~#3154~~ | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | kimi4 CC工作中 |
 | 11 | #2371 | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | |
 | 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
-| ~~13~~ | #2741 | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | |
+| ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | kimi6 CC工作中 |
 | 14 | #2336 | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | |
 | 15 | #2342 | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | |
 | 16 | #2364 | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | |
@@ -85,7 +85,8 @@
 | #2746 | 已指派 kimi6 | In Progress |
 | #3162 | ✅ PR #4508 MERGED | Done |
 | #3163 | ✅ PR 已合并 | Done |
-| #3164 | ✅ PR #4538 OPEN | Done |
+| #3164 | ✅ PR #4538 MERGED | Done |
+| #3181 | kimi3 CC中 | In Progress |
 | #3194 | 已指派 kimi3 | In Progress |
 | #3209 | ✅ PR #4518 MERGED | Done |
 | #3210 | ✅ PR #4522 MERGED | Done |
@@ -738,7 +739,7 @@
 | kimi3 | #3181 | backend | P1 | 阶段文档注册表 | CC工作中 |
 | ~~kimi3~~ | ~~#2643~~ | ~~backend~~ | ~~P1~~ | ~~员工代言内容池+分享追踪API~~ | ~~✅ PR #4534 MERGED~~ |
 | 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
-| 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 OPEN |
+| 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |
 | kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
 | kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
 | kimi2 | #3153 | backend | P1 | 自动审批规则引擎 — 预审条件+预清除回退 | CC工作中 |

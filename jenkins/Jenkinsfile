@@ -59,19 +59,12 @@ pipeline {
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}
                             git clone https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
-                            # 分支不存在时检查 PR 是否已合并（避免合并后触发残留构建报错）
+                            # 分支不存在时 fallback 到 dev（通常是因为 PR 已合并分支被删除，dev 分支包含合并代码）
                             if ! git fetch origin ${branch} 2>/dev/null; then
-                                echo "分支 ${branch} 不存在，检查 PR #${prNum} 是否已合并..."
-                                IS_MERGED=\$(gh pr view ${prNum} --repo ${REPO} --json merged --jq '.merged' 2>/dev/null || echo "false")
-                                if [ "\$IS_MERGED" = "true" ]; then
-                                    echo "PR #${prNum} 已合并，跳过构建。"
-                                    exit 0
-                                else
-                                    echo "分支不存在且 PR 未合并，从 dev 构建..."
-                                    git fetch origin dev
-                                    git checkout dev
-                                    exit 0
-                                fi
+                                echo "分支 ${branch} 不存在，fallback 到 dev..."
+                                git fetch origin dev
+                                git checkout dev
+                                exit 0
                             fi
                             git checkout ${branch}
                             git fetch origin dev

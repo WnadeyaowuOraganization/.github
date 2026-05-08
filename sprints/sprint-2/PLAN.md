@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-08（排程经理第1123轮；#2341/#2454/#2485/#2491/#2524已CLOSED→移除；补入#2364/#3162/#3132/#1941/#2013；非活跃记录更新）
+> 更新时间：2026-05-08（排程经理第1124轮；#2476/#2486/#2487/#2488移入非CC任务；#2330/#2333/#2337/#2338/#2473已指派；去重清理；非活跃记录同步）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -18,22 +18,15 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-08（排程经理第1123轮；移除5个CLOSED Issue；补入#2364/#3162/#3132/#1941/#2013；非活跃记录清理）
+> 更新时间：2026-05-08（排程经理第1124轮；#2476/#2486/#2487/#2488移入非CC任务；去重清理；可用Issue: #1941/#2013/#2533）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
-| 2 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
-| 3 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
-| 4 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
-| 5 | #2486 | P1 | design-ai | LoRA-A训练 — 万德产品风格微调(触发词wande) | ✅ |
-| 6 | #2487 | P1 | design-ai | LoRA-B训练 — 国际渲染美学微调(触发词premi) | ✅ |
-| 7 | #2488 | P1 | design-ai | ComfyUI图生图Pipeline — ControlNet+IPAdapter工作流 | ✅ |
-| 8 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | ✅ |
-| 9 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | ✅ |
-| 10 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | ✅ |
+| 1 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | |
+| 2 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | |
+| 3 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -42,6 +35,10 @@
 | Issue | 原因 | 当前状态 |
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
+| #2476 | ⛔ 非CC任务（需人工验证AI建模结果） | pause |
+| #2486 | ⛔ 非CC任务（LoRA训练需GPU，m7i CPU-only） | pause |
+| #2487 | ⛔ 非CC任务（LoRA训练需GPU，m7i CPU-only） | pause |
+| #2488 | ⛔ 非CC任务（ComfyUI需GPU+依赖#2486/#2487） | pause |
 | #2339 | ✅ PR #4488 MERGED | Done |
 | #2516 | ✅ PR #4496 MERGED | Done |
 | #2342 | ✅ PR #4500 MERGED | Done |
@@ -54,6 +51,10 @@
 | #3132 | ✅ PR #3917+PR #4508 MERGED | Done |
 | #2337 | ✅ PR #4506 MERGED | Done |
 | #2338 | ✅ PR #4505 MERGED | Done |
+| #2330 | 已指派 kimi1 | In Progress (PR #4507 OPEN) |
+| #2333 | 已指派 kimi3 | In Progress (PR #4502 MERGED) |
+| #2337 | 已指派 kimi4 | In Progress (PR #4506 MERGED) |
+| #2338 | 已指派 kimi5 | In Progress (PR #4505 MERGED) |
 | #2473 | 已指派 kimi6 | In Progress (PR #4504 OPEN) |
 | #2329 | ⏸️ 实际 pause（非已指派） | pause |
 | #2365 | ⏳ 依赖 #2025 未关闭（SLA规则配置页） | Plan |

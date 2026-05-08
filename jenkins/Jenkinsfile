@@ -194,21 +194,21 @@ pipeline {
                     done
 
                     # 运行 Playwright E2E（只跑与 PR 变更相关的测试，smoke 兜底）
-                    PR_NUM=${params.PR_NUMBER ?: env.PR_NUMBER ?: ''}
+                    PR_NUM="${params.PR_NUMBER ?: env.PR_NUMBER ?: ''}"
                     cd ${CI_WORK_DIR}/e2e
                     # 检测变更模块
-                    CHANGED=\$(gh pr diff ${PR_NUM} --repo ${REPO} --name-only 2>/dev/null || echo "")
+                    CHANGED=\$(gh pr diff "\${PR_NUM}" --repo ${REPO} --name-only 2>/dev/null || echo "")
                     BACKEND_CHANGED=false
                     FRONTEND_CHANGED=false
                     if echo "\$CHANGED" | grep -q "^backend/"; then BACKEND_CHANGED=true; fi
                     if echo "\$CHANGED" | grep -q "^frontend/"; then FRONTEND_CHANGED=true; fi
                     echo "变更检测: backend=\$BACKEND_CHANGED frontend=\$FRONTEND_CHANGED"
-                    echo "变更文件示例: \$(echo \"\$CHANGED\" | head -5)"
+                    echo "变更文件: \$(echo \"\$CHANGED\" | head -10)"
 
                     PLAYWRIGHT_ARGS="--reporter=list --timeout=120000"
                     PLAYWRIGHT_PATTERNS=""
 
-                    # 后端变更：跑所有 backend smoke（覆盖 backend/api 已有模块）
+                    # 后端变更：跑所有 backend smoke
                     if [ "\$BACKEND_CHANGED" = "true" ]; then
                         PLAYWRIGHT_PATTERNS="tests/backend/"
                     fi

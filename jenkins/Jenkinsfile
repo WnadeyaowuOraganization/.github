@@ -34,9 +34,10 @@ pipeline {
 
     environment {
         REPO         = 'WnadeyaowuOraganization/wande-play'
-        CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci'
-        CI_BACKEND_PORT = '6041'
-        CI_FRONTEND_PORT = '8084'
+        // 每个 build 用独立目录/端口，避免并行时冲突
+        CI_WORK_DIR  = "${WORKSPACE}/repo"
+        CI_BACKEND_PORT = "${Integer.toString(6041 + (env.BUILD_NUMBER as Integer) % 50)}"
+        CI_FRONTEND_PORT = "${Integer.toString(8084 + (env.BUILD_NUMBER as Integer) % 50)}"
         CI_DB_NAME   = 'wande-ai-ci'
         SCRIPTS_DIR  = '/data/home/ubuntu/projects/.github/scripts'
         JENKINS_DIR  = '/data/home/ubuntu/projects/.github/jenkins'

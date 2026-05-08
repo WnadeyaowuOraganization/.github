@@ -52,13 +52,27 @@ pipeline {
                 withCredentials([string(credentialsId: 'github-bot-token', variable: 'BOT_TOKEN')]) {
                     script {
                         def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
+                        def prNum = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
                         sh """
                             lsof +D ${CI_WORK_DIR} 2>/dev/null | awk 'NR>1{print \$2}' | sort -u | xargs -r kill -9 2>/dev/null || true
                             rm -rf ${CI_WORK_DIR}
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}
                             git clone https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
-                            git fetch origin ${branch}
+                            # 分支不存在时检查 PR 是否已合并（避免合并后触发残留构建报错）
+                            if ! git fetch origin ${branch} 2>/dev/null; then
+                                echo "分支 ${branch} 不存在，检查 PR #${prNum} 是否已合并..."
+                                IS_MERGED=\$(gh pr view ${prNum} --repo ${REPO} --json merged --jq '.merged' 2>/dev/null || echo "false")
+                                if [ "\$IS_MERGED" = "true" ]; then
+                                    echo "PR #${prNum} 已合并，跳过构建。"
+                                    exit 0
+                                else
+                                    echo "分支不存在且 PR 未合并，从 dev 构建..."
+                                    git fetch origin dev
+                                    git checkout dev
+                                    exit 0
+                                fi
+                            fi
                             git checkout ${branch}
                             git fetch origin dev
                         """

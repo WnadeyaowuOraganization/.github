@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-08（排程经理第1124轮；#2476/#2486/#2487/#2488移入非CC任务；#2330/#2333/#2337/#2338/#2473已指派；去重清理；非活跃记录同步）
+> 更新时间：2026-05-08（排程经理第1126轮；12个MERGED移入非活跃；补入13个新候选；累计PR #4509-#4525；剩余可用Issue不足时从Plan补位）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -18,32 +18,32 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-08（排程经理第1125轮；补满20个；17个Plan→Todo；优先Master收尾）
+> 更新时间：2026-05-08（排程经理第1126轮；12个MERGED清理；补入13个新候选；13个Plan→Todo）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #1887 | P2 | asset-library | 素材库建表 — asset_project_relations（Master #4215最后1个子Issue） | |
-| 2 | #2335 | P2 | sample | 样品借还+看板（Master #4198 [15/16] 接近收尾） | |
-| 3 | #2535 | P1 | backend | Gate Review记录表 — project_gate_review（项目组织Phase15） | |
-| 4 | #3194 | P1 | backend | 供应商排程数据模型 — plan_supplier_schedule（Master #4263启动） | |
-| 5 | #2034 | P2 | backend | 色卡库CRUD — Entity+Mapper+Service（色卡材料Phase2） | |
-| 6 | #2744 | P2 | backend | 客户触达提醒引擎 — 统一事件检测→提醒→闭环（Master #4146核心） | |
-| 7 | #2746 | P2 | backend | 赢/丢单复盘触发 — 商机关闭自动创建复盘任务（Master #4146 [3/12]） | |
-| 8 | #3209 | P1 | budget | 预算区域CRUD API — 招标文件导入+手动增删改（Master #4262） | |
-| 9 | #3210 | P1 | budget | 预算矩阵编制API — 区域×科目交叉格限额（Master #4262） | |
-| 10 | #2666 | P1 | backend | 外部仓库API对接 — 适配层（库存联通 [1/2]） | |
-| 11 | #2285 | P2 | budget | 报销申请预算关联前端集成（Master #4262） | |
-| 12 | #2286 | P2 | budget | 采购申请预算校验前端集成（Master #4262） | |
-| 13 | #2659 | P1 | backend | 色卡配色方案CRUD + 项目关联API（色卡配色器 [1/4]） | |
-| 14 | #2670 | P1 | fullstack | 样品箱追踪 + 业务员领用/归还流程（样品箱制度 [3/3]） | |
-| 15 | #2370 | P1 | frontend | 色卡库+材料库管理+审批页面（色卡材料Phase6） | |
-| 16 | #3163 | P1 | frontend | 企微H5审批发起页适配（企微审批贯通 3/6） | |
-| 17 | #3164 | P1 | backend | 企微审批消息卡片增强 — 一键审批+富文本摘要（企微审批贯通 4/6） | |
-| 18 | #2533 | P1 | backend | 任务表增强 — project_task字段扩展与关联查询优化 | |
-| 19 | #2013 | P2 | backend | 权限增强 Phase20: 敏感字段组+权限模板 — 一键分配岗位权限 | |
-| 20 | #1941 | P2 | design-ai | 文生图代理API — Spring Boot封装G7e + 外部API双轨Fallback | |
+| 1 | #2528 | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | |
+| 2 | #2529 | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
+| 3 | #2531 | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
+| 4 | #2633 | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | |
+| 5 | #2634 | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | |
+| 6 | #2643 | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | |
+| 7 | #2653 | P1 | backend | 节日日历DB + 海报模板管理API（Master #4091 内容自动化 [1/5]） | |
+| 8 | #2661 | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | |
+| 9 | #3153 | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | |
+| 10 | #3154 | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | |
+| 11 | #2371 | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | |
+| 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
+| 13 | #2741 | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | |
+| 14 | #2336 | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | |
+| 15 | #2342 | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | |
+| 16 | #2364 | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | |
+| 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | |
+| 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | |
+| 19 | #2334 | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | |
+| 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -53,40 +53,44 @@
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
 | #2476 | ⛔ 非CC任务（需人工验证AI建模结果） | pause |
-| #2486 | ⛔ 非CC任务（LoRA训练需GPU，m7i CPU-only） | pause |
-| #2487 | ⛔ 非CC任务（LoRA训练需GPU，m7i CPU-only） | pause |
+| #2486 / #2487 | ⛔ 非CC任务（LoRA训练需GPU，m7i CPU-only） | pause |
 | #2488 | ⛔ 非CC任务（ComfyUI需GPU+依赖#2486/#2487） | pause |
-| #2339 | ✅ PR #4488 MERGED | Done |
-| #2516 | ✅ PR #4496 MERGED | Done |
-| #2342 | ✅ PR #4500 MERGED | Done |
+| #2329 | ⏸️ 实际 pause（非已指派） | pause |
+| #2330 | ✅ PR #4507 MERGED | Done |
 | #2332 | ✅ PR #4501 MERGED | Done |
-| #2334 | ✅ PR #4499 MERGED | Done |
-| #2364 | ✅ PR #4498 MERGED | Done |
-| #2343 | ✅ PR #4503 MERGED | Done |
 | #2333 | ✅ PR #4502 MERGED | Done |
-| #3162 | ✅ PR #4508 MERGED | Done |
-| #1887 | 已指派 kimi1 | In Progress |
-| #2535 | 已指派 kimi2 | In Progress |
-| #3194 | 已指派 kimi3 | In Progress |
-| #2034 | 已指派 kimi4 | In Progress |
-| #3209 | 已指派 kimi1 | In Progress |
-| #2659 | 已指派 kimi4 | In Progress |
-| #2666 | 已指派 kimi5 | In Progress |
-| #3210 | 已指派 kimi2 | In Progress |
-| #2370 | 已指派 kimi5 | In Progress |
-| #3163 | 已指派 kimi5 | In Progress |
-| #2746 | 已指派 kimi6 | In Progress |
-| #3132 | ✅ PR #3917+PR #4508 MERGED | Done |
+| #2334 | ✅ PR #4499 MERGED | Done |
 | #2337 | ✅ PR #4506 MERGED | Done |
 | #2338 | ✅ PR #4505 MERGED | Done |
-| #2330 | 已指派 kimi1 | In Progress (PR #4507 OPEN) |
-| #2333 | 已指派 kimi3 | In Progress (PR #4502 MERGED) |
-| #2337 | 已指派 kimi4 | In Progress (PR #4506 MERGED) |
-| #2338 | 已指派 kimi5 | In Progress (PR #4505 MERGED) |
+| #2342 | ✅ PR #4500 MERGED | Done |
+| #2343 | ✅ PR #4503 MERGED | Done |
+| #1887 | ✅ PR #4513 MERGED | Done |
+| #1941 | ✅ PR #4512 MERGED | Done |
+| #2013 | ✅ PR #4510 MERGED | Done |
+| #2034 | ✅ PR #4514 MERGED | Done |
+| #2169 | ✅ PR #4076 MERGED | Done |
+| #2285 | ✅ PR #4525 MERGED | Done |
+| #2286 | 已指派 kimi4 | In Progress |
+| #2335 | ✅ PR 已合并 | Done |
+| #2336 | ⏳ 依赖后端 Phase 未完成 | Todo（阻塞） |
+| #2364 | ✅ PR #4498 MERGED | Done |
+| #2370 | ✅ PR #4520 MERGED | Done |
 | #2473 | 已指派 kimi6 | In Progress (PR #4504 OPEN) |
-| #2329 | ⏸️ 实际 pause（非已指派） | pause |
-| #2365 | ⏳ 依赖 #2025 未关闭（SLA规则配置页） | Plan |
-| #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
+| #2533 | ✅ PR #4509 MERGED | Done |
+| #2535 | ✅ PR #4515 MERGED | Done |
+| #2659 | ✅ PR #4519 MERGED | Done |
+| #2666 | ✅ PR #4517 MERGED | Done |
+| #2670 | 已指派 kimi1 | In Progress |
+| #2744 | ✅ PR #4524 MERGED | Done |
+| #2746 | 已指派 kimi6 | In Progress |
+| #3162 | ✅ PR #4508 MERGED | Done |
+| #3163 | ✅ PR 已合并 | Done |
+| #3164 | 已指派 | In Progress |
+| #3194 | 已指派 kimi3 | In Progress |
+| #3209 | ✅ PR #4518 MERGED | Done |
+| #3210 | ✅ PR #4522 MERGED | Done |
+| #2488 | ✅ PR #4511 MERGED | Done |
+| #3132 | ✅ PR #3917+#4508 MERGED | Done |
 | #1451 | ⚠️ 需配前端（body 写"前端待创建"） | Done |
 | #2259 | ❌ 依赖缺失（backend#929 不存在） | Done |
 | #2260 | ❌ 依赖缺失（backend#926-928 不存在） | Done |

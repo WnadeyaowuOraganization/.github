@@ -59,9 +59,9 @@ pipeline {
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}
                             git clone https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
-                            # 分支不存在时 fallback 到 dev（通常是因为 PR 已合并分支被删除，dev 分支包含合并代码）
+                            # fallback to dev when branch is gone (merged PR)
                             if ! git fetch origin ${branch} 2>/dev/null; then
-                                echo "分支 ${branch} 不存在，fallback 到 dev..."
+                                echo "branch ${branch} not found, fallback to dev"
                                 git fetch origin dev
                                 git checkout dev
                                 exit 0
@@ -84,7 +84,7 @@ pipeline {
                         sh """
                             MERGEABLE=\$(gh pr view ${pr} --repo ${REPO} --json mergeable --jq '.mergeable')
                             if [ "\$MERGEABLE" = "CONFLICTING" ]; then
-                                echo "PR #${pr} 有冲突，触发自动解决..."
+                                echo "PR #${pr} has conflict, auto-resolving..."
                                 bash ${JENKINS_DIR}/cycle-merge.sh ${pr} || true
                             fi
                         """
@@ -219,23 +219,23 @@ pipeline {
                     cd backend
                     mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q
                     bash /apps/wande-ai-backend/start.sh
-                    # 健康检查 + PID 变化验证（最多150秒）
+                    # health check + PID swap verification (max 150s)
                     for i in \$(seq 1 30); do
                         NEW_PID=\$(pgrep -f 'ruoyi-admin' 2>/dev/null || echo '')
-                        echo "轮次 \$i: 监听中, PID=\$NEW_PID (部署前=${OLD_BACKEND_PID:-无})"
-                        curl -sf http://localhost:6040/ > /dev/null 2>&1 || { echo "端口6040无响应，等待..."; sleep 5; continue; }
-                        # 验证 PID 已切换（新 jar 在跑）
+                        echo "check \$i: PID=\$NEW_PID (prev=${OLD_BACKEND_PID:-none})"
+                        curl -sf http://localhost:6040/ > /dev/null 2>&1 || { echo "port 6040 not responding, waiting..."; sleep 5; continue; }
+                        # verify PID changed (new jar is running)
                         if [ -n "\$NEW_PID" ] && [ "\$NEW_PID" != "${env.OLD_BACKEND_PID}" ]; then
-                            echo "✅ 后端部署完成 (PID: \$NEW_PID)"
+                            echo "backend deploy OK (PID: \$NEW_PID)"
                             exit 0
                         elif [ -z "\$NEW_PID" ]; then
-                            echo "进程消失，重新等待..."
+                            echo "process disappeared, retrying..."
                         else
-                            echo "PID 未变化，可能是旧进程未退出..."
+                            echo "PID unchanged, old process may still be running..."
                         fi
                         sleep 5
                     done
-                    echo "❌ 后端健康检查超时或PID未切换，回滚..."
+                    echo "backend health check timeout, rolling back..."
                     cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar 2>/dev/null || true
                     bash /apps/wande-ai-backend/start.sh
                     exit 1
@@ -255,9 +255,9 @@ pipeline {
                     sudo chown -R ubuntu:ubuntu /apps/wande-ai-front/ 2>/dev/null || true
                     rsync -a --delete apps/web-antd/dist/ /apps/wande-ai-front/
                     sudo nginx -s reload
-                    # 健康检查
+                    # health check
                     for i in \$(seq 1 10); do
-                        curl -sf http://localhost:8080/ > /dev/null 2>&1 && echo "✅ 前端部署完成" && exit 0
+                        curl -sf http://localhost:8080/ > /dev/null 2>&1 && echo "frontend deploy OK" && exit 0
                         sleep 3
                     done
                     exit 1
@@ -286,7 +286,7 @@ pipeline {
                             ISSUE_NUM=\$(gh pr view ${pr} --repo ${REPO} --json body,title --jq '.body + " " + .title' | grep -oP '(?<=#)\\d+' | head -1)
                         fi
                         if [ -n "\$ISSUE_NUM" ]; then
-                            echo "关闭 Issue #\$ISSUE_NUM"
+                            echo "closing Issue #\$ISSUE_NUM"
                             gh issue close \$ISSUE_NUM --repo ${REPO} --reason completed || true
                             bash ${JENKINS_DIR}/update-project-status.sh --repo play --issue \$ISSUE_NUM --status "Done" || true
                         fi
@@ -310,7 +310,7 @@ pipeline {
                         BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName')
                         ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
                         if [ -n "\$ISSUE_NUM" ]; then
-                            echo "释放 Issue #\$ISSUE_NUM 的 kimi 锁"
+                            echo "releasing kimi lock for Issue #\$ISSUE_NUM"
                             bash ${JENKINS_DIR}/release-cc-lock.sh "\$ISSUE_NUM" || true
                         fi
                     """
@@ -333,7 +333,7 @@ pipeline {
                 if (pr?.trim()) {
                     env.FAIL_PR_NUM = pr
                     env.FAIL_BUILD_URL = env.BUILD_URL ?: ''
-                    sh 'bash ${SCRIPTS_DIR}/jenkins-failure-handler.sh || true'
+                    sh "bash ${SCRIPTS_DIR}/jenkins-failure-handler.sh || true"
                 }
             }
         }

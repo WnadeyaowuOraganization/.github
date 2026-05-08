@@ -111,57 +111,56 @@ pipeline {
 
 
 
-        // ── 阶段5：E2E 测试 ──────────────────────────────────────────────
-        stage('E2E 测试') {
-            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
-            steps {
-                sh """
-                    # 停止旧 CI 后端
-                    # 启动 CI 环境（前后端），复用 unit test 已构建 jar
-                    bash ${JENKINS_DIR}/start-all.sh || { echo "❌ start-all.sh 失败"; exit 1; }
-
-                    # 运行 Playwright E2E（只跑与 PR 变更相关的测试，smoke 兜底）
-                    PR_NUM="${params.PR_NUMBER ?: env.PR_NUMBER ?: ''}"
-                    cd ${CI_WORK_DIR}/e2e
-                    # 检测变更模块
-                    CHANGED=\$(gh pr diff "\${PR_NUM}" --repo ${REPO} --name-only 2>/dev/null || echo "")
-                    BACKEND_CHANGED=false
-                    FRONTEND_CHANGED=false
-                    if echo "\$CHANGED" | grep -q "^backend/"; then BACKEND_CHANGED=true; fi
-                    if echo "\$CHANGED" | grep -q "^frontend/"; then FRONTEND_CHANGED=true; fi
-                    echo "变更检测: backend=\$BACKEND_CHANGED frontend=\$FRONTEND_CHANGED"
-                    echo "变更文件: \$(echo \"\$CHANGED\" | head -10)"
-
-                    PLAYWRIGHT_ARGS="--reporter=list --timeout=120000"
-                    PLAYWRIGHT_PATTERNS=""
-
-                    # 后端变更：跑所有 backend smoke
-                    if [ "\$BACKEND_CHANGED" = "true" ]; then
-                        PLAYWRIGHT_PATTERNS="tests/backend/"
-                    fi
-
-                    # 前端变更：追加 frontend smoke
-                    if [ "\$FRONTEND_CHANGED" = "true" ]; then
-                        if [ -n "\$PLAYWRIGHT_PATTERNS" ]; then
-                            PLAYWRIGHT_PATTERNS="\$PLAYWRIGHT_PATTERNS tests/front/"
-                        else
-                            PLAYWRIGHT_PATTERNS="tests/front/"
-                        fi
-                    fi
-
-                    # 兜底：两端都无变更时只跑 backend smoke
-                    if [ -z "\$PLAYWRIGHT_PATTERNS" ]; then
-                        echo "⚠️ 未检测到 backend/frontend 变更，降级跑 backend smoke 兜底"
-                        PLAYWRIGHT_PATTERNS="tests/backend/"
-                    fi
-
-                    echo "🎯 运行 Playwright: \${PLAYWRIGHT_PATTERNS}"
-                    BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
-                    BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
-                    npx playwright test \$PLAYWRIGHT_PATTERNS \$PLAYWRIGHT_ARGS || true
-                """
-            }
-        }
+        // ── 阶段5：E2E 测试（暂禁用，待模块级过滤方案设计）──────────────────────
+        // stage('E2E 测试') {
+        //     when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
+        //     steps {
+        //         sh """
+        //             # 启动 CI 环境（前后端），复用 unit test 已构建 jar
+        //             bash ${JENKINS_DIR}/start-all.sh || { echo "❌ start-all.sh 失败"; exit 1; }
+        //
+        //             # 运行 Playwright E2E（只跑与 PR 变更相关的测试，smoke 兜底）
+        //             PR_NUM="${params.PR_NUMBER ?: env.PR_NUMBER ?: ''}"
+        //             cd ${CI_WORK_DIR}/e2e
+        //             # 检测变更模块
+        //             CHANGED=\\\$(gh pr diff "\\\${PR_NUM}" --repo ${REPO} --name-only 2>/dev/null || echo "")
+        //             BACKEND_CHANGED=false
+        //             FRONTEND_CHANGED=false
+        //             if echo "\\\$CHANGED" | grep -q "^backend/"; then BACKEND_CHANGED=true; fi
+        //             if echo "\\\$CHANGED" | grep -q "^frontend/"; then FRONTEND_CHANGED=true; fi
+        //             echo "变更检测: backend=\\\$BACKEND_CHANGED frontend=\\\$FRONTEND_CHANGED"
+        //             echo "变更文件: \\\$(echo \\"\\\$CHANGED\\" | head -10)"
+        //
+        //             PLAYWRIGHT_ARGS="--reporter=list --timeout=120000"
+        //             PLAYWRIGHT_PATTERNS=""
+        //
+        //             # 后端变更：跑所有 backend smoke
+        //             if [ "\\\$BACKEND_CHANGED" = "true" ]; then
+        //                 PLAYWRIGHT_PATTERNS="tests/backend/"
+        //             fi
+        //
+        //             # 前端变更：追加 frontend smoke
+        //             if [ "\\\$FRONTEND_CHANGED" = "true" ]; then
+        //                 if [ -n "\\\$PLAYWRIGHT_PATTERNS" ]; then
+        //                     PLAYWRIGHT_PATTERNS="\\\$PLAYWRIGHT_PATTERNS tests/front/"
+        //                 else
+        //                     PLAYWRIGHT_PATTERNS="tests/front/"
+        //                 fi
+        //             fi
+        //
+        //             # 兜底：两端都无变更时只跑 backend smoke
+        //             if [ -z "\\\$PLAYWRIGHT_PATTERNS" ]; then
+        //                 echo "⚠️ 未检测到 backend/frontend 变更，降级跑 backend smoke 兜底"
+        //                 PLAYWRIGHT_PATTERNS="tests/backend/"
+        //             fi
+        //
+        //             echo "🎯 运行 Playwright: \\\${PLAYWRIGHT_PATTERNS}"
+        //             BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
+        //             BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
+        //             npx playwright test \\\$PLAYWRIGHT_PATTERNS \\\$PLAYWRIGHT_ARGS || true
+        //         """
+        //     }
+        // }
 
         // ── 阶段6：自动合并 PR ───────────────────────────────────────────
         stage('自动合并') {

@@ -65,6 +65,10 @@
 | #2343 | ✅ PR #4503 MERGED | Done |
 | #2333 | ✅ PR #4502 MERGED | Done |
 | #3162 | ✅ PR #4508 MERGED | Done |
+| #1887 | 已指派 kimi1 | In Progress |
+| #2535 | 已指派 kimi2 | In Progress |
+| #3194 | 已指派 kimi3 | In Progress |
+| #2034 | 已指派 kimi4 | In Progress |
 | #3132 | ✅ PR #3917+PR #4508 MERGED | Done |
 | #2337 | ✅ PR #4506 MERGED | Done |
 | #2338 | ✅ PR #4505 MERGED | Done |

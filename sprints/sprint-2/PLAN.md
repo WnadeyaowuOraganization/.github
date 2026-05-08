@@ -29,7 +29,7 @@
 | ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
 | ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
 | ~~5~~ | #2634 | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | |
-| ~~6~~ | ~~#2643~~ | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | ✅ PR #4534 OPEN |
+| ~~6~~ | ~~#2643~~ | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | ✅ PR #4534 MERGED |
 | ~~7~~ | #2653 | P1 | backend | 节日日历DB + 海报模板管理API（Master #4091 内容自动化 [1/5]） | |
 | ~~8~~ | #2661 | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | |
 | ~~9~~ | ~~#3153~~ | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | kimi2 CC启动 |
@@ -733,7 +733,8 @@
 | ~~kimi5~~ | ~~#2338~~ | ~~frontend~~ | ~~P1~~ | ~~样品箱管理页面~~ | ~~✅ PR #4505 MERGED~~ |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
 | kimi1 | #2013 | backend | P2 | 权限增强Phase20敏感字段组 | CC工作中 |
-| kimi3 | #2643 | backend | P1 | 员工代言内容池+分享追踪API | PR #4534 OPEN，等CI |
+| kimi3 | ~~#2643~~ | backend | P1 | 员工代言内容池+分享追踪API | ~~✅ PR #4534 MERGED~~ |
+| 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
 | kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
 | kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
 | kimi2 | #3153 | backend | P1 | 自动审批规则引擎 — 预审条件+预清除回退 | CC工作中 |

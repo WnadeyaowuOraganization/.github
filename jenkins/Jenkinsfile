@@ -215,18 +215,34 @@ pipeline {
         stage('部署后端') {
             when { expression { return env.HAS_BACKEND == 'true' } }
             steps {
+                script {
+                    def oldPid = sh(script: "pgrep -f 'ruoyi-admin' 2>/dev/null || echo ''", returnStdout: true).trim()
+                    env.OLD_BACKEND_PID = oldPid
+                    echo "部署前 PID: ${env.OLD_BACKEND_PID ?: '(无)'}"
+                }
                 sh """
                     cd ${WANDE_DIR}
                     git fetch origin dev && git reset --hard origin/dev && git clean -fd
                     cd backend
                     mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q
                     bash /apps/wande-ai-backend/start.sh
-                    # 健康检查（最多150秒）
+                    # 健康检查 + PID 变化验证（最多150秒）
                     for i in \$(seq 1 30); do
-                        curl -sf http://localhost:6040/ > /dev/null 2>&1 && echo "✅ 后端部署完成" && exit 0
+                        NEW_PID=\$(pgrep -f 'ruoyi-admin' 2>/dev/null || echo '')
+                        echo "轮次 \$i: 监听中, PID=\$NEW_PID (部署前=${OLD_BACKEND_PID:-无})"
+                        curl -sf http://localhost:6040/ > /dev/null 2>&1 || { echo "端口6040无响应，等待..."; sleep 5; continue; }
+                        # 验证 PID 已切换（新 jar 在跑）
+                        if [ -n "\$NEW_PID" ] && [ "\$NEW_PID" != "${env.OLD_BACKEND_PID}" ]; then
+                            echo "✅ 后端部署完成 (PID: \$NEW_PID)"
+                            exit 0
+                        elif [ -z "\$NEW_PID" ]; then
+                            echo "进程消失，重新等待..."
+                        else
+                            echo "PID 未变化，可能是旧进程未退出..."
+                        fi
                         sleep 5
                     done
-                    echo "❌ 后端健康检查超时，回滚..."
+                    echo "❌ 后端健康检查超时或PID未切换，回滚..."
                     cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar 2>/dev/null || true
                     bash /apps/wande-ai-backend/start.sh
                     exit 1

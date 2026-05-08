@@ -197,9 +197,11 @@ pipeline {
                         script: "cd ${WANDE_DIR} && git fetch origin dev && git diff --name-only origin/dev~1 origin/dev 2>/dev/null || echo 'backend/ frontend/'",
                         returnStdout: true
                     ).trim()
-                    env.HAS_BACKEND  = changed.contains('backend/')  ? 'true' : 'false'
-                    env.HAS_FRONTEND = changed.contains('frontend/') ? 'true' : 'false'
-                    echo "后端变更: ${env.HAS_BACKEND}, 前端变更: ${env.HAS_FRONTEND}"
+                    def hasBackend = changed.indexOf('backend/') >= 0
+                    def hasFrontend = changed.indexOf('frontend/') >= 0
+                    env.HAS_BACKEND = hasBackend ? 'true' : 'false'
+                    env.HAS_FRONTEND = hasFrontend ? 'true' : 'false'
+                    echo "backend=${env.HAS_BACKEND} frontend=${env.HAS_FRONTEND}"
                 }
             }
         }
@@ -211,7 +213,7 @@ pipeline {
                 script {
                     def oldPid = sh(script: "pgrep -f 'ruoyi-admin' 2>/dev/null || echo ''", returnStdout: true).trim()
                     env.OLD_BACKEND_PID = oldPid
-                    echo "部署前 PID: ${env.OLD_BACKEND_PID ?: '(无)'}"
+                    echo "prev PID: ${env.OLD_BACKEND_PID}"
                 }
                 sh """
                     cd ${WANDE_DIR}
@@ -222,7 +224,7 @@ pipeline {
                     # health check + PID swap verification (max 150s)
                     for i in \$(seq 1 30); do
                         NEW_PID=\$(pgrep -f 'ruoyi-admin' 2>/dev/null || echo '')
-                        echo "check \$i: PID=\$NEW_PID (prev=${OLD_BACKEND_PID:-none})"
+                        echo "check \$i: PID=\$NEW_PID (prev=${env.OLD_BACKEND_PID})"
                         curl -sf http://localhost:6040/ > /dev/null 2>&1 || { echo "port 6040 not responding, waiting..."; sleep 5; continue; }
                         # verify PID changed (new jar is running)
                         if [ -n "\$NEW_PID" ] && [ "\$NEW_PID" != "${env.OLD_BACKEND_PID}" ]; then

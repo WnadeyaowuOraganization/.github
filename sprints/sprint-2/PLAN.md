@@ -37,12 +37,12 @@
 | 11 | #2371 | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | |
 | 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
 | ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | kimi6 CC工作中 |
-| 14 | #2336 | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | |
+| 14 | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | kimi7 CC工作中 |
 | 15 | #2342 | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | |
 | 16 | #2364 | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | |
 | 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | |
 | 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | |
-| 19 | #2334 | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | |
+| 19 | ~~#2334~~ | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | kimi8 CC工作中 |
 | 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
@@ -87,6 +87,8 @@
 | #3163 | ✅ PR 已合并 | Done |
 | #3164 | ✅ PR #4538 MERGED | Done |
 | #3181 | kimi3 CC中 | In Progress |
+| #2336 | kimi7 CC中 | In Progress |
+| #2334 | kimi8 CC中 | In Progress |
 | #3194 | 已指派 kimi3 | In Progress |
 | #3209 | ✅ PR #4518 MERGED | Done |
 | #3210 | ✅ PR #4522 MERGED | Done |
@@ -737,12 +739,16 @@
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
+| kimi7 | #2336 | frontend | P1 | D3样品一键生成页面 | CC工作中 |
+| kimi8 | #2334 | backend | P1 | 设计工具下载页 D3/GH+AI渲染 | CC工作中 |
 | kimi3 | #3181 | backend | P1 | 阶段文档注册表 | CC工作中 |
 | ~~kimi3~~ | ~~#2643~~ | ~~backend~~ | ~~P1~~ | ~~员工代言内容池+分享追踪API~~ | ~~✅ PR #4534 MERGED~~ |
 | 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
 | 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |
 | 05-09 | kimi7 | ~~#2653~~ | backend | medium | ~~Done~~ | 节日日历DB+海报模板管理API — PR #4536 MERGED ✅ |
 | 05-09 | kimi8 | ~~#2661~~ | backend | medium | ~~Done~~ | 配色方案导出+总部需求表 — PR #4531 MERGED ✅ |
+| 05-09 | kimi7 | #2336 | frontend | medium | In Progress | D3样品一键生成页面（样品管理 Phase14） |
+| 05-09 | kimi8 | #2334 | backend | medium | In Progress | 设计工具下载页 D3/GH+AI渲染 |
 | kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
 | kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
 | kimi2 | #3153 | backend | P1 | 自动审批规则引擎 — 预审条件+预清除回退 | CC工作中 |

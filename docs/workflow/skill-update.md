@@ -14,6 +14,18 @@
 - 教训：Groovy sh""" 中避免复杂 shell 管道，改用专用脚本；CI 轮询必须与 CI 平台一致
 - 状态：**已修复** — commit 447ff77a + 005299b7 + 67aafc78
 
+**[2026-05-09] Jenkins Groovy 字符串插值系统性修复（Build #104-105）**
+- 问题A：sh""" 块内中文字符被 Groovy 解释器解析为变量引用 → `MissingPropertyException: 无`
+  - 修复：全面消除 Jenkinsfile 所有 `sh"""` 块内中文（echo/注释全部英文化）（commit 7f10a602）
+- 问题B：post-failure 中 `${buildUrl}` 在 Groovy 双引号字符串中插值，中文错误日志内容导致 Binding 报错
+  - 修复：改用 env.FAIL_PR_NUM / env.FAIL_BUILD_URL 环境变量传参（commit 1d1aafd9）
+- 问题C：`${VAR:-none}` 和 `${env.VAR ?: 'default'}` 在 Groovy CPS 解释器中被解析为属性查找
+  - 修复：移除所有 `:-none` / `?:` 在字符串插值中的使用，改用 def 中间变量（commit 02997480）
+- 问题D：检测变更 stage 的 `env.HAS_BACKEND = expr ? 'true' : 'false'` 三元表达式在 env 赋值中产生歧义
+  - 修复：拆为 `def hasBackend = expr; env.HAS_BACKEND = hasBackend ? 'true' : 'false'`
+- 教训：Groovy 字符串插值 `${...}` 中避免：中文、shell 特有语法（`:-`、`?:`）、三元表达式
+- 状态：**已修复** — Build #106 验证通过（Groovy 错误消除，失败原因为真实 MapStruct 编译错误）
+
 > ---
 
 **[2026-05-07] kimi环境未默认enable Flyway — CC #2339 反馈**

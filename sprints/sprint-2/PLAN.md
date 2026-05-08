@@ -49,12 +49,12 @@
 | #2334 | ✅ PR #4499 MERGED | Done |
 | #2364 | ✅ PR #4498 MERGED | Done |
 | #2343 | ✅ PR #4503 MERGED | Done |
-| #2333 | 已指派 kimi3 | In Progress |
+| #2333 | ✅ PR #4502 MERGED | Done |
 | #3162 | ✅ PR #4508 MERGED | Done |
-| #3132 | 已指派 kimi2 | In Progress |
-| #2337 | 已指派 kimi4 | In Progress |
-| #2338 | 已指派 kimi5 | In Progress |
-| #2473 | 已指派 kimi6 | In Progress |
+| #3132 | ✅ PR #3917+PR #4508 MERGED | Done |
+| #2337 | ✅ PR #4506 MERGED | Done |
+| #2338 | ✅ PR #4505 MERGED | Done |
+| #2473 | 已指派 kimi6 | In Progress (PR #4504 OPEN) |
 | #2329 | ⏸️ 实际 pause（非已指派） | pause |
 | #2365 | ⏳ 依赖 #2025 未关闭（SLA规则配置页） | Plan |
 | #2336 | ⏳ 依赖后端前置 Phase 未完成 | Todo |
@@ -694,12 +694,16 @@
 | ~~kimi5~~ | ~~#2334~~ | ~~fullstack~~ | ~~P1~~ | ~~设计工具下载页（D3/GH+AI渲染）~~ | ~~✅ PR #4499 MERGED~~ |
 | ~~kimi6~~ | ~~#2364~~ | ~~backend~~ | ~~P1~~ | ~~审批引擎Phase10菜单权限SQL~~ | ~~✅ PR #4498 MERGED~~ |
 | ~~kimi1~~ | ~~#2343~~ | ~~frontend~~ | ~~P1~~ | ~~S3资产浏览器前端~~ | ~~✅ PR #4503 MERGED~~ |
-| kimi3 | #2333 | fullstack | P1 | PPT插件下载页 | PR #4502 OPEN，等CI |
-| kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
-| kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
+| ~~kimi3~~ | ~~#2333~~ | ~~fullstack~~ | ~~P1~~ | ~~PPT插件下载页~~ | ~~✅ PR #4502 MERGED~~ |
+| ~~kimi4~~ | ~~#2337~~ | ~~frontend~~ | ~~P1~~ | ~~样品申请单页面~~ | ~~✅ PR #4506 MERGED~~ |
+| ~~kimi5~~ | ~~#2338~~ | ~~frontend~~ | ~~P1~~ | ~~样品箱管理页面~~ | ~~✅ PR #4505 MERGED~~ |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
-| kimi2 | #3132 | backend | P1 | 审批抄送功能 | CC工作中 |
-| kimi1 | #2330 | backend | P1 | PPT插件文生图面板 | PR #4507 OPEN，等CI |
+| kimi1 | #2013 | backend | P2 | 权限增强Phase20敏感字段组 | CC工作中 |
+| kimi3 | #2533 | backend | P1 | 任务表增强字段扩展 | CC工作中 |
+| kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
+| kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
+| ~~kimi2~~ | ~~#3132~~ | ~~backend~~ | ~~P1~~ | ~~审批抄送功能~~ | ~~✅ PR #3917+PR #4508 MERGED~~ |
+| ~~kimi1~~ | ~~#2330~~ | ~~backend~~ | ~~P1~~ | ~~PPT插件文生图面板~~ | ~~✅ PR #4507 MERGED~~ |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

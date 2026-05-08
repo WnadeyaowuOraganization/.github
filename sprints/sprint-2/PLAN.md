@@ -24,7 +24,7 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
+| 1 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
 | 2 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
 | 3 | #3132 | P1 | approval | 审批引擎-P0: 审批抄送功能 — 节点级/完成级抄送+企微通知 | ✅ |
 | 4 | #2476 | P1 | backend | D3-AI AI建模助手试点验证 — 1套产品端到端流程 | ✅ |
@@ -51,6 +51,7 @@
 | #2343 | ✅ PR #4503 MERGED | Done |
 | #2333 | 已指派 kimi3 | In Progress |
 | #3162 | ✅ PR #4508 MERGED | Done |
+| #3132 | 已指派 kimi2 | In Progress |
 | #2337 | 已指派 kimi4 | In Progress |
 | #2338 | 已指派 kimi5 | In Progress |
 | #2473 | 已指派 kimi6 | In Progress |
@@ -697,7 +698,7 @@
 | kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
 | kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
-| kimi2 | ~~#3162~~ | backend | P1 | 审批流程引擎回调处理 | ✅ PR #4508 MERGED |
+| kimi2 | #3132 | backend | P1 | 审批抄送功能 | CC工作中 |
 | kimi1 | #2330 | backend | P1 | PPT插件文生图面板 | PR #4507 OPEN，等CI |
 
 ### PR进度总览（04-26 22:05）

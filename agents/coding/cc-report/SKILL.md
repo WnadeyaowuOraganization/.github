@@ -184,27 +184,39 @@ curl -s -X POST http://localhost:9872/api/notify \
 > **只有前台 while 循环才能让 CC 保持"可被唤醒"状态。**
 
 ```bash
-# 前台阻塞式轮询 — CI 优先检测，CI 结论出来立刻响应
+# 前台阻塞式轮询 — Jenkins 优先检测，CI 结论出来立刻响应
+# 注意：GitHub Actions 已废弃，CI 全量迁移到 Jenkins
 while true; do
-  # 1. 查最新 CI run 状态（比 PR state 更早反映结果）
-  RUN=$(gh run list -b "feature-Issue-${ISSUE}" \
-    --repo WnadeyaowuOraganization/wande-play \
-    --json status,conclusion,name \
-    --jq '.[0]' 2>/dev/null)
-  CI_STATUS=$(echo "$RUN" | jq -r '.status' 2>/dev/null)
-  CI_CONCLUSION=$(echo "$RUN" | jq -r '.conclusion' 2>/dev/null)
+  # 1. 查 Jenkins 最新 Build 状态
+  BUILD=$(curl -sf "http://54.234.200.59:18080/jenkins/job/wande-play-pr/lastBuild/api/json?tree=number,result,building,actions[parameters[name,value]]" 2>/dev/null)
+  BUILD_NUM=$(echo "$BUILD" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('number',''))" 2>/dev/null)
+  BUILDING=$(echo "$BUILD" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('building',False))" 2>/dev/null)
+  BUILD_RESULT=$(echo "$BUILD" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('result') or '')" 2>/dev/null)
+  BUILD_PR=$(echo "$BUILD" | python3 -c "
+import sys,json
+d=json.load(sys.stdin)
+for a in d.get('actions',[]):
+    for p in a.get('parameters',[]):
+        if p.get('name')=='PR_NUMBER': print(p.get('value',''))
+" 2>/dev/null)
 
-  if [ "$CI_STATUS" = "completed" ]; then
-    if [ "$CI_CONCLUSION" = "failure" ] || [ "$CI_CONCLUSION" = "cancelled" ]; then
-      echo "❌ CI 失败 (conclusion=$CI_CONCLUSION)，切换 fix-ci-failure skill"
-      # 立刻切 fix-ci-failure skill，不等 inject-cc-prompt.sh 注入
-      # （CI 失败已经本轮检测到，主动切比被动等注入更快）
-      break   # 退出循环后 CC 自行切换 skill
+  # 判断是否为当前 Issue 对应的 PR
+  IS_MY_PR=true
+  if [ -n "$BUILD_PR" ] && [ "$BUILD_PR" != "${ISSUE}" ]; then
+    echo "Build #${BUILD_NUM} 是其他 PR(#${BUILD_PR})，等待..."
+    IS_MY_PR=false
+  fi
+
+  if [ "$BUILDING" = "False" ] && [ -n "$BUILD_RESULT" ]; then
+    # Build 结束
+    if [ "$BUILD_RESULT" = "FAILURE" ] && [ "$IS_MY_PR" = "true" ]; then
+      echo "❌ CI 失败 (Build #${BUILD_NUM})，切换 fix-ci-failure skill"
+      break
     fi
-    if [ "$CI_CONCLUSION" = "success" ]; then
-      echo "✅ CI 通过，继续等 PR merge"
+    if [ "$BUILD_RESULT" = "SUCCESS" ]; then
+      echo "✅ CI 通过 (Build #${BUILD_NUM})，Jenkins 将自动 squash-merge"
     fi
-    # 2. CI 完成后再查 PR state
+    # 2. 查 PR 状态确认 merge
     PR_STATE=$(gh pr view --head "feature-Issue-${ISSUE}" \
       --repo WnadeyaowuOraganization/wande-play \
       --json state --jq '.state' 2>/dev/null)
@@ -216,11 +228,13 @@ while true; do
       echo "⚠️ PR 被关闭（非 merge），汇报研发经理"
       break
     fi
-    echo "CI=$CI_CONCLUSION PR=$PR_STATE, sleep 60"
-    sleep 60   # CI 已通过，PR 还在等 merge，降频轮询
+    echo "Build=$BUILD_RESULT PR=$PR_STATE, sleep 60"
+    sleep 60
   else
-    # CI 跑动中：每 30 秒检测一次，不等 3 分钟
-    echo "CI running... status=$CI_STATUS, sleep 30"
+    # Build 进行中
+    if [ "$IS_MY_PR" = "true" ]; then
+      echo "CI running... Build #${BUILD_NUM} building=$BUILDING, sleep 30"
+    fi
     sleep 30
   fi
 done

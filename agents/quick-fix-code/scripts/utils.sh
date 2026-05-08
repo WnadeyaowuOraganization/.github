@@ -139,36 +139,31 @@ function verify-local() {
 # ============================================================================
 
 function wait-ci-complete() {
-  local run_id=$1
-  local max_wait=${2:-600}  # 默认 10 分钟超时
+  # 注意：GitHub Actions 已废弃，CI 迁移到 Jenkins
+  local max_wait=${1:-600}  # 默认 10 分钟超时
   local elapsed=0
-  local wait_interval=15
+  local wait_interval=20
 
-  if [ -z "$run_id" ]; then
-    echo -e "${RED}❌ Usage: wait-ci-complete <RUN_ID> [MAX_WAIT_SECONDS]${NC}"
-    return 1
-  fi
-
-  echo -e "${BLUE}⏳ Waiting for CI to complete (Run: $run_id, timeout: ${max_wait}s)${NC}"
+  echo -e "${BLUE}⏳ Waiting for Jenkins CI to complete (timeout: ${max_wait}s)${NC}"
 
   while [ $elapsed -lt $max_wait ]; do
-    local status_line=$(gh run view "$run_id" \
-      --repo "$REPO" \
-      --json status,conclusion 2>/dev/null | jq -r '"status=\(.status) conclusion=\(.conclusion // "pending")"' || echo "status=error conclusion=error")
+    local build_info=$(curl -sf "http://54.234.200.59:18080/jenkins/job/wande-play-pr/lastBuild/api/json?tree=number,result,building" 2>/dev/null)
+    local building=$(echo "$build_info" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('building',True))" 2>/dev/null)
+    local result=$(echo "$build_info" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('result') or 'RUNNING')" 2>/dev/null)
+    local bnum=$(echo "$build_info" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('number',''))" 2>/dev/null)
 
-    echo "[$(date '+%H:%M:%S')] $status_line"
+    echo "[$(date '+%H:%M:%S')] Build #${bnum} building=$building result=$result"
 
-    if echo "$status_line" | grep -q "status=completed"; then
-      if echo "$status_line" | grep -q "conclusion=success"; then
+    if [ "$building" = "False" ]; then
+      if [ "$result" = "SUCCESS" ]; then
         echo -e "${GREEN}✅ CI completed successfully${NC}"
         return 0
       else
-        echo -e "${RED}❌ CI failed${NC}"
+        echo -e "${RED}❌ CI failed: $result${NC}"
         return 1
       fi
     fi
 
-    # 指数退避：15s + 随机 0-10s 抖动
     sleep $((wait_interval + RANDOM % 10))
     elapsed=$((elapsed + wait_interval + 5))
   done
@@ -579,14 +574,11 @@ function quickfix-workflow() {
   echo "  git push origin dev"
   return 0  # 交还控制权给用户手动 add/commit/push
 
-  # 5. 等待 CI
+  # 5. 等待 CI（Jenkins）
   echo -e "${BLUE}⏳ Waiting for CI...${NC}"
   sleep 15
 
-  local run_id=$(gh run list --repo "$REPO" --branch dev --workflow build-deploy-dev.yml \
-    --limit 1 --json databaseId -q '.[0].databaseId')
-
-  if ! wait-ci-complete "$run_id"; then
+  if ! wait-ci-complete 600; then
     echo -e "${RED}❌ CI failed — attempting rollback${NC}"
     rollback-complete
     return 1
@@ -685,15 +677,14 @@ Quick-Fix Utils Library v1.1 — 快速修复工具库
   git commit -m "fix: 问题描述 (quick-fix #$ISSUE_NUM)"
   git push origin dev
 
-  # 6. 等待 CI
+  # 6. 等待 CI（Jenkins）
   sleep 15
-  RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play --branch dev --workflow build-deploy-dev.yml --limit 1 --json databaseId -q '.[0].databaseId')
-  wait-ci-complete "$RUN_ID" || rollback-complete
+  wait-ci-complete 600 || rollback-complete
 
   # 7. 验证 + 关闭
   take-screenshot "http://localhost:8080/crm/xxx" "/tmp/after.png"
   AFTER_URL=$(upload-release-asset "/tmp/after.png")
-  comment-issue-fixed "$ISSUE_NUM" "$AFTER_URL" "$RUN_ID"
+  comment-issue-fixed "$ISSUE_NUM" "$AFTER_URL"
   close-issue-fixed "$ISSUE_NUM"
 
 ════════════════════════════════════════════════════════════════════════════

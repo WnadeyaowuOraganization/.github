@@ -277,16 +277,13 @@ git push origin dev
 tail -f /apps/wande-ai-backend/logs/backend.log | grep -E "ERROR|Exception|Started|启动" &
 LOG_PID=$!
 
-# 同时轮询CI状态
+# 同时轮询Jenkins CI状态
 sleep 15
-RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play \
-  --branch dev --workflow build-deploy-dev.yml \
-  --limit 1 --json databaseId -q '.[0].databaseId')
-echo "CI Run: https://github.com/WnadeyaowuOraganization/wande-play/actions/runs/${RUN_ID}"
+echo "Jenkins: http://54.234.200.59:18080/jenkins/job/wande-play-pr/"
 
-# 轮询CI（最多10分钟）
+# 轮询Jenkins CI（最多10分钟）
 source /data/home/ubuntu/projects/.github/agents/quick-fix-code/scripts/utils.sh
-if wait-ci-complete "$RUN_ID" 600; then
+if wait-ci-complete 600; then
   echo "✅ CI passed"
 else
   echo "❌ CI failed"
@@ -307,12 +304,13 @@ kill $LOG_PID 2>/dev/null
 
 **或手动观察（不推荐，不会自动回滚）**：
 ```bash
-export GH_TOKEN=$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py)
-RUN_ID=$(gh run list --repo WnadeyaowuOraganization/wande-play --branch dev --workflow build-deploy-dev.yml --limit 1 --json databaseId -q '.[0].databaseId')
+# Jenkins CI 轮询（GitHub Actions 已废弃）
 while true; do
-  STATUS=$(gh run view $RUN_ID --repo WnadeyaowuOraganization/wande-play --json status,conclusion -q '.status + "/" + (.conclusion // "pending")')
-  echo "[$(date '+%H:%M:%S')] $STATUS"
-  [[ "$STATUS" == "completed/"* ]] && break
+  BUILD=$(curl -sf "http://54.234.200.59:18080/jenkins/job/wande-play-pr/lastBuild/api/json?tree=number,result,building" 2>/dev/null)
+  BNUM=$(echo "$BUILD" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('number',''))" 2>/dev/null)
+  RESULT=$(echo "$BUILD" | python3 -c "import sys,json; d=json.load(sys.stdin); print(d.get('result') or 'RUNNING')" 2>/dev/null)
+  echo "[$(date '+%H:%M:%S')] Build #${BNUM} $RESULT"
+  [ "$RESULT" != "RUNNING" ] && break
   sleep 15
 done
 ```

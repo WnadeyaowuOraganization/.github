@@ -2,6 +2,20 @@
 
 > ---
 
+**[2026-05-08] Jenkins 迁移后 4 项 CI 基础设施修复**
+- 问题1：Jenkinsfile 第317行 Groovy 语法错误 `\|`（BRE pipe 语法在 Groovy 双引号字符串中无效）
+  - 修复：grep -E 替代 BRE \| 分隔符（commit 910055b3）
+- 问题2：post-failure 阶段 exit 128（Groovy sh block 拼接多行命令导致 Jenkins 误报）
+  - 修复：拆出 jenkins-failure-handler.sh，post-failure 简化为单行脚本调用（commit 447ff77a）
+- 问题3：分支删除后残留构建 exit 128（PR 合并后 feature 分支被删除，git fetch 失败）
+  - 修复：Checkout 阶段检测分支不存在时检查 PR 是否已合并，已合并则 exit 0（commit 67aafc78）
+- 问题4：CC 轮询使用 GitHub Actions（gh run list）而非 Jenkins
+  - 修复：cc-report/quick-fix/quick-fix-code 全量迁移到 Jenkins curl API（commit 005299b7）
+- 教训：Groovy sh""" 中避免复杂 shell 管道，改用专用脚本；CI 轮询必须与 CI 平台一致
+- 状态：**已修复** — commit 447ff77a + 005299b7 + 67aafc78
+
+> ---
+
 **[2026-05-07] kimi环境未默认enable Flyway — CC #2339 反馈**
 - 现象：kimi1 CC 开发 #2339 时，Flyway迁移未自动执行，需手动建表+更新history才能跑通
 - 建议：提供一键建表脚本，或在 run-cc.sh 中注入 Flyway enable 参数
@@ -1643,3 +1657,26 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 建议：① backend-test skill 增加「根 pom skipTests=true 时的测试运行命令」模板（`mvn test -DskipTests=false -Dgroups=dev`）；② 新增测试类模板中预置 `@Tag("dev")`，避免遗漏
 - 来源：kimi4 #2147 CC-REVIEW
 - 频次：2次（kimi5/#1674, kimi4/#2147），接近阈值，持续观察
+
+## 2026-05-08 kimi5/#1941 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 1 | mvn install 缺失导致新代码不加载 | 2 (kimi5+kimi1) | restart-backend 应自动 mvn install --also-make | 观察中 |
+| 2 | Long 序列化为 string 导致 Playwright 断言失败 | 1 | Playwright API spec 模板统一 Number() 转换 | 观察中 |
+| 3 | git clean 误删新文件 | 1 | skill 中强调先 git add 再 git clean | 观察中 |
+- kimi5 GH_TOKEN偶尔失效（2026-05-08）：CC建议PR操作前自动refresh token。观察中。
+
+## 2026-05-08 kimi5/#2666 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 4 | kimi5 GH_TOKEN 偶发失效 | 1 | refresh-gh-token.sh 在 PR 操作前自动调用 | 观察中 |
+- mvn spring-boot:run 不触发 reactor 构建(2026-05-08 #3209)：建议restart-backend加--also-make参数自动编译依赖模块。
+
+## 2026-05-08 kimi2/#3210 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 5 | BaseEntity(Long createBy) vs 表 VARCHAR create_by 类型冲突 | 1 | backend-coding skill 增加提示：用 @TableField(exist=false) 或 XML 自定义查询 | 观察中 |
+| 6 | pom.xml 缺少 lucene-analyzers-smartcn 依赖导致 spring-boot:run 失败 | 1 | backend-coding skill 增加依赖检查步骤 | 观察中 |

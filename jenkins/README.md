@@ -1,107 +1,92 @@
-# Jenkins 迁移指南
+# Jenkins CI 流水线
 
-## 当前状态
+## 概述
 
-- Jenkins 已安装在 m7i 服务器
-- 访问地址: http://localhost:8080/jenkins
-- 初始密码: `5efd84ca8e254709b2824a60e4a71b3c`
+Jenkins 运行 wande-play PR 完整流水线：冲突检测 → 质量门控 → 单元测试 → CI DB修复 → Flyway预校验 → E2E测试 → 自动合并 → 部署 → 关闭Issue
 
-## 需要手动完成的步骤
+**访问**: http://54.234.200.59:18080/jenkins/job/wande-play-pr/
 
-### 1. 首次登录 Jenkins
+## 凭证（静态 PAT，过期需手动更新）
 
-1. 打开 http://localhost:8080/jenkins
-2. 输入初始密码: `5efd84ca8e254709b2824a60e4a71b3c`
-3. 点击 "Install suggested plugins"
-4. 创建管理员用户
+| ID | 类型 | 用途 |
+|----|------|------|
+| `github-bot-token` | StringCredentials (Secret text) | git clone + Flyway预校验 |
+| `github-weiping-token` | StringCredentials (Secret text) | 冲突检测 + 自动合并PR |
 
-### 2. 安装必要插件
+**凭证由 `/var/lib/jenkins/init.groovy.d/jenkins-init.groovy` 在 Jenkins 启动时从 token 文件自动创建**。Token 文件位置：
+- `github-bot-token`: `/home/ubuntu/projects/.github/scripts/tokens/bot.token`
+- `github-weiping-token`: `/home/ubuntu/projects/.github/scripts/tokens/weiping.pat`
 
-在 Jenkins > Manage Jenkins > Manage Plugins:
-- Git
-- Pipeline
-- GitHub Integration
-- Email Extension
-- Groovy
+凭证过期后：更新 token 文件 → 重启 Jenkins（init groovy 会重建）。
 
-### 3. 配置 GitHub 凭证
+## Webhook 触发
 
-1. Jenkins > Credentials > System > Global credentials
-2. 添加两个凭证:
-   - ID: `github-bot-token` - GitHub Bot 的 PAT (用于提交PR)
-   - ID: `github-weiping-token` - Weiping 的 PAT (用于合并PR)
+GitHub Webhook → `http://54.234.200.59:18080/jenkins/generic-webhook-trigger/invoke?token=wande-play-pr`
 
-### 4. 创建 Pipeline
+触发条件：`opened | synchronize | reopened`
 
-1. 新建 Item > Pipeline
-2. Name: `wande-play-pr`
-3. 选择 "Pipeline script from SCM"
-4. SCM: Git
-5. Repository: https://github.com/WnadeyaowuOraganization/wande-play
-6. Script Path: `jenkins/Jenkinsfile`
-7. 添加 GitHub credentials
+## 流水线阶段
 
-### 5. 配置 GitHub Webhook
-
-1. GitHub > Settings > Webhooks > Add webhook
-2. Payload URL: `http://<m7i-ip>:8080/jenkins/github-webhook/`
-3. Content type: `application/json`
-4. Events: Pull requests
-5. Secret: (生成一个secret)
-
-### 6. 将初始化脚本复制到 Jenkins
-
-```bash
-sudo cp init.groovy.d/01-init.groovy /var/lib/jenkins/init.groovy.d/
-sudo systemctl restart jenkins
-```
+| 阶段 | 说明 |
+|------|------|
+| 冲突检测 | `weiping-token` 检测 MERGEABLE，冲突则自动 resolve |
+| 质量门控 | 6道门（PR body/task.md/截图/smoke/端口/路径） |
+| 单元测试 | `mvn test -pl ruoyi-modules/wande-ai -am -Pprod` |
+| CI DB修复 | 补 `wande-ai-ci` 缺失的表（wande-ai 数据库有，ci 库没有） |
+| Flyway预校验 | 对 PR 新增的 V*.sql 在克隆库上预执行 |
+| E2E测试 | Playwright，按 PR 变更过滤 backend/frontend 测试 |
+| 自动合并 | `gh pr review --approve && gh pr merge --squash` |
+| 部署 | backend: `mvn package` → start.sh；frontend: `pnpm build:antd` → rsync |
+| 关闭Issue | gh issue close + 看板 Project Done |
 
 ## 文件说明
 
 | 文件 | 说明 |
 |------|------|
 | `Jenkinsfile` | 主流水线脚本 |
-| `github-webhook-trigger.sh` | Webhook 触发脚本 |
-| `setup-jenkins.sh` | 自动化配置脚本 |
-| `init.groovy.d/01-init.groovy` | 初始化凭证脚本 |
+| `quality-gate.sh` | 质量门控 6 道检查 |
+| `notify-failure.sh` | 失败时评论 PR |
+| `cycle-merge.sh` | 自动解决 PR 冲突 |
+| `update-project-status.sh` | 关闭 Issue + 看板 Done |
+| `release-cc-lock.sh` | 释放 kimi 目录锁 |
+| `setup-jenkins.sh` | 首次配置脚本（创建凭证 + Pipeline Job） |
+| `github-webhook-trigger.sh` | GitHub Webhook 回调脚本（参考） |
+| `init.groovy.d/jenkins-init.groovy` | Jenkins 启动时自动创建凭证 |
 
-## 质量门控（6道门）
+## CI 环境参数
 
-| 门 | 内容 | 实现 |
-|----|------|------|
-| 门1 | PR body checkbox | `grep '^- \\[ \\]'` |
-| 门2 | task.md checkbox | `grep '^- \\[ \\]'` |
-| 门3 | 前端截图 | `grep '!\['` |
-| 门4 | smoke 用例存在 | `gh api` 检查文件 |
-| 门5 | 无硬编码端口 | `grep 'localhost:710'` |
-| 门6 | 使用相对路径 | `grep "http://localhost:"` |
+| 参数 | 值 | 说明 |
+|------|---|------|
+| `CI_WORK_DIR` | `/home/ubuntu/projects/wande-play-ci` | PR 代码克隆目录 |
+| `CI_BACKEND_PORT` | `6041` | CI 后端端口 |
+| `CI_FRONTEND_PORT` | `8084` | CI 前端端口 |
+| `CI_DB_NAME` | `wande-ai-ci` | CI 数据库名 |
+| `WANDE_DIR` | `/home/ubuntu/projects/wande-play` | dev 部署基准目录 |
+| `JENKINS_DIR` | `/home/ubuntu/projects/.github/jenkins` | 本目录 |
+| `SCRIPTS_DIR` | `/home/ubuntu/projects/.github/scripts` | 共享脚本目录 |
+
+## E2E 测试过滤
+
+`gh pr diff --name-only` 检测变更路径：
+- `backend/` 变更 → 跑 `tests/backend/`
+- `frontend/` 变更 → 跑 `tests/backend/ + tests/front/`
+- 无两端变更 → 降级跑 `tests/backend/` smoke 兜底
 
 ## 故障排除
 
-### 凭证创建失败
+### Jenkins 重启
 ```bash
-# 手动通过 Jenkins CLI
-java -jar jenkins-cli.jar -s http://localhost:8080/jenkins/ -auth admin:password \
-  create-credentials-by-system \
-  "SystemCredentialsProvider::SystemContextResolver::jenkins" \
-  "GlobalCredentialsDomain" \
-  -impl StringCredentialsImpl \
-  id github-bot-token \
-  description "GitHub Bot Token"
+sudo pkill -f jenkins.war
+sudo systemctl start jenkins
+# 等待约30秒后访问
+curl -s http://localhost:18080/jenkins/api/json
 ```
+
+### 凭证类型错误
+Build 报错 `Credentials type mismatch` → 检查 `init.groovy.d/jenkins-init.groovy` 使用的是 `StringCredentialsImpl` 而非 `UsernamePasswordCredentialsImpl` → 重启 Jenkins
+
+### 凭证过期
+更新 `/home/ubuntu/projects/.github/scripts/tokens/bot.token` 或 `weiping.pat` → 重启 Jenkins → init groovy 自动重建凭证
 
 ### Webhook 不触发
-```bash
-# 检查 GitHub webhook 投递日志
-# GitHub > Settings > Webhooks > 点击 webhook > Recent Deliveries
-```
-
-## 迁移进度
-
-- [x] Jenkins 安装
-- [x] Jenkinsfile 编写
-- [x] 质量门控脚本
-- [ ] Jenkins UI 配置
-- [ ] GitHub Webhook 配置
-- [ ] 测试 PR 触发
-- [ ] 灰度验证
+检查 GitHub Webhook 配置 → Recent Deliveries 是否有 200 响应

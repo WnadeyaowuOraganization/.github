@@ -193,12 +193,45 @@ pipeline {
                         [ \$i -eq 60 ] && { echo "❌ CI后端未在180s内就绪"; tail -80 /apps/wande-ai-backend-ci/logs/backend.log; exit 1; }
                     done
 
-                    # 运行 Playwright E2E（用 CI_WORK_DIR 里刚 checkout 的代码）
-                    # E2E 失败降级为 UNSTABLE，不阻断合并（限流/页面缺失属业务层问题）
+                    # 运行 Playwright E2E（只跑与 PR 变更相关的测试，smoke 兜底）
+                    PR_NUM=${params.PR_NUMBER ?: env.PR_NUMBER ?: ''}
                     cd ${CI_WORK_DIR}/e2e
+                    # 检测变更模块
+                    CHANGED=\$(gh pr diff ${PR_NUM} --repo ${REPO} --name-only 2>/dev/null || echo "")
+                    BACKEND_CHANGED=false
+                    FRONTEND_CHANGED=false
+                    if echo "\$CHANGED" | grep -q "^backend/"; then BACKEND_CHANGED=true; fi
+                    if echo "\$CHANGED" | grep -q "^frontend/"; then FRONTEND_CHANGED=true; fi
+                    echo "变更检测: backend=\$BACKEND_CHANGED frontend=\$FRONTEND_CHANGED"
+                    echo "变更文件示例: \$(echo \"\$CHANGED\" | head -5)"
+
+                    PLAYWRIGHT_ARGS="--reporter=list --timeout=120000"
+                    PLAYWRIGHT_PATTERNS=""
+
+                    # 后端变更：跑所有 backend smoke（覆盖 backend/api 已有模块）
+                    if [ "\$BACKEND_CHANGED" = "true" ]; then
+                        PLAYWRIGHT_PATTERNS="tests/backend/"
+                    fi
+
+                    # 前端变更：追加 frontend smoke
+                    if [ "\$FRONTEND_CHANGED" = "true" ]; then
+                        if [ -n "\$PLAYWRIGHT_PATTERNS" ]; then
+                            PLAYWRIGHT_PATTERNS="\$PLAYWRIGHT_PATTERNS tests/front/"
+                        else
+                            PLAYWRIGHT_PATTERNS="tests/front/"
+                        fi
+                    fi
+
+                    # 兜底：两端都无变更时只跑 backend smoke
+                    if [ -z "\$PLAYWRIGHT_PATTERNS" ]; then
+                        echo "⚠️ 未检测到 backend/frontend 变更，降级跑 backend smoke 兜底"
+                        PLAYWRIGHT_PATTERNS="tests/backend/"
+                    fi
+
+                    echo "🎯 运行 Playwright: \${PLAYWRIGHT_PATTERNS}"
                     BASE_URL_API=http://localhost:${CI_BACKEND_PORT} \
                     BASE_URL_FRONT=http://localhost:${CI_FRONTEND_PORT} \
-                    npx playwright test --reporter=list --timeout=120000 || true
+                    npx playwright test \$PLAYWRIGHT_PATTERNS \$PLAYWRIGHT_ARGS || true
                 """
             }
         }

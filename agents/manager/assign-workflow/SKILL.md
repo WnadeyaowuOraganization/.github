@@ -90,7 +90,7 @@ gh issue view <N> --repo WnadeyaowuOraganization/wande-play --json state,stateRe
 ### 执行步骤
 
 ```bash
-# 1. 检查槽位（最多5个并发CC，用cc-check.sh）
+# 1. 检查槽位（最多8个并发CC，用cc-check.sh）
 bash scripts/cc-check.sh
 
 # 2. 检查空闲 kimi 目录（锁文件不存在）

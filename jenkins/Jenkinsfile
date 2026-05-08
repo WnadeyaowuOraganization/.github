@@ -331,9 +331,9 @@ pipeline {
             script {
                 def pr = params.PR_NUMBER ?: env.PR_NUMBER
                 if (pr?.trim()) {
-                    def buildUrl = env.BUILD_URL
-                    // 提取 Jenkins console URL，调用专用脚本提取错误并注入 CC
-                    sh "bash ${SCRIPTS_DIR}/jenkins-failure-handler.sh ${pr} '${buildUrl}' || true"
+                    env.FAIL_PR_NUM = pr
+                    env.FAIL_BUILD_URL = env.BUILD_URL ?: ''
+                    sh 'bash ${SCRIPTS_DIR}/jenkins-failure-handler.sh || true'
                 }
             }
         }

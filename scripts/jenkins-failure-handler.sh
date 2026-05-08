@@ -4,8 +4,8 @@
 
 set +e  # 不允许任何命令失败导致脚本退出
 
-PR_NUMBER=$1
-BUILD_URL=${2:-""}
+PR_NUMBER=${FAIL_PR_NUM:-""}
+BUILD_URL=${FAIL_BUILD_URL:-""}
 REPO="WnadeyaowuOraganization/wande-play"
 GH_TOKEN=${GH_TOKEN:-$(python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py 2>/dev/null)}
 
@@ -13,7 +13,7 @@ SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
 JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
 
 if [ -z "$PR_NUMBER" ]; then
-    echo "[failure-handler] 用法: $0 <PR_NUMBER> [BUILD_URL]"
+    echo "[failure-handler] 缺少 FAIL_PR_NUM 环境变量，跳过"
     exit 0
 fi
 

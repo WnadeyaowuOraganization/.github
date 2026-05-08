@@ -42,7 +42,7 @@
 | 16 | #2364 | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | |
 | 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | |
 | 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | |
-| 19 | ~~#2334~~ | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | kimi8 CC工作中 |
+| 19 | ~~#2334~~ | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | ✅ PR #4540 OPEN |
 | 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派

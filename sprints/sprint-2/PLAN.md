@@ -661,7 +661,7 @@
 | 05-08 | kimi5 | #2338 | frontend | medium | In Progress | 样品箱管理页面 — 卡位可视化布局 |
 | 05-08 | kimi6 | #2473 | backend | medium | In Progress | 律师催收数据库+API — 律师信息+催收案件+进展记录 |
 | 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED ✅ |
-| 05-08 | kimi1 | #2330 | backend | medium | In Progress | PPT插件文生图面板 — 文生图API+侧边栏集成 |
+| 05-08 | kimi1 | #2330 | backend | medium | In Progress | PPT插件文生图面板 — PR #4507 OPEN |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -695,7 +695,7 @@
 | kimi4 | #2337 | frontend | P1 | 样品申请单页面 | PR #4506 OPEN，等CI |
 | kimi5 | #2338 | frontend | P1 | 样品箱管理页面 | PR #4505 OPEN，等CI |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
-| kimi1 | #2330 | backend | P1 | PPT插件文生图面板 | CC工作中 |
+| kimi1 | #2330 | backend | P1 | PPT插件文生图面板 | PR #4507 OPEN，等CI |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

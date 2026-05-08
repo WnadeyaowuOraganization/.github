@@ -102,7 +102,7 @@ pipeline {
             steps {
                 sh """
                     cd ${CI_WORK_DIR}/backend
-                    mvn package -pl ruoyi-modules/wande-ai -am -Pprod -DskipTests=false -q
+                    mvn test -pl ruoyi-modules/wande-ai -am -Pprod -q
                 """
             }
         }

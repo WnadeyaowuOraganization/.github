@@ -89,6 +89,7 @@
 | #3181 | kimi3 CC中 | In Progress |
 | #2336 | kimi7 CC中 | In Progress |
 | #2334 | kimi8 CC中 | In Progress |
+| #2115 | kimi1 CC中 | In Progress |
 | #3194 | 已指派 kimi3 | In Progress |
 | #3209 | ✅ PR #4518 MERGED | Done |
 | #3210 | ✅ PR #4522 MERGED | Done |
@@ -737,6 +738,7 @@
 | ~~kimi4~~ | ~~#2337~~ | ~~frontend~~ | ~~P1~~ | ~~样品申请单页面~~ | ~~✅ PR #4506 MERGED~~ |
 | ~~kimi5~~ | ~~#2338~~ | ~~frontend~~ | ~~P1~~ | ~~样品箱管理页面~~ | ~~✅ PR #4505 MERGED~~ |
 | kimi6 | #2473 | backend | P1 | 律师催收数据库+API | PR #4504 OPEN，等CI |
+| kimi1 | #2115 | backend | P2 | G7e采集自动化 — 中标数据→AI判定→评分入库 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
 | kimi7 | #2336 | frontend | P1 | D3样品一键生成页面 | CC工作中 |
@@ -748,6 +750,8 @@
 | 05-09 | kimi7 | ~~#2653~~ | backend | medium | ~~Done~~ | 节日日历DB+海报模板管理API — PR #4536 MERGED ✅ |
 | 05-09 | kimi8 | ~~#2661~~ | backend | medium | ~~Done~~ | 配色方案导出+总部需求表 — PR #4531 MERGED ✅ |
 | 05-09 | kimi7 | #2336 | frontend | medium | In Progress | D3样品一键生成页面（样品管理 Phase14） |
+| 05-09 | kimi8 | #2334 | backend | medium | In Progress | 设计工具下载页 D3/GH+AI渲染 |
+| 05-09 | kimi1 | #2115 | backend | medium | In Progress | G7e采集自动化 — 中标数据→AI判定→评分入库 |
 | 05-09 | kimi8 | #2334 | backend | medium | In Progress | 设计工具下载页 D3/GH+AI渲染 |
 | kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
 | kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |

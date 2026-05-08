@@ -134,6 +134,7 @@ pipeline {
                     script {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
                         sh """
+                            cd ${CI_WORK_DIR}
                             NEW_SQLS=\$(gh pr diff ${pr} --repo ${REPO} --name-only 2>/dev/null | grep -E '^backend/.+/V[^/]+\\.sql\$' | sort -u || true)
                             if [ -z "\$NEW_SQLS" ]; then
                                 echo "PR 无新增 V*.sql，跳过 Flyway 预校验"

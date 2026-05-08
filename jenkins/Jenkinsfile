@@ -225,7 +225,7 @@ pipeline {
             when { expression { return env.HAS_FRONTEND == 'true' } }
             steps {
                 sh """
-                    cd ${WANDE_DIR}/frontend
+                    cd ${CI_WORK_DIR}/frontend
                     rm -rf .turbo node_modules/.cache apps/web-antd/dist
                     pnpm install --frozen-lockfile 2>/dev/null || pnpm install
                     pnpm build:antd

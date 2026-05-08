@@ -27,12 +27,12 @@
 | ~~1~~ | ~~#2528~~ | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | |
 | ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
 | ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
-| ~~4~~ | #2633 | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | |
+| ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
 | ~~5~~ | #2634 | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | |
 | ~~6~~ | #2643 | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | |
 | ~~7~~ | #2653 | P1 | backend | 节日日历DB + 海报模板管理API（Master #4091 内容自动化 [1/5]） | |
 | ~~8~~ | #2661 | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | |
-| ~~9~~ | #3153 | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | |
+| ~~9~~ | ~~#3153~~ | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | kimi2 CC启动 |
 | 10 | #3154 | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | |
 | 11 | #2371 | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | |
 | 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
@@ -698,6 +698,7 @@
 | 05-08 | kimi1 | ~~#2342~~ | frontend | medium | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED ✅ |
 | 05-08 | kimi1 | #2330 | backend | medium | In Progress | PPT插件文生图面板 — PR #4507 OPEN |
 | 05-08 | kimi2 | ~~#3162~~ | backend | medium | ~~Done~~ | 企微审批回调核心逻辑 — PR #4508 MERGED ✅ |
+| 05-09 | kimi2 | #3153 | backend | medium | In Progress | 自动审批规则引擎 — 预审条件+预清除回退（依赖#2026 CLOSED） |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -735,6 +736,7 @@
 | kimi3 | #2533 | backend | P1 | 任务表增强字段扩展 | CC工作中 |
 | kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
 | kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
+| kimi2 | #3153 | backend | P1 | 自动审批规则引擎 — 预审条件+预清除回退 | CC工作中 |
 | ~~kimi2~~ | ~~#3132~~ | ~~backend~~ | ~~P1~~ | ~~审批抄送功能~~ | ~~✅ PR #3917+PR #4508 MERGED~~ |
 | ~~kimi1~~ | ~~#2330~~ | ~~backend~~ | ~~P1~~ | ~~PPT插件文生图面板~~ | ~~✅ PR #4507 MERGED~~ |
 

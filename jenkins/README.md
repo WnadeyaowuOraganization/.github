@@ -17,10 +17,17 @@ Jenkins 运行 wande-play PR 完整流水线：冲突检测 → 质量门控 →
 - `github-bot-token`: `/home/ubuntu/projects/.github/scripts/tokens/bot.token`
 - `github-weiping-token`: `/home/ubuntu/projects/.github/scripts/tokens/weiping.pat`
 
-凭证过期后：更新 token 文件 → 重启 Jenkins（init groovy 会重建）。
+凭证过期后：更新 token 文件 → 热加载凭证。
+```bash
+# 方法1：直接改 XML + reload（推荐，无需重启）
+vi ~/.jenkins/credentials.xml   # 修改 <secret> 值
+curl -X POST http://localhost:18080/jenkins/reload
+
+# 方法2：init groovy（需重启）
+# ~/.jenkins/init.groovy.d/jenkins-init.groovy 在启动时自动重建凭证
+```
 
 **Jenkins Home**：`/home/ubuntu/.jenkins/`（非 `/var/lib/jenkins/`）。凭证存储在 `~/.jenkins/credentials.xml`。
-修改凭证方式：① Groovy Script Console（需认证）② 直接改 XML + `POST /jenkins/reload` 热加载 ③ 重启 Jenkins。
 
 ## Webhook 触发
 

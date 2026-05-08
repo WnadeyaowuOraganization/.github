@@ -10,9 +10,9 @@
       "api_url": "https://api.kimi.com/coding/",
       "api_key": "sk-kimi-ZLtO5HpArs0IH4sCzc8qwtOb8vRvvTKNxDvs5MmxugGQtkCAoReOqPpVuTicPdRf",
       "model_map": {
-        "claude-opus-4-6": "kimi-k2.5",
-        "claude-sonnet-4-6": "kimi-k2.5",
-        "claude-haiku-4-5-20251001": "kimi-k2.5"
+        "claude-opus-4-6": "kimi-k2.6",
+        "claude-sonnet-4-6": "kimi-k2.6",
+        "claude-haiku-4-5-20251001": "kimi-k2.6"
       },
       "env": {
         "ENABLE_TOOL_SEARCH": "false"
@@ -25,13 +25,13 @@
       "name": "kimi2",
       "type": "anthropic_compat",
       "provider": "kimi",
-      "priority": 1,
+      "priority": 2,
       "api_url": "https://api.kimi.com/coding/",
       "api_key": "sk-kimi-xA8Rg5wMzVEcwXQILlJswwQXq5p7r51ZGVya2thvKQmZF0fAxaH2f6jwDOEJwGnY",
       "model_map": {
-        "claude-opus-4-6": "kimi-k2.5",
-        "claude-sonnet-4-6": "kimi-k2.5",
-        "claude-haiku-4-5-20251001": "kimi-k2.5"
+        "claude-opus-4-6": "kimi-k2.6",
+        "claude-sonnet-4-6": "kimi-k2.6",
+        "claude-haiku-4-5-20251001": "kimi-k2.6"
       },
       "env": {
         "ENABLE_TOOL_SEARCH": "false"
@@ -40,11 +40,27 @@
       "context_window": 262144,
       "enabled": true
     },
+        {
+      "name": "minimax",
+      "type": "anthropic_compat",
+      "provider": "minimax",
+      "priority": 3,
+      "api_url": "https://api.minimaxi.com/anthropic",
+      "api_key": "sk-cp-hPtVrPJunuCzZK5UmKX2etTTgJE_Lz3iy1zVuK0dk0n8nRGBAneasJF_-4jZ4ZkLzlqw62O0FMhc75UvyuY7oAuheYmMSodaPmAeROQIzTH97BOdfV3ociE",
+      "model_map": {
+        "claude-opus-4-6": "MiniMax-M2.7-highspeed",
+        "claude-sonnet-4-6": "MiniMax-M2.7-highspeed",
+        "claude-haiku-4-5-20251001": "MiniMax-M2.7-highspeed"
+      },
+      "_note": "minimax官方coding plan",
+      "context_window": 262144,
+      "enabled": true
+    },
     {
       "name": "zhipu_max_1",
       "type": "anthropic_compat",
       "provider": "zhipu",
-      "priority": 2,
+      "priority": 4,
       "api_url": "https://open.bigmodel.cn/api/anthropic",
       "api_key": "3432cd07118f4267a0a41bd63f2f10f1.3MjdUZnhZFJdyIcJ",
       "model_map": {
@@ -57,26 +73,10 @@
       "enabled": true
     },
     {
-      "name": "zhipu_max_2",
-      "type": "anthropic_compat",
-      "provider": "zhipu",
-      "priority": 2,
-      "api_url": "https://open.bigmodel.cn/api/anthropic",
-      "api_key": "796883a67b533e7c35fbf39ebaea43a7.0Y9wR7oCfYWlkeWQ",
-      "model_map": {
-        "claude-opus-4-6": "glm-5.1",
-        "claude-sonnet-4-6": "glm-5.1",
-        "claude-haiku-4-5-20251001": "glm-5.1"
-      },
-      "_note": "智谱清言coding plan [1313公平使用封锁暂停]",
-      "context_window": 204800,
-      "enabled": false
-    },
-    {
       "name": "无问星穹",
       "type": "anthropic_compat",
       "provider": "infini",
-      "priority": 3,
+      "priority": 5,
       "api_url": "https://cloud.infini-ai.com/maas/coding",
       "api_key": "sk-cp-wp25vo2x4xdfdtoz",
       "model_map": {
@@ -92,17 +92,17 @@
       "name": "火山方舟",
       "type": "anthropic_compat",
       "provider": "volcengine",
-      "priority": 4,
+      "priority": 6,
       "api_url": "https://ark.cn-beijing.volces.com/api/coding",
       "api_key": "eeb31787-c25d-4346-8d87-f1d0b8e7d168",
       "model_map": {
-        "claude-opus-4-6": "kimi-k2.5",
-        "claude-sonnet-4-6": "kimi-k2.5",
-        "claude-haiku-4-5-20251001": "kimi-k2.5"
+        "claude-opus-4-6": "kimi-k2.6",
+        "claude-sonnet-4-6": "kimi-k2.6",
+        "claude-haiku-4-5-20251001": "kimi-k2.6"
       },
       "_note": "火山coding plan [ark.cn-beijing.volces.com EC2不可达禁用]",
       "context_window": 262144,
-      "enabled": false
+      "enabled": true
     }
   ],
   "fallback": {

@@ -1,21 +1,14 @@
 {
-  "火山方舟": {
-    "cooldown_until": "2026-04-28T18:52:53+08:00",
-    "marked_at": "2026-04-28T15:09:12.199654+08:00",
-    "error_type": "quota_exhausted",
-    "error_code": "TooManyRequests",
-    "raw_error": "You have exceeded the 5-hour usage quota. It will reset at 2026-04-28 18:52:53 +0800 CST. We recommend upgrading your plan for more quota, or waiting for the reset. Request id: 021777360150934ee0befab39272c2daa6a928a2ff2cde1dce46e"
-  },
   "kimi1": {
-    "cooldown_until": "2026-05-05T07:47:01.623753+08:00",
-    "marked_at": "2026-05-05T02:47:01.623753+08:00",
+    "cooldown_until": "2026-05-09T05:01:37.669643+08:00",
+    "marked_at": "2026-05-09T00:01:37.669643+08:00",
     "error_type": "balance_exhausted",
     "error_code": "permission_error",
     "raw_error": "You've reached your usage limit for this billing cycle. Your quota will be refreshed in the next cycle. Upgrade to get more: https://www.kimi.com/code/console?from=quota-upgrade"
   },
   "kimi2": {
-    "cooldown_until": "2026-05-05T11:25:18.945866+08:00",
-    "marked_at": "2026-05-05T06:25:18.945866+08:00",
+    "cooldown_until": "2026-05-09T05:01:39.093596+08:00",
+    "marked_at": "2026-05-09T00:01:39.093596+08:00",
     "error_type": "balance_exhausted",
     "error_code": "invalid_request_error",
     "raw_error": "We're unable to verify your membership benefits at this time. Please ensure your membership is active."

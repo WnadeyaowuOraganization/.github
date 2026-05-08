@@ -1,0 +1,4 @@
+#NOTE: This is a Maven Resolver internal implementation file, its format can be changed without prior notice.
+#Fri May 08 02:13:34 CST 2026
+lucene-core-8.9.0.jar>public=
+lucene-core-8.9.0.pom>public=

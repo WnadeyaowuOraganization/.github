@@ -1,6 +1,7 @@
 # 万德AI平台 · 项目状态
 
 > ⏰ 最后更新：2026-05-06 by 研发经理（D90 v3 E2E URL统一配置 · 仅BASE_URL_API/BASE_URL_FRONT两个变量 · 门5+6严格检查硬编码）
+> ⏰ 上次更新：2026-05-08 by 研发经理（D106 Jenkins迁移 · GitHub Actions废弃 · fix-ci-failure skill迁移Jenkins · Jenkinsfile options合并+--admin squash-merge · .github/workflows从kimi目录删除）
 > ⏰ 上次更新：2026-04-27 04:30 by 吴耀（D105 预算+计划+全景表三连击 B档建原型 · 3 Hub + 12 Tab + 3 详设 md · 3 Master #4262/#4263/#4264 + 33 子 Issue 三重引用 · needs-prototype 136→112）
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
@@ -44,7 +45,7 @@ Issue创建
                            CC轮询等待merge或新指令（不主动退出）
                                   │
     ══════════════════════════════╪══════════════════════════════
-    CI层 (pr-test.yml)            │  PR创建/更新自动触发
+    CI层 (Jenkins Pipeline)        │  PR创建/更新 → GitHub Webhook → Jenkins
     ══════════════════════════════╪══════════════════════════════
                                   ▼
                       CI专用环境构建(:6041/:8084)
@@ -67,7 +68,7 @@ Issue创建
               squash merge  + [E2E Fail]
                    │
     ══════════════════════════════════════════════════════════════
-    CD层 (pr-test.yml auto-merge job 内联)
+    CD层 (Jenkins Pipeline 部署阶段 内联)
     ══════════════════════════════════════════════════════════════
                    │
                    ▼
@@ -114,7 +115,7 @@ Issue创建
 |------|------|------|------|--------|----------|
 | 单元测试 | 编程CC TDD | 当前Issue涉及的Service | mvn test / vitest | 无 | 编程CC自行修复，不提PR |
 | 编译检查 | 编程CC提交前 | 全量编译 | mvn package / pnpm build | 无 | 编程CC自行修复，不提PR |
-| CI E2E | PR创建/更新 | PR影响的模块 | pr-test.yml + e2e-result-handler.py | 无 | 评论PR/Issue + test-failed + E2E Fail |
+| CI E2E | PR创建/更新 | PR影响的模块 | Jenkins Pipeline + quality-gate.sh | 无 | 评论PR/Issue + test-failed + E2E Fail |
 | Smoke探活 | cron 30min | health + auth + 页面smoke | e2e_smoke.sh + e2e-result-handler.py | **无** | 自动创建Issue + test-failed + E2E Fail |
 | 全量回归 | cron 6h | regression + 全模块 | Claude Code + e2e-result-handler.py | 有 | AI创建Issue + test-failed + E2E Fail |
 
@@ -567,3 +568,4 @@ Sprint-8 生态售后     █████████████ 生态闭环
 | D66 | 04-07 | ✅ | 企微审批贯通：万德平台主控+企微端审批双引擎 | 使用企微「审批流程引擎」API（非审批应用API），自建应用集成，控制权在万德平台侧。4核心API(submit/detail/list/status)+回调实时同步+H5发起+消息卡片一键审批+双端状态监控。6个Issue(#3161-#3166) Sprint-2，blocked-by #1564(企微SDK)+#2026(审批状态机) | 吴耀 |
 | D67 | 04-07 | ✅ | OA遗留47流程全覆盖：JSON Schema动态表单+条件路由 | 170+旧流程→33简化流程，47个OA未覆盖流程采用「通用表单引擎+审批引擎条件路由」方案，不逐个定制开发。JSON Schema驱动表单配置化，7模块28个模板(人事6+行政5+质量5+印章3+运营2+国贸1+管理6)。8个Issue(#3167-#3174) Sprint-2 | 吴耀 |
 | D68 | 04-07 | ✅ | 回款资料管理体系：Checklist+催收+企业信息库+甲方表单辅助 | 解决甲方回款�| D105 | 04-27 | ✅ | 预算+计划+全景表三连击 B档：3 Hub + 33 子 Issue 三重引用回填 | biz:budget(23 Issue)+biz:project-plan(12 Issue) 缺原型支撑全量补足。3 决策：①B档3 Master独立(预算/计划/全景表) ②BOM独立Tab(接入预算+计划各一) ③独立 tab-supplier-schedule.html。产出：3 Hub(budget 6Tab+plan 5Tab+cockpit 单页)+12 Tab HTML+3 详设 md(合计 3858 行/185.8KB)。zone 公共轴贯穿计划/预算/BOM 三维，cockpit 引入 EVM(PV/EV/AC/CPI/SPI)。3 Master #4262 #4263 #4264 创建，33 子 Issue 三重引用回填+24 摘 needs-prototype。biz:budget+biz:project-plan needs-prototype 残留=0。all-in-one 注入 14 菜单项(commit 04fe7ef2)。needs-prototype 136→112 | 吴耀 |
+| D106 | 05-08 | ✅ | CI从GitHub Actions迁移到Jenkins | Jenkins(Port 18080)替代GitHub Actions作为主CI。改动：(1)Jenkinsfile合并重复options块+移除gh pr review --approve改用--admin squash-merge；(2)fix-ci-failure skill迁移Jenkins API替代gh run命令；(3).github/workflows/从全部kimi工作目录删除；(4)GitHub webhook触发Jenkins GenericTrigger。pr-test.yml保留仅workflow_dispatch手动触发入口。 | 研发经理 |

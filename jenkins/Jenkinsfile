@@ -182,7 +182,7 @@ pipeline {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
                         sh """
                             export GH_TOKEN=\${WEIPING_TOKEN}
-                            gh pr merge ${pr} --repo ${REPO} --squash --delete-branch --admin
+                            gh pr merge ${pr} --repo ${REPO} --squash --delete-branch --auto
                         """
                     }
                 }

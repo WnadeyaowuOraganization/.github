@@ -2,7 +2,15 @@
 
 > ---
 
-**[2026-05-08] Jenkins 迁移后 4 项 CI 基础设施修复**
+**[2026-05-09] E2E spec 端口硬编码导致 CC 间互相污染（kimi5 #2746）**
+- 症状：kimi5 e2e spec 端口写成 `kimi6`（7106）而非 `kimi5`（7105），导致测到 kimi6 环境
+- 根因：e2e spec 模板中 `localhost:710N` 写死 N，上下文切换时未动态更新
+- 处置：CC 自己发现并修复（kimi6→kimi5）
+- 教训：e2e spec 应从环境变量或 `.env` 读取端口，不应硬编码 `710N`
+- 状态：**个案已修复**，频次=1次，持续观察
+- 附：kimi5 数据库缺 Flyway 迁移历史（首次使用），需手动执行 SQL——一次性初始化问题，不修改 skill
+
+---
 - 问题1：Jenkinsfile 第317行 Groovy 语法错误 `\|`（BRE pipe 语法在 Groovy 双引号字符串中无效）
   - 修复：grep -E 替代 BRE \| 分隔符（commit 910055b3）
 - 问题2：post-failure 阶段 exit 128（Groovy sh block 拼接多行命令导致 Jenkins 误报）

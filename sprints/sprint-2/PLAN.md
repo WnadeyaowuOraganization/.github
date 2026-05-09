@@ -836,3 +836,4 @@
 | 05-09 | kimi5 | #3196 | backend | P1 | In Progress | 供应商依赖矩阵 — 接口点管理与关键路径识别 [4/10] |
 | 05-09 | kimi7 | #3217 | frontend | P2 | In Progress | 预算区域管理页面 — 区域列表+招标文件导入+手动添加 [7/10] |
 | 05-09 | kimi8 | #3218 | frontend | P2 | In Progress | 预算矩阵编制页面 — 区域×科目二维表格编辑器+红线设置 [8/10] |
+| 05-09 | ~~kimi8~~ | ~~#3218~~ | frontend | P2 | ~~Done~~ | 预算矩阵编制页面 — PR #4551 MERGED ✅ |

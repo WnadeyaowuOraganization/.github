@@ -86,7 +86,7 @@
 | #3162 | ✅ PR #4508 MERGED | Done |
 | #3163 | ✅ PR 已合并 | Done |
 | #3164 | ✅ PR #4538 MERGED | Done |
-| #3181 | kimi3 CC中 | In Progress |
+| ~~#3181~~ | ~~kimi3 CC中~~ | ~~In Progress~~ | ✅ PR #4542 MERGED |
 | #2336 | kimi7 CC中 | In Progress |
 | #2334 | kimi8 CC中 | In Progress |
 | #2115 | kimi1 CC中 | In Progress |
@@ -704,7 +704,7 @@
 | 05-08 | kimi2 | ~~#3162~~ | backend | medium | ~~Done~~ | 企微审批回调核心逻辑 — PR #4508 MERGED ✅ |
 | 05-09 | kimi2 | #3153 | backend | medium | In Progress | 自动审批规则引擎 — 预审条件+预清除回退（依赖#2026 CLOSED） |
 | 05-09 | kimi1 | #3164 | backend | medium | In Progress | 企微审批消息卡片增强 — 一键审批+富文本摘要 |
-| 05-09 | kimi3 | #3181 | backend | medium | In Progress | 阶段文档注册表 — 文档清单模板+完成度计算 |
+| 05-09 | kimi3 | ~~#3181~~ | ~~backend~~ | ~~medium~~ | ~~Done~~ | 阶段文档注册表 — PR #4542 MERGED ✅ |
 ### 当前运行（05-06 10:04）
 | kimi | Issue | 模块 | 优先级 | 内容 | PR状态 |
 |------|-------|------|--------|------|--------|
@@ -744,7 +744,7 @@
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
 | kimi7 | ~~#2336~~ | ~~frontend~~ | ~~P1~~ | ~~D3样品一键生成页面~~ | ~~✅ PR #4541 MERGED~~ |
 | kimi8 | #2334 | backend | P1 | 设计工具下载页 D3/GH+AI渲染 | CC工作中 |
-| kimi3 | #3181 | backend | P1 | 阶段文档注册表 | CC工作中 |
+| ~~kimi3~~ | ~~#3181~~ | ~~backend~~ | ~~P1~~ | ~~阶段文档注册表~~ | ~~✅ PR #4542 MERGED~~ |
 | ~~kimi3~~ | ~~#2643~~ | ~~backend~~ | ~~P1~~ | ~~员工代言内容池+分享追踪API~~ | ~~✅ PR #4534 MERGED~~ |
 | 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
 | 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |

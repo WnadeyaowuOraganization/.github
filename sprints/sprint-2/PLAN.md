@@ -841,3 +841,4 @@
 | 05-09 | ~~kimi7~~ | ~~#3217~~ | frontend | P2 | ~~Done~~ | 预算区域管理页面 — PR #4552 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2331~~ | fullstack | P2 | ~~Done~~ | 文生图页面 — PR #4554 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2313~~ | frontend | P2 | ~~Done~~ | 图生图独立GUI页面 — PR #4555 MERGED |
+| 05-09 | ~~kimi5~~ | ~~#2433~~ | backend | P2 | ~~Done~~ | 项目链条时间窗口预测 — PR #4556 MERGED |

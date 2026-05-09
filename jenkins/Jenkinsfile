@@ -211,11 +211,19 @@ fi
 if [ "$MERGED" = "true" ]; then
     echo "Closing Issue and releasing kimi lock..."
     BRANCH_NAME=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json headRefName --jq .headRefName)
-    ISSUE_NUM=$(echo "$BRANCH_NAME" | grep -oP "(?<=Issue-|issue-)"' + '''\d+" | head -1)
+    # 用 bash 参数展开提取 Issue 后的数字
+    ISSUE_NUM="${BRANCH_NAME##*Issue-}"
+    ISSUE_NUM="${ISSUE_NUM%%[^0-9]*}"
     if [ -z "$ISSUE_NUM" ]; then
-        ISSUE_NUM=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body,title --jq ".body + \" \" + .title" | grep -oP "(?<=#)\d+" | head -1)
+        ISSUE_NUM="${BRANCH_NAME##*issue-}"
+        ISSUE_NUM="${ISSUE_NUM%%[^0-9]*}"
     fi
-    if [ -n "$ISSUE_NUM" ]; then
+    if [ -z "$ISSUE_NUM" ]; then
+        # fallback: 从 PR body 和 title 提取 #数字
+        BODY_TITLE=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body,title --jq ".body + \" \" + .title")
+        ISSUE_NUM=$(echo "$BODY_TITLE" | grep -oE "#[0-9]+" | head -1 | tr -d '#')
+    fi
+    if [ -n "$ISSUE_NUM" ] && [ "$ISSUE_NUM" -gt 0 ] 2>/dev/null; then
         gh issue close "$ISSUE_NUM" --repo "$REPO" --reason completed || true
         bash "$JENKINS_DIR/update-project-status.sh" --repo play --issue "$ISSUE_NUM" --status "Done" || true
         bash "$JENKINS_DIR/release-cc-lock.sh" "$ISSUE_NUM" || true

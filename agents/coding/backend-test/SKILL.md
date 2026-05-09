@@ -27,6 +27,7 @@ description: Test Wande-Play backend endpoints and services using JUnit unit tes
 **环境变量（run-cc.sh 自动注入，禁止硬编码端口）：**
 - `BASE_URL_FRONT` = `http://localhost:810N` — 前端地址
 - `BASE_URL_API` = `http://localhost:710N` — 后端API地址
+> kimiN 端口：`backend=710N`，`frontend=810N`（例：kimi5→`:7105` / `:8105`）。Playwright API spec 模板已用 `${BASE_URL_API}`，勿改为 `localhost:xxxx`。**硬编码导致 CI/跨 kimi spec 在错误端口运行，必挂。**
 
 ## TDD 红灯先行（强制）
 
@@ -156,7 +157,7 @@ mvn test                                                            # 全项目
 ```ts
 import { test, expect, request } from '@playwright/test';
 test('project-mine list 返回分页结构', async () => {
-  const api = await request.newContext({ baseURL: 'http://localhost:7101' });
+  const api = await request.newContext({ baseURL: BASE_URL_API });
   const login = await api.post('/auth/login', { data: {...} });
   const token = (await login.json()).data.access_token;
   const res = await api.get('/wande/project/mine/list', {

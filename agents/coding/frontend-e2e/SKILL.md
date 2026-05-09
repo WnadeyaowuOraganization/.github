@@ -21,7 +21,8 @@ description: End-to-end test Wande-Play frontend pages with Playwright in the is
 - `BASE_URL_FRONT` = `http://localhost:810N` — 前端地址
 - `BASE_URL_API` = `http://localhost:710N` — 后端API地址
 
-**smoke 测试必须使用相对路径，禁止硬编码端口。**
+**smoke 测试必须使用 `BASE_URL_FRONT` / `BASE_URL_API` 环境变量，禁止硬编码端口。**
+> kimiN 端口：`backend=710N`，`frontend=810N`（例：kimi5→`:7105` / `:8105`）。smoke 模板已用 `${BASE_URL_FRONT}`，勿改为 `localhost:xxxx`。**硬编码导致 CI spec 在错误端口运行，必挂。**
 
 ## 启动环境
 
@@ -74,7 +75,7 @@ test.describe(`smoke: ${PAGE_NAME}`, () => {
 
   test('页面可渲染', async ({ page }) => {
 
-    await page.goto(`http://localhost:8101${ROUTE}`);
+    await page.goto(`${BASE_URL_FRONT}${ROUTE}`);
 
     // 反事故 1：页面容器渲染（非白屏）
     await expect(page.locator('.ant-page-container, [class*="Page"]')).toBeVisible();

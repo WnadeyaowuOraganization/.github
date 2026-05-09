@@ -750,7 +750,7 @@
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
 | kimi7 | #2336 | frontend | P1 | D3样品一键生成页面 | ✅ PR #4541 OPEN |
-| kimi8 | #2334 | backend | P1 | 设计工具下载页 D3/GH+AI渲染 | CC工作中 |
+| ~~kimi8~~ | ~~#2334~~ | ~~backend~~ | ~~P1~~ | ~~设计工具下载页 D3/GH+AI渲染~~ | ~~✅ PR #4540 MERGED 05-09~~ |
 | ~~kimi3~~ | ~~#3181~~ | ~~backend~~ | ~~P1~~ | ~~阶段文档注册表~~ | ~~✅ PR #4542 MERGED~~ |
 | kimi3 | ~~#2364~~ | ~~approval~~ | ~~P1~~ | ~~菜单权限SQL+审批中心菜单注册~~ | ~~✅ PR #4545 MERGED 05-09 13:48~~ |
 | kimi3 | #2332 | pipeline | P1 | 采集工具使用指南页（数据管理→采集工具） | CC工作中 |
@@ -769,7 +769,7 @@
 | 05-09 | kimi2 | ~~#3153~~ | approval | medium | ~~Done~~ | 自动审批规则引擎 — PR #4537 MERGED ✅ |
 | 05-09 | kimi6 | ~~#2741~~ | fullstack | medium | ~~Done~~ | 自定义报告模板与导出 — PR #4539 MERGED ✅ |
 | 05-09 | — | ~~#2528~~ | backend | P2 | ~~Done~~ | 公告板DB建表 Phase8 — PR #4535 MERGED ✅ |
-| 05-09 | kimi8 | #2334 | backend | medium | In Progress | 设计工具下载页 D3/GH+AI渲染 |
+| 05-09 | kimi8 | ~~#2334~~ | backend | medium | ~~Done~~ | 设计工具下载页 D3/GH+AI渲染 — PR #4540 MERGED ✅ |
 | 05-09 | kimi1 | #2115 | backend | medium | In Progress | G7e采集自动化 — 中标数据→AI判定→评分入库 |
 | ~~kimi2~~ | ~~#3132~~ | ~~backend~~ | ~~P1~~ | ~~审批抄送功能~~ | ~~✅ PR #3917+PR #4508 MERGED~~ |
 | ~~kimi1~~ | ~~#2330~~ | ~~backend~~ | ~~P1~~ | ~~PPT插件文生图面板~~ | ~~✅ PR #4507 MERGED~~ |

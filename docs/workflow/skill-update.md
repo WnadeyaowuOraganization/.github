@@ -10,6 +10,14 @@
 - 状态：**个案已修复**，频次=1次，持续观察
 - 附：kimi5 数据库缺 Flyway 迁移历史（首次使用），需手动执行 SQL——一次性初始化问题，不修改 skill
 
+**[2026-05-09] backend-test skill mock 场景补充建议（kimi2 #2529）**
+- 场景1：MyBatis-Plus `LambdaUpdateWrapper` 在 mock 环境失败 → 改用 `UpdateWrapper`
+- 场景2：`WecomAppService.sendMarkdownMessage` 返回 `JsonNode` 非 void → mock 用 `when().thenReturn(jsonNode)`
+- 场景3：分页依赖 `ServiceImpl` 内部 `private baseMapper`，无法 mock → 用 `assertDoesNotThrow` 规避
+- 场景4：`PageQuery(10, 1)` 参数顺序易错（pageSize, pageNum）→ 建议 skill 标注
+- 状态：**频次=1次，持续观察**
+
+
 ---
 - 问题1：Jenkinsfile 第317行 Groovy 语法错误 `\|`（BRE pipe 语法在 Groovy 双引号字符串中无效）
   - 修复：grep -E 替代 BRE \| 分隔符（commit 910055b3）

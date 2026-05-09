@@ -132,6 +132,15 @@ class ProjectMineServiceTest {
 }
 ```
 
+### MyBatis-Plus + Mockito 常见卡点
+
+| 场景 | ❌ 错误写法 | ✅ 正确写法 | 原因 |
+|------|-----------|------------|------|
+| LambdaUpdateWrapper / LambdaQueryWrapper | `when(mapper.update(...，new LambdaUpdateWrapper<>()))` | **改用 `UpdateWrapper<>()` / `QueryWrapper<>()`**，不试 mock LambdaWrapper | LambdaWrapper 内部用反射拼 SQL，Mockito 无法匹配具体 lambda 对象，when() 永远不触发 |
+| Service 方法返回非 void | `doNothing().when(svc).sendMsg(...)` | `when(svc.sendMsg(...)).thenReturn(jsonNode)` | 若方法签名是 `JsonNode sendMsg(...)` 而非 `void sendMsg(...)`，stub 必须匹配实际返回值 |
+| 分页依赖 ServiceImpl 内部 private baseMapper | `when(baseMapper.selectPage(...)).thenReturn(...)` | **改用 `assertDoesNotThrow(() -> service.listPage(...))`** | `baseMapper` 是 `ServiceImpl` 的 private 字段，无法注入 mock；此时只验证方法不抛异常即可 |
+| `PageQuery` 分页参数 | `new PageQuery(10, 1)` | **确认参数顺序**：`new PageQuery(pageNum, pageSize)` 还是 `(pageSize, pageNum)` | MP 分页依赖 `Page(pageNum, pageSize)`，顺序反了查第 N 页数据而非第一页 |
+
 ### 最小覆盖
 
 | Issue 类型 | 要求 |

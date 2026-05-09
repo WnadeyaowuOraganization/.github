@@ -39,11 +39,11 @@
 | ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | ✅ PR #4539 MERGED 04:27 |
 | ~~14~~ | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | ✅ PR #4541 MERGED |
 | ~~15~~ | ~~#2342~~ | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | ✅ PR #4500 MERGED 05-07 |
-| ~~16~~ | ~~#2364~~ | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | kimi3 CC工作中 |
+| ~~16~~ | ~~#2364~~ | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | ✅ PR #4545 MERGED 05-09 13:48 |
 | 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | kimi1 CC工作中 |
-| 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | |
+| 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | kimi3 CC工作中 |
 | 19 | ~~#2334~~ | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | ✅ PR #4540 OPEN |
-| 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | |
+| 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | kimi2 CC工作中 |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -741,15 +741,18 @@
 | kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 MERGED 04:27~~ |
 | kimi1 | ~~#2115~~ | ~~backend~~ | ~~P2~~ | ~~G7e采集自动化 — 中标数据→AI判定→评分入库~~ | ~~✅ PR #4543 MERGED 05-09 13:44~~ |
 | ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
+| kimi2 | #2360 | frontend | P1 | 设计变更通知+确认页面 | CC工作中 |
 | kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
 | kimi7 | ~~#2336~~ | ~~frontend~~ | ~~P1~~ | ~~D3样品一键生成页面~~ | ~~✅ PR #4541 MERGED~~ |
 | kimi8 | #2334 | backend | P1 | 设计工具下载页 D3/GH+AI渲染 | CC工作中 |
 | ~~kimi3~~ | ~~#3181~~ | ~~backend~~ | ~~P1~~ | ~~阶段文档注册表~~ | ~~✅ PR #4542 MERGED~~ |
-| kimi3 | #2364 | approval | P1 | 菜单权限SQL+审批中心菜单注册 | CC工作中 |
+| kimi3 | ~~#2364~~ | ~~approval~~ | ~~P1~~ | ~~菜单权限SQL+审批中心菜单注册~~ | ~~✅ PR #4545 MERGED 05-09 13:48~~ |
+| kimi3 | #2332 | pipeline | P1 | 采集工具使用指南页（数据管理→采集工具） | CC工作中 |
 | ~~kimi3~~ | ~~#2643~~ | ~~backend~~ | ~~P1~~ | ~~员工代言内容池+分享追踪API~~ | ~~✅ PR #4534 MERGED~~ |
 | 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
+| 05-09 | kimi3 | ~~#2364~~ | approval | medium | ~~Done~~ | 菜单权限SQL+审批中心菜单注册 — PR #4545 MERGED ✅ |
 | 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |
 | 05-09 | kimi2 | ~~#2371~~ | fullstack | medium | ~~Done~~ | 竞品技术浏览器 — PR #4544 MERGED ✅ |
 | 05-09 | kimi6 | ~~#2342~~ | ~~frontend~~ | ~~medium~~ | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED 05-07 ✅ |

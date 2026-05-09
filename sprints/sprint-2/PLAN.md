@@ -760,7 +760,7 @@
 | 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |
 | 05-09 | kimi2 | ~~#2371~~ | fullstack | medium | ~~Done~~ | 竞品技术浏览器 — PR #4544 MERGED ✅ |
 | 05-09 | kimi6 | ~~#2342~~ | ~~frontend~~ | ~~medium~~ | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED 05-07 ✅ |
-| 05-09 | kimi7 | ~~#2336~~ | frontend | medium | ~~Done~~ | D3样品一键生成页面 — PR #4541 MERGED ✅ |
+| 05-09 | kimi7 | ~~#2336~~ | frontend | medium | ~~Done~~ | D3样品一键生成页面 — PR #4541 MERGED 05-09 ✅ |
 | 05-09 | kimi5 | ~~#2691~~ | fullstack | medium | ~~Done~~ | 竞品产品对比矩阵 — PR #4547 MERGED 05-09 ✅ |
 | 05-09 | kimi5 | ~~#2746~~ | backend | medium | ~~Done~~ | 赢/丢单复盘触发 — PR #4548 MERGED 05-09 ✅ |
 | 05-09 | kimi5 | #2286 | frontend | medium | In Progress | 采购申请预算校验前端集成 |

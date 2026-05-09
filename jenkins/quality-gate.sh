@@ -13,8 +13,18 @@ echo "[门1] 检查 PR body checkbox..."
 PR_BODY=$(gh pr view $PR_NUMBER --repo $REPO --json body --jq '.body')
 UNCHECKED_PR=$(echo "$PR_BODY" | grep -c '^- \[ \]' || true)
 if [ "$UNCHECKED_PR" -gt 0 ]; then
+    UNCHECKED_ITEMS=$(echo "$PR_BODY" | grep '^- \[ \]' | sed 's/^- \[ \] //' | head -5)
     echo "❌ 门1失败：PR body 存在 $UNCHECKED_PR 项未勾 checkbox"
-    gh pr comment $PR_NUMBER --repo $REPO --body "❌ quality-gate 门1拦截：PR body 存在 $UNCHECKED_PR 项未勾 checkbox" || true
+    COMMENT="❌ quality-gate 门1拦截：PR body 存在 $UNCHECKED_PR 项未勾 checkbox
+
+请在 PR 描述中勾选以下未完成项（将 \`- [ ]\` 改为 \`- [x]\`）：
+
+\`\`\`
+$UNCHECKED_ITEMS
+\`\`\`
+
+修复后 push 即可自动触发 CI 重跑。"
+    gh pr comment $PR_NUMBER --repo $REPO --body "$COMMENT" || true
     exit 1
 fi
 echo "✅ 门1通过"
@@ -26,12 +36,28 @@ if [ -z "$ISSUE_NUM" ]; then
     ISSUE_NUM=$(echo "$PR_BODY" | grep -oE '(Fixes|Closes) #[0-9]+' | head -1 | grep -oE '[0-9]+' || echo "")
 fi
 if [ -n "$ISSUE_NUM" ]; then
-    TASK_MD=$(gh api "repos/$REPO/contents/issues/issue-${ISSUE_NUM}/task.md?ref=${BRANCH}" --jq '.content' 2>/dev/null | base64 -d || echo "")
+    # 优先从 feature 分支取 task.md，回退到 origin/dev
+    TASK_MD=""
+    for ref in "${BRANCH}" "origin/dev" "dev"; do
+        TASK_MD=$(gh api "repos/$REPO/contents/issues/issue-${ISSUE_NUM}/task.md?ref=${ref}" --jq '.content' 2>/dev/null | base64 -d && break || true)
+        [ -n "$TASK_MD" ] && break
+    done
+
     if [ -n "$TASK_MD" ]; then
         UNCHECKED_TASK=$(echo "$TASK_MD" | grep -c '^- \[ \]' || true)
         if [ "$UNCHECKED_TASK" -gt 0 ]; then
+            UNCHECKED_ITEMS=$(echo "$TASK_MD" | grep '^- \[ \]' | sed 's/^- \[ \] //' | head -5)
             echo "❌ 门2失败：task.md 存在 $UNCHECKED_TASK 项未勾"
-            gh pr comment $PR_NUMBER --repo $REPO --body "❌ quality-gate 门2拦截：task.md 存在 $UNCHECKED_TASK 项未勾" || true
+            COMMENT="❌ quality-gate 门2拦截：task.md 存在 $UNCHECKED_TASK 项未勾
+
+请在 `issues/issue-${ISSUE_NUM}/task.md` 中勾选以下未完成项（将 \`- [ ]\` 改为 \`- [x]\`）：
+
+\`\`\`
+$UNCHECKED_ITEMS
+\`\`\`
+
+修复后 push 即可自动触发 CI 重跑。"
+            gh pr comment $PR_NUMBER --repo $REPO --body "$COMMENT" || true
             exit 2
         fi
     fi
@@ -44,7 +70,10 @@ FRONTEND_CHANGES=$(gh pr diff $PR_NUMBER --repo $REPO --name-only 2>/dev/null | 
 IMG_COUNT=$(echo "$PR_BODY" | grep -cE '!\[[^]]*\]\([^)]+\.(png|jpg|jpeg|gif|webp)' || true)
 if [ "$FRONTEND_CHANGES" -gt 0 ] && [ "$IMG_COUNT" -eq 0 ]; then
     echo "❌ 门3失败：前端 PR 缺少截图"
-    gh pr comment $PR_NUMBER --repo $REPO --body "❌ quality-gate 门3拦截：前端 PR 缺少截图" || true
+    COMMENT="❌ quality-gate 门3拦截：前端 PR 缺少截图
+
+请在 PR 描述中追加页面截图（截图格式：\`![描述](截图URL)\`），可上传到 GitHub PR 评论或用图床链接。"
+    gh pr comment $PR_NUMBER --repo $REPO --body "$COMMENT" || true
     exit 3
 fi
 echo "✅ 门3通过"
@@ -61,10 +90,17 @@ echo "✅ 门4通过"
 echo "[门5] 检查硬编码端口..."
 E2E_CHANGES=$(gh pr diff $PR_NUMBER --repo $REPO --name-only 2>/dev/null | grep -E "^e2e/.*\.(ts|js)$" || true)
 if [ -n "$E2E_CHANGES" ]; then
-    BAD_PORTS=$(echo "$E2E_CHANGES" | xargs grep -n "localhost:710[0-9]\|127\.0\.0\.1:710[0-9]" 2>/dev/null || true)
-    if [ -n "$BAD_PORTS" ]; then
+    BAD_FILES=$(echo "$E2E_CHANGES" | xargs grep -l "localhost:710[0-9]\|127\.0\.0\.1:710[0-9]" 2>/dev/null || true)
+    if [ -n "$BAD_FILES" ]; then
+        BAD_LINES=$(echo "$E2E_CHANGES" | xargs grep -n "localhost:710[0-9]\|127\.0\.0\.1:710[0-9]" 2>/dev/null | head -10 || true)
         echo "❌ 门5失败：E2E 文件硬编码了 kimi 端口"
-        gh pr comment $PR_NUMBER --repo $REPO --body "❌ quality-gate 门5拦截：E2E 文件硬编码了 kimi 端口" || true
+        COMMENT="❌ quality-gate 门5拦截：E2E 文件硬编码了 kimi 端口
+
+以下文件包含硬编码的 kimi 端口（应使用相对路径或环境变量）：
+\`\`\`
+$BAD_LINES
+\`\`\`"
+        gh pr comment $PR_NUMBER --repo $REPO --body "$COMMENT" || true
         exit 5
     fi
 fi

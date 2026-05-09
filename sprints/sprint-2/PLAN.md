@@ -24,7 +24,7 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| ~~1~~ | ~~#2528~~ | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | |
+| ~~1~~ | ~~#2528~~ | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | ✅ PR #4535 MERGED 04:35 |
 | ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
 | ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
 | ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
@@ -36,7 +36,7 @@
 | 10 | ~~#3154~~ | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | kimi4 CC工作中 |
 | 11 | #2371 | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | |
 | 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
-| ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | ✅ PR #4539 OPEN |
+| ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | ✅ PR #4539 MERGED 04:27 |
 | 14 | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | kimi7 CC工作中 |
 | 15 | #2342 | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | |
 | 16 | #2364 | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | |
@@ -737,8 +737,8 @@
 | ~~kimi3~~ | ~~#2333~~ | ~~fullstack~~ | ~~P1~~ | ~~PPT插件下载页~~ | ~~✅ PR #4502 MERGED~~ |
 | ~~kimi4~~ | ~~#2337~~ | ~~frontend~~ | ~~P1~~ | ~~样品申请单页面~~ | ~~✅ PR #4506 MERGED~~ |
 | ~~kimi5~~ | ~~#2338~~ | ~~frontend~~ | ~~P1~~ | ~~样品箱管理页面~~ | ~~✅ PR #4505 MERGED~~ |
-| kimi6 | ~~#2473~~ | ~~backend~~ | ~~P1~~ | ~~律师催收数据库+API~~ | ~~PR #4504 OPEN~~ |
-| kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 OPEN~~ |
+| kimi6 | ~~#2473~~ | ~~backend~~ | ~~P1~~ | ~~律师催收数据库+API~~ | ~~✅ PR #4504 MERGED~~ |
+| kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 MERGED 04:27~~ |
 | kimi1 | #2115 | backend | P2 | G7e采集自动化 — 中标数据→AI判定→评分入库 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
@@ -750,13 +750,12 @@
 | 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |
 | 05-09 | kimi7 | ~~#2653~~ | backend | medium | ~~Done~~ | 节日日历DB+海报模板管理API — PR #4536 MERGED ✅ |
 | 05-09 | kimi8 | ~~#2661~~ | backend | medium | ~~Done~~ | 配色方案导出+总部需求表 — PR #4531 MERGED ✅ |
+| 05-09 | kimi2 | ~~#3153~~ | approval | medium | ~~Done~~ | 自动审批规则引擎 — PR #4537 MERGED ✅ |
+| 05-09 | kimi6 | ~~#2741~~ | fullstack | medium | ~~Done~~ | 自定义报告模板与导出 — PR #4539 MERGED ✅ |
+| 05-09 | — | ~~#2528~~ | backend | P2 | ~~Done~~ | 公告板DB建表 Phase8 — PR #4535 MERGED ✅ |
 | 05-09 | kimi7 | #2336 | frontend | medium | In Progress | D3样品一键生成页面（样品管理 Phase14） |
 | 05-09 | kimi8 | #2334 | backend | medium | In Progress | 设计工具下载页 D3/GH+AI渲染 |
 | 05-09 | kimi1 | #2115 | backend | medium | In Progress | G7e采集自动化 — 中标数据→AI判定→评分入库 |
-| 05-09 | kimi8 | #2334 | backend | medium | In Progress | 设计工具下载页 D3/GH+AI渲染 |
-| kimi4 | #2488 | backend | P1 | ComfyUI图生图Pipeline | CC工作中 |
-| kimi5 | #1941 | backend | P2 | 文生图代理API | CC工作中 |
-| kimi2 | #3153 | backend | P1 | 自动审批规则引擎 — 预审条件+预清除回退 | CC工作中 |
 | ~~kimi2~~ | ~~#3132~~ | ~~backend~~ | ~~P1~~ | ~~审批抄送功能~~ | ~~✅ PR #3917+PR #4508 MERGED~~ |
 | ~~kimi1~~ | ~~#2330~~ | ~~backend~~ | ~~P1~~ | ~~PPT插件文生图面板~~ | ~~✅ PR #4507 MERGED~~ |
 

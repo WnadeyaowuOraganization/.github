@@ -44,7 +44,8 @@ if [ -n "$ISSUE_NUM" ]; then
     # 优先从 feature 分支取 task.md，回退到 origin/dev
     TASK_MD=""
     for ref in "${BRANCH}" "origin/dev" "dev"; do
-        TASK_MD=$(gh api "repos/$REPO/contents/issues/issue-${ISSUE_NUM}/task.md?ref=${ref}" --jq '.content' 2>/dev/null | base64 -d && break || true)
+        RAW=$(gh api "repos/$REPO/contents/issues/issue-${ISSUE_NUM}/task.md?ref=${ref}" --jq '.content' 2>/dev/null) || continue
+        TASK_MD=$(echo "$RAW" | base64 -d 2>/dev/null) || continue
         [ -n "$TASK_MD" ] && break
     done
 

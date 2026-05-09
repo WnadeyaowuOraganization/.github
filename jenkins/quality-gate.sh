@@ -73,8 +73,8 @@ echo "✅ 门2通过"
 # 门 3: 前端 PR 必须有截图
 echo "[门3] 检查前端截图..."
 FRONTEND_CHANGES=$(gh pr diff $PR_NUMBER --repo $REPO --name-only 2>/dev/null | grep -c "^frontend/apps/web-antd/src/views" || echo "0")
-IMG_COUNT=$(echo "$PR_BODY" | grep -cE '!\[[^]]*\]\([^)]+\.(png|jpg|jpeg|gif|webp)' || true)
-if [ "$FRONTEND_CHANGES" -gt 0 ] && [ "$IMG_COUNT" -eq 0 ]; then
+IMG_COUNT=$(echo "$PR_BODY" | grep -cE '!\[[^]]*\]\([^)]+\.(png|jpg|jpeg|gif|webp)' || echo "0")
+if [ "${FRONTEND_CHANGES:-0}" -gt 0 ] && [ "${IMG_COUNT:-0}" -eq 0 ]; then
     echo "❌ 门3失败：前端 PR 缺少截图"
     COMMENT="❌ quality-gate 门3拦截：前端 PR 缺少截图
 

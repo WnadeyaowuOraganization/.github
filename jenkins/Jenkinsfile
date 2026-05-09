@@ -333,6 +333,14 @@ pipeline {
             script {
                 def pr = params.PR_NUMBER ?: env.PR_NUMBER
                 if (pr?.trim()) {
+                    // 跳过 closed PR，避免 cycle-merge 死循环
+                    sh """
+                        PR_STATE=\$(gh pr view ${pr} --repo ${REPO} --json state --jq '.state')
+                        if [ "\${PR_STATE}" = "closed" ]; then
+                            echo "PR #${pr} is closed, skipping failure handler to prevent cycle-merge loop"
+                            exit 0
+                        fi
+                    """
                     env.FAIL_PR_NUM = pr
                     env.FAIL_BUILD_URL = env.BUILD_URL ?: ''
                     sh "bash ${SCRIPTS_DIR}/jenkins-failure-handler.sh || true"

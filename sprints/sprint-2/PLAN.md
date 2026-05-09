@@ -43,7 +43,7 @@
 | 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | kimi1 CC工作中 |
 | 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | kimi3 CC工作中 |
 | 19 | ~~#2334~~ | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | ✅ PR #4540 OPEN |
-| 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | kimi2 CC工作中 |
+| 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | ✅ PR #4546 OPEN |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -741,7 +741,7 @@
 | kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 MERGED 04:27~~ |
 | kimi1 | ~~#2115~~ | ~~backend~~ | ~~P2~~ | ~~G7e采集自动化 — 中标数据→AI判定→评分入库~~ | ~~✅ PR #4543 MERGED 05-09 13:44~~ |
 | ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
-| kimi2 | #2360 | frontend | P1 | 设计变更通知+确认页面 | CC工作中 |
+| kimi2 | ~~#2360~~ | ~~frontend~~ | ~~P1~~ | ~~设计变更通知+确认页面~~ | ~~✅ PR #4546 OPEN~~ |
 | kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |

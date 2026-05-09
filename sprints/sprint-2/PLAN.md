@@ -886,7 +886,7 @@
 | 05-10 | ~~kimi5~~ | ~~#2449~~ | pipeline | P2 | ~~Done~~ | 中标公告竞品自动发现 #4566 |
 | 05-10 | ~~kimi2~~ | ~~#2635~~ | backend | P1 | ~~Done~~ | 品牌中心·数字人 — 第三方API集成 — PR #4575 MERGED |
 | 05-10 | ~~kimi2~~ | ~~#2636~~ | frontend | P1 | ~~Done~~ | 品牌中心·数字人 — 数字分身+声音克隆管理页面 — PR #4578 MERGED |
-| 05-10 | kimi1 | #3199 | fullstack | P1 | In Progress | 预算调整单·前后端集成（CC工作中） |
+| 05-10 | ~~kimi1~~ | ~~#3199~~ | fullstack | P1 | ~~Done~~ | 计划预警引擎·延期预警+企微推送+升级机制 — PR #4577 MERGED |
 | 05-10 | kimi3 | #2332 | pipeline | P1 | In Progress | 采集工具使用指南页（CC工作中） |
 | 05-10 | ~~kimi4~~ | ~~#3198~~ | frontend | P1 | ~~Done~~ | 项目主计划页面（条线视图+甘特图）— PR #4572 MERGED |
 | 05-10 | kimi5 | #2640 | backend | P1 | In Progress | 品牌中心·视频裂变（CC工作中） |

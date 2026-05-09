@@ -56,7 +56,7 @@ if [ -n "$ISSUE_NUM" ]; then
             echo "❌ 门2失败：task.md 存在 $UNCHECKED_TASK 项未勾"
             COMMENT="❌ quality-gate 门2拦截：task.md 存在 $UNCHECKED_TASK 项未勾
 
-请在 `issues/issue-${ISSUE_NUM}/task.md` 中勾选以下未完成项（将 \`- [ ]\` 改为 \`- [x]\`）：
+请在 \`issues/issue-${ISSUE_NUM}/task.md\` 中勾选以下未完成项（将 \`- [ ]\` 改为 \`- [x]\`）：
 
 \`\`\`
 $UNCHECKED_ITEMS

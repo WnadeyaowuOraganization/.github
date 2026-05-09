@@ -109,8 +109,45 @@ for i in $(seq 1 ${HEALTH_TIMEOUT}); do
     sleep 1
     if [ "$i" -eq "${HEALTH_TIMEOUT}" ]; then
         echo "[e2e/start-all] ❌ CI 环境启动超时"
-        echo "===== 后端日志 (最后 40 行) ====="
-        tail -40 "${CI_BACKEND_DIR}/logs/backend.log" 2>/dev/null || echo "(无日志)"
+        echo "===== 后端日志 (最后 50 行) ====="
+        tail -50 "${CI_BACKEND_DIR}/logs/backend.log" 2>/dev/null || echo "(无日志)"
+
+        # Flyway 特定错误检测，提供明确诊断
+        LOG_FILE="${CI_BACKEND_DIR}/logs/backend.log"
+        if grep -q "Found more than one migration with version" "${LOG_FILE}" 2>/dev/null; then
+            echo ""
+            echo "=============================================="
+            echo "🚨 Flyway 版本冲突检测 — 多个迁移脚本使用相同版本号"
+            echo ""
+            echo "处理方法："
+            echo "1. 在 wande-play 仓库执行以下命令找出重复版本："
+            echo "   (ls backend/ruoyi-admin/src/main/resources/db/migration/;"
+            echo "    ls backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/) \\"
+            echo "   | sed 's/^V\([0-9]*\)__.*/\1/' | sort | uniq -c | sort -rn | head -10"
+            echo ""
+            echo "2. 重命名冲突文件（确保同一模块内版本唯一）："
+            echo "   mv V20260509000000__A.sql V20260509000001__A.sql"
+            echo ""
+            echo "3. 删除跨模块重复（完全相同的文件只保留一处）："
+            echo "   rm backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/<重复文件>"
+            echo ""
+            echo "4. 重建 jar："
+            echo "   cd backend && mvn clean package -pl ruoyi-admin -am -Pprod -Dmaven.test.skip=true"
+            echo "=============================================="
+        elif grep -q "FlywayMigrateException\|flyway.*failed\|迁移失败" "${LOG_FILE}" 2>/dev/null; then
+            echo ""
+            echo "=============================================="
+            echo "🚨 Flyway 迁移失败 — 检查以下常见原因："
+            echo "1. 表/数据已存在（INSERT 重复）→ 手动 mark success=1"
+            echo "   docker exec mysql-dev mysql -uroot -proot ${CI_DB_NAME} \\"
+            echo "     -e \"UPDATE flyway_schema_history SET success=1 WHERE success=0;\""
+            echo ""
+            echo "2. 依赖表不存在（执行顺序问题）→ 检查迁移脚本依赖关系"
+            echo ""
+            echo "3. SQL 语法错误 → 查看上方日志中 'SQL State' 定位具体脚本"
+            echo "=============================================="
+        fi
+
         exit 1
     fi
 done

@@ -210,10 +210,52 @@ cmd_wait() {
     return 1
   fi
 
+  # Flyway 错误诊断辅助函数
+  diagnose_flyway_error() {
+    local log="$1"
+    if ! grep -q "Flyway" "$log" 2>/dev/null; then return; fi
+    if grep -q "Found more than one migration with version" "$log" 2>/dev/null; then
+      echo ""
+      echo "=========================================="
+      echo "Flyway 版本冲突 — 多个迁移脚本使用相同版本号"
+      echo ""
+      echo "处理步骤："
+      echo "1. 扫描重复版本："
+      echo "   (ls backend/ruoyi-admin/src/main/resources/db/migration/;"
+      echo "    ls backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/) \\"
+      echo "   | sed 's/^V\([0-9]*\)__.*/\1/' | sort | uniq -c | sort -rn | head -10"
+      echo ""
+      echo "2. 重命名冲突文件（版本递增）："
+      echo "   mv V20260509000000__A.sql V20260509000001__A.sql"
+      echo ""
+      echo "3. 删除跨模块完全重复："
+      echo "   rm backend/ruoyi-modules/wande-ai/src/main/resources/db/migration/<重复文件名>"
+      echo ""
+      echo "4. 重建并重启："
+      echo "   mvn clean install -pl ruoyi-modules/wande-ai -am -Pprod -Dmaven.test.skip=true"
+      echo "   mvn clean package -pl ruoyi-admin -am -Pprod -Dmaven.test.skip=true"
+      echo "   bash ~/projects/.github/scripts/cc-test-env.sh restart-backend kimi<N>"
+      echo "=========================================="
+    elif grep -q "FlywayMigrateException\|迁移失败" "$log" 2>/dev/null; then
+      echo ""
+      echo "=========================================="
+      echo "Flyway 迁移失败常见原因："
+      echo "1. INSERT 重复（表/数据已存在）→ mark success=1"
+      echo "   mysql -uwande -p<pass> ${KIMI_DB} \\"
+      echo "     -e \"UPDATE flyway_schema_history SET success=1 WHERE success=0;\""
+      echo ""
+      echo "2. 依赖表不存在 → 检查脚本执行顺序"
+      echo ""
+      echo "3. SQL 语法错误 → 查看上方日志中的具体 SQL"
+      echo "=========================================="
+    fi
+  }
+
   local pid=$(cat "$PID_FILE")
   if ! kill -0 "$pid" 2>/dev/null; then
     echo "ERROR: 后端进程已退出 (PID=$pid)"
     tail -30 "$LOG_DIR/backend.log"
+    diagnose_flyway_error "$LOG_DIR/backend.log"
     rm -f "$PID_FILE"
     return 1
   fi
@@ -248,6 +290,7 @@ cmd_wait() {
       echo " TIMEOUT (${max_wait}s)"
       echo "最后30行日志:"
       tail -30 "$LOG_DIR/backend.log"
+      diagnose_flyway_error "$LOG_DIR/backend.log"
       return 1
     fi
   done

@@ -846,3 +846,4 @@
 | 05-09 | ~~kimi8~~ | ~~#2443~~ | backend | P2 | ~~Done~~ | ICP画像构建·矿场评分模型校准 — PR #4558 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2020~~ | approval | P2 | ~~Done~~ | 色卡材料审批迁移 — PR #4559 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2093~~ | backend | P3 | ~~Done~~ | AI增强验收·智能检查清单+报告生成+智能派单 — PR #4560 MERGED |
+| 05-10 | ~~kimi8~~ | ~~#2456~~ | design-ai | P2 | ~~Done~~ | Caption标注Pipeline后端·QwenVL — PR #4561 MERGED |

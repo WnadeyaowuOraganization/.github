@@ -40,7 +40,7 @@
 | ~~14~~ | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | ✅ PR #4541 MERGED |
 | ~~15~~ | ~~#2342~~ | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | ✅ PR #4500 MERGED 05-07 |
 | ~~16~~ | ~~#2364~~ | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | kimi3 CC工作中 |
-| 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | |
+| 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | kimi1 CC工作中 |
 | 18 | #2332 | P1 | frontend | 采集工具使用指南页（工具中心 [7/10]） | |
 | 19 | ~~#2334~~ | P1 | frontend | 设计工具下载页 D3/GH+AI渲染（工具中心 [5/10]） | ✅ PR #4540 OPEN |
 | 20 | #2360 | P1 | frontend | 设计变更通知+确认页面（项目中心 Phase11 [11/12]） | |
@@ -89,7 +89,7 @@
 | ~~#3181~~ | ~~kimi3 CC中~~ | ~~Done~~ |
 | #2336 | kimi7 CC中 | In Progress |
 | #2334 | kimi8 CC中 | In Progress |
-| #2115 | kimi1 CC中 | In Progress |
+| ~~#2115~~ | ~~kimi1 CC中~~ | ~~Done~~ |
 | #3194 | 已指派 kimi3 | In Progress |
 | #3209 | ✅ PR #4518 MERGED | Done |
 | #3210 | ✅ PR #4522 MERGED | Done |
@@ -739,8 +739,9 @@
 | ~~kimi5~~ | ~~#2338~~ | ~~frontend~~ | ~~P1~~ | ~~样品箱管理页面~~ | ~~✅ PR #4505 MERGED~~ |
 | kimi6 | ~~#2473~~ | ~~backend~~ | ~~P1~~ | ~~律师催收数据库+API~~ | ~~✅ PR #4504 MERGED~~ |
 | kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 MERGED 04:27~~ |
-| kimi1 | #2115 | backend | P2 | G7e采集自动化 — 中标数据→AI判定→评分入库 | CC工作中 |
+| kimi1 | ~~#2115~~ | ~~backend~~ | ~~P2~~ | ~~G7e采集自动化 — 中标数据→AI判定→评分入库~~ | ~~✅ PR #4543 MERGED 05-09 13:44~~ |
 | ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
+| kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
 | kimi7 | ~~#2336~~ | ~~frontend~~ | ~~P1~~ | ~~D3样品一键生成页面~~ | ~~✅ PR #4541 MERGED~~ |

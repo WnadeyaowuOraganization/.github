@@ -277,6 +277,24 @@ cmd_wait() {
     http_code=$(curl -s -o /dev/null -w "%{http_code}" "http://localhost:${BACKEND_PORT}/" --max-time 2 2>/dev/null)
     if [ "$http_code" != "000" ] && [ -n "$http_code" ]; then
       echo " OK (${i}s, HTTP=${http_code})"
+
+      # 后端就绪后检测：jar 是否已更新但未重启
+      # 若 per-kimi M2 wande-ai jar 比主 M2 新，说明 CC 刚 rebuild 但当前进程加载的是旧 jar
+      local kimi_m2="${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
+      local main_m2="${HOME:-/home/ubuntu}/.m2/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
+      if [ -f "$kimi_m2" ] && [ -f "$main_m2" ]; then
+        local kimi_ts=$(stat -c %Y "$kimi_m2" 2>/dev/null || echo 0)
+        local main_ts=$(stat -c %Y "$main_m2" 2>/dev/null || echo 0)
+        if [ "$kimi_ts" -gt "$((main_ts + 60))" ]; then
+          echo ""
+          echo "========================================================="
+          echo "⚠️  检测到 wande-ai 新构建（per-kimi M2 比主 M2 新 ~$(( (kimi_ts - main_ts) / 60)) 分钟）"
+          echo "⚠️  但当前进程仍在运行旧代码，请执行："
+          echo "   bash ~/projects/.github/scripts/cc-test-env.sh restart-backend ${tag}"
+          echo "========================================================="
+        fi
+      fi
+
       break
     fi
     # 备用检查：端口已监听
@@ -554,7 +572,21 @@ cmd_stop_frontend() {
 cmd_restart_backend() {
   local tag="$1"
   get_dirs "$tag"; get_ports "$tag" || exit 1
+
   echo "=== 重启 ${tag} 后端（保留前端 + 数据库）==="
+
+  # 检测是否有新的 wande-ai 构建（jar 时间戳 > 上次启动时的版本）
+  local kimi_m2="${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
+  local main_m2="${HOME:-/home/ubuntu}/.m2/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
+  if [ -f "$kimi_m2" ] && [ -f "$main_m2" ]; then
+    local kimi_ts=$(stat -c %Y "$kimi_m2" 2>/dev/null || echo 0)
+    local main_ts=$(stat -c %Y "$main_m2" 2>/dev/null || echo 0)
+    if [ "$kimi_ts" -gt "$main_ts" ]; then
+      echo "  ⚠️ 检测到 wande-ai 新构建（per-kimi M2 比主 M2 新 ${kimi_ts} > ${main_ts}）"
+      echo "  → 确认已执行 mvn install，后端将加载新构建"
+    fi
+  fi
+
   stop_backend
   sleep 1
   mkdir -p "$LOG_DIR"

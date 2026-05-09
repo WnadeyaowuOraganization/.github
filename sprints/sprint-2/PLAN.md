@@ -741,15 +741,15 @@
 | kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 MERGED 04:27~~ |
 | kimi1 | ~~#2115~~ | ~~backend~~ | ~~P2~~ | ~~G7e采集自动化 — 中标数据→AI判定→评分入库~~ | ~~✅ PR #4543 MERGED 05-09 13:44~~ |
 | ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
-| kimi2 | ~~#2360~~ | ~~frontend~~ | ~~P1~~ | ~~设计变更通知+确认页面~~ | ~~✅ PR #4546 OPEN~~ |
-| kimi5 | ~~#2691~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品产品对比矩阵~~ | ~~✅ PR #4547 OPEN~~ |
-| kimi5 | ~~#2746~~ | ~~backend~~ | ~~P2~~ | ~~赢/丢单复盘触发~~ | ~~✅ PR #4548 OPEN~~ |
-| kimi2 | ~~#2529~~ | ~~backend~~ | ~~P2~~ | ~~公告板Service CRUD+@提及解析+企微通知~~ | ~~✅ PR #4549 OPEN~~ |
-| kimi2 | ~~#2531~~ | ~~frontend~~ | ~~P2~~ | ~~项目详情页·公告板Tab~~ | ~~✅ PR #4550 OPEN~~ |
+| ~~kimi2~~ | ~~#2360~~ | ~~frontend~~ | ~~P1~~ | ~~设计变更通知+确认页面~~ | ~~✅ PR #4546 MERGED 05-09~~ |
+| ~~kimi5~~ | ~~#2691~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品产品对比矩阵~~ | ~~✅ PR #4547 MERGED 05-09~~ |
+| ~~kimi5~~ | ~~#2746~~ | ~~backend~~ | ~~P2~~ | ~~赢/丢单复盘触发~~ | ~~✅ PR #4548 MERGED 05-09~~ |
+| ~~kimi2~~ | ~~#2529~~ | ~~backend~~ | ~~P2~~ | ~~公告板Service CRUD+@提及解析+企微通知~~ | ~~✅ PR #4549 MERGED 05-09~~ |
+| kimi2 | #2531 | frontend | P2 | 项目详情页·公告板Tab | ✅ PR #4550 OPEN |
 | kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
-| kimi7 | ~~#2336~~ | ~~frontend~~ | ~~P1~~ | ~~D3样品一键生成页面~~ | ~~✅ PR #4541 MERGED~~ |
+| kimi7 | #2336 | frontend | P1 | D3样品一键生成页面 | ✅ PR #4541 OPEN |
 | kimi8 | #2334 | backend | P1 | 设计工具下载页 D3/GH+AI渲染 | CC工作中 |
 | ~~kimi3~~ | ~~#3181~~ | ~~backend~~ | ~~P1~~ | ~~阶段文档注册表~~ | ~~✅ PR #4542 MERGED~~ |
 | kimi3 | ~~#2364~~ | ~~approval~~ | ~~P1~~ | ~~菜单权限SQL+审批中心菜单注册~~ | ~~✅ PR #4545 MERGED 05-09 13:48~~ |
@@ -761,8 +761,8 @@
 | 05-09 | kimi2 | ~~#2371~~ | fullstack | medium | ~~Done~~ | 竞品技术浏览器 — PR #4544 MERGED ✅ |
 | 05-09 | kimi6 | ~~#2342~~ | ~~frontend~~ | ~~medium~~ | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED 05-07 ✅ |
 | 05-09 | kimi7 | ~~#2336~~ | frontend | medium | ~~Done~~ | D3样品一键生成页面 — PR #4541 MERGED ✅ |
-| 05-09 | kimi5 | ~~#2691~~ | fullstack | medium | ~~Done~~ | 竞品产品对比矩阵 — PR #4547 OPEN |
-| 05-09 | kimi5 | ~~#2746~~ | backend | medium | ~~Done~~ | 赢/丢单复盘触发 — PR #4548 OPEN |
+| 05-09 | kimi5 | ~~#2691~~ | fullstack | medium | ~~Done~~ | 竞品产品对比矩阵 — PR #4547 MERGED 05-09 ✅ |
+| 05-09 | kimi5 | ~~#2746~~ | backend | medium | ~~Done~~ | 赢/丢单复盘触发 — PR #4548 MERGED 05-09 ✅ |
 | 05-09 | kimi5 | #2286 | frontend | medium | In Progress | 采购申请预算校验前端集成 |
 | 05-09 | kimi7 | ~~#2653~~ | backend | medium | ~~Done~~ | 节日日历DB+海报模板管理API — PR #4536 MERGED ✅ |
 | 05-09 | kimi8 | ~~#2661~~ | backend | medium | ~~Done~~ | 配色方案导出+总部需求表 — PR #4531 MERGED ✅ |

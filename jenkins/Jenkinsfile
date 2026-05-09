@@ -191,8 +191,8 @@ JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
 SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
 export GH_TOKEN REPO CI_WORK_DIR JENKINS_DIR SCRIPTS_DIR
 set +e
-CONFLICTS=$(git -C "$CI_WORK_DIR" merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" || echo "0")
-echo "merge-tree conflict markers: $CONFLICTS"
+CONFLICTS=$(git -C "$CI_WORK_DIR" merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" | tr -d '\r ' || echo "0")
+echo "[DEBUG] CONFLICTS='$CONFLICTS'"
 MERGED=false
 if [ "$CONFLICTS" = "0" ]; then
     echo "Branch is clean vs dev — retrying merge until GitHub refreshes (up to 60s)..."
@@ -211,24 +211,19 @@ fi
 if [ "$MERGED" = "true" ]; then
     echo "Closing Issue and releasing kimi lock..."
     BRANCH_NAME=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json headRefName --jq .headRefName)
-    # 用 bash 参数展开提取 Issue 后的数字
-    ISSUE_NUM="${BRANCH_NAME##*Issue-}"
-    ISSUE_NUM="${ISSUE_NUM%%[^0-9]*}"
+    ISSUE_NUM=$(echo "$BRANCH_NAME" | grep -oE '[0-9]+' | tail -1)
     if [ -z "$ISSUE_NUM" ]; then
-        ISSUE_NUM="${BRANCH_NAME##*issue-}"
-        ISSUE_NUM="${ISSUE_NUM%%[^0-9]*}"
-    fi
-    if [ -z "$ISSUE_NUM" ]; then
-        # fallback: 从 PR body 和 title 提取 #数字
-        BODY_TITLE=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body,title --jq ".body + \" \" + .title")
-        ISSUE_NUM=$(echo "$BODY_TITLE" | grep -oE "#[0-9]+" | head -1 | tr -d '#')
+        BODY_TITLE=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body,title --jq ".body + " " + .title")
+        ISSUE_NUM=$(echo "$BODY_TITLE" | grep -oE '#[[:digit:]]+' | head -1 | tr -d '#')
     fi
     if [ -n "$ISSUE_NUM" ] && [ "$ISSUE_NUM" -gt 0 ] 2>/dev/null; then
+        echo "Processing Issue #$ISSUE_NUM"
         gh issue close "$ISSUE_NUM" --repo "$REPO" --reason completed || true
         bash "$JENKINS_DIR/update-project-status.sh" --repo play --issue "$ISSUE_NUM" --status "Done" || true
         bash "$JENKINS_DIR/release-cc-lock.sh" "$ISSUE_NUM" || true
     fi
-fi'''
+fi
+'''
                     }
                 }
             }

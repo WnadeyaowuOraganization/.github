@@ -35,7 +35,7 @@
 | ~~9~~ | ~~#3153~~ | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | ✅ PR #4537 OPEN |
 | 10 | ~~#3154~~ | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | kimi4 CC工作中 |
 | ~~11~~ | ~~#2371~~ | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | ✅ PR #4544 MERGED |
-| 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
+| 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | ✅ PR #4547 OPEN |
 | ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | ✅ PR #4539 MERGED 04:27 |
 | ~~14~~ | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | ✅ PR #4541 MERGED |
 | ~~15~~ | ~~#2342~~ | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | ✅ PR #4500 MERGED 05-07 |
@@ -742,6 +742,8 @@
 | kimi1 | ~~#2115~~ | ~~backend~~ | ~~P2~~ | ~~G7e采集自动化 — 中标数据→AI判定→评分入库~~ | ~~✅ PR #4543 MERGED 05-09 13:44~~ |
 | ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
 | kimi2 | ~~#2360~~ | ~~frontend~~ | ~~P1~~ | ~~设计变更通知+确认页面~~ | ~~✅ PR #4546 OPEN~~ |
+| kimi5 | ~~#2691~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品产品对比矩阵~~ | ~~✅ PR #4547 OPEN~~ |
+| kimi5 | #2746 | backend | P2 | 赢/丢单复盘触发 | CC工作中 |
 | kimi2 | #2529 | backend | P2 | 公告板Service CRUD+@提及解析+企微通知 | CC工作中 |
 | kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
@@ -758,6 +760,7 @@
 | 05-09 | kimi2 | ~~#2371~~ | fullstack | medium | ~~Done~~ | 竞品技术浏览器 — PR #4544 MERGED ✅ |
 | 05-09 | kimi6 | ~~#2342~~ | ~~frontend~~ | ~~medium~~ | ~~Done~~ | 方案模板管理前端 — PR #4500 MERGED 05-07 ✅ |
 | 05-09 | kimi7 | ~~#2336~~ | frontend | medium | ~~Done~~ | D3样品一键生成页面 — PR #4541 MERGED ✅ |
+| 05-09 | kimi5 | ~~#2691~~ | fullstack | medium | ~~Done~~ | 竞品产品对比矩阵 — PR #4547 OPEN |
 | 05-09 | kimi7 | ~~#2653~~ | backend | medium | ~~Done~~ | 节日日历DB+海报模板管理API — PR #4536 MERGED ✅ |
 | 05-09 | kimi8 | ~~#2661~~ | backend | medium | ~~Done~~ | 配色方案导出+总部需求表 — PR #4531 MERGED ✅ |
 | 05-09 | kimi2 | ~~#3153~~ | approval | medium | ~~Done~~ | 自动审批规则引擎 — PR #4537 MERGED ✅ |

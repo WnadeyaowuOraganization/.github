@@ -86,6 +86,8 @@ pipeline {
                             if [ "\$MERGEABLE" = "CONFLICTING" ]; then
                                 echo "PR #${pr} has conflict, auto-resolving..."
                                 bash ${JENKINS_DIR}/cycle-merge.sh ${pr} || true
+                                echo "Waiting for GitHub to refresh mergeability..."
+                                sleep 30
                             fi
                         """
                     }
@@ -187,15 +189,14 @@ pipeline {
                             CONFLICTS=\$(git -C \${CI_WORK_DIR} merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" || echo "0")
                             echo "merge-tree conflict markers: \$CONFLICTS"
                             if [ "\$CONFLICTS" = "0" ]; then
-                                echo "Branch is clean vs dev — attempting merge (GitHub mergeable_state may lag)"
-                                gh pr merge ${pr} --repo ${REPO} --squash --delete-branch --admin
-                                if [ \$? -eq 0 ]; then
-                                    echo "MERGE SUCCESS"
-                                else
-                                    echo "Merge failed (GitHub may show stale CONFLICTING). Pipeline continues."
-                                fi
+                                echo "Branch is clean vs dev — retrying merge until GitHub refreshes (up to 60s)..."
+                                for i in 1 2 3 4 5 6; do
+                                    gh pr merge ${pr} --repo ${REPO} --squash --delete-branch --admin && echo "MERGE SUCCESS" && break
+                                    echo "Attempt \$i failed, waiting 10s for GitHub to refresh..."
+                                    sleep 10
+                                done
                             else
-                                echo "Real conflicts detected (\$CONFLICTS markers), cannot auto-merge"
+                                echo "Real conflicts detected, cannot auto-merge"
                             fi
                         """
                     }

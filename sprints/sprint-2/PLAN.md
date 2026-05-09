@@ -844,3 +844,4 @@
 | 05-09 | ~~kimi5~~ | ~~#2433~~ | backend | P2 | ~~Done~~ | 项目链条时间窗口预测 — PR #4556 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2448~~ | backend | P2 | ~~Done~~ | 前期项目分频次定期复验机制 — PR #4557 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2443~~ | backend | P2 | ~~Done~~ | ICP画像构建·矿场评分模型校准 — PR #4558 MERGED |
+| 05-09 | ~~kimi8~~ | ~~#2020~~ | approval | P2 | ~~Done~~ | 色卡材料审批迁移 — PR #4559 MERGED |

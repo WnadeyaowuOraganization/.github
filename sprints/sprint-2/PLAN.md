@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-10（排程经理第1128轮；14个Plan→Todo同步入表；清空已指派/CLOSED条目；移出旧条目14条到非活跃记录）
+> 更新时间：2026-05-10（排程经理第1129轮；14个Plan→Todo同步；#3198已提PR；smoke选择器优化；Master Issue进度同步）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭(全子Issue CLOSED)、#4004已关闭(全子Issue CLOSED)
@@ -24,9 +24,9 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #3199 | P1 | backend | 计划预警引擎 — 延期预警+企微推送+升级机制（project-plan [7/10]） | ✅ 已指派 kimi1 |
+| 1 | #3199 | P1 | backend | 计划预警引擎 — 延期预警+企微推送+升级机制（project-plan [7/10]） | ✅ |
 | 2 | #3200 | P1 | backend | 计划变更管理 — 版本对比+影响分析+审批流（project-plan [8/10]） | ✅ |
-| ~~3~~ | ~~#3198~~ | P1 | frontend | 项目主计划页面 — 条线视图+甘特图（project-plan [6/10]） | ✅ 已指派 kimi4 |
+| ~~3~~ | ~~#3198~~ | P1 | frontend | 项目主计划页面 — 条线视图+甘特图（project-plan [6/10]） | ✅ 已提 PR #4572 |
 | 4 | #2635 | P1 | backend | 品牌中心·数字人 — 第三方数字人/声音克隆API集成服务 [3/7] | ✅ 已指派 kimi2 |
 | 5 | #2636 | P1 | frontend | 品牌中心·数字人 — 数字分身+声音克隆管理页面 [4/7] | ✅ |
 | 6 | #2640 | P1 | backend | 品牌中心·视频裂变 — 视频裂变服务+素材包管理API [1/3] | ✅ 已指派 kimi5 |
@@ -104,6 +104,7 @@
 | #2259 | ❌ 依赖缺失（backend#929 不存在） | Done |
 | #2260 | ❌ 依赖缺失（backend#926-928 不存在） | Done |
 | #2371 | ✅ PR #4544 MERGED | Done |
+| #3198 | ✅ PR #4572 OPEN（等待merge） | PR |
 | #3195 | 已指派 kimi2 | In Progress |
 | #2020 | ✅ PR #4559 MERGED | Done |
 | #2313 | ✅ PR #4555 MERGED | Done |

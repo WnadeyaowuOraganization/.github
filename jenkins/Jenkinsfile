@@ -191,8 +191,8 @@ JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
 SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
 export GH_TOKEN REPO CI_WORK_DIR JENKINS_DIR SCRIPTS_DIR
 set +e
-CONFLICTS=$(git -C "$CI_WORK_DIR" merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" | tr -d '\r ' || echo "0")
-echo "[DEBUG] CONFLICTS='$CONFLICTS'"
+CONFLICTS=$(git -C "$CI_WORK_DIR" merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" | head -1 || echo "0")
+printf "[DEBUG] CONFLICTS=[%s]\n" "$CONFLICTS"
 MERGED=false
 if [ "$CONFLICTS" = "0" ]; then
     echo "Branch is clean vs dev — retrying merge until GitHub refreshes (up to 60s)..."

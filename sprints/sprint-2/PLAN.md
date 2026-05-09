@@ -840,3 +840,4 @@
 | 05-09 | ~~kimi5~~ | ~~#3196~~ | backend | P1 | ~~Done~~ | 供应商依赖矩阵·关键路径识别 — PR #4553 MERGED |
 | 05-09 | ~~kimi7~~ | ~~#3217~~ | frontend | P2 | ~~Done~~ | 预算区域管理页面 — PR #4552 MERGED |
 | 05-09 | ~~kimi8~~ | ~~#2331~~ | fullstack | P2 | ~~Done~~ | 文生图页面 — PR #4554 MERGED |
+| 05-09 | ~~kimi8~~ | ~~#2313~~ | frontend | P2 | ~~Done~~ | 图生图独立GUI页面 — PR #4555 MERGED |

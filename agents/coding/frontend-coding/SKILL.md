@@ -404,6 +404,16 @@ for root, dirs, files in os.walk('frontend/apps/web-antd/src/api'):
 grep -n "^export\|^const \|^function \|^interface \|^type " \
   frontend/apps/web-antd/src/api/wande/execution.ts | awk -F: '{print $NF}' | sort | uniq -d
 
+# 2a. ⚠️ 新增 .vue 文件必须跑 vue-tsc 预检（#2331 教训：a-textarea rows="5" 传string而非number，build时才报错）
+#     快速检查：只扫新文件，不扫全项目（节省时间）
+NEW_VUE_FILES=$(git diff --name-only HEAD -- '*.vue' | grep -v '.spec.ts' | tr '\n' ' ')
+if [ -n "$NEW_VUE_FILES" ]; then
+  echo "检查新增 .vue 文件类型错误: $NEW_VUE_FILES"
+  cd frontend && vue-tsc --noEmit 2>&1 | grep -E "($NEW_VUE_FILES)" | head -20
+  # 若 vue-tsc 全量检查太慢（>30s），改用针对性正则快速扫新增文件：
+  # grep -n 'rows="[0-9]"' $NEW_VUE_FILES  # string literal rows → rows={5} numeric
+fi
+
 # 3. 构建（必须零错误）
 cd frontend && pnpm build:antd   # ⚠️ 用 build:antd 而非 pnpm build（后者走 turbo 可能缓存跳过）
 cd frontend && pnpm lint        # 可选，Lint 警告建议修

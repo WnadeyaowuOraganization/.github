@@ -25,8 +25,8 @@
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | ~~1~~ | ~~#2528~~ | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | ✅ PR #4535 MERGED 04:35 |
-| ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | ✅ PR #4549 OPEN |
-| ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | ✅ PR #4550 OPEN |
+| ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | ✅ PR #4549 MERGED |
+| 3 | #2531 | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | ✅ PR #4550 OPEN |
 | ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
 | ~~5~~ | ~~#2634~~ | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | ✅ PR #4533 MERGED |
 | ~~6~~ | ~~#2643~~ | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | ✅ PR #4534 MERGED |
@@ -37,7 +37,7 @@
 | ~~11~~ | ~~#2371~~ | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | ✅ PR #4544 MERGED |
 | 12 | ~~#2691~~ | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | ✅ PR #4547 OPEN |
 | ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | ✅ PR #4539 MERGED 04:27 |
-| ~~14~~ | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | ✅ PR #4541 MERGED |
+| 14 | #2336 | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | ✅ PR #4541 OPEN |
 | ~~15~~ | ~~#2342~~ | P1 | frontend | 方案模板管理前端 — 模板库浏览+上传+矩阵（方案引擎 [7/22]） | ✅ PR #4500 MERGED 05-07 |
 | ~~16~~ | ~~#2364~~ | P1 | approval | 菜单权限SQL + 审批中心菜单注册（审批引擎 Phase10 [10/10]） | ✅ PR #4545 MERGED 05-09 13:48 |
 | 17 | #2365 | P1 | approval | SLA规则配置页 + 审批统计看板（审批引擎 Phase9 [9/10]） | kimi1 CC工作中 |

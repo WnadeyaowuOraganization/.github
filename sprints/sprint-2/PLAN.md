@@ -34,7 +34,7 @@
 | ~~8~~ | ~~#2661~~ | P1 | backend | 配色方案导出 + 总部需求表自动生成（色卡配色器 [3/4]） | ✅ PR #4531 MERGED |
 | ~~9~~ | ~~#3153~~ | P1 | approval | 自动审批规则引擎 — 预审条件+预清除回退（审批引擎增强 [5/8]） | ✅ PR #4537 OPEN |
 | 10 | ~~#3154~~ | P1 | approval | 智能路由引擎 — 并行/串行/混合路径+动态审批人（审批引擎增强 [6/8]） | kimi4 CC工作中 |
-| 11 | #2371 | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | |
+| ~~11~~ | ~~#2371~~ | P1 | fullstack | 竞品技术浏览器 — 产品对标/参数查询/CAD下载（Master #4065 Phase7） | ✅ PR #4544 MERGED |
 | 12 | #2691 | P1 | fullstack | 竞品产品对比矩阵（Master #4065 行业信息 [6/10]） | |
 | ~~13~~ | ~~#2741~~ | P1 | fullstack | 自定义报告模板与导出（Master #4065 分发 [6/8]） | ✅ PR #4539 MERGED 04:27 |
 | ~~14~~ | ~~#2336~~ | P1 | sample | D3样品一键生成页面（样品管理 Phase14 [14/16]） | ✅ PR #4541 MERGED |
@@ -740,6 +740,7 @@
 | kimi6 | ~~#2473~~ | ~~backend~~ | ~~P1~~ | ~~律师催收数据库+API~~ | ~~✅ PR #4504 MERGED~~ |
 | kimi6 | ~~#2741~~ | ~~fullstack~~ | ~~P1~~ | ~~自定义报告模板与导出~~ | ~~✅ PR #4539 MERGED 04:27~~ |
 | kimi1 | #2115 | backend | P2 | G7e采集自动化 — 中标数据→AI判定→评分入库 | CC工作中 |
+| ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |
 | kimi7 | ~~#2336~~ | ~~frontend~~ | ~~P1~~ | ~~D3样品一键生成页面~~ | ~~✅ PR #4541 MERGED~~ |
@@ -749,6 +750,7 @@
 | ~~kimi3~~ | ~~#2643~~ | ~~backend~~ | ~~P1~~ | ~~员工代言内容池+分享追踪API~~ | ~~✅ PR #4534 MERGED~~ |
 | 05-09 | kimi3 | ~~#2643~~ | backend | medium | ~~Done~~ | 员工代言内容池API — PR #4534 MERGED ✅ |
 | 05-09 | kimi1 | ~~#3164~~ | backend | medium | ~~Done~~ | 企微审批消息卡片增强 — PR #4538 MERGED ✅ |
+| 05-09 | kimi2 | ~~#2371~~ | fullstack | medium | ~~Done~~ | 竞品技术浏览器 — PR #4544 MERGED ✅ |
 | 05-09 | kimi7 | ~~#2336~~ | frontend | medium | ~~Done~~ | D3样品一键生成页面 — PR #4541 MERGED ✅ |
 | 05-09 | kimi7 | ~~#2653~~ | backend | medium | ~~Done~~ | 节日日历DB+海报模板管理API — PR #4536 MERGED ✅ |
 | 05-09 | kimi8 | ~~#2661~~ | backend | medium | ~~Done~~ | 配色方案导出+总部需求表 — PR #4531 MERGED ✅ |

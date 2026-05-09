@@ -742,6 +742,7 @@
 | kimi1 | ~~#2115~~ | ~~backend~~ | ~~P2~~ | ~~G7e采集自动化 — 中标数据→AI判定→评分入库~~ | ~~✅ PR #4543 MERGED 05-09 13:44~~ |
 | ~~kimi2~~ | ~~#2371~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品技术浏览器~~ | ~~✅ PR #4544 MERGED~~ |
 | kimi2 | ~~#2360~~ | ~~frontend~~ | ~~P1~~ | ~~设计变更通知+确认页面~~ | ~~✅ PR #4546 OPEN~~ |
+| kimi2 | #2529 | backend | P2 | 公告板Service CRUD+@提及解析+企微通知 | CC工作中 |
 | kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |

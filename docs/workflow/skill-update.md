@@ -14,6 +14,18 @@
 - 教训：Groovy sh""" 中避免复杂 shell 管道，改用专用脚本；CI 轮询必须与 CI 平台一致
 - 状态：**已修复** — commit 447ff77a + 005299b7 + 67aafc78
 
+**[2026-05-09] CI 停摆根因修复（webhook URL + 质量门改进）**
+- 问题1：webhook 端点路径缺失 `/jenkins/` 前缀 → 404 导致手动触发失败
+  - 修复：确认正确 URL 为 `http://54.234.200.59:18080/jenkins/generic-webhook-trigger/invoke`
+- 问题2：质量门失败信息不告诉 CC 具体怎么修 → CC 收到失败通知后不知道做什么
+  - 修复：quality-gate.sh 所有门失败信息列出具体未勾项和修复命令（commit b24e4080）
+- 问题3：failure-handler 注入原始错误日志 → CC 不执行行动
+  - 修复：jenkins-failure-handler.sh 优先匹配质量门，注入可执行指令（commit b24e4080）
+- 问题4：jenkins-helper skill URL 写成 `localhost:18080` → CC 永远无法连接 Jenkins
+  - 修复：更新为 `54.234.200.59:18080`，更正门错误对照表（commit b24e4080）
+- 教训：CI 失败时必须给 CC 明确行动指令，不是错误日志
+- 状态：**已修复** — Build #123 已验证 webhook 触发成功
+
 **[2026-05-09] Jenkins Groovy 字符串插值系统性修复（Build #104-105）**
 - 问题A：sh""" 块内中文字符被 Groovy 解释器解析为变量引用 → `MissingPropertyException: 无`
   - 修复：全面消除 Jenkinsfile 所有 `sh"""` 块内中文（echo/注释全部英文化）（commit 7f10a602）

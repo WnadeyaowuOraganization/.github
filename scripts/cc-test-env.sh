@@ -295,6 +295,24 @@ cmd_wait() {
         fi
       fi
 
+      # Controller 注册诊断：发一个 planning 模块 API 请求
+      # 404 = Controller 未注册（spring-boot:run JAR unpack 问题）；200/401 = 已注册
+      local ctrl_code
+      ctrl_code=$(curl -s -o /dev/null -w "%{http_code}" \
+        "http://localhost:${BACKEND_PORT}/wande/plan/alert/page?pageNum=1&pageSize=10" \
+        --max-time 5 2>/dev/null)
+      if [ "$ctrl_code" = "404" ]; then
+        echo ""
+        echo "========================================================="
+        echo "⚠️  planning.* Controller 未注册（HTTP ${ctrl_code}）"
+        echo "   症状：PlanAlertController 404，但后端进程正常运行"
+        echo "   根因：spring-boot:run 模式下 wande-ai JAR 未 unpack，"
+        echo "         Controller 注解未被扫描"
+        echo "   解决：执行 restart-backend 强制重新加载"
+        echo "   bash ~/projects/.github/scripts/cc-test-env.sh restart-backend ${tag}"
+        echo "========================================================="
+      fi
+
       break
     fi
     # 备用检查：端口已监听

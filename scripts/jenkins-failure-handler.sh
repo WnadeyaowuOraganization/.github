@@ -25,42 +25,44 @@ echo "[failure-handler] PR #$PR_NUMBER branch=$BRANCH_NAME issue=$ISSUE_NUM"
 
 # 2. 提取门控失败原因（精准匹配，优先质量门）
 GATE_FAIL=""
-CONSOLE_URL=""
+CONSOLE_URL="${BUILD_URL}consoleText"
 if [ -n "$BUILD_URL" ]; then
-    CONSOLE_URL="${BUILD_URL}consoleText"
+    # 先提取，再过滤掉 Pipeline 行，防止 Jenkins pipeline 标记干扰
     GATE_FAIL=$(curl -sf "$CONSOLE_URL" 2>/dev/null | \
-        grep -E '❌|×|✘|quality-gate|门[0-9]' | \
-        grep -v '^\[Pipeline\]' | \
+        grep -iE '❌|×|✘|quality-gate|门[0-9]|gate[0-9]' | \
+        grep -viE '^\[Pipeline\]|^\s*ha://' | \
         head -20 || echo "")
 fi
 
 # 3. 构造可执行的提示词
-if [ -n "$GATE_FAIL" ]; then
+if [ -n "$GATE_FAIL" ] && echo "$GATE_FAIL" | grep -qiE '门[0-9]|gate|❌|quality'; then
     # 质量门失败：给出具体门号和修复指令
+    # 列出每条失败行，避免多行内容在 heredoc 中展开问题
+    FAIL_LINES=$(echo "$GATE_FAIL" | head -10 | while IFS= read -r line; do echo "  $line"; done)
     PROMPT_MSG="CI 质量门失败，请立即修复并 push（无需关闭 PR，push 自动触发重跑）：
 
 失败原因：
-$GATE_FAIL
+$FAIL_LINES
 
 修复指令：
-- 门1失败：PR body 有未勾 checkbox → 改为 \`- [x]\` 后 push
-- 门2失败：task.md 有未勾 checkbox → 在 task.md 中改为 \`- [x]\` 后 push
-- 门3失败：前端 PR 缺少截图 → 在 PR body 追加截图后 push
+- 门1失败：PR body 有未勾 checkbox → 修改 PR 描述，将 \`- [ ]\` 改为 \`- [x]\` 后 push
+- 门2失败：task.md 有未勾 checkbox → 修改 \`issues/issue-N/task.md\`，将 \`- [ ]\` 改为 \`- [x]\` 后 push
+- 门3失败：前端 PR 缺少截图 → 在 PR body 追加截图（\`![描述](url)\`）后 push
 - 门5失败：E2E 硬编码端口 → 改用相对路径/环境变量后 push
 
-完整日志：${CONSOLE_URL}"
+完整日志：$CONSOLE_URL"
 else
-    # 兜底：提取关键错误
-    ERROR_SUMMARY=$(curl -sf "${CONSOLE_URL:-${BUILD_URL}consoleText}" 2>/dev/null | \
-        grep -v '^\[Pipeline\]' | \
-        grep -E 'ERROR:|Tests run.*Errors|失败|❌|exit code [1-9]' | \
-        grep . | head -10 || echo "无法获取详细日志")
+    # 兜底：提取关键错误（过滤掉 Jenkins pipeline 标记行）
+    ERROR_SUMMARY=$(curl -sf "$CONSOLE_URL" 2>/dev/null | \
+        grep -viE '^\[Pipeline\]|^\s*ha://|^\[8mha' | \
+        grep -iE 'ERROR:|Tests run.*Fail|❌|exit code [1-9]|BUILD FAILED|编译失败|构建失败' | \
+        head -15 || echo "无法获取详细日志")
     PROMPT_MSG="CI 失败（exit code 非0），请修复后 push 重跑：
 
 关键错误：
 $ERROR_SUMMARY
 
-完整日志：${CONSOLE_URL:-${BUILD_URL}consoleText}"
+完整日志：$CONSOLE_URL"
 fi
 
 # 4. 注入 CC

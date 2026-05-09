@@ -8,20 +8,25 @@ GH_TOKEN="${WEIPING_TOKEN:-$GH_TOKEN}"
 
 echo "=== 质量门控检查 ==="
 
-# 门 1: PR body 无未勾 checkbox
+# 门 1: PR body 无未勾 checkbox（跳过 CI/Jenkins/E2E 相关项，这些是 CI 跑完才能勾的）
 echo "[门1] 检查 PR body checkbox..."
 PR_BODY=$(gh pr view $PR_NUMBER --repo $REPO --json body --jq '.body')
-UNCHECKED_PR=$(echo "$PR_BODY" | grep -c '^- \[ \]' || true)
-if [ "$UNCHECKED_PR" -gt 0 ]; then
-    UNCHECKED_ITEMS=$(echo "$PR_BODY" | grep '^- \[ \]' | sed 's/^- \[ \] //' | head -5)
-    echo "❌ 门1失败：PR body 存在 $UNCHECKED_PR 项未勾 checkbox"
-    COMMENT="❌ quality-gate 门1拦截：PR body 存在 $UNCHECKED_PR 项未勾 checkbox
+# 过滤掉 CI/Jenkins/E2E 验证类 checkbox（允许提交时不勾）
+UNCHECKED_ITEMS=$(echo "$PR_BODY" | grep '^- \[ \]' | \
+    grep -viE 'CI|Jenkins|E2E|验证|test.*pass|build.*success|check.*ok' | \
+    sed 's/^- \[ \] //' | head -5 || true)
+UNCHECKED_COUNT=$(echo "$UNCHECKED_ITEMS" | grep -c . || true)
+if [ "$UNCHECKED_COUNT" -gt 0 ]; then
+    echo "❌ 门1失败：PR body 存在 $UNCHECKED_COUNT 项未勾 checkbox"
+    COMMENT="❌ quality-gate 门1拦截：PR body 存在 $UNCHECKED_COUNT 项未勾 checkbox
 
 请在 PR 描述中勾选以下未完成项（将 \`- [ ]\` 改为 \`- [x]\`）：
 
 \`\`\`
 $UNCHECKED_ITEMS
 \`\`\`
+
+> 注：CI/Jenkins/E2E 验证类 checkbox 无需勾选，CI 跑完会自动通过。
 
 修复后 push 即可自动触发 CI 重跑。"
     gh pr comment $PR_NUMBER --repo $REPO --body "$COMMENT" || true

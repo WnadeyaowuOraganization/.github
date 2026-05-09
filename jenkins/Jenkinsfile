@@ -175,7 +175,7 @@ pipeline {
             when {
                 expression {
                     def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    return pr?.trim() && (currentBuild.result == null || currentBuild.result == 'SUCCESS')
+                    return pr?.trim()
                 }
             }
             steps {
@@ -184,19 +184,41 @@ pipeline {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
                         sh """
                             export GH_TOKEN=\${WEIPING_TOKEN}
+                            export SCRIPTS_DIR=${SCRIPTS_DIR}
+                            export JENKINS_DIR=${JENKINS_DIR}
+                            export REPO=${REPO}
                             set +e
                             # 用 merge-tree 验证 branch 是否真正干净
                             CONFLICTS=\$(git -C \${CI_WORK_DIR} merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" || echo "0")
                             echo "merge-tree conflict markers: \$CONFLICTS"
+                            MERGED=false
                             if [ "\$CONFLICTS" = "0" ]; then
                                 echo "Branch is clean vs dev — retrying merge until GitHub refreshes (up to 60s)..."
                                 for i in 1 2 3 4 5 6; do
-                                    gh pr merge ${pr} --repo ${REPO} --squash --delete-branch --admin && echo "MERGE SUCCESS" && break
+                                    if gh pr merge ${pr} --repo \${REPO} --squash --delete-branch --admin; then
+                                        echo "MERGE SUCCESS"
+                                        MERGED=true
+                                        break
+                                    fi
                                     echo "Attempt \$i failed, waiting 10s for GitHub to refresh..."
                                     sleep 10
                                 done
                             else
                                 echo "Real conflicts detected, cannot auto-merge"
+                            fi
+                            # 合并成功后：关闭Issue + 释放kimi锁
+                            if [ "\$MERGED" = "true" ]; then
+                                echo "Closing Issue and releasing kimi lock..."
+                                BRANCH_NAME=\$(gh pr view ${pr} --repo \${REPO} --json headRefName --jq '.headRefName')
+                                ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
+                                if [ -z "\$ISSUE_NUM" ]; then
+                                    ISSUE_NUM=\$(gh pr view ${pr} --repo \${REPO} --json body,title --jq '.body + " " + .title' | grep -oP '(?<=#)\\d+' | head -1)
+                                fi
+                                if [ -n "\$ISSUE_NUM" ]; then
+                                    gh issue close \$ISSUE_NUM --repo \${REPO} --reason completed || true
+                                    bash \${JENKINS_DIR}/update-project-status.sh --repo play --issue \$ISSUE_NUM --status "Done" || true
+                                    bash \${JENKINS_DIR}/release-cc-lock.sh "\$ISSUE_NUM" || true
+                                fi
                             fi
                         """
                     }
@@ -283,54 +305,21 @@ pipeline {
         }
 
         // ── 阶段10：关闭 Issue + 看板 Done ──────────────────────────────
+        // （已合并至"自动合并"阶段，避免 when 条件失效问题）
         stage('关闭Issue') {
-            when {
-                expression {
-                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    return pr?.trim() && (currentBuild.result == null || currentBuild.result == 'SUCCESS')
-                }
-            }
             steps {
                 script {
-                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    sh """
-                        GH_TOKEN=\$(python3 ${SCRIPTS_DIR}/gh-app-token.py 2>/dev/null)
-                        export GH_TOKEN
-                        # 从 PR branch 提取 Issue 号
-                        BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName')
-                        ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
-                        if [ -z "\$ISSUE_NUM" ]; then
-                            ISSUE_NUM=\$(gh pr view ${pr} --repo ${REPO} --json body,title --jq '.body + " " + .title' | grep -oP '(?<=#)\\d+' | head -1)
-                        fi
-                        if [ -n "\$ISSUE_NUM" ]; then
-                            echo "closing Issue #\$ISSUE_NUM"
-                            gh issue close \$ISSUE_NUM --repo ${REPO} --reason completed || true
-                            bash ${JENKINS_DIR}/update-project-status.sh --repo play --issue \$ISSUE_NUM --status "Done" || true
-                        fi
-                    """
+                    echo "Issue close handled in 自动合并 stage"
                 }
             }
         }
 
         // ── 阶段11：释放 kimi 目录锁 ────────────────────────────────────
+        // （已合并至"自动合并"阶段）
         stage('释放kimi锁') {
-            when {
-                expression {
-                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    return pr?.trim() && (currentBuild.result == null || currentBuild.result == 'SUCCESS')
-                }
-            }
             steps {
                 script {
-                    def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    sh """
-                        BRANCH_NAME=\$(gh pr view ${pr} --repo ${REPO} --json headRefName --jq '.headRefName')
-                        ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
-                        if [ -n "\$ISSUE_NUM" ]; then
-                            echo "releasing kimi lock for Issue #\$ISSUE_NUM"
-                            bash ${JENKINS_DIR}/release-cc-lock.sh "\$ISSUE_NUM" || true
-                        fi
-                    """
+                    echo "Lock release handled in 自动合并 stage"
                 }
             }
         }

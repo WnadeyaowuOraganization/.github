@@ -182,45 +182,45 @@ pipeline {
                 withCredentials([string(credentialsId: 'github-weiping-token', variable: 'WEIPING_TOKEN')]) {
                     script {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                        sh """
-                            export GH_TOKEN=\${WEIPING_TOKEN}
-                            export SCRIPTS_DIR=${SCRIPTS_DIR}
-                            export JENKINS_DIR=${JENKINS_DIR}
-                            export REPO=${REPO}
-                            set +e
-                            # 用 merge-tree 验证 branch 是否真正干净
-                            CONFLICTS=\$(git -C \${CI_WORK_DIR} merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" || echo "0")
-                            echo "merge-tree conflict markers: \$CONFLICTS"
-                            MERGED=false
-                            if [ "\$CONFLICTS" = "0" ]; then
-                                echo "Branch is clean vs dev — retrying merge until GitHub refreshes (up to 60s)..."
-                                for i in 1 2 3 4 5 6; do
-                                    if gh pr merge ${pr} --repo \${REPO} --squash --delete-branch --admin; then
-                                        echo "MERGE SUCCESS"
-                                        MERGED=true
-                                        break
-                                    fi
-                                    echo "Attempt \$i failed, waiting 10s for GitHub to refresh..."
-                                    sleep 10
-                                done
-                            else
-                                echo "Real conflicts detected, cannot auto-merge"
-                            fi
-                            # 合并成功后：关闭Issue + 释放kimi锁
-                            if [ "\$MERGED" = "true" ]; then
-                                echo "Closing Issue and releasing kimi lock..."
-                                BRANCH_NAME=\$(gh pr view ${pr} --repo \${REPO} --json headRefName --jq '.headRefName')
-                                ISSUE_NUM=\$(echo "\$BRANCH_NAME" | grep -oP '(?<=Issue-|issue-)\\d+' | head -1)
-                                if [ -z "\$ISSUE_NUM" ]; then
-                                    ISSUE_NUM=\$(gh pr view ${pr} --repo \${REPO} --json body,title --jq '.body + " " + .title' | grep -oP '(?<=#)\\d+' | head -1)
-                                fi
-                                if [ -n "\$ISSUE_NUM" ]; then
-                                    gh issue close \$ISSUE_NUM --repo \${REPO} --reason completed || true
-                                    bash \${JENKINS_DIR}/update-project-status.sh --repo play --issue \$ISSUE_NUM --status "Done" || true
-                                    bash \${JENKINS_DIR}/release-cc-lock.sh "\$ISSUE_NUM" || true
-                                fi
-                            fi
-                        """
+                        sh script: '''#!/bin/bash
+PR_NUMBER=''' + pr + '''
+GH_TOKEN="${WEIPING_TOKEN}"
+REPO="WnadeyaowuOraganization/wande-play"
+CI_WORK_DIR="/home/ubuntu/projects/wande-play-ci"
+JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
+SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
+export GH_TOKEN REPO CI_WORK_DIR JENKINS_DIR SCRIPTS_DIR
+set +e
+CONFLICTS=$(git -C "$CI_WORK_DIR" merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" || echo "0")
+echo "merge-tree conflict markers: $CONFLICTS"
+MERGED=false
+if [ "$CONFLICTS" = "0" ]; then
+    echo "Branch is clean vs dev — retrying merge until GitHub refreshes (up to 60s)..."
+    for i in 1 2 3 4 5 6; do
+        if gh pr merge "$PR_NUMBER" --repo "$REPO" --squash --delete-branch --admin; then
+            echo "MERGE SUCCESS"
+            MERGED=true
+            break
+        fi
+        echo "Attempt $i failed, waiting 10s for GitHub to refresh..."
+        sleep 10
+    done
+else
+    echo "Real conflicts detected ($CONFLICTS markers), cannot auto-merge"
+fi
+if [ "$MERGED" = "true" ]; then
+    echo "Closing Issue and releasing kimi lock..."
+    BRANCH_NAME=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json headRefName --jq .headRefName)
+    ISSUE_NUM=$(echo "$BRANCH_NAME" | grep -oP "(?<=Issue-|issue-)"' + '''\d+" | head -1)
+    if [ -z "$ISSUE_NUM" ]; then
+        ISSUE_NUM=$(gh pr view "$PR_NUMBER" --repo "$REPO" --json body,title --jq ".body + \" \" + .title" | grep -oP "(?<=#)\d+" | head -1)
+    fi
+    if [ -n "$ISSUE_NUM" ]; then
+        gh issue close "$ISSUE_NUM" --repo "$REPO" --reason completed || true
+        bash "$JENKINS_DIR/update-project-status.sh" --repo play --issue "$ISSUE_NUM" --status "Done" || true
+        bash "$JENKINS_DIR/release-cc-lock.sh" "$ISSUE_NUM" || true
+    fi
+fi'''
                     }
                 }
             }

@@ -215,6 +215,8 @@ for a in d.get('actions',[]):
     fi
     if [ "$BUILD_RESULT" = "SUCCESS" ]; then
       echo "✅ CI 通过 (Build #${BUILD_NUM})，Jenkins 将自动 squash-merge"
+      # 备选：Jenkins unreachable 未触发 auto-merge 时，手动合并
+      # gh pr merge --admin --merge --repo WnadeyaowuOraganization/wande-play "feature-Issue-${ISSUE}"
     fi
     # 2. 查 PR 状态确认 merge
     PR_STATE=$(gh pr view --head "feature-Issue-${ISSUE}" \

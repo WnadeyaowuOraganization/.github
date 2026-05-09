@@ -305,7 +305,43 @@ gutter 固定 16，行间距 `margin-top: 16px`。**禁止** `el-row` / `el-col`
 - 解决：先 `await page.keyboard.press('Escape')` 关闭下拉框，再继续后续操作
 - 案例：kimi5 #2278 E2E 阶段 Select dropdown 拦截 Next 按钮，用 Escape 关闭后正常通过
 
+### 🚨 export type → import type 类型导入硬约束（2026-05-10 #2636 教训）
+
+vue-vben-admin 体系里所有类型导出统一用 `export type`，前端 import 也必须用 `import type`。
+
+**错误示例：**
+```ts
+// types.ts
+export type AvatarStatus = 'idle' | 'generating' | 'done';  // type 导出
+export enum AvatarStatus { Idle, Generating, Done }          // 值导出
+
+// index.vue（错误！）
+import { AvatarStatus } from './types';   // 运行时 esbuild 找不到值
+// → Vue Router 静默崩溃，白屏，排查耗时 1h
+```
+
+**正确写法：**
+```ts
+// types.ts
+export type AvatarStatus = 'idle' | 'generating' | 'done';
+export enum AvatarStatus { Idle, Generating, Done }
+
+// index.vue（正确！）
+import type { AvatarStatus } from './types';   // type-only 导入
+// 如果要同时用值和类型：
+import { AvatarStatus } from './types';       // 值导出直接 import
+import type { AvatarStatus } from './types';  // type-only 再单独 import
+```
+
+**判断方法：**
+- 源文件 `export type { X }` 或 `export type X = ...` → 用 `import type { X }`
+- 源文件 `export enum X {}` 或 `export const X = ...` → 用 `import { X }`（值导入）
+- 不确定 → `import type { X }` 永远安全（编译时擦除，无运行时开销）
+
+事故案例：#2636 brand-avatar.ts 用 `export type` 导出枚举，index.vue 用 `import { AvatarStatus }` 导入 → esbuild 运行时找不到值 → Vue Router 静默崩溃 → 白屏。
+
 ### 🚨 API 层函数命名对齐红线（2026-04-15 第 2 次事故）
+
 
 新文件 import 后端 API 时 **必须先** `grep -r "export.*${functionName}" src/api/` 确认后端约定的函数名。**禁止**自创 `createX/updateX/deleteX` 新名，必须严格按后端现有导出名对齐。
 

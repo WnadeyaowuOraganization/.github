@@ -25,8 +25,8 @@
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | ~~1~~ | ~~#2528~~ | P2 | backend | 公告板DB建表 — project_announcements（Master #4263 Phase8） | ✅ PR #4535 MERGED 04:35 |
-| ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | |
-| ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | |
+| ~~2~~ | ~~#2529~~ | P2 | backend | 公告板Service — CRUD+@提及解析+企微通知（Master #4263 Phase9） | ✅ PR #4549 OPEN |
+| ~~3~~ | ~~#2531~~ | P2 | frontend | 公告板前端 — 项目详情页公告板Tab（Master #4263 Phase11） | kimi2 CC工作中 |
 | ~~4~~ | ~~#2633~~ | P1 | backend | 数字人DB建表 — brand_avatar/voice_clone（Master #4091） | ✅ PR #4532 MERGED |
 | ~~5~~ | ~~#2634~~ | P1 | backend | 数字人CRUD API — 数字分身+声音克隆+视频（Master #4091） | ✅ PR #4533 MERGED |
 | ~~6~~ | ~~#2643~~ | P1 | backend | 员工代言内容池 + 分享追踪API（Master #4091 员工代言 [1/2]） | ✅ PR #4534 MERGED |
@@ -744,7 +744,8 @@
 | kimi2 | ~~#2360~~ | ~~frontend~~ | ~~P1~~ | ~~设计变更通知+确认页面~~ | ~~✅ PR #4546 OPEN~~ |
 | kimi5 | ~~#2691~~ | ~~fullstack~~ | ~~P1~~ | ~~竞品产品对比矩阵~~ | ~~✅ PR #4547 OPEN~~ |
 | kimi5 | ~~#2746~~ | ~~backend~~ | ~~P2~~ | ~~赢/丢单复盘触发~~ | ~~✅ PR #4548 OPEN~~ |
-| kimi2 | #2529 | backend | P2 | 公告板Service CRUD+@提及解析+企微通知 | CC工作中 |
+| kimi2 | ~~#2529~~ | ~~backend~~ | ~~P2~~ | ~~公告板Service CRUD+@提及解析+企微通知~~ | ~~✅ PR #4549 OPEN~~ |
+| kimi2 | #2531 | frontend | P2 | 项目详情页·公告板Tab | CC工作中 |
 | kimi1 | #2365 | approval | P1 | SLA规则配置页 + 审批统计看板 | CC工作中 |
 | kimi7 | ~~#2653~~ | backend | P1 | 节日日历DB+海报模板管理API | ~~✅ PR #4536 MERGED~~ |
 | kimi8 | ~~#2661~~ | backend | P1 | 配色方案导出+总部需求表 | ~~✅ PR #4531 MERGED~~ |

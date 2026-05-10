@@ -267,3 +267,34 @@ bash ~/projects/.github/scripts/cc-test-env.sh wait kimiN
 ```
 
 看到 `Started RuoYiApplication` / wait 返回 `OK (Ns, HTTP=4xx/2xx)` + 无 `ConflictingBeanDefinitionException` / `ClassNotFoundException` / `Unknown column` = 通过。
+
+### 后端启动失败排查路径（优先级从高到低）
+
+```
+1. Controller 404？
+   → cc-test-env.sh wait 后诊断：GET /wande/plan/alert/page 返回 404
+   → 根因：spring-boot:run JAR 未 unpack，Controller 注解未扫描
+   → 解决：bash cc-test-env.sh restart-backend kimiN
+
+2. 循环依赖导致 Bean 创建失败？
+   → 日志搜 "Circular reference" 或 "BeanCurrentlyInCreationException"
+   → 根因：A 注入 B，B 注入 A（无 @Lazy 解耦）
+   → 解决：在被注入方加 @Lazy（只在注入点懒加载，不影响其他注入点）
+   → 例：AcceptanceAiReportTaskExecutor / DesignNonstandardApprovalServiceImpl
+   → 注意：循环依赖通常在本 Issue 新增的 Service 之间产生（PR #4560/#4559 引入了新注入点）
+
+3. @Lazy 生效但仍是 404？
+   → 检查 @Lazy 打在哪个方向（A→B 还是 B→A）
+   → 原则：打在"被多方依赖"的 Service 上，而非"依赖方"
+   → 验证：restart 后 GET /wande/新模块/xxx/page 返回 401（非404）= Controller 已注册
+
+4. ruoyi-common-bom / wande-ai jar 缺失？
+   → 日志搜 "Non-resolvable import POM" / "Could not find artifact"
+   → 解决：bash cc-test-env.sh restart-backend kimiN（自动触发 BOM 预装）
+
+5. MySQL schema 迁移脚本错误？
+   → 日志搜 "flyway" / "Unknown column" / "Table doesn't exist"
+   → 解决：bash cc-test-env.sh restart kimiN（重新 init-db + rebuild）
+```
+
+事故案例：#2664 修复 PR #4560/#4559 引入的循环依赖（2处 @Lazy），耗时 20min。

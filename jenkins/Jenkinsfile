@@ -345,7 +345,7 @@ fi
                     """
                     env.FAIL_PR_NUM = pr
                     env.FAIL_BUILD_URL = env.BUILD_URL ?: ''
-                    sh "bash ${SCRIPTS_DIR}/jenkins-failure-handler.sh || true"
+                    sh "bash ${JENKINS_DIR}/jenkins-failure-handler.sh || true"
                 }
             }
         }

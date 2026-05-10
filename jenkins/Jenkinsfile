@@ -175,22 +175,28 @@ pipeline {
             when {
                 expression {
                     def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    return pr?.trim()
+                    def result = currentBuild.result ?: 'SUCCESS'
+                    return pr?.trim() && result != 'FAILURE' && result != 'ABORTED'
                 }
             }
             steps {
                 withCredentials([string(credentialsId: 'github-weiping-token', variable: 'WEIPING_TOKEN')]) {
                     script {
                         def pr = params.PR_NUMBER ?: env.PR_NUMBER
+                        def buildResult = currentBuild.result ?: 'SUCCESS'
                         sh script: '''#!/bin/bash
 PR_NUMBER=''' + pr + '''
+BUILD_RESULT=''' + buildResult + '''
 GH_TOKEN="${WEIPING_TOKEN}"
 REPO="WnadeyaowuOraganization/wande-play"
 CI_WORK_DIR="/home/ubuntu/projects/wande-play-ci"
 JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
 SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
 export GH_TOKEN REPO CI_WORK_DIR JENKINS_DIR SCRIPTS_DIR
-set +e
+if [ "$BUILD_RESULT" = "FAILURE" ] || [ "$BUILD_RESULT" = "ABORTED" ]; then
+    echo "[MERGE SKIP] Build result=$BUILD_RESULT — skipping merge"
+    exit 0
+fi
 CONFLICTS=$(git -C "$CI_WORK_DIR" merge-tree origin/dev HEAD 2>/dev/null | grep -c "<<<<<<" | head -1 || echo "0")
 printf "[DEBUG] CONFLICTS=[%s]\n" "$CONFLICTS"
 MERGED=false

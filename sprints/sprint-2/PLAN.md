@@ -117,13 +117,13 @@
 | #2449 | 已指派 kimi5 | In Progress |
 | #2456 | ✅ PR #4561 MERGED | Done |
 | #2093 | ✅ PR #4560 MERGED | Done |
-| #3200 | 已指派 kimi1 | In Progress |
+| #3200 | ✅ PR #4583 MERGED | Done |
 | #2636 | ✅ PR #4578 MERGED | Done |
-| #2640 | 已指派 kimi5 | In Progress |
-| #2641 | 已指派 kimi2 | In Progress |
-| #2645 | ✅ PR #4581 OPEN（等待merge） | PR |
-| #2646 | 已指派 kimi4 | In Progress |
-| #2654 | ✅ PR #4582 OPEN（等待merge） | PR |
+| #2640 | ✅ PR #4579 MERGED | Done |
+| #2641 | ✅ PR #4580 MERGED | Done |
+| #2645 | ✅ PR #4581 MERGED | Done |
+| #2646 | ✅ PR #4584 MERGED | Done |
+| #2654 | ✅ PR #4582 MERGED | Done |
 | #2118 | 队列靠后（P3，当前优先P1/P2） | Todo |
 | #2142 | 队列靠后（P3，当前优先P1/P2） | Todo |
 | #2143 | 队列靠后（P3，当前优先P1/P2） | Todo |
@@ -898,13 +898,13 @@
 | 05-10 | ~~kimi5~~ | ~~#2449~~ | pipeline | P2 | ~~Done~~ | 中标公告竞品自动发现 #4566 |
 | 05-10 | ~~kimi2~~ | ~~#2635~~ | backend | P1 | ~~Done~~ | 品牌中心·数字人 — 第三方API集成 — PR #4575 MERGED |
 | 05-10 | ~~kimi2~~ | ~~#2636~~ | frontend | P1 | ~~Done~~ | 品牌中心·数字人 — 数字分身+声音克隆管理页面 — PR #4578 MERGED |
-| 05-10 | kimi1 | #3200 | backend | P1 | In Progress | 计划变更管理 — 版本对比+影响分析+审批流 |
-| 05-10 | kimi2 | #2641 | frontend | P1 | In Progress | 品牌中心·视频裂变 — 视频裂变工作台+素材包审批页面 |
-| 05-10 | kimi3 | #2645 | pipeline | P1 | In Progress | 品牌中心·舆情监控 — 品牌舆情采集+情感分析+告警Pipeline |
-| 05-10 | kimi4 | #2646 | fullstack | P1 | In Progress | 品牌中心·舆情监控 — 品牌舆情仪表盘+提及列表+周报 |
-| 05-10 | kimi6 | #2654 | pipeline | P1 | In Progress | 品牌中心·内容自动化 — AI海报自动生成Pipeline |
+| 05-10 | ~~kimi1~~ | ~~#3200~~ | backend | P1 | ~~Done~~ | 计划变更管理 — 版本对比+影响分析+审批流 — PR #4583 MERGED |
+| 05-10 | ~~kimi2~~ | ~~#2641~~ | frontend | P1 | ~~Done~~ | 品牌中心·视频裂变 — 视频裂变工作台+素材包审批页面 — PR #4580 MERGED |
+| 05-10 | ~~kimi3~~ | ~~#2645~~ | pipeline | P1 | ~~Done~~ | 品牌中心·舆情监控 — 品牌舆情采集+情感分析+告警Pipeline — PR #4581 MERGED |
+| 05-10 | ~~kimi4~~ | ~~#2646~~ | fullstack | P1 | ~~Done~~ | 品牌中心·舆情监控 — 品牌舆情仪表盘+提及列表+周报 — PR #4584 MERGED |
+| 05-10 | ~~kimi6~~ | ~~#2654~~ | pipeline | P1 | ~~Done~~ | 品牌中心·内容自动化 — AI海报自动生成Pipeline — PR #4582 MERGED |
 | 05-10 | ~~kimi1~~ | ~~#3199~~ | fullstack | P1 | ~~Done~~ | 计划预警引擎·延期预警+企微推送+升级机制 — PR #4577 MERGED |
-| 05-10 | kimi3 | #2332 | pipeline | P1 | In Progress | 采集工具使用指南页（CC工作中） |
+| 05-10 | ~~kimi3~~ | ~~#2332~~ | pipeline | P1 | ~~Done~~ | 采集工具使用指南页 — PR #4576 MERGED |
 | 05-10 | ~~kimi4~~ | ~~#3198~~ | frontend | P1 | ~~Done~~ | 项目主计划页面（条线视图+甘特图）— PR #4572 MERGED |
-| 05-10 | kimi5 | #2640 | backend | P1 | In Progress | 品牌中心·视频裂变（CC工作中） |
+| 05-10 | ~~kimi5~~ | ~~#2640~~ | backend | P1 | ~~Done~~ | 品牌中心·视频裂变 — PR #4579 MERGED |
 | 05-10 | ~~kimi6~~ | ~~#2342~~ | frontend | P1 | ~~Done~~ | 方案模板管理前端·E2E修复 — PR #4568 MERGED |

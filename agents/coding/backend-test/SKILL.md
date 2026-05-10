@@ -167,6 +167,7 @@ def mock_db_connection():
 | Service 方法返回非 void | `doNothing().when(svc).sendMsg(...)` | `when(svc.sendMsg(...)).thenReturn(jsonNode)` | 若方法签名是 `JsonNode sendMsg(...)` 而非 `void sendMsg(...)`，stub 必须匹配实际返回值 |
 | 分页依赖 ServiceImpl 内部 private baseMapper | `when(baseMapper.selectPage(...)).thenReturn(...)` | **改用 `assertDoesNotThrow(() -> service.listPage(...))`** | `baseMapper` 是 `ServiceImpl` 的 private 字段，无法注入 mock；此时只验证方法不抛异常即可 |
 | `PageQuery` 分页参数 | `new PageQuery(10, 1)` | **确认参数顺序**：`new PageQuery(pageNum, pageSize)` 还是 `(pageSize, pageNum)` | MP 分页依赖 `Page(pageNum, pageSize)`，顺序反了查第 N 页数据而非第一页 |
+| LambdaWrapper 在纯 Mockito 测试中 | 直接 `new LambdaQueryWrapper<>().eq(...)` | **@BeforeAll 中调用 `TableInfoHelper.initTableInfo(MyEntity.class)`** | LambdaWrapper 依赖 MP 的 lambda cache（table info），纯 Mockito 测试无 Spring 上下文时 cache 为空 → 报 "can not find lambda cache" |
 
 ### 最小覆盖
 

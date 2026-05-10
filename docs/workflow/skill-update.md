@@ -1720,3 +1720,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 |---|------|------|---------|------|
 | 5 | BaseEntity(Long createBy) vs 表 VARCHAR create_by 类型冲突 | 1 | backend-coding skill 增加提示：用 @TableField(exist=false) 或 XML 自定义查询 | 观察中 |
 | 6 | pom.xml 缺少 lucene-analyzers-smartcn 依赖导致 spring-boot:run 失败 | 1 | backend-coding skill 增加依赖检查步骤 | 观察中 |
+
+## 2026-05-11 kimi5/#2677 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 7 | pipeline 新管线 Issue 重复创建目录结构 | 1 | pipeline Issue 可预置目录模板（scripts/{feature}/ + tests/ + README.md），减少 T1 重复工作 | 观察中 |

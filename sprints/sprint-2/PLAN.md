@@ -38,11 +38,11 @@
 | 12 | ~~#2451~~ | P2 | backend | 竞品中标项目名称分词 → 补充keyword_pool搜索盲区（[5/38]） | ✅ 已指派 kimi6 |
 | 13 | ~~#2663~~ | P2 | backend | 库存联通 — 仓库维度表+sample_inventory增加warehouse_id [1/3] | ✅ 已指派 kimi7 |
 | 14 | ~~#2664~~ | P2 | backend | 库存联通 — 多仓库库存查询+智能调拨单API [2/3] | ✅ 已指派 kimi8 |
-| 15 | #2665 | P2 | frontend | 库存联通 — 多仓库库存看板+调拨单管理页 [3/3] | ✅ |
-| 16 | #2482 | P2 | backend | D3-AI GH侧AI按钮 — AI建模助手+AI变体生成按钮封装 [1/3] | ✅ |
+| 15 | ~~#2665~~ | P2 | frontend | 库存联通 — 多仓库库存看板+调拨单管理页 [3/3] | ~~✅ 已指派 kimi6~~ |
+| 16 | ~~#2482~~ | P2 | backend | D3-AI GH侧AI按钮 — AI建模助手+AI变体生成按钮封装 [1/3] | ~~✅ 已指派 kimi3~~ |
 | 17 | #2749 | P2 | backend | 设备档案数据模型 — 序列号/产品参数/安装日期/质保/客户关联 [6/12] | ✅ |
-| 18 | #2750 | P2 | backend | 设备生命周期提醒 — 巡检/质保到期/3年升级/5年换代 [7/12] | ✅ |
-| 19 | #2751 | P2 | backend | 客户分层自动分级 — 按签约额+复购自动分S/A/B/C [8/12] | ✅ |
+| 18 | ~~#2750~~ | P2 | backend | 设备生命周期提醒 — 巡检/质保到期/3年升级/5年换代 [7/12] | ~~✅ 已指派 kimi2~~ |
+| 19 | ~~#2751~~ | P2 | backend | 客户分层自动分级 — 按签约额+复购自动分S/A/B/C [8/12] | ~~✅ 已指派 kimi7~~ |
 | 20 | #2752 | P2 | backend | 客户分层运营提醒 — 按层级定期提醒商务回访 [9/12] | ✅ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
@@ -916,7 +916,11 @@
 | 05-11 | kimi2 | #3116 | pipeline | P1 | In Progress | 经销商发现 — 评分模型增加「专注度检验」维度 |
 | 05-11 | kimi3 | #2495 | pipeline | P1 | In Progress | 竞品情报Phase4 — T2级14家扩展采集 |
 | 05-11 | kimi4 | #2413 | pipeline | P2 | In Progress | 竞品出口客户反向采集 — 凯奇/奇特乐/永浪海外买家 |
-| 05-11 | kimi6 | #2451 | backend | P2 | In Progress | 竞品中标项目名称分词 → 补充keyword_pool搜索盲区 |
-| 05-11 | kimi7 | #2663 | backend | P2 | In Progress | 库存联通 — 仓库维度表+sample_inventory增加warehouse_id |
+| 05-11 | ~~kimi6~~ | ~~#2451~~ | backend | P2 | ~~Done~~ | 竞品中标项目名称分词 → 补充keyword_pool搜索盲区 — PR #4597 MERGED |
+| 05-11 | ~~kimi7~~ | ~~#2663~~ | backend | P2 | ~~Done~~ | 库存联通 — 仓库维度表+sample_inventory增加warehouse_id — PR #4601 MERGED |
+| 05-11 | kimi2 | #2750 | backend | P2 | In Progress | 设备生命周期提醒 — 巡检/质保到期/3年升级/5年换代 [7/12] |
+| 05-11 | kimi3 | #2482 | backend | P2 | In Progress | D3-AI GH侧AI按钮 — AI建模助手+AI变体生成按钮封装 [1/3] |
+| 05-11 | kimi6 | #2665 | frontend | P2 | In Progress | 库存联通 — 多仓库库存看板+调拨单管理页 [3/3] |
+| 05-11 | kimi7 | #2751 | backend | P2 | In Progress | 客户分层自动分级 — 按签约额+复购自动分S/A/B/C [8/12] |
 | 05-11 | kimi8 | #2664 | backend | P2 | In Progress | 库存联通 — 多仓库库存查询+智能调拨单API |
 | 05-10 | ~~kimi6~~ | ~~#2342~~ | frontend | P1 | ~~Done~~ | 方案模板管理前端·E2E修复 — PR #4568 MERGED |

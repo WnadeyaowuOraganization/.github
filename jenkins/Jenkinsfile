@@ -61,7 +61,12 @@ pipeline {
                             # 直接克隆指定分支，避免 fetch 静默失败导致回退到错误代码
                             git clone --branch ${branch} --depth=50 https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
                             git fetch origin dev --depth=50
-                            git merge origin/dev --no-edit 2>/dev/null || echo "WARN: dev merge failed (may have conflicts)"
+                            if git merge origin/dev --no-edit; then
+                                echo "dev merged OK"
+                            else
+                                echo "WARN: dev merge failed — forcing full build+test (cannot reliably detect changes)"
+                                echo "FORCE_FULL_BUILD=true" > ${CI_WORK_DIR}/.build_env
+                            fi
                         """
                     }
                 }
@@ -82,6 +87,11 @@ pipeline {
                                 bash ${JENKINS_DIR}/cycle-merge.sh ${pr} || true
                                 echo "Waiting for GitHub to refresh mergeability..."
                                 sleep 30
+                            fi
+                            # 验证 working tree 中是否仍有未解决的冲突标记
+                            if grep -r "<<<<<<\|======\|>>>>>>" ${CI_WORK_DIR}/frontend/ ${CI_WORK_DIR}/backend/ 2>/dev/null | head -1 | grep -q .; then
+                                echo "⚠️ Working tree still has unresolved conflict markers — forcing full build"
+                                echo "FORCE_FULL_BUILD=true" > ${CI_WORK_DIR}/.build_env
                             fi
                         """
                     }
@@ -105,16 +115,28 @@ pipeline {
         stage('检测变更') {
             steps {
                 script {
-                    def changed = sh(
-                        script: "cd ${CI_WORK_DIR} && git diff --name-only origin/dev HEAD 2>/dev/null | sort -u",
+                    def forceFull = sh(
+                        script: "cat ${CI_WORK_DIR}/.build_env 2>/dev/null || echo ''",
                         returnStdout: true
                     ).trim()
-                    env.CHANGED_FILES = changed
-                    env.HAS_BACKEND = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
-                    env.HAS_FRONTEND = (changed.indexOf('frontend/') >= 0) ? 'true' : 'false'
-                    env.HAS_UNIT_TEST = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
-                    echo "变更检测 → backend=${env.HAS_BACKEND} frontend=${env.HAS_FRONTEND}"
-                    echo "变更文件: ${changed.take(500)}"
+                    if (forceFull.indexOf('FORCE_FULL_BUILD=true') >= 0) {
+                        // 合并失败时强制全量构建（避免 git diff 空导致跳过测试/部署）
+                        env.HAS_BACKEND = 'true'
+                        env.HAS_FRONTEND = 'true'
+                        env.HAS_UNIT_TEST = 'true'
+                        echo "⚠️ dev merge failed — forcing full backend+frontend build+test"
+                    } else {
+                        def changed = sh(
+                            script: "cd ${CI_WORK_DIR} && git diff --name-only origin/dev HEAD 2>/dev/null | sort -u",
+                            returnStdout: true
+                        ).trim()
+                        env.CHANGED_FILES = changed
+                        env.HAS_BACKEND = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
+                        env.HAS_FRONTEND = (changed.indexOf('frontend/') >= 0) ? 'true' : 'false'
+                        env.HAS_UNIT_TEST = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
+                        echo "变更检测 → backend=${env.HAS_BACKEND} frontend=${env.HAS_FRONTEND}"
+                        echo "变更文件: ${changed.take(500)}"
+                    }
                 }
             }
         }

@@ -58,16 +58,9 @@ pipeline {
                             rm -rf ${CI_WORK_DIR}
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}
-                            git clone https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
-                            # fallback to dev when branch is gone (merged PR)
-                            if ! git fetch origin ${branch} 2>/dev/null; then
-                                echo "branch ${branch} not found, fallback to dev"
-                                git fetch origin dev
-                                git checkout dev
-                                exit 0
-                            fi
-                            git checkout ${branch}
-                            git fetch origin dev
+                            # 直接克隆指定分支，避免 fetch 静默失败导致回退到错误代码
+                            git clone --branch ${branch} --depth=50 https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
+                            git fetch origin dev --depth=50
                         """
                     }
                 }

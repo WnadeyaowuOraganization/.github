@@ -142,28 +142,31 @@ SET @max_id = (SELECT COALESCE(MAX(menu_id), 0) FROM sys_menu);
 -- 一级目录（menu_type=M，仅新模块需要）
 INSERT INTO sys_menu
   (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache,
-   menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+   menu_type, visible, status, perms, icon, create_dept, create_by, create_time, update_by, update_time, remark)
 VALUES
   (@max_id + 1, '模块名称', 0, 10, 'xxx', '', 1, 0,
-   'M', '0', '0', '', 'icon-name', 'admin', NOW(), 'admin', NOW(), '模块说明');
+   'M', '0', '0', '', 'icon-name', 0, 'admin', NOW(), 'admin', NOW(), '模块说明');
 SET @parent_id = @max_id + 1;
 
 -- 二级菜单（menu_type=C）
 INSERT INTO sys_menu
   (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache,
-   menu_type, visible, status, perms, icon, create_by, create_time, update_by, update_time, remark)
+   menu_type, visible, status, perms, icon, create_dept, create_by, create_time, update_by, update_time, remark)
 VALUES
   (@max_id + 2, '子模块名', @parent_id, 1, 'path-name', '{prefix}/xxx/index', 1, 0,
-   'C', '0', '0', '{perms-prefix}:xxx:list', '', 'admin', NOW(), 'admin', NOW(), '');
+   'C', '0', '0', '{perms-prefix}:xxx:list', '', 0, 'admin', NOW(), 'admin', NOW(), '');
 SET @menu_id = @max_id + 2;
 
--- 按钮权限（menu_type=F）
-INSERT INTO sys_menu VALUES
-  (@max_id + 3, '查询', @menu_id, 1, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:query', '', 'admin', NOW(), 'admin', NOW(), ''),
-  (@max_id + 4, '新增', @menu_id, 2, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:add', '', 'admin', NOW(), 'admin', NOW(), ''),
-  (@max_id + 5, '修改', @menu_id, 3, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:edit', '', 'admin', NOW(), 'admin', NOW(), ''),
-  (@max_id + 6, '删除', @menu_id, 4, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:remove', '', 'admin', NOW(), 'admin', NOW(), ''),
-  (@max_id + 7, '导出', @menu_id, 5, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:export', '', 'admin', NOW(), 'admin', NOW(), '');
+-- 按钮权限（menu_type=F，统一显式列名）
+INSERT INTO sys_menu
+  (menu_id, menu_name, parent_id, order_num, path, component, is_frame, is_cache,
+   menu_type, visible, status, perms, icon, create_dept, create_by, create_time, update_by, update_time, remark)
+VALUES
+  (@max_id + 3, '查询', @menu_id, 1, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:query', '', 0, 'admin', NOW(), 'admin', NOW(), ''),
+  (@max_id + 4, '新增', @menu_id, 2, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:add', '', 0, 'admin', NOW(), 'admin', NOW(), ''),
+  (@max_id + 5, '修改', @menu_id, 3, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:edit', '', 0, 'admin', NOW(), 'admin', NOW(), ''),
+  (@max_id + 6, '删除', @menu_id, 4, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:remove', '', 0, 'admin', NOW(), 'admin', NOW(), ''),
+  (@max_id + 7, '导出', @menu_id, 5, '', '', 1, 0, 'F', '0', '0', '{perms-prefix}:xxx:export', '', 0, 'admin', NOW(), 'admin', NOW(), '');
 
 -- 角色绑定（role_id=1 超管，新菜单必对管理员可见）
 INSERT IGNORE INTO sys_role_menu (role_id, menu_id) VALUES

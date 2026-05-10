@@ -1726,3 +1726,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 7 | pipeline 新管线 Issue 重复创建目录结构 | 1 | pipeline Issue 可预置目录模板（scripts/{feature}/ + tests/ + README.md），减少 T1 重复工作 | 观察中 |
+
+## 2026-05-11 kimi8/#2686 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 8 | restart-backend 后新 Controller 仍 404（M2 JAR 缓存未更新） | 1 | cc-test-env.sh cmd_restart_backend 已添加 `mvn install -pl wande-ai -am` 自动安装 | ✅ 已修复 |
+| 9 | menu INSERT 缺 create_dept 列导致 SQL 语法错误 | 1 | menu-contract SKILL.md INSERT 示例已补 create_dept 列 | ✅ 已修复 |

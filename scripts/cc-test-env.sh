@@ -614,6 +614,14 @@ cmd_restart_backend() {
 
   stop_backend
   sleep 1
+
+  # 自动安装 wande-ai 模块（确保 per-kimi M2 中 JAR 为最新，避免 restart 后新 Controller 仍 404）
+  echo "  编译安装 wande-ai 模块..."
+  KIMI_M2="${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository"
+  [ -d "$KIMI_M2" ] && MVN_M2_OPT="-Dmaven.repo.local=${KIMI_M2}" || MVN_M2_OPT=""
+  (cd "$KIMI_DIR/backend" && mvn install -pl ruoyi-modules/wande-ai -am -DskipTests $MVN_M2_OPT -q 2>&1 | tail -3) \
+    || echo "  ⚠️ wande-ai install 失败（后端可能仍用旧 JAR，若 Controller 404 请重试 mvn install）"
+
   mkdir -p "$LOG_DIR"
   start_backend "$tag"
   echo "✅ 后端重启进程已拉起 → http://localhost:${BACKEND_PORT}（编译+启动约 2-3 分钟）"

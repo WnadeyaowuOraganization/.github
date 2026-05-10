@@ -24,10 +24,10 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #2493 | P2 | pipeline | 竞品情报-P0 Phase2 — G7e采集引擎（Browser Agent + vLLM结构化提取） | ✅ |
-| 2 | #2494 | P2 | pipeline | 竞品情报-P0 Phase3 — T1级6家深度采集（KOMPAN/LSI/PlayCore等） | ✅ |
-| 3 | #2647 | P2 | pipeline | 品牌中心·SEO — SEO内容自动生成管线（关键词→文章→发布）[1/2] | ✅ |
-| 4 | #2638 | P2 | pipeline | 品牌中心·数字人 — AI自动脚本生成+定时视频生产管线 [6/7] | ✅ |
+| 1 | ~~#2493~~ | P2 | pipeline | 竞品情报-P0 Phase2 — G7e采集引擎（Browser Agent + vLLM结构化提取） | ~~✅ 已指派 kimi2~~ |
+| 2 | ~~#2494~~ | P2 | pipeline | 竞品情报-P0 Phase3 — T1级6家深度采集（KOMPAN/LSI/PlayCore等） | ~~✅ 已指派 kimi3~~ |
+| 3 | ~~#2647~~ | P2 | pipeline | 品牌中心·SEO — SEO内容自动生成管线（关键词→文章→发布）[1/2] | ~~✅ 已指派 kimi4~~ |
+| 4 | ~~#2638~~ | P2 | pipeline | 品牌中心·数字人 — AI自动脚本生成+定时视频生产管线 [6/7] | ~~✅ 已指派 kimi8~~ |
 | 5 | #2642 | P2 | pipeline | 品牌中心·视频裂变 — 自动视频裂变处理管线（ffmpeg+AI文案）[3/3] | ✅ |
 | 6 | ~~#2674~~ | P2 | fullstack | 商战情报中台·基础设施 — 统一实体模型（企业/产品/项目/联系人）[1/12] | ~~✅ 已指派 kimi6~~ |
 | 7 | ~~#2675~~ | P2 | fullstack | 商战情报中台·基础设施 — 情报标签体系（行业/地域/规模/类型）[2/12] | ~~✅ 已指派 kimi7~~ |
@@ -913,6 +913,13 @@
 
 **今日已交付**: PR #4552/4554/4555/4556/4557/4558/4559/4560/4561/4562 共 10 个 merged。
 | 05-11 | kimi1 | #2753 | backend | P2 | In Progress | 客户赢丢单复盘 — 月度汇总报表 (PR #4607 已关闭，CI Groovy语法错误，CC重启重跑) |
+| 05-11 | kimi2 | #2493 | pipeline | P2 | In Progress | 竞品情报-P0 Phase2 — G7e采集引擎 Browser Agent + vLLM结构化提取 |
+| 05-11 | kimi3 | #2494 | pipeline | P2 | In Progress | 竞品情报-P0 Phase3 — T1级6家深度采集 KOMPAN/LSI/PlayCore等 |
+| 05-11 | kimi4 | #2647 | pipeline | P2 | In Progress | 品牌中心·SEO — SEO内容自动生成管线 |
+| 05-11 | kimi5 | #2669 | frontend | P2 | In Progress | 样品箱制度 — 标准箱模板管理+项目箱一键生成 (PR #4611 已关闭，CI从未触发，CC重启重跑) |
+| 05-11 | kimi6 | #2674 | fullstack | P2 | In Progress | 商战情报中台·统一实体模型设计 (PR #4613 已关闭，CI Groovy语法错误，CC重启重跑) |
+| 05-11 | kimi7 | ~~#2675~~ | fullstack | P2 | ~~Done~~ | 商战情报中台·情报标签体系与分类法 — PR #4612 MERGED ✅ |
+| 05-11 | kimi8 | #2638 | pipeline | P2 | In Progress | 品牌中心·数字人 — AI自动脚本生成+定时视频生产管线 [6/7] |
 | 05-11 | kimi2 | ~~#2752~~ | backend | P2 | ~~Done~~ | 客户分层运营提醒 — PR #4610 OPEN，等待CI |
 | 05-11 | kimi3 | ~~#2749~~ | backend | P2 | ~~Done~~ | 设备档案数据模型 — PR #4612 MERGED ✅ (主环境部署触发Jenkinsfile修复) |
 | 05-11 | kimi4 | ~~#2668~~ | backend | P2 | ~~Done~~ | 样品箱CRUD+BOM生成 — PR #4609 MERGED ✅ |

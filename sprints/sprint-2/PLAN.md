@@ -29,8 +29,8 @@
 | 3 | #2647 | P2 | pipeline | 品牌中心·SEO — SEO内容自动生成管线（关键词→文章→发布）[1/2] | ✅ |
 | 4 | #2638 | P2 | pipeline | 品牌中心·数字人 — AI自动脚本生成+定时视频生产管线 [6/7] | ✅ |
 | 5 | #2642 | P2 | pipeline | 品牌中心·视频裂变 — 自动视频裂变处理管线（ffmpeg+AI文案）[3/3] | ✅ |
-| 6 | #2674 | P2 | fullstack | 商战情报中台·基础设施 — 统一实体模型（企业/产品/项目/联系人）[1/12] | ✅ |
-| 7 | #2675 | P2 | fullstack | 商战情报中台·基础设施 — 情报标签体系（行业/地域/规模/类型）[2/12] | ✅ |
+| 6 | ~~#2674~~ | P2 | fullstack | 商战情报中台·基础设施 — 统一实体模型（企业/产品/项目/联系人）[1/12] | ~~✅ 已指派 kimi6~~ |
+| 7 | ~~#2675~~ | P2 | fullstack | 商战情报中台·基础设施 — 情报标签体系（行业/地域/规模/类型）[2/12] | ~~✅ 已指派 kimi7~~ |
 | 8 | #2676 | P2 | fullstack | 商战情报中台·基础设施 — 实体知识图谱（关系抽取+图存储）[3/12] | ✅ |
 | 9 | #2677 | P2 | pipeline | 商战情报中台·基础设施 — 共享采集引擎（统一采集入口）[4/12] | ✅ |
 | 10 | #2679 | P2 | fullstack | 商战情报中台·基础设施 — 情报去重与合并（实体消歧）[6/12] | ✅ |
@@ -910,34 +910,21 @@
 **请求**: 请排程经理补充新的 Todo Issue 到建议表，或加速解除上述阻塞依赖。
 
 **今日已交付**: PR #4552/4554/4555/4556/4557/4558/4559/4560/4561/4562 共 10 个 merged。
-| 05-10 | ~~kimi7~~ | ~~#2414~~ | pipeline | P2 | ~~Done~~ | 海关数据游乐设备进口商采集 — PR #4564 MERGED |
-| 05-10 | ~~kimi1~~ | ~~#2365~~ | approval | P1 | ~~Done~~ | 统一审批工作台·多Tab架构 #3922 MERGED |
-| 05-10 | ~~kimi2~~ | ~~#3195~~ | backend | P1 | ~~Done~~ | 计划模板引擎·中标后一键生成主计划 — PR #4565 MERGED |
-| 05-10 | ~~kimi5~~ | ~~#2449~~ | pipeline | P2 | ~~Done~~ | 中标公告竞品自动发现 #4566 |
-| 05-10 | ~~kimi2~~ | ~~#2635~~ | backend | P1 | ~~Done~~ | 品牌中心·数字人 — 第三方API集成 — PR #4575 MERGED |
-| 05-10 | ~~kimi2~~ | ~~#2636~~ | frontend | P1 | ~~Done~~ | 品牌中心·数字人 — 数字分身+声音克隆管理页面 — PR #4578 MERGED |
-| 05-10 | ~~kimi1~~ | ~~#3200~~ | backend | P1 | ~~Done~~ | 计划变更管理 — 版本对比+影响分析+审批流 — PR #4583 MERGED |
-| 05-10 | ~~kimi2~~ | ~~#2641~~ | frontend | P1 | ~~Done~~ | 品牌中心·视频裂变 — 视频裂变工作台+素材包审批页面 — PR #4580 MERGED |
-| 05-10 | ~~kimi3~~ | ~~#2645~~ | pipeline | P1 | ~~Done~~ | 品牌中心·舆情监控 — 品牌舆情采集+情感分析+告警Pipeline — PR #4581 MERGED |
-| 05-10 | ~~kimi4~~ | ~~#2646~~ | fullstack | P1 | ~~Done~~ | 品牌中心·舆情监控 — 品牌舆情仪表盘+提及列表+周报 — PR #4584 MERGED |
-| 05-10 | ~~kimi6~~ | ~~#2654~~ | pipeline | P1 | ~~Done~~ | 品牌中心·内容自动化 — AI海报自动生成Pipeline — PR #4582 MERGED |
-| 05-10 | ~~kimi1~~ | ~~#3199~~ | fullstack | P1 | ~~Done~~ | 计划预警引擎·延期预警+企微推送+升级机制 — PR #4577 MERGED |
-| 05-10 | ~~kimi3~~ | ~~#2332~~ | pipeline | P1 | ~~Done~~ | 采集工具使用指南页 — PR #4576 MERGED |
-| 05-10 | ~~kimi4~~ | ~~#3198~~ | frontend | P1 | ~~Done~~ | 项目主计划页面（条线视图+甘特图）— PR #4572 MERGED |
-| 05-10 | ~~kimi5~~ | ~~#2640~~ | backend | P1 | ~~Done~~ | 品牌中心·视频裂变 — PR #4579 MERGED |
-| 05-11 | kimi1 | #3203 | backend | P1 | In Progress | BOM变更→计划联动引擎 — 变更事件驱动计划自动调整 [11/11] |
-| 05-11 | kimi2 | #3202 | fullstack | P1 | In Progress | 管理层计划仪表盘 — 多项目汇总+健康度评分 [10/10] |
-| 05-11 | kimi3 | #3201 | frontend | P1 | In Progress | 供应商排程管理页面 — 三段式+日历排程 [9/10] |
-| 05-11 | kimi1 | #2753 | backend | P2 | In Progress | (新Issue #2753) |
+| 05-11 | kimi1 | #2753 | backend | P2 | In Progress | 客户赢丢单复盘 — 月度汇总报表 |
 | 05-11 | kimi2 | #2752 | backend | P2 | In Progress | 客户分层运营提醒 — 按层级定期提醒商务回访 |
 | 05-11 | kimi3 | #2749 | backend | P2 | In Progress | 设备档案数据模型 — 序列号/产品参数/安装日期/质保/客户关联 [6/12] |
-| 05-11 | kimi4 | #2413 | pipeline | P2 | In Progress | 竞品出口客户反向采集 — 凯奇/奇特乐/永浪海外买家 |
-| 05-11 | kimi5 | #2644 | app | P1 | In Progress | 品牌中心·员工代言 — 内容池管理+员工分享看板+H5分享页 [2/2] |
-| 05-11 | kimi6 | #2665 | frontend | P2 | In Progress | 库存联通 — 多仓库库存看板+调拨单管理页 [3/3] |
-| 05-11 | kimi7 | #2751 | backend | P2 | In Progress | 客户分层自动分级 — 按签约额+复购自动分S/A/B/C [8/12] |
+| 05-11 | kimi4 | #2668 | backend | P2 | In Progress | (新Issue) |
+| 05-11 | kimi5 | #2669 | frontend | P2 | In Progress | 样品箱制度 — 标准箱模板管理+项目箱一键生成 |
+| 05-11 | kimi6 | #2674 | fullstack | P2 | In Progress | 商战情报中台·统一实体模型设计 |
+| 05-11 | kimi7 | #2675 | fullstack | P2 | In Progress | 商战情报中台·情报标签体系与分类法 |
 | 05-11 | kimi8 | #2664 | backend | P2 | In Progress | 库存联通 — 多仓库库存查询+智能调拨单API |
+| 05-11 | ~~kimi6~~ | ~~#2482~~ | backend | P2 | ~~Done~~ | D3-AI GH侧AI按钮 — PR #4602 MERGED |
+| 05-11 | ~~kimi7~~ | ~~#2751~~ | backend | P2 | ~~Done~~ | 客户分层自动分级 — PR #4606 MERGED |
+| 05-11 | ~~kimi6~~ | ~~#2665~~ | frontend | P2 | ~~Done~~ | 库存联通·库存看板+调拨单管理页 — PR #4605 MERGED |
+| 05-11 | ~~kimi5~~ | ~~#2644~~ | app | P1 | ~~Done~~ | 品牌中心·员工代言 — PR #4591 MERGED |
+| 05-11 | ~~kimi4~~ | ~~#2413~~ | pipeline | P2 | ~~Done~~ | 竞品出口客户反向采集 — PR #4599 MERGED |
 | 05-11 | ~~kimi2~~ | ~~#2750~~ | backend | P2 | ~~Done~~ | 设备生命周期提醒 — PR #4603 MERGED |
-| 05-11 | ~~kimi1~~ | ~~#2740~~ | frontend | P1 | ~~Done~~ | 商战情报中台·分发 — H5小程序5Tab快览 — PR #4600 MERGED |
-| 05-11 | ~~kimi6~~ | ~~#2451~~ | backend | P2 | ~~Done~~ | 竞品中标项目名称分词 → 补充keyword_pool搜索盲区 — PR #4597 MERGED |
-| 05-11 | ~~kimi7~~ | ~~#2663~~ | backend | P2 | ~~Done~~ | 库存联通 — 仓库维度表+sample_inventory增加warehouse_id — PR #4601 MERGED |
+| 05-11 | ~~kimi1~~ | ~~#2740~~ | frontend | P1 | ~~Done~~ | 商战情报中台·分发 — PR #4600 MERGED |
+| 05-10 | ~~kimi6~~ | ~~#2451~~ | backend | P2 | ~~Done~~ | 竞品中标项目名称分词 — PR #4597 MERGED |
+| 05-10 | ~~kimi7~~ | ~~#2663~~ | backend | P2 | ~~Done~~ | 库存联通·仓库维度表 — PR #4601 MERGED |
 | 05-10 | ~~kimi6~~ | ~~#2342~~ | frontend | P1 | ~~Done~~ | 方案模板管理前端·E2E修复 — PR #4568 MERGED |

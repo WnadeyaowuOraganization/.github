@@ -183,6 +183,18 @@ curl -s -X POST http://localhost:9872/api/notify \
 > ```
 > **只有前台 while 循环才能让 CC 保持"可被唤醒"状态。**
 
+#### PR 创建后主动触发 CI（如 CC push 后）
+
+```bash
+# ✅ Jenkins Webhook Token 端点（CC 可用，无需认证）
+export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
+curl -s -X POST "http://localhost:18080/jenkins/generic-webhook-trigger/invoke?token=wande-play-pr" \
+  -H "Content-Type: application/json" \
+  -d "{\"action\":\"synchronize\",\"pull_request\":{\"number\":${PR_NUMBER},\"head\":{\"ref\":\"feature-Issue-${ISSUE}\"},\"merged\":false}}"
+
+# ❌ 错误：调 Jenkins API（如 /build 或 /buildWithParameters）—— 需要认证，CC 无法使用
+```
+
 ```bash
 # 前台阻塞式轮询 — Jenkins 优先检测，CI 结论出来立刻响应
 # 注意：GitHub Actions 已废弃，CI 全量迁移到 Jenkins

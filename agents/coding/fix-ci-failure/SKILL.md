@@ -87,6 +87,23 @@ gh pr comment <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --body "forc
   gh pr edit <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --title "WIP: $(gh pr view <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --json title --jq '.title')"
 ```
 
+### 6. 触发 CI（正确方式）
+
+**Jenkins Webhook Token 端点（无需认证，直接 curl）**：
+
+```bash
+# ✅ 正确：调 webhook token URL（不需认证）
+curl -s -X POST "http://localhost:18080/jenkins/generic-webhook-trigger/invoke?token=wande-play-pr" \
+  -H "Content-Type: application/json" \
+  -d '{"action":"synchronize","pull_request":{"number":<PR_NUMBER>,"head":{"ref":"feature-Issue-<ISSUE>"},"merged":false}}'
+
+# ❌ 错误：调 Jenkins API（如 /buildWithParameters）—— 需要认证，CC 无法使用
+```
+
+**典型场景**：
+- CC push 后主动触发 CI（CC 用 git push 无法自动触发）
+- CI 失败修复后 push 需要重新触发
+
 ### 6. 继续 cc-report + 轮询
 
 发一条 stage-done 汇报"已提交第 N 轮修复"，然后回到 **cc-report 的 close 阶段标准轮询模板**等待新一轮 CI merged。

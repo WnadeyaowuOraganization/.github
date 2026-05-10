@@ -35,7 +35,8 @@ pipeline {
 
     environment {
         REPO         = 'WnadeyaowuOraganization/wande-play'
-        CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci'
+        CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}'
+        CI_M2_LOCAL = '/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}/.m2'
         CI_BACKEND_PORT = '6041'
         CI_FRONTEND_PORT = '8084'
         CI_DB_NAME   = 'wande-ai-ci'
@@ -59,8 +60,8 @@ pipeline {
                             mkdir -p ${CI_WORK_DIR}
                             cd ${CI_WORK_DIR}
                             # 直接克隆指定分支，避免 fetch 静默失败导致回退到错误代码
-                            git clone --branch ${branch} --depth=50 https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
-                            git fetch origin dev --depth=50
+                            git clone --branch ${branch} --depth=200 https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
+                            git fetch origin dev --depth=200
                             if git merge origin/dev --no-edit; then
                                 echo "dev merged OK"
                             else
@@ -144,7 +145,7 @@ pipeline {
             steps {
                 sh """
                     cd ${CI_WORK_DIR}/backend
-                    mvn test -pl ruoyi-modules/wande-ai -am -Pprod
+                    mvn test -pl ruoyi-modules/wande-ai -am -Pprod -Dmaven.repo.local=${CI_M2_LOCAL}
                 """
             }
         }
@@ -219,7 +220,7 @@ pipeline {
                         sh """
                             cd ${CI_WORK_DIR}
                             cd backend
-                            mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q
+                            mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q -Dmaven.repo.local=${CI_M2_LOCAL}
                             bash /apps/wande-ai-backend/start.sh
                             for i in \$(seq 1 30); do
                                 NEW_PID=\$(pgrep -f 'ruoyi-admin' 2>/dev/null || echo '')

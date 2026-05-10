@@ -914,6 +914,12 @@
 **今日已交付**: PR #4552/4554/4555/4556/4557/4558/4559/4560/4561/4562/4615/4616/4617/4619/4620 共 15 个 merged。
 | 05-11 | kimi2 | #2493 | pipeline | P2 | In Progress | 竞品情报-P0 Phase2 — G7e采集引擎 Browser Agent + vLLM结构化提取 |
 | 05-11 | kimi3 | #2494 | pipeline | P2 | In Progress | 竞品情报-P0 Phase3 — T1级6家深度采集 KOMPAN/LSI/PlayCore等 |
+| 05-11 | kimi1 | #2642 | pipeline | P2 | In Progress | 品牌中心·视频裂变 — 自动视频裂变处理管线（ffmpeg+AI文案）[3/3] |
+| 05-11 | kimi4 | #2676 | fullstack | P2 | In Progress | 商战情报中台·实体知识图谱存储层 [3/12] |
+| 05-11 | kimi5 | #2677 | pipeline | P2 | In Progress | 商战情报中台·共享采集引擎扩展·industry_intelligence管线 [4/12] |
+| 05-11 | kimi6 | #2679 | fullstack | P2 | In Progress | 商战情报中台·情报去重与合并引擎 [6/12] |
+| 05-11 | kimi7 | #2685 | fullstack | P2 | In Progress | 商战情报中台·全文检索与语义搜索引擎 [12/12] |
+| 05-11 | kimi8 | #2686 | fullstack | P2 | In Progress | 商战情报中台·行业档案7章节模板引擎 [1/10] |
 | 05-11 | kimi7 | ~~#2675~~ | fullstack | P2 | ~~Done~~ | 商战情报中台·情报标签体系与分类法 — PR #4612 MERGED ✅ |
 | 05-11 | ~~kimi1~~ | ~~#2753~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 客户赢丢单复盘 — 月度汇总报表 — PR #4617 MERGED ✅ |
 | 05-11 | ~~kimi5~~ | ~~#2669~~ | ~~frontend~~ | ~~P2~~ | ~~Done~~ | 样品箱制度·标准箱模板管理+项目箱一键生成 — PR #4616 MERGED ✅ |

@@ -911,22 +911,21 @@
 
 **请求**: 请排程经理补充新的 Todo Issue 到建议表，或加速解除上述阻塞依赖。
 
-**今日已交付**: PR #4552/4554/4555/4556/4557/4558/4559/4560/4561/4562 共 10 个 merged。
-| 05-11 | kimi1 | #2753 | backend | P2 | In Progress | 客户赢丢单复盘 — 月度汇总报表 (PR #4607 已关闭，CI Groovy语法错误，CC重启重跑) |
+**今日已交付**: PR #4552/4554/4555/4556/4557/4558/4559/4560/4561/4562/4615/4616/4617/4619/4620 共 15 个 merged。
 | 05-11 | kimi2 | #2493 | pipeline | P2 | In Progress | 竞品情报-P0 Phase2 — G7e采集引擎 Browser Agent + vLLM结构化提取 |
 | 05-11 | kimi3 | #2494 | pipeline | P2 | In Progress | 竞品情报-P0 Phase3 — T1级6家深度采集 KOMPAN/LSI/PlayCore等 |
-| 05-11 | kimi4 | #2647 | pipeline | P2 | In Progress | 品牌中心·SEO — SEO内容自动生成管线 |
-| 05-11 | kimi5 | #2669 | frontend | P2 | In Progress | 样品箱制度 — 标准箱模板管理+项目箱一键生成 (PR #4611 已关闭，CI从未触发，CC重启重跑) |
-| 05-11 | kimi6 | #2674 | fullstack | P2 | In Progress | 商战情报中台·统一实体模型设计 (PR #4613 已关闭，CI Groovy语法错误，CC重启重跑) |
 | 05-11 | kimi7 | ~~#2675~~ | fullstack | P2 | ~~Done~~ | 商战情报中台·情报标签体系与分类法 — PR #4612 MERGED ✅ |
-| 05-11 | kimi8 | #2638 | pipeline | P2 | In Progress | 品牌中心·数字人 — AI自动脚本生成+定时视频生产管线 [6/7] |
-| 05-11 | kimi2 | ~~#2752~~ | backend | P2 | ~~Done~~ | 客户分层运营提醒 — PR #4610 OPEN，等待CI |
-| 05-11 | kimi3 | ~~#2749~~ | backend | P2 | ~~Done~~ | 设备档案数据模型 — PR #4612 MERGED ✅ (主环境部署触发Jenkinsfile修复) |
-| 05-11 | kimi4 | ~~#2668~~ | backend | P2 | ~~Done~~ | 样品箱CRUD+BOM生成 — PR #4609 MERGED ✅ |
-| 05-11 | kimi5 | #2669 | frontend | P2 | In Progress | 样品箱制度 — 标准箱模板管理+项目箱一键生成 (PR #4611 已关闭，CI从未触发，CC重启重跑) |
-| 05-11 | kimi6 | #2674 | fullstack | P2 | In Progress | 商战情报中台·统一实体模型设计 (PR #4613 已关闭，CI Groovy语法错误，CC重启重跑) |
-| 05-11 | kimi7 | ~~#2675~~ | fullstack | P2 | ~~Done~~ | 商战情报中台·情报标签体系与分类法 — PR #4612 MERGED ✅ |
-| 05-11 | kimi8 | ~~#2664~~ | backend | P2 | ~~Done~~ | 库存联通 — 多仓库库存查询+智能调拨单API — PR #4604 MERGED ✅ |
+| 05-11 | ~~kimi1~~ | ~~#2753~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 客户赢丢单复盘 — 月度汇总报表 — PR #4617 MERGED ✅ |
+| 05-11 | ~~kimi5~~ | ~~#2669~~ | ~~frontend~~ | ~~P2~~ | ~~Done~~ | 样品箱制度·标准箱模板管理+项目箱一键生成 — PR #4616 MERGED ✅ |
+| 05-11 | ~~kimi4~~ | ~~#2647~~ | ~~pipeline~~ | ~~P2~~ | ~~Done~~ | 品牌中心·SEO内容自动生成管线 — PR #4620 MERGED ✅ |
+| 05-11 | ~~kimi6~~ | ~~#2674~~ | ~~fullstack~~ | ~~P2~~ | ~~Done~~ | 商战情报中台·统一实体模型设计 — PR #4620 MERGED ✅ |
+| 05-11 | ~~kimi8~~ | ~~#2638~~ | ~~pipeline~~ | ~~P2~~ | ~~Done~~ | 品牌中心·数字人AI脚本生成+定时视频管线 [6/7] — PR #4615 MERGED ✅ |
+| 05-11 | ~~kimi2~~ | ~~#2752~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 客户分层运营提醒 — PR #4610 OPEN → MERGED ✅ |
+| 05-11 | ~~kimi3~~ | ~~#2749~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 设备档案数据模型 — PR #4612 MERGED ✅ (触发Jenkinsfile修复) |
+| 05-11 | ~~kimi4~~ | ~~#2668~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 样品箱CRUD+BOM生成 — PR #4609 MERGED ✅ |
+| 05-11 | ~~kimi8~~ | ~~#2664~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 库存联通 — 多仓库库存查询+智能调拨单API — PR #4604 MERGED ✅ |
+| 05-11 | ~~kimi6~~ | ~~#2482~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | D3-AI GH侧AI按钮 — PR #4602 MERGED |
+| 05-11 | ~~kimi7~~ | ~~#2751~~ | ~~backend~~ | ~~P2~~ | ~~Done~~ | 客户分层自动分级 — PR #4606 MERGED |
 | 05-11 | ~~kimi6~~ | ~~#2482~~ | backend | P2 | ~~Done~~ | D3-AI GH侧AI按钮 — PR #4602 MERGED |
 | 05-11 | ~~kimi7~~ | ~~#2751~~ | backend | P2 | ~~Done~~ | 客户分层自动分级 — PR #4606 MERGED |
 | 05-11 | ~~kimi6~~ | ~~#2665~~ | frontend | P2 | ~~Done~~ | 库存联通·库存看板+调拨单管理页 — PR #4605 MERGED |

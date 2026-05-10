@@ -61,6 +61,7 @@ pipeline {
                             # 直接克隆指定分支，避免 fetch 静默失败导致回退到错误代码
                             git clone --branch ${branch} --depth=50 https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
                             git fetch origin dev --depth=50
+                            git merge origin/dev --no-edit 2>/dev/null || echo "WARN: dev merge failed (may have conflicts)"
                         """
                     }
                 }

@@ -109,18 +109,25 @@ pipeline {
                         script: "cat ${CI_WORK_DIR}/.build_env 2>/dev/null || echo ''",
                         returnStdout: true
                     ).trim()
+                    def changed = sh(
+                        script: "cd ${CI_WORK_DIR} && git diff --name-only origin/dev HEAD 2>/dev/null | sort -u",
+                        returnStdout: true
+                    ).trim()
+                    env.CHANGED_FILES = changed
                     if (forceFull.indexOf('FORCE_FULL_BUILD=true') >= 0) {
-                        // 合并失败时强制全量构建（避免 git diff 空导致跳过测试/部署）
-                        env.HAS_BACKEND = 'true'
-                        env.HAS_FRONTEND = 'true'
-                        env.HAS_UNIT_TEST = 'true'
-                        echo "⚠️ dev merge failed — forcing full backend+frontend build+test"
+                        // 合并失败时 diff 可能不准确：用 diff 结果为主，但若 diff 为空则强制全量
+                        if (changed) {
+                            env.HAS_BACKEND = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
+                            env.HAS_FRONTEND = (changed.indexOf('frontend/') >= 0) ? 'true' : 'false'
+                            env.HAS_UNIT_TEST = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
+                            echo "⚠️ dev merge failed but diff not empty — using diff result"
+                        } else {
+                            env.HAS_BACKEND = 'true'
+                            env.HAS_FRONTEND = 'true'
+                            env.HAS_UNIT_TEST = 'true'
+                            echo "⚠️ dev merge failed + diff empty — forcing full backend+frontend build+test"
+                        }
                     } else {
-                        def changed = sh(
-                            script: "cd ${CI_WORK_DIR} && git diff --name-only origin/dev HEAD 2>/dev/null | sort -u",
-                            returnStdout: true
-                        ).trim()
-                        env.CHANGED_FILES = changed
                         env.HAS_BACKEND = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
                         env.HAS_FRONTEND = (changed.indexOf('frontend/') >= 0) ? 'true' : 'false'
                         env.HAS_UNIT_TEST = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'

@@ -101,8 +101,27 @@ pipeline {
             }
         }
 
-        // ── 阶段4：单元测试 ──────────────────────────────────────────────
+        // ── 阶段4：检测变更模块（必须在前置，env vars 供后续 when 使用）────────
+        stage('检测变更') {
+            steps {
+                script {
+                    def changed = sh(
+                        script: "cd ${CI_WORK_DIR} && git diff --name-only origin/dev HEAD 2>/dev/null | sort -u",
+                        returnStdout: true
+                    ).trim()
+                    env.CHANGED_FILES = changed
+                    env.HAS_BACKEND = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
+                    env.HAS_FRONTEND = (changed.indexOf('frontend/') >= 0) ? 'true' : 'false'
+                    env.HAS_UNIT_TEST = (changed.indexOf('backend/') >= 0) ? 'true' : 'false'
+                    echo "变更检测 → backend=${env.HAS_BACKEND} frontend=${env.HAS_FRONTEND}"
+                    echo "变更文件: ${changed.take(500)}"
+                }
+            }
+        }
+
+        // ── 阶段5：单元测试（仅后端变更时运行）────────────────────────────
         stage('单元测试') {
+            when { expression { return env.HAS_UNIT_TEST == 'true' } }
             steps {
                 sh """
                     cd ${CI_WORK_DIR}/backend
@@ -111,9 +130,7 @@ pipeline {
             }
         }
 
-
-
-        // ── 阶段5：E2E 测试（暂禁用，待模块级过滤方案设计）──────────────────────
+        // ── 阶段6：E2E 测试（暂禁用，待模块级过滤方案设计）──────────────────────
         // stage('E2E 测试') {
         //     when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
         //     steps {
@@ -229,100 +246,69 @@ fi
             }
         }
 
-        // ── 阶段7：检测变更模块 ──────────────────────────────────────────
-        stage('检测变更') {
-            steps {
-                script {
-                    def changed = sh(
-                        script: "cd ${WANDE_DIR} && git fetch origin dev && git diff --name-only origin/dev~1 origin/dev 2>/dev/null || echo 'backend/ frontend/'",
-                        returnStdout: true
-                    ).trim()
-                    def hasBackend = changed.indexOf('backend/') >= 0
-                    def hasFrontend = changed.indexOf('frontend/') >= 0
-                    env.HAS_BACKEND = hasBackend ? 'true' : 'false'
-                    env.HAS_FRONTEND = hasFrontend ? 'true' : 'false'
-                    echo "backend=${env.HAS_BACKEND} frontend=${env.HAS_FRONTEND}"
+        // ── 阶段7：并行部署（前后端独立，同时进行）─────────────────────────
+        stage('并行部署') {
+            when {
+                expression {
+                    return env.HAS_BACKEND == 'true' || env.HAS_FRONTEND == 'true'
                 }
             }
-        }
-
-        // ── 阶段8：部署后端 ──────────────────────────────────────────────
-        stage('部署后端') {
-            when { expression { return env.HAS_BACKEND == 'true' } }
-            steps {
-                script {
-                    def oldPid = sh(script: "pgrep -f 'ruoyi-admin' 2>/dev/null || echo ''", returnStdout: true).trim()
-                    env.OLD_BACKEND_PID = oldPid
-                    echo "prev PID: ${env.OLD_BACKEND_PID}"
+            stages {
+                stage('部署后端') {
+                    when { expression { return env.HAS_BACKEND == 'true' } }
+                    steps {
+                        script {
+                            def oldPid = sh(script: "pgrep -f 'ruoyi-admin' 2>/dev/null || echo ''", returnStdout: true).trim()
+                            env.OLD_BACKEND_PID = oldPid
+                            echo "prev PID: ${env.OLD_BACKEND_PID}"
+                        }
+                        sh """
+                            cd ${CI_WORK_DIR}
+                            # 直接从 PR 合并后代码构建（无需重新 fetch）
+                            cd backend
+                            mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q
+                            bash /apps/wande-ai-backend/start.sh
+                            # health check + PID swap verification (max 150s)
+                            for i in \$(seq 1 30); do
+                                NEW_PID=\$(pgrep -f 'ruoyi-admin' 2>/dev/null || echo '')
+                                echo "check \$i: PID=\$NEW_PID (prev=${env.OLD_BACKEND_PID})"
+                                curl -sf http://localhost:6040/ > /dev/null 2>&1 || { echo "port 6040 not responding, waiting..."; sleep 5; continue; }
+                                if [ -n "\$NEW_PID" ] && [ "\$NEW_PID" != "${env.OLD_BACKEND_PID}" ]; then
+                                    echo "backend deploy OK (PID: \$NEW_PID)"
+                                    exit 0
+                                elif [ -z "\$NEW_PID" ]; then
+                                    echo "process disappeared, retrying..."
+                                else
+                                    echo "PID unchanged, old process may still be running..."
+                                fi
+                                sleep 5
+                            done
+                            echo "backend health check timeout, rolling back..."
+                            cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar 2>/dev/null || true
+                            bash /apps/wande-ai-backend/start.sh
+                            exit 1
+                        """
+                    }
                 }
-                sh """
-                    cd ${WANDE_DIR}
-                    git fetch origin dev && git reset --hard origin/dev && git clean -fd
-                    cd backend
-                    mvn clean package -Pprod -Dmaven.test.skip=true -T 1 -q
-                    bash /apps/wande-ai-backend/start.sh
-                    # health check + PID swap verification (max 150s)
-                    for i in \$(seq 1 30); do
-                        NEW_PID=\$(pgrep -f 'ruoyi-admin' 2>/dev/null || echo '')
-                        echo "check \$i: PID=\$NEW_PID (prev=${env.OLD_BACKEND_PID})"
-                        curl -sf http://localhost:6040/ > /dev/null 2>&1 || { echo "port 6040 not responding, waiting..."; sleep 5; continue; }
-                        # verify PID changed (new jar is running)
-                        if [ -n "\$NEW_PID" ] && [ "\$NEW_PID" != "${env.OLD_BACKEND_PID}" ]; then
-                            echo "backend deploy OK (PID: \$NEW_PID)"
-                            exit 0
-                        elif [ -z "\$NEW_PID" ]; then
-                            echo "process disappeared, retrying..."
-                        else
-                            echo "PID unchanged, old process may still be running..."
-                        fi
-                        sleep 5
-                    done
-                    echo "backend health check timeout, rolling back..."
-                    cp /apps/wande-ai-backend/ruoyi-admin.jar.bak /apps/wande-ai-backend/ruoyi-admin.jar 2>/dev/null || true
-                    bash /apps/wande-ai-backend/start.sh
-                    exit 1
-                """
-            }
-        }
-
-        // ── 阶段9：部署前端 ──────────────────────────────────────────────
-        stage('部署前端') {
-            when { expression { return env.HAS_FRONTEND == 'true' } }
-            steps {
-                sh """
-                    cd ${CI_WORK_DIR}/frontend
-                    rm -rf .turbo node_modules/.cache apps/web-antd/dist
-                    pnpm install --frozen-lockfile 2>/dev/null || pnpm install
-                    pnpm build:antd
-                    sudo chown -R ubuntu:ubuntu /apps/wande-ai-front/ 2>/dev/null || true
-                    rsync -a --delete apps/web-antd/dist/ /apps/wande-ai-front/
-                    sudo nginx -s reload
-                    # health check
-                    for i in \$(seq 1 10); do
-                        curl -sf http://localhost:8080/ > /dev/null 2>&1 && echo "frontend deploy OK" && exit 0
-                        sleep 3
-                    done
-                    exit 1
-                """
-            }
-        }
-
-        // ── 阶段10：关闭 Issue + 看板 Done ──────────────────────────────
-        // （已合并至"自动合并"阶段，避免 when 条件失效问题）
-        stage('关闭Issue') {
-            steps {
-                script {
-                    echo "Issue close handled in 自动合并 stage"
-                }
-            }
-        }
-
-        // ── 阶段11：释放 kimi 目录锁 ────────────────────────────────────
-        // （已合并至"自动合并"阶段）
-        stage('释放kimi锁') {
-            steps {
-                script {
-                    echo "Lock release handled in 自动合并 stage"
+                stage('部署前端') {
+                    when { expression { return env.HAS_FRONTEND == 'true' } }
+                    steps {
+                        sh """
+                            cd ${CI_WORK_DIR}/frontend
+                            rm -rf .turbo node_modules/.cache apps/web-antd/dist
+                            pnpm install --frozen-lockfile 2>/dev/null || pnpm install
+                            pnpm build:antd
+                            sudo chown -R ubuntu:ubuntu /apps/wande-ai-front/ 2>/dev/null || true
+                            rsync -a --delete apps/web-antd/dist/ /apps/wande-ai-front/
+                            sudo nginx -s reload
+                            # health check
+                            for i in \$(seq 1 10); do
+                                curl -sf http://localhost:8080/ > /dev/null 2>&1 && echo "frontend deploy OK" && exit 0
+                                sleep 3
+                            done
+                            exit 1
+                        """
+                    }
                 }
             }
         }

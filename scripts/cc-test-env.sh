@@ -593,16 +593,23 @@ cmd_restart_backend() {
 
   echo "=== 重启 ${tag} 后端（保留前端 + 数据库）==="
 
-  # 检测是否有新的 wande-ai 构建（jar 时间戳 > 上次启动时的版本）
+  # 打印本次使用的 Maven repo + wande-ai JAR 路径（帮助排查加载了哪个版本）
   local kimi_m2="${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
   local main_m2="${HOME:-/home/ubuntu}/.m2/repository/org/ruoyi/wande-ai/3.0.0/wande-ai-3.0.0.jar"
-  if [ -f "$kimi_m2" ] && [ -f "$main_m2" ]; then
+  local active_m2=""
+  if [ -n "$MVN_M2_OPT" ] && [ -d "${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository" ]; then
+    active_m2="per-kimi (${HOME:-/home/ubuntu}/cc_scheduler/m2/${tag}/repository)"
+  else
+    active_m2="主 M2 (~/.m2/repository)"
+  fi
+  echo "  Maven repo: $active_m2"
+  if [ -f "$kimi_m2" ]; then
     local kimi_ts=$(stat -c %Y "$kimi_m2" 2>/dev/null || echo 0)
+    echo "  per-kimi wande-ai JAR: $kimi_m2 ($(date -d "@$kimi_ts" '+%m-%d %H:%M' 2>/dev/null || echo ts=$kimi_ts))"
+  fi
+  if [ -f "$main_m2" ]; then
     local main_ts=$(stat -c %Y "$main_m2" 2>/dev/null || echo 0)
-    if [ "$kimi_ts" -gt "$main_ts" ]; then
-      echo "  ⚠️ 检测到 wande-ai 新构建（per-kimi M2 比主 M2 新 ${kimi_ts} > ${main_ts}）"
-      echo "  → 确认已执行 mvn install，后端将加载新构建"
-    fi
+    echo "  主 M2 wande-ai JAR:    $main_m2 ($(date -d "@$main_ts" '+%m-%d %H:%M' 2>/dev/null || echo ts=$main_ts))"
   fi
 
   stop_backend

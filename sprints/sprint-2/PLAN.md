@@ -913,7 +913,7 @@
 
 **今日已交付**: PR #4552/4554/4555/4556/4557/4558/4559/4560/4561/4562 共 10 个 merged。
 | 05-11 | kimi1 | #2753 | backend | P2 | In Progress | 客户赢丢单复盘 — 月度汇总报表 |
-| 05-11 | kimi2 | #2752 | backend | P2 | In Progress | 客户分层运营提醒 — 按层级定期提醒商务回访 |
+| 05-11 | kimi2 | ~~#2752~~ | backend | P2 | ~~Done~~ | 客户分层运营提醒 — PR #4610 OPEN，等待CI |
 | 05-11 | kimi3 | #2749 | backend | P2 | In Progress | 设备档案数据模型 — 序列号/产品参数/安装日期/质保/客户关联 [6/12] |
 | 05-11 | kimi4 | ~~#2668~~ | backend | P2 | ~~Done~~ | 样品箱CRUD+BOM生成 — PR #4609 MERGED ✅ |
 | 05-11 | kimi5 | #2669 | frontend | P2 | In Progress | 样品箱制度 — 标准箱模板管理+项目箱一键生成 |

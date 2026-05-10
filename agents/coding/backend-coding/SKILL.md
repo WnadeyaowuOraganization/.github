@@ -142,6 +142,13 @@ public class XxxController {
 - 写入/执行类：`"plm:<module>:<action>"`（如 `"plm:eco:execute"`、`"plm:configurator:confirm"`）
 - 管理员兜底：`orRole = "admin"`
 
+**Controller 路径前缀规范（/api vs /wande）：**
+- 继承 `BaseController` → 路径自动拼接 `/api/wande/xxx`，Controller 只需写 `/wande/xxx`
+- **不继承** BaseController（如独立微服务接口）→ 路径**不带** `/api` 前缀，直接写 `/wande/xxx`
+- 自测时用 curl 验证路径：先试 `/wande/xxx/page`，404 再试 `/api/wande/xxx/page`
+
+事故案例：#2752 E2E 测试路径写 `/api/wande/xxx/page`，但 Controller 不继承 BaseController 导致路径不匹配，排查 45min。
+
 ## 响应格式（违反导致前端弹错、不展示数据）
 
 | 场景 | 必须 | 禁止 |

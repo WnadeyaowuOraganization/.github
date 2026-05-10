@@ -85,7 +85,7 @@ pipeline {
                             MERGEABLE=\$(gh pr view "\${PR_NUM}" --repo ${REPO} --json mergeable --jq '.mergeable')
                             if [ "\$MERGEABLE" = "CONFLICTING" ]; then
                                 echo "PR #\${PR_NUM} has conflict, auto-resolving..."
-                                bash \${JENKINS_DIR}/cycle-merge.sh "\${PR_NUM}" ${'$'} || true
+                                bash \${JENKINS_DIR}/cycle-merge.sh "\${PR_NUM}" \$ || true
                                 echo "Waiting for GitHub to refresh mergeability..."
                                 sleep 30
                             fi

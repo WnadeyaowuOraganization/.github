@@ -132,6 +132,33 @@ class ProjectMineServiceTest {
 }
 ```
 
+### pytest pipeline 测试常见卡点（Python）
+
+| 场景 | ❌ 错误写法 | ✅ 正确写法 | 原因 |
+|------|-----------|------------|------|
+| mock_db_connection 不支持 with 语句 | `Mock()` 默认无 `__enter__` | **mock 需实现 `__enter__` 返回 cursor** | `with conn.cursor() as cursor:` 报 `AttributeError: Mock has no attribute 'cursor'` |
+| MagicMock cursor 返回新实例 | `mock_cursor = MagicMock()` 默认返回新 MagicMock | **`mock_cursor.__enter__ = MagicMock(return_value=cursor_mock)`** | Python `with` 语句调用 `cursor = conn.__enter__()`，返回值需可调用 `.execute()` |
+| `cursor.execute()` 后无返回值 | `cursor.execute(...)` 默认返回 None | **若业务代码用 `cursor.fetchall()` 读结果，需 mock：`cursor.fetchall.return_value = [(1, 'val')]`** | pytest 测试里 `cursor.execute` 后读数据必须 mock fetchall/fetchone |
+
+**标准 mock_db_connection fixture（需 conftest.py 中定义）：**
+```python
+# conftest.py
+@pytest.fixture
+def mock_db_connection():
+    cursor_mock = MagicMock()
+    cursor_mock.execute = MagicMock(return_value=None)
+    cursor_mock.fetchall = MagicMock(return_value=[])  # 按需设返回值
+    cursor_mock.fetchone = MagicMock(return_value=None)
+    cursor_mock.__enter__ = MagicMock(return_value=cursor_mock)
+    cursor_mock.__exit__ = MagicMock(return_value=False)
+    conn_mock = MagicMock()
+    conn_mock.cursor = MagicMock(return_value=cursor_mock)
+    conn_mock.__enter__ = MagicMock(return_value=conn_mock)
+    conn_mock.__exit__ = MagicMock(return_value=False)
+    return conn_mock
+```
+
+事故案例：#2645 / #2654 brand-poster pipeline，21个测试 ERROR → `AttributeError: Mock object has no attribute 'cursor'` → 根因是 `conftest.py` 的 `mock_db_connection` fixture 未实现 `__enter__`/`__exit__` 上下文管理协议。
 ### MyBatis-Plus + Mockito 常见卡点
 
 | 场景 | ❌ 错误写法 | ✅ 正确写法 | 原因 |

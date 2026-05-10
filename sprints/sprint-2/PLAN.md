@@ -18,7 +18,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-10（排程经理第1130轮；20条全部刷新；12个Plan→Todo同步入表；清空已指派/CLOSED条目）
+> 更新时间：2026-05-10（排程经理第1131轮；#2654已提PR#4582；backend-test加pytest上下文管理器说明）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -123,7 +123,7 @@
 | #2641 | 已指派 kimi2 | In Progress |
 | #2645 | ✅ PR #4581 OPEN（等待merge） | PR |
 | #2646 | 已指派 kimi4 | In Progress |
-| #2654 | 已指派 kimi6 | In Progress |
+| #2654 | ✅ PR #4582 OPEN（等待merge） | PR |
 | #2118 | 队列靠后（P3，当前优先P1/P2） | Todo |
 | #2142 | 队列靠后（P3，当前优先P1/P2） | Todo |
 | #2143 | 队列靠后（P3，当前优先P1/P2） | Todo |

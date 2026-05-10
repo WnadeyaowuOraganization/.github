@@ -1733,3 +1733,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 |---|------|------|---------|------|
 | 8 | restart-backend 后新 Controller 仍 404（M2 JAR 缓存未更新） | 1 | cc-test-env.sh cmd_restart_backend 已添加 `mvn install -pl wande-ai -am` 自动安装 | ✅ 已修复 |
 | 9 | menu INSERT 缺 create_dept 列导致 SQL 语法错误 | 1 | menu-contract SKILL.md INSERT 示例已补 create_dept 列 | ✅ 已修复 |
+
+## 2026-05-11 kimi7/#2685 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 10 | ES ik_smart 分析器未安装导致建索引失败 | 1 | backend-coding skill 增加 Spring Data Elasticsearch 常见坑预判（ik_smart 未装则 fallback standard；索引 mapping 冲突需先删除重建） | 观察中 |

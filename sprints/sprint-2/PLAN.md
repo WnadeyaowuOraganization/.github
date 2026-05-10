@@ -18,7 +18,7 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-10（排程经理第1132轮；表全空全部刷新；20个Plan→Todo同步；Done新增23条待归档）
+> 更新时间：2026-05-10（排程经理第1133轮；对账In Progress→Project纠正3条；#1911/#2516标pause；#2031/#2668归档；研发经理补充活跃CC记录）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
@@ -56,6 +56,8 @@
 | #2486 / #2487 | ⛔ 非CC任务（LoRA训练需GPU，m7i CPU-only） | pause |
 | #2488 | ⛔ 非CC任务（ComfyUI需GPU+依赖#2486/#2487） | pause |
 | #2329 | ⏸️ 实际 pause（非已指派） | pause |
+| #1911 | ⛔ 疑似已放弃（极老Issue，无CC追踪；PR #4301已MERGE但长期无进展） | pause |
+| #2516 | ⛔ 疑似已放弃（无CC追踪；PR #4496已MERGE但长期无进展） | pause |
 | #2330 | ✅ PR #4507 MERGED | Done |
 | #2332 | ✅ PR #4501 MERGED | Done |
 | #2333 | ✅ PR #4502 MERGED | Done |
@@ -913,7 +915,7 @@
 | 05-11 | kimi1 | #2753 | backend | P2 | In Progress | 客户赢丢单复盘 — 月度汇总报表 |
 | 05-11 | kimi2 | #2752 | backend | P2 | In Progress | 客户分层运营提醒 — 按层级定期提醒商务回访 |
 | 05-11 | kimi3 | #2749 | backend | P2 | In Progress | 设备档案数据模型 — 序列号/产品参数/安装日期/质保/客户关联 [6/12] |
-| 05-11 | kimi4 | #2668 | backend | P2 | In Progress | (新Issue) |
+| 05-11 | kimi4 | ~~#2668~~ | backend | P2 | ~~Done~~ | 样品箱CRUD+BOM生成 — PR #4609 MERGED ✅ |
 | 05-11 | kimi5 | #2669 | frontend | P2 | In Progress | 样品箱制度 — 标准箱模板管理+项目箱一键生成 |
 | 05-11 | kimi6 | #2674 | fullstack | P2 | In Progress | 商战情报中台·统一实体模型设计 |
 | 05-11 | kimi7 | #2675 | fullstack | P2 | In Progress | 商战情报中台·情报标签体系与分类法 |

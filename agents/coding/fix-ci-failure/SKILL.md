@@ -72,14 +72,19 @@ gh pr view <PR> --repo WnadeyaowuOraganization/wande-play --comments | head -200
 - [ ] T_fix_<N>_5 push 触发新一轮 CI
 ```
 
-### 5. push + 通知研发经理触发 CI
+### 5. push + 触发 CI（强制）
 
 ```bash
 git add -A
 git commit -m "fix(<module>): <一句话> #${ISSUE}"
 git push origin "feature-Issue-${ISSUE}"
-# 不需要重新 gh pr create，同一 PR 会自动触发新一轮 CI
-# 如果 Jenkins 未自动触发，发 cc-report 给研发经理请求手动触发
+
+# ⚠️ git push 本身不触发 Jenkins CI！
+# GitHub webhook 只订阅 pull_request 事件，push 事件没有 pull_request 字段，Jenkins 拿不到 PR 编号。
+# 必须主动触发 pull_request 事件：
+export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
+gh pr comment <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --body "force push 触发 CI" || \
+  gh pr edit <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --title "WIP: $(gh pr view <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --json title --jq '.title')"
 ```
 
 ### 6. 继续 cc-report + 轮询

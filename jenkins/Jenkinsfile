@@ -272,8 +272,7 @@ pipeline {
             when {
                 expression {
                     def pr = params.PR_NUMBER ?: env.PR_NUMBER
-                    def result = currentBuild.getCurrentResult()
-                    return pr?.trim() && result != 'FAILURE' && result != 'ABORTED'
+                    return pr?.trim()
                 }
             }
             steps {
@@ -286,7 +285,7 @@ PR_NUMBER=''' + pr + '''
 BUILD_RESULT=''' + buildResult + '''
 GH_TOKEN="${WEIPING_TOKEN}"
 REPO="WnadeyaowuOraganization/wande-play"
-CI_WORK_DIR="/home/ubuntu/projects/wande-play-ci"
+CI_WORK_DIR="/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}"
 JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
 SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
 export GH_TOKEN REPO CI_WORK_DIR JENKINS_DIR SCRIPTS_DIR

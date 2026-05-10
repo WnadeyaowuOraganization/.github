@@ -89,7 +89,8 @@ pipeline {
                                 sleep 30
                             fi
                             # 验证 working tree 中是否仍有未解决的冲突标记
-                            if grep -r "<<<<<<\|======\|>>>>>>" ${CI_WORK_DIR}/frontend/ ${CI_WORK_DIR}/backend/ 2>/dev/null | head -1 | grep -q .; then
+                            CONFLICT_FILES=$(find ${CI_WORK_DIR}/frontend ${CI_WORK_DIR}/backend -type f -name "*.ts" -o -name "*.java" -o -name "*.vue" -o -name "*.xml" -o -name "*.yaml" -o -name "*.yml" 2>/dev/null | xargs grep -l "<<<<<<" 2>/dev/null || echo "")
+                            if [ -n "$CONFLICT_FILES" ]; then
                                 echo "⚠️ Working tree still has unresolved conflict markers — forcing full build"
                                 echo "FORCE_FULL_BUILD=true" > ${CI_WORK_DIR}/.build_env
                             fi

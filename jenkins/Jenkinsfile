@@ -36,6 +36,7 @@ pipeline {
     parameters {
         string(name: 'PR_NUMBER', defaultValue: '', description: 'PR Number')
         string(name: 'BRANCH',    defaultValue: '', description: 'Branch name')
+        string(name: 'SCAN_MODE', defaultValue: '', description: 'Set "scan" to run PR scanner instead of build')
     }
 
     environment {
@@ -52,8 +53,24 @@ pipeline {
 
     stages {
 
-        // ── 阶段1：拉取 PR 代码 ──────────────────────────────────────────
+        // ── 定时扫描模式：扫描 open PR 并触发缺失的 CI ──────────────────────
+        stage('PR Scanner') {
+            when {
+                expression { return (params.SCAN_MODE ?: env.SCAN_MODE ?: '') == 'scan' }
+            }
+            steps {
+                script {
+                    sh "bash ${SCRIPTS_DIR}/ci-pr-scanner.sh"
+                    currentBuild.result = 'SUCCESS'
+                }
+            }
+        }
+
+        // ── 正常构建模式 ──────────────────────────────────────────────────
         stage('Checkout') {
+            when {
+                expression { return (params.SCAN_MODE ?: env.SCAN_MODE ?: '') != 'scan' }
+            }
             steps {
                 withCredentials([string(credentialsId: 'github-bot-token', variable: 'BOT_TOKEN')]) {
                     script {

@@ -899,7 +899,7 @@
 | kimi1 | ~~#2811~~ | fullstack | medium | ~~Done~~ | 企微获客效果分析看板 — PR #4677 MERGED ✅ |
 | kimi1 | ~~#2655~~ | pipeline | medium | ~~Done~~ | 品牌中心·文章内容选题引擎 — PR #4681 MERGED ✅ |
 | kimi1 | ~~#2636~~ | frontend | medium | ~~Done~~ | 品牌中心·数字人前端 — PR #4684 MERGED ✅ |
-| kimi1 | #2755 | frontend | medium | CC工作中 | 设备档案管理页 — 设备列表+详情+巡检+维保 [12/12] |
+| kimi1 | ~~#2755~~ | frontend | medium | ~~Done~~ | 设备档案管理页 — PR #4685 MERGED ✅ |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |

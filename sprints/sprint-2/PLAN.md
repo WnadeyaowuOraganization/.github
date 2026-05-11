@@ -54,6 +54,9 @@
 | 28 | ~~#2804~~ | — | frontend | 外展分析看板：送达率/打开率/回复率/会议转化 | ~~✅ 已指派 kimi2~~（已转 #2800）|
 | 29 | ~~#2801~~ | — | backend | 邮件追踪：打开+点击+回复检测 | ~~✅ 已指派 kimi4~~ |
 | 30 | ~~#2812~~ | — | fullstack | 批量加好友：导入+频率控制+通过率优化 | ~~✅ 已指派 kimi6~~ |
+| 31 | ~~#2809~~ | — | fullstack | 企微自动标签+客户画像同步CRM | ~~✅ 已指派 kimi6~~ |
+| 32 | #2802 | — | backend | 邮件A/B测试引擎 | 待指派（kimi1完成后） |
+| 33 | #2803 | — | backend | 收件箱轮转+发送量控制 | 待指派（kimi4完成后） |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -893,7 +896,8 @@
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | #2795 | backend | medium | CC工作中 | 外展获客Phase1·触发器框架 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
-| kimi6 | #2812 | backend | medium | PR已提，CI BUILDING | 外展获客Phase4·批量加好友：导入+频率控制+通过率优化 — PR #4670 |
+| kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
+| kimi6 | #2809 | backend | medium | CC工作中 | 企微自动标签+客户画像同步CRM |
 | kimi4 | #2801 | backend | medium | CC工作中 | 外展获客Phase2·邮件追踪：打开+点击+回复检测 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |

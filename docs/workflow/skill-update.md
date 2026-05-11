@@ -1792,3 +1792,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | 20 | auth state 失效（backend 重启导致 token 不匹配当前 VITE_PROXY_TARGET） | 1 | screenshot.ts 检查 auth state token 是否对应当前 VITE_PROXY_TARGET，不匹配则清除强制重新登录 | 观察中 |
 | 21 | "当前可投" tab 无数据（0 rows），无 Go/No-Go 按钮 | 1 | API JSON 截图作为视觉兜底证据 | 观察中 |
 
+
+## 2026-05-11 kimi8/#4123 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 22 | `git clean -fd` 误删所有新文件导致返工约 30min（重启后重建） | 1 | CC 规范中明确限定 `git clean -fd` 使用场景，或改为 `git restore` / `git checkout` 避免误删未跟踪文件 | 观察中 |

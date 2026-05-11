@@ -63,6 +63,7 @@
 | 37 | ~~#2817~~ | — | frontend | 获客渠道ROI统计看板：跨渠道对比分析 | ~~✅ 已指派 kimi6~~ |
 | 38 | ~~#2027~~ | P1 | backend | 审批引擎Phase2·Entity+Service — 审批模板/审批组/SLA规则 CRUD | ~~✅ 已指派 kimi4~~ |
 | 39 | ~~#2743~~ | P2 | fullstack | 商战情报·情报使用数据埋点与ROI分析 | ~~✅ 已指派 kimi6~~ |
+| 40 | ~~#2814~~ | P2 | backend | LinkedIn意图信号富化·Clay/Apollo API对接 [21/25] | ~~✅ 已指派 kimi4~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -881,7 +882,7 @@
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
 | kimi7 | ~~#2808~~ | backend | medium | ~~Done~~ | 企微活码引擎：PR #4671 MERGED ✅ |
-| kimi7 | #2810 | backend | medium | PR已提，CI BUILDING | 企微SOP培育序列 — PR #4683 CI修复已push，CI重新触发 |
+| kimi7 | ~~#2810~~ | backend | medium | ~~Done~~ | 企微SOP培育序列 — PR #4683 MERGED ✅ |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |
@@ -916,6 +917,7 @@
 | kimi4 | ~~#2801~~ | backend | medium | ~~Done~~ | 邮件追踪：打开+点击+回复检测 — PR #4673 MERGED ✅ |
 | kimi4 | ~~#2803~~ | backend | medium | ~~Done~~ | 收件箱轮转+发送量控制 — PR #4682 MERGED ✅ |
 | kimi4 | ~~#2027~~ | backend | medium | ~~Done~~ | 审批引擎Phase2 — PR#3898已于04-19 MERGED，Issue未自动关闭导致重复指派，已关闭 |
+| kimi4 | #2814 | backend | medium | CC工作中 | LinkedIn意图信号富化·Clay/Apollo API对接 [21/25] |
 | kimi6 | #2743 | fullstack | medium | CC工作中 | 商战情报·情报使用数据埋点与ROI分析 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |

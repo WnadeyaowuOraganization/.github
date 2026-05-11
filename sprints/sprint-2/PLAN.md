@@ -890,7 +890,7 @@
 | kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
 | kimi2 | ~~#4164~~ | backend | low | ~~Done~~ | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 — PR #4662 MERGED ✅ |
 | kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
-| kimi1 | #2811 | fullstack | medium | PR已提，CI BUILDING | 企微获客效果分析看板 — PR #4677 |
+| kimi1 | ~~#2811~~ | fullstack | medium | ~~Done~~ | 企微获客效果分析看板 — PR #4677 MERGED ✅ |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | #2802 | backend | medium | CC工作中 | 邮件A/B测试引擎 |

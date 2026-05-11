@@ -903,7 +903,7 @@
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | #2809 | backend | medium | CC工作中 | 企微自动标签+客户画像同步CRM |
-| kimi4 | #2801 | backend | medium | 后端完成，待提PR | 外展获客Phase2·邮件追踪：打开+点击+回复检测 |
+| kimi4 | #2801 | backend | medium | PR已提，CI BUILDING | 外展获客Phase2·邮件追踪：打开+点击+回复检测 — PR #4673 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | #2818 | fullstack | medium | CC工作中 | 营销-销售自动移交：评分达标→通知→商机→分配 |

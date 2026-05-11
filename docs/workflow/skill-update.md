@@ -1770,3 +1770,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 |---|------|------|------|------|
 | 15 | MySQL charset=utf8mb4 NLP分词字符集不兼容：NLP字典表含emoji/特殊符号，utf8连接失败 | 1→2 | cc-test-env.sh 已修复（connectionInitSql=SET NAMES utf8mb4）。backend-coding skill 补充：Flyway datasource url 需同步加 charset 参数 | 已修复 |
 
+
+## 2026-05-11 kimi6/#2143 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 16 | VbenAdmin Vue3 组件未自动导入 ref，导致 proxy 注入失效 | 1 | frontend-coding skill 补充：使用 ref/reactive/computed 前需显式 `import { ref } from 'vue'`；VbenAdmin 不做自动按名导入 | 观察中 |
+| 17 | kimi6 环境 auth 服务 500，后端重启导致 session 失效 | 1 | 环境文档：kimi N 前端 810N 使用 localStorage key='vben-web-antd-1.5.2-dev-access'，截图需预热 E2E auth state | 观察中 |

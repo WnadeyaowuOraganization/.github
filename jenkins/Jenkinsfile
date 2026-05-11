@@ -14,22 +14,17 @@ pipeline {
     triggers {
         GenericTrigger(
             genericVariables: [
-                // pull_request 事件
-                [key: 'PR_NUMBER',  value: '$.number'],
+                [key: 'PR_NUMBER',  value: '$.pull_request.number'],
                 [key: 'BRANCH',     value: '$.pull_request.head.ref'],
                 [key: 'PR_ACTION',  value: '$.action'],
-                [key: 'PR_MERGED',  value: '$.pull_request.merged'],
-                // push 事件（ref 格式: refs/heads/feature-Issue-xxx）
-                [key: 'PUSH_REF',   value: '$.ref'],
-                [key: 'PUSH_BRANCH', value: '$.ref'],
-                [key: 'PUSH_ACTION', value: 'push']
+                [key: 'PR_MERGED',  value: '$.pull_request.merged']
             ],
             causeString: 'PR #$PR_NUMBER ($PR_ACTION)',
             token: 'wande-play-pr',
             printContributedVariables: false,
             printPostContent: false,
             regexpFilterText: '$PR_ACTION',
-            regexpFilterExpression: 'opened|synchronize|reopened|push'
+            regexpFilterExpression: 'opened|synchronize|reopened'
         )
     }
 
@@ -74,17 +69,8 @@ pipeline {
             steps {
                 withCredentials([string(credentialsId: 'github-bot-token', variable: 'BOT_TOKEN')]) {
                     script {
-                        // push 事件：从 refs/heads/xxx 提取分支名
-                        def pushRef = params.PUSH_REF ?: env.PUSH_REF ?: ''
-                        if (pushRef?.startsWith('refs/heads/')) {
-                            env.BRANCH = pushRef.replace('refs/heads/', '')
-                        }
                         def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
                         def prNum = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
-                        // GenericTrigger PR_NUMBER 不可靠，从 BRANCH 推导
-                        if (!prNum?.trim() && branch.contains('Issue-')) {
-                            prNum = sh(script: "python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py 2>/dev/null | xargs -I{} gh pr list --head ${branch} --repo ${REPO} --json number --jq '.[0].number' 2>/dev/null || echo ''", returnStdout: true).trim()
-                        }
                         env.PR_NUMBER = prNum ?: ''
                         echo "PR_NUMBER=${env.PR_NUMBER} BRANCH=${branch}"
                         sh """

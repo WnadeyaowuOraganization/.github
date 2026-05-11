@@ -37,7 +37,7 @@ echo "[trigger-ci] 触发 CI: PR #$PR_NUM ($BRANCH)"
 # 触发 Jenkins
 RESPONSE=$(curl -sf "$JENKINS_WEBHOOK" -X POST \
     -H "Content-Type: application/json" \
-    -d "{\"action\":\"synchronize\",\"number\":${PR_NUM},\"pull_request\":{\"head\":{\"ref\":\"${BRANCH}\"},\"base\":{\"ref\":\"dev\"}}}" 2>/dev/null)
+    -d "{\"action\":\"synchronize\",\"pull_request\":{\"number\":${PR_NUM},\"head\":{\"ref\":\"${BRANCH}\"},\"base\":{\"ref\":\"dev\"}}}" 2>/dev/null)
 
 if [ $? -eq 0 ]; then
     TRIGGERED=$(echo "$RESPONSE" | python3 -c "import json,sys; d=json.load(sys.stdin); print(d.get('jobs',{}).get('wande-play-pr',{}).get('triggered',False))" 2>/dev/null)

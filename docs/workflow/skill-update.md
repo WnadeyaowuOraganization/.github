@@ -1840,3 +1840,8 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **问题4**: Playwright `stream.on is not a function` → multipart 用 buffer 而非 file 路径
 - **建议**: backend-coding skill 补充 MySQL 保留字列表；backend-test skill 补充 ReflectionTestUtils 注入示例
 - **时间**: 2026-05-11
+### kimi2/#2800 pom.xml skipTests=true 导致 mvn test 不执行
+- **场景**: 冷外展序列模板（backend-coding）
+- **问题**: `pom.xml` 中 `skipTests=true` 导致 `mvn test` 不执行任何测试，CC 用默认命令跑单元测试时误以为全绿
+- **建议**: skill 文档补充 `mvn test` vs `mvn surefire:test` 的区别，说明 skipTests=true 环境下正确测试方式
+- **时间**: 2026-05-11

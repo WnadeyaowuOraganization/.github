@@ -930,6 +930,7 @@
 | kimi4 | ~~#2814~~ | backend | medium | ~~Done~~ | LinkedIn意图信号富化 — PR #4687 MERGED ✅ |
 | kimi4 | ~~#2728~~ | backend | medium | ~~Done~~ | 商战情报·AI洞察自动生成引擎 — PR #4689 MERGED ✅ |
 | kimi4 | ~~#2742~~ | backend | medium | ~~Done~~ | 商战情报·CRM双向数据同步 — PR #4692 MERGED ✅ |
+| kimi4 | #2719 | pipeline | medium | CC工作中 | 商战情报·竞品大规模源监控扩展（竞品情报[4/10]） |
 | kimi6 | #2743 | fullstack | medium | CC工作中 | 商战情报·情报使用数据埋点与ROI分析 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |

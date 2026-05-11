@@ -904,6 +904,11 @@
 | kimi1 | ~~#3197~~ | backend | high | ~~Done~~ | 计划管理REST API·Controller层 — PR #4691 MERGED ✅ |
 | kimi1 | ~~#2734~~ | backend | medium | ~~Done~~ | 商战情报·趋势预测与预警系统（联动层[9/10]） — PR #4695 MERGED ✅ |
 | kimi1 | #1451 | backend | medium | CC工作中 | 品牌术语表管理 — brand_glossary表+CRUD+术语校验+Prompt注入 |
+
+### 05-12 新批次（池耗尽拆补）
+| kimi | Issue | 模块 | effort | 状态 | 内容 |
+|------|-------|------|--------|------|------|
+| kimi1 | #1451 | backend | medium | CC工作中 | 品牌术语表管理 — brand_glossary表+CRUD+术语校验+Prompt注入（#1717等均needs-prototype冻结，唯一可派） |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |

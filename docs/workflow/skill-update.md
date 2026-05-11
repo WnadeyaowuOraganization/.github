@@ -1,4 +1,13 @@
-# Skill 改进跟踪
+**[2026-05-11] `git clean -fd` 误删所有新文件导致返工约30min（kimi8 #4123）**
+- 症状：kimi8 在 git rebase 后执行 `git clean -fd`，误删所有新文件（17 backend + 3 frontend），导致重建花费约30分钟
+- 根因：`git clean -fd` 在不同 shell 环境下行为不稳定，-d 参数可能误匹配本应保留的文件
+- 教训：rebase 后清理工作区应使用 `git restore .` 而非 `git clean -fd`，后者在 CI 预清理场景才适用
+- 处置：**频次=1次，持续观察**，建议后续更新 backend-coding skill 中的 rebase 后清理步骤
+- 建议 CC 规范：rebase 后清理用 `git restore . && git clean -fd --exclude=node_modules --exclude=target`，严格限定排除目录
+
+---
+
+
 
 > ---
 

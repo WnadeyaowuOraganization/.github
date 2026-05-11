@@ -57,6 +57,8 @@
 | 31 | ~~#2809~~ | — | fullstack | 企微自动标签+客户画像同步CRM | ~~✅ 已指派 kimi6~~ |
 | 32 | #2802 | — | backend | 邮件A/B测试引擎 | 待指派（kimi1完成后） |
 | 33 | #2803 | — | backend | 收件箱轮转+发送量控制 | 待指派（kimi4完成后） |
+| 34 | ~~#2813~~ | — | backend | LinkedIn联系人导入：CSV→CRM | ~~✅ 已指派 kimi4~~ |
+| 35 | #2815 | — | fullstack | LinkedIn+邮件协同序列：多渠道编排 | 待指派（#2812已完成） |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -891,7 +893,7 @@
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
 | kimi3 | #2816 | backend | medium | PR已提，CI BUILDING | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 — PR #4667 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
-| kimi4 | #2813 | backend | medium | PR已提，CI BUILDING | 外展获客Phase4·LinkedIn联系人导入：CSV→CRM — PR #4665 |
+| kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | #2795 | backend | medium | CC工作中 | 外展获客Phase1·触发器框架 |

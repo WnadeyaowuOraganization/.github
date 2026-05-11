@@ -918,7 +918,8 @@
 | kimi3 | ~~#2815~~ | fullstack | medium | ~~Done~~ | LinkedIn+邮件协同序列：PR #4680 MERGED ✅ |
 | kimi3 | ~~#2736~~ | backend | medium | ~~Done~~ | 商战情报·企微Bot集成 — PR #4686 MERGED ✅ |
 | kimi3 | ~~#2727~~ | backend | medium | ~~Done~~ | 商战情报·三角关联引擎 — PR #4694 MERGED ✅ |
-| kimi3 | #2065 | backend | high | CC工作中 | D3市场配置预设 — 5市场种子（China/International/North America/Southeast Asia/EU双轨）+Redis缓存+JUnit |
+| kimi3 | ~~#2065~~ | backend | high | ~~Done~~ | D3市场配置预设 — 5市场种子+Redis缓存+JUnit — PR #4698 MERGED ✅ |
+| kimi3 | #4700 | frontend | medium | CC工作中 | D3参数化·材质标注与渲染预览 — 4种材质切换+Three.js实时渲染+导出保留 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
@@ -944,7 +945,7 @@
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |
 | kimi8 | ~~#2726~~ | backend | medium | ~~Done~~ | 商战情报·跨模块事件总线 — PR #4688 MERGED ✅ |
-| kimi8 | #2729 | backend | medium | CC工作中 | 商战情报·商机评分综合模型（联动层） |
+| kimi8 | #2729 | backend | medium | PR #4699 OPEN | 商战情报·商机评分综合模型（联动层） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

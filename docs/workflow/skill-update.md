@@ -1845,3 +1845,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **问题**: `pom.xml` 中 `skipTests=true` 导致 `mvn test` 不执行任何测试，CC 用默认命令跑单元测试时误以为全绿
 - **建议**: skill 文档补充 `mvn test` vs `mvn surefire:test` 的区别，说明 skipTests=true 环境下正确测试方式
 - **时间**: 2026-05-11
+### Maven 测试命令必须在 backend/ 目录执行
+- **场景**: CC 在 `.github` 目录执行 `mvn surefire:test` 导致 BUILD FAILURE（No POM in directory）
+- **问题**: `pom.xml` 中 `skipTests=true` 时，`mvn test` 不执行任何测试；`mvn surefire:test` 也必须在有 pom.xml 的目录下执行
+- **正确做法**: `cd kimiN/backend && mvn surefire:test -pl ruoyi-modules/wande-ai -am`
+- **建议**: backend-coding skill 补充 Maven 命令必须在 backend/ 子目录执行的说明
+- **时间**: 2026-05-11

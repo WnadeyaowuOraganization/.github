@@ -1751,3 +1751,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 12 | pipeline competitors 模块预存测试14个失败（DictCursor + regex 问题），非本次引入 | 1 | 建议：排期统一修复 competitors 模块历史测试，避免每次新 Issue 都遇到预存失败干扰 | 观察中 |
+
+## 2026-05-11 kimi3/#2689 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 13 | ECharts registerMap 动态导入地图无范例，CC 踩坑 | 1 | frontend-coding skill 补充 registerMap 动态导入地图 JSON 的范例代码 | 观察中 |

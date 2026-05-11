@@ -51,7 +51,7 @@
 | 25 | ~~#2818~~ | — | fullstack | 营销-销售自动移交：评分达标→通知→商机→分配 | ~~✅ 已指派 kimi8~~ |
 | 26 | ~~#2811~~ | — | fullstack | 企微获客效果分析看板 | ~~✅ 已指派 kimi1~~ |
 | 27 | ~~#2800~~ | — | backend | 冷外展序列模板：7步标准序列+预置模板 | ~~✅ 已指派 kimi2~~ |
-| 28 | ~~#2804~~ | — | frontend | 外展分析看板：送达率/打开率/回复率/会议转化 | ~~✅ 已指派 kimi2~~（已转 #2800）|
+| 28 | ~~#2804~~ | — | frontend | 外展分析看板：送达率/打开率/回复率/会议转化 | ~~✅ 已指派 kimi2~~（→kimi5） |
 | 29 | ~~#2801~~ | — | backend | 邮件追踪：打开+点击+回复检测 | ~~✅ 已指派 kimi4~~ |
 | 30 | ~~#2812~~ | — | fullstack | 批量加好友：导入+频率控制+通过率优化 | ~~✅ 已指派 kimi6~~ |
 | 31 | ~~#2809~~ | — | fullstack | 企微自动标签+客户画像同步CRM | ~~✅ 已指派 kimi6~~ |
@@ -902,6 +902,7 @@
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | ~~#2795~~ | backend | medium | ~~Done~~ | 外展获客Phase1·触发器框架 — PR #4675 MERGED ✅ |
+| kimi5 | #2804 | frontend | medium | CC工作中 | 外展分析看板：送达率/打开率/回复率/会议转化 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

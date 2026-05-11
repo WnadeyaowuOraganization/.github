@@ -835,7 +835,7 @@
 |------|-------|------|--------|------|------|
 | kimi1 | ~~#2647~~ | pipeline | medium | ~~Done~~ | 品牌中心·SEO Pipeline — PR #4629 MERGED ✅ |
 | kimi2 | ~~#2687~~ | pipeline | medium | ~~Done~~ | 商战情报中台·政策法规自动采集 — PR #4630 MERGED ✅ |
-| kimi2 | #2142 | fullstack | medium | PR #4636 OPEN | [品牌中心] 竞品内容监测 — MediaCrawler 定时采集 |
+| kimi2 | ~~#2142~~ | fullstack | medium | ~~Done~~ | [品牌中心] 竞品内容监测 — PR #4636 MERGED ✅ |
 | kimi3 | #2118 | fullstack | medium | CC工作中 | [执行管理] AI BOM 智能推荐 |
 | kimi3 | ~~#2689~~ | frontend | medium | ~~Done~~ | 商战情报中台·市场趋势仪表盘 — PR #4631 MERGED ✅ |
 | kimi4 | ~~#2694~~ | fullstack | medium | ~~Done~~ | 商战情报中台·行业展会与会议日历 — PR #4634 MERGED ✅ |

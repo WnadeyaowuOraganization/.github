@@ -897,7 +897,7 @@
 | kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
 | kimi1 | ~~#2811~~ | fullstack | medium | ~~Done~~ | 企微获客效果分析看板 — PR #4677 MERGED ✅ |
 | kimi1 | ~~#2655~~ | pipeline | medium | ~~Done~~ | 品牌中心·文章内容选题引擎 — PR #4681 MERGED ✅ |
-| kimi1 | #2636 | frontend | medium | CC工作中 | 品牌中心·数字人前端 |
+| kimi1 | ~~#2636~~ | frontend | medium | ~~Done~~ | 品牌中心·数字人前端 — PR #4684 MERGED ✅ |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |

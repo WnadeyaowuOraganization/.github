@@ -71,6 +71,11 @@ pipeline {
                     script {
                         def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
                         def prNum = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
+                        // trigger-ci.sh 的 webhook payload: pull_request.number
+                        // 若 PR_NUMBER 仍为空，从分支名推导
+                        if (!prNum?.trim() && branch.contains('Issue-')) {
+                            prNum = sh(script: "python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py 2>/dev/null | xargs -I{} gh pr list --head ${branch} --repo ${REPO} --json number --jq '.[0].number' 2>/dev/null || echo ''", returnStdout: true).trim()
+                        }
                         env.PR_NUMBER = prNum ?: ''
                         echo "PR_NUMBER=${env.PR_NUMBER} BRANCH=${branch}"
                         sh """

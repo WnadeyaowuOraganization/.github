@@ -864,7 +864,7 @@
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | #2715 | fullstack | medium | CI构建中 | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGEABLE |
-| kimi1 | #2709 | fullstack | medium | CC工作中 | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] |
+| kimi1 | #2709 | fullstack | medium | PR已提，CI构建中 | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 |
 
 ### 05-11 第四批次（外展获客 + AI商务助手）
 | kimi | Issue | 模块 | effort | 状态 | 内容 |

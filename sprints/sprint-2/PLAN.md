@@ -47,8 +47,13 @@
 | 21 | ~~#2793~~ | — | backend | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） | ~~✅ 已指派 kimi4~~ |
 | 22 | ~~#2796~~ | — | backend | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） | ~~✅ 已指派 kimi5~~ |
 | 23 | ~~#2799~~ | — | frontend | 营销序列管理前端：可视化编辑器+状态追踪 | ~~✅ 已指派 kimi8~~ |
-| 24 | #2816 | — | backend | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 | ✅ 已指派 kimi3 |
-| 25 | #2818 | — | fullstack | 营销-销售自动移交：评分达标→通知→商机→分配 | ✅ 已指派 kimi8 |
+| 24 | ~~#2816~~ | — | backend | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 | ~~✅ 已指派 kimi3~~ |
+| 25 | ~~#2818~~ | — | fullstack | 营销-销售自动移交：评分达标→通知→商机→分配 | ~~✅ 已指派 kimi8~~ |
+| 26 | ~~#2811~~ | — | fullstack | 企微获客效果分析看板 | ~~✅ 已指派 kimi1~~ |
+| 27 | ~~#2800~~ | — | backend | 冷外展序列模板：7步标准序列+预置模板 | ~~✅ 已指派 kimi2~~ |
+| 28 | ~~#2804~~ | — | frontend | 外展分析看板：送达率/打开率/回复率/会议转化 | ~~✅ 已指派 kimi2~~（已转 #2800）|
+| 29 | ~~#2801~~ | — | backend | 邮件追踪：打开+点击+回复检测 | ~~✅ 已指派 kimi4~~ |
+| 30 | ~~#2812~~ | — | fullstack | 批量加好友：导入+频率控制+通过率优化 | ~~✅ 已指派 kimi6~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -866,7 +871,8 @@
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
-| kimi7 | #2808 | backend | medium | CC工作中 | 外展获客Phase3·企微活码引擎：自动分流+分时段欢迎语 || kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
+| kimi7 | #2808 | backend | medium | CC工作中 | 外展获客Phase3·企微活码引擎：自动分流+分时段欢迎语 |
+| kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |
 
@@ -875,7 +881,10 @@
 |------|-------|------|--------|------|------|
 | kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
 | kimi2 | ~~#4164~~ | backend | low | ~~Done~~ | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 — PR #4662 MERGED ✅ |
-| kimi2 | #2804 | frontend | medium | CC工作中 | 外展分析看板：送达率/打开率/回复率/会议转化 |
+| kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
+| kimi1 | #2811 | fullstack | medium | CC工作中 | 企微效果看板：自动分流+分时段欢迎语 |
+| kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
+| kimi2 | #2800 | backend | medium | CC工作中 | 冷外展序列模板：7步标准序列+预置模板 |
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
 | kimi3 | #2816 | backend | medium | PR已提，CI BUILDING | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 — PR #4667 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
@@ -884,7 +893,8 @@
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | #2795 | backend | medium | CC工作中 | 外展获客Phase1·触发器框架 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
-| kimi6 | #2812 | backend | medium | CC工作中 | 外展获客Phase4·批量加好友：导入+频率控制+通过率优化 |
+| kimi6 | #2812 | backend | medium | PR已提，CI BUILDING | 外展获客Phase4·批量加好友：导入+频率控制+通过率优化 — PR #4670 |
+| kimi4 | #2801 | backend | medium | CC工作中 | 外展获客Phase2·邮件追踪：打开+点击+回复检测 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | #2818 | fullstack | medium | CC工作中 | 营销-销售自动移交：评分达标→通知→商机→分配 |

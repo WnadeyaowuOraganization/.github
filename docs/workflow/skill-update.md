@@ -1739,3 +1739,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 10 | ES ik_smart 分析器未安装导致建索引失败 | 1 | backend-coding skill 增加 Spring Data Elasticsearch 常见坑预判（ik_smart 未装则 fallback standard；索引 mapping 冲突需先删除重建） | 观察中 |
+
+## 2026-05-11 kimi3/#2494 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 11 | pipeline 脚本 __file__ 路径解析不一致（parent.parent vs parent.parent.parent） | 1 | pipeline skill 模板补充「输出路径统一规范」：所有脚本统一用 `Path(__file__).resolve()` 计算路径，避免相对/绝对解析差异 | 观察中 |

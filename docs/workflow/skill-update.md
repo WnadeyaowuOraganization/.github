@@ -1851,3 +1851,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **正确做法**: `cd kimiN/backend && mvn surefire:test -pl ruoyi-modules/wande-ai -am`
 - **建议**: backend-coding skill 补充 Maven 命令必须在 backend/ 子目录执行的说明
 - **时间**: 2026-05-11
+
+**[2026-05-12] `mvn test` 失败 — BOM 缓存导致版本冲突（kimi1 #2734）**
+- 症状：kimi1 在 CC 私有 M2 目录运行 `mvn test` 失败，BOM 依赖版本解析错误
+- 根因：CC 私有 M2（`.m2-local/`）缓存了旧版 BOM `24.0-SNAPSHOT`，与 main M2 缓存不一致
+- 处置：**频次=1次**，观察是否重复
+- 建议 backend-coding skill 补充：`mvn test` 应使用 main M2（`~/.m2/repository`），CC 私有 M2 仅用于 `mvn package -DskipTests`

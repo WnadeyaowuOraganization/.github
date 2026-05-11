@@ -1745,3 +1745,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 11 | pipeline 脚本 __file__ 路径解析不一致（parent.parent vs parent.parent.parent） | 1 | pipeline skill 模板补充「输出路径统一规范」：所有脚本统一用 `Path(__file__).resolve()` 计算路径，避免相对/绝对解析差异 | 观察中 |
+
+## 2026-05-11 kimi2/#2493 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 12 | pipeline competitors 模块预存测试14个失败（DictCursor + regex 问题），非本次引入 | 1 | 建议：排期统一修复 competitors 模块历史测试，避免每次新 Issue 都遇到预存失败干扰 | 观察中 |

@@ -848,7 +848,7 @@
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
 | kimi5 | #2648 | fullstack | medium | PR已提，轮询CI | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] — PR #4642 |
 | kimi8 | ~~#2706~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — PR #4640 MERGED ✅ |
-| kimi3 | #2649 | backend | medium | CC工作中 | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads [3/5] |
+| kimi3 | #2649 | backend | medium | PR已提，轮询CI | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads — PR #4644 |
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
 | kimi8 | #2662 | frontend | medium | CC工作中 | 色卡配色器 — 需求表预览+一键导出+审批提交 [4/4] |
 | kimi4 | #2705 | backend | medium | CC工作中 | 商战情报中台·项目矿场 — 投标利润预测模型 [10/10] |
@@ -912,6 +912,7 @@
 | kimi8 | #2706 | #4640 | ✅ merged | 17:27 UTC，PR merge，卡位释放 |
 | kimi2 | #2490 | #4641 | ✅ merged | 17:35 UTC，LoRA训练机制 MERGED |
 | kimi5 | #2648 | #4642 | 🔄 CI中 | 品牌中心SEO PR |
+| kimi3 | #2649 | #4644 | 🔄 CI中 | LinkedIn自动投放 PR |
 | kimi7 | #2697 | #4643 | 🔄 CI中 | 企业能力画像 PR |
 | kimi4 | #2656 | #4639 | ✅ merged | 17:28 UTC，品牌中心文章AI MERGED |
 | kimi4 | #2705 | | CC工作中 | 项目矿场投标利润预测 [10/10] |

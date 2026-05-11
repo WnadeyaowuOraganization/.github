@@ -1,3 +1,9 @@
+**[2026-05-11] Mockito `doNothing()` 用于非void方法导致 UnnecessaryStubbing（kimi5 #2797）**
+- 症状：BaseMapper `updateById()`/`insert()` 返回 int，mock 时用了 `doNothing()` 报错
+- 根因：MyBatis-Plus 的 Mapper 方法返回 int/shell 而非 void，但 `doNothing()` 只适用于 void
+- 处置：**频次=1次**，观察同类错误是否重复
+- 建议 backend-test skill 补充：BaseMapper updateById/insert 返回 `int`，mock 应返回 `when(...).thenReturn(1)`
+
 **[2026-05-11] `git clean -fd` 误删所有新文件导致返工约30min（kimi8 #4123）**
 - 症状：kimi8 在 git rebase 后执行 `git clean -fd`，误删所有新文件（17 backend + 3 frontend），导致重建花费约30分钟
 - 根因：`git clean -fd` 在不同 shell 环境下行为不稳定，-d 参数可能误匹配本应保留的文件

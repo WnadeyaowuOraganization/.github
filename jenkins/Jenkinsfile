@@ -113,6 +113,7 @@ pipeline {
 
         // ── 阶段2：冲突检测 ──────────────────────────────────────────────
         stage('冲突检测') {
+            when { expression { return (params.SCAN_MODE ?: env.SCAN_MODE ?: '') != 'scan' } }
             steps {
                 withCredentials([string(credentialsId: 'github-weiping-token', variable: 'WEIPING_TOKEN')]) {
                     script {
@@ -128,6 +129,12 @@ pipeline {
 
         // ── 阶段3：质量门控（快速失败）──────────────────────────────────
         stage('质量门控') {
+            when {
+                expression {
+                    def prNum = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
+                    return (params.SCAN_MODE ?: env.SCAN_MODE ?: '') != 'scan' && prNum.trim()
+                }
+            }
             steps {
                 script {
                     def pr = params.PR_NUMBER ?: env.PR_NUMBER
@@ -140,7 +147,10 @@ pipeline {
         // ── 阶段4：检测变更模块（必须在前置，env vars 供后续 when 使用）────────
         stage('检测变更') {
             when {
-                expression { return (params.SCAN_MODE ?: env.SCAN_MODE ?: '') != 'scan' }
+                expression {
+                    def prNum = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
+                    return (params.SCAN_MODE ?: env.SCAN_MODE ?: '') != 'scan' && prNum.trim()
+                }
             }
             steps {
                 script {

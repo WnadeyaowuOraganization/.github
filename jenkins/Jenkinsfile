@@ -36,7 +36,7 @@ pipeline {
     environment {
         REPO         = 'WnadeyaowuOraganization/wande-play'
         CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}'
-        CI_M2_LOCAL = '/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}/.m2'
+        CI_M2_LOCAL = '/home/ubuntu/.m2/repository'
         CI_BACKEND_PORT = '6041'
         CI_FRONTEND_PORT = '8084'
         CI_DB_NAME   = 'wande-ai-ci'

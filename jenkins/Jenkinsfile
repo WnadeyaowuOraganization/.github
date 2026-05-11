@@ -14,7 +14,7 @@ pipeline {
     triggers {
         GenericTrigger(
             genericVariables: [
-                [key: 'PR_NUMBER',  value: '$.pull_request.number'],
+                [key: 'PR_NUMBER',  value: '$.number'],
                 [key: 'BRANCH',     value: '$.pull_request.head.ref'],
                 [key: 'PR_ACTION',  value: '$.action'],
                 [key: 'PR_MERGED',  value: '$.pull_request.merged']

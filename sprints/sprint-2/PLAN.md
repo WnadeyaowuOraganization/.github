@@ -833,9 +833,10 @@
 | kimi3 | ~~#2689~~ | frontend | medium | ~~Done~~ | 商战情报中台·市场趋势仪表盘 — PR #4631 MERGED ✅ |
 | kimi4 | #2694 | fullstack | medium | CC工作中 | 商战情报中台·行业展会与会议日历 [9/10] |
 | kimi5 | #2695 | backend | medium | CC工作中 | 商战情报中台·行业信息中心AI问答 [10/10] |
-| kimi6 | #2696 | backend | medium | CC工作中 | 商战情报中台·中标概率评分引擎 [1/10] |
+| kimi6 | ~~#2696~~ | backend | medium | ~~Done~~ | 商战情报中台·中标概率评分引擎 — PR #4632 MERGED ✅ |
 | kimi7 | #2697 | backend | medium | CC工作中 | 商战情报中台·企业能力画像 [2/10] |
-| kimi8 | #2698 | backend | medium | CC工作中 | 商战情报中台·AI标书深度解析 [3/10] |
+| kimi8 | ~~#2698~~ | backend | medium | ~~Done~~ | 商战情报中台·AI标书深度解析 — PR #4633 MERGED ✅ |
+| kimi6 | #2143 | fullstack | medium | CC工作中 | [品牌中心] AI内容建议 — 标题优化+标签推荐+最佳发布时间 |
 | kimi1 | #2699 | fullstack | medium | CC工作中 | 商战情报中台·Go/No-Go智能决策 [4/10] — 接替#2647槽位 |
 
 ### PR进度总览（04-26 22:05）

@@ -889,7 +889,7 @@
 | kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
 | kimi1 | #2811 | fullstack | medium | CC工作中 | 企微效果看板：自动分流+分时段欢迎语 |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
-| kimi2 | #2800 | backend | medium | CC工作中 | 冷外展序列模板：7步标准序列+预置模板 |
+| kimi2 | ~~#2800~~ | backend | medium | PR已提，CI BUILDING | 冷外展序列模板：PR #4672 |
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
 | kimi3 | #2816 | backend | medium | ⚠️ CI 失败3次，已重新触发 | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 — PR #4667 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |

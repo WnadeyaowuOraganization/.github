@@ -900,7 +900,7 @@
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
-| kimi5 | #2795 | backend | medium | CC工作中 | 外展获客Phase1·触发器框架 |
+| kimi5 | #2795 | backend | medium | PR已提，CI BUILDING | 外展获客Phase1·触发器框架 — PR #4675 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | #2809 | backend | medium | PR已提，CI BUILDING | 企微自动标签+客户画像同步CRM — PR #4674 |

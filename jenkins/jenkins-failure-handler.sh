@@ -1,5 +1,7 @@
 #!/bin/bash
 # jenkins-failure-handler.sh — CI 失败时提取错误日志并注入对应 CC
+# 注意：必须用 bash 运行（Jenkins 默认 sh 不支持某些特性）
+set -o pipefail
 set +e
 
 PR_NUMBER="${FAIL_PR_NUM:-}"

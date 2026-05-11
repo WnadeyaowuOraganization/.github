@@ -1,7 +1,7 @@
 # 万德AI平台 · 项目状态
 
-> ⏰ 最后更新：2026-05-06 by 研发经理（D90 v3 E2E URL统一配置 · 仅BASE_URL_API/BASE_URL_FRONT两个变量 · 门5+6严格检查硬编码）
-> ⏰ 上次更新：2026-05-08 by 研发经理（D106 Jenkins迁移 · GitHub Actions废弃 · fix-ci-failure skill迁移Jenkins · Jenkinsfile options合并+--admin squash-merge · .github/workflows从kimi目录删除）
+> ⏰ 最后更新：2026-05-11 by 排程经理（Jenkinsfile 维护职责移交排程经理 · 新增 push 事件触发 + PR Scanner 定时扫描 · CI_WORK_DIR 固定路径 + 共享 M2）
+> ⏰ 上次更新：2026-05-06 by 研发经理（D90 v3 E2E URL统一配置 · 仅BASE_URL_API/BASE_URL_FRONT两个变量 · 门5+6严格检查硬编码）
 > ⏰ 上次更新：2026-04-27 04:30 by 吴耀（D105 预算+计划+全景表三连击 B档建原型 · 3 Hub + 12 Tab + 3 详设 md · 3 Master #4262/#4263/#4264 + 33 子 Issue 三重引用 · needs-prototype 136→112）
 > 📚 功能注册表：[`docs/feature-registry.md`](../docs/feature-registry.md) — 42个模块·1200个Issue全景索引
 
@@ -13,6 +13,7 @@
 |------|------|------|------|
 | 2026-04-19 02:17 | wande-ai-api 引用遗漏 | CI workflow 引用已删除模块，导致所有PR单测失败 | pr-test.yml 第126行删除过时构建命令 |
 | 2026-05-06 | D90 E2E测试硬编码kimi端口 | #4467 commission-calculate.spec.ts 硬编码localhost:7102，CI中无服务 → 655个API测试全部30秒超时×retries2，E2E运行4小时阻塞整个runner | (1) D90 v3：统一使用BASE_URL_API/BASE_URL_FRONT两个变量；(2) pr-test.yml/ci-env.sh仅注入两个合法变量；(3) playwright.config.ts配置各project baseURL；(4) quality-gate门5+6严格检查所有硬编码URL；(5) wande-ai skill §7.7 + coding skills同步简化；(6) 移除所有旧变量兼容 |
+| 2026-05-11 | Jenkinsfile 维护职责移交排程经理 | Jenkinsfile 大量改动（push 事件触发 + PR Scanner + CI_WORK_DIR 固定路径 + 共享 M2），需排程经理同步并负责后续维护 | 排程经理已读取完整 Jenkinsfile 并记录关键结构到 memory，后续 CI 流水线变更由排程经理负责 |
 ## 🔄 Issue 生命周期 + 测试层级
 
 ### 完整流程图

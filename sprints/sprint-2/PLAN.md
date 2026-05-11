@@ -41,6 +41,11 @@
 | 15 | ~~#2457~~ | P2 | pipeline | 设计模型训练 — 竞品T1级6家效果图采集 LoRA-B [2/14] | ~~✅ 已指派 kimi1~~ |
 | 16 | ~~#2489~~ | P2 | backend | 设计模型训练 — 批量渲染引擎 [8/14] | ~~✅ 已指派 kimi4~~ |
 | 17 | ~~#2490~~ | P2 | backend | 设计模型训练 — LoRA增量训练机制 [9/14] | ~~✅ 已指派 kimi2~~ |
+| 18 | ~~#4164~~ | — | backend | E2E回归测试5项失败修复 | ~~✅ 已指派 kimi2~~ |
+| 19 | ~~#4123~~ | — | fullstack | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） | ~~✅ 已指派 kimi8~~ |
+| 20 | ~~#2745~~ | — | backend | 交付里程碑提醒规则 — 中标阶段变更提醒 | ~~✅ 已指派 kimi3~~ |
+| 21 | ~~#2793~~ | — | backend | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） | ~~✅ 已指派 kimi4~~ |
+| 22 | ~~#2796~~ | — | backend | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） | ~~✅ 已指派 kimi5~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -858,8 +863,17 @@
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | #2716 | backend | medium | CC工作中 | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
-| kimi6 | #2715 | fullstack | medium | 冲突rebase中 | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 CONFLICTING |
+| kimi6 | #2715 | fullstack | medium | CI构建中 | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGEABLE |
 | kimi1 | #2709 | fullstack | medium | CC工作中 | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] |
+
+### 05-11 第四批次（外展获客 + AI商务助手）
+| kimi | Issue | 模块 | effort | 状态 | 内容 |
+|------|-------|------|--------|------|------|
+| kimi2 | #4164 | backend | low | CC工作中 | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 |
+| kimi3 | #2745 | backend | medium | CC工作中 | 交付里程碑提醒规则 — 中标阶段变更提醒项目组 |
+| kimi4 | #2793 | backend | medium | CC工作中 | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） |
+| kimi5 | #2796 | backend | medium | CC工作中 | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） |
+| kimi8 | #4123 | fullstack | medium | CC工作中 | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

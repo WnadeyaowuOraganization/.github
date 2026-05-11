@@ -917,6 +917,7 @@
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | ~~#2795~~ | backend | medium | ~~Done~~ | 外展获客Phase1·触发器框架 — PR #4675 MERGED ✅ |
 | kimi5 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 — PR #4690 MERGED ✅ |
+| kimi5 | #2739 | frontend | medium | CC工作中 | 商战情报·移动端H5自适应（分发层） |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |
@@ -931,6 +932,7 @@
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |
 | kimi8 | ~~#2726~~ | backend | medium | ~~Done~~ | 商战情报·跨模块事件总线 — PR #4688 MERGED ✅ |
+| kimi8 | #2729 | backend | medium | CC工作中 | 商战情报·商机评分综合模型（联动层） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

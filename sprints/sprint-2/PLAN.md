@@ -912,7 +912,7 @@
 | kimi4 | #2803 | backend | medium | CC工作中 | 收件箱轮转+发送量控制 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
-| kimi8 | #2818 | fullstack | medium | PR已提，CI BUILDING | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 |
+| kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

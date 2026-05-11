@@ -1763,3 +1763,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 14 | `h()` JSX 在 `<script setup>` 内导致构建失败（vite 不识别） | 1 | frontend-coding skill 强调 Vue3 SFC 规范：JSX 逻辑只用 `<script setup>` 中的内联函数或 `useXXX` hook，`<template>` 专用；避免在 `<script setup>` 直接写 JSX | 观察中 |
+
+## 2026-05-11 kimi3/#2118 反馈（charset 修复，基础设施）
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|------|------|
+| 15 | MySQL charset=utf8mb4 NLP分词字符集不兼容：NLP字典表含emoji/特殊符号，utf8连接失败 | 1→2 | cc-test-env.sh 已修复（connectionInitSql=SET NAMES utf8mb4）。backend-coding skill 补充：Flyway datasource url 需同步加 charset 参数 | 已修复 |
+

@@ -147,7 +147,7 @@ spring:
     dynamic:
       datasource:
         master:
-          url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
+          url: jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&connectionInitSql=SET NAMES utf8mb4&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true
           username: ${MYSQL_USER}
           password: ${MYSQL_PASS}
   data:
@@ -439,7 +439,7 @@ start_backend() {
     fi
   fi
 
-  setsid mvn spring-boot:run $MVN_M2_OPT -Dspring-boot.run.profiles=dev -Dspring-boot.run.arguments="--server.port=${BACKEND_PORT} --spring.flyway.enabled=true --spring.flyway.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8 --spring.flyway.user=${MYSQL_USER} --spring.flyway.password=${MYSQL_PASS} --spring.flyway.baseline-on-migrate=true --spring.flyway.baseline-version=20991231235959 --spring.flyway.locations=classpath:db/migration --spring.flyway.clean-disabled=true --spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true --spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} --spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} --spring.data.redis.host=${REDIS_HOST} --spring.data.redis.port=${REDIS_PORT} --spring.data.redis.database=${REDIS_DB}" > "$LOG_DIR/backend.log" 2>&1 &
+  setsid mvn spring-boot:run $MVN_M2_OPT -Dspring-boot.run.profiles=dev -Dspring-boot.run.arguments="--server.port=${BACKEND_PORT} --spring.flyway.enabled=true --spring.flyway.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&connectionInitSql=SET NAMES utf8mb4&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8 --spring.flyway.user=${MYSQL_USER} --spring.flyway.password=${MYSQL_PASS} --spring.flyway.baseline-on-migrate=true --spring.flyway.baseline-version=20991231235959 --spring.flyway.locations=classpath:db/migration --spring.flyway.clean-disabled=true --spring.datasource.dynamic.datasource.master.url=jdbc:mysql://${MYSQL_HOST}:${MYSQL_PORT}/${KIMI_DB}?useUnicode=true&characterEncoding=utf8&connectionInitSql=SET NAMES utf8mb4&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8&autoReconnect=true&rewriteBatchedStatements=true&allowPublicKeyRetrieval=true&nullCatalogMeansCurrent=true --spring.datasource.dynamic.datasource.master.username=${MYSQL_USER} --spring.datasource.dynamic.datasource.master.password=${MYSQL_PASS} --spring.data.redis.host=${REDIS_HOST} --spring.data.redis.port=${REDIS_PORT} --spring.data.redis.database=${REDIS_DB}" > "$LOG_DIR/backend.log" 2>&1 &
 
   local pid=$!
   echo "$pid" > "$PID_FILE"

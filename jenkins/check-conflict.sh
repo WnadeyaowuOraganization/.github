@@ -9,8 +9,8 @@ CI_WORK_DIR="${4:-/home/ubuntu/projects/wande-play-ci}"
 export GH_TOKEN WEIPING_TOKEN REPO
 
 if [ -z "$PR_NUM" ]; then
-    echo "Usage: $0 <PR_NUMBER> [REPO] [JENKINS_DIR] [CI_WORK_DIR]"
-    exit 1
+    echo "PR_NUMBER not provided (push event), skipping conflict check"
+    exit 0
 fi
 
 MERGEABLE=$(gh pr view "$PR_NUM" --repo "$REPO" --json mergeable --jq '.mergeable')

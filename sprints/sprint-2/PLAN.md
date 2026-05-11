@@ -850,7 +850,7 @@
 | kimi8 | ~~#2706~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — PR #4640 MERGED ✅ |
 | kimi3 | ~~#2649~~ | backend | medium | ~~Done~~ | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads — PR #4644 MERGED ✅ |
 | kimi8 | ~~#2662~~ | frontend | medium | ~~Done~~ | 色卡配色器 — PR #4648 MERGED ✅ |
-| kimi8 | #2711 | fullstack | medium | PR已提，轮询CI | 商战情报中台·客户雷达 — 客户雷达实时看板 [6/10] — PR #4651 |
+| kimi8 | ~~#2711~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户雷达实时看板 [6/10] — PR #4651 MERGED ✅ |
 | kimi4 | ~~#2705~~ | backend | medium | ~~Done~~ | 商战情报中台·项目矿场 — 投标利润预测模型 [10/10] — PR #4650 MERGED ✅ |
 | kimi4 | #2489 | backend | medium | CC工作中 | 设计模型训练 — 批量渲染引擎 [8/14] |
 | kimi2 | ~~#2707~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — ICP自动评分引擎 — PR #4646 MERGED ✅ |
@@ -932,6 +932,7 @@
 | kimi4 | #2705 | #4650 | ✅ merged | 投标利润预测模型 MERGED |
 | kimi5 | #2648 | #4642 | ✅ merged | 品牌中心SEO MERGED |
 | kimi2 | #2717 | #4652 | 🔄 CI中 | AI事实卡片自动更新档案 PR |
+| kimi8 | #2711 | #4651 | ✅ merged | 客户雷达实时看板 MERGED |
 | kimi4 | #2705 | #4650 | 🔄 CI中 | 项目矿场投标利润预测 PR |
 | kimi8 | #2711 | #4651 | 🔄 CI中 | 客户雷达实时看板 PR |
 | kimi4 | #2705 | #? | 🔄 CI中 | 项目矿场投标利润预测 |

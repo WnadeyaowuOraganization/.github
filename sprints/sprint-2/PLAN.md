@@ -871,7 +871,7 @@
 |------|-------|------|--------|------|------|
 | kimi2 | #4164 | backend | low | CC工作中 | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 |
 | kimi3 | #2745 | backend | medium | CC工作中 | 交付里程碑提醒规则 — 中标阶段变更提醒项目组 |
-| kimi4 | #2793 | backend | medium | CC工作中 | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） |
+| kimi4 | #2793 | backend | medium | PR已提，CI队列中 | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 |
 | kimi5 | #2796 | backend | medium | CC工作中 | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） |
 | kimi8 | #4123 | fullstack | medium | PR已提，CI队列中 | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 |
 

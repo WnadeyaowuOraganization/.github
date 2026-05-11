@@ -61,9 +61,8 @@ pipeline {
                             cd ${CI_WORK_DIR}
                             # 直接克隆指定分支，避免 fetch 静默失败导致回退到错误代码
                             git clone --branch ${branch} --depth=200 https://wandeyaowu:${BOT_TOKEN}@github.com/${REPO} .
-                            # shallow clone 导致 merge 失败：dev 与 PR 分支共享历史不足
-                            # 用 unshallow 确保 merge 能正确执行（#2669 教训）
-                            git fetch origin dev --unshallow
+                            # shallow clone 的 refspec 只包含 PR 分支，需显式 fetch dev 到本地
+                            git fetch origin dev:refs/remotes/origin/dev --depth=10000
                             if git merge origin/dev --no-edit; then
                                 echo "dev merged OK"
                             else

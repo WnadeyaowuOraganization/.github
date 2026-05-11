@@ -27,7 +27,7 @@
 | 1 | ~~#2656~~ | P1 | pipeline | 品牌中心·内容自动化 [4/5] — 文章AI初稿生成+图文排版+审批推送 | ~~✅ 已指派 kimi4~~ |
 | 2 | ~~#2648~~ | P2 | fullstack | 品牌中心·SEO [2/2] — SEO内容管理页面+排名追踪看板 | ~~✅ 已指派 kimi5~~ |
 | 3 | ~~#2649~~ | P2 | backend | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads 自动投放 | ~~✅ 已指派 kimi3~~ |
-| 4 | #2662 | P2 | frontend | 色卡配色器 [4/4] — 需求表预览+一键导出+审批提交 | ✅ |
+| 4 | ~~#2662~~ | P2 | frontend | 色卡配色器 [4/4] — 需求表预览+一键导出+审批提交 | ~~✅ 已指派 kimi8~~ |
 | 5 | #2705 | P2 | backend | 商战情报中台·项目矿场 [10/10] — 投标利润预测模型 | ✅ |
 | 6 | ~~#2706~~ | P2 | backend | 商战情报中台·客户雷达 [1/10] — ICP理想客户画像模型 | ~~✅ 已指派 kimi8~~ |
 | 7 | #2707 | P2 | backend | 商战情报中台·客户雷达 [2/10] — ICP自动评分引擎 | ✅ |
@@ -844,11 +844,12 @@
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
 | kimi1 | #2457 | pipeline | medium | CC工作中 | 设计模型训练 — 竞品效果图采集 LoRA-B素材 [2/14] |
-| kimi2 | #2490 | backend | medium | PR已提，轮询CI | 设计模型训练 — LoRA增量训练机制 [9/14] — PR提交中 |
+| kimi2 | #2490 | backend | medium | PR已提，轮询CI | 设计模型训练 — LoRA增量训练机制 [9/14] — PR #4641 |
 | kimi4 | #2656 | pipeline | medium | PR已提，轮询CI | 品牌中心·内容自动化 — PR #4639，CI触发中 |
 | kimi5 | #2648 | fullstack | medium | CC工作中 | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] |
-| kimi8 | #2706 | backend | medium | PR已提，轮询CI | 商战情报中台·客户雷达 — PR #4640，CI触发中 |
+| kimi8 | ~~#2706~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — PR #4640 MERGED ✅ |
 | kimi3 | #2649 | backend | medium | CC工作中 | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads [3/5] |
+| kimi8 | #2662 | frontend | medium | CC工作中 | 色卡配色器 — 需求表预览+一键导出+审批提交 [4/4] |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -905,6 +906,9 @@
 | kimi4 | #2656 | #4639 | 🔄 CI触发中 | 17:17 UTC，品牌中心文章AI初稿 |
 | kimi8 | #2706 | #4640 | 🔄 CI触发中 | 17:19 UTC，ICP客户画像 |
 | kimi3 | #2118 | #4638 | ✅ merged | 17:22 UTC，CI ✅，auto-merge 生效 |
+| kimi8 | #2706 | #4640 | ✅ merged | 17:27 UTC，PR merge，卡位释放 |
+| kimi2 | #2490 | #4641 | 🔄 CI中 | 17:27 UTC，LoRA训练机制 PR |
+| kimi4 | #2656 | #4639 | 🔄 CI中 | 品牌中心文章AI |
 
 | 05-09 | kimi2 | #3195 | backend | P1 | In Progress | 计划模板引擎 — 中标后一键生成项目主计划 [3/10] |
 | 05-09 | kimi5 | #3196 | backend | P1 | In Progress | 供应商依赖矩阵 — 接口点管理与关键路径识别 [4/10] |

@@ -54,6 +54,12 @@ pipeline {
                     script {
                         def branch = params.BRANCH ?: env.BRANCH ?: 'dev'
                         def prNum = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
+                        // GenericTrigger PR_NUMBER 不可靠，从 BRANCH 推导
+                        if (!prNum?.trim() && branch.contains('Issue-')) {
+                            prNum = sh(script: "python3 /data/home/ubuntu/projects/.github/scripts/gh-app-token.py 2>/dev/null | xargs -I{} gh pr list --head ${branch} --repo ${REPO} --json number --jq '.[0].number' 2>/dev/null || echo ''", returnStdout: true).trim()
+                        }
+                        env.PR_NUMBER = prNum ?: ''
+                        echo "PR_NUMBER=${env.PR_NUMBER} BRANCH=${branch}"
                         sh """
                             lsof +D ${CI_WORK_DIR} 2>/dev/null | awk 'NR>1{print \$2}' | sort -u | xargs -r kill -9 2>/dev/null || true
                             rm -rf ${CI_WORK_DIR}
@@ -72,6 +78,8 @@ pipeline {
                         """
                     }
                 }
+            }
+        }
             }
         }
 

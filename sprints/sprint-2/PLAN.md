@@ -879,7 +879,7 @@
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
 | kimi7 | ~~#2808~~ | backend | medium | ~~Done~~ | 企微活码引擎：PR #4671 MERGED ✅ |
-| kimi7 | #2810 | backend | medium | CC工作中 | 企微SOP培育序列：渠道差异化自动培育 |
+| kimi7 | #2810 | backend | medium | PR已提，CI BUILDING | 企微SOP培育序列 — PR #4683 |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |
@@ -912,7 +912,7 @@
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |
 | kimi6 | ~~#2817~~ | frontend | medium | ~~Done~~ | 获客渠道ROI统计看板 — PR #4678 MERGED ✅ |
 | kimi4 | ~~#2801~~ | backend | medium | ~~Done~~ | 邮件追踪：打开+点击+回复检测 — PR #4673 MERGED ✅ |
-| kimi4 | #2803 | backend | medium | CC工作中 | 收件箱轮转+发送量控制 |
+| kimi4 | ~~#2803~~ | backend | medium | ~~Done~~ | 收件箱轮转+发送量控制 — PR #4682 MERGED ✅ |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |

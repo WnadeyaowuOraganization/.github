@@ -39,8 +39,8 @@ echo "[scanner] 发现 $(echo "$OPEN_PRS" | wc -l) 个 open PR"
 TRIGGERED=0
 SKIPPED=0
 
-# 检查是否有运行中的构建（通过扫描本地 Jenkins build 目录，避免依赖 API）
-# result 文件不存在 = 运行中或已排队
+# 检查是否有运行中的构建（通过扫描本地 Jenkins build 目录）
+# result 文件不存在 = 构建仍在运行
 check_running_build() {
     local pr_num="$1"
     local branch="$2"
@@ -63,6 +63,29 @@ check_running_build() {
     return 1
 }
 
+# 检查 Jenkins 队列中是否已有该 PR 的待处理项（通过队列 API，无需认证）
+check_queue() {
+    local pr_num="$1"
+    local JENKINS_QUEUE_JSON=$(curl -sf "${JENKINS_URL}/queue/api/json" 2>/dev/null)
+    if [ -z "$JENKINS_QUEUE_JSON" ]; then
+        return 1  # API 不可用，不阻止触发
+    fi
+    echo "$JENKINS_QUEUE_JSON" | python3 -c "
+import json, sys, re
+try:
+    d = json.load(sys.stdin)
+    for item in d.get('items', []):
+        params = item.get('params', '')
+        m = re.search(r'PR_NUMBER=([^\s&]+)', params)
+        if m and m.group(1) == '$pr_num':
+            print(f\"queue_id={item['id']} why={item.get('why','')[:60]}\")
+            sys.exit(0)
+    sys.exit(1)
+except:
+    sys.exit(1)
+" 2>/dev/null
+}
+
 while IFS='|' read -r pr_num branch updated_at; do
     [ -z "$pr_num" ] && continue
 
@@ -70,6 +93,14 @@ while IFS='|' read -r pr_num branch updated_at; do
     RUNNING_BUILD=$(check_running_build "$pr_num" "$branch")
     if [ -n "$RUNNING_BUILD" ]; then
         echo "  PR #$pr_num ($branch): Build #$RUNNING_BUILD 正在运行，跳过"
+        SKIPPED=$((SKIPPED + 1))
+        continue
+    fi
+
+    # 检查 Jenkins 队列中是否已有该 PR
+    QUEUE_ITEM=$(check_queue "$pr_num")
+    if [ -n "$QUEUE_ITEM" ]; then
+        echo "  PR #$pr_num ($branch): 已在队列 $QUEUE_ITEM，跳过"
         SKIPPED=$((SKIPPED + 1))
         continue
     fi

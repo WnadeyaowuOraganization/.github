@@ -899,6 +899,7 @@
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
 | kimi3 | ~~#2816~~ | backend | medium | ~~Done~~ | 线索评分增强：PR #4667 MERGED ✅ |
 | kimi3 | ~~#2815~~ | fullstack | medium | ~~Done~~ | LinkedIn+邮件协同序列：PR #4680 MERGED ✅ |
+| kimi3 | #2736 | backend | medium | CC工作中 | 商战情报·企微Bot集成（分发层龙头） |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |

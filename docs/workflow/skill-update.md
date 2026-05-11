@@ -1820,3 +1820,8 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 |---|------|------|---------|------|
 | 23 | VO 缺 `@AutoMapper(target=Entity.class)` → MapStruct 转换失败，API 返回 500 | 1 | backend-coding skill 补充：VO 类必须加 `@AutoMapper(target=Entity.class)`，MapStruct 转换必须显式指定 target | 观察中 |
 | 24 | Flyway CREATE TABLE 缺 `create_dept` 等 BaseEntity 字段 → SQL 与 Entity 不匹配 | 1 | backend-schema skill 补充：所有 CREATE TABLE 必须包含 BaseEntity 全部字段（id/create_by/create_dept 等），禁止省略 | 观察中 |
+### kimi8/#2799 ISequenceService.updateSequence 缺失
+- **场景**: 营销序列管理前端（可视化编辑器）
+- **问题**: 前端调用 `ISequenceService.updateSequence()` 编辑序列，但后端只有 `createSequence`，前端用 `create+传id` 替代有隐患
+- **建议**: 后端补充 `ISequenceService.updateSequence()` 方法；或前端改用已有 API
+- **时间**: 2026-05-11

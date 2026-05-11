@@ -1757,3 +1757,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 13 | ECharts registerMap 动态导入地图无范例，CC 踩坑 | 1 | frontend-coding skill 补充 registerMap 动态导入地图 JSON 的范例代码 | 观察中 |
+
+## 2026-05-11 kimi2/#2142 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 14 | `h()` JSX 在 `<script setup>` 内导致构建失败（vite 不识别） | 1 | frontend-coding skill 强调 Vue3 SFC 规范：JSX 逻辑只用 `<script setup>` 中的内联函数或 `useXXX` hook，`<template>` 专用；避免在 `<script setup>` 直接写 JSX | 观察中 |

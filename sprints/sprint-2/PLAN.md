@@ -835,7 +835,7 @@
 | kimi4 | ~~#2694~~ | fullstack | medium | ~~Done~~ | 商战情报中台·行业展会与会议日历 — PR #4634 MERGED ✅ |
 | kimi5 | ~~#2695~~ | backend | medium | ~~Done~~ | 商战情报中台·行业信息中心AI问答 — PR #4635 MERGED ✅ |
 | kimi6 | ~~#2696~~ | backend | medium | ~~Done~~ | 商战情报中台·中标概率评分引擎 — PR #4632 MERGED ✅ |
-| kimi7 | #2697 | backend | medium | CC工作中 | 商战情报中台·企业能力画像 [2/10] |
+| kimi7 | ~~#2697~~ | backend | medium | ~~Done~~ | 商战情报中台·企业能力画像 [2/10] — PR #4643 MERGED ✅ |
 | kimi8 | ~~#2698~~ | backend | medium | ~~Done~~ | 商战情报中台·AI标书深度解析 — PR #4633 MERGED ✅ |
 | kimi6 | #2143 | fullstack | medium | PR已提，轮询CI | [品牌中心] AI内容建议 — PR #4645 |
 | kimi1 | ~~#2699~~ | fullstack | medium | ~~Done~~ | 商战情报中台·Go/No-Go智能决策 — PR #4637 MERGED ✅ |
@@ -915,7 +915,7 @@
 | kimi3 | #2649 | #4644 | 🔄 CI中 | LinkedIn自动投放 PR |
 | kimi6 | #2143 | #4645 | 🔄 CI中 | 品牌中心AI内容建议 PR |
 | kimi2 | #2707 | #4646 | 🔄 CI中 | ICP评分引擎 PR |
-| kimi7 | #2697 | #4643 | 🔄 CI中 | 企业能力画像 PR |
+| kimi7 | #2697 | #4643 | ✅ merged | 17:57 UTC，企业能力画像 MERGED |
 | kimi1 | #2457 | #4647 | 🔄 CI中 | 设计模型LoRA采集 PR |
 | kimi4 | #2705 | #? | 🔄 CI中 | 项目矿场投标利润预测 |
 | kimi4 | #2656 | #4639 | ✅ merged | 17:28 UTC，品牌中心文章AI MERGED |

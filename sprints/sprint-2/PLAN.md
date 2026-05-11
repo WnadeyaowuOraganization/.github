@@ -870,7 +870,8 @@
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
 | kimi1 | #2794 | backend | medium | CC工作中 | 营销序列引擎：执行调度器（#2793后续） |
-| kimi2 | #4164 | backend | low | PR已提，CI BUILDING | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 — PR #4662 |
+| kimi2 | ~~#4164~~ | backend | low | ~~Done~~ | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 — PR #4662 MERGED ✅ |
+| kimi2 | #2804 | frontend | medium | CC工作中 | 外展分析看板：送达率/打开率/回复率/会议转化 |
 | kimi3 | #2745 | backend | medium | PR已提，等pause | 交付里程碑提醒规则 — PR#4659已提，needs-prototype标pause |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | #2813 | backend | medium | CC工作中 | 外展获客Phase4·LinkedIn联系人导入：CSV→CRM |

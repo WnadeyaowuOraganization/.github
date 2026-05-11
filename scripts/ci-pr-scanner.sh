@@ -7,8 +7,15 @@ set +e
 REPO="WnadeyaowuOraganization/wande-play"
 JENKINS_URL="http://localhost:18080/jenkins"
 SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
-export GH_TOKEN="${GH_TOKEN:-$(python3 $SCRIPTS_DIR/gh-app-token.py 2>/dev/null)}"
 
+# 优先使用缓存 token（由 refresh-gh-token.sh 维护），避免频繁调 GitHub App API 触发 rate limit
+if [ -f /tmp/.gh-token.env ]; then
+    export GH_TOKEN=$(bash -c 'source /tmp/.gh-token.env && echo $GH_TOKEN' 2>/dev/null)
+fi
+# 兜底：从 GitHub App 生成新 token
+if [ -z "$GH_TOKEN" ]; then
+    export GH_TOKEN=$(python3 "$SCRIPTS_DIR/gh-app-token.py" 2>/dev/null)
+fi
 if [ -z "$GH_TOKEN" ]; then
     echo "[scanner] GH_TOKEN 为空，退出"
     exit 1

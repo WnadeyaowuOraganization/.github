@@ -78,7 +78,13 @@ pipeline {
 
         // ── 阶段2：冲突检测 ──────────────────────────────────────────────
         stage('冲突检测') {
-            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
+            when {
+                expression {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
+                    def br = params.BRANCH ?: env.BRANCH ?: ''
+                    return pr.trim() || br.contains('feature-') || br.contains('fix-')
+                }
+            }
             steps {
                 withCredentials([string(credentialsId: 'github-weiping-token', variable: 'WEIPING_TOKEN')]) {
                     script {
@@ -94,7 +100,13 @@ pipeline {
 
         // ── 阶段3：质量门控（快速失败）──────────────────────────────────
         stage('质量门控') {
-            when { expression { return (params.PR_NUMBER ?: env.PR_NUMBER)?.trim() } }
+            when {
+                expression {
+                    def pr = params.PR_NUMBER ?: env.PR_NUMBER ?: ''
+                    def br = params.BRANCH ?: env.BRANCH ?: ''
+                    return pr.trim() || br.contains('feature-') || br.contains('fix-')
+                }
+            }
             steps {
                 script {
                     def pr = params.PR_NUMBER ?: env.PR_NUMBER

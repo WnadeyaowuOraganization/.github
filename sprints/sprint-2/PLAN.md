@@ -865,7 +865,8 @@
 | kimi2 | ~~#2717~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — AI事实卡片自动更新档案 [2/10] — PR #4652 MERGED ✅ |
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
-| kimi7 | #2807 | backend | medium | CC工作中 | 外展获客Phase3·企微获客助手API — 获客链接管理 || kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
+| kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
+| kimi7 | #2808 | backend | medium | CC工作中 | 外展获客Phase3·企微活码引擎：自动分流+分时段欢迎语 || kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |
 
@@ -876,9 +877,9 @@
 | kimi2 | ~~#4164~~ | backend | low | ~~Done~~ | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 — PR #4662 MERGED ✅ |
 | kimi2 | #2804 | frontend | medium | CC工作中 | 外展分析看板：送达率/打开率/回复率/会议转化 |
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
-| kimi3 | #2816 | backend | medium | CC工作中 | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 |
+| kimi3 | #2816 | backend | medium | PR已提，CI BUILDING | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 — PR #4667 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
-| kimi4 | #2813 | backend | medium | CC工作中 | 外展获客Phase4·LinkedIn联系人导入：CSV→CRM |
+| kimi4 | #2813 | backend | medium | PR已提，CI BUILDING | 外展获客Phase4·LinkedIn联系人导入：CSV→CRM — PR #4665 |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | #2795 | backend | medium | CC工作中 | 外展获客Phase1·触发器框架 |

@@ -861,7 +861,7 @@
 | kimi2 | ~~#2707~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — ICP自动评分引擎 — PR #4646 MERGED ✅ |
 | kimi2 | ~~#2717~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — AI事实卡片自动更新档案 [2/10] — PR #4652 MERGED ✅ |
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
-| kimi7 | #2716 | backend | medium | PR已提，CI构建中 | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 |
+| kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | #2715 | fullstack | medium | CI构建中 | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGEABLE |
 | kimi1 | #2709 | fullstack | medium | CC工作中 | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] |

@@ -852,7 +852,7 @@
 | kimi8 | #2662 | frontend | medium | PR已提，轮询CI | 色卡配色器 — PR #4648 |
 | kimi4 | #2705 | backend | medium | CC工作中 | 商战情报中台·项目矿场 — 投标利润预测模型 [10/10] |
 | kimi2 | #2707 | backend | medium | PR已提，轮询CI | 商战情报中台·客户雷达 — ICP自动评分引擎 — PR #4646 |
-| kimi7 | #2708 | pipeline | medium | 等待锁释放 | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] |
+| kimi7 | #2708 | pipeline | medium | CC工作中 | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

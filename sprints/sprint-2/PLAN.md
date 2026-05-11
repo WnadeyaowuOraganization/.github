@@ -919,7 +919,7 @@
 | kimi3 | ~~#2736~~ | backend | medium | ~~Done~~ | 商战情报·企微Bot集成 — PR #4686 MERGED ✅ |
 | kimi3 | ~~#2727~~ | backend | medium | ~~Done~~ | 商战情报·三角关联引擎 — PR #4694 MERGED ✅ |
 | kimi3 | ~~#2065~~ | backend | high | ~~Done~~ | D3市场配置预设 — 5市场种子+Redis缓存+JUnit — PR #4698 MERGED ✅ |
-| kimi3 | #4700 | frontend | medium | CC工作中 | D3参数化·材质标注与渲染预览 — 4种材质切换+Three.js实时渲染+导出保留 |
+| kimi3 | #4700 | frontend | medium | PR #4704 OPEN | D3参数化·材质标注与渲染预览 — 4种材质切换+Three.js实时渲染+导出保留，CI等待中 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
@@ -928,7 +928,7 @@
 | kimi5 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 — PR #4690 MERGED ✅ |
 | kimi5 | ~~#2739~~ | frontend | medium | ~~Done~~ | 商战情报·移动端H5自适应 — PR #4693 MERGED ✅ |
 | kimi5 | ~~#2725~~ | backend | medium | ~~Done~~ | 商战情报·投标竞争对手识别·Deal Tips — PR #4702 MERGED ✅ |
-| kimi5 | — | — | — | 🔴 空闲 | 池耗尽，等排程经理拆分补充 |
+| kimi5 | #4705 | frontend | medium | CC工作中 | CRM商机转化漏斗详情 — 商机各阶段时长+转化障碍分析（新建） |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
 | kimi4 | #2016 | backend | medium | PR #4703 OPEN | 企微审批消息卡片·后端 — CI等待中 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |

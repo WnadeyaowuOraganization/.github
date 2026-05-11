@@ -35,7 +35,7 @@ pipeline {
 
     environment {
         REPO         = 'WnadeyaowuOraganization/wande-play'
-        CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}'
+        CI_WORK_DIR  = '/home/ubuntu/projects/wande-play-ci'
         CI_M2_LOCAL = '/home/ubuntu/.m2/repository'
         CI_BACKEND_PORT = '6041'
         CI_FRONTEND_PORT = '8084'
@@ -285,7 +285,7 @@ PR_NUMBER=''' + pr + '''
 BUILD_RESULT=''' + buildResult + '''
 GH_TOKEN="${WEIPING_TOKEN}"
 REPO="WnadeyaowuOraganization/wande-play"
-CI_WORK_DIR="/home/ubuntu/projects/wande-play-ci-${BUILD_NUMBER}"
+CI_WORK_DIR="/home/ubuntu/projects/wande-play-ci"
 JENKINS_DIR="/data/home/ubuntu/projects/.github/jenkins"
 SCRIPTS_DIR="/data/home/ubuntu/projects/.github/scripts"
 export GH_TOKEN REPO CI_WORK_DIR JENKINS_DIR SCRIPTS_DIR

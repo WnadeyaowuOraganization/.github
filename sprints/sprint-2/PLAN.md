@@ -30,7 +30,7 @@
 | 4 | ~~#2662~~ | P2 | frontend | 色卡配色器 [4/4] — 需求表预览+一键导出+审批提交 | ~~✅ 已指派 kimi8~~ |
 | 5 | ~~#2705~~ | P2 | backend | 商战情报中台·项目矿场 [10/10] — 投标利润预测模型 | ~~✅ 已指派 kimi4~~ |
 | 6 | ~~#2706~~ | P2 | backend | 商战情报中台·客户雷达 [1/10] — ICP理想客户画像模型 | ~~✅ 已指派 kimi8~~ |
-| 7 | #2707 | P2 | backend | 商战情报中台·客户雷达 [2/10] — ICP自动评分引擎 | ✅ |
+| 7 | ~~#2707~~ | P2 | backend | 商战情报中台·客户雷达 [2/10] — ICP自动评分引擎 | ~~✅ 已指派 kimi2~~ |
 | 8 | #2708 | P2 | pipeline | 商战情报中台·客户雷达 [3/10] — 多源意图信号采集管线 | ✅ |
 | 9 | #2709 | P2 | fullstack | 商战情报中台·客户雷达 [4/10] — 客户购买阶段预测 | ✅ |
 | 10 | #2711 | P2 | fullstack | 商战情报中台·客户雷达 [6/10] — 客户雷达实时看板 | ✅ |
@@ -844,7 +844,7 @@
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
 | kimi1 | #2457 | pipeline | medium | CC工作中 | 设计模型训练 — 竞品效果图采集 LoRA-B素材 [2/14] |
-| kimi2 | #2490 | backend | medium | PR已提，轮询CI | 设计模型训练 — LoRA增量训练机制 [9/14] — PR #4641 |
+| kimi2 | ~~#2490~~ | backend | medium | ~~Done~~ | 设计模型训练 — LoRA增量训练机制 [9/14] — PR #4641 MERGED ✅ |
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
 | kimi5 | #2648 | fullstack | medium | PR已提，轮询CI | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] — PR #4642 |
 | kimi8 | ~~#2706~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — PR #4640 MERGED ✅ |
@@ -852,6 +852,7 @@
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
 | kimi8 | #2662 | frontend | medium | CC工作中 | 色卡配色器 — 需求表预览+一键导出+审批提交 [4/4] |
 | kimi4 | #2705 | backend | medium | CC工作中 | 商战情报中台·项目矿场 — 投标利润预测模型 [10/10] |
+| kimi2 | #2707 | backend | medium | CC工作中 | 商战情报中台·客户雷达 — ICP自动评分引擎 [2/10] |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -909,8 +910,9 @@
 | kimi8 | #2706 | #4640 | 🔄 CI触发中 | 17:19 UTC，ICP客户画像 |
 | kimi3 | #2118 | #4638 | ✅ merged | 17:22 UTC，CI ✅，auto-merge 生效 |
 | kimi8 | #2706 | #4640 | ✅ merged | 17:27 UTC，PR merge，卡位释放 |
-| kimi2 | #2490 | #4641 | 🔄 CI中 | 17:27 UTC，LoRA训练机制 |
+| kimi2 | #2490 | #4641 | ✅ merged | 17:35 UTC，LoRA训练机制 MERGED |
 | kimi5 | #2648 | #4642 | 🔄 CI中 | 品牌中心SEO PR |
+| kimi7 | #2697 | #4643 | 🔄 CI中 | 企业能力画像 PR |
 | kimi4 | #2656 | #4639 | ✅ merged | 17:28 UTC，品牌中心文章AI MERGED |
 | kimi4 | #2705 | | CC工作中 | 项目矿场投标利润预测 [10/10] |
 

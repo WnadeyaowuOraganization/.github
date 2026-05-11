@@ -871,11 +871,12 @@
 |------|-------|------|--------|------|------|
 | kimi1 | #2794 | backend | medium | CC工作中 | 营销序列引擎：执行调度器（#2793后续） |
 | kimi2 | #4164 | backend | low | PR已提，CI BUILDING | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 — PR #4662 |
-| kimi3 | #2745 | backend | medium | CC工作中 | 交付里程碑提醒规则 — 中标阶段变更提醒项目组 |
+| kimi3 | #2745 | backend | medium | PR已提，等pause | 交付里程碑提醒规则 — PR#4659已提，needs-prototype标pause |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | #2813 | backend | medium | CC工作中 | 外展获客Phase4·LinkedIn联系人导入：CSV→CRM |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
-| kimi5 | #2797 | backend | medium | PR已提，CI BUILDING | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 |
+| kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
+| kimi5 | #2795 | backend | medium | CC工作中 | 外展获客Phase1·触发器框架 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | #2812 | backend | medium | CC工作中 | 外展获客Phase4·批量加好友：导入+频率控制+通过率优化 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |

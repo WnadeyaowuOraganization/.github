@@ -64,6 +64,7 @@
 | 38 | ~~#2027~~ | P1 | backend | 审批引擎Phase2·Entity+Service — 审批模板/审批组/SLA规则 CRUD | ~~✅ 已指派 kimi4~~ |
 | 39 | ~~#2743~~ | P2 | fullstack | 商战情报·情报使用数据埋点与ROI分析 | ~~✅ 已指派 kimi6~~ |
 | 40 | ~~#2814~~ | P2 | backend | LinkedIn意图信号富化·Clay/Apollo API对接 [21/25] | ~~✅ 已指派 kimi4~~ |
+| 41 | ~~#3104~~ | P2 | fullstack | PI形式发票生成+PDF导出 — CRM模块 | ~~✅ 已指派 kimi7~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -883,6 +884,7 @@
 | kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
 | kimi7 | ~~#2808~~ | backend | medium | ~~Done~~ | 企微活码引擎：PR #4671 MERGED ✅ |
 | kimi7 | ~~#2810~~ | backend | medium | ~~Done~~ | 企微SOP培育序列 — PR #4683 MERGED ✅ |
+| kimi7 | #3104 | fullstack | medium | CC工作中 | PI形式发票生成+PDF导出 — CRM模块 |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |

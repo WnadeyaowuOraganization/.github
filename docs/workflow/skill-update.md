@@ -1777,3 +1777,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 |---|------|------|---------|------|
 | 16 | VbenAdmin Vue3 组件未自动导入 ref，导致 proxy 注入失效 | 1 | frontend-coding skill 补充：使用 ref/reactive/computed 前需显式 `import { ref } from 'vue'`；VbenAdmin 不做自动按名导入 | 观察中 |
 | 17 | kimi6 环境 auth 服务 500，后端重启导致 session 失效 | 1 | 环境文档：kimi N 前端 810N 使用 localStorage key='vben-web-antd-1.5.2-dev-access'，截图需预热 E2E auth state | 观察中 |
+
+## 2026-05-11 kimi2/#2707 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 18 | testCompile 阶段 Page 类路径与主代码不一致（BeanCopier 编译失败） | 1 | backend-coding skill 补充：testCompile 也用 Amplexton 插件，保持 Page 类路径一致 | 观察中 |

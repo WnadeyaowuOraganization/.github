@@ -835,11 +835,11 @@
 |------|-------|------|--------|------|------|
 | kimi1 | ~~#2647~~ | pipeline | medium | ~~Done~~ | 品牌中心·SEO Pipeline — PR #4629 MERGED ✅ |
 | kimi2 | ~~#2687~~ | pipeline | medium | ~~Done~~ | 商战情报中台·政策法规自动采集 — PR #4630 MERGED ✅ |
-| kimi2 | #2142 | fullstack | medium | CC工作中 | [品牌中心] 竞品内容监测 — MediaCrawler 定时采集 |
+| kimi2 | #2142 | fullstack | medium | PR #4636 OPEN | [品牌中心] 竞品内容监测 — MediaCrawler 定时采集 |
 | kimi3 | #2118 | fullstack | medium | CC工作中 | [执行管理] AI BOM 智能推荐 |
 | kimi3 | ~~#2689~~ | frontend | medium | ~~Done~~ | 商战情报中台·市场趋势仪表盘 — PR #4631 MERGED ✅ |
 | kimi4 | ~~#2694~~ | fullstack | medium | ~~Done~~ | 商战情报中台·行业展会与会议日历 — PR #4634 MERGED ✅ |
-| kimi5 | #2695 | backend | medium | CC工作中 | 商战情报中台·行业信息中心AI问答 [10/10] |
+| kimi5 | ~~#2695~~ | backend | medium | ~~Done~~ | 商战情报中台·行业信息中心AI问答 — PR #4635 MERGED ✅ |
 | kimi6 | ~~#2696~~ | backend | medium | ~~Done~~ | 商战情报中台·中标概率评分引擎 — PR #4632 MERGED ✅ |
 | kimi7 | #2697 | backend | medium | CC工作中 | 商战情报中台·企业能力画像 [2/10] |
 | kimi8 | ~~#2698~~ | backend | medium | ~~Done~~ | 商战情报中台·AI标书深度解析 — PR #4633 MERGED ✅ |

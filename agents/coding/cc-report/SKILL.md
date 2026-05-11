@@ -186,11 +186,8 @@ curl -s -X POST http://localhost:9872/api/notify \
 #### PR 创建后主动触发 CI（如 CC push 后）
 
 ```bash
-# ✅ Jenkins Webhook Token 端点（CC 可用，无需认证）
-export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
-curl -s -X POST "http://localhost:18080/jenkins/generic-webhook-trigger/invoke?token=wande-play-pr" \
-  -H "Content-Type: application/json" \
-  -d "{\"action\":\"synchronize\",\"pull_request\":{\"number\":${PR_NUMBER},\"head\":{\"ref\":\"feature-Issue-${ISSUE}\"},\"merged\":false}}"
+# ✅ push 后必须触发 CI（不等 webhook，CC push 不会自动触发 Jenkins）
+bash ~/projects/.github/scripts/trigger-ci.sh ${PR_NUMBER}
 
 # ❌ 错误：调 Jenkins API（如 /build 或 /buildWithParameters）—— 需要认证，CC 无法使用
 ```

@@ -82,6 +82,8 @@ cp /tmp/01-list.png /tmp/02-modal.png issues/issue-${ISSUE}/screenshots/
 git add issues/issue-${ISSUE}/screenshots/
 git commit -m "docs: 添加截图证据 #${ISSUE}"
 git push --force-with-lease
+# push 后必须触发 CI（不等 webhook，CC push 不会自动触发 Jenkins）
+bash ~/projects/.github/scripts/trigger-ci.sh ${PR_NUMBER}
 
 # 3. PR body中用相对路径引用
 ```
@@ -182,6 +184,8 @@ Fixes #<Issue号>
 # 1. rebase dev（约束 8）
 git fetch origin dev && git rebase origin/dev
 git push --force-with-lease
+# push 后必须触发 CI（不等 webhook，CC push 不会自动触发 Jenkins）
+bash ~/projects/.github/scripts/trigger-ci.sh ${PR_NUMBER}
 
 # 2. 【前端必做】全量构建验证（门禁，失败则不允许继续提 PR）
 # ⚠️ 本步骤仅在有前端改动时执行；纯后端 PR 可跳过

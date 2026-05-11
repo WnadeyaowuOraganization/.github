@@ -79,26 +79,13 @@ git add -A
 git commit -m "fix(<module>): <一句话> #${ISSUE}"
 git push origin "feature-Issue-${ISSUE}"
 
-# ⚠️ git push 本身不触发 Jenkins CI！
-# GitHub webhook 只订阅 pull_request 事件，push 事件没有 pull_request 字段，Jenkins 拿不到 PR 编号。
-# 必须主动触发 pull_request 事件：
-export GH_TOKEN=$(python3 ~/projects/.github/scripts/gh-app-token.py)
-gh pr comment <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --body "force push 触发 CI" || \
-  gh pr edit <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --title "WIP: $(gh pr view <PR_NUMBER> --repo WnadeyaowuOraganization/wande-play --json title --jq '.title')"
+# push 后必须触发 CI（不等 webhook，CC push 不会自动触发 Jenkins）
+bash ~/projects/.github/scripts/trigger-ci.sh <PR_NUMBER>
 ```
 
-### 6. 触发 CI（正确方式）
-
-**Jenkins Webhook Token 端点（无需认证，直接 curl）**：
-
-```bash
-# ✅ 正确：调 webhook token URL（不需认证）
-curl -s -X POST "http://localhost:18080/jenkins/generic-webhook-trigger/invoke?token=wande-play-pr" \
-  -H "Content-Type: application/json" \
-  -d '{"action":"synchronize","pull_request":{"number":<PR_NUMBER>,"head":{"ref":"feature-Issue-<ISSUE>"},"merged":false}}'
-
-# ❌ 错误：调 Jenkins API（如 /buildWithParameters）—— 需要认证，CC 无法使用
-```
+**错误方式（❌ 已废弃）**：
+- `gh pr comment` trick — 不再需要，trigger-ci.sh 直接发 webhook 事件
+- GitHub webhook 的 push 事件 — Jenkins 已移除 push 触发，仅响应 pull_request
 
 **典型场景**：
 - CC push 后主动触发 CI（CC 用 git push 无法自动触发）

@@ -1857,3 +1857,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 根因：CC 私有 M2（`.m2-local/`）缓存了旧版 BOM `24.0-SNAPSHOT`，与 main M2 缓存不一致
 - 处置：**频次=1次**，观察是否重复
 - 建议 backend-coding skill 补充：`mvn test` 应使用 main M2（`~/.m2/repository`），CC 私有 M2 仅用于 `mvn package -DskipTests`
+
+**[2026-05-12] Spring Context 加载失败浪费 1h — bean 冲突绕过后改用纯 Mockito（kimi4 #2719）**
+- 症状：kimi4 环境 `sysLoginService` bean 冲突，`BaseServiceTest @Tag(dev)` Spring 上下文加载失败，浪费约 1h 排查
+- 根因：CC 私有环境存在预置 bean 与测试上下文冲突，未区分「需要 Spring 上下文」和「纯 Mockito」两种写法
+- 处置：**频次=1次**，观察是否重复
+- 建议 backend-test skill 补充：明确区分两种测试策略，优先使用 `@ExtendWith(MockitoExtension)` 纯 Mockito 写法（无需 Spring 上下文），仅在必须集成 Spring bean 时才使用 `@SpringBootTest`

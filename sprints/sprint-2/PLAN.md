@@ -58,7 +58,8 @@
 | 32 | #2802 | — | backend | 邮件A/B测试引擎 | 待指派（kimi1完成后） |
 | 33 | #2803 | — | backend | 收件箱轮转+发送量控制 | 待指派（kimi4完成后） |
 | 34 | ~~#2813~~ | — | backend | LinkedIn联系人导入：CSV→CRM | ~~✅ 已指派 kimi4~~ |
-| 35 | #2815 | — | fullstack | LinkedIn+邮件协同序列：多渠道编排 | 待指派（#2812已完成） |
+| 35 | ~~#2815~~ | — | fullstack | LinkedIn+邮件协同序列：多渠道编排 | ~~✅ 已指派 kimi3~~ |
+| 36 | ~~#2810~~ | — | backend | 企微SOP培育序列：渠道差异化自动培育 | ~~✅ 已指派 kimi7~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -876,7 +877,8 @@
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
-| kimi7 | #2808 | backend | medium | PR已提，CI BUILDING | 外展获客Phase3·企微活码引擎：自动分流+分时段欢迎语 — PR #4671 |
+| kimi7 | ~~#2808~~ | backend | medium | ~~Done~~ | 企微活码引擎：PR #4671 MERGED ✅ |
+| kimi7 | #2810 | backend | medium | CC工作中 | 企微SOP培育序列：渠道差异化自动培育 |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |
@@ -891,7 +893,8 @@
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | PR已提，CI BUILDING | 冷外展序列模板：PR #4672 |
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
-| kimi3 | #2816 | backend | medium | ⚠️ CI 失败3次，已重新触发 | 线索评分增强：邮件+企微+LinkedIn多渠道信号融合 — PR #4667 |
+| kimi3 | ~~#2816~~ | backend | medium | ~~Done~~ | 线索评分增强：PR #4667 MERGED ✅ |
+| kimi3 | #2815 | fullstack | medium | CC工作中 | LinkedIn+邮件协同序列：多渠道编排 |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |

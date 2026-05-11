@@ -1,3 +1,10 @@
+**[2026-05-11] PR #4667 CI 连续失败 3 次（Build #498/#500/#504）（kimi3 #2816）**
+- 症状：Jenkins Groovy 返回 `ERROR: script returned exit code 1/2`，实际测试失败原因需从 Maven surefire 报告定位
+- 根因：待确认（可能是新增接口与现有测试冲突）
+- 处置：已注入 failure handler 到 kimi3，已重新触发 CI Build #510+
+- 教训：CI 失败 2+ 次时需主动排查，不要等 scanner 重试
+- 状态：**频次=3次（观察中），已重新触发 CI**
+
 **[2026-05-11] Mockito `doNothing()` 用于非void方法导致 UnnecessaryStubbing（kimi5 #2797）**
 - 症状：BaseMapper `updateById()`/`insert()` 返回 int，mock 时用了 `doNothing()` 报错
 - 根因：MyBatis-Plus 的 Mapper 方法返回 int/shell 而非 void，但 `doNothing()` 只适用于 void

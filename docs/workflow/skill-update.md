@@ -1863,3 +1863,9 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 根因：CC 私有环境存在预置 bean 与测试上下文冲突，未区分「需要 Spring 上下文」和「纯 Mockito」两种写法
 - 处置：**频次=1次**，观察是否重复
 - 建议 backend-test skill 补充：明确区分两种测试策略，优先使用 `@ExtendWith(MockitoExtension)` 纯 Mockito 写法（无需 Spring 上下文），仅在必须集成 Spring bean 时才使用 `@SpringBootTest`
+
+**[2026-05-12] Playwright auth.setup 登录超时 — 后端 stopped 未发现（kimi5 #4705）**
+- 症状：kimi5 前端 E2E 测试中，auth.setup 登录超时，排查了约 45 分钟才发现后端已 stopped
+- 根因：`cc-test-env status` 输出中 backend 状态字段不易读，stopped 状态不够醒目
+- 处置：**频次=1次**，观察是否重复
+- 建议：CC 测试环境运维 skill 或 cc-test-env 脚本中，`backend STOPPED` 状态应以红色/醒目颜色标出，避免 CC 忽略

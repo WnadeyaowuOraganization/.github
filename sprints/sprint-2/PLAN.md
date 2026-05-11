@@ -43,7 +43,7 @@
 | 17 | ~~#2696~~ | P2 | fullstack | 商战情报中台·项目矿场 — 中标概率评分模型（企业能力+历史+竞争度）[1/10] | ~~✅ 已指派 kimi6~~ |
 | 18 | ~~#2697~~ | P2 | fullstack | 商战情报中台·项目矿场 — 企业能力画像（规模/资质/历史/协同）[2/10] | ~~✅ 已指派 kimi7~~ |
 | 19 | ~~#2698~~ | P2 | fullstack | 商战情报中台·项目矿场 — AI标书深度解析与关键信息提取 [3/10] | ~~✅ 已指派 kimi8~~ |
-| 20 | #2699 | P2 | fullstack | 商战情报中台·项目矿场 — Go/No-Go智能决策（风险/收益/竞争度评分）[4/10] | ✅ |
+| 20 | ~~#2699~~ | P2 | fullstack | 商战情报中台·项目矿场 — Go/No-Go智能决策（风险/收益/竞争度评分）[4/10] | ~~✅ 已指派 kimi1~~ |
 
 > ⚠️ 指派前请用 `gh issue view #N --repo WnadeyaowuOraganization/wande-play --json body` 确认依赖已CLOSED再指派
 
@@ -826,14 +826,15 @@
 ### 05-11 批次（商战情报中台·行业信息 + 项目矿场）
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
-| kimi1 | #2647 | pipeline | medium | CC工作中 | 品牌中心·SEO Pipeline — 重新指派 |
-| kimi2 | #2687 | pipeline | medium | CC工作中 | 商战情报中台·政策法规自动采集 [2/10] |
+| kimi1 | ~~#2647~~ | pipeline | medium | ~~Done~~ | 品牌中心·SEO Pipeline — PR #4629 MERGED ✅ |
+| kimi2 | ~~#2687~~ | pipeline | medium | ~~Done~~ | 商战情报中台·政策法规自动采集 — PR #4630 MERGED ✅ |
 | kimi3 | #2689 | frontend | medium | CC工作中 | 商战情报中台·市场趋势仪表盘 [4/10] |
 | kimi4 | #2694 | fullstack | medium | CC工作中 | 商战情报中台·行业展会与会议日历 [9/10] |
 | kimi5 | #2695 | backend | medium | CC工作中 | 商战情报中台·行业信息中心AI问答 [10/10] |
 | kimi6 | #2696 | backend | medium | CC工作中 | 商战情报中台·中标概率评分引擎 [1/10] |
 | kimi7 | #2697 | backend | medium | CC工作中 | 商战情报中台·企业能力画像 [2/10] |
 | kimi8 | #2698 | backend | medium | CC工作中 | 商战情报中台·AI标书深度解析 [3/10] |
+| kimi1 | #2699 | fullstack | medium | CC工作中 | 商战情报中台·Go/No-Go智能决策 [4/10] — 接替#2647槽位 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

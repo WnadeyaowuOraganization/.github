@@ -876,7 +876,7 @@
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi7 | ~~#2807~~ | backend | medium | ~~Done~~ | 外展获客Phase3·企微获客助手API — 获客链接管理 — PR #4666 MERGED ✅ |
-| kimi7 | #2808 | backend | medium | CC工作中 | 外展获客Phase3·企微活码引擎：自动分流+分时段欢迎语 |
+| kimi7 | #2808 | backend | medium | PR已提，CI BUILDING | 外展获客Phase3·企微活码引擎：自动分流+分时段欢迎语 — PR #4671 |
 | kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |

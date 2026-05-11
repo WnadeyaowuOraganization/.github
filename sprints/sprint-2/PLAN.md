@@ -37,9 +37,9 @@
 | 11 | ~~#2714~~ | P2 | backend | 商战情报中台·客户雷达 [9/10] — 客户流失预警模型 | ~~✅ 已指派 kimi3~~ |
 | 12 | ~~#2715~~ | P2 | fullstack | 商战情报中台·客户雷达 [10/10] — ABM目标客户清单编排 | ~~✅ 已指派 kimi6~~ |
 | 13 | ~~#2716~~ | P2 | backend | 商战情报中台·竞品情报 [1/10] — 竞品知识图谱自动构建 | ~~✅ 已指派 kimi7~~ |
-| 14 | #2717 | P2 | backend | 商战情报中台·竞品情报 [2/10] — AI事实卡片自动更新档案 | ✅ |
+| 14 | ~~#2717~~ | P2 | backend | 商战情报中台·竞品情报 [2/10] — AI事实卡片自动更新档案 | ~~✅ 已指派 kimi2~~ |
 | 15 | ~~#2457~~ | P2 | pipeline | 设计模型训练 — 竞品T1级6家效果图采集 LoRA-B [2/14] | ~~✅ 已指派 kimi1~~ |
-| 16 | #2489 | P2 | backend | 设计模型训练 — 批量渲染引擎 [8/14] | ✅ |
+| 16 | ~~#2489~~ | P2 | backend | 设计模型训练 — 批量渲染引擎 [8/14] | ~~✅ 已指派 kimi4~~ |
 | 17 | ~~#2490~~ | P2 | backend | 设计模型训练 — LoRA增量训练机制 [9/14] | ~~✅ 已指派 kimi2~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
@@ -851,8 +851,10 @@
 | kimi3 | ~~#2649~~ | backend | medium | ~~Done~~ | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads — PR #4644 MERGED ✅ |
 | kimi8 | ~~#2662~~ | frontend | medium | ~~Done~~ | 色卡配色器 — PR #4648 MERGED ✅ |
 | kimi8 | #2711 | fullstack | medium | PR已提，轮询CI | 商战情报中台·客户雷达 — 客户雷达实时看板 [6/10] — PR #4651 |
-| kimi4 | #2705 | backend | medium | PR已提，轮询CI | 商战情报中台·项目矿场 — 投标利润预测模型 [10/10] — PR #4650 |
-| kimi2 | #2707 | backend | medium | PR已提，轮询CI | 商战情报中台·客户雷达 — ICP自动评分引擎 — PR #4646 |
+| kimi4 | ~~#2705~~ | backend | medium | ~~Done~~ | 商战情报中台·项目矿场 — 投标利润预测模型 [10/10] — PR #4650 MERGED ✅ |
+| kimi4 | #2489 | backend | medium | CC工作中 | 设计模型训练 — 批量渲染引擎 [8/14] |
+| kimi2 | ~~#2707~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — ICP自动评分引擎 — PR #4646 MERGED ✅ |
+| kimi2 | #2717 | backend | medium | CC工作中 | 商战情报中台·竞品情报 — AI事实卡片自动更新档案 [2/10] |
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | #2716 | backend | medium | CC工作中 | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] |
 | kimi3 | #2714 | backend | medium | CC工作中 | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] |
@@ -926,6 +928,8 @@
 | kimi3 | #2649 | #4644 | ✅ merged | 11:17 UTC，LinkedIn自动投放 MERGED ✅ |
 | kimi6 | #2143 | #4645 | ✅ merged | 11:13 UTC，AI内容建议 MERGED ✅ |
 | kimi7 | #2708 | #4649 | ✅ merged | 11:22 UTC，多源意图信号采集 MERGED ✅ |
+| kimi2 | #2707 | #4646 | ✅ merged | ICP自动评分引擎 MERGED |
+| kimi4 | #2705 | #4650 | ✅ merged | 投标利润预测模型 MERGED |
 | kimi4 | #2705 | #4650 | 🔄 CI中 | 项目矿场投标利润预测 PR |
 | kimi8 | #2711 | #4651 | 🔄 CI中 | 客户雷达实时看板 PR |
 | kimi4 | #2705 | #? | 🔄 CI中 | 项目矿场投标利润预测 |

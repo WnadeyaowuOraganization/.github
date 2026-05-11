@@ -1807,3 +1807,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 22 | `git clean -fd` 误删所有新文件导致返工约 30min（重启后重建） | 1 | CC 规范中明确限定 `git clean -fd` 使用场景，或改为 `git restore` / `git checkout` 避免误删未跟踪文件 | 观察中 |
+
+## 2026-05-11 kimi4/#2793 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 23 | VO 缺 `@AutoMapper(target=Entity.class)` → MapStruct 转换失败，API 返回 500 | 1 | backend-coding skill 补充：VO 类必须加 `@AutoMapper(target=Entity.class)`，MapStruct 转换必须显式指定 target | 观察中 |
+| 24 | Flyway CREATE TABLE 缺 `create_dept` 等 BaseEntity 字段 → SQL 与 Entity 不匹配 | 1 | backend-schema skill 补充：所有 CREATE TABLE 必须包含 BaseEntity 全部字段（id/create_by/create_dept 等），禁止省略 | 观察中 |

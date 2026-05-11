@@ -1825,3 +1825,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **问题**: 前端调用 `ISequenceService.updateSequence()` 编辑序列，但后端只有 `createSequence`，前端用 `create+传id` 替代有隐患
 - **建议**: 后端补充 `ISequenceService.updateSequence()` 方法；或前端改用已有 API
 - **时间**: 2026-05-11
+### kimi4/#2813 LinkedIn CSV 导入卡点集合
+- **场景**: LinkedIn 联系人导入（纯后端，20 文件）
+- **问题1**: `CrmCustomer.getDelFlag()` 不存在 → 用 `.apply()` 替代 LambdaQueryWrapper Lambda
+- **问题2**: Flyway `row_number` 是 MySQL 保留字 → 用反引号包裹
+- **问题3**: JUnit `@InjectMocks` 未注入 baseMapper → 用 `ReflectionTestUtils.setField`
+- **问题4**: Playwright `stream.on is not a function` → multipart 用 buffer 而非 file 路径
+- **建议**: backend-coding skill 补充 MySQL 保留字列表；backend-test skill 补充 ReflectionTestUtils 注入示例
+- **时间**: 2026-05-11

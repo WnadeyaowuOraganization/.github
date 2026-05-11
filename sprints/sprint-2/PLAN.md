@@ -863,7 +863,7 @@
 | kimi7 | ~~#2708~~ | pipeline | medium | ~~Done~~ | 商战情报中台·客户雷达 — 多源意图信号采集管线 [3/10] — PR #4649 MERGED ✅ |
 | kimi7 | ~~#2716~~ | backend | medium | ~~Done~~ | 商战情报中台·竞品情报 — 竞品知识图谱自动构建 [1/10] — PR #4656 MERGED ✅ |
 | kimi7 | #2807 | backend | medium | CC工作中 | 外展获客Phase3·企微获客助手API — 获客链接管理 || kimi3 | ~~#2714~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户流失预警模型 [9/10] — PR #4653 MERGED ✅ |
-| kimi6 | #2715 | fullstack | medium | CI构建中 | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGEABLE |
+| kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi1 | ~~#2709~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — 客户购买阶段预测 [4/10] — PR #4657 MERGED ✅ |
 
 ### 05-11 第四批次（外展获客 + AI商务助手）
@@ -872,8 +872,11 @@
 | kimi2 | #4164 | backend | low | CC工作中 | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 |
 | kimi3 | #2745 | backend | medium | CC工作中 | 交付里程碑提醒规则 — 中标阶段变更提醒项目组 |
 | kimi4 | #2793 | backend | medium | PR已提，CI队列中 | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 |
-| kimi5 | #2796 | backend | medium | CC工作中 | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） |
-| kimi8 | #4123 | fullstack | medium | PR已提，CI队列中 | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 |
+| kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
+| kimi5 | #2797 | backend | medium | CC工作中 | 外展获客Phase2·邮件预热+送达率监控 |
+| kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
+| kimi6 | #2812 | backend | medium | CC工作中 | 外展获客Phase4·批量加好友：导入+频率控制+通过率优化 |
+| kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -55,8 +55,8 @@
 | 29 | ~~#2801~~ | — | backend | 邮件追踪：打开+点击+回复检测 | ~~✅ 已指派 kimi4~~ |
 | 30 | ~~#2812~~ | — | fullstack | 批量加好友：导入+频率控制+通过率优化 | ~~✅ 已指派 kimi6~~ |
 | 31 | ~~#2809~~ | — | fullstack | 企微自动标签+客户画像同步CRM | ~~✅ 已指派 kimi6~~ |
-| 32 | #2802 | — | backend | 邮件A/B测试引擎 | 待指派（kimi1完成后） |
-| 33 | #2803 | — | backend | 收件箱轮转+发送量控制 | 待指派（kimi4完成后） |
+| 32 | ~~#2802~~ | — | backend | 邮件A/B测试引擎 | ~~✅ 已指派 kimi2~~ |
+| 33 | ~~#2803~~ | — | backend | 收件箱轮转+发送量控制 | ~~✅ 已指派 kimi4~~ |
 | 34 | ~~#2813~~ | — | backend | LinkedIn联系人导入：CSV→CRM | ~~✅ 已指派 kimi4~~ |
 | 35 | ~~#2815~~ | — | fullstack | LinkedIn+邮件协同序列：多渠道编排 | ~~✅ 已指派 kimi3~~ |
 | 36 | ~~#2810~~ | — | backend | 企微SOP培育序列：渠道差异化自动培育 | ~~✅ 已指派 kimi7~~ |
@@ -891,7 +891,8 @@
 | kimi1 | ~~#2794~~ | backend | medium | ~~Done~~ | 营销序列引擎：执行调度器（#2793后续） — PR #4668 MERGED ✅ |
 | kimi1 | #2811 | fullstack | medium | CC工作中 | 企微效果看板：自动分流+分时段欢迎语 |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
-| kimi2 | ~~#2800~~ | backend | medium | PR已提，CI BUILDING | 冷外展序列模板：PR #4672 |
+| kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
+| kimi2 | #2802 | backend | medium | CC工作中 | 邮件A/B测试引擎 |
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
 | kimi3 | ~~#2816~~ | backend | medium | ~~Done~~ | 线索评分增强：PR #4667 MERGED ✅ |
 | kimi3 | #2815 | fullstack | medium | CC工作中 | LinkedIn+邮件协同序列：多渠道编排 |
@@ -903,7 +904,8 @@
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | #2809 | backend | medium | CC工作中 | 企微自动标签+客户画像同步CRM |
-| kimi4 | #2801 | backend | medium | PR已提，CI BUILDING | 外展获客Phase2·邮件追踪：打开+点击+回复检测 — PR #4673 |
+| kimi4 | ~~#2801~~ | backend | medium | ~~Done~~ | 邮件追踪：打开+点击+回复检测 — PR #4673 MERGED ✅ |
+| kimi4 | #2803 | backend | medium | CC工作中 | 收件箱轮转+发送量控制 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | #2818 | fullstack | medium | CC工作中 | 营销-销售自动移交：评分达标→通知→商机→分配 |

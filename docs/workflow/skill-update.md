@@ -1783,3 +1783,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 | # | 问题 | 频次 | 建议改进 | 状态 |
 |---|------|------|---------|------|
 | 18 | testCompile 阶段 Page 类路径与主代码不一致（BeanCopier 编译失败） | 1 | backend-coding skill 补充：testCompile 也用 Amplexton 插件，保持 Page 类路径一致 | 观察中 |
+
+## 2026-05-11 kimi8/#2705 反馈
+
+| # | 问题 | 频次 | 建议改进 | 状态 |
+|---|------|------|---------|------|
+| 19 | headless Chrome SPA 不渲染（body text 为空），upgrade modal 拦截 click 事件 | 1 | screenshot.ts 增加 waitForTimeout 到 8-12s + page.evaluate() JS click 绕过 upgrade modal | 观察中 |
+| 20 | auth state 失效（backend 重启导致 token 不匹配当前 VITE_PROXY_TARGET） | 1 | screenshot.ts 检查 auth state token 是否对应当前 VITE_PROXY_TARGET，不匹配则清除强制重新登录 | 观察中 |
+| 21 | "当前可投" tab 无数据（0 rows），无 Go/No-Go 按钮 | 1 | API JSON 截图作为视觉兜底证据 | 观察中 |
+

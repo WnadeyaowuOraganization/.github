@@ -929,7 +929,7 @@
 | kimi4 | ~~#2027~~ | backend | medium | ~~Done~~ | 审批引擎Phase2 — PR#3898已于04-19 MERGED，Issue未自动关闭导致重复指派，已关闭 |
 | kimi4 | ~~#2814~~ | backend | medium | ~~Done~~ | LinkedIn意图信号富化 — PR #4687 MERGED ✅ |
 | kimi4 | ~~#2728~~ | backend | medium | ~~Done~~ | 商战情报·AI洞察自动生成引擎 — PR #4689 MERGED ✅ |
-| kimi4 | #2742 | backend | medium | CC工作中 | 商战情报·CRM双向数据同步（分发层[7/8]） |
+| kimi4 | ~~#2742~~ | backend | medium | ~~Done~~ | 商战情报·CRM双向数据同步 — PR #4692 MERGED ✅ |
 | kimi6 | #2743 | fullstack | medium | CC工作中 | 商战情报·情报使用数据埋点与ROI分析 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |

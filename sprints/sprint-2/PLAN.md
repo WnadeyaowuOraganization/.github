@@ -918,7 +918,7 @@
 | kimi5 | ~~#2797~~ | backend | medium | ~~Done~~ | 外展获客Phase2·邮件预热+送达率监控 — PR #4663 MERGED ✅ |
 | kimi5 | ~~#2795~~ | backend | medium | ~~Done~~ | 外展获客Phase1·触发器框架 — PR #4675 MERGED ✅ |
 | kimi5 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 — PR #4690 MERGED ✅ |
-| kimi5 | #2739 | frontend | medium | CC工作中 | 商战情报·移动端H5自适应（分发层） |
+| kimi5 | ~~#2739~~ | frontend | medium | ~~Done~~ | 商战情报·移动端H5自适应 — PR #4693 MERGED ✅ |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

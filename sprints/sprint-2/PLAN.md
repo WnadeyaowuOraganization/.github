@@ -830,7 +830,7 @@
 | kimi1 | ~~#2647~~ | pipeline | medium | ~~Done~~ | 品牌中心·SEO Pipeline — PR #4629 MERGED ✅ |
 | kimi2 | ~~#2687~~ | pipeline | medium | ~~Done~~ | 商战情报中台·政策法规自动采集 — PR #4630 MERGED ✅ |
 | kimi2 | ~~#2142~~ | fullstack | medium | ~~Done~~ | [品牌中心] 竞品内容监测 — PR #4636 MERGED ✅ |
-| kimi3 | #2118 | fullstack | medium | CC工作中 | [执行管理] AI BOM 智能推荐 |
+| kimi3 | #2118 | fullstack | medium | PR已提，轮询merge | [执行管理] AI BOM 智能推荐 — PR #4638，CI ✅，merge BLOCKED（可能缺审批） |
 | kimi3 | ~~#2689~~ | frontend | medium | ~~Done~~ | 商战情报中台·市场趋势仪表盘 — PR #4631 MERGED ✅ |
 | kimi4 | ~~#2694~~ | fullstack | medium | ~~Done~~ | 商战情报中台·行业展会与会议日历 — PR #4634 MERGED ✅ |
 | kimi5 | ~~#2695~~ | backend | medium | ~~Done~~ | 商战情报中台·行业信息中心AI问答 — PR #4635 MERGED ✅ |
@@ -845,9 +845,9 @@
 |------|-------|------|--------|------|------|
 | kimi1 | #2457 | pipeline | medium | CC工作中 | 设计模型训练 — 竞品效果图采集 LoRA-B素材 [2/14] |
 | kimi2 | #2490 | backend | medium | CC工作中 | 设计模型训练 — LoRA增量训练机制 [9/14] |
-| kimi4 | #2656 | pipeline | medium | CC工作中 | 品牌中心·内容自动化 — 文章AI初稿生成 [4/5] P1 |
+| kimi4 | #2656 | pipeline | medium | PR已提，轮询CI | 品牌中心·内容自动化 — PR #4639，CI触发中 |
 | kimi5 | #2648 | fullstack | medium | CC工作中 | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] |
-| kimi8 | #2706 | backend | medium | CC工作中 | 商战情报中台·客户雷达 — ICP理想客户画像 [1/10] |
+| kimi8 | #2706 | backend | medium | PR已提，轮询CI | 商战情报中台·客户雷达 — PR #4640，CI触发中 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |
@@ -901,6 +901,9 @@
 | — | #1826 | #4426 | 🔍 REVIEW_REQUIRED | 05:26:38 UTC，Vue JSX 插件修复构建 |
 | — | #1963 | #4425 | 🔍 REVIEW_REQUIRED | 04:10:56 UTC |
 | #2132 ✅merged/kimi1 | #1496 | #4431 | 🔍 REVIEW_REQUIRED | 08:15:00 UTC，NBO行动推荐生成 |
+| kimi4 | #2656 | #4639 | 🔄 CI触发中 | 17:17 UTC，品牌中心文章AI初稿 |
+| kimi8 | #2706 | #4640 | 🔄 CI触发中 | 17:19 UTC，ICP客户画像 |
+| kimi3 | #2118 | #4638 | ⚠️ BLOCKED | 17:15 UTC CI ✅，待merge（缺审批？） |
 
 | 05-09 | kimi2 | #3195 | backend | P1 | In Progress | 计划模板引擎 — 中标后一键生成项目主计划 [3/10] |
 | 05-09 | kimi5 | #3196 | backend | P1 | In Progress | 供应商依赖矩阵 — 接口点管理与关键路径识别 [4/10] |

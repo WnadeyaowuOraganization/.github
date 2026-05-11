@@ -846,7 +846,7 @@
 | kimi1 | ~~#2457~~ | pipeline | medium | ~~Done~~ | 设计模型训练 — 竞品效果图采集 LoRA-B素材 — PR #4647 MERGED ✅ |
 | kimi2 | ~~#2490~~ | backend | medium | ~~Done~~ | 设计模型训练 — LoRA增量训练机制 [9/14] — PR #4641 MERGED ✅ |
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
-| kimi5 | #2648 | fullstack | medium | PR已提，轮询CI | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] — PR #4642 |
+| kimi5 | ~~#2648~~ | fullstack | medium | ~~Done~~ | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] — PR #4642 MERGED ✅ |
 | kimi8 | ~~#2706~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — PR #4640 MERGED ✅ |
 | kimi3 | ~~#2649~~ | backend | medium | ~~Done~~ | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads — PR #4644 MERGED ✅ |
 | kimi8 | ~~#2662~~ | frontend | medium | ~~Done~~ | 色卡配色器 — PR #4648 MERGED ✅ |
@@ -930,6 +930,7 @@
 | kimi7 | #2708 | #4649 | ✅ merged | 11:22 UTC，多源意图信号采集 MERGED ✅ |
 | kimi2 | #2707 | #4646 | ✅ merged | ICP自动评分引擎 MERGED |
 | kimi4 | #2705 | #4650 | ✅ merged | 投标利润预测模型 MERGED |
+| kimi5 | #2648 | #4642 | ✅ merged | 品牌中心SEO MERGED |
 | kimi4 | #2705 | #4650 | 🔄 CI中 | 项目矿场投标利润预测 PR |
 | kimi8 | #2711 | #4651 | 🔄 CI中 | 客户雷达实时看板 PR |
 | kimi4 | #2705 | #? | 🔄 CI中 | 项目矿场投标利润预测 |

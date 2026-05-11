@@ -931,7 +931,8 @@
 | kimi5 | ~~#2725~~ | backend | medium | ~~Done~~ | 商战情报·投标竞争对手识别·Deal Tips — PR #4702 MERGED ✅ |
 | kimi5 | #4705 | frontend | medium | CC工作中 | CRM商机转化漏斗详情 — 商机各阶段时长+转化障碍分析（新建） |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
-| kimi4 | #2016 | backend | medium | PR #4703 OPEN | 企微审批消息卡片·后端 — CI等待中 |
+| kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
+| kimi4 | #4707 | fullstack | medium | CC工作中 | CRM客户拜访记录管理 — 拜访计划+签到+报告（新建） |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

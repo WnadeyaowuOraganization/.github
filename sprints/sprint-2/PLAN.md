@@ -846,7 +846,7 @@
 | kimi1 | #2457 | pipeline | medium | CC工作中 | 设计模型训练 — 竞品效果图采集 LoRA-B素材 [2/14] |
 | kimi2 | #2490 | backend | medium | PR已提，轮询CI | 设计模型训练 — LoRA增量训练机制 [9/14] — PR #4641 |
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
-| kimi5 | #2648 | fullstack | medium | CC工作中 | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] |
+| kimi5 | #2648 | fullstack | medium | PR已提，轮询CI | 品牌中心·SEO — 前端内容管理+排名看板 [2/2] — PR #4642 |
 | kimi8 | ~~#2706~~ | backend | medium | ~~Done~~ | 商战情报中台·客户雷达 — PR #4640 MERGED ✅ |
 | kimi3 | #2649 | backend | medium | CC工作中 | 品牌中心·思想领导力 — LinkedIn Thought Leader Ads [3/5] |
 | kimi4 | ~~#2656~~ | pipeline | medium | ~~Done~~ | 品牌中心·内容自动化 — PR #4639 MERGED ✅ |
@@ -909,7 +909,8 @@
 | kimi8 | #2706 | #4640 | 🔄 CI触发中 | 17:19 UTC，ICP客户画像 |
 | kimi3 | #2118 | #4638 | ✅ merged | 17:22 UTC，CI ✅，auto-merge 生效 |
 | kimi8 | #2706 | #4640 | ✅ merged | 17:27 UTC，PR merge，卡位释放 |
-| kimi2 | #2490 | #4641 | 🔄 CI中 | 17:27 UTC，LoRA训练机制 PR |
+| kimi2 | #2490 | #4641 | 🔄 CI中 | 17:27 UTC，LoRA训练机制 |
+| kimi5 | #2648 | #4642 | 🔄 CI中 | 品牌中心SEO PR |
 | kimi4 | #2656 | #4639 | ✅ merged | 17:28 UTC，品牌中心文章AI MERGED |
 | kimi4 | #2705 | | CC工作中 | 项目矿场投标利润预测 [10/10] |
 

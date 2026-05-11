@@ -945,7 +945,8 @@
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |
 | kimi8 | ~~#2726~~ | backend | medium | ~~Done~~ | 商战情报·跨模块事件总线 — PR #4688 MERGED ✅ |
-| kimi8 | #2729 | backend | medium | PR #4699 OPEN | 商战情报·商机评分综合模型（联动层） |
+| kimi8 | ~~#2729~~ | backend | medium | ~~Done~~ | 商战情报·商机评分综合模型 — PR #4699 MERGED ✅ |
+| kimi8 | #4701 | frontend | medium | CC工作中 | CRM销售漏斗实时看板 — 线索→商机→报价→合同转化率分析 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

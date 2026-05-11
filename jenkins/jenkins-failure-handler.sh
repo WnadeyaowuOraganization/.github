@@ -40,13 +40,13 @@ echo "[failure-handler] PR #$PR_NUMBER branch=$BRANCH_NAME issue=$ISSUE_NUM"
 # 3. 提取失败原因
 FAIL_MSG=""
 if [ -n "$CONSOLE_URL" ]; then
-    # 质量门失败
+    # 质量门失败（只匹配❌/✗/✘等失败标记，避免匹配到✅通过的输出）
     GATE_FAIL=$(curl -sf "$CONSOLE_URL" 2>/dev/null | \
-        grep -iE '❌|×|✘|quality-gate|门[0-9]|gate[0-9]' | \
+        grep -E '❌|✗|✘|门[0-9].*失败|gate.*fail|quality.*fail' | \
         grep -viE '^\[Pipeline\]|^\s*ha://' | \
         head -10 || echo "")
 
-    if [ -n "$GATE_FAIL" ] && echo "$GATE_FAIL" | grep -qiE '门[0-9]|gate|❌|quality|checkbox'; then
+    if [ -n "$GATE_FAIL" ]; then
         FAIL_LINES=$(echo "$GATE_FAIL" | head -5 | while IFS= read -r line; do echo "  $line"; done)
         FAIL_MSG="CI 质量门失败，请立即修复并 push（无需关闭 PR，push 自动触发重跑）：
 

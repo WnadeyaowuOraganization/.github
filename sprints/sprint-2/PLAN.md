@@ -65,6 +65,7 @@
 | 39 | ~~#2743~~ | P2 | fullstack | 商战情报·情报使用数据埋点与ROI分析 | ~~✅ 已指派 kimi6~~ |
 | 40 | ~~#2814~~ | P2 | backend | LinkedIn意图信号富化·Clay/Apollo API对接 [21/25] | ~~✅ 已指派 kimi4~~ |
 | 41 | ~~#3104~~ | P2 | fullstack | PI形式发票生成+PDF导出 — CRM模块 | ~~✅ 已指派 kimi7~~ |
+| 42 | ~~#2755~~ | P2 | frontend | 设备档案管理页 — 设备列表+详情+巡检+维保 [12/12] | ~~✅ 已指派 kimi1~~ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -898,6 +899,7 @@
 | kimi1 | ~~#2811~~ | fullstack | medium | ~~Done~~ | 企微获客效果分析看板 — PR #4677 MERGED ✅ |
 | kimi1 | ~~#2655~~ | pipeline | medium | ~~Done~~ | 品牌中心·文章内容选题引擎 — PR #4681 MERGED ✅ |
 | kimi1 | ~~#2636~~ | frontend | medium | ~~Done~~ | 品牌中心·数字人前端 — PR #4684 MERGED ✅ |
+| kimi1 | #2755 | frontend | medium | CC工作中 | 设备档案管理页 — 设备列表+详情+巡检+维保 [12/12] |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |

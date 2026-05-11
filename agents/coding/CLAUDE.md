@@ -66,9 +66,13 @@
 13. **API Error 400 `thinking...missing` 立即 `/clear`** — 不重试不再compact
 14. **禁止 push dev/main** — 只push `feature-Issue-<N>`
 15. **PR提交前必须勾选所有checkbox** — `gh pr create` 之前：1) PR body 里所有 `- [ ]` 改为 `- [x]`；2) task.md 所有完成步骤的 `- [ ]` 改为 `- [x]`。质量预检 gate 会 block 任何未勾选项（2026-04-27 10个PR连续失败的教训）
-16. **push 后必须触发 CI 重新跑** — `git push` 本身不触发 Jenkins（webhook 只监听 pull_request 事件）。push 后必须执行：
+16. **push 后必须触发 CI 重新跑** — `git push` 后直接本地调用 Jenkins，不依赖 GitHub webhook：
 ```bash
-gh pr comment $PR_NUMBER --repo WnadeyaowuOraganization/wande-play --body "force push 触发 CI" || gh pr edit $PR_NUMBER --repo WnadeyaowuOraganization/wande-play --title "WIP: $(gh pr view $PR_NUMBER --repo WnadeyaowuOraganization/wande-play --json title --jq '.title')"
+bash /data/home/ubuntu/projects/.github/scripts/trigger-ci.sh $PR_NUMBER
+```
+如果不知道 PR 号，可以传分支名：
+```bash
+bash /data/home/ubuntu/projects/.github/scripts/trigger-ci.sh "" feature-Issue-XXXX
 ```
 这条规则在 CI 修复阶段（收到部署失败通知后修复并 push）**尤其关键**。
 

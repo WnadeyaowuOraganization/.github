@@ -869,9 +869,11 @@
 ### 05-11 第四批次（外展获客 + AI商务助手）
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
+| kimi1 | #2794 | backend | medium | CC工作中 | 营销序列引擎：执行调度器（#2793后续） |
 | kimi2 | #4164 | backend | low | CC工作中 | E2E回归测试5项失败修复 — 登录超时×4+设计素材页重定向×1 |
 | kimi3 | #2745 | backend | medium | CC工作中 | 交付里程碑提醒规则 — 中标阶段变更提醒项目组 |
-| kimi4 | #2793 | backend | medium | PR已提，CI队列中 | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 |
+| kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
+| kimi4 | #2813 | backend | medium | CC工作中 | 外展获客Phase4·LinkedIn联系人导入：CSV→CRM |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
 | kimi5 | #2797 | backend | medium | CC工作中 | 外展获客Phase2·邮件预热+送达率监控 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |

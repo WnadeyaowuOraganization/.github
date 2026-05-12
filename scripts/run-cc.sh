@@ -376,8 +376,15 @@ tmux new-session -d -s "$SESSION" -c "$PROJECT_DIR" \
    claude --model ${MODEL} --dangerously-skip-permissions ${CONVENTIONS_FLAG}; \
    ${POST_EXIT_CMD} rm -f ${CONVENTIONS_INJECT:-/dev/null}; ${CLEANUP_CMD} exec bash"
 
-# 等待 Claude Code CLI 初始化完成
-sleep 8
+# 等待 Claude Code CLI 初始化（信任对话框通常在3秒内出现）
+sleep 3
+
+# 处理首次工作区信任确认（新目录会出现 "Yes, I trust this folder" 对话框）
+# --dangerously-skip-permissions 仅跳过运行时权限提示，不跳过此对话框
+tmux send-keys -t "$SESSION" Enter
+
+# 继续等待初始化完成
+sleep 5
 
 # 注入简短 prompt（一行，无多行粘贴问题）
 tmux send-keys -t "$SESSION" "$CC_PROMPT" Enter

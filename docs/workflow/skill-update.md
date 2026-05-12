@@ -1,3 +1,13 @@
+**[2026-05-13] 新目录首次启动CC被工作区信任确认阻塞（glm1-4 #18-#23）**
+- 症状：`--dangerously-skip-permissions` 未跳过首次工作区信任确认（"Yes, I trust this folder"）
+- 根因：该 flag 仅跳过运行时权限提示，不跳过首次目录信任对话框
+- 影响：glm1-4 全部卡在信任确认，prompt 未接收，4个CC同时阻塞
+- 处置：已手动注入 Enter 确认 + 重新注入 prompt；已更新 run-cc.sh 自动处理
+- 建议：run-cc.sh 启动后首条 send-keys 改为发送信任确认（`y` + Enter），再等待 8 秒后注入 prompt
+- 状态：**一次大面积阻塞（4 CC），已直改脚本**
+
+---
+
 **[2026-05-11] PR #4667 CI 连续失败 3 次（Build #498/#500/#504）（kimi3 #2816）**
 - 症状：Jenkins Groovy 返回 `ERROR: script returned exit code 1/2`，实际测试失败原因需从 Maven surefire 报告定位
 - 根因：待确认（可能是新增接口与现有测试冲突）
@@ -1618,3 +1628,14 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 处置：CC 将聚合逻辑从 SQL 层迁移到 Java 层解决
 - 建议：backend-coding skill 补充 JSON 函数兼容性指南；涉及 JSON 聚合时优先在 Java/应用层处理
 - 频次：**1次（观察中）**，同类错误重复 ≥4 次时触发 skill 更新
+
+---
+
+**[2026-05-13] Claude Code 首次工作区信任确认阻塞新目录CC（大面积）**
+- 症状：`--dangerously-skip-permissions` 未跳过首次工作区信任确认，新目录（如 wande-gh-plugins-glm1~4）启动后卡在 "Yes, I trust this folder" 对话框
+- 影响：4个CC全部阻塞，prompt未接收，零进度
+- 根因：Claude Code v2.1.101 的安全检查对话框在 tmux 会话中等待交互输入
+- 处置：巡检注入 Enter 确认 + 重新注入 prompt
+- 建议：run-cc.sh 新目录首次启动需预生成 `.claude/projects` 信任记录，或在启动后检测信任提示并自动注入确认
+- 来源：研发经理巡检发现
+- 频次：**1次**，blast radius 大（≥3 CC），已止血

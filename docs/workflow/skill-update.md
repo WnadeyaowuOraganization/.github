@@ -1601,3 +1601,11 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 解决：参考现有测试补 @Tag("dev")
 - 建议：backend-coding skill 补充 @Tag注解强制要求说明
 - 来源：kimi5/#1674 本轮回顾
+
+**[2026-05-12] Mockito mock MyBatis-Plus ServiceImpl.baseMapper 注入困难（kimi7 #2017）**
+- 症状：Mockito @InjectMocks/ReflectionTestUtils/直接反射均因 MP 3.5.14 的 ServiceImpl 字段机制问题失败
+- 根因：MyBatis-Plus 3.5.14 ServiceImpl 内部字段机制与常规 Spring Bean 不同，反射注入 baseMapper 不生效
+- 处置：最终改为纯 SQL 文件解析测试绕过 mock
+- 建议：backend-test skill 增加 ServiceImpl mock 最佳实践示例，或推荐纯 SQL/JDBC 测试策略
+- 频次：**1次（观察中）**，同类错误重复 ≥4 次时触发 skill 更新
+

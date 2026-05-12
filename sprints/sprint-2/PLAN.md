@@ -956,7 +956,8 @@
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — /outreach/linkedin-import — PR #4697 MERGED ✅ |
 | kimi6 | ~~#2743~~ | fullstack | medium | ~~Done~~ | 情报ROI分析看板 — PR #4722 MERGED ✅ |
 | kimi6 | ~~#4723~~ | fullstack | medium | ~~Done~~ | 客户满意度调查与NPS评分 — PR #4730 MERGED ✅ |
-| kimi6 | #4731 | fullstack | medium | CC工作中 | 客户流失预警与挽留策略 — 流失评分+挽留策略推荐（新建） |
+| kimi6 | ~~#4731~~ | fullstack | medium | ~~Done~~ | 客户流失预警与挽留策略 — PR #4738 MERGED ✅ |
+| kimi6 | #4739 | fullstack | medium | CC工作中 | 客户分配规则引擎与自动路由 — 规则CRUD+轮询/权重/条件分配（新建） |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |

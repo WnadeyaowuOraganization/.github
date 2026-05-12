@@ -18,18 +18,13 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-12（排程经理第1144轮；指派建议表重建；6个Todo可用；#1754/#1766原型缺失移入pause）
+> 更新时间：2026-05-12（排程经理第1151轮；9个Issue流转至In Progress；指派建议表压缩至1个；#2496/#2396/#2226/#2227/#2393/#2065/#4761/#4763/#4765）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #1911 | P0 | backend | D3-AI·AI电池包开发助手 — 中文描述→GH Python脚本生成（G7e Qwen3.5） | ✅ |
-| 2 | #2496 | P2 | pipeline | 竞品情报·T3级30家补充采集 — 全球游乐设施行业全覆盖（T2已完成） | ✅ |
-| 3 | #2396 | P3 | pipeline | 矿场·国际信息源适配器-北美 — SAM.gov+ConstructConnect采集 [1/10] | ✅ |
-| 4 | #2226 | P3 | backend | 矿场·市场流程知识库 — 北美/欧洲/中东/东南亚采购流程Wiki [8/10] | ✅ |
-| 5 | #2227 | P3 | backend | 矿场·跨境资格评估UI — 8步评估向导 [6/10] | ✅ |
-| 6 | #2393 | P3 | pipeline | 矿场·买家意图信号采集 — 官网访问+招聘动态监控 [9/10] | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -41,10 +36,17 @@
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
 | #1754 / #1766 | ⛔ needs-prototype（原型文件不存在） | pause |
+| #2496 | 已指派 kimi4 | In Progress |
+| #2396 | 已指派 kimi6 | In Progress |
+| #2226 | 已指派 kimi7 | In Progress |
+| #2227 | 已指派 kimi7 | In Progress |
+| #2393 | 已指派 kimi7 | In Progress |
+| #2065 | 已指派 kimi6 | In Progress |
 | #2343 | 已指派 kimi5 | In Progress |
 | #2487 | 已指派 kimi3 | In Progress |
 | #2486 | 已指派 kimi8 | In Progress |
 | #2476 | 已指派 kimi2 | In Progress |
+| #4761 / #4763 / #4765 | 新建CRM Issue | In Progress |
 | #2017 | ✅ CLOSED（明道云权限模式提取） | Done |
 | #2516 | ✅ CLOSED（合同要点卡片） | Done |
 | #2655 | ⏳ 依赖 #2648（仍在 Plan，未完成） | Todo（阻塞） |

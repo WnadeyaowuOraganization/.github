@@ -1,7 +1,8 @@
 # Sprint-2 排程计划
 
 > 更新时间：2026-05-13（排程经理第1214轮；Done 1539；In Progress 5；Todo 1；Plan 6；无变化）
-> 活跃CC：glm1/#11 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#23
+> 活跃CC：glm1/#11 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#23（均已提交PR）
+> 新增：PR#54/#23 #55/#11 #56/#10 #57/#21 #58/#20 均已开→dev
 > 指派建议表：已清空
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
@@ -47,19 +48,20 @@
 | #18 | ✅ CLOSED（D3生产链路-弧长/曲线标注增强）PR#37 | Done |
 | #19 | ✅ CLOSED（D3生产链路-曲面面板分割电池包）PR#38 | Done |
 | #17 | ✅ CLOSED（D3生产链路-2D板材排料电池包）PR#39 | Done |
+| #11 | ✅ PR#55已开（feature-Issue-11→dev，D3_Structure结构模块） | PR待merge |
 | #9 | ✅ CLOSED（D3_Core共享模块）PR#40 | Done |
 | #7 | ✅ CLOSED（一键标注出图组件）PR#49 | Done |
-| #20 | 已指派 glm3 | In Progress |
-| #10 | 已指派 glm2 | In Progress |
+| #20 | ✅ PR#58已开（feature-Issue-20→dev） | PR待merge |
+| #10 | ✅ PR#56已开（feature-Issue-10→dev） | PR待merge |
 | #2 | ✅ CLOSED（DfMA制造可行性检测引擎）PR#41 | Done |
 | #3 | ✅ CLOSED（几何审计脚本）PR#43 | Done |
 | #25 | ✅ CLOSED（端到端测试套件）PR#42 | Done |
 | #4 | ✅ CLOSED（钢管下料优化）PR#45 | Done |
 | #5 | ✅ CLOSED（CNC/DXF分层导出）PR#44 | Done |
 | #24 | ✅ CLOSED（GH纯参数传递模式改造）PR#46 | Done |
-| #21 | 已指派 glm4 | In Progress |
+| #21 | ✅ PR#57已开（feature-Issue-21→dev） | PR待merge |
 | #6 | ✅ CLOSED（STEP零件批量导出）PR#48 | Done |
-| #25 | 已指派 kimi1 | In Progress |
+| #23 | ✅ PR#54已开（feature-Issue-23→dev，Redis缓存层补充） | PR待merge |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |
 | #2487 | ✅ CLOSED（设计模型训练LoRA-B） | Done |

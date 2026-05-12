@@ -912,7 +912,7 @@
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |
-| kimi2 | ~~#2718~~ | fullstack | medium | ~~PR#4699 OPEN~~ | 商战情报·动态销售战斗卡引擎 — 建表+契约+后端+E2E(8/8✅)，准备提PR |
+| kimi2 | ~~#2718~~ | fullstack | medium | ~~PR#4714 OPEN~~ | 商战情报·动态销售战斗卡引擎 — PR #4714 OPEN，CI已触发 |
 | kimi3 | ~~#2745~~ | backend | medium | ~~Done~~ | 交付里程碑提醒规则 — PR#4659 MERGED ✅ |
 | kimi3 | ~~#2816~~ | backend | medium | ~~Done~~ | 线索评分增强：PR #4667 MERGED ✅ |
 | kimi3 | ~~#2815~~ | fullstack | medium | ~~Done~~ | LinkedIn+邮件协同序列：PR #4680 MERGED ✅ |

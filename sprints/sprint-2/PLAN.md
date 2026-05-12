@@ -910,7 +910,7 @@
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
 | kimi1 | ~~#1451~~ | backend | medium | ~~Done~~ | 品牌术语表管理 — PR #4726 MERGED ✅ |
-| kimi1 | #4727 | fullstack | medium | CC工作中 | 销售活动日历与日程管理 — FullCalendar+拖拽+日/周/月视图（新建） |
+| kimi1 | ~~#4727~~ | fullstack | medium | ~~PR#4732 OPEN~~ | 销售活动日历与日程管理 — PR #4732 OPEN，CI已触发 |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |

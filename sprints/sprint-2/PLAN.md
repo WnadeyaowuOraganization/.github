@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1217轮；Done 1539；In Progress 0；Todo 1；Plan 6；无变化）
+> 更新时间：2026-05-13（排程经理第1218轮；Done 1539；In Progress 0（gh-plugins Done=13）；Todo 1；Plan 6；无变化）
 > 活跃CC：gh-plugins全部完成，等待新指派
 > 新增：PR#54/#23 #55/#11 #56/#10 #57/#21 #58/#20 均已开→dev
 > 指派建议表：已清空

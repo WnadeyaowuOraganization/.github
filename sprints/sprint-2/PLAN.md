@@ -291,13 +291,14 @@
 | 05-13 | kimi1 | ~~#6~~ | gh-plugins | P1 | ~~Done~~ | D3 STEP零件批量导出 — **PR#48 MERGED** ✅ |
 | 05-13 | glm1 | ~~#7~~ | gh-plugins | P1 | ~~Done~~ | D3一键标注出图组件 — **PR#49 MERGED** ✅ |
 | 05-13 | kimi1 | ~~#8~~ | gh-plugins | P1 | ~~Done~~ | D3一键BOM+报价引擎 — **PR#50 MERGED** ✅ |
+| 05-13 | kimi1 | ~~#13~~ | gh-plugins | P1 | ~~Done~~ | D3_Visual模块 — **PR#51 MERGED** ✅ |
 
 **当前5个CC在线运行中（05-13研发经理指派）：**
 - glm1 #11: D3_Structure模块（gh-plugins，P1，编码中）
 - glm2 #10: D3_Safety安全区域（gh-plugins，P0，PR准备中 62%）
 - glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，39%）
 - glm4 #21: D3生产链路-表皮效果预览（gh-plugins，P2，30%）
-- kimi1 #13: D3_Visual模块（gh-plugins，P1，刚启动）
+- kimi1 #12: D3_Document模块（gh-plugins，P1，刚启动）
 
 **最近完成（本轮巡检新增）**:
 - ~~kimi2 #4720~~ → PR#4770 MERGED（研发经理手动rebase解决crm.ts冲突）✅

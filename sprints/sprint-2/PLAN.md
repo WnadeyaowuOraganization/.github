@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1167轮；Done 1524；In Progress 0；Todo 22；Plan 6；从wande-gh-plugins流转7个Issue补充队列）
+> 更新时间：2026-05-13（排程经理第1168轮；Done 1523；In Progress 0；Todo 22；Plan 5；队列正常）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭

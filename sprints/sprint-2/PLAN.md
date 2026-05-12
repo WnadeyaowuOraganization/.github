@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1170轮；Done 1524；In Progress 5；Todo 17；Plan 6；#23 Done/#17 In Progress）
+> 更新时间：2026-05-13（排程经理第1171轮；Done 1525；In Progress 4；Todo 16；Plan 6；#18 PR#37 merged）
 > 活跃CC：kimi1/#1911 + glm1/#18 + glm2/#19 + glm3/#20 + glm4/#23
 > ⚠️ kimi2-8 空闲但无 wande-play Todo Issue 可接，全部 Todo 为 gh-plugins
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
@@ -26,11 +26,10 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #9 | P0 | gh-plugins | D3_Core共享模块 — 云端API/产品库/标准库 | ✅ |
-| 2 | #10 | P0 | gh-plugins | D3_Safety模块 — 安全区域自动生成+三标合规 | ✅ |
-| 3 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
-| 4 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
-| 5 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
+| 1 | #10 | P0 | gh-plugins | D3_Safety模块 — 安全区域自动生成+三标合规 | ✅ |
+| 2 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
+| 3 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
+| 4 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -49,7 +48,9 @@
 | #1911 | 已指派 kimi1（重新启动） | In Progress |
 | #2393 | ✅ CLOSED（矿场Phase5买家意图信号采集） | Done |
 | #23 | ✅ CLOSED（D3缺陷修复-Redis缓存层）PR#36 | Done |
+| #18 | ✅ CLOSED（D3生产链路-弧长/曲线标注增强）PR#37 | Done |
 | #17 | 已指派 glm4 | In Progress |
+| #9 | 已指派 glm1 | In Progress |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |
 | #2487 | ✅ CLOSED（设计模型训练LoRA-B） | Done |

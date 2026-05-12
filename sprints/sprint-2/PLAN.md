@@ -909,7 +909,7 @@
 ### 05-12 新批次（池耗尽拆补）
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
-| kimi1 | #1451 | backend | medium | CC工作中 | 品牌术语表管理 — brand_glossary表+CRUD+术语校验+Prompt注入（#1717等均needs-prototype冻结，唯一可派） |
+| kimi1 | #1451 | backend | medium | CC重启 | 品牌术语表管理 — 卡网络错误3h43m，已kill+重启 |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |
@@ -950,7 +950,8 @@
 | kimi4 | ~~#2742~~ | backend | medium | ~~Done~~ | 商战情报·CRM双向数据同步 — PR #4692 MERGED ✅ |
 | kimi4 | ~~#2719~~ | pipeline | medium | ~~Done~~ | 商战情报·竞品大规模源监控扩展（竞品情报[4/10]） — PR #4696 MERGED ✅ |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — /outreach/linkedin-import — PR #4697 MERGED ✅ |
-| kimi6 | ~~#2743~~ | fullstack | medium | ~~PR#4722 OPEN~~ | 情报ROI分析看板 — PR #4722 OPEN，CI已触发 |
+| kimi6 | ~~#2743~~ | fullstack | medium | ~~Done~~ | 情报ROI分析看板 — PR #4722 MERGED ✅ |
+| kimi6 | #4723 | fullstack | medium | CC工作中 | 客户满意度调查与NPS评分 — 问卷+NPS仪表盘（新建） |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |

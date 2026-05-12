@@ -1,8 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1171轮；Done 1525；In Progress 4；Todo 16；Plan 6；#18 PR#37 merged）
-> 活跃CC：kimi1/#1911 + glm1/#18 + glm2/#19 + glm3/#20 + glm4/#23
-> ⚠️ kimi2-8 空闲但无 wande-play Todo Issue 可接，全部 Todo 为 gh-plugins
+> 更新时间：2026-05-13（排程经理第1172轮；Done 1525；In Progress 5；Todo 15；Plan 6；指派建议表补充至5条）
+> 活跃CC：kimi1/#1911 + glm1/#9 + glm2/#19 + glm3/#20 + glm4/#17
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -27,9 +26,10 @@
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #10 | P0 | gh-plugins | D3_Safety模块 — 安全区域自动生成+三标合规 | ✅ |
-| 2 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
-| 3 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
-| 4 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
+| 2 | #2 | P1 | gh-plugins | D3-v2.0：DfMA制造可行性自动检测引擎 | ✅ |
+| 3 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
+| 4 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
+| 5 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 

@@ -3,7 +3,7 @@
 > 更新时间：2026-05-12（排程经理第1141轮；Plan队列needs-prototype耗尽；7个Issue流转Todo；2个Master自动关闭）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
-> Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭
+> Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
 
 ## 排程统计
 

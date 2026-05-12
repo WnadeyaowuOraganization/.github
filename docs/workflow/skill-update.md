@@ -1876,3 +1876,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - **影响**: 下游PR#4714(#2718 战斗卡) CI连续2次编译失败
 - **处置**: 排程经理直修dev推送+重触发CI
 - **改进建议**: squash-merge后应验证dev分支至少能mvn compile（当前CI只跑feature分支）
+
+**[2026-05-12] menu-contract skill 文档过时：禁止INSERT规则与实际执行不一致（kimi8 #4745）**
+- 症状：kimi8 开发排行榜/竞赛功能时，按 menu-contract skill 文档尝试用占位 UPDATE，但实际走的是 INSERT 分支（issue-source.md 模板含 INSERT）；CC 纠结 20 分钟，最终自主决定走 INSERT
+- 根因：menu-contract skill 写"禁止 INSERT，必须 UPDATE 占位菜单"，但 CRM Issue 的 issue-source.md 模板含 INSERT sys_menu，实际开发中 CC 只能走 INSERT
+- 处置：研发经理直接告知"sys_menu INSERT 是 CRM Issue 标准实践"，CC 立即执行
+- **频次=1次**，观察是否重复
+- **建议**：更新 `agents/skills/menu-contract/SKILL.md`，将"禁止INSERT"改为"CRM Issue 可直接 INSERT sys_menu（所有 CRM Issue 均含菜单注册，是标准流程）"，避免 CC 困惑

@@ -25,6 +25,20 @@
 - 建议：backend-schema skill 在建表前先 `ls db/migration/` 查现有 timestamp 范围，避免重复
 - 频次：1次（观察中）
 
+**[2026-05-12] CC 违反 sys_menu INSERT 禁止规范（kimi1 #4743）**
+- 症状：kimi1 PR 中出现 `INSERT INTO sys_menu`，违反 CLAUDE.md 红线"禁止 INSERT 新 sys_menu — 只 UPDATE 占位菜单"
+- 根因：skill 无自动化检查机制，CC 靠自觉遵守，偶发违规
+- 处置：kimi1 自行发现并删除（未造成事故）
+- 建议：CLAUDE.md 或 backend-schema skill 增加 commit 前 `grep -n "INSERT.*sys_menu" *.sql` 自检提示
+- 频次：1次（观察中）
+
+**[2026-05-12] 后端重启后 schedule 任务报缺失表错误（kimi1 #4743）**
+- 症状：kimi1 后端重启后，定时任务报 `wdpp_brand_avatar`/`wdpp_photo_ai_tags` 等表不存在
+- 根因：这些表由 Flyway 管理，但 seed 数据未包含，restart 触发 Flyway init 时新表未在 seed 中
+- 处置：kimi1 在测试过程中重建了缺失的 5 张表
+- 建议：backend-schema skill 补充说明：新增表后若遇 schedule 任务重启报错，检查 Flyway init 是否完整
+- 频次：1次（观察中）
+
 ---
 
 

@@ -1609,3 +1609,12 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 建议：backend-test skill 增加 ServiceImpl mock 最佳实践示例，或推荐纯 SQL/JDBC 测试策略
 - 频次：**1次（观察中）**，同类错误重复 ≥4 次时触发 skill 更新
 
+
+---
+
+**[2026-05-12] MySQL JSON_TABLE 兼容性导致 SQL 层聚合失败（kimi? #4761）**
+- 症状：关键词聚合使用 MySQL JSON_TABLE 函数，在部分环境（MySQL 版本差异）下不兼容
+- 根因：MySQL JSON_TABLE 在某些版本或配置下不可用
+- 处置：CC 将聚合逻辑从 SQL 层迁移到 Java 层解决
+- 建议：backend-coding skill 补充 JSON 函数兼容性指南；涉及 JSON 聚合时优先在 Java/应用层处理
+- 频次：**1次（观察中）**，同类错误重复 ≥4 次时触发 skill 更新

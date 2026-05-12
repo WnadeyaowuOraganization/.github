@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1172轮；Done 1525；In Progress 5；Todo 15；Plan 6；指派建议表补充至5条）
+> 更新时间：2026-05-13（排程经理第1173轮；Done 1525；In Progress 5；Todo 15；Plan 6；无变化）
 > 活跃CC：kimi1/#1911 + glm1/#9 + glm2/#19 + glm3/#20 + glm4/#17
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)

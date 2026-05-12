@@ -1,7 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1186轮；Done 1536；In Progress 4；Todo 4；Plan 6；无变化）
-> 活跃CC：glm1/#7 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#8
+> 更新时间：2026-05-13（排程经理第1186轮；Done 1537；In Progress 5；Todo 4；Plan 6；#7 Done，#11 In Progress）
+> 活跃CC：glm1/#11 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#8
+> 指派建议表：已清空（gh-plugins Todo队列待补充）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -48,6 +49,7 @@
 | #19 | ✅ CLOSED（D3生产链路-曲面面板分割电池包）PR#38 | Done |
 | #17 | ✅ CLOSED（D3生产链路-2D板材排料电池包）PR#39 | Done |
 | #9 | ✅ CLOSED（D3_Core共享模块）PR#40 | Done |
+| #7 | ✅ CLOSED（一键标注出图组件）PR#49 | Done |
 | #20 | 已指派 glm3 | In Progress |
 | #10 | 已指派 glm2 | In Progress |
 | #2 | ✅ CLOSED（DfMA制造可行性检测引擎）PR#41 | Done |

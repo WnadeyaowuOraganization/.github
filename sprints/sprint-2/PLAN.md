@@ -973,7 +973,8 @@
 | kimi8 | ~~#4719~~ | fullstack | medium | ~~Done~~ | 报价单快速生成与版本管理 — PR #4728 MERGED ✅ |
 | kimi8 | ~~#4729~~ | fullstack | medium | ~~Done~~ | 商机竞争对手跟踪与分析 — PR #4733 MERGED ✅ |
 | kimi8 | ~~#4736~~ | fullstack | medium | ~~Done~~ | 客户拜访签到与GPS轨迹追踪 — PR #4742 MERGED ✅ |
-| kimi8 | #4745 | fullstack | medium | CC工作中 | 客户回访计划与跟进提醒 — 回访计划+日历+今日待办（新建） |
+| kimi8 | ~~#4745~~ | fullstack | medium | ~~Done~~ | 客户回访计划与跟进提醒 — PR #4753 MERGED ✅ |
+| kimi8 | #4756 | fullstack | medium | CC工作中 | 客户生命周期阶段自动化管理 — 阶段流转+停滞检测+看板（新建） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -955,7 +955,7 @@
 | kimi8 | ~~#2726~~ | backend | medium | ~~Done~~ | 商战情报·跨模块事件总线 — PR #4688 MERGED ✅ |
 | kimi8 | ~~#2729~~ | backend | medium | ~~Done~~ | 商战情报·商机评分综合模型 — PR #4699 MERGED ✅ |
 | kimi8 | ~~#4701~~ | frontend | medium | ~~Done~~ | CRM销售漏斗实时看板 — PR #4710 MERGED ✅ |
-| kimi8 | #4711 | fullstack | medium | CC工作中 | 合同到期自动预警 — 定时扫描+企微/邮件多级提醒（新建） |
+| kimi8 | ~~#4711~~ | fullstack | medium | ~~PR#4717 OPEN~~ | 合同到期自动预警 — PR #4717 OPEN，CI轮询中 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

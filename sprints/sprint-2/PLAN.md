@@ -287,13 +287,15 @@
 | 05-13 | kimi1 | ~~#4~~ | gh-plugins | P1 | ~~Done~~ | D3钢管下料优化（1D Nesting）— **PR#45 MERGED** ✅ |
 | 05-13 | glm4 | ~~#5~~ | gh-plugins | P1 | ~~Done~~ | D3 CNC/激光切割文件输出 — **PR#44 MERGED** ✅ |
 | 05-13 | kimi1 | ~~#24~~ | gh-plugins | P2 | ~~Done~~ | GH端纯参数传递模式改造 — **PR#46 MERGED** ✅ |
+| 05-13 | glm1 | ~~#9~~ | gh-plugins | P0 | ~~Done~~ | D3_Core共享模块 — **PR#40 MERGED** ✅ |
+| 05-13 | kimi1 | ~~#6~~ | gh-plugins | P1 | PR中 | D3 STEP零件批量导出 — **PR#47 CONFLICTING处理中** |
 
 **当前5个CC在线运行中（05-13研发经理指派）：**
-- glm1 #9: D3_Core共享模块（gh-plugins，P0，rebase中 67%）
+- glm1 #7: D3一键标注出图（gh-plugins，P1，刚启动）
 - glm2 #10: D3_Safety安全区域（gh-plugins，P0，PR准备中 62%）
-- glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，编码中）
+- glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，33%）
 - glm4 #21: D3生产链路-表皮效果预览（gh-plugins，P2，30%）
-- kimi1 #6: D3 STEP零件批量导出（gh-plugins，P1，刚启动）
+- kimi1 #6: D3 STEP零件批量导出（gh-plugins，P1，PR#47 CONFLICTING处理中）
 
 **最近完成（本轮巡检新增）**:
 - ~~kimi2 #4720~~ → PR#4770 MERGED（研发经理手动rebase解决crm.ts冲突）✅

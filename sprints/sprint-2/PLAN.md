@@ -950,7 +950,7 @@
 | kimi4 | ~~#2742~~ | backend | medium | ~~Done~~ | 商战情报·CRM双向数据同步 — PR #4692 MERGED ✅ |
 | kimi4 | ~~#2719~~ | pipeline | medium | ~~Done~~ | 商战情报·竞品大规模源监控扩展（竞品情报[4/10]） — PR #4696 MERGED ✅ |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — /outreach/linkedin-import — PR #4697 MERGED ✅ |
-| kimi6 | #2743 | fullstack | medium | CC工作中 | 商战情报·情报使用数据埋点与ROI分析 |
+| kimi6 | ~~#2743~~ | fullstack | medium | ~~PR#4722 OPEN~~ | 情报ROI分析看板 — PR #4722 OPEN，CI已触发 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |

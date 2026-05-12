@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1184轮；Done 1535；In Progress 4；Todo 5；Plan 6；无变化）
-> 活跃CC：glm1/#7 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#6
+> 更新时间：2026-05-13（排程经理第1184轮；Done 1536；In Progress 5；Todo 5；Plan 6；#6 Done）
+> 活跃CC：glm1/#7 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#8
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -25,8 +25,7 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #8 | P1 | gh-plugins | 一键BOM+报价 — 零件清单/材料/工时 | ✅ |
-| 2 | #11 | P1 | gh-plugins | D3_Structure模块 — 受力计算+构件选型 | ✅ |
+| 1 | #11 | P1 | gh-plugins | D3_Structure模块 — 受力计算+构件选型 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -58,7 +57,7 @@
 | #5 | ✅ CLOSED（CNC/DXF分层导出）PR#44 | Done |
 | #24 | ✅ CLOSED（GH纯参数传递模式改造）PR#46 | Done |
 | #21 | 已指派 glm4 | In Progress |
-| #6 | 已指派 kimi1 | In Progress |
+| #6 | ✅ CLOSED（STEP零件批量导出）PR#48 | Done |
 | #25 | 已指派 kimi1 | In Progress |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |

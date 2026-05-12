@@ -953,7 +953,7 @@
 | kimi4 | ~~#2719~~ | pipeline | medium | ~~Done~~ | 商战情报·竞品大规模源监控扩展（竞品情报[4/10]） — PR #4696 MERGED ✅ |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — /outreach/linkedin-import — PR #4697 MERGED ✅ |
 | kimi6 | ~~#2743~~ | fullstack | medium | ~~Done~~ | 情报ROI分析看板 — PR #4722 MERGED ✅ |
-| kimi6 | #4723 | fullstack | medium | CC工作中 | 客户满意度调查与NPS评分 — 问卷+NPS仪表盘（新建） |
+| kimi6 | ~~#4723~~ | fullstack | medium | ~~PR#4730 OPEN~~ | 客户满意度调查与NPS评分 — PR #4730 OPEN，CI已触发 |
 | kimi8 | ~~#4123~~ | fullstack | medium | ~~Done~~ | AI商务助手 — 全局右侧常驻组件（CRM Sprint-3） — PR #4660 MERGED ✅ |
 | kimi8 | ~~#2799~~ | frontend | medium | ~~Done~~ | 营销序列管理前端：可视化编辑器+状态追踪 — PR #4664 MERGED ✅ |
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |

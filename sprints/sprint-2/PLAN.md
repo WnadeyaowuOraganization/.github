@@ -249,7 +249,8 @@
 | 05-04 | #2132 ✅merged/kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置-多角色模板系统 — **PR #4453 MERGED** ✅ |
 | 05-12 | kimi2 | ~~#4720~~ | fullstack | medium | **Done** | 客户分级自动评定与管理 — PR#4770 MERGED ✅ |
 | 05-12 | kimi1 | ~~#4767~~ | fullstack | medium | ~~Done~~ | 客户推荐关系与奖励管理 — PR#4786 merged |
-| 05-12 | kimi2 | #1911 | backend | P0 | **异常** | D3-AI·AI电池包开发助手 — OPEN无PR，CC已退出 |
+| 05-12 | kimi2 | ~~#1911~~ | backend | P0 | ~~异常~~ | ~~D3-AI·AI电池包开发助手 — CC误杀，已重新指派~~ |
+| 05-13 | kimi1 | #1911 | backend | P0 | In Progress | D3-AI·AI电池包开发助手 — 重新指派（G7e不可达则代码先行） |
 | 05-12 | kimi3 | ~~#4771~~ | fullstack | medium | ~~Done~~ | 客户数据质量评分与管理 — CLOSED/COMPLETED |
 | 05-12 | kimi4 | ~~#4769~~ | fullstack | medium | ~~Done~~ | 客户合同续约管理与到期预警 — CLOSED/COMPLETED |
 | 05-12 | kimi5 | ~~#4772~~ | fullstack | medium | ~~Done~~ | 客户价值分层与RFM模型管理 — PR#4775 merged |
@@ -261,11 +262,12 @@
 | 05-13 | glm3 | #20 | gh-plugins | medium | In Progress | D3生产链路-图纸分级输出系统（P1） |
 | 05-13 | glm4 | #23 | gh-plugins | medium | In Progress | D3缺陷修复-Redis缓存层（P1） |
 
-**当前4个CC在线运行中（05-13研发经理指派）：**
+**当前5个CC在线运行中（05-13研发经理指派）：**
 - glm1 #18: D3生产链路-弧长/曲线标注增强（gh-plugins，P0，已启动）
 - glm2 #19: D3生产链路-曲面面板分割电池包（gh-plugins，P1，已启动）
 - glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，已启动）
 - glm4 #23: D3缺陷修复-Redis缓存层（gh-plugins，P1，已启动）
+- kimi1 #1911: D3-AI·AI电池包开发助手（backend，P0，已重新指派）
 
 **最近完成（本轮巡检新增）**:
 - ~~kimi2 #4720~~ → PR#4770 MERGED（研发经理手动rebase解决crm.ts冲突）✅

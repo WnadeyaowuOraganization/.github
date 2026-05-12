@@ -945,7 +945,8 @@
 | kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
 | kimi4 | ~~#4707~~ | fullstack | medium | ~~Done~~ | CRM客户拜访记录管理 — PR #4715 MERGED ✅ |
 | kimi4 | ~~#4716~~ | fullstack | medium | ~~Done~~ | 客户标签智能推荐与批量管理 — PR #4740 MERGED ✅ |
-| kimi4 | #4744 | fullstack | medium | CC工作中 | 销售业绩排行榜与团队竞赛看板 — 个人/团队排行+竞赛管理（新建） |
+| kimi4 | ~~#4744~~ | fullstack | medium | ~~Done~~ | 销售业绩排行榜与团队竞赛看板 — PR #4750 MERGED ✅ |
+| kimi4 | #4757 | fullstack | medium | CC工作中 | 客户忠诚度计划与复购激励管理 — 积分+会员等级+排行榜（新建） |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

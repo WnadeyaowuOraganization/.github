@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1180轮；Done 1532；In Progress 5；Todo 8；Plan 6；#4 Done/#24 In Progress kimi1）
-> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + glm4/#5 + kimi1/#24
+> 更新时间：2026-05-13（排程经理第1181轮；Done 1533；In Progress 5；Todo 8；Plan 6；指派建议表补充至4条）
+> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#24
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -25,7 +25,10 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
+| 1 | #6 | P1 | gh-plugins | STEP零件批量导出 — Pancake集成 | ✅ |
+| 2 | #7 | P1 | gh-plugins | 一键标注出图 — 平面/立面/详图+DWG | ✅ |
+| 3 | #8 | P1 | gh-plugins | 一键BOM+报价 — 零件清单/材料/工时 | ✅ |
+| 4 | #11 | P1 | gh-plugins | D3_Structure模块 — 受力计算+构件选型 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -54,7 +57,9 @@
 | #3 | ✅ CLOSED（几何审计脚本）PR#43 | Done |
 | #25 | ✅ CLOSED（端到端测试套件）PR#42 | Done |
 | #4 | ✅ CLOSED（钢管下料优化）PR#45 | Done |
+| #5 | ✅ CLOSED（CNC/DXF分层导出）PR#44 | Done |
 | #24 | 已指派 kimi1 | In Progress |
+| #21 | 已指派 glm4 | In Progress |
 | #25 | 已指派 kimi1 | In Progress |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |

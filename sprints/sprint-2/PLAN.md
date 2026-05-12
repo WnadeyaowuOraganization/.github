@@ -920,7 +920,8 @@
 | kimi3 | ~~#2727~~ | backend | medium | ~~Done~~ | 商战情报·三角关联引擎 — PR #4694 MERGED ✅ |
 | kimi3 | ~~#2065~~ | backend | high | ~~Done~~ | D3市场配置预设 — 5市场种子+Redis缓存+JUnit — PR #4698 MERGED ✅ |
 | kimi3 | ~~#4700~~ | frontend | medium | ~~Done~~ | D3参数化·材质标注与渲染预览 — PR #4704 MERGED ✅ |
-| kimi3 | ~~#4706~~ | frontend | medium | ~~PR#4713 OPEN~~ | CRM客户跟进任务自动生成 — PR #4713 OPEN，预检6门绿，等CI merge |
+| kimi3 | ~~#4706~~ | frontend | medium | ~~Done~~ | CRM客户跟进任务自动生成 — PR #4713 MERGED ✅ |
+| kimi3 | #4712 | fullstack | medium | CC工作中 | 销售目标进度实时看板 — 个人/团队目标完成率（新建） |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |
@@ -933,7 +934,7 @@
 | kimi5 | #4709 | fullstack | medium | CC工作中 | CRM客户接触历史时间轴 — 邮件+拜访+企微多渠道汇总（新建） |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
 | kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
-| kimi4 | #4707 | fullstack | medium | CC工作中 | CRM客户拜访记录管理 — 拜访计划+签到+报告（新建） |
+| kimi4 | ~~#4707~~ | fullstack | medium | ~~PR#4715 OPEN~~ | CRM客户拜访记录管理 — PR #4715 OPEN，CI已触发 |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

@@ -24,13 +24,9 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #18 | P0 | gh-plugins | D3生产链路：弧长/曲线标注增强 | ✅ |
-| 2 | #19 | P1 | gh-plugins | D3生产链路：曲面面板分割电池包 | ✅ |
-| 3 | #20 | P1 | gh-plugins | D3生产链路：图纸分级输出系统 | ✅ |
-| 4 | #23 | P1 | gh-plugins | D3缺陷修复：Redis缓存层 | ✅ |
-| 5 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
-| 6 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
-| 7 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
+| 1 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
+| 2 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
+| 3 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -260,16 +256,16 @@
 | 05-12 | kimi6 | #4773 | fullstack | medium | In Progress | 客户健康度追踪与预警（新建） |
 | 05-12 | kimi7 | #4768 | fullstack | medium | In Progress | 客户投诉登记与处理跟踪（新建） |
 | 05-12 | kimi8 | #4766 | fullstack | medium | In Progress | 客户社交媒体互动记录管理（新建） |
+| 05-13 | glm1 | #18 | gh-plugins | medium | In Progress | D3生产链路-弧长/曲线标注增强（P0） |
+| 05-13 | glm2 | #19 | gh-plugins | medium | In Progress | D3生产链路-曲面面板分割电池包（P1） |
+| 05-13 | glm3 | #20 | gh-plugins | medium | In Progress | D3生产链路-图纸分级输出系统（P1） |
+| 05-13 | glm4 | #23 | gh-plugins | medium | In Progress | D3缺陷修复-Redis缓存层（P1） |
 
-**当前8个CC在线运行中（05-12研发经理指派）：**
-- kimi1 #4767: 客户推荐关系与奖励管理（fullstack，已启动）
-- kimi2 #1911: AI电池包开发助手（backend，P0，刚指派）
-- kimi3 #4771: 客户数据质量评分与管理（fullstack，已启动）
-- kimi4 #4769: 客户合同续约管理与到期预警（fullstack，已启动）
-- kimi5 #4772: 客户价值分层与RFM模型管理（fullstack，已启动）
-- kimi6 #4773: 客户健康度追踪与预警（fullstack，已启动）
-- kimi7 #4768: 客户投诉登记与处理跟踪（fullstack，已启动）
-- kimi8 #4766: 客户社交媒体互动记录管理（fullstack，已启动）
+**当前4个CC在线运行中（05-13研发经理指派）：**
+- glm1 #18: D3生产链路-弧长/曲线标注增强（gh-plugins，P0，已启动）
+- glm2 #19: D3生产链路-曲面面板分割电池包（gh-plugins，P1，已启动）
+- glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，已启动）
+- glm4 #23: D3缺陷修复-Redis缓存层（gh-plugins，P1，已启动）
 
 **最近完成（本轮巡检新增）**:
 - ~~kimi2 #4720~~ → PR#4770 MERGED（研发经理手动rebase解决crm.ts冲突）✅

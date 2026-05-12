@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1174轮；Done 1527；In Progress 2；Todo 15；Plan 6；#19/#17/#1911 Done）
-> 活跃CC：glm1/#9 + glm3/#20
+> 更新时间：2026-05-13（排程经理第1174轮；Done 1527；In Progress 5；Todo 12；Plan 6；指派建议表补充至5条）
+> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + glm4/#2 + kimi1/#25
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -25,9 +25,9 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #10 | P0 | gh-plugins | D3_Safety模块 — 安全区域自动生成+三标合规 | ✅ |
-| 2 | #2 | P1 | gh-plugins | D3-v2.0：DfMA制造可行性自动检测引擎 | ✅ |
-| 3 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
+| 1 | #3 | P1 | gh-plugins | D3-v2.0：几何审计脚本 — bake前自动扫描 | ✅ |
+| 2 | #4 | P1 | gh-plugins | D3-v2.0：钢管下料优化（1D Nesting） | ✅ |
+| 3 | #5 | P1 | gh-plugins | D3-v2.0：CNC/激光切割文件直接输出 | ✅ |
 | 4 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
 | 5 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
 
@@ -51,8 +51,11 @@
 | #18 | ✅ CLOSED（D3生产链路-弧长/曲线标注增强）PR#37 | Done |
 | #19 | ✅ CLOSED（D3生产链路-曲面面板分割电池包）PR#38 | Done |
 | #17 | ✅ CLOSED（D3生产链路-2D板材排料电池包）PR#39 | Done |
-| #9 | 已指派 glm1 | In Progress |
+| #9 | 已指派 glm1（PR#40冲突处理中） | In Progress |
 | #20 | 已指派 glm3 | In Progress |
+| #10 | 已指派 glm2 | In Progress |
+| #2 | 已指派 glm4 | In Progress |
+| #25 | 已指派 kimi1 | In Progress |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |
 | #2487 | ✅ CLOSED（设计模型训练LoRA-B） | Done |

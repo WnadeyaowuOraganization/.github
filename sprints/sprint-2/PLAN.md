@@ -911,7 +911,8 @@
 |------|-------|------|--------|------|------|
 | kimi1 | ~~#1451~~ | backend | medium | ~~Done~~ | 品牌术语表管理 — PR #4726 MERGED ✅ |
 | kimi1 | ~~#4727~~ | fullstack | medium | ~~Done~~ | 销售活动日历与日程管理 — PR #4732 MERGED ✅ |
-| kimi1 | #4735 | fullstack | medium | CC工作中 | 客户公海池与自动回收规则 — 公海池+认领+定时回收（新建） |
+| kimi1 | ~~#4735~~ | fullstack | medium | ~~Done~~ | 客户公海池与自动回收规则 — PR #4741 MERGED ✅ |
+| kimi1 | #4743 | fullstack | medium | CC工作中 | 客户关联关系图谱 — 力导向图+关系CRUD+统计（新建） |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |
@@ -941,7 +942,8 @@
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
 | kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
 | kimi4 | ~~#4707~~ | fullstack | medium | ~~Done~~ | CRM客户拜访记录管理 — PR #4715 MERGED ✅ |
-| kimi4 | #4716 | fullstack | medium | CC工作中 | 客户标签智能推荐与批量管理 — 标签库+自动规则+批量打标签（新建） |
+| kimi4 | ~~#4716~~ | fullstack | medium | ~~Done~~ | 客户标签智能推荐与批量管理 — PR #4740 MERGED ✅ |
+| kimi4 | #4744 | fullstack | medium | CC工作中 | 销售业绩排行榜与团队竞赛看板 — 个人/团队排行+竞赛管理（新建） |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

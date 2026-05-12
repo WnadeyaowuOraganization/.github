@@ -961,7 +961,7 @@
 | kimi8 | ~~#2729~~ | backend | medium | ~~Done~~ | 商战情报·商机评分综合模型 — PR #4699 MERGED ✅ |
 | kimi8 | ~~#4701~~ | frontend | medium | ~~Done~~ | CRM销售漏斗实时看板 — PR #4710 MERGED ✅ |
 | kimi8 | ~~#4711~~ | fullstack | medium | ~~Done~~ | 合同到期自动预警 — PR #4717 MERGED ✅ |
-| kimi8 | #4719 | fullstack | medium | CC工作中 | 报价单快速生成与版本管理 — 从商机一键生成+版本对比+审批（新建） |
+| kimi8 | ~~#4719~~ | fullstack | medium | ~~PR#4728 OPEN~~ | 报价单快速生成与版本管理 — PR #4728 OPEN，CI已触发 |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

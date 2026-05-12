@@ -264,13 +264,12 @@
 | 05-12 | kimi6 | ~~#4773~~ | fullstack | medium | ~~Done~~ | 客户健康度追踪与预警 — PR#4779 merged |
 | 05-12 | kimi7 | ~~#4768~~ | fullstack | medium | ~~Done~~ | 客户投诉登记与处理跟踪 — PR#4774 merged |
 | 05-12 | kimi8 | ~~#4766~~ | fullstack | medium | ~~Done~~ | 客户社交媒体互动记录管理 — PR#4777 merged |
-| 05-13 | glm1 | #18 | gh-plugins | medium | In Progress | D3生产链路-弧长/曲线标注增强（P0） |
+| 05-13 | glm1 | ~~#18~~ | gh-plugins | medium | ~~Done~~ | D3生产链路-弧长/曲线标注增强 — **PR#37 MERGED** ✅ |
 | 05-13 | glm2 | #19 | gh-plugins | medium | In Progress | D3生产链路-曲面面板分割电池包（P1） |
 | 05-13 | glm3 | #20 | gh-plugins | medium | In Progress | D3生产链路-图纸分级输出系统（P1） |
 | 05-13 | glm4 | ~~#23~~ | gh-plugins | medium | ~~Done~~ | D3缺陷修复-Redis缓存层 — **PR#36 MERGED** ✅ |
 
-**当前5个CC在线运行中（05-13研发经理指派）：**
-- glm1 #18: D3生产链路-弧长/曲线标注增强（gh-plugins，P0，已启动）
+**当前4个CC在线运行中（05-13研发经理指派）：**
 - glm2 #19: D3生产链路-曲面面板分割电池包（gh-plugins，P1，已启动）
 - glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，已启动）
 - glm4 #17: D3生产链路-2D板材排料电池包（gh-plugins，P0，已启动）

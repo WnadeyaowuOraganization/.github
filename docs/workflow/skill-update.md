@@ -18,6 +18,13 @@
 - 处置：**频次=1次，持续观察**，建议后续更新 backend-coding skill 中的 rebase 后清理步骤
 - 建议 CC 规范：rebase 后清理用 `git restore . && git clean -fd --exclude=node_modules --exclude=target`，严格限定排除目录
 
+**[2026-05-12] Flyway migration timestamp 冲突导致 CC 返工（kimi8 #4756）**
+- 症状：CC 创建 migration 文件时，timestamp `20260512100001` 已被占用，Flyway 报错阻止建表
+- 根因：多个 CC 并发执行，timestamp 生成逻辑未做防重处理
+- 处置：kimi8 CC 层手动 rename 为 `date +%Y%m%d%H%M%S`（实时时间戳）绕过冲突
+- 建议：backend-schema skill 在建表前先 `ls db/migration/` 查现有 timestamp 范围，避免重复
+- 频次：1次（观察中）
+
 ---
 
 

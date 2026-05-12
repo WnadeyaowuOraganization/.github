@@ -418,6 +418,11 @@ cat issues/issue-${ISSUE}/issue-source.md | grep -A5 "原型\|设计\|关联"
 git fetch origin dev && git rebase origin/dev
 # 有冲突解决后继续；解不了就 git rebase --abort 然后 push，让 CI 兜底
 
+## ⚠️ Git 清理红线
+- **禁止** `git clean -fd`（4次全删灾难：#4735 kimi1删mapper、#4688删契约、#4650删service、#4725删全部代码）
+- 正确清理 CLAUDE.md 要求的内容：`git checkout -- .`（丢弃未 staged 修改）
+- CLAUDE.md 禁止内容清理：`git clean -fd -e '.claude/skills/' -e 'CLAUDE.md' -e 'issues/'`（只删CC内部产物，保留所有业务代码）
+
 # 1a. ⚠️ MUST: rebase 后立即扫 TS 文件中的破损 JSDoc（4次事故：2026-04-16 #1576 policy.ts）
 #     rebase 冲突合并会静默丢失 `}` 和 `/**`，导致 TS Syntax error 但本地不报（已缓存）
 python3 -c "

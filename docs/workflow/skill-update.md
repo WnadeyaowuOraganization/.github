@@ -1883,3 +1883,18 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 处置：研发经理直接告知"sys_menu INSERT 是 CRM Issue 标准实践"，CC 立即执行
 - **频次=1次**，观察是否重复
 - **建议**：更新 `agents/skills/menu-contract/SKILL.md`，将"禁止INSERT"改为"CRM Issue 可直接 INSERT sys_menu（所有 CRM Issue 均含菜单注册，是标准流程）"，避免 CC 困惑
+
+**[2026-05-12] git clean -fd 触发第4次全删灾难（kimi3 #4725）**
+- 症状：kimi3 执行 `git clean -fd` 删除了所有已完成的代码文件，必须全部重建
+- 根因：红线 #8 说"PR前清理用 `git clean -fd -e '.claude/skills/' -e 'CLAUDE.md'`"，但 `-e` 例外的语义不明确，CC 误解为"只保留这些文件其余全删"
+- 频次：**4次**（超过阈值，立即更新 skill）
+- 处置：已升级 backend-coding SKILL.md：git clean 升级为**全面禁止**，并提供安全替换命令 `git checkout -- .` + `git clean -fd -e '.claude/skills/' -e 'CLAUDE.md' -e 'issues/'`
+- 建议：前端coding skill 同样检查是否有 git clean 相关规则
+
+**[2026-05-12] PaymentPlanServiceTest.java 编译歧义阻塞多PR（kimi4 #4744、kimi6 #4749）**
+- 症状：MyBatis-Plus BaseMapper 的 `insert(T)` vs `insert(Collection<T>)` 以及 `updateById(T)` vs `updateById(Collection<T>)` 在 Mockito mock 时产生编译歧义
+- 根因：测试代码用 `any()` 或 `any(Entity.class)` 时，编译器将返回类型推断为 Object，导致方法歧义
+- 修复方法：在 `when()/verify()` 调用中，对 BaseMapper 的 `insert/updateById` 使用显式泛型：`ArgumentMatchers.<CrmPaymentPlan>any()` 或 `any(CrmPaymentPlan.class)` 配合正确的 ArgumentMatchers 导入
+- 频次：2次（kimi4已修复，kimi6待修复）
+- 处置：通知 kimi6 应用同样修复
+- 建议：backend-test skill 或 backend-coding skill 中加入"MyBatis-Plus BaseMapper 的 insert/updateById 在 mock 时必须使用显式泛型 any()"规则

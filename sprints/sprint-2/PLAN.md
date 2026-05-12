@@ -25,7 +25,7 @@
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
 | 1 | #2516 | P1 | frontend | 合同管理·项目详情页「合同要点」卡片 — 关键信息内嵌执行管理 | ✅ |
-| 2 | #1911 | P0 | backend | D3-AI·AI电池包开发助手 — 中文描述→GH Python脚本生成（G7e Qwen3.5） | ⚠️ 需G7e |
+| 2 | ~~#1911~~ | P0 | backend | D3-AI·AI电池包开发助手 — 中文描述→GH Python脚本生成（G7e Qwen3.5） | ~~✅ 已指派 kimi2~~ |
 | 3 | #2343 | P1 | frontend | 方案引擎·S3资产浏览器前端 — 可视化查看S3所有数据资产 [3/22] | ✅ |
 | 4 | #2487 | P1 | backend | 设计模型训练·LoRA-B训练 — 国际渲染美学微调(触发词premium_render) [6/14] | ✅ |
 | 5 | #2486 | P1 | backend | 设计模型训练·LoRA-A训练 — 万德产品风格微调(触发词wande_product) [5/14] | ✅ |
@@ -240,32 +240,34 @@
 | 05-04 | kimi5 | ~~#1674~~ | biz-enablement | medium | **Done** | 产品参数查询中心API — 搜索/筛选/详情/资料包下载 — **PR #4449 MERGED** ✅ |
 | 05-04 | kimi5 | ~~#1539~~ | budget | P2 | **Done** | 历史基准自动积累 — 项目关闭时自动更新成本基准库 — **PR #4451 MERGED** ✅ |
 | 05-04 | #2132 ✅merged/kimi1 | ~~#1615~~ | chat | P1 | **Done** | 按群分角色AI配置-多角色模板系统 — **PR #4453 MERGED** ✅ |
-| 05-06 | kimi1 | #2475 | backend | **high** | In Progress | D3-AI G7e AI建模后端 — Qwen驱动GH脚本生成API |
-| 05-06 | kimi2 | #2438 | backend | **high** | In Progress | 投标人名单提取 → 发现同场竞技者 |
-| 05-06 | kimi3 | #2436 | pipeline | **high** | In Progress | 财政预算信号采集 → 六层信号源第三层 |
-| 05-06 | kimi4 | #2434 | backend | **high** | In Progress | 信号链自动串联 → 同项目不同阶段信号关联 |
+| 05-12 | kimi2 | ~~#4720~~ | fullstack | medium | **Done** | 客户分级自动评定与管理 — PR#4770 MERGED ✅ |
+| 05-12 | kimi1 | #4767 | fullstack | medium | In Progress | 客户推荐关系与奖励管理（新建） |
+| 05-12 | kimi2 | #1911 | backend | P0 | In Progress | D3-AI·AI电池包开发助手 — G7e Qwen3.5 |
+| 05-12 | kimi3 | #4771 | fullstack | medium | In Progress | 客户数据质量评分与管理（新建） |
+| 05-12 | kimi4 | #4769 | fullstack | medium | In Progress | 客户合同续约管理与到期预警（新建） |
+| 05-12 | kimi5 | #4772 | fullstack | medium | In Progress | 客户价值分层与RFM模型管理（新建） |
+| 05-12 | kimi6 | #4773 | fullstack | medium | In Progress | 客户健康度追踪与预警（新建） |
+| 05-12 | kimi7 | #4768 | fullstack | medium | In Progress | 客户投诉登记与处理跟踪（新建） |
+| 05-12 | kimi8 | #4766 | fullstack | medium | In Progress | 客户社交媒体互动记录管理（新建） |
 
-**当前4个CC在线运行中（05-06研发经理指派）：**
-- kimi1 #2475: D3-AI G7e AI建模后端（backend，**high**，刚启动）
-- kimi2 #2438: 投标人名单提取（backend，**high**，刚启动）
-- kimi3 #2436: 财政预算信号采集（pipeline，**high**，刚启动）
-- kimi4 #2434: 信号链自动串联（backend，**high**，刚启动）
-- ~~kimi2 #3383~~ → **kimi2 #2527**: 0%进度（版本历史+审批流程面板，frontend，刚启动）✅ 序号#7
-- ~~kimi3 #3384~~ → **kimi3 #2532**: 0%进度（已读追踪+公告详情，frontend，刚启动）✅ 序号#8
-- kimi4 #1923: 62%进度（竞品定价数据库，backend，持续工作中）
-- kimi5 #2536: 44%进度（项目组织管理-阶段推进弹窗增强，frontend，持续工作中）
+**当前8个CC在线运行中（05-12研发经理指派）：**
+- kimi1 #4767: 客户推荐关系与奖励管理（fullstack，已启动）
+- kimi2 #1911: AI电池包开发助手（backend，P0，刚指派）
+- kimi3 #4771: 客户数据质量评分与管理（fullstack，已启动）
+- kimi4 #4769: 客户合同续约管理与到期预警（fullstack，已启动）
+- kimi5 #4772: 客户价值分层与RFM模型管理（fullstack，已启动）
+- kimi6 #4773: 客户健康度追踪与预警（fullstack，已启动）
+- kimi7 #4768: 客户投诉登记与处理跟踪（fullstack，已启动）
+- kimi8 #4766: 客户社交媒体互动记录管理（fullstack，已启动）
 
 **最近完成（本轮巡检新增）**:
-- ~~kimi5 #1926~~ → PR #4185 merged 08:57:13 → Issue自动关闭 08:58:02 ✅
-- ~~kimi3 #3384~~ → PR #4186 merged 08:53:07 → 等待自动关闭
-- ~~kimi2 #3383~~ → PR #3991已merged → 等待自动关闭
-
-**下一批派遣计划**（kimi2/3释放后）:
-1. kimi2释放 → 派遣 #2527（序号#7，版本历史+审批流程面板，frontend）
-2. kimi3释放 → 派遣 #2532（序号#8，已读追踪+公告详情，frontend）
-3. 暂停 #2441（序号#6需要#2440先完成，目前#2440未派遣）
+- ~~kimi2 #4720~~ → PR#4770 MERGED（研发经理手动rebase解决crm.ts冲突）✅
+- Master #3647 → 所有子Issue CLOSED，自动关闭 ✅
+- Master #4020 → 所有子Issue CLOSED，自动关闭 ✅
+- 22个 needs-prototype Plan Issue → 批量移入 pause ✅
 
 ---
 
 
-> Plan 队列已被 needs-prototype 严重阻塞（~37/45 Issue 冻结）。新 Issue 需从 Master Issue 拆分创建。
+> **可执行Issue清单归档**：原161个Issue中159个已完成（CLOSED），7个仍在OPEN：#1466/#2218/#2223/#4013/#4021/#4043/#4046。已完成信息已汇总至指派历史表。
+> Plan 队列已被 needs-prototype 严重阻塞（~37/45 Issue 冻结，已批量移入pause）。新 Issue 需从 Master Issue 拆分创建。

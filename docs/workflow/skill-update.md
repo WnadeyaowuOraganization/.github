@@ -1869,3 +1869,10 @@ await page.locator('button[aria-label="login"]').click({ force: true });
 - 根因：`cc-test-env status` 输出中 backend 状态字段不易读，stopped 状态不够醒目
 - 处置：**频次=1次**，观察是否重复
 - 建议：CC 测试环境运维 skill 或 cc-test-env 脚本中，`backend STOPPED` 状态应以红色/醒目颜色标出，避免 CC 忽略
+
+## 2026-05-12 PR#4715 BO缺字段致下游CI失败
+- **现象**: PR#4715(#4707 拜访记录) squash-merge 后，CrmVisitRecordServiceTest 引用 setOpportunityIdQuery 等3个query字段不存在
+- **根因**: PR的BO缺3个query字段但mapper+test都引用了，squash-merge后CI未实际测试dev分支编译
+- **影响**: 下游PR#4714(#2718 战斗卡) CI连续2次编译失败
+- **处置**: 排程经理直修dev推送+重触发CI
+- **改进建议**: squash-merge后应验证dev分支至少能mvn compile（当前CI只跑feature分支）

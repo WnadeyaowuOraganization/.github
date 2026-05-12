@@ -929,7 +929,8 @@
 | kimi5 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 — PR #4690 MERGED ✅ |
 | kimi5 | ~~#2739~~ | frontend | medium | ~~Done~~ | 商战情报·移动端H5自适应 — PR #4693 MERGED ✅ |
 | kimi5 | ~~#2725~~ | backend | medium | ~~Done~~ | 商战情报·投标竞争对手识别·Deal Tips — PR #4702 MERGED ✅ |
-| kimi5 | #4705 | frontend | medium | CC工作中 | CRM商机转化漏斗详情 — 商机各阶段时长+转化障碍分析（新建） |
+| kimi5 | ~~#4705~~ | frontend | medium | ~~Done~~ | CRM商机转化漏斗详情 — PR #4708 MERGED ✅ |
+| kimi5 | #4709 | fullstack | medium | CC工作中 | CRM客户接触历史时间轴 — 邮件+拜访+企微多渠道汇总（新建） |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
 | kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
 | kimi4 | #4707 | fullstack | medium | CC工作中 | CRM客户拜访记录管理 — 拜访计划+签到+报告（新建） |
@@ -951,7 +952,7 @@
 | kimi8 | ~~#2818~~ | fullstack | medium | ~~Done~~ | 营销-销售自动移交：评分达标→通知→商机→分配 — PR #4676 MERGED ✅ |
 | kimi8 | ~~#2726~~ | backend | medium | ~~Done~~ | 商战情报·跨模块事件总线 — PR #4688 MERGED ✅ |
 | kimi8 | ~~#2729~~ | backend | medium | ~~Done~~ | 商战情报·商机评分综合模型 — PR #4699 MERGED ✅ |
-| kimi8 | #4701 | frontend | medium | CC工作中 | CRM销售漏斗实时看板 — 线索→商机→报价→合同转化率分析 |
+| kimi8 | ~~#4701~~ | frontend | medium | ~~PR#4710 OPEN~~ | CRM销售漏斗实时看板 — PR #4710 OPEN，CI已触发，等待merge |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

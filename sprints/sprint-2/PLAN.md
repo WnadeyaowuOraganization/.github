@@ -1,6 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1168轮；Done 1523；In Progress 0；Todo 22；Plan 5；队列正常）
+> 更新时间：2026-05-13（排程经理第1168轮；Done 1523；In Progress 5；Todo 18；Plan 5；队列正常）
+> 活跃CC：kimi1/#1911 + glm1/#18 + glm2/#19 + glm3/#20 + glm4/#23
+> ⚠️ kimi2-8 空闲但无 wande-play Todo Issue 可接，全部 Todo 为 gh-plugins
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -42,7 +44,7 @@
 | #2396 | ✅ CLOSED（国际信息源适配器-北美） | Done |
 | #2226 | ✅ CLOSED（竞品采集发布流程v2） | Done |
 | #2227 | ✅ CLOSED（跨境资格评估UI） | Done |
-| #1911 | ✅ CLOSED（D3-AI电池包助手） | Done |
+| #1911 | 已指派 kimi1（重新启动） | In Progress |
 | #2393 | ✅ CLOSED（矿场Phase5买家意图信号采集） | Done |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |
@@ -52,7 +54,9 @@
 | #4761 | ✅ CLOSED（CRM跟进记录AI摘要） | Done |
 | #4763 | ✅ CLOSED（CRM客户评分模型） | Done |
 | #4765 | ✅ CLOSED（CRM经销商关系分析） | Done |
-| #4761 / #4763 / #4765 | 新建CRM Issue | In Progress |
+| #4761 | ✅ CLOSED（CRM跟进记录AI摘要） | Done |
+| #4763 | ✅ CLOSED（CRM客户评分模型） | Done |
+| #4765 | ✅ CLOSED（CRM经销商关系分析） | Done |
 | #2017 | ✅ CLOSED（明道云权限模式提取） | Done |
 | #2516 | ✅ CLOSED（合同要点卡片） | Done |
 | #2655 | ⏳ 依赖 #2648（仍在 Plan，未完成） | Todo（阻塞） |

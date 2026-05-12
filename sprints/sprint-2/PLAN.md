@@ -939,7 +939,8 @@
 | kimi5 | ~~#2725~~ | backend | medium | ~~Done~~ | 商战情报·投标竞争对手识别·Deal Tips — PR #4702 MERGED ✅ |
 | kimi5 | ~~#4705~~ | frontend | medium | ~~Done~~ | CRM商机转化漏斗详情 — PR #4708 MERGED ✅ |
 | kimi5 | ~~#4709~~ | fullstack | medium | ~~Done~~ | CRM客户接触历史时间轴 — PR #4734 MERGED ✅ |
-| kimi5 | #4737 | fullstack | medium | CC工作中 | 客户数据导出与报表中心 — 导出模板+报表配置+图表（新建） |
+| kimi5 | ~~#4737~~ | fullstack | medium | ~~Done~~ | 客户数据导出与报表中心 — PR #4751 MERGED ✅ |
+| kimi5 | #4752 | fullstack | medium | CC工作中 | 销售目标设定与达成率分析 — 目标设定+进度看板+达成率分析（新建） |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
 | kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
 | kimi4 | ~~#4707~~ | fullstack | medium | ~~Done~~ | CRM客户拜访记录管理 — PR #4715 MERGED ✅ |

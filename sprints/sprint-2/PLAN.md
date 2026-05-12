@@ -279,13 +279,14 @@
 | 05-13 | kimi1 | ~~#1911~~ | backend | P0 | ~~Done~~ | D3-AI·AI电池包开发助手 — **PR#4801 MERGED** ✅（Jenkins部署失败需关注） |
 | 05-13 | kimi1 | ~~#25~~ | gh-plugins | P1 | ~~Done~~ | D3电池包端到端测试套件 — **PR#42 MERGED** ✅ |
 | 05-13 | glm4 | ~~#3~~ | gh-plugins | P1 | ~~Done~~ | D3几何审计脚本 — **PR#43 MERGED** ✅ |
+| 05-13 | kimi1 | ~~#4~~ | gh-plugins | P1 | ~~Done~~ | D3钢管下料优化（1D Nesting）— **PR#45 MERGED** ✅ |
 
 **当前5个CC在线运行中（05-13研发经理指派）：**
 - glm1 #9: D3_Core共享模块（gh-plugins，P0，PR处理中 50%）
 - glm2 #10: D3_Safety安全区域（gh-plugins，P0，PR准备中 62%）
 - glm3 #20: D3生产链路-图纸分级输出系统（gh-plugins，P1，编码中）
-- glm4 #5: D3 CNC/激光切割文件输出（gh-plugins，P1，刚启动）
-- kimi1 #4: D3钢管下料优化（gh-plugins，P1，38%）
+- glm4 #5: D3 CNC/激光切割文件输出（gh-plugins，P1，52%）
+- kimi1 #24: D3缺陷修复-GH纯参数传递模式改造（gh-plugins，P2，刚启动）
 
 **最近完成（本轮巡检新增）**:
 - ~~kimi2 #4720~~ → PR#4770 MERGED（研发经理手动rebase解决crm.ts冲突）✅

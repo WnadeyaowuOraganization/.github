@@ -969,7 +969,8 @@
 | kimi8 | ~~#4711~~ | fullstack | medium | ~~Done~~ | 合同到期自动预警 — PR #4717 MERGED ✅ |
 | kimi8 | ~~#4719~~ | fullstack | medium | ~~Done~~ | 报价单快速生成与版本管理 — PR #4728 MERGED ✅ |
 | kimi8 | ~~#4729~~ | fullstack | medium | ~~Done~~ | 商机竞争对手跟踪与分析 — PR #4733 MERGED ✅ |
-| kimi8 | #4736 | fullstack | medium | CC工作中 | 客户拜访签到与GPS轨迹追踪 — 签到+轨迹+统计看板（新建） |
+| kimi8 | ~~#4736~~ | fullstack | medium | ~~Done~~ | 客户拜访签到与GPS轨迹追踪 — PR #4742 MERGED ✅ |
+| kimi8 | #4745 | fullstack | medium | CC工作中 | 客户回访计划与跟进提醒 — 回访计划+日历+今日待办（新建） |
 
 ### PR进度总览（04-26 22:05）
 | kimi | Issue | PR | 状态 | 备注 |

@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1178轮；Done 1530；In Progress 5；Todo 10；Plan 6；#25 Done/#4 In Progress）
-> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + glm4/#3 + kimi1/#4
+> 更新时间：2026-05-13（排程经理第1179轮；Done 1531；In Progress 4；Todo 9；Plan 6；#3 Done PR#43）
+> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + kimi1/#4
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -53,7 +53,7 @@
 | #20 | 已指派 glm3 | In Progress |
 | #10 | 已指派 glm2 | In Progress |
 | #2 | ✅ CLOSED（DfMA制造可行性检测引擎）PR#41 | Done |
-| #3 | 已指派 glm4 | In Progress |
+| #3 | ✅ CLOSED（几何审计脚本）PR#43 | Done |
 | #25 | ✅ CLOSED（端到端测试套件）PR#42 | Done |
 | #4 | 已指派 kimi1 | In Progress |
 | #25 | 已指派 kimi1 | In Progress |

@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1187轮；Done 1538；In Progress 5；Todo 3；Plan 6；#8 Done，#13 In Progress kimi1）
+> 更新时间：2026-05-13（排程经理第1188轮；Done 1538；In Progress 4；Todo 2；Plan 6；无变化）
 > 活跃CC：glm1/#11 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#13
 > 指派建议表：1条（#12 P1 gh-plugins）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程

@@ -934,7 +934,8 @@
 | kimi5 | #4709 | fullstack | medium | CC工作中 | CRM客户接触历史时间轴 — 邮件+拜访+企微多渠道汇总（新建） |
 | kimi4 | ~~#4669~~ | frontend | medium | ~~Done~~ | LinkedIn联系人导入前端 — PR #4697 MERGED ✅ |
 | kimi4 | ~~#2016~~ | backend | medium | ~~Done~~ | 审批引擎Phase22·企微template_card消息 — PR #4703 MERGED ✅ |
-| kimi4 | ~~#4707~~ | fullstack | medium | ~~PR#4715 OPEN~~ | CRM客户拜访记录管理 — PR #4715 OPEN，CI已触发 |
+| kimi4 | ~~#4707~~ | fullstack | medium | ~~Done~~ | CRM客户拜访记录管理 — PR #4715 MERGED ✅ |
+| kimi4 | #4716 | fullstack | medium | CC工作中 | 客户标签智能推荐与批量管理 — 标签库+自动规则+批量打标签（新建） |
 | kimi6 | ~~#2715~~ | fullstack | medium | ~~Done~~ | 商战情报中台·客户雷达 — ABM目标客户清单 [10/10] — PR #4655 MERGED ✅ |
 | kimi6 | ~~#2812~~ | backend | medium | ~~Done~~ | 批量加好友：导入+频率控制+通过率优化 — PR #4670 MERGED ✅ |
 | kimi6 | ~~#2809~~ | backend | medium | ~~Done~~ | 企微自动标签+客户画像同步CRM — PR #4674 MERGED ✅ |

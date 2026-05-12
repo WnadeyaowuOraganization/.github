@@ -46,7 +46,7 @@
 | #4705 | [CRM] CRM商机转化漏斗详情（新建） | kimi5 | ✅ PR#4708 MERGED |
 | #4701 | [CRM] CRM销售漏斗实时看板（新建） | kimi8 | ✅ PR#4710 MERGED |
 | #4706 | [CRM] 客户跟进任务自动生成（新建） | kimi3 | ✅ PR#4713 MERGED |
-| #4712 | [CRM] 销售目标进度实时看板（新建） | kimi3 | CC工作中 |
+| #4712 | [CRM] 销售目标进度实时看板（新建） | kimi3 | CC工作中（已开工） |
 
 ### 活跃进行中（8 sessions）
 
@@ -55,7 +55,8 @@
 | kimi1 | #1451 | 品牌术语表管理 | backend | 无 | 后端API已有PR#4235，前端从零 |
 | kimi2 | #2718 | 商战情报·动态销售战斗卡引擎 | 全栈 | 无 | 建表+契约+后端+E2E 8/8✅，准备提PR |
 | kimi3 | #4712 | 销售目标进度实时看板 | fullstack | 无 | 新建，个人/团队目标完成率 |
-| kimi4 | ~~#4707~~ | CRM客户拜访记录管理 | fullstack | 无 | PR#4715 OPEN，CI已触发 |
+| kimi4 | ~~#4707~~ | CRM客户拜访记录管理 | fullstack | 无 | ~~✅ PR#4715 MERGED~~ |
+| kimi4 | #4716 | 客户标签智能推荐与批量管理 | fullstack | 无 | 新建，标签库+自动规则+批量打标签 |
 | kimi5 | #4709 | CRM客户接触历史时间轴 | fullstack | 无 | 新建，邮件+拜访+企微多渠道汇总 |
 | kimi6 | #2743 | 情报ROI分析看板 | fullstack | 无 | |
 | kimi7 | #3104 | PI形式发票生成+PDF导出 | fullstack | 无 | |

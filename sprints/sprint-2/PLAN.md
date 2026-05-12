@@ -920,7 +920,7 @@
 | kimi3 | ~~#2727~~ | backend | medium | ~~Done~~ | 商战情报·三角关联引擎 — PR #4694 MERGED ✅ |
 | kimi3 | ~~#2065~~ | backend | high | ~~Done~~ | D3市场配置预设 — 5市场种子+Redis缓存+JUnit — PR #4698 MERGED ✅ |
 | kimi3 | ~~#4700~~ | frontend | medium | ~~Done~~ | D3参数化·材质标注与渲染预览 — PR #4704 MERGED ✅ |
-| kimi3 | #4706 | frontend | medium | CC工作中 | CRM客户跟进任务自动生成 — 阶段变更触发待办+超时提醒（新建） |
+| kimi3 | ~~#4706~~ | frontend | medium | ~~PR#4713 OPEN~~ | CRM客户跟进任务自动生成 — PR #4713 OPEN，预检6门绿，等CI merge |
 | kimi4 | ~~#2793~~ | backend | medium | ~~Done~~ | 营销序列引擎：数据模型+核心API（外展获客Phase1龙头） — PR #4661 MERGED ✅ |
 | kimi4 | ~~#2813~~ | backend | medium | ~~Done~~ | LinkedIn联系人导入：CSV→CRM — PR #4665 MERGED ✅ |
 | kimi5 | ~~#2796~~ | backend | medium | ~~Done~~ | 邮件发送基础设施：多域名+SMTP配置（外展获客Phase2） — PR #4658 MERGED ✅ |

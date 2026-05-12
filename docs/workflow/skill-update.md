@@ -29,8 +29,8 @@
 - 症状：kimi1 PR 中出现 `INSERT INTO sys_menu`，违反 CLAUDE.md 红线"禁止 INSERT 新 sys_menu — 只 UPDATE 占位菜单"
 - 根因：skill 无自动化检查机制，CC 靠自觉遵守，偶发违规
 - 处置：kimi1 自行发现并删除（未造成事故）
-- 建议：CLAUDE.md 或 backend-schema skill 增加 commit 前 `grep -n "INSERT.*sys_menu" *.sql` 自检提示
-- 频次：1次（观察中）
+- 频次：3次（频繁），kimi4（#4744）、kimi8（#4745）、kimi1（#4743）均触发
+- 建议升级：CLAUDE.md 或 backend-schema skill 增加 commit 前 `grep -n "INSERT.*sys_menu" *.sql` 自检提示
 
 **[2026-05-12] 后端重启后 schedule 任务报缺失表错误（kimi1 #4743）**
 - 症状：kimi1 后端重启后，定时任务报 `wdpp_brand_avatar`/`wdpp_photo_ai_tags` 等表不存在

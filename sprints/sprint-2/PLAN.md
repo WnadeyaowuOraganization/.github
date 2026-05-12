@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1183轮；Done 1534；In Progress 4；Todo 6；Plan 6；无变化）
-> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#6
+> 更新时间：2026-05-13（排程经理第1183轮；Done 1535；In Progress 5；Todo 6；Plan 6；#9 Done）
+> 活跃CC：glm1/#7 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#6
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -25,9 +25,8 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #7 | P1 | gh-plugins | 一键标注出图 — 平面/立面/详图+DWG | ✅ |
-| 2 | #8 | P1 | gh-plugins | 一键BOM+报价 — 零件清单/材料/工时 | ✅ |
-| 3 | #11 | P1 | gh-plugins | D3_Structure模块 — 受力计算+构件选型 | ✅ |
+| 1 | #8 | P1 | gh-plugins | 一键BOM+报价 — 零件清单/材料/工时 | ✅ |
+| 2 | #11 | P1 | gh-plugins | D3_Structure模块 — 受力计算+构件选型 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -49,7 +48,7 @@
 | #18 | ✅ CLOSED（D3生产链路-弧长/曲线标注增强）PR#37 | Done |
 | #19 | ✅ CLOSED（D3生产链路-曲面面板分割电池包）PR#38 | Done |
 | #17 | ✅ CLOSED（D3生产链路-2D板材排料电池包）PR#39 | Done |
-| #9 | 已指派 glm1（PR#40冲突处理中） | In Progress |
+| #9 | ✅ CLOSED（D3_Core共享模块）PR#40 | Done |
 | #20 | 已指派 glm3 | In Progress |
 | #10 | 已指派 glm2 | In Progress |
 | #2 | ✅ CLOSED（DfMA制造可行性检测引擎）PR#41 | Done |

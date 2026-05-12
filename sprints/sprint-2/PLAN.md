@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1173轮；Done 1525；In Progress 5；Todo 15；Plan 6；无变化）
-> 活跃CC：kimi1/#1911 + glm1/#9 + glm2/#19 + glm3/#20 + glm4/#17
+> 更新时间：2026-05-13（排程经理第1174轮；Done 1527；In Progress 2；Todo 15；Plan 6；#19/#17/#1911 Done）
+> 活跃CC：glm1/#9 + glm3/#20
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -45,12 +45,14 @@
 | #2396 | ✅ CLOSED（国际信息源适配器-北美） | Done |
 | #2226 | ✅ CLOSED（竞品采集发布流程v2） | Done |
 | #2227 | ✅ CLOSED（跨境资格评估UI） | Done |
-| #1911 | 已指派 kimi1（重新启动） | In Progress |
+| #1911 | ✅ CLOSED（D3-AI电池包开发助手）PR#4801 | Done |
 | #2393 | ✅ CLOSED（矿场Phase5买家意图信号采集） | Done |
 | #23 | ✅ CLOSED（D3缺陷修复-Redis缓存层）PR#36 | Done |
 | #18 | ✅ CLOSED（D3生产链路-弧长/曲线标注增强）PR#37 | Done |
-| #17 | 已指派 glm4 | In Progress |
+| #19 | ✅ CLOSED（D3生产链路-曲面面板分割电池包）PR#38 | Done |
+| #17 | ✅ CLOSED（D3生产链路-2D板材排料电池包）PR#39 | Done |
 | #9 | 已指派 glm1 | In Progress |
+| #20 | 已指派 glm3 | In Progress |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |
 | #2487 | ✅ CLOSED（设计模型训练LoRA-B） | Done |

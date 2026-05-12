@@ -1,8 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1176轮；Done 1528；In Progress 4；Todo 12；Plan 6；#2 PR#41 merged）
-> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + kimi1/#25
-> 空闲CC：glm4（#2 Done，可接新Issue）
+> 更新时间：2026-05-13（排程经理第1176轮；Done 1528；In Progress 5；Todo 12；Plan 6；#3→glm4指派）
+> 活跃CC：glm1/#9 + glm2/#10 + glm3/#20 + glm4/#3 + kimi1/#25
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -26,11 +25,10 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #3 | P1 | gh-plugins | D3-v2.0：几何审计脚本 — bake前自动扫描 | ✅ |
-| 2 | #4 | P1 | gh-plugins | D3-v2.0：钢管下料优化（1D Nesting） | ✅ |
-| 3 | #5 | P1 | gh-plugins | D3-v2.0：CNC/激光切割文件直接输出 | ✅ |
-| 4 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
-| 5 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
+| 1 | #4 | P1 | gh-plugins | D3-v2.0：钢管下料优化（1D Nesting） | ✅ |
+| 2 | #5 | P1 | gh-plugins | D3-v2.0：CNC/激光切割文件直接输出 | ✅ |
+| 3 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
+| 4 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -56,6 +54,7 @@
 | #20 | 已指派 glm3 | In Progress |
 | #10 | 已指派 glm2 | In Progress |
 | #2 | ✅ CLOSED（DfMA制造可行性检测引擎）PR#41 | Done |
+| #3 | 已指派 glm4 | In Progress |
 | #25 | 已指派 kimi1 | In Progress |
 | #2065 | ✅ CLOSED（D3市场配置预设） | Done |
 | #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |

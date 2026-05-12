@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1167轮；Done 1524；In Progress 0；Todo空；队列枯竭；#1911/#2065/#2393/#2227/#2396/#2476 已合并）
+> 更新时间：2026-05-13（排程经理第1167轮；Done 1524；In Progress 0；Todo 22；Plan 6；从wande-gh-plugins流转7个Issue补充队列）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -24,7 +24,13 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-（指派建议表空 — 队列枯竭，等待产品侧新建 Issue）
+| 1 | #18 | P0 | gh-plugins | D3生产链路：弧长/曲线标注增强 | ✅ |
+| 2 | #19 | P1 | gh-plugins | D3生产链路：曲面面板分割电池包 | ✅ |
+| 3 | #20 | P1 | gh-plugins | D3生产链路：图纸分级输出系统 | ✅ |
+| 4 | #23 | P1 | gh-plugins | D3缺陷修复：Redis缓存层 | ✅ |
+| 5 | #25 | P1 | gh-plugins | D3缺陷修复：端到端测试套件 | ✅ |
+| 6 | #24 | P2 | gh-plugins | D3缺陷修复：GH纯参数传递模式改造 | ✅ |
+| 7 | #21 | P2 | gh-plugins | D3生产链路：表皮效果预览 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -36,17 +42,20 @@
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
 | #1754 / #1766 | ⛔ needs-prototype（原型文件不存在） | pause |
-| #2496 | 已指派 kimi4 | In Progress |
+| #2496 | ✅ CLOSED（竞品情报T3级30家补充采集） | Done |
 | #2396 | ✅ CLOSED（国际信息源适配器-北美） | Done |
-| #2226 | 已指派 kimi7 | In Progress |
+| #2226 | ✅ CLOSED（竞品采集发布流程v2） | Done |
 | #2227 | ✅ CLOSED（跨境资格评估UI） | Done |
-| #1911 | 已指派（D3-AI电池包助手） | In Progress |
-| #2393 | 已指派 kimi8 | In Progress | PR #4796
-| #2065 | 已指派 kimi6 | In Progress |
-| #2343 | 已指派 kimi5 | In Progress |
-| #2487 | 已指派 kimi3 | In Progress |
-| #2486 | 已指派 kimi8 | In Progress |
+| #1911 | ✅ CLOSED（D3-AI电池包助手） | Done |
+| #2393 | ✅ CLOSED（矿场Phase5买家意图信号采集） | Done |
+| #2065 | ✅ CLOSED（D3市场配置预设） | Done |
+| #2343 | ✅ CLOSED（竞对分析-自动分类） | Done |
+| #2487 | ✅ CLOSED（设计模型训练LoRA-B） | Done |
+| #2486 | ✅ CLOSED（设计模型训练LoRA-A） | Done |
 | #2476 | ✅ CLOSED（AI建模助手试点验证） | Done |
+| #4761 | ✅ CLOSED（CRM跟进记录AI摘要） | Done |
+| #4763 | ✅ CLOSED（CRM客户评分模型） | Done |
+| #4765 | ✅ CLOSED（CRM经销商关系分析） | Done |
 | #4761 / #4763 / #4765 | 新建CRM Issue | In Progress |
 | #2017 | ✅ CLOSED（明道云权限模式提取） | Done |
 | #2516 | ✅ CLOSED（合同要点卡片） | Done |

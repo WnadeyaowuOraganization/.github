@@ -1,8 +1,8 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1188轮；Done 1538；In Progress 4；Todo 2；Plan 6；无变化）
-> 活跃CC：glm1/#11 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#13
-> 指派建议表：1条（#12 P1 gh-plugins）
+> 更新时间：2026-05-13（排程经理第1188轮；Done 1539；In Progress 5；Todo 2；Plan 6；#13 Done）
+> 活跃CC：glm1/#11 + glm2/#10 + glm3/#20 + glm4/#21 + kimi1/#12
+> 指派建议表：已清空
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -26,7 +26,6 @@
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #12 | P1 | gh-plugins | D3_Document模块 — 一键标注+BOM+报价+导出 | ✅ |
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 

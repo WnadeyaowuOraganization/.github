@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1161轮；Done 1519；In Progress 4（#2227 CLOSED）；队列枯竭仅#1911 P0待指派）
+> 更新时间：2026-05-13（排程经理第1162轮；Done 1520；In Progress 4（#1911已指派→In Progress，#2396 CLOSED）；Todo空）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭
@@ -18,13 +18,13 @@
 ## 指派建议（最近20个）
 
 > 排程经理维护，研发经理按此顺序指派。已指派的由研发经理从表中删除。
-> 更新时间：2026-05-13（排程经理第1161轮；#2227 CLOSED；队列枯竭仅#1911 P0待指派；4个In Progress运行中）
+> 更新时间：2026-05-13（排程经理第1162轮；#1911已指派，#2396 CLOSED；Todo空；队列枯竭）
 > ⚠️ needs-prototype冻结、Master Issue不出现在本表；指派前请用 `gh issue view #N` 确认标签
 > 注意：本表与GitHub Issue编号一致，无需转换
 
 | # | Issue | 优先级 | 模块 | 说明 | 启动 |
 |---|-------|--------|------|------|------|
-| 1 | #1911 | P0 | backend | D3-AI·AI电池包开发助手 — 中文描述→GH Python脚本生成（G7e Qwen3.5） | ✅ |
+（指派建议表空 — 队列枯竭，等待产品侧新建 Issue）
 
 > ⚠️ 修正：Master Issue (#4065/#4091/#4198) 是导航型 parent 引用，非真正依赖。子 Issue 的非 Master 依赖已全部 CLOSED。
 
@@ -37,9 +37,10 @@
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
 | #1754 / #1766 | ⛔ needs-prototype（原型文件不存在） | pause |
 | #2496 | 已指派 kimi4 | In Progress |
-| #2396 | 已指派 kimi6 | In Progress |
+| #2396 | ✅ CLOSED（国际信息源适配器-北美） | Done |
 | #2226 | 已指派 kimi7 | In Progress |
 | #2227 | ✅ CLOSED（跨境资格评估UI） | Done |
+| #1911 | 已指派（D3-AI电池包助手） | In Progress |
 | #2393 | 已指派 kimi8 | In Progress | PR #4796
 | #2065 | 已指派 kimi6 | In Progress |
 | #2343 | 已指派 kimi5 | In Progress |

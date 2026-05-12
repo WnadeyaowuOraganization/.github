@@ -910,7 +910,8 @@
 | kimi | Issue | 模块 | effort | 状态 | 内容 |
 |------|-------|------|--------|------|------|
 | kimi1 | ~~#1451~~ | backend | medium | ~~Done~~ | 品牌术语表管理 — PR #4726 MERGED ✅ |
-| kimi1 | ~~#4727~~ | fullstack | medium | ~~PR#4732 OPEN~~ | 销售活动日历与日程管理 — PR #4732 OPEN，CI已触发 |
+| kimi1 | ~~#4727~~ | fullstack | medium | ~~Done~~ | 销售活动日历与日程管理 — PR #4732 MERGED ✅ |
+| kimi1 | #4735 | fullstack | medium | CC工作中 | 客户公海池与自动回收规则 — 公海池+认领+定时回收（新建） |
 | kimi2 | ~~#2804~~ | frontend | medium | ~~Done~~ | 外展分析看板 → 已转 #2800 |
 | kimi2 | ~~#2800~~ | backend | medium | ~~Done~~ | 冷外展序列模板：PR #4672 MERGED ✅ |
 | kimi2 | ~~#2802~~ | backend | medium | ~~Done~~ | 邮件A/B测试引擎 — PR #4679 MERGED ✅ |

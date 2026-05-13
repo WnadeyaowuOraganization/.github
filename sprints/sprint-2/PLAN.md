@@ -1,9 +1,9 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1237轮；Done 1546；In Progress 1（kimi1/#1754，47%，80分钟，Mulling思考中，PR尚未创建）；Todo 0；Plan 3；pause 64；Master自动关闭2个）
-> 活跃CC：kimi1/#1754（代理商工作台前端，P2/frontend/medium，Mulling思考中，PR待创建）
+> 更新时间：2026-05-13（排程经理第1238轮；Done 1547（#1754已标Done）；In Progress 0；Todo 0；Plan 3；pause 64；Master自动关闭2个）
+> 活跃CC：无（kimi1僵尸会话已清理，锁已释放，#1754→Done）
 > 新增：PR#54/#23 #55/#11 #56/#10 #57/#21 #58/#20 均已开→dev
-> 指派建议表：已清空（#1754已指派）
+> 指派建议表：已清空（#1754已标Done，kimi1已释放）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭、#4065已关闭、#4097已关闭

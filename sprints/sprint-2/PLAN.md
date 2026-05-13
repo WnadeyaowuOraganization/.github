@@ -1,9 +1,9 @@
 # Sprint-2 排程计划
 
 > 更新时间：2026-05-13（排程经理第1228轮；Done 1546；In Progress 0（gh-plugins Done=13）；Todo 1；Plan 5；Master自动关闭2个）
-> 活跃CC：研发经理报告0/15 CC空闲，锁=0，repo干净，等待队列补充
+> 活跃CC：kimi1/#1754（代理商工作台前端，P2/frontend/medium，刚启动）
 > 新增：PR#54/#23 #55/#11 #56/#10 #57/#21 #58/#20 均已开→dev
-> 指派建议表：已清空
+> 指派建议表：已清空（#1754已指派）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
 > 规则：EXEMPT 33个→Todo / A档128个→按Sprint Todo / C_frozen 165个→保持Plan(needs-prototype)
 > Master Issue：#3994已关闭、#4004已关闭、#3647已关闭、#4020已关闭、#3622已关闭、#4142已关闭、#4065已关闭、#4097已关闭
@@ -84,6 +84,7 @@
 
 | 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
 |------|------|-------|------|--------|------|------|
+| 05-13 | kimi1 | #1754 | frontend | medium | In Progress | 代理商工作台前端数据打通 — kimi1已启动 |
 | 04-22 | #2132 ✅merged/kimi1 | ~~#3386~~ | PLM | medium | ~~Done~~ | ECO审批流集成 — CLOSED/COMPLETED |
 | 04-22 | kimi2 | ~~#3389~~ | PLM | medium | ~~Done~~ | EBOM解析API — CLOSED/COMPLETED |
 | 04-22 | kimi3 | ~~#3392~~ | PLM | medium | ~~Done~~ | 版本化定价引擎API — CLOSED/COMPLETED |

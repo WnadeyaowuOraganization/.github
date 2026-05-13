@@ -1,6 +1,6 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1232轮；Done 1546；In Progress 1（kimi1/#1754，编译全绿+Mock清理+招标标签实现，下一步E2E+PR）；Todo 0；Plan 3；pause 64；Master自动关闭2个）
+> 更新时间：2026-05-13（排程经理第1233轮；Done 1546；In Progress 1（kimi1/#1754，编译全绿+Mock清理+招标标签实现，下一步E2E+PR）；Todo 0；Plan 3；pause 64；Master自动关闭2个）
 > 活跃CC：kimi1/#1754（代理商工作台前端，P2/frontend/medium，编译全绿，待E2E+PR）
 > 新增：PR#54/#23 #55/#11 #56/#10 #57/#21 #58/#20 均已开→dev
 > 指派建议表：已清空（#1754已指派）

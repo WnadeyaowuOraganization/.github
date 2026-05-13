@@ -38,7 +38,7 @@
 |-------|------|---------|
 | #2420 / #2422 / #2425 / #2424 / #2165 | ⛔ needs-prototype 冻结 | pause |
 | #1766 | ⛔ needs-prototype（原型文件不存在） | pause |
-| #1754 | 已指派 kimi1 | In Progress |
+| ~~#1754~~ | ✅ PR#3949已于04-19 merged | ~~Done~~ |
 | #2496 | ✅ CLOSED（竞品情报T3级30家补充采集） | Done |
 | #2396 | ✅ CLOSED（国际信息源适配器-北美） | Done |
 | #2226 | ✅ CLOSED（竞品采集发布流程v2） | Done |
@@ -84,7 +84,7 @@
 
 | 日期 | kimi | Issue | 模块 | effort | 状态 | 备注 |
 |------|------|-------|------|--------|------|------|
-| 05-13 | kimi1 | #1754 | frontend | medium | In Progress | 代理商工作台前端数据打通 — kimi1已启动 |
+| 05-13 | kimi1 | ~~#1754~~ | frontend | medium | ~~Done~~ | 代理商工作台前端数据打通 — **PR#3949已于04-19 merged，误派（僵尸会话已清理）** |
 | 04-22 | #2132 ✅merged/kimi1 | ~~#3386~~ | PLM | medium | ~~Done~~ | ECO审批流集成 — CLOSED/COMPLETED |
 | 04-22 | kimi2 | ~~#3389~~ | PLM | medium | ~~Done~~ | EBOM解析API — CLOSED/COMPLETED |
 | 04-22 | kimi3 | ~~#3392~~ | PLM | medium | ~~Done~~ | 版本化定价引擎API — CLOSED/COMPLETED |

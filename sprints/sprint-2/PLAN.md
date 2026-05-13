@@ -1,7 +1,7 @@
 # Sprint-2 排程计划
 
-> 更新时间：2026-05-13（排程经理第1234轮；Done 1546；In Progress 1（kimi1/#1754，48%，70分钟，E2E测试中，PR尚未创建）；Todo 0；Plan 3；pause 64；Master自动关闭2个）
-> 活跃CC：kimi1/#1754（代理商工作台前端，P2/frontend/medium，E2E测试中，PR待创建）
+> 更新时间：2026-05-13（排程经理第1235轮；Done 1546；In Progress 1（kimi1/#1754，47%，80分钟，Mulling思考中，PR尚未创建）；Todo 0；Plan 3；pause 64；Master自动关闭2个）
+> 活跃CC：kimi1/#1754（代理商工作台前端，P2/frontend/medium，Mulling思考中，PR待创建）
 > 新增：PR#54/#23 #55/#11 #56/#10 #57/#21 #58/#20 均已开→dev
 > 指派建议表：已清空（#1754已指派）
 > 来源：v5.1 §5.6 全量对账 — 326个已合规Issue一次性排程
